@@ -12402,3 +12402,264 @@ Le `du` complet de `/home/stephane` a été interrompu (trop lent) : le volume a
 
 Si tu veux, l'étape suivante naturelle est de **construire le corpus FR à partir de Wikipédia** (base sqlite ou dump), avec la dédup et le contrôle de contamination déjà outillés, puis d'y ajouter les PDF extraits/OCRisés.
 
+
+## Tour 5
+
+### 👤 Utilisateur
+
+go
+
+### 🤖 Assistant
+
+⏵ Construction du corpus français à partir de Wikipédia
+
+Je commence par la base FR : schéma, volume d'articles, format du texte — puis j'extrais, je filtre et je découpe.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane; ls -la data/wikipedia/db/frwiki_v14.db; sqlite3 data/wikipedia/db/frwiki_v14.db \".tables\" 2>&1 | head; echo \"=== schéma\"; sqlite3 data/wikipedia/db/frwiki_v14.db \".schema\" 2>&1 | head -40", "description": "Inspect French Wikipedia sqlite schema … [70 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 7248388096 25 mai 22:50 data/wikipedia/db/frwiki_v14.db
+articles
+=== schéma
+CREATE TABLE articles (
+    page_id     INTEGER PRIMARY KEY,
+    title       TEXT    NOT NULL,
+    title_lower TEXT    NOT NULL,
+    lang        TEXT    NOT NULL,
+    n_chars     INTEGER,
+    n_words     INTEGER,
+    summary     TEXT,
+    v14_json    TEXT,
+    v14_top3    TEXT,
+    dominant    TEXT,
+    molecules   TEXT,
+    signed_at   REAL,
+    sign_version TEXT DEFAULT 'v360'
+);
+CREATE INDEX idx_title_lower ON articles(title_lower);
+CREATE INDEX idx_dominant   ON articles(dominant);
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane; echo \"=== DB counts\"; sqlite3 data/wikipedia/db/frwiki_v14.db \"select count(*), sum(n_chars), sum(n_words), avg(n_chars) from articles;\" 2>&1; echo \"=== sample\"; sqlite3 data/wikipedia/db/frwiki_v14.db \"select title, n_chars, substr(summary,1, … [476 caractères tronqués]`
+
+  ```
+=== DB counts
+2755035|7017594173|1090303426|2547.1887554967543
+=== sample
+Antoine Meillet|8000|Antoine Meillet, né le  à Moulins (Allier) et mort le  à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du . Biographie Enfance et formation Paul Jules Antoine Meillet est d'origine bourbonnaiseSa famille paternelle est une famille de nota
+Algèbre linéaire|8000|L’algèbre linéaire est la branche des mathématiques qui s'intéresse aux espaces vectoriels et aux transformations linéaires, formalisation générale des théories des systèmes d'équations linéaires. Histoire L'algèbre linéaire est initiée dans son principe par le mathématicien perse Al-Khwârizmî qui s
+=== wiki_apparie fr
+482
+1,9M	total
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/IA/outils/ | head -20; echo \"=== dumps fr\"; ls -la /home/stephane/Data13TB/stephane/data/wikipedia/dumps/fr/; echo \"=== wikiextractor ?\"; python3 -c \"import wikiextractor; print(wikiextractor.__file__)\" 2>&1 | head -2; pip list 2>/dev/null | grep -i wiki | he … [123 caractères tronqués]`
+
+  ```
+total 40
+drwxr-xr-x.  3 stephane stephane 4096 12 oct 18:42 .
+drwxr-xr-x  14 stephane stephane 4096 21 oct 16:30 ..
+-rwxr-xr-x.  1 stephane stephane 5769 12 oct 15:37 banc-io.py
+-rwx--x--x.  1 stephane stephane 3639 12 oct 18:02 banc-numa-raid.py
+-rwxr-xr-x.  1 stephane stephane 2504 12 oct 15:49 etat-raid.sh
+-rwxr-xr-x.  1 stephane stephane 4144 12 oct 15:49 migration-phase2.sh
+-rwxr-xr-x.  1 stephane stephane 2713 12 oct 15:45 migrer-vers-raid.sh
+drwxr-xr-x.  2 stephane stephane 4096 12 oct 18:02 __pycache__
+=== dumps fr
+total 7024348
+drwxr-xr-x. 1 stephane stephane        204 25 mai 15:22 .
+drwxr-xr-x. 1 stephane stephane         40 26 mai 09:14 ..
+-rw-r--r--. 1 stephane stephane   63415485 25 mai 15:22 frwiki-latest-pages-articles-multistream-index.txt.bz2
+-rw-r--r--. 1 stephane stephane 7129511779 25 mai 15:22 frwiki-latest-pages-articles-multistream.xml.bz2
+=== wikiextractor ?
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane; sqlite3 data/wikipedia/db/frwiki_v14.db \"select max(n_chars), min(n_chars), count(*) from articles;\" ; echo \"=== distribution\"; sqlite3 data/wikipedia/db/frwiki_v14.db \"select case when n_chars>=3000 then '>=3000' when n_chars>=1000 then '1000-3 … [403 caractères tronqués]`
+
+  ```
+8000|0|2755035
+=== distribution
+1000-3000|958842
+300-1000|744600
+<300|228928
+>=3000|822665
+=== raw summary
+Paris (Prononciation en franM-CM-'ais de France retranscrite selon la norme API. ), officiellement la Ville de Paris, est la capitale de la France, le chef-lieu de la rM-CM-)gion M-CM-^Nle-de-France et le siM-CM-(ge de la mM-CM-)tropole du Grand Paris. Elle est situM-CM-)e au centre du Bassin parisien, sur une boucle de la Seine, entre les confluents avec la Marne et l'Oise. Le site est occupM-CM-) M-CM-  partir du  avant notre M-CM-(re sous le nom LutM-CM-(ce par le peuple gaulois des Parisii, qui donne son nom M-CM-  la ville. Administrativement, elle a le statut de collectivitM-CM-) M-CM-  statut particulier et est divisM-CM-)e en vingt arrondissements. Au dM-CM-)but du , Clovis choisit Paris comme capitale de son royaume. Profitant de la fertilitM-CM-) agricole de son bassin alentour alliM-CM-)e au pouvoir institutionnel lui M-CM-)tant confM-CM-)rM-CM-), la citM-CM-) devient alors une des principales villes de l'ancienne Gaule avec des palais royaux, de riches abbayes et une cathM-CM-)drale. Au cours du Moyen M-CM-^Bge, elle s'impose comme un foyer intellectuel et artistiq
+… [225 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > tools/corpus_wikipedia.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"corpus_wikipedia.py — un corpus de prose française depuis la base Wikipédia v14.\n\nPOURQUOI CE FICHIER. L'inventaire du disque a montré que le seul stock local d'u … [9829 caractères tronqués]`
+
+  ```
+OK
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_wikipedia.py", line 190, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_wikipedia.py", line 92, in main
+    con = sqlite3.connect(f"file:{args.db}?mode=ro", uri=True)
+sqlite3.OperationalError: unable to open database file
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/corpus_wikipedia.py'); s=p.read_text()\ns=s.replace('con = sqlite3.connect(f\"file:{args.db}?mode=ro\", uri=True)',\n            'con = sqlite3.connect(f\"file:{args.db.resolve()} … [388 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_wikipedia.py", line 190, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_wikipedia.py", line 92, in main
+    con = sqlite3.connect(f"file:{args.db.resolve()}?mode=ro", uri=True)
+sqlite3.OperationalError: unable to open database file
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport sqlite3\np='/home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db'\nfor uri,opts in ((f\"file:{p}?mode=ro\",{'uri':True}),(f\"file:{p}?mode=ro&immutable=1\",{'uri':True}),(p,{})):\n    try:\n         … [422 caractères tronqués]`
+
+  ```
+file:/home/stephane/Data13TB/stephane/data/wikipedia/db/frwi {'uri': True} -> (2755035,)
+file:/home/stephane/Data13TB/stephane/data/wikipedia/db/frwi {'uri': True} -> (2755035,)
+/home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v1 {} -> (2755035,)
+-rw-r--r--. 1 stephane stephane 7248388096 25 mai 22:50 /home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db
+/dev/mapper/system-root on /home/stephane/Data13TB type btrfs (rw,noatime,seclabel,compress=zstd:3,space_cache=v2,subvolid=262,subvol=/@/home)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/corpus_wikipedia.py'); s=p.read_text()\ns=s.replace('''    ap.add_argument(\"--db\", type=pathlib.Path, default=RACINE / \"data/wikipedia/db/frwiki_v14.db\")''',\n'''    # la base … [651 caractères tronqués]`
+
+  ```
+{
+ "articles_lus": 5001,
+ "articles_gardes": 5000,
+ "articles_doublons": 0,
+ "troncons": 5000,
+ "troncons_doublons": 0,
+ "caracteres_gardes": 9460112,
+ "mots_estimes": 1525824,
+ "octets": {
+  "train": 8831466,
+  "val": 494185,
+  "test": 474249
+ }
+}
+=== extrait
+Antoine Meillet, né le à Moulins (Allier) et mort le à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du . Biographie Enfance et formation Paul Jules Antoine Meillet est d'origine bourbonnaiseSa famille paternelle est une famille de notables de Saint-Désiré, commune de l'Allier limitrophe du Cher ; la famille de sa mère, Louise Poirier, qu'il perd à l'âge de 11 ans, est de Moulins., fils d'un notaire de Châteaumeillant (C
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; mkdir -p data/corpus_wiki_fr; df -h /home/stephane/Data13TB | tail -1; nohup python3 tools/corpus_wikipedia.py --db /home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db --sortie data/corpus_wiki_fr --manifeste reports/corpu … [270 caractères tronqués]`
+
+  ```
+started background job bash-652
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"def \\|contamination\\|fenetre\\|shingle\" tools/corpus_propre.py | head -25; sed -n \"$(grep -n 'def contamination' tools/corpus_propre.py | cut -d: -f1),+30p\" tools/corpus_propre.py 2>/dev/null", "description": "Read corpu … [118 caractères tronqués]`
+
+  ```
+11:1. **Déduplication par shingles.** On roule un hachage de Rabin-Karp sur des fenêtres de
+12:   `--fenetre` octets (96 par défaut). La première occurrence d'un shingle est gardée ;
+13:   toute position couverte par un shingle déjà vu est retirée. Conséquence : après
+42:def hachages(data: bytes, fenetre: int) -> list[int]:
+43:    """Hachage roulant de toutes les fenêtres de `fenetre` octets (Rabin-Karp)."""
+45:    if n < fenetre:
+47:    puissance = pow(BASE, fenetre - 1, MOD)
+49:    for i in range(fenetre):
+52:    for i in range(fenetre, n):
+53:        h = (h - data[i - fenetre] * puissance) % MOD
+59:def couverture(hs: list[int], fenetre: int) -> list[bool]:
+60:    """Vrai pour chaque position couverte par un shingle déjà vu plus tôt."""
+61:    n = len(hs) + fenetre - 1
+68:        elif i - j >= fenetre:  # vraie répétition, pas le recouvrement de la fenêtre
+70:    # dilater : une fenêtre marquée couvre ses `fenetre` octets
+75:            portee = fenetre
+82:def deduit(data: bytes, fenetre: int, min_run: int = 64) -> tuple[bytes, dict]:
+83:    hs = hachages(data, fenetre)
+84:    couvert = couverture(hs, fenetre)
+109:def decoupe(texte: bytes, chunk: int) -> list[bytes]:
+113:def spli
+… [345 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -5 work/corpus-wiki.log; ls -la data/corpus_wiki_fr/ 2>/dev/null; pgrep -af corpus_wikipedia | grep -v pgrep | head -2; date +%H:%M", "description": "Check Wikipedia extraction progress", "timeoutMs": 120000, "workdir": "/home/ste … [40 caractères tronqués]`
+
+  ```
+200000/2755035 lus · 200000 gardés · 200000 tronçons
+total 581080
+drwxr-xr-x. 1 stephane stephane        48  1 nov 11:02 .
+drwxr-xr-x. 1 stephane stephane      1608  1 nov 11:02 ..
+-rw-r--r--. 1 stephane stephane  29357010  1 nov 11:03 test.txt
+-rw-r--r--. 1 stephane stephane 535818141  1 nov 11:03 train.txt
+-rw-r--r--. 1 stephane stephane  29845423  1 nov 11:03 val.txt
+1297980 python3 tools/corpus_wikipedia.py --db /home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db --sortie data/corpus_wiki_fr --manifeste reports/corpus-wiki-fr.json
+11:03
+  ```
+
+### 👤 Utilisateur
+
+background job bash-652 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; mkdir -p data/corpus_wiki_fr; df -h /home/stephane/Data13TB | tail -1; nohup python3 tools/corpus_wikipedia.py --db /home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db --sortie data/corpus_wiki_fr --manifeste reports/corpus-wiki-fr.json > work/corpus-wiki.log 2>&1 & echo "job $!"; sleep 20; tail -3 work/corpus-wiki.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > tools/verifie_contamination.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"verifie_contamination.py — les fuites entre splits et entre corpus, mesurées.\n\nPOURQUOI CE FICHIER. Un corpus d'entraînement sans contrôle de fuite est un co … [4647 caractères tronqués]`
+
+  ```
+OK
+  200000/2755035 lus · 200000 gardés · 200000 tronçons
+  400000/2755035 lus · 399982 gardés · 399982 tronçons
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -2 work/corpus-wiki.log; ls -la data/corpus_wiki_fr/; echo \"=== jointures minuscule->majuscule (échantillon 200 Mo)\"; head -c 200000000 data/corpus_wiki_fr/train.txt | grep -oP '[a-zà-ÿ][A-ZÀ-Ý]' | wc -l; echo \"=== exemples\";  … [241 caractères tronqués]`
+
+  ```
+400000/2755035 lus · 399982 gardés · 399982 tronçons
+  600000/2755035 lus · 599971 gardés · 599971 tronçons
+total 1163440
+drwxr-xr-x. 1 stephane stephane         48  1 nov 11:02 .
+drwxr-xr-x. 1 stephane stephane       1608  1 nov 11:02 ..
+-rw-r--r--. 1 stephane stephane   59185341  1 nov 11:03 test.txt
+-rw-r--r--. 1 stephane stephane 1072143741  1 nov 11:03 train.txt
+-rw-r--r--. 1 stephane stephane   60029429  1 nov 11:03 val.txt
+=== jointures minuscule->majuscule (échantillon 200 Mo)
+92747
+=== exemples
+est d'origine bourbonnaiseSa famille paternelle est 
+elopper des siècles durantRoshdi Rashed, D'Al Khwari
+est encore parfois utiliséPar exemple, l'UQAM propos
+t à eux comme Óglaigh na hÉireann (« volontaires d'I
+ise, donnant naissance à lOfficial Irish Republican 
+[stderr]
+grep: write error: Broken pipe
+head: error writing 'standard output': Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pkill -f \"tools/corpus_wikipedia.py\" && echo \"extraction arrêtée\"; sleep 1; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/corpus_wikipedia.py'); s=p.read_text()\ns=s.replace('''    t = t.replace(\"\\\\u00a0\", \" \").repl … [1533 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "pgrep -af \"corpus_wikipedia\" | grep -v pgrep | head -3; tail -2 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/corpus-wiki.log; ls -la /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/corpus_wiki_fr/ | head -4", "description": "Check if extraction survived", "timeoutMs": 120 … [66 caractères tronqués]`
+
+  ```
+600000/2755035 lus · 599971 gardés · 599971 tronçons
+  800000/2755035 lus · 799968 gardés · 799968 tronçons
+total 1556556
+drwxr-xr-x. 1 stephane stephane         48  1 nov 11:02 .
+drwxr-xr-x. 1 stephane stephane       1608  1 nov 11:02 ..
+-rw-r--r--. 1 stephane stephane   79148439  1 nov 11:04 test.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/corpus_wikipedia.py'); s=p.read_text()\nold='''    t = t.replace(\"\\\\u00a0\", \" \").replace(\"\\\\u202f\", \" \")\n    t = ESPACES.sub(\" \", t).strip()\n    return t'''\nnew=' … [1476 caractères tronqués]`
+
+  ```
+patch appliqué
+ "octets": {
+  "train": 5310557,
+  "val": 309969,
+  "test": 283361
+ }
+}
+=== extrait
+Antoine Meillet, né le à Moulins (Allier) et mort le à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du . Biographie Enfance et formation Paul Jules Antoine Meillet est d'origine bourbonnaise Sa famille paternelle est une famille de notables de Saint-Désiré, commune de l'Allier limitrophe du Cher ; la famille de sa mère, Loui
+=== lOfficial restants
+  ```
+

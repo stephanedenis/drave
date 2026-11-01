@@ -11267,3 +11267,310 @@ Tests : alignement des spans, validation + export, verdict invalide refusé, bas
 
 La suite naturelle, dans l'ordre : **un générateur de candidats** (l'analyseur de la « coloration »), **plus de phrases par lot**, puis le branchement de l'export sur le corpus du projet — et l'expérience E2 (canal de structure en entrée du modèle), avec le placebo et l'ablation qui vont avec.
 
+
+## Tour 12
+
+### 👤 Utilisateur
+
+lance le serveur et continue
+
+### 🤖 Assistant
+
+⏵ Serveur lancé ; je construis le générateur de candidats (l'analyseur) pour la suite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 tools/structures/serveur.py --port 8765 > /tmp/banc-structures.log 2>&1 & echo \"serveur $!\"; sleep 1.5; curl -s -o /dev/null -w \"HTTP %{http_code}\\n\" http://127.0.0.1:8765/; curl -s http://127.0.0.1:8765/api/phrase … [228 caractères tronqués]`
+
+  ```
+serveur 1297035
+HTTP 200
+6 phrases, 0 validations
+  banc de structures · http://127.0.0.1:8765 · 6 phrases
+  127.0.0.1 · "GET / HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && cat > generateur.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"generateur.py — une phrase brute → des structures candidates (v0 heuristique).\n\nCe n'est pas un analyseur syntaxique : c'est un **générateur de candidats** à faire  … [8975 caractères tronqués]`
+
+  ```
+=== Le chat de la voisine qui dort sur le toit se réveille.
+- « qui dort sur le toit se réveille » → Le chat de la voisine
+   'Le chat de la voisine' [GN · agent]
+       'qui dort sur le toit se réveille' [REL · qualite]
+=== J'ai vu l'homme avec le télescope.
+- « avec le télescope » → J'ai vu l'homme
+   "J'ai vu l'homme" [GV · predicat]
+     'avec le télescope' [GP · moyen]
+=== Il a couru pour attraper le bus.
+- « a couru pour attraper le bus » → Il
+   'Il' [GN · agent]
+       'a couru pour attraper le bus' [GP · destinataire]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('generateur.py'); s = p.read_text()\n# 1. lexiques : de/du/des/à/au/aux sont des prépositions ; a/à et ou/où se distinguent par l'accent\ns = s.replace('DET = set(\"le la le … [3698 caractères tronqués]`
+
+  ```
+générateur corrigé
+=== Le chat de la voisine qui dort sur le toit se réveille.
+- « qui dort sur le toit » → Le chat
+   'Le chat' [GN · agent]
+     'de la voisine' [GP · theme]
+       'qui dort sur le toit' [REL · qualite]
+   'se réveille' [GV · predicat]
+=== J'ai vu l'homme avec le télescope.
+- « avec le télescope » → l'homme
+   "J'ai vu" [GV · predicat]
+   "l'homme" [GN · patient]
+       'avec le télescope' [GP · moyen]
+- « avec le télescope » → J'ai vu
+   "J'ai vu" [GV · predicat]
+   "l'homme" [GN · patient]
+     'avec le télescope' [GP · moyen]
+=== Il a couru pour attraper le bus.
+- « pour attraper le bus » → Il a couru
+   'Il a couru' [GV · predicat]
+     'pour attraper le bus' [GP · but]
+=== Elle a dit qu'elle viendrait hier.
+- « qu'elle viendrait hier » → Elle a dit
+   'Elle a dit' [GV · predicat]
+     "qu'elle viendrait hier" [REL · qualite]
+=== La femme a vu l'homme dans le parc.
+- « dans le parc » → l'homme
+   'La femme' [GN · agent]
+   'a vu' [GV · predicat]
+   "l'homme" [GN · patient]
+       'dans le parc' [GP · lieu]
+- « dans le parc » → a vu
+   'La femme' [GN · agent]
+   'a vu' [GV · predicat]
+   "l'homme" [GN · patient]
+     'dans le parc' [GP · lieu]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('generateur.py'); s = p.read_text()\ns = s.replace('PONCT = set(\".,;:!?…()«»\")',\n'''ADVERBES_TEMPS = set(\"hier aujourd'hui demain maintenant ici la toujours jamais souve … [2797 caractères tronqués]`
+
+  ```
+ok
+=== Le chat de la voisine qui dort sur le toit se réveille.
+=== Elle a dit qu'elle viendrait hier.
+=== Il a couru pour attraper le bus.
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/drave-structures/generateur.py", line 227, in <module>
+    cs = analyser(texte)
+  File "/home/stephane/Data13TB/stephane/GitHub/drave-structures/generateur.py", line 183, in analyser
+    base = _segmente(texte, toks)
+  File "/home/stephane/Data13TB/stephane/GitHub/drave-structures/generateur.py", line 137, in _segmente
+    segs.append(Segment(t.debut, utiles[j - 1].fin, texte[t.debut:utiles[j - 1].fin],
+                ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        "GN", "agent" if not any(s.type == "GV" for s in segs) else "patient"))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/drave-structures/generateur.py", line 99, in __init__
+    self.cible_gp = None    # la tête du GP le plus proche à gauche
+    ^^^^^^^^^^^^^
+AttributeError: 'Segment' object has no attribute 'cible_gp' and no __dict__ for setting new attr
+… [2023 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('generateur.py'); s = p.read_text()\ns = s.replace('__slots__ = (\"debut\", \"fin\", \"type\", \"role\", \"niveau\", \"texte\", \"cible_nom\", \"cible_verbe\")',\n           … [463 caractères tronqués]`
+
+  ```
+ok
+=== Le chat de la voisine qui dort sur le toit se réveille.
+- « qui dort sur le toit » → voisine
+   'Le chat' [GN · agent]
+     'de la voisine' [GP · theme]
+       'qui dort sur le toit' [REL · qualite]
+   'se réveille' [GV · predicat]
+- « qui dort sur le toit » → Le chat
+   'Le chat' [GN · agent]
+     'de la voisine' [GP · theme]
+     'qui dort sur le toit' [REL · qualite]
+   'se réveille' [GV · predicat]
+=== Elle a dit qu'elle viendrait hier.
+- « qu'elle viendrait hier » → Elle a dit
+   'Elle a dit' [GV · predicat]
+     "qu'elle viendrait hier" [REL · qualite]
+=== Il a couru pour attraper le bus.
+- « pour attraper le bus » → Il a couru
+   'Il a couru' [GV · predicat]
+     'pour attraper le bus' [GP · but]
+=== La femme a vu l'homme dans le parc.
+- « dans le parc » → l'homme
+   'La femme' [GN · agent]
+   'a vu' [GV · predicat]
+   "l'homme" [GN · patient]
+     'dans le parc' [GP · lieu]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('generateur.py'); s = p.read_text()\ndebut = s.index(\"def analyser(\")\nfin = s.index('if __name__ == \"__main__\":')\nneuf = '''ROLES_AMBIGUS = {\"pour\": [\"but\", \"caus … [3029 caractères tronqués]`
+
+  ```
+ok
+=== Le chat de la voisine qui dort sur le toit se réveille.
+- « qui dort sur le toit » → voisine
+   'Le chat' [GN · agent]
+     'de la voisine' [GP · theme]
+       'qui dort sur le toit' [REL · qualite]
+   'se réveille' [GV · predicat]
+- « qui dort sur le toit » → Le chat
+   'Le chat' [GN · agent]
+     'de la voisine' [GP · theme]
+     'qui dort sur le toit' [REL · qualite]
+   'se réveille' [GV · predicat]
+=== La femme a vu l'homme dans le parc.
+- « dans le parc » → l'homme
+   'La femme' [GN · agent]
+   'a vu' [GV · predicat]
+   "l'homme" [GN · patient]
+     'dans le parc' [GP · lieu]
+- « dans le parc » → a vu
+   'La femme' [GN · agent]
+   'a vu' [GV · predicat]
+   "l'homme" [GN · patient]
+     'dans le parc' [GP · lieu]
+=== Il a couru pour attraper le bus.
+- « pour attraper le bus » → Il a couru
+   'Il a couru' [GV · predicat]
+     'pour attraper le bus' [GP · but]
+- « pour attraper le bus » = cause
+   'Il a couru' [GV · predicat]
+     'pour attraper le bus' [GP · cause]
+=== J'ai vu l'homme avec le télescope.
+- « avec le télescope » → l'homme
+   "J'ai vu" [GV · predicat]
+   "l'homme" [GN · patient]
+     'avec le télescope' [GP · moyen]
+- « avec le télescope » → J'ai vu
+   "J'ai
+… [219 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && cat > tests/test_generateur.py <<'PY'\n\"\"\"Tests du générateur de candidats.\"\"\"\nimport unittest\n\nimport generateur\n\n\nclass TestGenerateur(unittest.TestCase):\n    def test_segments_alignes(self):\n        for text … [2511 caractères tronqués]`
+
+  ```
+test_role_pour (tests.test_generateur.TestGenerateur.test_role_pour) ... ok
+test_segments_alignes (tests.test_generateur.TestGenerateur.test_segments_alignes) ... ok
+test_une_seule_variation (tests.test_generateur.TestGenerateur.test_une_seule_variation)
+Deux candidats ne diffèrent que par le segment ambigu. ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.002s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('serveur.py'); s = p.read_text()\ns = s.replace(\"import llm\", \"import generateur\\nimport llm\")\ns = s.replace('''        self.verrou = threading.Lock()\n        self.ph … [3700 caractères tronqués]`
+
+  ```
+serveur patché
+ui patchée
+Ran 10 tests in 2.615s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && kill 1297035 2>/dev/null; sleep 0.5; nohup python3 tools/structures/serveur.py --port 8765 > /tmp/banc-structures.log 2>&1 & echo \"serveur $!\"; sleep 1.2; echo \"=== ajouter ===\"; curl -s -X POST http://127.0.0.1:8765/api/ajouter  … [875 caractères tronqués]`
+
+  ```
+serveur 1298338
+=== ajouter ===
+=== valider le généré ===
+{"erreur": "'phrase inconnue : g001'"}
+=== export ===
+
+=== phrases ===
+6 phrases, 0 validations
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json,sys; d=json.load(sys.stdin); print(d['id'], len(d['candidats']), 'candidats :', [c['nom'] for c in d['candidats']])
+                       ~~~~~~~~~^^^^^^^^^^^
+  File "/usr/lib64/python3.13/json/__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/usr/lib64/python3.13/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/usr/lib64/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1
+… [18 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -20 /tmp/banc-structures.log; echo \"=== test direct ===\"; cd tools/structures && PYTHONPATH=. python3 -c \"\nimport serveur, pathlib\nd = serveur.Donnees(pathlib.Path('donnees'))\np = d.ajouter('Le chien du voisin qui aboie la … [144 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/serveur.py", line 172, in <module>
+    main()
+    ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/serveur.py", line 162, in main
+    s = ThreadingHTTPServer((a.hote, a.port), Serveur)
+  File "/usr/lib64/python3.13/socketserver.py", line 457, in __init__
+    self.server_bind()
+    ~~~~~~~~~  127.0.0.1 · code 404, message Not Found
+  127.0.0.1 · "POST /api/ajouter HTTP/1.1" 404 -
+  127.0.0.1 · "POST /api/valider HTTP/1.1" 400 -
+  127.0.0.1 · "GET /api/export HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+bind
+    self.socket.bind(self.server_address)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 98] Address already in use
+=== test direct ===
+Traceback (most recent call last):
+  File "<string>", line 4, in <module>
+    p = d.ajouter('Le chien du voisin qui aboie la nuit réveille tout le quartier.')
+        ^^^^^^^^^
+AttributeError: 'Donnees' object has no attribute 'ajouter'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && git status --short; git add -A && git -c user.name=\"Stéphane\" -c user.email=\"stephane@local\" commit -q -m \"GÉNÉRATEUR — UNE PHRASE BRUTE → DES STRUCTURES CANDIDATES (V0 HEURISTIQUE)\n\ngenerateur.py segmente (GN, GV, GP … [853 caractères tronqués]`
+
+  ```
+M serveur.py
+ M static/app.js
+ M static/index.html
+?? generateur.py
+?? tests/test_generateur.py
+a407095 GÉNÉRATEUR — UNE PHRASE BRUTE → DES STRUCTURES CANDIDATES (V0 HEURISTIQUE)
+ccb1006 v0 — le banc de structures : phrases, candidats, validation, LLM, banque
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && fuser -k 8765/tcp 2>/dev/null; sleep 0.5; git -C tools/structures fetch -q origin && git -C tools/structures checkout -q a407095 && git -C tools/structures log --oneline -1; cd tools/structures && PYTHONPATH=. python3 -m unittest dis … [97 caractères tronqués]`
+
+  ```
+1297037a407095 GÉNÉRATEUR — UNE PHRASE BRUTE → DES STRUCTURES CANDIDATES (V0 HEURISTIQUE)
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 tools/structures/serveur.py --port 8765 > /tmp/banc-structures.log 2>&1 & sleep 1.3; echo \"=== ajouter ===\"; curl -s -X POST http://127.0.0.1:8765/api/ajouter -H 'Content-Type: application/json' -d '{\"texte\":\"Le ch … [798 caractères tronqués]`
+
+  ```
+=== ajouter ===
+g001 2 candidats : ['« qui aboie la nuit réveille tout le quartier » → voisin', '« qui aboie la nuit réveille tout le quartier » → Le chien']
+=== valider ===
+{"phrase_id": "g001", "candidat_id": "g001-c1", "verdict": "ok", "note": "test de bout en bout", "auteur": "humain", "horodatage": "2026-11-01T11:03:55"}
+=== export ===
+{"phrase": "Le chien du voisin qui aboie la nuit réveille tout le quartier.", "candidat": "g001-c1", "nom": "« qui aboie la nuit réveille tout le quartier » → voisin", "lectu
+=== état ===
+7 phrases, 1 validations
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && rm -f donnees/phrases_generees.json donnees/validations.jsonl donnees/llm.jsonl && git status --short; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pi … [1164 caractères tronqués]`
+
+  ```
+en-cours ok
+roadmap ok
+  T0 max : 3646 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/structures docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"S — LE GÉNÉRATEUR DE CANDIDATS : UNE PHRASE BRUTE → DES STRUCTURES À VALIDER\n\nLe banc de structures gagne son analyseur v0 ( … [936 caractères tronqués]`

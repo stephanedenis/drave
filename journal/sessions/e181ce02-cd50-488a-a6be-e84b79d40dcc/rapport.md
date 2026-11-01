@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 18.3 h |
-| Tours | 6 |
-| Messages | 238 |
-| Appels d'outils | 267 |
+| Durée | 18.4 h |
+| Tours | 7 |
+| Messages | 250 |
+| Appels d'outils | 285 |
 | Fichiers touchés | 16 |
-| Commandes | 197 |
+| Commandes | 214 |
 | Sous-agents | 2 |
 | Commits | 11 |
 | Compactages de contexte | 0 |
@@ -23,6 +23,8 @@
 … [256 caractères tronqués]
 - **complete** — Refondre la documentation de l'architecture Drave autour de la RSN plurielle (plusieurs candidats, pas un objet canonique unique) comme représentation interne permettant des cycles de pensée itératifs multi-niveaux : arbre d'états, opérateurs neuronaux/classiques, portefeuille de stratégies d'IA cla
 … [256 caractères tronqués]
+- **create** — Reprendre et compléter les sessions suspendues : R4.4 (exposant fusionné, fax 1 bit, scans réels de bout en bout) et S (candidats générés par un analyseur, export branché sur le corpus). Produire les mesures, fiches, tests et mises à jour d'en-cours/plans, documenter les limites qui ne se réparent p
+… [114 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -37,6 +39,8 @@
 **Tour 5** — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon travail en maintenant ce document à jour pour que les autres sessions locales puissent être en synergie avec tes travaux.
 
 **Tour 6** — étudie les sessions dsh actives et assure-toi que notre doc est à jour
+
+**Tour 7** — prends en charge ici les sessions en suspend pour les compléter
 
 ## 2. Déroulé, étape par étape
 
@@ -298,7 +302,7 @@ Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.
 
 ### Tour 6 — étudie les sessions dsh actives et assure-toi que notre doc est à jour
 
-*21 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Lire l'état des plans de session
 - bash — Extraire les champs de tous les plans
@@ -314,11 +318,68 @@ Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.
 - bash — Voir les modifications récentes de l'état
 - bash — Identifier les sessions DSH des processus actifs
 - read
-- … et 7 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ N2.h et R4.4 sont closes, Pensée a un v0 : je réécris l'état sur les seuls mandats actifs
+⏵ Audit terminé : une seule session active, l'état suit les mandats
+
+J'ai étudié les trois TUI DSH ouvertes et confronté leurs **plans** à `en-cours`. Verdict : **un seul mandat est actif**, les deux autres sont clos ; l'état était en retard d'un jour et listait encore deux sessions fermées.
+
+\## Ce que disent les mandats
+
+| session | plan | état réel |
+|---|---|---|
+| `e181ce02` — Pensée | heartbeat 2026-11-01 10 h 55 | **actif** ; state store v0 committé (`a20de579`), 6/6 portes T0–T4 |
+| `0b0a6a0d` — N2.h/N2.i | heartbeat 08 h 35 | **terminé** ; N2.i committé (`17ececfc`) |
+| `fe3c05f0` — R4.4 | heartbeat 02 h 55 | **terminé** ; R4.4 close (`7452a447`, `43a7b3fe`) |
+
+Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contrat de `continuite.md` dit qu'une session terminée sort d'`en-cours`. Les résultats restent dans les fiches et dans les puces de l'état.
+
+\## Ce qui était faux dans `en-cours`
+
+- date **03 h 15** alors que les commits vont jusqu'à **10 h 51** ;
+- **N2.h et R4.4 encore en sessions actives**, alors que leurs plans sont `terminé` ;
+- Pensée avec un **heartbeat du 31/10 22 h 45** et une prochaine action « écrire `moteur-de-pensee.md` » — déjà fait ;
+- puce N2 encore sur **N2.h en cours** alors que **N2.i** est committé ;
+- puce Pensée encore sur « le state store v0 est la prochaine action » alors qu'il est **mesuré 6/6** ;
+- questions ouvertes et ligne **N** du chantier restées sur l'ancien état.
+
+\## Ce que j'ai corrigé
+
+- **Date** : 2026-11-01, 10 h 55 HNE.
+- **Sessions en cours** : une seule, **Pensée** — `e181ce02` — avec plan, ambition, stratégie, objectif final, interfaces, fichiers réservés, heartbeat et prochaine action.
+- **Sessions archivées** : `0b0a6a0d` (N2.h/N2.i) et `fe3c05f0` (R4.4) ajoutées, avec leurs fiches.
+- **Pensée** : state store v0 **6/6 portes**, BFS/greedy/A*/MCTS-lite, fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine action **AC-3, alpha-bêta, DRVF, banc anytime**.
+- **N2** : N2.h close, N2.i (4,84 Mo) **12,93** littérature / **33,83** anglais, fiche [`n2-corpus-elargi`](../../reports/rapport-n2-corpus-elargi.md).
+- **R** : R4.4 close, **typoglycémie** ×17,8 (intérieur mélangé) / ×62,7 (tout mélangé), fiche [`typoglycemie`](../../reports/rapport-typoglycemie.md).
+- **Chantier N** : N2 close, N2 < 2,5 non atteinte, N4 0/4, N5 gelé.
+- **Questions** : N2 (la porte < 2,5 est-elle la bonne après 3,09 en domaine et 12,93 en littérature ?) et Pensée (AC-3/alpha-bêta et le banc anyt
+… [971 caractères tronqués]
+
+### Tour 7 — prends en charge ici les sessions en suspend pour les compléter
+
+*16 appels d'outils.* Actions notables :
+
+- bash — Lire le plan R4.4 et ce qui reste
+- bash — Lire le plan N2 et son objectif final
+- bash — Inspecter S, work/r44 et les GPU
+- bash — Lire la fiche R4.4 et ses limites
+- bash — Lire le README du banc de structures
+- bash — Lister les artefacts R4.4 disponibles
+- create_goal
+- bash — Repérer les fonctions R4.4 à étendre
+- bash — Lire le banc de mesure des scans
+- bash — Lire la construction des données S et l'export
+- bash — Lire la récupération des exposants
+- bash — Lire la suite de l'OCR et le banc réel
+- bash — Trouver les scans réels et le journal de bord
+- bash — Trouver la page et la boîte de l'exposant fusionné
+- … et 2 autres
+
+**Synthèse produite :**
+
+⏵ Je crée le goal de reprise, puis j'inspecte les deux chantiers restants (R4.4 et S)
 
 ## 3. Travail accompli
 
@@ -390,7 +451,7 @@ Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 157 autres
+- … et 174 autres
 
 ## 4. Mesures et résultats marquants
 

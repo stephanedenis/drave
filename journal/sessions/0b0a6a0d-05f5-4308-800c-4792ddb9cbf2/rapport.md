@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 18.6 h |
-| Tours | 11 |
-| Messages | 842 |
-| Appels d'outils | 789 |
+| Durée | 18.8 h |
+| Tours | 12 |
+| Messages | 858 |
+| Appels d'outils | 804 |
 | Fichiers touchés | 11 |
-| Commandes | 653 |
+| Commandes | 668 |
 | Sous-agents | 0 |
-| Commits | 19 |
+| Commits | 20 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -49,6 +49,8 @@
 **Tour 10** — en tant que programmeur, j'apprécie la coloration du code, syntaxe et structure indentée. On pourrait imaginer un outil semblable pour la linguistique. C'est à dire une coloration et découpage visuel de la structure des phrases et paragraphes. Bref quand j'apprends un nouvelle langue c'est le genre d'outil que j'aimerais avoir. Il serait profitable d'avoir un tel outil en entrée de notre modèle po … [63 caractères tronqués]
 
 **Tour 11** — allons-y, mais créons d'abord un outil pour humain dans un projet distinct (submodule git) qui permet d'afficher en web un ensemble de structures d'interprétation candidatees. On a donc un moyen de voir et valider les interprétations par un humain. On peut aussi soumettre cet ensemble à au grss modèle comme DeepSeek via l'API pour étudier son évaluation. et se construire ainsi un banque de corpus  … [28 caractères tronqués]
+
+**Tour 12** — lance le serveur et continue
 
 ## 2. Déroulé, étape par étape
 
@@ -581,6 +583,30 @@ Tests : alignement des spans, validation + export, verdict invalide refusé, bas
 - L'état la menti
 … [837 caractères tronqués]
 
+### Tour 12 — lance le serveur et continue
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Launch the structures server in the background
+- bash — Write the candidate generator and test it
+- bash — Fix the classifier and clause boundaries
+- bash — Add PP-head and adverb handling to the generator
+- bash — Fix the slots and retest the generator
+- bash — Rewrite the candidate generator with role ambiguity
+- bash — Write and run the generator tests
+- bash — Integrate the generator into the server and UI
+- bash — Test the generate-validate-export loop end-to-end
+- bash — Diagnose the /api/ajouter failure
+- bash — Commit the generator in the sub-project
+- bash — Update the submodule checkout to the new commit
+- bash — Test the full generate-validate-export loop
+- bash — Clean the demo artifacts and update the plan
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Serveur lancé ; je construis le générateur de candidats (l'analyseur) pour la suite
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -641,7 +667,7 @@ Tests : alignement des spans, validation + export, verdict invalide refusé, bas
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 613 autres
+- … et 628 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -769,7 +795,7 @@ Tests : alignement des spans, validation + export, verdict invalide refusé, bas
 
 ## 5. Erreurs rencontrées
 
-45 sorties en erreur ou divergentes. Les premières :
+46 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5
@@ -808,4 +834,5 @@ Tests : alignement des spans, validation + export, verdict invalide refusé, bas
 - SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES  Les deux chantiers menés en parallèle sont committés : N2.i (17ececf
 - LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE)  Trois variantes du même texte de validation, mêmes octets, même protocole : p
 - S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS  Nouveau sous-projet (submodule : tools/structures, dépôt local drave-struc
+- S — LE GÉNÉRATEUR DE CANDIDATS : UNE PHRASE BRUTE → DES STRUCTURES À VALIDER  Le banc de structures gagne son analyseur v0 (submodule tools/structures, commit a
 

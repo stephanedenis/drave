@@ -5067,3 +5067,518 @@ python3 tools/verifie_journal.py           EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md && git diff --cached --stat && timeout 240 git commit -m \"ÉTAT — N2.h ET R4.4 CLOSES, PENSÉE v0 ACTIVE : L'ÉTAT SUIT LES MANDATS\" 2>&1  … [108 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                          | 86 +++++++---------------
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   | 13 ++--
+ 2 files changed, 34 insertions(+), 65 deletions(-)
+[still running after 60000ms; moved to background job bash-197]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-197", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 48d2c064] ÉTAT — N2.h ET R4.4 CLOSES, PENSÉE v0 ACTIVE : L'ÉTAT SUIT LES MANDATS
+ 10 files changed, 240 insertions(+), 82 deletions(-)
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --status | tail -6; echo '---'; python3 tools/verifie_en_cours.py; echo '---'; python3 tools/revue_documentation.py | tail -2", "description": "Confirmer l'état final et les mandats"}`
+
+  ```
+c3d0f0bd-e344-4600 · terminé  · 2980 min · R4.1–R4.3, B10.2bis, A8.3b
+      → **B10.2bis** suite (encodeur) ; **A8.3b** ; **R4.4 bloqué**.
+    e181ce02-cd50-488a · actif    ·   3 min · Pensée
+      → AC-3, alpha-bêta, l'intégration DRVF et le banc anytime — le state store
+    fe3c05f0-834b-44f2 · terminé  · 483 min · R4.4 — les scans (OCR, prétraitement, exposants, colonnes, second moteur)
+      → la **parité** sur photocopie (6,6 % de WER mais 48 % de parité), puis
+---
+  en-cours · 1276 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---
+  revue de documentation · 381 fiche(s) · 457 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain; echo '=== counters ==='; grep -n \"fichiers / JSON\\|documents de\\|Mis à jour\" docs/pilotage/en-cours.md; echo '=== log ==='; git log --oneline -3", "description": "Vérifier si un autre mandat a modifié l'ét … [20 caractères tronqués]`
+
+  ```
+M tools/docwatch
+=== counters ===
+3:**Mis à jour : 2026-11-01, 10 h 55 HNE (heure locale, EST).**
+83:| fichiers / JSON de résultats | **381** / **457** | `reports/*.md` / `reports/*.json` |
+84:| documents de `docs/` | **114** (hors archive et README) | `docs/**/*.md` |
+=== log ===
+48d2c064 ÉTAT — N2.h ET R4.4 CLOSES, PENSÉE v0 ACTIVE : L'ÉTAT SUIT LES MANDATS
+1c9d3d26 DONNÉES — L'INVENTAIRE LOCAL : 132 GO DE WIKIPÉDIA, 228 GO DE DOCUMENTS, 2,8 TO DE VIDÉOS QUI NE SONT PAS DU TEXTE
+ae9ad3be S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit terminé : une seule session active, l'état suit les mandats
+
+J'ai étudié les trois TUI DSH ouvertes et confronté leurs **plans** à `en-cours`. Verdict : **un seul mandat est actif**, les deux autres sont clos ; l'état était en retard d'un jour et listait encore deux sessions fermées.
+
+## Ce que disent les mandats
+
+| session | plan | état réel |
+|---|---|---|
+| `e181ce02` — Pensée | heartbeat 2026-11-01 10 h 55 | **actif** ; state store v0 committé (`a20de579`), 6/6 portes T0–T4 |
+| `0b0a6a0d` — N2.h/N2.i | heartbeat 08 h 35 | **terminé** ; N2.i committé (`17ececfc`) |
+| `fe3c05f0` — R4.4 | heartbeat 02 h 55 | **terminé** ; R4.4 close (`7452a447`, `43a7b3fe`) |
+
+Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contrat de `continuite.md` dit qu'une session terminée sort d'`en-cours`. Les résultats restent dans les fiches et dans les puces de l'état.
+
+## Ce qui était faux dans `en-cours`
+
+- date **03 h 15** alors que les commits vont jusqu'à **10 h 51** ;
+- **N2.h et R4.4 encore en sessions actives**, alors que leurs plans sont `terminé` ;
+- Pensée avec un **heartbeat du 31/10 22 h 45** et une prochaine action « écrire `moteur-de-pensee.md` » — déjà fait ;
+- puce N2 encore sur **N2.h en cours** alors que **N2.i** est committé ;
+- puce Pensée encore sur « le state store v0 est la prochaine action » alors qu'il est **mesuré 6/6** ;
+- questions ouvertes et ligne **N** du chantier restées sur l'ancien état.
+
+## Ce que j'ai corrigé
+
+- **Date** : 2026-11-01, 10 h 55 HNE.
+- **Sessions en cours** : une seule, **Pensée** — `e181ce02` — avec plan, ambition, stratégie, objectif final, interfaces, fichiers réservés, heartbeat et prochaine action.
+- **Sessions archivées** : `0b0a6a0d` (N2.h/N2.i) et `fe3c05f0` (R4.4) ajoutées, avec leurs fiches.
+- **Pensée** : state store v0 **6/6 portes**, BFS/greedy/A*/MCTS-lite, fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine action **AC-3, alpha-bêta, DRVF, banc anytime**.
+- **N2** : N2.h close, N2.i (4,84 Mo) **12,93** littérature / **33,83** anglais, fiche [`n2-corpus-elargi`](../../reports/rapport-n2-corpus-elargi.md).
+- **R** : R4.4 close, **typoglycémie** ×17,8 (intérieur mélangé) / ×62,7 (tout mélangé), fiche [`typoglycemie`](../../reports/rapport-typoglycemie.md).
+- **Chantier N** : N2 close, N2 < 2,5 non atteinte, N4 0/4, N5 gelé.
+- **Questions** : N2 (la porte < 2,5 est-elle la bonne après 3,09 en domaine et 12,93 en littérature ?) et Pensée (AC-3/alpha-bêta et le banc anytime battent-ils le greedy ?).
+- **Plan `e181ce02`** : heartbeat 10 h 55, étapes 3-4 barrées, prochaine action AC-3/alpha-bêta/DRVF/banc.
+
+## Vérifications
+
+- `sessions.py --check` : **plans cohérents** (un actif, deux terminés).
+- `verifie_en_cours` : **1 276 mots**, 1 session, 10 puces, 5 questions — ✅.
+- `revue_documentation` : **381 fiches / 457 JSON / 114 docs / 80 portes** — ✅.
+- `taille_documents`, `porte-tableaux`, `verifier_schemas`, `verifie_journal` — ✅.
+- Commit : **`48d2c064`** — « ÉTAT — N2.h ET R4.4 CLOSES, PENSÉE v0 ACTIVE : L'ÉTAT SUIT LES MANDATS ».
+
+## Règle pour la suite
+
+Si les TUI N2 ou R4.4 reprennent, elles doivent d'abord **rouvrir leur plan** (`État : actif`, heartbeat, prochaine action) et le déclarer dans `en-cours` — sinon `sessions.py --check` les verra comme terminées, et l'état ne saura pas qu'elles travaillent. La seule session active à ce jour est **Pensée** ; sa prochaine action est **AC-3, alpha-bêta, DRVF, banc anytime**.
+
+
+## Tour 7
+
+### 👤 Utilisateur
+
+prends en charge ici les sessions en suspend pour les compléter
+
+### 🤖 Assistant
+
+⏵ Reprise des sessions suspendues : je lis leurs restes, leurs mesures et leurs fichiers réservés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,140p' journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md", "description": "Lire le plan R4.4 et ce qui reste"}`
+
+  ```
+# Plan de session — R4.4, les scans (mandat libre de 10 h)
+
+> **Mandat ouvert** le 2026-10-31 22 h 50 HAE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) — le heartbeat est celui de
+> l'état ; la session le met à jour à chaque cycle. **Échéance : 2026-11-01 07 h 14** (10 h
+> humain, pas une estimation de durée de travail).
+
+- **Session** : `fe3c05f0-834b-44f2-8739-501865d652c1`
+- **Rôle** : **R4.4 — les scans** — CPU seulement ; les deux GPU restent à N2.h.
+- **Périmètre** : R4.4 — les scans (OCR, prétraitement, exposants, colonnes, second moteur)
+- **Fichiers réservés** : `work/r44/`, `work/ocr/`, `tools/simuler_scan.py`, `tools/nettoyer_scan.py`,
+  `tools/mesurer_scans.py`, `tools/graphe_document_ocr.py`, `tools/mesurer_ocr.py`, `tools/porte-ocr.sh`,
+  `reports/r44-*`, `docs/implantation/encodeur-visuel.md`, `journal/sessions/fe3c05f0-…/`
+- **Heartbeat** : 2026-11-01 02:55
+- **État** : terminé
+- **Prochaine action** : la **parité** sur photocopie (6,6 % de WER mais 48 % de parité), puis
+  exposants et colonnes.
+
+## Objectif final
+
+**R4.4 mesurée, pas partielle.** Un lecteur qui lit des **scans** — photocopie, photo de
+téléphone, fax, papier — avec la **
+… [5324 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,120p' journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md", "description": "Lire le plan N2 et son objectif final"}`
+
+  ```
+# Plan de session — N2.h, le mètre propre
+
+> **Mandat ouvert** le 2026-10-31 22 h 30 HAE depuis [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md)
+> — mandat libre de 10 h (nuit du 31/10 au 1/11). Le heartbeat est celui de l'état.
+
+- **Session** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2`
+- **Rôle** : calcul : distillation ; corpus ; évaluation
+- **Périmètre** : N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+- **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`,
+  `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`,
+  `journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/`
+- **Heartbeat** : 2026-11-01 08:35 EST
+- **Objectif final** : un **mètre honnête** pour N2 — corpus dédupliqué (0 % de fenêtres de
+  validation dans l'entraînement), chaîne refaite dessus, porte < 2,5 redéfinie — puis trancher
+  ce que les chiffres contaminés ne pouvaient pas trancher : la **généralité hors dépôt** et le
+  **verrou de longueur**.
+- **Résultat** : corpus 4,63 → 3,61 Mo (−22,2 %), **0 / 2 814** fenêtres de validation dans
+  l'entraînement (contre 32,8 %) ; chaîne propre **3,09** en domaine, **16,70** sur la littérature
+  jamais vue ; di
+… [403 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la tools/structures/ 2>/dev/null | head -20; echo '=== README ==='; find tools/structures -maxdepth 2 -iname 'README*' -o -iname '*.md' | head -10; echo '=== work/r44 ==='; ls -la work/r44/ | head -20; echo '=== GPU ==='; nvidia- … [147 caractères tronqués]`
+
+  ```
+total 40
+drwxr-xr-x. 1 stephane stephane   178  1 nov 10:53 .
+drwxr-xr-x. 1 stephane stephane 16500  1 nov 10:50 ..
+-rw-r--r--. 1 stephane stephane  5768  1 nov 10:50 construire_donnees.py
+drwxr-xr-x. 1 stephane stephane    24  1 nov 10:50 donnees
+-rw-r--r--. 1 stephane stephane    44  1 nov 10:50 .git
+-rw-r--r--. 1 stephane stephane    19  1 nov 10:50 .gitignore
+-rw-r--r--. 1 stephane stephane  4128  1 nov 10:50 llm.py
+drwxr-xr-x. 1 stephane stephane    84  1 nov 10:53 __pycache__
+-rw-r--r--. 1 stephane stephane  4308  1 nov 10:50 README.md
+-rw-r--r--. 1 stephane stephane  7598  1 nov 10:50 serveur.py
+drwxr-xr-x. 1 stephane stephane    50  1 nov 10:50 static
+drwxr-xr-x. 1 stephane stephane    52  1 nov 10:53 tests
+=== README ===
+tools/structures/README.md
+=== work/r44 ===
+total 2012
+drwxr-xr-x. 1 stephane stephane   2344  1 nov 03:03 .
+drwxr-xr-x. 1 stephane stephane     46  1 nov 07:11 ..
+drwxr-xr-x. 1 stephane stephane    854 31 oct 23:20 colonnes
+-rw-r--r--. 1 stephane stephane  19656  1 nov 02:56 colonnes.json
+-rw-r--r--. 1 stephane stephane   1808 31 oct 23:35 colonnes.log
+-rw-r--r--. 1 stephane stephane   9281  1 nov 00:57 colonnes-nouveau.json
+-rw-r--r--. 1 stephane stephan
+… [945 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,140p' reports/rapport-r44-scans.md", "description": "Lire la fiche R4.4 et ses limites"}`
+
+  ```
+# R4.4 — les scans : la photo passe de 55,9 % à 6,7 % de WER, les colonnes de 89 % à 0,5 %
+
+> **Objet.** La ligne R4.4 était **partielle** : dix pages **rendues** lues, mais aucun scan.
+> Ce programme fabrique cinq familles de dégradations, mesure ce qu'elles coûtent, ajoute le
+> prétraitement, la récupération des exposants, l'ordre de lecture des colonnes et les cellules
+> des tableaux — et valide la chaîne sur un **vrai scan** d'Internet Archive.
+>
+> **Ce que ce n'est pas.** Les scans sont **simulés** (il n'y a pas de scanner sur la machine) ;
+> la validation réelle compare à la **couche OCR** d'Internet Archive, pas à une vérité humaine.
+> Les deux limites sont dites, pas contournées.
+
+## Dispositif
+
+- **100 scans simulés** : 10 pages de développement (9 portent les 30 questions du banc R0.3) et
+  10 pages de test, × **5 familles** : `propre` (contrôle), `photocopie` (200 dpi, flou, 1,2°,
+  mouchetures, JPEG q45), `photo` (180 dpi, perspective, éclairage inégal + ombre, flou de
+  mouvement, bruit, JPEG q25), `fax` (120 dpi, binarisation dure, sel-et-poivre), `papier`
+  (170 dpi, texture, jaunissement, vignettage, taches, rotation).
+- **OCR** : tesseract 5.5.3 sans root ([`instal
+… [6895 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat tools/structures/README.md", "description": "Lire le README du banc de structures"}`
+
+  ```
+# Structures — le banc d'interprétations candidates
+
+> **Ce que c'est.** Un outil **pour humain** : il affiche, pour une phrase, plusieurs **structures
+> d'interprétation candidates** (attachements, rôles, portées), permet de les **valider**, de
+> demander l'avis d'un **grand modèle** (DeepSeek), et d'**exporter une banque** de structures
+> validées — un corpus d'entraînement pour le projet Drave.
+
+> **Ce que ce n'est pas.** Pas un analyseur : les candidats sont fournis par le fichier de données
+> (v0 : écrits à la main). Le jour où un analyseur les génère, l'outil ne change pas.
+
+## Lancer
+
+```bash
+python3 serveur.py                 # http://127.0.0.1:8765
+python3 serveur.py --port 9000 --hote 0.0.0.0   # sur le réseau local
+```
+
+Aucune dépendance : la bibliothèque standard suffit (serveur HTTP, JSON, `urllib`).
+
+## L'interface
+
+- une carte par phrase ; chaque candidat montre la **phrase colorée par type de segment**, les
+  **blocs indentés** (l'indentation est la profondeur d'attachement), l'**attachement** explicite
+  (`qui dort → le chat`), et une **lecture** en français courant ;
+- trois verdicts par candidat — **✓ acceptable**, **~ discutable**, **✗ non** — avec une note ;
+- 
+… [2998 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/r44/ | head -40; echo '=== scans ==='; ls work/r44/scans 2>/dev/null | head; echo '=== reports r44 ==='; ls reports/ | grep r44", "description": "Lister les artefacts R4.4 disponibles"}`
+
+  ```
+colonnes
+colonnes.json
+colonnes.log
+colonnes-nouveau.json
+colonnes-nouveau.log
+colonnes-v4.json
+colonnes-v4.log
+colonnes-v6.json
+colonnes-v6.log
+cout
+cout.json
+gate-final.log
+gate-v5.log
+gate-v6.log
+gate-v7.log
+gate-v8.log
+gen-g2.log
+gen-g3.log
+gen-petit.log
+journal.md
+mesure-brut-auto.json
+mesure-brut-auto.log
+mesure-brut.json
+mesure-brut.log
+mesure-dev-auto2.json
+mesure-dev-exp.json
+mesure-final-exp-col.json
+mesure-final-exp-col.log
+mesure-final.json
+mesure-final.log
+mesure-g2.json
+mesure-g2.log
+mesure-g2-v5.json
+mesure-g2-v7.json
+mesure-g2-v9.json
+mesure-g3.json
+mesure-g3.log
+mesure-g3-v7.json
+mesure-g3-v9.json
+mesure.json
+=== scans ===
+A_RES_80_10-en-p1-s1-fax.png
+A_RES_80_10-en-p1-s1-papier.png
+A_RES_80_10-en-p1-s1-photocopie.png
+A_RES_80_10-en-p1-s1-photo.png
+A_RES_80_10-en-p1-s1-propre.png
+A_RES_80_10-en-p2-s1-fax.png
+A_RES_80_10-en-p2-s1-papier.png
+A_RES_80_10-en-p2-s1-photocopie.png
+A_RES_80_10-en-p2-s1-photo.png
+A_RES_80_10-en-p2-s1-propre.png
+=== reports r44 ===
+r44-colonnes.json
+r44-cout.json
+r44-ocr-pilote.json
+r44-petit.json
+r44-reel.json
+r44-reel-second.json
+r44-reel-third.json
+r44-rotation.json
+r44-sans-exposants.json
+r44-scans.json
+r44-seed2.json
+r44-seed3.json
+r44
+… [61 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je crée le goal de reprise, puis j'inspecte les deux chantiers restants (R4.4 et S)
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "Reprendre et compléter les sessions suspendues : R4.4 (exposant fusionné, fax 1 bit, scans réels de bout en bout) et S (candidats générés par un analyseur, export branché sur le corpus). Produire les mesures, fiches, tests et mises à jour d'en-cours/plans, doc … [156 caractères tronqués]`
+
+> **Objectif** (create) : Reprendre et compléter les sessions suspendues : R4.4 (exposant fusionné, fax 1 bit, scans réels de bout en bout) et S (candidats générés par un analyseur, export branché sur le corpus). Produire les mesures, fiches, tests et mises à jour d'en-cours/plans, documenter les limites qui ne se réparent pas, et committer. Ne pas rouvrir N2 (close, porte < 2,5 non atteinte) sans nouvelle hypothèse de capacité/données.
+
+
+  ```
+{"goal":{"id":"goal-ccfa4ca3-ce3f-4d12-8dd0-bce263a1c405","revision":1,"objective":"Reprendre et compléter les sessions suspendues : R4.4 (exposant fusionné, fax 1 bit, scans réels de bout en bout) et S (candidats générés par un analyseur, export branché sur le corpus). Produire les mesures, fiches, tests et mises à jour d'en-cours/plans, documenter les limites qui ne se réparent pas, et committer. Ne pas rouvrir N2 (close, porte < 2,5 non atteinte) sans nouvelle hypothèse de capacité/données.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^def \\|^class \\|exposant\\|fax\" tools/graphe_document_ocr.py | head -40; echo '=== nettoyer ==='; grep -n \"^def \\|fax\\|binar\\|median\\|otsu\" tools/nettoyer_scan.py | head -50; echo '=== mesurer ==='; grep -n \"^def  … [136 caractères tronqués]`
+
+  ```
+49:# Version de la seule RÉCUPÉRATION (exposants) : la changer invalide les caches de mesure.
+56:def _env() -> dict:
+66:def exige() -> None:
+73:def version() -> str:
+80:def mots(image: pathlib.Path, langue: str = "fra", psm: int = 3) -> list[dict]:
+123:def _ocr_boite(image: pathlib.Path, boite: tuple[int, int, int, int], langue: str,
+156:def recuperer_exposants(image: pathlib.Path, les_mots: list[dict],
+158:    """Rend les appels de note en exposant que tesseract a lus comme de la ponctuation.
+161:    et **fait de ponctuation** (`!`, `!!`, `!?`, `!l`) est un exposant raté. On recadre sa
+186:            mot["exposant_recupere"] = round(conf, 1)
+191:def bandes_vides(boites: list[tuple[float, float, float, float]],
+237:def bande_vide_boites(boites: list[tuple[float, float, float, float]],
+244:def bande_vide(lignes: list[dict], largeur: float,
+250:def ordre_de_lecture(lignes: list[dict], largeur: float) -> list[dict]:
+263:def _typographie(texte: str) -> str:
+271:def _lignes_depuis_mots(les_mots: list[dict]) -> list[dict]:
+294:def lignes_de_mots(les_mots: list[dict], colonnes: bool = False) -> list[dict]:
+322:def _recoller(texte: str, suivant: str) -> str:
+330:def blocs_de_page(lignes: 
+… [4545 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' tools/mesurer_scans.py; echo '...'; sed -n '80,200p' tools/mesurer_scans.py", "description": "Lire le banc de mesure des scans"}`
+
+  ```
+#!/usr/bin/env python3
+"""mesurer_scans.py — R4.4 : les scans SIMULÉS, mesurés famille par famille et pipeline par pipeline.
+
+POURQUOI CE FICHIER. Le pilote R4.4 a mesuré des pages rendues, pas des scans. `simuler_scan.py`
+fabrique cinq familles de scans (photocopie, photo, fax, papier) et un contrôle (`propre`) ; ce
+fichier mesure ce qu'elles coûtent, et ce que le prétraitement (`nettoyer_scan.py`) récupère.
+La question n'est pas « quel est le WER ? » mais « quelle **famille** de dégradation casse quoi,
+et quelle **étape** la relève ».
+
+CE QUE LA MESURE GARDE :
+  - le WER mot à mot contre le texte natif de la MÊME page, avec rappel et précision ;
+  - la confiance moyenne de l'OCR (pondérée par les mots) ;
+  - la PARITÉ des questions du banc R0.3 sur les pages de développement (même lecteur R0.2) ;
+  - le split **dev / test** : les pages de test ne portent pas de questions et ne servent qu'au
+    WER — le prétraitement est réglé sur dev, le test dit s'il transfère ;
+  - deux contrôles : une page **noire** (aucun mot, WER 1) et la famille `propre` (le plafond).
+
+Usage :
+  python3 tools/mesurer_scans.py --corpus work/r44/scans/manifeste.json \
+      --pipelines brut,auto --sortie wor
+… [8879 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,120p' tools/structures/construire_donnees.py; echo '=== serveur export ==='; grep -n \"export\\|validations\\|def \" tools/structures/serveur.py | head -40", "description": "Lire la construction des données S et l'export"}`
+
+  ```
+#!/usr/bin/env python3
+"""construire_donnees.py — fabrique donnees/phrases.json en calculant les spans par sous-chaîne.
+
+Écrire les spans à la main est une source d'erreurs ; ici, chaque segment est donné par son
+**texte exact**, et l'outil vérifie qu'il apparaît bien, dans l'ordre, dans la phrase.
+"""
+import json, pathlib
+
+PHRASES = [
+    ("p001", "Le chat de la voisine qui dort sur le toit se réveille.",
+     [("Le chat", "GN", "agent", 0), (" de la voisine", "GP", "possession", 0),
+      (" qui dort sur le toit", "REL", "qualite", 1), (" se réveille", "GV", "predicat", 0)],
+     "« qui dort » sur le chat",
+     "C'est le chat qui dort ; il est à la voisine ; il est sur le toit.",
+     (" qui dort sur le toit", "Le chat", "relative")),
+    ("p001", "Le chat de la voisine qui dort sur le toit se réveille.",
+     [("Le chat", "GN", "agent", 0), (" de la voisine", "GP", "possession", 0),
+      (" qui dort sur le toit", "REL", "qualite", 2), (" se réveille", "GV", "predicat", 0)],
+     "« qui dort » sur la voisine",
+     "C'est la voisine qui dort ; le chat est à elle ; il est sur le toit.",
+     (" qui dort sur le toit", " de la voisine", "relative")),
+    ("p002", "J'ai vu l'homme 
+… [5689 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '120,200p' tools/graphe_document_ocr.py", "description": "Lire la récupération des exposants"}`
+
+  ```
+RE_EXPOSANT = re.compile(r"^[!?|Il1'°.,;:*+=]+$")
+
+
+def _ocr_boite(image: pathlib.Path, boite: tuple[int, int, int, int], langue: str,
+               marge: int = 5, hauteur: int = 96, psm: int = 10) -> list[tuple[str, float]]:
+    """OCRise UNE petite boîte, agrandie, avec une liste blanche de chiffres. C'est la
+    deuxième chance d'un appel de note : le premier passage l'a lu « ! » ou « !? »."""
+    from PIL import Image, ImageFilter
+    x0, y0, x1, y1 = boite
+    with Image.open(image) as im:
+        g = im.convert("L").crop((max(x0 - marge, 0), max(y0 - marge, 0),
+                                  x1 + marge, y1 + marge))
+    facteur = max(hauteur / max(g.height, 1), 3.0)
+    g = g.resize((max(int(g.width * facteur), 1), max(int(g.height * facteur), 1)),
+                 Image.LANCZOS).filter(ImageFilter.GaussianBlur(0.4))
+    with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
+        chemin = pathlib.Path(tmp.name)
+    try:
+        g.save(chemin)
+        sortie = subprocess.run(
+            [str(BIN), str(chemin), "stdout", "-l", langue, "--psm", str(psm),
+             "-c", "tessedit_char_whitelist=0123456789", "-c", "tessedit_create_tsv=1"],
+            e
+… [2975 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '200,260p' tools/graphe_document_ocr.py; echo '=== reel ==='; grep -n \"^def \\|Verne\\|reel\\|parite\\|question\" tools/mesurer_reel.py | head -40; echo '=== r44-reel ==='; python3 -c \"import json;d=json.load(open('reports/r … [125 caractères tronqués]`
+
+  ```
+groupe de mots entre deux gouttières doit peser au moins 12 % des mots, sinon la bande est
+    un faux vide (espace de justification, titre centré)."""
+    if len(boites) < 8 or largeur < 100:
+        return []
+    occupation = np.zeros(int(largeur) + 2, dtype=np.float64)
+    for x0, x1, y0, y1 in boites:
+        occupation[max(int(x0), 0):max(int(x1), 0)] += float(y1 - y0)
+    if hauteur:
+        occupation /= max(float(hauteur), 1.0)
+    faible = occupation < 0.10
+    deb, fin = int(largeur * 0.15), int(largeur * 0.85)
+    largeur_min = max(largeur * 0.025, 12)
+    largeur_max = largeur * 0.15
+    bandes = []
+    i = deb
+    while i < fin:
+        if faible[i]:
+            j = i
+            while j < fin and faible[j]:
+                j += 1
+            if largeur_min <= (j - i) <= largeur_max:
+                bandes.append((float(i), float(j)))
+            i = j
+        else:
+            i += 1
+    if not bandes:
+        return []
+    # chaque groupe entre deux gouttières doit exister : au moins 12 % des mots
+    bornes = [0.0] + [(a + b) / 2 for a, b in bandes] + [float(largeur)]
+    for k in range(len(bornes) - 1):
+        gauche, droite = bornes[k], bornes[k + 1]
+        poid
+… [4201 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && find work/r44 -maxdepth 2 -iname '*verne*' -o -iname '*reel*' | head -20; echo '=== journal r44 ==='; tail -60 work/r44/journal.md", "description": "Trouver les scans réels et le journal de bord"}`
+
+  ```
+work/r44/reel
+work/r44/reel/verne2.pdf
+work/r44/reel/verne2-p40.png
+work/r44/reel/verne2-p40-net.png
+work/r44/reel/verne2-p60.png
+work/r44/reel/verne2-p60-net.png
+work/r44/reel/verne2-p80.png
+work/r44/reel/verne2-p80-net.png
+work/r44/reel/verne2-p100.png
+work/r44/reel/verne2-p100-net.png
+work/r44/reel/verne2-p120.png
+work/r44/reel/verne2-p120-net.png
+work/r44/reel/verne2-p140.png
+work/r44/reel/verne2-p140-net.png
+work/r44/reel/verne2-p160.png
+work/r44/reel/verne2-p160-net.png
+work/r44/reel/verne2-p180.png
+work/r44/reel/verne2-p180-net.png
+work/r44/reel/verne2-p200.png
+work/r44/reel/verne2-p200-net.png
+=== journal r44 ===
+# Journal de bord — OCR robuste (R4.4), programme 10 h
+Échéance : 2026-11-01 07:14 (epoch dans /tmp/r44-echeance.txt)
+
+## 22:45 — baseline + premier prétraitement (dev, 10 pages)
+- baseline brut (dev) : propre 4,46 | photocopie 6,55 | papier 13,02 | fax 27,05 | photo 55,85
+- baseline brut (test) : propre 2,84 | photocopie 4,69 | papier 53,15 | fax 23,10 | photo 80,65
+- auto : photo 55,85→7,29 ; fax 27,05→21,93 ; papier 13,02→13,07 ; photocopie 6,55→6,58
+- parité dev : propre 87,0 | photocopie 62,2 (auto 48,0) | photo 7,4 (auto 69,6) | fax 2,2 (auto 11,5) | papier 6
+… [1859 caractères tronqués]
+  ```
+

@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 18.3 h |
-| Tours | 4 |
-| Messages | 695 |
-| Appels d'outils | 705 |
+| Durée | 18.5 h |
+| Tours | 5 |
+| Messages | 714 |
+| Appels d'outils | 723 |
 | Fichiers touchés | 18 |
-| Commandes | 643 |
+| Commandes | 661 |
 | Sous-agents | 0 |
 | Commits | 31 |
 | Compactages de contexte | 1 |
@@ -33,6 +33,8 @@
 **Tour 3** — <goal_round> Objective: "R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer fiches, JSON, docs, porte, roadmap, en-cours, journal et commits. Continuer … [637 caractères tronqués]
 
 **Tour 4** — révise nos sources de données pour l'entrainement. fais le tour du disque dur pour avoir un inventaire local pour l'entrainement.
+
+**Tour 5** — go
 
 ## 2. Déroulé, étape par étape
 
@@ -254,6 +256,32 @@ Le point de vigilance immédiat : **IA est presque plein** (34 Go libres), et c'
 1. **Le levier français, c'est Wikipédia, pas le dépôt** : 
 … [1200 caractères tronqués]
 
+### Tour 5 — go
+
+*18 appels d'outils.* Actions notables :
+
+- bash — Inspect French Wikipedia sqlite schema
+- bash — Check DB summaries and French wiki text files
+- bash — Check tools and dump contents
+- bash — Inspect summary sizes and raw formatting
+- bash — Write Wikipedia corpus builder and test on 5000 articles
+- bash — Fix sqlite URI and retest extraction
+- bash — Debug sqlite open modes
+- bash — Fix default DB path and test extraction
+- bash — Launch full French Wikipedia extraction
+- bash — Read corpus dedup and contamination helpers
+- bash — Check Wikipedia extraction progress
+- bash — Write contamination checker for corpus
+- bash — Check extraction and text join artifacts
+- bash — Stop extraction and strengthen text cleanup
+- … et 4 autres
+
+**Synthèse produite :**
+
+⏵ Construction du corpus français à partir de Wikipédia
+
+Je commence par la base FR : schéma, volume d'articles, format du texte — puis j'extrais, je filtre et je découpe.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -321,7 +349,7 @@ Le point de vigilance immédiat : **IA est presque plein** (34 Go libres), et c'
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 603 autres
+- … et 621 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -449,7 +477,7 @@ Le point de vigilance immédiat : **IA est presque plein** (34 Go libres), et c'
 
 ## 5. Erreurs rencontrées
 
-33 sorties en erreur ou divergentes. Les premières :
+35 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

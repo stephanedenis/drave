@@ -50,8 +50,8 @@
   [`r44-scans`](../../reports/rapport-r44-scans.md) · [`typoglycemie`](../../reports/rapport-typoglycemie.md).
 - **Données — l'inventaire local** : Wikipédia **132 Go** (10 langues), documents **~228 Go**
   (DRM exclu), **2,8 To** de vidéos exclues ; fiche [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md).
-- **S — le banc de structures** : outil web (`tools/structures`, submodule) : 6 phrases, 12
-  candidats, validation, LLM, export ; candidats à la main.
+- **S — le banc de structures** : outil web (`tools/structures`, submodule) : 6 phrases,
+  **générateur** de candidats, validation, LLM, export.
 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
   1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
   [`r13`](../../reports/rapport-r13-decision.md), spécification
