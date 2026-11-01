@@ -13203,3 +13203,24 @@ ositions aléatoires : 14,11 → 3,25** à 256 octets ; les deux leviers **se co
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\na = \"le **corpus élargi** (N2.i, 4,84 Mo) **généralise** (littérature −22 %, anglais −40 %) sans relever le domaine. Prochaine ac … [2537 caractères tronqués]`
+
+  ```
+roadmap ok
+compteurs ok
+     · compteurs : en-cours.md dit 467 JSON, le disque en a 471
+  T0 max : 3915 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-769]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-769", "timeout_ms": 300000, "wait": true}`
+
+  ```
+21 files changed, 520 insertions(+), 39 deletions(-)
+ create mode 100644 reports/corpus-multi-propre.json
+ create mode 100644 reports/rapport-n2-multilingue.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [663 caractères tronqués]`

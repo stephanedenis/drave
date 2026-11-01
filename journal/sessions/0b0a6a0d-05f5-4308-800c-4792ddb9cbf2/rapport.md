@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 21.9 h |
 | Tours | 16 |
-| Messages | 994 |
-| Appels d'outils | 928 |
+| Messages | 996 |
+| Appels d'outils | 930 |
 | Fichiers touchés | 11 |
-| Commandes | 769 |
+| Commandes | 770 |
 | Sous-agents | 0 |
-| Commits | 25 |
+| Commits | 26 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -820,7 +820,7 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 
 ### Tour 16 — continue avec de trèes gros corpus multilingues
 
-*31 appels d'outils.* Actions notables :
+*33 appels d'outils.* Actions notables :
 
 - bash — List the Wikipedia language bases and GPU status
 - bash — Extract 10-language Wikipedia articles
@@ -836,7 +836,7 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 - bash — Wait for the multilingual base training
 - bash — Check the multilingual training progress
 - bash — Wait for the multilingual base to finish
-- … et 13 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
@@ -902,7 +902,7 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 729 autres
+- … et 730 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1075,4 +1075,5 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 - S — DES CONTEXTES PLUS LARGES, ET LA MESURE DE CE QU'IL FAUT POUR TRANCHER  Le contexte n'est plus un champ unique : il est gradué (0 sans contexte, 1 phrase d'
 - N2.j — 186 Mo DE VRAI FRANÇAIS : LE BLOC LINGUISTIQUE GAGNE ×1,7 À ×2,6 HORS DOMAINE  Sur l'inventaire local (132 Go de Wikipédia, base FR de 7,25 Go) : 120 000
 - N2.k — DIX LANGUES : LE FRANÇAIS PAIE 0,65 BIT/OCTET, LES AUTRES GAGNENT 0,8 À 3,4  Dix langues extraites des bases sqlite (fr, en, de, es, it, pt, ru, ar, ja, 
+- ÉTAT — COMPTEUR JSON 471 (DIX LANGUES)  Les corpus et les évaluations multilingues de l'autre session font passer le compteur à 471 ; la revue repasse." && git 
 

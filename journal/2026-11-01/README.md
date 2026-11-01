@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**50 commits** · **4 session(s)** · **9 thème(s)**
+**51 commits** · **4 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 11 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 28 | [mesures.md](mesures.md) |
+| mesures | 29 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -84,6 +84,7 @@
 | 12:55 | `a31a2e4d` | DONNÉES — LES DIX LANGUES SONT LÀ : 21,6 M ARTICLES, 31,4 G CARACTÈRES, 38,8 GO, 0 FUITE |
 | 13:46 | `275fea5a` | PILOTAGE — LA VISION À JOUR ET LES HUIT CHANTIERS : 48 H DE MANDATS, LEURS RELATIONS, LA CARTE |
 | 13:49 | `651bfc90` | BLOC LINGUISTIQUE — NEUF NIVEAUX, HEURISTIQUE ET NEURONAL, 398 LANGUES À 0,9687 |
+| 14:12 | `291f0f72` | N2.k — DIX LANGUES : LE FRANÇAIS PAIE 0,65 BIT/OCTET, LES AUTRES GAGNENT 0,8 À 3,4 |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (28)
+## Commits du jour (29)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -36,6 +36,7 @@
 | 12:40 | `6cf77396` | N2.j — 186 Mo DE VRAI FRANÇAIS : LE BLOC LINGUISTIQUE GAGNE ×1,7 À ×2,6 HORS DOMAINE | `en-cours.md`, `README.md`, `attention.md` (+18) |
 | 13:46 | `275fea5a` | PILOTAGE — LA VISION À JOUR ET LES HUIT CHANTIERS : 48 H DE MANDATS, LEURS RELATIONS, LA CARTE | `chantiers.md`, `en-cours.md`, `roadmap.md` (+24) |
 | 13:49 | `651bfc90` | BLOC LINGUISTIQUE — NEUF NIVEAUX, HEURISTIQUE ET NEURONAL, 398 LANGUES À 0,9687 | `README.md`, `bloc-linguistique.md`, `en-cours.md` (+30) |
+| 14:12 | `291f0f72` | N2.k — DIX LANGUES : LE FRANÇAIS PAIE 0,65 BIT/OCTET, LES AUTRES GAGNENT 0,8 À 3,4 | `en-cours.md`, `roadmap.md`, `README.md` (+18) |
 
 ## Chiffres du jour
 
@@ -61,6 +62,7 @@
 - [reports/rapport-n2-corpus-reel.md](../../reports/rapport-n2-corpus-reel.md)
 - [reports/rapport-n2-diversite.md](../../reports/rapport-n2-diversite.md)
 - [reports/rapport-n2-longueur.md](../../reports/rapport-n2-longueur.md)
+- [reports/rapport-n2-multilingue.md](../../reports/rapport-n2-multilingue.md)
 - [reports/rapport-n2-propre.md](../../reports/rapport-n2-propre.md)
 - [reports/rapport-r44-scans.md](../../reports/rapport-r44-scans.md)
 
