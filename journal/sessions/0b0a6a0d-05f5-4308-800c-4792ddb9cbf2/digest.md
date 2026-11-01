@@ -10720,3 +10720,435 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1343 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-625]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-625", "timeout_ms": 240000, "wait": true}`
+
+  ```
+14 files changed, 530 insertions(+), 23 deletions(-)
+ create mode 100644 journal/2026-11-01/moteur.md
+ create mode 100644 reports/rapport-typoglycemie.md
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse : mesurée, argumentée, et reliée à la vision du projet
+
+## D'abord la mesure, parce qu'elle tranche
+
+J'ai pris le texte de validation et je l'ai mélangé de deux façons, à octets et longueur identiques :
+
+| variante | PPL | ×propre |
+|---|---:|---:|
+| propre | **3,0555** | 1,0 |
+| intérieur des mots mélangé (première et dernière gardées) | **54,2655** | **×17,8** |
+| toutes les lettres mélangées | **191,4059** | **×62,7** |
+
+**Le modèle actuel ne fait pas ce que fait l'humain : il lit des lettres.** L'effet dont tu parles — « je lis vite, l'ordre du milieu ne compte pas » — est un effet de **supériorité du mot** : un lexique de dizaines de milliers de mots, une prédiction top-down qui choisit le mot avant de le lire, et une forme globale (longueur + lettres extérieures). Ce modèle n'a ni lexique ni top-down : mélanger l'intérieur d'un mot détruit exactement ce qu'il exploite. La différence milieu/tout (×3,5) montre que les lettres extérieures portent encore un peu de signal — mais rien qui ressemble à une lecture par formes.
+
+## Oui, on peut s'en approcher — et c'est même trois idées distinctes
+
+**1. Le mot comme forme apprise (micro).** Un encodeur qui représente un mot par un *pooling* de n-grammes de caractères (forme globale, ordre interne libre), avec des **positions relatives** entre mots. Le modèle voit un **ensemble de formes** et l'ordre vient d'un code de position relatif, pas absolu. C'est la version « mots d'abord, lettres ensuite » de ton intuition — et elle attaque directement le verrou que N2.h a mesuré : la position absolue (14,11 → 3,25 quand on la randomise).
+
+**2. La page comme champ visuel (macro).** Les humains ne lisent pas une ligne : ils *balayent* une page en 2D. Le projet a déjà les briques de la structure de page — colonnes (89,4 % → 0,5 %), tableaux (92,6 %), ordre de lecture. Un encodeur qui voit la page comme un **champ de patchs** (positions 2D, régions) avant de linéariser est la version « surface » au sens propre. C'est ce que fait un ViT sur une image, et c'est cohérent avec ta lecture : la structure **avant** le flux de lettres.
+
+**3. La saccade comme politique active (le lien avec la vision du projet).** Une saccade, c'est **lire ce qu'on regarde, pas tout le texte** : 4 à 5 fixations par seconde, 7 à 9 lettres par fixation, et l'intégration se fait dans un état. C'est exactement le principe du projet — *le coût du calcul proportionnel à l'activité* : un modèle qui **échantillonne** des fenêtres de mots au lieu de tout lire est un modèle à flots, pas à séquence. Et le **moteur de pensée v0** construit aujourd'hui est l'hôte naturel de cette politique : choisir où regarder est une recherche (frontière, budget, trace, rejeu), pas une couche de plus.
+
+## Ce que le dépôt impose au design
+
+- **Ne pas tokeniser à la main** : R13 a mesuré que les octets battent BPE 512 (+0,39 %, dans le bruit) et BPE 1024 (+4,09 %). Donc les fragments doivent être **appris** (patchs, formes) et non découpés par un vocabulaire externe.
+- **Le masque n'est pas le verrou** : élargir la fenêtre locale à l'inférence ne récupère rien (6,13 → 6,37 à 512). Ce qui manque, c'est l'**entraînement sur des contextes longs** — une politique de saccades devra donc être entraînée sur des documents entiers, pas sur des fenêtres de 128.
+- **La position est le premier verrou** : la forme « mot + position relative » est précisément ce qui le lève.
+
+## Le risque honnête
+
+À 11,47 M de paramètres et 5 Mo de texte, **le lexique n'existe pas**. La typoglycémie mesure que le modèle s'accroche aux lettres *parce qu'il n'a rien d'autre*. Un encodeur de formes pourrait perdre plus qu'il ne gagne à cette échelle : la forme globale est une **hypothèse forte** qui a besoin de données pour être apprise. C'est pour ça que l'expérience doit être **falsifiable** : même budget de paramètres, même corpus, et deux métriques — la PPL **et** la robustesse au mélange.
+
+## Le programme, en trois étapes
+
+1. **E1 — la typoglycémie comme banc** (fait aujourd'hui, committé) : 3,06 / 54,27 / 191,41. C'est désormais une **métrique de robustesse** du projet, à côté de la PPL et de la courbe de longueur.
+2. **E2 — l'encodeur de formes** : mots = pooling de n-grammes, positions relatives, même budget ; jugé sur la PPL **et** sur le mélange (il doit résister là où le modèle en octets s'effondre).
+3. **E3 — la saccade** : une politique de glimpses hébergée par le moteur v0, entraînée sur des documents longs ; jugée sur la PPL à 512/1 024 (le verrou actuel) et sur le **coût par octet lu** — la promesse « structure » du projet.
+
+## La réponse en une phrase
+
+**Oui, c'est une direction juste — mais elle concerne la *lecture*, pas la *connaissance*.** Un modèle de formes et de saccades peut lire la structure, être robuste à la longueur et coûter proportionnellement à ce qu'il regarde ; il ne saura pas pour autant écrire du français. C'est exactement la ligne **R** (le lecteur), et c'est là que la thèse « la structure avant la taille » a une chance de se prouver : non pas en faisant un modèle qui sait plus, mais un modèle qui **lit mieux avec moins**.
+
+
+## Tour 10
+
+### 👤 Utilisateur
+
+en tant que programmeur, j'apprécie la coloration du code, syntaxe et structure indentée. On pourrait imaginer un outil semblable pour la linguistique. C'est à dire une coloration et découpage visuel de la structure des phrases et paragraphes. Bref quand j'apprends un nouvelle langue c'est le genre d'outil que j'aimerais avoir. Il serait profitable d'avoir un tel outil en entrée de notre modèle pour accélérer son apprentissage et valider la qualité en sortie.
+
+### 🤖 Assistant
+
+⏵ Je regarde ce que le dépôt a déjà pour la structure de phrase avant de proposer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/ | grep -iE \"rsn|parse|syntax|role|colori\" | head -12; echo \"=== docs RSN ===\"; ls docs/theorie/ | grep -iE \"rsn|semant|syntax\" | head; echo \"=== rapport B2 ===\"; ls reports/ | grep -iE \"rsn|b2-\" | head -6", "descr … [50 caractères tronqués]`
+
+  ```
+controle_capacite.py
+lecteur_controleur.py
+=== docs RSN ===
+protocole-semantique.md
+semantique-universaux.md
+=== rapport B2 ===
+n3.2b2-cache.json
+rapport-n3.2b2-cache.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"coloration\\|colori\" docs/ --include=*.md | head -6; echo \"=== RSN roles ===\"; grep -rn \"sujet\\|objet\\|rôle\" docs/theorie/protocole-semantique.md 2>/dev/null | head -5", "description": "Check for existing coloring o … [17 caractères tronqués]`
+
+  ```
+=== RSN roles ===
+13:écart relatif réel (4,40 %) mais **transitoire** : à 1 000 pas, le contrôle repasse, et à 30 langues l'effet se
+48:    neutre. La sonde de langue est le contrôle.
+68:- **contrôle** : le même opérateur sur les **surfaces** (sans `z`) doit faire moins bien, et l'opérateur sur
+82:| **masque, plancher, permutation** (B9) | les contrôles : plancher chrF, rappel mélangé, sonde de langue |
+84:## Les contrôles négatifs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 docs/theorie/semantique-universaux.md; echo \"=== B11 codec ===\"; head -25 reports/rapport-b11-codec.md 2>/dev/null || ls reports/ | grep -i b11", "description": "Read the universal semantics schema"}`
+
+  ```
+# Universaux sémantiques : ce que les écoles disent, ce que Drave en garde
+
+> **Rôle.** Cette note fonde la **base fixe** de la couche sémantique. Elle ne remplace pas les mesures :
+> elle fixe le vocabulaire, les invariants et les limites. Le protocole est dans
+> [`protocole-semantique.md`](protocole-semantique.md) ; le premier résultat typé dans
+> [`rapport-universaux.md`](../../reports/rapport-universaux.md).
+
+## 1. Pourquoi une base, et pas un vecteur libre
+
+Un `z` contrastif retrouve un article, mais ne dit pas **ce qu'il contient**. Pour une couche **opérable**,
+il faut un code **typé**, **fini**, **déterministe** : un tuple de champs fixes, chacun avec un vocabulaire
+fixe. Le sens devient une **structure** que le raisonnement classique peut lire, et la restitution peut être
+un **codec** exact plutôt qu'un décodeur neuronal approximatif.
+
+## 2. Les écoles
+
+### 2.1 Natural Semantic Metalanguage (NSM)
+
+Wierzbicka et Goddard proposent une **réduction** du sens à des **primes sémantiques** universelles
+(« I », « YOU », « SOMEONE », « THINK », « WANT », « GOOD », « BIG », « BECAUSE », « IF »…), combinées par
+une grammaire minimale, et paraphrasables dans toutes les langues. La for
+… [1451 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Esquisse : une « coloration syntaxique » du français, pour voir l'idée en concret
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2i/coloration.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"coloration.py — esquisse d'une coloration linguistique : fonction vs contenu, propositions indentées.\n\nCe n'est pas un analyseur : c'est un **v0 rule-based** qui mo … [2431 caractères tronqués]`
+
+  ```
+M-bM-^TM-^LM-bM-^TM-^@ ^[[38;5;110mLe^[[0m ^[[38;5;223mchat^[[0m ^[[38;5;223mnoir^[[0m
+M-bM-^TM-^\M-bM-^TM-^@ ^[[38;5;110mqui^[[0m ^[[38;5;223mdormait^[[0m ^[[38;5;110msur^[[0m ^[[38;5;110mle^[[0m ^[[38;5;223mtoit^[[0m^[[38;5;244m,^[[0m ^[[38;5;110mse^[[0m ^[[38;5;223mrM-CM-)veilla^[[0m ^[[38;5;110mquand^[[0m ^[[38;5;110mla^[[0m ^[[38;5;223mpluie^[[0m ^[[38;5;223mtomba^[[0m^[[38;5;244m,^[[0m ^[[38;5;110met^[[0m ^[[38;5;110mil^[[0m ^[[38;5;223mrentra^[[0m ^[[38;5;110mparce^[[0m ^[[38;5;110mque^[[0m ^[[38;5;110mla^[[0m ^[[38;5;223mnuit^[[0m ^[[38;5;110mM-CM-)tait^[[0m ^[[38;5;223mfroide^[[0m^[[38;5;244m.^[[0m
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse : l'idée, sa forme concrète, et comment la tester
+
+## L'idée est juste — et elle a déjà un statut dans le projet
+
+Ce que tu décris est exactement un **bloc classique** au sens de Drave : déterministe, auditable, rejouable, pas cher, et qui rend visible une structure que le modèle neuronal, lui, devrait deviner. Le parallèle avec l'IDE est profond : la coloration syntaxique ne rend pas le compilateur plus intelligent, elle rend **la structure lisible pour celui qui lit**. Pour un modèle, l'équivalent n'est pas cosmétique : c'est un **prior**.
+
+Et le dépôt a déjà la moitié de la matière : les **universaux RSN** (types, rôles, cas), le **codec B11** (449 surfaces), la structure de **page** (R4.4 : colonnes, tableaux, ordre de lecture). Ce qui manque est exactement le niveau que tu décris : **la phrase**.
+
+## À quoi ça ressemble (esquisse d'aujourd'hui)
+
+J'ai écrit un v0 de 40 lignes (`work/n2i/coloration.py`) : il colore les mots grammaticaux contre les mots pleins et indente les propositions aux frontières (virgule + subordonnant) :
+
+```
+┌─ Le chat noir,
+├─ qui dormait sur le toit,
+├─ se réveilla quand la pluie tomba,
+└─ et il rentra parce que la nuit était froide.
+```
+
+C'est une esquisse, pas un analyseur — mais elle montre les trois couches qu'un vrai outil devrait porter :
+
+| couche | ce qu'elle colore | l'équivalent en code |
+|---|---|---|
+| **lexicale** | mots grammaticaux / mots pleins, temps et personne | les mots-clés contre les identifiants |
+| **syntagmatique** | GN, GV, GP, propositions (indentation) | les blocs et l'indentation |
+| **actancielle** | rôles RSN : agent, patient, but, lieu, instrument | les types et les signatures |
+
+La troisième est la vraie différenciation : spaCy, Stanza ou displaCy colorient des **POS** ; personne ne colorie des **rôles sémantiques** avec une palette **cross-lingue**. Les universaux du projet permettent exactement ça : le même agent est de la même couleur en français, en anglais et en latin — c'est ça, l'outil dont un apprenant a besoin : voir la **charpente** avant la traduction.
+
+## Les sorties
+
+- **ANSI** : le terminal, pour l'apprenant.
+- **HTML** : les couches activables (voir / masquer les rôles, mode examen).
+- **SVG** : les arcs de dépendance, comme un AST — et le projet sait déjà faire des SVG propres.
+- **Linéarisé** : `<GN>le chat</GN> <GV>dort</GV>` — le format qui sert au modèle.
+
+## Les deux usages, et ils ne se testent pas pareil
+
+**Pour l'apprenant** : la qualité se juge sur la **couverture** (part des phrases entièrement découpées), l'**accord avec un analyseur de référence**, et le **coût** (ms/phrase). C'est un produit : il faut qu'il soit juste, sinon il enseigne une mauvaise charpente.
+
+**Pour le modèle** : trois façons de l'injecter, et une seule est honnête à cette échelle :
+
+1. **Canal parallèle par octet** : chaque octet reçoit une classe (contenu, fonction, ponctuation, frontière de proposition), le modèle a une embedding de cette classe. Le highlighter tourne **à l'inférence** comme bloc classique : le modèle reçoit un prior déterministe, pas une annotation apprise.
+2. **Markup linéarisé** : le modèle lit `<GN>…</GN>` — risqué : il apprend le balisage, pas la structure.
+3. **Curriculum** : pré-entraîner sur annoté, affiner sur brut — le plus élégant, le plus long.
+
+**Pour la sortie** : c'est l'usage le plus immédiat et le moins cher. Un **validateur déterministe** : la phrase générée doit se parser (un sujet, un verbe, des dépendances cohérentes). Le saladier de mots d'aujourd'hui (« La France est un pays de la couche 1… ») échouerait au premier coup — et ce serait déjà un progrès : un **garde-fou** que le projet n'a pas.
+
+## Le protocole falsifiable
+
+- **V0** : le highlighter sur le corpus propre ; métriques : couverture, accord avec un analyseur de référence, latence.
+- **E2 (le prior)** : même modèle, même corpus, même compute, **avec et sans** le canal de structure. Contrôles indispensables : (i) une **annotation aléatoire** (placebo) — pour séparer « structure » de « signal supplémentaire » ; (ii) l'**ablation** du canal à l'inférence — le modèle l'utilise-t-il vraiment ? (iii) la **robustesse au mélange** (la typoglycémie d'aujourd'hui : 3,06 / 54,27 / 191,41) — si le canal fait résister au mélange, la structure aide ; sinon, elle ne fait que du bruit.
+- **E3 (la sortie)** : 100 générations, taux de parseabilité contre jugement humain — un validateur qui ne coûte rien et qui dit la vérité.
+
+## Le risque, dit franchement
+
+Une annotation est une **hypothèse grammaticale** : si le highlighter se trompe, il enseigne une mauvaise structure, et le modèle l'apprendra fidèlement. Et à 11,47 M de paramètres, le prior peut être ignoré : c'est pour ça que l'ablation et le placebo ne sont pas optionnels. La question « la structure aide-t-elle à cette échelle ? » est une **mesure**, pas une conviction.
+
+## Ce que je ferais
+
+Le highlighter est un **double chantier** qui se rentabilise deux fois : un produit pour l'apprenant (la charpente visible, cross-lingue, avec les universaux) et un **prior mesurable** pour le modèle (canal + placebo + ablation). C'est aussi le prolongement naturel de la typoglycémie : le modèle lit des lettres ; donnons-lui, en entrée, la **forme** qu'il ne sait pas voir — et regardons s'il s'en sert.
+
+
+## Tour 11
+
+### 👤 Utilisateur
+
+allons-y, mais créons d'abord un outil pour humain dans un projet distinct (submodule git) qui permet d'afficher en web un ensemble de structures d'interprétation candidatees. On a donc un moyen de voir et valider les interprétations par un humain. On peut aussi soumettre cet ensemble à au grss modèle comme DeepSeek via l'API pour étudier son évaluation. et se construire ainsi un banque de corpus robuste pour l'entrainement.
+
+### 🤖 Assistant
+
+⏵ Création du sous-projet web (submodule) : structures candidates, validation humaine, évaluation LLM
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import fastapi, uvicorn; print('fastapi ok')\" 2>&1 | tail -1; python3 -c \"import flask; print('flask ok')\" 2>&1 | tail -1; cat .gitmodules 2>/dev/null; git submodule status 2>/dev/null | head -3; echo \"=== env clé == … [188 caractères tronqués]`
+
+  ```
+ModuleNotFoundError: No module named 'fastapi'
+ModuleNotFoundError: No module named 'flask'
+[submodule "tools/docwatch"]
+	path = tools/docwatch
+	url = https://github.com/stephanedenis/docwatch.git
+ 95e94c47007672e4a64e6a4952944e071f92ef94 tools/docwatch (v0.4.1)
+=== env clé ===
+=== git ===
+git version 2.56.0
+Python 3.13.16
+  ```
+
+- **bash** `{"command": "mkdir -p /home/stephane/Data13TB/stephane/GitHub/drave-structures/{donnees,static,tests} && cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && git init -q 2>/dev/null; cat > donnees/phrases.json <<'JSON'\n{\n \"version\": 1,\n \"note\": \"Six phrases, deux ou trois interprét … [7479 caractères tronqués]`
+
+  ```
+6 phrases, 12 candidats
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && cat > construire_donnees.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"construire_donnees.py — fabrique donnees/phrases.json en calculant les spans par sous-chaîne.\n\nÉcrire les spans à la main est une source d'erreurs ; ici, ch … [5599 caractères tronqués]`
+
+  ```
+6 phrases, 12 candidats, spans vérifiés
+alignement ok sur 38 segments
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && cat > llm.py <<'PY'\n\"\"\"llm.py — l'évaluation des interprétations par un grand modèle.\n\nDeux fournisseurs :\n  · « baseline »  — un attachement au plus proche (déterministe, explicable) : c'est le **témoin**\n    auquel … [3991 caractères tronqués]`
+
+  ```
+p001 → p001-c1 | Attachement au nom le plus proche (heuristique de droite).
+p002 → p002-c1 | Attachement au nom le plus proche (heuristique de droite).
+p003 → p003-c1 | Attachement au nom le plus proche (heuristique de droite).
+p004 → p004-c1 | Attachement au nom le plus proche (heuristique de droite).
+p005 → p005-c1 | Attachement au nom le plus proche (heuristique de droite).
+p006 → p006-c1 | Attachement au nom le plus proche (heuristique de droite).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('construire_donnees.py'); s = p.read_text()\n# ajouter l'attachement à chaque candidat : (segment, cible, genre)\ns = s.replace('''     \"qui dort » sur le chat\",''', ' … [4413 caractères tronqués]`
+
+  ```
+builder patché
+6 phrases, 12 candidats, spans vérifiés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('llm.py'); s = p.read_text()\ndebut = s.index(\"def baseline(\")\nfin = s.index(\"def _prompt(\")\nneuf = '''def baseline(phrase, candidats):\n    \"\"\"Attachement au plus  … [1856 caractères tronqués]`
+
+  ```
+ok
+p001 → p001-c2 | Attachement à la cible la plus proche (heuristique de d
+p002 → p002-c2 | Attachement à la cible la plus proche (heuristique de d
+p003 → p003-c2 | Attachement à la cible la plus proche (heuristique de d
+p004 → p004-c1 | Pas de signal d'attachement : choix par défaut du premi
+p005 → p005-c2 | Attachement à la cible la plus proche (heuristique de d
+p006 → p006-c1 | Attachement à la cible la plus proche (heuristique de d
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && cat > serveur.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"serveur.py — le banc de structures : API + interface web, sans dépendance.\n\nLe serveur expose les phrases et leurs interprétations candidates, enregistre les verdicts\ … [7996 caractères tronqués]`
+
+  ```
+syntaxe ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && cat > static/index.html <<'HTML'\n<!doctype html>\n<html lang=\"fr\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Structures — le banc d'interprétations … [10710 caractères tronqués]`
+
+  ```
+fichiers statiques ok
+total 20
+drwxr-xr-x. 1 stephane stephane   50  1 nov 10:49 .
+drwxr-xr-x. 1 stephane stephane  140  1 nov 10:48 ..
+-rw-r--r--. 1 stephane stephane 4358  1 nov 10:49 app.js
+-rw-r--r--. 1 stephane stephane 1531  1 nov 10:49 index.html
+-rw-r--r--. 1 stephane stephane 4484  1 nov 10:49 style.css
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('serveur.py'); s = p.read_text()\ns = s.replace(\"class Serveur(BaseHTTPRequestHandler):\\n    donnees: Donnees = None  # injecté par main()\\n\", \"class Serveur(BaseHTTPRe … [5035 caractères tronqués]`
+
+  ```
+serveur patché
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_verdict_invalide (test_serveur.TestBanc.test_verdict_invalide) ...   127.0.0.1 · "POST /api/valider HTTP/1.1" 400 -
+/usr/lib64/python3.13/unittest/case.py:606: ResourceWarning: unclosed <socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 29539)>
+  if method() is not None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 2.627s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tests/test_serveur.py'); s = p.read_text()\ns = s.replace(\"        self.serveur.shutdown()\\n        shutil.rmtree(self.dossier, ignore_errors=True)\",\n              \"   … [1175 caractères tronqués]`
+
+  ```
+ok
+Ran 5 tests in 2.615s
+
+OK
+serveur 1290134
+=== phrases ===
+6 phrases, 0 validations
+=== valider ===
+{"phrase_id": "p001", "candidat_id": "p001-c1", "verdict": "ok", "note": "lecture naturelle", "auteur": "humain", "horodatage": "2026-11-01T10:49:42"}
+=== llm ===
+{"phrase_id": "p001", "fournisseur": "baseline", "modele": "attachement-le-plus-proche", "choix": "p001-c2", "confiance": 0.5, "justification": "Attachement à la cible la plus proche (heuristique de droite).", "mode": "local", "horodatage": "2026-11-01T10:49:42"}
+=== export ===
+{"phrase": "Le chat de la voisine qui dort sur le toit se réveille.", "candidat": "p001-c1", "nom": "« qui dort » sur le chat", "lecture": "C'est le chat qui dort ; il est à la voisine ; il est sur le toit.", "segmen
+=== index ===
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initia
+--- arrêt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && rm -f donnees/validations.jsonl donnees/llm.jsonl && cat > README.md <<'MD'\n# Structures — le banc d'interprétations candidates\n\n> **Ce que c'est.** Un outil **pour humain** : il affiche, pour une phrase, plusieurs **stru … [5347 caractères tronqués]`
+
+  ```
+ccb1006 v0 — le banc de structures : phrases, candidats, validation, LLM, banque
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git submodule add /home/stephane/Data13TB/stephane/GitHub/drave-structures tools/structures 2>&1 | tail -3; git submodule status; cat .gitmodules", "description": "Add the tool as a git submodule"}`
+
+  ```
+Cloning into '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures'...
+fatal: transport 'file' not allowed
+fatal: clone of '/home/stephane/Data13TB/stephane/GitHub/drave-structures' into submodule path '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures' failed
+ 95e94c47007672e4a64e6a4952944e071f92ef94 tools/docwatch (v0.4.1)
+[submodule "tools/docwatch"]
+	path = tools/docwatch
+	url = https://github.com/stephanedenis/docwatch.git
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la tools/structures 2>/dev/null | head -3; rmdir tools/structures 2>/dev/null; git -c protocol.file.allow=always submodule add /home/stephane/Data13TB/stephane/GitHub/drave-structures tools/structures 2>&1 | tail -3; git submodul … [97 caractères tronqués]`
+
+  ```
+Cloning into '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures'...
+done.
+ 95e94c47007672e4a64e6a4952944e071f92ef94 tools/docwatch (v0.4.1)
+ ccb100616e98cb7a84eeb70730eb5c92782f4bc2 tools/structures (heads/master)
+[submodule "tools/docwatch"]
+	path = tools/docwatch
+	url = https://github.com/stephanedenis/docwatch.git
+[submodule "tools/structures"]
+	path = tools/structures
+	url = /home/stephane/Data13TB/stephane/GitHub/drave-structures
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"\"\"- **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,\n  32 formules/10 dérivées, **m … [890 caractères tronqués]`
+
+  ```
+T0 max : 3998 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+AssertionError: puce R introuvable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -A4 \"R4.1–R4.3\\|R4.1–R4.4\" docs/pilotage/en-cours.md | head -12", "description": "Find the current R bullet text"}`
+
+  ```
+80:- **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
+81-  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** est **mesurée sur scans
+82-  simulés (4/5 familles ≥ **90 %** de parité, fax **56,7 %**) ; fiche
+83-  [`r44-scans`](../../reports/rapport-r44-scans.md).
+84-- **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); lignes = p.read_text().splitlines(keepends=True)\ni = next(k for k, l in enumerate(lignes) if l.startswith(\"- **R4.1–R4.3 — les blocs structurels**\")) … [827 caractères tronqués]`
+
+  ```
+trouvé ligne 80 → - **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996
+remplacé
+  T0 max : 4017 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ état court, structuré, multi-session et reprenable
+  [`r04`](../../reports/rapport-r04-tete-survol.md), [`r07`](../../reports/rapport-r07-routeur.md),
+  [`r06`](../../reports/rapport-r06-publication.md) (cascade à confiance **publiée**).
+- **R4.1–R4.4 — les blocs structurels** : **mesurés** — 996/802 cellules, 294/24 fichiers,
+  32/10 formules, **miroir 34/34** ; **R4.4** sur scans simulés (4/5 ≥ **90 %** de parité) ;
+  fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
+- **S — le banc de structures** : outil web (`tools/structures`, submodule) — 6 phrases, 12
+  candidats, validation humaine, LLM et export JSONL ; candidats à la main.
+- **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
+  1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"996/802 cellules, 294/24 fichiers,\\n  32/10 formules, **miroir 34/34** ; **R4.4** sur scans simulés (4/5 ≥ **90 %**  … [982 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4003 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.i** (4,84 Mo) : **12,93** en littérature, **33,83** en anglais\", \"**N2.i** (4,84 Mo) : **12,93** littérature,  … [375 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 380 fiche(s) · 456 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^| \\*\\*R — le lecteur\\*\\*\" docs/pilotage/roadmap.md; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); lignes = p.read_text().splitlines(keepends=True)\ni = next(k for k, l in enumerate(li … [568 caractères tronqués]`
+
+  ```
+33:| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) | **R4.4** : les **scans réels de bout en bout** ; R1/R2/R3 attendent N2 |
+S inséré après la ligne 33
+| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles
+| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | 🔬 **v0 (outil web)** : 6 phrases, 12 candidats, validation + baseline + export JSONL | générer les candidat
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add .gitmodules tools/structures docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS\n\nNouveau sous-projet (submo … [1313 caractères tronqués]`

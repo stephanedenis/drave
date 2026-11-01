@@ -1,3 +1,6 @@
 [submodule "tools/docwatch"]
 	path = tools/docwatch
 	url = https://github.com/stephanedenis/docwatch.git
+[submodule "tools/structures"]
+	path = tools/structures
+	url = /home/stephane/Data13TB/stephane/GitHub/drave-structures

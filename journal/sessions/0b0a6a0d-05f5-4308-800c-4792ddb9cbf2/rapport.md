@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 18.2 h |
-| Tours | 9 |
-| Messages | 808 |
-| Appels d'outils | 759 |
+| Durée | 18.6 h |
+| Tours | 11 |
+| Messages | 836 |
+| Appels d'outils | 784 |
 | Fichiers touchés | 11 |
-| Commandes | 625 |
+| Commandes | 649 |
 | Sous-agents | 0 |
-| Commits | 18 |
+| Commits | 19 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -45,6 +45,10 @@
 **Tour 8** — Est-on encore loin de pouvoir utiliser le système pour du vrai travail?
 
 **Tour 9** — peut-on s'éloigner du modèle octet et modèle token pour aller vers un modèle qui voit la structure du texte en surface avant un peu comme la perception humaine le fait avec la saccade et les mots dont on peut mélanger les lettres du milieu sans qu'on s'en rende compte à la lecture rapide.
+
+**Tour 10** — en tant que programmeur, j'apprécie la coloration du code, syntaxe et structure indentée. On pourrait imaginer un outil semblable pour la linguistique. C'est à dire une coloration et découpage visuel de la structure des phrases et paragraphes. Bref quand j'apprends un nouvelle langue c'est le genre d'outil que j'aimerais avoir. Il serait profitable d'avoir un tel outil en entrée de notre modèle po … [63 caractères tronqués]
+
+**Tour 11** — allons-y, mais créons d'abord un outil pour humain dans un projet distinct (submodule git) qui permet d'afficher en web un ensemble de structures d'interprétation candidatees. On a donc un moyen de voir et valider les interprétations par un humain. On peut aussi soumettre cet ensemble à au grss modèle comme DeepSeek via l'API pour étudier son évaluation. et se construire ainsi un banque de corpus  … [28 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -430,7 +434,7 @@ Localement français, globalement du **saladier de mots**. Ce n'est pas un probl
 
 ### Tour 9 — peut-on s'éloigner du modèle octet et modèle token pour aller vers un modèle qui voit la structure du texte en surface a … [169 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Measure the model on letter-scrambled text
 - bash — Read the evaluation helpers
@@ -438,10 +442,108 @@ Localement français, globalement du **saladier de mots**. Ce n'est pas un probl
 - bash — Fix the tensor conversion and run the scrambled-text test
 - bash — Write the typoglycemia report and update the state
 - bash — Commit the typoglycemia diagnostic
+- job_output
 
 **Synthèse produite :**
 
-⏵ La mesure est nette : je la consigne en fiche, puis je réponds
+⏵ Réponse : mesurée, argumentée, et reliée à la vision du projet
+
+\## D'abord la mesure, parce qu'elle tranche
+
+J'ai pris le texte de validation et je l'ai mélangé de deux façons, à octets et longueur identiques :
+
+| variante | PPL | ×propre |
+|---|---:|---:|
+| propre | **3,0555** | 1,0 |
+| intérieur des mots mélangé (première et dernière gardées) | **54,2655** | **×17,8** |
+| toutes les lettres mélangées | **191,4059** | **×62,7** |
+
+**Le modèle actuel ne fait pas ce que fait l'humain : il lit des lettres.** L'effet dont tu parles — « je lis vite, l'ordre du milieu ne compte pas » — est un effet de **supériorité du mot** : un lexique de dizaines de milliers de mots, une prédiction top-down qui choisit le mot avant de le lire, et une forme globale (longueur + lettres extérieures). Ce modèle n'a ni lexique ni top-down : mélanger l'intérieur d'un mot détruit exactement ce qu'il exploite. La différence milieu/tout (×3,5) montre que les lettres extérieures portent encore un peu de signal — mais rien qui ressemble à une lecture par formes.
+
+\## Oui, on peut s'en approcher — et c'est même trois idées distinctes
+
+**1. Le mot comme forme apprise (micro).** Un encodeur qui représente un mot par un *pooling* de n-grammes de caractères (forme globale, ordre interne libre), avec des **positions relatives** entre mots. Le modèle voit un **ensemble de formes** et l'ordre vient d'un code de position relatif, pas absolu. C'est la version « mots d'abord, lettres ensuite » de ton intuition — et elle attaque directement le verrou que N2.h a mesuré : la position absolue (14,11 → 3,25 quand on la randomise).
+
+**2. La page comme champ visuel (macro).** Les humains ne lisent pas une ligne : ils *balayent* une page en 2D. Le projet a déjà les briques de la structure de page — colonnes (89,4 % → 0,5 %), tableaux (92,6 %), ordre de lecture. Un encodeur qui voit la page comme un **champ de patchs** (positions 2D, régions) avant de linéariser est la version « surface » au sens propre. C'est ce que fait un ViT sur une image, et c'est cohérent avec ta lecture : la structure **avant** le flux de lettres.
+
+**3. La saccade comme politique active (le lien avec la vision du projet).** Une saccade, c'est **lire ce qu'on regarde, pas tout le texte** : 4 à 5 fixations par seconde, 7 à 9 lettres par fixation, et l'intégration se fait dans un état. C'est exactement le principe du projet — *le coût du calcul proportionnel à l'activité* : un modèle qui **échantillonne** des fenêtres de mots au lieu 
+… [2608 caractères tronqués]
+
+### Tour 10 — en tant que programmeur, j'apprécie la coloration du code, syntaxe et structure indentée. On pourrait imaginer un outil  … [343 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Find the RSN parser and semantic layer
+- bash — Check for existing coloring or role concepts
+- bash — Read the universal semantics schema
+- bash — Sketch a French syntax highlighter
+
+**Synthèse produite :**
+
+⏵ Réponse : l'idée, sa forme concrète, et comment la tester
+
+\## L'idée est juste — et elle a déjà un statut dans le projet
+
+Ce que tu décris est exactement un **bloc classique** au sens de Drave : déterministe, auditable, rejouable, pas cher, et qui rend visible une structure que le modèle neuronal, lui, devrait deviner. Le parallèle avec l'IDE est profond : la coloration syntaxique ne rend pas le compilateur plus intelligent, elle rend **la structure lisible pour celui qui lit**. Pour un modèle, l'équivalent n'est pas cosmétique : c'est un **prior**.
+
+Et le dépôt a déjà la moitié de la matière : les **universaux RSN** (types, rôles, cas), le **codec B11** (449 surfaces), la structure de **page** (R4.4 : colonnes, tableaux, ordre de lecture). Ce qui manque est exactement le niveau que tu décris : **la phrase**.
+
+\## À quoi ça ressemble (esquisse d'aujourd'hui)
+
+J'ai écrit un v0 de 40 lignes (`work/n2i/coloration.py`) : il colore les mots grammaticaux contre les mots pleins et indente les propositions aux frontières (virgule + subordonnant) :
+
+```
+┌─ Le chat noir,
+├─ qui dormait sur le toit,
+├─ se réveilla quand la pluie tomba,
+└─ et il rentra parce que la nuit était froide.
+```
+
+C'est une esquisse, pas un analyseur — mais elle montre les trois couches qu'un vrai outil devrait porter :
+
+| couche | ce qu'elle colore | l'équivalent en code |
+|---|---|---|
+| **lexicale** | mots grammaticaux / mots pleins, temps et personne | les mots-clés contre les identifiants |
+| **syntagmatique** | GN, GV, GP, propositions (indentation) | les blocs et l'indentation |
+| **actancielle** | rôles RSN : agent, patient, but, lieu, instrument | les types et les signatures |
+
+La troisième est la vraie différenciation : spaCy, Stanza ou displaCy colorient des **POS** ; personne ne colorie des **rôles sémantiques** avec une palette **cross-lingue**. Les universaux du projet permettent exactement ça : le même agent est de la même couleur en français, en anglais et en latin — c'est ça, l'outil dont un apprenant a besoin : voir la **charpente** avant la traduction.
+
+\## Les sorties
+
+- **ANSI** : le terminal, pour l'apprenant.
+- **HTML** : les couches activables (voir / masquer les rôles, mode examen).
+- **SVG** : les arcs de dépendance, comme un AST — et le projet sait déjà faire des SVG propres.
+- **Linéarisé** : `<GN>le chat</GN> <GV>dort</GV>` — le format qui sert au modèle.
+
+\## Les deux usages, et ils ne se testent pas pareil
+
+**Pour l'apprenant** : la qualité se juge sur la **couver
+… [2794 caractères tronqués]
+
+### Tour 11 — allons-y, mais créons d'abord un outil pour humain dans un projet distinct (submodule git) qui permet d'afficher en web  … [308 caractères tronqués]
+
+*20 appels d'outils.* Actions notables :
+
+- bash — Check the environment for the sub-project
+- bash — Create the structures repository with seed data
+- bash — Build the seed data with verified spans
+- bash — Write the LLM evaluation module and test the baseline
+- bash — Add explicit attachment targets to the candidates
+- bash — Fix the baseline heuristic with attachment targets
+- bash — Write the HTTP server
+- bash — Write the web interface
+- bash — Write and run the tests
+- bash — Test the running server end-to-end
+- bash — Write the README and commit the sub-project
+- bash — Add the tool as a git submodule
+- bash — Retry the submodule with the file transport allowed
+- bash — Add the structures tool to the state
+- … et 6 autres
+
+**Synthèse produite :**
+
+⏵ Création du sous-projet web (submodule) : structures candidates, validation humaine, évaluation LLM
 
 ## 3. Travail accompli
 
@@ -503,7 +605,7 @@ Localement français, globalement du **saladier de mots**. Ce n'est pas un probl
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 585 autres
+- … et 609 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -669,4 +771,5 @@ Localement français, globalement du **saladier de mots**. Ce n'est pas un probl
 - N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE  À recette égale, le corpus du dépôt courant (docs + journal + rapports, 1 308 documen
 - SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES  Les deux chantiers menés en parallèle sont committés : N2.i (17ececf
 - LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE)  Trois variantes du même texte de validation, mêmes octets, même protocole : p
+- S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS  Nouveau sous-projet (submodule : tools/structures, dépôt local drave-struc
 

@@ -4677,3 +4677,155 @@ La **prochaine action** de la session est maintenant : le **state store v0** dan
 
 Le compromis est assumé : `en-cours` porte les quatre champs en version **compacte** et le lien vers le plan complet. Si tu veux le plan **intégral** dans `en-cours`, il faut relever le budget de l'état (et le T0) — sinon la page devient un journal, ce que la méthode interdit. Dis-moi si tu préfères cette seconde option, ou si j'enchaîne sur le state store v0.
 
+
+## Tour 6
+
+### 👤 Utilisateur
+
+étudie les sessions dsh actives et assure-toi que notre doc est à jour
+
+### 🤖 Assistant
+
+⏵ Audit des sessions DSH actives et comparaison avec `en-cours`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --status; echo \"EXIT=$?\"; echo '=== CHECK ==='; python3 tools/sessions.py --check; echo \"EXIT=$?\"", "description": "Lire l'état des plans de session"}`
+
+  ```
+sessions · plans de mandat
+    0b0a6a0d-05f5-4308 · terminé  · 136 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 2210 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 1381 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+      → clôture committée (`eff8d8e4`) — session close ; la suite est **N2** (la hiérarchie), portée par la session à ouvrir
+    71d57f53-8b41-4220 · terminé  · 2714 min · docs/pilotage/en-cours.md, docs/methode/continuite.md, tools/sessions.py
+      → aucune — coordination close ; les trois plans migrés et les sessions archivées par `22e518ee`.
+    8156fdcb-5033-4ba4 · terminé  · 2718 min · R0.1–R0.5
+      → la boucle de lecture (R11, dépend de N2) ou la restitution (R31, dépend de R21) — toutes deux hors R0 ; sinon consolidation.
+    N2-GPU             · terminé  · 2746 min · N2
+      → N2 — la **hiérarchie** (état de section), porte **< 2,5** (meilleur **2
+… [731 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in journal/sessions/*/plan.md; do echo \"=== $f\"; grep -E \"^\\s*-\\s*\\*\\*(Session|Rôle|Périmètre|Heartbeat|État|Prochaine action)\\*\\*\" \"$f\"; done", "description": "Extraire les champs de tous les plans"}`
+
+  ```
+=== journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md
+- **Session** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2`
+- **Rôle** : calcul : distillation ; corpus ; évaluation
+- **Périmètre** : N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+- **Heartbeat** : 2026-11-01 08:35 EST
+- **Prochaine action** : close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+- **État** : terminé
+=== journal/sessions/0b69f616-5c75-4c34-b97a-ae05564812af/plan.md
+- **Session** : `0b69f616-5c75-4c34-b97a-ae05564812af`
+- **Rôle** : clôture des chantiers ouverts du lecteur (R0.4, R0.5, R13) et consolidation de l'état
+- **Périmètre** : R0.4, R0.5, R13, R4.1–R4.3 ; en-cours, roadmap, backlog
+- **Heartbeat** : 2026-10-30 22:01 HAE
+- **Prochaine action** : clôture reprise par la session `22e518ee` — commit, archives, état.
+- **État** : terminé
+=== journal/sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/plan.md
+- **Session** : `22e518ee-81b8-4081-ae1b-f0d7a777a1d7`
+- **Rôle** : clôture des sessions (`8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`) et remise d'aplomb de l'état
+- **Périmètre** : archives de sessions, journal, en-cours, roadmap, backlog ; outil
+… [2802 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lt journal/sessions/*/session.v4.jsonl.zstd 2>/dev/null | head -12; echo '=== work ==='; ls -lt work/ 2>/dev/null | head -12; echo '=== ps ==='; ps aux | grep -i 'dsh\\|drave' | grep -v grep | head -20", "description": "Repérer l … [32 caractères tronqués]`
+
+  ```
+-rw-------. 1 stephane stephane  3309524  1 nov 10:31 journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/session.v4.jsonl.zstd
+-rw-------. 1 stephane stephane  3801416  1 nov 03:06 journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/session.v4.jsonl.zstd
+-rw-------. 1 stephane stephane  1940009 31 oct 22:51 journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/session.v4.jsonl.zstd
+-rw-------. 1 stephane stephane    18664 31 oct 18:02 journal/sessions/0f3b6070-57ce-4642-b9ec-3b3956f75978/session.v4.jsonl.zstd
+-rw-------. 1 stephane stephane    19960 31 oct 17:53 journal/sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/session.v4.jsonl.zstd
+-rw-------. 1 stephane stephane      561 31 oct 17:39 journal/sessions/163d631a-6528-4324-b7b3-6487d24feeb5/session.v4.jsonl.zstd
+-rw-------. 1 stephane stephane  4182682 31 oct 17:39 journal/sessions/bc3c0b97-cae0-4773-921d-ef27c8285461/session.v4.jsonl.zstd
+-rw-------. 1 stephane stephane   587533 31 oct 11:26 journal/sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/session.v4.jsonl.zstd
+-rw-------. 1 stephane stephane   758480 30 oct 22:01 journal/sessions/0b69f616-5c75-4c34-b97a-ae05564812af/session.v4.jsonl.zstd
+-rw-------. 1 stephane stephan
+… [1223 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'état a un jour de retard : N2 et R4.4 sont closes, la Pensée a un v0 committé — je vérifie les faits
+
+- **bash** `{"command": "date '+%Y-%m-%d %H:%M %Z'; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -12 && echo '=== STATUS ===' && git status --porcelain | head -30", "description": "Lire la date, les derniers commits et l'état git"}`
+
+  ```
+2026-11-01 10:51 EST
+68b5e819 LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE)
+95d17ae6 SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES
+17ececfc N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE
+a20de579 PENSÉE v0 — LE STATE STORE EXISTE ET TIENT SES SIX PORTES
+43a7b3fe ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE
+18f28437 RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ
+d2613e8f N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN
+3a6ae9ca N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS
+88f598c3 ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES
+52cf5853 N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS
+0a802a61 R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER
+7452a447 SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION
+=== STATUS ===
+M  .gitmodules
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M too
+… [31 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la tools/pensee/ 2>/dev/null; echo '=== reports pensee/n2i ==='; ls -lt reports/ | grep -E \"pensee|n2i|n2-\" | head -15; echo '=== docs moteur ==='; ls -l docs/implantation/moteur-de-pensee.md", "description": "Chercher les arte … [25 caractères tronqués]`
+
+  ```
+total 36
+drwxr-xr-x. 1 stephane stephane   136  1 nov 07:16 .
+drwxr-xr-x. 1 stephane stephane 16500  1 nov 10:50 ..
+-rw-r--r--. 1 stephane stephane  5280  1 nov 07:16 autotest.py
+-rw-r--r--. 1 stephane stephane  3148  1 nov 07:16 coeur.py
+-rw-r--r--. 1 stephane stephane  3996  1 nov 07:15 cruches.py
+-rw-r--r--. 1 stephane stephane   952  1 nov 07:16 __init__.py
+-rw-r--r--. 1 stephane stephane  5126  1 nov 07:15 moteur.py
+drwxr-xr-x. 1 stephane stephane   270  1 nov 07:16 __pycache__
+-rw-r--r--. 1 stephane stephane  8055  1 nov 07:16 store.py
+=== reports pensee/n2i ===
+-rw-r--r--. 1 stephane stephane    4333  1 nov 08:30 rapport-n2-corpus-elargi.md
+-rw-r--r--. 1 stephane stephane    4818  1 nov 07:16 rapport-pensee-v0.md
+-rw-r--r--. 1 stephane stephane    4488  1 nov 06:50 rapport-n2-longueur.md
+-rw-r--r--. 1 stephane stephane    3265  1 nov 05:28 rapport-n2-capacite.md
+-rw-r--r--. 1 stephane stephane    3268  1 nov 03:58 rapport-n2-combine.md
+-rw-r--r--. 1 stephane stephane    1173  1 nov 01:31 n2-propre.json
+-rw-r--r--. 1 stephane stephane    4530  1 nov 01:31 rapport-n2-diversite.md
+-rw-r--r--. 1 stephane stephane    8257  1 nov 01:31 rapport-n2-propre.md
+-rw-r--r--. 1 stephane s
+… [602 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,140p' docs/pilotage/en-cours.md", "description": "Relire l'état courant complet"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-01, 03 h 15 HAE (heure locale, EST).**
+
+> **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
+> avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
+> [`reports/`](../../reports/). Histoire : [`journal/`](../../journal/). Plan : [`roadmap.md`](roadmap.md).
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session qui trouve l'état en retard
+> le corrige.
+
+### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre
+
+- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+- **Rôle** : **N2.h — le mètre propre** : corpus, distillation, évaluation.
+- **Plan** : corpus dédupliqué, chaîne refaite, porte honnête, diversité, longueur, capacité.
+- **Ambition** : sortir du chiffre c
+… [9694 caractères tronqués]
+  ```
+

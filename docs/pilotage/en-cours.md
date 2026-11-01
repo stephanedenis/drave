@@ -25,10 +25,9 @@
 - **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité, longueur, combinaison, capacité et
   corpus élargi mesurés (6 fiches).
 - **Résultat** (3 graines) : la chaîne propre vaut **3,09** en domaine (3,20 au test) et **16,70** sur la littérature jamais vue ; la **diversité** la ramène à **3,86** (÷ 4,3) et
-  l'anglais de **57,6** à **25,7** pour **+0,17** ; les **positions aléatoires** font passer 256
-  octets de **14,11** à **3,25** ; la base vaut **12,29**
-  hors domaine : **distiller spécialise**. Les leviers **se composent** (DR : **3,47** / **4,10** / **3,49** à 256). La **capacité paie** peu (21,65 M : **3,03**) sans couvrir. Fiches `n2-propre`, `n2-diversite`,
-  `n2-longueur`, `n2-combine`, `n2-capacite`. **N2.i** (4,84 Mo) : **12,93** en littérature, **33,83** en anglais — **généralise** sans
+  l'anglais de **57,6** à **25,7** pour **+0,17** ; positions aléatoires : 256 octets **14,11 → 3,25** ; la base vaut **12,29**
+  hors domaine : **distiller spécialise**. Les leviers **se composent** (DR : **3,47** / **4,10** / **3,49** à 256). **Capacité** : 21,65 M paie peu (3,03). Fiches `n2-propre`, `n2-diversite`,
+  `n2-longueur`, `n2-combine`, `n2-capacite`. **N2.i** (4,84 Mo) : **12,93** littérature, **33,83** anglais — **généralise** sans
   relever le domaine.
 - **Ce que font les autres** : **Pensée** sans GPU ; **N4** en file.
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`, `journal/sessions/0b0a6a0d-…/`.
@@ -77,10 +76,11 @@
   (négatif)** ; R0.6 **12/20** au pilote, **7/7** à la porte. Fiches
   [`r04`](../../reports/rapport-r04-tete-survol.md), [`r07`](../../reports/rapport-r07-routeur.md),
   [`r06`](../../reports/rapport-r06-publication.md) (cascade à confiance **publiée**).
-- **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
-  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** est **mesurée sur scans
-  simulés (4/5 familles ≥ **90 %** de parité, fax **56,7 %**) ; fiche
-  [`r44-scans`](../../reports/rapport-r44-scans.md).
+- **R4.1–R4.4 — les blocs** : **mesurés** — 996/802 cellules, 294/24 fichiers,
+  32/10 formules ; **R4.4** scans simulés (4/5 ≥ **90 %**) ;
+  fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
+- **S — le banc de structures** : outil web (`tools/structures`, submodule) : 6 phrases, 12
+  candidats, validation, LLM, export ; candidats à la main.
 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
   1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
   [`r13`](../../reports/rapport-r13-decision.md), spécification

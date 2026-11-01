@@ -11326,3 +11326,958 @@ Commits de la session : de `54cba6af` à `0a802a61` (dont `4aef1413` pour la par
 
 **À toi de voir** : le fax et l'exposant fusionné sont les deux seuls chantiers restants ; le quatrième livre demanderait un corpus avec vérité humaine alignée, pas une couche OCR de plus.
 
+
+## Tour 4
+
+### 👤 Utilisateur
+
+révise nos sources de données pour l'entrainement. fais le tour du disque dur pour avoir un inventaire local pour l'entrainement.
+
+### 🤖 Assistant
+
+⏵ Inventaire du disque pour les sources d'entraînement
+
+Je commence par cartographier les volumes et les répertoires les plus gros, puis je descends sur les formats utiles (textes, jeux de données, modèles).
+
+- **bash** `{"command": "df -hT 2>/dev/null | grep -vE \"tmpfs|devtmpfs|overlay|squashfs\" | head -12; echo \"=== lsblk\"; lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT 2>/dev/null | head -20", "description": "Show mounted filesystems and volumes", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+Filesystem              Type      Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2          btrfs     828G  121G  706G  15% /
+efivarfs                efivarfs  256K  139K  113K  56% /sys/firmware/efi/efivars
+/dev/nvme0n1p1          vfat      2,0G  1,6G  426M  80% /boot/efi
+/dev/nvme0n1p2          btrfs     828G  121G  706G  15% /.snapshots
+/dev/nvme0n1p2          btrfs     828G  121G  706G  15% /var
+/dev/nvme0n1p2          btrfs     828G  121G  706G  15% /opt
+/dev/nvme0n1p2          btrfs     828G  121G  706G  15% /srv
+/dev/nvme0n1p2          btrfs     828G  121G  706G  15% /usr/local
+/dev/nvme0n1p2          btrfs     828G  121G  706G  15% /home
+/dev/nvme0n1p2          btrfs     828G  121G  706G  15% /root
+/dev/nvme0n1p2          btrfs     828G  121G  706G  15% /home/stephane/FastNVMe
+=== lsblk
+NAME              SIZE FSTYPE            MOUNTPOINT
+sda              10,9T                   
+├─sda1              8M                   
+└─sda2           10,9T LVM2_member       
+  ├─system-swap  62,8G swap              [SWAP]
+  └─system-root  10,9T btrfs             /home/stephane/Data13TB
+nvme4n1         238,5G linux_raid_member 
+└─md0           953,4G ext4              /home/stephane/IA
+nvm
+… [477 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"=== home\"; du -sh /home/stephane 2>/dev/null; echo \"=== racine de travail\"; du -sh /home/stephane/Data13TB 2>/dev/null; echo \"=== top niveau /home/stephane/Data13TB\"; du -sh /home/stephane/Data13TB/* 2>/dev/null | sort -rh | head -15", "description": "Measure home and data v … [106 caractères tronqués]`
+
+  ```
+=== home
+[still running after 600000ms; moved to background job bash-602]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_kill** `{"job_id": "bash-602", "reason": "du complet trop lent sur 10,9 To ; passer aux mesures ciblées"}`
+
+  ```
+requested cancellation of job bash-602
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/ 2>/dev/null | head -25; echo \"=== Data13TB\"; ls -la /home/stephane/Data13TB/ 2>/dev/null | head -25; echo \"=== IA\"; ls -la /home/stephane/IA/ 2>/dev/null | head -20", "description": "List home and data top-level directories", "timeoutMs": 120000, "workdir": "/ … [48 caractères tronqués]`
+
+  ```
+total 8768
+drwx--x---+  1 stephane stephane    2052 31 oct 17:17 .
+dr-xr-xr-x.  1 root     root          16 28 jui 12:38 ..
+-rw-r--r--.  1 stephane stephane     111 31 jui 08:30 .ado_orgs.cache
+drwxr-xr-x.  1 stephane stephane      44 30 jui 16:52 .agents
+drwxr-xr-x.  1 stephane stephane    4914 31 jui 08:15 .aitk
+lrwxrwxrwx.  1 stephane stephane      43 30 jui 13:24 altera_pro -> /home/stephane/Data13TB/stephane/altera_pro
+drwxr-xr-x.  1 stephane stephane      84 25 sep 13:31 .altera.quartus
+lrwxrwxrwx.  1 stephane stephane      36 11 aoû 11:26 Applications -> /home/stephane/FastNVMe/Applications
+drwx------.  1 stephane stephane      84 31 jui 08:40 .azd
+drwxr-xr-x.  1 stephane stephane     486  5 aoû 11:05 .azure
+drwxr-xr-x.  1 stephane stephane      20 31 jui 08:44 .azure-devops
+-rw-------.  1 stephane stephane   48159 31 oct 17:13 .bash_history
+-rw-r-----.  1 stephane stephane    1723 28 oct 11:35 .bashrc
+lrwxrwxrwx.  1 stephane stephane       7 29 jui 14:11 Bureau -> Desktop
+drwx------.  1 stephane stephane    1944 31 oct 17:17 .cache
+lrwxrwxrwx.  1 stephane stephane      29 11 aoû 11:26 .cargo -> /home/stephane/FastNVMe/cargo
+lrwxrwxrwx.  1 stephane stephane      29 11 aoû 11
+… [1756 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for d in artefacts cache drave-data modeles modeles-lourds scratch venv-drave; do printf \"%-16s \" \"$d\"; timeout 120 du -sh \"/home/stephane/IA/$d\" 2>/dev/null | cut -f1; done; echo \"=== IA contenu\"; find /home/stephane/IA -maxdepth 2 -mindepth 1 -type d 2>/dev/null | head -30", " … [132 caractères tronqués]`
+
+  ```
+artefacts        122G
+cache            123G
+drave-data       314M
+modeles          77G
+modeles-lourds   341G
+scratch          548M
+venv-drave       5,8G
+=== IA contenu
+/home/stephane/IA/outils
+/home/stephane/IA/outils/__pycache__
+/home/stephane/IA/migration-logs
+/home/stephane/IA/modeles
+/home/stephane/IA/modeles/ollama
+/home/stephane/IA/modeles-lourds
+/home/stephane/IA/artefacts
+/home/stephane/IA/artefacts/n2i
+/home/stephane/IA/artefacts/sessions-dsh
+/home/stephane/IA/artefacts/traces
+/home/stephane/IA/artefacts/modeles-optimises
+/home/stephane/IA/artefacts/n2
+/home/stephane/IA/artefacts/index
+/home/stephane/IA/artefacts/n2h
+/home/stephane/IA/artefacts/caches
+/home/stephane/IA/venv-drave
+/home/stephane/IA/venv-drave/lib
+/home/stephane/IA/venv-drave/share
+/home/stephane/IA/venv-drave/bin
+/home/stephane/IA/drave-data
+/home/stephane/IA/drave-data/pidgin
+/home/stephane/IA/docs
+/home/stephane/IA/scratch
+/home/stephane/IA/scratch/c8-prof12
+/home/stephane/IA/scratch/c8-prof4
+/home/stephane/IA/scratch/c8-prof8
+/home/stephane/IA/scratch/c8-echelle
+/home/stephane/IA/scratch/prerequis
+/home/stephane/IA/k3-nvme
+/home/stephane/IA/cache
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/ 2>/dev/null | head -30; echo \"=== Qtrinet\"; ls -la /home/stephane/Data13TB/stephane/GitHub/Qtrinet 2>/dev/null | head -30", "description": "List data volume and project directories", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/step … [21 caractères tronqués]`
+
+  ```
+total 186804780
+drwxr-xr-x. 1 stephane stephane         2454 31 oct 16:57 .
+dr-xr-xr-x. 1 root     root               16 28 nov  2025 ..
+-rw-r--r--. 1 stephane stephane        11688 30 mar  2026 adobe_account_backup_uuid_d79a3839-50e8-4906-bb1a-e8c3954711b2.zip
+-rw-r--r--. 1 stephane stephane          111 19 mar  2026 .ado_orgs.cache
+drwxr-xr-x. 1 stephane stephane          386 25 sep 09:52 agent-kit
+drwxr-xr-x. 1 stephane stephane          132  2 avr  2026 .agents
+drwxr-xr-x. 1 stephane stephane         4154 14 mai 10:14 .aitk
+drwxr-xr-x. 1 stephane stephane            8 28 mai 09:48 altera_pro
+drwxr-xr-x. 1 stephane stephane          250 17 jun 21:32 .altera.quartus
+drwxr-x---. 1 stephane stephane           48 16 mar  2026 .android
+drwxr-xr-x. 1 stephane stephane          422 12 oct 18:03 archives
+drwxr-xr-x. 1 stephane stephane           18 22 jun  2024 Arduino
+drwxr-xr-x. 1 stephane stephane          442 14 avr  2026 .azure
+drwxr-xr-x. 1 stephane stephane           20  2 avr  2026 .azure-devops
+drwxr-xr-x. 1 stephane stephane          100  1 nov 08:31 backups
+-rw-------. 1 stephane stephane        47656 24 jui 20:02 .bash_history
+-rw-r--r--. 1 stephane stephane          163 15 
+… [2661 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane; for d in Biblio_large corpus data archives models backups Documents Téléchargements; do [ -e \"$d\" ] && { printf \"%-16s \" \"$d\"; timeout 180 du -sh \"$d\" 2>/dev/null | cut -f1; }; done", "description": "Measure main data directories on 10.9T vol … [74 caractères tronqués]`
+
+  ```
+Biblio_large     22G
+corpus           35G
+data             132G
+archives         3,0T
+models           0
+backups          5,5G
+Documents        159G
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for d in data work models bench; do [ -e \"$d\" ] && { printf \"%-10s \" \"$d\"; timeout 120 du -sh \"$d\" 2>/dev/null | cut -f1; }; done; echo \"=== data/\"; ls -la data/ | head -20; echo \"=== models/\"; ls -la models/ | head -10", " … [143 caractères tronqués]`
+
+  ```
+data       6,6G
+work       4,1G
+models     2,5G
+bench      16K
+=== data/
+total 961812
+drwxr-xr-x. 1 stephane stephane      1580  1 nov 07:11 .
+drwxr-xr-x. 1 stephane stephane       660 31 oct 17:22 ..
+drwxr-xr-x. 1 stephane stephane       220 22 oct 22:05 adaptateurs
+drwxr-xr-x. 1 stephane stephane        32 19 oct 14:30 alignement
+-rw-r--r--. 1 stephane stephane  59784525 21 oct 01:02 composition-etats.npz
+-rw-r--r--. 1 stephane stephane  30539912 21 oct 03:44 composition-verne-14b-etats.npz
+-rw-r--r--. 1 stephane stephane  21144969 21 oct 01:38 composition-verne-7b-etats.npz
+-rw-r--r--. 1 stephane stephane  12037642 21 oct 01:30 composition-verne-etats.npz
+-rw-r--r--. 1 stephane stephane 151064111 21 oct 23:31 composition-verne-large-etats.npz
+-rw-r--r--. 1 stephane stephane 147255554 21 oct 23:47 composition-verne-plan-etats.npz
+-rw-r--r--. 1 stephane stephane     97900 29 oct 14:19 consignes_train.jsonl
+-rw-r--r--. 1 stephane stephane      1931 29 oct 14:19 consignes_val.jsonl
+-rw-r--r--. 1 stephane stephane 100276153  8 oct 09:42 corpus_en.txt
+-rw-r--r--. 1 stephane stephane   2032162  8 oct 09:42 corpus_en_val.txt
+-rw-r--r--. 1 stephane stephane  17031747 17 oct 18:26 corpus_
+… [667 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== data/ (suite)\"; ls -la data/ | tail -30; echo \"=== work/\"; ls -la work/ 2>/dev/null | head -25; echo \"=== reports corpus\"; ls -la reports/corpus-*.json 2>/dev/null | head -10", "description": "List project data, work, a … [102 caractères tronqués]`
+
+  ```
+=== data/ (suite)
+-rw-r--r--. 1 stephane stephane 115446985 28 oct 13:18 corpus_multi_train.txt
+-rw-r--r--. 1 stephane stephane 121523142 28 oct 13:18 corpus_multi.txt
+-rw-r--r--. 1 stephane stephane   6076157 28 oct 13:18 corpus_multi_val.txt
+drwxr-xr-x. 1 stephane stephane        62 31 oct 22:21 corpus_propre
+drwxr-xr-x. 1 stephane stephane        62  1 nov 07:11 corpus_repo_propre
+-rw-r--r--. 1 stephane stephane   6394114  1 nov 07:11 corpus_repo.txt
+drwxr-xr-x. 1 stephane stephane        46 24 oct 08:48 daccord
+drwxr-xr-x. 1 stephane stephane       574 26 oct 15:08 deepseek
+drwxr-xr-x. 1 stephane stephane        84 24 oct 09:28 diabla
+drwxr-xr-x. 1 stephane stephane       140 20 oct 10:02 eurlex
+drwxr-xr-x. 1 stephane stephane        46 18 oct 10:29 glottolog
+-rw-r--r--. 1 stephane stephane      1273 29 oct 04:47 instructions_fr.jsonl
+drwxr-xr-x. 1 stephane stephane        62 22 oct 18:44 jrc
+drwxr-xr-x. 1 stephane stephane        32 20 oct 23:43 jw
+drwxr-xr-x. 1 stephane stephane        70 22 oct 19:52 multiun
+drwxr-xr-x. 1 stephane stephane        40 20 oct 22:39 onu
+drwxr-xr-x. 1 stephane stephane        72 22 oct 17:08 opensubtitles
+-rw-r--r--. 1 stephane stephane  88666485
+… [1579 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane; echo \"=== corpus/\"; ls -la corpus/ 2>/dev/null | head -20; echo \"=== Biblio_large/\"; ls -la Biblio_large/ 2>/dev/null | head -20; echo \"=== data/ (racine)\"; ls -la data/ 2>/dev/null | head -20", "description": "List corpus, library, and data di … [79 caractères tronqués]`
+
+  ```
+=== corpus/
+total 0
+drwxr-xr-x. 1 stephane stephane    108  6 oct 14:51 .
+drwxr-xr-x. 1 stephane stephane   2454 31 oct 16:57 ..
+drwxr-xr-x. 1 stephane stephane    876  6 oct 15:26 parallele_crime
+drwxr-xr-x. 1 stephane stephane    960  6 oct 03:40 parallele_rj
+drwxr-xr-x. 1 stephane stephane    742  7 oct 18:39 udhr
+drwxr-xr-x. 1 stephane stephane 108760  7 oct 09:13 wiki_apparie
+drwxr-xr-x. 1 stephane stephane  10560  6 oct 06:47 wiki_traces
+=== Biblio_large/
+total 0
+drwxr-xr-x. 1 stephane stephane  872 31 jui 13:20 .
+drwxr-xr-x. 1 stephane stephane 2454 31 oct 16:57 ..
+drwxr-xr-x. 1 stephane stephane  108 18 avr  2026 000 Informatique
+drwxr-xr-x. 1 stephane stephane 3628 22 mar  2026 001.0_General_Imported_Documents
+drwxr-xr-x. 1 stephane stephane  102 22 mar  2026 004.6_Networking_Systems
+drwxr-xr-x. 1 stephane stephane  204 22 mar  2026 005.13_Programming_Languages
+drwxr-xr-x. 1 stephane stephane  310 22 mar  2026 005.276_Testing_QA_DevOps
+drwxr-xr-x. 1 stephane stephane  688 22 mar  2026 005.3_Software_Architecture_UML
+drwxr-xr-x. 1 stephane stephane  106 22 mar  2026 005.8_Cybersecurity_Cryptography
+drwxr-xr-x. 1 stephane stephane  570 22 mar  2026 006.31_Machine_Learning_AI
+… [838 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane; echo \"=== archives/\"; ls -la archives/ 2>/dev/null | head -20; echo \"=== tailles archives\"; for d in archives/*/; do printf \"%-40s \" \"$(basename \"$d\")\"; timeout 60 du -sh \"$d\" 2>/dev/null | cut -f1; done | head -20", "description": "Inspe … [91 caractères tronqués]`
+
+  ```
+=== archives/
+total 158376
+drwxr-xr-x. 1 stephane stephane       422 12 oct 18:03 .
+drwxr-xr-x. 1 stephane stephane      2454 31 oct 16:57 ..
+drwxr-xr-x. 1 stephane stephane    454284 22 jun 20:07 audio
+drwxr-xr-x. 1 stephane stephane       132 20 jun 16:54 bookmarkbackups
+drwxr-xr-x. 1 stephane stephane      4050 20 jun 17:17 CEGEP
+drwxr-xr-x. 1 stephane stephane      9630 20 jun 17:18 collections
+drwxr-xr-x. 1 stephane stephane        86 20 jun 17:07 emails
+drwxr-xr-x. 1 stephane stephane        68 20 jun 11:21 enfants
+drwxr-xr-x. 1 stephane stephane       172 13 mai 14:41 Google-Takeout
+-rw-r--r--. 1 stephane stephane 129454441 18 jun 15:39 .hash-db.json
+-rw-r--r--. 1 stephane stephane        31 19 jun 18:26 hash_snapshot_2026-06-19.log
+-rw-r--r--. 1 stephane stephane  32711489 19 jun 18:26 hash_snapshot_2026-06-19.sha256
+drwxr-xr-x. 1 stephane stephane       202 12 oct 18:04 kld-logits-2026-09-24
+drwxr-xr-x. 1 stephane stephane       108 21 sep 14:58 migration-hauru-2026-09
+drwxr-xr-x. 1 stephane stephane        12 22 jun 08:14 opt
+drwxr-xr-x. 1 stephane stephane        96 20 jun 09:59 .quarantine-dedup
+drwxr-xr-x. 1 stephane stephane        76 20 jun 12:34 recovery-raw
+=== tai
+… [515 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"=== HF cache\"; ls -la /home/stephane/.cache/huggingface 2>/dev/null | head; timeout 120 du -sh /home/stephane/.cache/huggingface 2>/dev/null | cut -f1; echo \"=== IA modeles\"; ls -la /home/stephane/IA/modeles/ 2>/dev/null | head -15; echo \"=== IA modeles-lourds\"; ls -la /home … [203 caractères tronqués]`
+
+  ```
+=== HF cache
+lrwxrwxrwx. 1 stephane stephane 35 12 oct 15:45 /home/stephane/.cache/huggingface -> /home/stephane/IA/cache/huggingface
+4,0K
+=== IA modeles
+total 18121784
+drwxr-xr-x.  3 stephane stephane        4096 12 oct 15:50 .
+drwxr-xr-x  14 stephane stephane        4096 21 oct 16:30 ..
+drwxr-xr-x.  4 stephane stephane        4096 12 oct 16:04 ollama
+-rw-r--r--.  1 stephane stephane 18556686752  3 oct 13:17 qwen3-30b-a3b-Q4_K_M.gguf
+=== IA modeles-lourds
+total 357142328
+drwxr-xr-x.  2 stephane stephane         4096 12 oct 15:53 .
+drwxr-xr-x  14 stephane stephane         4096 21 oct 16:30 ..
+-rw-r--r--.  1 stephane stephane 365713686528  1 oct 22:59 DeepSeek-V4.1-Flash-Q2.gguf
+-rw-r--r--.  1 stephane stephane         1494 12 oct 15:53 README.md
+=== IA cache
+total 16
+drwxr-xr-x.  4 stephane stephane 4096 12 oct 15:46 .
+drwxr-xr-x  14 stephane stephane 4096 21 oct 16:30 ..
+drwxr-xr-x. 19 stephane stephane 4096 12 aoû 16:22 ccache
+drwxr-xr-x.  5 stephane stephane 4096 15 oct 09:09 huggingface
+  ```
+
+- **bash** `{"command": "echo \"=== recovery-raw\"; ls -la /home/stephane/Data13TB/stephane/archives/recovery-raw/ 2>/dev/null | head -15; echo \"=== tailles recovery\"; for d in /home/stephane/Data13TB/stephane/archives/recovery-raw/*/; do printf \"%-40s \" \"$(basename \"$d\")\"; timeout 60 du -sh \"$d\" 2>/d … [161 caractères tronqués]`
+
+  ```
+=== recovery-raw
+total 0
+drwxr-xr-x. 1 stephane stephane    76 20 jun 12:34 .
+drwxr-xr-x. 1 stephane stephane   422 12 oct 18:03 ..
+drwxr-xr-x. 1 stephane stephane    18 20 jun 12:34 import-export-2026-06-20
+drwxr-xr-x. 1 stephane stephane 23686 20 jun 10:11 recup_dir_root
+=== tailles recovery
+import-export-2026-06-20                 2,8T
+recup_dir_root                           27G
+  ```
+
+- **bash** `{"command": "echo \"=== HF hub\"; ls -la /home/stephane/IA/cache/huggingface/hub 2>/dev/null | head -20; echo \"=== HF datasets\"; ls -la /home/stephane/IA/cache/huggingface/datasets 2>/dev/null | head -15; echo \"=== HF sizes\"; timeout 120 du -sh /home/stephane/IA/cache/huggingface/hub /home/steph … [114 caractères tronqués]`
+
+  ```
+=== HF hub
+total 72
+drwxr-xr-x. 17 stephane stephane 4096 24 oct 08:48 .
+drwxr-xr-x.  5 stephane stephane 4096 15 oct 09:09 ..
+drwxr-xr-x. 24 stephane stephane 4096 24 oct 08:35 blobs
+-rw-r--r--.  1 stephane stephane  191 14 sep 14:06 CACHEDIR.TAG
+drwxr-xr-x.  6 stephane stephane 4096 24 oct 08:48 datasets--maximoss--daccord-contradictions
+drwxr-xr-x.  5 stephane stephane 4096 24 oct 08:48 datasets--maximoss--gqnli-fr
+drwxr-xr-x.  5 stephane stephane 4096 24 oct 08:42 datasets--rbawden--DiaBLa
+drwxr-xr-x. 14 stephane stephane 4096 24 oct 08:48 .locks
+drwxr-xr-x.  5 stephane stephane 4096 12 aoû 15:02 models--ggml-org--gemma-3-1b-it-GGUF
+drwxr-xr-x.  7 stephane stephane 4096  7 oct 21:00 models--Qwen--Qwen2.5-0.5B
+drwxr-xr-x.  7 stephane stephane 4096 19 oct 12:13 models--Qwen--Qwen2.5-0.5B-Instruct
+drwxr-xr-x.  7 stephane stephane 4096 19 oct 13:29 models--Qwen--Qwen2.5-14B-Instruct
+drwxr-xr-x.  7 stephane stephane 4096 19 oct 12:13 models--Qwen--Qwen2.5-1.5B-Instruct
+drwxr-xr-x.  7 stephane stephane 4096 24 oct 08:35 models--Qwen--Qwen2.5-32B-Instruct
+drwxr-xr-x.  7 stephane stephane 4096 19 oct 12:09 models--Qwen--Qwen2.5-3B-Instruct
+drwxr-xr-x.  7 stephane stephane 4096 19 oct 1
+… [295 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data; for d in */; do n=$(basename \"$d\"); s=$(timeout 30 du -sh \"$d\" 2>/dev/null | cut -f1); f=$(timeout 30 find \"$d\" -type f 2>/dev/null | wc -l); printf \"%-22s %8s %8s fichiers\\n\" \"$n\" \"${s:-?}\" \"$f\"; done; echo \"=== f … [224 caractères tronqués]`
+
+  ```
+adaptateurs                170M       19 fichiers
+alignement                 1,3M        1 fichiers
+corpus_litt_propre          17M        3 fichiers
+corpus_propre              3,8M        4 fichiers
+corpus_repo_propre         5,6M        4 fichiers
+daccord                    536K        2 fichiers
+deepseek                    13M      941 fichiers
+diabla                     2,1M        8 fichiers
+eurlex                      10M       32 fichiers
+glottolog                   23M        2 fichiers
+jrc                         48M        2 fichiers
+jw                          36M       73 fichiers
+multiun                    1,2G        2 fichiers
+onu                        9,9M       81 fichiers
+opensubtitles              1,2G        2 fichiers
+pidgin                     314M       70 fichiers
+pidgin.old                 314M       70 fichiers
+presse                     752K       46 fichiers
+raisonnement               7,9M        7 fichiers
+ted2020                    109M        2 fichiers
+udhr                        28M       55 fichiers
+wikimatrix                 326M        2 fichiers
+xnli                       2,3G       52 fichiers
+=== fichiers texte à la racine
+corpus_multi.txt
+co
+… [366 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== work/n2h\"; ls -la work/n2h/ 2>/dev/null | head -25; echo \"=== tailles n2h\"; for d in work/n2h/*/; do printf \"%-40s \" \"$(basename \"$d\")\"; timeout 30 du -sh \"$d\" 2>/dev/null | cut -f1; done | head -20; echo \"=== co … [265 caractères tronqués]`
+
+  ```
+=== work/n2h
+total 1385916
+drwxr-xr-x. 1 stephane stephane     3262  1 nov 06:53 .
+drwxr-xr-x. 1 stephane stephane       46  1 nov 07:11 ..
+-rw-r--r--. 1 stephane stephane     2337 31 oct 22:27 agrege.py
+-rw-r--r--. 1 stephane stephane     8649 31 oct 23:12 A-propre-g1.json
+-rw-r--r--. 1 stephane stephane     6155 31 oct 23:12 A-propre-g1.log
+-rw-r--r--. 1 stephane stephane     6657 31 oct 23:12 A-propre-g1.out
+-rw-r--r--. 1 stephane stephane 47302035 31 oct 23:12 A-propre-g1.pt
+-rw-r--r--. 1 stephane stephane     8647 31 oct 23:35 A-propre-g2.json
+-rw-r--r--. 1 stephane stephane     6153 31 oct 23:35 A-propre-g2.log
+-rw-r--r--. 1 stephane stephane     6656 31 oct 23:35 A-propre-g2.out
+-rw-r--r--. 1 stephane stephane 47302035 31 oct 23:35 A-propre-g2.pt
+-rw-r--r--. 1 stephane stephane     8653 31 oct 23:58 A-propre-g3.json
+-rw-r--r--. 1 stephane stephane     6163 31 oct 23:58 A-propre-g3.log
+-rw-r--r--. 1 stephane stephane     6666 31 oct 23:58 A-propre-g3.out
+-rw-r--r--. 1 stephane stephane 47302035 31 oct 23:58 A-propre-g3.pt
+-rw-r--r--. 1 stephane stephane 86605660  1 nov 04:20 base-capacite.drvm
+-rw-r--r--. 1 stephane stephane    21533  1 nov 04:20 base-capacite.log
+-rw-r--r--.
+… [2435 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane; echo \"=== corpus/\"; for d in corpus/*/; do printf \"%-24s %8s %8s fichiers\\n\" \"$(basename \"$d\")\" \"$(timeout 60 du -sh \"$d\" 2>/dev/null | cut -f1)\" \"$(timeout 60 find \"$d\" -type f 2>/dev/null | wc -l)\"; done; echo \"=== extensions corp … [218 caractères tronqués]`
+
+  ```
+=== corpus/
+parallele_crime              261M       56 fichiers
+parallele_rj                 988M       48 fichiers
+udhr                          21G     3550 fichiers
+wiki_apparie                  12G     6084 fichiers
+wiki_traces                  1,8G      480 fichiers
+=== extensions corpus
+   5892 drvf
+   3804 txt
+    457 xml
+     57 ids
+      3 zip
+      2 npz
+      1 rng
+      1 rnc
+      1 jsonl
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane; echo \"=== Biblio_large\"; timeout 120 find Biblio_large -type f 2>/dev/null | wc -l; timeout 120 find Biblio_large -type f 2>/dev/null | sed 's/.*\\.//' | tr 'A-Z' 'a-z' | sort | uniq -c | sort -rn | head -12; echo \"=== catégories\"; du -sh Biblio_ … [175 caractères tronqués]`
+
+  ```
+=== Biblio_large
+3253
+   2345 kfx-zip
+    271 jpg
+    237 png
+    122 gif
+    104 pdf
+     87 xhtml
+     19 html
+     17 mp3
+      9 url
+      9 opf
+      8 css
+      5 jpeg
+=== catégories
+12G	Biblio_large/001.0_General_Imported_Documents/
+2,6G	Biblio_large/DRM_Archive_20260321/
+1,6G	Biblio_large/000 Informatique/
+1,2G	Biblio_large/005.3_Software_Architecture_UML/
+779M	Biblio_large/621.381_Electronics_Embedded/
+615M	Biblio_large/005.8_Cybersecurity_Cryptography/
+467M	Biblio_large/006.31_Machine_Learning_AI/
+333M	Biblio_large/005.276_Testing_QA_DevOps/
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data; echo \"=== corpus racine (octets, mots)\"; for f in corpus_en.txt corpus_fr.txt corpus_fr_litterature.txt corpus_multi_train.txt corpus_multi.txt corpus_repo.txt corpus_mixte_litterature.txt corpus_mixte_litt.txt corpus_mixte.txt  … [586 caractères tronqués]`
+
+  ```
+=== corpus racine (octets, mots)
+corpus_en.txt                   100276153 octets   15508881 mots
+corpus_fr.txt                     4633889 octets     789416 mots
+corpus_fr_litterature.txt        17031747 octets    2755917 mots
+corpus_multi_train.txt          115446985 octets   17772492 mots
+corpus_multi.txt                121523142 octets   18737950 mots
+corpus_repo.txt                   6394114 octets    1008898 mots
+corpus_mixte_litt.txt            12233263 octets    1918080 mots
+corpus_mixte.txt                 10647410 octets    1718481 mots
+corpus_mixte_propre.txt           6144000 octets    1024267 mots
+=== jsonl
+consignes_train.jsonl        2000 lignes
+consignes_val.jsonl            40 lignes
+instructions_fr.jsonl          24 lignes
+=== data wikipedia (racine volume)
+total 0
+drwxr-xr-x. 1 stephane stephane  14 25 mai 14:39 .
+drwxr-xr-x. 1 stephane stephane  18 25 mai 14:39 ..
+drwxr-xr-x. 1 stephane stephane 940  6 oct 13:51 db
+drwxr-xr-x. 1 stephane stephane  40 26 mai 09:14 dumps
+  ```
+
+- **bash** `{"command": "echo \"=== HF datasets\"; for d in /home/stephane/IA/cache/huggingface/hub/datasets--*; do printf \"%-50s \" \"$(basename \"$d\")\"; timeout 30 du -sh \"$d\" 2>/dev/null | cut -f1; done; echo \"=== modèles HF (taille)\"; for d in /home/stephane/IA/cache/huggingface/hub/models--*; do pri … [234 caractères tronqués]`
+
+  ```
+=== HF datasets
+datasets--maximoss--daccord-contradictions         472K
+datasets--maximoss--gqnli-fr                       120K
+datasets--rbawden--DiaBLa                          8,8M
+=== modèles HF (taille)
+models--ggml-org--gemma-3-1b-it-GGUF                    769M
+models--Qwen--Qwen2.5-0.5B                              954M
+models--Qwen--Qwen2.5-0.5B-Instruct                     954M
+models--Qwen--Qwen2.5-14B-Instruct                      12M
+models--Qwen--Qwen2.5-1.5B-Instruct                     2,9G
+models--Qwen--Qwen2.5-32B-Instruct                      12M
+models--Qwen--Qwen2.5-3B-Instruct                       5,8G
+models--Qwen--Qwen2.5-7B-Instruct                       15G
+models--Qwen--Qwen3-0.6B                                1,5G
+models--Systran--faster-whisper-large-v3                2,9G
+  ```
+
+- **bash** `{"command": "echo \"=== volume data/wikipedia\"; du -sh /home/stephane/Data13TB/stephane/data/wikipedia 2>/dev/null; ls -la /home/stephane/Data13TB/stephane/data/wikipedia/dumps 2>/dev/null | head -8; ls /home/stephane/Data13TB/stephane/data/wikipedia/db 2>/dev/null | head -5; du -sh /home/stephane/ … [117 caractères tronqués]`
+
+  ```
+=== volume data/wikipedia
+132G	/home/stephane/Data13TB/stephane/data/wikipedia
+total 0
+drwxr-xr-x. 1 stephane stephane  40 26 mai 09:14 .
+drwxr-xr-x. 1 stephane stephane  14 25 mai 14:39 ..
+drwxr-xr-x. 1 stephane stephane 204 26 mai 09:19 ar
+drwxr-xr-x. 1 stephane stephane 204 25 mai 15:32 de
+drwxr-xr-x. 1 stephane stephane 204 25 mai 15:13 en
+drwxr-xr-x. 1 stephane stephane 204 26 mai 09:43 es
+drwxr-xr-x. 1 stephane stephane 204 25 mai 15:22 fr
+arwiki_v14.db
+arwiki_v14.db-shm
+arwiki_v14.db-wal
+dewiki_v14.db
+dewiki_v14.db-shm
+66G	/home/stephane/Data13TB/stephane/data/wikipedia/db
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== n2h data files\"; find work/n2h -maxdepth 1 -type f \\( -name '*.txt' -o -name '*.jsonl' -o -name '*.json' \\) -printf '%s %f\\n' 2>/dev/null | sort -rn | head -12; echo \"=== n2d\"; ls -la work/n2d/ 2>/dev/null | head -12;  … [316 caractères tronqués]`
+
+  ```
+=== n2h data files
+10112 eval.json
+8666 D-mixte-g2.json
+8665 D-mixte-g3.json
+8660 D-mixte-g1.json
+8653 A-propre-g3.json
+8649 A-propre-g1.json
+8647 A-propre-g2.json
+8646 CAP-g1.json
+8645 CAP-g2.json
+8641 DR-pos-g2.json
+8637 R-pos-g2.json
+8630 DR-pos-g1.json
+=== n2d
+total 647184
+drwxr-xr-x. 1 stephane stephane     2228 31 oct 21:19 .
+drwxr-xr-x. 1 stephane stephane       46  1 nov 07:11 ..
+-rw-r--r--. 1 stephane stephane     8677 31 oct 17:47 A-fr-g1.json
+-rw-r--r--. 1 stephane stephane     6246 31 oct 17:47 A-fr-g1.log
+-rw-r--r--. 1 stephane stephane     6748 31 oct 17:47 A-fr-g1.out
+-rw-r--r--. 1 stephane stephane 47300931 31 oct 17:47 A-fr-g1.pt
+-rw-r--r--. 1 stephane stephane     8679 31 oct 18:11 A-fr-g2.json
+-rw-r--r--. 1 stephane stephane     6254 31 oct 18:11 A-fr-g2.log
+-rw-r--r--. 1 stephane stephane     6757 31 oct 18:11 A-fr-g2.out
+-rw-r--r--. 1 stephane stephane 47300931 31 oct 18:11 A-fr-g2.pt
+-rw-r--r--. 1 stephane stephane     8683 31 oct 18:33 A-fr-g3.json
+=== artefacts IA
+caches                       4,0K
+index                        4,0K
+modeles-optimises            116G
+n2                           3,1G
+n2h                          1,4G
+n2i                        
+… [73 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane; echo \"=== collections\"; timeout 90 find archives/collections -type f 2>/dev/null | sed 's/.*\\.//' | tr 'A-Z' 'a-z' | sort | uniq -c | sort -rn | head -8; echo \"=== CEGEP\"; timeout 90 find archives/CEGEP -type f 2>/dev/null | sed 's/.*\\.//' | tr … [325 caractères tronqués]`
+
+  ```
+=== collections
+   1250 jpg
+    384 docx
+    206 doc
+    193 html
+     45 gif
+     36 zip
+     35 ksd
+     26 less
+=== CEGEP
+   3774 xlsx
+   2711 pdf
+    454 docx
+    362 pptx
+    281 doc
+    109 epub
+    104 one
+     88 zip
+=== Documents
+  42832 txt
+   9005 html
+   6486 xml
+   6441 pdf
+   5561 res
+   3789 mbpv2
+   3629 azw
+   2807 voucher
+   2720 md
+   1142 phl
+[stderr]
+sort: write failed: 'standard output': Broken pipe
+sort: write error
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane; echo \"=== import-export top\"; ls -la archives/recovery-raw/import-export-2026-06-20/ 2>/dev/null | head -15; echo \"=== sous-dossiers\"; find archives/recovery-raw/import-export-2026-06-20 -maxdepth 2 -type d 2>/dev/null | head -15; echo \"=== écha … [320 caractères tronqués]`
+
+  ```
+=== import-export top
+total 0
+drwxr-xr-x. 1 stephane stephane 18 20 jun 12:34 .
+drwxr-xr-x. 1 stephane stephane 76 20 jun 12:34 ..
+drwxr-xr-x. 1 stephane stephane 16 20 jun 12:34 Documents
+=== sous-dossiers
+archives/recovery-raw/import-export-2026-06-20
+archives/recovery-raw/import-export-2026-06-20/Documents
+archives/recovery-raw/import-export-2026-06-20/Documents/À_Trier
+=== échantillon extensions
+      2 json
+  ```
+
+- **bash** `{"command": "echo \"=== À_Trier\"; ls -la \"/home/stephane/Data13TB/stephane/archives/recovery-raw/import-export-2026-06-20/Documents/À_Trier\" 2>/dev/null | head -15; du -sh \"/home/stephane/Data13TB/stephane/archives/recovery-raw/import-export-2026-06-20/Documents/À_Trier\" 2>/dev/null", "descript … [67 caractères tronqués]`
+
+  ```
+=== À_Trier
+total 7768
+drwxr-xr-x. 1 stephane stephane      94 21 jun 03:51 .
+drwxr-xr-x. 1 stephane stephane      16 20 jun 12:34 ..
+-rw-r--r--. 1 stephane stephane 7951831 26 fév  2026 .hash-db__dup02.json
+-rw-r--r--. 1 stephane stephane       0 20 jun 22:03 .hash-db.json
+drwxr-xr-x. 1 stephane stephane    9188 13 mar  2026 PhotoRec
+drwxr-xr-x. 1 stephane stephane      22 13 mar  2026 Videos
+2,8T	/home/stephane/Data13TB/stephane/archives/recovery-raw/import-export-2026-06-20/Documents/À_Trier
+  ```
+
+- **bash** `{"command": "echo \"=== wikipedia dumps\"; for d in /home/stephane/Data13TB/stephane/data/wikipedia/dumps/*/; do printf \"%-6s \" \"$(basename \"$d\")\"; timeout 60 du -sh \"$d\" 2>/dev/null | cut -f1; done; echo \"=== wikipedia db\"; ls -la /home/stephane/Data13TB/stephane/data/wikipedia/db/ | head … [277 caractères tronqués]`
+
+  ```
+=== wikipedia dumps
+ar     2,0G
+de     7,7G
+en     25G
+es     5,0G
+fr     6,7G
+it     4,2G
+ja     4,5G
+pt     2,6G
+ru     5,8G
+zh     3,3G
+=== wikipedia db
+total 68722292
+drwxr-xr-x. 1 stephane stephane         940  6 oct 13:51 .
+drwxr-xr-x. 1 stephane stephane          14 25 mai 14:39 ..
+-rw-r--r--. 1 stephane stephane  3505520640 26 mai 10:48 arwiki_v14.db
+-rw-r--r--. 1 stephane stephane       32768  6 oct 13:51 arwiki_v14.db-shm
+-rw-r--r--. 1 stephane stephane           0  6 oct 13:49 arwiki_v14.db-wal
+-rw-r--r--. 1 stephane stephane  9424920576 25 mai 21:35 dewiki_v14.db
+-rw-r--r--. 1 stephane stephane       32768  6 oct 13:51 dewiki_v14.db-shm
+-rw-r--r--. 1 stephane stephane           0  6 oct 13:49 dewiki_v14.db-wal
+-rw-r--r--. 1 stephane stephane 19540979712 26 mai 06:09 enwiki_v14.db
+-rw-r--r--. 1 stephane stephane       32768  6 oct 13:51 enwiki_v14.db-shm
+-rw-r--r--. 1 stephane stephane           0  6 oct 13:49 enwiki_v14.db-wal
+=== pidgin
+total 319860
+drwxr-xr-x. 3 stephane stephane      4096 21 oct 14:30 .
+drwxr-xr-x. 3 stephane stephane      4096 21 oct 16:30 ..
+-rw-r--r--. 1 stephane stephane     35592 21 oct 14:30 asp_raw.json
+-rw-r--r--. 1 stephane stephane   842290
+… [433 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data; for d in multiun opensubtitles xnli eurlex jrc ted2020 wikimatrix udhr jw glottolog daccord diabla onu raisonnement presse deepseek; do printf \"%-16s \" \"$d\"; timeout 30 find \"$d\" -type f 2>/dev/null | sed 's/.*\\.//' | tr 'A … [221 caractères tronqués]`
+
+  ```
+multiun                1 json       1 gz 
+opensubtitles          1 json       1 gz 
+xnli                  34 tsv       6 ds_store       4 jsonl 
+eurlex                28 xhtml       4 json 
+jrc                    1 json       1 gz 
+ted2020                1 json       1 gz 
+wikimatrix             1 json       1 gz 
+udhr                  40 jsonl      12 txt       3 json 
+jw                    72 html       1 json 
+glottolog              2 csv 
+daccord                2 tsv 
+diabla                 2 ref       2 orig       2 json 
+onu                   30 docx      25 txt      25 pdf 
+raisonnement           7 json 
+presse                46 json 
+deepseek             919 json      16 txt       6 jsonl
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== corpus_propre\"; ls -la data/corpus_propre/ data/corpus_litt_propre/ data/corpus_repo_propre/ 2>/dev/null | head -25; echo \"=== rapports N2 corpus\"; ls -la reports/rapport-n2-*.md 2>/dev/null | head; echo \"=== stats lues\ … [487 caractères tronqués]`
+
+  ```
+=== corpus_propre
+data/corpus_litt_propre/:
+total 16624
+drwxr-xr-x. 1 stephane stephane       48 31 oct 22:24 .
+drwxr-xr-x. 1 stephane stephane     1580  1 nov 07:11 ..
+-rw-r--r--. 1 stephane stephane   843776 31 oct 22:24 test.txt
+-rw-r--r--. 1 stephane stephane 15332926 31 oct 22:24 train.txt
+-rw-r--r--. 1 stephane stephane   843776 31 oct 22:24 val.txt
+
+data/corpus_propre/:
+total 3840
+drwxr-xr-x. 1 stephane stephane      62 31 oct 22:21 .
+drwxr-xr-x. 1 stephane stephane    1580  1 nov 07:11 ..
+-rw-r--r--. 1 stephane stephane  320314 31 oct 22:21 dev.txt
+-rw-r--r--. 1 stephane stephane  180224 31 oct 22:20 test.txt
+-rw-r--r--. 1 stephane stephane 3244858 31 oct 22:20 train.txt
+-rw-r--r--. 1 stephane stephane  180224 31 oct 22:20 val.txt
+
+data/corpus_repo_propre/:
+total 5708
+drwxr-xr-x. 1 stephane stephane      62  1 nov 07:11 .
+drwxr-xr-x. 1 stephane stephane    1580  1 nov 07:11 ..
+-rw-r--r--. 1 stephane stephane  483328  1 nov 07:11 dev.txt
+-rw-r--r--. 1 stephane stephane  262144  1 nov 07:11 test.txt
+-rw-r--r--. 1 stephane stephane 4836314  1 nov 07:11 train.txt
+-rw-r--r--. 1 stephane stephane  262144  1 nov 07:11 val.txt
+=== rapports N2 corpus
+-rw-r--r--. 1 stephane stephane 
+… [1012 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,80p' reports/rapport-n2-corpus-elargi.md", "description": "Read N2 enlarged corpus report", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+# N2.i — Le corpus élargi : 4,84 Mo uniques au lieu de 3,24
+
+> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : élargir le corpus au dépôt
+> courant (**+49 %** de texte unique, autres registres) ne fait pas baisser la PPL en domaine
+> (**3,1278** sur son propre jeu ; **3,6996** sur l'ancien, contre **3,0904**) mais
+> **améliore nettement la généralité** : littérature **12,93** contre **16,70**, anglais
+> **33,83** contre **57,58**.
+
+## La question
+
+N2.h a laissé une question chiffrée : le corpus propre fait **3,24 Mo** d'entraînement, alors que
+le dépôt courant en contient bien plus (recensement du 01/11 : 27,7 Mo avec les transcripts, mais
+ceux-ci sont du méta-texte). La question testable sans changer de recette : **le corpus de prose
+du dépôt, dédupliqué, est-il plus grand que celui du snapshot ?** Oui — 6,39 Mo bruts pour
+docs+journal+rapports, 5,36 Mo uniques. Est-ce que cela fait baisser la PPL honnête ?
+
+## Le dispositif
+
+- **corpus** : `docs/` + `journal/` (hors `sessions/`) + `reports/`, 1 308 documents, 6,39 Mo
+  bruts ; dédupliqué par les mêmes shingles de 96 octets (−16,2 %, 2 008 runs), split par chunks
+  de 8 Ko → **4 836 314** octets d'entraînement, 2
+… [3014 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"=== modeles-optimises\"; ls -la /home/stephane/IA/artefacts/modeles-optimises/ 2>/dev/null | head -12; echo \"=== kld-logits\"; ls -la /home/stephane/Data13TB/stephane/archives/kld-logits-2026-09-24/ 2>/dev/null | head -10; echo \"=== wiki dumps fr\"; ls -la /home/stephane/Data13 … [361 caractères tronqués]`
+
+  ```
+=== modeles-optimises
+total 24
+drwxr-xr-x.  6 stephane stephane 4096  2 oct 16:59 .
+drwxr-xr-x. 10 stephane stephane 4096  1 nov 08:31 ..
+drwxr-xr-x.  2 stephane stephane 4096  1 oct 10:57 qwen3-30b-8clusters
+drwxr-xr-x.  2 stephane stephane 4096  1 oct 12:27 qwen3-30b-8clusters-v2
+drwxr-xr-x.  2 stephane stephane 4096  2 oct 16:48 v4flash-8clusters
+drwxr-xr-x.  2 stephane stephane 4096  2 oct 16:59 v4flash-topk2
+=== kld-logits
+total 6604272
+drwxr-xr-x. 1 stephane stephane        202 12 oct 18:04 .
+drwxr-xr-x. 1 stephane stephane        422 12 oct 18:03 ..
+-rw-r--r--. 1 stephane stephane  536739828 24 sep 09:17 codestral22b-base.kld
+-rw-r--r--. 1 stephane stephane 2490331124 24 sep 09:12 ds14b-base.kld
+-rw-r--r--. 1 stephane stephane 1245165572 24 sep 09:23 q32-base.kld
+-rw-r--r--. 1 stephane stephane       1443 12 oct 18:04 README.md
+-rw-r--r--. 1 stephane stephane 2490331124 24 sep 09:15 vl7b-base.kld
+-rw-r--r--. 1 stephane stephane     200000 24 sep 09:11 wiki-test-200k.txt
+drwxrwx---. 1 stephane stephane         82 26 sep  2016 wikitext-2-raw
+=== wiki dumps fr
+total 7024348
+drwxr-xr-x. 1 stephane stephane        204 25 mai 15:22 .
+drwxr-xr-x. 1 stephane stephane         40 26 m
+… [301 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"=== wikipedia db\"; ls -la /home/stephane/Data13TB/stephane/data/wikipedia/db/*.db 2>/dev/null | awk '{print $5, $9}'; echo \"=== corpus/udhr\"; ls /home/stephane/Data13TB/stephane/corpus/udhr/ | head -5; find /home/stephane/Data13TB/stephane/corpus/udhr -type f | head -5; echo \ … [253 caractères tronqués]`
+
+  ```
+=== wikipedia db
+3505520640 /home/stephane/Data13TB/stephane/data/wikipedia/db/arwiki_v14.db
+9424920576 /home/stephane/Data13TB/stephane/data/wikipedia/db/dewiki_v14.db
+19540979712 /home/stephane/Data13TB/stephane/data/wikipedia/db/enwiki_v14.db
+5506088960 /home/stephane/Data13TB/stephane/data/wikipedia/db/eswiki_v14.db
+7248388096 /home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db
+4569493504 /home/stephane/Data13TB/stephane/data/wikipedia/db/itwiki_v14.db
+6133825536 /home/stephane/Data13TB/stephane/data/wikipedia/db/jawiki_v14.db
+2773049344 /home/stephane/Data13TB/stephane/data/wikipedia/db/ptwiki_v14.db
+8023691264 /home/stephane/Data13TB/stephane/data/wikipedia/db/ruwiki_v14.db
+3645382656 /home/stephane/Data13TB/stephane/data/wikipedia/db/zhwiki_v14.db
+=== corpus/udhr
+appr
+appr10
+appr10c
+appr40
+appr42
+/home/stephane/Data13TB/stephane/corpus/udhr/udhr_txt.zip
+/home/stephane/Data13TB/stephane/corpus/udhr/udhr_xml.zip
+/home/stephane/Data13TB/stephane/corpus/udhr/udhr.zip
+/home/stephane/Data13TB/stephane/corpus/udhr/udhr_xml/udhr_007.xml
+/home/stephane/Data13TB/stephane/corpus/udhr/udhr_xml/udhr_008.xml
+=== corpus/wiki_apparie
+de_Aaliyah.txt
+de_Aarhus.txt
+de_Aaron.txt
+de
+… [478 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"=== corpus/parallele_rj\"; find /home/stephane/Data13TB/stephane/corpus/parallele_rj -type f | head -6; echo \"=== parallele_crime\"; find /home/stephane/Data13TB/stephane/corpus/parallele_crime -type f | head -4; echo \"=== wiki_traces\"; find /home/stephane/Data13TB/stephane/co … [272 caractères tronqués]`
+
+  ```
+=== corpus/parallele_rj
+/home/stephane/Data13TB/stephane/corpus/parallele_rj/en_01.drvf
+/home/stephane/Data13TB/stephane/corpus/parallele_rj/en_02.drvf
+/home/stephane/Data13TB/stephane/corpus/parallele_rj/en_03.drvf
+/home/stephane/Data13TB/stephane/corpus/parallele_rj/en_04.drvf
+/home/stephane/Data13TB/stephane/corpus/parallele_rj/en_05.drvf
+/home/stephane/Data13TB/stephane/corpus/parallele_rj/en_06.drvf
+=== parallele_crime
+/home/stephane/Data13TB/stephane/corpus/parallele_crime/en_01.txt
+/home/stephane/Data13TB/stephane/corpus/parallele_crime/es_01.txt
+/home/stephane/Data13TB/stephane/corpus/parallele_crime/en_02.txt
+/home/stephane/Data13TB/stephane/corpus/parallele_crime/es_02.txt
+=== wiki_traces
+/home/stephane/Data13TB/stephane/corpus/wiki_traces/en_001.drvf
+/home/stephane/Data13TB/stephane/corpus/wiki_traces/en_002.drvf
+/home/stephane/Data13TB/stephane/corpus/wiki_traces/en_003.drvf
+/home/stephane/Data13TB/stephane/corpus/wiki_traces/en_004.drvf
+=== tailles fichiers typiques
+118096187 /home/stephane/Data13TB/stephane/corpus/udhr/tenus10c/hin.drvf
+118060382 /home/stephane/Data13TB/stephane/corpus/udhr/appr10c/ben.drvf
+117911372 /home/stephane/Data13TB/stephane/corpus/udhr/tenus1
+… [504 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data; echo \"=== deepseek\"; ls deepseek/ | head -5; head -c 400 deepseek/$(ls deepseek | head -1) 2>/dev/null; echo; echo \"=== raisonnement\"; ls raisonnement/ | head -5; head -c 300 raisonnement/$(ls raisonnement | head -1) 2>/dev/nu … [293 caractères tronqués]`
+
+  ```
+=== deepseek
+cache
+distillation
+distillation-300
+distillation-300-controle
+distillation-600
+
+=== raisonnement
+profondeur_paires.json
+transitif.json
+transitif_paires_3langues.json
+transitif_paires_4langues.json
+transitif_paires_ar.json
+{
+ "noms": [
+  "Alice",
+  "Bruno",
+  "Chloé",
+  "David",
+  "Emma",
+  "Farid",
+  "Gina",
+  "Hugo",
+  "Inès",
+  "Jules",
+  "Karim",
+  "Léa",
+  "Marco",
+  "Nina",
+  "Omar",
+  "Paula",
+  "Quentin",
+  "Rosa",
+  "Sami",
+  "Tina"
+ ],
+ "relation": "ordre",
+ "paires": [
+  {
+   "id": "4-0",
+   "longueur": 
+=== adaptateurs
+total 0
+drwxr-xr-x. 1 stephane stephane  220 22 oct 22:05 .
+drwxr-xr-x. 1 stephane stephane 1580  1 nov 07:11 ..
+drwxr-xr-x. 1 stephane stephane  120 22 oct 17:53 bilingue-1600
+drwxr-xr-x. 1 stephane stephane  106 22 oct 18:07 plan-bilingue-800
+drwxr-xr-x. 1 stephane stephane  106 22 oct 18:26 plan-contraste-800
+drwxr-xr-x. 1 stephane stephane  106 22 oct 20:33 plan-contraste-plein-800
+drwxr-xr-x. 1 stephane stephane  106 22 oct 22:05 plan-multi-tache-800
+=== press
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "echo \"=== archives/opt\"; ls -la /home/stephane/Data13TB/stephane/archives/opt/ 2>/dev/null | head -8; du -sh /home/stephane/Data13TB/stephane/archives/opt 2>/dev/null; echo \"=== udhr zips\"; ls -la /home/stephane/Data13TB/stephane/corpus/udhr/*.zip 2>/dev/null; echo \"=== corpus drvf … [548 caractères tronqués]`
+
+  ```
+=== archives/opt
+total 0
+drwxr-xr-x. 1 stephane stephane  12 22 jun 08:14 .
+drwxr-xr-x. 1 stephane stephane 422 12 oct 18:03 ..
+drwxr-xr-x. 1 stephane stephane  92 22 jun 08:20 builds
+5,4G	/home/stephane/Data13TB/stephane/archives/opt
+=== udhr zips
+-rw-r--r--. 1 stephane stephane     196  5 oct 09:06 /home/stephane/Data13TB/stephane/corpus/udhr/udhr_txt.zip
+-rw-r--r--. 1 stephane stephane     196  5 oct 09:07 /home/stephane/Data13TB/stephane/corpus/udhr/udhr_xml.zip
+-rw-r--r--. 1 stephane stephane 2237381  5 oct 09:07 /home/stephane/Data13TB/stephane/corpus/udhr/udhr.zip
+=== corpus drvf (extrait)
+/home/stephane/Data13TB/stephane/corpus/parallele_rj/en_01.drvf: data
+00000000: 4452 5646 0200 1800 0000 8003 0000 0000  DRVF............
+00000010: 0100 0000 4d03 0000 8158 883b 000b 0002  ....M....X.;....
+00000020: 0e00 010b 0001 1f00 010a 0001 e6ff 01fe  ................
+=== opensubtitles/multiun
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/multiun/:
+total 1246688
+drwxr-xr-x. 1 stephane stephane         70 22 oct 19:52 .
+drwxr-xr-x. 1 stephane stephane       1580  1 nov 07:11 ..
+-rw-r--r--. 1 stephane stephane 1276271220 22 oct 19:49 en-fr.tmx.gz
+-rw-r--r--. 1 stephane stephane  
+… [188 caractères tronqués]
+  ```
+
+- **bash** `{"command": "df -h /home/stephane/Data13TB /home/stephane/IA /home/stephane 2>/dev/null | sed 's/  */ /g'; echo \"=== du IA\"; timeout 300 du -sh /home/stephane/IA 2>/dev/null; echo \"=== du Data13TB/stephane (borné)\"; timeout 300 du -sh --max-depth=1 /home/stephane/Data13TB/stephane 2>/dev/null |  … [150 caractères tronqués]`
+
+  ```
+Filesystem Size Used Avail Use% Mounted on
+/dev/mapper/system-root 11T 8,9T 2,0T 82% /home/stephane/Data13TB
+/dev/md0 938G 895G 34G 97% /home/stephane/IA
+/dev/nvme0n1p2 828G 121G 706G 15% /home
+=== du IA
+895G	/home/stephane/IA
+=== du Data13TB/stephane (borné)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/archives/recovery-raw/import-export-2026-06-20/Documents/À_Trier; echo \"=== PhotoRec\"; ls PhotoRec | head -5; timeout 60 find PhotoRec -maxdepth 2 -type f 2>/dev/null | head -5; timeout 60 find PhotoRec -maxdepth 3 -type f 2>/dev/null | sed 's/.*\\. … [253 caractères tronqués]`
+
+  ```
+=== PhotoRec
+recup_dir.1109
+recup_dir.1115
+recup_dir.1145
+recup_dir.1146
+recup_dir.1147
+PhotoRec/recup_dir.1109/f173598312.ogg
+PhotoRec/recup_dir.1115/f173807456.xls
+PhotoRec/recup_dir.1145/f177641112_ElementsOfDystopia_Installation.pdf
+PhotoRec/recup_dir.1146/f177781064.ogg
+PhotoRec/recup_dir.1146/f177781368.ogg
+   1358 pdf
+    355 ogg
+     57 mov
+     17 pptx
+      6 xls
+      5 xlsx
+      2 ppt
+=== Videos
+movies
+Video
+3,5G	PhotoRec
+2,8T	Videos
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane; echo \"=== Biblio DRM archive\"; ls Biblio_large/DRM_Archive_20260321/ 2>/dev/null | head -6; find Biblio_large/DRM_Archive_20260321 -type f 2>/dev/null | sed 's/.*\\.//' | sort | uniq -c | sort -rn | head -5; echo \"=== Qtrinet data total\"; du -sh  … [268 caractères tronqués]`
+
+  ```
+=== Biblio DRM archive
+non_document
+   2345 kfx-zip
+    271 jpg
+    237 png
+    122 gif
+     87 xhtml
+=== Qtrinet data total
+6,6G	/home/stephane/Data13TB/stephane/GitHub/Qtrinet/data
+=== corpus total
+35G	/home/stephane/Data13TB/stephane/corpus
+  ```
+

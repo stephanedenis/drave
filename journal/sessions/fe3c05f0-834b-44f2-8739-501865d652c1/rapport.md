@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 10.5 h |
-| Tours | 3 |
-| Messages | 666 |
-| Appels d'outils | 661 |
+| Durée | 18.3 h |
+| Tours | 4 |
+| Messages | 687 |
+| Appels d'outils | 698 |
 | Fichiers touchés | 18 |
-| Commandes | 600 |
+| Commandes | 636 |
 | Sous-agents | 0 |
 | Commits | 30 |
 | Compactages de contexte | 1 |
@@ -31,6 +31,8 @@
 **Tour 2** — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it que tu n'y est pas arrivée. J'accueille tes résultars et écarts sans jugement.
 
 **Tour 3** — <goal_round> Objective: "R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer fiches, JSON, docs, porte, roadmap, en-cours, journal et commits. Continuer … [637 caractères tronqués]
+
+**Tour 4** — révise nos sources de données pour l'entrainement. fais le tour du disque dur pour avoir un inventaire local pour l'entrainement.
 
 ## 2. Déroulé, étape par étape
 
@@ -196,6 +198,32 @@ Le reste du programme tient : colonnes **89,4 → 0,5 %** (deux colonnes), **52,
 - Code : `tools/graphe_document_ocr.py`, `nettoyer_scan.py`, `e
 … [632 caractères tronqués]
 
+### Tour 4 — révise nos sources de données pour l'entrainement. fais le tour du disque dur pour avoir un inventaire local pour l'entr … [9 caractères tronqués]
+
+*37 appels d'outils.* Actions notables :
+
+- bash — Show mounted filesystems and volumes
+- bash — Measure home and data volume top-level sizes
+- job_kill
+- bash — List home and data top-level directories
+- bash — Measure IA volume subdirectories
+- bash — List data volume and project directories
+- bash — Measure main data directories on 10.9T volume
+- bash — Measure project data and models directories
+- bash — List project data, work, and corpus reports
+- bash — List corpus, library, and data directories
+- bash — Inspect archives directory
+- bash — Inspect model caches and stores
+- bash — Inspect recovery raw archive structure
+- bash — Inventory HuggingFace cache
+- … et 23 autres
+
+**Synthèse produite :**
+
+⏵ Inventaire du disque pour les sources d'entraînement
+
+Je commence par cartographier les volumes et les répertoires les plus gros, puis je descends sur les formats utiles (textes, jeux de données, modèles).
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -263,7 +291,7 @@ Le reste du programme tient : colonnes **89,4 → 0,5 %** (deux colonnes), **52,
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 560 autres
+- … et 596 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -391,7 +419,7 @@ Le reste du programme tient : colonnes **89,4 → 0,5 %** (deux colonnes), **52,
 
 ## 5. Erreurs rencontrées
 
-30 sorties en erreur ou divergentes. Les premières :
+33 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
