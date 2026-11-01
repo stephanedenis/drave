@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**17 commits** · **8 session(s)** · **6 thème(s)**
+**18 commits** · **8 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
-| distribue | 4 | [distribue.md](distribue.md) |
+| distribue | 5 | [distribue.md](distribue.md) |
 | docs | 5 | [docs.md](docs.md) |
 | mesures | 2 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
@@ -22,7 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 4.0 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 4.1 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `0f3b6070-57ce-4642-b9ec-3b3956f75978` | Regarde l'image /tmp/qa/check1.png avec | 2026-10-31 18:02 | 0.0 h | [rapport](../sessions/0f3b6070-57ce-4642-b9ec-3b3956f75978/rapport.md) · [digest](../sessions/0f3b6070-57ce-4642-b9ec-3b3956f75978/digest.md) |
 | `163d631a-6528-4324-b7b3-6487d24feeb5` | — | 2026-10-31 17:39 | 0.0 h | [rapport](../sessions/163d631a-6528-4324-b7b3-6487d24feeb5/rapport.md) · [digest](../sessions/163d631a-6528-4324-b7b3-6487d24feeb5/digest.md) |
 | `22e518ee-81b8-4081-ae1b-f0d7a777a1d7` | Compléter les autres sessions avant le backlog | 2026-10-31 11:13 | 0.2 h | [rapport](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/rapport.md) · [digest](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/digest.md) |
@@ -52,6 +52,7 @@
 | 21:00 | `ffad1c53` | DOCS — LE MODÈLE NATIF ET DIEHL & COOK ENRICHIS : QUOTIENT, TYPES, NEUTRALITÉ, DÉTERMINISME, BANC, CONFORMITÉ |
 | 21:05 | `2ac27021` | DOCS — LE COÛT CACHÉ DE LA STDP SYMÉTRIQUE, LA LECTURE D'UN PAS ET LES QUESTIONS OUVERTES |
 | 21:06 | `c83f17d5` | DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT |
+| 21:20 | `c3bcbe99` | N2 — LE BUDGET PAIE 2,8 %, LES QUATRE SOURCES COÛTENT 91 %, ET LA VALIDATION EST CONTAMINÉE À 32,8 % |
 
 ## Le récit de la journée (écrit à la main)
 

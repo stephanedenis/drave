@@ -33,18 +33,12 @@
 > rouges structurelles, avec les mêmes diagnostics ; **aucune régression**. Journaux :
 > `/tmp/portes-1027-12h45`.
 
-> **Passe précédente — 2026-10-26 à 14 h 30** (**49 portes, 47 vertes, 2 rouges**, **1 h 34 min**) — la passe de clôture
-> de **B9**, avec `porte-deepseek` **incluse** (1 s, **verte** : 20 tests, dry-run, 60 et 310 prompts) et
-> `porte-jeux` **verte** (106 s : 449/449 au niveau 4, 11/11 paires, permutation 12/275, notation 5 112/5 112,
-> livre 10/10, go 9×9 10/10 contre 3/10, dames 0 défaite, cartes 44,7 % contre 51,0 %). Les **deux rouges**
-> sont les **structurelles connues** : `porte-indice` (861 s) et `porte-melange` (107 s), avec les mêmes
-> diagnostics (indice extérieur à 482 jetons, écart nul ou négatif ; état de A qui ne rend pas le code de A).
-> `porte-homeostasie` est **verte** (506 s). Les références sont stables : `porte-flux` **60,8135**,
-> `porte-pont` **+2,81 % / +25,35 %**, `porte-coupe` **+0,52 % → +17,09 %**, `porte-gain` **29,0206 →
-> 1297,5437**, `porte-topologie` **42,5477**, `porte-reparti-moteur` **0,0000 %**, `porte-greffe` **branchée**,
-> `porte-vision` **559 s**, `porte-poids-creux` **319 s**, `porte-prechargement` **187 s**. Journaux :
-> `/tmp/portes-b9-1026-12h55`.
->
+> **Passe précédente — 2026-10-26 à 14 h 30** (**49 portes, 2 rouges**, **1 h 34**) — clôture de **B9** :
+> `porte-deepseek` et `porte-jeux` (**106 s**, 449/449 au niveau 4) **vertes** ; les rouges sont
+> `porte-indice` (861 s) et `porte-melange` (107 s). Références stables : `porte-flux` **60,8135**,
+> `porte-pont` **+2,81 / +25,35 %**, `porte-coupe` **+0,52 → +17,09 %**, `porte-gain` **29,0206 →
+> 1297,5437**, `porte-topologie` **42,5477**, `porte-vision` **559 s**, `porte-poids-creux` **319 s**.
+> Journaux `/tmp/portes-b9-1026-12h55`.
 
 > **Historique des passes** : les passes antérieures au 26/10 14 h 30, dont celle du
 > 25/10 04 h 51, sont conservées dans

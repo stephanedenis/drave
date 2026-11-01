@@ -4693,3 +4693,104 @@ la question était simple : le dispositif reconstruit hier n'avait vu que **20,4
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add .gitignore docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/backlog/N2-distillation.md docs/pilotage/references-non-regression.md reports/rapport-n2-budget.md reports/n2-budget.json reports/INDEX.md reports/RE … [193 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-242]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-242", "timeout_ms": 180000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master c3bcbe99] N2 — LE BUDGET PAIE 2,8 %, LES QUATRE SOURCES COÛTENT 91 %, ET LA VALIDATION EST CONTAMINÉE À 32,8 %
+ 24 files changed, 1765 insertions(+), 79 deletions(-)
+ create mode 100644 reports/n2-budget.json
+ create mode 100644 reports/rapport-n2-budget.md
+ create mode 100644 tools/distiller_budget.py
+ create mode 100644 tools/eval_n2_budget.py
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat HEAD | head -32; echo \"=== status ===\"; git status --short | grep -v \"^ m tools/docwatch\"", "description": "Verify the commit contents"}`
+
+  ```
+commit c3bcbe99af1bff5a61f1e9e78151c610f5698d9b
+Author: Stéphane <stephane@localhost>
+Date:   Sat Oct 31 21:20:06 2026 -0400
+
+    N2 — LE BUDGET PAIE 2,8 %, LES QUATRE SOURCES COÛTENT 91 %, ET LA VALIDATION EST CONTAMINÉE À 32,8 %
+    
+    Le budget plein (20 000 pas, 41 Mo, trois graines) amène l'élève distillé de 2,9355 à
+    2,8527 sous le protocole de N2.19 : −0,0828, du même ordre que la chaîne historique, et
+    toujours 0,35 au-dessus de la porte 2,5. Le corpus à quatre sources, tel que le manifeste le
+    définit (82,5 % anglais), coûte +0,9064 ; à quotas égaux (25 % par source) il coûte encore
+    +0,58 : la diversité n'aide pas la porte française, et le professeur français sur des octets
+    anglais est un confondant nommé. Le curriculum 129 gagne 0,0416 à 129, 0,0056 à 128.
+    
+    Puis le chiffre qui change la lecture : la validation n'est pas tenue à l'écart. 32,8 % des
+    fenêtres du protocole (42 sur 128) sont verbatim dans l'entraînement — le corpus recopie des
+    documents — et les fenêtres contaminées donnent 0,39 de PPL de moins que les propres
+    (2,5862 contre 2,9795) ; l'écart croît avec le budget (0,17 pour la base, 0,35 pour 5 000 pas,
+    0,39 pour 20 0
+… [985 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -3; python3 tools/verifie_en_cours.py | tail -2; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_journal.py 2>&1 | tail -1; python3 tools/verifie_ba … [126 caractères tronqués]`
+
+  ```
+revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1266 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 violation(s) :
+     · docs/pilotage/references-non-regression.md : 2571 mots > budget 2500 (T1)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib, re, sys\nsys.path.insert(0,'tools')\nfrom taille_documents import mots_hors_diagrammes\nt = pathlib.Path('docs/pilotage/references-non-regression.md').read_text()\nprint('total', mots_hors_diagramme … [202 caractères tronqués]`
+
+  ```
+total 2571
+83 | > **Dernière passe complète — 2026-10-31 à 19 h 42 :** **79 portes, 75 vertes, 4 rouges, 1
+74 | > **Passe précédente — 2026-10-31 à 12 h 54 :** **78 portes, 73 vertes, 5 rouges, 1 h 37**
+34 | > **Passe précédente — 2026-10-29 à 22 h 09 :** 62 portes, 60 vertes, 2 rouges, 1 h 46 ;
+54 | > **Ce que ce fichier porte.** Les repères chiffrés qu'une passe complète imprime, et
+47 | > **Passe du 2026-10-28 à 00 h 12** (**49 portes, 46 vertes, 3 rouges**, **1 h 40 min**) —
+52 | > **Passe précédente — 2026-10-27 à 14 h 33** (**49 portes, 47 vertes, 2 rouges**, **1 h 4
+172 | > **Passe précédente — 2026-10-26 à 14 h 30** (**49 portes, 47 vertes, 2 rouges**, **1 h 3
+26 | > **Historique des passes** : les passes antérieures au 26/10 14 h 30, dont celle du
+287 | > ### ⚠️ DEUX DÉFAUTS DE MESURE, TROUVÉS LE 16/10 — ET ILS SONT DE LA MÊME FAMILLE
+511 | > **4. ET UN AUDIT DES 46 PORTES, LE MÊME JOUR** (analyse statique, sans les exécuter ✗) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"2026-10-26\" -A 12 docs/pilotage/references-non-regression.md | head -16", "description": "Read the 26/10 pass block"}`
+
+  ```
+36:> **Passe précédente — 2026-10-26 à 14 h 30** (**49 portes, 47 vertes, 2 rouges**, **1 h 34 min**) — la passe de clôture
+37-> de **B9**, avec `porte-deepseek` **incluse** (1 s, **verte** : 20 tests, dry-run, 60 et 310 prompts) et
+38-> `porte-jeux` **verte** (106 s : 449/449 au niveau 4, 11/11 paires, permutation 12/275, notation 5 112/5 112,
+39-> livre 10/10, go 9×9 10/10 contre 3/10, dames 0 défaite, cartes 44,7 % contre 51,0 %). Les **deux rouges**
+40-> sont les **structurelles connues** : `porte-indice` (861 s) et `porte-melange` (107 s), avec les mêmes
+41-> diagnostics (indice extérieur à 482 jetons, écart nul ou négatif ; état de A qui ne rend pas le code de A).
+42-> `porte-homeostasie` est **verte** (506 s). Les références sont stables : `porte-flux` **60,8135**,
+43-> `porte-pont` **+2,81 % / +25,35 %**, `porte-coupe` **+0,52 % → +17,09 %**, `porte-gain` **29,0206 →
+44-> 1297,5437**, `porte-topologie` **42,5477**, `porte-reparti-moteur` **0,0000 %**, `porte-greffe` **branchée**,
+45-> `porte-vision` **559 s**, `porte-poids-creux` **319 s**, `porte-prechargement` **187 s**. Journaux :
+46-> `/tmp/portes-b9-1026-12h55`.
+47->
+48-
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\ndebut = s.index(\"> **Passe précédente — 2026-10-26 à 14 h 30**\")\nfin = s.index(\"> **Historique des passes**\")\ … [739 caractères tronqués]`
+
+  ```
+ok
+     · 14 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/references-non-regression.md && git commit -m \"RÉFÉRENCES — LA PASSE DU 31 À 19 h 42 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET\n\nLa passe complète de clôture (79 portes, 75 vertes, 4 rouges, 1 h 39, journau … [564 caractères tronqués]`

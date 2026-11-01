@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,10 +12,17 @@
 | 13:03 | `48243e3d` | RÉFÉRENCES — LA PASSE DU 31 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET (2 489 MOTS) | `references-non-regression.md`, `README.md`, `docs.md` (+1) |
 | 17:31 | `54dc7a26` | ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40 | `en-cours.md`, `README.md`, `apprentissage.md` (+11) |
 | 18:06 | `58103738` | DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS | `diehl-cook.md`, `README.md`, `apprentissage.md` (+12) |
+| 21:20 | `c3bcbe99` | N2 — LE BUDGET PAIE 2,8 %, LES QUATRE SOURCES COÛTENT 91 %, ET LA VALIDATION EST CONTAMINÉE À 32,8 % | `.gitignore`, `N2-distillation.md`, `en-cours.md` (+21) |
+
+## Chiffres du jour
+
+`2,8 %` · `91 %` · `32,8 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 4.0 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 4.1 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `0f3b6070-57ce-4642-b9ec-3b3956f75978` — Regarde l'image /tmp/qa/check1.png avec (début 2026-10-31 18:02, 0.0 h) → [rapport](../sessions/0f3b6070-57ce-4642-b9ec-3b3956f75978/rapport.md) · [digest](../sessions/0f3b6070-57ce-4642-b9ec-3b3956f75978/digest.md)
 - `163d631a-6528-4324-b7b3-6487d24feeb5` — — (début 2026-10-31 17:39, 0.0 h) → [rapport](../sessions/163d631a-6528-4324-b7b3-6487d24feeb5/rapport.md) · [digest](../sessions/163d631a-6528-4324-b7b3-6487d24feeb5/digest.md)
 - `22e518ee-81b8-4081-ae1b-f0d7a777a1d7` — Compléter les autres sessions avant le backlog (début 2026-10-31 11:13, 0.2 h) → [rapport](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/rapport.md) · [digest](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/digest.md)
@@ -23,6 +30,12 @@
 - `df1b1098-d54e-4763-bfc2-2a8cc1498cec` — Tu es relecteur visuel de (début 2026-10-31 17:52, 0.0 h) → [rapport](../sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) · [digest](../sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 3.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 0.7 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+
+## Mesures et rapports touchés
+
+- [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/README.md](../../reports/README.md)
+- [reports/rapport-n2-budget.md](../../reports/rapport-n2-budget.md)
 
 <!-- notes -->
 
