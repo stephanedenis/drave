@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 18.6 h |
 | Tours | 7 |
-| Messages | 277 |
-| Appels d'outils | 314 |
+| Messages | 282 |
+| Appels d'outils | 319 |
 | Fichiers touchés | 18 |
-| Commandes | 238 |
+| Commandes | 242 |
 | Sous-agents | 2 |
-| Commits | 14 |
+| Commits | 15 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -359,7 +359,7 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 
 ### Tour 7 — prends en charge ici les sessions en suspend pour les compléter
 
-*45 appels d'outils.* Actions notables :
+*50 appels d'outils.* Actions notables :
 
 - bash — Lire le plan R4.4 et ce qui reste
 - bash — Lire le plan N2 et son objectif final
@@ -375,11 +375,11 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 - bash — Lire la suite de l'OCR et le banc réel
 - bash — Trouver les scans réels et le journal de bord
 - bash — Trouver la page et la boîte de l'exposant fusionné
-- … et 29 autres
+- … et 33 autres
 
 **Synthèse produite :**
 
-⏵ S est presque fini : le générateur existe et les tests passent ; il manque l'export corpus
+⏵ S a été repris par une autre TUI pendant mon travail : je corrige l'état pour ne pas mentir sur l'export
 
 ## 3. Travail accompli
 
@@ -453,7 +453,7 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 198 autres
+- … et 202 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -601,4 +601,5 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 - EXPORT — LA BANQUE VALIDÉE DEVIENT UN CORPUS JSONL (SPANS VÉRIFIÉS)" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - S — L'EXPORT CORPUS EST BRANCHÉ (14 TESTS) ; R4.4 — LES TROIS RESTES SONT DES LIMITES NOMMÉES" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - S — L'EXPORT CORPUS EST BRANCHÉ (14 TESTS) ; R4.4 — LES TROIS RESTES SONT DES LIMITES NOMMÉES" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS)" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 

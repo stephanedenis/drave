@@ -12689,3 +12689,20 @@ drwxr-xr-x. 1 stephane stephane       1608  1 nov 11:02 ..
 background job bash-660 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nohup python3 tools/corpus_wikipedia.py --db /home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db --sortie data/corpus_wiki_fr --manifeste reports/corpus-wiki-fr.json > work/corpus-wiki.log 2>&1 & echo "job $!"; sleep 30; tail -3 work/corpus-wiki.log; date +%H:%M) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "sleep 420; tail -4 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/corpus-wiki.log; ls -la /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/corpus_wiki_fr/; pgrep -af \"corpus_wikipedia.py\" | grep -v pgrep | wc -l; date +%H:%M", "description": "Wait for extraction completion", … [83 caractères tronqués]`
+
+  ```
+"val": 191095576,
+  "test": 189680293
+ }
+}
+total 3717160
+drwxr-xr-x. 1 stephane stephane         48  1 nov 11:02 .
+drwxr-xr-x. 1 stephane stephane       1608  1 nov 11:13 ..
+-rw-r--r--. 1 stephane stephane  189680293  1 nov 11:14 test.txt
+-rw-r--r--. 1 stephane stephane 3425588868  1 nov 11:14 train.txt
+-rw-r--r--. 1 stephane stephane  191095576  1 nov 11:14 val.txt
+0
+11:17
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json\nd=json.load(open('reports/corpus-wiki-fr.json'))\nfor k in ('articles_db','articles_lus','articles_gardes','articles_courts','articles_vides','articles_doublons','caracteres_gardes','mots_estimes','tronco … [635 caractères tronqués]`

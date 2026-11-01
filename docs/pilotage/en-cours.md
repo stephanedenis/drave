@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-01, 10 h 55 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-01, 11 h 20 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -17,12 +17,13 @@
 ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
 
 - **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
-- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; **reprise** de S et des restes de R4.4.
-- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes)~~ ; 4) ~~moteur v0 (BFS, greedy, A*, MCTS-lite)~~ ; 5) **AC-3, alpha-bêta, DRVF** ; 6) **banc anytime** (AUC, regret, justification, rejeu) et intégration ; 7) **reprise S/R4.4** : export corpus, note de limites.
+- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; **reprise** des restes de R4.4.
+- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes)~~ ; 4) ~~moteur v0 (BFS, greedy, A*, MCTS-lite)~~ ; 5) **AC-3, alpha-bêta, DRVF** ; 6) **banc anytime** (AUC, regret, justification, rejeu) et intégration ; 7) **reprise R4.4** : note de clôture des limites.
 - **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels, avec des opérateurs hétérogènes.
 - **Stratégie** : théorie d'abord, puis un **v0 petit et mesuré** ; réserver les fichiers ; ne pas toucher aux GPU de N2.
 - **Objectif final** : un **moteur de pensée v0 exécutable** — state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles — documenté, mesuré, committé.
-- **Reprise** : **S** — export corpus JSONL vérifié (14 tests, manifeste) ; **R4.4** — note de clôture des trois limites (fax 1 bit, exposant fusionné, parité réelle sans questions).
+- **Reprise** : **R4.4** — note de clôture des trois limites (fax 1 bit, exposant fusionné,
+  parité réelle sans questions) ; **S** est actif dans une autre TUI (export pragmatique, 11 tests).
 - **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes** (T0 canonique, T1 rejeu,
   T2 stratégies, T3 anytime, T4 justification) sur le jouet des cruches ; BFS, greedy, A* et
   MCTS-lite ; fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md). Fait en parallèle par la
@@ -30,8 +31,8 @@
 - **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
   avance ; **N4** en file ; **A/B** gardent les leurs.
 - **Interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state`.
-- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `tools/structures/`, `data/structures/`, `reports/r44-*`, `journal/sessions/e181ce02-…/`.
-- **Prochaine action** : **S** — export ✅ ; **R4.4** — note de limites ; puis **AC-3, alpha-bêta, DRVF, banc anytime**.
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `reports/r44-*`, `journal/sessions/e181ce02-…/`.
+- **Prochaine action** : **R4.4** — limites committées ; puis **AC-3, alpha-bêta, DRVF, banc anytime**.
 - **Bloquants** : aucun ; corpus de test à choisir ; pas de GPU.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 

@@ -9,8 +9,8 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 19.0 h |
 | Tours | 13 |
-| Messages | 878 |
-| Appels d'outils | 822 |
+| Messages | 880 |
+| Appels d'outils | 823 |
 | Fichiers touchés | 11 |
 | Commandes | 684 |
 | Sous-agents | 0 |
@@ -649,7 +649,7 @@ Le banc ne se contente plus de phrases écrites à la main — **il analyse** :
 
 ### Tour 13 — Les phrases présentées sont ambigues et ne peuvent être résolues hors contexte, même par un humain. En contexte, cette a … [128 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Add the pragmatic statuses to the server
 - bash — Rewrite the LLM client with context and pragmatic statuses
@@ -669,7 +669,37 @@ Le banc ne se contente plus de phrases écrites à la main — **il analyse** :
 
 **Synthèse produite :**
 
-⏵ Le point est juste : j'ajoute le niveau pragmatique — contexte, statuts, double sens conservé
+⏵ Le niveau pragmatique est en place, vérifié de bout en bout
+
+\## Le point était juste, et il a changé le modèle de l'outil
+
+Les phrases du banc étaient ambiguës **par construction** — c'était le but : exposer des lectures concurrentes. Mais forcer un verdict unique par candidat est le mauvais geste : hors contexte, personne ne peut trancher, et en contexte l'ambiguïté peut être **voulue**. L'outil enregistre donc désormais un **statut pragmatique**, pas une vérité.
+
+\## Ce qui a changé
+
+| avant | maintenant |
+|---|---|
+| ✓ acceptable / ~ discutable / ✗ non | **résolu** / **compatible** / **exclu** / **⇄ double sens** |
+| pas de contexte | un **champ de contexte** libre par phrase, enregistré avec chaque verdict |
+| export = candidats acceptés | export = **lectures conservées**, avec statut, contexte et **groupe** |
+| LLM = un choix | LLM = une **liste de lectures** + une **intention** (sérieux / humour / ambigu) |
+| baseline = un choix | baseline **aveugle au contexte** — le témoin qui montre ce que coûte l'absence de pragmatique |
+
+**Le double sens se conserve.** Deux lectures marquées « double sens » sortent ensemble, avec le même `groupe` (`p007-double`) : l'ambiguïté intentionnelle est un **fait** à conserver, pas un défaut à trancher.
+
+**Une phrase pour l'incarner** : « Le canard est prêt à manger. » — le canard est cuit (patient) ou il a faim (agent). Vérifié de bout en bout : deux validations `double_sens` sur `p007` avec un contexte → **export 2 lignes, groupe `p007-double`, contexte conservé**.
+
+\## L'état
+
+- Sous-projet : commit **`7366191`** (pragmatique + contexte + export groupé) ; **11 tests** passent (6 serveur, 5 générateur), dont le groupe double sens et le contexte.
+- Dépôt principal : **`5a5915a5`** (pointeur + plan) et **`1145834c`** (compteurs).
+- **Serveur en ligne** : http://127.0.0.1:8765 — 7 phrases, 0 validation, sous-module propre.
+- Vérifications : revue ✅, état ✅, **T0 3 743 / 4 000**.
+
+\## Ce que ça relie dans le projet
+
+Ce n'est pas un détail d'interface : c'est la **RSN plurielle** appliquée à l'interprétation. Un sens n'est pas un parse unique mais un **état à plusieurs lectures**, chacune avec un statut ; le contexte est ce qui **décide**, et quand l'intention est humoristique, la décision est de **garder les deux**. C'est exactement ce que le moteur de pensée v0 sait représenter (états pluriels, justification, trace) — et le corpus qui en sort est rare : des **lectures doubles validées avec leur contexte**, ce qu'aucun corp
+… [734 caractères tronqués]
 
 ## 3. Travail accompli
 

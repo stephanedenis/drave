@@ -6642,3 +6642,111 @@ M  journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
 … [675 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat 5a5915a5 | head -25; echo '=== 0ca545eb ==='; git show --stat 0ca545eb | head -25; echo '=== submodule ==='; git -C tools/structures log --oneline -3; git submodule status tools/structures; echo '=== en-cours reprise  … [226 caractères tronqués]`
+
+  ```
+commit 5a5915a587441e6aaae6162451b4d7b470ca0de3
+Author: Stéphane <stephane@localhost>
+Date:   Sun Nov 1 11:13:22 2026 -0500
+
+    S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE
+    
+    Le banc de structures ne force plus un verdict unique (submodule 7366191). Chaque lecture reçoit
+    un statut pragmatique — resolu, compatible, exclu, double_sens — enregistré avec le contexte qui
+    l'a tranché ; l'interface gagne un champ de contexte par phrase et le bouton « ⇄ double sens ».
+    
+    Deux lectures marquées double_sens sortent ensemble dans l'export, avec le même groupe
+    (p007-double) : l'ambiguïté intentionnelle est un fait à conserver, pas un défaut à trancher.
+    L'export devient une ligne par lecture conservée, avec statut, contexte et groupe.
+    
+    Le grand modèle reçoit le contexte et rend une liste de lectures plus une intention (serieux /
+    humour / ambigu) ; la baseline reste aveugle au contexte — le témoin qui montre ce que coûte
+    l'absence de pragmatique. Nouvelle phrase à double sens assumé : « Le canard est prêt à manger. »
+    
+    Vérifié de bout en bout : deux validations double_sens sur p007 avec contexte → export 2 lignes
+… [3243 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo '=== submodule status ==='; git -C tools/structures status --short; echo '=== files ==='; ls tools/structures/exporter_corpus.py tools/structures/tests/test_export.py 2>/dev/null; echo '=== HEAD report tail ==='; git show HEAD:r … [400 caractères tronqués]`
+
+  ```
+=== submodule status ===
+=== files ===
+=== HEAD report tail ===
+
+## Ce qui reste — trois limites nommées, pas trois tâches ouvertes
+
+| reste | ce qui a été essayé | pourquoi ça s'arrête |
+|---|---|---|
+| **fax 1 bit** | médian / ouverture / composantes connexes avant upscale (95 % de destruction), `psm` 4, 6, 11 | 120 dpi, 1 bit : l'information n'est plus dans l'image ; **56,7 %** de parité, le pire des cinq |
+| **exposant fusionné** | passe chiffres sur les petits mots (`!`, `!!`, `!?`) ; le `10` de « développement 10 » a une boîte de **confiance 0** | il n'y a pas de boîte séparée à recadrer ; un split textuel serait une **devinette**, pas une mesure |
+| **scans réels de bout en bout** | Verne 1 : **WER 7,10 %**, rappel **93,7 %**, ordre des colonnes prouvé sur Verne 2 | la **parité** exige des questions humaines sur le scan ; sans elles, le WER est la mesure, et la parité n'est pas mesurable |
+
+**Ce qui rouvrirait** : un scanner réel, une vérité humaine sur dix pages, ou un moteur OCR qui
+retrouve le 1 bit. Tant que ce n'est pas là, R4.4 est **close avec ses limites nommées** — et le
+banc, lui, tourne tel quel sur des scans réels sans changer une ligne.
+=== HEAD plan reprise ===
+… [593 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ S a été repris par une autre TUI pendant mon travail : je corrige l'état pour ne pas mentir sur l'export
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' tools/structures/README.md; echo '=== export ==='; grep -n \"export\\|statut\\|contexte\\|groupe\" tools/structures/README.md | tail -15; echo '=== tests ==='; ls tools/structures/tests; cd tools/structures && python3  … [113 caractères tronqués]`
+
+  ```
+# Structures — le banc d'interprétations candidates
+
+> **Ce que c'est.** Un outil **pour humain** : il affiche, pour une phrase, plusieurs **structures
+> d'interprétation candidates** (attachements, rôles, portées), permet de les **valider**, de
+> demander l'avis d'un **grand modèle** (DeepSeek), et d'**exporter une banque** de structures
+> validées — un corpus d'entraînement pour le projet Drave.
+
+> **Ce que ce n'est pas.** Pas un analyseur : les candidats sont fournis par le fichier de données
+> (v0 : écrits à la main). Le jour où un analyseur les génère, l'outil ne change pas.
+
+## Lancer
+
+```bash
+python3 serveur.py                 # http://127.0.0.1:8765
+python3 serveur.py --port 9000 --hote 0.0.0.0   # sur le réseau local
+```
+
+Aucune dépendance : la bibliothèque standard suffit (serveur HTTP, JSON, `urllib`).
+
+## Le niveau pragmatique
+
+Une phrase hors contexte est **ambiguë** — même pour un humain. Et en contexte, l'ambiguïté peut
+être **voulue** (jeu de mots, humour). L'outil ne force donc pas un choix : il enregistre un
+**statut pragmatique** par lecture, avec le contexte qui l'a tranché.
+
+| statut | sens |
+|---|---|
+| **resolu** | le contexte tranche : c'est ce sens-là |
+| *
+… [2184 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**Mis à jour : 2026-11-01, 10 h 55 HNE (heure locale, EST).**\",\n            \"**Mis à jour : 2026-11-01, 11 h 20 HNE (heu … [3709 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1360 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+ETAT=0
+  ✅ plans cohérents
+SESSIONS=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\"; do eval \"$t\" >/tmp/ak 2>&1; c=$?;  … [141 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md && git diff --cached --stat | tail -8 && timeout 240 git commit -m \"ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS) … [103 caractères tronqués]`

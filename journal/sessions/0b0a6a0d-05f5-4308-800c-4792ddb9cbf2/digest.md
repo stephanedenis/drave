@@ -11818,3 +11818,64 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [498 caractères tronqués]`
+
+  ```
+compteurs ok
+  revue de documentation · 381 fiche(s) · 458 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-684]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-684", "timeout_ms": 240000, "wait": true}`
+
+  ```
+1145834c ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON
+5a5915a5 S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le niveau pragmatique est en place, vérifié de bout en bout
+
+## Le point était juste, et il a changé le modèle de l'outil
+
+Les phrases du banc étaient ambiguës **par construction** — c'était le but : exposer des lectures concurrentes. Mais forcer un verdict unique par candidat est le mauvais geste : hors contexte, personne ne peut trancher, et en contexte l'ambiguïté peut être **voulue**. L'outil enregistre donc désormais un **statut pragmatique**, pas une vérité.
+
+## Ce qui a changé
+
+| avant | maintenant |
+|---|---|
+| ✓ acceptable / ~ discutable / ✗ non | **résolu** / **compatible** / **exclu** / **⇄ double sens** |
+| pas de contexte | un **champ de contexte** libre par phrase, enregistré avec chaque verdict |
+| export = candidats acceptés | export = **lectures conservées**, avec statut, contexte et **groupe** |
+| LLM = un choix | LLM = une **liste de lectures** + une **intention** (sérieux / humour / ambigu) |
+| baseline = un choix | baseline **aveugle au contexte** — le témoin qui montre ce que coûte l'absence de pragmatique |
+
+**Le double sens se conserve.** Deux lectures marquées « double sens » sortent ensemble, avec le même `groupe` (`p007-double`) : l'ambiguïté intentionnelle est un **fait** à conserver, pas un défaut à trancher.
+
+**Une phrase pour l'incarner** : « Le canard est prêt à manger. » — le canard est cuit (patient) ou il a faim (agent). Vérifié de bout en bout : deux validations `double_sens` sur `p007` avec un contexte → **export 2 lignes, groupe `p007-double`, contexte conservé**.
+
+## L'état
+
+- Sous-projet : commit **`7366191`** (pragmatique + contexte + export groupé) ; **11 tests** passent (6 serveur, 5 générateur), dont le groupe double sens et le contexte.
+- Dépôt principal : **`5a5915a5`** (pointeur + plan) et **`1145834c`** (compteurs).
+- **Serveur en ligne** : http://127.0.0.1:8765 — 7 phrases, 0 validation, sous-module propre.
+- Vérifications : revue ✅, état ✅, **T0 3 743 / 4 000**.
+
+## Ce que ça relie dans le projet
+
+Ce n'est pas un détail d'interface : c'est la **RSN plurielle** appliquée à l'interprétation. Un sens n'est pas un parse unique mais un **état à plusieurs lectures**, chacune avec un statut ; le contexte est ce qui **décide**, et quand l'intention est humoristique, la décision est de **garder les deux**. C'est exactement ce que le moteur de pensée v0 sait représenter (états pluriels, justification, trace) — et le corpus qui en sort est rare : des **lectures doubles validées avec leur contexte**, ce qu'aucun corpus de parsing standard ne contient.
+
+## Ce qui manque encore
+
+- Le contexte est **du texte libre** : rien ne mesure automatiquement sa **cohérence** avec chaque lecture — c'est le juge humain ou le LLM qui le fait.
+- L'**intention** n'est pas inférée de façon fiable : le LLM la propose, l'humain la confirme ; un modèle entraîné sur ces verdicts pourrait l'apprendre.
+- Le **générateur** ne produit pas encore les subordonnées ni la coordination : les candidats restent des attachements et des rôles.
+
+La suite naturelle : un lot de phrases avec leur contexte, la validation par lots, et l'export comme **corpus de lectures plurielles** — pour entraîner, un jour, un modèle qui ne choisit pas un sens mais **sait qu'il y en a deux**.
+
