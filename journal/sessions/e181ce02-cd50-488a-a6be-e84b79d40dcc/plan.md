@@ -15,7 +15,7 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-01 12:25 EST
+- **Heartbeat** : 2026-11-01 13:50 EST
 - **Prochaine action** : le bloc linguistique v0 est livré (398 langues à 0,9687, contrat
   heuristique/neuronal, activation 51–76 %) ; qualifier un gold et un modèle neuronal ; puis
   AC-3, alpha-bêta, DRVF et le banc anytime (S reste à l'autre TUI).

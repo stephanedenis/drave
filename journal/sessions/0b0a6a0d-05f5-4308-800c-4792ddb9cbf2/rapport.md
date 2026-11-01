@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 21.3 h |
+| Durée | 21.5 h |
 | Tours | 16 |
-| Messages | 974 |
-| Appels d'outils | 910 |
+| Messages | 977 |
+| Appels d'outils | 913 |
 | Fichiers touchés | 11 |
-| Commandes | 754 |
+| Commandes | 756 |
 | Sous-agents | 0 |
 | Commits | 24 |
 | Compactages de contexte | 1 |
@@ -820,7 +820,7 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 
 ### Tour 16 — continue avec de trèes gros corpus multilingues
 
-*13 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — List the Wikipedia language bases and GPU status
 - bash — Extract 10-language Wikipedia articles
@@ -834,6 +834,8 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 - bash — Check contamination per language and launch the multilingual base
 - bash — Evaluate the monolingual French base on all ten languages
 - bash — Wait for the multilingual base training
+- bash — Check the multilingual training progress
+- bash — Wait for the multilingual base to finish
 
 **Synthèse produite :**
 
@@ -899,7 +901,7 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 714 autres
+- … et 716 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1027,7 +1029,7 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 
 ## 5. Erreurs rencontrées
 
-48 sorties en erreur ou divergentes. Les premières :
+49 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5

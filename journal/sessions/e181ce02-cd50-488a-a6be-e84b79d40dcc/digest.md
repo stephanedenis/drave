@@ -9103,3 +9103,170 @@ C'est la **priorité** : un lecteur au niveau **système**, avec le moteur exist
 … [1779 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '17,40p' docs/pilotage/en-cours.md; echo '=== counters ==='; grep -n \"fichiers / JSON\\|documents de\\|Mis à jour\\|R — le lecteur\\|R4.4 — close\" docs/pilotage/en-cours.md", "description": "Lire le bloc état à mettre à jour … [2 caractères tronqués]`
+
+  ```
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+
+- **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; reprise R4.4 ; **analyse de la couche heuristique**.
+- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes)~~ ; 4) ~~moteur v0 (BFS, greedy, A*, MCTS-lite)~~ ; 5) **AC-3, alpha-bêta, DRVF** ; 6) **banc anytime** (AUC, regret, justification, rejeu) et intégration ; 7) ~~reprise R4.4~~ ; 8) **couche heuristique** (analyse, 5 schémas).
+- **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels, avec des opérateurs hétérogènes.
+- **Stratégie** : théorie d'abord, puis un **v0 petit et mesuré** ; réserver les fichiers ; ne pas toucher aux GPU de N2.
+- **Objectif final** : un **moteur de pensée v0 exécutable** — state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles — documenté, mesuré, committé.
+- **Reprise** : **R4.4** — note de clôture des trois limites (fax 1 bit, exposant fu
+… [2156 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# docs README\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`implantation/encodeur-visuel.md`](implantation/encodeur-visuel.md) | l'OCR comme bloc classique : contrat, confianc … [3490 caractères tronqués]`
+
+  ```
+index ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '8,35p' journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md", "description": "Lire le plan à mettre à jour"}`
+
+  ```
+- **Session** : `e181ce02-cd50-488a-a6be-e84b79d40dcc`
+- **Rôle** : Pensée — RSN plurielle, arbre d'états, cycle multi-niveaux, moteur N3 ; analyse de la couche heuristique
+- **Périmètre** : Pensée, R4.4-reste, Coloration
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`,
+  `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`,
+  `reports/r44-*`, `docs/theorie/pre-traitement-linguistique.md`,
+  `docs/schemas/heuristique-*.svg`, `journal/sessions/e181ce02-…/`
+- **Heartbeat** : 2026-11-01 11:45 EST
+- **Prochaine action** : l'analyse heuristique est écrite (5 schémas) ; première mesure de la
+  cascade (langue et frontières sur 71 langues) ; puis AC-3, alpha-bêta, DRVF et le banc anytime
+  (S reste à l'autre TUI).
+- **État** : actif
+- **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
+  stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
+  (BFS, greedy, A*, MCTS-lite)~~ ; 5) **AC-3, alpha-bêta, DRVF** ; 6) **banc anytime** (AUC,
+  regret, justification, rejeu) et intégration DRVM/DRVF.
+- **Ambition** : faire de Drave un **runtime cognitif** où pe
+… [1013 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# plan\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); t=p.read_text()\nt=t.replace(\"- **Rôle** : Pensée — RSN plurielle, arbre d'états, cycle multi-niveaux, moteur … [5952 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1522 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+ETAT=0
+  ⚠ mandat périmé (82 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+SESSIONS=0
+  ```
+
+- **bash** `{"command": "date '+%Y-%m-%d %H:%M %Z'; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -6; echo '=== schemas ==='; python3 tools/verifier_schemas.py 2>&1 | tail -4; echo '=== taille ==='; python3 tools/taille_documents.py 2>&1 | tail -5; echo ' … [132 caractères tronqués]`
+
+  ```
+2026-11-01 13:47 EST
+  revue de documentation · 384 fiche(s) · 471 JSON · 117 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 3 anomalie(s) :
+     · compteurs : en-cours.md dit 118 documents, le disque en a 117
+     · compteurs : en-cours.md dit 385 fichiers, le disque en a 384
+     · compteurs : en-cours.md dit 472 JSON, le disque en a 471
+=== schemas ===
+  schémas · 436 document(s) · 66 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+=== taille ===
+
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+=== tableaux ===
+  ✅ 1355 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 1379 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-01)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l reports/rapport-bloc-linguistique.md reports/bloc-linguistique.json docs/implantation/bloc-linguistique.md tools/bloc_linguistique.py 2>&1; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read … [1132 caractères tronqués]`
+
+  ```
+-rw-------. 1 stephane stephane 16517  1 nov 13:44 docs/implantation/bloc-linguistique.md
+-rw-r--r--. 1 stephane stephane 13877  1 nov 13:42 reports/bloc-linguistique.json
+-rw-------. 1 stephane stephane 10136  1 nov 13:45 reports/rapport-bloc-linguistique.md
+-rw-------. 1 stephane stephane 52886  1 nov 13:41 tools/bloc_linguistique.py
+dates ok
+  revue de documentation · 384 fiche(s) · 471 JSON · 117 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 3 anomalie(s) :
+     · compteurs : en-cours.md dit 118 documents, le disque en a 117
+     · compteurs : en-cours.md dit 385 fichiers, le disque en a 384
+     · compteurs : en-cours.md dit 472 JSON, le disque en a 471
+=== sessions ===
+  ✅ plans cohérents
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -E \"bloc|linguistique\" | head -20; echo '=== revue count ==='; grep -n \"def .*compt\\|rglob\\|glob\\|ls-files\\|ls-tree\\|reports/\\*\" tools/revue_documentation.py | head -30", "description": "Comprendre … [26 caractères tronqués]`
+
+  ```
+A  docs/implantation/bloc-linguistique.md
+A  docs/schemas/bloc-linguistique-niveaux.svg
+A  docs/schemas/bloc-linguistique-substitution.svg
+A  reports/bloc-linguistique.json
+A  reports/rapport-bloc-linguistique.md
+A  tools/bloc_linguistique.py
+A  tools/porte-bloc-linguistique.sh
+A  tools/tests/linguistique/test_bloc_linguistique.py
+=== revue count ===
+67:    return [p for p in (RACINE / "docs").rglob("*.md")
+72:    return list((RACINE / "docs").rglob("*.md"))
+76:    return list((RACINE / "reports").glob("*.md"))
+100:def compte_portes() -> int:
+101:    return len(list((RACINE / "tools").glob("porte-*.sh")))
+104:def compte_chapitres() -> int:
+105:    return len(list((RACINE / "docs/theorie/synthese").glob("0*.md")))
+108:def compte_fiches() -> int:
+112:def compte_json() -> int:
+113:    return len(list((RACINE / "reports").glob("*.json")))
+116:def compte_docs() -> int:
+161:    for f in (RACINE / "docs").rglob("*"):
+262:    cartes = sorted((RACINE / "docs/theorie/glossaire/entrees").glob("*.md"))
+298:    for f in (RACINE / "docs").rglob("*.md"):
+323:        chapitres = sorted(syn.glob("0*.md"))
+341:        n = len(list((syn / "schemas").glob("*.svg")))
+363:        for s in (syn / "schema
+… [18 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"| fichiers / JSON de résultats | **385** / **472** |\", \"| fichiers / JSON de résultats | **384** / **471** |\")\nt=t.repl … [552 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 384 fiche(s) · 471 JSON · 117 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== en-cours ===
+  en-cours · 1522 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== sessions ===
+  ✅ plans cohérents
+=== porte bloc ===
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''    if args.mode == \"neuronal\":\n        return n.analyser(texte, args.langue, args.contexte)''',\n'''    if args.mode  … [1313 caractères tronqués]`
+
+  ```
+ok
+COMPILE=0
+langue=fr script=Latn source=neuronal refus=-
+  phrase       type           'déclarative' [0:13] conf=0.90 src=neuronal
+=== gates ===
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/bloc_linguistique.py tools/porte-bloc-linguistique.sh tools/tests/linguistique/test_bloc_linguistique.py docs/implantation/bloc-linguistique.md docs/schemas/bloc-linguistique-niveaux.svg docs/schemas/bloc-linguistique-s … [552 caractères tronqués]`

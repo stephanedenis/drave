@@ -14168,3 +14168,69 @@ ligne déplacée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor t in \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifie_etat_a_jour.py\"; do timeout 300 $t >/tmp/g.log 2>&1; c=$?; printf \"%-32s [%s] \" \"$t\" \"$c\"; tail -1 /tmp/g.log | cut -c1-8 … [3272 caractères tronqués]`
+
+  ```
+python3 tools/verifie_journal.py [0]   ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+python3 tools/verifie_backlog.py [0] ✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inve
+python3 tools/verifie_etat_a_jour.py [0]   ✅ aucun fait commité après le dernier état
+  ✅ index : aucun fait stagé sans état
+ create mode 100644 journal/sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md
+ create mode 100644 tools/carte_chantiers.py
+275fea5a PILOTAGE — LA VISION À JOUR ET LES HUIT CHANTIERS : 48 H DE MANDATS, LEURS RELATIONS, LA CARTE
+  ```
+
+### 🤖 Assistant
+
+⏵ Vision relue sur 48 h, inventaire élargi à huit chantiers, carte et doc committés
+
+J'ai relu les messages humains des 48 h dans les traces DSH — `0b69f616`, `22e518ee`, `0b0a6a0d` (N2.h), `fe3c05f0` (R4.4), `e181ce02` (Pensée), plus les sessions de QA visuelle —, les plans et rapports de session, et les documents de vision, roadmap, programme R et backlog. Voici ce qui en sort.
+
+## La vision à jour, en huit principes
+
+1. **Le bus de flux typés, et la structure bat la taille** ; les blocs sont petits, substituables (neuronal, classique, matériel), indépendants du mode d'opération — « l'interface reste Drave ».
+2. **Le texte se lit en surface d'abord** : octet → morphème → mot → syntagme → phrase → paragraphe → document → multilingue, en **annotations** et non en prompts ; le CPU étiquette le sûr et énumère le plausible, le réseau tranche.
+3. **La pragmatique est un niveau** : l'ambiguïté ne se tranche qu'en contexte, et le double sens se **conserve**.
+4. **Les interprétations sont plurielles** : RSN à candidats, arbre d'états, BFS/A*/MCTS/AC-3/alpha-bêta, anytime, trace/rejeu.
+5. **La validation humaine construit la banque** : S montre les structures candidates, l'humain et le LLM les évaluent, l'export alimente le corpus.
+6. **Le lecteur R est la preuve** : document + question + budget → réponse sourcée ou refus motivé.
+7. **Le natif N est la capacité** : distillation, corpus propre, mètre honnête, longueur, diversité.
+8. **La mesure est la règle** : un chiffre, un contrôle négatif, une fiche, une porte, un état ; les limites sont nommées.
+
+Les demandes qui ont produit cela : la **séparation à 3 niveaux** et les blocs substituables (31/10), la **RSN plurielle** et l'arbre d'états (22 h 22), les **10 h de liberté** (N2.h et R4.4), la **typoglycémie** et la **coloration linguistique** (01/11 10 h 29–10 h 46), le **niveau pragmatique** et les phrases non ambiguës (11 h 10–11 h 36), la **couche heuristique** (11 h 33), et surtout le **contrat du bloc langue** (13 h 23) : « une version heuristique et une neuronale, le contrat garantissant la substitution ou le parallèle ».
+
+## L'inventaire élargi : de quatre à huit chantiers
+
+| chantier | question | état | prochaine action |
+|---|---|---|---|
+| **A — le moteur** | les flux de blocs tournent-ils, se placent-ils, se rejouent-ils ? | ✅ A1–A8 ; A3.4/A5.4/A6.2 bloqués | A2.6, réduire le lot |
+| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres | ✅ B1–B12 ; B10.3 bloqué ; B13 v0 (6/6 portes) | B10.3, puis AC-3/alpha-bêta |
+| **N — le natif** | petit, creux, honnête, général ? | 3,09 en domaine ; 16,70 → 3,85 hors dépôt | N2 sur le français réel, N4 |
+| **R — le lecteur** | réponse sourcée ou refus motivé ? | R0 close ; R4.1–R4.4 mesurés | R1.1/R1.2 |
+| **S — les structures** | quelles interprétations candidates, validées par un humain ? | v0 : 7 phrases, générateur, pragmatique 0–4, LLM, export | analyseur plus riche, export au corpus |
+| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface, le réseau ne traiter que le résidu ? | analyse écrite (5 schémas), **pas encore de contrat** | **écrire le contrat** (deux implémentations), mesure de cascade 71 langues |
+| **D — les données** (nouveau) | avec quoi et à quel prix ? | 10 corpus, 21,6 M articles, 38,8 Go, 0 fuite | texte intégral, PDF/OCR, stubs, licences |
+| **B13 — la pensée** | penser est-il une recherche tracée sur des états pluriels ? | state store et moteur v0, 6/6 portes | AC-3, alpha-bêta, DRVF, banc anytime |
+
+## Les relations
+
+La carte est dans `docs/schemas/chantiers-vision.svg` (générée par `tools/carte_chantiers.py` : 8 boîtes, 15 arêtes, rails et canaux, **0 libellé dans une boîte, 0 segment traversant une boîte**).
+
+- **D → L, N, S, R03** : les corpus nourrissent le bloc langue, le natif, la banque de structures et le banc.
+- **L → R, B, N, S** : la surface étiquetée entre dans le lecteur, la couche sémantique, l'entraînement du natif et les candidats de S.
+- **S → L, B, D** : les validations deviennent la banque qui entraîne L neuronal, alimente la pragmatique et grossit D.
+- **N → R1–R3 ; B10.3 → R5** ; **A → N, B** ; **B13 → L, R, N**.
+- Trois chemins critiques : lecteur `R01→R02→R03→R31→R32→R51` ; langue `D→L→S→B` ; natif `D→N2→R1→R2→R3`.
+
+## Ce qui reste à trancher
+
+La frontière heuristique/réseau (à mesurer en couverture × précision par unité de calcul), le **contrat de L** (pas encore écrit), la **pragmatique** (quel contexte, quel accord inter-juges), le **natif contre les blocs** (N2 avec et sans la surface de L), la mesure de S, et les limites nommées de R4.4.
+
+## Les artefacts
+
+- `docs/pilotage/chantiers.md` — la vision à jour, la chronologie des 48 h, l'inventaire à huit chantiers, les relations, les tensions, la frontière, et où lire quoi.
+- `docs/schemas/chantiers-vision.svg` + `tools/carte_chantiers.py` — la carte.
+- Pointeurs ajoutés dans `docs/pilotage/roadmap.md` et `docs/pilotage/en-cours.md` ; récit dans `journal/2026-11-01/README.md`.
+- Commit `275fea5a` ; revue de documentation verte (384 fiches, 471 JSON, 117 docs, 81 portes), état vert.
+
+À noter : pendant la relecture, la session Pensée a créé `docs/implantation/bloc-linguistique.md` — c'est le même chantier **L** ; mon inventaire le nomme et le relie, sans toucher à son fichier.
+

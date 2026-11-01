@@ -13027,3 +13027,25 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-754", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2k/base-multi.log; ls work/n2k/base-multi.pt 2>/dev/null && echo MULTI_OK", "description": "Check the multilingual training progress"}`
+
+  ```
+13:47
+pas 14200 · perte 1.9090 · PPL val 8.169 · 670 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2k/base-multi.log; ls work/n2k/base-multi.pt 2>/dev/null && echo MULTI_OK", "description": "Wait for the multilingual base to finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-756]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-756", "timeout_ms": 400000, "wait": true}`

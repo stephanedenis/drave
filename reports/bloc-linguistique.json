@@ -1,0 +1,739 @@
+{
+ "date": "2026-11-01T13:42:46",
+ "niveaux": [
+  "graphème",
+  "morphème",
+  "mot",
+  "pos",
+  "syntagme",
+  "phrase",
+  "discours",
+  "pragmatique",
+  "document"
+ ],
+ "langue": {
+  "langues_profil": 398,
+  "articles_test": 447,
+  "accuracy": 0.9687,
+  "accuracy_script": 1.0,
+  "duree_s": 4.037,
+  "langues": {
+   "hus": [
+    3,
+    3
+   ],
+   "oci": [
+    7,
+    6
+   ],
+   "roh": [
+    7,
+    7
+   ],
+   "ron": [
+    3,
+    3
+   ]
+  }
+ },
+ "controle_permute": {
+  "accuracy": 0.0022,
+  "attendu": "proche du hasard"
+ },
+ "echantillons": [
+  {
+   "langue": "fr",
+   "heuristique": {
+    "langue": "fra",
+    "script": "Latn",
+    "source": "heuristique",
+    "refus": "",
+    "niveaux": {
+     "discours": 2,
+     "document": 1,
+     "graphème": 56,
+     "morphème": 1,
+     "mot": 29,
+     "phrase": 5,
+     "pos": 25,
+     "pragmatique": 3,
+     "syntagme": 8
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.4,
+     "phrase": 0.85,
+     "pragmatique": 0.45,
+     "discours": 0.55,
+     "document": 0.7,
+     "morphème": 0.32
+    },
+    "fraction_semantique": 0.513,
+    "etiquettes": 130
+   },
+   "neuronal_mock": {
+    "langue": "fra",
+    "script": "Latn",
+    "source": "neuronal",
+    "refus": "",
+    "niveaux": {
+     "morphème": 1,
+     "phrase": 3,
+     "pos": 13,
+     "pragmatique": 3,
+     "syntagme": 4
+    },
+    "couverture": {
+     "pos": 0.82,
+     "morphème": 0.8,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "syntagme": 0.78
+    },
+    "fraction_semantique": 0.513,
+    "etiquettes": 24
+   },
+   "parallele": {
+    "langue": "fra",
+    "script": "Latn",
+    "source": "parallele",
+    "refus": "",
+    "niveaux": {
+     "discours": 1,
+     "document": 1,
+     "graphème": 56,
+     "morphème": 2,
+     "mot": 29,
+     "phrase": 3,
+     "pos": 25,
+     "pragmatique": 3,
+     "syntagme": 8
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.4,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "document": 0.7,
+     "morphème": 0.8,
+     "discours": 0.55
+    },
+    "fraction_semantique": 0.513,
+    "etiquettes": 128
+   },
+   "cascade": {
+    "langue": "fra",
+    "script": "Latn",
+    "source": "cascade",
+    "refus": "",
+    "niveaux": {
+     "discours": 1,
+     "document": 1,
+     "graphème": 56,
+     "morphème": 2,
+     "mot": 29,
+     "phrase": 3,
+     "pos": 25,
+     "pragmatique": 3,
+     "syntagme": 8
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.4,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "document": 0.7,
+     "morphème": 0.8,
+     "discours": 0.55
+    },
+    "fraction_semantique": 0.513,
+    "etiquettes": 128
+   },
+   "activation_heuristique": {
+    "unites": 13,
+    "octets": 59,
+    "fraction": 0.513,
+    "cout": 59.0,
+    "source": "heuristique",
+    "langue": "fra"
+   },
+   "activation_neuronal": {
+    "unites": 13,
+    "octets": 59,
+    "fraction": 0.513,
+    "cout": 59.0,
+    "source": "neuronal",
+    "langue": "fra"
+   },
+   "schema_identique": true,
+   "sources_parallele": [
+    "heuristique",
+    "neuronal"
+   ]
+  },
+  {
+   "langue": "en",
+   "heuristique": {
+    "langue": "und",
+    "script": "Latn",
+    "source": "heuristique",
+    "refus": "",
+    "niveaux": {
+     "discours": 2,
+     "document": 1,
+     "graphème": 55,
+     "morphème": 1,
+     "mot": 30,
+     "phrase": 5,
+     "pos": 26,
+     "pragmatique": 3,
+     "syntagme": 4
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.55,
+     "phrase": 0.85,
+     "pragmatique": 0.45,
+     "discours": 0.55,
+     "document": 0.7,
+     "morphème": 0.32
+    },
+    "fraction_semantique": 0.7373,
+    "etiquettes": 127
+   },
+   "neuronal_mock": {
+    "langue": "sco",
+    "script": "Latn",
+    "source": "neuronal",
+    "refus": "",
+    "niveaux": {
+     "morphème": 1,
+     "phrase": 3,
+     "pos": 25,
+     "pragmatique": 3,
+     "syntagme": 1
+    },
+    "couverture": {
+     "pos": 0.82,
+     "morphème": 0.8,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "syntagme": 0.78
+    },
+    "fraction_semantique": 0.7373,
+    "etiquettes": 33
+   },
+   "parallele": {
+    "langue": "sco",
+    "script": "Latn",
+    "source": "parallele",
+    "refus": "",
+    "niveaux": {
+     "discours": 1,
+     "document": 1,
+     "graphème": 55,
+     "morphème": 2,
+     "mot": 30,
+     "phrase": 3,
+     "pos": 26,
+     "pragmatique": 3,
+     "syntagme": 4
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.55,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "document": 0.7,
+     "discours": 0.55,
+     "morphème": 0.8
+    },
+    "fraction_semantique": 0.7373,
+    "etiquettes": 125
+   },
+   "cascade": {
+    "langue": "sco",
+    "script": "Latn",
+    "source": "cascade",
+    "refus": "",
+    "niveaux": {
+     "discours": 1,
+     "document": 1,
+     "graphème": 55,
+     "morphème": 2,
+     "mot": 30,
+     "phrase": 3,
+     "pos": 26,
+     "pragmatique": 3,
+     "syntagme": 4
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.55,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "document": 0.7,
+     "discours": 0.55,
+     "morphème": 0.8
+    },
+    "fraction_semantique": 0.7373,
+    "etiquettes": 125
+   },
+   "activation_heuristique": {
+    "unites": 25,
+    "octets": 87,
+    "fraction": 0.7373,
+    "cout": 87.0,
+    "source": "heuristique",
+    "langue": "und"
+   },
+   "activation_neuronal": {
+    "unites": 25,
+    "octets": 87,
+    "fraction": 0.7373,
+    "cout": 87.0,
+    "source": "neuronal",
+    "langue": "sco"
+   },
+   "schema_identique": true,
+   "sources_parallele": [
+    "heuristique",
+    "neuronal"
+   ]
+  },
+  {
+   "langue": "de",
+   "heuristique": {
+    "langue": "deu",
+    "script": "Latn",
+    "source": "heuristique",
+    "refus": "",
+    "niveaux": {
+     "discours": 1,
+     "document": 1,
+     "graphème": 33,
+     "mot": 19,
+     "phrase": 2,
+     "pos": 15,
+     "pragmatique": 2,
+     "syntagme": 5
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.55,
+     "phrase": 0.85,
+     "pragmatique": 0.45,
+     "discours": 0.5,
+     "document": 0.7
+    },
+    "fraction_semantique": 0.7561,
+    "etiquettes": 78
+   },
+   "neuronal_mock": {
+    "langue": "deu",
+    "script": "Latn",
+    "source": "neuronal",
+    "refus": "",
+    "niveaux": {
+     "phrase": 2,
+     "pos": 14,
+     "pragmatique": 2,
+     "syntagme": 1
+    },
+    "couverture": {
+     "pos": 0.82,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "syntagme": 0.78
+    },
+    "fraction_semantique": 0.7561,
+    "etiquettes": 19
+   },
+   "parallele": {
+    "langue": "deu",
+    "script": "Latn",
+    "source": "parallele",
+    "refus": "",
+    "niveaux": {
+     "discours": 1,
+     "document": 1,
+     "graphème": 33,
+     "mot": 19,
+     "phrase": 2,
+     "pos": 15,
+     "pragmatique": 2,
+     "syntagme": 5
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.55,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "discours": 0.5,
+     "document": 0.7
+    },
+    "fraction_semantique": 0.7561,
+    "etiquettes": 78
+   },
+   "cascade": {
+    "langue": "deu",
+    "script": "Latn",
+    "source": "cascade",
+    "refus": "",
+    "niveaux": {
+     "discours": 1,
+     "document": 1,
+     "graphème": 33,
+     "mot": 19,
+     "phrase": 2,
+     "pos": 15,
+     "pragmatique": 2,
+     "syntagme": 5
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.55,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "discours": 0.5,
+     "document": 0.7
+    },
+    "fraction_semantique": 0.7561,
+    "etiquettes": 78
+   },
+   "activation_heuristique": {
+    "unites": 14,
+    "octets": 62,
+    "fraction": 0.7561,
+    "cout": 62.0,
+    "source": "heuristique",
+    "langue": "deu"
+   },
+   "activation_neuronal": {
+    "unites": 14,
+    "octets": 62,
+    "fraction": 0.7561,
+    "cout": 62.0,
+    "source": "neuronal",
+    "langue": "deu"
+   },
+   "schema_identique": true,
+   "sources_parallele": [
+    "heuristique",
+    "neuronal"
+   ]
+  },
+  {
+   "langue": "es",
+   "heuristique": {
+    "langue": "spa",
+    "script": "Latn",
+    "source": "heuristique",
+    "refus": "",
+    "niveaux": {
+     "discours": 2,
+     "document": 1,
+     "graphème": 32,
+     "morphème": 1,
+     "mot": 18,
+     "phrase": 2,
+     "pos": 15,
+     "pragmatique": 2,
+     "syntagme": 5
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.4,
+     "discours": 0.55,
+     "phrase": 0.85,
+     "pragmatique": 0.45,
+     "document": 0.7,
+     "morphème": 0.32
+    },
+    "fraction_semantique": 0.6111,
+    "etiquettes": 78
+   },
+   "neuronal_mock": {
+    "langue": "spa",
+    "script": "Latn",
+    "source": "neuronal",
+    "refus": "",
+    "niveaux": {
+     "morphème": 1,
+     "phrase": 2,
+     "pos": 10,
+     "pragmatique": 2,
+     "syntagme": 1
+    },
+    "couverture": {
+     "pos": 0.82,
+     "morphème": 0.8,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "syntagme": 0.78
+    },
+    "fraction_semantique": 0.6111,
+    "etiquettes": 16
+   },
+   "parallele": {
+    "langue": "spa",
+    "script": "Latn",
+    "source": "parallele",
+    "refus": "",
+    "niveaux": {
+     "discours": 1,
+     "document": 1,
+     "graphème": 32,
+     "morphème": 2,
+     "mot": 18,
+     "phrase": 2,
+     "pos": 15,
+     "pragmatique": 2,
+     "syntagme": 5
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.4,
+     "discours": 0.55,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "document": 0.7,
+     "morphème": 0.8
+    },
+    "fraction_semantique": 0.6111,
+    "etiquettes": 78
+   },
+   "cascade": {
+    "langue": "spa",
+    "script": "Latn",
+    "source": "cascade",
+    "refus": "",
+    "niveaux": {
+     "discours": 1,
+     "document": 1,
+     "graphème": 32,
+     "morphème": 2,
+     "mot": 18,
+     "phrase": 2,
+     "pos": 15,
+     "pragmatique": 2,
+     "syntagme": 5
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.4,
+     "discours": 0.55,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "document": 0.7,
+     "morphème": 0.8
+    },
+    "fraction_semantique": 0.6111,
+    "etiquettes": 78
+   },
+   "activation_heuristique": {
+    "unites": 10,
+    "octets": 44,
+    "fraction": 0.6111,
+    "cout": 44.0,
+    "source": "heuristique",
+    "langue": "spa"
+   },
+   "activation_neuronal": {
+    "unites": 10,
+    "octets": 44,
+    "fraction": 0.6111,
+    "cout": 44.0,
+    "source": "neuronal",
+    "langue": "spa"
+   },
+   "schema_identique": true,
+   "sources_parallele": [
+    "heuristique",
+    "neuronal"
+   ]
+  },
+  {
+   "langue": "it",
+   "heuristique": {
+    "langue": "ita",
+    "script": "Latn",
+    "source": "heuristique",
+    "refus": "",
+    "niveaux": {
+     "discours": 1,
+     "document": 1,
+     "graphème": 27,
+     "mot": 15,
+     "phrase": 2,
+     "pos": 13,
+     "pragmatique": 2,
+     "syntagme": 3
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.55,
+     "phrase": 0.85,
+     "pragmatique": 0.45,
+     "discours": 0.5,
+     "document": 0.7
+    },
+    "fraction_semantique": 0.7059,
+    "etiquettes": 64
+   },
+   "neuronal_mock": {
+    "langue": "ita",
+    "script": "Latn",
+    "source": "neuronal",
+    "refus": "",
+    "niveaux": {
+     "phrase": 2,
+     "pos": 10,
+     "pragmatique": 2
+    },
+    "couverture": {
+     "pos": 0.82,
+     "phrase": 0.9,
+     "pragmatique": 0.8
+    },
+    "fraction_semantique": 0.7059,
+    "etiquettes": 14
+   },
+   "parallele": {
+    "langue": "ita",
+    "script": "Latn",
+    "source": "parallele",
+    "refus": "",
+    "niveaux": {
+     "discours": 1,
+     "document": 1,
+     "graphème": 27,
+     "mot": 15,
+     "phrase": 2,
+     "pos": 13,
+     "pragmatique": 2,
+     "syntagme": 3
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.55,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "discours": 0.5,
+     "document": 0.7
+    },
+    "fraction_semantique": 0.7059,
+    "etiquettes": 64
+   },
+   "cascade": {
+    "langue": "ita",
+    "script": "Latn",
+    "source": "cascade",
+    "refus": "",
+    "niveaux": {
+     "discours": 1,
+     "document": 1,
+     "graphème": 27,
+     "mot": 15,
+     "phrase": 2,
+     "pos": 13,
+     "pragmatique": 2,
+     "syntagme": 3
+    },
+    "couverture": {
+     "graphème": 0.99,
+     "mot": 0.98,
+     "pos": 0.92,
+     "syntagme": 0.55,
+     "phrase": 0.9,
+     "pragmatique": 0.8,
+     "discours": 0.5,
+     "document": 0.7
+    },
+    "fraction_semantique": 0.7059,
+    "etiquettes": 64
+   },
+   "activation_heuristique": {
+    "unites": 10,
+    "octets": 48,
+    "fraction": 0.7059,
+    "cout": 48.0,
+    "source": "heuristique",
+    "langue": "ita"
+   },
+   "activation_neuronal": {
+    "unites": 10,
+    "octets": 48,
+    "fraction": 0.7059,
+    "cout": 48.0,
+    "source": "neuronal",
+    "langue": "ita"
+   },
+   "schema_identique": true,
+   "sources_parallele": [
+    "heuristique",
+    "neuronal"
+   ]
+  }
+ ],
+ "niveaux_vus": [
+  "discours",
+  "document",
+  "graphème",
+  "morphème",
+  "mot",
+  "phrase",
+  "pos",
+  "pragmatique",
+  "syntagme"
+ ],
+ "niveaux_manquants": [],
+ "controles": {
+  "vide_refus": "vide",
+  "ponctuation_refus": "vide",
+  "langue_inconnue": "und",
+  "indice_faux": "und",
+  "rejeu_identique": true
+ },
+ "verdicts": {
+  "langue": true,
+  "script": true,
+  "permute_faible": true,
+  "niveaux": true,
+  "substitution": true,
+  "parallele": true,
+  "activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}

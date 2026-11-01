@@ -124,6 +124,7 @@ pipeline, et deux négatifs assumés. Ce qui tient :
 | **R0.3 banc** | 30 documents, 249 lexicales + 84 paraphrases | **0,231** contre **0,042** à la troncature | [`r03`](../../reports/rapport-r03-banc-complet.md) |
 | **R0.6 pipeline** | 20 questions, 10 hors sujet, 8 paraphrases | **12/20**, **9/10** refus, **7/8** modèle | [`r06`](../../reports/rapport-r06-pipeline.md) |
 | **R06 calibration** | 124 + 42 questions, split paires/impaires | **0,894** lexical, **0,366** paraphrases | [`r06`](../../reports/rapport-r06-publication.md) |
+| **R0.7 couche linguistique** | 9 niveaux, heuristique/neuronal, 398 langues | **0,9687** langue, **1,0000** script | [`bloc`](../implantation/bloc-linguistique.md) |
 
 Ce qui ne tient pas, et qui est **nommé** :
 

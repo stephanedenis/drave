@@ -38,6 +38,13 @@
 | [programme-r-phases.svg](programme-r-phases.svg) | les six phases R0–R5, leurs états et leurs dépendances | [le programme R](../pilotage/programme-r.md) |
 | [programme-r-pipeline.svg](programme-r-pipeline.svg) | le pipeline R0.6 : document → régions → contrôleur → lecteurs → réponse citée | [le programme R](../pilotage/programme-r.md) |
 
+## Les schémas du bloc linguistique
+
+| schéma | ce qu'il montre | où il est utilisé |
+|---|---|---|
+| [bloc-linguistique-niveaux.svg](bloc-linguistique-niveaux.svg) | les neuf niveaux, la confiance heuristique et la couverture neuronale | [le bloc linguistique](../implantation/bloc-linguistique.md) |
+| [bloc-linguistique-substitution.svg](bloc-linguistique-substitution.svg) | un contrat, plusieurs implémentations, le parallèle/cascade et l'activation sémantique | [le bloc linguistique](../implantation/bloc-linguistique.md) |
+
 ## Les schémas du natif et de l'impulsionnel
 
 | schéma | ce qu'il montre | où il est utilisé |

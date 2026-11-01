@@ -1,0 +1,51 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Le bloc linguistique — substituer, paralléliser, activer</title>
+<desc>Un seul contrat, plusieurs implémentations ; le parallèle fusionne, la cascade n&#x27;appelle le neuronal que sur le résidu.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="560" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Le bloc linguistique — substituer, paralléliser, activer</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">La couche sémantique ne reçoit que les unités : l&#x27;heuristique peut l&#x27;activer avant le neuronal.</text>
+<rect x="30" y="82" width="900" height="58" rx="10" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+<text x="480.0" y="106" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">BlocLinguistique</text>
+<text x="480.0" y="128.0" text-anchor="middle" font-size="9" fill="#334155">analyser(texte, langue) → Annotation</text>
+<rect x="30" y="178" width="160" height="64" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="110.0" y="202" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">Heuristique</text>
+<text x="110.0" y="224.0" text-anchor="middle" font-size="8" fill="#334155">CPU, déterministe</text>
+<line x1="110" y1="164" x2="110" y2="142" stroke="#15803d" stroke-width="1.2" marker-end="url(#f)"/>
+<rect x="210" y="178" width="160" height="64" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="290.0" y="202" text-anchor="middle" font-size="10" font-weight="bold" fill="#1d4ed8">MockNeuronal</text>
+<text x="290.0" y="224.0" text-anchor="middle" font-size="8" fill="#334155">contrat, sans GPU</text>
+<line x1="290" y1="164" x2="290" y2="142" stroke="#1d4ed8" stroke-width="1.2" marker-end="url(#f)"/>
+<rect x="390" y="178" width="160" height="64" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+<text x="470.0" y="202" text-anchor="middle" font-size="10" font-weight="bold" fill="#b91c1c">NeuronalLLM</text>
+<text x="470.0" y="224.0" text-anchor="middle" font-size="8" fill="#334155">modèle local</text>
+<line x1="470" y1="164" x2="470" y2="142" stroke="#b91c1c" stroke-width="1.2" marker-end="url(#f)"/>
+<rect x="570" y="178" width="160" height="64" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="650.0" y="202" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">Parallele</text>
+<text x="650.0" y="224.0" text-anchor="middle" font-size="8" fill="#334155">fusion</text>
+<line x1="650" y1="164" x2="650" y2="142" stroke="#b45309" stroke-width="1.2" marker-end="url(#f)"/>
+<rect x="750" y="178" width="160" height="64" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+<text x="830.0" y="202" text-anchor="middle" font-size="10" font-weight="bold" fill="#6d28d9">Cascade</text>
+<text x="830.0" y="224.0" text-anchor="middle" font-size="8" fill="#334155">résidu</text>
+<line x1="830" y1="164" x2="830" y2="142" stroke="#6d28d9" stroke-width="1.2" marker-end="url(#f)"/>
+<line x1="30" y1="268" x2="830" y2="268" stroke="#94a3b8" stroke-width="2"/>
+<line x1="110" y1="242" x2="110" y2="266" stroke="#334155" stroke-width="1.2" marker-end="url(#f)"/>
+<line x1="290" y1="242" x2="290" y2="266" stroke="#334155" stroke-width="1.2" marker-end="url(#f)"/>
+<line x1="470" y1="242" x2="470" y2="266" stroke="#334155" stroke-width="1.2" marker-end="url(#f)"/>
+<line x1="650" y1="242" x2="650" y2="266" stroke="#334155" stroke-width="1.2" marker-end="url(#f)"/>
+<line x1="830" y1="242" x2="830" y2="266" stroke="#334155" stroke-width="1.2" marker-end="url(#f)"/>
+<line x1="430" y1="268" x2="430" y2="298" stroke="#334155" stroke-width="1.6" marker-end="url(#f)"/>
+<rect x="30" y="300" width="500" height="86" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="280.0" y="324" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d4ed8">Annotation</text>
+<text x="280.0" y="346.0" text-anchor="middle" font-size="8.5" fill="#334155">niveau · span · type · source · confiance</text>
+<text x="280.0" y="358.325" text-anchor="middle" font-size="8.5" fill="#334155">candidats · langue · script · unités sémantiques</text>
+<rect x="570" y="300" width="360" height="86" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="750.0" y="324" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">Couche sémantique</text>
+<text x="750.0" y="346.0" text-anchor="middle" font-size="8.5" fill="#334155">unites_semantiques</text>
+<text x="750.0" y="358.325" text-anchor="middle" font-size="8.5" fill="#334155">fraction 0,51–0,76 · coût au prorata</text>
+<line x1="532" y1="343" x2="568" y2="343" stroke="#15803d" stroke-width="1.6" marker-end="url(#f)"/>
+<text x="480" y="430" text-anchor="middle" font-size="10" font-weight="bold" fill="#334155">Le contrat ne dit pas *qui* a raison : il dit *qui a parlé*, avec quelle confiance et à quel coût.</text>
+<text x="480" y="460" text-anchor="middle" font-size="9" fill="#475569">Parallèle : fusion par (niveau, span, source) ; le syntagme heuristique (générateur S) n&#x27;est pas écrasé.</text>
+<text x="480" y="482" text-anchor="middle" font-size="9" fill="#475569">Cascade : le neuronal n&#x27;est appelé que si un niveau reste sous le seuil ; la trace porte le résidu.</text>
+<text x="480" y="516" text-anchor="middle" font-size="9.5" font-style="italic" fill="#475569">Le même consommateur lit l&#x27;heuristique, le mock, le modèle ou la composition — sans changer de code.</text>
+</svg>

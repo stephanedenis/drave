@@ -9,7 +9,7 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 21.2 h |
 | Tours | 7 |
-| Messages | 799 |
+| Messages | 800 |
 | Appels d'outils | 805 |
 | Fichiers touchés | 18 |
 | Commandes | 736 |
@@ -409,9 +409,30 @@ Usages : **N2** a le français et l'anglais ; les agents multilingues ont les hu
 
 **Synthèse produite :**
 
-⏵ Relecture des mandats des 48 h et cartographie des chantiers
+⏵ Vision relue sur 48 h, inventaire élargi à huit chantiers, carte et doc committés
 
-Je commence par retrouver les demandes humaines dans les sessions et le journal, puis je confronte à la vision et à la roadmap.
+J'ai relu les messages humains des 48 h dans les traces DSH — `0b69f616`, `22e518ee`, `0b0a6a0d` (N2.h), `fe3c05f0` (R4.4), `e181ce02` (Pensée), plus les sessions de QA visuelle —, les plans et rapports de session, et les documents de vision, roadmap, programme R et backlog. Voici ce qui en sort.
+
+\## La vision à jour, en huit principes
+
+1. **Le bus de flux typés, et la structure bat la taille** ; les blocs sont petits, substituables (neuronal, classique, matériel), indépendants du mode d'opération — « l'interface reste Drave ».
+2. **Le texte se lit en surface d'abord** : octet → morphème → mot → syntagme → phrase → paragraphe → document → multilingue, en **annotations** et non en prompts ; le CPU étiquette le sûr et énumère le plausible, le réseau tranche.
+3. **La pragmatique est un niveau** : l'ambiguïté ne se tranche qu'en contexte, et le double sens se **conserve**.
+4. **Les interprétations sont plurielles** : RSN à candidats, arbre d'états, BFS/A*/MCTS/AC-3/alpha-bêta, anytime, trace/rejeu.
+5. **La validation humaine construit la banque** : S montre les structures candidates, l'humain et le LLM les évaluent, l'export alimente le corpus.
+6. **Le lecteur R est la preuve** : document + question + budget → réponse sourcée ou refus motivé.
+7. **Le natif N est la capacité** : distillation, corpus propre, mètre honnête, longueur, diversité.
+8. **La mesure est la règle** : un chiffre, un contrôle négatif, une fiche, une porte, un état ; les limites sont nommées.
+
+Les demandes qui ont produit cela : la **séparation à 3 niveaux** et les blocs substituables (31/10), la **RSN plurielle** et l'arbre d'états (22 h 22), les **10 h de liberté** (N2.h et R4.4), la **typoglycémie** et la **coloration linguistique** (01/11 10 h 29–10 h 46), le **niveau pragmatique** et les phrases non ambiguës (11 h 10–11 h 36), la **couche heuristique** (11 h 33), et surtout le **contrat du bloc langue** (13 h 23) : « une version heuristique et une neuronale, le contrat garantissant la substitution ou le parallèle ».
+
+\## L'inventaire élargi : de quatre à huit chantiers
+
+| chantier | question | état | prochaine action |
+|---|---|---|---|
+| **A — le moteur** | les flux de blocs tournent-ils, se placent-ils, se rejouent-ils ? | ✅ A1–A8 ; A3.4/A5.4/A6.2 bloqués | A2.6, réduire le lot |
+| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres | ✅ B1–B12 ; B10.3 bloqué ; B13 v0 (6/6 portes) | B10
+… [2796 caractères tronqués]
 
 ## 3. Travail accompli
 

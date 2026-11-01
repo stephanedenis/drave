@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 21.1 h |
+| Durée | 21.2 h |
 | Tours | 11 |
-| Messages | 381 |
-| Appels d'outils | 417 |
+| Messages | 387 |
+| Appels d'outils | 423 |
 | Fichiers touchés | 25 |
-| Commandes | 322 |
+| Commandes | 327 |
 | Sous-agents | 2 |
-| Commits | 19 |
+| Commits | 20 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -588,7 +588,7 @@ Le générateur S est le **bon germe**, mais il lui manque exactement ce qui fai
 
 ### Tour 11 — fait les deux. Le bloc langue doit couvrir l'étiquetage tous les niveaux linguistiques jusqu'à la pragmatique. on doit a … [231 caractères tronqués]
 
-*35 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - bash — Trouver le corpus multilingue UDHR
 - bash — Trouver le modèle local et l'adaptateur neuronal
@@ -604,7 +604,7 @@ Le générateur S est le **bon germe**, mais il lui manque exactement ce qui fai
 - bash — Tester les modes et l'autotest UDHR
 - bash — Lire les résultats de langue et de substitution
 - bash — Ajouter le seuil de langue et la fusion sans chevauchement
-- … et 20 autres
+- … et 25 autres
 
 **Synthèse produite :**
 
@@ -689,7 +689,7 @@ Le générateur S est le **bon germe**, mais il lui manque exactement ce qui fai
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 282 autres
+- … et 287 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -845,4 +845,5 @@ Le générateur S est le **bon germe**, mais il lui manque exactement ce qui fai
 - COLORATION — LA COUCHE HEURISTIQUE : CE QUE LE CPU ÉTIQUETTE AVANT LE RÉSEAU" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - R — LA CHARTE DU PROGRAMME : SIX PHASES, TROIS LOIS, CE QUI TIENT ET CE QUI MANQUE" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - ÉTAT — COMPTEUR JSON 467 (CORPUS WIKI)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- BLOC LINGUISTIQUE — NEUF NIVEAUX, HEURISTIQUE ET NEURONAL, 398 LANGUES À 0,9687" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 
