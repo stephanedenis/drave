@@ -506,7 +506,26 @@ Six façons de casser la séparation, et le test qui les attrape :
 - **Le graphe n'est pas utilisé** : si retirer le pont, les routes ou les têtes précoces ne change rien, alors le
   modèle est une pile qui s'ignore. Chaque arête doit avoir une ablation.
 
-## 12. Où lire la suite
+## 12. Les questions ouvertes
+
+Ce document dit ce qui est **défini** ; il ne dit pas que tout est **résolu**. Les questions qui restent, et ce
+qui les trancherait :
+
+| question | ce qui la trancherait |
+|---|---|
+| **canoniser à l'échelle** : combien de modalités, et comment composer des RSN de modalités différentes ? | un canoniseur multi-modal, mesuré sur des paires parallèles |
+| **l'algèbre de l'annotation** : comment composer langue, format, confiance et ambiguïté sans fuite ? | un monoïde d'annotation implanté, avec une preuve de non-fuite |
+| **la neutralité relative** : quel corpus, quelle puissance, quel adversaire ? | une sonde adversariale sur un corpus équilibré, avec un seuil |
+| **le coût de la séparation** : deux fois le travail, une latence ; la RSN est-elle un goulot ? | une mesure de bout en bout, en temps réel |
+| **le composite** : un `surface → rsn` contient une mémoire N2 ; fuit-il ? | un test de bout en bout + une preuve de composition |
+| **le rejeu distribué** : la pile tient sur une machine ; deux nœuds ? | un rejeu à deux nœuds, diff à zéro |
+| **la substitution** : que faire des annotations incompatibles ? | un protocole de raffinement avec tolérance déclarée |
+
+**Ce qui ne changera pas** : la RSN est un **quotient**, pas un vecteur ; le niveau est un **contrat déclaré**,
+pas une couche ; la neutralité est un **couple** avec l'informativité, pas une vertu. Ces trois phrases sont la
+partie stable du document.
+
+## 13. Où lire la suite
 
 - **Le format** : [`architecture-native.md`](architecture-native.md) · [`format-flux.md`](../implantation/format-flux.md) ·
   [`format-clusters.md`](../implantation/format-clusters.md)

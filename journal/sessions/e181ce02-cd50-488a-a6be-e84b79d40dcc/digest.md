@@ -3048,3 +3048,115 @@ docs/implantation/diehl-cook.md        | 235 ++++++++++++++++++++++++++++++++-
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 240 git commit -m \"DOCS — LE MODÈLE NATIF ET DIEHL & COOK ENRICHIS : QUOTIENT, TYPES, NEUTRALITÉ, DÉTERMINISME, BANC, CONFORMITÉ\" 2>&1 | tail -12; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer l'enrichissement  … [20 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-110]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-110", "timeout_ms": 240000, "wait": true}`
+
+  ```
+[master ffad1c53] DOCS — LE MODÈLE NATIF ET DIEHL & COOK ENRICHIS : QUOTIENT, TYPES, NEUTRALITÉ, DÉTERMINISME, BANC, CONFORMITÉ
+ 30 files changed, 3150 insertions(+), 71 deletions(-)
+ create mode 100644 docs/schemas/diehl-cook-banc.svg
+ create mode 100644 docs/schemas/diehl-cook-conformite.svg
+ create mode 100644 docs/schemas/diehl-cook-dynamique.svg
+ create mode 100644 docs/schemas/diehl-cook-memoire.svg
+ create mode 100644 docs/schemas/diehl-cook-taux.svg
+ create mode 100644 docs/schemas/natif-anti-patrons.svg
+ create mode 100644 docs/schemas/natif-neutralite.svg
+ create mode 100644 docs/schemas/natif-quotient.svg
+ create mode 100644 docs/schemas/natif-rejeu.svg
+ create mode 100644 docs/schemas/natif-types.svg
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"### Le coût\" docs/implantation/diehl-cook.md && sed -n '/### Le coût/,/## 8. L/p' docs/implantation/diehl-cook.md | head -45 && echo '=== defaut ===' && grep -n \"Le plus insidieux\" docs/implantation/diehl-cook.md", "desc … [43 caractères tronqués]`
+
+  ```
+533:### Le coût
+### Le coût
+
+**Exécution.** Pour la couche entrée → E :
+
+- événements : `E = n_input · r · T · n_e` (r en spikes/ms) ;
+- dense : `D = n_input · n_e · T` ;
+- rapport : `D/E = 1/(r · dt)` — il ne dépend **ni de n_e ni de T**, seulement du taux et du pas.
+
+À 20 Hz et `dt = 0,5 ms`, `r·dt = 0,01` : **100×** moins d'opérations. C'est la projection ; la mesure D5 la
+remplace.
+
+**Apprentissage.** La STDP touche `n_input` poids par spike post et `n_e` par spike pré ; la **normalisation**
+touche `n_input · n_e` par exemple, même si peu de neurones ont gagné. C'est le **coût caché** :
+
+| opération | poids touchés par exemple | proportion |
+|---|---:|---:|
+| STDP (spikes) | `n_input · s_post` | faible |
+| normalisation | `n_input · n_e` | **100 %** |
+| inhibition | `n_e · s_e` | faible |
+
+**Mémoire.** `w_in` : `n_input · n_e` f32 ; les traces : `x_pre` (même taille), `post1/post2` (`n_e`), `θ` (`n_e`).
+Pour 6 400 E et 784 entrées : ~20 Mo de poids, ~20 Mo de traces — portable, mais pas gratuit.
+
+**La leçon** : l'exécution est creuse ; l'apprentissage ne l'est pas encore. C'est le chantier que la porte D5b
+nomme, et c'est plus utile que de célébrer les 100× de l'inférence.
+
+
+##
+… [142 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/diehl-cook.md'); t=p.read_text()\n\nvieux = \"\"\"**Apprentissage.** La STDP touche `n_input` poids par spike post et `n_e` par spike pré ; la **normalisation**\ntou … [3580 caractères tronqués]`
+
+  ```
+ok
+490:**Lecture d'un pas (exemple jouet).** Deux entrées, un excitateur, `w = [10, 10]` nS, `dt = 0,5 ms`,
+502:**Le piège du premier spike.** Dans la variante du code, `post2before` vaut 0 au premier spike post, donc ce
+568:| STDP symétrique (code), **pré** | `n_e · s_pre` | **comme l'exécution** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/diehl-cook.md'); t=p.read_text()\nt=t.replace(\"\"\"Le document ne tranche pas à la place de la mesure : **les deux** sont implémentables, et la porte D3 compare\nla … [1312 caractères tronqués]`
+
+  ```
+ok
+tableaux=0
+  ✅ 1325 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 1264 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-10-31)
+revue=0
+  revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout des questions ouvertes, la partie que le document ne prétend pas résoudre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n\np=pathlib.Path('docs/theorie/modele-natif.md'); t=p.read_text()\nbloc = \"\"\"## 12. Les questions ouvertes\n\nCe document dit ce qui est **défini** ; il ne dit pas que tout est **résolu**. Les que … [3258 caractères tronqués]`
+
+  ```
+ok
+schemas=0
+tableaux=0
+  ✅ 1264 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-10-31)
+revue=0
+  revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/diehl-cook.md'); t=p.read_text()\nbloc = \"\"\"### Le squelette du module\n\n| fonction | entrée | sortie | invariant |\n|---|---|---|---|\n| `pas(t, etat, params, r … [1328 caractères tronqués]`
+
+  ```
+ok
+python3 tools/verifier_schemas.py             EXIT=0
+bash tools/porte-tableaux.sh                  EXIT=0
+python3 tools/revue_documentation.py          EXIT=0
+python3 tools/taille_documents.py             EXIT=0
+python3 tools/verifie_en_cours.py             EXIT=0
+python3 tools/verifie_journal.py              EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/theorie/modele-natif.md docs/implantation/diehl-cook.md && git diff --cached --stat && timeout 240 git commit -m \"DOCS — LE COÛT CACHÉ DE LA STDP SYMÉTRIQUE, LA LECTURE D'UN PAS ET LES QUESTIONS OUVERTES\" 2>&1 | tail - … [114 caractères tronqués]`

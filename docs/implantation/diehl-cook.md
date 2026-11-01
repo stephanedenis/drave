@@ -400,9 +400,11 @@ Valeurs du papier et du code de référence (à vérifier sur le code, pas sur u
   papier (`x_pre` 20 ms, `post1` 20 ms, `post2` 40 ms), `η_pre = 1e-4`, `η_post = 1e-2`, `w` borné à `[0, 1]` ;
   elle donne **~89 %** à 400 neurones.
 
-Le document ne tranche pas à la place de la mesure : **les deux** sont implémentables, et la porte D3 compare
-la règle du papier à la variante du code **à budget égal**. Ce qui compte pour Drave, c'est que la règle soit
-**locale** (elle ne lit que des traces pré/post) et **déterministe** (mêmes spikes → mêmes poids).
+Le document ne tranche pas sur la **qualité** : **les deux** sont implémentables, et la porte D3 compare la
+règle du papier à la variante du code **à budget égal**. Mais le **coût** tranche déjà en partie : la règle
+post-only ne touche que `n_input` poids par spike post, tandis que la variante symétrique touche `n_e` poids par
+spike pré (voir § 7). Ce qui compte pour Drave, c'est que la règle soit **locale** (elle ne lit que des traces
+pré/post) et **déterministe** (mêmes spikes → mêmes poids).
 
 ### La normalisation des poids
 
@@ -487,6 +489,23 @@ def pas(t, etat, params, rng, trace):
     return spikes
 ```
 
+**Lecture d'un pas (exemple jouet).** Deux entrées, un excitateur, `w = [10, 10]` nS, `dt = 0,5 ms`,
+`τ_m = 100 ms`, `τ_ge = 1 ms`, `V_thr = −52 mV`. Les deux entrées déchargent à `t = 0` :
+
+| pas | `g_e` (nS) | `V` (mV) | événement |
+|---:|---:|---:|---|
+| 0 | 20,0 | −58,5 | entrée |
+| 1 | 12,1 | −55,0 | décroissance |
+| 2 | 7,4 | −53,0 | décroissance |
+| 3 | 4,5 | −51,9 | **spike**, reset, θ += 0,05 |
+
+Valeurs arrondies, pour lire l'**ordre** des opérations — pas une mesure.
+
+**Le piège du premier spike.** Dans la variante du code, `post2before` vaut 0 au premier spike post, donc ce
+premier spike **n'actualise pas** le poids ; la règle du papier (Eq. 3) utilise `x_pre` directement et
+potentialise dès le premier spike. Les deux règles ne sont pas équivalentes, et c'est exactement le genre
+d'écart que la porte D1 doit trancher.
+
 **Ce que ce code ne fait pas** : il ne normalise pas les poids (l'option est choisie ailleurs), il ne gère pas
 le multi-exemple, et il fixe une convention d'ordre : la trace pré est mise à jour **après** les spikes post du
 même pas. C'est un choix, et la porte D1 le vérifie contre le simulateur de référence.
@@ -541,20 +560,27 @@ par une mesure sur la machine.
 À 20 Hz et `dt = 0,5 ms`, `r·dt = 0,01` : **100×** moins d'opérations. C'est la projection ; la mesure D5 la
 remplace.
 
-**Apprentissage.** La STDP touche `n_input` poids par spike post et `n_e` par spike pré ; la **normalisation**
-touche `n_input · n_e` par exemple, même si peu de neurones ont gagné. C'est le **coût caché** :
+**Apprentissage.** Le coût dépend de la règle, et c'est là que le choix compte. Avec `s_pre` spikes d'entrée
+et `s_post` spikes post :
 
-| opération | poids touchés par exemple | proportion |
+| opération | poids touchés par exemple | ordre de grandeur |
 |---|---:|---:|
-| STDP (spikes) | `n_input · s_post` | faible |
-| normalisation | `n_input · n_e` | **100 %** |
-| inhibition | `n_e · s_e` | faible |
+| STDP post-only (Eq. 3) | `n_input · s_post` | faible |
+| STDP symétrique (code), post | `n_input · s_post` | faible |
+| STDP symétrique (code), **pré** | `n_e · s_pre` | **comme l'exécution** |
+| normalisation | `n_input · n_e` | ~1/7 de l'exécution |
+| inhibition | `n_e · s_e` | quelques % |
+
+Avec `s_pre ≈ 5 488` spikes d'entrée et `n_e = 400`, la mise à jour **pré** touche `2,2 M` poids — exactement
+l'ordre des événements du forward. **La règle symétrique du code n'est pas creuse ; la règle post-only du papier
+l'est.** C'est un argument de coût, pas seulement de qualité, pour choisir Eq. 3.
 
 **Mémoire.** `w_in` : `n_input · n_e` f32 ; les traces : `x_pre` (même taille), `post1/post2` (`n_e`), `θ` (`n_e`).
 Pour 6 400 E et 784 entrées : ~20 Mo de poids, ~20 Mo de traces — portable, mais pas gratuit.
 
-**La leçon** : l'exécution est creuse ; l'apprentissage ne l'est pas encore. C'est le chantier que la porte D5b
-nomme, et c'est plus utile que de célébrer les 100× de l'inférence.
+**La leçon** : l'exécution est creuse ; l'apprentissage ne l'est pas encore. Le premier coupable n'est pas la
+normalisation, c'est la **mise à jour pré** de la règle symétrique — et c'est une raison de plus de choisir la
+règle post-only du papier. La porte D5b compte les **poids touchés**, pas seulement les spikes.
 
 
 ## 8. L'entraînement
@@ -698,10 +724,11 @@ que la lecture par neurones. Si c'est le cas, il faut le **dire** : le spike app
 | **assignation ambiguë** | ex æquo | peu de neurones | fraction d'ex æquo | plus de neurones |
 | **fuite de format** | sonde de format > chance | φ lit l'annotation | sonde | φ sur le corps seul |
 | **rejeu divergent** | diff > 0 | RNG/ordre/FP | deux runs | tirage contré, f64 |
-| **coût caché** | poids touchés = 100 % | normalisation dense | compteur | colonnes actives |
+| **coût caché** | poids touchés = 100 % | mise à jour pré symétrique | compteur | règle post-only, ou mise à jour différée |
 
-**Le plus insidieux est le dernier** : on mesure les spikes, on oublie la normalisation, et on croit que
-l'apprentissage est creux. Le compteur de **poids touchés** est la mesure qui manque à presque tous les bancs SNN.
+**Le plus insidieux est le coût de la règle symétrique** : la mise à jour pré touche tous les poids post à
+chaque spike d'entrée ; on croit que l'apprentissage est creux parce qu'on n'a compté que les spikes. Le compteur
+de **poids touchés** est la mesure qui manque à presque tous les bancs SNN.
 
 
 ## 11. Les portes D
@@ -780,6 +807,20 @@ on compare des surfaces ; avec lui, on compare des sens.
   **langue** — et alors il vit au même niveau, derrière le même contrat, pas à la place du contrat.
 
 
+### Le squelette du module
+
+| fonction | entrée | sortie | invariant |
+|---|---|---|---|
+| `pas(t, etat, params, rng)` | état, pas | spikes | déterministe à graine fixée |
+| `entrainer(exemples, params, graine)` | corpus train | poids, θ | aucune étiquette lue |
+| `assigner(poids, train)` | poids, train | `assign` | train seulement |
+| `evaluer(poids, assign, test)` | test | accuracy | test jamais lu avant |
+| `tracer(spikes)` | spikes | DRVF | rejouable, diffable |
+| `exporter(poids, params)` | poids, params | DRVM | manifeste + tenseurs |
+
+**Le contrat du module** : aucune fonction ne lit le test avant `evaluer` ; aucune fonction n'écrit un poids
+après `assigner` ; `pas` ne lit jamais l'horloge murale. Ces trois interdits sont les tests D2, D6 et D1.
+
 ## 12. Le plan d'implémentation
 
 | étape | fichier | ce qu'on fait | porte |
@@ -830,7 +871,22 @@ compatible avec les outils existants ; une variante bitmap est une **optimisatio
 - **Le « code temporel » est revendiqué sans contrôle** : si la lecture taux seul fait aussi bien, le timing
   n'apporte rien. Le test : l'A/B taux contre spikes.
 
-## 14. La phrase
+## 14. Les questions ouvertes
+
+| question | ce qui la trancherait |
+|---|---|
+| **la profondeur** : une couche de prototypes ne compose pas ; comment empiler sans perdre le local ? | un empilement à 2 couches, mesuré contre une couche |
+| **le code temporel** : taux seulement ; un code de latence serait-il compatible ? | un banc latency-coded contre rate-coded, à budget égal |
+| **local vs gradient** : à quelle taille le local perd-il ? | une courbe accuracy vs données, local et gradient |
+| **le coût de la normalisation** : colonnes actives, différée, post-only ? | D5b, trois variantes, même qualité |
+| **la mémoire N2** : un prototype de sens est-il stable sous annotation ? | les tests de récupération, invariance et open-set |
+| **le matériel** : le 100× est une projection ; où est le point de bascule ? | une mesure sur CPU, FPGA, neuromorphique |
+| **la sûreté** : un apprentissage en ligne peut être empoisonné | une attaque de poisoning + un détecteur de dérive |
+
+**Ce qui ne changera pas** : le spike n'est pas le sens ; le sens est le contrat ; l'apprentissage local est un
+choix de coût autant que de biologie. Le reste est à mesurer.
+
+## 15. La phrase
 
 **Le spike n'est pas le sens ; le sens est le contrat.** Un bloc D&C est Drave-compatible le jour où il ne voit
 que la RSN, ne rend que la RSN, et laisse le chargeur refuser tout le reste. Le reste — les neurones, les
