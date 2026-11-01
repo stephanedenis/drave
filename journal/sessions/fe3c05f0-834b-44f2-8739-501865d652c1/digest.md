@@ -15370,3 +15370,56 @@ run complet job 1454236
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifier_schemas.py … [2902 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py [0]   ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohé
+python3 tools/taille_documents.py  [0]   ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+python3 tools/verifie_en_cours.py  [0]   ✅ état court, structuré, multi-session et reprenable
+python3 tools/verifie_journal.py   [0]   ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+python3 tools/verifie_backlog.py   [0] ✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité in
+python3 tools/verifier_schemas.py  [0]      sources et images relatives.
+python3 tools/sessions.py --check  [0]   ✅ plans cohérents
+  ✅ index : aucun fait stagé sans état
+ create mode 100644 reports/rapport-corpus-wiki-texte.md
+ create mode 100644 tools/corpus_wikipedia_texte.py
+6fbfbb80 DONNÉES — LE TEXTE INTÉGRAL DE WIKIPÉDIA : LE PILOTE FR (100 000 ARTICLES, 1,082 GO, 0 FUITE 8 KO)
+  ```
+
+### 🤖 Assistant
+
+⏵ Plan lu, session D/R/A ouverte, texte intégral lancé
+
+J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du mandat **D/R/A** : le texte **intégral** de Wikipédia, celui que les corpus actuels ne donnent pas (leurs résumés sont tronqués à 8 000 caractères).
+
+## Ce qui est fait
+
+**La session D/R/A est ouverte** : le plan `journal/sessions/fe3c05f0/…/plan.md` (rôle, périmètre, territoire, heartbeat, prochaine action), sa section dans l'état, le territoire du plan complété (`tools/corpus_wikipedia_texte.py`, `data/corpus_wiki_*_texte/`, `reports/corpus-wiki-*texte*`). L'état déclare maintenant **2 sessions** (Pensée + D/R/A) et passe `sessions.py --check`.
+
+**L'outil** `tools/corpus_wikipedia_texte.py` lit le dump `frwiki` (7,13 Go), débalise (commentaires, refs, tableaux, modèles, fichiers/catégories, liens → libellé, titres de sections), déduplique, sépare par article et écrit les tronçons de 8 192 caractères avec les SHA-256 et le manifeste.
+
+**Le pilote** (100 000 articles, 146 250 pages lues, 31 998 redirections écartées) :
+
+| grandeur | valeur |
+|---|---:|
+| articles gardés | 100 000 |
+| caractères | 1 045 085 924 |
+| mots (car. / 6,2) | 168 562 245 |
+| train / val / test | 972,6 / 56,3 / 52,7 Mo |
+| résidus `{{` / `[[` / `<` sur 20 000 lignes | 1 / 0 / 3 |
+
+**Les contrôles** : au niveau du **tronçon réel (8 Ko)**, **0 / 6 661** fenêtres de la validation et **0 / 6 228** du test dans l'entraînement ; **0 / 40** fenêtres sur les **cinq** jeux d'évaluation (XNLI fr, UDHR, trois jeux locaux). Le contrôle standard (unité = ligne) signale 3,66 % / 3,49 % de lignes dupliquées : ce sont les **titres de sections répétés** (« Biographie », « Notes et références »…), pas de la prose — c'est écrit et expliqué dans la fiche.
+
+**Le run complet est lancé** : 2,5 M d'articles, ~26 Go estimés, dans `data/corpus_wiki_fr_texte/`, manifeste `reports/corpus-wiki-fr-texte.json` au prochain checkpoint (PID de suivi `1454236`, log `/tmp/run-texte-fr.log`). Les neuf autres langues suivent le même outil (`--langue de`, etc.).
+
+## Les artefacts
+
+- Fiche `reports/rapport-corpus-wiki-texte.md` (méthode, pilote, contrôles, limites, run complet).
+- `reports/corpus-wiki-fr-texte-pilote.json` et `reports/corpus-wiki-fr-texte-pilote-contamination.json`.
+- Commit `6fbfbb80` ; état à jour (session D/R/A, compteurs 388 fiches / 474 JSON / 118 docs / 81 portes), **T0 3 985 / 4 000**, revue verte.
+
+## Les notes
+
+- Deux bugs corrigés en route : le chemin `ElementTree` du `<text>` (le débaliseur n'était jamais appelé — le premier test tournait à vide) et le parseur des plans de session, qui avalait les titres Markdown dans le dernier champ.
+- Le placeholder `tools/structures` reste **orphelin** : la session S doit ouvrir son plan dans le dépôt (le moniteur `surveille_sessions.py` le signale ; aucun conflit déclaré).
+- Le prochain checkpoint : le manifeste du run complet, la contamination sur le corpus entier, puis l'extraction PDF/OCR (les 104 livres, les 2 711 PDF du CEGEP) et la prépa R1.1/R1.2.
+

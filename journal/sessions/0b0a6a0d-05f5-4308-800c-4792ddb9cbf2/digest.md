@@ -13581,3 +13581,87 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-789", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-cap.log; ls work/n2j/base-wiki-cap.pt 2>/dev/null && echo CAP_OK", "description": "Check the capacity model progress"}`
+
+  ```
+16:44
+pas 17800 · perte 1.4996 · PPL val 4.588 · 843 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-cap.log; ls work/n2j/base-wiki-cap.pt 2>/dev/null && echo CAP_OK", "description": "Wait for the capacity model to finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-791]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-791", "timeout_ms": 400000, "wait": true}`
+
+  ```
+16:48
+}
+work/n2j/base-wiki-cap.pt
+CAP_OK
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-789 (bash: sleep 780; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-cap.log; ls work/n2j/base-wiki-cap.pt 2>/dev/null && echo CAP_OK) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/base-wiki-cap.pt --decomposition --longueurs --corpus-dir data/wiki_fr/propre --sortie work/n2j/eval-cap.json 2>&1 | grep -v Loading; ~ … [191 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-792]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-792", "timeout_ms": 400000, "wait": true}`
+
+  ```
+{"fichier": "base-wiki-cap.pt", "params": 21646224, "val": 4.2013, "test": 4.2881, "litterature": 7.3538, "litterature_propre": 7.458, "anglais": 13.5501, "wikitext2": 14.5245, "permute": 207.1387, "decomposition": {"complete": 4.0748, "apres_2_blocs": 5.3217, "apres_4_blocs": 4.4243, "apres_6_blocs": 4.1125, "sans_pensee": 840870.4132}, "longueurs": {"129": 4.2143, "192": 4.1903, "256": 4.2772, "384": 4.6594, "512": 5.0259}}
+{"fichier": "base-wiki-cap.pt", "params": 21646224, "val": 6.8751, "test": 6.8295, "litterature": 7.3538, "litterature_propre": 7.458, "anglais": 13.5501, "wikitext2": 14.5245, "permute": 279.175}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-capacite-reelle.md <<'EOF'\n# N2.j3 — La capacité sur 186 Mo : 21,65 M paie (4,39 → 4,20, et mieux partout)\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : à données et budget égaux\n>  … [4741 caractères tronqués]`
+
+  ```
+fiche écrite
+  T0 max : 3985 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 388 fichiers, le disque en a 389
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AssertionError: puce N2 introuvable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"N2.j2\\|N2.k\\|N2.j3\" docs/pilotage/en-cours.md | head -5; sed -n '/N2.j2/,+3p' docs/pilotage/en-cours.md | head -6", "description": "Find the current N2 bullet text"}`
+
+  ```
+80:- **N2.h/N2.i — closes** : corpus dédupliqué, **3,09** en domaine, **12,93** littérature, **33,83** anglais ; **N2.j** (186 Mo) **7,42/12,41** ; **N2.k** (10 langues) fr **5,68**, anglais **6,30** ; **N2.j2** : 256 **9,28 → 4,49**, 512 **13,37 → 5,67** ; N4 **0/40**. Fiches [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md).
+- **N2.h/N2.i — closes** : corpus dédupliqué, **3,09** en domaine, **12,93** littérature, **33,83** anglais ; **N2.j** (186 Mo) **7,42/12,41** ; **N2.k** (10 langues) fr **5,68**, anglais **6,30** ; **N2.j2** : 256 **9,28 → 4,49**, 512 **13,37 → 5,67** ; N4 **0/40**. Fiches [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md).
+- **Pensée — state store v0** : 6/6 portes (BFS, greedy, A*, MCTS-lite), jouet des cruches ; fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine AC-3, alpha-bêta, DRVF.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"**N2.j2** : 256 **9,28 → 4,49**, 512 **13,37 → 5,67** ; N4 **0/40**. Fiches [`n2-propre`](../../reports/rapport-n2-propre.m … [1270 caractères tronqués]`
+
+  ```
+en-cours ok
+roadmap ok
+  T0 max : 3995 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-n2-capacite-reelle.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"N2.j3 — LA CAPACITÉ SUR 186 Mo : 21,65 M PAIE (4,39 → 4,20), DONNÉES × CAPACITÉ\n\nÀ données et budget ég … [777 caractères tronqués]`

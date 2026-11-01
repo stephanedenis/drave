@@ -7,9 +7,9 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 24.0 h |
+| Durée | 24.1 h |
 | Tours | 10 |
-| Messages | 850 |
+| Messages | 851 |
 | Appels d'outils | 851 |
 | Fichiers touchés | 18 |
 | Commandes | 779 |
@@ -548,7 +548,40 @@ Le **hub** tient l'état, la roadmap, les compteurs, le journal et la revue ; il
 
 **Synthèse produite :**
 
-⏵ Lecture du plan de travail, puis première action D/R/A : le texte intégral
+⏵ Plan lu, session D/R/A ouverte, texte intégral lancé
+
+J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du mandat **D/R/A** : le texte **intégral** de Wikipédia, celui que les corpus actuels ne donnent pas (leurs résumés sont tronqués à 8 000 caractères).
+
+\## Ce qui est fait
+
+**La session D/R/A est ouverte** : le plan `journal/sessions/fe3c05f0/…/plan.md` (rôle, périmètre, territoire, heartbeat, prochaine action), sa section dans l'état, le territoire du plan complété (`tools/corpus_wikipedia_texte.py`, `data/corpus_wiki_*_texte/`, `reports/corpus-wiki-*texte*`). L'état déclare maintenant **2 sessions** (Pensée + D/R/A) et passe `sessions.py --check`.
+
+**L'outil** `tools/corpus_wikipedia_texte.py` lit le dump `frwiki` (7,13 Go), débalise (commentaires, refs, tableaux, modèles, fichiers/catégories, liens → libellé, titres de sections), déduplique, sépare par article et écrit les tronçons de 8 192 caractères avec les SHA-256 et le manifeste.
+
+**Le pilote** (100 000 articles, 146 250 pages lues, 31 998 redirections écartées) :
+
+| grandeur | valeur |
+|---|---:|
+| articles gardés | 100 000 |
+| caractères | 1 045 085 924 |
+| mots (car. / 6,2) | 168 562 245 |
+| train / val / test | 972,6 / 56,3 / 52,7 Mo |
+| résidus `{{` / `[[` / `<` sur 20 000 lignes | 1 / 0 / 3 |
+
+**Les contrôles** : au niveau du **tronçon réel (8 Ko)**, **0 / 6 661** fenêtres de la validation et **0 / 6 228** du test dans l'entraînement ; **0 / 40** fenêtres sur les **cinq** jeux d'évaluation (XNLI fr, UDHR, trois jeux locaux). Le contrôle standard (unité = ligne) signale 3,66 % / 3,49 % de lignes dupliquées : ce sont les **titres de sections répétés** (« Biographie », « Notes et références »…), pas de la prose — c'est écrit et expliqué dans la fiche.
+
+**Le run complet est lancé** : 2,5 M d'articles, ~26 Go estimés, dans `data/corpus_wiki_fr_texte/`, manifeste `reports/corpus-wiki-fr-texte.json` au prochain checkpoint (PID de suivi `1454236`, log `/tmp/run-texte-fr.log`). Les neuf autres langues suivent le même outil (`--langue de`, etc.).
+
+\## Les artefacts
+
+- Fiche `reports/rapport-corpus-wiki-texte.md` (méthode, pilote, contrôles, limites, run complet).
+- `reports/corpus-wiki-fr-texte-pilote.json` et `reports/corpus-wiki-fr-texte-pilote-contamination.json`.
+- Commit `6fbfbb80` ; état à jour (session D/R/A, compteurs 388 fiches / 474 JSON / 118 docs / 81 portes), **T0 3 985 / 4 000**, revue verte.
+
+\## Les notes
+
+- Deux bugs corrigés en route : le chemin `ElementTree` 
+… [538 caractères tronqués]
 
 ## 3. Travail accompli
 

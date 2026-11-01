@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 24.3 h |
+| Durée | 24.5 h |
 | Tours | 17 |
-| Messages | 1024 |
-| Appels d'outils | 955 |
+| Messages | 1034 |
+| Appels d'outils | 964 |
 | Fichiers touchés | 11 |
-| Commandes | 789 |
+| Commandes | 796 |
 | Sous-agents | 0 |
-| Commits | 27 |
+| Commits | 28 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -878,7 +878,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 
 ### Tour 17 — lire docs/pilotage/plan-travail.md et avancer
 
-*24 appels d'outils.* Actions notables :
+*33 appels d'outils.* Actions notables :
 
 - bash — Read the work plan
 - bash — Read the batch sampler and the position support
@@ -894,7 +894,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 - bash — Update the plan with the length result and check the capacity run
 - bash — Trim the state under budget
 - bash — Read the N2 bullet in full
-- … et 6 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
@@ -960,7 +960,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 749 autres
+- … et 756 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1088,7 +1088,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 
 ## 5. Erreurs rencontrées
 
-52 sorties en erreur ou divergentes. Les premières :
+53 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5
@@ -1135,4 +1135,5 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 - N2.k — DIX LANGUES : LE FRANÇAIS PAIE 0,65 BIT/OCTET, LES AUTRES GAGNENT 0,8 À 3,4  Dix langues extraites des bases sqlite (fr, en, de, es, it, pt, ru, ar, ja, 
 - ÉTAT — COMPTEUR JSON 471 (DIX LANGUES)  Les corpus et les évaluations multilingues de l'autre session font passer le compteur à 471 ; la revue repasse." && git 
 - N2.j2 — POSITIONS ALÉATOIRES SUR 186 Mo : LE VERROU DE LONGUEUR TOMBE ENCORE (÷2,4 À 512)  La base du corpus réel (186 Mo de Wikipédia, N2.j) entraînée avec des
+- N2.j3 — LA CAPACITÉ SUR 186 Mo : 21,65 M PAIE (4,39 → 4,20), DONNÉES × CAPACITÉ  À données et budget égaux (20 000 pas, positions 0–384), le modèle de 21,65 M v
 
