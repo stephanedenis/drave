@@ -155,16 +155,22 @@ La trace est un flux **DRVF** de profil `thought` : une liste par événement, a
 `corps` complet à chaque pas : elle transporte l'**empreinte** et la **référence** au store. Le
 rejeu recharge les états par empreinte.
 
+**Le profil `thought`** (implémenté dans `trace.py`) : enveloppe `DRVF` (4 octets), version
+`u16`, profil `u16 = 1`, longueur `u32`, puis une charge JSON canonique
+`{probleme, racine, evenements}`. La racine porte l'état complet ; chaque événement porte
+`parent`, `enfant`, `operateur`, `params`, `score`, `cout`, `strategie`, `pas`.
+
 **Le rejeu** : mêmes empreintes, mêmes scores, mêmes décisions ; le `diff` localise le premier
 nœud divergent. Un rejeu qui ne redonne pas les mêmes scores n'est pas un rejeu, c'est une
-re-exécution.
+re-exécution. Un score modifié dans le fichier **lève** : une trace est une preuve, pas une
+ré-exécution.
 
 ## 7. Les portes
 
 | porte | question | critère | contrôle négatif |
 |---|---|---|---|
 | **T0** | le store est-il canonique ? | aller-retour exact, empreinte stable | deux ordres d'insertion → même empreinte |
-| **T1** | l'arbre se rejoue-t-il ? | mêmes états, mêmes scores | une graine changée doit diverger |
+| **T1** | l'arbre se rejoue-t-il ? | mêmes états, mêmes scores ; le flux `thought` se relit | une graine changée diverge ; un score corrompu est refusé |
 | **T2** | une stratégie est-elle substituable ? | même arbre, deux stratégies, traces comparables | une stratégie qui ne visite rien doit échouer |
 | **T3** | le moteur est-il anytime ? | best-so-far non décroissant | un budget nul rend le meilleur courant |
 | **T4** | la justification est-elle valide ? | chemin racine → settled | un chemin inventé est refusé |

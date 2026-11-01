@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**60 commits** · **4 session(s)** · **9 thème(s)**
+**61 commits** · **4 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 15 | [docs.md](docs.md) |
-| memoire | 3 | [memoire.md](memoire.md) |
+| memoire | 4 | [memoire.md](memoire.md) |
 | mesures | 31 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -25,10 +25,10 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 24.6 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 26.2 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 23.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 25.0 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 25.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 25.9 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -94,10 +94,18 @@
 | 16:50 | `1520b875` | N2.j3 — LA CAPACITÉ SUR 186 Mo : 21,65 M PAIE (4,39 → 4,20), DONNÉES × CAPACITÉ |
 | 17:05 | `f4c200d0` | PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUIVI DANS L'ÉTAT |
 | 17:07 | `993f147e` | ÉTAT — LE BUDGET T0 REVIENT À 3 998 (TRIM DU BLOC D/R/A) |
+| 17:38 | `79bce783` | DONNÉES — LE TEXTE INTÉGRAL FR EST LÀ : 2 388 219 ARTICLES, 8,025 G CARACTÈRES, 8,34 GO, 0 FUITE |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Le texte intégral passe aux neuf langues.** Objectif persisté : suivre le plan de travail
+jusqu'au 2/11 8 h. Les dumps des neuf autres langues sont là (en 25 Go, de 7,6, ru 5,7, es 5,0,
+ja 4,5, it 4,1, zh 3,3, pt 2,6, ar 2,0) ; **cinq runs sont lancés** (en, de, ru, es, ja), les
+quatre autres suivent. La chaîne est la même que le français : débaliseur, dédup exacte, split par
+article, SHA-256, manifeste ; la contamination et les fiches suivront par langue, puis le
+catalogue des dix corpus.
+
 **Le texte intégral de Wikipédia : le run FR est terminé.** Le plan de travail relu, la session
 `fe3c05f0` rouverte pour le rôle **D/R/A** (données, lecteur, moteur). L'outil
 `corpus_wikipedia_texte.py` lit le dump (7,13 Go, 5 968 207 pages), débalise, déduplique et sépare

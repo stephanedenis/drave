@@ -1,0 +1,18 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "verdict": "9/9",
+ "drvf": {
+  "taille_octets": 23597,
+  "evenements": 93,
+  "probleme": "cruches",
+  "strategie": "bfs",
+  "rejeu": "identique",
+  "diff": null,
+  "corruption_score": "refusee",
+  "diff_corruption": 0
+ },
+ "portes": {"T0": true, "T1_rejeu": true, "T1_graine": true, "T1_drvf": true,
+            "T2": true, "T3": true, "T4": true, "T5_ac3": true, "T6_alphabeta": true,
+            "tenues": 9, "total": 9}
+}

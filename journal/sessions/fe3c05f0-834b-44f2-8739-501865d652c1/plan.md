@@ -14,10 +14,10 @@
   `reports/corpus-wiki-*`, `reports/corpus-wikipedia-*`, `reports/inventaire-*`,
   `reports/rapport-corpus-*`, `reports/r11-*`, `reports/r12-*`, `reports/a26-*`, `reports/a83-*`,
   `journal/sessions/fe3c05f0-…/`
-- **Heartbeat** : 2026-11-01 16:55
+- **Heartbeat** : 2026-11-01 17:50
 - **État** : en cours
-- **Prochaine action** : le **run complet du texte intégral FR** (en cours) ; puis les neuf
-  langues, l'extraction PDF/OCR et la prépa R1.1/R1.2.
+- **Prochaine action** : les **neuf langues** en texte intégral (en, de, ru, es, ja lancés ;
+  it, zh, pt, ar ensuite), puis la contamination, les fiches et l'extraction PDF/OCR.
 
 ## Objectif final
 

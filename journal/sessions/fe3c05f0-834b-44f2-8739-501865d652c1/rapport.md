@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 25.0 h |
-| Tours | 11 |
-| Messages | 868 |
-| Appels d'outils | 868 |
+| Durée | 25.9 h |
+| Tours | 12 |
+| Messages | 873 |
+| Appels d'outils | 872 |
 | Fichiers touchés | 18 |
-| Commandes | 796 |
+| Commandes | 799 |
 | Sous-agents | 0 |
-| Commits | 41 |
+| Commits | 42 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -23,6 +23,8 @@
 … [168 caractères tronqués]
 - **complete** — R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer 
 … [168 caractères tronqués]
+- **create** — Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locau
+… [279 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -47,6 +49,8 @@
 **Tour 10** — lire docs/pilotage/plan-travail.md et avancer
 
 **Tour 11** — es-tu à jour? as-tu fait tout ce que tu pouvais?
+
+**Tour 12** — suis le plan, continue jusqu'à 8h demain matin
 
 ## 2. Déroulé, étape par étape
 
@@ -607,7 +611,54 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 
 **Synthèse produite :**
 
-⏵ Vérification de l'état réel : run complet, dépôt, compteurs, heartbeats
+⏵ Oui : le run complet est terminé, mesuré et committé
+
+**Oui — maintenant, tout ce qui pouvait être fait dans cette session est fait et committé.** Le run complet du texte intégral, qui tournait encore quand tu as posé la question, est **terminé** (commit `79bce783`).
+
+\## Le texte intégral FR — résultat complet
+
+| grandeur | valeur |
+|---|---:|
+| pages lues | 5 968 207 |
+| articles gardés | **2 388 219** |
+| redirections / autres ns / courts | 1 827 807 / 1 385 362 / 366 649 |
+| caractères | **8 025 059 777** |
+| mots (car. / 6,2) | 1 294 364 480 |
+| train / val / test | 7,50 Go / 419,6 Mo / 415,3 Mo |
+| articles train / val / test | 2 149 330 / 119 866 / 119 023 |
+| tronçons 8 192 car. | 2 755 825 (783 doublons) |
+| résidus `{{` / `[[` / `<` (20 000 lignes) | 1 / 0 / 3 |
+
+**Contrôles** : **0 / 40** fenêtres sur les cinq jeux d'évaluation (XNLI fr, UDHR, trois jeux locaux) ; **0 / 49 655** (validation) et **0 / 49 148** (test) fenêtres de 8 Ko dans l'entraînement. Le contrôle standard (unité = ligne) signale 5,53 % / 5,47 % : ce sont les **titres de sections répétés**, pas de la prose — la fiche l'explique et donne le contrôle 8 Ko qui le corrige.
+
+**Le pilote est réfuté comme projection** : les 100 000 premiers articles (10,45 Ko/article) laissaient croire à 7× les résumés et 26 Go ; le run donne **3,36 Ko/article** et **8,34 Go** (2,18×). C'est le run qui fait foi ; le pilote reste le manifeste de validation. C'est écrit dans la fiche, avec la limite du pilote non aléatoire.
+
+\## Ce qui est à jour
+
+- **État** (`en-cours.md`) : session D/R/A avec les chiffres du run, prochaine action « les 9 langues, puis PDF/OCR » ; compteurs **389 fiches / 476 JSON / 118 docs / 81 portes** ; **T0 3 982 / 4 000** ; `verifie_en_cours` vert.
+- **Roadmap** : les lignes **L** (bloc langue, R0.7 : 398 langues à 0,9687) et **D** (les données : inventaire, 10 corpus, texte intégral FR) sont ajoutées à « En un coup d'œil ».
+- **Plan de travail** : le territoire D/R/A complété (l'outil, `data/corpus_wiki_*_texte/`, les fiches) ; heartbeat du plan rafraîchi.
+- **Fiche, manifeste et contamination** du run complet committés ; le corpus (8,34 Go) reste local, gitignoré.
+- **Nettoyage** : le pilote temporaire (`/tmp`, 1,1 Go) supprimé.
+- Les portes passent : revue de documentation, taille, état, journal, backlog, schémas, sessions ; le dépôt est propre (seuls `tools/docwatch` modifié et `tools/structures` non suivi, les deux connus).
+
+\## Ce qui n'est pas fait — et pourquoi
+
+- **Les ne
+… [867 caractères tronqués]
+
+### Tour 12 — suis le plan, continue jusqu'à 8h demain matin
+
+*4 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Create long goal and check nine language dumps
+- bash — Launch five language full-text extractions
+- bash — Update plan and state for nine languages
+
+**Synthèse produite :**
+
+⏵ Mandat long : objectif persisté jusqu'à 8 h, puis lancement des neuf langues
 
 ## 3. Travail accompli
 
@@ -676,7 +727,7 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 756 autres
+- … et 759 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -865,4 +916,5 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUIVI DANS L'ÉTAT" 2>&1 | tail -2; git log --oneline -1
 - ÉTAT — LE BUDGET T0 REVIENT À 3 998 (TRIM DU BLOC D/R/A)" 2>&1 | tail -1 echo "=== run"; ps -p 1454236 -o pid,etime,pcpu --no-headers 2>/dev/null || echo "termi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet python3 - <<'PY' import pathlib,re p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=re.sub(r"\|
+- DONNÉES — LE TEXTE INTÉGRAL PASSE AUX NEUF LANGUES : EN, DE, RU, ES, JA LANCÉS" 2>&1 | tail -2; git log --oneline -1
 

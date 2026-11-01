@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 24.6 h |
-| Tours | 17 |
-| Messages | 1037 |
-| Appels d'outils | 966 |
+| Durée | 26.2 h |
+| Tours | 18 |
+| Messages | 1049 |
+| Appels d'outils | 977 |
 | Fichiers touchés | 11 |
-| Commandes | 797 |
+| Commandes | 804 |
 | Sous-agents | 0 |
 | Commits | 28 |
 | Compactages de contexte | 1 |
@@ -25,6 +25,10 @@
 … [41 caractères tronqués]
 - **create** — N2.h — le mètre propre : construire un corpus dédupliqué avec split train/val/test sans répétition (outil versionné + manifeste + vérification), refaire toute la chaîne sur ce corpus (professeur 23,5 M, base supervisée, distillation 20k × 3 graines, curriculum 129), mesurer la porte honnête et le pr
 … [344 caractères tronqués]
+- **edit** — Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, s
+… [189 caractères tronqués]
+- **resume** — Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, s
+… [189 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -61,6 +65,8 @@
 **Tour 16** — continue avec de trèes gros corpus multilingues
 
 **Tour 17** — lire docs/pilotage/plan-travail.md et avancer
+
+**Tour 18** — suis le plan, continue jusqu'à 8h demain matin
 
 ## 2. Déroulé, étape par étape
 
@@ -939,6 +945,25 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 1. **La distillation sur le corpus réel*
 … [515 caractères tronqués]
 
+### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
+
+*11 appels d'outils.* Actions notables :
+
+- create_goal
+- get_goal
+- update_goal
+- bash — Launch the teacher on the real corpus
+- bash — Check the teacher launch
+- bash — Write the structure channel tool and test its speed
+- bash — Fix the canal regex and check the teacher
+- bash — Check the teacher process
+- bash — Add the channel to the model and the trainer
+- bash — Compute the structure channel for the wiki corpus
+
+**Synthèse produite :**
+
+⏵ Phase 1 : professeur sur le corpus réel, puis distillation à positions aléatoires
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -999,7 +1024,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 757 autres
+- … et 764 autres
 
 ## 4. Mesures et résultats marquants
 

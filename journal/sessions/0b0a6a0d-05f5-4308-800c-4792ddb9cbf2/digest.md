@@ -13741,3 +13741,108 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 2. **La base anglaise seule** (le « en » du plan) : le multilingue donne 6,30 en anglais, mais la référence monolingue EN n'est pas mesurée.
 3. **Le canal d'annotation** (la structure ajoutée, pas retirée) — la seule voie que le filtre non ambigu n'a pas fermée, et la suite naturelle du banc de structures.
 
+
+## Tour 18
+
+### 👤 Utilisateur
+
+suis le plan, continue jusqu'à 8h demain matin
+
+- **create_goal** `{"objective": "Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel, canal d'annotation, base anglaise, session S, intégration hub. Chaque étape rend un résultat mesuré, une fiche, un commit, et  … [95 caractères tronqués]`
+
+  ```
+Error: goal "goal-7e5e03db-88c5-4373-9ab3-8ed001aa777a" already exists with phase "active"
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-7e5e03db-88c5-4373-9ab3-8ed001aa777a","revision":1,"objective":"N2.h — le mètre propre : construire un corpus dédupliqué avec split train/val/test sans répétition (outil versionné + manifeste + vérification), refaire toute la chaîne sur ce corpus (professeur 23,5 M, base supervisée, distillation 20k × 3 graines, curriculum 129), mesurer la porte honnête et le profil hors domaine (littérature française, anglais, wikitext2), trancher la capacité (21,63 M) sur ce mètre, mesurer la décomposition (blocs, têtes précoces, pensée), puis attaquer le verrou de longueur avec des positions aléatoires (3 graines, 129→512 octets) ; écrire les fiches, le journal, l'état et la roadmap, passer les portes, committer.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **update_goal** `{"action": "edit", "goal_id": "goal-7e5e03db-88c5-4373-9ab3-8ed001aa777a", "objective": "Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires) … [295 caractères tronqués]`
+
+> **Objectif** (edit) : Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, session S (analyseur plus riche, export), intégration hub. Chaque étape rend un résultat mesuré, une fiche, un commit, et met à jour en-cours/roadmap ; les portes et la revue restent vertes.
+
+
+  ```
+{"goal":{"id":"goal-7e5e03db-88c5-4373-9ab3-8ed001aa777a","revision":2,"objective":"Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, session S (analyseur plus riche, export), intégration hub. Chaque étape rend un résultat mesuré, une fiche, un commit, et met à jour en-cours/roadmap ; les portes et la revue restent vertes.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **update_goal** `{"action": "resume", "goal_id": "goal-7e5e03db-88c5-4373-9ab3-8ed001aa777a", "revision": 2}`
+
+> **Objectif** (resume) : Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, session S (analyseur plus riche, export), intégration hub. Chaque étape rend un résultat mesuré, une fiche, un commit, et met à jour en-cours/roadmap ; les portes et la revue restent vertes.
+
+
+  ```
+{"goal":{"id":"goal-7e5e03db-88c5-4373-9ab3-8ed001aa777a","revision":3,"objective":"Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, session S (analyseur plus riche, export), intégration hub. Chaque étape rend un résultat mesuré, une fiche, un commit, et met à jour en-cours/roadmap ; les portes et la revue restent vertes.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Phase 1 : professeur sur le corpus réel, puis distillation à positions aléatoires
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\ntr = pathlib.Path('data/wiki_fr/propre/train.txt').read_bytes()\nC = 8192\nchunks = [tr[i:i+C] for i in range(0, len(tr), C)]\ndev = b''.join(c for i, c in enumerate(chunks) if i % 10 == 6)\npathlib. … [699 caractères tronqués]`
+
+  ```
+dev 18604032 octets · 22716 chunks
+teacher 1494417
+18:30
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2j/teacher-wiki.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Check the teacher launch"}`
+
+  ```
+18:31
+0, 1124 MiB, 51 %
+1, 1 MiB, 0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/canal_structure.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"canal_structure.py — la classe de structure de chaque octet, pour le canal d'annotation.\n\nLe canal est une **seconde entrée** : à chaque octet du texte, une class … [3239 caractères tronqués]`
+
+  ```
+52 51
+[1, 1, 2, 0, 0, 0, 0, 2, 1, 1, 2, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 2, 1, 1, 2, 1, 2, 2, 0, 0, 0, 3, 2, 1, 1, 2, 1, 1, 2, 0, 0, 0, 0, 0, 3]
+112000021121120000000200003211212200032112112000003
+=== test vitesse sur 2 Mo ===
+2.0 Mo en 1.8 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/canal_structure.py'); s = p.read_text()\ns = s.replace('''PLEIN, GRAMMA, ESPACE, PONCT, CHIFFRE, FRONTIERE = 0, 1, 2, 3, 4, 5''',\n'''MOTIF = __import__(\"re\").compile(r\"[A- … [684 caractères tronqués]`
+
+  ```
+ok
+52 52 1120000211211200000002000032112124200032112112000003
+21 21 000000023242024202423
+27 27 000000200020000023320000233
+18:31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,etime,pcpu,cmd | grep entrainer_moteur | grep -v grep | head -2; ls -la work/n2j/teacher-wiki.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; date '+%H:%M'", "description": "Check the t … [16 caractères tronqués]`
+
+  ```
+1494417       01:32  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_moteur.py --famille route --dim 384 --couches 6 --tetes 4 --cache 752 --experts 8 --k 2 --pas 20000 --lot 16 --seq 128 --lr 1e-3 --graine 1 --donnees data/wiki_fr/propre/train.txt --validation data/wiki_fr/propre/dev.txt --sortie work/n2j/route-wiki > work/n2j/teacher-wiki.log 2>&1
+1494419       01:32 86.3 /home/stephane/gpu-env/bin/python tools/entrainer_moteur.py --famille route --dim 384 --couches 6 --tetes 4 --cache 752 --experts 8 --k 2 --pas 20000 --lot 16 --seq 128 --lr 1e-3 --graine 1 --donnees data/wiki_fr/propre/train.txt --validation data/wiki_fr/propre/dev.txt --sortie work/n2j/route-wiki
+-rw-r--r--. 1 stephane stephane 0  1 nov 18:30 work/n2j/teacher-wiki.log
+0, 1124 MiB, 49 %
+1, 1 MiB, 0 %
+18:31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/native_model.py'); s = p.read_text()\ns = s.replace('''        self.head_byte = nn.Linear(self.cfg.d_model, self.cfg.vocab)''',\n'''        self.head_byte = nn.Linear(self.cfg … [4867 caractères tronqués]`
+
+  ```
+modèle : canal ajouté
+trainer : canal ajouté
+syntaxe ok
+10:import argparse
+11:import json
+12:import math
+13:import pathlib
+14:import random
+15:import time
+17:import torch
+18:import torch.nn.functional as F
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/canal_structure.py --entree data/wiki_fr/propre/train.txt --sortie data/wiki_fr/propre/train.canal && python3 tools/canal_structure.py --entree data/w … [439 caractères tronqués]`

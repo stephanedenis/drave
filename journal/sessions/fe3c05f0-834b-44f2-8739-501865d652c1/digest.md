@@ -15645,3 +15645,136 @@ test fenêtres 8 Ko dupliquées dans train : 0 / 49148 0.000%
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n         \"| fichiers / JSON de résultats | … [2617 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py [0]   ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohé
+python3 tools/taille_documents.py  [0]   ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+python3 tools/verifie_en_cours.py  [0]   ✅ état court, structuré, multi-session et reprenable
+python3 tools/verifie_journal.py   [0]   ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+python3 tools/verifie_backlog.py   [0] ✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité in
+python3 tools/verifier_schemas.py  [0]      sources et images relatives.
+python3 tools/sessions.py --check  [0]   ⚠ mandat périmé (69 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat 
+  ✅ index : aucun fait stagé sans état
+ create mode 100644 reports/corpus-wiki-fr-texte-contamination.json
+ create mode 100644 reports/corpus-wiki-fr-texte.json
+79bce783 DONNÉES — LE TEXTE INTÉGRAL FR EST LÀ : 2 388 219 ARTICLES, 8,025 G CARACTÈRES, 8,34 GO, 0 FUITE
+  ```
+
+### 🤖 Assistant
+
+⏵ Oui : le run complet est terminé, mesuré et committé
+
+**Oui — maintenant, tout ce qui pouvait être fait dans cette session est fait et committé.** Le run complet du texte intégral, qui tournait encore quand tu as posé la question, est **terminé** (commit `79bce783`).
+
+## Le texte intégral FR — résultat complet
+
+| grandeur | valeur |
+|---|---:|
+| pages lues | 5 968 207 |
+| articles gardés | **2 388 219** |
+| redirections / autres ns / courts | 1 827 807 / 1 385 362 / 366 649 |
+| caractères | **8 025 059 777** |
+| mots (car. / 6,2) | 1 294 364 480 |
+| train / val / test | 7,50 Go / 419,6 Mo / 415,3 Mo |
+| articles train / val / test | 2 149 330 / 119 866 / 119 023 |
+| tronçons 8 192 car. | 2 755 825 (783 doublons) |
+| résidus `{{` / `[[` / `<` (20 000 lignes) | 1 / 0 / 3 |
+
+**Contrôles** : **0 / 40** fenêtres sur les cinq jeux d'évaluation (XNLI fr, UDHR, trois jeux locaux) ; **0 / 49 655** (validation) et **0 / 49 148** (test) fenêtres de 8 Ko dans l'entraînement. Le contrôle standard (unité = ligne) signale 5,53 % / 5,47 % : ce sont les **titres de sections répétés**, pas de la prose — la fiche l'explique et donne le contrôle 8 Ko qui le corrige.
+
+**Le pilote est réfuté comme projection** : les 100 000 premiers articles (10,45 Ko/article) laissaient croire à 7× les résumés et 26 Go ; le run donne **3,36 Ko/article** et **8,34 Go** (2,18×). C'est le run qui fait foi ; le pilote reste le manifeste de validation. C'est écrit dans la fiche, avec la limite du pilote non aléatoire.
+
+## Ce qui est à jour
+
+- **État** (`en-cours.md`) : session D/R/A avec les chiffres du run, prochaine action « les 9 langues, puis PDF/OCR » ; compteurs **389 fiches / 476 JSON / 118 docs / 81 portes** ; **T0 3 982 / 4 000** ; `verifie_en_cours` vert.
+- **Roadmap** : les lignes **L** (bloc langue, R0.7 : 398 langues à 0,9687) et **D** (les données : inventaire, 10 corpus, texte intégral FR) sont ajoutées à « En un coup d'œil ».
+- **Plan de travail** : le territoire D/R/A complété (l'outil, `data/corpus_wiki_*_texte/`, les fiches) ; heartbeat du plan rafraîchi.
+- **Fiche, manifeste et contamination** du run complet committés ; le corpus (8,34 Go) reste local, gitignoré.
+- **Nettoyage** : le pilote temporaire (`/tmp`, 1,1 Go) supprimé.
+- Les portes passent : revue de documentation, taille, état, journal, backlog, schémas, sessions ; le dépôt est propre (seuls `tools/docwatch` modifié et `tools/structures` non suivi, les deux connus).
+
+## Ce qui n'est pas fait — et pourquoi
+
+- **Les neuf autres langues** et l'**extraction PDF/OCR** (les 104 livres, les 2 711 PDF du CEGEP) : les prochaines actions du mandat D/R/A, pas des blocages — le même outil, le même temps de calcul (le français a pris ~50 min).
+- **R1.1/R1.2** et **A2.6/A8.3** : les autres items du mandat D/R/A, après les corpus.
+- **La session S** n'a toujours pas de plan dans ce dépôt (`tools/structures` orphelin) : c'est à sa TUI de l'ouvrir.
+- **Le heartbeat de Pensée** est à 69 min (seuil 45) : sa session doit le rafraîchir, ce n'est pas le mien à écrire.
+- **Le contrôle 8 Ko** est un script ad hoc : il mérite d'entrer dans `verifie_contamination.py` (limite nommée dans la fiche).
+
+## Les commits
+
+`6fbfbb80` (le pilote, l'outil, la fiche), `f4c200d0` (roadmap L/D, heartbeat), le trim T0, puis **`79bce783`** (le run complet, le manifeste, la contamination, l'état, le journal).
+
+
+## Tour 12
+
+### 👤 Utilisateur
+
+suis le plan, continue jusqu'à 8h demain matin
+
+### 🤖 Assistant
+
+⏵ Mandat long : objectif persisté jusqu'à 8 h, puis lancement des neuf langues
+
+- **create_goal** `{"objective": "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des  … [321 caractères tronqués]`
+
+> **Objectif** (create) : Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions.
+
+
+  ```
+{"goal":{"id":"goal-2631cfd8-8a48-409f-b5f8-1b65c4f77b59","revision":1,"objective":"Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -la /home/stephane/Data13TB/stephane/data/wikipedia/dumps/ 2>/dev/null | head -15; echo \"=== dumps\"; for l in de en es it ja pt ru zh ar; do f=$(ls /home/stephane/Data13TB/stephane/data/wikipedia/dumps/$l/*pages-articles-multistre … [297 caractères tronqués]`
+
+  ```
+total 0
+drwxr-xr-x. 1 stephane stephane  40 26 mai 09:14 .
+drwxr-xr-x. 1 stephane stephane  14 25 mai 14:39 ..
+drwxr-xr-x. 1 stephane stephane 204 26 mai 09:19 ar
+drwxr-xr-x. 1 stephane stephane 204 25 mai 15:32 de
+drwxr-xr-x. 1 stephane stephane 204 25 mai 15:13 en
+drwxr-xr-x. 1 stephane stephane 204 26 mai 09:43 es
+drwxr-xr-x. 1 stephane stephane 204 25 mai 15:22 fr
+drwxr-xr-x. 1 stephane stephane 204 26 mai 10:20 it
+drwxr-xr-x. 1 stephane stephane 204 26 mai 10:03 ja
+drwxr-xr-x. 1 stephane stephane 204 28 mai 08:14 pt
+drwxr-xr-x. 1 stephane stephane 204 28 mai 08:17 ru
+drwxr-xr-x. 1 stephane stephane 204 26 mai 09:19 zh
+=== dumps
+de 7,6G
+en 25G
+es 5,0G
+it 4,1G
+ja 4,5G
+pt 2,6G
+ru 5,7G
+zh 3,3G
+ar 2,0G
+40
+Mem:             125          17          61           6          53         108
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; rm -f /tmp/texte-pids.txt\nfor l in en de ru es ja; do\n  nohup python3 tools/corpus_wikipedia_texte.py --langue $l --sortie data/corpus_wiki_${l}_texte --manifeste reports/corpus-wiki-${l}-texte.json > /tmp/run-texte-${l}.log 2>&1 &\n … [450 caractères tronqués]`
+
+  ```
+en 1494795
+de 1494796
+ru 1494797
+es 1494798
+ja 1494799
+=== état
+en       00:15 99.2
+de       00:15 98.5
+ru       00:15 99.0
+es       00:15 98.3
+ja       00:15 98.8
+61M	data/corpus_wiki_de_texte
+50M	data/corpus_wiki_en_texte
+58M	data/corpus_wiki_es_texte
+7,8G	data/corpus_wiki_fr_texte
+91M	data/corpus_wiki_ja_texte
+86M	data/corpus_wiki_ru_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\n# plan\np=pathlib.Path('journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md'); s=p.read_text()\ns=s.replace(\"- **Heartbeat** : 2026-11-01 16:55\",\"- **Heartbeat** : 2026-11-01 17:50\")\ns=s … [3227 caractères tronqués]`

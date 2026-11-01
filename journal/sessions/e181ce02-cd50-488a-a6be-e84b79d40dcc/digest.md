@@ -9971,3 +9971,75 @@ Les portes T5/T6 du contrat — « un solveur se branche », « le coût est com
 
 Le plan est lu, la prochaine action de L/B13 est faite ; le prochain pas est le **DRVF**, pas un nouveau détour.
 
+
+## Tour 13
+
+### 👤 Utilisateur
+
+suis le plan, continue jusqu'à 8h demain matin
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade me … [295 caractères tronqués]`
+
+> **Objectif** (create) : Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit.
+
+
+  ```
+{"goal":{"id":"goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d","revision":1,"objective":"Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '150,175p' docs/implantation/moteur-de-pensee.md; echo '=== trace types ==='; grep -n \"class Evenement\\|class Trace\\|def vers_dict\\|def replay\\|def diff\" tools/pensee/store.py", "description": "Lire le contrat DRVF thoug … [26 caractères tronqués]`
+
+  ```
+## 6. La trace
+
+La trace est un flux **DRVF** de profil `thought` : une liste par événement, avec les champs
+`nœud`, `parent`, `operateur`, `score`, `cout`, `strategie`, `pas`. Elle ne transporte pas le
+`corps` complet à chaque pas : elle transporte l'**empreinte** et la **référence** au store. Le
+rejeu recharge les états par empreinte.
+
+**Le rejeu** : mêmes empreintes, mêmes scores, mêmes décisions ; le `diff` localise le premier
+nœud divergent. Un rejeu qui ne redonne pas les mêmes scores n'est pas un rejeu, c'est une
+re-exécution.
+
+## 7. Les portes
+
+| porte | question | critère | contrôle négatif |
+|---|---|---|---|
+| **T0** | le store est-il canonique ? | aller-retour exact, empreinte stable | deux ordres d'insertion → même empreinte |
+| **T1** | l'arbre se rejoue-t-il ? | mêmes états, mêmes scores | une graine changée doit diverger |
+| **T2** | une stratégie est-elle substituable ? | même arbre, deux stratégies, traces comparables | une stratégie qui ne visite rien doit échouer |
+| **T3** | le moteur est-il anytime ? | best-so-far non décroissant | un budget nul rend le meilleur courant |
+| **T4** | la justification est-elle valide ? | chemin racine → settled | un chemin inven
+… [662 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ B13 suite : j'encode la trace en DRVF `thought`, avec rejeu et diff vérifiés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pensee/trace.py <<'PY'\n\"\"\"trace.py — le profil DRVF `thought` : une enveloppe, un rejeu, un diff.\n\nLe format de flux DRVF décrit les activations ; ce profil transporte une **trace de pensée** :\nle problème, l'état  … [6740 caractères tronqués]`
+
+  ```
+COMPILE=0
+taille 23597 ev 93 diff None rejeu 93
+corruption vue score divergent sur 1db86b08: 0.125 != 1.125
+diff fichiers 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T1  l'arbre se rejoue               mêmes empreintes, mêmes scores ; une graine changée diverge\",\n\"  T1  l'arbre se rej … [2118 caractères tronqués]`
+
+  ```
+ok
+  ✅ T0 store canonique     aller-retour exact, empreinte stable sous permutation
+  ✅ T1 rejeu               rejeu identique sur 93 événements ; deux exécutions égales
+  ✅ T1 graine              deux graines divergent au premier pas différent
+  ✅ T1 DRVF thought        DRVF 23597 octets, 93 événements rejoués ; score corrompu refusé ; diff 0
+  ✅ T2 stratégies          BFS et A* atteignent le même but ; la stratégie aveugle échoue
+  ✅ T3 anytime             best-so-far non décroissant sur 5 budgets : [0.2, 0.25, 0.33, 1.0, 1.0]
+  ✅ T4 justification       justification valide sur 7 nœuds ; chemin inventé refusé
+  ✅ T5 AC-3                chaîne {'A': ('r',), 'B': ('g',), 'C': ('r',)} ; carte 3-colorable non réduite ; contradiction domaine vide = True
+  ✅ T6 alpha-bêta          gain en 2 ; blocage en 5 ; profondeur 1 rate (1) ; alpha-bêta 1495 nœuds/296 coupes vs minimax 18730
+  9/9 portes tenues
+EXIT=0
+  ```
+

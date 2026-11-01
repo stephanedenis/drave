@@ -28,12 +28,12 @@
 | chantier | ce qu'il couvre | état | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
-| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta**, **8/8 portes** | B10.3 attend un **encodeur qui porte** ; **B13** : **DRVF**, banc anytime |
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **DRVF `thought`**, **9/9 portes** | B10.3 attend un **encodeur qui porte** ; **B13** : **banc anytime** |
 | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : corpus propre, **3,0904** en domaine, **16,70 → 3,85** hors dépôt ; N4 partiel | **N2** (plus de français unique, capacité), **N4** (consigne) |
 | **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ; **R0.7 — bloc linguistique** (398 langues, 0,9687) | **R4.4 close** (limites nommées) ; **R1.1/R1.2** (contexte natif) ; R2/R3 attendent N5/N4 |
 | **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | 🔬 **v0** : 7 phrases + **générateur** + **pragmatique** (statuts, double sens conservé, **niveaux 0–4**, niveau minimal), LLM, export | **analyseur plus riche** (rôles, subordonnées), puis brancher l'export au corpus |
 | **L — le bloc langue** | surface, heuristique CPU + neuronal, contrat, cascade, pragmatique | 🔬 **R0.7** : 9 niveaux, **398 langues à 0,9687**, script 1,0000 ; analyse heuristique (5 schémas) ; **contrat de substitution à écrire** | **le contrat de L** (heuristique/neuronal), la mesure 71 langues |
-| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/OCR | ✅ inventaire local ; **10 corpus** (21,6 M art., 38,8 Go) ; **texte intégral FR** : pilote 100 000 art. (1,08 Go), run complet en cours | **les 9 langues**, le texte intégral complet, PDF/OCR, licences |
+| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/OCR | ✅ inventaire local ; **10 corpus** (21,6 M art., 38,8 Go) ; **texte intégral FR** (2,39 M art., 8,34 Go) ; **9 langues en cours** | **les 9 langues**, PDF/OCR, licences |
 
 **La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail multi-sessions** (qui fait quoi, où, à quelle cadence) est dans [`plan-travail.md`](plan-travail.md). Les demandes des 48 h y sont reliées à ce qu'elles ont déplacé.
 
@@ -161,7 +161,7 @@ La ligne ouverte est **B10.3** (décodeur) ; **B12.10** et **B10.2bis** sont **c
 | **B10** | le protocole sémantique : encodeur `z`, décodeur, raisonnement | ✅ / ❌ / ⏳ | **B10.3 bloqué** ; 5 leviers : l'**objectif mot** lève le décodeur (**32,5** UDHR, **26,7** JW > plancher 17,1) mais le `z` ne porte que **1,5–2,6** points ; le **contrastif** ne le fait pas lire — le verrou est l'encodeur |
 | **B11** | la base d'universaux typés : schéma, parseur, codec, contexte | ✅ | **B11.10 close** (cartes, ambiguïtés refusées) ; le codec lit **100 %** |
 | **B12** | les modules cerveau-langage M1–M9 | ⚠️ / ❌ | **B12.10 close** (négatif : oracle = M8, M4 seul = 0) ; seul M1 est solide |
-| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | 🔬 **state store v0** + moteur (BFS, greedy, A*, MCTS-lite) + **AC-3/alpha-bêta**, **8/8 portes** T0–T6 | l'intégration **DRVF** et le banc anytime |
+| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | 🔬 **state store v0** + moteur (BFS, greedy, A*, MCTS-lite) + **AC-3/alpha-bêta** + **DRVF `thought`**, **9/9 portes** T0–T6 | le **banc anytime** |
 | **C3.2** | les modules par famille de langues | ✅ | aucune — **7/9 > 30 %**, moyenne **69,5 %**, contrôle **≤ 0,5 %** |
 
 **Ce qui compte pour R** : le **codec classique** lit **100 %** des surfaces ; c'est la preuve qu'un bloc

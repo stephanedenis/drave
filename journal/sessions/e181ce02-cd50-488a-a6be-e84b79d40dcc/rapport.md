@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 23.8 h |
-| Tours | 12 |
-| Messages | 414 |
-| Appels d'outils | 450 |
+| Durée | 25.9 h |
+| Tours | 13 |
+| Messages | 423 |
+| Appels d'outils | 458 |
 | Fichiers touchés | 25 |
-| Commandes | 352 |
+| Commandes | 359 |
 | Sous-agents | 2 |
-| Commits | 21 |
+| Commits | 22 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -27,6 +27,8 @@
 … [114 caractères tronqués]
 - **complete** — Reprendre et compléter les sessions suspendues : R4.4 (exposant fusionné, fax 1 bit, scans réels de bout en bout) et S (candidats générés par un analyseur, export branché sur le corpus). Produire les mesures, fiches, tests et mises à jour d'en-cours/plans, documenter les limites qui ne se réparent p
 … [114 caractères tronqués]
+- **create** — Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantier
+… [253 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -53,6 +55,8 @@
 **Tour 11** — fait les deux. Le bloc langue doit couvrir l'étiquetage tous les niveaux linguistiques jusqu'à la pragmatique. on doit avoir une version heuristique et une neuronale. Le contrat garantissant la possibilité de substituer ou faire fonctionner en parallèle (heuristique ultra rapide permettant l'activation de la couche sémantique à une fraction du coût.
 
 **Tour 12** — lire docs/pilotage/plan-travail.md et avancer
+
+**Tour 13** — suis le plan, continue jusqu'à 8h demain matin
 
 ## 2. Déroulé, étape par étape
 
@@ -716,6 +720,23 @@ Le contrat est respecté au niveau des types : mêmes `Etat`, `Probleme`, `Decis
 Les portes T5/T6 du contrat — « un solveur se branche », « le coût est 
 … [1983 caractères tronqués]
 
+### Tour 13 — suis le plan, continue jusqu'à 8h demain matin
+
+*8 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Lire le contrat DRVF thought et les types de trace
+- bash — Écrire et tester le codec DRVF thought
+- bash — Ajouter la porte DRVF et l'exécuter
+- bash — Écrire la fiche DRVF et mettre l'état à jour
+- bash — Vérifier les compteurs et les portes après le DRVF
+- bash — Aligner les compteurs de la fiche DRVF
+- bash — Committer le profil DRVF thought
+
+**Synthèse produite :**
+
+⏵ B13 suite : j'encode la trace en DRVF `thought`, avec rejeu et diff vérifiés
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -795,7 +816,7 @@ Les portes T5/T6 du contrat — « un solveur se branche », « le coût est
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 312 autres
+- … et 319 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -956,4 +977,5 @@ Les portes T5/T6 du contrat — « un solveur se branche », « le coût est
 - ÉTAT — COMPTEUR JSON 467 (CORPUS WIKI)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - BLOC LINGUISTIQUE — NEUF NIVEAUX, HEURISTIQUE ET NEURONAL, 398 LANGUES À 0,9687" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — AC-3 ET ALPHA-BÊTA : 8/8 PORTES, 1 495 NŒUDS/296 COUPES CONTRE 18 730" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — DRVF THOUGHT : 23 597 OCTETS, 93 ÉVÉNEMENTS, REJEU IDENTIQUE, CORRUPTION REFUSÉE" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

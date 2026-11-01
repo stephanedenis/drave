@@ -3,6 +3,7 @@
 
   T0  le store est canonique          aller-retour exact, empreinte stable, ordres différents
   T1  l'arbre se rejoue               mêmes empreintes, mêmes scores ; une graine changée diverge
+  T1  le flux DRVF thought se relit   enveloppe, racine, rejeu ; un score corrompu est refusé
   T2  une stratégie est substituable  même arbre, deux stratégies ; une stratégie aveugle échoue
   T3  le moteur est anytime           best-so-far non décroissant ; un budget nul est refusé
   T4  la justification est valide     chemin racine → settled ; un chemin inventé est refusé
@@ -75,6 +76,36 @@ def t1_graine() -> tuple[bool, str]:
     if diff(m.trace, n.trace) is None:
         return False, "deux graines donnent la même trace (contrôle négatif raté)"
     return True, "deux graines divergent au premier pas différent"
+
+
+def t1_drvf() -> tuple[bool, str]:
+    """Le flux `thought` : enveloppe DRVF, racine, rejeu, corruption refusée."""
+    import json
+    import struct
+    from .trace import decoder, diff_fichiers, encoder, rejouer
+    m = Moteur()
+    d = m.boucle(CRUCHES, BFS(), Budget(200), arret_sur_but=True)
+    racine = m.store.chemin(d.etat.empreinte())[0]
+    octets = encoder(m.trace, m.store, racine, "cruches")
+    doc = decoder(octets)
+    store2, trace2 = rejouer(doc, CRUCHES)
+    if diff(m.trace, trace2) is not None:
+        return False, "le rejeu DRVF diverge de la trace"
+    version, profil, _ = struct.unpack("<HHI", octets[4:12])
+    corps = json.loads(octets[12:])
+    corps["evenements"][0]["score"] += 1.0
+    charge = json.dumps(corps, ensure_ascii=False, sort_keys=True,
+                        separators=(",", ":")).encode()
+    mauvais = b"DRVF" + struct.pack("<HHI", version, profil, len(charge)) + charge
+    try:
+        rejouer(decoder(mauvais), CRUCHES)
+        return False, "un score corrompu a été rejoué (contrôle négatif raté)"
+    except ValueError:
+        pass
+    if diff_fichiers(octets, mauvais) != 0:
+        return False, "le diff n'a pas localisé la corruption"
+    return True, (f"DRVF {len(octets)} octets, {len(doc['evenements'])} événements rejoués ; "
+                  f"score corrompu refusé ; diff 0")
 
 
 def t2_strategies() -> tuple[bool, str]:
@@ -171,7 +202,8 @@ def t6_alphabeta() -> tuple[bool, str]:
 
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
-              ("T1 graine", t1_graine()), ("T2 stratégies", t2_strategies()),
+              ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
+              ("T2 stratégies", t2_strategies()),
               ("T3 anytime", t3_anytime()), ("T4 justification", t4_justification()),
               ("T5 AC-3", t5_ac3()), ("T6 alpha-bêta", t6_alphabeta())]
     échecs = 0
