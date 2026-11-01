@@ -6190,3 +6190,55 @@ started background job bash-336
   ```
 
 - **job_output** `{"job_id": "bash-336", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-326 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | tr '\n' ' '; echo; for f in C-propre-g2 R-pos-g1 D-mixte-g3; do echo "-- $f"; tail -1 work/n2h/$f.log 2>/dev/null; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt | tr '\\n' ' '; echo; for f in C-propre-g3 R-pos-g1 R-pos-g2 D-mixte-g3; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Check the random-position arm progress"}`
+
+  ```
+00:22
+work/n2h/A-propre-g1.pt work/n2h/A-propre-g2.pt work/n2h/A-propre-g3.pt work/n2h/base-mixte.pt work/n2h/base-propre.pt work/n2h/C-propre-g1.pt work/n2h/C-propre-g2.pt work/n2h/D-mixte-g1.pt work/n2h/D-mixte-g2.pt 
+-- C-propre-g3
+# stage seq 129 · 10000 pas · lr 5e-06
+-- R-pos-g1
+-- R-pos-g2
+-- D-mixte-g3
+pas 14250 · seq 128 · perte 28.7678 · PPL 128/4 3.3870 · 1016 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction des trois fiches avec un remplisseur automatique depuis l'évaluation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/fiche1.md <<'EOF'\n# N2.h1 — Le corpus propre : la validation n'était pas tenue à l'écart, et la porte honnête vaut 3,09\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : le corpus de N2 se recopia … [6606 caractères tronqués]`
+
+  ```
+fiche1 écrit
+128 work/n2h/fiche1.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/fiche2.md <<'EOF'\n# N2.h2 — La diversité française : un modèle de français plutôt qu'un modèle du dépôt\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : entraîné **moitié dépôt,\n> moitié littéra … [6847 caractères tronqués]`
+
+  ```
+fiches 2 et 3 écrites
+  74 work/n2h/fiche2.md
+  58 work/n2h/fiche3.md
+ 132 total
+00:22
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/remplit.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"remplit.py — remplit les trois fiches N2.h depuis work/n2h/eval.json.\"\"\"\nimport json, pathlib, statistics as st\n\nev = {r[\"fichier\"]: r for r in json.loads(pathli … [7289 caractères tronqués]`
+
+  ```
+ok
+00:23
+pas   750 · seq 129 · perte 45.7731 · PPL 128/4 3.1869 · 53 s
+  ```
+

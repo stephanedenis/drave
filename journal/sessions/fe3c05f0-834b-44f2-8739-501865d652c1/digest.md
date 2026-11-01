@@ -6748,3 +6748,141 @@ fusionné — nommés, pas cachés.
   ```
 
 - **bash** `{"command": "cat > /tmp/msg-r44-scans.txt <<'EOF'\nR4.4 — LES SCANS : LA PHOTO PASSE DE 55,9 % À 7,0 % DE WER, LES COLONNES DE 89 % À 0,5 %, UN VRAI LIVRE TIENT 7,10 %\n\nLa ligne R4.4 était partielle : dix pages **rendues** lues, aucun scan. Ce programme fabrique\nles scans que la machine ne peut p … [4644 caractères tronqués]`
+
+  ```
+tools/nettoyer_scan.py                             |   10 +-
+ tools/porte-ocr-scans.sh                           |   54 +
+ 28 files changed, 8090 insertions(+), 106 deletions(-)
+  ✅ index : aucun fait stagé sans état
+ create mode 100644 tools/fabriquer_tables.py
+ create mode 100644 tools/mesurer_colonnes.py
+ create mode 100644 tools/mesurer_reel.py
+ create mode 100644 tools/mesurer_tables.py
+ create mode 100755 tools/porte-ocr-scans.sh
+  ```
+
+- **bash** `{"command": "git log --oneline -3; echo \"=== stat\"; git show --stat --oneline HEAD | head -34; echo \"=== status\"; git status --short | head -20", "description": "Verify commit content and tree state", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+54cba6af R4.4 — LES SCANS : LA PHOTO PASSE DE 55,9 % À 7,0 % DE WER, LES COLONNES DE 89 % À 0,5 %, UN VRAI LIVRE TIENT 7,10 %
+26f722e7 ÉTAT — N2.h : LA DIVERSITÉ FRANÇAISE DIVISE LA PPL HORS DÉPÔT PAR 4,4
+47db37ba ÉTAT — N2.h : LA CHAÎNE PROPRE DONNE 3,10 EN DOMAINE, PAS 2,85
+=== stat
+54cba6af R4.4 — LES SCANS : LA PHOTO PASSE DE 55,9 % À 7,0 % DE WER, LES COLONNES DE 89 % À 0,5 %, UN VRAI LIVRE TIENT 7,10 %
+ docs/implantation/encodeur-visuel.md               |   60 +-
+ docs/pilotage/backlog/R44-encodeur-visuel.md       |   37 +-
+ docs/pilotage/en-cours.md                          |   33 +-
+ docs/pilotage/roadmap.md                           |   11 +-
+ journal/2026-10-31/README.md                       |   15 +
+ journal/2026-11-01/README.md                       |   26 +
+ journal/README.md                                  |    4 +-
+ .../0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md |  149 +
+ .../rapport.md                                     |   16 +-
+ journal/sessions/MANIFEST.md                       |    6 +-
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/digest.md |  631 ++++
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/plan.md   |   17 +-
+ .../rapport.md                              
+… [1881 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git reset -q; echo \"[reset $?]\"; git status --short | head -25; echo \"=== log\"; git log --oneline -2", "description": "Sync index with HEAD and inspect tree", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+[reset 0]
+ M tools/distiller_budget.py
+ m tools/docwatch
+ M tools/native_model.py
+?? reports/corpus-litt-propre.json
+?? reports/corpus-propre.json
+?? tools/corpus_propre.py
+?? tools/eval_n2_propre.py
+=== log
+54cba6af R4.4 — LES SCANS : LA PHOTO PASSE DE 55,9 % À 7,0 % DE WER, LES COLONNES DE 89 % À 0,5 %, UN VRAI LIVRE TIENT 7,10 %
+26f722e7 ÉTAT — N2.h : LA DIVERSITÉ FRANÇAISE DIVISE LA PPL HORS DÉPÔT PAR 4,4
+  ```
+
+- **bash** `{"command": "for t in \"python3 tools/verifie_etat_a_jour.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/sessions.py --check\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifier_schemas.py\"; do echo \" … [348 caractères tronqués]`
+
+  ```
+=== python3 tools/verifie_etat_a_jour.py
+  état · dernier fait 54cba6af · dernier état 54cba6af
+  ✅ aucun fait commité après le dernier état
+[code 0]
+=== python3 tools/taille_documents.py
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[code 0]
+=== python3 tools/verifie_journal.py
+  journal · 38 jour(s) · 110 session(s) · 1715 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[code 0]
+=== python3 tools/sessions.py --check
+  ⚠ mandat périmé (101 min) : 0b0a6a0d-05f5-4308-800c-4792ddb9cbf2 — heartbeat à rafraîchir
+  ⚠ mandat périmé (96 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+[code 0]
+=== python3 tools/verifie_backlog.py
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+[code 0]
+=== python3 tools/verifie_en_cours.py
+  en-cours · 1626 mots · 7 sections · 3 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[code 0]
+=== python3 tools/verifier_schemas.py
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+[code 0]
+=== porte-etat
+[code 0]
+  ✅ autotest : 6 cas, dont 3 refus a
+… [81 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -6; echo \"[code ${PIPESTATUS[0]}]\"; bash tools/porte-tableaux.sh > /tmp/tab.log 2>&1; echo \"[tableaux $?]\"; tail -2 /tmp/tab.log; date \"+%H:%M:%S\"", "description": "Run documentation review and table gate", "timeoutMs": 600000, "wor … [57 caractères tronqués]`
+
+  ```
+revue de documentation · 372 fiche(s) · 445 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · fraîcheur : en-cours.md dit 2026-10-31, le dernier commit date du 2026-11-01
+[code 1]
+[tableaux 1]
+       nouveau), puis relancer cette porte. Un petit cycle sans page à jour est un cycle
+       que personne ne peut lire.
+00:21:15
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"**Mis à jour : 2026-10-31, 18 h 15 HAE (heure locale, EDT).**\",\n            \"**Mis à jour : 2026-11-01, 00 h 20 HAE (heure locale, EST).**\")\np.write_text(s)\nprint('date mi … [490 caractères tronqués]`
+
+  ```
+date mise à jour
+	tools/eval_n2_propre.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+  ❌ 1 anomalie(s) :
+     · fraîcheur : en-cours.md dit 2026-10-31, le dernier commit date du 2026-11-01
+[revue 1]
+[tableaux 1]
+       nouveau), puis relancer cette porte. Un petit cycle sans page à jour est un cycle
+       que personne ne peut lire.
+  ```
+
+- **bash** `{"command": "head -4 docs/pilotage/en-cours.md; echo \"=== staged\"; git diff --cached --name-only | head; echo \"=== status\"; git status --short docs/pilotage/en-cours.md", "description": "Check state date line and staging", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-10-31, 22 h 50 HAE (heure locale, EDT).**
+
+=== staged
+journal/2026-11-01/README.md
+journal/2026-11-01/mesures.md
+journal/README.md
+journal/THEMES.md
+journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md
+journal/sessions/MANIFEST.md
+journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md
+journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md
+=== status
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns2=re.sub(r\"\\*\\*Mis à jour : [^*]+\\*\\*\", \"**Mis à jour : 2026-11-01, 00 h 25 HAE (heure locale, EST).**\", s, count=1)\nassert s2!=s\np.write_text(s2)\nprint(re.search(r\"\\*\\*Mis  … [519 caractères tronqués]`

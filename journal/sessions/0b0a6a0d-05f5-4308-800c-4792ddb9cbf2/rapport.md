@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 7.0 h |
+| Durée | 7.1 h |
 | Tours | 4 |
-| Messages | 423 |
-| Appels d'outils | 410 |
+| Messages | 430 |
+| Appels d'outils | 416 |
 | Fichiers touchés | 11 |
-| Commandes | 336 |
+| Commandes | 341 |
 | Sous-agents | 0 |
 | Commits | 6 |
 | Compactages de contexte | 0 |
@@ -171,7 +171,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 4 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*71 appels d'outils.* Actions notables :
+*77 appels d'outils.* Actions notables :
 
 - bash — Check active sessions, state, and campaign
 - bash — Measure the context budget headroom
@@ -187,11 +187,11 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - job_output
 - bash — Check campaign state after the state commit
 - bash — Draft the clean-corpus report
-- … et 45 autres
+- … et 50 autres
 
 **Synthèse produite :**
 
-⏵ Le bras diversité divise la PPL hors domaine par 4,4 pour 0,16 en domaine
+⏵ Rédaction des trois fiches avec un remplisseur automatique depuis l'évaluation
 
 ## 3. Travail accompli
 
@@ -253,7 +253,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 296 autres
+- … et 301 autres
 
 ## 4. Mesures et résultats marquants
 
