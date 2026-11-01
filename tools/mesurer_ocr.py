@@ -182,6 +182,23 @@ def trouve(reponse: dict | None, valeur: str) -> bool:
     return bool(reponse and normalise(valeur) in normalise(reponse["texte"]))
 
 
+def texte_de_region(manifeste: dict, region_id: str | None) -> str:
+    """Le texte du PASSAGE (bloc) d'où la réponse a été extraite. La parité de valeur de la
+    spécification porte sur le passage choisi, pas sur la fenêtre de réponse : un chiffre lu
+    dans le bloc mais coupé par la fenêtre ne doit pas compter comme une perte d'OCR."""
+    if not region_id:
+        return ""
+    for r in manifeste.get("regions", []):
+        if r.get("id") == region_id:
+            return r.get("texte", "")
+    return ""
+
+
+def trouve_dans_passage(manifeste: dict, reponse: dict | None, valeur: str) -> bool:
+    return bool(reponse and normalise(valeur) in normalise(
+        texte_de_region(manifeste, reponse.get("region"))))
+
+
 def pages_du_banc(limite: int) -> list[dict]:
     """Les pages qui portent les questions du banc R0.3 : une page par son PDF, son numéro,
     sa langue et SES questions. C'est le dispositif, pas un choix après coup."""

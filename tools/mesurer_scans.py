@@ -136,9 +136,14 @@ def mesure_entree(entree: dict, pipeline: str, questions: dict,
             region += f1 >= 0.90
             trouve_nat = mesurer_ocr.trouve(rep_nat, q["valeur"])
             trouve_ocr = mesurer_ocr.trouve(rep_ocr, q["valeur"])
-            valeur += trouve_ocr == trouve_nat
+            # parité de VALEUR de la spécification : le chiffre est dans le PASSAGE choisi
+            passe_nat = mesurer_ocr.trouve_dans_passage(natif, rep_nat, q["valeur"])
+            passe_ocr = mesurer_ocr.trouve_dans_passage(m, rep_ocr, q["valeur"])
+            valeur += passe_ocr == passe_nat
             ligne["details"].append({"valeur": q["valeur"], "f1": round(f1, 3),
-                                     "trouve_natif": trouve_nat, "trouve": trouve_ocr})
+                                     "trouve_natif": trouve_nat, "trouve": trouve_ocr,
+                                     "trouve_natif_passage": passe_nat,
+                                     "trouve_passage": passe_ocr})
         ligne["parite_region"] = round(region / len(qs), 4)
         ligne["parite_valeur"] = round(valeur / len(qs), 4)
     return ligne
@@ -183,8 +188,13 @@ def agrege(lignes: list[dict]) -> dict:
             "exactitude_ocr": round(sum(d["trouve"] for d in details) / max(q, 1), 4),
             # la préservation est LA mesure de parité : ce que le natif trouvait et que le
             # scan retrouve. Compter « les deux échouent » comme une parité flatterait le scan.
-            "preservation": (round(sum(d["trouve_natif"] and d["trouve"] for d in details)
+            "preservation": (round(sum(d.get("trouve_natif_passage", d["trouve_natif"])
+                                      and d.get("trouve_passage", d["trouve"]) for d in details)
                                     / max(natifs, 1), 4) if natifs else None),
+            # la variante STRICTE : le chiffre doit être dans la FENÊTRE DE RÉPONSE, pas
+            # seulement dans le passage choisi. Publiée à côté, jamais à la place.
+            "preservation_reponse": (round(sum(d["trouve_natif"] and d["trouve"] for d in details)
+                                           / max(natifs, 1), 4) if natifs else None),
             "parite_region": (round(sum(d["f1"] >= 0.90 for d in details) / max(q, 1), 4)
                               if q else None),
             "f1_median": round(f1s[len(f1s) // 2], 4) if f1s else None,

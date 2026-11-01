@@ -64,7 +64,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 |---|---|---|---|---|---|---|---|---|
 | `00221850` | Outillage de présentation de documentation | 2026-10-27 11:34 | 4.9 h | 6 | 529 | 38 | 25 | [rapport](sessions/00221850-90de-4287-90ee-324a35e504cd/rapport.md) |
 | `04ed1834` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 42 | 0 | 0 | [rapport](sessions/04ed1834-b0f8-42a1-aa21-75a75c19647e/rapport.md) |
-| `0b0a6a0d` | Continue session work | 2026-10-31 17:17 | 10.5 h | 4 | 545 | 11 | 8 | [rapport](sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) |
+| `0b0a6a0d` | Continue session work | 2026-10-31 17:17 | 10.5 h | 4 | 550 | 11 | 8 | [rapport](sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) |
 | `0b2c86eb` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 10:29 | 1.5 h | 1 | 128 | 5 | 0 | [rapport](sessions/0b2c86eb-7a8d-4eed-a3dd-fb165f1a8630/rapport.md) |
 | `0b69f616` | Continue AI coding session | 2026-10-30 21:46 | 0.3 h | 1 | 200 | 6 | 0 | [rapport](sessions/0b69f616-5c75-4c34-b97a-ae05564812af/rapport.md) |
 | `0c631fa9` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 15 | 0 | 0 | [rapport](sessions/0c631fa9-58cb-4d77-a7e0-fc77e5b3f93f/rapport.md) |
@@ -169,5 +169,5 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `fba448b3` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 26 | 0 | 0 | [rapport](sessions/fba448b3-e237-4eb3-b77d-fcbf7da1c93d/rapport.md) |
 | `fc167f70` | Projet Drave continuer | 2026-10-14 13:07 | 118.4 h | 187 | 2339 | 80 | 279 | [rapport](sessions/fc167f70-be8b-4c63-be5e-3c0d3c0ba1c3/rapport.md) |
 | `fd4b8df1` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:41 | 0.6 h | 1 | 90 | 6 | 0 | [rapport](sessions/fd4b8df1-abc9-4dd6-94df-fcf484cc9017/rapport.md) |
-| `fe3c05f0` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 10.2 h | 3 | 638 | 18 | 26 | [rapport](sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) |
+| `fe3c05f0` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 10.3 h | 3 | 643 | 18 | 28 | [rapport](sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) |
 | `ff364db0` | Relecture ADVERSARIALE de clôture, dans | 2026-10-01 05:50 | 0.1 h | 1 | 75 | 0 | 0 | [rapport](sessions/ff364db0-d28f-47eb-973e-f13bdafd35a2/rapport.md) |

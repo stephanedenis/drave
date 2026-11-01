@@ -75,8 +75,8 @@
   [`r06`](../../reports/rapport-r06-publication.md) (cascade à confiance **publiée**).
 - **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
   32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** est **mesurée sur scans
-  simulés** — photo **55,9 → 6,7 %**, préservation **90–97 %** (4 familles), colonnes **89,4 → 0,5 %**,
-  tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** (trois livres) ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
+  simulés** — photo **55,9 → 6,7 %**, préservation **90–97 %** (4/5, fax **56,7 %**), colonnes **89,4 → 0,5 %**,
+  tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
   1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
   [`r13`](../../reports/rapport-r13-decision.md), spécification

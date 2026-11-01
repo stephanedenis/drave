@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 10.5 h |
 | Tours | 4 |
-| Messages | 571 |
-| Appels d'outils | 545 |
+| Messages | 576 |
+| Appels d'outils | 550 |
 | Fichiers touchés | 11 |
-| Commandes | 449 |
+| Commandes | 452 |
 | Sous-agents | 0 |
 | Commits | 8 |
 | Compactages de contexte | 0 |
@@ -171,7 +171,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 4 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*206 appels d'outils.* Actions notables :
+*211 appels d'outils.* Actions notables :
 
 - bash — Check active sessions, state, and campaign
 - bash — Measure the context budget headroom
@@ -187,7 +187,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - job_output
 - bash — Check campaign state after the state commit
 - bash — Draft the clean-corpus report
-- … et 149 autres
+- … et 152 autres
 
 **Synthèse produite :**
 
@@ -253,7 +253,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 409 autres
+- … et 412 autres
 
 ## 4. Mesures et résultats marquants
 

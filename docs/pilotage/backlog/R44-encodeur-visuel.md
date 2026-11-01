@@ -29,8 +29,8 @@ colonnes, tableaux et un **vrai scan** ([`scans`](../../../reports/rapport-r44-s
 
 - WER (dev → test) : **propre 4,1 → 3,0 %**, **photocopie 6,3 → 4,7 %**, **photo 6,7 → 5,7 %**,
   **papier 6,9 → 6,4 %**, **fax 21,9 → 15,5 %** ; la photo partait de **55,9 %** brute ;
-- **préservation** des réponses du lecteur (dev, 30 questions) : **96,7 / 90,0 / 90,0 / 86,7 /
-  56,7 %** ; **exposants** : le plafond du texte propre monte de 83,3 à **90 %** ;
+- **préservation** des réponses du lecteur (dev, 30 questions) : **96,7 / 93,3 / 90,0 / 90,0 /
+  56,7 %** ; **exposants** : le plafond du texte propre monte de 90,0 à **96,7 %** ;
 - **colonnes** : deux colonnes **89,4 % → 0,5 %** de WER (mono inchangée) ;
 - **tableaux** : **92,6 %** de cellules exactes (propre), **69,1 %** (photocopie), **53,7 %**
   (photo) ; sans redressement **0 %** ; texte à plat **0 cellule localisée** ;

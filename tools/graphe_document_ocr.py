@@ -45,7 +45,7 @@ RACINE = pathlib.Path(__file__).resolve().parent.parent
 VERSION = 1
 # Version de la CONSTRUCTION du manifeste (lignes, blocs, colonnes) : la changer invalide les
 # caches de mesure — sinon une amélioration de l'ordre de lecture n'est jamais mesurée.
-VERSION_MANIFESTE = 6
+VERSION_MANIFESTE = 7
 # Version de la seule RÉCUPÉRATION (exposants) : la changer invalide les caches de mesure.
 RECUPERATION_VERSION = 2
 PREFIXE = pathlib.Path(os.environ.get("TESSERACT_PREFIX", RACINE / "work/ocr/root"))
@@ -328,13 +328,15 @@ def _recoller(texte: str, suivant: str) -> str:
 
 
 def blocs_de_page(lignes: list[dict], numero: int = 1,
-                  langue: str = "fra") -> list[dict]:
+                  langue: str = "fra", hauteur_page: float | None = None) -> list[dict]:
     """Les blocs d'une page OCR : notes à part, titres par la hauteur, le reste en
     paragraphes. La provenance porte la page, le y et la CONFIANCE moyenne du bloc."""
     if not lignes:
         return []
     corps = statistics.median(l["hauteur"] for l in lignes)
-    bas_page = max(l["y1"] for l in lignes)
+    # la hauteur de la PAGE, pas l'étendue du texte : une page courte a son corps dans le
+    # « bas » de son propre texte, et la règle des notes y typait le corps en note (mesuré).
+    bas_page = hauteur_page or max(l["y1"] for l in lignes)
     blocs: list[dict] = []
     paragraphe: list[dict] = []
 
@@ -360,7 +362,10 @@ def blocs_de_page(lignes: list[dict], numero: int = 1,
         # domaines connexes » était typée note, coupait le paragraphe, et la question « point 13 »
         # perdait sa réponse sur TOUTES les familles, page propre comprise).
         petit = ligne["hauteur"] < corps * 0.85 and ligne["y0"] > bas_page * 0.62
-        grand = ligne["hauteur"] > corps * 1.12
+        # 1,30 et non 1,12 : la hauteur d'une ligne OCR varie de ±15 % selon les hampes ;
+        # à 1,12, une ligne de corps un peu haute devenait une « section » (mesuré : la
+        # dernière ligne d'une phrase, coupée du paragraphe, faisait perdre la réponse).
+        grand = ligne["hauteur"] > corps * 1.30
         court = len(ligne["texte"]) < 90
         if petit:
             fin_paragraphe()
@@ -396,7 +401,10 @@ def analyse(image: pathlib.Path, langue: str = "fra", psm: int = 3,
     les_mots = mots(image, langue, psm)
     if exposants:
         les_mots, _ = recuperer_exposants(image, les_mots, langue)
-    return blocs_de_page(lignes_de_mots(les_mots, colonnes), 1, langue)
+    from PIL import Image
+    with Image.open(image) as im:
+        hauteur = im.height
+    return blocs_de_page(lignes_de_mots(les_mots, colonnes), 1, langue, hauteur)
 
 
 def _source(image: pathlib.Path, langue: str) -> dict:

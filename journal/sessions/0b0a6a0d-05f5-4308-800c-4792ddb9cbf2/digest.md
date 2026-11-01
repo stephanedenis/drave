@@ -7698,3 +7698,45 @@ fenêtres de validation étaient verbatim dans l'entraînement — toute PPL de 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/2026-11-01/mesures.md && timeout 300 git commit -m \"JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR\n\nLe récit de la nuit : la validation se recopiait (32,8 %), le corpus dédupliqué tombe à … [442 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-449]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-449", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 1da58752] JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR
+ 6 files changed, 165 insertions(+), 13 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2h/DR-pos-g1.log; nvidia-smi --query-gpu=index,utilization.gpu --format=csv,noheader", "description": "Check the combined arm progress"}`
+
+  ```
+02:49
+pas  1750 · seq 128 · perte 203.7634 · PPL 128/4 4.1213 · 122 s
+0, 78 %
+1, 0 %
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g1.pt 2>/dev/null && echo DR1_OK; tail -1 work/n2h/DR-pos-g2.log 2>/dev/null", "description": "Wait 30 minutes for the combined arm", "run_in_background": true}`
+
+  ```
+started background job bash-451
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; git log --oneline -3", "description": "Run the checks after the commits"}`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+1da58752 JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR
+e36e8185 N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE
+e7b51508 R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %)
+  ```
+
+- **job_output** `{"job_id": "bash-451", "timeout_ms": 1800000, "wait": true}`

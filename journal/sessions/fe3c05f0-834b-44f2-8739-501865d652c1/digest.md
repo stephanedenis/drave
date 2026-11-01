@@ -10948,3 +10948,70 @@ journal : chiffres finaux
   ```
 
 - **bash** `{"command": "sleep 300; tail -16 work/r44/gate-v8.log; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l; date +%H:%M", "description": "Wait for final gate verdict", "timeoutMs": 360000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+✅ fax · test : WER ≤ 25% (mesuré 15.5%)
+  ✅ papier · dev : WER ≤ 10% (mesuré 6.9%)
+  ✅ papier · dev : préservation ≥ 55% (mesuré 90.0%)
+  ✅ papier · test : WER ≤ 10% (mesuré 6.4%)
+  ✅ photo · dev : WER ≤ 10% (mesuré 6.7%)
+  ✅ photo · dev : préservation ≥ 60% (mesuré 90.0%)
+  ✅ photo · test : WER ≤ 10% (mesuré 5.7%)
+  ✅ photocopie · dev : WER ≤ 8% (mesuré 6.3%)
+  ✅ photocopie · dev : préservation ≥ 60% (mesuré 93.3%)
+  ✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 96.7%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 91 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+3
+02:50
+  ```
+
+- **bash** `{"command": "cat > /tmp/msg-parite.txt <<'EOF'\nR4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS\n\nTrois verrous tombaient les réponses du lecteur sur les scans, sans que l'OCR soit en cause :\n\n1. **la note typée au mil … [2438 caractères tronqués]`
+
+  ```
+❌ commit refusé : 7 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/backlog/R44-encodeur-visuel.md
+     · docs/pilotage/roadmap.md
+     · reports/r44-sans-exposants.json
+     · reports/r44-scans.json
+     · reports/r44-seed2.json
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "grep -n \"préservation\\|90–97\\|86,7\\|papier\" docs/pilotage/en-cours.md | head -6", "description": "Inspect state preservation line", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+45:- **Ce qu'elle fait** : photo **55,9 → 6,7 %**, préservation **90–97 %** (4 familles), colonnes **89,4 → 0,5 %** (3 col. : **0–1 %**), tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+78:  simulés** — photo **55,9 → 6,7 %**, préservation **90–97 %** (4 familles), colonnes **89,4 → 0,5 %**,
+  ```
+
+- **bash** `{"command": "git show HEAD:docs/pilotage/en-cours.md | grep -n \"90–97\\|86,7\" | head -3; git diff HEAD --stat -- docs/pilotage/en-cours.md; git log --oneline -3", "description": "Check whether state changes are already committed", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+45:- **Ce qu'elle fait** : photo **55,9 → 6,7 %**, préservation **90–97 %** (4 familles), colonnes **89,4 → 0,5 %** (3 col. : **0–1 %**), tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+78:  simulés** — photo **55,9 → 6,7 %**, préservation **90–97 %** (4 familles), colonnes **89,4 → 0,5 %**,
+1da58752 JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR
+e36e8185 N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE
+e7b51508 R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %)
+  ```
+
+- **bash** `{"command": "sed -n '74,82p' docs/pilotage/en-cours.md", "description": "Read R4.4 bullet in state", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+[`r04`](../../reports/rapport-r04-tete-survol.md), [`r07`](../../reports/rapport-r07-routeur.md),
+  [`r06`](../../reports/rapport-r06-publication.md) (cascade à confiance **publiée**).
+- **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
+  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** est **mesurée sur scans
+  simulés** — photo **55,9 → 6,7 %**, préservation **90–97 %** (4 familles), colonnes **89,4 → 0,5 %**,
+  tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** (trois livres) ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
+- **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
+  1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
+  [`r13`](../../reports/rapport-r13-decision.md), spécification
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"préservation **90–97 %** (4 familles), colonnes **89,4 → 0,5 %**,\\n  tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** (trois livres) ; fiche\",\n            \"préservation ** … [1089 caractères tronqués]`

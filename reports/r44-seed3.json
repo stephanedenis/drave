@@ -26,10 +26,11 @@
    "confiance": 77.1,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.5,
-   "preservation": 0.5,
-   "parite_region": 0.0667,
-   "f1_median": 0.773
+   "exactitude_ocr": 0.5667,
+   "preservation": 0.5667,
+   "preservation_reponse": 0.5667,
+   "parite_region": 0.1,
+   "f1_median": 0.783
   },
   "papier|dev|auto": {
    "famille": "papier",
@@ -43,9 +44,10 @@
    "confiance": 92.8,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.8667,
-   "preservation": 0.8667,
-   "parite_region": 0.8333,
+   "exactitude_ocr": 0.9,
+   "preservation": 0.9,
+   "preservation_reponse": 0.9,
+   "parite_region": 0.9333,
    "f1_median": 1.0
   },
   "photo|dev|auto": {
@@ -60,8 +62,9 @@
    "confiance": 92.8,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.8667,
-   "preservation": 0.8667,
+   "exactitude_ocr": 0.9,
+   "preservation": 0.9,
+   "preservation_reponse": 0.9,
    "parite_region": 0.8333,
    "f1_median": 1.0
   },
@@ -77,8 +80,9 @@
    "confiance": 90.0,
    "questions": 30,
    "exactitude_natif": 1.0,
-   "exactitude_ocr": 0.8667,
-   "preservation": 0.8667,
+   "exactitude_ocr": 0.9,
+   "preservation": 0.9333,
+   "preservation_reponse": 0.9,
    "parite_region": 0.7667,
    "f1_median": 1.0
   },
@@ -96,7 +100,8 @@
    "exactitude_natif": 1.0,
    "exactitude_ocr": 0.9667,
    "preservation": 0.9667,
-   "parite_region": 0.9667,
+   "preservation_reponse": 0.9667,
+   "parite_region": 0.9333,
    "f1_median": 1.0
   }
  },
@@ -130,31 +135,41 @@
      "valeur": "10",
      "f1": 0.923,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "2030 11",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "53",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 0.974,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -187,31 +202,41 @@
      "valeur": "10",
      "f1": 0.833,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "2030 11",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "53",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 0.974,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -245,31 +270,41 @@
      "valeur": "10",
      "f1": 0.833,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "2030 11",
      "f1": 0.923,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "53",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 0.974,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -301,33 +336,43 @@
    "details": [
     {
      "valeur": "10",
-     "f1": 0.615,
+     "f1": 0.714,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "2030 11",
      "f1": 0.857,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "53",
      "f1": 0.727,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "39",
      "f1": 0.857,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 0.872,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     }
    ]
   },
@@ -355,38 +400,48 @@
    "exposants": true,
    "colonnes": true,
    "questions": 5,
-   "parite_region": 0.8,
+   "parite_region": 1.0,
    "parite_valeur": 0.6,
    "details": [
     {
      "valeur": "10",
      "f1": 0.923,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "2030 11",
      "f1": 0.923,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "53",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
-     "f1": 0.788,
+     "f1": 0.974,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -419,25 +474,33 @@
      "valeur": "2030",
      "f1": 0.933,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "53",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
      "f1": 0.947,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "40",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -470,25 +533,33 @@
      "valeur": "2030",
      "f1": 0.933,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "53",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
      "f1": 0.947,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "40",
      "f1": 0.957,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -522,25 +593,33 @@
      "valeur": "2030",
      "f1": 0.933,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "53",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
      "f1": 0.947,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "40",
      "f1": 0.588,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -563,36 +642,44 @@
    "wer": 0.1868,
    "rappel": 0.8223,
    "precision": 0.8472,
-   "confiance": 78.5,
+   "confiance": 78.4,
    "exposants": true,
    "colonnes": true,
    "questions": 4,
    "parite_region": 0.25,
-   "parite_valeur": 0.5,
+   "parite_valeur": 0.75,
    "details": [
     {
      "valeur": "2030",
      "f1": 0.8,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "53",
      "f1": 0.571,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "39",
-     "f1": 0.333,
+     "f1": 0.8,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "40",
      "f1": 0.957,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -626,25 +713,33 @@
      "valeur": "2030",
      "f1": 0.933,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "53",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
      "f1": 0.947,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "40",
      "f1": 0.957,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -677,25 +772,33 @@
      "valeur": "2030",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "53",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
      "f1": 0.957,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "40",
      "f1": 0.96,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -728,25 +831,33 @@
      "valeur": "2030",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "53",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
      "f1": 0.815,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "40",
      "f1": 0.471,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -780,25 +891,33 @@
      "valeur": "2030",
      "f1": 0.941,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "53",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
      "f1": 0.957,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "40",
      "f1": 0.471,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -821,7 +940,7 @@
    "wer": 0.1993,
    "rappel": 0.8059,
    "precision": 0.8274,
-   "confiance": 81.0,
+   "confiance": 80.9,
    "exposants": true,
    "colonnes": true,
    "questions": 4,
@@ -832,25 +951,33 @@
      "valeur": "2030",
      "f1": 0.824,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "53",
      "f1": 0.778,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
-     "f1": 0.667,
+     "f1": 0.783,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "40",
      "f1": 0.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     }
    ]
   },
@@ -877,32 +1004,40 @@
    "exposants": true,
    "colonnes": true,
    "questions": 4,
-   "parite_region": 0.5,
+   "parite_region": 0.75,
    "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "2030",
      "f1": 0.941,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "53",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "39",
      "f1": 0.87,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "40",
-     "f1": 0.471,
+     "f1": 0.96,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -935,19 +1070,25 @@
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "11",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -980,19 +1121,25 @@
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "11",
      "f1": 0.941,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 0.5,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     }
    ]
   },
@@ -1019,26 +1166,32 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
-   "parite_valeur": 0.6667,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "11",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
-     "f1": 0.5,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1072,19 +1225,25 @@
      "valeur": "80",
      "f1": 0.333,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "11",
      "f1": 0.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "12",
      "f1": 0.833,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1118,19 +1277,25 @@
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "11",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 0.5,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     }
    ]
   },
@@ -1163,19 +1328,25 @@
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "11",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1202,25 +1373,31 @@
    "colonnes": true,
    "questions": 3,
    "parite_region": 0.6667,
-   "parite_valeur": 0.6667,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "11",
      "f1": 0.98,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 0.222,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1254,19 +1431,25 @@
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "11",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1293,26 +1476,32 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.0,
-   "parite_valeur": 0.3333,
+   "parite_region": 0.3333,
+   "parite_valeur": 0.6667,
    "details": [
     {
      "valeur": "80",
      "f1": 0.857,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "11",
-     "f1": 0.471,
+     "f1": 0.98,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 0.812,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1335,7 +1524,7 @@
    "wer": 0.0429,
    "rappel": 0.9693,
    "precision": 0.9723,
-   "confiance": 94.1,
+   "confiance": 93.8,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
@@ -1346,19 +1535,25 @@
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "11",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1384,26 +1579,32 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 1.0,
+   "parite_region": 0.6667,
    "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "11",
-     "f1": 1.0,
+     "f1": 0.6,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1429,26 +1630,32 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.3333,
-   "parite_valeur": 0.6667,
+   "parite_region": 0.6667,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "11",
-     "f1": 0.889,
+     "f1": 0.533,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
-     "f1": 0.471,
+     "f1": 0.923,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1475,26 +1682,32 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
+   "parite_region": 0.3333,
    "parite_valeur": 0.6667,
    "details": [
     {
      "valeur": "80",
      "f1": 0.833,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "11",
-     "f1": 1.0,
+     "f1": 0.6,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1528,19 +1741,25 @@
      "valeur": "80",
      "f1": 0.545,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     },
     {
      "valeur": "11",
      "f1": 0.778,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
      "f1": 0.923,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1567,26 +1786,32 @@
    "exposants": true,
    "colonnes": true,
    "questions": 3,
-   "parite_region": 0.6667,
-   "parite_valeur": 0.6667,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "11",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "12",
-     "f1": 0.471,
+     "f1": 1.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1619,19 +1844,25 @@
      "valeur": "13",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "189",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1653,7 +1884,7 @@
    "wer": 0.0918,
    "rappel": 0.9304,
    "precision": 0.9608,
-   "confiance": 85.9,
+   "confiance": 86.0,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
@@ -1664,19 +1895,25 @@
      "valeur": "13",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 0.909,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "189",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1710,19 +1947,25 @@
      "valeur": "13",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "189",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1745,7 +1988,7 @@
    "wer": 0.3829,
    "rappel": 0.6646,
    "precision": 0.7119,
-   "confiance": 68.6,
+   "confiance": 68.5,
    "exposants": true,
    "colonnes": true,
    "questions": 3,
@@ -1756,19 +1999,25 @@
      "valeur": "13",
      "f1": 0.773,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 0.333,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "189",
      "f1": 0.154,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     }
    ]
   },
@@ -1802,19 +2051,25 @@
      "valeur": "13",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "189",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1847,19 +2102,25 @@
      "valeur": "13",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "2200",
      "f1": 0.8,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1892,19 +2153,25 @@
      "valeur": "13",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "2200",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1938,19 +2205,25 @@
      "valeur": "13",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "2200",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -1984,19 +2257,25 @@
      "valeur": "13",
      "f1": 0.885,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 0.667,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "2200",
      "f1": 0.0,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     }
    ]
   },
@@ -2030,19 +2309,25 @@
      "valeur": "13",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "2200",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -2075,13 +2360,17 @@
      "valeur": "13",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -2103,24 +2392,28 @@
    "wer": 0.118,
    "rappel": 0.918,
    "precision": 0.9459,
-   "confiance": 87.8,
+   "confiance": 87.9,
    "exposants": true,
    "colonnes": true,
    "questions": 2,
-   "parite_region": 1.0,
+   "parite_region": 0.5,
    "parite_valeur": 1.0,
    "details": [
     {
      "valeur": "13",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
-     "f1": 1.0,
+     "f1": 0.632,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -2154,13 +2447,17 @@
      "valeur": "13",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -2194,13 +2491,17 @@
      "valeur": "13",
      "f1": 0.679,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 0.833,
      "trouve_natif": true,
-     "trouve": false
+     "trouve": false,
+     "trouve_natif_passage": true,
+     "trouve_passage": false
     }
    ]
   },
@@ -2234,13 +2535,17 @@
      "valeur": "13",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     },
     {
      "valeur": "80",
      "f1": 1.0,
      "trouve_natif": true,
-     "trouve": true
+     "trouve": true,
+     "trouve_natif_passage": true,
+     "trouve_passage": true
     }
    ]
   },
@@ -2378,5 +2683,5 @@
    "details": []
   }
  ],
- "dispositif": "seconde/troisième graine, code v7 (notes seulement en bas de page)"
+ "dispositif": "graine 2/3, code v9 (hauteur de page, titres 1,30)"
 }

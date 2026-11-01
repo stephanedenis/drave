@@ -70,9 +70,11 @@ La question de R4.4 n'est pas « l'OCR lit-il ? » mais « la page lue en OCR do
 2. la **parité de passage** : les questions du banc R0.3 dont le gold tombe sur la page, lues
    par le **même** lecteur extractif (R0.2) sur le manifeste natif et sur le manifeste OCR ; le
    passage choisi est le même si le **F1 mots ≥ 0,90** ;
-3. la **parité de valeur** (le chiffre exact de la question est dans le passage choisi) : plus
-   stricte, elle est **rapportée** et non portée par la porte, parce qu'elle dépend du layout
-   (appels de note en exposant, en-têtes).
+3. la **parité de valeur** (le chiffre exact de la question est dans le **passage choisi**, pas
+   seulement dans la fenêtre de réponse) : elle est **rapportée** ; la variante stricte (le chiffre
+   dans la fenêtre de réponse) est publiée **à côté** (`preservation_reponse` dans le JSON). Les
+   deux coïncident quand la segmentation des blocs est juste — c'est le cas sur les 100 scans
+   depuis que la hauteur de page et le seuil de titre sont mesurés.
 
 Le lecteur est **extractif** : cette parité mesure la **sélection**, pas la compréhension d'un
 modèle. Un modèle externe sur le texte OCR serait une autre mesure, et elle n'est pas faite ici.
