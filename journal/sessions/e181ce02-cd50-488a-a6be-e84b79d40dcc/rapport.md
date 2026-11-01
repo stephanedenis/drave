@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 21.2 h |
-| Tours | 11 |
-| Messages | 389 |
-| Appels d'outils | 424 |
+| Durée | 23.8 h |
+| Tours | 12 |
+| Messages | 413 |
+| Appels d'outils | 450 |
 | Fichiers touchés | 25 |
-| Commandes | 328 |
+| Commandes | 352 |
 | Sous-agents | 2 |
-| Commits | 20 |
+| Commits | 21 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -51,6 +51,8 @@
 **Tour 10** — donc, on n'a pas encore de bloc d'étiquetage de structure linguistique?
 
 **Tour 11** — fait les deux. Le bloc langue doit couvrir l'étiquetage tous les niveaux linguistiques jusqu'à la pragmatique. on doit avoir une version heuristique et une neuronale. Le contrat garantissant la possibilité de substituer ou faire fonctionner en parallèle (heuristique ultra rapide permettant l'activation de la couche sémantique à une fraction du coût.
+
+**Tour 12** — lire docs/pilotage/plan-travail.md et avancer
 
 ## 2. Déroulé, étape par étape
 
@@ -652,6 +654,30 @@ Deux schémas : `bloc-linguistique-niveaux.svg` et `bloc-linguistique-substituti
   gagne, **sauf le syntagme**, où la segmentation heuristique 
 … [3426 caractères tronqués]
 
+### Tour 12 — lire docs/pilotage/plan-travail.md et avancer
+
+*26 appels d'outils.* Actions notables :
+
+- read
+- bash — Lire les sessions actives et les territoires
+- bash — Trouver B13 et l'état du moteur de pensée
+- bash — Lire le moteur de pensée et ses types
+- bash — Lire les portes et stratégies du moteur
+- bash — Lire les types et la fin du moteur
+- bash — Écrire AC-3 et le CSP de test
+- bash — Tester AC-3 sur la carte et la contradiction
+- bash — Tester la propagation AC-3 et la contradiction
+- bash — Écrire alpha-bêta et tester les coups
+- bash — Déboguer l'état du morpion
+- bash — Corriger le tour et tester alpha-bêta
+- bash — Corriger l'évaluation et tester alpha-bêta
+- bash — Ajouter les portes AC-3 et alpha-bêta, les exécuter
+- … et 12 autres
+
+**Synthèse produite :**
+
+⏵ J'attaque la suite B13 : AC-3 branché sur la boucle, alpha-bêta pour les jeux
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -731,7 +757,7 @@ Deux schémas : `bloc-linguistique-niveaux.svg` et `bloc-linguistique-substituti
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 288 autres
+- … et 312 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -859,12 +885,15 @@ Deux schémas : `bloc-linguistique-niveaux.svg` et `bloc-linguistique-substituti
 
 ## 5. Erreurs rencontrées
 
-4 sorties en erreur ou divergentes. Les premières :
+7 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
 - **T8** : [stderr] Traceback (most recent call last):   File "<string>", line 1, in <module>     import cairosvg; cairosvg.svg2png(url='docs/schemas/heuristique-niveaux.svg', write_to='/tmp/heur-niveaux.png', o
 - **T11** : /home/stephane/.local/bin/llama-cli Qwen2.5-0.5B-Q4_0.gguf Qwen2.5-0.5B-Q8_0.gguf vision llm porte_mistral.py porte-mistral.sh tokenize_llama tokenize_llama.cpp === llm_externe === [exit code: 2]
+- **T12** : COMPILE=0 [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 182, in decider     _, m
+- **T12** : [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 43, in joueur_de     return next(c
+- **T12** : ok [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 182, in decider     _, meilleur
 
 ## 6. Commits
 
@@ -888,4 +917,5 @@ Deux schémas : `bloc-linguistique-niveaux.svg` et `bloc-linguistique-substituti
 - R — LA CHARTE DU PROGRAMME : SIX PHASES, TROIS LOIS, CE QUI TIENT ET CE QUI MANQUE" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - ÉTAT — COMPTEUR JSON 467 (CORPUS WIKI)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - BLOC LINGUISTIQUE — NEUF NIVEAUX, HEURISTIQUE ET NEURONAL, 398 LANGUES À 0,9687" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — AC-3 ET ALPHA-BÊTA : 8/8 PORTES, 1 495 NŒUDS/296 COUPES CONTRE 18 730" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 

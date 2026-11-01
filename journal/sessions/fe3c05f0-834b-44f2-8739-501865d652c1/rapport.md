@@ -7,15 +7,15 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 23.1 h |
-| Tours | 9 |
-| Messages | 815 |
-| Appels d'outils | 819 |
+| Durée | 23.9 h |
+| Tours | 10 |
+| Messages | 833 |
+| Appels d'outils | 834 |
 | Fichiers touchés | 18 |
-| Commandes | 750 |
+| Commandes | 762 |
 | Sous-agents | 0 |
 | Commits | 37 |
-| Compactages de contexte | 1 |
+| Compactages de contexte | 2 |
 
 ## Objectifs déclarés
 
@@ -43,6 +43,8 @@
 **Tour 8** — combien de chantiers simultanés on peut faire en ce moment? Est0il préférable d'avoir plusieurs sessions dsh ou bien une seule avec beaucoup de sub-agents?
 
 **Tour 9** — organise le dossier pilotage pour qu'il soit à jour et qu'entre le en-cours.md et roadmap.md il y ait un plan de travail optimal pour plusieurs sessions bien balancées. Note tout se passe sur la même machine. Elle est bien ddtée en matériel, mais ils faut surveiller beaucoup de fichiers en mouvement par des sessions parallèles.
+
+**Tour 10** — lire docs/pilotage/plan-travail.md et avancer
 
 ## 2. Déroulé, étape par étape
 
@@ -496,9 +498,57 @@ Une **seule session avec beaucoup de sous-agents** ne remplace pas les sessions 
 
 **Synthèse produite :**
 
-⏵ Organisation du pilotage : index, plan multi-sessions, territoires et surveillance
+⏵ Pilotage réorganisé, plan multi-sessions et surveillance en place
 
-Je regarde d'abord l'existant (utilisation, sessions.py, en-cours, réservations) pour construire le pont en-cours ↔ plan ↔ roadmap sans dupliquer.
+Le dossier pilotage a maintenant son **index**, son **plan de travail** et ses **outils de surveillance**. Commit `ac1f9436`, revue verte (385 fiches, 471 JSON, 118 docs, 81 portes), T0 3 948/4 000.
+
+\## La chaîne de lecture
+
+`en-cours.md` (l'état, ce qui se passe maintenant) → **`plan-travail.md`** (qui fait quoi, où, à quelle cadence) → `roadmap.md` (l'ordre) → `chantiers.md` (les relations, la vision, la capacité) → `programme-r.md` → `backlog/`. Le `docs/pilotage/README.md` dit cet ordre, **qui écrit quoi**, les outils et les documents datés à ne pas charger par défaut. La carte de la documentation (`docs/README.md`) pointe désormais sur le plan et les chantiers.
+
+\## Le plan de travail
+
+**Quatre sessions de mandat + un rôle d'intégration** (le hub) :
+
+| session | mandat | charge | prochaine action |
+|---|---|---|---|
+| **N2** | le natif : entraînement, longueur, capacité, diversité | **GPU** (1 des 2) | N2 sur les corpus wiki fr/en ; le verrou 129→512 |
+| **L** | le bloc langue (heuristique + neuronal), la cascade, la pragmatique ; B13 | CPU | le **contrat de L**, puis la mesure 71 langues |
+| **S** | les structures candidates, la validation humaine/LLM, la banque | CPU | l'analyseur plus riche, l'export au corpus |
+| **D/R/A** | les corpus (texte intégral, PDF/OCR), R1.1/R1.2, A2.6/A8.3 | CPU/IO | le texte intégral, l'extraction PDF/OCR |
+
+Le **hub** tient l'état, la roadmap, les compteurs, le journal et la revue ; il **intègre** les sections des sessions, il ne code pas un chantier.
+
+**Les territoires** sont écrits (globs) et le partage de `data/` est réglé : N2 écrit les corpus préparés qu'il utilise, D écrit les nouveaux corpus wiki et leurs manifestes ; chacun **lit** ceux de l'autre sans les modifier. L'état, la roadmap, `AGENTS.md`, `INDEX.md` et le journal ne s'écrivent que par le hub, **une session à la fois**.
+
+**La cadence** : un round jusqu'à un checkpoint (fait mesuré, fiche, JSON, commit, ligne d'état, heartbeat) ; un seul écrivain d'état ; `git add` explicite ; index alterné pour les commits partagés ; en cas de course `HEAD`, relire, refaire l'index, recommiter — jamais de `reset` sur les fichiers d'une autre session ; portes lourdes (OCR-scans, toutes-les-portes) **une à la fois**.
+
+**La machine partagée** : 1 session GPU, 3 sessions CPU, 2 à 4 sous-agents par session, 40 cœurs mais 2 à 3 gros travaux à la fois, `IA` à **34 Go libres** (aucun nouveau gros modèle sans s
+… [1369 caractères tronqués]
+
+### Tour 10 — lire docs/pilotage/plan-travail.md et avancer
+
+*15 appels d'outils.* Actions notables :
+
+- read
+- bash — Read current state plan and French dump
+- bash — Write full-text extractor and test on 3000 articles
+- job_output
+- bash — Check test extraction process and outputs
+- job_kill
+- bash — Fix ElementTree text path and time parsing
+- bash — Check stuck process and tool text path
+- bash — Patch text path and time 3000-page parse
+- bash — Benchmark wikitext stripper speed
+- bash — Start 100k-article full-text pilot in background
+- bash — Open D/R/A session plan and update territory
+- bash — Fix field parser headings and check pilot
+- bash — Inspect pilot sample and status
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Lecture du plan de travail, puis première action D/R/A : le texte intégral
 
 ## 3. Travail accompli
 
@@ -567,7 +617,7 @@ Je regarde d'abord l'existant (utilisation, sessions.py, en-cours, réservations
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 710 autres
+- … et 722 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -695,7 +745,7 @@ Je regarde d'abord l'existant (utilisation, sessions.py, en-cours, réservations
 
 ## 5. Erreurs rencontrées
 
-36 sorties en erreur ou divergentes. Les premières :
+37 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

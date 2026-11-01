@@ -1,20 +1,28 @@
 #!/usr/bin/env python3
-"""autotest.py — les cinq portes du moteur de pensée (T0–T4), avec leurs contrôles négatifs.
+"""autotest.py — les portes du moteur de pensée : T0–T4, puis AC-3 et alpha-bêta.
 
   T0  le store est canonique          aller-retour exact, empreinte stable, ordres différents
   T1  l'arbre se rejoue               mêmes empreintes, mêmes scores ; une graine changée diverge
   T2  une stratégie est substituable  même arbre, deux stratégies ; une stratégie aveugle échoue
   T3  le moteur est anytime           best-so-far non décroissant ; un budget nul est refusé
   T4  la justification est valide     chemin racine → settled ; un chemin inventé est refusé
+  T5  AC-3 se branche                 une chaîne propage, une contradiction se voit, la carte
+                                      arc-consistante ne se réduit pas (contrôle)
+  T6  alpha-bêta décide               gagner en un coup, bloquer, couper ; le minimax exact
+                                      visite plus de nœuds ; la profondeur 1 sans évaluation rate
 
 Usage : PYTHONPATH=. ~/gpu-env/bin/python tools/pensee/autotest.py
 """
 from __future__ import annotations
 
 import sys
+from dataclasses import replace
 
 from .coeur import Candidat, Etat
 from .cruches import CRUCHES
+from .csp import (AC3, CARTE_AUSTRALIE, CSP_CONTRADICTION, CSP_PROPAGATION,
+                  domaines_de, probleme_csp, resoudre, verifier_arc_consistance)
+from .jeux import MORPION, AlphaBeta, case_jouee, etat_morpion, gagnant, plateau_de
 from .moteur import AStar, BFS, Moteur, Strategie
 from .store import Budget, justification_valide, replay, diff
 
@@ -112,10 +120,60 @@ def t4_justification() -> tuple[bool, str]:
     return True, f"justification valide sur {len(d.justification)} nœuds ; chemin inventé refusé"
 
 
+def t5_ac3() -> tuple[bool, str]:
+    """La chaîne propage, la contradiction se voit, la carte est déjà arc-consistante."""
+    m = Moteur()
+    d = m.boucle(probleme_csp(CSP_PROPAGATION), AC3(CSP_PROPAGATION), Budget(100),
+                 arret_sur_but=True)
+    dom = domaines_de(d.etat)
+    chaine = (dom == {"A": ("r",), "B": ("g",), "C": ("r",)}
+              and verifier_arc_consistance(CSP_PROPAGATION, dom)
+              and resoudre(CSP_PROPAGATION, dom) is not None
+              and d.etat.statut == "settled")
+    m2 = Moteur()
+    d2 = m2.boucle(probleme_csp(CARTE_AUSTRALIE), AC3(CARTE_AUSTRALIE), Budget(300))
+    dom2 = domaines_de(d2.etat)
+    carte = (verifier_arc_consistance(CARTE_AUSTRALIE, dom2)
+             and resoudre(CARTE_AUSTRALIE, dom2) is not None
+             and all(len(v) == 3 for v in dom2.values()))
+    m3 = Moteur()
+    d3 = m3.boucle(probleme_csp(CSP_CONTRADICTION), AC3(CSP_CONTRADICTION), Budget(100))
+    dom3 = domaines_de(d3.etat)
+    contradiction = any(not v for v in dom3.values()) and resoudre(CSP_CONTRADICTION, dom3) is None
+    ok = chaine and carte and contradiction
+    return ok, (f"chaîne {dom} ; carte 3-colorable non réduite ; "
+                f"contradiction domaine vide = {contradiction}")
+
+
+def t6_alphabeta() -> tuple[bool, str]:
+    """Gagner en un coup, bloquer, et couper : le minimax exact visite plus de nœuds."""
+    gagnante = ("X", "X", ".", "O", "O", ".", ".", ".", ".")
+    e = etat_morpion(gagnante, "X")
+    d = AlphaBeta(profondeur=9).decider(replace(MORPION, initial=lambda: e))
+    win = case_jouee(e, d.etat)
+    gagne = gagnant(plateau_de(d.etat)) == "X"
+    blocage = ("X", ".", ".", "O", "O", ".", "X", ".", ".")
+    e2 = etat_morpion(blocage, "X")
+    p2 = replace(MORPION, initial=lambda: e2)
+    d2 = AlphaBeta(profondeur=9).decider(p2)
+    d1 = AlphaBeta(profondeur=1, evaluer=lambda _e: 0.0).decider(p2)
+    bloque = case_jouee(e2, d2.etat) == 5
+    rate = case_jouee(e2, d1.etat) == 1
+    ab = AlphaBeta(profondeur=5, pruning=True)
+    da = ab.decider(MORPION, Budget(200_000))
+    mm = AlphaBeta(profondeur=5, pruning=False)
+    dm = mm.decider(MORPION, Budget(200_000))
+    coupe = ab.noeuds < mm.noeuds and ab.coupes > 0
+    ok = gagne and win == 2 and bloque and rate and coupe
+    return ok, (f"gain en {win} ; blocage en 5 ; profondeur 1 rate (1) ; "
+                f"alpha-bêta {ab.noeuds} nœuds/{ab.coupes} coupes vs minimax {mm.noeuds}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T2 stratégies", t2_strategies()),
-              ("T3 anytime", t3_anytime()), ("T4 justification", t4_justification())]
+              ("T3 anytime", t3_anytime()), ("T4 justification", t4_justification()),
+              ("T5 AC-3", t5_ac3()), ("T6 alpha-bêta", t6_alphabeta())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

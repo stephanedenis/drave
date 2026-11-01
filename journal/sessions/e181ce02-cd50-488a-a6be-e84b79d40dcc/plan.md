@@ -15,14 +15,14 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-01 13:50 EST
-- **Prochaine action** : le bloc linguistique v0 est livré (398 langues à 0,9687, contrat
-  heuristique/neuronal, activation 51–76 %) ; qualifier un gold et un modèle neuronal ; puis
-  AC-3, alpha-bêta, DRVF et le banc anytime (S reste à l'autre TUI).
+- **Heartbeat** : 2026-11-01 16:30 EST
+- **Prochaine action** : le bloc linguistique v0 est livré (398 langues) et **AC-3/alpha-bêta**
+  sont mesurés (8/8) ; qualifier un gold et un modèle neuronal ; puis **DRVF** et le banc anytime
+  (S reste à l'autre TUI).
 - **État** : actif
 - **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
   stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
-  (BFS, greedy, A*, MCTS-lite)~~ ; 5) **AC-3, alpha-bêta, DRVF** ; 6) **banc anytime** (AUC,
+  (BFS, greedy, A*, MCTS-lite)~~ ; 5) ~~AC-3, alpha-bêta~~ (**8/8**), **DRVF** ; 6) **banc anytime** (AUC,
   regret, justification, rejeu) et intégration DRVM/DRVF ; 9) **bloc linguistique** (R0.7).
 - **Ambition** : faire de Drave un **runtime cognitif** où penser est une **recherche tracée** sur
   des **états pluriels**, avec des opérateurs hétérogènes (neuronaux, classiques, matériel) et des
@@ -39,6 +39,9 @@
   CPU + neuronal de contrat, parallèle/cascade, activation 51–76 %) ; **398 langues à 0,9687**,
   script **1,0000**, profils permutés **0,0022** ; le modèle réel local n'est pas qualifié ;
   fiche [`bloc`](../../reports/rapport-bloc-linguistique.md) et porte.
+- **Moteur B13** : **AC-3 et alpha-bêta**, **8/8 portes** ; chaîne A/B/C, carte arc-consistante,
+  contradiction ; alpha-bêta **1 495 nœuds / 296 coupes** contre **18 730** au minimax ; fiche
+  [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md).
 - **Objectif final** : un **moteur de pensée v0 exécutable** — state store typé, arbre d'états,
   A*/MCTS/AC-3 sur le même contrat, trace/rejeu, banc anytime avec contrôles — documenté, mesuré
   et committé.

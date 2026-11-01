@@ -9430,3 +9430,447 @@ l'**activation à fraction** sont faits et testés ; la **langue et le script** 
 398 langues ; les **niveaux profonds** sont des candidats, et le **neuronal réel** est une
 prochaine campagne, pas une revendication.
 
+
+## Tour 12
+
+### 👤 Utilisateur
+
+lire docs/pilotage/plan-travail.md et avancer
+
+### 🤖 Assistant
+
+⏵ Je lis le plan de travail, puis j'en prends la première action concrète
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+1: # Le plan de travail — plusieurs sessions sur une même machine
+2: 
+3: > **Ce que ce document est.** Le **pont** entre l'état ([`en-cours.md`](en-cours.md), ce qui se
+4: > passe maintenant) et l'ordre ([`roadmap.md`](roadmap.md), ce qu'il faut faire et dans quel
+5: > ordre) : **qui fait quoi, dans quel territoire, à quelle cadence, et comment on surveille les
+6: > fichiers qui bougent**. Il ne remplace ni l'un ni l'autre : l'état reste la source du présent,
+7: > la roadmap la source de l'ordre.
+8: >
+9: > **Date** : 2026-11-01. **Machine** : une seule — 40 cœurs, 125 Go de RAM, 2 GPU de 16 Go,
+10: > 2,0 To libres sur `Data13TB`, 34 Go sur `IA`. **Capacité** : voir
+11: > [`chantiers.md`](chantiers.md) § 8 (4 sessions, 4 à 6 chantiers, 2 à 4 sous-agents par session).
+12: >
+13: > **Chargement** : ce document avant d'ouvrir une session ; puis la fiche du chantier.
+14: 
+15: ## 1. Où ce plan se situe
+16: 
+17: ```
+18: en-cours.md          ce qui se passe maintenant (état court, une section par session active)
+19: plan-travail.md      qui fait quoi, où, à quelle cadence (
+… [11507 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --status 2>&1 | tail -20; echo '=== check ==='; python3 tools/sessions.py --check 2>&1 | tail -5; echo '=== surveille ==='; ls tools/surveille_sessions.py 2>/dev/null && python3 tools/surveille_sessions.py 2 … [130 caractères tronqués]`
+
+  ```
+sessions · plans de mandat
+    0b0a6a0d-05f5-4308 · terminé  · 455 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 2529 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 1700 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+      → clôture committée (`eff8d8e4`) — session close ; la suite est **N2** (la hiérarchie), portée par la session à ouvrir
+    71d57f53-8b41-4220 · terminé  · 3033 min · docs/pilotage/en-cours.md, docs/methode/continuite.md, tools/sessions.py, journal/sessions/README.md, journal/sessions/_modele/plan.md, tools/porte-sessions.sh
+      → aucune — coordination close ; les trois plans migrés et les sessions archivées par `22e518ee`.
+    8156fdcb-5033-4ba4 · terminé  · 3037 min · R0.1–R0.5
+      → la boucle de lecture (R11, dépend de N2) ou la restitution (R31, dépend de R21) — toutes deux hors R0 ; sinon consolidation.
+    N2-GPU             · terminé  · 3065 m
+… [2221 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"B13\\|la langue et la pensée\\|L —\" docs/pilotage/chantiers.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md 2>/dev/null | head -30; echo '=== moteur ==='; ls tools/pensee/; grep -n \"AC-3\\|alpha\\|beta\\|bêta\\|def  … [98 caractères tronqués]`
+
+  ```
+docs/pilotage/chantiers.md:4:> 48 dernières heures ont déplacé, l'inventaire élargi (A, B, N, R, **S**, **L**, **D**, B13),
+docs/pilotage/chantiers.md:30:| 31/10 22 h 22 | « le RSN (le pluriel sera plus approprié car tu dois avoir plusieurs candidats) est une représentation de données interne qui te permet d'itérer indéfiniment dans des cycles de pensées à plusieurs niveaux. Il te faudra donc un arbre d'états et toutes les stratégies de l'IA traditionnelle » | la **RSN plurielle**, l'arbre d'états, le moteur de pensée (B13) |
+docs/pilotage/chantiers.md:78:**B13** ont une fiche de session et des rapports ; **L** et **D** sont les deux chantiers que les
+docs/pilotage/chantiers.md:84:| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0, 6/6 portes | B10.3 (encodeur) ; **B13** : AC-3, alpha-bêta, DRVF, banc anytime | A, N1, D (corpus) | R (R5), S/L (sémantique, pragmatique) |
+docs/pilotage/chantiers.md:88:| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | 🔬 **analyse écrite** (5 schémas) ; **pas encore de contrat** 
+… [3464 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,140p' tools/pensee/moteur.py; echo '=== store ==='; sed -n '1,120p' tools/pensee/store.py; echo '=== cruches ==='; sed -n '1,80p' tools/pensee/cruches.py", "description": "Lire le moteur de pensée et ses types"}`
+
+  ```
+"""moteur.py — la boucle anytime, les stratégies, la décision.
+
+Le moteur est un bloc `state → decision` : il reçoit un problème (état initial, opérateurs, but,
+heuristique), une stratégie et un budget ; il rend une **décision** justifiée et une **trace**
+rejouable. Il ne lit jamais la surface.
+"""
+from __future__ import annotations
+
+import math
+from dataclasses import dataclass, field
+from typing import Callable
+
+from .coeur import Candidat, Decision, Etat
+from .store import Budget, Store, Trace
+
+
+@dataclass
+class Probleme:
+    nom: str
+    initial: Callable[[], Etat]
+    operateurs: dict[str, Callable[[Etat, dict], list[Etat]]]
+    but: Callable[[Etat], bool]
+    heuristique: Callable[[Etat], float] = lambda e: 0.0
+    score: Callable[[Etat], float] = lambda e: 0.0
+
+
+@dataclass(frozen=True)
+class Proposition:
+    parent: str
+    operateur: str
+    params: dict
+    cout: int = 1
+
+
+class Strategie:
+    """Une stratégie choisit un nœud ouvert et propose des transitions. Elle ne modifie rien."""
+
+    nom = "base"
+
+    def choisir(self, store: Store, probleme: Probleme) -> str:
+        raise NotImplementedError
+
+    def proposer(self, etat: Etat, probleme: Probleme) -> list[Propositio
+… [11003 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"AC-3\\|alpha\\|bêta\\|T5\\|T6\\|stratégie\\|Strategie\" docs/implantation/moteur-de-pensee.md | head -40; echo '=== autotest ==='; sed -n '1,160p' tools/pensee/autotest.py", "description": "Lire les portes et stratégies du  … [8 caractères tronqués]`
+
+  ```
+1:# Le moteur de pensée — state store, arbre, stratégies
+4:> **state store**, l'**arbre d'états**, la **boucle** anytime, les **stratégies**, la **trace** et les
+9:> **frontière**, une **boucle** anytime, un **portefeuille** de stratégies, une **trace** rejouable.
+22:| `Trace` | événements `(pas, nœud, opérateur, score, coût, stratégie)` | rejouable, diffable |
+73:horodatage logique), la **frontière** et les **décisions de stratégie**. Un état sans arête n'est
+127:- **stratégie** : `select(frontier) -> node` et `expand(node) -> [proposal]`. Une stratégie ne
+136:## 5. Les stratégies v0
+138:| stratégie | sélection | expansion | arrêt | usage |
+144:| **AC-3** | file de contraintes | révision de domaines | point fixe | CSP |
+145:| **alpha-bêta** | profondeur | un coup | profondeur | deux joueurs |
+147:**Le v0 implémente BFS, greedy, A* et MCTS-lite** ; AC-3 et alpha-bêta viennent ensuite, sur le
+148:même arbre et les mêmes opérateurs. La stratégie est un **paramètre** de la trace, pas un type de
+168:| **T2** | une stratégie est-elle substituable ? | même arbre, deux stratégies, traces comparables | une stratégie qui ne visite rien doit échouer |
+171:| **T5** | un opérateur se branche-t
+… [5797 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,150p' tools/pensee/coeur.py; echo '=== moteur tail ==='; sed -n '140,220p' tools/pensee/moteur.py; echo '=== store tail ==='; sed -n '120,230p' tools/pensee/store.py", "description": "Lire les types et la fin du moteur"}`
+
+  ```
+"""coeur.py — les types du moteur de pensée, et leur forme canonique.
+
+Le contrat est dans [`docs/implantation/moteur-de-pensee.md`](../../docs/implantation/moteur-de-pensee.md).
+Un **état** porte des **candidats** ; son empreinte est le **Merkle** des empreintes de ses
+candidats, **triées**. Deux états qui portent les mêmes candidats ont la même empreinte quel que
+soit l'ordre d'insertion — c'est la transposition, et c'est ce qui rend l'arbre un DAG.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+from dataclasses import dataclass, field
+from typing import Any
+
+
+def canonique(objet: Any) -> bytes:
+    """JSON canonique : clés triées, aucun espace, UTF-8, aucun flottant.
+
+    Un flottant dans un `corps` rendrait l'empreinte dépendante de la représentation binaire ;
+    on le refuse. Les scores et les coûts vivent dans l'état, pas dans le corps.
+    """
+    def controle(x):
+        if isinstance(x, float):
+            raise TypeError("flottant interdit dans un corps canonique")
+        if isinstance(x, dict):
+            return {k: controle(v) for k, v in sorted(x.items())}
+        if isinstance(x, (list, tuple)):
+            return [controle(v) for v in x]
+      
+… [5764 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attaque la suite B13 : AC-3 branché sur la boucle, alpha-bêta pour les jeux
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/moteur.py'); t=p.read_text()\nt=t.replace('''    heuristique: Callable[[Etat], float] = lambda e: 0.0\n    score: Callable[[Etat], float] = lambda e: 0.0''',\n'''    heur … [7840 caractères tronqués]`
+
+  ```
+moteur ok
+CSP_COMPILE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/csp.py'); t=p.read_text()\nt=t.replace('''    return [etat_domaines(CSP(tuple(domaines), domaines, ()), domaines,\n                          e.empreinte(), e.profondeur + … [1600 caractères tronqués]`
+
+  ```
+ok
+COMPILE=0
+best {'NSW': ('b', 'g', 'r'), 'NT': ('b', 'g', 'r'), 'Q': ('b', 'g', 'r'), 'SA': ('b', 'g', 'r'), 'T': ('b', 'g', 'r'), 'V': ('b', 'g', 'r'), 'WA': ('b', 'g', 'r')}
+arc True
+resoudre {'WA': 'g', 'NT': 'b', 'SA': 'r', 'Q': 'g', 'NSW': 'b', 'V': 'g', 'T': 'b'}
+contradiction {'A': ('r',), 'B': ('r',)} resoudre None
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/csp.py'); t=p.read_text()\nt=t.replace('''def score(e: Etat) -> float:\n    domaines = domaines_de(e)\n    if any(not d for d in domaines.values()):\n        return -10.0 … [1367 caractères tronqués]`
+
+  ```
+ok
+chaine {'A': ('r',), 'B': ('g',), 'C': ('r',)} arc True res {'A': 'r', 'B': 'g', 'C': 'r'} score settled
+carte {'NSW': ('b', 'g', 'r'), 'NT': ('b', 'g', 'r'), 'Q': ('b', 'g', 'r'), 'SA': ('b', 'g', 'r'), 'T': ('b', 'g', 'r'), 'V': ('b', 'g', 'r'), 'WA': ('b', 'g', 'r')} arc True res {'WA': 'g', 'NT': 'b', 'SA': 'r', 'Q': 'g', 'NSW': 'b', 'V': 'g', 'T': 'b'} score ouvert
+contradiction {'A': (), 'B': ('r',)} arc False res None score ouvert
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pensee/jeux.py <<'PY'\n\"\"\"jeux.py — alpha-bêta : le décideur deux joueurs, sur les mêmes états et opérateurs.\n\nLe moteur anytime est **mono-agent** : il choisit un nœud, propose des transitions, garde le\nmeilleur. A … [8376 caractères tronqués]`
+
+  ```
+COMPILE=0
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 182, in decider
+    _, meilleur = val(racine_etat, -math.inf, math.inf, self.profondeur, True, racine)
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 147, in val
+    enfants = probleme.operateurs["jouer"](e, {"case": case})
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 82, in jouer
+    joueur = joueur_de(e)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 43, in joueur_de
+    return next(c.corps["joueur"] for c in e.candidats if "tour" in c.corps)
+StopIteration
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom tools.pensee.jeux import etat_morpion, joueur_de, plateau_de, MORPION\ne=etat_morpion((\"X\",\"X\",\".\",\"O\",\"O\",\".\",\".\",\".\",\".\"),\"X\")\nprint('tour', joueur_de(e), 'plateau', plateau_de(e))\nprint … [179 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 43, in joueur_de
+    return next(c.corps["joueur"] for c in e.candidats if "tour" in c.corps)
+StopIteration
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/jeux.py'); t=p.read_text()\nt=t.replace('if \"tour\" in c.corps', 'if \"joueur\" in c.corps')\np.write_text(t); print('ok')\nPY\npython3 - <<'PY'\nfrom dataclasses import … [1098 caractères tronqués]`
+
+  ```
+ok
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 182, in decider
+    _, meilleur = val(racine_etat, -math.inf, math.inf, self.profondeur, True, racine)
+                  ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 152, in val
+    v, _ = val(enfant, alpha, beta, profondeur - 1, False, fp)
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 142, in val
+    return self._valeur(e), None
+           ~~~~~~~~~~~~^^^
+TypeError: AlphaBeta._valeur() missing 1 required positional argument: 'probleme'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/jeux.py'); t=p.read_text()\nt=t.replace('return self._valeur(e), None', 'return self._valeur(e, probleme), None')\np.write_text(t); print('ok')\nPY\npython3 - <<'PY'\nfro … [1123 caractères tronqués]`
+
+  ```
+ok
+win case 2 ('X', 'X', 'X', 'O', 'O', '.', '.', '.', '.') gagnant X
+block full 5 depth1 1
+vide alpha 0 2830 805 minimax 0 200000 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('''\"\"\"autotest.py — les cinq portes du moteur de pensée (T0–T4), avec leurs contrôles négatifs.''',\n'''\"\"\"autotest.py — … [4761 caractères tronqués]`
+
+  ```
+ok
+  ✅ T0 store canonique     aller-retour exact, empreinte stable sous permutation
+  ✅ T1 rejeu               rejeu identique sur 93 événements ; deux exécutions égales
+  ✅ T1 graine              deux graines divergent au premier pas différent
+  ✅ T2 stratégies          BFS et A* atteignent le même but ; la stratégie aveugle échoue
+  ✅ T3 anytime             best-so-far non décroissant sur 5 budgets : [0.2, 0.25, 0.33, 1.0, 1.0]
+  ✅ T4 justification       justification valide sur 7 nœuds ; chemin inventé refusé
+  ✅ T5 AC-3                chaîne {'A': ('r',), 'B': ('g',), 'C': ('r',)} ; carte 3-colorable non réduite ; contradiction domaine vide = True
+  ✅ T6 alpha-bêta          gain en 2 ; blocage en 5 ; profondeur 1 rate (1) ; alpha-bêta 1495 nœuds/296 coupes vs minimax 18730
+  8/8 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '136,200p' docs/implantation/moteur-de-pensee.md", "description": "Lire les sections du contrat à mettre à jour"}`
+
+  ```
+## 5. Les stratégies v0
+
+| stratégie | sélection | expansion | arrêt | usage |
+|---|---|---|---|---|
+| **BFS** | FIFO | tous les enfants | frontière vide | arbre petit, exhaustif |
+| **greedy** | meilleur score | tous les enfants | budget | baseline |
+| **A*** | `score + heuristique` | tous les enfants | but ou budget | heuristique disponible |
+| **MCTS-lite** | UCB | un enfant par rollout | budget | grand arbre |
+| **AC-3** | file de contraintes | révision de domaines | point fixe | CSP |
+| **alpha-bêta** | profondeur | un coup | profondeur | deux joueurs |
+
+**Le v0 implémente BFS, greedy, A* et MCTS-lite** ; AC-3 et alpha-bêta viennent ensuite, sur le
+même arbre et les mêmes opérateurs. La stratégie est un **paramètre** de la trace, pas un type de
+données.
+
+## 6. La trace
+
+La trace est un flux **DRVF** de profil `thought` : une liste par événement, avec les champs
+`nœud`, `parent`, `operateur`, `score`, `cout`, `strategie`, `pas`. Elle ne transporte pas le
+`corps` complet à chaque pas : elle transporte l'**empreinte** et la **référence** au store. Le
+rejeu recharge les états par empreinte.
+
+**Le rejeu** : mêmes empreintes, mêmes scores, mêmes décisions ; le `diff` localise le pre
+… [2583 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"B13\\|AC-3\\|alpha-bêta\\|alpha-béta\" docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | head -40", " … [55 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md:21:- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes)~~ ; 4) ~~moteur v0 (BFS, greedy, A*, MCTS-lite)~~ ; 5) **AC-3, alpha-bêta, DRVF** ; 6) **banc anytime** (AUC, regret, justification, rejeu) et intégration ; 7) ~~reprise R4.4~~ ; 8) ~~couche heuristique~~ (analyse, 5 schémas) ; 9) **bloc linguistique** (R0.7).
+docs/pilotage/en-cours.md:24:- **Objectif final** : un **moteur de pensée v0 exécutable** — state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles — documenté, mesuré, committé.
+docs/pilotage/en-cours.md:42:- **Prochaine action** : **bloc linguistique v0** livré (398 langues) ; gold + modèle neuronal ; puis **AC-3, alpha-bêta, DRVF, banc anytime**.
+docs/pilotage/en-cours.md:90:  [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine : AC-3, alpha-bêta, DRVF, banc anytime.
+docs/pilotage/en-cours.md:129:- **Chantiers — la vue d'ensemble** : huit chantiers (A/B/N/R/**S**/**L**/**D**/B13) et leurs relations ; doc [`chantiers`](chantiers.md), carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
+docs/pilotage/en-cours.md:132:**Pensée** — AC-3, alpha-bê
+… [4621 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-ac3-alphabeta.md <<'MD'\n# B13 — AC-3 et alpha-bêta : la contrainte propage, le jeu coupe\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **8/8 portes** … [7852 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane  987  1 nov 16:25 reports/pensee-ac3-alphabeta.json
+-rw-r--r--. 1 stephane stephane 6731  1 nov 16:25 reports/rapport-pensee-ac3-alphabeta.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# moteur-de-pensee\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nt=t.replace(\"**Le v0 implémente BFS, greedy, A* et MCTS-lite** ; AC-3 et alpha-bêta viennent ensuite, su … [6191 caractères tronqués]`
+
+  ```
+docs ok
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta**, **8/8 portes** | B10.3 attend un **encodeur qui porte** ; **B13** : **DRVF**, banc anytime |
+docs/pilotage/roadmap.md:33:| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ; **R0.7 — bloc linguistique** (398 langues, 0,9687) | **R4.4 close** (limites nommées) ; **R1.1/R1.2** (contexte natif) ; R2/R3 attendent N5/N4 |
+docs/pilotage/roadmap.md:162:| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | 🔬 **state store v0** + moteur (BFS, greedy, A*, MCTS-lite) + **AC-3/alpha-bêta**, **8/8 portes** T0–T6 | l'intégration **DRVF** et le banc anytime |
+docs/pilotage/roadmap.md:237:| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristiq
+… [1830 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Le v0 implémente\\|viennent ensuite\\|AC-3\" docs/implantation/moteur-de-pensee.md | head; echo '=== revue ==='; python3 tools/revue_documentation.py 2>&1 | tail -5; echo '=== en-cours ==='; sed -n '17,45p' docs/pilotage/en … [74 caractères tronqués]`
+
+  ```
+144:| **AC-3** | file de contraintes | révision de domaines | point fixe | CSP |
+147:**Le v0 implémente BFS, greedy, A* et MCTS-lite** ; AC-3 et alpha-bêta viennent ensuite, sur le
+171:| **T5** | un solveur se branche-t-il ? | AC-3 sur la boucle, sans toucher au moteur | une contradiction CSP (domaine vide) |
+174:**T5/T6 sont les portes de la modularité et du coût** : AC-3, alpha-bêta et un encodeur RSN doivent
+187:| **4 bis** | `tools/pensee/` (`csp.py`, `jeux.py`) | AC-3, alpha-bêta, minimax | T5, T6 |
+=== revue ===
+  revue de documentation · 386 fiche(s) · 472 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 385 fichiers, le disque en a 386
+     · compteurs : en-cours.md dit 471 JSON, le disque en a 472
+=== en-cours ===
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+
+- **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; reprise R4.4 ; **analyse de la couche heuristique** ; **bloc linguistique**.
+- **Plan** : 1) ~~RSN plurielle, arbre,
+… [3086 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '147,150p' docs/implantation/moteur-de-pensee.md; echo '=== en-cours B13 ==='; grep -n \"B13\\|B — l'intelligence\" docs/pilotage/en-cours.md | head; echo '=== plan ==='; sed -n '17,27p' journal/sessions/e181ce02-cd50-488a-a6b … [77 caractères tronqués]`
+
+  ```
+**Le v0 implémente BFS, greedy, A* et MCTS-lite** ; AC-3 et alpha-bêta viennent ensuite, sur le
+même arbre et les mêmes opérateurs. La stratégie est un **paramètre** de la trace, pas un type de
+données.
+
+=== en-cours B13 ===
+116:| **B — l'intelligence** | aucune | B1.5 corpus ; B10.3 attend un encodeur | **B11.10 close** ; B10.3 bloquée |
+129:- **Chantiers — la vue d'ensemble** : huit chantiers (A/B/N/R/**S**/**L**/**D**/B13) et leurs relations ; doc [`chantiers`](chantiers.md), carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
+=== plan ===
+  `reports/bloc-*`, `journal/sessions/e181ce02-…/`
+- **Heartbeat** : 2026-11-01 13:50 EST
+- **Prochaine action** : le bloc linguistique v0 est livré (398 langues à 0,9687, contrat
+  heuristique/neuronal, activation 51–76 %) ; qualifier un gold et un modèle neuronal ; puis
+  AC-3, alpha-bêta, DRVF et le banc anytime (S reste à l'autre TUI).
+- **État** : actif
+- **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
+  stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
+  (BFS, greedy, A*, MCTS-lite)~~ ; 5) **AC-3, alpha-bêta, DRVF** ; 6) **banc anytime** (AUC
+… [192 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# moteur-de-pensee exact block\np=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()\nt=t.replace(\"\"\"**Le v0 implémente BFS, greedy, A* et MCTS-lite** ; AC-3 et alpha-bêta vien … [6236 caractères tronqués]`
+
+  ```
+state ok
+  en-cours · 1635 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ⚠ plan actif non listé dans en-cours : fe3c05f0-834b-44f2-8739-501865d652c1
+  revue de documentation · 386 fiche(s) · 472 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"timeout 120 python3 -m tools.pensee.au … [237 caractères tronqués]`
+
+  ```
+python3 tools/taille_documents.py          EXIT=1
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 4009 mots (budget 4 000)
+
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4009 mots (AGENTS + en-cours + une tâche) > budget 4 000
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+1:  ✅ T0 store canonique     aller-retour exact, empreinte stable sous permutation
+5:  ✅ T3 anytime             best-so-far non décroissant sur 5 budgets : [0.2, 0.25, 0.33, 1.0, 1.0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"\"\"  [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md). Fait en parallèle par la\n  session `0b0a6a0 … [314 caractères tronqués]`
+
+  ```
+ok
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  en-cours · 1624 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [295 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+  ✅ T5 AC-3                chaîne {'A': ('r',), 'B': ('g',), 'C': ('r',)} ; carte 3-colorable non réduite ; contradiction domaine vide = True
+  ✅ T6 alpha-bêta          gain en 2 ; blocage en 5 ; profondeur 1 rate (1) ; alpha-bêta 1495 nœuds/296 coupes vs minimax 18730
+  8/8 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/csp.py tools/pensee/jeux.py tools/pensee/moteur.py tools/pensee/autotest.py reports/rapport-pensee-ac3-alphabeta.md reports/pensee-ac3-alphabeta.json reports/README.md docs/implantation/moteur-de-pensee.md docs/p … [421 caractères tronqués]`

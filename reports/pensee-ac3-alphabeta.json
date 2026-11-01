@@ -1,0 +1,21 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "verdict": "8/8",
+ "ac3": {
+  "chaine": {"domaines": {"A": ["r"], "B": ["g"], "C": ["r"]}, "valeurs_retirees": 2,
+             "arc_consistance": true, "solution": {"A": "r", "B": "g", "C": "r"}},
+  "carte": {"variables": 7, "couleurs": 3, "reduction": 0, "arc_consistance": true,
+            "solution": {"WA": "g", "NT": "b", "SA": "r", "Q": "g", "NSW": "b", "V": "g", "T": "b"}},
+  "contradiction": {"domaines": {"A": [], "B": ["r"]}, "solution": null}
+ },
+ "alphabeta": {
+  "gain_en_un": {"case": 2, "gagnant": "X"},
+  "blocage": {"case": 5},
+  "controle_profondeur_1": {"case": 1, "rate": true},
+  "coupe": {"profondeur": 5, "budget": 200000, "alpha_beta_nds": 1495, "alpha_beta_coupes": 296,
+            "minimax_nds": 18730, "minimax_coupes": 0, "premier_coup": 0}
+ },
+ "portes": {"T0": true, "T1": true, "T1_graine": true, "T2": true, "T3": true, "T4": true,
+            "T5_ac3": true, "T6_alphabeta": true, "tenues": 8, "total": 8}
+}

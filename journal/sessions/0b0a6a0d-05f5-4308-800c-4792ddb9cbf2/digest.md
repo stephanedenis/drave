@@ -13295,3 +13295,158 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 2. **La loi d'échelle multilingue** : les trois bases à 21,65 M, pour savoir combien de langues par million de paramètres.
 3. **Le canal d'annotation** (la structure ajoutée, pas retirée) — la seule voie que le filtre non ambigu n'a pas fermée.
 
+
+## Tour 17
+
+### 👤 Utilisateur
+
+lire docs/pilotage/plan-travail.md et avancer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la docs/pilotage/plan-travail.md 2>/dev/null && cat docs/pilotage/plan-travail.md", "description": "Read the work plan"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 12105  1 nov 15:38 docs/pilotage/plan-travail.md
+# Le plan de travail — plusieurs sessions sur une même machine
+
+> **Ce que ce document est.** Le **pont** entre l'état ([`en-cours.md`](en-cours.md), ce qui se
+> passe maintenant) et l'ordre ([`roadmap.md`](roadmap.md), ce qu'il faut faire et dans quel
+> ordre) : **qui fait quoi, dans quel territoire, à quelle cadence, et comment on surveille les
+> fichiers qui bougent**. Il ne remplace ni l'un ni l'autre : l'état reste la source du présent,
+> la roadmap la source de l'ordre.
+>
+> **Date** : 2026-11-01. **Machine** : une seule — 40 cœurs, 125 Go de RAM, 2 GPU de 16 Go,
+> 2,0 To libres sur `Data13TB`, 34 Go sur `IA`. **Capacité** : voir
+> [`chantiers.md`](chantiers.md) § 8 (4 sessions, 4 à 6 chantiers, 2 à 4 sous-agents par session).
+>
+> **Chargement** : ce document avant d'ouvrir une session ; puis la fiche du chantier.
+
+## 1. Où ce plan se situe
+
+```
+en-cours.md          ce qui se passe maintenant (état court, une section par session active)
+plan-travail.md      qui fait quoi, où, à quelle cadence (ce document)
+roadmap.md           l'ordre des chantiers et leur état
+chantiers.md         les relations e
+… [10733 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le plan lu : je prends la prochaine action N2 — le verrou de longueur sur le corpus réel
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -n -A12 \"def lot(\" tools/entrainer_native.py | head -16; grep -n \"pos_debut\" tools/native_model.py | head -4", "description": "Read the batch sampler and the position support"}`
+
+  ```
+16:10
+30:def lot(data: torch.Tensor, n: int, seq: int, device: str, compteur: int):
+31-    # Van der Corput : même compteur = mêmes fenêtres, sans état aléatoire.
+32-    i = torch.tensor(departs_vdc(compteur, n, len(data) - seq - 1, seq), dtype=torch.long)
+33-    x = torch.stack([data[j:j + seq] for j in i]).to(device)
+34-    y = torch.stack([data[j + 1:j + seq + 1] for j in i]).to(device)
+35-    return x, y
+36-
+37-
+38-def ppl(modele, data, seq, lot_n, device, n_lots=8, compteur=0):
+39-    modele.eval(); total = 0.0; n = 0
+40-    with torch.no_grad():
+41-        for _ in range(n_lots):
+42-            x, y = lot(data, lot_n, seq, device, compteur + _ * lot_n)
+116:    def forward(self, ids, pos_debut: int = 0):
+118:        x = self.embed(ids) + self.pos(torch.arange(s, device=ids.device) + pos_debut)[None]
+137:    def forward_jusqua(self, ids, n_blocs: int, pos_debut: int = 0):
+140:        x = self.embed(ids) + self.pos(torch.arange(s, device=ids.device) + pos_debut)[None]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 112,150p tools/native_model.py", "description": "Read the native model forward"}`
+
+  ```
+self.thought_in = nn.Linear(self.cfg.d_model, self.cfg.d_model)
+        self.head_byte = nn.Linear(self.cfg.d_model, self.cfg.vocab)
+        self.head_rsn = nn.Linear(self.cfg.d_model, self.cfg.rsn_dim)
+
+    def forward(self, ids, pos_debut: int = 0):
+        b, s = ids.shape
+        x = self.embed(ids) + self.pos(torch.arange(s, device=ids.device) + pos_debut)[None]
+        early = []; local = []
+        for i, bloc in enumerate(self.blocks):
+            x = bloc(x)
+            if i == self.cfg.n_blocks // 2 - 1:
+                # Pont de région : projection apprise entre les deux moitiés.
+                x = x + self.bridge(x)
+            local.append(self.local_heads[i](x))
+            if i in self.cfg.early_blocks:
+                early.append(self.early_heads[self.cfg.early_blocks.index(i)](x))
+        h0 = x
+        for _ in range(self.cfg.thought_steps):
+            # Pas CONTRACTANT : tanh(W x + U h0), sans résidu x + ….
+            # Le résidu garantissait λ ≈ 1,42 ; le pas contractant ramène λ < 1
+            # tout en gardant le contenu par l'injection h0.
+            x = torch.tanh(self.thought(x) + self.thought_in(h0))
+        return {"logits": self.head_byte(x), "earl
+… [756 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/entrainer_native.py'); s = p.read_text()\ns = s.replace(\"import time\", \"import random\\nimport time\", 1) if \"import random\" not in s else s\ns = s.replace('''    ap.add_ … [1337 caractères tronqués]`
+
+  ```
+positions ajoutées
+syntaxe ok
+14:import random
+wiki pos 1432889
+  opt.step(); pertes.append(float(perte))
+pas    1 · perte 5.8683 · PPL val 257.782 · 0 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/plan-travail.md'); s = p.read_text()\na = \"`reports/n2-*`, `reports/corpus-propre.json`, `reports/corpus-litt-propre.json`, `reports/corpus-repo-propre.json`, `work/n … [762 caractères tronqués]`
+
+  ```
+plan : territoire N2 à jour
+60:| **N2** | `data/corpus_propre/`, `data/corpus_litt_propre/`, `data/corpus_repo_propre/`, `data/corpus_*.txt`, `tools/corpus_propre.py`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `reports/rapport-n2-*`, `reports/corpus-propre.json`, `reports/corpus-litt-propre.json`, `reports/corpus-repo-propre.json`, `reports/corpus-wiki-propre.json`, `reports/corpus-multi-propre.json`, `data/wiki_fr/`, `data/wiki_multi/`, `tools/entrainer_native.py`, `work/n2d/`, `work/n2h/`, `work/n2i/`, `work/n2j/`, `work/n2k/`, `models/` | `data/corpus_wiki_*`, `reports/corpus-wiki-*`, `reports/inventaire-*` |
+16:11
+pas  350 · perte 2.5693 · PPL val 13.005 · 15 s
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-pos.log; ls work/n2j/base-wiki-pos.pt 2>/dev/null && echo POS_OK", "description": "Wait for the position-randomized wiki base"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-776]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-776", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-pos.log; ls work/n2j/base-wiki-pos.pt 2>/dev/null && echo POS_OK", "description": "Check the position-randomized training"}`
+
+  ```
+16:22
+pas 15150 · perte 1.5547 · PPL val 4.894 · 691 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-pos.log; ls work/n2j/base-wiki-pos.pt 2>/dev/null && echo POS_OK", "description": "Wait for the position-randomized base to finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-778]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-778", "timeout_ms": 400000, "wait": true}`
+
+  ```
+16:27
+}
+work/n2j/base-wiki-pos.pt
+POS_OK
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-776 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-pos.log; ls work/n2j/base-wiki-pos.pt 2>/dev/null && echo POS_OK) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/base-wiki-pos.pt --decomposition --longueurs --corpus-dir data/wiki_fr/propre --sortie work/n2j/eval-pos.json 2>&1 | grep -v Loading; ~ … [187 caractères tronqués]`

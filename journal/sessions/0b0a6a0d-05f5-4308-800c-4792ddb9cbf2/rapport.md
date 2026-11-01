@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 22.0 h |
-| Tours | 16 |
-| Messages | 998 |
-| Appels d'outils | 931 |
+| Durée | 24.2 h |
+| Tours | 17 |
+| Messages | 1012 |
+| Appels d'outils | 943 |
 | Fichiers touchés | 11 |
-| Commandes | 770 |
+| Commandes | 779 |
 | Sous-agents | 0 |
 | Commits | 26 |
 | Compactages de contexte | 1 |
@@ -59,6 +59,8 @@
 **Tour 15** — peux-tu comencer l'entrainement avec des phrases non ambigue et étudier les effets  sur la qualité du bloc linguistique.
 
 **Tour 16** — continue avec de trèes gros corpus multilingues
+
+**Tour 17** — lire docs/pilotage/plan-travail.md et avancer
 
 ## 2. Déroulé, étape par étape
 
@@ -874,6 +876,25 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 - **La question ouverte est une loi d'échelle** : combien de langues par million de paramètres ? Elle se mesure en refaisant tourner les trois bases à 21,65 M (le bras capacité de N2.h5 
 … [771 caractères tronqués]
 
+### Tour 17 — lire docs/pilotage/plan-travail.md et avancer
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Read the work plan
+- bash — Read the batch sampler and the position support
+- bash — Read the native model forward
+- bash — Add position randomization and train the wiki base with it
+- bash — Declare the new work directories in the N2 territory
+- bash — Wait for the position-randomized wiki base
+- job_output
+- bash — Check the position-randomized training
+- bash — Wait for the position-randomized base to finish
+- bash — Evaluate the position-randomized wiki base
+
+**Synthèse produite :**
+
+⏵ Le plan lu : je prends la prochaine action N2 — le verrou de longueur sur le corpus réel
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -934,7 +955,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 730 autres
+- … et 739 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1062,7 +1083,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 
 ## 5. Erreurs rencontrées
 
-51 sorties en erreur ou divergentes. Les premières :
+52 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5

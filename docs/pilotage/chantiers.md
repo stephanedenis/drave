@@ -81,13 +81,13 @@ Huit chantiers. Les quatre premiers (A, B, N, R) ont leurs fiches dans le backlo
 | chantier | la question à laquelle il répond | état au 01/11 | prochaine action | dépend de | fournit à |
 |---|---|---|---|---|---|
 | **A — le moteur** | un flux de blocs typés peut-il tourner, se placer, se répartir, se rejouer ? | ✅ A1–A8 ; A3.4, A5.4, A6.2 bloqués ; A2.6 partiel ; A8.3 expliqué | **A2.6** (experts, A6.2 bloqué) ; réduire le lot | — | N, B (exécution) |
-| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0, 6/6 portes | B10.3 (encodeur) ; **B13** : AC-3, alpha-bêta, DRVF, banc anytime | A, N1, D (corpus) | R (R5), S/L (sémantique, pragmatique) |
+| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0 + AC-3/alpha-bêta, 8/8 portes | B10.3 (encodeur) ; **B13** : DRVF, banc anytime | A, N1, D (corpus) | R (R5), S/L (sémantique, pragmatique) |
 | **N — le natif** | le modèle natif peut-il être petit, creux, honnête et général ? | 🔬 N0/N1 mesurés ; N2.h : 3,09 en domaine, 16,70 → 3,85 hors dépôt ; N4 partiel | **N2** (français réel, capacité) ; N4 (consigne) | A (moteur), D (corpus) | R1–R3, N5 |
 | **R — le lecteur** | un document, une question, un budget : réponse sourcée ou refus motivé ? | ✅ R0.1–R0.3 ; R0.4/R0.5 négatifs ; R4.1–R4.4 mesurés (R4.4 : 4/5 familles ≥ 90 %) | **R1.1/R1.2** (contexte natif) ; R2/R3 attendent N ; R5 attend B10.3 | R03 (banc), N, B10.3, D (docs) | la preuve d'usage pour tous |
 | **S — les structures** | quelles structures d'interprétation candidates, et lesquelles un humain valide ? | 🔬 v0 : 7 phrases, générateur, pragmatique (niveaux 0–4, double sens), LLM, export ; 11 tests | **analyseur plus riche** (rôles, subordonnées) ; brancher l'export au corpus | L (annotations), D (corpus), B (sens) | L (banque), B (pragmatique), D (corpus) |
-| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | 🔬 **analyse écrite** (5 schémas) ; **pas encore de contrat** ni de mesure de cascade | **écrire le contrat** (deux implémentations, substitution/parallèle) ; première mesure 71 langues | D (corpus), S (banque), N2 (entraînement) | R (prétraitement), B (sémantique), N2 (allègement) |
+| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, heuristique/neuronal substituables, parallèle/cascade, activation 51–76 % ; **398 langues à 0,9687** | **gold/neuronal** ; la cascade mesurée | D (corpus), S (banque), N2 (entraînement) | R (prétraitement), B (sémantique), N2 (allègement) |
 | **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus** (21,6 M articles, 38,8 Go), dédup, splits, 0 fuite | texte intégral (dumps), PDF/OCR, filtrage des stubs, licences | — | N2, L, S, R03 |
-| **B13 — le moteur de pensée** | penser est-il une recherche tracée sur des états pluriels ? | 🔬 state store v0, moteur v0 (BFS, greedy, A*, MCTS-lite), 6/6 portes | AC-3, alpha-bêta, DRVF, banc anytime | L (états), R (documents), N (opérateurs) | B, R, L |
+| **B13 — le moteur de pensée** | penser est-il une recherche tracée sur des états pluriels ? | ✅ state store v0 + AC-3/alpha-bêta, **8/8 portes** | **DRVF**, banc anytime | L (états), R (documents), N (opérateurs) | B, R, L |
 
 **Deux remarques d'inventaire.** (1) **S** et **L** ne sont pas des sous-produits de B : ce sont
 des **blocs** avec leur contrat, leur coût et leur trace — et le contrat de L est précisément ce
@@ -173,7 +173,7 @@ existante (quatre couloirs) est dans [chantiers-decision.svg](../schemas/chantie
 | 2 | première **mesure de cascade** (langue, frontières, 71 langues) | L | elle juge la couche heuristique avant de l'étendre |
 | 3 | **analyseur plus riche** de S + export vers le corpus | S | la banque est le carburant de L neuronal |
 | 4 | entraîner **N2 sur D** (fr/en), avec et sans surface | N2, L, D | le levier « français réel » est le seul qui reste à N2 |
-| 5 | **AC-3, alpha-bêta, DRVF, banc anytime** | B13 | le state store v0 et le moteur sont prêts |
+| 5 | **DRVF, banc anytime** | B13 | AC-3 et alpha-bêta sont mesurés (8/8) |
 | 6 | **R1.1/R1.2** (contexte natif) | R | R0/R4 sont closes ; R1 attend N2 |
 | 7 | **texte intégral** des 10 corpus + PDF/OCR | D | 38,8 Go de résumés, pas encore les articles entiers |
 

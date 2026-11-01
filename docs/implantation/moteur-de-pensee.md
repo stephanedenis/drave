@@ -144,9 +144,9 @@ les autres.
 | **AC-3** | file de contraintes | révision de domaines | point fixe | CSP |
 | **alpha-bêta** | profondeur | un coup | profondeur | deux joueurs |
 
-**Le v0 implémente BFS, greedy, A* et MCTS-lite** ; AC-3 et alpha-bêta viennent ensuite, sur le
-même arbre et les mêmes opérateurs. La stratégie est un **paramètre** de la trace, pas un type de
-données.
+**Le v0 implémente BFS, greedy, A* et MCTS-lite** ; **AC-3** est branché sur la boucle
+(`csp.py`) et **alpha-bêta** est le décideur deux joueurs (`jeux.py`), sur les **mêmes** `Etat`,
+`Probleme` et opérateurs. La stratégie est un **paramètre** de la trace, pas un type de données.
 
 ## 6. La trace
 
@@ -168,12 +168,12 @@ re-exécution.
 | **T2** | une stratégie est-elle substituable ? | même arbre, deux stratégies, traces comparables | une stratégie qui ne visite rien doit échouer |
 | **T3** | le moteur est-il anytime ? | best-so-far non décroissant | un budget nul rend le meilleur courant |
 | **T4** | la justification est-elle valide ? | chemin racine → settled | un chemin inventé est refusé |
-| **T5** | un opérateur se branche-t-il ? | un bloc D&C ou un solveur, sans toucher au moteur | un opérateur qui rend un type faux est refusé |
-| **T6** | le coût est-il compté ? | nœuds, temps, poids touchés | un budget non compté doit être visible |
+| **T5** | un solveur se branche-t-il ? | AC-3 sur la boucle, sans toucher au moteur | une contradiction CSP (domaine vide) |
+| **T6** | le coût est-il compté ? | nœuds, coupes, budget de l'alpha-bêta | le minimax exact visite plus de nœuds |
 
-**T5 est la porte de la modularité** : un opérateur D&C, un solveur de morpion et un encodeur RSN
-doivent se brancher sur le **même** contrat, sans modifier le moteur. Si l'un demande une exception,
-le contrat est faux.
+**T5/T6 sont les portes de la modularité et du coût** : AC-3, alpha-bêta et un encodeur RSN doivent
+se brancher sur le **même** contrat, sans modifier le moteur. Si l'un demande une exception, le
+contrat est faux ; si le coût n'est pas dans la trace, l'anytime est décoratif.
 
 ## 8. Le plan v0
 
@@ -183,9 +183,10 @@ le contrat est faux.
 | **1** | `tools/pensee/` (`state.py`) | `Candidate`, `State`, canonicalisation, Merkle | T0 |
 | **2** | `tools/pensee/` (`tree.py`) | nœuds, arêtes, frontière, transposition, compaction | T1 |
 | **3** | `tools/pensee/` (`engine.py`) | boucle, budget, anytime, trace | T1, T3 |
-| **4** | `tools/pensee/` (`strategies.py`) | BFS, greedy, A*, MCTS-lite | T2 |
+| **4** | `tools/pensee/` (`moteur.py`) | BFS, greedy, A*, MCTS-lite | T2 |
+| **4 bis** | `tools/pensee/` (`csp.py`, `jeux.py`) | AC-3, alpha-bêta, minimax | T5, T6 |
 | **5** | `tools/pensee/` (`trace.py`) | DRVF `thought`, rejeu, diff | T1, T6 |
-| **6** | `tools/pensee/tests/` | T0–T6, contrôles négatifs | toutes |
+| **6** | `tools/pensee/autotest.py` | T0–T6, contrôles négatifs | toutes |
 
 **Le corpus v0** : un jeu de petits graphes (morpion, taquin 3×3, un CSP jouet) et un jeu de
 RSN-visuelles déjà produit par N1. Pas de GPU ; le CPU suffit pour 10³–10⁴ nœuds.

@@ -14534,3 +14534,561 @@ carte, compteur, monitor
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/surveille_sessions.py'); s=p.read_text()\ns=s.replace('''            \"journal/2026-*\")''','''            \"journal/2026-*\", \"docs/README.md\")''')\np.write_text(s)\nPY\nfor t  … [2869 caractères tronqués]`
+
+  ```
+python3 tools/verifie_journal.py   [0]   ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+python3 tools/verifie_backlog.py   [0] ✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inve
+python3 tools/verifie_etat_a_jour.py [0]   ✅ aucun fait commité après le dernier état
+python3 tools/verifier_schemas.py  [0]      sources et images relatives.
+python3 tools/sessions.py --check  [0]   ⚠ mandat périmé (110 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à
+
+  orphelins (1) — à attribuer, commiter ou supprimer :
+    · tools/structures
+  conflits (0) — deux sessions les réclament :
+  ✅ index : aucun fait stagé sans état
+ create mode 100644 docs/pilotage/plan-travail.md
+ create mode 100644 tools/surveille_sessions.py
+ac1f9436 PILOTAGE — LE DOSSIER REMIS À PLAT : INDEX, PLAN MULTI-SESSIONS, TERRITOIRES ET SURVEILLANCE
+  ```
+
+### 🤖 Assistant
+
+⏵ Pilotage réorganisé, plan multi-sessions et surveillance en place
+
+Le dossier pilotage a maintenant son **index**, son **plan de travail** et ses **outils de surveillance**. Commit `ac1f9436`, revue verte (385 fiches, 471 JSON, 118 docs, 81 portes), T0 3 948/4 000.
+
+## La chaîne de lecture
+
+`en-cours.md` (l'état, ce qui se passe maintenant) → **`plan-travail.md`** (qui fait quoi, où, à quelle cadence) → `roadmap.md` (l'ordre) → `chantiers.md` (les relations, la vision, la capacité) → `programme-r.md` → `backlog/`. Le `docs/pilotage/README.md` dit cet ordre, **qui écrit quoi**, les outils et les documents datés à ne pas charger par défaut. La carte de la documentation (`docs/README.md`) pointe désormais sur le plan et les chantiers.
+
+## Le plan de travail
+
+**Quatre sessions de mandat + un rôle d'intégration** (le hub) :
+
+| session | mandat | charge | prochaine action |
+|---|---|---|---|
+| **N2** | le natif : entraînement, longueur, capacité, diversité | **GPU** (1 des 2) | N2 sur les corpus wiki fr/en ; le verrou 129→512 |
+| **L** | le bloc langue (heuristique + neuronal), la cascade, la pragmatique ; B13 | CPU | le **contrat de L**, puis la mesure 71 langues |
+| **S** | les structures candidates, la validation humaine/LLM, la banque | CPU | l'analyseur plus riche, l'export au corpus |
+| **D/R/A** | les corpus (texte intégral, PDF/OCR), R1.1/R1.2, A2.6/A8.3 | CPU/IO | le texte intégral, l'extraction PDF/OCR |
+
+Le **hub** tient l'état, la roadmap, les compteurs, le journal et la revue ; il **intègre** les sections des sessions, il ne code pas un chantier.
+
+**Les territoires** sont écrits (globs) et le partage de `data/` est réglé : N2 écrit les corpus préparés qu'il utilise, D écrit les nouveaux corpus wiki et leurs manifestes ; chacun **lit** ceux de l'autre sans les modifier. L'état, la roadmap, `AGENTS.md`, `INDEX.md` et le journal ne s'écrivent que par le hub, **une session à la fois**.
+
+**La cadence** : un round jusqu'à un checkpoint (fait mesuré, fiche, JSON, commit, ligne d'état, heartbeat) ; un seul écrivain d'état ; `git add` explicite ; index alterné pour les commits partagés ; en cas de course `HEAD`, relire, refaire l'index, recommiter — jamais de `reset` sur les fichiers d'une autre session ; portes lourdes (OCR-scans, toutes-les-portes) **une à la fois**.
+
+**La machine partagée** : 1 session GPU, 3 sessions CPU, 2 à 4 sous-agents par session, 40 cœurs mais 2 à 3 gros travaux à la fois, `IA` à **34 Go libres** (aucun nouveau gros modèle sans supprimer), les `work/` par session.
+
+## La surveillance
+
+- **`tools/sessions.py --check`** : plans complets, heartbeats < 45 min, périmètres et réservations qui se recouvrent. Correctif au passage : les champs **multi-lignes** sont enfin lus en entier (le plan de Pensée donnait 2 réservations lues au lieu de 9) ; `porte-sessions.sh` tenue.
+- **`tools/surveille_sessions.py`** (nouveau) : les fichiers en mouvement (`git status`) rangés par session, les **orphelins** et les **conflits**. Premier run : **un seul orphelin, `tools/structures`** — la session S n'a pas encore déclaré son plan dans ce dépôt ; c'est l'action immédiate. Aucun conflit.
+- **Le heartbeat de Pensée est à 110 min** (seuil 45) : la session active doit le rafraîchir au prochain cycle.
+
+## Ce qu'il reste à faire
+
+1. La session **S** ouvre son `journal/sessions/<id>/plan.md` (les onze champs, le territoire `tools/structures/`, `reports/structures-*`, la banque) — l'orphelin disparaît.
+2. Les sessions **N2, L, D/R/A** sont ouvertes selon le plan ; chacune réserve son territoire et remet sa section au hub.
+3. Le premier **checkpoint d'intégration** : le hub relit les quatre sections, met à jour la roadmap et l'état, note le journal.
+
+Le plan est dans `docs/pilotage/plan-travail.md`, l'index dans `docs/pilotage/README.md`, la carte des relations dans `docs/schemas/chantiers-vision.svg`.
+
+
+## Tour 10
+
+### 👤 Utilisateur
+
+lire docs/pilotage/plan-travail.md et avancer
+
+### 🤖 Assistant
+
+⏵ Lecture du plan de travail, puis première action D/R/A : le texte intégral
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md", "limit": 80}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+1: # Le plan de travail — plusieurs sessions sur une même machine
+2: 
+3: > **Ce que ce document est.** Le **pont** entre l'état ([`en-cours.md`](en-cours.md), ce qui se
+4: > passe maintenant) et l'ordre ([`roadmap.md`](roadmap.md), ce qu'il faut faire et dans quel
+5: > ordre) : **qui fait quoi, dans quel territoire, à quelle cadence, et comment on surveille les
+6: > fichiers qui bougent**. Il ne remplace ni l'un ni l'autre : l'état reste la source du présent,
+7: > la roadmap la source de l'ordre.
+8: >
+9: > **Date** : 2026-11-01. **Machine** : une seule — 40 cœurs, 125 Go de RAM, 2 GPU de 16 Go,
+10: > 2,0 To libres sur `Data13TB`, 34 Go sur `IA`. **Capacité** : voir
+11: > [`chantiers.md`](chantiers.md) § 8 (4 sessions, 4 à 6 chantiers, 2 à 4 sous-agents par session).
+12: >
+13: > **Chargement** : ce document avant d'ouvrir une session ; puis la fiche du chantier.
+14: 
+15: ## 1. Où ce plan se situe
+16: 
+17: ```
+18: en-cours.md          ce qui se passe maintenant (état court, une section par session active)
+19: plan-travail.md      qui fait quoi, où, à quelle cadence (
+… [5941 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '1,40p' docs/pilotage/en-cours.md; echo \"=== mon plan\"; sed -n '1,30p' journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md; echo \"=== dump\"; ls -la data/wikipedia/dumps/fr/ 2>/dev/null || ls -la /home/stephane/Data … [191 caractères tronqués]`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-01, 13 h 50 HNE (heure locale, EST).**
+
+> **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
+> avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
+> [`reports/`](../../reports/). Histoire : [`journal/`](../../journal/). Plan : [`roadmap.md`](roadmap.md).
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session qui trouve l'état en retard
+> le corrige.
+
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+
+- **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; reprise R4.4 ; **analyse de la couche heuristique** ; **bloc linguistique**.
+- **Plan** : 1) ~~RSN plurielle, arbre, cy
+… [4117 caractères tronqués]
+  ```
+
+
+  ```
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/0b69f616-5c75-4c34-b97a-ae05564812af
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/0f3b6070-57ce-4642-b9ec-3b3956f75978
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/163d631a-6528-4324-b7b3-6487d24feeb5
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/22e518ee-81b8-4081-ae1b-f0d7a777a1d7
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/b6a672ec-3349-4a4c-9e23-4478aa823170
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/df1b1098-d54e-4763-bfc2-2a8cc1498cec
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/e181ce02-cd50-488a-a6be-e84b79d40dcc
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/fe3c05f0-834b-44f2-8739-501865d652c1
+=== extraction
+
+===== b6a672ec-3349-4a4c-9e23-4478aa823170 (1 messa
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+13:## Comment lire cette roadmap
+26:## En un coup d'œil
+30:| **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0, 6/6 portes | B10.3 attend un **encodeur qui porte** ; **B13** : AC-3, DRVF |
+32:| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : corpus propre, **3,0904** en domaine, **16,70 → 3,85** hors dépôt ; N4 partiel | **N2** (plus de français unique, capacité), **N4** (consigne) |
+33:| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) | **R4.4 close** (limites nommées) ; **R1.1/R1.2** (context
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+A2.6-ordonnanceur.md
+A3.2-granularite.md
+A3.3-seuil.md
+A3.4-colab.md
+A5.4-fpga.md
+A6.2-moe-local.md
+A8.0-portes-ppl.md
+A8.3-defaut.md
+B10.2bis-decodeur-attention-croisee.md
+B10.3-raisonnement-z.md
+B11.10-cartes-ambiguites.md
+B12.10-pipeline-m1-m4-m8.md
+B1.5-prose-scientifique.md
+dependances.md
+index.md
+_modele.md
+N0.3b-parite-ppl.md
+N2-distillation.md
+N3-operations-natives.md
+N4-usage-sft.md
+R01-graphe-document.md
+R02-controleur-lecture.md
+R03-banc-lecture-rapide.md
+R04-tete-survol.md
+R05-tete-balayage.md
+R06-tete-relecture.md
+R07-routeur-extractif-generatif.md
+R11-contexte-hierarchique.md
+R12-curriculum-contexte.md
+R13-tokenisation-bpe.md
+R21-memoire-travail-gist.md
+R22-memoire-episodique.md
+R31-restitution-sft.md
+R32-citations-provenance.md
+R41-bloc-tableaux.md
+R42-bloc-code.md
+R43-bloc-maths.md
+R44-encodeur-visuel.md
+R51-lecture-croisee.md
+R52-multilingue-decodeur.md
+=== manques
+# Registre des manques
+
+> **Dernière vérification : 2026-10-27.**
+
+> **Résumé —** Le registre des manques mesurés (M1–M9, N1–N5, architecture) ; chaque ligne porte la
+> mesure qui l'établit et ce qu'elle bloque. **Chargement :** document daté ; **ne pas charger par
+> défaut**. Lire ce résumé, puis la sec
+… [3958 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > tools/corpus_wikipedia_texte.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"corpus_wikipedia_texte.py — le texte INTÉGRAL des articles Wikipédia, par langue.\n\nPOURQUOI CE FICHIER. Les corpus `corpus_wiki_<langue>` sont des **résumés … [12046 caractères tronqués]`
+
+  ```
+OK
+[still running after 600000ms; moved to background job bash-752]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- User asked to "révise nos sources de données pour l'entraînement. fais le tour du disque dur pour avoir un inventaire local pour l'entraînement." → delivered a disk-wide training-data inventory.
+- Then "go" → build the French training corpus from Wikipedia (the natural next step proposed).
+- Current request: "constitue les corpus des autres langues et assure-toi que tous les agents s'y retrouvent pour leurs besoins" → build the 9 other Wikipedia language corpora (ar, de, en, es, it, ja, pt, ru, zh) and ensure all sessions/agents can find and use them (shared state, catalog, manifests, docs).
+- Earlier completed objective: R4.4 OCR robustness program (corpus, preprocessing, layout, exponents, columns, tables, parity ≥90%, fiche/JSON/docs/gate/roadmap/en-cours/journal/commits) — goal marked complete.
+
+## Key Technical Concepts
+- Drave project: `docs/` knowledge, `reports/` measured results, `journal/` dated narrative, `data/` corpora; every result needs number, negative control, fiche, commit, state line.
+- Wikipedia `xxwiki_v14.db` sqlite: table `articles(page_id, title, title_lower, lang, n_chars, n_words, summary, v14_json, ...)`; `summary` = article lead **truncated at 8 000 chars**, already de-wikified; 10 DBs = 66 GB.
+- Corpus builder: filter `n_chars >= 300`; cleanup (HTML entities/tags, control chars, nbsp; insert space at lowercase→uppercase joins, restore `l'`/`d'` before uppercase); BLAKE2b exact article dedup; chunk dedup (8 192 chars, word boundaries; 1 chunk/article because summary ≤8 000); split by article via salted hash of `page_id` (5% val / 5% test); SHA-256 of outputs; per-language JSON manifest.
+- Contamination checker: exact chunk duplicates between splits (BLAKE2b of lines/trunks) + 128-byte windows sampled (stride 512, max 30) from eval files searched in `train.txt` via `mmap.find`.
+- Eval sets: XNLI dev TSV (`data/xnli/XNLI-1.0/xnli.dev.tsv`, languages ar/de/en/es/fr/ru/zh), UDHR per-language texts (`data/udhr/articles.jsonl`, iso3 ita/jpn/por), `data/wikitext2_test.txt`, FR local evals (`corpus_propre/test`, `corpus_litt_propre/test`, `corpus_repo_propre/test`).
+- Licensing: Wikipedia text is **CC-BY-SA 4.0 + GFDL**; training free, redistribution requires attribution/share-alike; corpora stay local (data/ gitignored).
+- Gate conventions: `tools/porte-*.sh`; `python3 tools/revue_documentation.py`, `taille_documents.py`, `verifie_en_cours.py`, `verifie_journal.py`, `verifie_backlog.py`, `verifier_schemas.py`, `verifie_etat_a_jour.py`, `porte-etat.sh`.
+- T0 context budget: AGENTS 1200 + en-cours + largest T0 method doc (1134) ≤ 4000; counters line `| fichiers / JSON de résultats | **N** / **M** |`.
+- Pre-commit hook `verifie_etat_a_jour.py`: any staged `reports/`/`tools/` fact requires staged `docs/pilotage/en-cours.md`.
+- Shared working tree with other active sessions (N2.h `0b0a6a0d`, Pensée `e181ce02`); use explicit `git add` of own paths; alt-index trick `GIT_INDEX_FILE=/tmp/index.r44 git read-tree HEAD` to avoid other sessions' staged files; HEAD can move concurrently → retry commit on "cannot lock ref 'HEAD'".
+
+## Files and Code
+- `reports/inventaire-donnees-entrainement.md` + `.json` (59 entries): disk inventory; volumes: Data13TB 11T/8.9T used/2.0T free; IA 938G/895G used (97%, 34G free); key sources: Wikipedia 132G (10 DBs 66G + dumps 67G), `corpus/wiki_apparie` 12G, Qtrinet `data/` 6.6G, `Biblio_large` 22G (2345 Kindle kfx-zip DRM + 104 PDF), `archives/CEGEP` 11G, `collections` 36G, `Documents` 159G (personal), `archives/recovery-raw/.../Videos` 2.8T (excluded), PhotoRec 3.5G, `archives/audio` 87G, `kld-logits` 6.4G; models: DeepSeek-V4.1-Flash Q2 341G, Qwen3-30B 77G, HF hub 119G, artefacts/modeles-optimises 116G.
+- `tools/corpus_wikipedia.py` (rewritten multi-language): `BASE_DB=/home/stephane/Data13TB/stephane/data/wikipedia/db`; functions `nettoie`, `empreinte`, `troncons`, `construire(db, sortie, manifeste, langue, min_chars, chunk, val, test, graine, max_artic
+… [8066 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- User asked to "révise nos sources de données pour l'entraînement. fais le tour du disque dur pour avoir un inventaire local pour l'entraînement." → delivered a disk-wide training-data inventory.
+- Then "go" → build the French training corpus from Wikipedia (the natural next step proposed).
+- Current request: "constitue les corpus des autres langues et assure-toi que tous les agents s'y retrouvent pour leurs besoins" → build the 9 other Wikipedia language corpora (ar, de, en, es, it, ja, pt, ru, zh) and ensure all sessions/agents can find and use them (shared state, catalog, manifests, docs).
+- Earlier completed objective: R4.4 OCR robustness program (corpus, preprocessing, layout, exponents, columns, tables, parity ≥90%, fiche/JSON/docs/gate/roadmap/en-cours/journal/commits) — goal marked complete.
+
+## Key Technical Concepts
+- Drave project: `docs/` knowledge, `reports/` measured results, `journal/` dated narrative, `data/` corpora; every result needs number, negative control, fiche, commit, state line.
+- Wikipedia `xxwiki_v14.db` sqlite: table `articles(page_id, title, title_lower, lang, n_chars, n_words, summary, v14_json, ...)`; `summary` = article lead **truncated at 8 000 chars**, already de-wikified; 10 DBs = 66 GB.
+- Corpus builder: filter `n_chars >= 300`; cleanup (HTML entities/tags, control chars, nbsp; insert space at lowercase→uppercase joins, restore `l'`/`d'` before uppercase); BLAKE2b exact article dedup; chunk dedup (8 192 chars, word boundaries; 1 chunk/article because summary ≤8 000); split by article via salted hash of `page_id` (5% val / 5% test); SHA-256 of outputs; per-language JSON manifest.
+- Contamination checker: exact chunk duplicates between splits (BLAKE2b of lines/trunks) + 128-byte windows sampled (stride 512, max 30) from eval files searched in `train.txt` via `mmap.find`.
+- Eval sets: XNLI dev TSV (`data/xnli/XNLI-1.0/xnli.dev.tsv`, languages ar/de/en/es/fr/ru/zh), UDHR per-language texts (`data/udhr/articles.jsonl`, iso3 ita/jpn/por), `data/wikitext2_test.txt`, FR local evals (`corpus_propre/test`, `corpus_litt_propre/test`, `corpus_repo_propre/test`).
+- Licensing: Wikipedia text is **CC-BY-SA 4.0 + GFDL**; training free, redistribution requires attribution/share-alike; corpora stay local (data/ gitignored).
+- Gate conventions: `tools/porte-*.sh`; `python3 tools/revue_documentation.py`, `taille_documents.py`, `verifie_en_cours.py`, `verifie_journal.py`, `verifie_backlog.py`, `verifier_schemas.py`, `verifie_etat_a_jour.py`, `porte-etat.sh`.
+- T0 context budget: AGENTS 1200 + en-cours + largest T0 method doc (1134) ≤ 4000; counters line `| fichiers / JSON de résultats | **N** / **M** |`.
+- Pre-commit hook `verifie_etat_a_jour.py`: any staged `reports/`/`tools/` fact requires staged `docs/pilotage/en-cours.md`.
+- Shared working tree with other active sessions (N2.h `0b0a6a0d`, Pensée `e181ce02`); use explicit `git add` of own paths; alt-index trick `GIT_INDEX_FILE=/tmp/index.r44 git read-tree HEAD` to avoid other sessions' staged files; HEAD can move concurrently → retry commit on "cannot lock ref 'HEAD'".
+
+## Files and Code
+- `reports/inventaire-donnees-entrainement.md` + `.json` (59 entries): disk inventory; volumes: Data13TB 11T/8.9T used/2.0T free; IA 938G/895G used (97%, 34G free); key sources: Wikipedia 132G (10 DBs 66G + dumps 67G), `corpus/wiki_apparie` 12G, Qtrinet `data/` 6.6G, `Biblio_large` 22G (2345 Kindle kfx-zip DRM + 104 PDF), `archives/CEGEP` 11G, `collections` 36G, `Documents` 159G (personal), `archives/recovery-raw/.../Videos` 2.8T (excluded), PhotoRec 3.5G, `archives/audio` 87G, `kld-logits` 6.4G; models: DeepSeek-V4.1-Flash Q2 341G, Qwen3-30B 77G, HF hub 119G, artefacts/modeles-optimises 116G.
+- `tools/corpus_wikipedia.py` (rewritten multi-language): `BASE_DB=/home/stephane/Data13TB/stephane/data/wikipedia/db`; functions `nettoie`, `empreinte`, `troncons`, `construire(db, sortie, manifeste, langue, min_chars, chunk, val, test, graine, max_articles)`; CLI `--db/--sortie/--manifeste/--langue/--toutes-les-langues/--force/--min-chars/--chunk/--val/--test/--graine/--max-articles`; `--toutes-les-langues` skips languages whose manifest exists unless `--force`; manifest fields include `langue`, `articles_db/lus/gardes`, `articles_doublons`, `caracteres_gardes`, `mots_estimes` (chars/6.2), `note_mots`, `octets{train,val,test}`, `sha256_*`, licence, limites.
+- `tools/verifie_contamination.py`: `--train --val --test --eval (repeatable) --fenetre 128 --pas 512 --echantillon 40 --sortie`; outputs cross-split chunk duplicates + eval-window overlap.
+- `tools/catalogue_corpus.py`: reads `reports/corpus-wiki-*.json`, prints markdown table (order fr,en,de,es,ru,it,ja,zh,pt,ar), totals; ja/zh words shown "— (caractères)"; cell units `Go / Mo / Mo`; total line "21 630 731 articles · 31.42 G caractères · 4643 M mots (langues à espaces ; ja/zh comptés en caractères) · 38.8 Go".
+- `data/corpus_wiki_<lang>/{train,val,test}.txt` (gitignored, 38.8 Go total): fr 2 525 902 art / 3.68 G chars / 594 M words / 3.43+191+190 Mo; en 6 552 645 / 9.91 G / 1599 M / 8.98 Go+498+498 Mo; de 2 884 427 / 4.72 G / 762 M; es 1 900 560 / 2.79 G / 451 M; ru 1 956 216 / 2.93 G / 473 M; it 1 592 477 / 2.26 G / 365 M; ja 1 355 856 / 1.76 G / (chars); zh 823 401 / 0.87 G / (chars); pt 991 389 / 1.35 G / 218 M; ar 1 047 858 / 1.13 G / 183 M.
+- `reports/corpus-wiki-<lang>.json`: 10 per-language manifests (ar,de,en,es,fr,it,ja,pt,ru,zh); `reports/corpus-wiki-fr.json` was patched with `langue: fr` + `note_mots`.
+- `reports/corpus-wikipedia-contamination.json` (new, combined): per-language cross-split + eval results; fr merges old local evals + XNLI fr (all 0/30); en XNLI 0/30 + wikitext2 0/30; de/es/ru/zh/pt/ar 0/30; it 1/23 UDHR; ja 1/23 UDHR (note "UDHR citée dans Wikipédia"); cross-split 0 everywhere (fr 0/126 636, 0/125 972; ar 0/52 203, 0/52 033; en 0/327 337, 0/327 877; ru 0/97 650, 0/97 198; etc.).
+- `reports/rapport-corpus-wikipedia.md` (new, 1323 words): title + verdict (10 langues, 21 630 731 articles, 31.42 G caractères, 4 643 M mots, 38.8 Go, 0 fuite, UDHR it/ja 1/23); sections 1 source, 2 méthode, 3 table des dix corpus, 4 fuites, 5 valeur/limites, 6 où les agents les trouvent (paths + `--toutes-les-langues` + `catalogue_corpus.py`), 7 ce qui pourrait être faux, Fichiers.
+- `reports/rapport-corpus-wiki-fr.md` (old FR fiche) and `reports/corpus-wiki-fr-contamination.json` (old fr-only contamination) are **still present**; intended to be `git rm`-ed after link updates.
+- `reports/inventaire-donnees-entrainement.md`: updated with row `data/corpus_wiki_<langue>/` ~60 Go → link `rapport-corpus-wikipedia`; recommendation priority 1 marked "faite — 10 corpus par langue; reste le texte intégral".
+- `docs/pilotage/en-cours.md`: line ~56 currently still says corpus FR 2,5 M articles and links `corpus-wiki-fr`; counters line 94 currently `**383** / **467**` (other session edits pushed it); needs update to 10-language totals + catalog link + correct counters (expected **382** fiches / **468** JSON if old fr fiche+contamination removed and 9 manifests + combined added).
+- `journal/2026-11-01/README.md`: line ~93 links `corpus-wiki-fr`; has a "corpus Wikipédia FR" paragraph; needs 10-language update + new link.
+- Earlier R4.4 artifacts remain: `reports/rapport-r44-scans.md`, `r44-*.json`, `tools/graphe_document_ocr.py`, `nettoyer_scan.py`, `extraire_tableaux.py`, `mesurer_scans.py`, `mesurer_reel.py`, `porte-ocr-scans.sh`, spec `docs/implantation/encodeur-visuel.md`.
+
+## Errors and Fixes
+- `sqlite3.connect(f"file:{args.db}?mode=ro")` failed "unable to open database file": default DB path was inside the repo (`Qtrinet/data/...`); fixed default to `RACINE.parents[1]/data/wikipedia/db/frwiki_v14.db`, and use `args.db.resolve()` in URI.
+- `sum(length(summary))` over 66 GB too slow (background job killed); counts/volume taken from manifests instead.
+- `pkill -f "tools/corpus_wikipedia.py"` killed the shell running the command itself (pattern matched own command line), aborting the patch/test; had to reapply; extraction relaunched.
+- Initial FR corpus had glued joins ("bourbonnaiseSa", "lOfficial"): fixed with regexes `(?<=[a-zà-ÿœæ])(?=[A-ZÀ-ÝŒÆ])` → space, and `(?<![A-Za-zÀ-ÿ'’])l(?=[A-ZÀ-Ý])` → `l'`, `...d...` → `d'`; FR corpus rebuilt.
+- Earlier: `du -sh /home/stephane` on 10.9T timed out → killed, used targeted `du`/`find`.
+- Commit race: `fatal: cannot lock ref 'HEAD': is at cdb82916... but expected 4ff739cf...` due to concurrent session commit; resolved by re-reading HEAD/alt-index and retrying (`74d7f0b9` success).
+- Pre-commit hook refusals "N fait(s) stagé(s) sans docs/pilotage/en-cours.md" when en-cours had no diff vs HEAD: fixed by adding a genuine state change (e.g., preservation line, counters).
+
+## Pending Jobs
+- Remove old `reports/rapport-corpus-wiki-fr.md` and `reports/corpus-wiki-fr-contamination.json`; update links in `docs/pilotage/en-cours.md` and `journal/2026-11-01/README.md` from `corpus-wiki-fr` → `corpus-wikipedia`.
+- Update `docs/pilotage/en-cours.md` Données line with 10-language totals (21,6 M articles, 31,4 G chars, 38,8 Go, 0 fuite, UDHR it/ja note) and counters to 382/468.
+- Run doc gates (`revue_documentation.py`, `taille_documents.py`, `verifie_en_cours.py`, `verifie_journal.py`, `verifie_backlog.py`, `verifier_schemas.py`, `verifie_etat_a_jour.py`) and commit all: `tools/corpus_wikipedia.py`, `tools/verifie_contamination.py`, `tools/catalogue_corpus.py`, 9 new manifests, combined contamination JSON, catalog fiche, inventory update, en-cours, journal (alt-index; retry on HEAD race).
+- Final answer to user: table of 10 corpora, paths, manifests, how agents use them, controls/results, limits.
+
+## Current Work
+- All 10 corpora extracted (`--toutes-les-langues` + parallel loop `es it ja pt ru zh`); all 10 contamination checks done; combined JSON built; catalog fiche assembled; catalogue tool patched.
+- Just checked heading structure of `reports/rapport-corpus-wikipedia.md`: sections 1–7 + Fichiers at expected lines.
+- Discovered en-cours counters now `**383** / **467**` and links still `corpus-wiki-fr`; journal link also `corpus-wiki-fr`.
+
+## Next Step
+- Update `docs/pilotage/en-cours.md` (Données line + catalog link + counters 382/468) and `journal/2026-11-01/README.md` (10-language paragraph + new link); `git rm` the old FR fiche and old fr contamination JSON; run the doc gates; commit everything with the alt-index and retry on HEAD race.
+
+## Critical Context
+- Deadline/goal: prior R4.4 goal complete; no active deadline for this data task.
+- Data corpus files (38.8 Go) are gitignored; only manifests/fiches are committed.
+- The `reports/corpus-wiki-propre.json` belongs to another session (N2.h) — do **not** stage/commit it; catalogue tool already ignores it (not in ORDRE).
+- FR extraction results: 2 755 035 DB articles → 2 526 107 read → **2 525 902 kept**, 204 exact duplicates, 3 680 374 275 chars, 593 608 754 words; train 2 273 294 / val 126 636 / test 125 972; old contaminations: cross-split 0, local evals 0/30 each.
+- The word estimate chars/6.2 is invalid for ja/zh (character is the unit) — stated in manifests/fiche/tool.
+- Limits: summaries truncated at 8 000 chars; de-wikification artifacts (empty dates, section titles glued); exact dedup only (near-dups remain); CC-BY-SA attribution/share-alike; UDHR is quoted in Wikipedia (it/ja 1/23) so not a held-out eval for those languages.
+- Corpus sizes per language (Go, total): en 9.3, ru 4.9, de 4.5, ja 4.2, fr 3.6, es 2.7, it 2.2, zh 2.0, ar 1.9, pt 1.3.
+- Agents' usage entry points: `data/corpus_wiki_<lang>/{train,val,test}.txt`; manifests `reports/corpus-wiki-<lang>.json`; catalog `reports/rapport-corpus-wikipedia.md`; regeneration `python3 tools/corpus_wikipedia.py --toutes-les-langues`, table `python3 tools/catalogue_corpus.py`.
+- En-cours T0 currently 3742 (room), but counters must match disk after removals/additions; other sessions edit en-cours concurrently — re-read before editing, commit quickly, never stage their files.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des alternatives ayant des architectures différentes. e.g. Blocs neuronaux là où l'intuition est un avantage, blocs computationnels classiques pour les opérations où l'informatique classique est plus fiable et performante.
+
+Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
+les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
+**distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
+volonté** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+- **job_output** `{"job_id": "bash-752", "timeout_ms": 5000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,pmem,cmd | grep -E \"corpus_wikipedia_texte\" | grep -v grep; ls -la /tmp/wiki-texte-essai/ 2>/dev/null; wc -c /tmp/wiki-texte-essai/*.txt 2>/dev/null; tail -5 /tmp/wiki-texte-essai.json 2>/dev/null", "description": "Check test extraction process and outputs", "tim … [78 caractères tronqués]`
+
+  ```
+1433639       10:49  0.0  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet cat > tools/corpus_wikipedia_texte.py <<'EOF' #!/usr/bin/env python3 """corpus_wikipedia_texte.py — le texte INTÉGRAL des articles Wikipédia, par langue.  POURQUOI CE FICHIER. Les corpus `corpus_wiki_<langue>` sont des **résumés** tronqués à 8 000 caractères (le champ `summary` de la base v14). N2 a besoin de la **prose entière** : ce script lit le dump `xxwiki-latest-pages-articles-multistream.xml.bz2`, débalise le wikitexte et écrit `train.txt`, `val.txt`, `test.txt` — même nettoyage, même déduplication exacte, même split par article que `corpus_wikipedia.py`.  CE QUE LE DÉBALISEUR FAIT, ET CE QU'IL PERD. Il retire commentaires, références, tableaux, modèles (par itérations), fichiers et catégories, garde le **libellé** des liens, les titres de sections, le texte des listes ; il remplace les liens externes par leur libellé. Il ne comprend pas la sémantique des modèles : les **infobox** et les **dates de modèles** disparaissent, les formules `<math>` sont retirées, les tableaux sont perdus. C'est un débaliseur **mesuré** : la fiche donne le taux de résidus (`{{`, `[[`, `<`) et un échantillon. 
+… [11064 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+- **job_kill** `{"job_id": "bash-752", "reason": "Extraction bloquée : chemin ElementTree erroné, le débaliseur n'était jamais appelé."}`
+
+  ```
+requested cancellation of job bash-752
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pkill -f \"corpus_wikipedia_texte.py --max-articles 3000\" 2>/dev/null; sleep 1\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/corpus_wikipedia_texte.py'); s=p.read_text()\ns=s.replace('texte = elem.findtext(\"{*}/revision/{* … [1045 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,cmd | grep \"corpus_wikipedia_texte\" | grep -v grep; echo \"---\"; grep -n \"findtext(\\\"{.*revision\" /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_wikipedia_texte.py", "description": "Check stuck process and tool text path", "timeoutMs": 60000, "workd … [55 caractères tronqués]`
+
+  ```
+---
+151:            texte = elem.findtext("{*}/revision/{*}text") or ""
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/corpus_wikipedia_texte.py'); s=p.read_text()\ns=s.replace('texte = elem.findtext(\"{*}/revision/{*}text\") or \"\"',\n            'texte = elem.findtext(\"{*}revision/{*}text\") o … [1107 caractères tronqués]`
+
+  ```
+1 0 'Antoine Meillet' 15965
+2 0 'Algèbre linéaire' 17644
+3 0 'Algèbre générale' 4416
+3000 pages en 5.9 s; ns0: 2932 taille moyenne 41250
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 180 python3 - <<'PY'\nimport bz2, time, xml.etree.ElementTree as ET, pathlib, sys\nsys.path.insert(0,'tools')\nimport corpus_wikipedia_texte as c\np=pathlib.Path('/home/stephane/Data13TB/stephane/data/wikipedia/dumps/fr/frwiki- … [900 caractères tronqués]`
+
+  ```
+100 articles : stripper total 0.29 s · médiane 0.002 s · max 0.018 s
+taille moyenne wikitexte 45952 · projeté 2,5 M : 2.0 h
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; rm -rf /tmp/wiki-texte-pilote; nohup python3 tools/corpus_wikipedia_texte.py --max-articles 100000 --sortie /tmp/wiki-texte-pilote --manifeste reports/corpus-wiki-fr-texte-pilote.json > /tmp/pilote-texte.log 2>&1 & echo \"job $!\"; sle … [242 caractères tronqués]`
+
+  ```
+job 1442484
+total 80644
+drwxr-xr-x.   2 stephane stephane      100  1 nov 16:25 .
+drwxrwxrwt. 118 root     root         9700  1 nov 16:25 ..
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md <<'EOF'\n# Plan de session — D/R/A : les données, le lecteur, le moteur\n\n> **Mandat ouvert** le 2026-11-01 16 h 25 HNE depuis\n> [`docs/pilotage/plan-travail.md`](.. … [3469 caractères tronqués]`
+
+  ```
+plan + territoire
+    fe3c05f0-834b-44f2 · en cours ·   1 min · D (texte intégral, PDF/OCR, licences, stubs), R1.1/R1.2 (préparation), A2.6/A8.3
+      → le **pilote du texte intégral FR** (100 000 articles) — measure, fiche, puis le run complet ; ensuite l'extraction PDF/OCR et la prépa R1.1/R1.2.  ## Objectif final  **Les dix corpus en texte intégral, mesurés et ficés** — le français réel en volume pour N2 :  1. le **texte intégral** des dix langues (le dump, un débaliseur mesuré, la déduplication exacte, les splits par article, les contrôles de contamination) ; 2. l'**extraction PDF native et OCR** des documents locaux (les 104 livres, les 2 711 PDF du CEGEP, les collections) avec leurs licences ; 3. la **préparation de R1.1/R1.2** (le contexte natif) et les mesures A2.6/A8.3 ; 4. pour chaque livraison : le chiffre, la fiche, le JSON, le commit et la ligne d'état.  ## Ambition  Que **D** cesse d'être un inventaire et devienne le **carburant mesuré** de N2, L et S : des corpus dont on connaît la taille, la qualité, les fuites et les limites — et dont le passage à l'échelle (10 langues, texte intégral, documents) est reproduit par un outil, pas à la main.  ## Stratégie  1. **Le pil
+… [797 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/sessions.py'); s=p.read_text()\n# le champ multi-lignes s'arrête aussi à un titre Markdown, pas seulement à une puce\ns=s.replace('''r\"(.*(?:\\\\n(?!\\\\s*[-*]\\\\s*\\\\*\\\\*).* … [902 caractères tronqués]`
+
+  ```
+parseur : champs arrêtés aux titres
+    fe3c05f0-834b-44f2 · en cours ·   1 min · D (texte intégral, PDF/OCR, licences, stubs), R1.1/R1.2 (préparation), A2.6/A8.3
+      → le **pilote du texte intégral FR** (100 000 articles) — measure, fiche, puis le run complet ; ensuite l'extraction PDF/OCR et la prépa R1.1/R1.2.
+  ⚠ mandat périmé (156 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+=== pilote
+184M	/tmp/wiki-texte-pilote
+-rw-r--r--.   1 stephane stephane   9382587  1 nov 16:26 test.txt
+-rw-r--r--.   1 stephane stephane 173221480  1 nov 16:26 train.txt
+-rw-r--r--.   1 stephane stephane   9792129  1 nov 16:26 val.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== échantillon train\"; head -c 1200 /tmp/wiki-texte-pilote/train.txt; echo; echo \"=== processus\"; ps -eo pid,etime,pcpu,cmd | grep \"corpus_wikipedia_texte.py --max-articles 100000\" | grep -v grep | head -2; echo \"=== mani … [234 caractères tronqués]`
+
+  ```
+=== échantillon train
+Antoine Meillet
+Antoine Meillet, né le à Moulins (Allier) et mort le à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du .
+
+Biographie
+Enfance et formation
+Paul Jules Antoine Meillet est d'origine bourbonnaise, fils d'un notaire de Châteaumeillant (Cher). Il naît à Moulins le .
+
+Il passe son enfance à Châteaumeillant, puis fait ses études secondaires au lycée de Moulins.
+
+Étudiant à partir de 1885 à la faculté des lettres de Paris où il suit notamment les cours de Louis Havet, il assiste également à ceux de Michel Bréal au Collège de France et de Ferdinand de Saussure à l'École pratique des hautes études.
+
+En 1889, il est major de l'agrégation de grammaire. En 1891, il fait son premier séjour en Arménie, notamment à Etchmiadzin ; son projet est d'apprendre l'arménien moderne et d'étudier d'anciens manuscrits.
+
+À son retour, il assure à la suite de Saussure le cours de grammaire comparée, qu'il complète à partir de 1894 par une conférence sur les langues persanes.
+
+En 1897, il soutient sa thèse pour le doctorat ès lettres (Recherches sur l'emploi du génitif-accusatif en vieux-slave
+=== processus
+14424
+… [180 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 60); do [ -f reports/corpus-wiki-fr-texte-pilote.json ] && break; sleep 5; done; tail -3 /tmp/pilote-texte.log; echo \"=== manifeste\"; python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('reports/corpus-wiki-fr-text … [614 caractères tronqués]`

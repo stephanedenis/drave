@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-ac3-alphabeta.md`](rapport-pensee-ac3-alphabeta.md) | **B13** — AC-3 et alpha-bêta : **8/8**, 1 495 nœuds/296 coupes contre 18 730 au minimax |
 | [`rapport-bloc-linguistique.md`](rapport-bloc-linguistique.md) | **R0.7** — le bloc linguistique : 9 niveaux, heuristique/neuronal, **398 langues** à 0,9687, activation 51–76 % |
 | [`rapport-n2-propre.md`](rapport-n2-propre.md) | **N2.h1** — corpus dédupliqué (**0 %** de fuite) : la chaîne propre vaut **3,09** en domaine, pas 2,85 ; **16,7** sur de la littérature jamais vue |
 | [`rapport-n2-diversite.md`](rapport-n2-diversite.md) | **N2.h2** — la diversité française divise la PPL hors dépôt par **4,3** (16,7 → 3,86) pour **+0,17** en domaine |

@@ -22,6 +22,7 @@ class Probleme:
     but: Callable[[Etat], bool]
     heuristique: Callable[[Etat], float] = lambda e: 0.0
     score: Callable[[Etat], float] = lambda e: 0.0
+    csp: object | None = None
 
 
 @dataclass(frozen=True)
