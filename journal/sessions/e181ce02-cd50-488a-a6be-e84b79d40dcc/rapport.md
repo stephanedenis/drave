@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 21.2 h |
 | Tours | 11 |
-| Messages | 387 |
-| Appels d'outils | 423 |
+| Messages | 389 |
+| Appels d'outils | 424 |
 | Fichiers touchés | 25 |
-| Commandes | 327 |
+| Commandes | 328 |
 | Sous-agents | 2 |
 | Commits | 20 |
 | Compactages de contexte | 1 |
@@ -588,7 +588,7 @@ Le générateur S est le **bon germe**, mais il lui manque exactement ce qui fai
 
 ### Tour 11 — fait les deux. Le bloc langue doit couvrir l'étiquetage tous les niveaux linguistiques jusqu'à la pragmatique. on doit a … [231 caractères tronqués]
 
-*41 appels d'outils.* Actions notables :
+*42 appels d'outils.* Actions notables :
 
 - bash — Trouver le corpus multilingue UDHR
 - bash — Trouver le modèle local et l'adaptateur neuronal
@@ -604,11 +604,53 @@ Le générateur S est le **bon germe**, mais il lui manque exactement ce qui fai
 - bash — Tester les modes et l'autotest UDHR
 - bash — Lire les résultats de langue et de substitution
 - bash — Ajouter le seuil de langue et la fusion sans chevauchement
-- … et 25 autres
+- … et 26 autres
 
 **Synthèse produite :**
 
-⏵ J'écris le contrat du bloc, la fiche de mesure et les index ; les schémas sont prêts
+⏵ Bloc livré : neuf niveaux, 398 langues, heuristique et neuronal substituables
+
+Les deux sont faits : le **contrat** et le **bloc exécutable**. Commit **`651bfc90`**.
+
+\## 1. Le contrat — `docs/implantation/bloc-linguistique.md`
+
+Un seul contrat, **neuf niveaux** :
+
+| niveau | heuristique CPU | neuronal | exemple |
+|---|---:|---:|---|
+| graphème | 0,99 | — | script, classe, normalisation |
+| morphème | 0,32 | 0,80 | affixes, racine (candidats) |
+| mot | 0,98 | 0,80 | frontières, nombres, URLs, emoji |
+| pos | 0,92 fermé / 0,30 ouvert | 0,82 | DET/PREP/PRON/CONJ/AUX, classes ouvertes |
+| syntagme | 0,40 | 0,78 | GN/GV/GP/REL/SUB, rôles, attachements |
+| phrase | 0,85 | 0,90 | type, négation, modalité |
+| discours | 0,55 | 0,80 | paragraphe, connecteur, relation |
+| pragmatique | 0,45 / 0,25 | 0,80 | acte, double sens, contexte |
+| document | 0,70 | 0,80 | région, titre, provenance |
+
+Chaque étiquette porte `niveau`, `span`, `type`, `valeur`, `source`, `confiance`, `candidats`,
+`langue`, `script`. Une `Annotation` porte les étiquettes, les **unités sémantiques**, la
+fraction, la trace, le coût et le refus. **La RSN n'est pas touchée** : l'annotation de langue,
+script, source et confiance vit à côté du corps ; le corps reste neutre.
+
+Deux schémas : `bloc-linguistique-niveaux.svg` et `bloc-linguistique-substitution.svg`.
+
+\## 2. Le bloc — `tools/bloc_linguistique.py`
+
+- **`Heuristique`** : CPU, déterministe, sans GPU. Profils de trigrammes par langue, script
+  Unicode, mots, classes fermées fr/en, affixes, phrases, connecteurs, actes de parole, régions.
+  Le **générateur de la coloration** (`tools/structures/generateur.py`) est importé **en lecture
+  seule** pour les syntagmes : sur « Le chat de la voisine qui dort sur le toit se réveille. », il
+  rend GN/GP/REL/GV et les deux candidats d'attachement.
+- **`MockNeuronal`** : le **double de contrat** — déterministe, sans GPU, il rend les niveaux
+  profonds avec `source = neuronal`. Il prouve la substitution et le parallèle, pas la qualité.
+- **`NeuronalLLM`** : l'**adaptateur réel** — prompt JSON, `llama-cli`, parsing, refus explicite.
+  Le vrai `Qwen2.5-0.5B` local **n'a pas fini** dans le délai (110 s, puis 35 s en CPU pur) : sa
+  qualité n'est **pas revendiquée**. Il est testé avec un **faux `llama-cli`** qui rend le JSON :
+  le chemin réel est vérifié.
+- **`Parallele`** : fusion par `(niveau, span, type, source)` ; à niveau égal, la plus confiante
+  gagne, **sauf le syntagme**, où la segmentation heuristique 
+… [3426 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -689,7 +731,7 @@ Le générateur S est le **bon germe**, mais il lui manque exactement ce qui fai
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 287 autres
+- … et 288 autres
 
 ## 4. Mesures et résultats marquants
 

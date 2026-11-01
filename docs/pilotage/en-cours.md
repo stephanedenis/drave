@@ -79,9 +79,12 @@
 - **N2.h — close** : corpus dédupliqué (**0 %** de fuite), chaîne propre **3,09** en domaine,
   diversité (÷ 4,3 hors dépôt), longueur (14,11 → 3,25 à 256), combinaison et capacité ; **N2.i**
   (4,84 Mo) : **12,93** littérature, **33,83** anglais — généralise sans relever le domaine ; **N2.j**
-  (**186 Mo** de Wikipédia) : **7,42** / **12,41**, filtre non ambigu sans effet. Fiches
+  (**186 Mo** de Wikipédia) : **7,42** / **12,41**, filtre non ambigu sans effet ; **N2.k**
+  (**10 langues**, 237 Mo) : fr **5,68** (à données égales **3,62**), anglais **6,30**, chinois
+  **9,65**. Fiches
   [`n2-propre`](../../reports/rapport-n2-propre.md) · [`n2-corpus-elargi`](../../reports/rapport-n2-corpus-elargi.md) ·
-  [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md). N4 **0/40**.
+  [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md) ·
+  [`n2-multilingue`](../../reports/rapport-n2-multilingue.md). N4 **0/40**.
 - **Pensée — state store v0** : théorie (10 tours, 9 schémas) et **state store v0** (6/6 portes
   T0–T4 ; BFS, greedy, A*, MCTS-lite ; jouet des cruches) ; fiche
   [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine : AC-3, alpha-bêta, DRVF, banc anytime.
@@ -95,7 +98,7 @@
 |---|---|---|
 | portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **384** / **471** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **385** / **467** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **117** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

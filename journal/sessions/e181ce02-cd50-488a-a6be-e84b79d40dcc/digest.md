@@ -9270,3 +9270,163 @@ bash tools/porte-bloc-linguistique.sh      EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/bloc_linguistique.py tools/porte-bloc-linguistique.sh tools/tests/linguistique/test_bloc_linguistique.py docs/implantation/bloc-linguistique.md docs/schemas/bloc-linguistique-niveaux.svg docs/schemas/bloc-linguistique-s … [552 caractères tronqués]`
+
+  ```
+docs/README.md                                     |    1 +
+ docs/implantation/bloc-linguistique.md             |  289 ++++++
+ docs/pilotage/en-cours.md                          |   18 +-
+ docs/pilotage/programme-r.md                       |    1 +
+ docs/pilotage/roadmap.md                           |    3 +-
+ docs/schemas/README.md                             |    7 +
+ docs/schemas/bloc-linguistique-niveaux.svg         |   92 ++
+ docs/schemas/bloc-linguistique-substitution.svg    |   51 +
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |    2 +-
+ reports/README.md                                  |    1 +
+ reports/bloc-linguistique.json                     |  739 +++++++++++++
+ reports/rapport-bloc-linguistique.md               |  179 ++++
+ tools/bloc_linguistique.py                         | 1086 ++++++++++++++++++++
+ tools/porte-bloc-linguistique.sh                   |    9 +
+ tools/tests/linguistique/test_bloc_linguistique.py |  107 ++
+ 15 files changed, 2576 insertions(+), 9 deletions(-)
+[still running after 60000ms; moved to background job bash-327]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop 
+… [17 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-327", "timeout_ms": 240000, "wait": true}`
+
+  ```
+create mode 100644 docs/implantation/bloc-linguistique.md
+ create mode 100644 docs/schemas/bloc-linguistique-niveaux.svg
+ create mode 100644 docs/schemas/bloc-linguistique-substitution.svg
+ create mode 100644 reports/bloc-linguistique.json
+ create mode 100644 reports/rapport-bloc-linguistique.md
+ create mode 100644 tools/bloc_linguistique.py
+ create mode 100755 tools/porte-bloc-linguistique.sh
+ create mode 100644 tools/tests/linguistique/test_bloc_linguistique.py
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s' ; python3 tools/verifie_en_cours.py | tail -2; python3 tools/revue_documentation.py | tail -2", "description": "Lire le hash et confirmer l'état final"}`
+
+  ```
+651bfc90 BLOC LINGUISTIQUE — NEUF NIVEAUX, HEURISTIQUE ET NEURONAL, 398 LANGUES À 0,9687
+  en-cours · 1522 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 384 fiche(s) · 471 JSON · 117 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Bloc livré : neuf niveaux, 398 langues, heuristique et neuronal substituables
+
+Les deux sont faits : le **contrat** et le **bloc exécutable**. Commit **`651bfc90`**.
+
+## 1. Le contrat — `docs/implantation/bloc-linguistique.md`
+
+Un seul contrat, **neuf niveaux** :
+
+| niveau | heuristique CPU | neuronal | exemple |
+|---|---:|---:|---|
+| graphème | 0,99 | — | script, classe, normalisation |
+| morphème | 0,32 | 0,80 | affixes, racine (candidats) |
+| mot | 0,98 | 0,80 | frontières, nombres, URLs, emoji |
+| pos | 0,92 fermé / 0,30 ouvert | 0,82 | DET/PREP/PRON/CONJ/AUX, classes ouvertes |
+| syntagme | 0,40 | 0,78 | GN/GV/GP/REL/SUB, rôles, attachements |
+| phrase | 0,85 | 0,90 | type, négation, modalité |
+| discours | 0,55 | 0,80 | paragraphe, connecteur, relation |
+| pragmatique | 0,45 / 0,25 | 0,80 | acte, double sens, contexte |
+| document | 0,70 | 0,80 | région, titre, provenance |
+
+Chaque étiquette porte `niveau`, `span`, `type`, `valeur`, `source`, `confiance`, `candidats`,
+`langue`, `script`. Une `Annotation` porte les étiquettes, les **unités sémantiques**, la
+fraction, la trace, le coût et le refus. **La RSN n'est pas touchée** : l'annotation de langue,
+script, source et confiance vit à côté du corps ; le corps reste neutre.
+
+Deux schémas : `bloc-linguistique-niveaux.svg` et `bloc-linguistique-substitution.svg`.
+
+## 2. Le bloc — `tools/bloc_linguistique.py`
+
+- **`Heuristique`** : CPU, déterministe, sans GPU. Profils de trigrammes par langue, script
+  Unicode, mots, classes fermées fr/en, affixes, phrases, connecteurs, actes de parole, régions.
+  Le **générateur de la coloration** (`tools/structures/generateur.py`) est importé **en lecture
+  seule** pour les syntagmes : sur « Le chat de la voisine qui dort sur le toit se réveille. », il
+  rend GN/GP/REL/GV et les deux candidats d'attachement.
+- **`MockNeuronal`** : le **double de contrat** — déterministe, sans GPU, il rend les niveaux
+  profonds avec `source = neuronal`. Il prouve la substitution et le parallèle, pas la qualité.
+- **`NeuronalLLM`** : l'**adaptateur réel** — prompt JSON, `llama-cli`, parsing, refus explicite.
+  Le vrai `Qwen2.5-0.5B` local **n'a pas fini** dans le délai (110 s, puis 35 s en CPU pur) : sa
+  qualité n'est **pas revendiquée**. Il est testé avec un **faux `llama-cli`** qui rend le JSON :
+  le chemin réel est vérifié.
+- **`Parallele`** : fusion par `(niveau, span, type, source)` ; à niveau égal, la plus confiante
+  gagne, **sauf le syntagme**, où la segmentation heuristique (le générateur S) est prioritaire —
+  un gros span du mock n'écrase pas un découpage plus fin.
+- **`Cascade`** : le neuronal n'est appelé que si `morphème`, `pos`, `syntagme`, `discours` ou
+  `pragmatique` restent sous **0,6** ; la trace porte le résidu.
+- **`CoucheSemantique`** : un stub qui ne reçoit que `unites_semantiques` et compte la fraction
+  et le coût. L'heuristique peut l'activer **avant** le neuronal, sur **51–76 %** du texte selon
+  l'échantillon.
+
+## 3. Les mesures
+
+| mesure | résultat |
+|---|---:|
+| langues avec profil UDHR | **398** |
+| articles de test (article 15 tenu à l'écart) | **447** |
+| **accuracy langue** | **0,9687** |
+| **accuracy script** | **1,0000** |
+| **profils permutés** (contrôle) | **0,0022** |
+| construction + test | **4,0 s** |
+
+Les **neuf niveaux sont présents** (`niveaux_manquants = []`). Les fractions sémantiques :
+français **0,513**, anglais **0,737**, allemand **0,756**, espagnol **0,611**, italien **0,706**.
+
+**Les limites sont nommées** : l'anglais et le scots sont proches — l'échantillon anglais est
+classé `sco` (ou `und` sous le seuil) ; l'UDHR est parallèle et propre ; un article par langue
+n'est pas une campagne multi-domaines ; les niveaux profonds n'ont **pas de gold**, donc leurs
+confiances sont **déclarées**, pas mesurées.
+
+## 4. La porte et les tests
+
+```bash
+bash tools/porte-bloc-linguistique.sh
+python3 tools/bloc_linguistique.py --texte "…" --mode heuristique
+python3 tools/bloc_linguistique.py --texte "…" --mode parallele --json
+python3 tools/bloc_linguistique.py --texte "…" --mode cascade
+python3 tools/bloc_linguistique.py --autotest --udhr data/udhr/articles.jsonl
+```
+
+La porte est **verte** : tests de contrat (niveaux, spans, langue/script, substitution,
+parallèle, cascade, activation, refus, rejeu, faux `llama-cli`), autotest UDHR, verdict `ok`.
+Les contrôles négatifs : profils permutés **0,0022**, texte vide, ponctuation seule, langue
+inconnue `und`, indice faux `und`, rejeu identique.
+
+## 5. L'état
+
+- `en-cours` : **1 522 mots**, 1 session, 10 puces ; le bloc est déclaré dans la session Pensée.
+- Roadmap : **R0.7 — la couche linguistique** (398 langues, 0,9687) ; la charte R et la fiche
+  sont à jour.
+- Compteurs : **384 fiches / 471 JSON / 117 docs / 81 portes**.
+- Toutes les portes passent : `revue_documentation`, `taille_documents`, `porte-tableaux`,
+  `verifier_schemas`, `verifie_journal`, `verifie_en_cours`, `sessions.py --check`,
+  `porte-bloc-linguistique`.
+
+## 6. Ce qui reste, nommé
+
+1. **Un gold** de POS/syntagme/pragmatique sur 100–200 phrases : transformer les confiances en
+   précisions.
+2. **Un modèle neuronal qualifié** sur ce gold ; l'adaptateur `NeuronalLLM` est branché, le
+   modèle local ne répond pas dans cet environnement.
+3. **Les paquets de langue** (classes fermées, affixes) pour les 71 langues du dépôt — la
+   coloration est française, les profils UDHR sont un début.
+4. **L'intégration RSN/DRVM** : l'annotation `langue`, `script`, `source`, `confiance` à côté du
+   corps ; le bloc comme port du bus.
+5. **Le split `bloc-langue` / `bloc-coloration`** si le bloc grossit.
+
+Autrement dit : le **contrat**, la **substitution**, le **parallèle**, la **cascade** et
+l'**activation à fraction** sont faits et testés ; la **langue et le script** sont mesurés sur
+398 langues ; les **niveaux profonds** sont des candidats, et le **neuronal réel** est une
+prochaine campagne, pas une revendication.
+

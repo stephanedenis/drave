@@ -13049,3 +13049,157 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-756", "timeout_ms": 400000, "wait": true}`
+
+  ```
+13:52
+}
+work/n2k/base-multi.pt
+MULTI_OK
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-754 (bash: sleep 780; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2k/base-multi.log; ls work/n2k/base-multi.pt 2>/dev/null && echo MULTI_OK) finished [status: completed, exit code: 2]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python work/n2k/evalue.py work/n2k/base-multi.pt 2>&1 | grep -v Loading | tee work/n2k/eval-multi.json", "description": "Evaluate the multilingual base on all ten language … [3 caractères tronqués]`
+
+  ```
+{"fichier": "base-multi.pt", "fr": 5.6842, "en": 6.3024, "de": 6.5047, "es": 6.0866, "it": 6.0605, "pt": 6.8002, "ru": 3.6809, "ar": 3.6064, "ja": 5.7423, "zh": 9.6509}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_multi/fr_train.txt --pas 20000 --seq 128 --lot 8 --lr 3e-4 --g … [249 caractères tronqués]`
+
+  ```
+fr21 1392712
+pas  200 · perte 2.5680 · PPL val 14.732 · 10 s
+pas  250 · perte 2.6521 · PPL val 14.375 · 13 s
+13:53
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2k/fiche.md <<'EOF'\n# N2.k — Dix langues : la base multilingue paie **0,60 bit/octet** en français et en gagne **0,8 à 3,2** ailleurs\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : une seule base  … [6373 caractères tronqués]`
+
+  ```
+fiche + filler prêts
+13:54
+pas  850 · perte 2.3882 · PPL val 11.514 · 43 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 300 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2k/base-multi.pt --corpus-dir data/corpus_propre 2>&1 | grep -v Loading | tee work/n2k/eval-multi-ood.json", "description": "Evaluate  … [46 caractères tronqués]`
+
+  ```
+{"fichier": "base-multi.pt", "params": 11814792, "val": 9.1943, "test": 9.0811, "litterature": 8.7248, "litterature_propre": 8.81, "anglais": 7.0461, "wikitext2": 7.3391, "permute": 241.2997}
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2k/base-fr21.log; ls work/n2k/base-fr21.pt 2>/dev/null && echo FR21_OK", "description": "Wait for the equal-data control"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-761]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-761", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2k/base-fr21.log; ls work/n2k/base-fr21.pt 2>/dev/null && echo FR21_OK", "description": "Check the equal-data control progress"}`
+
+  ```
+14:06
+pas 15350 · perte 1.2849 · PPL val 4.754 · 741 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2k/base-fr21.log; ls work/n2k/base-fr21.pt 2>/dev/null && echo FR21_OK", "description": "Wait for the control to finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-763]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-763", "timeout_ms": 400000, "wait": true}`
+
+  ```
+14:11
+}
+work/n2k/base-fr21.pt
+FR21_OK
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-761 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2k/base-fr21.log; ls work/n2k/base-fr21.pt 2>/dev/null && echo FR21_OK) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python work/n2k/evalue.py work/n2k/base-fr21.pt 2>&1 | grep -v Loading | tee work/n2k/eval-fr21.json; python3 work/n2k/remplit.py", "description": "Evaluate the equal-data … [30 caractères tronqués]`
+
+  ```
+{"fichier": "base-fr21.pt", "fr": 3.623, "en": 10.9509, "de": 17.5431, "es": 13.3105, "it": 13.8877, "pt": 15.9746, "ru": 8.3772, "ar": 16.5414, "ja": 43.5327, "zh": 107.8443}
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2k/remplit.py", line 7, in <module>
+    wiki = charge("eval-wiki.json")["base-wiki.pt"]
+           ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2k/remplit.py", line 6, in charge
+    return {r["fichier"]: r for r in json.loads(pathlib.Path(f"work/n2k/{nom}").read_text())}
+            ~^^^^^^^^^^^
+TypeError: string indices must be integers, not 'str'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2k/remplit.py'); s = p.read_text()\ns = s.replace('''def charge(nom):\n    return {r[\"fichier\"]: r for r in json.loads(pathlib.Path(f\"work/n2k/{nom}\").read_text())}''',\n' … [3746 caractères tronqués]`
+
+  ```
+filler corrigé
+restes: []
+fr 3,7633 → 5,6842 | fr21 3,6230
+=== table ===
+## Ce qui est mesuré
+
+| langue | FR seul (186 Mo) | FR seul (21 Mo) | 10 langues (237 Mo) | écart multi / FR 21 Mo |
+|---|---:|---:|---:|---:|
+| **fr** | 3,7633 | 3,6230 | 5,6842 | +57 % |
+| **en** | 11,0366 | 10,9509 | 6,3024 | −42 % |
+| **de** | 16,3009 | 17,5431 | 6,5047 | −63 % |
+| **es** | 13,0054 | 13,3105 | 6,0866 | −54 % |
+| **it** | 13,6259 | 13,8877 | 6,0605 | −56 % |
+| **pt** | 15,2688 | 15,9746 | 6,8002 | −57 % |
+| **ru** | 10,7419 | 8,3772 | 3,6809 | −56 % |
+| **ar** | 13,0103 | 16,5414 | 3,6064 | −78 % |
+| **ja** | 53,8382 | 43,5327 | 5,7423 | −87 % |
+| **zh** | 85,0273 | 107,8443 | 9,6509 | −91 % |
+
+## Lecture
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"\"\"  (**186 Mo** de Wikipédia) : **7,42** / **12,41**, filtre non ambigu sans effet. Fiches\"\"\"\nb = \"\"\"  (**186 Mo** de  … [1165 caractères tronqués]`
+
+  ```
+en-cours ok
+  T0 max : 3915 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 384 fichiers, le disque en a 385
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 16, in <module>
+AssertionError: ligne N2 introuvable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^| \\*\\*N2\\*\\*\" docs/pilotage/roadmap.md | cut -c1-400", "description": "Read the current N2 roadmap row"}`
+
+  ```
+181:| **N2** | la distillation : corpus, professeur, curriculum | 🔬 | **N2.h** — corpus dédupliqué (**0 %** de fuite) : la chaîne propre vaut **3,0904**, pas 2,85 ; **la diversité française divise la PPL hors dépôt par 4,3** (16,70 → 3,85) pour **+0,17** en domaine ; **positions aléatoires : 14,11 → 3,25** à 256 octets ; les deux leviers **se composent** (DR : 3,47 / 4,10 / 3,49 à 256) ; la **capa
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 181p docs/pilotage/roadmap.md | tail -c 500", "description": "Read the end of the N2 row"}`
+
+  ```
+ositions aléatoires : 14,11 → 3,25** à 256 octets ; les deux leviers **se composent** (DR : 3,47 / 4,10 / 3,49 à 256) ; la **capacité** (21,65 M) paie **−0,06** en domaine mais ne couvre pas. le **corpus élargi** (N2.i, 4,84 Mo) **généralise** (littérature −22 %, anglais −40 %) sans relever le domaine. Prochaine action : **un corpus d'un autre ordre** — du français réel en volume, pas les rapports du dépôt (5 Mo de prose y sont disponibles ; 27,7 Mo avec les transcripts) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\na = \"le **corpus élargi** (N2.i, 4,84 Mo) **généralise** (littérature −22 %, anglais −40 %) sans relever le domaine. Prochaine ac … [2537 caractères tronqués]`
