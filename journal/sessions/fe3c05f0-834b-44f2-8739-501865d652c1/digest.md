@@ -14299,3 +14299,238 @@ section capacité ajoutée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git add docs/pilotage/chantiers.md; git commit -m \"PILOTAGE — LA CAPACITÉ SIMULTANÉE : 4 SESSIONS, 4 À 6 CHANTIERS, 2 À 4 SOUS-AGENTS, ET LES LIMITES MESURÉES\" 2>&1 | tail -2; git log --oneline -1", "description": "Commit capacity se … [90 caractères tronqués]`
+
+  ```
+[master e20d0cd8] PILOTAGE — LA CAPACITÉ SIMULTANÉE : 4 SESSIONS, 4 À 6 CHANTIERS, 2 À 4 SOUS-AGENTS, ET LES LIMITES MESURÉES
+ 17 files changed, 276 insertions(+), 39 deletions(-)
+e20d0cd8 PILOTAGE — LA CAPACITÉ SIMULTANÉE : 4 SESSIONS, 4 À 6 CHANTIERS, 2 À 4 SOUS-AGENTS, ET LES LIMITES MESURÉES
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse : capacité mesurée et arbitrage sessions/sous-agents
+
+## Combien, en ce moment
+
+Les moyens réels, mesurés à l'instant : **40 cœurs**, **125 Go de RAM** (109 disponibles), **2 GPU Quadro RTX 5000 de 16 Go — libres**, **2,0 To libres** sur `Data13TB`, **34 Go seulement** sur `IA` (97 % plein), et **4 processus `dsh`-TUI actifs** (l'état ne déclare qu'une session, Pensée).
+
+**Matériellement**, on peut tenir 6 à 10 tâches CPU simultanées et **1 à 2 chantiers GPU** (un entraînement par GPU ; le 32 B et le professeur ne tiennent pas en 16 Go).
+
+**Réellement, la capacité est de 4 à 6 chantiers en vol** — 4 sessions + 2 à 4 sous-agents. Les six chantiers prêts aujourd'hui : **N2** (GPU libre), **L** (contrat + cascade), **S** (analyseur + export), **D** (texte intégral, PDF/OCR), **A2.6/A8.3**, **B13** (AC-3, alpha-bêta). Bloqués : B10.3, A3.4, A5.4, A6.2, R2/R3, R5, N5.
+
+## Pourquoi pas plus
+
+- **L'état s'écrit une session à la fois** (`continuite.md`) ; au-delà de 4 écrivains, les compteurs dérivent et les commits se verrouillent — on l'a vu le 01/11 : `cannot lock ref 'HEAD'` sur deux commits concurrents.
+- **Les territoires de fichiers** se chevauchent vite (N2 : `data/`, `tools/corpus*` ; Pensée : `tools/pensee/`, `reports/pensee-*`, `r44-*` ; S : `tools/structures` ; D : `data/corpus*`).
+- **La mesure sérialise** : le banc R03, les portes, les JSON.
+- **L'humain est le goulot** : S, la pragmatique, le contrat de L et les choix de design demandent ta relecture — plus d'agents produisent plus à relire, pas plus de **validé**.
+
+## Sessions ou une seule avec beaucoup de sous-agents ?
+
+**Les deux, à des échelles différentes — c'est un hybride, pas un choix exclusif.**
+
+| besoin | unité | pourquoi |
+|---|---|---|
+| un **mandat long** (heures, objectif propre, contexte qui compacte, territoire réservé) | **session DSH** | elle survit, écrit son plan et son état, se reprend ; elle coûte la coordination |
+| une **tâche bornée** (une mesure, un outil, une fiche, un audit) | **sous-agent** (2 à 4, AGENTS § 10) | il rend un diff, la session intègre et commite ; il ne touche ni `en-cours` ni la roadmap |
+| un **audit massif en lecture seule** | **workflow** (fan-out) | il parallélise la lecture, pas l'écriture |
+
+Une **seule session avec beaucoup de sous-agents** ne remplace pas les sessions : son contexte compacte, l'état reste à un écrivain unique, et huit sous-agents qui écrivent dans le même arbre se sérialisent à l'intégration. Les sessions sont l'**unité de mandat**, les sous-agents l'**unité de tâche**.
+
+## L'allocation que je recommande maintenant
+
+**4 sessions** : (1) **N2** sur le GPU — entraînement sur les corpus D, longueur, capacité ; (2) **Pensée** — contrat de L + mesure de cascade, puis B13 (AC-3, alpha-bêta) ; (3) **S** — analyseur plus riche + export vers le corpus ; (4) **D/lecteur/A** — texte intégral, PDF/OCR, R1.1/R1.2, A2.6.
+
+Et **2 sous-agents** dans les deux sessions les plus chargées : un pour la cascade de L, un pour AC-3/alpha-bêta ; un pour l'extraction PDF, un pour les dumps. **Un écrivain d'état à la fois**, toi sur S, L et la pragmatique. Le plafond utile est là : **4 sessions, 4 à 6 chantiers, 2 à 4 sous-agents par session** — au-delà, la coordination et la relecture mangent le gain.
+
+Le tout est écrit dans `docs/pilotage/chantiers.md` § 8 (« La capacité simultanée »), commit `e20d0cd8`, avec la carte des relations `docs/schemas/chantiers-vision.svg`.
+
+
+## Tour 9
+
+### 👤 Utilisateur
+
+organise le dossier pilotage pour qu'il soit à jour et qu'entre le en-cours.md et roadmap.md il y ait un plan de travail optimal pour plusieurs sessions bien balancées. Note tout se passe sur la même machine. Elle est bien ddtée en matériel, mais ils faut surveiller beaucoup de fichiers en mouvement par des sessions parallèles.
+
+### 🤖 Assistant
+
+⏵ Organisation du pilotage : index, plan multi-sessions, territoires et surveillance
+
+Je regarde d'abord l'existant (utilisation, sessions.py, en-cours, réservations) pour construire le pont en-cours ↔ plan ↔ roadmap sans dupliquer.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== utilisation.md\"; head -50 docs/pilotage/utilisation.md; echo \"=== sessions.py\"; sed -n '1,80p' tools/sessions.py", "description": "Read pilotage usage and session checker", "timeoutMs": 180000, "workdir": "/home/stephane/ … [34 caractères tronqués]`
+
+  ```
+=== utilisation.md
+# UTILISER DRAVE — ce qui marche aujourd'hui, et ce qui manque
+
+> Écrit le **16/10**, **revu le 2026-10-27**. en réponse à une question simple : « que manque-t-il pour que je puisse utiliser
+> tout ça ? ». Ce document dit **ce qui s'utilise tout de suite** ✓, **la commande exacte** ✓, et
+> **ce qui n'existe pas encore** ✗ — avec ce que chaque manque coûterait ✓.
+> Règle de lecture : tout ce qui est ✅ a été **exécuté** le jour de l'écriture ✓ ; tout ce qui est ❌
+> est un **manque constaté**, pas une supposition ✓.
+
+## 1. ✅ Ce qui s'utilise tout de suite
+
+### Parler au modèle — le chat
+
+```bash
+python3 tools/chat.py                       # REPL : Qwen2.5-0.5B, contexte 2048, 256 jetons/réponse
+python3 tools/chat.py --modele models/Qwen2.5-0.5B-Q4_0.gguf --temp 0.9 --n 512
+```
+
+Commandes dans le REPL : `/aide`, `/reset`, `/system TEXTE`, `/temp X`, `/n X`, `/ctx X`, `/brut`,
+`/quitter` ✓. **Ce que ce script corrige, et qui manquait** ✗ : `--chat` **seul ne fait rien** ✗ (le
+gabarit n'est appliqué qu'avec `--prompt` ✓ — sans lui, le moteur lance un **banc de mesure** ✗✓) ; et
+il n'existe **aucun mode silencieux** ✗ (la télémétrie suit la réponse ✓) → le REPL construi
+… [5042 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== plans actifs\"; for p in journal/sessions/*/plan.md; do etat=$(grep -m1 \"^- \\*\\*État\\*\\*\" \"$p\" 2>/dev/null | sed 's/.*: //'); case \"$etat\" in en\\ cours*|actif*) echo \"$p : $etat\";; esac; done; echo \"=== réserva … [306 caractères tronqués]`
+
+  ```
+=== plans actifs
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md : actif
+journal/sessions/_modele/plan.md : actif
+=== réservations
+journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md:- **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`,
+journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md-  `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`,
+journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md-  `journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/`
+--
+journal/sessions/0b69f616-5c75-4c34-b97a-ae05564812af/plan.md:- **Fichiers réservés** : `tools/routeur.py`, `tools/r13_anglais.py`, `reports/r04-*`,
+journal/sessions/0b69f616-5c75-4c34-b97a-ae05564812af/plan.md-  `reports/r07-*`, `reports/r13*`, `reports/rapport-r04-*`, `reports/rapport-r07-*`,
+journal/sessions/0b69f616-5c75-4c34-b97a-ae05564812af/plan.md-  `reports/rapport-r13*`, `docs/implantation/tokenisation.md`, `docs/pilotage/en-cours.md`,
+--
+journal/sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/plan.md:- **Fichiers réservés** : `tools/archive_sessions.py`, `tools/session_report.py`,
+journal/sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/plan.md-  `tools/
+… [2408 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '80,200p' tools/sessions.py", "description": "Read sessions checker status and overlap logic", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+def ids_en_cours(racine: Path) -> list[str]:
+    p = racine / ETAT
+    if not p.exists():
+        return []
+    texte = p.read_text(encoding="utf-8")
+    return re.findall(r"^###\s+Session\s+`?([A-Za-z0-9_.-]+)`?", texte, re.M)
+
+
+def sections_en_cours(racine: Path) -> list[dict]:
+    p = racine / ETAT
+    if not p.exists():
+        return []
+    texte = p.read_text(encoding="utf-8")
+    m = re.search(r"Mis à jour\s*:\s*(\d{4}-\d{2}-\d{2}),\s*(\d{1,2})\s*h\s*(\d{2})", texte)
+    heartbeat = f"{m.group(1)} {int(m.group(2)):02d}:{m.group(3)} HAE" if m else ""
+    morceaux = re.split(r"^###\s+Session\s+`?([A-Za-z0-9_.-]+)`?\s*—\s*(.*)$", texte, flags=re.M)
+    out = []
+    for i in range(1, len(morceaux), 3):
+        sid, role, bloc = morceaux[i], morceaux[i + 1].strip(), morceaux[i + 2]
+        champs = {}
+        for mm in re.finditer(r"^-\s+\*\*(.+?)\*\*\s*:\s*(.*(?:\n(?!-\s+\*\*).*)*)", bloc, re.M):
+            champs[_cle(mm.group(1))] = " ".join(x.strip() for x in mm.group(2).splitlines()).strip()
+        out.append({"id": sid, "role": role, "champs": champs,
+                    "fichiers": champs.get("fichiers réservés", ""),
+                    "prochaine": champs.get("prochain
+… [4362 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > docs/pilotage/plan-travail.md <<'EOF'\n# Le plan de travail — plusieurs sessions sur une même machine\n\n> **Ce que ce document est.** Le **pont** entre l'état ([`en-cours.md`](en-cours.md), ce qui se\n> passe maintenant) et l'or … [16289 caractères tronqués]`
+
+  ```
+160 docs/pilotage/plan-travail.md
+64 docs/pilotage/README.md
+  T0 max : 3915 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > tools/surveille_sessions.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"surveille_sessions.py — les fichiers qui bougent, rangés par session.\n\nPOURQUOI CET OUTIL. Tout le monde travaille sur le **même arbre** : deux sessions qui écr … [4632 caractères tronqués]`
+
+  ```
+surveille-sessions · 1 session(s) active(s) · 5 fichier(s) en mouvement
+  e181ce02-cd50-488a · actif   · 108 min · 2 réservation(s)
+  e181ce02-cd50-488a · 0 fichier(s) : 
+  hub (partagé)      · 2 fichier(s) : docs/pilotage/README.md, docs/pilotage/plan-travail.md
+
+  orphelins (3) — à attribuer, commiter ou supprimer :
+    · tools/docwatch
+    · tools/structures
+    · tools/surveille_sessions.py
+  conflits (0) — deux sessions les réclament :
+[code 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/sessions.py'); s=p.read_text()\nold='''def lire_plan(chemin: Path) -> dict:\n    champs: dict[str, str] = {}\n    for ligne in chemin.read_text(encoding=\"utf-8\").splitlines():\n … [1502 caractères tronqués]`
+
+  ```
+lire_plan : champs multi-lignes
+sessions · plans de mandat
+    0b0a6a0d-05f5-4308 · terminé  · 424 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 2498 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 1669 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+      → clôture committée (`eff8d8e4`) — session close ; la suite est **N2** (la hiérarchie), portée par la session à ouvrir
+    71d57f53-8b41-4220 · terminé  · 3002 min · docs/pilotage/en-cours.md, docs/methode/continuite.md, tools/sessions.py, journal/sessions/README.md, journal/sessions/_modele/plan.md, tools/porte-sessions.sh
+=== check
+  ⚠ mandat périmé (109 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+[check 0]
+=== porte
+[porte 0]
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé
+  ⚠ mandat périmé (109 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+POR
+… [74 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\n# monitor : le hub possède aussi ses outils\np=pathlib.Path('tools/surveille_sessions.py'); s=p.read_text()\ns=s.replace('''            \"docs/pilotage/README.md\", \"AGENTS.md\", \"reports/INDEX.md\") … [3101 caractères tronqués]`
+
+  ```
+pointeurs, compteurs, journal
+  e181ce02-cd50-488a · 0 fichier(s) : 
+  hub (partagé)      · 6 fichier(s) : docs/pilotage/en-cours.md, docs/pilotage/roadmap.md, tools/sessions.py, docs/pilotage/README.md, docs/pilotage/plan-travail.md …
+
+  orphelins (3) — à attribuer, commiter ou supprimer :
+    · journal/2026-11-01/README.md
+    · tools/docwatch
+    · tools/structures
+  conflits (0) — deux sessions les réclament :
+  T0 max : 3948 mots (budget 4 000)
+  revue de documentation · 385 fiche(s) · 471 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 119 documents, le disque en a 118
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"pilotage\" docs/README.md | head -12; echo \"=== en-cours compteurs\"; grep -n \"fichiers / JSON\\|documents de\" docs/pilotage/en-cours.md", "description": "Check docs map and counters", "timeoutMs": 120000, "workdir": "/hom … [45 caractères tronqués]`
+
+  ```
+15:| **faire** (résultat, porte, rangement, Panini, miroir, ressources) | [`methode/`](methode/) · [l'organisation](methode/organisation-du-depot.md) · [l'utilisation](pilotage/utilisation.md) |
+16:| **savoir où l'on en est** | [l'état](pilotage/en-cours.md) · [la roadmap](pilotage/roadmap.md) · [le backlog](pilotage/backlog/index.md) · [les résultats](../reports/README.md) · [les portes](pilotage/references-non-regression.md) · [le journal](../journal/README.md) |
+41:| [`pilotage/en-cours.md`](pilotage/en-cours.md) | l'**état courant** : synthèse, chantiers, questions |
+42:| [`pilotage/roadmap.md`](pilotage/roadmap.md) | le **plan unique** : chantiers A/B/N/R, prochaine action par ligne |
+43:| [`pilotage/backlog/index.md`](pilotage/backlog/index.md) | le **backlog** : une fiche par fonctionnalité (R, et lignes ouvertes A/B/N) |
+44:| [`pilotage/utilisation.md`](pilotage/utilisation.md) | ce qui marche aujourd'hui, avec la commande exacte |
+45:| [`pilotage/manques.md`](pilotage/manques.md) | le registre des manques mesurés |
+46:| [`pilotage/references-non-regression.md`](pilotage/references-non-regression.md) | les repères chiffrés des passes complètes |
+95:`docs/` = **méthode, pilo
+… [336 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\n# en-cours : compteur docs\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"| documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |\",\n            \"|  … [2723 caractères tronqués]`
+
+  ```
+carte, compteur, monitor
+  hub (partagé)      · 8 fichier(s) : docs/pilotage/en-cours.md, docs/pilotage/roadmap.md, journal/2026-11-01/README.md, tools/docwatch, tools/sessions.py …
+
+  orphelins (2) — à attribuer, commiter ou supprimer :
+    · docs/README.md
+    · tools/structures
+  conflits (0) — deux sessions les réclament :
+  revue de documentation · 385 fiche(s) · 471 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3948 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/surveille_sessions.py'); s=p.read_text()\ns=s.replace('''            \"journal/2026-*\")''','''            \"journal/2026-*\", \"docs/README.md\")''')\np.write_text(s)\nPY\nfor t  … [2869 caractères tronqués]`

@@ -99,7 +99,7 @@
 | portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **385** / **471** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **117** (hors archive et README) | `docs/**/*.md` |
+| documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
@@ -131,6 +131,8 @@ styles · **C5** domaines · **C6** documentation · **C7** pensée — hors gra
 **N2.h** — **close** (N2.i : 12,93 littérature, 33,83 anglais ; porte < 2,5 non atteinte) ;
 **Pensée** — AC-3, alpha-bêta, DRVF, banc anytime (session `e181ce02`) ; **N4** — la consigne
 courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — close, limites nommées ; **R0.7** — gold/neuronal ; **R1.1/R1.2** — le contexte natif ; **S** — l'export au corpus.
+
+- **Le plan de travail multi-sessions** : [`plan-travail`](plan-travail.md) — quatre sessions (N2, L, S, D/R/A) + le hub, les territoires, la cadence, la surveillance ; le pont entre cet état et la roadmap.
 
 ## Les questions ouvertes
 

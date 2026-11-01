@@ -38,10 +38,15 @@ def _valeur(s: str) -> str:
 
 def lire_plan(chemin: Path) -> dict:
     champs: dict[str, str] = {}
-    for ligne in chemin.read_text(encoding="utf-8").splitlines():
-        m = re.match(r"^\s*[-*]\s*\*\*(.+?)\*\*\s*:\s*(.*?)\s*$", ligne)
-        if m:
-            champs[_cle(m.group(1))] = _valeur(m.group(2))
+    # un champ peut tenir sur plusieurs lignes (réservations, périmètre) : on prend la ligne du
+    # champ ET ses continuations jusqu'au prochain « - **champ** ». Sans cela, la moitié des
+    # fichiers réservés n'était pas vérifiée (mesuré sur le plan de la session Pensée : 2 items
+    # lus au lieu de 9).
+    texte = chemin.read_text(encoding="utf-8")
+    for m in re.finditer(r"^\s*[-*]\s*\*\*(.+?)\*\*\s*:\s*"
+                         r"(.*(?:\n(?!\s*[-*]\s*\*\*).*)*)", texte, re.M):
+        valeur = " ".join(x.strip() for x in m.group(2).splitlines()).strip()
+        champs[_cle(m.group(1))] = _valeur(valeur)
     # tolérances : Role / Perimetre sans accent
     for alias, cible in (("role", "rôle"), ("perimetre", "périmètre"),
                          ("fichiers reserves", "fichiers réservés"),

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**52 commits** · **4 session(s)** · **9 thème(s)**
+**53 commits** · **4 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 12 | [docs.md](docs.md) |
+| docs | 13 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 29 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -28,7 +28,7 @@
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 22.0 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 21.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 22.7 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 23.1 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -86,10 +86,24 @@
 | 13:49 | `651bfc90` | BLOC LINGUISTIQUE — NEUF NIVEAUX, HEURISTIQUE ET NEURONAL, 398 LANGUES À 0,9687 |
 | 14:12 | `291f0f72` | N2.k — DIX LANGUES : LE FRANÇAIS PAIE 0,65 BIT/OCTET, LES AUTRES GAGNENT 0,8 À 3,4 |
 | 14:13 | `0f2dbdca` | ÉTAT — COMPTEUR JSON 471 (DIX LANGUES) |
+| 15:20 | `e20d0cd8` | PILOTAGE — LA CAPACITÉ SIMULTANÉE : 4 SESSIONS, 4 À 6 CHANTIERS, 2 À 4 SOUS-AGENTS, ET LES LIMITES MESURÉES |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Le dossier pilotage remis à plat, avec un plan de travail multi-sessions.** Le pilotage a
+maintenant un **index** (`docs/pilotage/README.md`, l'ordre de lecture et qui écrit quoi) et un
+**plan de travail** (`docs/pilotage/plan-travail.md`) qui fait le pont entre l'état et la
+roadmap : quatre sessions de mandat (N2 GPU, L langue/pensée, S structures, D/R/A
+données/lecteur/moteur) + un rôle d'intégration, les **territoires** (qui écrit quoi, le partage
+de `data/` réglé), la **cadence** (round, checkpoint, un écrivain d'état à la fois, index alterné,
+retry sur `HEAD`), les règles de la machine partagée (GPU, 40 cœurs, `IA` à 34 Go) et la
+**surveillance** : `sessions.py --check` (réservations déclarées, désormais multi-lignes — 2 items
+lus au lieu de 9 avant le correctif) et le nouvel outil `surveille_sessions.py` (fichiers en
+mouvement rangés par session, orphelins et conflits — le premier run signale `tools/structures`
+sans session déclarée). Fiches : [`plan-travail`](../../docs/pilotage/plan-travail.md),
+[`README`](../../docs/pilotage/README.md).
+
 **La vision relue sur 48 h, et l'inventaire élargi.** Les messages humains des sessions
 `0b69f616`, `22e518ee`, `0b0a6a0d`, `fe3c05f0`, `e181ce02` et des sessions de QA visuelle ont été
 relus dans les traces DSH. Ils disent la même chose en plusieurs temps : les blocs sont

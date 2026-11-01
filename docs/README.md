@@ -13,7 +13,7 @@
 |---|---|
 | **comprendre le projet** | [la vision](theorie/vision.md) · [la mission](methode/mission.md) · [le protocole sémantique](theorie/protocole-semantique.md) · [le glossaire](theorie/glossaire.md) · [la synthèse](theorie/synthese/index.md) |
 | **faire** (résultat, porte, rangement, Panini, miroir, ressources) | [`methode/`](methode/) · [l'organisation](methode/organisation-du-depot.md) · [l'utilisation](pilotage/utilisation.md) |
-| **savoir où l'on en est** | [l'état](pilotage/en-cours.md) · [la roadmap](pilotage/roadmap.md) · [le backlog](pilotage/backlog/index.md) · [les résultats](../reports/README.md) · [les portes](pilotage/references-non-regression.md) · [le journal](../journal/README.md) |
+| **savoir où l'on en est** | [l'état](pilotage/en-cours.md) · [le plan de travail](pilotage/plan-travail.md) · [la roadmap](pilotage/roadmap.md) · [les chantiers](pilotage/chantiers.md) · [le backlog](pilotage/backlog/index.md) · [les résultats](../reports/README.md) · [les portes](pilotage/references-non-regression.md) · [le journal](../journal/README.md) |
 
 ## Méthode — comment on travaille
 
@@ -38,8 +38,12 @@
 
 | document | pour quoi |
 |---|---|
-| [`pilotage/en-cours.md`](pilotage/en-cours.md) | l'**état courant** : synthèse, chantiers, questions |
-| [`pilotage/roadmap.md`](pilotage/roadmap.md) | le **plan unique** : chantiers A/B/N/R, prochaine action par ligne |
+| [`pilotage/README.md`](pilotage/README.md) | la **carte du pilotage** : ordre de lecture, qui écrit quoi, outils |
+| [`pilotage/en-cours.md`](pilotage/en-cours.md) | l'**état courant** : synthèse, chantiers, sessions actives |
+| [`pilotage/plan-travail.md`](pilotage/plan-travail.md) | le **plan multi-sessions** : quatre sessions + le hub, territoires, cadence, surveillance |
+| [`pilotage/roadmap.md`](pilotage/roadmap.md) | l'**ordre** : chantiers A/B/N/R/S, état et prochaine action par ligne |
+| [`pilotage/chantiers.md`](pilotage/chantiers.md) | les **relations** entre chantiers, la vision à jour, la capacité |
+| [`pilotage/programme-r.md`](pilotage/programme-r.md) | la **charte du programme R** : six phases, lois, dépendances |
 | [`pilotage/backlog/index.md`](pilotage/backlog/index.md) | le **backlog** : une fiche par fonctionnalité (R, et lignes ouvertes A/B/N) |
 | [`pilotage/utilisation.md`](pilotage/utilisation.md) | ce qui marche aujourd'hui, avec la commande exacte |
 | [`pilotage/manques.md`](pilotage/manques.md) | le registre des manques mesurés |

@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 22.7 h |
-| Tours | 8 |
-| Messages | 804 |
-| Appels d'outils | 809 |
+| Durée | 23.1 h |
+| Tours | 9 |
+| Messages | 815 |
+| Appels d'outils | 819 |
 | Fichiers touchés | 18 |
-| Commandes | 740 |
+| Commandes | 750 |
 | Sous-agents | 0 |
-| Commits | 36 |
+| Commits | 37 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -41,6 +41,8 @@
 **Tour 7** — relis mes demandes de toutes les sessions des derniers 48h pour compredre la vision à jour du projet. creuse l'historique au besoin pour garantir la cohérence et élargir l'inventaire de chantier pour mieux comprendre leurs relations.
 
 **Tour 8** — combien de chantiers simultanés on peut faire en ce moment? Est0il préférable d'avoir plusieurs sessions dsh ou bien une seule avec beaucoup de sub-agents?
+
+**Tour 9** — organise le dossier pilotage pour qu'il soit à jour et qu'entre le en-cours.md et roadmap.md il y ait un plan de travail optimal pour plusieurs sessions bien balancées. Note tout se passe sur la même machine. Elle est bien ddtée en matériel, mais ils faut surveiller beaucoup de fichiers en mouvement par des sessions parallèles.
 
 ## 2. Déroulé, étape par étape
 
@@ -447,9 +449,56 @@ Les demandes qui ont produit cela : la **séparation à 3 niveaux** et les blocs
 
 **Synthèse produite :**
 
-⏵ Capacité de parallélisme : ressources, sessions actives, et politique de sous-agents
+⏵ Réponse : capacité mesurée et arbitrage sessions/sous-agents
 
-Je regarde les moyens réels (cœurs, RAM, GPU, disque), les sessions en cours et ce que la méthode dit déjà des sous-agents.
+\## Combien, en ce moment
+
+Les moyens réels, mesurés à l'instant : **40 cœurs**, **125 Go de RAM** (109 disponibles), **2 GPU Quadro RTX 5000 de 16 Go — libres**, **2,0 To libres** sur `Data13TB`, **34 Go seulement** sur `IA` (97 % plein), et **4 processus `dsh`-TUI actifs** (l'état ne déclare qu'une session, Pensée).
+
+**Matériellement**, on peut tenir 6 à 10 tâches CPU simultanées et **1 à 2 chantiers GPU** (un entraînement par GPU ; le 32 B et le professeur ne tiennent pas en 16 Go).
+
+**Réellement, la capacité est de 4 à 6 chantiers en vol** — 4 sessions + 2 à 4 sous-agents. Les six chantiers prêts aujourd'hui : **N2** (GPU libre), **L** (contrat + cascade), **S** (analyseur + export), **D** (texte intégral, PDF/OCR), **A2.6/A8.3**, **B13** (AC-3, alpha-bêta). Bloqués : B10.3, A3.4, A5.4, A6.2, R2/R3, R5, N5.
+
+\## Pourquoi pas plus
+
+- **L'état s'écrit une session à la fois** (`continuite.md`) ; au-delà de 4 écrivains, les compteurs dérivent et les commits se verrouillent — on l'a vu le 01/11 : `cannot lock ref 'HEAD'` sur deux commits concurrents.
+- **Les territoires de fichiers** se chevauchent vite (N2 : `data/`, `tools/corpus*` ; Pensée : `tools/pensee/`, `reports/pensee-*`, `r44-*` ; S : `tools/structures` ; D : `data/corpus*`).
+- **La mesure sérialise** : le banc R03, les portes, les JSON.
+- **L'humain est le goulot** : S, la pragmatique, le contrat de L et les choix de design demandent ta relecture — plus d'agents produisent plus à relire, pas plus de **validé**.
+
+\## Sessions ou une seule avec beaucoup de sous-agents ?
+
+**Les deux, à des échelles différentes — c'est un hybride, pas un choix exclusif.**
+
+| besoin | unité | pourquoi |
+|---|---|---|
+| un **mandat long** (heures, objectif propre, contexte qui compacte, territoire réservé) | **session DSH** | elle survit, écrit son plan et son état, se reprend ; elle coûte la coordination |
+| une **tâche bornée** (une mesure, un outil, une fiche, un audit) | **sous-agent** (2 à 4, AGENTS § 10) | il rend un diff, la session intègre et commite ; il ne touche ni `en-cours` ni la roadmap |
+| un **audit massif en lecture seule** | **workflow** (fan-out) | il parallélise la lecture, pas l'écriture |
+
+Une **seule session avec beaucoup de sous-agents** ne remplace pas les sessions : son contexte compacte, l'état reste à un écrivain unique, et huit sous-agents qui écrivent dans le même arbre se sérialisent à l'intégration. Les sessions sont l'**unité 
+… [941 caractères tronqués]
+
+### Tour 9 — organise le dossier pilotage pour qu'il soit à jour et qu'entre le en-cours.md et roadmap.md il y ait un plan de travail … [209 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Read pilotage usage and session checker
+- bash — List active session plans, reservations, and moving files
+- bash — Read sessions checker status and overlap logic
+- bash — Write multi-session work plan and pilotage index
+- bash — Write and run session file monitor
+- bash — Fix multi-line plan parsing and run session gate
+- bash — Update pointers, counters, journal, and run monitor
+- bash — Check docs map and counters
+- bash — Update docs map, counters, monitor rules
+- bash — Final gates and commit pilotage reorganization
+
+**Synthèse produite :**
+
+⏵ Organisation du pilotage : index, plan multi-sessions, territoires et surveillance
+
+Je regarde d'abord l'existant (utilisation, sessions.py, en-cours, réservations) pour construire le pont en-cours ↔ plan ↔ roadmap sans dupliquer.
 
 ## 3. Travail accompli
 
@@ -518,7 +567,7 @@ Je regarde les moyens réels (cœurs, RAM, GPU, disque), les sessions en cours e
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 700 autres
+- … et 710 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -702,4 +751,5 @@ Je regarde les moyens réels (cœurs, RAM, GPU, disque), les sessions en cours e
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("| f
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet for t in "python3 tools/verifie_journal.py" "python3 tools/verifie_backlog.py" "python3 tools/verifie_etat_a_
 - PILOTAGE — LA CAPACITÉ SIMULTANÉE : 4 SESSIONS, 4 À 6 CHANTIERS, 2 À 4 SOUS-AGENTS, ET LES LIMITES MESURÉES" 2>&1 | tail -2; git log --oneline -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet python3 - <<'PY' import pathlib p=pathlib.Path('tools/surveille_sessions.py'); s=p.read_text() s=s.replace(''
 
