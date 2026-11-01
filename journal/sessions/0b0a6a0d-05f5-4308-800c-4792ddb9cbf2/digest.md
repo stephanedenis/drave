@@ -6456,3 +6456,109 @@ pas 12250 · seq 128 · perte 75.0291 · PPL 128/4 3.5246 · 847 s
   ```
 
 - **job_output** `{"job_id": "bash-359", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g2.pt 2>/dev/null && echo R2_OK; tail -1 work/n2h/R-pos-g3.log 2>/dev/null; tail -1 work/n2h/R-pos-g2.log", "description": "Check R seed 2 status"}`
+
+  ```
+01:21
+work/n2h/R-pos-g2.pt
+R2_OK
+pas  1000 · seq 128 · perte 364.0111 · PPL 128/4 3.8031 · 72 s
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/R-pos-g2.pt --longueurs 2>&1 | grep -v Loading", "description": "Evaluate random positions seed 2"}`
+
+  ```
+{"fichier": "R-pos-g2.pt", "params": 11814792, "val": 3.2392, "test": 3.3466, "litterature": 15.342, "litterature_propre": 16.7327, "anglais": 58.2932, "wikitext2": 57.9316, "permute": 1202.2777, "longueurs": {"129": 3.2428, "192": 3.2328, "256": 3.2453, "384": 4.966, "512": 5.7697}}
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g3.pt 2>/dev/null && echo R3_OK; ls work/n2h/*.pt | wc -l", "description": "Wait for the last run", "run_in_background": true}`
+
+  ```
+started background job bash-363
+  ```
+
+- **job_output** `{"job_id": "bash-363", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-356 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g2.pt 2>/dev/null && echo R2_OK; tail -1 work/n2h/R-pos-g3.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-359 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g2.pt 2>/dev/null && echo R2_OK; tail -1 work/n2h/R-pos-g3.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g3.pt 2>/dev/null && echo R3_OK; tail -1 work/n2h/R-pos-g3.log; ls work/n2h/gpu0.termine work/n2h/gpu1.termine 2>/dev/null", "description": "Check the final run"}`
+
+  ```
+01:32
+pas 10500 · seq 128 · perte 67.4545 · PPL 128/4 3.5030 · 719 s
+work/n2h/gpu1.termine
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/journal.md <<'EOF'\n### N2.h — le mètre propre, la généralité, et le verrou de longueur\n\nLa nuit du 31 octobre au 1er novembre, la session a eu **dix heures**. Le premier geste n'a pas été\nd'entraîner plus : il a ét … [2285 caractères tronqués]`
+
+  ```
+ok
+01:32
+pas 10500 · seq 128 · perte 67.4545 · PPL 128/4 3.5030 · 719 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 12,20p reports/README.md", "description": "Read the reports index head"}`
+
+  ```
+> partie**, jamais en entier ; l'index exhaustif des fiches est [`INDEX.md`](INDEX.md).
+
+## Les fiches courantes
+
+| fichier | ce qu'il porte |
+|---|---|
+| [`rapport-n2-budget.md`](rapport-n2-budget.md) | **N2.d** — le budget plein paie **2,9355 → 2,8527**, les 4 sources coûtent **+0,91**, et **la validation est contaminée à 32,8 %** (PPL propres **2,9795**) |
+| [`rapport-native-prof30k.md`](rapport-native-prof30k.md) | **N2.21** — professeur 30k, lr 3e-6 : PPL **2,823**, dégradation, arrêté |
+| `rapport-native-prof20k-6.md` (fiche non écrite) | **N2.23** — professeur 20k, lr 3e-6 : PPL **2,753**, arrêté |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/README.md'); s = p.read_text()\nvieux = \"| [`rapport-n2-budget.md`](rapport-n2-budget.md) | **N2.d** — le budget plein paie **2,9355 → 2,8527**, les 4 sources coûtent **+0, … [1061 caractères tronqués]`
+
+  ```
+ok
+01:32
+pas 10750 · seq 128 · perte 65.5193 · PPL 128/4 3.5016 · 735 s
+  ```
+
+- **job_output** `{"job_id": "bash-363", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+01:41
+13
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt | wc -l; ls work/n2h/gpu0.termine work/n2h/gpu1.termine 2>/dev/null; tail -1 work/n2h/R-pos-g3.log", "description": "Check the end of the campaign"}`
+
+  ```
+01:41
+13
+work/n2h/gpu1.termine
+pas 19250 · seq 128 · perte 72.3568 · PPL 128/4 3.4588 · 1314 s
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g3.pt 2>/dev/null && echo R3_OK; ls work/n2h/gpu0.termine 2>/dev/null && echo GPU0_FINI", "description": "Wait for the last checkpoint", "run_in_background": true}`
+
+  ```
+started background job bash-369
+  ```
+
+- **job_output** `{"job_id": "bash-369", "timeout_ms": 600000, "wait": true}`

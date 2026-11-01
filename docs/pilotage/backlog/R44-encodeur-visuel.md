@@ -27,8 +27,8 @@ Une partie des documents n'existe qu'en image. Sans OCR et layout, Drave ne lit 
 **Programme de la nuit du 31/10 au 1/11** — 100 scans **simulés** (5 familles, dev/test),
 colonnes, tableaux et un **vrai scan** ([`scans`](../../../reports/rapport-r44-scans.md)) :
 
-- WER (dev → test) : **propre 4,1 → 3,0 %**, **photocopie 6,3 → 4,7 %**, **photo 7,0 → 5,3 %**,
-  **papier 7,3 → 6,2 %**, **fax 21,9 → 15,5 %** ; la photo partait de **55,9 %** brute ;
+- WER (dev → test) : **propre 4,1 → 3,0 %**, **photocopie 6,3 → 4,7 %**, **photo 6,7 → 5,7 %**,
+  **papier 6,9 → 6,4 %**, **fax 21,9 → 15,5 %** ; la photo partait de **55,9 %** brute ;
 - **préservation** des réponses du lecteur (dev, 30 questions) : **90,0 / 86,7 / 86,7 / 73,3 /
   53,3 %** ; **exposants** : le plafond du texte propre monte de 83,3 à **90 %** ;
 - **colonnes** : deux colonnes **89,4 % → 0,5 %** de WER (mono inchangée) ;

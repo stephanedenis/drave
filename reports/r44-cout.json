@@ -1,0 +1,231 @@
+{
+ "date": "2026-11-01",
+ "ligne": "R4.4",
+ "nature": "coût mesuré",
+ "machine": "40 cœurs, tesseract 5.5.3, CPU",
+ "agregat": {
+  "propre": {
+   "pages": 3,
+   "nettoyage_s": 1.36,
+   "ocr_s": 2.86,
+   "ocr_brut_s": 2.94
+  },
+  "photocopie": {
+   "pages": 3,
+   "nettoyage_s": 0.43,
+   "ocr_s": 2.53,
+   "ocr_brut_s": 2.54
+  },
+  "photo": {
+   "pages": 3,
+   "nettoyage_s": 0.41,
+   "ocr_s": 2.37,
+   "ocr_brut_s": 1.39
+  },
+  "fax": {
+   "pages": 3,
+   "nettoyage_s": 0.4,
+   "ocr_s": 2.62,
+   "ocr_brut_s": 1.7
+  },
+  "papier": {
+   "pages": 3,
+   "nettoyage_s": 0.39,
+   "ocr_s": 2.37,
+   "ocr_brut_s": 2.32
+  }
+ },
+ "pages": [
+  {
+   "image": "A_RES_80_10-fr-p2-s1-propre.png",
+   "famille": "propre",
+   "langue": "fra",
+   "nettoyage_s": 1.33,
+   "ocr_s": 2.8,
+   "ocr_brut_s": 2.88,
+   "trace": [
+    "recadrage"
+   ],
+   "mots_ocr": 552
+  },
+  {
+   "image": "A_RES_80_10-fr-p2-s1-photocopie.png",
+   "famille": "photocopie",
+   "langue": "fra",
+   "nettoyage_s": 0.43,
+   "ocr_s": 2.49,
+   "ocr_brut_s": 2.5,
+   "trace": [
+    "recadrage"
+   ],
+   "mots_ocr": 549
+  },
+  {
+   "image": "A_RES_80_10-fr-p2-s1-photo.png",
+   "famille": "photo",
+   "langue": "fra",
+   "nettoyage_s": 0.42,
+   "ocr_s": 2.31,
+   "ocr_brut_s": 1.38,
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_ocr": 545
+  },
+  {
+   "image": "A_RES_80_10-fr-p2-s1-fax.png",
+   "famille": "fax",
+   "langue": "fra",
+   "nettoyage_s": 0.41,
+   "ocr_s": 2.55,
+   "ocr_brut_s": 1.67,
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_ocr": 540
+  },
+  {
+   "image": "A_RES_80_10-fr-p2-s1-papier.png",
+   "famille": "papier",
+   "langue": "fra",
+   "nettoyage_s": 0.45,
+   "ocr_s": 2.72,
+   "ocr_brut_s": 2.26,
+   "trace": [
+    "recadrage",
+    "eclairage",
+    "echelle(1800)"
+   ],
+   "mots_ocr": 550
+  },
+  {
+   "image": "A_RES_80_10-en-p2-s1-propre.png",
+   "famille": "propre",
+   "langue": "eng",
+   "nettoyage_s": 1.39,
+   "ocr_s": 2.91,
+   "ocr_brut_s": 2.94,
+   "trace": [
+    "recadrage"
+   ],
+   "mots_ocr": 540
+  },
+  {
+   "image": "A_RES_80_10-en-p2-s1-photocopie.png",
+   "famille": "photocopie",
+   "langue": "eng",
+   "nettoyage_s": 0.43,
+   "ocr_s": 2.56,
+   "ocr_brut_s": 2.59,
+   "trace": [
+    "recadrage"
+   ],
+   "mots_ocr": 540
+  },
+  {
+   "image": "A_RES_80_10-en-p2-s1-photo.png",
+   "famille": "photo",
+   "langue": "eng",
+   "nettoyage_s": 0.41,
+   "ocr_s": 2.4,
+   "ocr_brut_s": 1.44,
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_ocr": 541
+  },
+  {
+   "image": "A_RES_80_10-en-p2-s1-fax.png",
+   "famille": "fax",
+   "langue": "eng",
+   "nettoyage_s": 0.41,
+   "ocr_s": 2.65,
+   "ocr_brut_s": 1.72,
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_ocr": 531
+  },
+  {
+   "image": "A_RES_80_10-en-p2-s1-papier.png",
+   "famille": "papier",
+   "langue": "eng",
+   "nettoyage_s": 0.37,
+   "ocr_s": 2.2,
+   "ocr_brut_s": 2.37,
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_ocr": 541
+  },
+  {
+   "image": "A_RES_80_10-es-p2-s1-propre.png",
+   "famille": "propre",
+   "langue": "spa",
+   "nettoyage_s": 1.35,
+   "ocr_s": 2.88,
+   "ocr_brut_s": 2.99,
+   "trace": [
+    "recadrage"
+   ],
+   "mots_ocr": 571
+  },
+  {
+   "image": "A_RES_80_10-es-p2-s1-photocopie.png",
+   "famille": "photocopie",
+   "langue": "spa",
+   "nettoyage_s": 0.42,
+   "ocr_s": 2.55,
+   "ocr_brut_s": 2.54,
+   "trace": [
+    "recadrage"
+   ],
+   "mots_ocr": 572
+  },
+  {
+   "image": "A_RES_80_10-es-p2-s1-photo.png",
+   "famille": "photo",
+   "langue": "spa",
+   "nettoyage_s": 0.39,
+   "ocr_s": 2.39,
+   "ocr_brut_s": 1.35,
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_ocr": 567
+  },
+  {
+   "image": "A_RES_80_10-es-p2-s1-fax.png",
+   "famille": "fax",
+   "langue": "spa",
+   "nettoyage_s": 0.38,
+   "ocr_s": 2.65,
+   "ocr_brut_s": 1.72,
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_ocr": 563
+  },
+  {
+   "image": "A_RES_80_10-es-p2-s1-papier.png",
+   "famille": "papier",
+   "langue": "spa",
+   "nettoyage_s": 0.34,
+   "ocr_s": 2.18,
+   "ocr_brut_s": 2.32,
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_ocr": 572
+  }
+ ],
+ "dispositif": "R4.4 — mesures du programme scans"
+}

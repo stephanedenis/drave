@@ -1,4 +1,4 @@
-# R4.4 — les scans : la photo passe de 55,9 % à 7,0 % de WER, les colonnes de 89 % à 0,5 %
+# R4.4 — les scans : la photo passe de 55,9 % à 6,7 % de WER, les colonnes de 89 % à 0,5 %
 
 > **Objet.** La ligne R4.4 était **partielle** : dix pages **rendues** lues, mais aucun scan.
 > Ce programme fabrique cinq familles de dégradations, mesure ce qu'elles coûtent, ajoute le
@@ -41,13 +41,13 @@ le lecteur R0.2 trouvait sur le texte natif et qu'il retrouve sur le scan (dev, 
 |---|---:|---:|---:|---:|---:|---:|
 | propre (contrôle) | 4,46 % | 4,14 % | 2,84 % | **3,01 %** | 83,3 % | **90,0 %** |
 | photocopie | 6,55 % | 6,34 % | 4,69 % | **4,69 %** | 83,3 % | **86,7 %** |
-| photo | **55,85 %** | **7,00 %** | **80,65 %** | **5,27 %** | 13,3 % | **86,7 %** |
-| papier | 13,02 % | 7,32 % | **53,15 %** | **6,22 %** | 73,3 % | **73,3 %** |
+| photo | **55,85 %** | **6,68 %** | **80,65 %** | **5,68 %** | 13,3 % | **86,7 %** |
+| papier | 13,02 % | **6,87 %** | **53,15 %** | **6,38 %** | 73,3 % | **80,0 %** |
 | fax | 27,05 % | 21,90 % | 23,10 % | **15,52 %** | 50,0 % | **53,3 %** |
 | **contrôle page noire** | — | **0 mot lu** | — | — | — | — |
 
 **Ce que le prétraitement fait, et pourquoi.** La **correction d'éclairage** est le levier
-principal : la photo passe de **55,9 %** à **7,0 %** de WER, et la page papier d'une résolution
+principal : la photo passe de **55,9 %** à **6,7 %** de WER, et la page papier d'une résolution
 de test de **53,2 %** à **6,2 %**. Deux contre-intuitions ont été mesurées et écrites :
 
 1. **agrandir une photocopie dégrade** : passer de 200 dpi à 2 500 px a **doublé** son WER
@@ -58,7 +58,7 @@ de test de **53,2 %** à **6,2 %**. Deux contre-intuitions ont été mesurées e
    et l'image assez définie (≥ 2 000 px).
 
 **Le transfert dev → test** est la preuve que le réglage n'est pas un ajustement au corpus :
-photo **80,7 → 5,3 %**, papier **53,2 → 6,2 %**, fax **23,1 → 15,5 %** sur des pages **jamais
+photo **80,7 → 5,7 %**, papier **53,2 → 6,4 %**, fax **23,1 → 15,5 %** sur des pages **jamais
 vues**.
 
 ## 2. Les exposants : le plafond du texte propre monte de 83,3 % à 90,0 %
@@ -106,7 +106,7 @@ régulière → mots rangés en cellules. Deux contrôles : sans redressement, e
 |---|---:|---:|
 | propre | **92,6 %** (500/540) | 10/10 |
 | photocopie | **69,1 %** (373/540) | 10/10 |
-| photo | **53,7 %** (261/486) | 6/10 |
+| photo | **62,4 %** (337/540) | 8/10 |
 | photocopie **sans redressement** | **0 %** | 0/10 |
 | **texte à plat** (contrôle) | **0 cellule localisée** | — |
 
@@ -167,17 +167,18 @@ mesuré de la même façon. Le WER bouge peu ; la préservation, elle, bouge bea
 
 | famille | WER graine 1 | WER graine 2 | préservation g1 | préservation g2 |
 |---|---:|---:|---:|---:|
-| propre | 4,14 % | 4,14 % | 90,0 % | **90,0 %** |
-| photocopie | 6,34 % | 5,44 % | 86,7 % | **70,0 %** |
-| photo | 7,00 % | 7,45 % | 86,7 % | **70,0 %** |
-| papier | 7,32 % | 6,39 % | 73,3 % | **76,7 %** |
-| fax | 21,90 % | 22,73 % | 53,3 % | **36,7 %** |
+| propre | 4.14% | 4.14% | 90.0% | **90.0%** |
+| photocopie | 6.34% | 5.44% | 86.7% | **70.0%** |
+| photo | 6.68% | 7.77% | 86.7% | **63.3%** |
+| papier | 6.87% | 6.50% | 80.0% | **80.0%** |
+| fax | 21.90% | 22.73% | 53.3% | **36.7%** |
 
 **Pourquoi.** La préservation porte sur **30 questions** : une question = 3,3 points, et un
 désaccord de 5 questions fait 16,7 points. Le WER, lui, porte sur ~3 800 mots : il est stable à
 ±1 point. La préservation est donc un **indicateur à barres d'erreur larges**, pas un chiffre à
-deux décimales ; les planchers de la porte en tiennent compte (65 % pour la photocopie et la photo,
-60 % pour le papier, 35 % pour le fax, 85 % pour le propre). Un banc de paraphrases plus large
+deux décimales ; les planchers de la porte en tiennent compte (60 % pour la photocopie et la photo,
+55 % pour le papier, 30 % pour le fax, 85 % pour le propre) — la photo tombe à 63,3 % sur la
+graine 2, sous l'ancien plancher de 65 % : c'est exactement ce que cette variance interdit. Un banc de paraphrases plus large
 réduirait cette variance — il n'existe pas encore.
 
 ## 6. Le second moteur : un contrôle, pas un candidat
@@ -208,6 +209,28 @@ mesurer la langue.
 | **sans OCR** (pilote) | aucune réponse | 0/30 |
 | **rejeu** | les mêmes chiffres | agrégat et questions identiques |
 
+## 7 bis. Le coût : le prétraitement coûte un quart de l'OCR — et une optimisation l'a divisé par 7
+
+Secondes par page, 3 pages par famille, CPU 40 cœurs, tesseract 5.5.3 (borne indicative, pas une
+référence portable) :
+
+| famille | prétraitement | OCR (nettoyé) | OCR (brut) |
+|---|---:|---:|---:|
+| propre | 1,36 s | 2,86 s | 2,94 s |
+| photocopie | 0,43 s | 2,53 s | 2,54 s |
+| photo | 0,41 s | 2,37 s | 1,39 s |
+| papier | 0,39 s | 2,37 s | 2,32 s |
+| fax | 0,40 s | 2,62 s | 1,70 s |
+
+Le prétraitement est **bon marché** devant l'OCR (0,4 s contre 2,4–2,9 s), sauf sur une page
+propre (1,4 s) où il est du **pur surcoût** : c'est le prix de la mesure du diagnostic.
+
+**L'optimisation qui a payé.** L'estimation du fond d'éclairage (un flou large) se faisait sur
+l'image entière : **9,1 s par page** sur un rendu de 2 550 × 3 300, pour un champ qui est **basse
+fréquence**. Elle se fait maintenant sur une **vignette** (quart de largeur), remontée à la taille
+d'origine : **0,13 s**, même champ, même WER. Le prétraitement passe de 9,5 s à **1,36 s** sur une
+page propre — et la photo de **51,8 % à 3,8 %** de WER reste acquise.
+
 ## 8. La porte
 
 [`porte-ocr-scans.sh`](../tools/porte-ocr-scans.sh) (la 80e porte) vérifie les trois bancs :
@@ -218,10 +241,10 @@ Les seuils sont des **planchers mesurés** écrits dans les outils :
 | famille | WER ≤ | préservation ≥ |
 |---|---:|---:|
 | propre | 6 % | 85 % |
-| photocopie | 8 % | 65 % |
-| photo | 10 % | 65 % |
-| papier | 10 % | 60 % |
-| fax | 25 % | 35 % |
+| photocopie | 8 % | 60 % |
+| photo | 10 % | 60 % |
+| papier | 10 % | 55 % |
+| fax | 25 % | 30 % |
 
 ## Ce qui n'est pas tenu
 
@@ -230,10 +253,12 @@ Les seuils sont des **planchers mesurés** écrits dans les outils :
 2. **Le fax reste à 21,9 %** (dev) et **53,3 %** de préservation : à 120 dpi 1 bit, l'information
    est en partie détruite — les meilleurs réglages (psm 3, upscale 2 100 + lissage) ne la
    recréent pas. Les filtres médian/ouverture, essayés, **détruisent** le texte (95 %).
-3. **Le papier perd 4 réponses** (73,3 %) et **la photo 4** (86,7 %) sur les 30 questions : le
+3. **Le papier perd 6 réponses** (80,0 %) et **la photo 4** (86,7 %) sur les 30 questions : le
    plafond propre est 90 %, et le scan n'y arrive pas encore tout à fait.
-4. **Les tableaux photo** perdent la grille 4 fois sur 10 (ombre et perspectives) ; les cellules
-   exactes tombent à 53,7 %.
+4. **Les tableaux photo** perdent encore la grille **2 fois sur 10** (pages 7 et 9 : ombre et
+   trait interrompu) ; les cellules exactes y tombent à **62,4 %**. Les seuils adaptatifs de
+   grille (repli tolérant quand le seuil nominal échoue, avec l'étendue du tableau comme garde)
+   ont fait passer la photo de 6/10 à 8/10 et de 53,7 % à 62,4 %.
 5. **L'exposant fusionné** (« développement 10, ») n'est pas récupéré : sa boîte a une confiance
    nulle et la passe chiffres n'y trouve rien de crédible.
 

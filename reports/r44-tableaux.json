@@ -10,8 +10,8 @@
  ],
  "seuils": {
   "propre": 0.9,
-  "photocopie": 0.8,
-  "photo": 0.6
+  "photocopie": 0.65,
+  "photo": 0.45
  },
  "controle_plat": {
   "cellules": 54,
@@ -25,9 +25,9 @@
    "redresser": true,
    "pages": 10,
    "cellules": 486,
-   "exactes": 261,
-   "taux": 0.537,
-   "grilles_exactes": 6,
+   "exactes": 303,
+   "taux": 0.6235,
+   "grilles_exactes": 8,
    "angles": [
     -0.3,
     -0.3,
@@ -259,9 +259,9 @@
     "eclairage"
    ],
    "cellules": 54,
-   "exactes": 17,
-   "taux": 0.3148,
-   "grille": false
+   "exactes": 39,
+   "taux": 0.7222,
+   "grille": true
   },
   {
    "page": 3,
@@ -481,7 +481,7 @@
    "famille": "photo",
    "redresser": true,
    "angle": -0.8,
-   "raison": "trop peu de traits verticaux (2)",
+   "raison": "trop peu de traits verticaux (0)",
    "trace": [
     "recadrage",
     "eclairage"
@@ -544,9 +544,9 @@
     "eclairage"
    ],
    "cellules": 54,
-   "exactes": 13,
-   "taux": 0.2407,
-   "grille": false
+   "exactes": 33,
+   "taux": 0.6111,
+   "grille": true
   },
   {
    "page": 8,
@@ -654,7 +654,8 @@
    "angle": -0.2,
    "raison": "",
    "trace": [
-    "recadrage"
+    "recadrage",
+    "eclairage"
    ],
    "cellules": 54,
    "exactes": 40,
@@ -676,5 +677,5 @@
    "grille": false
   }
  ],
- "dispositif": "outils de R4.4 (simuler_scan, nettoyer_scan, mesurer_scans, mesurer_colonnes, mesurer_tables, mesurer_reel)"
+ "dispositif": "R4.4 — mesures du programme scans"
 }

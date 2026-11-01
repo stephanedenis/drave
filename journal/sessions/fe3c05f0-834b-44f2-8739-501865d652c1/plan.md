@@ -59,7 +59,7 @@ rendus vectoriels. Trois idées portent le programme :
 |---|---|---|---|
 | 1 | **corpus** de scans simulés (5 familles, dev/test, manifeste) | `tools/simuler_scan.py`, 100 scans | ✅ fait |
 | 2 | **baseline** brute, WER + parité + contrôles | `work/r44/mesure-brut.json` | ✅ fait |
-| 3 | **prétraitement** (recadrage, éclairage, redressement, échelle, lissage) | `tools/nettoyer_scan.py`, deltas mesurés | ✅ photo **55,9 → 7,0 %**, papier test **53,2 → 6,2 %** |
+| 3 | **prétraitement** (recadrage, éclairage, redressement, échelle, lissage) | `tools/nettoyer_scan.py`, deltas mesurés | ✅ photo **55,9 → 6,7 %**, papier test **53,2 → 6,2 %** |
 | 4 | **parité** : préservation, pas « les deux échouent » | métrique corrigée + diagnostic | ✅ préservation **86,7 %** (plafond propre **90 %**) |
 | 5 | **exposants** : passe ciblée chiffres sur les petits mots du TSV | récupération des appels de note | ✅ plafond propre **83,3 → 90 %** |
 | 6 | **colonnes** : gouttière verticale, ordre de lecture | pages 2 colonnes synthétiques | ✅ **89,4 → 0,5 %** de WER |

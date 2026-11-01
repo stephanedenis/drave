@@ -159,14 +159,36 @@ def grille(im: Image.Image) -> dict:
     hauteur, largeur = encre.shape
     # seuil 190 : un trait de scan est noir mais le JPEG l'éclaircit ; à 128, il se coupe
     encre = gris < 190
-    candidats = _groupes(np.where(_plus_longue_serie(encre) > largeur * 0.60)[0])
-    ys = _grille_reguliere(candidats)
+
+    def adaptatif(profils, seuils, minimum, etendue_min, reference):
+        """Un trait de photo est parfois interrompu : on essaie des seuils de plus en plus
+        tolérants, et on ne garde une suite que si elle couvre la largeur du tableau (une
+        progression de lignes de texte, elle, ne la couvre pas). Pour les traits
+        horizontaux, l'étendue se mesure sur la hauteur — le tableau n'occupe qu'une partie
+        de la page."""
+        for fraction in seuils:
+            candidats = _groupes(np.where(profils > fraction)[0])
+            suite = _grille_reguliere(candidats)
+            if (len(suite) >= minimum
+                    and (suite[-1] - suite[0]) / max(reference, 1) >= etendue_min):
+                return suite
+        return []
+
+    hauteur_page = encre.shape[0]
+    serie_h = _plus_longue_serie(encre) / max(encre.shape[1], 1)
+    # premier essai au seuil qui marchait sur les rendus et les photocopies ; le repli plus
+    # tolérant ne sert qu'aux photos, où un trait peut être interrompu
+    ys = _grille_reguliere(_groupes(np.where(serie_h > 0.60)[0]))
+    if len(ys) < 4:
+        ys = adaptatif(serie_h, (0.50, 0.40, 0.35), 4, 0.25, hauteur_page)
     if len(ys) < 3:
         return {"xs": [], "ys": [], "raison": f"trop peu de traits horizontaux ({len(ys)})"}
     haut, bas = ys[0], ys[-1]
     region = encre[haut:bas + 1, :]
-    candidats_x = _groupes(np.where(_plus_longue_serie(region.T) > region.shape[0] * 0.55)[0])
-    xs = _grille_reguliere(candidats_x)
+    serie_v = _plus_longue_serie(region.T) / max(region.shape[0], 1)
+    xs = _grille_reguliere(_groupes(np.where(serie_v > 0.55)[0]))
+    if len(xs) < 5:
+        xs = adaptatif(serie_v, (0.45, 0.40, 0.35), 5, 0.70, largeur)
     if len(xs) < 3:
         return {"xs": [], "ys": ys, "raison": f"trop peu de traits verticaux ({len(xs)})"}
     return {"xs": xs, "ys": ys, "raison": ""}

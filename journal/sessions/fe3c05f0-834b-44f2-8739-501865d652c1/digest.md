@@ -7933,3 +7933,489 @@ T0 3958
   ```
 
 - **bash** `{"command": "cat > /tmp/msg-gouttiere.txt <<'EOF'\nR4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 %\n\nLe corpus synthétique trouvait la gouttière ; le premier lexique **réel** d'un livre scanné (Verne,\n1902, page de vocabulaire à  … [2466 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+  ✅ index : aucun fait stagé sans état
+[master 53fa2e5a] R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 %
+ 19 files changed, 974 insertions(+), 140 deletions(-)
+53fa2e5a R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 %
+944dff2b R4.4 — LA VARIANCE ENTRE GRAINES : LE WER TIENT À ±1 POINT, LA PRÉSERVATION VARIE DE 17 POINTS
+c51cee41 R4.4 — UN SECOND VRAI SCAN : 23,3 % DE WER MAIS 88,5 % DES MOTS — C'EST L'ORDRE DES COLONNES
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et, mesurer_tables as mt, nettoyer_scan as ns\nman=json.load(open('work/r44/tables/manifeste.json'))\nr=json.load(open('work/r44/tables.json'))\n# pages photo en échec\nechecs=[]\nfor m in … [816 caractères tronqués]`
+
+  ```
+pages photo sans grille: [3, 7, 8, 10]
+page 3 angle 0.0 raison  xs 4 ys 10
+   diag {'largeur': 1313, 'hauteur': 557, 'binaire': 0.023, 'fond_ratio': 1.09, 'petit': True, 'inclinaison': 0.0}
+page 7 angle -0.7999999999999989 raison trop peu de traits verticaux (2) xs 0 ys 10
+   diag {'largeur': 1332, 'hauteur': 1992, 'binaire': 0.002, 'fond_ratio': 1.04, 'petit': True, 'inclinaison': -0.75}
+page 8 angle -0.5999999999999988 raison  xs 3 ys 10
+   diag {'largeur': 1311, 'hauteur': 570, 'binaire': 0.033, 'fond_ratio': 1.09, 'petit': True, 'inclinaison': -0.5}
+page 10 angle -0.1999999999999984 raison  xs 7 ys 9
+   diag {'largeur': 1306, 'hauteur': 557, 'binaire': 0.01, 'fond_ratio': 1.28, 'petit': True, 'inclinaison': 0.0}
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nimport numpy as np\nfrom PIL import Image\nfrom scipy.ndimage import binary_closing\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et\nman=json.load(open('work/r44/tables/manifeste.json'))\nfor page in (3,7,8,10):\n    entree=[x for x … [949 caractères tronqués]`
+
+  ```
+page 3 ferm 1 frac 0.4: candidats 21
+page 3 ferm 1 frac 0.5: candidats 15
+page 3 ferm 1 frac 0.6: candidats 10
+page 3 ferm 3 frac 0.4: candidats 22
+page 3 ferm 3 frac 0.5: candidats 15
+page 3 ferm 3 frac 0.6: candidats 10
+page 3 ferm 5 frac 0.4: candidats 22
+page 3 ferm 5 frac 0.5: candidats 15
+page 3 ferm 5 frac 0.6: candidats 10
+page 3 ferm 7 frac 0.4: candidats 21
+page 3 ferm 7 frac 0.5: candidats 15
+page 3 ferm 7 frac 0.6: candidats 10
+page 7 ferm 1 frac 0.4: candidats 17
+page 7 ferm 1 frac 0.5: candidats 6
+page 7 ferm 3 frac 0.4: candidats 17
+page 7 ferm 3 frac 0.5: candidats 5
+page 7 ferm 5 frac 0.4: candidats 17
+page 7 ferm 5 frac 0.5: candidats 5
+page 7 ferm 7 frac 0.4: candidats 17
+page 7 ferm 7 frac 0.5: candidats 5
+page 8 ferm 1 frac 0.4: candidats 24
+page 8 ferm 1 frac 0.5: candidats 9
+page 8 ferm 3 frac 0.4: candidats 27
+page 8 ferm 3 frac 0.5: candidats 11
+page 8 ferm 3 frac 0.6: candidats 5
+page 8 ferm 5 frac 0.4: candidats 27
+page 8 ferm 5 frac 0.5: candidats 12
+page 8 ferm 5 frac 0.6: candidats 5
+page 8 ferm 7 frac 0.4: candidats 27
+page 8 ferm 7 frac 0.5: candidats 12
+page 8 ferm 7 frac 0.6: candidats 5
+page 10 ferm 1 frac 0.4: candidats 326
+page 10 ferm 1 frac 0.
+… [406 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nimport numpy as np\nfrom PIL import Image\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et\nman=json.load(open('work/r44/tables/manifeste.json'))\nfor page in (3,7,8,10):\n    entree=[x for x in man['entrees'] if x['page']==page][0]\ … [819 caractères tronqués]`
+
+  ```
+page 3 ys 10 cand_x 7 premiers [14, 228, 442, 656, 869, 1082, 1295]
+   tol 0.1: 7 lignes [14, 228, 441, 654, 868, 1082, 1295]
+   tol 0.15: 7 lignes [14, 228, 441, 654, 868, 1082, 1295]
+   tol 0.2: 7 lignes [14, 228, 441, 654, 868, 1082, 1295]
+   tol 0.3: 7 lignes [14, 228, 441, 654, 868, 1082, 1295]
+page 7 ys 10 cand_x 2 premiers [40, 256]
+   tol 0.1: 2 lignes [40, 256]
+   tol 0.15: 2 lignes [40, 256]
+   tol 0.2: 2 lignes [40, 256]
+   tol 0.3: 2 lignes [40, 256]
+page 8 ys 10 cand_x 3 premiers [18, 233, 446]
+   tol 0.1: 3 lignes [18, 233, 446]
+   tol 0.15: 3 lignes [18, 233, 446]
+   tol 0.2: 3 lignes [18, 233, 446]
+   tol 0.3: 3 lignes [18, 233, 446]
+page 10 ys 9 cand_x 21 premiers [16, 227, 438, 477, 505, 557, 596, 600, 608, 614, 624, 629]
+   tol 0.1: 7 lignes [16, 229, 441, 654, 867, 1079, 1292]
+   tol 0.15: 7 lignes [16, 229, 441, 654, 867, 1079, 1292]
+   tol 0.2: 7 lignes [16, 229, 441, 654, 867, 1079, 1292]
+   tol 0.3: 8 lignes [438, 475, 512, 549, 586, 623, 660, 697]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nimport numpy as np\nfrom PIL import Image\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et\nman=json.load(open('work/r44/tables/manifeste.json'))\nfor page in (7,8,10):\n    entree=[x for x in man['entrees'] if x['page']==page][0]\n  … [830 caractères tronqués]`
+
+  ```
+page 7 frac 0.45: cand 3 fit 3 span 0.32
+page 7 frac 0.4: cand 4 fit 4 span 0.48
+page 7 frac 0.35: cand 5 fit 4 span 0.48
+page 8 frac 0.45: cand 4 fit 4 span 0.49
+page 8 frac 0.4: cand 8 fit 7 span 0.97
+page 8 frac 0.35: cand 7 fit 7 span 0.97
+page 10 frac 0.45: cand 17 fit 7 span 0.98
+page 10 frac 0.4: cand 19 fit 7 span 0.98
+page 10 frac 0.35: cand 15 fit 7 span 0.97
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extraire_tableaux.py'); s=p.read_text()\nold='''    # seuil 190 : un trait de scan est noir mais le JPEG l'éclaircit ; à 128, il se coupe\n    encre = gris < 190\n    candidats = _groupes(np.where(_plus_longue_serie(encre) > largeu … [2725 caractères tronqués]`
+
+  ```
+seuils adaptatifs de grille
+propre grilles exactes 0 / 10 | taux [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+photocopie grilles exactes 0 / 10 | taux [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+photo grilles exactes 0 / 10 | taux [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extraire_tableaux.py'); s=p.read_text()\ns=s.replace('''    def adaptatif(profils, seuils, minimum, etendue_min):\n        \"\"\"Un trait de photo est parfois interrompu : on essaie des seuils de plus en plus\n        tolérants, et … [2552 caractères tronqués]`
+
+  ```
+étendue horizontale sur la hauteur
+propre grilles 0 / 10 | taux [(1, False, 0.0), (2, False, 0.0), (3, False, 0.0), (4, False, 0.0), (5, False, 0.0), (6, False, 0.0), (7, False, 0.0), (8, False, 0.0), (9, False, 0.0), (10, False, 0.0)]
+photocopie grilles 0 / 10 | taux [(1, False, 0.0), (2, False, 0.0), (3, False, 0.0), (4, False, 0.0), (5, False, 0.0), (6, False, 0.0), (7, False, 0.0), (8, False, 0.0), (9, False, 0.0), (10, False, 0.0)]
+photo grilles 0 / 10 | taux [(1, False, 0.0), (2, False, 0.0), (3, False, 0.0), (4, False, 0.0), (5, False, 0.0), (6, False, 0.0), (7, False, 0.0), (8, False, 0.0), (9, False, 0.0), (10, False, 0.0)]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et\nfrom PIL import Image\np=pathlib.Path('work/r44/tables/scans/tableau-p1-propre.png')\nim2,a=et.redresser_tableau(Image.open(p).convert('RGB'))\ng=et.grille(im2); print('grille',len(g[' … [290 caractères tronqués]`
+
+  ```
+grille 0 0 'trop peu de traits horizontaux (0)'
+extraire 0 0 'trop peu de traits horizontaux (0)' grille 0
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extraire_tableaux.py'); s=p.read_text()\ns=s.replace('''    hauteur_page = encre.shape[0]\n    serie_h = _plus_longue_serie(encre)\n    ys = adaptatif(serie_h, (0.60, 0.50, 0.40, 0.35), 4, 0.25, hauteur_page)''','''    hauteur_page … [1301 caractères tronqués]`
+
+  ```
+profils normalisés
+propre grilles 10 / 10 | taux [0.94, 0.93, 0.94, 0.89, 0.93, 0.91, 0.94, 0.93, 0.93, 0.93]
+photocopie grilles 0 / 10 | taux [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+photo grilles 7 / 10 | taux [0.72, 0.39, 0.72, 0.69, 0.54, 0.61, 0.0, 0.61, 0.0, 0.74]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extraire_tableaux.py'); s=p.read_text()\ns=s.replace('''    hauteur_page = encre.shape[0]\n    serie_h = _plus_longue_serie(encre) / max(encre.shape[1], 1)\n    ys = adaptatif(serie_h, (0.60, 0.50, 0.40, 0.35), 4, 0.25, hauteur_pag … [1684 caractères tronqués]`
+
+  ```
+hybride fixe + repli
+propre grilles 10 / 10 | taux [0.94, 0.93, 0.94, 0.89, 0.93, 0.91, 0.94, 0.93, 0.93, 0.93]
+photocopie grilles 10 / 10 | taux [0.65, 0.7, 0.76, 0.7, 0.67, 0.69, 0.61, 0.67, 0.81, 0.65]
+photo grilles 8 / 10 | taux [0.72, 0.39, 0.72, 0.69, 0.54, 0.61, 0.0, 0.61, 0.59, 0.74]
+  ```
+
+- **bash** `{"command": "date +%H:%M; timeout 2400 python3 tools/mesurer_tables.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/tables-v4.json > work/r44/tables-v4.log 2>&1; echo \"[tables $?]\"; tail -12 work/r44/tables-v4.log", "description": "Run full table benchmark after grid fix", "run_ … [83 caractères tronqués]`
+
+  ```
+started background job bash-411
+  ```
+
+- **bash** `{"command": "cat > tools/mesurer_cout.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"mesurer_cout.py — R4.4 : ce que le prétraitement et l'OCR coûtent, par page et par famille.\n\nPOURQUOI CE FICHIER. La métrique du lecteur n'est pas le débit : c'est la **compréhension par\nunité de calcul** (R0.2). Le c … [4400 caractères tronqués]`
+
+  ```
+OK
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_cout.py'); s=p.read_text()\ns=s.replace('import graphe_document_ocr  # noqa: E402\\nimport mesurer_scans  # noqa: E402\\nimport nettoyer_scan  # noqa: E402',\n            'import graphe_document_ocr  # noqa: E402\\nimport m … [763 caractères tronqués]`
+
+  ```
+OK
+  page 1 · propre     : 51/54 cellules · grille oui
+  page 1 · photocopie : 35/54 cellules · grille oui
+2
+  ```
+
+- **bash** `{"command": "sleep 300; tail -8 work/r44/tables-v4.log; wc -l < work/r44/tables-v4.log; date +%H:%M", "description": "Wait for table benchmark", "timeoutMs": 360000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+✅ propre : cellules exactes ≥ 90% (mesuré 92.6%)
+  ✅ propre : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photocopie : cellules exactes ≥ 65% (mesuré 69.1%)
+  ✅ photocopie : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photo : cellules exactes ≥ 45% (mesuré 62.4%)
+  ✅ photo : grilles de bonne forme ≥ 50% (mesuré 8/10)
+
+  → work/r44/tables-v4.json
+47
+01:28
+  ```
+
+### 👤 Utilisateur
+
+background job bash-411 (bash: date +%H:%M; timeout 2400 python3 tools/mesurer_tables.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/tables-v4.json > work/r44/tables-v4.log 2>&1; echo "[tables $?]"; tail -12 work/r44/tables-v4.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('work/r44/tables-v4.json').read_text())\nd['dispositif']='tools/fabriquer_tables.py + simuler_scan.py + extraire_tableaux.py (grille par continuité et suite arithmétique)'\npathlib.Path('reports/r44-tableaux.json').write_t … [1069 caractères tronqués]`
+
+  ```
+JSON tableaux mis à jour
+fiche : tableaux mis à jour
+  A_RES_80_10-es-p2-s1-photocopie.png        nettoyage  2.86 s · OCR  2.51 s (brut  2.46 s)
+  A_RES_80_10-es-p2-s1-photo.png             nettoyage  3.26 s · OCR  2.35 s (brut  1.31 s)
+  A_RES_80_10-es-p2-s1-fax.png               nettoyage  0.96 s · OCR  2.59 s (brut  1.69 s)
+  A_RES_80_10-es-p2-s1-papier.png            nettoyage  1.79 s · OCR  2.27 s (brut  2.29 s)
+
+  fax         nettoyage  0.99 s · OCR  2.58 s · OCR brut  1.71 s
+  papier      nettoyage  1.84 s · OCR  2.56 s · OCR brut  2.28 s
+  photo       nettoyage  3.26 s · OCR  2.38 s · OCR brut  1.36 s
+  photocopie  nettoyage  2.86 s · OCR  2.49 s · OCR brut  2.49 s
+  propre      nettoyage  9.50 s · OCR  2.83 s · OCR brut  2.92 s
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,time,pathlib\nsys.path.insert(0,'tools')\nimport nettoyer_scan as ns\nfrom PIL import Image\nim=Image.open('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png').convert('RGB')\nt=time.perf_counter(); d=ns.diagnostic(im); print('diagnostic',round(time.perf_counte … [452 caractères tronqués]`
+
+  ```
+diagnostic 9.13 {'largeur': 2550, 'hauteur': 3300, 'binaire': 0.443, 'fond_ratio': 1.12, 'petit': False, 'inclinaison': 0.0}
+angle 0.46 0.0
+recadrage 0.13 (2102, 2971)
+auto 9.52 ['recadrage'] (2102, 2971)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/nettoyer_scan.py'); s=p.read_text()\ns=s.replace('''def diagnostic(im: Image.Image) -> dict:''','''def _fond(g: np.ndarray, facteur: float = 0.25) -> np.ndarray:\n    \"\"\"Le fond, estimé sur une VIGNETTE puis remonté à la taille  … [2683 caractères tronqués]`
+
+  ```
+fond estimé sur vignette
+propre     diag 0.82s auto 1.30s ratio 1.14 trace ['recadrage'] WER  2.15%
+photocopie diag 0.37s auto 0.42s ratio 1.15 trace ['recadrage'] WER  5.73%
+photo      diag 0.29s auto 0.39s ratio 1.75 trace ['recadrage', 'eclairage'] WER  3.58%
+papier     diag 0.25s auto 0.42s ratio 1.3 trace ['recadrage', 'eclairage', 'echelle(1800)'] WER  3.05%
+fax        diag 0.13s auto 0.39s ratio 1.13 trace ['echelle(2100)', 'lissage'] WER 23.66%
+  ```
+
+- **bash** `{"command": "timeout 900 python3 tools/mesurer_cout.py --pages 3 --sortie work/r44/cout.json 2>&1 | tail -8", "description": "Measure cost after optimization", "timeoutMs": 900000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+A_RES_80_10-es-p2-s1-fax.png               nettoyage  0.38 s · OCR  2.65 s (brut  1.72 s)
+  A_RES_80_10-es-p2-s1-papier.png            nettoyage  0.34 s · OCR  2.18 s (brut  2.32 s)
+
+  fax         nettoyage  0.40 s · OCR  2.62 s · OCR brut  1.70 s
+  papier      nettoyage  0.39 s · OCR  2.37 s · OCR brut  2.32 s
+  photo       nettoyage  0.41 s · OCR  2.37 s · OCR brut  1.39 s
+  photocopie  nettoyage  0.43 s · OCR  2.53 s · OCR brut  2.54 s
+  propre      nettoyage  1.36 s · OCR  2.86 s · OCR brut  2.94 s
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-10-31, 17 h 30 HAE (heure locale, EDT).**
+4: 
+5: > **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
+6: > **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
+7: > [`contexte.md`](../methode/contexte.md), contrat des sessions dans [`continuite.md`](../methode/continuite.md).
+8: > Les résultats sont dans [`reports/`](../../reports/) ; l'histoire dans
+9: > [`journal/`](../../journal/) ; le plan dans [`roadmap.md`](roadmap.md).
+10: 
+11: ## Sessions en cours
+12: 
+13: > Contrat et budget : [`continuite.md`](../methode/continuite.md) ; sessions terminées :
+14: > [`journal/sessions/`](../../journal/sessions/).
+15: 
+16: > **Plan d'abord.** Chaque session active expose son mandat dans
+17: > [`journal/sessions/`](../../journal/sessions/) (`<id>/plan.md`) ; `python3 tools/sessions.py --status`
+18: > avant d'écrire ici.
+19: 
+20: > **Écriture.** Toute session écrit l'état, **une à la fois** : un commit est atomique, et
+21: > aucun 
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md</path>
+<type>file</type>
+<content>
+1: # La roadmap de Drave — un seul plan, quatre chantiers
+2: 
+3: > **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+4: > L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date. Les chiffres, les séries et les
+5: > contrôles vivent dans [`reports/`](../../reports/) ; ici : l'état, la prochaine action, et ce qui bloque.
+6: >
+7: > **Détail et histoire** : l'ancien plan A/B est archivé dans
+8: > [`roadmap-detail-2026-10-29.md`](../archive/roadmap-detail-2026-10-29.md), le détail N dans
+9: > [`roadmap-native-2026-10-29.md`](../archive/roadmap-native-2026-10-29.md). Les **fiches de fonctionnalité** sont
+10: > dans [`backlog/index.md`](backlog/index.md) ; le **graphe des dépendances** est dans
+11: > [`backlog/dependances.md`](backlog/dependances.md). La **page vivante** est [`en-cours.md`](en-cours.md).
+12: 
+13: ## Comment lire cette roadmap
+14: 
+15: - **Les états** : ✅ mesuré et écrit · 🔬 en cours · ⏳ à faire · 🧱 bloqué par une infra absente.
+16: - **Le carpe diem** : pas d'échéance. Un c
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md</path>
+<type>file</type>
+<content>
+1: # Références de non-régression
+2: 
+3: > **Dernière passe complète — 2026-10-31 à 12 h 54 :** **78 portes, 73 vertes, 5 rouges, 1 h 37**
+4: > (journaux `/tmp/portes-1031-11h17`). `porte-indice`, `porte-melange` : les **structurelles
+5: > connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé
+6: > au démarrage. `porte-jeux` : **vraie régression** corrigée le jour même (`2edb3079` — le SAN
+7: > perdait contre la case, 110/112). `porte-reparti-moteur` : PPL épinglée 9,1748 non reproduite
+8: > (8,7434), écart de flux nul — à trancher.
+9: 
+10: > **Passe précédente — 2026-10-29 à 22 h 09 :** 62 portes, 60 vertes, 2 rouges, 1 h 46 ;
+11: > mêmes structurelles connues, **aucune régression**. Journaux : `/tmp/portes-1029-20h23` ;
+12: > historique : [`reports/historique-passes-portes.md`](../../reports/historique-passes-portes.md).
+13: 
+14: > **Ce que ce fichier porte.** Les repères chiffrés qu'une passe complète imprime, et
+15: > les invariants qui ne sont pas des chiffres. Les mesures de campagne (perplexités,
+16: > bu
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+== /home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/00221850-90de-4287-90ee-324a35e504cd/
+drwx------. 1 stephane stephane      66 11:34 .
+drwx------. 1 stephane stephane    7776 17:52 ..
+-rw-r--r--. 1 stephane stephane       0 11:34 session.lock
+-rw-------. 1 stephane stephane 2577525 16:29 session.v4.jsonl.zstd
+== /home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/04ed1834-b0f8-42a1-aa21-75a75c19647e/
+total 300
+drwx------. 1 stephane stephane     36 09:18 .
+drwx------. 1 stephane stephane   7776 17:52 ..
+-rw-------. 1 stephane stephane 303833 09:21 session.jsonl.zstd
+== /home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/
+drwx------. 1 stephane stephane     66 17:17 .
+drwx------. 1 stephane stephane   7776 17:52 ..
+-rw-r--r--. 1 stephane stephane      0 17:17 session.lock
+-rw-------. 1 stephane stephane 815842 17:57 session.v4.jsonl.zstd
+== /home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/0b2c86eb-7a8d-4eed-a3dd-fb165f1a8630/
+drwx------. 1 stephane stephane     66 10:29 .
+drwx------. 1 stephane stephane   7776 17:52 ..
+-rw-r--r
+… [3958 caractères tronqués]
+  ```
+
+- **bash** `{"command": "timeout 2400 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte --sortie work/r44/mesure-v5.json > work/r44/scans-v5.log 2>&1; echo \"[scans $?]\"; tail -5 work/r44/scans-v5.log", "description": "Re-run scans after preprocessing optimization", "run_in_backgro … [73 caractères tronqués]`
+
+  ```
+started background job bash-419
+  ```
+
+- **bash** `{"command": "timeout 2400 python3 tools/mesurer_tables.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/tables-v5.json > work/r44/tables-v5.log 2>&1; echo \"[tables $?]\"; tail -8 work/r44/tables-v5.log", "description": "Re-run tables after preprocessing change", "run_in_background … [70 caractères tronqués]`
+
+  ```
+started background job bash-420
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/verne2.pdf --djvu-xml work/r44/reel/verne2_djvu.xml --pages 40,60,80,100,120,140,160,180,200,210 --sortie work/r44/reel2-v5.json >/dev/null 2>&1; timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/livre.pdf --djv … [420 caractères tronqués]`
+
+  ```
+started background job bash-421
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib,json\nd=json.loads(pathlib.Path('work/r44/cout.json').read_text())\nd['dispositif']='tools/mesurer_cout.py (chronométrage CPU, 40 cœurs, tesseract 5.5.3)'\npathlib.Path('reports/r44-cout.json').write_text(json.dumps(d,ensure_ascii=False,indent=1)+'\\n',e … [1541 caractères tronqués]`
+
+  ```
+section coût ajoutée
+211:## 7 bis. Le coût : le prétraitement coûte un quart de l'OCR — et une optimisation l'a divisé par 7
+  ```
+
+- **bash** `{"command": "sleep 300; echo \"=== scans\"; tail -3 work/r44/scans-v5.log; wc -l < work/r44/scans-v5.log; echo \"=== tables\"; tail -3 work/r44/tables-v5.log; wc -l < work/r44/tables-v5.log; echo \"=== reel\"; ls -la --time-style=+%H:%M work/r44/reel-v5.json work/r44/reel2-v5.json 2>/dev/null; date  … [127 caractères tronqués]`
+
+  ```
+=== scans
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 147 s → work/r44/mesure-v5.json
+134
+=== tables
+  ✅ photo : grilles de bonne forme ≥ 50% (mesuré 8/10)
+
+  → work/r44/tables-v5.json
+47
+=== reel
+-rw-r--r--. 1 stephane stephane 3936 01:34 work/r44/reel2-v5.json
+-rw-r--r--. 1 stephane stephane 3727 01:35 work/r44/reel-v5.json
+01:39
+  ```
+
+### 👤 Utilisateur
+
+background job bash-421 (bash: timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/verne2.pdf --djvu-xml work/r44/reel/verne2_djvu.xml --pages 40,60,80,100,120,140,160,180,200,210 --sortie work/r44/reel2-v5.json >/dev/null 2>&1; timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/livre.pdf --djvu-xml work/r44/reel/livre_djvu.xml --pages 30,50,70,90,110,130,150,170,190,210 --sortie work/r44/reel-v5.json >/dev/null 2>&1; python3 -c "
+import json
+for f in ('work/r44/reel-v5.json','work/r44/reel2-v5.json'):
+    d=json.load(open(f)); print(f,d['agregat'])") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-419 (bash: timeout 2400 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte --sortie work/r44/mesure-v5.json > work/r44/scans-v5.log 2>&1; echo "[scans $?]"; tail -5 work/r44/scans-v5.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-420 (bash: timeout 2400 python3 tools/mesurer_tables.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/tables-v5.json > work/r44/tables-v5.log 2>&1; echo "[tables $?]"; tail -8 work/r44/tables-v5.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nfor f in ('work/r44/mesure-v5.json','work/r44/tables-v5.json','work/r44/reel-v5.json','work/r44/reel2-v5.json'):\n    d=json.load(open(f)); print('===',f)\n    a=d.get('agregat',{})\n    for k,v in sorted(a.items()):\n        print(' ',k,{x:v.get(x) for x  … [199 caractères tronqués]`
+
+  ```
+=== work/r44/mesure-v5.json
+  fax|dev|auto {'wer': 0.219, 'preservation': 0.5333, 'rappel': 0.7987}
+  fax|test|auto {'wer': 0.1552, 'preservation': None, 'rappel': 0.8608}
+  papier|dev|auto {'wer': 0.0687, 'preservation': 0.8, 'rappel': 0.961}
+  papier|test|auto {'wer': 0.0638, 'preservation': None, 'rappel': 0.9716}
+  photocopie|dev|auto {'wer': 0.0634, 'preservation': 0.8667, 'rappel': 0.9621}
+  photocopie|test|auto {'wer': 0.0469, 'preservation': None, 'rappel': 0.979}
+  photo|dev|auto {'wer': 0.0668, 'preservation': 0.8667, 'rappel': 0.9605}
+  photo|test|auto {'wer': 0.0568, 'preservation': None, 'rappel': 0.9732}
+  propre|dev|auto {'wer': 0.0414, 'preservation': 0.9, 'rappel': 0.9761}
+  propre|test|auto {'wer': 0.0301, 'preservation': None, 'rappel': 0.9918}
+=== work/r44/tables-v5.json
+  photocopie|redresse {'taux': 0.6907, 'grilles_exactes': 10, 'pages': 10}
+  photocopie|sans {'taux': 0.0, 'grilles_exactes': 0, 'pages': 10}
+  photo|redresse {'taux': 0.6235, 'grilles_exactes': 8, 'pages': 10}
+  propre|redresse {'taux': 0.9259, 'grilles_exactes': 10, 'pages': 10}
+=== work/r44/reel-v5.json
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+TypeErro
+… [58 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nfor f in ('work/r44/reel-v5.json','work/r44/reel2-v5.json'):\n    d=json.load(open(f)); print(f, d['agregat'])\n    print('  pages colonnes:', [(p['page'],p.get('wer_colonnes'),p.get('wer_colonnes_inverse')) for p in d['pages'] if p['page'] in (180,200,210 … [118 caractères tronqués]`
+
+  ```
+work/r44/reel-v5.json {'pages': 10, 'mots_reference': 4494, 'wer': 0.071, 'wer_brut': 0.0705, 'rappel': 0.9372, 'confiance': 91.1, 'wer_colonnes': 0.8996, 'wer_colonnes_inverse': 0.9101}
+  pages colonnes: [(210, 0.9371, 0.9011)]
+work/r44/reel2-v5.json {'pages': 10, 'mots_reference': 2686, 'wer': 0.3626, 'wer_brut': 0.3619, 'rappel': 0.8838, 'confiance': 89.2, 'wer_colonnes': 0.6821, 'wer_colonnes_inverse': 0.9274}
+  pages colonnes: [(180, 0.1532, 0.9798), (200, 0.0709, 0.9606), (210, 0.128, 0.992)]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib,re\n# 1) JSON\nfor src,dst in (('work/r44/mesure-v5.json','reports/r44-scans.json'),\n                ('work/r44/tables-v5.json','reports/r44-tableaux.json'),\n                ('work/r44/cout.json','reports/r44-cout.json')):\n    d=json.loads(pathli … [2515 caractères tronqués]`
+
+  ```
+reports/r44-scans.json
+reports/r44-tableaux.json
+reports/r44-cout.json
+fiche mise à jour
+roadmap/carte/état/plan mis à jour
+1:# R4.4 — les scans : la photo passe de 55,9 % à 6,7 % de WER, les colonnes de 89 % à 0,5 %
+43:| photocopie | 6,55 % | 6,34 % | 4,69 % | **4,69 %** | 83,3 % | **86,7 %** |
+44:| photo | **55,85 %** | **6,68 %** | **80,65 %** | **5,68 %** | 13,3 % | **86,7 %** |
+45:| papier | 13,02 % | **6,87 %** | **53,15 %** | **6,38 %** | 73,3 % | **80,0 %** |
+50:principal : la photo passe de **55,9 %** à **6,7 %** de WER, et la page papier d'une résolution
+74:| photocopie, préservation | 83,3 % | **86,7 %** |
+75:| photo, préservation | 83,3 % | **86,7 %** |
+171:| photocopie | 6,34 % | 5,44 % | 86,7 % | **70,0 %** |
+  ```
+
+- **bash** `{"command": "grep -n \"6,2 %\\|7,0 %\\|73,3\\|5,3 %\" reports/rapport-r44-scans.md | head -8; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-r44-scans.md'); s=p.read_text()\ns=s.replace(\"la page papier d'une résolution de test de **53,2 %** à **6,2 %**\",\"la page papier d'une ré … [365 caractères tronqués]`
+
+  ```
+45:| papier | 13,02 % | **6,87 %** | **53,15 %** | **6,38 %** | 73,3 % | **80,0 %** |
+51:de test de **53,2 %** à **6,2 %**. Deux contre-intuitions ont été mesurées et écrites :
+173:| papier | 7,32 % | 6,39 % | 73,3 % | **76,7 %** |
+267:dont l'ordre des colonnes, prouvé sur un lexique réel (15,3 % de WER contre 98,0 % en ordre
+restes corrigés
+45:| papier | 13,02 % | **6,87 %** | **53,15 %** | **6,38 %** | 73,3 % | **80,0 %** |
+51:de test de **53,2 %** à **6,2 %**. Deux contre-intuitions ont été mesurées et écrites :
+173:| papier | 7,32 % | 6,39 % | 73,3 % | **76,7 %** |
+  ```
+
+- **bash** `{"command": "timeout 1200 python3 tools/mesurer_scans.py --corpus work/r44/scans-g2/manifeste.json --pipelines auto --exposants --colonnes --splits dev --sortie work/r44/mesure-g2-v5.json >/dev/null 2>&1; python3 - <<'PY'\nimport json,pathlib\na=json.load(open('work/r44/mesure-v5.json'))['agregat']; … [970 caractères tronqués]`
+
+  ```
+propre     g1  4.14% g2  4.14% prés 90.0% / 90.0%
+photocopie g1  6.34% g2  5.44% prés 86.7% / 70.0%
+photo      g1  6.68% g2  7.77% prés 86.7% / 63.3%
+papier     g1  6.87% g2  6.50% prés 80.0% / 80.0%
+fax        g1 21.90% g2 22.73% prés 53.3% / 36.7%
+table de variance mise à jour
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\ns=s.replace('''        \"photocopie\": {\"wer\": 0.08, \"preservation\": 0.65},\n        \"photo\":      {\"wer\": 0.10, \"preservation\": 0.65},\n        \"papier\":     {\"wer\": 0.10, \"prese … [1875 caractères tronqués]`
+
+  ```
+planchers et fiche ajustés
+python3 tools/revue_documentation.py [1]      · compteurs : en-cours.md dit 447 JSON, le disque en a 448
+python3 tools/taille_documents.py  [0]   ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+python3 tools/verifie_en_cours.py  [0]   ✅ état court, structuré, multi-session et reprenable
+python3 tools/verifie_backlog.py   [0] ✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+python3 tools/verifie_journal.py   [0]   ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"| fichiers / JSON de résultats | **372** / **447** |\",\"| fichiers / JSON de résultats | **372** / **448** |\")\np.write_text(s)\nPY\npython3 tools/revue_documentation.py 2>&1  … [2587 caractères tronqués]`
