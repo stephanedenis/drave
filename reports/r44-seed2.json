@@ -1,0 +1,2379 @@
+{
+ "date": "2026-10-31",
+ "ligne": "R4.4",
+ "corpus": "work/r44/scans-g2/manifeste.json",
+ "nature": "scans SIMULÉS",
+ "pipelines": [
+  "auto"
+ ],
+ "exposants": true,
+ "colonnes": true,
+ "controle_noir": {
+  "pipeline": "brut",
+  "mots": 0,
+  "regions": 0
+ },
+ "agregat": {
+  "fax|dev|auto": {
+   "famille": "fax",
+   "split": "dev",
+   "pipeline": "auto",
+   "scans": 10,
+   "mots_natifs": 3771,
+   "wer": 0.2273,
+   "rappel": 0.7963,
+   "precision": 0.8196,
+   "confiance": 76.8,
+   "questions": 30,
+   "exactitude_natif": 1.0,
+   "exactitude_ocr": 0.3667,
+   "preservation": 0.3667,
+   "parite_region": 0.1,
+   "f1_median": 0.667
+  },
+  "papier|dev|auto": {
+   "famille": "papier",
+   "split": "dev",
+   "pipeline": "auto",
+   "scans": 10,
+   "mots_natifs": 3771,
+   "wer": 0.0639,
+   "rappel": 0.9565,
+   "precision": 0.9738,
+   "confiance": 92.3,
+   "questions": 30,
+   "exactitude_natif": 1.0,
+   "exactitude_ocr": 0.7667,
+   "preservation": 0.7667,
+   "parite_region": 0.6667,
+   "f1_median": 0.957
+  },
+  "photo|dev|auto": {
+   "famille": "photo",
+   "split": "dev",
+   "pipeline": "auto",
+   "scans": 10,
+   "mots_natifs": 3771,
+   "wer": 0.0745,
+   "rappel": 0.9549,
+   "precision": 0.9639,
+   "confiance": 91.1,
+   "questions": 30,
+   "exactitude_natif": 1.0,
+   "exactitude_ocr": 0.7,
+   "preservation": 0.7,
+   "parite_region": 0.5333,
+   "f1_median": 0.941
+  },
+  "photocopie|dev|auto": {
+   "famille": "photocopie",
+   "split": "dev",
+   "pipeline": "auto",
+   "scans": 10,
+   "mots_natifs": 3771,
+   "wer": 0.0544,
+   "rappel": 0.9645,
+   "precision": 0.9725,
+   "confiance": 90.4,
+   "questions": 30,
+   "exactitude_natif": 1.0,
+   "exactitude_ocr": 0.7,
+   "preservation": 0.7,
+   "parite_region": 0.7,
+   "f1_median": 0.957
+  },
+  "propre|dev|auto": {
+   "famille": "propre",
+   "split": "dev",
+   "pipeline": "auto",
+   "scans": 10,
+   "mots_natifs": 3771,
+   "wer": 0.0414,
+   "rappel": 0.9761,
+   "precision": 0.9798,
+   "confiance": 93.2,
+   "questions": 30,
+   "exactitude_natif": 1.0,
+   "exactitude_ocr": 0.9,
+   "preservation": 0.9,
+   "parite_region": 0.9,
+   "f1_median": 1.0
+  }
+ },
+ "entrees": [
+  {
+   "image": "A_RES_80_10-fr-p2-s2-propre.png",
+   "pdf": "A_RES_80_10-fr.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "propre",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 558,
+   "mots_ocr": 554,
+   "distance": 9,
+   "commun": 549,
+   "wer": 0.0161,
+   "rappel": 0.9839,
+   "precision": 0.991,
+   "confiance": 94.2,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 5,
+   "parite_region": 1.0,
+   "parite_valeur": 0.8,
+   "details": [
+    {
+     "valeur": "10",
+     "f1": 0.923,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "2030 11",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "53",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 0.974,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-fr-p2-s2-photocopie.png",
+   "pdf": "A_RES_80_10-fr.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "photocopie",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 558,
+   "mots_ocr": 551,
+   "distance": 19,
+   "commun": 539,
+   "wer": 0.0341,
+   "rappel": 0.9659,
+   "precision": 0.9782,
+   "confiance": 91.8,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 5,
+   "parite_region": 0.8,
+   "parite_valeur": 0.4,
+   "details": [
+    {
+     "valeur": "10",
+     "f1": 0.833,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "2030 11",
+     "f1": 0.923,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "53",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 0.923,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-fr-p2-s2-photo.png",
+   "pdf": "A_RES_80_10-fr.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "photo",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 558,
+   "mots_ocr": 549,
+   "distance": 13,
+   "commun": 545,
+   "wer": 0.0233,
+   "rappel": 0.9767,
+   "precision": 0.9927,
+   "confiance": 93.7,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 5,
+   "parite_region": 0.6,
+   "parite_valeur": 0.8,
+   "details": [
+    {
+     "valeur": "10",
+     "f1": 0.833,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "2030 11",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "53",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 0.788,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-fr-p2-s2-fax.png",
+   "pdf": "A_RES_80_10-fr.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "fax",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_natifs": 558,
+   "mots_ocr": 539,
+   "distance": 123,
+   "commun": 438,
+   "wer": 0.2204,
+   "rappel": 0.7849,
+   "precision": 0.8126,
+   "confiance": 71.3,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 5,
+   "parite_region": 0.0,
+   "parite_valeur": 0.2,
+   "details": [
+    {
+     "valeur": "10",
+     "f1": 0.769,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "2030 11",
+     "f1": 0.714,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "53",
+     "f1": 0.545,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "39",
+     "f1": 0.714,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 0.872,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-fr-p2-s2-papier.png",
+   "pdf": "A_RES_80_10-fr.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "papier",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ],
+   "mots_natifs": 558,
+   "mots_ocr": 541,
+   "distance": 28,
+   "commun": 532,
+   "wer": 0.0502,
+   "rappel": 0.9534,
+   "precision": 0.9834,
+   "confiance": 91.6,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 5,
+   "parite_region": 0.6,
+   "parite_valeur": 0.4,
+   "details": [
+    {
+     "valeur": "10",
+     "f1": 0.923,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "2030 11",
+     "f1": 0.923,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "53",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 0.857,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 0.75,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-en-p2-s2-propre.png",
+   "pdf": "A_RES_80_10-en.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "propre",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 546,
+   "mots_ocr": 542,
+   "distance": 4,
+   "commun": 542,
+   "wer": 0.0073,
+   "rappel": 0.9927,
+   "precision": 1.0,
+   "confiance": 94.7,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 4,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "2030",
+     "f1": 0.933,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "53",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 0.947,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "40",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-en-p2-s2-photocopie.png",
+   "pdf": "A_RES_80_10-en.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "photocopie",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 546,
+   "mots_ocr": 540,
+   "distance": 13,
+   "commun": 537,
+   "wer": 0.0238,
+   "rappel": 0.9835,
+   "precision": 0.9944,
+   "confiance": 92.1,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 4,
+   "parite_region": 0.75,
+   "parite_valeur": 0.75,
+   "details": [
+    {
+     "valeur": "2030",
+     "f1": 0.933,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "53",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 0.333,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "40",
+     "f1": 0.957,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-en-p2-s2-photo.png",
+   "pdf": "A_RES_80_10-en.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "photo",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 546,
+   "mots_ocr": 542,
+   "distance": 14,
+   "commun": 540,
+   "wer": 0.0256,
+   "rappel": 0.989,
+   "precision": 0.9963,
+   "confiance": 94.9,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 4,
+   "parite_region": 0.75,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "2030",
+     "f1": 0.933,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "53",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 0.947,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "40",
+     "f1": 0.588,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-en-p2-s2-fax.png",
+   "pdf": "A_RES_80_10-en.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "fax",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_natifs": 546,
+   "mots_ocr": 535,
+   "distance": 112,
+   "commun": 436,
+   "wer": 0.2051,
+   "rappel": 0.7985,
+   "precision": 0.815,
+   "confiance": 76.3,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 4,
+   "parite_region": 0.0,
+   "parite_valeur": 0.5,
+   "details": [
+    {
+     "valeur": "2030",
+     "f1": 0.8,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "53",
+     "f1": 0.571,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "39",
+     "f1": 0.333,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "40",
+     "f1": 0.556,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-en-p2-s2-papier.png",
+   "pdf": "A_RES_80_10-en.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "papier",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 546,
+   "mots_ocr": 537,
+   "distance": 21,
+   "commun": 533,
+   "wer": 0.0385,
+   "rappel": 0.9762,
+   "precision": 0.9926,
+   "confiance": 93.9,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 4,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "2030",
+     "f1": 0.933,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "53",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 0.947,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "40",
+     "f1": 0.957,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-es-p2-s2-propre.png",
+   "pdf": "A_RES_80_10-es.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "propre",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 577,
+   "mots_ocr": 573,
+   "distance": 9,
+   "commun": 568,
+   "wer": 0.0156,
+   "rappel": 0.9844,
+   "precision": 0.9913,
+   "confiance": 94.5,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 4,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "2030",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "53",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 0.957,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "40",
+     "f1": 0.96,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-es-p2-s2-photocopie.png",
+   "pdf": "A_RES_80_10-es.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "photocopie",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 577,
+   "mots_ocr": 572,
+   "distance": 15,
+   "commun": 567,
+   "wer": 0.026,
+   "rappel": 0.9827,
+   "precision": 0.9913,
+   "confiance": 90.8,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 4,
+   "parite_region": 0.5,
+   "parite_valeur": 0.75,
+   "details": [
+    {
+     "valeur": "2030",
+     "f1": 0.2,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "53",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 0.87,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "40",
+     "f1": 0.923,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-es-p2-s2-photo.png",
+   "pdf": "A_RES_80_10-es.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "photo",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 577,
+   "mots_ocr": 570,
+   "distance": 22,
+   "commun": 564,
+   "wer": 0.0381,
+   "rappel": 0.9775,
+   "precision": 0.9895,
+   "confiance": 94.3,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 4,
+   "parite_region": 0.5,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "2030",
+     "f1": 0.941,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "53",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 0.667,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "40",
+     "f1": 0.471,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-es-p2-s2-fax.png",
+   "pdf": "A_RES_80_10-es.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "fax",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_natifs": 577,
+   "mots_ocr": 566,
+   "distance": 125,
+   "commun": 458,
+   "wer": 0.2166,
+   "rappel": 0.7938,
+   "precision": 0.8092,
+   "confiance": 82.1,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 4,
+   "parite_region": 0.25,
+   "parite_valeur": 0.75,
+   "details": [
+    {
+     "valeur": "2030",
+     "f1": 0.941,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "53",
+     "f1": 0.778,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 0.667,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "40",
+     "f1": 0.0,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-es-p2-s2-papier.png",
+   "pdf": "A_RES_80_10-es.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "papier",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 577,
+   "mots_ocr": 567,
+   "distance": 32,
+   "commun": 555,
+   "wer": 0.0555,
+   "rappel": 0.9619,
+   "precision": 0.9788,
+   "confiance": 93.7,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 4,
+   "parite_region": 0.5,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "2030",
+     "f1": 0.941,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "53",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "39",
+     "f1": 0.667,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "40",
+     "f1": 0.471,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-en-p1-s2-propre.png",
+   "pdf": "A_RES_80_1-en.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "propre",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 294,
+   "mots_ocr": 297,
+   "distance": 14,
+   "commun": 289,
+   "wer": 0.0476,
+   "rappel": 0.983,
+   "precision": 0.9731,
+   "confiance": 93.6,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "11",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-en-p1-s2-photocopie.png",
+   "pdf": "A_RES_80_1-en.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "photocopie",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 294,
+   "mots_ocr": 297,
+   "distance": 16,
+   "commun": 285,
+   "wer": 0.0544,
+   "rappel": 0.9694,
+   "precision": 0.9596,
+   "confiance": 91.0,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.3333,
+   "parite_valeur": 0.6667,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "11",
+     "f1": 0.875,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 0.5,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-en-p1-s2-photo.png",
+   "pdf": "A_RES_80_1-en.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "photo",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 294,
+   "mots_ocr": 293,
+   "distance": 20,
+   "commun": 281,
+   "wer": 0.068,
+   "rappel": 0.9558,
+   "precision": 0.959,
+   "confiance": 92.1,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.6667,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 0.667,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "11",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-en-p1-s2-fax.png",
+   "pdf": "A_RES_80_1-en.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "fax",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_natifs": 294,
+   "mots_ocr": 292,
+   "distance": 74,
+   "commun": 238,
+   "wer": 0.2517,
+   "rappel": 0.8095,
+   "precision": 0.8151,
+   "confiance": 78.8,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.0,
+   "parite_valeur": 0.3333,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 0.615,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "11",
+     "f1": 0.519,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "12",
+     "f1": 0.783,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-en-p1-s2-papier.png",
+   "pdf": "A_RES_80_1-en.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "papier",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 294,
+   "mots_ocr": 294,
+   "distance": 16,
+   "commun": 285,
+   "wer": 0.0544,
+   "rappel": 0.9694,
+   "precision": 0.9694,
+   "confiance": 93.2,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.6667,
+   "parite_valeur": 0.6667,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "11",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 0.5,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-es-p1-s2-propre.png",
+   "pdf": "A_RES_80_1-es.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "propre",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 326,
+   "mots_ocr": 334,
+   "distance": 19,
+   "commun": 321,
+   "wer": 0.0583,
+   "rappel": 0.9847,
+   "precision": 0.9611,
+   "confiance": 93.0,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "11",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-es-p1-s2-photocopie.png",
+   "pdf": "A_RES_80_1-es.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "photocopie",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 326,
+   "mots_ocr": 331,
+   "distance": 21,
+   "commun": 314,
+   "wer": 0.0644,
+   "rappel": 0.9632,
+   "precision": 0.9486,
+   "confiance": 90.2,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "11",
+     "f1": 0.96,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-es-p1-s2-photo.png",
+   "pdf": "A_RES_80_1-es.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "photo",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 326,
+   "mots_ocr": 335,
+   "distance": 31,
+   "commun": 312,
+   "wer": 0.0951,
+   "rappel": 0.9571,
+   "precision": 0.9313,
+   "confiance": 91.6,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.6667,
+   "parite_valeur": 0.6667,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 0.615,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "11",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-es-p1-s2-fax.png",
+   "pdf": "A_RES_80_1-es.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "fax",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_natifs": 326,
+   "mots_ocr": 329,
+   "distance": 49,
+   "commun": 288,
+   "wer": 0.1503,
+   "rappel": 0.8834,
+   "precision": 0.8754,
+   "confiance": 83.5,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.6667,
+   "parite_valeur": 0.6667,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 0.875,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "11",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 0.97,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-es-p1-s2-papier.png",
+   "pdf": "A_RES_80_1-es.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "papier",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 326,
+   "mots_ocr": 329,
+   "distance": 20,
+   "commun": 315,
+   "wer": 0.0613,
+   "rappel": 0.9663,
+   "precision": 0.9574,
+   "confiance": 93.4,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.6667,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "11",
+     "f1": 0.889,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-fr-p1-s2-propre.png",
+   "pdf": "A_RES_80_1-fr.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "propre",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 315,
+   "mots_ocr": 322,
+   "distance": 14,
+   "commun": 314,
+   "wer": 0.0444,
+   "rappel": 0.9968,
+   "precision": 0.9752,
+   "confiance": 90.5,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "11",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-fr-p1-s2-photocopie.png",
+   "pdf": "A_RES_80_1-fr.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "photocopie",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 315,
+   "mots_ocr": 316,
+   "distance": 15,
+   "commun": 308,
+   "wer": 0.0476,
+   "rappel": 0.9778,
+   "precision": 0.9747,
+   "confiance": 89.5,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.6667,
+   "parite_valeur": 0.6667,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "11",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 0.471,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-fr-p1-s2-photo.png",
+   "pdf": "A_RES_80_1-fr.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "photo",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 315,
+   "mots_ocr": 320,
+   "distance": 20,
+   "commun": 307,
+   "wer": 0.0635,
+   "rappel": 0.9746,
+   "precision": 0.9594,
+   "confiance": 88.8,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.6667,
+   "parite_valeur": 0.6667,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "11",
+     "f1": 0.824,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "12",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-fr-p1-s2-fax.png",
+   "pdf": "A_RES_80_1-fr.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "fax",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_natifs": 315,
+   "mots_ocr": 319,
+   "distance": 53,
+   "commun": 275,
+   "wer": 0.1683,
+   "rappel": 0.873,
+   "precision": 0.8621,
+   "confiance": 79.0,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.0,
+   "parite_valeur": 0.0,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 0.667,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "11",
+     "f1": 0.889,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "12",
+     "f1": 0.25,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-fr-p1-s2-papier.png",
+   "pdf": "A_RES_80_1-fr.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "papier",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 315,
+   "mots_ocr": 316,
+   "distance": 13,
+   "commun": 308,
+   "wer": 0.0413,
+   "rappel": 0.9778,
+   "precision": 0.9747,
+   "confiance": 92.7,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.6667,
+   "parite_valeur": 0.6667,
+   "details": [
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "11",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "12",
+     "f1": 0.471,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-en-p1-s2-propre.png",
+   "pdf": "A_RES_80_10-en.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "propre",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 316,
+   "mots_ocr": 307,
+   "distance": 26,
+   "commun": 297,
+   "wer": 0.0823,
+   "rappel": 0.9399,
+   "precision": 0.9674,
+   "confiance": 91.5,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "189",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-en-p1-s2-photocopie.png",
+   "pdf": "A_RES_80_10-en.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "photocopie",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 316,
+   "mots_ocr": 307,
+   "distance": 24,
+   "commun": 300,
+   "wer": 0.0759,
+   "rappel": 0.9494,
+   "precision": 0.9772,
+   "confiance": 86.4,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 1.0,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "80",
+     "f1": 0.909,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "189",
+     "f1": 0.941,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-en-p1-s2-photo.png",
+   "pdf": "A_RES_80_10-en.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "photo",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 316,
+   "mots_ocr": 305,
+   "distance": 55,
+   "commun": 278,
+   "wer": 0.1741,
+   "rappel": 0.8797,
+   "precision": 0.9115,
+   "confiance": 82.3,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.3333,
+   "parite_valeur": 0.3333,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.385,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "189",
+     "f1": 0.2,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-en-p1-s2-fax.png",
+   "pdf": "A_RES_80_10-en.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "fax",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_natifs": 316,
+   "mots_ocr": 287,
+   "distance": 118,
+   "commun": 214,
+   "wer": 0.3734,
+   "rappel": 0.6772,
+   "precision": 0.7456,
+   "confiance": 70.5,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.0,
+   "parite_valeur": 0.3333,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.286,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "80",
+     "f1": 0.5,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "189",
+     "f1": 0.105,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-en-p1-s2-papier.png",
+   "pdf": "A_RES_80_10-en.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "papier",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 316,
+   "mots_ocr": 301,
+   "distance": 32,
+   "commun": 288,
+   "wer": 0.1013,
+   "rappel": 0.9114,
+   "precision": 0.9568,
+   "confiance": 89.2,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.6667,
+   "parite_valeur": 1.0,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.833,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "189",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-es-p1-s2-propre.png",
+   "pdf": "A_RES_80_10-es.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "propre",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 284,
+   "mots_ocr": 284,
+   "distance": 30,
+   "commun": 269,
+   "wer": 0.1056,
+   "rappel": 0.9472,
+   "precision": 0.9472,
+   "confiance": 91.1,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.3333,
+   "parite_valeur": 0.6667,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.143,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "2200",
+     "f1": 0.8,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-es-p1-s2-photocopie.png",
+   "pdf": "A_RES_80_10-es.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "photocopie",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 284,
+   "mots_ocr": 283,
+   "distance": 35,
+   "commun": 263,
+   "wer": 0.1232,
+   "rappel": 0.9261,
+   "precision": 0.9293,
+   "confiance": 89.1,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.6667,
+   "parite_valeur": 0.6667,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.143,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "2200",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-es-p1-s2-photo.png",
+   "pdf": "A_RES_80_10-es.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "photo",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 284,
+   "mots_ocr": 280,
+   "distance": 45,
+   "commun": 258,
+   "wer": 0.1585,
+   "rappel": 0.9085,
+   "precision": 0.9214,
+   "confiance": 87.5,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.3333,
+   "parite_valeur": 0.3333,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.143,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "2200",
+     "f1": 0.444,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-es-p1-s2-fax.png",
+   "pdf": "A_RES_80_10-es.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "fax",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_natifs": 284,
+   "mots_ocr": 263,
+   "distance": 83,
+   "commun": 209,
+   "wer": 0.2923,
+   "rappel": 0.7359,
+   "precision": 0.7947,
+   "confiance": 76.7,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.0,
+   "parite_valeur": 0.3333,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.267,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "80",
+     "f1": 0.75,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "2200",
+     "f1": 0.0,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-es-p1-s2-papier.png",
+   "pdf": "A_RES_80_10-es.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "papier",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 284,
+   "mots_ocr": 278,
+   "distance": 31,
+   "commun": 264,
+   "wer": 0.1092,
+   "rappel": 0.9296,
+   "precision": 0.9496,
+   "confiance": 91.6,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 3,
+   "parite_region": 0.6667,
+   "parite_valeur": 0.6667,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.143,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    },
+    {
+     "valeur": "2200",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-fr-p1-s2-propre.png",
+   "pdf": "A_RES_80_10-fr.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "propre",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 305,
+   "mots_ocr": 295,
+   "distance": 30,
+   "commun": 283,
+   "wer": 0.0984,
+   "rappel": 0.9279,
+   "precision": 0.9593,
+   "confiance": 90.2,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 2,
+   "parite_region": 0.5,
+   "parite_valeur": 0.5,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.214,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-fr-p1-s2-photocopie.png",
+   "pdf": "A_RES_80_10-fr.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "photocopie",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 305,
+   "mots_ocr": 294,
+   "distance": 42,
+   "commun": 275,
+   "wer": 0.1377,
+   "rappel": 0.9016,
+   "precision": 0.9354,
+   "confiance": 87.1,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 2,
+   "parite_region": 0.5,
+   "parite_valeur": 0.5,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.214,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-fr-p1-s2-photo.png",
+   "pdf": "A_RES_80_10-fr.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "photo",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 305,
+   "mots_ocr": 293,
+   "distance": 52,
+   "commun": 267,
+   "wer": 0.1705,
+   "rappel": 0.8754,
+   "precision": 0.9113,
+   "confiance": 83.2,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 2,
+   "parite_region": 0.0,
+   "parite_valeur": 0.0,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.214,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "80",
+     "f1": 0.833,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-fr-p1-s2-fax.png",
+   "pdf": "A_RES_80_10-fr.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "fax",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_natifs": 305,
+   "mots_ocr": 285,
+   "distance": 98,
+   "commun": 218,
+   "wer": 0.3213,
+   "rappel": 0.7148,
+   "precision": 0.7649,
+   "confiance": 67.9,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 2,
+   "parite_region": 0.0,
+   "parite_valeur": 0.0,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.207,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "80",
+     "f1": 0.615,
+     "trouve_natif": true,
+     "trouve": false
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_10-fr-p1-s2-papier.png",
+   "pdf": "A_RES_80_10-fr.pdf",
+   "page": 1,
+   "split": "dev",
+   "famille": "papier",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 305,
+   "mots_ocr": 293,
+   "distance": 37,
+   "commun": 280,
+   "wer": 0.1213,
+   "rappel": 0.918,
+   "precision": 0.9556,
+   "confiance": 88.7,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 2,
+   "parite_region": 0.5,
+   "parite_valeur": 0.5,
+   "details": [
+    {
+     "valeur": "13",
+     "f1": 0.214,
+     "trouve_natif": true,
+     "trouve": false
+    },
+    {
+     "valeur": "80",
+     "f1": 1.0,
+     "trouve_natif": true,
+     "trouve": true
+    }
+   ]
+  },
+  {
+   "image": "A_RES_80_1-en-p2-s2-propre.png",
+   "pdf": "A_RES_80_1-en.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "propre",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 250,
+   "mots_ocr": 249,
+   "distance": 1,
+   "commun": 249,
+   "wer": 0.004,
+   "rappel": 0.996,
+   "precision": 1.0,
+   "confiance": 95.7,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 0,
+   "parite_region": null,
+   "parite_valeur": null,
+   "details": []
+  },
+  {
+   "image": "A_RES_80_1-en-p2-s2-photocopie.png",
+   "pdf": "A_RES_80_1-en.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "photocopie",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage"
+   ],
+   "mots_natifs": 250,
+   "mots_ocr": 249,
+   "distance": 5,
+   "commun": 249,
+   "wer": 0.02,
+   "rappel": 0.996,
+   "precision": 1.0,
+   "confiance": 94.6,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 0,
+   "parite_region": null,
+   "parite_valeur": null,
+   "details": []
+  },
+  {
+   "image": "A_RES_80_1-en-p2-s2-photo.png",
+   "pdf": "A_RES_80_1-en.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "photo",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 250,
+   "mots_ocr": 249,
+   "distance": 9,
+   "commun": 249,
+   "wer": 0.036,
+   "rappel": 0.996,
+   "precision": 1.0,
+   "confiance": 95.5,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 0,
+   "parite_region": null,
+   "parite_valeur": null,
+   "details": []
+  },
+  {
+   "image": "A_RES_80_1-en-p2-s2-fax.png",
+   "pdf": "A_RES_80_1-en.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "fax",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "echelle(2100)",
+    "lissage"
+   ],
+   "mots_natifs": 250,
+   "mots_ocr": 249,
+   "distance": 22,
+   "commun": 229,
+   "wer": 0.088,
+   "rappel": 0.916,
+   "precision": 0.9197,
+   "confiance": 82.5,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 0,
+   "parite_region": null,
+   "parite_valeur": null,
+   "details": []
+  },
+  {
+   "image": "A_RES_80_1-en-p2-s2-papier.png",
+   "pdf": "A_RES_80_1-en.pdf",
+   "page": 2,
+   "split": "dev",
+   "famille": "papier",
+   "graine": 2,
+   "pipeline": "auto",
+   "trace": [
+    "recadrage",
+    "eclairage"
+   ],
+   "mots_natifs": 250,
+   "mots_ocr": 248,
+   "distance": 11,
+   "commun": 247,
+   "wer": 0.044,
+   "rappel": 0.988,
+   "precision": 0.996,
+   "confiance": 93.8,
+   "exposants": true,
+   "colonnes": true,
+   "questions": 0,
+   "parite_region": null,
+   "parite_valeur": null,
+   "details": []
+  }
+ ],
+ "dispositif": "seconde graine du corpus de scans (mêmes pages, dégradations différentes)"
+}

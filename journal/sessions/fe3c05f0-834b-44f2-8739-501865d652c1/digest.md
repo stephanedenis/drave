@@ -7092,3 +7092,341 @@ plan actualisé
   ```
 
 - **bash** `{"command": "cat > /tmp/msg-reel2.txt <<'EOF'\nR4.4 — UN SECOND VRAI SCAN : 23,3 % DE WER MAIS 88,5 % DES MOTS — C'EST L'ORDRE DES COLONNES\n\nLa validation réelle ne tenait qu'un livre de prose. Le second — *Vingt mille lieues sous les\nmers*, édition 1902, Internet Archive — donne un WER de **23,2 … [1546 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+ 16 files changed, 485 insertions(+), 51 deletions(-)
+ create mode 100644 journal/2026-11-01/docs.md
+ create mode 100644 reports/r44-reel-second.json
+c51cee41 R4.4 — UN SECOND VRAI SCAN : 23,3 % DE WER MAIS 88,5 % DES MOTS — C'EST L'ORDRE DES COLONNES
+a9211299 ÉTAT — LA PAGE VIVANTE PASSE AU 1er NOVEMBRE : LA REVUE EXIGE LA DATE DU DERNIER COMMIT
+ M tools/distiller_budget.py
+ m tools/docwatch
+ M tools/native_model.py
+?? reports/corpus-litt-propre.json
+?? reports/corpus-propre.json
+?? tools/corpus_propre.py
+?? tools/eval_n2_propre.py
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,subprocess,os\nimport numpy as np\nfrom PIL import Image\nfrom scipy.ndimage import label, find_objects\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png')\nim=Image.open(img).convert('L'); arr=np.asarray(im)\n# boîte du mot fusionné  … [1344 caractères tronqués]`
+
+  ```
+composantes 23
+(12, 140, 14, 19, 28, 190)
+(13, 164, 14, 15, 20, 122)
+(14, 183, 14, 9, 19, 84)
+(15, 190, 14, 24, 19, 158)
+(16, 218, 14, 15, 20, 122)
+(17, 237, 14, 9, 19, 84)
+(18, 244, 14, 12, 19, 86)
+(19, 301, 29, 6, 8, 26)
+(20, 268, 30, 1, 1, 1)
+(21, 304, 37, 1, 1, 1)
+(22, 302, 38, 2, 1, 2)
+(23, 301, 39, 1, 1, 1)
+comp 276 0 6 18 -> ''
+comp 286 0 12 18 -> ''
+comp 259 9 10 24 -> ''
+comp 218 14 15 20 -> ''
+comp 237 14 9 19 -> ''
+comp 244 14 12 19 -> ''
+comp 301 29 6 8 -> '9'
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,subprocess,os\nimport numpy as np\nfrom PIL import Image\nfrom scipy.ndimage import label, find_objects\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png')\narr=np.asarray(Image.open(img).convert('L'))\nx0,y0,x1,y1=514,377-25,514+307+ … [1287 caractères tronqués]`
+
+  ```
+crop (67, 322) composantes 46
+(1, 0, 0, 11, 8, 41)
+(2, 24, 0, 9, 8, 38)
+(3, 40, 0, 17, 9, 59)
+(4, 65, 0, 10, 2, 14)
+(5, 83, 0, 9, 8, 38)
+(6, 100, 0, 8, 8, 33)
+(7, 108, 0, 7, 8, 31)
+(8, 119, 0, 9, 8, 37)
+(9, 130, 0, 9, 8, 32)
+(10, 141, 0, 9, 8, 32)
+(11, 153, 0, 9, 8, 37)
+(12, 164, 0, 9, 8, 32)
+(13, 175, 0, 9, 8, 32)
+(14, 188, 0, 15, 9, 57)
+(15, 236, 0, 19, 9, 80)
+(16, 274, 0, 8, 8, 33)
+(17, 282, 0, 7, 8, 31)
+(18, 294, 0, 14, 9, 54)
+(19, 315, 0, 7, 8, 33)
+(20, 308, 1, 1, 2, 2)
+petit 0 0 11 8 aire 41 -> '1'
+petit 24 0 9 8 aire 38 -> '1'
+petit 40 0 17 9 aire 59 -> ''
+petit 65 0 10 2 aire 14 -> ''
+petit 83 0 9 8 aire 38 -> '1'
+petit 100 0 8 8 aire 33 -> ''
+petit 108 0 7 8 aire 31 -> ''
+petit 119 0 9 8 aire 37 -> '1'
+petit 130 0 9 8 aire 32 -> '1'
+petit 141 0 9 8 aire 32 -> ''
+petit 153 0 9 8 aire 37 -> '1'
+petit 164 0 9 8 aire 32 -> '1'
+petit 175 0 9 8 aire 32 -> ''
+petit 188 0 15 9 aire 57 -> ''
+petit 236 0 19 9 aire 80 -> ''
+petit 274 0 8 8 aire 33 -> ''
+petit 282 0 7 8 aire 31 -> ''
+petit 294 0 14 9 aire 54 -> ''
+petit 315 0 7 8 aire 33 -> ''
+petit 61 2 19 15 aire 111 -> ''
+petit 29 30 6 6 aire 18 -> ''
+petit 301 54 6 8 aire 26 -> '9'
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,subprocess,os\nfrom PIL import Image, ImageFilter\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p2-s1-propre.png')\nim=Image.open(img).convert('L')\nROOT=pathlib.Path('work/ocr/root'); env=dict(os.environ)\nenv['LD_LIBRARY_PATH']=str(ROOT/'usr/lib … [1325 caractères tronqués]`
+
+  ```
+mot_up4                      psm7 oemNone fra -> 'développement".'
+mot_up6                      psm7 oemNone fra -> 'développement".'
+mot_up8                      psm7 oemNone fra -> 'développement".'
+mot_psm6                     psm6 oemNone fra -> 'développement".'
+mot_eng                      psm7 oemNone eng -> 'développement”,'
+mot_oem0                     psm7 oem0 fra -> ''
+mot_chiffres                 psm7 oemNone fra -> ''
+queue_740                    psm7 oemNone fra -> "nt'°."
+queue_ch_740                 psm7 oemNone fra -> ''
+queue_760                    psm7 oemNone fra -> "it'°."
+queue_ch_760                 psm7 oemNone fra -> ''
+queue_780                    psm7 oemNone fra -> 'ee'
+queue_ch_780                 psm7 oemNone fra -> '2'
+queue_790                    psm7 oemNone fra -> 'd'
+queue_ch_790                 psm7 oemNone fra -> ''
+queue_800                    psm7 oemNone fra -> ','
+queue_ch_800                 psm7 oemNone fra -> ''
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/simuler_scan.py'); s=p.read_text()\ns=s.replace('''    ap.add_argument(\"--graines\", type=int, default=1)''','''    ap.add_argument(\"--graines\", type=int, default=1)\n    ap.add_argument(\"--graine\", type=int, default=0,\n      … [1300 caractères tronqués]`
+
+  ```
+started background job bash-346
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib,subprocess,os,time\nimport numpy as np\nfrom PIL import Image, ImageFilter\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, nettoyer_scan as ns, graphe_document_ocr as gco\nman=json.load(open('work/r44/scans/manifeste. … [2254 caractères tronqués]`
+
+  ```
+fax A: WER=31.85%
+fax C: WER=33.02%
+fax F: WER=36.91%
+fax B: WER=40.63%
+fax D: WER=55.45%
+fax E: WER=67.94%
+fax G: WER=100.00%
+  ```
+
+### 👤 Utilisateur
+
+background job bash-346 (bash: python3 - <<'PY'
+import pathlib
+p=pathlib.Path('tools/simuler_scan.py'); s=p.read_text()
+s=s.replace('''    ap.add_argument("--graines", type=int, default=1)''','''    ap.add_argument("--graines", type=int, default=1)
+    ap.add_argument("--graine", type=int, default=0,
+                    help="une seule graine (pour la variance) ; 0 = 1..--graines")
+    ap.add_argument("--splits", default="dev,test")''')
+s=s.replace('''    familles = [f for f in args.familles.split(",") if f]''','''    familles = [f for f in args.familles.split(",") if f]
+    graines = [args.graine] if args.graine else list(range(1, args.graines + 1))
+    splits = {x for x in args.splits.split(",") if x}''')
+s=s.replace('''    dev = mesurer_ocr.pages_du_banc(args.pages)
+    for p in dev:
+        p["split"] = "dev"''','''    dev = mesurer_ocr.pages_du_banc(args.pages)
+    for p in dev:
+        p["split"] = "dev"
+    dev = [p for p in dev if "dev" in splits]''')
+s=s.replace('''            for graine in range(1, args.graines + 1):''','''            for graine in graines:''')
+p.write_text(s)
+print('options graine/splits ajoutées')
+PY
+python3 -m py_compile tools/simuler_scan.py && timeout 1800 python3 tools/simuler_scan.py --sortie work/r44/scans-g2 --pages 10 --graine 2 --splits dev --familles propre,photocopie,photo,fax,papier > work/r44/gen-g2.log 2>&1; echo "[code $?]"; tail -3 work/r44/gen-g2.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,hashlib\nimport numpy as np\nfrom PIL import Image\nsys.path.insert(0,'tools')\nimport nettoyer_scan as ns, mesurer_scans as ms, mesurer_ocr as mo\nimg=pathlib.Path('work/r44/scans/A_RES_80_10-fr-p1-s1-fax.png')\nchemin,trace=ms.nettoyer(img,'auto')\ … [648 caractères tronqués]`
+
+  ```
+cache auto /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/nettoye/A_RES_80_10-fr-p1-s1-fax-auto.png ['echelle(2100)', 'lissage'] 20ed66aaff62
+sweep A 20ed66aaff62
+auto mots manifeste 285 régions 63
+sweep mots manifeste 285 régions 63
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,subprocess,os\nimport numpy as np\nfrom PIL import Image\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, nettoyer_scan as ns, graphe_document_ocr as gco\ne={'pdf':'A_RES_80_10-fr.pdf','page':2,'langue':'fra','image':'A_RES … [1015 caractères tronqués]`
+
+  ```
+manifeste WER 0.2366 mots 540
+stdout WER 0.2366 mots 540
+ref mots 558
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo\nr=json.load(open('reports/r44-scans.json'))\n# détail par page du JSON final : entrées\nfor l in r['entrees']:\n    if l['famille']=='fax' and l['split']=='dev':\n        print(l['image'], l … [154 caractères tronqués]`
+
+  ```
+A_RES_80_10-fr-p2-s1-fax.png 0.2348 541
+A_RES_80_10-en-p2-s1-fax.png 0.1758 531
+A_RES_80_10-es-p2-s1-fax.png 0.2184 563
+A_RES_80_1-en-p1-s1-fax.png 0.1973 293
+A_RES_80_1-es-p1-s1-fax.png 0.1595 328
+A_RES_80_1-fr-p1-s1-fax.png 0.1492 317
+A_RES_80_10-en-p1-s1-fax.png 0.3354 294
+A_RES_80_10-es-p1-s1-fax.png 0.2535 269
+A_RES_80_10-fr-p1-s1-fax.png 0.3508 285
+A_RES_80_1-en-p2-s1-fax.png 0.124 249
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib,subprocess,os\nimport numpy as np\nfrom PIL import Image, ImageFilter\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, nettoyer_scan as ns\nman=json.load(open('work/r44/scans/manifeste.json'))\nsel=[e for e in man['ent … [765 caractères tronqués]`
+
+  ```
+A_RES_80_10-fr-p2-s1-fax.png trace ['echelle(2100)', 'lissage'] WER 0.2366
+A_RES_80_10-en-p2-s1-fax.png trace ['echelle(2100)', 'lissage'] WER 0.2729
+A_RES_80_10-es-p2-s1-fax.png trace ['echelle(2100)', 'lissage'] WER 0.409
+A_RES_80_1-en-p1-s1-fax.png trace ['echelle(2100)', 'lissage'] WER 0.2347
+A_RES_80_1-es-p1-s1-fax.png trace ['echelle(2100)', 'lissage'] WER 0.3681
+A_RES_80_1-fr-p1-s1-fax.png trace ['echelle(2100)', 'lissage'] WER 0.1492
+A_RES_80_10-en-p1-s1-fax.png trace ['echelle(2100)', 'lissage'] WER 0.3797
+A_RES_80_10-es-p1-s1-fax.png trace ['echelle(2100)', 'lissage'] WER 0.4648
+A_RES_80_10-fr-p1-s1-fax.png trace ['echelle(2100)', 'lissage'] WER 0.3508
+A_RES_80_1-en-p2-s1-fax.png trace ['echelle(2100)', 'lissage'] WER 0.212
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json,hashlib\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, graphe_document_ocr as gco, nettoyer_scan as ns\nfrom PIL import Image\ne={'pdf':'A_RES_80_10-en.pdf','page':2,'langue':'eng','image':'A_RES_80_10-en-p2-s1-fax.p … [1098 caractères tronqués]`
+
+  ```
+image hash ff26fe35f68bb5c9 trace ['echelle(2100)', 'lissage']
+brut True 18154
+   WER 0.1758 mots 531 exp None
+-exp2-col True 18180
+   WER 0.1758 mots 531 exp 0
+frais WER 0.1758 mots 531
+ref 546
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_scans.py --corpus work/r44/scans-g2/manifeste.json --pipelines auto --exposants --colonnes --splits dev --sortie work/r44/mesure-g2.json > work/r44/mesure-g2.log 2>&1; echo \"[code $?]\"; tail -6 work/r44/mesure-g2.log", "description": "Measure second  … [109 caractères tronqués]`
+
+  ```
+started background job bash-353
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/advancedsearch.php?q=title%3A%28pride+and+prejudice%29+AND+language%3Aeng&fl%5B%5D=identifier&fl%5B%5D=year&rows=8&output=json\" | python3 -c \"import json,sys;d=json.load(sys.stdin);[print(x) for x in d['response']['docs']]\" 2>&1 | head -8", "d … [129 caractères tronqués]`
+
+  ```
+{'identifier': 'prideprejudiceli0000jane_k4s7', 'year': 2013}
+{'identifier': 'prideprejudice0000aust_k5e5', 'year': 1991}
+{'identifier': 'prideprejudice0000gree', 'year': 2003}
+{'identifier': 'prideprejudice0000unse_r9d8', 'year': 1947}
+{'identifier': 'prideprejudice190000jane', 'year': 1946}
+{'identifier': 'prideprejudice0000unse_i3x0', 'year': 1968}
+{'identifier': 'bwb_O5-LTL-793', 'year': 1966}
+{'identifier': 'prideprejudiceja0000pasc', 'year': 2002}
+  ```
+
+### 👤 Utilisateur
+
+background job bash-353 (bash: timeout 1800 python3 tools/mesurer_scans.py --corpus work/r44/scans-g2/manifeste.json --pipelines auto --exposants --colonnes --splits dev --sortie work/r44/mesure-g2.json > work/r44/mesure-g2.log 2>&1; echo "[code $?]"; tail -6 work/r44/mesure-g2.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\na=json.load(open('work/r44/mesure-final-exp-col.json'))['agregat']\nb=json.load(open('work/r44/mesure-g2.json'))['agregat']\nprint(f\"{'famille':10s} {'WER g1':>8s} {'WER g2':>8s} {'écart':>7s} {'prés g1':>8s} {'prés g2':>8s}\")\nfor fam in ('propre','phot … [384 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: 'work/r44/mesure-g2.json'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "ls work/r44/scans-g2/ | head -3; tail -8 work/r44/mesure-g2.log 2>/dev/null; echo \"===\"; head -3 work/r44/gen-g2.log 2>/dev/null; tail -3 work/r44/gen-g2.log 2>/dev/null", "description": "Inspect seed-2 corpus and measurement logs", "workdir": "/home/stephane/Data13TB/stephane/GitHub/ … [9 caractères tronqués]`
+
+  ```
+A_RES_80_10-en-p1-s2-fax.png
+A_RES_80_10-en-p1-s2-papier.png
+A_RES_80_10-en-p1-s2-photocopie.png
+    chemin, trace = nettoyer(image, pipeline)
+                    ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_scans.py", line 78, in nettoyer
+    im = Image.open(image).convert("RGB")
+         ~~~~~~~~~~^^^^^^^
+  File "/usr/lib64/python3.13/site-packages/PIL/Image.py", line 3654, in open
+    fp = builtins.open(filename, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/scans/A_RES_80_10-fr-p2-s2-propre.png'
+===
+  A_RES_80_10-fr-p2-s2-propre.png · 2550×3300
+  A_RES_80_10-fr-p2-s2-photocopie.png · 1700×2200
+  A_RES_80_10-fr-p2-s2-photo.png · 1530×1980
+  A_RES_80_1-en-p2-s2-papier.png · 1445×1870
+
+50 scans → work/r44/scans-g2/manifeste.json
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\ns=s.replace('''def mesure_entree(entree: dict, pipeline: str, questions: dict,\n                  exposants: bool = False, colonnes: bool = False) -> dict:\n    image = (RACINE / \"work/r44/scan … [1121 caractères tronqués]`
+
+  ```
+base du corpus prise en compte
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_scans.py", line 280, in main
+    "corpus": str(args.corpus.relative_to(RACINE)), "nature": "scans SIMULÉS",
+                  ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/usr/lib64/python3.13/pathlib/_local.py", line 385, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: 'work/r44/scans-g2/manifeste.json' is not in the subpath of '/home/stephane/Data13TB/stephane/GitHub/Qtrinet'
+[code 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\ns=s.replace('\"corpus\": str(args.corpus.relative_to(RACINE)), \"nature\": \"scans SIMULÉS\",',\n            '\"corpus\": str(args.corpus), \"nature\": \"scans SIMULÉS\",')\ns=s.replace('colonne … [1052 caractères tronqués]`
+
+  ```
+✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 90.0%)
+
+  50 mesures en 210 s → work/r44/mesure-g2.json
+[code 0]
+famille      WER g1   WER g2   écart  prés g1  prés g2
+propre        4.14%    4.14%  +0.00%    90.0%    90.0%
+photocopie    6.34%    5.44%  -0.90%    86.7%    70.0%
+photo         7.00%    7.45%  +0.45%    86.7%    70.0%
+papier        7.32%    6.39%  -0.93%    73.3%    76.7%
+fax          21.90%   22.73%  +0.83%    53.3%    36.7%
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib,json\n# 1) fiche : section variance\np=pathlib.Path('reports/rapport-r44-scans.md'); s=p.read_text()\nancre='''## 6. Le second moteur : un contrôle, pas un candidat'''\nsection='''## 5 bis. La variance entre graines : le WER est stable, la préservation n … [3415 caractères tronqués]`
+
+  ```
+fiche : variance ajoutée
+reports/r44-seed2.json écrit
+T0 3958
+  ```
+
+- **bash** `{"command": "grep -n \"préservation\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -4; echo \"=== seuils\"; grep -n \"preservation\" tools/mesurer_scans.py | head -6", "description": "Check whether state and thresholds updates applied", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrin … [4 caractères tronqués]`
+
+  ```
+47:- **Ce qu'elle fait** : photo **55,9 → 7,0 %**, préservation **86,7 %**, colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,5 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+80:  simulés** — photo **55,9 → 7,0 %**, préservation **86,7 %**, colonnes **89,4 → 0,5 %**,
+107:| fichiers / JSON de résultats | **372** / **447** | `reports/*.md` / `reports/*.json` |
+=== seuils
+185:            "preservation": (round(sum(d["trouve_natif"] and d["trouve"] for d in details)
+199:        "propre":     {"wer": 0.06, "preservation": 0.85},
+202:        "photocopie": {"wer": 0.08, "preservation": 0.65},
+203:        "photo":      {"wer": 0.10, "preservation": 0.65},
+204:        "papier":     {"wer": 0.10, "preservation": 0.60},
+205:        "fax":        {"wer": 0.25, "preservation": 0.35},
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"vrais scans **7,10 / 88,5 %** — [`r44-scans`]\",\"vrais scans **7,10 / 88,5 %** — [`r44-scans`]\")\ns=s.replace(\"photo **55,9 → 7,0 %**, préservation **86,7 %**, colonnes **89, … [649 caractères tronqués]`
+
+  ```
+T0 3961
+47:- **Ce qu'elle fait** : photo **55,9 → 7,0 %**, préservation **70–87 %** selon la graine, colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,5 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+80:  simulés** — photo **55,9 → 7,0 %**, préservation **86,7 %**, colonnes **89,4 → 0,5 %**,
+  ```
+
+- **bash** `{"command": "timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-final.log 2>&1; echo \"[gate $?]\"; tail -8 work/r44/gate-final.log", "description": "Run full scan gate with new floors", "run_in_background": true, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+started background job bash-362
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"simulés** — photo **55,9 → 7,0 %**, préservation **86,7 %**, colonnes **89,4 → 0,5 %**,\",\n            \"simulés** — photo **55,9 → 7,0 %**, préservation **70–87 %** selon la g … [1986 caractères tronqués]`

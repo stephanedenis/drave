@@ -6249,3 +6249,71 @@ started background job bash-341
   ```
 
 - **job_output** `{"job_id": "bash-341", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-330 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt | wc -l; for f in C-propre-g3 R-pos-g1 D-mixte-g3; do echo "-- $f"; tail -1 work/n2h/$f.log 2>/dev/null; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt | wc -l; for f in R-pos-g1 R-pos-g2; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Check random-position progress"}`
+
+  ```
+00:33
+10
+-- R-pos-g1
+-- R-pos-g2
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n2h/*.pt | sed 's|work/n2h/||' | tr '\\n' ' '; echo; ps -eo pid,etime,cmd | grep distiller_budget | grep -v grep | sed 's/.*--sortie/--sortie/'", "description": "List checkpoints and running jobs"}`
+
+  ```
+A-propre-g1.pt A-propre-g2.pt A-propre-g3.pt base-mixte.pt base-propre.pt C-propre-g1.pt C-propre-g2.pt C-propre-g3.pt D-mixte-g1.pt D-mixte-g2.pt D-mixte-g3.pt 
+--sortie work/n2h/R-pos-g1.pt --log work/n2h/R-pos-g1.log
+  ```
+
+- **bash** `{"command": "sleep 1400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g1.pt 2>/dev/null && echo R1_OK; tail -1 work/n2h/R-pos-g2.log 2>/dev/null", "description": "Wait for the first random-position run", "run_in_background": true}`
+
+  ```
+started background job bash-344
+  ```
+
+- **job_output** `{"job_id": "bash-344", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g1.pt 2>/dev/null && echo R1_OK; tail -1 work/n2h/R-pos-g1.log 2>/dev/null; tail -1 work/n2h/R-pos-g2.log 2>/dev/null", "description": "Check R seed 1 completion"}`
+
+  ```
+00:43
+pas  8750 · seq 128 · perte 68.3296 · PPL 128/4 3.5794 · 612 s
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 1000; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/R-pos-g1.pt 2>/dev/null && echo R1_OK; tail -1 work/n2h/R-pos-g2.log 2>/dev/null", "description": "Wait for R seed 1", "run_in_background": true}`
+
+  ```
+started background job bash-346
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/backlog/N2-distillation.md'); s = p.read_text()\nvieux = \"\"\"## L'état\n\n49 999 fenêtres, 4 sources ; professeur 30k 1,734 (0,794 bit/octet) ; student 3,123 à 20 00 … [2247 caractères tronqués]`
+
+  ```
+backlog N2 mis à jour
+14:## L'état
+15-
+16-Le budget est mesuré (N2.d) : 2,9355 → 2,8527, mais **sur un jeu contaminé à 32,8 %**. N2.h a
+17-refait le mètre : corpus dédupliqué (−22,2 % de texte), split par chunks, **0 % de fuite** ; la
+18-chaîne propre vaut **3,09** en domaine et **16,7** sur de la littérature jamais vue — le modèle de
+19-N2 est un **spécialiste du dépôt**. La diversité française (moitié dépôt, moitié littérature)
+20-ramène la littérature à **3,86** pour **+0,17** en domaine.
+  ```
+
+- **job_output** `{"job_id": "bash-346", "timeout_ms": 1200000, "wait": true}`

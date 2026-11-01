@@ -145,6 +145,26 @@ téléphone qui pose problème, et c'est là que la correction d'éclairage paie
 livres est de la prose pure : le second prouve la lecture par colonnes, pas la reconnaissance sur
 des pages illustrées.
 
+## 5 bis. La variance entre graines : le WER est stable, la préservation ne l'est pas
+
+Le corpus a été régénéré avec une **seconde graine** (mêmes pages, dégradations différentes) et
+mesuré de la même façon. Le WER bouge peu ; la préservation, elle, bouge beaucoup :
+
+| famille | WER graine 1 | WER graine 2 | préservation g1 | préservation g2 |
+|---|---:|---:|---:|---:|
+| propre | 4,14 % | 4,14 % | 90,0 % | **90,0 %** |
+| photocopie | 6,34 % | 5,44 % | 86,7 % | **70,0 %** |
+| photo | 7,00 % | 7,45 % | 86,7 % | **70,0 %** |
+| papier | 7,32 % | 6,39 % | 73,3 % | **76,7 %** |
+| fax | 21,90 % | 22,73 % | 53,3 % | **36,7 %** |
+
+**Pourquoi.** La préservation porte sur **30 questions** : une question = 3,3 points, et un
+désaccord de 5 questions fait 16,7 points. Le WER, lui, porte sur ~3 800 mots : il est stable à
+±1 point. La préservation est donc un **indicateur à barres d'erreur larges**, pas un chiffre à
+deux décimales ; les planchers de la porte en tiennent compte (65 % pour la photocopie et la photo,
+60 % pour le papier, 35 % pour le fax, 85 % pour le propre). Un banc de paraphrases plus large
+réduirait cette variance — il n'existe pas encore.
+
 ## 6. Le second moteur : un contrôle, pas un candidat
 
 RapidOCR (ONNX, CPU, modèles par défaut chinois+anglais) sur 4 images, même page, même vérité :
@@ -183,10 +203,10 @@ Les seuils sont des **planchers mesurés** écrits dans les outils :
 | famille | WER ≤ | préservation ≥ |
 |---|---:|---:|
 | propre | 6 % | 85 % |
-| photocopie | 8 % | 80 % |
-| photo | 10 % | 80 % |
-| papier | 10 % | 70 % |
-| fax | 25 % | 45 % |
+| photocopie | 8 % | 65 % |
+| photo | 10 % | 65 % |
+| papier | 10 % | 60 % |
+| fax | 25 % | 35 % |
 
 ## Ce qui n'est pas tenu
 
