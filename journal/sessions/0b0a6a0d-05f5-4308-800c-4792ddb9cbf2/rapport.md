@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 11.7 h |
 | Tours | 4 |
-| Messages | 608 |
-| Appels d'outils | 577 |
+| Messages | 616 |
+| Appels d'outils | 584 |
 | Fichiers touchés | 11 |
-| Commandes | 473 |
+| Commandes | 478 |
 | Sous-agents | 0 |
-| Commits | 9 |
+| Commits | 10 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -171,7 +171,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 4 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*238 appels d'outils.* Actions notables :
+*245 appels d'outils.* Actions notables :
 
 - bash — Check active sessions, state, and campaign
 - bash — Measure the context budget headroom
@@ -187,11 +187,11 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - job_output
 - bash — Check campaign state after the state commit
 - bash — Draft the clean-corpus report
-- … et 172 autres
+- … et 177 autres
 
 **Synthèse produite :**
 
-⏵ Commit principal fait (`e36e8185`) ; lancement du bras combiné (diversité + positions)
+⏵ Clôture : archivage des points de contrôle et portes documentaires
 
 ## 3. Travail accompli
 
@@ -253,7 +253,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 433 autres
+- … et 438 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -410,4 +410,5 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/N2-distillation.md docs/pilotage/en-cours.md docs/pilotage/references-non-re
 - JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR  Le récit de la nuit : la validation se recopiait (32,8 %), le corpus dédupliqué tombe
 - N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS  Le corpus mixte (moitié dépôt, moitié littérature) et les positions
+- ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES  La page d'état passe la session N2.h en close : les quatre fiches (n2-propre, n2-diversite, n2-long
 

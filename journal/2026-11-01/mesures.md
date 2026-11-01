@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (17)
+## Commits du jour (18)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -25,6 +25,7 @@
 | 02:45 | `e36e8185` | N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE | `N2-distillation.md`, `en-cours.md`, `references-non-regression.md` (+23) |
 | 02:51 | `4aef1413` | R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS | `encodeur-visuel.md`, `R44-encodeur-visuel.md`, `en-cours.md` (+19) |
 | 03:05 | `0a802a61` | R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER | `en-cours.md`, `README.md`, `distribue.md` (+10) |
+| 03:58 | `52cf5853` | N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS | `en-cours.md`, `roadmap.md`, `README.md` (+12) |
 
 ## Chiffres du jour
 
@@ -41,6 +42,7 @@
 
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
+- [reports/rapport-n2-combine.md](../../reports/rapport-n2-combine.md)
 - [reports/rapport-n2-diversite.md](../../reports/rapport-n2-diversite.md)
 - [reports/rapport-n2-longueur.md](../../reports/rapport-n2-longueur.md)
 - [reports/rapport-n2-propre.md](../../reports/rapport-n2-propre.md)

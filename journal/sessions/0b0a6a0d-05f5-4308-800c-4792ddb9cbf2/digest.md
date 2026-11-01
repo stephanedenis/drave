@@ -7987,3 +7987,77 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-n2-combine.md reports/INDEX.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS\n\nL … [685 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-473]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-473", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 52cf5853] N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS
+ 15 files changed, 426 insertions(+), 37 deletions(-)
+ create mode 100644 reports/rapport-n2-combine.md
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture : archivage des points de contrôle et portes documentaires
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rsync -a --exclude 'essai-*' work/n2h/ /home/stephane/Data13TB/stephane/backups/n2h/2026-11-01/ && rsync -a --exclude 'essai-*' work/n2h/ /home/stephane/IA/artefacts/n2h/2026-11-01/ && du -sh /home/stephane/Data13TB/stephane/backups/ … [197 caractères tronqués]`
+
+  ```
+1,1G	/home/stephane/Data13TB/stephane/backups/n2h/2026-11-01
+1,1G	/home/stephane/IA/artefacts/n2h/2026-11-01
+17
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=\"etat registre document tableaux sessions budget\" DELAI=300 timeout 900 bash tools/toutes-les-portes.sh 2>&1 | tail -10", "description": "Run the documentation gates subset"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-475]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-475", "timeout_ms": 600000, "wait": true}`
+
+  ```
+porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          45 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-document         ✅                           6 s  ✅ porte document verte
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-registre         ✅                          15 s    ✅ région absente : refusée en la nommant (code 2), rien n'est calculé
+  porte-sessions         ✅                           0 s  PORTE TENUE : plan lisible · autotest doublon/champ manquant · check en-cours
+  porte-tableaux         ✅                           1 s    ✅ la page vivante date du dernier commit (2026-11-01)
+--- 7 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : /tmp/portes-1101-04h00
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/README.md'); s = p.read_text()\na = \"| [`rapport-n2-budget.md`](rapport-n2-budget.md) | **N2.d** — le budget plein paie **2,9355 → 2,8527**, les 4 sources coûtent **+0,91** … [1067 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 👤 Utilisateur
+
+background job bash-464 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g3.pt 2>/dev/null && echo DR3_OK; ls work/n2h/combine.termine 2>/dev/null && echo FINI) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"- **Prochaine action** : **close** — les quatre fiches sont committées, les portes sont vertes.\",\n              \"- … [306 caractères tronqués]`
+
+  ```
+ok
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/README.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES\n\nLa page d'état passe la session N2.h en close : les quatre fiches (n2-propre, n2-divers … [406 caractères tronqués]`

@@ -18,6 +18,7 @@
 | [`rapport-n2-propre.md`](rapport-n2-propre.md) | **N2.h1** — corpus dédupliqué (**0 %** de fuite) : la chaîne propre vaut **3,09** en domaine, pas 2,85 ; **16,7** sur de la littérature jamais vue |
 | [`rapport-n2-diversite.md`](rapport-n2-diversite.md) | **N2.h2** — la diversité française divise la PPL hors dépôt par **4,3** (16,7 → 3,86) pour **+0,17** en domaine |
 | [`rapport-n2-longueur.md`](rapport-n2-longueur.md) | **N2.h3** — le verrou de longueur est la **position apprise** : 14,46 → **3,25** à 256 octets ; au-delà, c'est la fenêtre locale |
+| [`rapport-n2-combine.md`](rapport-n2-combine.md) | **N2.h4** — les deux leviers se composent : **3,47** en domaine, **4,10** hors dépôt, **3,49** à 256 octets |
 | [`rapport-n2-budget.md`](rapport-n2-budget.md) | **N2.d** — le budget plein paie **2,9355 → 2,8527**, les 4 sources coûtent **+0,91**, et **la validation est contaminée à 32,8 %** (PPL propres **2,9795**) |
 | [`rapport-native-prof30k.md`](rapport-native-prof30k.md) | **N2.21** — professeur 30k, lr 3e-6 : PPL **2,823**, dégradation, arrêté |
 | `rapport-native-prof20k-6.md` (fiche non écrite) | **N2.23** — professeur 20k, lr 3e-6 : PPL **2,753**, arrêté |

@@ -33,7 +33,7 @@
   `n2-longueur`, `n2-combine`.
 - **Ce que font les autres** : **Pensée** et **R4.4** sans GPU ; **N4** en file.
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`, `journal/sessions/0b0a6a0d-…/`.
-- **Prochaine action** : clôture — journal, roadmap, portes, commit.
+- **Prochaine action** : **close** — quatre fiches committées, portes vertes.
 - **Bloquants** : aucun — GPU rendus.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/).
 
