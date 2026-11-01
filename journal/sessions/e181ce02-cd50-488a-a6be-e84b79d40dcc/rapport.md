@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 18.6 h |
+| Durée | 18.7 h |
 | Tours | 7 |
-| Messages | 282 |
-| Appels d'outils | 319 |
+| Messages | 286 |
+| Appels d'outils | 323 |
 | Fichiers touchés | 18 |
-| Commandes | 242 |
+| Commandes | 245 |
 | Sous-agents | 2 |
-| Commits | 15 |
+| Commits | 16 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -359,7 +359,7 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 
 ### Tour 7 — prends en charge ici les sessions en suspend pour les compléter
 
-*50 appels d'outils.* Actions notables :
+*54 appels d'outils.* Actions notables :
 
 - bash — Lire le plan R4.4 et ce qui reste
 - bash — Lire le plan N2 et son objectif final
@@ -375,7 +375,7 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 - bash — Lire la suite de l'OCR et le banc réel
 - bash — Trouver les scans réels et le journal de bord
 - bash — Trouver la page et la boîte de l'exposant fusionné
-- … et 33 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
@@ -453,7 +453,7 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 202 autres
+- … et 205 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -602,4 +602,5 @@ Trois processus DSH tournent encore, mais **deux mandats sont clos** : le contra
 - S — L'EXPORT CORPUS EST BRANCHÉ (14 TESTS) ; R4.4 — LES TROIS RESTES SONT DES LIMITES NOMMÉES" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - S — L'EXPORT CORPUS EST BRANCHÉ (14 TESTS) ; R4.4 — LES TROIS RESTES SONT DES LIMITES NOMMÉES" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS)" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

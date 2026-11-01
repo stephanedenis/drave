@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**39 commits** · **3 session(s)** · **8 thème(s)**
+**40 commits** · **3 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,15 +18,15 @@
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
-| portes | 2 | [portes.md](portes.md) |
+| portes | 3 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 19.0 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 18.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 18.7 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 18.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 18.8 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -71,10 +71,20 @@
 | 11:04 | `0ca545eb` | S — LE GÉNÉRATEUR DE CANDIDATS : UNE PHRASE BRUTE → DES STRUCTURES À VALIDER |
 | 11:13 | `5a5915a5` | S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE |
 | 11:15 | `1145834c` | ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON |
+| 11:17 | `4ff739cf` | ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS) |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Le corpus Wikipédia FR est construit.** 2 755 035 articles dans la base, **2 525 902 gardés**,
+**3,68 G caractères**, **593,6 M mots** — le premier stock local d'un autre ordre de grandeur que
+les 5,36 Mo de prose du dépôt. Nettoyage (jointures recollées, apostrophes restaurées), dédup
+exacte (204 doublons), split **par article** (2 273 294 / 126 636 / 125 972) : **0 doublon de
+tronçon entre splits** et **0/30 fenêtres** de chaque jeu d'évaluation retrouvées dans
+l'entraînement. Limites écrites : résumés tronqués à 8 000 caractères, titres de sections restés
+dans le texte, dédup exacte seulement, licence **CC-BY-SA 4.0**. Fiche
+[`corpus-wiki-fr`](../../reports/rapport-corpus-wiki-fr.md).
+
 **L'inventaire des données.** Le disque a été passé au crible pour l'entraînement : **132 Go de
 Wikipédia** (10 langues, bases sqlite 66 Go + dumps 67 Go ; FR 7,25 + 7,13 Go), **12 Go
 d'articles Wikipédia en texte brut** (`corpus/wiki_apparie`), **6,6 Go de corpus déjà préparés**

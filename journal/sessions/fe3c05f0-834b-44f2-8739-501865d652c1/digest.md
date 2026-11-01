@@ -12706,3 +12706,69 @@ drwxr-xr-x. 1 stephane stephane       1608  1 nov 11:13 ..
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json\nd=json.load(open('reports/corpus-wiki-fr.json'))\nfor k in ('articles_db','articles_lus','articles_gardes','articles_courts','articles_vides','articles_doublons','caracteres_gardes','mots_estimes','tronco … [635 caractères tronqués]`
+
+  ```
+articles_db 2755035
+articles_lus 2526107
+articles_gardes 2525902
+articles_courts 0
+articles_vides 1
+articles_doublons 204
+caracteres_gardes 3680374275
+mots_estimes 593608754
+troncons 2525902
+troncons_doublons 0
+octets {'train': 3425588868, 'val': 191095576, 'test': 189680293}
+articles {'train': 2273294, 'val': 126636, 'test': 125972}
+troncons_par_split {'train': 2273294, 'val': 126636, 'test': 125972}
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 125972,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ },
+ "recouvrement_eval": [
+  {
+   "fichier": "test.txt",
+   "fenetre": 128,
+   "fenetres": 30,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "test.txt",
+   "fenetre": 128,
+   "fenetres": 30,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "test.txt",
+   "fenetre": 128,
+   "fenetres": 30,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "wikitext2_test.txt",
+   "fenetre": 128,
+   "fenetres": 30,
+   "trouvees": 0,
+   "taux": 0.0
+  }
+ ]
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > reports/rapport-corpus-wiki-fr.md <<'EOF'\n# Le corpus de prose française depuis Wikipédia\n\n> **Ligne de roadmap** : Données · **Date** : 2026-11-01 · **Verdict** : **2 525 902 articles**,\n> **3,68 G caractères**, **593,6 M mo … [6536 caractères tronqués]`
+
+  ```
+114 reports/rapport-corpus-wiki-fr.md
+  revue de documentation · 382 fiche(s) · 459 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 381 fichiers, le disque en a 382
+  ```
+

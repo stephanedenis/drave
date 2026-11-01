@@ -6750,3 +6750,53 @@ python3 tools/verifie_journal.py           EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md && git diff --cached --stat | tail -8 && timeout 240 git commit -m \"ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS) … [103 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                                 | 13 +++++++------
+ .../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | 15 +++++++--------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
+[still running after 60000ms; moved to background job bash-242]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-242", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 4ff739cf] ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS)
+ 19 files changed, 270 insertions(+), 51 deletions(-)
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4; echo '=== status ==='; git status --short | head -12; echo '=== final ==='; python3 tools/verifie_en_cours.py | tail -2; python3 tools/revue_documentation.py | tail -2", "description": "Vérifier l'état final apr … [25 caractères tronqués]`
+
+  ```
+4ff739cf ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS)
+1145834c ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON
+5a5915a5 S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE
+0ca545eb S — LE GÉNÉRATEUR DE CANDIDATS : UNE PHRASE BRUTE → DES STRUCTURES À VALIDER
+=== status ===
+ M tools/corpus_wikipedia.py
+ m tools/docwatch
+?? reports/corpus-wiki-fr-contamination.json
+?? reports/corpus-wiki-fr.json
+?? tools/verifie_contamination.py
+=== final ===
+  en-cours · 1360 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 458 JSON, le disque en a 459
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"| fichiers / JSON de résultats | **381** / **458** |\", \"| fichiers / JSON de résultats | **381** / **459** |\")\np.write_ … [176 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 381 fiche(s) · 459 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1360 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && timeout 240 git commit -m \"ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION\" 2>&1 | tail -6; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer le compteur JSON à jour"}`
