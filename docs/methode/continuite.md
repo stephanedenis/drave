@@ -85,12 +85,15 @@ fiches sont des résultats, la roadmap est le plan : aucun ne remplace l'état.
 | **une ligne par résultat** | le chiffre + le lien vers la fiche ; jamais le protocole |
 | **prochaine action** | toujours nommée, avec son identifiant (N0.3b, N2.4…) |
 | **écriture** | toute session écrit `en-cours`, **une à la fois** ; aucun fait (`reports/`, roadmap, backlog) ne se commite sans sa ligne (hook `pre-commit`) |
-| **sessions actives** | une sous-section par session : Id, rôle, action, autres sessions, prochaine action, bloquants, journal ; le rôle nomme le chantier |
+| **sessions actives** | une sous-section par session : Id, rôle, **plan, ambition, stratégie, objectif final**, action, autres sessions, prochaine action, bloquants, journal ; le rôle nomme le chantier |
 | **plan** | `journal/sessions/<id>/plan.md` |
 | **bloquants** | un bloquant par chantier A/B/N/R, même « aucun » |
 | **questions ouvertes** | **5 au plus**, chacune avec ce qui la débloque |
 | **pas de logs** | pas de tableaux de mesures, pas de séries, pas de récit de round |
 | **pas de doublon** | un résultat n'apparaît qu'une fois ; on supprime la ligne périmée |
+
+Le **plan**, l'**ambition**, la **stratégie** et l'**objectif final** sont le **contrat de synergie** :
+ils disent ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
 
 **Lecture** : `AGENTS.md` + `en-cours` (« Sessions en cours », « Les chantiers et leurs bloquants »,
 « Ce qui reste ») + **un** document de tâche. On ne lit ni journal ni rapports « pour suivre ».
@@ -103,8 +106,9 @@ jamais `--amend` sur le commit d'un autre.
 À la fin d'un cycle, `en-cours` doit permettre de reprendre sans contexte :
 
 - la **date** est celle du dernier commit ;
-- **« Sessions en cours »** : une sous-section par session active, avec ses sept champs (Id, rôle, action,
-  autres sessions, prochaine action, bloquants, journal) ;
+- **« Sessions en cours »** : une sous-section par session active, avec ses **onze champs** (Id, rôle,
+  plan, ambition, stratégie, objectif final, action, autres sessions, prochaine action, bloquants,
+  journal) ;
 - **« Les chantiers et leurs bloquants »** : A/B/N/R, bloquant non vide ;
 - **« Ce qui reste »** nomme la **prochaine action** ;
 - les **questions ouvertes** sont celles qui bloquent, pas celles qui sont déjà tranchées ;

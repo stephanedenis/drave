@@ -4526,3 +4526,146 @@ Updated file
   ```
 
 - **bash** `{"command": "set -e\nPATHS=(docs/pilotage/en-cours.md journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md tools/simuler_scan.py tools/nettoyer_scan.py tools/mesurer_scans.py)\ngit add \"${PATHS[@]}\"\nrm -f /tmp/index.r44\nGIT_INDEX_FILE=/tmp/index.r44 git read-tree HEAD\nGIT_INDEX_FILE=/t … [2131 caractères tronqués]`
+
+  ```
+tools/nettoyer_scan.py                             | 222 ++++++++++++++++
+ tools/simuler_scan.py                              | 290 +++++++++++++++++++++
+ 6 files changed, 949 insertions(+), 19 deletions(-)
+ create mode 100644 journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+ create mode 100644 tools/mesurer_scans.py
+ create mode 100644 tools/nettoyer_scan.py
+ create mode 100644 tools/simuler_scan.py
+=== status
+ M docs/methode/continuite.md
+M  docs/pilotage/en-cours.md
+MM journal/2026-10-31/README.md
+MM journal/2026-10-31/apprentissage.md
+MM journal/2026-10-31/distribue.md
+MM journal/2026-10-31/docs.md
+MM journal/2026-10-31/memoire.md
+MM journal/2026-10-31/mesures.md
+MM journal/2026-10-31/modele.md
+MM journal/2026-10-31/portes.md
+7408441e R4.4 — CENT SCANS SIMULÉS, CINQ FAMILLES : LA PHOTO PASSE DE 55,9 % À 7,3 % DE WER
+3dc2fe27 ÉTAT — LA SESSION N2.h PORTE SON PLAN, SON AMBITION ET SA STRATÉGIE DANS LA PAGE D'ÉTAT
+  ```
+
+- **bash** `{"command": "git show HEAD:docs/pilotage/en-cours.md | grep -c \"R4.4, les scans\"; echo \"=== staged en-cours diff\"; git diff --cached docs/pilotage/en-cours.md | head -30; echo \"=== worktree diff en-cours\"; git diff docs/pilotage/en-cours.md | head -20", "description": "Check staged state chang … [79 caractères tronqués]`
+
+  ```
+1
+=== staged en-cours diff
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 29b054aa..bfe444e4 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -127,11 +127,8 @@
+   [`r04`](../../reports/rapport-r04-tete-survol.md), [`r07`](../../reports/rapport-r07-routeur.md),
+   [`r06`](../../reports/rapport-r06-publication.md) (cascade à confiance **publiée**).
+ - **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
+-  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; fiches
+-  [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
+-  [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
+-  **R4.4 partielle** : OCR installé sans root, **10 pages rendues** à **WER 4,48 %** et
+-  **parité 90 %** ; page dégradée **26,7 %** ; fiche [`r44`](../../reports/rapport-r44-ocr-pilote.md).
++  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** a sa session et sa fiche
++  [`r44`](../../reports/rapport-r44-ocr-pilote.md).
+ - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (brui
+… [1103 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show :docs/pilotage/en-cours.md | grep -n \"Session \\`fe3c05f0\\|Objectif final\\|Plan\\*\\* :\\|Stratégie\\*\\* :\\|Ambition\\*\\* :\\|Synergie\" | head -12; echo \"=== count mots (index)\"; git show :docs/pilotage/en-cours.md | wc -w", "description": "Verify my session section in … [77 caractères tronqués]`
+
+  ```
+24:- **Objectif final** : donner à la ligne N2 un **mètre honnête** — corpus dédupliqué et split
+27:- **Plan** : 1) `tools/corpus_propre.py` : dédup par shingles, split par chunks, **0 %** de
+33:- **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, et **le
+35:- **Ambition** : sortir N2 du chiffre qui flattait (**2,85** sur un jeu contaminé à **32,8 %**),
+49:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans (nuit du 31/10 au 1/11)
+54:- **Objectif final** : R4.4 **mesurée** — un lecteur qui lit des **scans** (photocopie, photo de
+58:- **Plan** : 1) corpus de scans **simulés** (5 familles, dev/test, vérité terrain) ✅ ; 2)
+62:- **Stratégie** : mesurer le **brut** famille par famille, n'ajouter que les étapes qui
+66:- **Ambition** : faire de l'OCR un **bloc classique robuste** du lecteur — pas un pilote — et
+75:- **Synergie** : `simuler_scan.py` + `mesurer_scans.py` évaluent **toute** lecture d'images
+90:- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ;
+94:- **Ambition** : faire de Drave un **runtime cognitif** où penser est une recherche tracée sur des
+=== count mots (index)
+1998
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,re\nsys.path.insert(0,'tools'); import taille_documents as td\nR=pathlib.Path('.')\nt=(R/'docs/pilotage/en-cours.md').read_text()\nprint('en-cours mots', td.mots_hors_diagrammes(t))\n# taille de chaque section de session\nparts=re.split(r'\\n### ', t … [550 caractères tronqués]`
+
+  ```
+en-cours mots 1998
+   344  Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre
+   346  Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans (nuit
+  1180  Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurie
+   245  ## Ce qui est en cours
+    94  ## Les chiffres
+   263  ## Les chantiers
+    58  ## Ce qui reste
+   108  ## Les questions
+T0 4332
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\n\n# 1) compacter MA section (garder tous les champs, couper la prose)\ndebut = s.index(\"### Session `fe3c05f0-834b-44f2-8739-501865d652c1`\")\nfin = s.index(\"### Session `e181ce02\", deb … [4755 caractères tronqués]`
+
+  ```
+en-cours · 1562 mots · 7 sections · 3 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3936 mots (budget 4 000)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 69, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "grep -n \"### Session\\|Objectif final\\|^\\*\\*Plan\\|^- \\*\\*Plan\\|^- \\*\\*Stratégie\\|^- \\*\\*Ambition\\|^- \\*\\*Synergie\" docs/pilotage/en-cours.md | head -20; echo \"=== ma section\"; sed -n \"/### Session \\`fe3c05f0/,/### Session \\`e181ce02/p\" docs/pilotage/en-cours.md |  … [394 caractères tronqués]`
+
+  ```
+19:### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre
+23:- **Plan** : 1) `tools/corpus_propre.py` (dédup, split par chunks) ; 2) chaîne propre (professeur 23,5 M, base 20k, distillation 20k × 3, curriculum 129 × 3) ; 3) porte honnête + hors domaine + décomposition ; 4) diversité FR 50/50 ; 5) verrou de longueur 129→512 × 3 ; 6) fiches, portes, commit.
+24:- **Ambition** : sortir N2 du chiffre contaminé (**2,85** sur **32,8 %**) et donner à R un modèle qui lit du français général ; trancher le verrou de longueur.
+25:- **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, le corpus d'abord.
+26:- **Objectif final** : un **mètre honnête** — corpus dédupliqué (0 % de validation dans l'entraînement), chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
+34:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans
+38:- **Plan** : 1) scans simulés ✅ ; 2) prétraitement mesuré ; 3) exposants ; 4) colonnes + tables ; 5) second moteur ; 6) porte resserrée, fiche, spec, commit.
+39:- **Ambition** : faire de l'OCR un **bloc classique robuste**, jugé par la **parité**, pas le WER.
+40:- **Stratégie** : mesurer le bru
+… [2519 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat >> work/r44/journal.md <<'EOF'\n\n## 22:45 — baseline + premier prétraitement (dev, 10 pages)\n- baseline brut (dev) : propre 4,46 | photocopie 6,55 | papier 13,02 | fax 27,05 | photo 55,85\n- baseline brut (test) : propre 2,84 | photocopie 4,69 | papier 53,15 | fax 23,10 | photo 80 … [813 caractères tronqués]`
+
+  ```
+started background job bash-202
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib,re\nsys.path.insert(0,'tools')\nimport mesurer_scans as ms, mesurer_ocr as mo, graphe_document_ocr as gco\nman=json.load(open('work/r44/scans/manifeste.json')); Q=ms.questions_par_page()\nfrom collections import Counter\nfor fam in ('propre','ph … [1408 caractères tronqués]`
+
+  ```
+propre {'valeur présente, autre passage choisi': 3, 'valeur absente du texte OCR': 2, 'ok': 24, 'passage choisi différent (F1<0,9)': 1}
+    ('propre', 'A_RES_80_10-fr-p2-s1-propr', '10', True, False, 0.92)
+    ('propre', 'A_RES_80_10-fr-p2-s1-propr', '2030 11', False, False, 0.92)
+    ('propre', 'A_RES_80_10-fr-p2-s1-propr', '12', False, False, 0.95)
+    ('propre', 'A_RES_80_10-es-p1-s1-propr', '13', True, False, 0.14)
+    ('propre', 'A_RES_80_10-es-p1-s1-propr', '2200', True, True, 0.8)
+    ('propre', 'A_RES_80_10-fr-p1-s1-propr', '13', True, False, 0.21)
+photocopie {'valeur présente, autre passage choisi': 4, 'valeur absente du texte OCR': 1, 'ok': 18, 'passage choisi différent (F1<0,9)': 7}
+    ('photocopie', 'A_RES_80_10-fr-p2-s1-photo', '10', True, False, 0.83)
+    ('photocopie', 'A_RES_80_10-fr-p2-s1-photo', '2030 11', False, False, 0.86)
+    ('photocopie', 'A_RES_80_10-fr-p2-s1-photo', '12', True, False, 0.92)
+    ('photocopie', 'A_RES_80_10-en-p2-s1-photo', '40', True, True, 0.59)
+    ('photocopie', 'A_RES_80_10-es-p2-s1-photo', '40', True, True, 0.47)
+    ('photocopie', 'A_RES_80_1-en-p1-s1-photoc', '11', True, True, 0.57)
+    ('photocopie', 'A_RES_80_1-es-p1-s1-photoc', '
+… [760 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-202"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+

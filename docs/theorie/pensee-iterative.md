@@ -6,7 +6,7 @@
 > **portefeuille de stratégies** d'IA classique et des **opérateurs** neuronaux ou classiques. Le bus ne transporte
 > pas des réponses : il transporte des **états** et des **propositions** typés, tracés et rejouables.
 > Les **chiffres** sont dans [`reports/`](../../reports/) ; la **séparation à trois niveaux** dans
-> [`modele-natif.md`](modele-natif.md) ; l'**implémentation** dans un document dédié (à venir).
+> [`modele-natif.md`](modele-natif.md) ; l'**implémentation** dans [`moteur-de-pensee.md`](../implantation/moteur-de-pensee.md).
 
 > **Fiche concept — la RSN plurielle.**
 > Un **état** est un ensemble de **candidats**. Chaque candidat a un **corps canonique**, une **annotation**

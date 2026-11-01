@@ -4428,3 +4428,164 @@ EXIT=1
 … [1737 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\n\nt=t.replace(\"\"\"- **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,\n  32 formules/10 dérivée … [4596 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 2003 mots · 7 sections · 3 session(s) · 9 puces · 5 questions
+  ❌ 1 anomalie(s) :
+     · 2003 mots > budget 2 000
+EXIT=1
+ 2003 docs/pilotage/en-cours.md
+ 1174 docs/methode/continuite.md
+ 3177 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"la validation est contaminée à **32,8 %**, c'est le point\\nde  départ. Fiche\", \"la validation est contaminée à **32,8 %* … [418 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1998 mots · 7 sections · 3 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+EXIT=0
+  ❌ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md : champ(s) manquant(s) — périmètre, fichiers réservés, prochaine action
+SESSIONS=1
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md", "limit": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — R4.4, les scans (mandat libre de 10 h)
+2: 
+3: > **Mandat ouvert** le 2026-10-31 22 h 50 HAE depuis
+4: > [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) — le heartbeat est celui de
+5: > l'état ; la session le met à jour à chaque cycle. **Échéance : 2026-11-01 07 h 14** (10 h
+6: > humain, pas une estimation de durée de travail).
+7: 
+8: - **Session** : `fe3c05f0-834b-44f2-8739-501865d652c1`
+9: - **Rôle** : **R4.4 — les scans** — CPU seulement ; les deux GPU restent à N2.h.
+10: - **Heartbeat** : 2026-10-31 22:50
+11: - **État** : en cours
+12: 
+13: ## Objectif final
+14: 
+15: **R4.4 mesurée, pas partielle.** Un lecteur qui lit des **scans** — photocopie, photo de
+16: téléphone, fax, papier — avec la **même réponse** que le texte natif :
+17: 
+18: 1. **WER ≤ 5 %** et **parité ≥ 90 %** sur les pages de **test** (jamais vues) ;
+19: 2. la **porte** `porte-ocr` resserrée sur ce corpus, avec ses contrôles négatifs ;
+20: 3. la **fiche**, la **spécification**, la **roadmap** et le **journal** qui portent le r
+… [614 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md", "new_string": "- **Session** : `fe3c05f0-834b-44f2-8739-501865d652c1`\n- **Rôle** : **R4.4 — les scans** — CPU seulement ; les deux GPU restent à N2.h.\n- **Périmètre** : R4 … [769 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --check; echo \"SESSIONS=$?\"; python3 tools/taille_documents.py >/tmp/ae 2>&1; echo \"TAILLE=$?\"; tail -8 /tmp/ae", "description": "Vérifier les sessions et le budget T0"}`
+
+  ```
+✅ plans cohérents
+SESSIONS=0
+TAILLE=1
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 4372 mots (budget 4 000)
+
+  avertissements :
+     · 14 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4372 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\nt=open('docs/pilotage/en-cours.md').read()\nparts=re.split(r'^(##+ .*)$',t,flags=re.M)\ncur=None; buf=[]\nfor x in parts:\n    if re.match(r'^##+ ',x):\n        if cur: print(f\"{len(re.findall(r'\\\\S+', … [214 caractères tronqués]`
+
+  ```
+0  ## Sessions en cours
+   0  ### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre
+   0  ### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans (nuit du 31/10 au 1/11)
+   0  ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+   0  ## Ce qui est en cours
+   0  ## Les chiffres de l'état
+   0  ## Les chantiers et leurs bloquants
+   0  ## Ce qui reste
+   0  ## Les questions ouvertes
+   0  ## La carte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\nlignes=open('docs/pilotage/en-cours.md').read().splitlines()\ncur='(avant)'; n=0\nfor l in lignes:\n    if re.match(r'^#{2,3} ',l):\n        if cur: print(f\"{n:4d}  {cur}\")\n        cur=l.strip(); n=0\n … [138 caractères tronqués]`
+
+  ```
+70  (avant)
+  51  ## Sessions en cours
+ 337  ### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre
+ 335  ### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans (nuit du 31/10 au 1/11)
+ 367  ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+ 239  ## Ce qui est en cours
+  89  ## Les chiffres de l'état
+ 257  ## Les chantiers et leurs bloquants
+  54  ## Ce qui reste
+ 104  ## Les questions ouvertes
+  31  ## La carte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\n\nn2 = \"\"\"### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre\n\n- **Id** : `0b0a6a0d-05f5-4308-800c-4792dd … [5940 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1562 mots · 7 sections · 3 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+EXIT=0
+1562 docs/pilotage/en-cours.md
+     · 14 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/sessions.py --check\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/taille_documents.py\" \"python3 tools/revue_documentation.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\ … [242 caractères tronqués]`
+
+  ```
+python3 tools/sessions.py --check          EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+python3 tools/revue_documentation.py       EXIT=1
+  revue de documentation · 371 fiche(s) · 441 JSON · 113 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · chemin mort : docs/pilotage/en-cours.md:60 → docs/implantation/moteur-de-pensee.md
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Le chemin mort révèle la prochaine action : j'écris le contrat d'implémentation du moteur
+
+- **write** `{"content": "# Le moteur de pensée — state store, arbre, stratégies\n\n> **Ce que ce document est.** Le **contrat d'implémentation** du moteur de pensée : les types, le\n> **state store**, l'**arbre d'états**, la **boucle** anytime, les **stratégies**, la **trace** et les\n> **portes**. La théorie e … [10332 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/implantation/moteur-de-pensee.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/pensee-iterative.md'); t=p.read_text()\nt=t.replace(\"l'**implémentation** dans un document dédié (à venir).\",\n            \"l'**implémentation** dans [`moteur-de-pense … [1471 caractères tronqués]`
+
+  ```
+ok
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+python3 tools/revue_documentation.py       EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/methode/continuite.md tools/verifie_en_cours.py docs/theorie/pensee-iterative.md docs/implantation/moteur-de-pensee.md docs/README.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.m … [338 caractères tronqués]`

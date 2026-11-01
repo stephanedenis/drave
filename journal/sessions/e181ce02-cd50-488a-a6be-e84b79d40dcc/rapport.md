@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 5.1 h |
+| Durée | 5.2 h |
 | Tours | 5 |
-| Messages | 212 |
-| Appels d'outils | 236 |
-| Fichiers touchés | 15 |
-| Commandes | 170 |
+| Messages | 221 |
+| Appels d'outils | 245 |
+| Fichiers touchés | 16 |
+| Commandes | 177 |
 | Sous-agents | 2 |
-| Commits | 9 |
+| Commits | 10 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -251,7 +251,7 @@ J'ai intégré la correction de fond : **la RSN canonique unique était le résu
 
 ### Tour 5 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*22 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - bash — Lire l'état courant et les variables DSH
 - bash — Lire le contrat des sessions
@@ -267,11 +267,11 @@ J'ai intégré la correction de fond : **la RSN canonique unique était le résu
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md`
 - bash — Mettre à jour l'état avec la session Pensée
 - bash — Compter les sessions et lire la question
-- … et 8 autres
+- … et 17 autres
 
 **Synthèse produite :**
 
-⏵ Mise à jour de `en-cours` : plan, ambition, stratégie et objectif final par session
+⏵ Le chemin mort révèle la prochaine action : j'écris le contrat d'implémentation du moteur
 
 ## 3. Travail accompli
 
@@ -294,6 +294,7 @@ J'ai intégré la correction de fond : **la RSN canonique unique était le résu
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/pensee-iterative.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/implantation/moteur-de-pensee.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -342,7 +343,7 @@ J'ai intégré la correction de fond : **la RSN canonique unique était le résu
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 130 autres
+- … et 137 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -479,4 +480,5 @@ J'ai intégré la correction de fond : **la RSN canonique unique était le résu
 - PENSÉE — TOUR 1-2 : LA RSN PLURIELLE ET L'ARBRE D'ÉTATS" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - PENSÉE — TOURS 3-4 : LE CYCLE MULTI-NIVEAUX ET LE PORTEFEUILLE DE STRATÉGIES" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - PENSÉE — TOURS 5-10 : CONTRAT, ANYTIME, MÉTA, MÉMOIRE, MESURE" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- ÉTAT — TROIS SESSIONS, PLAN/AMBITION/STRATÉGIE/OBJECTIF FINAL, ET LE CONTRAT DU MOTEUR" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 

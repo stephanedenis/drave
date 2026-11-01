@@ -76,6 +76,7 @@
 | [`implantation/tokenisation.md`](implantation/tokenisation.md) | la tokenisation native : octets, et la décision mesurée R13 |
 | [`implantation/encodeur-visuel.md`](implantation/encodeur-visuel.md) | l'OCR comme bloc classique : contrat, confiance, parité, porte |
 | [`implantation/diehl-cook.md`](implantation/diehl-cook.md) | un bloc Diehl & Cook : équations, contrat DRVM, RSN, portes |
+| [`implantation/moteur-de-pensee.md`](implantation/moteur-de-pensee.md) | le state store, l'arbre d'états, les stratégies et les portes du moteur |
 | [`implantation/llm-externe.md`](implantation/llm-externe.md) | le banc externe, le professeur et l'élève |
 | [`implantation/numa-segregation.md`](implantation/numa-segregation.md) | la ségrégation NUMA mesurée |
 | [`implantation/configuration-nvme-raid-amd.md`](implantation/configuration-nvme-raid-amd.md) | l'array NVMe et le pari AMD |

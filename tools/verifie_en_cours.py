@@ -5,8 +5,9 @@ Le fichier `docs/pilotage/en-cours.md` est la seule source de l'état. Ce contr�
   1. un budget de **2 000 mots** ;
   2. les **sept sections** du template ;
   3. « Sessions en cours » : une sous-section `### Session ...` par session active, avec
-     **Id**, **Rôle**, **Ce qu'elle fait**, **Ce que font les autres**, **Prochaine action**,
-     **Bloquants** et **Journal** ;
+     **Id**, **Rôle**, **Plan**, **Ambition**, **Stratégie**, **Objectif final**,
+     **Ce qu'elle fait**, **Ce que font les autres**, **Prochaine action**, **Bloquants** et
+     **Journal** ;
   4. **10 puces au plus** dans « Ce qui est en cours », sans doublon et sans puce de plus de 80 mots ;
   5. « Les chantiers et leurs bloquants » : une ligne **A**, **B**, **N**, **R** avec un bloquant
      **non vide** (le mot « aucun » est une information, une cellule vide est un oubli) ;
@@ -34,6 +35,10 @@ SECTIONS = [
 CHAMPS_SESSION = (
     "**Id**",
     "**Rôle**",
+    "**Plan**",
+    "**Ambition**",
+    "**Stratégie**",
+    "**Objectif final**",
     "**Ce qu'elle fait**",
     "**Ce que font les autres**",
     "**Prochaine action**",
