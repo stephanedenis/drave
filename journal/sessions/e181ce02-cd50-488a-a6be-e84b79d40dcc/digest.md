@@ -3897,3 +3897,313 @@ python3 tools/verifie_journal.py         EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/theorie/pensee-iterative.md docs/theorie/modele-natif.md docs/implantation/diehl-cook.md docs/schemas/README.md docs/schemas/pensee-contrat.svg docs/schemas/pensee-anytime.svg docs/schemas/pensee-meta.svg docs/schemas/pe … [276 caractères tronqués]`
+
+  ```
+docs/implantation/diehl-cook.md  |   4 +
+ docs/schemas/README.md           |   5 ++
+ docs/schemas/pensee-anytime.svg  |  40 ++++++++++
+ docs/schemas/pensee-contrat.svg  |  41 +++++++++++
+ docs/schemas/pensee-memoire.svg  |  47 ++++++++++++
+ docs/schemas/pensee-mesure.svg   |  56 ++++++++++++++
+ docs/schemas/pensee-meta.svg     |  42 +++++++++++
+ docs/theorie/modele-natif.md     |  10 +++
+ docs/theorie/pensee-iterative.md | 154 +++++++++++++++++++++++++++++++++++----
+ 9 files changed, 383 insertions(+), 16 deletions(-)
+[still running after 60000ms; moved to background job bash-150]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-150", "timeout_ms": 240000, "wait": true}`
+
+  ```
+[master 91f31faa] PENSÉE — TOURS 5-10 : CONTRAT, ANYTIME, MÉTA, MÉMOIRE, MESURE
+ 24 files changed, 705 insertions(+), 45 deletions(-)
+ create mode 100644 docs/schemas/pensee-anytime.svg
+ create mode 100644 docs/schemas/pensee-contrat.svg
+ create mode 100644 docs/schemas/pensee-memoire.svg
+ create mode 100644 docs/schemas/pensee-mesure.svg
+ create mode 100644 docs/schemas/pensee-meta.svg
+ create mode 100644 journal/2026-10-31/memoire.md
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale des dix tours, puis clôture du goal
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/verifier_schemas.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" … [301 caractères tronqués]`
+
+  ```
+python3 tools/verifier_schemas.py        EXIT=0
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/revue_documentation.py     EXIT=0
+python3 tools/taille_documents.py        EXIT=0
+python3 tools/verifie_en_cours.py        EXIT=0
+python3 tools/verifie_journal.py         EXIT=0
+---
+2964 docs/theorie/pensee-iterative.md
+9
+91f31faa PENSÉE — TOURS 5-10 : CONTRAT, ANYTIME, MÉTA, MÉMOIRE, MESURE
+0a296b75 PENSÉE — TOURS 3-4 : LE CYCLE MULTI-NIVEAUX ET LE PORTEFEUILLE DE STRATÉGIES
+3cb15674 PENSÉE — TOUR 1-2 : LA RSN PLURIELLE ET L'ARBRE D'ÉTATS
+77ceb533 DOCS — LE CONTRAT EST L'INVARIANT, LA TECHNOLOGIE EST LA VARIABLE : MODES, GRANULARITÉ, GRAPHE DYNAMIQUE
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-c26e365b-e64b-4736-be51-e625b760564e","revision":1,"objective":"Refondre la documentation de l'architecture Drave autour de la RSN plurielle (plusieurs candidats, pas un objet canonique unique) comme représentation interne permettant des cycles de pensée itératifs multi-niveaux : arbre d'états, opérateurs neuronaux/classiques, portefeuille de stratégies d'IA classique (recherche, contraintes, planification, adversarial, MCTS, méta), méta-apprentissage, mesure et rejeu. Produire au moins 10 tours de raffinement documentés, avec schémas SVG, mises à jour des documents existants, index et portes vertes, puis commit.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-c26e365b-e64b-4736-be51-e625b760564e", "revision": 1}`
+
+> **Objectif** (complete) : Refondre la documentation de l'architecture Drave autour de la RSN plurielle (plusieurs candidats, pas un objet canonique unique) comme représentation interne permettant des cycles de pensée itératifs multi-niveaux : arbre d'états, opérateurs neuronaux/classiques, portefeuille de stratégies d'IA classique (recherche, contraintes, planification, adversarial, MCTS, méta), méta-apprentissage, mesure et rejeu. Produire au moins 10 tours de raffinement documentés, avec schémas SVG, mises à jour des documents existants, index et portes vertes, puis commit.
+
+
+  ```
+{"goal":{"id":"goal-c26e365b-e64b-4736-be51-e625b760564e","revision":2,"objective":"Refondre la documentation de l'architecture Drave autour de la RSN plurielle (plusieurs candidats, pas un objet canonique unique) comme représentation interne permettant des cycles de pensée itératifs multi-niveaux : arbre d'états, opérateurs neuronaux/classiques, portefeuille de stratégies d'IA classique (recherche, contraintes, planification, adversarial, MCTS, méta), méta-apprentissage, mesure et rejeu. Produire au moins 10 tours de raffinement documentés, avec schémas SVG, mises à jour des documents existants, index et portes vertes, puis commit.","phase":"complete","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Dix tours achevés : RSN plurielle, arbre d'états, moteur de pensée documenté
+
+J'ai intégré la correction de fond : **la RSN canonique unique était le résultat d'un cycle, pas la représentation de travail**. La représentation de travail est **plurielle** — un ensemble de candidats — et la pensée est une **recherche** dans un **arbre d'états**, avec un **portefeuille de stratégies** d'IA classique. Le document [`docs/theorie/pensee-iterative.md`](docs/theorie/pensee-iterative.md) est la refonte ; il documente les dix tours.
+
+## Les dix tours
+
+| tour | question | ce que ça a produit |
+|---:|---|---|
+| **1** | la RSN unique était-elle la bonne représentation ? | le diagnostic : ambiguïté, incomplétude, contradiction, plan, provenance, révision |
+| **2** | comment ordonner les candidats ? | l'état = ensemble de candidats, statuts, provenance, empreinte Merkle, arbre |
+| **3** | comment penser en boucle ? | le cycle observer → proposer → contraindre → évaluer → sélectionner → revenir → arrêter |
+| **4** | avec quelles stratégies ? | le portefeuille : A*, beam, MCTS, alpha-bêta, AC-3, SAT/SMT, STRIPS/HTN, probabiliste, local, cas-based, méta |
+| **5** | quel contrat ? | `state`, `proposal`, `score`, `constraint`, `decision`, `trace` ; moteur N3, opérateurs N1/N2, store |
+| **6** | quand s'arrêter ? | anytime, best-so-far, budget, `settled`, contradiction, méta, interruption |
+| **7** | comment choisir la stratégie ? | bandit, statistiques MCTS, politique hors ligne ; le regret comme signal |
+| **8** | comment garder et rejouer ? | store, query, compact, replay, diff, share ; rejouer les **choix**, pas seulement les tenseurs |
+| **9** | comment mesurer ? | anytime AUC, taux de solution, gap, nœuds, regret, justification, rejeu, invariance |
+| **10** | que change-t-on aux documents ? | `modele-natif.md`, `diehl-cook.md`, index, 9 schémas, portes |
+
+## Les idées qui structurent la refonte
+
+**La RSN est un type, pas un bloc.** Un **candidat** a un corps canonique, une annotation, un statut, une provenance, un coût, un score. Un **état** est un ensemble de candidats, avec un parent, une profondeur, une frontière, une empreinte. Le quotient reste **local** : il s'applique à un candidat, pas à l'état.
+
+**La pensée est une recherche, pas un forward pass.** L'arbre d'états est la mémoire de travail : nœuds = états, arêtes = opérateurs, frontière = nœuds ouverts, transposition = même empreinte, justification = le chemin racine → nœud. Le retour arrière est une arête de plus, pas un échec.
+
+**Les stratégies sont des politiques, pas des blocs neufs.** A*, beam, MCTS, alpha-bêta, AC-3, SAT/SMT, STRIPS/HTN, belief propagation, recuit, analogie : elles appellent les **mêmes opérateurs** sur le **même arbre**, avec les **mêmes types**. Le bus ne voit que des états et des propositions.
+
+**Le moteur est N3, mais il n'est pas seul.** Il a la signature `state → state` ou `state → decision` ; il appelle des opérateurs N1/N2/N3 ; il ne lit jamais la surface. Le store d'arbres est un bloc comme un autre : contrat, coût, trace.
+
+**L'arrêt est une décision, pas une panne.** Anytime, budget, `settled`, contradiction, méta, interruption : chaque critère est tracé. Un moteur qui ne compte pas son budget ne peut pas être anytime ; un moteur qui ne s'arrête jamais ne pense pas, il tourne.
+
+**Le méta-apprentissage choisit la politique, pas le candidat.** Bandit, statistiques MCTS, politique hors ligne ; le signal est le regret. Le contrôle est un portfolio aléatoire et un portfolio fixe : si le méta ne les bat pas, il ne paie pas.
+
+**La mémoire est épisodique et compactable.** Store, query, compact, replay, diff, share. Le rejeu de la pensée est le rejeu d'une **séquence d'opérateurs et de décisions de stratégie** ; la trace doit contenir les deux, sinon le diff est aveugle.
+
+**La mesure est celle de la recherche.** Anytime AUC, taux de solution, gap, nœuds, regret, justification, rejeu, invariance. Une réponse sans chemin est une intuition ; une intuition n'est pas une mesure.
+
+## Ce que ça change dans les documents existants
+
+- [`modele-natif.md`](docs/theorie/modele-natif.md) : le quotient est explicitement **local à un candidat** ; l'état de pensée est pluriel ; le type `rsn` se décline en `candidat` et `état` ; le moteur N3 a la signature `state → state`.
+- [`diehl-cook.md`](docs/implantation/diehl-cook.md) : D&C n'est pas le penseur, c'est un **opérateur** qui propose des candidats ou des prototypes ; le moteur choisit, contraint, évalue.
+- [`pensee-iterative.md`](docs/theorie/pensee-iterative.md) : la théorie complète, 2 964 mots, 11 sections, 9 schémas.
+
+## Les schémas
+
+`pensee-rsn-plurielle.svg`, `pensee-arbre.svg`, `pensee-cycle.svg`, `pensee-portefeuille.svg`, `pensee-contrat.svg`, `pensee-anytime.svg`, `pensee-meta.svg`, `pensee-memoire.svg`, `pensee-mesure.svg`.
+
+## Commits et portes
+
+- **`3cb15674`** — tours 1-2 : la RSN plurielle et l'arbre d'états.
+- **`0a296b75`** — tours 3-4 : le cycle multi-niveaux et le portefeuille.
+- **`91f31faa`** — tours 5-10 : contrat, anytime, méta, mémoire, mesure.
+- Portes : schémas, tableaux, revue, budget, état, journal — **toutes vertes**.
+
+## Ce qui reste — et c'est le vrai chantier
+
+La **documentation** est refondue ; le **moteur exécutable** ne l'est pas. Le prochain programme n'est plus « écrire la théorie », c'est :
+
+1. un **state store** typé (candidats, arbre, empreinte Merkle, compaction) ;
+2. un **moteur N3** avec frontière, opérateurs, stratégies, anytime, trace ;
+3. un **portefeuille** réel (A*, MCTS, AC-3, alpha-bêta) sur le même arbre ;
+4. un **banc** de pensée : anytime AUC, regret, justification, rejeu, contrôles ;
+5. un **v0** qui prouve qu'un état pluriel se rejoue et qu'une stratégie se substitue.
+
+Le goal de refonte documentaire est clos. Si tu veux, j'ouvre un **goal d'implémentation** (1 000 rounds) pour le state store et le moteur de pensée — cette fois avec du code, des traces et des mesures, pas seulement des schémas.
+
+
+## Tour 5
+
+### 👤 Utilisateur
+
+en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon travail en maintenant ce document à jour pour que les autres sessions locales puissent être en synergie avec tes travaux.
+
+### 🤖 Assistant
+
+⏵ Mise à jour de `en-cours` : plan, ambition, stratégie et objectif final par session
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && env | grep -i '^DSH' | head -20; echo '---'; sed -n '1,120p' docs/pilotage/en-cours.md", "description": "Lire l'état courant et les variables DSH"}`
+
+  ```
+DSH_PROFILE=dsh-tui
+DSH_PROFILE_DIR=/home/stephane/.dsh/profiles/dsh-tui
+DSH_SHELL=1
+DSH_SESSION_ID=e181ce02-cd50-488a-a6be-e84b79d40dcc
+DSH_HOME=/home/stephane/.dsh
+---
+# En ce moment
+
+**Mis à jour : 2026-10-31, 18 h 15 HAE (heure locale, EDT).**
+
+> **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
+> **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
+> [`contexte.md`](../methode/contexte.md), contrat des sessions dans [`continuite.md`](../methode/continuite.md).
+> Les résultats sont dans [`reports/`](../../reports/) ; l'histoire dans
+> [`journal/`](../../journal/) ; le plan dans [`roadmap.md`](roadmap.md).
+
+## Sessions en cours
+
+> Contrat et budget : [`continuite.md`](../methode/continuite.md) ; sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/).
+
+> **Plan d'abord.** Chaque session active expose son mandat dans
+> [`journal/sessions/`](../../journal/sessions/) (`<id>/plan.md`) ; `python3 tools/sessions.py --status`
+> avant d'écrire ici.
+
+> **Écriture.** Toute session écrit l'état, **une à la fois** : un commit est atomique, et
+> aucun fait (`reports/`, ro
+… [7161 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,140p' docs/methode/continuite.md", "description": "Lire le contrat des sessions"}`
+
+  ```
+# Continuité — cycles longs, sous-agents, état unique
+
+> **Objet.** Comment un travail continue : cycles DSH, sous-agents, discipline de
+> [`en-cours`](../pilotage/en-cours.md). Ni planning ni résultats : **qui écrit l'état, quand, et avec quoi on reprend**.
+>
+> **Règle d'or.** Un cycle est fini quand le résultat est **mesuré, écrit, committé**, qu'`en-cours` porte sa
+> **prochaine action**, et que la roadmap est à jour.
+
+## 1. Les cycles DSH
+
+| réglage | valeur | pourquoi |
+|---|---|---|
+| `max_goal_rounds` | **1 000** (ou le maximum du harnais) | la limite est un **filet**, pas un objectif : on ne s'arrête pas à 20 ou 50 rounds |
+| goal | **un par programme** (N, B, docs) | recréer un goal à chaque tâche casse la continuité et l'historique |
+| reprise | `update_goal resume` | on reprend le **même** goal, on n'en ouvre pas un nouveau |
+| fin de cycle | résultat + fiche + commit + `en-cours` + roadmap | jamais « le temps est écoulé » |
+
+- **Un cycle = un sous-chantier**, pas un round : plusieurs heures et délégations possibles.
+- **On ne s'arrête pas sur un compteur** : si la limite tombe avant un résultat, écrire `en-cours` +
+  [`REPRISE`](../../REPRISE.md), committer, puis `updat
+… [5720 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,160p' tools/verifie_en_cours.py", "description": "Lire le vérificateur de l'état"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_en_cours.py — l'état doit rester court, structuré, reprenable et multi-session.
+
+Le fichier `docs/pilotage/en-cours.md` est la seule source de l'état. Ce contrôle vérifie :
+  1. un budget de **2 000 mots** ;
+  2. les **sept sections** du template ;
+  3. « Sessions en cours » : une sous-section `### Session ...` par session active, avec
+     **Id**, **Rôle**, **Ce qu'elle fait**, **Ce que font les autres**, **Prochaine action**,
+     **Bloquants** et **Journal** ;
+  4. **10 puces au plus** dans « Ce qui est en cours », sans doublon et sans puce de plus de 80 mots ;
+  5. « Les chantiers et leurs bloquants » : une ligne **A**, **B**, **N**, **R** avec un bloquant
+     **non vide** (le mot « aucun » est une information, une cellule vide est un oubli) ;
+  6. **5 questions ouvertes au plus**, chacune avec ce qui la débloque (`→`) ;
+  7. une **prochaine action nommée** dans « Ce qui reste » (A/B/C/N/R) ;
+  8. aucune ligne de journal A7.x dans l'état (les mesures vont dans `reports/`).
+
+Usage : python3 tools/verifie_en_cours.py   (code 0 = l'état est reprenable)
+"""
+from __future__ import annotations
+import pathlib
+import re
+
+RACINE = pathlib.Path(__file__
+… [4665 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/ 2>/dev/null; echo '---'; sed -n '1,80p' tools/sessions.py", "description": "Vérifier la session et le format des plans"}`
+
+  ```
+digest.md
+rapport.md
+session.v4.jsonl.zstd
+---
+#!/usr/bin/env python3
+"""sessions.py — plans de session : qui fait quoi, avant d'écrire `en-cours`.
+
+Chaque session active expose son mandat dans `journal/sessions/<id>/plan.md` :
+périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
+sessions consultent `--status` avant de claim, et `--check` refuse les mandats
+incomplets, les identifiants dupliqués, les périmètres qui se recouvrent et
+les heartbeats périmés. `en-cours` reste la seule source de l'état : ce plan
+est le **contrat de travail** qui le précède.
+"""
+from __future__ import annotations
+
+import argparse
+import re
+import sys
+import tempfile
+from datetime import datetime
+from pathlib import Path
+
+RACINE = Path(__file__).resolve().parents[1]
+SESSIONS = "journal/sessions"
+ETAT = "docs/pilotage/en-cours.md"
+CHAMPS = ("session", "rôle", "périmètre", "fichiers réservés", "heartbeat",
+          "prochaine action", "état")
+ACTIFS = {"actif", "active", "en cours", "bloqué", "bloquee", "bloqué(e)"}
+A_CONFIRMER = {"à confirmer", "a confirmer"}
+ETATS_CONNUS = ACTIFS | {"terminé", "termine", "libre", "libre."} | A_CONFIRMER
+PEREMPTION_MIN = 45
+
+
+def _cle(s: str) -> str
+… [1943 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def verifier\\|--check\\|ETAT\\|Session\" tools/sessions.py | head -40 && sed -n '150,260p' tools/sessions.py", "description": "Lire la vérification des plans et de l'état"}`
+
+  ```
+6:sessions consultent `--status` avant de claim, et `--check` refuse les mandats
+22:ETAT = "docs/pilotage/en-cours.md"
+27:ETATS_CONNUS = ACTIFS | {"terminé", "termine", "libre", "libre."} | A_CONFIRMER
+83:    p = racine / ETAT
+87:    return re.findall(r"^###\s+Session\s+`?([A-Za-z0-9_.-]+)`?", texte, re.M)
+91:    p = racine / ETAT
+97:    morceaux = re.split(r"^###\s+Session\s+`?([A-Za-z0-9_.-]+)`?\s*—\s*(.*)$", texte, flags=re.M)
+128:- **Session** : `{s['id']}`
+142:def verifier(racine: Path, strict: bool = False) -> tuple[list[str], list[str]]:
+152:        if p["etat"] not in ETATS_CONNUS:
+212:        (r / ETAT).write_text("### Session `a` — test\n", encoding="utf-8")
+216:            "# Plan\n\n- **Session** : `a`\n- **Rôle** : test\n- **Périmètre** : A8.0\n"
+224:            "# Plan\n\n- **Session** : `b`\n- **Rôle** : test\n- **Périmètre** : A8.0\n"
+231:            "# Plan\n\n- **Session** : `a`\n- **Rôle** : test\n- **Heartbeat** : 2026-10-30 11:00 HAE\n"
+244:- **Session** : `<id>`
+258:    ap.add_argument("--check", action="store_true")
+        if manquants:
+            erreurs.append(f"{p['chemin']} : champ(s) manquant(s) — {', '.join(manquants)}")
+        if p["etat"] not in ET
+… [4981 caractères tronqués]
+  ```
+
+- **bash** `{"command": "date '+%Y-%m-%d %H:%M %Z' && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -w docs/pilotage/en-cours.md docs/methode/continuite.md", "description": "Lire l'heure et les budgets des documents"}`
+
+  ```
+2026-10-31 22:41 EDT
+ 1305 docs/pilotage/en-cours.md
+ 1134 docs/methode/continuite.md
+ 2439 total
+  ```
+

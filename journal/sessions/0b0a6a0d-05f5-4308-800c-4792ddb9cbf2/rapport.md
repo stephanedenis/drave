@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 5.2 h |
-| Tours | 3 |
-| Messages | 341 |
-| Appels d'outils | 336 |
+| Durée | 5.4 h |
+| Tours | 4 |
+| Messages | 356 |
+| Appels d'outils | 350 |
 | Fichiers touchés | 11 |
-| Commandes | 278 |
+| Commandes | 288 |
 | Sous-agents | 0 |
-| Commits | 3 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -33,6 +33,8 @@
 **Tour 2** — <goal_round> Objective: "N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / 20 000 pas, 4 sources contre français seul, puis curriculum 129), avec contrôle négatif et trois graines ; écrire la fiche dans reports/, le récit dans journal/, committer avec le chiffre et mettre docs/pilotage/en-cours.md et la roadmap à jour." Round: 1/1000  Continue working  … [511 caractères tronqués]
 
 **Tour 3** — je te donnes 10h de liberté totale. impressionne-moi. je serai décu si tu as terminé à temps.
+
+**Tour 4** — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon travail en maintenant ce document à jour pour que les autres sessions locales puissent être en synergie avec tes travaux.
 
 ## 2. Déroulé, étape par étape
 
@@ -145,7 +147,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 3 — je te donnes 10h de liberté totale. impressionne-moi. je serai décu si tu as terminé à temps.
 
-*34 appels d'outils.* Actions notables :
+*37 appels d'outils.* Actions notables :
 
 - bash — Determine which repo files compose the French corpus
 - bash — Measure the size of duplicated passages
@@ -161,11 +163,31 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - bash — Check whether the teacher early-stops on validation
 - bash — Check checkpoint selection in the teacher trainer
 - bash — Launch teacher and base training on the clean corpus
-- … et 20 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
 ⏵ Ajout des positions aléatoires (attaque du verrou de longueur) au modèle et au distillateur
+
+### Tour 4 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Check active sessions, state, and campaign
+- bash — Measure the context budget headroom
+- read
+- bash — Rewrite the state with the full session plan
+- bash — Add the Id field and restore the remaining-work section
+- bash — Read the session plan file
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md`
+- bash — Re-read the session plan
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md`
+- bash — Write the session plan and validate
+- bash — Commit the state update for other sessions
+
+**Synthèse produite :**
+
+⏵ Mise à jour d'`en-cours` : plan complet, ambition et stratégie de la session N2.h
 
 ## 3. Travail accompli
 
@@ -174,7 +196,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/distiller_budget.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md` | 3 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/evalue-final.py` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py` | 3 | 0 |
@@ -227,7 +249,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 238 autres
+- … et 248 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -355,7 +377,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ## 5. Erreurs rencontrées
 
-21 sorties en erreur ou divergentes. Les premières :
+22 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5
@@ -378,4 +400,5 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40  Une seconde session peut démarrer : en-cours nomme désormais la session a
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add .gitignore docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/backlog/N2-distillatio
 - RÉFÉRENCES — LA PASSE DU 31 À 19 h 42 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET  La passe complète de clôture (79 portes, 75 vertes, 4 rouges, 1 h 39, journa
+- ÉTAT — LA SESSION N2.h PORTE SON PLAN, SON AMBITION ET SA STRATÉGIE DANS LA PAGE D'ÉTAT  La page d'état doit suffire à une autre session : en-cours expose maint
 

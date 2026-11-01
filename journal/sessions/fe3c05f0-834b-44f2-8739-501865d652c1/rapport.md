@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 4.9 h |
+| Durée | 5.1 h |
 | Tours | 2 |
-| Messages | 202 |
-| Appels d'outils | 222 |
+| Messages | 203 |
+| Appels d'outils | 223 |
 | Fichiers touchés | 10 |
-| Commandes | 190 |
+| Commandes | 191 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*37 appels d'outils.* Actions notables :
+*38 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,7 +101,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 22 autres
+- … et 23 autres
 
 **Synthèse produite :**
 
@@ -166,7 +166,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 150 autres
+- … et 151 autres
 
 ## 4. Mesures et résultats marquants
 

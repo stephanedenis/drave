@@ -4374,3 +4374,26 @@ ok
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib\nsys.path.insert(0,'tools')\nimport mesurer_scans as ms\nman=json.load(open('work/r44/scans/manifeste.json'))\nQ=ms.questions_par_page()\npipes=['brut','recadrage','redressement','echelle','recadrage,redressement','redressement,echelle','recadra … [627 caractères tronqués]`
+
+  ```
+=== photocopie 10
+  brut                         WER= 6.55% conf= 90.4
+  recadrage                    WER= 6.55% conf= 90.4
+  redressement                 WER= 6.58% conf= 90.1
+  echelle                      WER=12.86% conf= 81.8
+  recadrage,redressement       WER= 6.58% conf= 90.1
+  redressement,echelle         WER=13.31% conf= 81.9
+  recadrage,echelle            WER=12.86% conf= 81.8
+  recadrage,redressement,echelle WER=13.31% conf= 81.9
+=== papier 10
+  brut                         WER=13.02% conf= 91.3
+  recadrage                    WER=12.89% conf= 91.5
+  redressement                 WER=41.93% conf= 83.5
+  echelle                      WER=12.65% conf= 91.0
+  recadrage,redressement       WER=13.07% conf= 92.0
+  redressement,echelle         WER=43.28% conf= 80.0
+  recadrage,echelle            WER=13.05% conf= 90.8
+  recadrage,redressement,echelle WER=12.97% conf= 91.5
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/nettoyer_scan.py'); s=p.read_text()\nold='''def lissage(im: Image.Image, seuil: int = 160) -> Image.Image:\n    \"\"\"Pour une image binaire : adoucir AVANT de re-seuiller. L'upscaling d'un fax 1 bit\n    fabrique des marches ; san … [3888 caractères tronqués]`

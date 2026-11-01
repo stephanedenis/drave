@@ -10,34 +10,41 @@
 
 ## Sessions en cours
 
-> Contrat et budget : [`continuite.md`](../methode/continuite.md) ; sessions terminées :
-> [`journal/sessions/`](../../journal/sessions/).
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session qui trouve l'état en retard
+> le corrige.
 
-> **Plan d'abord.** Chaque session active expose son mandat dans
-> [`journal/sessions/`](../../journal/sessions/) (`<id>/plan.md`) ; `python3 tools/sessions.py --status`
-> avant d'écrire ici.
+### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre
 
-> **Écriture.** Toute session écrit l'état, **une à la fois** : un commit est atomique, et
-> aucun fait (`reports/`, roadmap, backlog) ne se commite sans sa ligne. La garantie est au
-> commit, pas dans un rôle : `tools/verifie_etat_a_jour.py` refuse le commit (hook
-> `pre-commit`) et la porte `porte-etat.sh` compare les commits. Une session qui trouve
-> l'état en retard le corrige — elle n'attend pas qu'on désigne une « principale ».
-
-### Session à ouvrir — N2, le corpus décontaminé
-
-- **Id** : aucune session active — `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` est **close** (la
-  campagne N2.d est committée).
-- **Rôle** : **N2, le corpus** — **32,8 %** des fenêtres de validation sont verbatim dans
-  l'entraînement ; il faut dédupliquer et séparer train/validation **par document** avant que la
-  porte < 2,5 ait un sens.
-- **Ce qu'elle fait** : reconstruire `data/corpus_fr.txt` sans répétitions, un split par document,
-  puis remesurer la base et le meilleur élève ; la porte sera **redéfinie** sur ce jeu-là.
-- **Ce que font les autres** : **R4.4** (les scans réels) est ouverte et non bloquante ; **N4**
-  (consigne courte) prend la file si N2 bloque.
-- **Fichiers réservés** : `data/`, `tools/corpus*`, `reports/n2-*`, `journal/sessions/<id>/`.
-- **Prochaine action** : le script de déduplication et le split par document.
-- **Bloquants** : aucun côté N2 ; **R4.4** attend des scans, pas un blocage.
-- **Journal** : [le 30/10](../../journal/2026-10-30/README.md) · [le 31/10](../../journal/2026-10-31/README.md).
+- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — plan et journal dans
+  [`journal/sessions/0b0a6a0d-…/`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+- **Rôle** : **N2.h — le mètre propre**, mandat libre de 10 h (nuit du 31/10 au 1/11).
+- **Objectif final** : donner à la ligne N2 un **mètre honnête** — corpus dédupliqué et split
+  sans fuite, chaîne refaite dessus, porte < 2,5 **redéfinie** sur ce jeu — puis trancher ce
+  qu'aucun chiffre contaminé ne pouvait trancher : la **généralité** et le **verrou de longueur**.
+- **Plan** : 1) `tools/corpus_propre.py` : dédup par shingles, split par chunks, **0 %** de
+  contamination vérifiée ; 2) chaîne propre — professeur 23,5 M, base 20 000 pas, distillation
+  20 000 pas × 3 graines, curriculum 129 × 3 ; 3) **porte honnête** + profil hors domaine
+  (littérature, anglais, wikitext2) et décomposition (têtes précoces, pensée) ; 4) **diversité
+  française** — moitié dépôt, moitié littérature, × 3 graines : ce que la généralité coûte ;
+  5) **verrou de longueur** — courbe 129→512 et positions aléatoires × 3 ; 6) fiches, portes, commit.
+- **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, et **le
+  corpus d'abord** — un levier mesuré sur un mètre faux ne vaut rien.
+- **Ambition** : sortir N2 du chiffre qui flattait (**2,85** sur un jeu contaminé à **32,8 %**),
+  donner à R un modèle qui lit du **français général**, et trancher le verrou de longueur par une
+  expérience, pas par un vœu.
+- **Ce qu'elle fait** : campagne GPU (2 cartes) ; points de contrôle dans `work/n2h/`, archivés
+  ensuite sur deux disques.
+- **Ce que font les autres** : **R4.4** (scans réels) et les docs continuent en parallèle ; ne
+  pas lancer `tools/toutes-les-portes.sh` tant que les GPU tournent, ni toucher `data/`,
+  `tools/corpus*`, `reports/n2-*` ; cette page : une session à la fois.
+- **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`, `reports/n2-*`,
+  `work/n2h/`, `journal/sessions/0b0a6a0d-…/`.
+- **Prochaine action** : attendre la distillation A (3 graines) puis évaluer la porte honnête.
+- **Bloquants** : aucun — GPU occupés jusqu'à ~1 h 40.
+- **Journal** : [le 31/10](../../journal/2026-10-31/README.md).
 
 > **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`,
 > `fe3c05f0`, `0b0a6a0d` (N2.d) — rapports dans [`journal/sessions/`](../../journal/sessions/).
@@ -83,21 +90,17 @@
 |---|---|---|
 | portes | **79** (75 vertes, 4 rouges à la passe du 31/10 19 h 42) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **371** / **439** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **112** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **371** / **441** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **113** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 39** (31/10 19 h 42) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
 
-**Les dépendances ne sont pas dans cette page.** Elles vivent dans le **graphe** du backlog —
-[`backlog/dependances.md`](backlog/dependances.md) §5 pour la frontière, et le schéma
-[`backlog-dependances.svg`](../schemas/backlog-dependances.svg) — recalculé par
-`python3 tools/verifie_backlog.py`, qui confronte aussi les statuts des fiches et de l'index.
-Cette table ne garde que les **bloquants externes** (ce que le graphe ne peut pas dire : une
-ressource qui manque) et la **prochaine action** ; elle ne recopie pas les statuts, qui dérivent.
-La vue d'ensemble est la **[carte de décision](../schemas/chantiers-decision.svg)** : quatre
-couloirs, la profondeur de dépendance comme axe (jamais le temps), la frontière en vert et les
-sources de blocage nommées.
+**Les dépendances vivent dans le graphe** ([`dependances.md`](backlog/dependances.md) §5, schéma
+[`backlog-dependances.svg`](../schemas/backlog-dependances.svg)), recalculé par
+`tools/verifie_backlog.py`. Cette table ne garde que les **bloquants externes** et la **prochaine
+action** — pas les statuts, qui dérivent. Vue d'ensemble :
+[**la carte de décision**](../schemas/chantiers-decision.svg).
 
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
@@ -114,10 +117,8 @@ documentation · **C7** pensée — mesurés, et désormais du récit, pas du pl
 
 ## Ce qui reste
 
-**R0** — R0.1–R0.6 **mesurés** ; **R0.4/R0.5 closes en négatif** ; **R4.4 partielle** (OCR, scans réels à faire).
-**N2** — la **hiérarchie** et les **données** sont écartées ; le **budget** paie **−0,08** ; la
-**validation est contaminée à 32,8 %** — le prochain pas est le **corpus**, pas l'entraînement. **N4** — la **consigne
-courte**. **B10.3** — le `z` et l'encodeur.
+**N2** — le **corpus propre** et la porte honnête (N2.h, en cours) ; **N4** — la consigne
+courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — les scans réels.
 **Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).
 
 ## Les questions ouvertes

@@ -5354,3 +5354,208 @@ plus long préfixe retrouvé dans train (sur 50 fenêtres) : 48
   ```
 
 - **job_output** `{"job_id": "bash-275", "timeout_ms": 900000, "wait": true}`
+
+  ```
+22:37
+work/n2h/base-propre.pt
+}
+  pas  11000 · perte 0.9444 · val 1.4780 bits/octet · 910 s
+  pas   1000 · perte 1.5888 · val 2.0462 bits/octet · 82 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat work/n2h/base-propre.pt.json 2>/dev/null | head -20; echo \"=== teacher ===\"; tail -1 work/n2h/teacher.log; echo \"=== mixte ===\"; tail -1 work/n2h/teacher-mixte.log", "description": "Read the clean base metrics"}`
+
+  ```
+{
+ "modele": "drave-n0",
+ "parametres": 11814792,
+ "corpus": "data/corpus_propre/train.txt",
+ "octets": 3244858,
+ "pas": 20000,
+ "seq": 128,
+ "lot": 8,
+ "lr": 0.0003,
+ "graine": 1,
+ "perte_finale": 1.1913173198699951,
+ "ppl_val": 3.721005346145684,
+ "jetons_val": 8192,
+ "tetes": true,
+ "precision_main": 0.6103515625,
+ "precision_early": [
+  0.569580078125,
+  0.60595703125,
+  0.610107421875
+ ],
+=== teacher ===
+  pas  11000 · perte 0.9444 · val 1.4780 bits/octet · 910 s
+=== mixte ===
+  pas   1000 · perte 1.5888 · val 2.0462 bits/octet · 82 s
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null; for f in A-propre-g1 A-propre-g2; do tail -1 work/n2h/$f.log 2>/dev/null; done; tail -1 work/n2h/teacher-mixte.log", "description": "Wait 20 minutes for distillation to start", … [27 caractères tronqués]`
+
+  ```
+started background job bash-280
+  ```
+
+- **job_output** `{"job_id": "bash-280", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+Error: wait aborted
+  ```
+
+
+## Tour 4
+
+### 👤 Utilisateur
+
+en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon travail en maintenant ce document à jour pour que les autres sessions locales puissent être en synergie avec tes travaux.
+
+### 🤖 Assistant
+
+⏵ Mise à jour d'`en-cours` : plan complet, ambition et stratégie de la session N2.h
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; python3 tools/sessions.py --status 2>&1 | head -8; echo \"=== en-cours sessions ===\"; sed -n 11,50p docs/pilotage/en-cours.md; echo \"=== campagne ===\"; ls work/n2h/*.pt 2>/dev/null; tail -1 work/n2h/A-propre-g1.log  … [74 caractères tronqués]`
+
+  ```
+22:38
+sessions · plans de mandat
+    0b0a6a0d-05f5-4308 · terminé  · 149 min · N2 — le budget complet, les données et le curriculum
+      → **close** — N2.d est mesuré : budget **2,9355 → 2,8527**, quatre sources
+    0b69f616-5c75-4c34 · terminé  · 1478 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 649 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+      → clôture committée (`eff8d8e4`) — session close ; la suite est **N2** (la hiérarchie), portée par la session à ouvrir
+    71d57f53-8b41-4220 · terminé  · 1982 min · docs/pilotage/en-cours.md, docs/methode/continuite.md, tools/sessions.py
+=== en-cours sessions ===
+## Sessions en cours
+
+> Contrat et budget : [`continuite.md`](../methode/continuite.md) ; sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/).
+
+> **Plan d'abord.** Chaque session active expose son mandat dans
+> [`journal/sessions/`](../../journal/sessions/) (`<id>/plan.md`) ; `python3 tools/sessions.py --status`
+> avant d'écrire ici.
+
+> **Écriture.** Toute session écrit l'état, **une à la f
+… [2085 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,'tools')\nfrom taille_documents import mots_hors_diagrammes\nfrom pathlib import Path\na=mots_hors_diagrammes(Path('AGENTS.md').read_text())\ne=mots_hors_diagrammes(Path('docs/pilotage … [280 caractères tronqués]`
+
+  ```
+AGENTS 1200 en-cours 1266 max méthode (1579, 'organisation-du-depot.md') T0 4045 marge -45
+  ```
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "offset": 50, "limit": 90}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+50:   [`r06`](../../reports/rapport-r06-publication.md) (cascade à confiance **publiée**).
+51: - **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
+52:   32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; fiches
+53:   [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
+54:   [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
+55:   **R4.4 partielle** : OCR installé sans root, **10 pages rendues** à **WER 4,48 %** et
+56:   **parité 90 %** ; page dégradée **26,7 %** ; fiche [`r44`](../../reports/rapport-r44-ocr-pilote.md).
+57: - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
+58:   1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
+59:   [`r13`](../../reports/rapport-r13-decision.md), spécification
+60:   [`tokenisation`](../implantation/tokenisation.md).
+61: - **B10.2bis — décodeur** : 3×3 : **11,1** ; capacité 11,8 ; **mots 32,5** ;
+62:   **JW 26,7** (plancher 17,1) ; `z` 1,5–
+… [5722 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\n\n# 1. Remplacer le bloc « session à ouvrir » par la session active N2.h, avec plan, ambition, stratégie.\ndebut = s.index(\"### Sess … [5450 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1249 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ❌ 3 anomalie(s) :
+     · section absente : « Ce qui reste »
+     · session « Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre » ne dit pas « **Id** »
+     · « Ce qui reste » ne nomme aucune prochaine action (A/B/C/N/R)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"\"\"### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre\n\n- **Rôle** : **N2.h — le mètre prop … [966 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1305 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md", "description": "Read the session plan file"}`
+
+  ```
+# Plan de session — N2-budget
+
+> **Mandat ouvert** le 2026-10-31 17 h 35 HAE depuis [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md)
+> — le heartbeat est celui de l'état ; la session le met à jour à chaque cycle.
+
+- **Session** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2`
+- **Rôle** : calcul : distillation
+- **Périmètre** : N2 — le budget complet, les données et le curriculum
+- **Fichiers réservés** : `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`,
+  `journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/`
+- **Heartbeat** : 2026-10-31 20:10 HAE
+- **Prochaine action** : **close** — N2.d est mesuré : budget **2,9355 → 2,8527**, quatre sources
+  **3,7591**, quotas égaux **3,4350**, curriculum **2,8471 / 2,8327**, et **32,8 % des fenêtres de
+  validation sont verbatim dans l'entraînement**. La suite appartient au corpus, pas à
+  l'entraînement.
+- **État** : terminé
+  ```
+
+- **write** `{"content": "# Plan de session — N2.h, le mètre propre\n\n> **Mandat ouvert** le 2026-10-31 22 h 30 HAE depuis [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md)\n> — mandat libre de 10 h (nuit du 31/10 au 1/11). Le heartbeat est celui de l'état.\n\n- **Session** : `0b0a6a0d-05f5-4308 … [1799 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md; echo \"=== git ===\"; git log --oneline -2 -- journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md", "description": "Re-read the session plan"}`
+
+  ```
+# Plan de session — N2-budget
+
+> **Mandat ouvert** le 2026-10-31 17 h 35 HAE depuis [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md)
+> — le heartbeat est celui de l'état ; la session le met à jour à chaque cycle.
+
+- **Session** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2`
+- **Rôle** : calcul : distillation
+- **Périmètre** : N2 — le budget complet, les données et le curriculum
+- **Fichiers réservés** : `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`,
+  `journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/`
+- **Heartbeat** : 2026-10-31 20:10 HAE
+- **Prochaine action** : **close** — N2.d est mesuré : budget **2,9355 → 2,8527**, quatre sources
+  **3,7591**, quotas égaux **3,4350**, curriculum **2,8471 / 2,8327**, et **32,8 % des fenêtres de
+  validation sont verbatim dans l'entraînement**. La suite appartient au corpus, pas à
+  l'entraînement.
+- **État** : terminé
+=== git ===
+ffad1c53 DOCS — LE MODÈLE NATIF ET DIEHL & COOK ENRICHIS : QUOTIENT, TYPES, NEUTRALITÉ, DÉTERMINISME, BANC, CONFORMITÉ
+bb3bfefe DOCS — LE MODÈLE NATIF ET DIEHL & COOK, 13 SCHÉMAS : LA SÉPARATION À TROIS NIVEAUX
+  ```
+
+- **write** `{"content": "# Plan de session — N2.h, le mètre propre\n\n> **Mandat ouvert** le 2026-10-31 22 h 30 HAE depuis [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md)\n> — mandat libre de 10 h (nuit du 31/10 au 1/11). Le heartbeat est celui de l'état.\n\n- **Session** : `0b0a6a0d-05f5-4308 … [1799 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md <<'EOF'\n# Plan de session — N2.h, le mètre propre\n\n> **Mandat ouvert** le 2026-10-31 22 h 30 HAE depuis [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-co … [1995 caractères tronqués]`
+
+  ```
+✅ plans cohérents
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md && git commit -m \"ÉTAT — LA SESSION N2.h PORTE SON PLAN, SON AMBITION ET SA STRATÉGIE DANS LA PAGE D'ÉTAT\n\nLa page d'état doit suffire … [873 caractères tronqués]`

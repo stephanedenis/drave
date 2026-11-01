@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 4.9 h |
-| Tours | 4 |
-| Messages | 187 |
-| Appels d'outils | 211 |
+| Durée | 5.0 h |
+| Tours | 5 |
+| Messages | 196 |
+| Appels d'outils | 220 |
 | Fichiers touchés | 13 |
-| Commandes | 150 |
+| Commandes | 157 |
 | Sous-agents | 2 |
 | Commits | 9 |
 | Compactages de contexte | 0 |
@@ -20,6 +20,8 @@
 ## Objectifs déclarés
 
 - **create** — Refondre la documentation de l'architecture Drave autour de la RSN plurielle (plusieurs candidats, pas un objet canonique unique) comme représentation interne permettant des cycles de pensée itératifs multi-niveaux : arbre d'états, opérateurs neuronaux/classiques, portefeuille de stratégies d'IA cla
+… [256 caractères tronqués]
+- **complete** — Refondre la documentation de l'architecture Drave autour de la RSN plurielle (plusieurs candidats, pas un objet canonique unique) comme représentation interne permettant des cycles de pensée itératifs multi-niveaux : arbre d'états, opérateurs neuronaux/classiques, portefeuille de stratégies d'IA cla
 … [256 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -31,6 +33,8 @@
 **Tour 3** — Il est important que le RSN comme les autres blocs puissent accomplir leur tâches indépendamment du mode d'opération. C'est à dire que pour chaque bloc (et on veut que ces blocs soient petits) peut utiliser la technologie et les moyens les plus appropriés pour arriver à leur fins. Bref on a une modularité extréme où les neurones et le approches technoliques plus natives au matériel se coitoient na … [132 caractères tronqués]
 
 **Tour 4** — tu commence à peine à comprendre la portée de ce quie je te demande. le RSN (le pluriel sera plus approprié ca tu dois avoir pleusieurs candidats) est une représentation de données interne qui te permen d'itérer indéfiniment dans de4s cicles de pensées à plunieurs niveauc. Il te faudra donc un arbre d'états et toutes les streatégies de l'ia traditionelle, pour pouvoir "penser". Prends au moins 10  … [102 caractères tronqués]
+
+**Tour 5** — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon travail en maintenant ce document à jour pour que les autres sessions locales puissent être en synergie avec tes travaux.
 
 ## 2. Déroulé, étape par étape
 
@@ -199,7 +203,7 @@ Un bloc trop gros n'est ni mesurable, ni plaçable, ni substituable. Un bloc tro
 
 ### Tour 4 — tu commence à peine à comprendre la portée de ce quie je te demande. le RSN (le pluriel sera plus approprié ca tu dois a … [382 caractères tronqués]
 
-*39 appels d'outils.* Actions notables :
+*42 appels d'outils.* Actions notables :
 
 - create_goal
 - write `/tmp/gen_pensee.py`
@@ -215,11 +219,50 @@ Un bloc trop gros n'est ni mesurable, ni plaçable, ni substituable. Un bloc tro
 - bash — Générer le cycle et le portefeuille de stratégies
 - bash — Corriger la sortie settled du cycle
 - bash — Déplacer le libellé settled au-dessus du nœud
-- … et 20 autres
+- … et 23 autres
 
 **Synthèse produite :**
 
-⏵ Tours 7-9 — méta-apprentissage, mémoire/rejeu, mesure de la pensée
+⏵ Dix tours achevés : RSN plurielle, arbre d'états, moteur de pensée documenté
+
+J'ai intégré la correction de fond : **la RSN canonique unique était le résultat d'un cycle, pas la représentation de travail**. La représentation de travail est **plurielle** — un ensemble de candidats — et la pensée est une **recherche** dans un **arbre d'états**, avec un **portefeuille de stratégies** d'IA classique. Le document [`docs/theorie/pensee-iterative.md`](docs/theorie/pensee-iterative.md) est la refonte ; il documente les dix tours.
+
+\## Les dix tours
+
+| tour | question | ce que ça a produit |
+|---:|---|---|
+| **1** | la RSN unique était-elle la bonne représentation ? | le diagnostic : ambiguïté, incomplétude, contradiction, plan, provenance, révision |
+| **2** | comment ordonner les candidats ? | l'état = ensemble de candidats, statuts, provenance, empreinte Merkle, arbre |
+| **3** | comment penser en boucle ? | le cycle observer → proposer → contraindre → évaluer → sélectionner → revenir → arrêter |
+| **4** | avec quelles stratégies ? | le portefeuille : A*, beam, MCTS, alpha-bêta, AC-3, SAT/SMT, STRIPS/HTN, probabiliste, local, cas-based, méta |
+| **5** | quel contrat ? | `state`, `proposal`, `score`, `constraint`, `decision`, `trace` ; moteur N3, opérateurs N1/N2, store |
+| **6** | quand s'arrêter ? | anytime, best-so-far, budget, `settled`, contradiction, méta, interruption |
+| **7** | comment choisir la stratégie ? | bandit, statistiques MCTS, politique hors ligne ; le regret comme signal |
+| **8** | comment garder et rejouer ? | store, query, compact, replay, diff, share ; rejouer les **choix**, pas seulement les tenseurs |
+| **9** | comment mesurer ? | anytime AUC, taux de solution, gap, nœuds, regret, justification, rejeu, invariance |
+| **10** | que change-t-on aux documents ? | `modele-natif.md`, `diehl-cook.md`, index, 9 schémas, portes |
+
+\## Les idées qui structurent la refonte
+
+**La RSN est un type, pas un bloc.** Un **candidat** a un corps canonique, une annotation, un statut, une provenance, un coût, un score. Un **état** est un ensemble de candidats, avec un parent, une profondeur, une frontière, une empreinte. Le quotient reste **local** : il s'applique à un candidat, pas à l'état.
+
+**La pensée est une recherche, pas un forward pass.** L'arbre d'états est la mémoire de travail : nœuds = états, arêtes = opérateurs, frontière = nœuds ouverts, transposition = même empreinte, justification = le chemin racine → nœud. Le retour arrière est une arête de p
+… [3465 caractères tronqués]
+
+### Tour 5 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Lire l'état courant et les variables DSH
+- bash — Lire le contrat des sessions
+- bash — Lire le vérificateur de l'état
+- bash — Vérifier la session et le format des plans
+- bash — Lire la vérification des plans et de l'état
+- bash — Lire l'heure et les budgets des documents
+
+**Synthèse produite :**
+
+⏵ Mise à jour de `en-cours` : plan, ambition, stratégie et objectif final par session
 
 ## 3. Travail accompli
 
@@ -288,7 +331,7 @@ Un bloc trop gros n'est ni mesurable, ni plaçable, ni substituable. Un bloc tro
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 110 autres
+- … et 117 autres
 
 ## 4. Mesures et résultats marquants
 
