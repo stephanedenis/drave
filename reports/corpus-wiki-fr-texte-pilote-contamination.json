@@ -1,0 +1,55 @@
+{
+ "train": "/tmp/wiki-texte-pilote/train.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 2938969,
+  "par_split": {
+   "val.txt": {
+    "troncons": 170703,
+    "doublons": 6240,
+    "taux": 0.036555
+   },
+   "test.txt": {
+    "troncons": 159658,
+    "doublons": 5576,
+    "taux": 0.034925
+   }
+  }
+ },
+ "recouvrement_eval": [
+  {
+   "fichier": "xnli.dev.tsv",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "articles.jsonl",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "test.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "test.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "test.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  }
+ ]
+}

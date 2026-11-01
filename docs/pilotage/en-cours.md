@@ -52,48 +52,33 @@
 > `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close ; restes nommés : fax 1 bit,
 > exposant fusionné, parité réelle sans questions) — rapports dans [`journal/sessions/`](../../journal/sessions/).
 
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **D/R/A** — le texte intégral, l'extraction PDF/OCR, la prépa R1.1/R1.2, A2.6/A8.3.
+- **Plan** : le texte intégral (pilote FR), puis PDF/OCR, puis R1.1/R1.2.
+- **Ambition** : le français réel pour N2 ; D, carburant de N2/L/S.
+- **Stratégie** : le dump, débaliseur mesuré, dédup, splits ; pilote avant run.
+- **Objectif final** : 10 corpus en texte intégral, mesurés et ficés.
+- **Ce qu'elle fait** : le **pilote FR** : 100 000 articles, 1,082 Go, **0 fuite 8 Ko**, **0/40** fenêtres d'éval ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md) ; run complet lancé.
+- **Ce que font les autres** : Pensée (L/B13), S, N2 ; le hub tient l'état.
+- **Prochaine action** : le run complet FR (~26 Go), puis les 9 langues, PDF/OCR.
+- **Bloquants** : aucun.
+- **Journal** : [le 01/11](../../journal/2026-11-01/README.md).
+
 ## Ce qui est en cours
 
-- **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4 close (négatif)** ; **R0.5 close
-  (négatif)** ; R0.6 **12/20** au pilote, **7/7** à la porte. Fiches
-  [`r04`](../../reports/rapport-r04-tete-survol.md), [`r07`](../../reports/rapport-r07-routeur.md),
-  [`r06`](../../reports/rapport-r06-publication.md) (cascade à confiance **publiée**).
-- **R4.1–R4.4 — les blocs** : **mesurés** — 996/802 cellules, 294/24 fichiers,
-  32/10 formules ; **R4.4** scans simulés (4/5 ≥ **90 %**) ; **typoglycémie** : le modèle lit les
-  lettres (×17,8 au mélange intérieur, ×62,7 tout) ; fiches
-  [`r44-scans`](../../reports/rapport-r44-scans.md) · [`typoglycemie`](../../reports/rapport-typoglycemie.md).
-- **Données** : inventaire local (Wikipédia **132 Go**, documents **~228 Go**, DRM et vidéos exclus) ;
-  **corpus par langue** (10) : **21,6 M articles**, **31,4 G caractères**, **38,8 Go**, splits par
-  article, **0 fuite** — fiches [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md),
-  [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md) (catalogue et manifestes).
-- **S — le banc de structures** : outil web (`tools/structures`, submodule) ; **générateur**
-  heuristique, **pragmatique** (statuts, **double sens conservé**, **niveaux de contexte 0–4**,
-  **niveau minimal** mesuré) et **export corpus** JSONL (12 tests) ; 7 phrases, 14 candidats ;
-  la banque reçoit déjà des validations réelles ; [`README`](../../tools/structures/README.md).
-- **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
-  1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
-  [`r13`](../../reports/rapport-r13-decision.md), spécification
-  [`tokenisation`](../implantation/tokenisation.md).
-- **B10.2bis — décodeur** : 3×3 : **11,1** ; capacité 11,8 ; **mots 32,5** ;
-  **JW 26,7** (plancher 17,1) ; `z` 1,5–2,6 points ; **contrastif négatif** ; fiches
-  [`b102bis`](../../reports/rapport-b102bis-decodeur.md), [`mots`](../../reports/rapport-b10-decodeur-mots.md), [`mots-jw`](../../reports/rapport-b10-mots-jw.md).
-- **A8.0 : 19** ; **A8.3b refusé** (lot) ; **A8.3c/d** : lot 1≠≥2, ctx stable, threads
-  innocents — fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md), [`a83d`](../../reports/rapport-a83d-lot-threads.md).
+- **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte ; fiches [`r04`](../../reports/rapport-r04-tete-survol.md), [`r07`](../../reports/rapport-r07-routeur.md), [`r06`](../../reports/rapport-r06-publication.md).
+- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 au mélange intérieur, ×62,7 tout ; fiches [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
+- **Données** : inventaire local (Wikipédia **132 Go**, documents **~228 Go**, DRM et vidéos exclus) ; **corpus par langue** (10) : **21,6 M articles**, **31,4 G caractères**, **38,8 Go**, **0 fuite** — fiches [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md).
+- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (double sens, niveaux 0–4), export JSONL (12 tests) ; 7 phrases, 14 candidats ; [`README`](../../tools/structures/README.md).
+- **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 %, 1024 +4,09 % ; fiche [`r13`](../../reports/rapport-r13-decision.md).
+- **B10.2bis — décodeur** : 3×3 **11,1** ; capacité 11,8 ; **mots 32,5** ; **JW 26,7** ; `z` 1,5–2,6 ; fiches [`b102bis`](../../reports/rapport-b102bis-decodeur.md), [`mots`](../../reports/rapport-b10-decodeur-mots.md), [`mots-jw`](../../reports/rapport-b10-mots-jw.md).
+- **A8** : **A8.0 : 19** ; **A8.3b refusé** (lot) ; **A8.3c/d** : lot 1≠≥2, threads innocents ; fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md), [`a83d`](../../reports/rapport-a83d-lot-threads.md).
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
-- **N2.h — close** : corpus dédupliqué (**0 %** de fuite), chaîne propre **3,09** en domaine,
-  diversité (÷ 4,3 hors dépôt), longueur, combinaison et capacité ; **N2.i**
-  (4,84 Mo) : **12,93** littérature, **33,83** anglais — généralise ; **N2.j**
-  (**186 Mo** de Wikipédia) : **7,42** / **12,41**, filtre non ambigu sans effet ; **N2.k**
-  (10 langues) : fr **5,68**, anglais **6,30** ; **N2.j2** (positions 0–384) : 256 **9,28 → 4,49**,
-  512 **13,37 → 5,67**. Fiches
-  [`n2-propre`](../../reports/rapport-n2-propre.md) · [`n2-corpus-elargi`](../../reports/rapport-n2-corpus-elargi.md) ·
-  [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md) ·
-  [`n2-multilingue`](../../reports/rapport-n2-multilingue.md) ·
-  [`n2-longueur-reelle`](../../reports/rapport-n2-longueur-reelle.md). N4 **0/40**.
-- **Pensée — state store v0** : théorie (10 tours, 9 schémas) et **state store v0** (6/6 portes
-  T0–T4 ; BFS, greedy, A*, MCTS-lite ; jouet des cruches) ; fiche
-  [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine : AC-3, alpha-bêta, DRVF, banc anytime.
+- **N2.h/N2.i — closes** : corpus dédupliqué, **3,09** en domaine, **12,93** littérature, **33,83** anglais ; **N2.j** (186 Mo) **7,42/12,41** ; **N2.k** (10 langues) fr **5,68**, anglais **6,30** ; **N2.j2** : 256 **9,28 → 4,49**, 512 **13,37 → 5,67** ; N4 **0/40**. Fiches [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md).
+- **Pensée — state store v0** : 6/6 portes (BFS, greedy, A*, MCTS-lite), jouet des cruches ; fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine AC-3, alpha-bêta, DRVF.
 
 
 ## Les chiffres de l'état
@@ -104,7 +89,7 @@
 |---|---|---|
 | portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **387** / **474** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **388** / **474** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
@@ -132,13 +117,12 @@ action** — pas les statuts, qui dérivent. Vue d'ensemble :
 styles · **C5** domaines · **C6** documentation · **C7** pensée — hors graphe, mesurés, du récit.
 
 ## Ce qui reste
-- **Chantiers — la vue d'ensemble** : huit chantiers (A/B/N/R/**S**/**L**/**D**/B13) et leurs relations ; doc [`chantiers`](chantiers.md), carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
 
 **N2.h** — **close** (N2.i : 12,93 littérature, 33,83 anglais ; porte < 2,5 non atteinte) ;
 **Pensée** — **DRVF, banc anytime** (AC-3/alpha-bêta faits ; session `e181ce02`) ; **N4** — la consigne
 courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — close, limites nommées ; **R0.7** — gold/neuronal ; **R1.1/R1.2** — le contexte natif ; **S** — l'export au corpus.
 
-- **Le plan de travail multi-sessions** : [`plan-travail`](plan-travail.md) — quatre sessions (N2, L, S, D/R/A) + le hub, les territoires, la cadence, la surveillance ; le pont entre cet état et la roadmap.
+- **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
 
 ## Les questions ouvertes
 

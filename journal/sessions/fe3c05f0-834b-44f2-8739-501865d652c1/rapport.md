@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 24.0 h |
 | Tours | 10 |
-| Messages | 837 |
-| Appels d'outils | 838 |
+| Messages | 850 |
+| Appels d'outils | 851 |
 | Fichiers touchés | 18 |
-| Commandes | 766 |
+| Commandes | 779 |
 | Sous-agents | 0 |
-| Commits | 37 |
+| Commits | 38 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -528,7 +528,7 @@ Le **hub** tient l'état, la roadmap, les compteurs, le journal et la revue ; il
 
 ### Tour 10 — lire docs/pilotage/plan-travail.md et avancer
 
-*19 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - read
 - bash — Read current state plan and French dump
@@ -544,7 +544,7 @@ Le **hub** tient l'état, la roadmap, les compteurs, le journal et la revue ; il
 - bash — Open D/R/A session plan and update territory
 - bash — Fix field parser headings and check pilot
 - bash — Inspect pilot sample and status
-- … et 5 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
@@ -617,7 +617,7 @@ Le **hub** tient l'état, la roadmap, les compteurs, le journal et la revue ; il
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 726 autres
+- … et 739 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -802,4 +802,5 @@ Le **hub** tient l'état, la roadmap, les compteurs, le journal et la revue ; il
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet for t in "python3 tools/verifie_journal.py" "python3 tools/verifie_backlog.py" "python3 tools/verifie_etat_a_
 - PILOTAGE — LA CAPACITÉ SIMULTANÉE : 4 SESSIONS, 4 À 6 CHANTIERS, 2 À 4 SOUS-AGENTS, ET LES LIMITES MESURÉES" 2>&1 | tail -2; git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet python3 - <<'PY' import pathlib p=pathlib.Path('tools/surveille_sessions.py'); s=p.read_text() s=s.replace(''
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet for t in "python3 tools/revue_documentation.py" "python3 tools/taille_documents.py" "python3 tools/verifie_en
 

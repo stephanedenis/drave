@@ -44,7 +44,7 @@ def lire_plan(chemin: Path) -> dict:
     # lus au lieu de 9).
     texte = chemin.read_text(encoding="utf-8")
     for m in re.finditer(r"^\s*[-*]\s*\*\*(.+?)\*\*\s*:\s*"
-                         r"(.*(?:\n(?!\s*[-*]\s*\*\*).*)*)", texte, re.M):
+                         r"(.*(?:\n(?![ \t]*(?:[-*]\s*\*\*|#)).*)*)", texte, re.M):
         valeur = " ".join(x.strip() for x in m.group(2).splitlines()).strip()
         champs[_cle(m.group(1))] = _valeur(valeur)
     # tolérances : Role / Perimetre sans accent
@@ -104,7 +104,7 @@ def sections_en_cours(racine: Path) -> list[dict]:
     for i in range(1, len(morceaux), 3):
         sid, role, bloc = morceaux[i], morceaux[i + 1].strip(), morceaux[i + 2]
         champs = {}
-        for mm in re.finditer(r"^-\s+\*\*(.+?)\*\*\s*:\s*(.*(?:\n(?!-\s+\*\*).*)*)", bloc, re.M):
+        for mm in re.finditer(r"^-\s+\*\*(.+?)\*\*\s*:\s*(.*(?:\n(?![ \t]*(?:-\s+\*\*|#)).*)*)", bloc, re.M):
             champs[_cle(mm.group(1))] = " ".join(x.strip() for x in mm.group(2).splitlines()).strip()
         out.append({"id": sid, "role": role, "champs": champs,
                     "fichiers": champs.get("fichiers réservés", ""),

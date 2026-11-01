@@ -15170,3 +15170,203 @@ echantillon: --- | Antoine Meillet | Antoine Meillet, né le à Moulins (Allier)
 === evals
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"vus_troncons\\|troncons(\" tools/corpus_wikipedia.py | head -8; echo \"=== 8KB windows\"; timeout 300 python3 - <<'PY'\nimport hashlib, pathlib\nbase=pathlib.Path('/tmp/wiki-texte-pilote')\ndef fenetres(p, taille=8192):\n     … [766 caractères tronqués]`
+
+  ```
+66:def troncons(texte: str, taille: int):
+91:    vus_troncons: set[str] = set()
+116:        for morceau in troncons(texte, chunk):
+119:                if m in vus_troncons:
+122:                vus_troncons.add(m)
+=== 8KB windows
+{'train': 115007, 'val': 6661, 'test': 6228}
+val fenêtres 8 Ko dupliquées dans train : 0 / 6661 0.0 %
+test fenêtres 8 Ko dupliquées dans train : 0 / 6228 0.0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > reports/rapport-corpus-wiki-texte.md <<'EOF'\n# Le texte intégral de Wikipédia — le pilote FR\n\n> **Verdict.** Le débaliseur `tools/corpus_wikipedia_texte.py` fonctionne : **100 000 articles**\n> en **1,082 Go** (10,45 Ko par ar … [4901 caractères tronqués]`
+
+  ```
+770 reports/rapport-corpus-wiki-texte.md
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 387 fichiers, le disque en a 388
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/revue_documentation.py 2>&1 | head -2; grep -n \"fichiers / JSON\\|documents de\\|portes |\" docs/pilotage/en-cours.md; echo \"=== reste\"; sed -n '/## Ce qui reste/,/## Les questions/p' docs/pilotage/en-cours.md; echo \" … [235 caractères tronqués]`
+
+  ```
+revue de documentation · 388 fiche(s) · 474 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+105:| portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
+107:| fichiers / JSON de résultats | **387** / **474** | `reports/*.md` / `reports/*.json` |
+108:| documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
+=== reste
+## Ce qui reste
+- **Chantiers — la vue d'ensemble** : huit chantiers (A/B/N/R/**S**/**L**/**D**/B13) et leurs relations ; doc [`chantiers`](chantiers.md), carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
+
+**N2.h** — **close** (N2.i : 12,93 littérature, 33,83 anglais ; porte < 2,5 non atteinte) ;
+**Pensée** — **DRVF, banc anytime** (AC-3/alpha-bêta faits ; session `e181ce02`) ; **N4** — la consigne
+courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — close, limites nommées ; **R0.7** — gold/neuronal ; **R1.1/R1.2** — le contexte natif ; **S** — l'export au corpus.
+
+- **Le plan de travail multi-sessions** : [`plan-travail`](plan-travail.md) — quatre sessions (N2, L, S, D/R/A) + le hub, les territoires, la cadence, la surveillance ; le pont entre cet état et la ro
+… [331 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"**Mis à jour : 2026-11-01, 13 h 50 HNE (heure locale, EST).**\",\n            \"**Mis à jour : 2026-11-01, 16 h 45 HNE (heure … [2713 caractères tronqués]`
+
+  ```
+section D/R/A, trim, compteurs
+  en-cours · 1756 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4130 mots (budget 4 000)
+  revue de documentation · 388 fiche(s) · 474 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ plans cohérents
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '52,100p' docs/pilotage/en-cours.md", "description": "Read in-progress and chantier sections for trimming", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+> `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close ; restes nommés : fax 1 bit,
+> exposant fusionné, parité réelle sans questions) — rapports dans [`journal/sessions/`](../../journal/sessions/).
+
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **D/R/A** — le texte intégral, l'extraction PDF/OCR, la prépa R1.1/R1.2, A2.6/A8.3.
+- **Plan** : le texte intégral des 10 corpus (pilote FR), puis PDF/OCR, puis R1.1/R1.2.
+- **Ambition** : le français réel en volume pour N2 ; D, carburant mesuré de N2, L et S.
+- **Stratégie** : le dump, un débaliseur mesuré, la dédup exacte, les splits ; le pilote avant le run.
+- **Objectif final** : 10 corpus en texte intégral, mesurés, ficés et committés.
+- **Ce qu'elle fait** : le **pilote FR** : 100 000 articles, 1,082 Go, **0 fuite 8 Ko**, **0/40** fenêtres d'éval ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md) ; run complet lancé.
+- **Ce que font les autres** : Pensée (L/B13, R0.7), S (structures), N2 (GPU) ; le hub tient l'état.
+- **Prochaine a
+… [2952 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '100,135p' docs/pilotage/en-cours.md", "description": "Read rest of in-progress section", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+(4,84 Mo) : **12,93** littérature, **33,83** anglais — généralise ; **N2.j**
+  (**186 Mo** de Wikipédia) : **7,42** / **12,41**, filtre non ambigu sans effet ; **N2.k**
+  (10 langues) : fr **5,68**, anglais **6,30** ; **N2.j2** (positions 0–384) : 256 **9,28 → 4,49**,
+  512 **13,37 → 5,67**. Fiches
+  [`n2-propre`](../../reports/rapport-n2-propre.md) · [`n2-corpus-elargi`](../../reports/rapport-n2-corpus-elargi.md) ·
+  [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md) ·
+  [`n2-multilingue`](../../reports/rapport-n2-multilingue.md) ·
+  [`n2-longueur-reelle`](../../reports/rapport-n2-longueur-reelle.md). N4 **0/40**.
+- **Pensée — state store v0** : théorie (10 tours, 9 schémas) et **state store v0** (6/6 portes
+  T0–T4 ; BFS, greedy, A*, MCTS-lite ; jouet des cruches) ; fiche
+  [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine : AC-3, alpha-bêta, DRVF, banc anytime.
+
+
+## Les chiffres de l'état
+
+> **Source unique.** Ces valeurs sont vérifiées par `tools/revue_documentation.py`.
+
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
+| chapitres de la synthèse | 
+… [943 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ndebut=s.find(\"- **N2.h — close**\")\nfin=s.find(\"N4 **0/40**.\", debut)\nif debut>=0 and fin>=0:\n    fin+=len(\"N4 **0/40**.\")\n    … [1452 caractères tronqués]`
+
+  ```
+N2 et Pensée compactés
+  en-cours · 1702 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4076 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ndef remplace(debut, fin, court):\n    global s\n    i=s.find(debut)\n    if i<0: print('introuvable', debut[:30]); return\n    j=s.find(fin … [1717 caractères tronqués]`
+
+  ```
+fin introuvable `rapport-typoglycemie.md`).
+fin introuvable `tokenisation.md`).
+fin introuvable `rapport-a83d-lot-threads.md`)
+R0/R4/R13/A8 compactés
+  en-cours · 1695 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4069 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ndef bloc(debut, court):\n    global s\n    i=s.find(debut)\n    if i<0: print('introuvable', debut[:25]); return\n    j=s.find(\"\\n- **\", … [1288 caractères tronqués]`
+
+  ```
+blocs compactés
+  en-cours · 1666 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4040 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ndef bloc(debut, court):\n    global s\n    i=s.find(debut)\n    if i<0: print('introuvable', debut[:25]); return\n    j=s.find(\"\\n- **\", … [1645 caractères tronqués]`
+
+  ```
+compactions
+  en-cours · 1651 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4025 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ plans cohérents
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\n# ma section D/R/A : valeurs plus courtes\ns=s.replace(\"- **Plan** : le texte intégral des 10 corpus (pilote FR), puis PDF/OCR, puis R1.1/ … [1995 caractères tronqués]`
+
+  ```
+section D/R/A et bullet S compactés
+  en-cours · 1611 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3985 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/corpus-wiki-fr-texte-pilote-contamination.json').read_text())\nfor e in d.get('recouvrement_eval',[]):\n    print(e.get('fichier'), '|', e.get('fenetres'), 'fenê … [290 caractères tronqués]`
+
+  ```
+xnli.dev.tsv | 40 fenêtres | 0 trouvées
+articles.jsonl | 40 fenêtres | 0 trouvées
+data/corpus_litt_propre/:
+test.txt
+train.txt
+val.txt
+
+data/corpus_propre/:
+dev.txt
+test.txt
+train.txt
+val.txt
+
+data/corpus_repo_propre/:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 600 python3 tools/verifie_contamination.py --train /tmp/wiki-texte-pilote/train.txt --val /tmp/wiki-texte-pilote/val.txt --test /tmp/wiki-texte-pilote/test.txt --eval data/xnli/XNLI-1.0/xnli.dev.tsv --eval data/udhr/articles.js … [623 caractères tronqués]`
+
+  ```
+"taux": 0.0
+  }
+ ]
+}
+xnli.dev.tsv | 40 fenêtres | 0 trouvées
+articles.jsonl | 40 fenêtres | 0 trouvées
+test.txt | 40 fenêtres | 0 trouvées
+test.txt | 40 fenêtres | 0 trouvées
+test.txt | 40 fenêtres | 0 trouvées
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-01/README.md'); s=p.read_text()\npara='''**Le texte intégral de Wikipédia : le pilote FR.** Le plan de travail relu, la session\n`fe3c05f0` rouverte pour le rôle **D/R/A … [1299 caractères tronqués]`
+
+  ```
+journal
+run complet job 1454236
+1454236       00:10  100 python3 tools/corpus_wikipedia_texte.py --sortie data/corpus_wiki_fr_texte --manifeste reports/corpus-wiki-fr-texte.json
+-rw-r--r--. 1 stephane stephane  2430349  1 nov 16:37 test.txt
+-rw-r--r--. 1 stephane stephane 40351267  1 nov 16:37 train.txt
+-rw-r--r--. 1 stephane stephane  2399726  1 nov 16:37 val.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifier_schemas.py … [2902 caractères tronqués]`

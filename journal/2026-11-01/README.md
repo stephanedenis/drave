@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**55 commits** · **4 session(s)** · **9 thème(s)**
+**56 commits** · **4 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 14 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 29 | [mesures.md](mesures.md) |
+| mesures | 30 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -25,7 +25,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 24.2 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 24.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 23.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 24.0 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
@@ -89,10 +89,20 @@
 | 15:20 | `e20d0cd8` | PILOTAGE — LA CAPACITÉ SIMULTANÉE : 4 SESSIONS, 4 À 6 CHANTIERS, 2 À 4 SOUS-AGENTS, ET LES LIMITES MESURÉES |
 | 15:40 | `ac1f9436` | PILOTAGE — LE DOSSIER REMIS À PLAT : INDEX, PLAN MULTI-SESSIONS, TERRITOIRES ET SURVEILLANCE |
 | 16:28 | `3c749d27` | B13 — AC-3 ET ALPHA-BÊTA : 8/8 PORTES, 1 495 NŒUDS/296 COUPES CONTRE 18 730 |
+| 16:31 | `4db5aac0` | N2.j2 — POSITIONS ALÉATOIRES SUR 186 Mo : LE VERROU DE LONGUEUR TOMBE ENCORE (÷2,4 À 512) |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Le texte intégral de Wikipédia : le pilote FR.** Le plan de travail relu, la session
+`fe3c05f0` rouverte pour le rôle **D/R/A** (données, lecteur, moteur). L'outil
+`corpus_wikipedia_texte.py` lit le dump (7,13 Go), débalise, déduplique et sépare par article. Le
+**pilote de 100 000 articles** donne **1,082 Go**, **1,045 G caractères**, **168,6 M mots**,
+**1 résidu `{{` sur 20 000 lignes**, **0 / 6 661** fenêtres de 8 Ko de la validation dans
+l'entraînement et **0 / 40** fenêtres sur les cinq jeux d'évaluation (XNLI, UDHR, trois jeux
+locaux). Le run complet (2,5 M, ~26 Go) est lancé ; son manifeste sera committé au prochain
+checkpoint. Fiche [`rapport-corpus-wiki-texte`](../../reports/rapport-corpus-wiki-texte.md).
+
 **Le dossier pilotage remis à plat, avec un plan de travail multi-sessions.** Le pilotage a
 maintenant un **index** (`docs/pilotage/README.md`, l'ordre de lecture et qui écrit quoi) et un
 **plan de travail** (`docs/pilotage/plan-travail.md`) qui fait le pont entre l'état et la

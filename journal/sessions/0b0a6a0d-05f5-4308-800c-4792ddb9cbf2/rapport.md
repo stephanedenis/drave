@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 24.2 h |
+| Durée | 24.3 h |
 | Tours | 17 |
-| Messages | 1020 |
-| Appels d'outils | 951 |
+| Messages | 1024 |
+| Appels d'outils | 955 |
 | Fichiers touchés | 11 |
-| Commandes | 787 |
+| Commandes | 789 |
 | Sous-agents | 0 |
 | Commits | 27 |
 | Compactages de contexte | 1 |
@@ -878,7 +878,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 
 ### Tour 17 — lire docs/pilotage/plan-travail.md et avancer
 
-*20 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Read the work plan
 - bash — Read the batch sampler and the position support
@@ -894,7 +894,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 - bash — Update the plan with the length result and check the capacity run
 - bash — Trim the state under budget
 - bash — Read the N2 bullet in full
-- … et 4 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
@@ -960,7 +960,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 747 autres
+- … et 749 autres
 
 ## 4. Mesures et résultats marquants
 

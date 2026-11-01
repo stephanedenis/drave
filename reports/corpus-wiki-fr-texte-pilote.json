@@ -1,0 +1,55 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "langue": "fr",
+ "nature": "corpus Wikipédia fr (texte intégral)",
+ "source": {
+  "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/fr/frwiki-latest-pages-articles-multistream.xml.bz2",
+  "octets": 7129511779
+ },
+ "methode": {
+  "debaliseur": "regex : commentaires, refs, tableaux, modèles (30 itérations), fichiers/catégories, liens → libellé, titres de sections, listes",
+  "filtre": "ns 0, sans redirection, texte >= 300 caractères",
+  "deduplication": "articles (BLAKE2b) + tronçons (train), première occurrence gardée",
+  "split": "hash salé (graine 1) de page_id : 5% val, 5% test"
+ },
+ "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/fr/frwiki-latest-pages-articles-multistream.xml.bz2",
+ "dump_octets": 7129511779,
+ "articles_lus": 146250,
+ "articles_gardes": 100000,
+ "articles_rediriges": 31998,
+ "articles_hors_ns": 10677,
+ "articles_courts": 3574,
+ "articles_doublons": 0,
+ "caracteres_gardes": 1045085924,
+ "troncons": 187765,
+ "troncons_doublons": 112,
+ "octets": {
+  "train": 972627365,
+  "val": 56335398,
+  "test": 52664369
+ },
+ "articles": {
+  "train": 89914,
+  "val": 5105,
+  "test": 4981
+ },
+ "residus": {
+  "modele": 1,
+  "lien": 0,
+  "balise": 3,
+  "lignes_echantillon": 20000
+ },
+ "echantillon": "---\nAntoine Meillet\nAntoine Meillet, né le à Moulins (Allier) et mort le à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du .\n\nBiographie\nEnfance et formation\nPaul Jules Antoine Meillet est d'origine bourbonnaise, fils d'un notaire de Châteaumeillant (Cher). Il naît à Moulins le .\n\nIl passe son enfance à Châteaumeillant, puis fait ses études secondaires au lycée de Moulins.\n\nÉtudiant à partir de 1885 à la faculté des lettres de Paris où il suit notamment les cours de Louis Havet, il assiste également à ceux de Michel Bréal au Collège de France et de Fe\n---\nAlgèbre linéaire\nL’algèbre linéaire est la branche des mathématiques qui s'intéresse aux espaces vectoriels et aux transformations linéaires, formalisation générale des théories des systèmes d'équations linéaires.\n\nHistoire\nL'algèbre linéaire est initiée dans son principe par le mathématicien perse Al-Khwârizmî qui s'est inspiré des textes de mathématiques indiens et qui a complété les travaux de l'école grecque, laquelle continuera de se développer des siècles durant. Elle a été reprise par René Descartes qui pose des problèmes de géométrie, comme la détermination de l'intersection de deux droites, en termes\n---\nAlgèbre générale\nL'algèbre générale, ou algèbre abstraite, est la branche des mathématiques qui porte principalement sur l'étude des structures algébriques et de leurs relations. L'appellation algèbre générale s'oppose à celle dalgèbre élémentaire ; cette dernière enseigne le calcul algébrique, c'est-à-dire les règles de manipulation des formules et des expressions algébriques.\n\nHistoriquement, les structures algébriques sont apparues dans différents domaines des mathématiques, et n'y ont pas été étudiées séparément. C'est pourquoi l'algèbre générale possède beaucoup de connexions avec toutes les branches des",
+ "mots_estimes": 168562245,
+ "note_mots": "caractères / 6,2 (estimation ; le japonais et le chinois se comptent en caractères)",
+ "sha256_train": "707a512098c1fb58cbba07e8bdf2b922cbeec35fc439f348ba9783186b634149",
+ "sha256_val": "f2d3a4e4021aa288da187f7f1045c391ae8f68060bb5ec4c47e5f24b0c33cedf",
+ "sha256_test": "3f9ec6362b390e2095a559649adf16afba9f7e587964e0ca619be2f22423ca05",
+ "licence": "Wikipédia : CC-BY-SA 4.0 (et GFDL) — attribution et partage à l'identique ; corpus local",
+ "limites": [
+  "débaliseur regex : infobox/dates de modèles perdues, formules <math> retirées, tableaux perdus",
+  "les redirections et les espaces de noms autres que 0 sont exclus",
+  "déduplication exacte seulement (quasi-doublons non détectés)"
+ ]
+}
