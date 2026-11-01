@@ -7740,3 +7740,23 @@ e7b51508 R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE
   ```
 
 - **job_output** `{"job_id": "bash-451", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g1.pt 2>/dev/null && echo DR1_OK; tail -1 work/n2h/DR-pos-g2.log 2>/dev/null; tail -1 work/n2h/DR-pos-g1.log", "description": "Check the combined arm progress"}`
+
+  ```
+03:00
+pas 10750 · seq 128 · perte 42.4715 · PPL 128/4 3.7147 · 748 s
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g1.pt 2>/dev/null && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/DR-pos-g1.pt --longueurs 2>&1 | grep -v Loading", "description":  … [72 caractères tronqués]`
+
+  ```
+started background job bash-454
+  ```
+
+- **job_output** `{"job_id": "bash-454", "timeout_ms": 1200000, "wait": true}`

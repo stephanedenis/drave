@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 10.3 h |
+| Durée | 10.5 h |
 | Tours | 3 |
-| Messages | 648 |
-| Appels d'outils | 646 |
+| Messages | 663 |
+| Appels d'outils | 660 |
 | Fichiers touchés | 18 |
-| Commandes | 587 |
+| Commandes | 600 |
 | Sous-agents | 0 |
-| Commits | 29 |
+| Commits | 30 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -144,7 +144,7 @@ Deux défauts que le synthétique ne voyait pas : un **en-tête centré** traver
 
 ### Tour 3 — <goal_round> Objective: "R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité … [917 caractères tronqués]
 
-*68 appels d'outils.* Actions notables :
+*82 appels d'outils.* Actions notables :
 
 - bash — Inspect failed parity questions
 - bash — Inspect scan entry structure
@@ -160,7 +160,7 @@ Deux défauts que le synthétique ne voyait pas : un **en-tête centré** traver
 - bash — Read scans results after note fix
 - bash — List remaining parity failures
 - bash — Inspect the 2030-11 value failure
-- … et 54 autres
+- … et 68 autres
 
 ## 3. Travail accompli
 
@@ -229,7 +229,7 @@ Deux défauts que le synthétique ne voyait pas : un **en-tête centré** traver
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 547 autres
+- … et 560 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -406,4 +406,5 @@ Deux défauts que le synthétique ne voyait pas : un **en-tête centré** traver
 - cat > /tmp/msg-parite.txt <<'EOF' R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS
 - python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("préservation **90–97 %** (4 familles), colonnes **89,4
 - SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION" 2>&1 | tail -2 git log --oneline -1; tail -3 work/r44/gate-v8.l
+- R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER" 2>&1 | tail -2 git log --oneline -1
 

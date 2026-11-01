@@ -11054,3 +11054,213 @@ python3 tools/verifie_etat_a_jour.py [0]   ✅ aucun fait commité après le der
   ```
 
 - **bash** `{"command": "git add journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md\ngit commit -m \"SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION\" 2>&1 | tail -2\ngit log --oneline -1; tail -3 work/r44/gate-v8.log; pgrep -af \"porte-ocr-scans\" | gr … [160 caractères tronqués]`
+
+  ```
+[master 7452a447] SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION
+ 8 files changed, 59 insertions(+), 17 deletions(-)
+7452a447 SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION
+
+  100 mesures en 91 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+3
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,stat,cmd | grep -E \"mesurer_colonnes\" | grep -v grep; ls work/r44/ocr/*-m7* 2>/dev/null | wc -l; pgrep -c tesseract; date +%H:%M", "description": "Check gate columns progress via cache", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtr … [6 caractères tronqués]`
+
+  ```
+351
+0
+02:56
+  ```
+
+- **bash** `{"command": "tail -20 work/r44/gate-v8.log; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | head -3; pgrep -af \"mesurer_tables|extraire_tableaux\" | grep -v pgrep | head -3; date +%H:%M", "description": "Check gate step and processes", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stepha … [19 caractères tronqués]`
+
+  ```
+✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 96.7%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 91 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+
+  ✅ deux colonnes · propre : WER ≤ 3% (mesuré 0.5%)
+  ✅ deux colonnes · photocopie : WER ≤ 6% (mesuré 1.0%)
+  ✅ deux colonnes · photo : WER ≤ 20% (mesuré 6.5%)
+  ✅ contrôle sans gouttière · photo : ≥ 50 % (mesuré 88.3%)
+  ✅ mono-colonne · photo : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · photocopie : ≥ 50 % (mesuré 90.1%)
+  ✅ mono-colonne · photocopie : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · propre : ≥ 50 % (mesuré 89.4%)
+  ✅ mono-colonne · propre : écart ≤ 0,5 pt (mesuré 0.00%)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/colonnes.json
+--- 3. les tableaux (10 pages × 3 familles)
+1134973 bash -c timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-v8.log 2>&1; echo "[gate $?]"; tail -4 work/r44/gate-v8.log
+1134980 timeout 2400 bash tools/porte-ocr-scans.sh
+1134981 bash tools/porte-ocr-scans.s
+… [55 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 240; tail -14 work/r44/gate-v8.log; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l; date +%H:%M", "description": "Read final gate verdict", "timeoutMs": 300000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+--- 3. les tableaux (10 pages × 3 familles)
+  propre      oui           10       540      500   92.6%    10/10
+
+  contrôle texte à plat : 29/54 valeurs présentes (53.7%), 0 localisée
+
+  ✅ propre : cellules exactes ≥ 90% (mesuré 92.6%)
+  ✅ propre : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photocopie : cellules exactes ≥ 65% (mesuré 69.1%)
+  ✅ photocopie : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photo : cellules exactes ≥ 45% (mesuré 62.4%)
+  ✅ photo : grilles de bonne forme ≥ 50% (mesuré 8/10)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables.json
+✅ porte OCR-scans verte : familles, colonnes et tableaux tiennent leurs planchers
+0
+03:01
+  ```
+
+### 👤 Utilisateur
+
+background job bash-571 (bash: timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-v8.log 2>&1; echo "[gate $?]"; tail -4 work/r44/gate-v8.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 tools/verifie_etat_a_jour.py 2>&1 | tail -1; bash tools/porte-etat.sh >/tmp/pe.log 2>&1; echo \"[porte-etat $?]\"; tail -1 /tmp/pe.log; git log --oneline -4; git status --short | grep -E \"r44|encodeur|roadmap|en-cours|plan.md|2026-11-01\" | head -5", "description": "Final state … [98 caractères tronqués]`
+
+  ```
+✅ aucun fait commité après le dernier état
+[porte-etat 0]
+✅ porte état verte : aucun fait commité après le dernier état
+7452a447 SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION
+4aef1413 R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS
+1da58752 JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR
+e36e8185 N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-a1de2753-e989-4813-b730-20de506599cf","revision":1,"objective":"R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer fiches, JSON, docs, porte, roadmap, en-cours, journal et commits. Continuer les rounds tant que l'heure système est avant l'échéance de 10 h (≈ 2026-11-01 04 h 20 HAE).","phase":"active","roundsStarted":1,"maxGoalRounds":200},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/advancedsearch.php?q=title%3A%28madame+bovary%29+AND+language%3Afre+AND+year%3A%5B1890+TO+1925%5D&fl%5B%5D=identifier&fl%5B%5D=year&rows=6&output=json\" | python3 -c \"import json,sys;d=json.load(sys.stdin);[print(x) for x in d['response']['docs' … [158 caractères tronqués]`
+
+  ```
+{'identifier': 'madamebovarymoeu00flau', 'year': 1921}
+{'identifier': 'leprocsdemadam00jalluoft', 'year': 1905}
+{'identifier': 'leprocsdemadame00parigoog', 'year': 1905}
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/metadata/madamebovarymoeu00flau\" | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin); m=d.get('metadata',{}); print('titre',m.get('title'),'| langue',m.get('language'))\nfor f in d.get('files',[]):\n    if f['name'].endswith(('.pdf','_djvu. … [187 caractères tronqués]`
+
+  ```
+titre None | langue None
+  ```
+
+- **bash** `{"command": "for id in leprocsdemadame00parigoog leprocsdemadam00jalluoft; do echo \"== $id\"; timeout 40 curl -s \"https://archive.org/metadata/$id\" | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin); m=d.get('metadata',{}); print('titre',m.get('title'),'| langue',m.get('language'))\nfor f i … [265 caractères tronqués]`
+
+  ```
+== leprocsdemadame00parigoog
+titre Le procès de "Madame Bovary"; discours prononcé à l'ouverture de la Conférence des avocats le 2 décembre 1905 | langue fre
+leprocsdemadame00parigoog.pdf 1159994
+leprocsdemadame00parigoog_djvu.xml 715669
+== leprocsdemadam00jalluoft
+titre Le procès de "Madame Bovary"; discours prononcé à l'ouverture de la Conférence des avocats, le 2 déc. 1905 | langue fre
+leprocsdemadam00jalluoft.pdf 5220397
+leprocsdemadam00jalluoft_djvu.xml 946728
+  ```
+
+- **bash** `{"command": "set -e\ncd work/r44/reel\n[ -s proces.pdf ] || timeout 120 curl -sSL -A \"Mozilla/5.0\" -o proces.pdf \"https://archive.org/download/leprocsdemadame00parigoog/leprocsdemadame00parigoog.pdf\"\n[ -s proces_djvu.xml ] || timeout 120 curl -sSL -A \"Mozilla/5.0\" -o proces_djvu.xml \"https:/ … [541 caractères tronqués]`
+
+  ```
+Pages:           52
+Page size:       612 x 792 pts (letter)
+-rw-r--r--. 1 stephane stephane  715669 03:02 proces_djvu.xml
+-rw-r--r--. 1 stephane stephane 1159994 03:02 proces.pdf
+  page   5 · WER  0.00% (brut  0.00%) · rappel  0.00% · conf   0.0 · 0 mots · colonnes  0.00% (inverse  0.00%)
+  page   8 · WER 27200.00% (brut 27200.00%) · rappel  0.00% · conf  93.1 · 0 mots · colonnes 27200.00% (inverse 27200.00%)
+  page  11 · WER 35100.00% (brut 35100.00%) · rappel  0.00% · conf  92.3 · 0 mots · colonnes 35100.00% (inverse 35100.00%)
+  page  14 · WER 26700.00% (brut 26700.00%) · rappel  0.00% · conf  92.8 · 0 mots · colonnes 26700.00% (inverse 26700.00%)
+  page  17 · WER 27000.00% (brut 27000.00%) · rappel  0.00% · conf  90.8 · 0 mots · colonnes 27000.00% (inverse 27000.00%)
+  page  20 · WER 26400.00% (brut 26400.00%) · rappel  0.00% · conf  91.5 · 0 mots · colonnes 26400.00% (inverse 26400.00%)
+  page  23 · WER 25600.00% (brut 25600.00%) · rappel  0.00% · conf  92.1 · 0 mots · colonnes 25600.00% (inverse 25600.00%)
+  page  26 · WER 41400.00% (brut 41400.00%) · rappel  0.00% · conf  92.2 · 0 mots · colonnes 41400.00% (inverse 41400.00%)
+  page  29 · WER 25100.00% (brut 25600.00%) · rap
+… [308 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_reel.py'); s=p.read_text()\ns=s.replace('''    ref = mesurer_ocr.jetons(reference(pdf, page))\n    m = mesurer_scans.manifeste_ocr(chemin, langue, exposants=True, colonnes=True)''','''    ref = mesurer_ocr.jetons(reference( … [1277 caractères tronqués]`
+
+  ```
+fallback DjVu + page sans référence
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_reel.py", line 192, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_reel.py", line 168, in main
+    print(f"  page {page:3d} · WER {ligne['wer']:6.2%} (brut {ligne['wer_brut']:6.2%}) "
+                                    ~~~~~^^^^^^^
+KeyError: 'wer'
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_reel.py'); s=p.read_text()\ns=s.replace('''        ligne = mesure(args.pdf, page, args.djvu_xml, args.langue)\n        print(f\"  page {page:3d}''','''        ligne = mesure(args.pdf, page, args.djvu_xml, args.langue)\n     … [584 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_reel.py", line 192, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_reel.py", line 168, in main
+    print(f"  page {page:3d} · WER {ligne['wer']:6.2%} (brut {ligne['wer_brut']:6.2%}) "
+                                    ~~~~~^^^^^^^
+KeyError: 'wer'
+  ```
+
+- **bash** `{"command": "sed -n '150,180p' tools/mesurer_reel.py", "description": "Read real measurement main loop", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+"wer_colonnes_inverse": round(sum(round(l["wer_colonnes_inverse"] * l["mots_reference"]) for l in lignes) / max(mots, 1), 4)}
+               if all("wer_colonnes" in l for l in lignes) else {})}
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--pdf", type=pathlib.Path, required=True)
+    ap.add_argument("--pages", default="30,50,70,90,110,130,150,170,190,210")
+    ap.add_argument("--langue", default="fra")
+    ap.add_argument("--djvu-xml", type=pathlib.Path,
+                    help="référence d'ordre des colonnes depuis les coordonnées DjVu")
+    ap.add_argument("--sortie", type=pathlib.Path, default=RACINE / "work/r44/reel.json")
+    args = ap.parse_args()
+    pages = [int(p) for p in args.pages.split(",") if p.strip()]
+    lignes = []
+    for page in pages:
+        ligne = mesure(args.pdf, page, args.djvu_xml, args.langue)
+        lignes.append(ligne)
+        print(f"  page {page:3d} · WER {ligne['wer']:6.2%} (brut {ligne['wer_brut']:6.2%}) "
+              f"· rappel {ligne['rappel']:6.2%} · conf {ligne['confiance']:5.1f} "
+              f"· {ligne['mots_reference']} mots"
+              + (f" · colonnes {ligne['wer_colonnes']:6.2%}
+… [749 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_reel.py'); s=p.read_text()\ns=s.replace('''        ligne = mesure(args.pdf, page, args.djvu_xml, args.langue)\n        lignes.append(ligne)\n        print(f\"  page {page:3d} · WER''','''        ligne = mesure(args.pdf, pag … [646 caractères tronqués]`
+
+  ```
+page   5 · référence vide (ni PDF ni DjVu) — ignorée
+  page   8 · référence vide (ni PDF ni DjVu) — ignorée
+  page  11 · référence vide (ni PDF ni DjVu) — ignorée
+  page  14 · référence vide (ni PDF ni DjVu) — ignorée
+  page  17 · référence vide (ni PDF ni DjVu) — ignorée
+  page  20 · référence vide (ni PDF ni DjVu) — ignorée
+  page  23 · référence vide (ni PDF ni DjVu) — ignorée
+  page  26 · référence vide (ni PDF ni DjVu) — ignorée
+  page  29 · référence vide (ni PDF ni DjVu) — ignorée
+  page  32 · référence vide (ni PDF ni DjVu) — ignorée
+
+  0 pages · WER 0.00% nettoyé · 0.00% brut · rappel multiensemble 0.00% · confiance 0.0 → work/r44/reel4.json
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport xml.etree.ElementTree as ET\nroot=ET.parse('work/r44/reel/proces_djvu.xml').getroot()\nobjs=[o for o in root.iter() if o.tag.split('}')[-1]=='OBJECT']\nwords=[w for o in objs for w in o.iter() if w.tag.split('}')[-1]=='WORD']\nprint('objets',len(objs),'mots',len … [756 caractères tronqués]`

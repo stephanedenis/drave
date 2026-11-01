@@ -102,6 +102,14 @@ def mesure(pdf: pathlib.Path, page: int, xml: pathlib.Path | None = None,
     if not chemin.exists():
         propre.save(chemin)
     ref = mesurer_ocr.jetons(reference(pdf, page))
+    source_ref = "couche PDF"
+    if not ref and xml is not None:
+        # un scan Google sans couche texte : la référence est la couche OCR du DjVu, dans
+        # l'ordre de ses mots — un autre moteur, dit comme tel.
+        ref = mesurer_ocr.jetons(reference_colonnes(xml, page))
+        source_ref = "couche DjVu (ordre des mots)"
+    if not ref:
+        return {"page": page, "erreur": "référence vide (ni PDF ni DjVu)", "mots_reference": 0}
     m = mesurer_scans.manifeste_ocr(chemin, langue, exposants=True, colonnes=True)
     hyp = mesurer_ocr.jetons(mesurer_ocr.texte_du_manifeste(m))
     # le RAPPEL MULTIENSEMBLE ne dépend pas de l'ordre : sur une page à deux colonnes, la
@@ -119,7 +127,7 @@ def mesure(pdf: pathlib.Path, page: int, xml: pathlib.Path | None = None,
              "rappel": round(commun / max(len(ref), 1), 4),
              "precision": round(commun / max(len(hyp), 1), 4),
              "confiance": mesurer_ocr.confiance_moyenne(m),
-             "trace": trace}
+             "reference": source_ref, "trace": trace}
     if xml is not None:
         # l'ordre des colonnes, et son contrôle : l'ordre INVERSE doit échouer
         ordre = mesurer_ocr.jetons(reference_colonnes(xml, page))
@@ -156,6 +164,9 @@ def main() -> int:
     lignes = []
     for page in pages:
         ligne = mesure(args.pdf, page, args.djvu_xml, args.langue)
+        if "erreur" in ligne:
+            print(f"  page {page:3d} · {ligne['erreur']} — ignorée", flush=True)
+            continue
         lignes.append(ligne)
         print(f"  page {page:3d} · WER {ligne['wer']:6.2%} (brut {ligne['wer_brut']:6.2%}) "
               f"· rappel {ligne['rappel']:6.2%} · conf {ligne['confiance']:5.1f} "
