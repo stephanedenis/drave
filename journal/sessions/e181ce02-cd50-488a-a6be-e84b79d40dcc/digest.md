@@ -8305,3 +8305,801 @@ Drave n'est pas à L6 ; R0 a couvert L2, L3 et une partie de L6. Le reste est le
 
 **R n'est pas un modèle de plus : c'est le test qui dit si les modèles savent lire.** Tant que la réponse n'a pas sa provenance, que le budget n'est pas tenu et que la parité natif/scan n'est pas mesurée, le programme n'a pas fini — et la prochaine étape n'est pas R0, c'est **R1.1/R1.2**, ou un bloc de surface si le contexte natif bloque.
 
+
+## Tour 10
+
+### 👤 Utilisateur
+
+donc, on n'a pas encore de bloc d'étiquetage de structure linguistique?
+
+### 🤖 Assistant
+
+⏵ Je vérifie ce qui existe réellement comme bloc d'étiquetage linguistique, du prototype au bus
+
+- **glob** `{"pattern": "docs/implantation/*bloc*"}`
+
+  ```
+docs/implantation/bloc-tableaux.md
+docs/implantation/bloc-code.md
+docs/implantation/bloc-maths.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/structures/*.py; echo '=== bloc API ==='; grep -R \"class Bloc\\|class Bloc\\|def bloc\\|Bloc(\" -n tools/*.py tools/**/*.py 2>/dev/null | head -20; echo '=== coloration ==='; grep -R \"coloration\\|étiquet\\|POS\\|morpholog … [139 caractères tronqués]`
+
+  ```
+tools/structures/construire_donnees.py
+tools/structures/generateur.py
+tools/structures/llm.py
+tools/structures/serveur.py
+=== bloc API ===
+tools/corpus_eurlex.py:54:def blocs(div) -> list[str]:
+tools/decoupe_langues.py:28:def bloc(texte):
+tools/essai_blocs.py:163:class Bloc(nn.Module):
+tools/essai_blocs.py:220:            blocs.append(Bloc(d, tetes, ffn, decharge, seuil))
+tools/essai_decharge.py:206:class BlocDecharge(nn.Module):
+tools/essai_decharge.py:260:class BlocDense(nn.Module):
+tools/graphe_document_ocr.py:330:def blocs_de_page(lignes: list[dict], numero: int = 1,
+tools/graphe_document_pdf.py:113:def blocs_de_page(page: dict, numero: int) -> list[dict]:
+tools/kv_cache_int8.py:67:class CacheInt8Bloc(CacheInt8):
+tools/kv_cache_int8.py:96:                         past_key_values=CacheInt8Bloc(), pad_token_id=0)
+tools/native_model.py:70:class Block(nn.Module):
+tools/pas_de_pensee_recurrent.py:33:class Bloc(nn.Module):
+tools/pas_de_pensee_recurrent.py:68:        modele = Bloc(d)
+tools/verifier_schemas.py:37:def blocs_code(texte: str):
+=== coloration ===
+docs/implantation/numa-segregation.md:18:> rapports cités. Ce qui est déduit est étiqueté **[déduit]**.
+docs/implantation/bloc-t
+… [5001 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/schemas/ | grep -E \"lang|coloration|heuristique|jeux|document\"; echo '=== R0.1 API ==='; grep -n \"class \\|def regions\\|def manifeste\\|type\\|region\" tools/graphe_document.py | head -20; echo '=== générateur ==='; grep  … [188 caractères tronqués]`
+
+  ```
+heuristique-cascade.svg
+heuristique-coloration.svg
+heuristique-cout.svg
+heuristique-multilingue.svg
+heuristique-niveaux.svg
+jeux-symboliques.svg
+modules-cerveau-langage.svg
+=== R0.1 API ===
+15:  3. **la structure** — les types de région ne sont pas triviaux : un texte plat ne doit
+44:# Le vocabulaire est FERMÉ : un type inventé casse le contrôleur qui lira le graphe.
+129:    def ajoute(type_: str, contenu: str, i: int, **prov) -> None:
+137:        blocs.append({"type": type_, "texte": contenu, "prov": prov})
+287:def manifeste_de_blocs(blocs: list[dict], source: dict, extraction: dict,
+294:        blocs = [{"type": "paragraphe", "texte": " ".join(b["texte"] for b in blocs),
+299:    regions, position, morceaux = [], 0, []
+302:            regions.append({
+303:                "id": f"b{indice:05d}", "type": "blanc", "texte": "\n",
+305:                "ordre": len(regions) + 1, "prov": {"separateur": True},
+311:        regions.append({
+312:            "id": f"r{indice:05d}", "type": bloc["type"], "texte": texte,
+314:            "ordre": len(regions) + 1, "prov": bloc.get("prov", {}),
+320:    types = Counter(r["type"] for r in regions)
+326:        "regions": regions,
+327:        "stats":
+… [1552 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/ | grep -E \"bus|bloc|drvm|flux\" | head -20; echo '=== format ==='; sed -n '1,40p' docs/implantation/format-flux.md 2>/dev/null; echo '=== native block ==='; sed -n '60,100p' tools/native_model.py", "description": "Lire le  … [31 caractères tronqués]`
+
+  ```
+analyse_flux.py
+approximabilite_bloc.py
+bloc_code.py
+bloc_maths.py
+bloc_tableaux.py
+diff_flux.py
+drvm.py
+drvm_trace.py
+essai_blocs.py
+flux_codec.py
+gguf_drvm.py
+granularite_flux.py
+iterer_bloc.py
+porte-bloc-code.sh
+porte-bloc-maths.sh
+porte-bloc-tableaux.sh
+porte-bus.sh
+porte-bus-socket.sh
+porte-flux.sh
+porte-miroir-blocs.sh
+=== format ===
+# Le format de flux (DRVF) — spécification
+
+> **Ce que ce document est.** La **spécification** du format de flux : une trace, un rejeu, un
+> transport et une analyse dans les mêmes octets. **Chargement :** T1 — lire ce résumé, puis la
+> section utile ; le protocole réseau est détaillé plus bas.
+
+Ce format sert **quatre choses à la fois**, et c'est délibéré :
+
+1. la **trace** d'exécution (`--trace-flux`) : ce qui s'est passé, couche par
+   couche ;
+2. le **rejeu** (`--flux-forcer`) : on réinjecte les activations enregistrées et
+   le calcul repart de là ;
+3. le **transport** (phase 3, `--flux-serveur` / `--ppl-reparti`) : ce qu'un nœud
+   distant reçoit pour continuer le calcul ;
+4. l'**analyse** : les mêmes octets, relus par `tools/profil_flux.py`,
+   `tools/analyse_flux.py` et `tools/diff_flux.py`, disent quels neurones
+   travaillent — c'est la
+… [2760 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class \\|def \\|Bloc\\|entree\\|sortie\\|cout\\|trace\" tools/bloc_tableaux.py | head -30; echo '=== doc bloc ==='; sed -n '1,55p' docs/implantation/bloc-tableaux.md", "description": "Lire le contrat d'un bloc existant"}`
+
+  ```
+52:class Refus(Exception):
+55:    def __init__(self, raison: str, ligne: int | None = None, detail: str = "") -> None:
+63:class SansEntete(Exception):
+67:class ColonneInconnue(Exception):
+71:class NonNumerique(Exception):
+85:def _offsets(texte: str) -> list[int]:
+94:def _nombre(texte: str) -> float | int | None:
+118:def type_de(texte: str) -> str:
+128:class Cellule:
+134:    def __init__(self, texte: str, brut: str = "", ligne: int = 0, colonne: int = 0,
+149:    def valeur(self) -> float | int | None:
+152:    def __repr__(self) -> str:  # pragma: no cover - confort de débogage
+156:class Grille:
+159:    def __init__(self, source: str, format_: str, entetes: list[str] | None,
+178:    def n_lignes(self) -> int:
+182:    def n_colonnes(self) -> int:
+186:    def n_cellules(self) -> int:
+189:    def colonne(self, nom: str) -> int:
+197:    def resolue(self, ligne: int, colonne: int) -> Cellule:
+204:    def texte_plat(self) -> str:
+212:def _cellules_ligne(ligne: str, prefixe: int) -> list[tuple[str, int, int]]:
+239:def _est_separateur(ligne: str) -> bool:
+245:def _ligne_tableau(ligne: str) -> bool:
+249:def _grille_markdown(lignes: list[str], offsets: list[int], debut: int,
+259:    def cellul
+… [3774 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/bloc_coloration.py tools/bloc_langue.py tools/porte-coloration.sh docs/implantation/bloc-coloration.md docs/implantation/bloc-langue.md 2>&1; echo '---'; ls tools/bloc_*.py", "description": "Confirmer l'absence des fichiers  … [22 caractères tronqués]`
+
+  ```
+ls: cannot access 'tools/bloc_coloration.py': No such file or directory
+ls: cannot access 'tools/bloc_langue.py': No such file or directory
+ls: cannot access 'tools/porte-coloration.sh': No such file or directory
+ls: cannot access 'docs/implantation/bloc-coloration.md': No such file or directory
+ls: cannot access 'docs/implantation/bloc-langue.md': No such file or directory
+---
+tools/bloc_code.py
+tools/bloc_maths.py
+tools/bloc_tableaux.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérifié : oui pour les régions et les candidats, non pour un bloc linguistique
+
+**Non — pas encore.** Il y a trois briques qui en approchent, mais aucune n'est le **bloc d'étiquetage de structure linguistique** au sens Drave : un bloc typé, multi-niveaux, multilingue, avec un contrat, une trace, un coût et une porte.
+
+## Ce qui existe
+
+| brique | ce qu'elle fait | ce qu'elle n'est pas |
+|---|---|---|
+| **R0.1 — `graphe_document.py`** | découpe un document en **régions** (titre, section, paragraphe, tableau, code, maths, figure), avec offsets et provenance | ce n'est pas de la linguistique : aucun mot, aucune phrase, aucun rôle ; le vocabulaire des régions est fermé |
+| **R4.1–R4.4** | lisent la **structure** : tableaux (996 cellules), code (AST), maths (sympy), scans (OCR) | ce n'est pas de la langue : ce sont des blocs structurels, pas des étiquettes morphologiques ou syntaxiques |
+| **S — `tools/structures/generateur.py`** | segmente en **GN/GV/GP/REL/SUB**, devine des rôles par la préposition, produit des **candidats d'attachement** ; 7 phrases, 11 tests | ce n'est pas un bloc : c'est un **générateur de candidats** pour validation humaine, français, sans POS par mot, sans morphologie, sans phrase/document, sans contrat de flux, sans porte |
+| **La RSN** | la **cible** : une structure multi-niveaux (graphémique, morphologique, syntaxique, sémantique, discursif) | ce n'est pas l'étiqueteur : aucun code ne remplit aujourd'hui les niveaux de surface ; B travaille le sens (15 champs, 502 classes), N lit des octets |
+| **`pre-traitement-linguistique.md`** | l'**analyse** de ce que le CPU peut étiqueter, la cascade et le protocole | ce n'est pas une implémentation : pas de `bloc-langue`, pas de `bloc-coloration`, pas de `porte-coloration` |
+
+Le constat est net : `docs/implantation/` n'a que `bloc-tableaux.md`, `bloc-code.md` et `bloc-maths.md` ; `tools/` n'a que `bloc_tableaux.py`, `bloc_code.py`, `bloc_maths.py`. Il n'y a **ni `bloc_coloration.py`, ni `bloc_langue.py`, ni `porte-coloration.sh`**.
+
+## Pourquoi la coloration n'est pas encore le bloc
+
+Le générateur S est le **bon germe**, mais il lui manque exactement ce qui fait un bloc :
+
+- **un contrat de flux** : entrée (texte/octets + langue), sortie (liste valuée d'annotations avec `span`, `niveau`, `type`, `rôle`, `source`, `confiance`, `candidats`), coût, trace, rejeu, refus ;
+- **les niveaux** : aujourd'hui il fait le **syntagme** (GN/GV/GP/REL/SUB) ; il ne fait ni `lang` (script/langue), ni `tok` (frontières de mots), ni `pos` (classes ouvertes/fermées par mot), ni `sent` (phrase), ni `doc` (régions) ;
+- **le multilingue** : ses ensembles `DET`, `PREP`, `RELATIFS` sont **français** ; il n'y a pas de paquets universel/famille/langue ;
+- **la confiance et la porte** : il n'a pas de `confiance` calibrée, pas de `porte-coloration`, pas de gold à l'échelle ; les 11 tests sont des tests unitaires, pas une mesure ;
+- **l'annotation RSN** : les étiquettes ne sont pas encore écrites dans l'annotation de la RSN (source, langue, script, confiance) ; le corps doit rester neutre ;
+- **le repli réseau** : pas de gate qui envoie le résidu au modèle ; la coloration est humaine ou seule.
+
+## Ce que serait le bloc
+
+Un `bloc-langue` d'abord, puis un `bloc-coloration` :
+
+| bloc | niveaux | rôle | dépendance |
+|---|---|---|---|
+| **`bloc-langue`** | `lang`, `tok`, `sent` | Unicode/script/langue, frontières de mots et de phrases, normalisation | CPU seul, 71 langues, aucun modèle |
+| **`bloc-coloration`** | `pos`, `seg` | classes fermées, POS, segments GN/GV/GP/REL/SUB, rôles, attachements candidats | le générateur S + des paquets de langue |
+| **`bloc-document`** | `doc` | régions, titres, tableaux, provenance | R0.1 (déjà là) |
+
+Le contrat serait celui des blocs R4 : **entrée → sortie → coût → trace → rejeu**, avec un **refus nommé** (langue inconnue, confiance basse, structure non couverte) et une **porte** qui échoue sur une heuristique corrompue. La sortie serait une **annotation** de la RSN, jamais le corps : `source: heuristique|neuronal|humain`, `confiance`, `langue`, `script`, `candidats`.
+
+Le plus petit pas utile n'est pas la coloration complète : c'est le **`bloc-langue`** — Unicode, script, langue, frontières de phrase et de mot — parce qu'il est **invariant**, **CPU seul**, **multi-langue** et qu'il manque à tout le reste. La coloration vient après, avec le générateur S comme germe et les 7 phrases comme premier gold.
+
+## Ce que je peux faire ici
+
+Deux options, sans toucher à la TUI S qui travaille sur `tools/structures` :
+
+1. **écrire le contrat** `docs/implantation/bloc-coloration.md` (niveaux, flux, coût, trace, refus, porte, paquets de langue, protocole) — la spec qui manque, prête à être implémentée par la session S ou ici ;
+2. **implémenter le `bloc-langue`** (Unicode/script/langue/frontières), CPU, 71 langues, avec une `porte-coloration` minimale sur l'UDHR — le socle dont la coloration a besoin.
+
+La réponse courte : **on a des régions, des blocs structurels et un générateur de candidats ; on n'a pas le bloc linguistique.** Le contrat et le socle `lang` sont les deux pièces à poser avant de parler d'étiquetage multi-niveaux.
+
+
+## Tour 11
+
+### 👤 Utilisateur
+
+fait les deux. Le bloc langue doit couvrir l'étiquetage tous les niveaux linguistiques jusqu'à la pragmatique. on doit avoir une version heuristique et une neuronale. Le contrat garantissant la possibilité de substituer ou faire fonctionner en parallèle (heuristique ultra rapide permettant l'activation de la couche sémantique à une fraction du coût.
+
+### 🤖 Assistant
+
+⏵ Je cadre le contrat et le bloc : d'abord les données multilingues et le modèle neuronal disponibles
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls data | head -25; echo '=== udhr ==='; find data -maxdepth 3 -iname '*udhr*' 2>/dev/null | head -10; echo '=== corpus.py ==='; grep -n \"udhr\\|UDHR\\|chemin\\|data/\" tools/semantique/corpus.py 2>/dev/null | head -20", "descriptio … [41 caractères tronqués]`
+
+  ```
+adaptateurs
+alignement
+composition-etats.npz
+composition-verne-14b-etats.npz
+composition-verne-7b-etats.npz
+composition-verne-etats.npz
+composition-verne-large-etats.npz
+composition-verne-plan-etats.npz
+consignes_train.jsonl
+consignes_val.jsonl
+corpus_en.txt
+corpus_en_val.txt
+corpus_fr_litterature.txt
+corpus_fr_train.txt
+corpus_fr.txt
+corpus_fr_val.txt
+corpus_litt_propre
+corpus_mixte_dev.txt
+corpus_mixte_litt2.txt
+corpus_mixte_litt.txt
+corpus_mixte_propre.txt
+corpus_mixte.txt
+corpus_multi_train.txt
+corpus_multi.txt
+corpus_multi_val.txt
+=== udhr ===
+data/udhr
+data/udhr/udhr_train.txt
+data/udhr/udhr_val.txt
+data/udhr/udhr_fra_train.txt
+data/udhr/udhr_fra_val.txt
+data/udhr/udhr_10_train.txt
+data/udhr/udhr_10_val.txt
+data/udhr/udhr_50_train.txt
+data/udhr/udhr_50_val.txt
+data/udhr/udhr_1_train.txt
+=== corpus.py ===
+2:"""corpus.py — les articles UDHR parallèles, pour le protocole sémantique.
+19:ARTICLES = RACINE / "data" / "udhr" / "articles.jsonl"
+26:            chemin: pathlib.Path | None = None) -> dict[int, dict[str, str]]:
+31:    for ligne in (chemin or ARTICLES).read_text(encoding="utf-8").splitlines():
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && which llama-cli 2>/dev/null; ls models/ 2>/dev/null | head -10; ls tools/ | grep -E \"llama|llm|mistral|qwen\" | head -20; echo '=== llm_externe ==='; sed -n '1,50p' tools/llm_externe.py 2>/dev/null", "description": "Trouver le modèl … [34 caractères tronqués]`
+
+  ```
+/home/stephane/.local/bin/llama-cli
+Qwen2.5-0.5B-Q4_0.gguf
+Qwen2.5-0.5B-Q8_0.gguf
+vision
+llm
+porte_mistral.py
+porte-mistral.sh
+tokenize_llama
+tokenize_llama.cpp
+=== llm_externe ===
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/schemas/ | wc -l; ls docs/schemas/ | grep -E \"bloc|lingu\" ; echo '=== graphe document API ==='; grep -n \"^def manifeste\\|^def regions\\|^def analyser\\|class \" tools/graphe_document.py | head -15; echo '=== generateur im … [115 caractères tronqués]`
+
+  ```
+52
+heuristique-multilingue.svg
+=== graphe document API ===
+287:def manifeste_de_blocs(blocs: list[dict], source: dict, extraction: dict,
+331:def manifeste(chemin: pathlib.Path, langue: str = "und", plat: bool = False) -> dict:
+=== generateur import ===
+#!/usr/bin/env python3
+"""generateur.py — une phrase brute → des structures candidates (v0 heuristique).
+
+Ce n'est pas un analyseur syntaxique : c'est un **générateur de candidats** à faire valider par
+un humain. Il segmente (GN, GV, GP, REL, SUB), devine des rôles par la préposition, puis produit
+plusieurs candidats en variant l'**attachement** de chaque segment ambigu (GN le plus proche ou
+GV le plus proche).
+
+    python3 generateur.py "Le chat de la voisine qui dort sur le toit se réveille."
+    python3 generateur.py --json "..."     # la structure complète
+"""
+from __future__ import annotations
+
+import json
+import re
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,pathlib,collections\np=pathlib.Path('data/udhr/articles.jsonl')\nprint(p.exists(), p.stat().st_size if p.exists() else 0)\nlangs=collections.Counter(); n=0\nfor line in p.read_text(encoding='utf-8').spli … [430 caractères tronqués]`
+
+  ```
+True 7661342
+lines 13996 langs 7
+[('fichier', 13996), ('iso3', 13996), ('nom', 13996), ('script', 13996), ('art', 13996), ('titre', 13996), ('texte', 13996)]
+['fichier', 'iso3', 'nom', 'script', 'art', 'titre', 'texte']
+=== llama help ===
+----- common params -----
+
+-h,    --help, --usage                  print usage and exit
+--version                               show version and build info
+-cl,   --cache-list                     show list of models in cache
+--completion-bash                       print source-able bash completion script for llama.cpp
+-t,    --threads N                      number of CPU threads to use during generation (default: -1)
+                                        (env: LLAMA_ARG_THREADS)
+-tb,   --threads-batch N                number of threads to use during batch and prompt processing (default:
+                                        same as --threads)
+-C,    --cpu-mask M                     CPU affinity mask: arbitrarily long hex. Complements cpu-range
+                                        (default: "")
+-Cr,   --cpu-range lo-hi                range of CPUs for affinity. Complements --cpu-mask
+--cpu-strict <0|1>                      use strict CPU pla
+… [1033 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,pathlib,collections\np=pathlib.Path('data/udhr/articles.jsonl')\nc=collections.Counter(); s=collections.Counter(); ids=set()\nfor line in p.read_text(encoding='utf-8').splitlines():\n    if not line.stri … [267 caractères tronqués]`
+
+  ```
+iso3 400 [('roh', 217), ('oci', 216), ('und', 155), ('hus', 93), ('ron', 93), ('pov', 62), ('kmb', 62), ('umb', 62), ('acu', 62), ('twi', 62), ('azj', 62), ('bos', 62), ('chr', 62), ('cjk', 62), ('cmn', 62), ('deu', 62), ('ell', 62), ('fuf', 62), ('hat', 62), ('hau', 62), ('jav', 62), ('kng', 62), ('lat', 62), ('lin', 62), ('zlm', 62), ('nya', 62), ('por', 62), ('rmn', 62), ('san', 62), ('srp', 62), ('tam', 62), ('tha', 62), ('tso', 62), ('tuk', 62), ('uig', 62), ('urd', 62), ('uzn', 62), ('vie', 62), ('khk', 32), ('tgl', 32), ('tzm', 32), ('cri', 31), ('tdt', 31), ('duu', 31), ('abk', 31), ('ace', 31), ('ada', 31), ('ady', 31), ('afr', 31), ('agr', 31), ('aii', 31), ('ajg', 31), ('fat', 31), ('als', 31), ('alt', 31), ('amc', 31), ('ame', 31), ('ami', 31), ('amr', 31), ('arb', 31), ('arl', 31), ('arn', 31), ('ast', 31), ('auc', 31), ('ayr', 31), ('bam', 31), ('ban', 31), ('bax', 31), ('bba', 31), ('bci', 31), ('bcl', 31), ('bel', 31), ('bem', 31), ('ben', 31), ('bfa', 31), ('bho', 31), ('bin', 31), ('bis', 31), ('blt', 31), ('hnj', 31), ('boa', 31), ('bod', 31), ('bre', 31), ('bum', 31), ('buc', 31), ('bug', 31), ('bul', 31), ('cab', 31), ('cak', 31), ('cat', 31), ('cbi', 31), ('cb
+… [5509 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/tests | head -8; ls tools/tests | wc -l; python3 - <<'PY'\nimport json,collections\np='data/udhr/articles.jsonl'\narts=collections.Counter(); bylang=collections.Counter()\nfor line in open(p,encoding='utf-8'):\n    d=json.lo … [266 caractères tronqués]`
+
+  ```
+code
+documents
+maths
+tableaux
+4
+arts 0 30 [0, 1, 2, 3, 4] [26, 27, 28, 29, 30]
+langs>=5 399 total 400
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente le bloc : contrat unique, heuristique CPU, adaptateur neuronal, parallèle/cascade et activation sémantique
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"bloc_linguistique.py — le bloc d'étiquetage linguistique, du graphème à la pragmatique.\n\nUn seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** :\n\n  - `Heuristique` : CPU, déterministe, ultra-rapide ; elle étiquette la surface et … [53471 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''def _score_profil(texte: str, profil: dict[str, int]) -> float:\n    tri = collections.Counter(_trigrammes(texte))\n    t … [2017 caractères tronqués]`
+
+  ```
+ok
+COMPILE=0
+langue=fr script=Latn source=heuristique refus=-
+  document     paragraphe     'Le chat de la voisine qui dort sur le to' [0:55] conf=0.70 src=heuristique
+  graphème     lettres        'Le' [0:2] conf=0.99 src=heuristique
+  graphème     espace         ' ' [2:3] conf=0.99 src=heuristique
+  graphème     lettres        'chat' [3:7] conf=0.99 src=heuristique
+  graphème     espace         ' ' [7:8] conf=0.99 src=heuristique
+  morphème     préfixe        'ré' [46:48] conf=0.32 src=heuristique
+  mot          mot            'Le' [0:2] conf=0.98 src=heuristique
+  mot          mot            'chat' [3:7] conf=0.98 src=heuristique
+  mot          mot            'de' [8:10] conf=0.98 src=heuristique
+  mot          mot            'la' [11:13] conf=0.98 src=heuristique
+  phrase       type           'déclarative' [0:55] conf=0.85 src=heuristique
+  pos          DET            'Le' [0:2] conf=0.92 src=heuristique
+  pos          NOUN           'chat' [3:7] conf=0.30 src=heuristique
+  pos          DET            'de' [8:10] conf=0.92 src=heuristique
+  pos          DET            'la' [11:13] conf=0.92 src=heuristique
+  pragmatique  acte           'assertion' [0:55] conf=0.45 src=heuristiq
+… [292 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        try:\n            import generateur  # le générateur S, importé en lecture seule\n            return generateur.a … [933 caractères tronqués]`
+
+  ```
+ok
+langue=fr script=Latn source=heuristique refus=-
+  pos          DET            'Le' [0:2] conf=0.92 src=heuristique
+  pos          NOUN           'chat' [3:7] conf=0.30 src=heuristique
+  pos          DET            'de' [8:10] conf=0.92 src=heuristique
+  pos          DET            'la' [11:13] conf=0.92 src=heuristique
+  syntagme     GN             'Le chat' [0:7] conf=0.40 src=heuristique
+  syntagme     GP             'de la voisine' [8:21] conf=0.40 src=heuristique
+  syntagme     REL            'qui dort sur le toit' [22:42] conf=0.40 src=heuristique
+  syntagme     GV             'se réveille' [43:54] conf=0.40 src=heuristique
+unités sémantiques : 5 (49.1% du texte)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"DET\": set' tools/bloc_linguistique.py", "description": "Voir la ligne DET restante"}`
+
+  ```
+293:        "DET": set("le la les l un une des du de d ce cet cette ces mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs quel quelle quels quelles".split()),
+300:        "DET": set("the a an this that these those my your his her its our their".split()),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('\"DET\": set(\"le la les l un une des du de d ce cet cette ces mon ma mes ton ta tes son sa ses notre nos votre vos leur le … [439 caractères tronqués]`
+
+  ```
+ok
+  pos          DET            'Le' [0:2] conf=0.92 src=heuristique
+  pos          NOUN           'chat' [3:7] conf=0.30 src=heuristique
+  pos          PREP           'de' [8:10] conf=0.92 src=heuristique
+  pos          DET            'la' [11:13] conf=0.92 src=heuristique
+  syntagme     GN             'Le chat' [0:7] conf=0.40 src=heuristique
+  syntagme     GP             'de la voisine' [8:21] conf=0.40 src=heuristique
+  syntagme     REL            'qui dort sur le toit' [22:42] conf=0.40 src=heuristique
+  syntagme     GV             'se réveille' [43:54] conf=0.40 src=heuristique
+unités sémantiques : 5 (49.1% du texte)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/bloc_linguistique.py --mode parallele --texte \"Le chat de la voisine qui dort sur le toit se réveille.\" 2>&1 | tail -5; echo '=== cascade ==='; python3 tools/bloc_linguistique.py --mode cascade --texte \"Le chat de la … [294 caractères tronqués]`
+
+  ```
+syntagme     GN             'Le chat' [0:7] conf=0.78 src=neuronal
+  syntagme     GP             'de la voisine' [8:21] conf=0.40 src=heuristique
+  syntagme     GP             'de la voisine qui dort sur le toit se ré' [8:54] conf=0.78 src=neuronal
+  syntagme     REL            'qui dort sur le toit' [22:42] conf=0.40 src=heuristique
+unités sémantiques : 5 (49.1% du texte)
+=== cascade ===
+  syntagme     GN             'Le chat' [0:7] conf=0.78 src=neuronal
+  syntagme     GP             'de la voisine' [8:21] conf=0.40 src=heuristique
+  syntagme     GP             'de la voisine qui dort sur le toit se ré' [8:54] conf=0.78 src=neuronal
+  syntagme     REL            'qui dort sur le toit' [22:42] conf=0.40 src=heuristique
+unités sémantiques : 5 (49.1% du texte)
+=== autotest ===
+    3
+   ]
+  }
+ },
+ "controle_permute": {
+  "accuracy": 0.0022,
+  "attendu": "proche du hasard"
+ },
+ "niveaux_vus": [
+  "discours",
+  "document",
+  "graphème",
+  "morphème",
+  "mot",
+  "phrase",
+  "pos",
+  "pragmatique",
+  "syntagme"
+ ],
+ "niveaux_manquants": [],
+ "controles": {
+  "vide_refus": "vide",
+  "ponctuation_refus": "vide",
+  "langue_inconnue": "bin",
+  "indice_faux": "sco",
+  "rejeu_identique": true
+
+… [276 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/bloc.json'))\nprint(json.dumps(d['langue'],indent=1)[:1200])\nprint('=== samples ===')\nfor s in d['echantillons']:\n    print(s['langue'], 'h',s['heuristique']['langue'],'n',s['n … [276 caractères tronqués]`
+
+  ```
+{
+ "langues_profil": 398,
+ "articles_test": 447,
+ "accuracy": 0.9687,
+ "accuracy_script": 1.0,
+ "duree_s": 4.641,
+ "langues": {
+  "hus": [
+   3,
+   3
+  ],
+  "oci": [
+   7,
+   6
+  ],
+  "roh": [
+   7,
+   7
+  ],
+  "ron": [
+   3,
+   3
+  ]
+ }
+}
+=== samples ===
+fr h fra n fr p fr c fr frac 0.513 sources ['heuristique', 'neuronal'] schema True
+en h sco n en p en c en frac 0.7373 sources ['heuristique', 'neuronal'] schema True
+de h deu n de p de c de frac 0.7561 sources ['heuristique', 'neuronal'] schema True
+es h spa n es p es c es frac 0.6111 sources ['heuristique', 'neuronal'] schema True
+it h ita n it p it c it frac 0.7059 sources ['heuristique', 'neuronal'] schema True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,\n                 seuil_ouvert:  … [3054 caractères tronqués]`
+
+  ```
+ok
+COMPILE=0
+langue=fr script=Latn source=parallele refus=-
+  syntagme     GN             'Le chat' [0:7] conf=0.78 src=neuronal
+  syntagme     GP             'de la voisine qui dort sur le toit se ré' [8:54] conf=0.78 src=neuronal
+unités sémantiques : 5 (49.1% du texte)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''class MockNeuronal:\n    \"\"\"Le neuronal **de contrat** : même sortie, source `neuronal`, déterministe, sans GPU.\n\n   … [2772 caractères tronqués]`
+
+  ```
+ok
+COMPILE=0
+langue=fr script=Latn source=parallele refus=-
+  pos          DET            'Le' [0:2] conf=0.92 src=heuristique
+  pos          NOUN           'chat' [3:7] conf=0.82 src=neuronal
+  pos          PREP           'de' [8:10] conf=0.92 src=heuristique
+  pos          DET            'la' [11:13] conf=0.92 src=heuristique
+  syntagme     GN             'Le chat' [0:7] conf=0.78 src=neuronal
+  syntagme     GP             'de la voisine' [8:21] conf=0.40 src=heuristique
+  syntagme     REL            'qui dort sur le toit' [22:42] conf=0.40 src=heuristique
+  syntagme     GV             'se réveille' [43:54] conf=0.40 src=heuristique
+unités sémantiques : 5 (49.1% du texte)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        cle = (e.niveau, e.debut, e.fin, e.type)''',\n'''        cle = (e.niveau, e.debut, e.fin, e.type, e.source)''')\n … [607 caractères tronqués]`
+
+  ```
+ok
+langue=fr script=Latn source=parallele refus=-
+  pos          DET            'Le' [0:2] conf=0.92 src=heuristique
+  pos          NOUN           'chat' [3:7] conf=0.82 src=neuronal
+  pos          PREP           'de' [8:10] conf=0.92 src=heuristique
+  pos          DET            'la' [11:13] conf=0.92 src=heuristique
+  syntagme     GN             'Le chat' [0:7] conf=0.40 src=heuristique
+  syntagme     GP             'de la voisine' [8:21] conf=0.40 src=heuristique
+  syntagme     REL            'qui dort sur le toit' [22:42] conf=0.40 src=heuristique
+  syntagme     GV             'se réveille' [43:54] conf=0.40 src=heuristique
+unités sémantiques : 5 (49.1% du texte)
+=== autotest ===
+  "pragmatique",
+  "syntagme"
+ ],
+ "niveaux_manquants": [],
+ "controles": {
+  "vide_refus": "vide",
+  "ponctuation_refus": "vide",
+  "langue_inconnue": "und",
+  "indice_faux": "und",
+  "rejeu_identique": true
+ },
+ "verdicts": {
+  "langue": true,
+  "script": true,
+  "permute_faible": true,
+  "niveaux": true,
+  "substitution": true,
+  "parallele": true,
+  "activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+[stderr]
+
+real	0m8,623s
+user	0m8,579s
+sys	0m0,046s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 - <<'PY' 2>&1 | tail -25\nimport sys, json\nsys.path.insert(0,'tools')\nfrom bloc_linguistique import NeuronalLLM, RefusNeuronal\nn=NeuronalLLM('models/Qwen2.5-0.5B-Q4_0.gguf', max_jetons=160, timeout=110)\ntry:\n … [271 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-308]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-308", "timeout_ms": 120000, "wait": true}`
+
+  ```
+REFUS Command '['llama-cli', '-m', 'models/Qwen2.5-0.5B-Q4_0.gguf', '-p', 'Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {"langue":"fr","script":"Latn","etiquettes":[{"niveau":"phrase|pragmatique|syntagme|pos","type":"...","valeur":"...","debut":0,"fin":0,"confiance":0.8}]}. Niveaux attendus : phrase.type, pragmatique.acte, syntagme (GN/GV/GP/REL/SUB). Langue indiquée : fr. Contexte : aucun.\nTexte : Le chat dort. Il ne mange pas.', '-n', '160', '--temp', '0', '--no-display-prompt']' timed out after 110 seconds
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && llama-cli --help 2>&1 | grep -iE \"cnv|single|conversation|prompt\" | head -15; echo '=== test direct ==='; time timeout 60 llama-cli -m models/Qwen2.5-0.5B-Q4_0.gguf -p \"Réponds par un JSON {\\\"langue\\\":\\\"fr\\\"}. Texte: Le ch … [176 caractères tronqués]`
+
+  ```
+-tb,   --threads-batch N                number of threads to use during batch and prompt processing (default:
+-c,    --ctx-size N                     size of the prompt context (default: 0, 0 = loaded from model)
+--keep N                                number of tokens to keep from the initial prompt (default: 0, -1 =
+-p,    --prompt PROMPT                  prompt to start generation with; for system message, use -sys
+-f,    --file FNAME                     a file containing the prompt (default: none)
+-bf,   --binary-file FNAME              binary file containing the prompt (default: none)
+                                        single value is broadcast across all devices, default: 1024
+                                        number of threads to use during batch and prompt processing (default:
+--verbose-prompt                        print a verbose prompt before generation (default: false)
+--display-prompt, --no-display-prompt   whether to print prompt at generation (default: true)
+-co,   --color [on|off|auto]            Colorize output to distinguish prompt and user input from generations
+-sys,  --system-prompt PROMPT           system prompt to use with model (if applicable, dep
+… [484 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-309", "timeout_ms": 90000, "wait": true}`
+
+  ```
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> [0m
+EXIT=124
+[stderr]
+
+real	1m0,416s
+user	0m46,403s
+sys	1m3,478s
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-309 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && llama-cli --help 2>&1 | grep -iE "cnv|single|conversation|prompt" | head -15; echo '=== test direct ==='; time timeout 60 llama-cli -m models/Qwen2.5-0.5B-Q4_0.gguf -p "Réponds par un JSON {\"langue\":\"fr\"}. Texte: Le chat dort." -n 40 --temp 0 -no-cnv --no-display-prompt </dev/null 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 35 llama-cli -m models/Qwen2.5-0.5B-Q4_0.gguf -p \"JSON seulement: {\\\"langue\\\":\\\"fr\\\"}\" -n 24 --temp 0 -ngl 0 -t 4 --no-conversation --no-display-prompt </dev/null 2>&1 | tail -6; echo \"EXIT=${PIPESTATUS[0]}\"", "de … [61 caractères tronqués]`
+
+  ```
+> 
+> 
+> 
+> 
+> 
+> [0m
+EXIT=124
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p tools/tests/linguistique && cat > tools/tests/linguistique/test_bloc_linguistique.py <<'PY'\n\"\"\"Tests du bloc linguistique — contrat, substitution, parallèle, cascade, activation.\"\"\"\nimport json\nimport pathlib\nimpor … [5460 caractères tronqués]`
+
+  ```
+..F.F....
+======================================================================
+FAIL: test_cascade (test_bloc_linguistique.TestBlocLinguistique.test_cascade)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py", line 67, in test_cascade
+    self.assertIn("residuel", [t.get("etape") for t in a.trace])
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'residuel' not found in ['fusion', 'cascade']
+
+======================================================================
+FAIL: test_niveaux_et_spans (test_bloc_linguistique.TestBlocLinguistique.test_niveaux_et_spans)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py", line 24, in test_niveaux_et_spans
+    self.assertEqual(set(bl.NIVEAUX) - niveaux, set(), f"niveaux manquants : {set(bl.NIVEAUX)-niveaux}")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+… [252 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# discours : frontière de paragraphe, même sans connecteur\nt=t.replace('''        for d, f, p in paragraphes:\n            titre = (p.l … [1392 caractères tronqués]`
+
+  ```
+ok
+  "permute_faible": true,
+  "niveaux": true,
+  "substitution": true,
+  "parallele": true,
+  "activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/bloc_linguistique.py --autotest --udhr data/udhr/articles.jsonl --sortie reports/bloc-linguistique.json >/tmp/autotest.out 2>&1; echo \"EXIT=$?\"; python3 - <<'PY'\nimport json\nd=json.load(open('reports/bloc-linguistiq … [613 caractères tronqués]`
+
+  ```
+EXIT=0
+langue 398 447 0.9687 1.0 4.037
+permute {'accuracy': 0.0022, 'attendu': 'proche du hasard'}
+niveaux ['discours', 'document', 'graphème', 'morphème', 'mot', 'phrase', 'pos', 'pragmatique', 'syntagme'] []
+controles {'vide_refus': 'vide', 'ponctuation_refus': 'vide', 'langue_inconnue': 'und', 'indice_faux': 'und', 'rejeu_identique': True}
+verdicts {'langue': True, 'script': True, 'permute_faible': True, 'niveaux': True, 'substitution': True, 'parallele': True, 'activation': True, 'vide': True, 'inconnue': True, 'rejeu': True} ok True
+fr fra fra fra 0.513 ['heuristique', 'neuronal']
+en und sco sco 0.7373 ['heuristique', 'neuronal']
+de deu deu deu 0.7561 ['heuristique', 'neuronal']
+es spa spa spa 0.6111 ['heuristique', 'neuronal']
+it ita ita ita 0.7059 ['heuristique', 'neuronal']
+  ```
+
+- **bash** `{"command": "cat > /tmp/gen_bloc_schemas.py <<'PY'\nimport sys, pathlib\nsys.path.insert(0, \"/tmp\")\nfrom svgkit import *\nOUT = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas\")\n\ndef niveaux():\n    s = SVG(960, 630, \"Le bloc linguistique — neuf niveaux, deux implé … [4731 caractères tronqués]`
+
+  ```
+✓ bloc-linguistique-niveaux.svg
+  ✓ bloc-linguistique-substitution.svg
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris le contrat du bloc, la fiche de mesure et les index ; les schémas sont prêts
+
+- **write** `{"content": "# Le bloc linguistique — un contrat, deux implémentations, neuf niveaux\n\n> **Ce que ce document est.** La **spécification** du bloc d'étiquetage linguistique : ce qu'il\n> étiquette du **graphème** à la **pragmatique**, ce que chaque étiquette porte, comment\n> l'**heuristique CPU** e … [16337 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/implantation/bloc-linguistique.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "# Le bloc linguistique — 398 langues au niveau langue, un contrat pour l'heuristique et le neuronal\n\n> **Ligne de roadmap** : **R0.7** (proposition — la couche linguistique de surface) · **Date** :\n> 2026-11-01 · **Verdict** : ✅ **le contrat tient** : neuf niveaux, deux implémentatio … [9921 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-bloc-linguistique.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Implantation\\|implantation/\" docs/README.md | head -20; echo '=== reports README ==='; sed -n '1,25p' reports/README.md; echo '=== roadmap R0.6 ==='; sed -n '40,52p' docs/pilotage/roadmap.md", "description": "Lire les ind … [16 caractères tronqués]`
+
+  ```
+69:## Implantation — comment c'est construit
+73:| [`implantation/format-flux.md`](implantation/format-flux.md) | la spécification DRVF : trace, rejeu, transport |
+74:| [`implantation/format-clusters.md`](implantation/format-clusters.md) | le modèle éclaté en clusters |
+75:| [`implantation/convertisseur.md`](implantation/convertisseur.md) | le convertisseur et le chargement |
+76:| [`implantation/contexte-long.md`](implantation/contexte-long.md) | ce que 1 M de contexte veut dire, et par où ça casse |
+77:| [`implantation/tokenisation.md`](implantation/tokenisation.md) | la tokenisation native : octets, et la décision mesurée R13 |
+78:| [`implantation/encodeur-visuel.md`](implantation/encodeur-visuel.md) | l'OCR comme bloc classique : contrat, confiance, parité, porte |
+79:| [`implantation/diehl-cook.md`](implantation/diehl-cook.md) | un bloc Diehl & Cook : équations, contrat DRVM, RSN, portes |
+80:| [`implantation/moteur-de-pensee.md`](implantation/moteur-de-pensee.md) | le state store, l'arbre d'états, les stratégies et les portes du moteur |
+81:| [`implantation/llm-externe.md`](implantation/llm-externe.md) | le banc externe, le professeur et l'élève |
+82:| [`implantation/numa-segre
+… [3608 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"R0.6\\|R0.5\\|R0.4\" docs/pilotage/roadmap.md | head; echo '=== reports R rows ==='; grep -n \"rapport-r44\\|rapport-r13\\|rapport-r06\" reports/README.md | head; echo '=== docs row ==='; grep -n \"encodeur-visuel\\|moteur- … [88 caractères tronqués]`
+
+  ```
+33:| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) | **R4.4 close** (limites nommées) ; **R1.1/R1.2** (contexte natif) ; R2/R3 attendent N5/N4 |
+43:   30 % sur 5 types et **249 questions**) ; **R0.4** (tête de survol) et **R0.5** (routeur) sont
+92:[R0.4] lasts 2 days and is 100% complete and is colored in #6a1b9a
+93:[R0.5] lasts 2 days and is 100% complete and is colored in #6a1b9a
+108:[R0.4] starts at [R0.1–R0.3]'s end
+109:[R0.5] starts at [R0.1–R0.3]'s end
+236:| **R0.6** | **pipeline de lecture** : l'assemblage R0.1–R0.3 — budget, provenance, refus, rejeu ; extractif par défaut, modèle sur demande | ✅ **12/20** au pilote, **9/10** refusés, **7/8** au modèle, porte 7/7 ; **voie auto** : +0,109 sur les valeurs, −0,150 sur le mixte | — (livré) |
+237:| **R0.5** | **routeur extractif / génératif** : choisir le lecteur selon la question (signal BM25), parce qu'aucun des deux ne gagne partout | ❌ **close (négatif)** : signal AUC **0,839** (331 questions, corpus gelé) ; z-score transfère **0,819 / 0,313**, sous le choix
+… [1168 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '228,240p' docs/pilotage/roadmap.md; echo '=== plan R0 table ==='; grep -n \"R0.6 pipeline\\|R06 calibration\" docs/pilotage/programme-r.md", "description": "Lire les tableaux à compléter"}`
+
+  ```
+C'est la **priorité** : un lecteur au niveau **système**, avec le moteur existant et un modèle externe, pour
+établir la cible avant de la porter dans le natif.
+
+| # | fonctionnalité | état | porte |
+|---|---|---|---|
+| **R0.1** | **graphe de document** : régions typées (titre, section, paragraphe, tableau, code, maths, figure), offsets, provenance ; parseurs PDF/HTML/DOCX/Markdown ; sans modèle | ✅ **51 pages**, fidélité **1,000** | 50 pages découpées, provenance exacte, rejeu identique |
+| **R0.2** | **contrôleur de lecture** : `survol`, `balayage`, `lecture`, `relecture`, `arrêt` ; budget en octets ; classique d'abord (TOC, titres, premières/dernières phrases, BM25/regex) | ✅ **1,000** à 30 % sur **5 types** | à 30 % du budget, **≥ 90 %** de la réponse de la lecture intégrale sur **3 types** |
+| **R0.3** | **banc de lecture rapide** : 30 documents, 5 types, 10 questions/spans gold, modes intégral/écrémage/balayage/sélectif, contrôles closed-book, régions aléatoires, sections mélangées | ✅ **249 questions** : extractif **1,000** à 30 % ; modèle **0,231** contre début **0,042**. **Durci** (84 paraphrases) : modèle **0,375**, lexical **0,269** | une courbe vitesse-compréhension par 
+… [1779 caractères tronqués]
+  ```
+

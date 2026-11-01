@@ -12880,3 +12880,150 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 
 La suite que je propose : **distiller sur le wiki** (le gain OOD est trop gros pour ne pas être testé sur le modèle final), puis **le canal d'annotation** — la structure ajoutée, pas retirée.
 
+
+## Tour 16
+
+### 👤 Utilisateur
+
+continue avec de trèes gros corpus multilingues
+
+### 🤖 Assistant
+
+⏵ Corpus multilingue : 9 langues de Wikipédia, entraînement et mesure par langue
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/data/wikipedia/db && ls -la *.db 2>/dev/null | awk '{printf \"%s %.1f Go\\n\", $9, $5/1e9}' | head -12; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "List the Wikipedia language bases and GPU status"}`
+
+  ```
+arwiki_v14.db 3.5 Go
+dewiki_v14.db 9.4 Go
+enwiki_v14.db 19.5 Go
+eswiki_v14.db 5.5 Go
+frwiki_v14.db 7.2 Go
+itwiki_v14.db 4.6 Go
+jawiki_v14.db 6.1 Go
+ptwiki_v14.db 2.8 Go
+ruwiki_v14.db 8.0 Go
+zhwiki_v14.db 3.6 Go
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p data/wiki_multi && cat > work/n2k/extrait.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"extrait.py — 12 000 articles par langue depuis les bases sqlite de Wikipédia.\"\"\"\nimport random, sqlite3, pathlib\n\nLANGUES = [\"fr\", \" … [1330 caractères tronqués]`
+
+  ```
+python3: can't open file '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2k/extrait.py': [Errno 2] No such file or directory
+[stderr]
+bash: line 1: work/n2k/extrait.py: No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/n2k && cat > work/n2k/extrait.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"extrait.py — 12 000 articles par langue depuis les bases sqlite de Wikipédia.\"\"\"\nimport random, sqlite3, pathlib\n\nLANGUES = [\"fr\", \"en\", \ … [1326 caractères tronqués]`
+
+  ```
+fr : 11000 train (22.1 Mo) · 1000 val (2.0 Mo)
+en : 11000 train (21.9 Mo) · 1000 val (2.0 Mo)
+de : 11000 train (22.0 Mo) · 1000 val (2.0 Mo)
+es : 11000 train (21.2 Mo) · 1000 val (1.9 Mo)
+it : 11000 train (21.3 Mo) · 1000 val (2.0 Mo)
+pt : 11000 train (21.0 Mo) · 1000 val (1.9 Mo)
+ru : 11000 train (37.6 Mo) · 1000 val (3.5 Mo)
+ar : 11000 train (36.6 Mo) · 1000 val (3.3 Mo)
+ja : 11000 train (54.3 Mo) · 1000 val (5.0 Mo)
+zh : 11000 train (51.4 Mo) · 1000 val (4.7 Mo)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nlangues = [\"fr\", \"en\", \"de\", \"es\", \"it\", \"pt\", \"ru\", \"ar\", \"ja\", \"zh\"]\nmorceaux = {}\nfor l in langues:\n    d = pathlib.Path(f\"data/wiki_multi/{l}_train.txt\").read_bytes()\n   … [762 caractères tronqués]`
+
+  ```
+309.5 Mo, 37782 chunks, 10 langues entrelacées
+dedup 1356515
+13:25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && kill 1356515 2>/dev/null; sleep 1; rm -rf data/wiki_multi/propre; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2k/extrait.py'); s = p.read_text()\ns = s.replace('\"AND summary IS NOT NULL ORDER BY page_id LIMIT ?\", (N,) … [283 caractères tronqués]`
+
+  ```
+offset ajouté
+fr : 11000 train (20.7 Mo) · 1000 val (1.9 Mo)
+en : 11000 train (21.5 Mo) · 1000 val (2.0 Mo)
+de : 11000 train (21.3 Mo) · 1000 val (1.9 Mo)
+es : 11000 train (20.4 Mo) · 1000 val (1.8 Mo)
+it : 11000 train (19.9 Mo) · 1000 val (1.8 Mo)
+pt : 11000 train (18.9 Mo) · 1000 val (1.7 Mo)
+ru : 11000 train (35.1 Mo) · 1000 val (3.2 Mo)
+ar : 11000 train (29.7 Mo) · 1000 val (2.7 Mo)
+ja : 11000 train (46.6 Mo) · 1000 val (4.2 Mo)
+zh : 11000 train (41.4 Mo) · 1000 val (3.8 Mo)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nlangues = [\"fr\", \"en\", \"de\", \"es\", \"it\", \"pt\", \"ru\", \"ar\", \"ja\", \"zh\"]\nmorceaux = {}\nfor l in langues:\n    d = pathlib.Path(f\"data/wiki_multi/{l}_train.txt\").read_bytes()\n   … [706 caractères tronqués]`
+
+  ```
+275.5 Mo
+dedup 1356946
+13:27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2k/evalue.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"evalue.py — PPL par langue d'un point de contrôle, sur les vals multilingues.\"\"\"\nimport json, pathlib, sys\nsys.path.insert(0, '.')\nfrom tools.eval_n2_propre import  … [615 caractères tronqués]`
+
+  ```
+ok
+13:27
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -6 work/n2k/dedup.log; ls -la data/wiki_multi/propre/ 2>/dev/null | head -4", "description": "Wait for the multilingual dedup"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-751]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-751", "timeout_ms": 600000, "wait": true}`
+
+  ```
+13:35
+   "fenetres": 100,
+   "contaminees": 0,
+   "taux": 0.0
+  }
+ }
+}
+total 257152
+drwxr-xr-x. 1 stephane stephane        48  1 nov 13:34 .
+drwxr-xr-x. 1 stephane stephane       470  1 nov 13:34 ..
+-rw-r--r--. 1 stephane stephane  13164544  1 nov 13:34 test.txt
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json; d=json.load(open('reports/corpus-multi-propre.json'))\nprint('source', d['source_octets']/1e6, 'Mo → propre', d['propre_octets']/1e6, 'Mo | train', d['train_octets']/1e6, '| dédup', d['deduplication']['ret … [1018 caractères tronqués]`
+
+  ```
+source 275.467919 Mo → propre 263.32056 Mo | train 236.991472 | dédup 4.42 %
+fr : 0/60 = 0.0 %
+en : 0/60 = 0.0 %
+de : 0/60 = 0.0 %
+es : 0/60 = 0.0 %
+it : 0/60 = 0.0 %
+pt : 0/60 = 0.0 %
+ru : 0/60 = 0.0 %
+ar : 0/60 = 0.0 %
+ja : 0/60 = 0.0 %
+zh : 0/60 = 0.0 %
+multi base 1385281
+13:36
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 600 ~/gpu-env/bin/python work/n2k/evalue.py work/n2j/base-wiki.pt 2>&1 | grep -v Loading | tee work/n2k/eval-wiki.json", "description": "Evaluate the monolingual French base on all ten lang … [7 caractères tronqués]`
+
+  ```
+{"fichier": "base-wiki.pt", "fr": 3.7633, "en": 11.0366, "de": 16.3009, "es": 13.0054, "it": 13.6259, "pt": 15.2688, "ru": 10.7419, "ar": 13.0103, "ja": 53.8382, "zh": 85.0273}
+  ```
+
+- **bash** `{"command": "sleep 780; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2k/base-multi.log; ls work/n2k/base-multi.pt 2>/dev/null && echo MULTI_OK", "description": "Wait for the multilingual base training"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-754]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-754", "timeout_ms": 900000, "wait": true}`

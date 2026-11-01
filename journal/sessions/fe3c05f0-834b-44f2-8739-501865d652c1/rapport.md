@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 20.3 h |
-| Tours | 6 |
-| Messages | 772 |
-| Appels d'outils | 775 |
+| Durée | 21.2 h |
+| Tours | 7 |
+| Messages | 799 |
+| Appels d'outils | 805 |
 | Fichiers touchés | 18 |
-| Commandes | 707 |
+| Commandes | 736 |
 | Sous-agents | 0 |
-| Commits | 34 |
+| Commits | 35 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -37,6 +37,8 @@
 **Tour 5** — go
 
 **Tour 6** — constitue les corpus des autres langues et assure-toi que tous les agents s'y retrouvent pour leurs besoins
+
+**Tour 7** — relis mes demandes de toutes les sessions des derniers 48h pour compredre la vision à jour du projet. creuse l'historique au besoin pour garantir la cohérence et élargir l'inventaire de chantier pour mieux comprendre leurs relations.
 
 ## 2. Déroulé, étape par étape
 
@@ -349,9 +351,67 @@ C'est **cent fois** la prose du dépôt (5,36 Mo uniques).
 
 **Synthèse produite :**
 
-⏵ Corpus multilingues : vérification des bases, extraction, puis catalogue partagé
+⏵ Les dix corpus sont construits, documentés et partagés
 
-Je regarde d'abord les neuf autres bases (schéma, articles, volume de résumés), puis j'étends l'outil et je lance les extractions.
+C'est fait : les neuf autres langues sont extraites avec le même outil que le français, et tout est catalogué pour que chaque agent trouve le sien.
+
+\## Les dix corpus
+
+| langue | articles | caractères | train / val / test | corpus |
+|---|---:|---:|---:|---|
+| **fr** | 2 525 902 | 3,68 G | 3,43 Go / 191 / 190 Mo | `data/corpus_wiki_fr/` |
+| **en** | 6 552 645 | 9,91 G | 8,98 Go / 498 / 498 Mo | `data/corpus_wiki_en/` |
+| **de** | 2 884 427 | 4,72 G | 4,33 Go / 240 / 240 Mo | `data/corpus_wiki_de/` |
+| **es** | 1 900 560 | 2,79 G | 2,57 Go / 143 / 142 Mo | `data/corpus_wiki_es/` |
+| **ru** | 1 956 216 | 2,93 G | 4,66 Go / 259 / 257 Mo | `data/corpus_wiki_ru/` |
+| **it** | 1 592 477 | 2,26 G | 2,06 Go / 114 / 114 Mo | `data/corpus_wiki_it/` |
+| **ja** | 1 355 856 | 1,76 G | 3,97 Go / 220 / 220 Mo | `data/corpus_wiki_ja/` |
+| **zh** | 823 401 | 0,87 G | 1,89 Go / 104 / 105 Mo | `data/corpus_wiki_zh/` |
+| **pt** | 991 389 | 1,35 G | 1,25 Go / 70 / 70 Mo | `data/corpus_wiki_pt/` |
+| **ar** | 1 047 858 | 1,13 G | 1,78 Go / 98 / 98 Mo | `data/corpus_wiki_ar/` |
+
+**Total : 21 630 731 articles · 31,42 G caractères · 4 643 M mots** (langues à espaces ; ja/zh comptés en caractères, comme le disent les manifestes) **· 38,8 Go**.
+
+\## Où chaque agent les trouve
+
+- **Un catalogue unique** : `reports/rapport-corpus-wikipedia.md` — la table ci-dessus, la méthode, les contrôles et les limites.
+- **Un manifeste par langue** : `reports/corpus-wiki-<langue>.json` — articles, caractères, mots, octets, **SHA-256** des trois fichiers, licence, limites.
+- **L'état partagé** : `docs/pilotage/en-cours.md`, ligne **Données**, pointe sur le catalogue et les manifestes ; l'inventaire `reports/inventaire-donnees-entrainement.md` aussi.
+- **Les fichiers** : `data/corpus_wiki_<langue>/{train,val,test}.txt` (UTF-8, un article par bloc, tronçons séparés par deux sauts de ligne). Pour refaire : `python3 tools/corpus_wikipedia.py --toutes-les-langues` ; pour régénérer la table : `python3 tools/catalogue_corpus.py`.
+
+Usages : **N2** a le français et l'anglais ; les agents multilingues ont les huit autres ; **R4.4** garde ses scans (ce sont des textes, pas des images).
+
+\## Les contrôles
+
+- **0 doublon exact de tronçon entre splits** pour les dix langues (0/52 203 et 0/52 033 en arabe, 0/327 337 et 0/327 877 en anglais, 0/97 650 et 0/97 198 en russe…).
+- **0/30 fenêtres** de chaque jeu d'évaluation retrouvées dans l'entraînement : XNLI (ar
+… [733 caractères tronqués]
+
+### Tour 7 — relis mes demandes de toutes les sessions des derniers 48h pour compredre la vision à jour du projet. creuse l'historiqu … [113 caractères tronqués]
+
+*30 appels d'outils.* Actions notables :
+
+- bash — List sessions and recent journal days
+- bash — Locate DSH session transcripts
+- bash — Find recent sessions and raw traces
+- bash — Read recent session plans and mandates
+- bash — Locate recent DSH session traces
+- bash — List Qtrinet workspace session directories
+- bash — Inspect DSH session trace format
+- bash — Decompress and inspect session trace records
+- bash — Inspect user message record structure
+- bash — Extract human messages from last 48h sessions
+- bash — Read roadmap structure and backlog index
+- bash — List pilotage docs and read programme R
+- bash — Read backlog files, gaps, and dependency graph
+- bash — Read Pensée session plan and report
+- … et 16 autres
+
+**Synthèse produite :**
+
+⏵ Relecture des mandats des 48 h et cartographie des chantiers
+
+Je commence par retrouver les demandes humaines dans les sessions et le journal, puis je confronte à la vision et à la roadmap.
 
 ## 3. Travail accompli
 
@@ -420,7 +480,7 @@ Je regarde d'abord les neuf autres bases (schéma, articles, volume de résumés
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 667 autres
+- … et 696 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -548,7 +608,7 @@ Je regarde d'abord les neuf autres bases (schéma, articles, volume de résumés
 
 ## 5. Erreurs rencontrées
 
-35 sorties en erreur ou divergentes. Les premières :
+36 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -602,4 +662,5 @@ Je regarde d'abord les neuf autres bases (schéma, articles, volume de résumés
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet cat > /tmp/msg-wiki.txt <<'EOF' DONNÉES — LE CORPUS FRANÇAIS EST LÀ : 2,5 M ARTICLES WIKIPÉDIA, 594 M MOTS, 0
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet set -e rm -f /tmp/index.r44 GIT_INDEX_FILE=/tmp/index.r44 git read-tree HEAD GIT_INDEX_FILE=/tmp/index.r44 gi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("| f
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet for t in "python3 tools/verifie_journal.py" "python3 tools/verifie_backlog.py" "python3 tools/verifie_etat_a_
 

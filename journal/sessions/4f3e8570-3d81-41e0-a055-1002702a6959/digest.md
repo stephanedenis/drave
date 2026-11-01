@@ -263,7 +263,7 @@ export PATH=/usr/local/cuda-13/bin:$PATH
 export OLLAMA_MODELS=/home/stephane/Data13TB/stephane/ollama-models
 
 # --- Clés API IA ---
-export DEEPSEEK_API_KEY="<REDACTED>"
+export DEEPSEEK_API_KEY="sk-17be827b57b84cb99b84647d1649eb0b"
 export TAVILY_API_KEY="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"
 
 . "$HOME/.local/share/../bin/env"
@@ -1315,7 +1315,7 @@ Error: cannot modify "/home/stephane/.bashrc": file has not been read — read t
 22: export OLLAMA_MODELS=/home/stephane/Data13TB/stephane/ollama-models
 23: 
 24: # --- Clés API IA ---
-25: export DEEPSEEK_API_KEY="<REDACTED>"
+25: export DEEPSEEK_API_KEY="sk-17be827b57b84cb99b84647d1649eb0b"
 26: export TAVILY_API_KEY="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"
 27: 
 28: . "$HOME/.local/share/../bin/env"
@@ -1342,7 +1342,7 @@ The file /home/stephane/.bashrc has been updated successfully.
 21: . "$HOME/.cargo/env"
 22: export OLLAMA_MODELS=/home/stephane/Data13TB/stephane/ollama-models
 23: # --- Clés API IA ---
-24: export DEEPSEEK_API_KEY="<REDACTED>"
+24: export DEEPSEEK_API_KEY="sk-17be827b57b84cb99b84647d1649eb0b"
 25: export TAVILY_API_KEY="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"
 26: 
 27: . "$HOME/.local/share/../bin/env"
@@ -1369,7 +1369,7 @@ The file /home/stephane/.bashrc has been updated successfully.
 IA=/home/stephane/IA
 /home/stephane/IA/outils/etat-raid.sh
 # --- Clés API IA ---
-export DEEPSEEK_API_KEY="<REDACTED>"
+export DEEPSEEK_API_KEY="sk-17be827b57b84cb99b84647d1649eb0b"
 export TAVILY_API_KEY="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"
 
 . "$HOME/.local/share/../bin/env"

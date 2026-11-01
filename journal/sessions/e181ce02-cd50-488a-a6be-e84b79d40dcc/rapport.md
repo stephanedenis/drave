@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 20.0 h |
-| Tours | 9 |
-| Messages | 340 |
-| Appels d'outils | 376 |
-| Fichiers touchés | 22 |
-| Commandes | 287 |
+| Durée | 21.1 h |
+| Tours | 11 |
+| Messages | 381 |
+| Appels d'outils | 417 |
+| Fichiers touchés | 25 |
+| Commandes | 322 |
 | Sous-agents | 2 |
 | Commits | 19 |
 | Compactages de contexte | 1 |
@@ -47,6 +47,10 @@
 **Tour 8** — on une session active sur l'analyse linguistique par heuristique (coloration). J'aimerais de ce côté-ci (cette session parallèle) que tu analyse les bénéfices d'avoir une couche linguistique de prétraitement par heuristique pour l'étiquetage des différents niveaux du mot jusqu'au document en plusieurs langues. Je vise ici à alléger le traitement linguistique des réseaux de neurones en utilisant de … [60 caractères tronqués]
 
 **Tour 9** — détaille ce qu'est le pprogramme R : docs/pilotage/programme-r.md
+
+**Tour 10** — donc, on n'a pas encore de bloc d'étiquetage de structure linguistique?
+
+**Tour 11** — fait les deux. Le bloc langue doit couvrir l'étiquetage tous les niveaux linguistiques jusqu'à la pragmatique. on doit avoir une version heuristique et une neuronale. Le contrat garantissant la possibilité de substituer ou faire fonctionner en parallèle (heuristique ultra rapide permettant l'activation de la couche sémantique à une fraction du coût.
 
 ## 2. Déroulé, étape par étape
 
@@ -545,6 +549,67 @@ La charte contient le schéma des phases et de leurs dépendances (`programme-r-
 - **R0.3** : 30 documents, **249 questi
 … [5445 caractères tronqués]
 
+### Tour 10 — donc, on n'a pas encore de bloc d'étiquetage de structure linguistique?
+
+*6 appels d'outils.* Actions notables :
+
+- glob
+- bash — Chercher un bloc ou un étiqueteur existant
+- bash — Vérifier les niveaux couverts par R0.1 et la coloration
+- bash — Lire le contrat de bloc/flux existant
+- bash — Lire le contrat d'un bloc existant
+- bash — Confirmer l'absence des fichiers du bloc linguistique
+
+**Synthèse produite :**
+
+⏵ Vérifié : oui pour les régions et les candidats, non pour un bloc linguistique
+
+**Non — pas encore.** Il y a trois briques qui en approchent, mais aucune n'est le **bloc d'étiquetage de structure linguistique** au sens Drave : un bloc typé, multi-niveaux, multilingue, avec un contrat, une trace, un coût et une porte.
+
+\## Ce qui existe
+
+| brique | ce qu'elle fait | ce qu'elle n'est pas |
+|---|---|---|
+| **R0.1 — `graphe_document.py`** | découpe un document en **régions** (titre, section, paragraphe, tableau, code, maths, figure), avec offsets et provenance | ce n'est pas de la linguistique : aucun mot, aucune phrase, aucun rôle ; le vocabulaire des régions est fermé |
+| **R4.1–R4.4** | lisent la **structure** : tableaux (996 cellules), code (AST), maths (sympy), scans (OCR) | ce n'est pas de la langue : ce sont des blocs structurels, pas des étiquettes morphologiques ou syntaxiques |
+| **S — `tools/structures/generateur.py`** | segmente en **GN/GV/GP/REL/SUB**, devine des rôles par la préposition, produit des **candidats d'attachement** ; 7 phrases, 11 tests | ce n'est pas un bloc : c'est un **générateur de candidats** pour validation humaine, français, sans POS par mot, sans morphologie, sans phrase/document, sans contrat de flux, sans porte |
+| **La RSN** | la **cible** : une structure multi-niveaux (graphémique, morphologique, syntaxique, sémantique, discursif) | ce n'est pas l'étiqueteur : aucun code ne remplit aujourd'hui les niveaux de surface ; B travaille le sens (15 champs, 502 classes), N lit des octets |
+| **`pre-traitement-linguistique.md`** | l'**analyse** de ce que le CPU peut étiqueter, la cascade et le protocole | ce n'est pas une implémentation : pas de `bloc-langue`, pas de `bloc-coloration`, pas de `porte-coloration` |
+
+Le constat est net : `docs/implantation/` n'a que `bloc-tableaux.md`, `bloc-code.md` et `bloc-maths.md` ; `tools/` n'a que `bloc_tableaux.py`, `bloc_code.py`, `bloc_maths.py`. Il n'y a **ni `bloc_coloration.py`, ni `bloc_langue.py`, ni `porte-coloration.sh`**.
+
+\## Pourquoi la coloration n'est pas encore le bloc
+
+Le générateur S est le **bon germe**, mais il lui manque exactement ce qui fait un bloc :
+
+- **un contrat de flux** : entrée (texte/octets + langue), sortie (liste valuée d'annotations avec `span`, `niveau`, `type`, `rôle`, `source`, `confiance`, `candidats`), coût, trace, rejeu, refus ;
+- **les niveaux** : aujourd'hui il fait le **syntagme** (GN/GV/GP/REL/SUB) ; il ne fait ni `lang` (script/langue), ni `tok` (fr
+… [2675 caractères tronqués]
+
+### Tour 11 — fait les deux. Le bloc langue doit couvrir l'étiquetage tous les niveaux linguistiques jusqu'à la pragmatique. on doit a … [231 caractères tronqués]
+
+*35 appels d'outils.* Actions notables :
+
+- bash — Trouver le corpus multilingue UDHR
+- bash — Trouver le modèle local et l'adaptateur neuronal
+- bash — Vérifier les schémas et les API à réutiliser
+- bash — Compter les langues UDHR et vérifier llama-cli
+- bash — Compter les langues et scripts UDHR
+- bash — Vérifier les tests et le split UDHR
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py`
+- bash — Corriger et tester le bloc sur une phrase
+- bash — Brancher le générateur S et corriger les prépositions
+- bash — Voir la ligne DET restante
+- bash — Corriger la classe de « de »
+- bash — Tester les modes et l'autotest UDHR
+- bash — Lire les résultats de langue et de substitution
+- bash — Ajouter le seuil de langue et la fusion sans chevauchement
+- … et 20 autres
+
+**Synthèse produite :**
+
+⏵ J'écris le contrat du bloc, la fiche de mesure et les index ; les schémas sont prêts
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -573,6 +638,9 @@ La charte contient le schéma des phases et de leurs dépendances (`programme-r-
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/pre-traitement-linguistique.md` | 1 | 0 |
 | `/tmp/gen_programme_r.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/programme-r.md` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/implantation/bloc-linguistique.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-bloc-linguistique.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -621,7 +689,7 @@ La charte contient le schéma des phases et de leurs dépendances (`programme-r-
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 247 autres
+- … et 282 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -749,11 +817,12 @@ La charte contient le schéma des phases et de leurs dépendances (`programme-r-
 
 ## 5. Erreurs rencontrées
 
-3 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
 - **T8** : [stderr] Traceback (most recent call last):   File "<string>", line 1, in <module>     import cairosvg; cairosvg.svg2png(url='docs/schemas/heuristique-niveaux.svg', write_to='/tmp/heur-niveaux.png', o
+- **T11** : /home/stephane/.local/bin/llama-cli Qwen2.5-0.5B-Q4_0.gguf Qwen2.5-0.5B-Q8_0.gguf vision llm porte_mistral.py porte-mistral.sh tokenize_llama tokenize_llama.cpp === llm_externe === [exit code: 2]
 
 ## 6. Commits
 

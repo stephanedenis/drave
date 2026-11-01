@@ -13550,3 +13550,621 @@ anciens fichiers retirés
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"| fichiers / JSON de résultats | **383** / **467** |\",\"| fichiers / JSON de résultats | **383** / **469** |\")\np.write_tex … [3373 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py [0]   ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocab
+python3 tools/taille_documents.py  [0]   ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+python3 tools/verifie_en_cours.py  [0]   ✅ état court, structuré, multi-session et reprenable
+python3 tools/verifie_journal.py   [0]   ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+python3 tools/verifie_backlog.py   [0] ✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+python3 tools/verifier_schemas.py  [0]      sources et images relatives.
+python3 tools/verifie_etat_a_jour.py [0]   ✅ aucun fait commité après le dernier état
+  ✅ index : aucun fait stagé sans état
+ create mode 100644 reports/rapport-corpus-wikipedia.md
+ create mode 100644 tools/catalogue_corpus.py
+5d5c1ee9 DONNÉES — LES DIX LANGUES SONT LÀ : 21,6 M ARTICLES, 31,4 G CARACTÈRES, 38,8 GO, 0 FUITE
+  ```
+
+### 🤖 Assistant
+
+⏵ Les dix corpus sont construits, documentés et partagés
+
+C'est fait : les neuf autres langues sont extraites avec le même outil que le français, et tout est catalogué pour que chaque agent trouve le sien.
+
+## Les dix corpus
+
+| langue | articles | caractères | train / val / test | corpus |
+|---|---:|---:|---:|---|
+| **fr** | 2 525 902 | 3,68 G | 3,43 Go / 191 / 190 Mo | `data/corpus_wiki_fr/` |
+| **en** | 6 552 645 | 9,91 G | 8,98 Go / 498 / 498 Mo | `data/corpus_wiki_en/` |
+| **de** | 2 884 427 | 4,72 G | 4,33 Go / 240 / 240 Mo | `data/corpus_wiki_de/` |
+| **es** | 1 900 560 | 2,79 G | 2,57 Go / 143 / 142 Mo | `data/corpus_wiki_es/` |
+| **ru** | 1 956 216 | 2,93 G | 4,66 Go / 259 / 257 Mo | `data/corpus_wiki_ru/` |
+| **it** | 1 592 477 | 2,26 G | 2,06 Go / 114 / 114 Mo | `data/corpus_wiki_it/` |
+| **ja** | 1 355 856 | 1,76 G | 3,97 Go / 220 / 220 Mo | `data/corpus_wiki_ja/` |
+| **zh** | 823 401 | 0,87 G | 1,89 Go / 104 / 105 Mo | `data/corpus_wiki_zh/` |
+| **pt** | 991 389 | 1,35 G | 1,25 Go / 70 / 70 Mo | `data/corpus_wiki_pt/` |
+| **ar** | 1 047 858 | 1,13 G | 1,78 Go / 98 / 98 Mo | `data/corpus_wiki_ar/` |
+
+**Total : 21 630 731 articles · 31,42 G caractères · 4 643 M mots** (langues à espaces ; ja/zh comptés en caractères, comme le disent les manifestes) **· 38,8 Go**.
+
+## Où chaque agent les trouve
+
+- **Un catalogue unique** : `reports/rapport-corpus-wikipedia.md` — la table ci-dessus, la méthode, les contrôles et les limites.
+- **Un manifeste par langue** : `reports/corpus-wiki-<langue>.json` — articles, caractères, mots, octets, **SHA-256** des trois fichiers, licence, limites.
+- **L'état partagé** : `docs/pilotage/en-cours.md`, ligne **Données**, pointe sur le catalogue et les manifestes ; l'inventaire `reports/inventaire-donnees-entrainement.md` aussi.
+- **Les fichiers** : `data/corpus_wiki_<langue>/{train,val,test}.txt` (UTF-8, un article par bloc, tronçons séparés par deux sauts de ligne). Pour refaire : `python3 tools/corpus_wikipedia.py --toutes-les-langues` ; pour régénérer la table : `python3 tools/catalogue_corpus.py`.
+
+Usages : **N2** a le français et l'anglais ; les agents multilingues ont les huit autres ; **R4.4** garde ses scans (ce sont des textes, pas des images).
+
+## Les contrôles
+
+- **0 doublon exact de tronçon entre splits** pour les dix langues (0/52 203 et 0/52 033 en arabe, 0/327 337 et 0/327 877 en anglais, 0/97 650 et 0/97 198 en russe…).
+- **0/30 fenêtres** de chaque jeu d'évaluation retrouvées dans l'entraînement : XNLI (ar/de/en/es/fr/ru/zh), wikitext2 (en), jeux locaux (fr).
+- **Une exception nommée** : l'UDHR donne **1/23** pour l'italien et le japonais, 0/30 pour le portugais — c'est l'UDHR **citée dans Wikipédia**, pas un défaut du corpus, mais ce n'est donc pas un jeu d'évaluation tenu à l'écart pour ces deux langues.
+
+## Les limites, écrites
+
+Résumés **tronqués à 8 000 caractères** (pas les articles entiers), artefacts de débalisage (dates vides, titres de sections), **déduplication exacte** seulement (quasi-doublons non détectés), licence **CC-BY-SA 4.0** (attribution et partage à l'identique ; corpus local, non diffusé). Le texte intégral reste le prochain chantier : dumps `xml.bz2` (67 Go) + débaliseur complet.
+
+Commit : `5d5c1ee9`.
+
+
+## Tour 7
+
+### 👤 Utilisateur
+
+relis mes demandes de toutes les sessions des derniers 48h pour compredre la vision à jour du projet. creuse l'historique au besoin pour garantir la cohérence et élargir l'inventaire de chantier pour mieux comprendre leurs relations.
+
+### 🤖 Assistant
+
+⏵ Relecture des mandats des 48 h et cartographie des chantiers
+
+Je commence par retrouver les demandes humaines dans les sessions et le journal, puis je confronte à la vision et à la roadmap.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls journal/sessions/ | head -30; echo \"=== jours\"; ls -d journal/2026-10-3* journal/2026-11-0* 2>/dev/null; echo \"=== manifest\"; sed -n '1,60p' journal/sessions/MANIFEST.md", "description": "List sessions and recent journal days",  … [82 caractères tronqués]`
+
+  ```
+00221850-90de-4287-90ee-324a35e504cd
+04ed1834-b0f8-42a1-aa21-75a75c19647e
+0b0a6a0d-05f5-4308-800c-4792ddb9cbf2
+0b2c86eb-7a8d-4eed-a3dd-fb165f1a8630
+0b69f616-5c75-4c34-b97a-ae05564812af
+0c631fa9-58cb-4d77-a7e0-fc77e5b3f93f
+0f3b6070-57ce-4642-b9ec-3b3956f75978
+11b2d312-9a7e-4a4e-814f-ed0384ed9d4d
+13446299-79d8-497c-ba83-673c176a4637
+15d4e6f4-b2ba-44c7-8c0e-03c141280f9b
+15fd322f-7e9e-48c0-a970-f36335eb622a
+163d631a-6528-4324-b7b3-6487d24feeb5
+1820cf6b-c8a4-411c-894c-31195b9ff7a8
+18b8879c-f211-43b8-9908-cf65e509b21d
+18c3f6d0-5bb1-45bb-9f94-ab0e7812218d
+1966e052-ebc6-4f4b-b7f9-6d1c6cb4b445
+1f9394fb-6435-4928-9a03-2b258e5a28c5
+22bcae27-254b-47b2-acda-87467dab060c
+22e518ee-81b8-4081-ae1b-f0d7a777a1d7
+235066f5-307a-4285-a882-14bc2d06cb7b
+27c99b10-c57e-4599-a23a-f7b1a54c17a1
+2c2a6595-b208-446e-bbd1-d0f49eca45e8
+2f51f17f-f47c-49d5-958f-cafecd3fe01e
+2fd56aa5-7b9b-40b0-9470-05c74b032d55
+31f26a6e-65f5-480d-be32-36b9f425b3dd
+34e1d4be-3708-4065-ae77-eca21f86e857
+3d5618a0-4e3a-45bb-943d-a72c753fb7da
+3de141c0-089b-4ceb-8a2e-bd6d83044a5f
+42059fde-f06f-4e2c-9a23-8292d887fb6e
+482522d1-31f1-43eb-ae9c-a681336404f7
+=== jours
+journal/2026-10-30
+journal/2026-10-31
+journal/2026-11-01
+=== manifest
+# Sessions
+… [4214 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/IA/artefacts/sessions-dsh/ 2>/dev/null | head; find /home/stephane/IA/artefacts/sessions-dsh -maxdepth 2 -type f 2>/dev/null | head -10; echo \"=== aitk/agents\"; ls -la /home/stephane/.aitk 2>/dev/null | head -8; ls -la /home/stephane/.agents 2>/dev/null | head -5 … [134 caractères tronqués]`
+
+  ```
+total 12
+drwxr-xr-x.  3 stephane stephane 4096 31 oct 17:01 .
+drwxr-xr-x. 10 stephane stephane 4096  1 nov 08:31 ..
+drwxr-xr-x.  3 stephane stephane 4096 31 oct 17:01 2026-10-31
+/home/stephane/IA/artefacts/sessions-dsh/2026-10-31/sessions-dsh-2026-10-31.tar.zst
+/home/stephane/IA/artefacts/sessions-dsh/2026-10-31/MANIFESTE.sha256
+=== aitk/agents
+total 864
+drwxr-xr-x. 1 stephane stephane   4914 31 jui 08:15 .
+drwx--x---+ 1 stephane stephane   2052 31 oct 17:17 ..
+-rw-r--r--. 1 stephane stephane    528 30 jui 16:14 20260730-153306-ext.log
+-rw-r--r--. 1 stephane stephane    858 30 jui 16:24 20260730-153306-tracing.log
+-rw-r--r--. 1 stephane stephane   1065 30 jui 16:26 20260730-172659-ext.log
+-rw-r--r--. 1 stephane stephane    858 30 jui 16:36 20260730-172659-tracing.log
+-rw-r--r--. 1 stephane stephane   1628 30 jui 16:44 20260730-186037-ext.log
+total 4
+drwxr-xr-x. 1 stephane stephane   44 30 jui 16:52 .
+drwx--x---+ 1 stephane stephane 2052 31 oct 17:17 ..
+-rw-r--r--. 1 stephane stephane  478 30 jui 16:52 .skill-lock.json
+drwxr-xr-x. 1 stephane stephane   34 30 jui 16:52 skills
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -E \"2026-10-(30|31)|2026-11-01\" journal/sessions/MANIFEST.md | head -20; echo \"=== traces sur disque\"; find /home/stephane -maxdepth 6 -name \"session*.jsonl*\" 2>/dev/null | head -8; find /home/stephane/IA -maxdepth 5 -name \ … [174 caractères tronqués]`
+
+  ```
+| `0b0a6a0d` | 2026-10-31 17:17 | 4.1 Mo | 705 Ko | 15 | 960 | 897 | 4 | 2 |
+| `0b69f616` | 2026-10-30 21:46 | 0.8 Mo | 197 Ko | 1 | 180 | 200 | 0 | 0 |
+| `0f3b6070` | 2026-10-31 18:02 | 0.0 Mo | 12 Ko | 1 | 4 | 0 | 0 | 0 |
+| `163d631a` | 2026-10-31 17:39 | 0.0 Mo | 0 Ko | 0 | 0 | 0 | 0 | 0 |
+| `22e518ee` | 2026-10-31 11:13 | 0.6 Mo | 175 Ko | 1 | 129 | 171 | 5 | 0 |
+| `df1b1098` | 2026-10-31 17:52 | 0.0 Mo | 13 Ko | 1 | 4 | 0 | 0 | 0 |
+| `e181ce02` | 2026-10-31 17:40 | 3.1 Mo | 482 Ko | 10 | 346 | 382 | 6 | 2 |
+| `fe3c05f0` | 2026-10-31 17:35 | 4.5 Mo | 769 Ko | 6 | 773 | 775 | 3 | 2 |
+=== traces sur disque
+/home/stephane/.config/mozilla/firefox/xlddxyfz.default-release/sessionstore.jsonlz4
+/home/stephane/.dsh/sessions/--home-stephane--/817f54a4-14eb-4f3f-8c41-085d1a4a8ae2/session.jsonl.zstd
+/home/stephane/.dsh/sessions/--home-stephane--/85c4f5c4-6471-4490-baf3-51609ccb7d11/session.jsonl.zstd
+/home/stephane/.dsh/sessions/--home-stephane--/session-19d7b749-f44c-41d5-b225-b8b9c3918d66/session.jsonl.zstd
+/home/stephane/.dsh/sessions/--home-stephane--/session-39caae13-2a50-49e0-bef1-f76e23cfa1d0/session.jsonl.zstd
+/home/stephane/.dsh/sessions/--home-stephane--/session-d1f850e8-4179-41
+… [386 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -la journal/sessions/ | grep -E \"10-30|10-31|11-01\" | head; for s in 0b0a6a0d 0b69f616 22e518ee e181ce02 fe3c05f0; do echo \"=== $s\"; ls journal/sessions/${s}*/ 2>/dev/null | head -5; head -30 journal/sessions/${s}*/plan.md 2>/de … [165 caractères tronqués]`
+
+  ```
+=== 0b0a6a0d
+digest.md
+plan.md
+rapport.md
+session.v4.jsonl.zstd
+# Plan de session — N2.h, le mètre propre
+
+> **Mandat ouvert** le 2026-10-31 22 h 30 HAE depuis [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md)
+> — mandat libre de 10 h (nuit du 31/10 au 1/11). Le heartbeat est celui de l'état.
+
+- **Session** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2`
+- **Rôle** : calcul : distillation ; corpus ; évaluation
+- **Périmètre** : N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+- **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`,
+  `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`,
+  `journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/`
+- **Heartbeat** : 2026-11-01 08:35 EST
+- **Objectif final** : un **mètre honnête** pour N2 — corpus dédupliqué (0 % de fenêtres de
+  validation dans l'entraînement), chaîne refaite dessus, porte < 2,5 redéfinie — puis trancher
+  ce que les chiffres contaminés ne pouvaient pas trancher : la **généralité hors dépôt** et le
+  **verrou de longueur**.
+- **Résultat** : corpus 4,63 → 3,61 Mo (−22,2 %), **0 / 2 814** fenêtres de validation dans
+  l'entraînement (contre 32,8 %) ; chaîne propre **3
+… [4717 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls /home/stephane/.dsh/sessions/ | head -20; echo \"=== sessions récentes\"; for d in /home/stephane/.dsh/sessions/*/; do ls \"$d\" 2>/dev/null | head -0; done; find /home/stephane/.dsh/sessions -maxdepth 2 -name \"session.jsonl.zstd\" -newermt \"2026-10-30\" 2>/dev/null | head -20", "d … [131 caractères tronqués]`
+
+  ```
+--home-stephane--
+--home-stephane-Data13TB-stephane-GitHub-contcal--
+--home-stephane-Data13TB-stephane-GitHub-equipment-hauru--
+--home-stephane-Data13TB-stephane-GitHub-gods-eye-view--
+--home-stephane-Data13TB-stephane-GitHub-hauru-top--
+--home-stephane-Data13TB-stephane-GitHub-llama.cpp--
+--home-stephane-Data13TB-stephane-GitHub-Panini--
+--home-stephane-Data13TB-stephane-GitHub-Panini-research--
+--home-stephane-Data13TB-stephane-GitHub-Panini-Research--
+--home-stephane-Data13TB-stephane-GitHub-Qtrinet--
+--home-stephane-Data13TB-stephane-GitHub-Qtrinet-tools-docwatch--
+--home-stephane-Data13TB-stephane-MESS-CALME--
+=== sessions récentes
+  ```
+
+- **bash** `{"command": "D=/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--; ls \"$D\" | head -20; echo \"=== count\"; ls \"$D\" | wc -l; echo \"=== recent\"; ls -lt \"$D\" | head -10", "description": "List Qtrinet workspace session directories", "timeoutMs": 120000, "workdir": "/ … [48 caractères tronqués]`
+
+  ```
+00221850-90de-4287-90ee-324a35e504cd
+04ed1834-b0f8-42a1-aa21-75a75c19647e
+0b0a6a0d-05f5-4308-800c-4792ddb9cbf2
+0b2c86eb-7a8d-4eed-a3dd-fb165f1a8630
+0b69f616-5c75-4c34-b97a-ae05564812af
+0c631fa9-58cb-4d77-a7e0-fc77e5b3f93f
+0f3b6070-57ce-4642-b9ec-3b3956f75978
+11b2d312-9a7e-4a4e-814f-ed0384ed9d4d
+13446299-79d8-497c-ba83-673c176a4637
+15d4e6f4-b2ba-44c7-8c0e-03c141280f9b
+15fd322f-7e9e-48c0-a970-f36335eb622a
+163d631a-6528-4324-b7b3-6487d24feeb5
+1820cf6b-c8a4-411c-894c-31195b9ff7a8
+18b8879c-f211-43b8-9908-cf65e509b21d
+18c3f6d0-5bb1-45bb-9f94-ab0e7812218d
+1966e052-ebc6-4f4b-b7f9-6d1c6cb4b445
+1f9394fb-6435-4928-9a03-2b258e5a28c5
+22bcae27-254b-47b2-acda-87467dab060c
+22e518ee-81b8-4081-ae1b-f0d7a777a1d7
+235066f5-307a-4285-a882-14bc2d06cb7b
+=== count
+110
+=== recent
+total 0
+drwx------. 1 stephane stephane 66  1 nov 13:28 b6a672ec-3349-4a4c-9e23-4478aa823170
+drwx------. 1 stephane stephane 66 31 oct 18:02 0f3b6070-57ce-4642-b9ec-3b3956f75978
+drwx------. 1 stephane stephane 66 31 oct 17:52 df1b1098-d54e-4763-bfc2-2a8cc1498cec
+drwx------. 1 stephane stephane 66 31 oct 17:40 e181ce02-cd50-488a-a6be-e84b79d40dcc
+drwx------. 1 stephane stephane 66 31 oct 17:39 163d631a-6528-4324-b7b3-6487d24feeb5
+dr
+… [375 caractères tronqués]
+  ```
+
+- **bash** `{"command": "D=/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--; ls -la \"$D/fe3c05f0-834b-44f2-8739-501865d652c1/\"; zstd -dc \"$D/fe3c05f0-834b-44f2-8739-501865d652c1/session.jsonl.zstd\" 2>/dev/null | head -3 | cut -c1-400", "description": "Inspect DSH session trace … [92 caractères tronqués]`
+
+  ```
+total 4388
+drwx------. 1 stephane stephane      66 31 oct 17:35 .
+drwx------. 1 stephane stephane    7920  1 nov 13:28 ..
+-rw-r--r--. 1 stephane stephane       0 31 oct 17:35 session.lock
+-rw-------. 1 stephane stephane 4492132  1 nov 13:35 session.v4.jsonl.zstd
+  ```
+
+- **bash** `{"command": "D=/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--; zstd -dc \"$D/fe3c05f0-834b-44f2-8739-501865d652c1/session.v4.jsonl.zstd\" 2>/dev/null | head -2 | cut -c1-600; echo \"=== roles\"; zstd -dc \"$D/fe3c05f0-834b-44f2-8739-501865d652c1/session.v4.jsonl.zstd … [382 caractères tronqués]`
+
+  ```
+{"type":"session","version":4,"id":"fe3c05f0-834b-44f2-8739-501865d652c1","createdAt":1793482527511,"cwd":"/home/stephane/Data13TB/stephane/GitHub/Qtrinet","isSeeded":false,"delegationDepth":0,"agentPreset":"standard"}
+{"type":"permission/preset","seq":0,"time":1793482527532,"data":{"preset":"danger-full-access"}}
+=== roles
+Counter({'tool/result': 786, 'tool/call': 783, 'session-log-deepseek/delivery-accepted': 720, 'step/start': 718, 'assistant/message': 718, 'step/end': 717, 'agent/inbox/spliced': 106, 'user/message': 62, 'turn/start': 7, 'turn/end': 6, 'request/header': 4, 'compaction/prune': 4, 'session/title': 2, 'goal/change': 2, 'session': 1, 'permission/preset': 1, 'sandbox/mode': 1, 'approval/policy': 1, 'subagent/model-selection-policy': 1, 'system/message': 1, 'request/context': 1, 'session/title-llm-request': 1, 'todo/write': 1, 'compaction/start': 1, 'compaction/summary': 1, 'compaction/end': 1})
+  ```
+
+- **bash** `{"command": "D=/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--; zstd -dc \"$D/fe3c05f0-834b-44f2-8739-501865d652c1/session.v4.jsonl.zstd\" 2>/dev/null | python3 -c \"\nimport sys,json\nfor line in sys.stdin:\n    d=json.loads(line)\n    if d.get('type')=='user/message … [209 caractères tronqués]`
+
+  ```
+{"type": "user/message", "seq": 9, "time": 1793482558106, "data": {"content": [{"type": "text", "text": "lis le fichier en-cours.md et prends une tâche qui n'est pas en conflit avec l'autre session"}], "source": {"kind": "user"}, "role": "user", "id": "654e0ee7-6686-44bd-a80c-94db7438e09a"}, "surfaceOp": "append"}
+  ```
+
+- **bash** `{"command": "D=/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--; find \"$D\" -maxdepth 1 -type d -newermt \"2026-10-30 13:00\" 2>/dev/null | sort; echo \"=== extraction\"; python3 - <<'PY'\nimport subprocess, json, pathlib, datetime, glob\nbase=pathlib.Path('/home/step … [1437 caractères tronqués]`
+
+  ```
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/0b69f616-5c75-4c34-b97a-ae05564812af
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/0f3b6070-57ce-4642-b9ec-3b3956f75978
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/163d631a-6528-4324-b7b3-6487d24feeb5
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/22e518ee-81b8-4081-ae1b-f0d7a777a1d7
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/b6a672ec-3349-4a4c-9e23-4478aa823170
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/df1b1098-d54e-4763-bfc2-2a8cc1498cec
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/e181ce02-cd50-488a-a6be-e84b79d40dcc
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Qtrinet--/fe3c05f0-834b-44f2-8739-501865d652c1
+=== extraction
+
+===== b6a672ec-3349-4a4c-9e23-4478aa823170 (1 messa
+… [8488 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"^## \\|^### \\|^| \\*\\*\" docs/pilotage/roadmap.md | head -50; echo \"=== backlog index\"; sed -n '1,60p' docs/pilotage/backlog/index.md", "description": "Read roadmap structure and backlog index", "timeoutMs": 180000, "work … [56 caractères tronqués]`
+
+  ```
+13:## Comment lire cette roadmap
+26:## En un coup d'œil
+30:| **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0, 6/6 portes | B10.3 attend un **encodeur qui porte** ; **B13** : AC-3, DRVF |
+32:| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : corpus propre, **3,0904** en domaine, **16,70 → 3,85** hors dépôt ; N4 partiel | **N2** (plus de français unique, capacité), **N4** (consigne) |
+33:| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) | **R4.4 close** (limites nommées) ; **R1.1/R1.2** (context
+… [11094 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls docs/pilotage/ docs/theorie/ | head -40; echo \"=== programme-r\"; head -60 docs/pilotage/programme-r.md 2>/dev/null; echo \"=== vision\"; head -40 docs/theorie/vision.md 2>/dev/null", "description": "List pilotage docs and read pro … [93 caractères tronqués]`
+
+  ```
+docs/pilotage/:
+backlog
+en-cours.md
+manques.md
+programme-r.md
+references-non-regression.md
+roadmap.md
+utilisation.md
+
+docs/theorie/:
+architecture-native.md
+carte.md
+genealogie-des-langues.md
+glossaire
+glossaire.md
+histoire.md
+jeux-symboliques.md
+lecture-rapide.md
+modele-natif.md
+modules-cerveau-langage.md
+pensee-iterative.md
+pre-traitement-linguistique.md
+protocole-semantique.md
+semantique-universaux.md
+synthese
+vision.md
+=== programme-r
+# Le programme R — le lecteur, de la surface à la réponse
+
+> **Charte de programme.** Ce document dit ce qu'est **R**, pourquoi il existe, ses six phases, ses
+> lois, ce qui tient et ce qui ne tient pas, ses dépendances et sa prochaine action. **État au
+> 2026-11-01.** Les chiffres sont dans les fiches [`reports/`](../../reports/) ; l'ordre et les
+> états dans [`roadmap.md`](roadmap.md) ; la théorie de la lecture dans
+> [`lecture-rapide.md`](../theorie/lecture-rapide.md). Cette page ne remplace ni les unes ni les
+> autres : elle dit **ce qu'on peut affirmer** et **ce qui manque**.
+>
+> **Ce que R n'est pas.** Ni la ligne **N** (le natif), ni la ligne **B** (le sens), ni **A** (le
+> moteur). R n'est pas un modèle ni un benchmark : c'est le **lecteur*
+… [5831 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls docs/pilotage/backlog/ | head -50; echo \"=== manques\"; head -80 docs/pilotage/manques.md; echo \"=== dependances\"; head -50 docs/pilotage/backlog/dependances.md", "description": "Read backlog files, gaps, and dependency graph", " … [81 caractères tronqués]`
+
+  ```
+A2.6-ordonnanceur.md
+A3.2-granularite.md
+A3.3-seuil.md
+A3.4-colab.md
+A5.4-fpga.md
+A6.2-moe-local.md
+A8.0-portes-ppl.md
+A8.3-defaut.md
+B10.2bis-decodeur-attention-croisee.md
+B10.3-raisonnement-z.md
+B11.10-cartes-ambiguites.md
+B12.10-pipeline-m1-m4-m8.md
+B1.5-prose-scientifique.md
+dependances.md
+index.md
+_modele.md
+N0.3b-parite-ppl.md
+N2-distillation.md
+N3-operations-natives.md
+N4-usage-sft.md
+R01-graphe-document.md
+R02-controleur-lecture.md
+R03-banc-lecture-rapide.md
+R04-tete-survol.md
+R05-tete-balayage.md
+R06-tete-relecture.md
+R07-routeur-extractif-generatif.md
+R11-contexte-hierarchique.md
+R12-curriculum-contexte.md
+R13-tokenisation-bpe.md
+R21-memoire-travail-gist.md
+R22-memoire-episodique.md
+R31-restitution-sft.md
+R32-citations-provenance.md
+R41-bloc-tableaux.md
+R42-bloc-code.md
+R43-bloc-maths.md
+R44-encodeur-visuel.md
+R51-lecture-croisee.md
+R52-multilingue-decodeur.md
+=== manques
+# Registre des manques
+
+> **Dernière vérification : 2026-10-27.**
+
+> **Résumé —** Le registre des manques mesurés (M1–M9, N1–N5, architecture) ; chaque ligne porte la
+> mesure qui l'établit et ce qu'elle bloque. **Chargement :** document daté ; **ne pas charger par
+> défaut**. Lire ce résumé, puis la sec
+… [13129 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== plan pensée\"; sed -n '1,80p' journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md; echo \"=== rapport pensée\"; head -60 journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md 2>/dev/null", "description": … [122 caractères tronqués]`
+
+  ```
+=== plan pensée
+# Plan de session — Pensée, la RSN plurielle et le moteur N3
+
+> **Mandat vivant.** Ouvert le 2026-10-31 22 h 45 HAE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md). Ce plan est le **contrat de
+> synergie** : il dit ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
+> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+
+- **Session** : `e181ce02-cd50-488a-a6be-e84b79d40dcc`
+- **Rôle** : Pensée — RSN plurielle, arbre d'états, cycle multi-niveaux, moteur N3 ; analyse de la couche heuristique
+- **Périmètre** : Pensée, R4.4-reste, Coloration
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`,
+  `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`,
+  `reports/r44-*`, `docs/theorie/pre-traitement-linguistique.md`,
+  `docs/schemas/heuristique-*.svg`, `journal/sessions/e181ce02-…/`
+- **Heartbeat** : 2026-11-01 11:45 EST
+- **Prochaine action** : l'analyse heuristique est écrite (5 schémas) ; première mesure de la
+  cascade (langue et frontières sur 71 langues) ; puis AC-3, alpha-bêta, DRVF et le banc anytime
+  (S reste à l'autre TUI).
+- **Éta
+… [6611 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -la tools/carte_decisions.py docs/schemas/chantiers-decision.svg docs/schemas/backlog-dependances.svg 2>/dev/null; head -60 tools/carte_decisions.py 2>/dev/null; echo \"=== S dans roadmap\"; grep -n \"S —\\|structures\\|coloration\" … [175 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 27699 31 oct 12:51 docs/schemas/backlog-dependances.svg
+-rw-r--r--. 1 stephane stephane 23107 30 oct 13:30 docs/schemas/chantiers-decision.svg
+-rwxr-xr-x. 1 stephane stephane 10245 30 oct 13:30 tools/carte_decisions.py
+#!/usr/bin/env python3
+"""carte_decisions.py — la carte de décision des chantiers (SVG).
+
+POURQUOI CETTE CARTE EXISTE. Trois vues ont échoué à aider la décision rapide : le WBS d'états
+(il ne montre ni les dépendances ni les sources de blocage, et il dérive), le Gantt (il étale le
+travail en jours alors qu'on décide par périodes courtes), et le graphe d'items (37 nœuds, juste
+pour la lecture d'ensemble mais dense). Ce qui manque est une vue **par chantier**, où la
+position verticale n'est pas le temps mais la **profondeur de dépendance** : en haut, ce qui
+peut démarrer maintenant ; en dessous, ce que ça débloque ; en rouge, ce qu'une ressource
+externe bloque, avec la ressource nommée.
+
+La carte se lit donc de haut en bas comme un ordre de travail, jamais comme un calendrier.
+
+Usage :
+  python3 tools/carte_decisions.py --svg docs/schemas/chantiers-decision.svg
+"""
+from __future__ import annotations
+
+import argparse
+import pathlib
+import
+… [2152 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '1,80p' docs/theorie/pre-traitement-linguistique.md 2>/dev/null; echo \"=== rapport S ?\"; ls reports/ | grep -iE \"structure|s-|coloration|heuristi\" | head -10", "description": "Read linguistic preprocessing analysis", "timeou … [75 caractères tronqués]`
+
+  ```
+# La couche heuristique — ce que le CPU étiquette avant le réseau
+
+> **Rôle.** Cette note analyse une **couche linguistique de prétraitement par heuristiques** : ce
+> qu'elle peut étiqueter, du mot au document, en plusieurs langues, et ce qu'elle **retire au
+> réseau de neurones**. Elle ne remplace pas une mesure : elle fixe les niveaux, la cascade, le
+> coût et le protocole. Les chiffres cités viennent des fiches ; les **projections** sont dites
+> comme telles.
+>
+> **Ce qu'elle n'est pas.** Un plaidoyer « le CPU remplace le réseau ». Le CPU étiquette la
+> **surface** ; le réseau tranche l'**ambiguïté** et le **sens**. La cascade se juge sur sa
+> **précision par unité de calcul**, pas sur son débit brut.
+
+## 1. La thèse en trois idées
+
+1. **Le réseau paie la surface.** Une part du travail d'un modèle de langue n'est pas du sens :
+   c'est de la normalisation Unicode, de la détection de script et de langue, des frontières de
+   mots et de phrases, des classes fermées, des régions de document. Ces opérations sont
+   **locales, déterministes et bon marché** : un CPU les fait à des ordres de grandeur qui n'ont
+   rien à voir avec un passage dans un transformer.
+2. **L'heuristique ne dé
+… [5353 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '20,40p' docs/pilotage/en-cours.md; echo \"=== coup d'oeil\"; sed -n '26,36p' docs/pilotage/roadmap.md; echo \"=== T0\"; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|violation\" | head -1; ls docs/pilotage/*.md | wc … [156 caractères tronqués]`
+
+  ```
+- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; reprise R4.4 ; **analyse de la couche heuristique**.
+- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes)~~ ; 4) ~~moteur v0 (BFS, greedy, A*, MCTS-lite)~~ ; 5) **AC-3, alpha-bêta, DRVF** ; 6) **banc anytime** (AUC, regret, justification, rejeu) et intégration ; 7) ~~reprise R4.4~~ ; 8) **couche heuristique** (analyse, 5 schémas).
+- **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels, avec des opérateurs hétérogènes.
+- **Stratégie** : théorie d'abord, puis un **v0 petit et mesuré** ; réserver les fichiers ; ne pas toucher aux GPU de N2.
+- **Objectif final** : un **moteur de pensée v0 exécutable** — state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles — documenté, mesuré, committé.
+- **Reprise** : **R4.4** — note de clôture des trois limites (fax 1 bit, exposant fusionné,
+  parité réelle sans questions) ; **S** est actif dans une autre TUI (export pragmatique, 11 tests).
+- **Coloration** : analyse [`pre-traitement-linguistique`](../theorie/pre-traitement-linguistique.md)
+  (5 schémas) — le
+… [3176 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > docs/pilotage/chantiers.md <<'EOF'\n# Les chantiers — la vision à jour et leurs relations\n\n> **Ce que ce document est.** La **vue d'ensemble des chantiers** : ce que les demandes des\n> 48 dernières heures ont déplacé, l'invent … [17598 caractères tronqués]`
+
+  ```
+192 docs/pilotage/chantiers.md
+  T0 max : 3820 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > tools/carte_chantiers.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"carte_chantiers.py — la carte des chantiers et de leurs relations (SVG).\n\nPOURQUOI CETTE CARTE. La carte de décision (`carte_decisions.py`) lit le backlog A/B/N/R  … [9313 caractères tronqués]`
+
+  ```
+→ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/chantiers-vision.svg
+  schémas · 435 document(s) · 64 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; which rsvg-convert inkscape convert magick 2>/dev/null; rsvg-convert -w 1260 -h 720 docs/schemas/chantiers-vision.svg -o /tmp/chantiers-vision.png 2>&1 | head -2; ls -la /tmp/chantiers-vision.png 2>/dev/null", "description": "Render SV … [110 caractères tronqués]`
+
+  ```
+/usr/bin/inkscape
+/usr/bin/convert
+/usr/bin/magick
+bash: line 1: rsvg-convert: command not found
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 120 inkscape docs/schemas/chantiers-vision.svg --export-type=png --export-filename=/tmp/chantiers-vision.png --export-width=1260 2>&1 | tail -3; ls -la /tmp/chantiers-vision.png 2>/dev/null", "description": "Render SVG with Ink … [90 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 146879  1 nov 13:42 /tmp/chantiers-vision.png
+  ```
+
+- **read_image** `{"file_path": "/tmp/chantiers-vision.png"}`
+
+  ```
+Error: cannot read "/tmp/chantiers-vision.png" as an image: model "deepseek-flash" does not declare image input; switch to an image-capable model to read images
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/carte_chantiers.py'); s=p.read_text()\n# remplacer la liste ARETES et la fonction fleche par des chemins explicites\ndebut=s.index('# (source, cible, libellé, pointillé)')\nfin=s. … [3487 caractères tronqués]`
+
+  ```
+chemins explicites
+→ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/chantiers-vision.svg
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+libellés dans une boîte: [(160.0, 130.0, 'D — les données'), (160.0, 154.0, '10 corpus · 38,8 Go'), (440.0, 130.0, 'L — le bloc langue'), (440.0, 154.0, 'surface · heuristique + neuronal'), (720.0, 130.0, 'S — les structures')] 16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport re, pathlib\nsvg=pathlib.Path('docs/schemas/chantiers-vision.svg').read_text()\nrects=[tuple(map(float,m)) for m in re.findall(r'<rect x=\"([\\d.]+)\" y=\"([\\d.]+)\" width=\"([\\d.]+)\" height=\"([\\d.]+)\"',s … [1722 caractères tronqués]`
+
+  ```
+arêtes 15 libellés dans une boîte []
+segments qui traversent une boîte 0 []
+-rw-r--r--. 1 stephane stephane 130755  1 nov 13:44 /tmp/chantiers-vision.png
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\n# roadmap : pointeur\np=pathlib.Path('docs/pilotage/roadmap.md'); s=p.read_text()\nancre=\"## L'ordre du jour (carpe diem)\"\nligne=(\"**La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R,  … [2872 caractères tronqués]`
+
+  ```
+roadmap, en-cours, journal mis à jour
+  T0 max : 3838 mots (budget 4 000)
+     · annotation : docs/implantation/bloc-linguistique.md → ../../reports/rapport-bloc-linguistique.md (cassé)
+     · annotation : docs/implantation/bloc-linguistique.md → ../../reports/rapport-bloc-linguistique.md (cassé)
+     · navigation : docs/implantation/bloc-linguistique.md n'a aucun lien entrant
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/revue_documentation.py 2>&1 | tail -12; echo \"=== fichier\"; ls -la docs/implantation/bloc-linguistique.md 2>/dev/null; git status --short docs/implantation/bloc-linguistique.md docs/pilotage/chantiers.md docs/schemas/ch … [205 caractères tronqués]`
+
+  ```
+revue de documentation · 384 fiche(s) · 471 JSON · 117 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 4 anomalie(s) :
+     · compteurs : en-cours.md dit 80 portes, le disque en a 81
+     · compteurs : en-cours.md dit 115 documents, le disque en a 117
+     · compteurs : en-cours.md dit 383 fichiers, le disque en a 384
+     · compteurs : en-cours.md dit 469 JSON, le disque en a 471
+=== fichier
+-rw-------. 1 stephane stephane 16517  1 nov 13:44 docs/implantation/bloc-linguistique.md
+?? docs/implantation/bloc-linguistique.md
+?? docs/pilotage/chantiers.md
+?? docs/schemas/chantiers-vision.svg
+?? tools/carte_chantiers.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '82,96p' docs/pilotage/en-cours.md", "description": "Read state counters block", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+- **Pensée — state store v0** : théorie (10 tours, 9 schémas) et **state store v0** (6/6 portes
+  T0–T4 ; BFS, greedy, A*, MCTS-lite ; jouet des cruches) ; fiche
+  [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine : AC-3, alpha-bêta, DRVF, banc anytime.
+
+
+## Les chiffres de l'état
+
+> **Source unique.** Ces valeurs sont vérifiées par `tools/revue_documentation.py`.
+
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **383** / **469** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **115** (hors archive et README) | `docs/**/*.md` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"| portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |\",\n            … [922 caractères tronqués]`
+
+  ```
+revue de documentation · 384 fiche(s) · 471 JSON · 117 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3838 mots (budget 4 000)
+     · 11 puces dans « Ce qui est en cours » > 10
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\nligne=\"- **Chantiers — la vue d'ensemble** : huit chantiers (A/B/N/R/**S**/**L**/**D**/B13) et leurs relations ; doc [`chantiers`](chantie … [658 caractères tronqués]`
+
+  ```
+ligne déplacée
+  en-cours · 1464 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3838 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor t in \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifie_etat_a_jour.py\"; do timeout 300 $t >/tmp/g.log 2>&1; c=$?; printf \"%-32s [%s] \" \"$t\" \"$c\"; tail -1 /tmp/g.log | cut -c1-8 … [3272 caractères tronqués]`

@@ -89,10 +89,10 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
+| portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **383** / **469** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **115** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **384** / **471** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **117** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
@@ -119,6 +119,7 @@ action** — pas les statuts, qui dérivent. Vue d'ensemble :
 styles · **C5** domaines · **C6** documentation · **C7** pensée — hors graphe, mesurés, du récit.
 
 ## Ce qui reste
+- **Chantiers — la vue d'ensemble** : huit chantiers (A/B/N/R/**S**/**L**/**D**/B13) et leurs relations ; doc [`chantiers`](chantiers.md), carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
 
 **N2.h** — **close** (N2.i : 12,93 littérature, 33,83 anglais ; porte < 2,5 non atteinte) ;
 **Pensée** — AC-3, alpha-bêta, DRVF, banc anytime (session `e181ce02`) ; **N4** — la consigne

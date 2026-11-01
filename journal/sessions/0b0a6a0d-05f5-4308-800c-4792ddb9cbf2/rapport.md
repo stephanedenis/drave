@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 20.4 h |
-| Tours | 15 |
-| Messages | 960 |
-| Appels d'outils | 897 |
+| Durée | 21.3 h |
+| Tours | 16 |
+| Messages | 974 |
+| Appels d'outils | 910 |
 | Fichiers touchés | 11 |
-| Commandes | 743 |
+| Commandes | 754 |
 | Sous-agents | 0 |
 | Commits | 24 |
 | Compactages de contexte | 1 |
@@ -57,6 +57,8 @@
 **Tour 14** — ça va prendre des contextes plus larges pour trancher sur les interprétations ambigues.
 
 **Tour 15** — peux-tu comencer l'entrainement avec des phrases non ambigue et étudier les effets  sur la qualité du bloc linguistique.
+
+**Tour 16** — continue avec de trèes gros corpus multilingues
 
 ## 2. Déroulé, étape par étape
 
@@ -816,6 +818,27 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 - Vérifications : revue ✅, état ✅, **T0 3 811 / 4 000**, journal ✅. **Serveur du banc toujours en ligne** (HTTP 200
 … [781 caractères tronqués]
 
+### Tour 16 — continue avec de trèes gros corpus multilingues
+
+*13 appels d'outils.* Actions notables :
+
+- bash — List the Wikipedia language bases and GPU status
+- bash — Extract 10-language Wikipedia articles
+- bash — Extract the multilingual Wikipedia corpus
+- bash — Build and deduplicate the multilingual corpus
+- bash — Re-extract from a different page range to avoid overlap
+- bash — Rebuild the multilingual corpus and deduplicate
+- bash — Write the per-language evaluation script
+- bash — Wait for the multilingual dedup
+- job_output
+- bash — Check contamination per language and launch the multilingual base
+- bash — Evaluate the monolingual French base on all ten languages
+- bash — Wait for the multilingual base training
+
+**Synthèse produite :**
+
+⏵ Corpus multilingue : 9 langues de Wikipédia, entraînement et mesure par langue
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -876,7 +899,7 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 703 autres
+- … et 714 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1004,7 +1027,7 @@ J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki
 
 ## 5. Erreurs rencontrées
 
-47 sorties en erreur ou divergentes. Les premières :
+48 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5

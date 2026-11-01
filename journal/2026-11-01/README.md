@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**47 commits** · **3 session(s)** · **9 thème(s)**
+**48 commits** · **4 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 11 | [docs.md](docs.md) |
-| memoire | 1 | [memoire.md](memoire.md) |
+| memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 26 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -25,65 +25,81 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 20.4 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 20.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 20.3 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 21.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 21.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 21.2 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
 | heure | commit | fait |
 |---|---|---|
-| 00:19 | `54cba6af` | R4.4 — LES SCANS : LA PHOTO PASSE DE 55,9 % À 7,0 % DE WER, LES COLONNES DE 89 % À 0,5 %, UN VRAI LIVRE TIENT 7,10 % |
-| 00:23 | `a9211299` | ÉTAT — LA PAGE VIVANTE PASSE AU 1er NOVEMBRE : LA REVUE EXIGE LA DATE DU DERNIER COMMIT |
-| 00:29 | `c51cee41` | R4.4 — UN SECOND VRAI SCAN : 23,3 % DE WER MAIS 88,5 % DES MOTS — C'EST L'ORDRE DES COLONNES |
-| 00:46 | `944dff2b` | R4.4 — LA VARIANCE ENTRE GRAINES : LE WER TIENT À ±1 POINT, LA PRÉSERVATION VARIE DE 17 POINTS |
-| 01:05 | `d6b4da35` | R4.4 — TROIS GRAINES ET UN PETIT TEXTE : LA PRÉSERVATION VARIE DE 23 POINTS, L'AGRANDISSEMENT GAGNE 0,6 POINT |
-| 01:10 | `6bedea0f` | R4.4 — LA ROTATION : 3° COÛTENT 4,5 POINTS DE WER, LE REDRESSEMENT LES REPREND ; 0,8° N'EST PAS TOUCHÉ |
-| 01:15 | `b859f27f` | R4.4 — LE REDRESSEMENT SERT JUSQU'À 6°, PUIS DÉCROCHE : 10° DONNENT 43,5 % DE WER |
-| 01:17 | `5a681326` | ÉTAT — LE BUDGET DE CONTEXTE REPASSE SOUS 4 000 MOTS (5 MOTS RETIRÉS) |
-| 01:17 | `53fa2e5a` | R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 % |
-| 01:25 | `50e59804` | R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %) |
-| 01:29 | `1e0dfa83` | R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR |
-| 01:32 | `6332b8cb` | R4.4 — LA SPÉCIFICATION DIT ENFIN CE QUE LE BLOC FAIT : GOUTTIÈRE SUR LES MOTS, GRILLE ADAPTATIVE, COÛT, ET LES LIMITES NOMMÉES |
-| 01:36 | `caff2033` | R4.4 — TROIS COLONNES : LA GOUTTIÈRE UNIQUE COUPE LA PAGE EN DEUX ET LE WER MONTE À 52,5 % |
-| 01:38 | `55e6adbf` | ÉTAT — BUDGET DE CONTEXTE : LA LIGNE R4.4 SE RESSUERRE (T0 ≤ 4 000) |
-| 01:43 | `dc737497` | R4.4 — LE FOND D'ÉCLAIRAGE SE CALCULE SUR UNE VIGNETTE : 9,5 S → 1,4 S, LE PAPIER GAGNE 6,6 POINTS DE PRÉSERVATION |
-| 01:54 | `69bf5ecb` | R4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS |
-| 01:56 | `1776f53e` | R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER |
-| 02:24 | `e7b51508` | R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %) |
-| 02:45 | `e36e8185` | N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE |
-| 02:48 | `1da58752` | JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR |
-| 02:51 | `4aef1413` | R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS |
-| 02:55 | `7452a447` | SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION |
-| 03:05 | `0a802a61` | R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER |
-| 03:58 | `52cf5853` | N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS |
-| 04:02 | `88f598c3` | ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES |
-| 05:28 | `3a6ae9ca` | N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS |
-| 06:50 | `d2613e8f` | N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN |
-| 06:58 | `18f28437` | RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ |
-| 07:07 | `43a7b3fe` | ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE |
-| 07:18 | `a20de579` | PENSÉE v0 — LE STATE STORE EXISTE ET TIENT SES SIX PORTES |
-| 08:32 | `17ececfc` | N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE |
-| 08:34 | `95d17ae6` | SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES |
-| 10:31 | `68b5e819` | LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE) |
-| 10:51 | `ae9ad3be` | S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS |
-| 10:54 | `1c9d3d26` | DONNÉES — L'INVENTAIRE LOCAL : 132 GO DE WIKIPÉDIA, 228 GO DE DOCUMENTS, 2,8 TO DE VIDÉOS QUI NE SONT PAS DU TEXTE |
-| 10:56 | `48d2c064` | ÉTAT — N2.h ET R4.4 CLOSES, PENSÉE v0 ACTIVE : L'ÉTAT SUIT LES MANDATS |
-| 11:04 | `0ca545eb` | S — LE GÉNÉRATEUR DE CANDIDATS : UNE PHRASE BRUTE → DES STRUCTURES À VALIDER |
-| 11:13 | `5a5915a5` | S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE |
-| 11:15 | `1145834c` | ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON |
-| 11:17 | `4ff739cf` | ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS) |
-| 11:19 | `cdb82916` | ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION |
-| 11:22 | `74d7f0b9` | DONNÉES — LE CORPUS FRANÇAIS EST LÀ : 2,5 M ARTICLES WIKIPÉDIA, 594 M MOTS, 0 FUITE ENTRE SPLITS |
-| 11:27 | `8aaa3c13` | S — DES CONTEXTES PLUS LARGES, ET LA MESURE DE CE QU'IL FAUT POUR TRANCHER |
-| 11:44 | `e331ef42` | COLORATION — LA COUCHE HEURISTIQUE : CE QUE LE CPU ÉTIQUETTE AVANT LE RÉSEAU |
-| 12:34 | `73b00495` | R — LA CHARTE DU PROGRAMME : SIX PHASES, TROIS LOIS, CE QUI TIENT ET CE QUI MANQUE |
-| 12:36 | `0a17760d` | ÉTAT — COMPTEUR JSON 467 (CORPUS WIKI) |
-| 12:40 | `c96eb475` | N2.j — 186 Mo DE VRAI FRANÇAIS : LE BLOC LINGUISTIQUE GAGNE ×1,7 À ×2,6 HORS DOMAINE |
+| 00:19 | `2f79057b` | R4.4 — LES SCANS : LA PHOTO PASSE DE 55,9 % À 7,0 % DE WER, LES COLONNES DE 89 % À 0,5 %, UN VRAI LIVRE TIENT 7,10 % |
+| 00:23 | `07ec2fdf` | ÉTAT — LA PAGE VIVANTE PASSE AU 1er NOVEMBRE : LA REVUE EXIGE LA DATE DU DERNIER COMMIT |
+| 00:29 | `04a452de` | R4.4 — UN SECOND VRAI SCAN : 23,3 % DE WER MAIS 88,5 % DES MOTS — C'EST L'ORDRE DES COLONNES |
+| 00:46 | `9e766f69` | R4.4 — LA VARIANCE ENTRE GRAINES : LE WER TIENT À ±1 POINT, LA PRÉSERVATION VARIE DE 17 POINTS |
+| 01:05 | `bf589c21` | R4.4 — TROIS GRAINES ET UN PETIT TEXTE : LA PRÉSERVATION VARIE DE 23 POINTS, L'AGRANDISSEMENT GAGNE 0,6 POINT |
+| 01:10 | `b2b7dff8` | R4.4 — LA ROTATION : 3° COÛTENT 4,5 POINTS DE WER, LE REDRESSEMENT LES REPREND ; 0,8° N'EST PAS TOUCHÉ |
+| 01:15 | `0a2b3725` | R4.4 — LE REDRESSEMENT SERT JUSQU'À 6°, PUIS DÉCROCHE : 10° DONNENT 43,5 % DE WER |
+| 01:17 | `9366a219` | ÉTAT — LE BUDGET DE CONTEXTE REPASSE SOUS 4 000 MOTS (5 MOTS RETIRÉS) |
+| 01:17 | `b333136f` | R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 % |
+| 01:25 | `28022a23` | R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %) |
+| 01:29 | `ed20c9e2` | R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR |
+| 01:32 | `f7ea2ee1` | R4.4 — LA SPÉCIFICATION DIT ENFIN CE QUE LE BLOC FAIT : GOUTTIÈRE SUR LES MOTS, GRILLE ADAPTATIVE, COÛT, ET LES LIMITES NOMMÉES |
+| 01:36 | `4f1c89fb` | R4.4 — TROIS COLONNES : LA GOUTTIÈRE UNIQUE COUPE LA PAGE EN DEUX ET LE WER MONTE À 52,5 % |
+| 01:38 | `bbee7a11` | ÉTAT — BUDGET DE CONTEXTE : LA LIGNE R4.4 SE RESSUERRE (T0 ≤ 4 000) |
+| 01:43 | `aad1d11d` | R4.4 — LE FOND D'ÉCLAIRAGE SE CALCULE SUR UNE VIGNETTE : 9,5 S → 1,4 S, LE PAPIER GAGNE 6,6 POINTS DE PRÉSERVATION |
+| 01:54 | `fa1c0cdc` | R4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS |
+| 01:56 | `52ceb6e5` | R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER |
+| 02:24 | `b9e4300f` | R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %) |
+| 02:45 | `585d5a09` | N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE |
+| 02:48 | `282760b2` | JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR |
+| 02:51 | `72f5a69f` | R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS |
+| 02:55 | `0f0b678c` | SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION |
+| 03:05 | `3aab9ebb` | R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER |
+| 03:58 | `22eae325` | N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS |
+| 04:02 | `aa3f5901` | ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES |
+| 05:28 | `8aeefaff` | N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS |
+| 06:50 | `47f72042` | N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN |
+| 06:58 | `72964e3a` | RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ |
+| 07:07 | `69837ad6` | ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE |
+| 07:18 | `481083ee` | PENSÉE v0 — LE STATE STORE EXISTE ET TIENT SES SIX PORTES |
+| 08:32 | `51c988a6` | N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE |
+| 08:34 | `b91be742` | SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES |
+| 10:31 | `e6d92ce4` | LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE) |
+| 10:51 | `4f1c4217` | S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS |
+| 10:54 | `cfa7280d` | DONNÉES — L'INVENTAIRE LOCAL : 132 GO DE WIKIPÉDIA, 228 GO DE DOCUMENTS, 2,8 TO DE VIDÉOS QUI NE SONT PAS DU TEXTE |
+| 10:56 | `9a3c04bf` | ÉTAT — N2.h ET R4.4 CLOSES, PENSÉE v0 ACTIVE : L'ÉTAT SUIT LES MANDATS |
+| 11:04 | `436d4dde` | S — LE GÉNÉRATEUR DE CANDIDATS : UNE PHRASE BRUTE → DES STRUCTURES À VALIDER |
+| 11:13 | `0983977f` | S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE |
+| 11:15 | `01e7061c` | ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON |
+| 11:17 | `5fd90a19` | ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS) |
+| 11:19 | `86e1f9a4` | ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION |
+| 11:22 | `67d1ecc0` | DONNÉES — LE CORPUS FRANÇAIS EST LÀ : 2,5 M ARTICLES WIKIPÉDIA, 594 M MOTS, 0 FUITE ENTRE SPLITS |
+| 11:27 | `4da50110` | S — DES CONTEXTES PLUS LARGES, ET LA MESURE DE CE QU'IL FAUT POUR TRANCHER |
+| 11:44 | `6ae737fd` | COLORATION — LA COUCHE HEURISTIQUE : CE QUE LE CPU ÉTIQUETTE AVANT LE RÉSEAU |
+| 12:34 | `8ec96646` | R — LA CHARTE DU PROGRAMME : SIX PHASES, TROIS LOIS, CE QUI TIENT ET CE QUI MANQUE |
+| 12:36 | `959da72d` | ÉTAT — COMPTEUR JSON 467 (CORPUS WIKI) |
+| 12:40 | `6cf77396` | N2.j — 186 Mo DE VRAI FRANÇAIS : LE BLOC LINGUISTIQUE GAGNE ×1,7 À ×2,6 HORS DOMAINE |
+| 12:55 | `a31a2e4d` | DONNÉES — LES DIX LANGUES SONT LÀ : 21,6 M ARTICLES, 31,4 G CARACTÈRES, 38,8 GO, 0 FUITE |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**La vision relue sur 48 h, et l'inventaire élargi.** Les messages humains des sessions
+`0b69f616`, `22e518ee`, `0b0a6a0d`, `fe3c05f0`, `e181ce02` et des sessions de QA visuelle ont été
+relus dans les traces DSH. Ils disent la même chose en plusieurs temps : les blocs sont
+**substituables** (neuronal, classique, matériel) et l'interface reste Drave ; le texte se lit en
+**surface d'abord** (octet → document, multilingue), avec une version **heuristique CPU** et une
+version **neuronale** du bloc langue, substituables ou en parallèle ; la **pragmatique** est un
+niveau (double sens conservé) ; les interprétations sont **plurielles** (RSN, arbre d'états,
+stratégies classiques) ; **S** valide les structures avec l'humain et le LLM et construit la
+banque ; **D** (les 10 corpus) alimente N2, L, S et le banc ; **R** est la preuve d'usage.
+L'inventaire est passé de quatre chantiers (A/B/N/R) à **huit** — S, L, D et B13 — avec leurs
+relations, les trois chemins critiques et les tensions à trancher, dans
+[`chantiers`](../../docs/pilotage/chantiers.md) et la carte
+[`chantiers-vision`](../../docs/schemas/chantiers-vision.svg).
+
 **Les corpus Wikipédia par langue sont construits.** Dix langues (ar, de, en, es, fr, it, ja, pt,
 ru, zh), **21 630 731 articles**, **31,42 G caractères** (4 643 M mots pour les langues à espaces,
 ja/zh comptés en caractères), **38,8 Go** — le stock multilingue qui manquait, contre 5,36 Mo de

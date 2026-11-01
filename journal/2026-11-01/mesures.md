@@ -8,32 +8,32 @@
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 00:19 | `54cba6af` | R4.4 — LES SCANS : LA PHOTO PASSE DE 55,9 % À 7,0 % DE WER, LES COLONNES DE 89 % À 0,5 %, UN VRAI LIVRE TIENT 7,10 % | `encodeur-visuel.md`, `R44-encodeur-visuel.md`, `en-cours.md` (+26) |
-| 00:29 | `c51cee41` | R4.4 — UN SECOND VRAI SCAN : 23,3 % DE WER MAIS 88,5 % DES MOTS — C'EST L'ORDRE DES COLONNES | `en-cours.md`, `README.md`, `docs.md` (+13) |
-| 00:46 | `944dff2b` | R4.4 — LA VARIANCE ENTRE GRAINES : LE WER TIENT À ±1 POINT, LA PRÉSERVATION VARIE DE 17 POINTS | `en-cours.md`, `README.md`, `docs.md` (+11) |
-| 01:05 | `d6b4da35` | R4.4 — TROIS GRAINES ET UN PETIT TEXTE : LA PRÉSERVATION VARIE DE 23 POINTS, L'AGRANDISSEMENT GAGNE 0,6 POINT | `en-cours.md`, `README.md`, `docs.md` (+12) |
-| 01:10 | `6bedea0f` | R4.4 — LA ROTATION : 3° COÛTENT 4,5 POINTS DE WER, LE REDRESSEMENT LES REPREND ; 0,8° N'EST PAS TOUCHÉ | `en-cours.md`, `README.md`, `docs.md` (+9) |
-| 01:15 | `b859f27f` | R4.4 — LE REDRESSEMENT SERT JUSQU'À 6°, PUIS DÉCROCHE : 10° DONNENT 43,5 % DE WER | `en-cours.md`, `README.md`, `docs.md` (+7) |
-| 01:17 | `53fa2e5a` | R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 % | `R44-encodeur-visuel.md`, `en-cours.md`, `roadmap.md` (+16) |
-| 01:25 | `50e59804` | R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %) | `en-cours.md`, `README.md`, `distribue.md` (+11) |
-| 01:29 | `1e0dfa83` | R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR | `en-cours.md`, `README.md`, `distribue.md` (+9) |
-| 01:36 | `caff2033` | R4.4 — TROIS COLONNES : LA GOUTTIÈRE UNIQUE COUPE LA PAGE EN DEUX ET LE WER MONTE À 52,5 % | `encodeur-visuel.md`, `en-cours.md`, `README.md` (+7) |
-| 01:43 | `dc737497` | R4.4 — LE FOND D'ÉCLAIRAGE SE CALCULE SUR UNE VIGNETTE : 9,5 S → 1,4 S, LE PAPIER GAGNE 6,6 POINTS DE PRÉSERVATION | `R44-encodeur-visuel.md`, `en-cours.md`, `roadmap.md` (+19) |
-| 01:54 | `69bf5ecb` | R4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS | `en-cours.md`, `README.md`, `distribue.md` (+10) |
-| 01:56 | `1776f53e` | R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER | `en-cours.md`, `roadmap.md`, `README.md` (+12) |
-| 02:24 | `e7b51508` | R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %) | `encodeur-visuel.md`, `R44-encodeur-visuel.md`, `en-cours.md` (+18) |
-| 02:45 | `e36e8185` | N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE | `N2-distillation.md`, `en-cours.md`, `references-non-regression.md` (+23) |
-| 02:51 | `4aef1413` | R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS | `encodeur-visuel.md`, `R44-encodeur-visuel.md`, `en-cours.md` (+19) |
-| 03:05 | `0a802a61` | R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER | `en-cours.md`, `README.md`, `distribue.md` (+10) |
-| 03:58 | `52cf5853` | N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS | `en-cours.md`, `roadmap.md`, `README.md` (+12) |
-| 05:28 | `3a6ae9ca` | N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS | `en-cours.md`, `roadmap.md`, `README.md` (+13) |
-| 06:58 | `18f28437` | RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ | `en-cours.md`, `roadmap.md`, `README.md` (+11) |
-| 08:32 | `17ececfc` | N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE | `en-cours.md`, `roadmap.md`, `README.md` (+13) |
-| 10:51 | `ae9ad3be` | S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS | `.gitmodules`, `en-cours.md`, `roadmap.md` (+18) |
-| 11:13 | `5a5915a5` | S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE | `en-cours.md`, `README.md`, `attention.md` (+19) |
-| 11:15 | `1145834c` | ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON | `en-cours.md`, `README.md`, `attention.md` (+13) |
-| 11:27 | `8aaa3c13` | S — DES CONTEXTES PLUS LARGES, ET LA MESURE DE CE QU'IL FAUT POUR TRANCHER | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
-| 12:40 | `c96eb475` | N2.j — 186 Mo DE VRAI FRANÇAIS : LE BLOC LINGUISTIQUE GAGNE ×1,7 À ×2,6 HORS DOMAINE | `en-cours.md`, `README.md`, `attention.md` (+18) |
+| 00:19 | `2f79057b` | R4.4 — LES SCANS : LA PHOTO PASSE DE 55,9 % À 7,0 % DE WER, LES COLONNES DE 89 % À 0,5 %, UN VRAI LIVRE TIENT 7,10 % | `encodeur-visuel.md`, `R44-encodeur-visuel.md`, `en-cours.md` (+26) |
+| 00:29 | `04a452de` | R4.4 — UN SECOND VRAI SCAN : 23,3 % DE WER MAIS 88,5 % DES MOTS — C'EST L'ORDRE DES COLONNES | `en-cours.md`, `README.md`, `docs.md` (+13) |
+| 00:46 | `9e766f69` | R4.4 — LA VARIANCE ENTRE GRAINES : LE WER TIENT À ±1 POINT, LA PRÉSERVATION VARIE DE 17 POINTS | `en-cours.md`, `README.md`, `docs.md` (+11) |
+| 01:05 | `bf589c21` | R4.4 — TROIS GRAINES ET UN PETIT TEXTE : LA PRÉSERVATION VARIE DE 23 POINTS, L'AGRANDISSEMENT GAGNE 0,6 POINT | `en-cours.md`, `README.md`, `docs.md` (+12) |
+| 01:10 | `b2b7dff8` | R4.4 — LA ROTATION : 3° COÛTENT 4,5 POINTS DE WER, LE REDRESSEMENT LES REPREND ; 0,8° N'EST PAS TOUCHÉ | `en-cours.md`, `README.md`, `docs.md` (+9) |
+| 01:15 | `0a2b3725` | R4.4 — LE REDRESSEMENT SERT JUSQU'À 6°, PUIS DÉCROCHE : 10° DONNENT 43,5 % DE WER | `en-cours.md`, `README.md`, `docs.md` (+7) |
+| 01:17 | `b333136f` | R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 % | `R44-encodeur-visuel.md`, `en-cours.md`, `roadmap.md` (+16) |
+| 01:25 | `28022a23` | R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %) | `en-cours.md`, `README.md`, `distribue.md` (+11) |
+| 01:29 | `ed20c9e2` | R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR | `en-cours.md`, `README.md`, `distribue.md` (+9) |
+| 01:36 | `4f1c89fb` | R4.4 — TROIS COLONNES : LA GOUTTIÈRE UNIQUE COUPE LA PAGE EN DEUX ET LE WER MONTE À 52,5 % | `encodeur-visuel.md`, `en-cours.md`, `README.md` (+7) |
+| 01:43 | `aad1d11d` | R4.4 — LE FOND D'ÉCLAIRAGE SE CALCULE SUR UNE VIGNETTE : 9,5 S → 1,4 S, LE PAPIER GAGNE 6,6 POINTS DE PRÉSERVATION | `R44-encodeur-visuel.md`, `en-cours.md`, `roadmap.md` (+19) |
+| 01:54 | `fa1c0cdc` | R4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1,1 %, RIEN NE BOUGE AILLEURS | `en-cours.md`, `README.md`, `distribue.md` (+10) |
+| 01:56 | `52ceb6e5` | R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER | `en-cours.md`, `roadmap.md`, `README.md` (+12) |
+| 02:24 | `b9e4300f` | R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %) | `encodeur-visuel.md`, `R44-encodeur-visuel.md`, `en-cours.md` (+18) |
+| 02:45 | `585d5a09` | N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE | `N2-distillation.md`, `en-cours.md`, `references-non-regression.md` (+23) |
+| 02:51 | `72f5a69f` | R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS | `encodeur-visuel.md`, `R44-encodeur-visuel.md`, `en-cours.md` (+19) |
+| 03:05 | `3aab9ebb` | R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER | `en-cours.md`, `README.md`, `distribue.md` (+10) |
+| 03:58 | `22eae325` | N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS | `en-cours.md`, `roadmap.md`, `README.md` (+12) |
+| 05:28 | `8aeefaff` | N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS | `en-cours.md`, `roadmap.md`, `README.md` (+13) |
+| 06:58 | `72964e3a` | RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ | `en-cours.md`, `roadmap.md`, `README.md` (+11) |
+| 08:32 | `51c988a6` | N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE | `en-cours.md`, `roadmap.md`, `README.md` (+13) |
+| 10:51 | `4f1c4217` | S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS | `.gitmodules`, `en-cours.md`, `roadmap.md` (+18) |
+| 11:13 | `0983977f` | S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE | `en-cours.md`, `README.md`, `attention.md` (+19) |
+| 11:15 | `01e7061c` | ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON | `en-cours.md`, `README.md`, `attention.md` (+13) |
+| 11:27 | `4da50110` | S — DES CONTEXTES PLUS LARGES, ET LA MESURE DE CE QU'IL FAUT POUR TRANCHER | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
+| 12:40 | `6cf77396` | N2.j — 186 Mo DE VRAI FRANÇAIS : LE BLOC LINGUISTIQUE GAGNE ×1,7 À ×2,6 HORS DOMAINE | `en-cours.md`, `README.md`, `attention.md` (+18) |
 
 ## Chiffres du jour
 
@@ -43,9 +43,10 @@
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 20.4 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 20.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 20.3 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 21.3 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `b6a672ec-3349-4a4c-9e23-4478aa823170` — Git push to origin remote (début 2026-11-01 13:28, 0.1 h) → [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 21.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 21.2 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
