@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 14.7 h |
-| Tours | 5 |
-| Messages | 688 |
-| Appels d'outils | 647 |
+| Durée | 14.8 h |
+| Tours | 6 |
+| Messages | 717 |
+| Appels d'outils | 677 |
 | Fichiers touchés | 11 |
-| Commandes | 526 |
+| Commandes | 555 |
 | Sous-agents | 0 |
-| Commits | 13 |
+| Commits | 14 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -37,6 +37,8 @@
 **Tour 4** — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon travail en maintenant ce document à jour pour que les autres sessions locales puissent être en synergie avec tes travaux.
 
 **Tour 5** — continue
+
+**Tour 6** — vérifie l'état des autres sessions dsh et mets à jour les fichiers en-cours.md et roadmap.md
 
 ## 2. Déroulé, étape par étape
 
@@ -227,7 +229,7 @@ N2 avait un défaut plus grave que son plateau : **son mètre mesurait de la mé
 
 ### Tour 5 — continue
 
-*17 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Test whether the local window mask is the second lock
 - bash — Add the mask test to the report, roadmap and state
@@ -243,10 +245,55 @@ N2 avait un défaut plus grave que son plateau : **son mètre mesurait de la mé
 - bash — Record the census in the repo and the state
 - bash — Trim the state to fit after the census
 - bash — Commit the census
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Enregistrement du recensement : 27,7 Mo de français unique, 8,5× le corpus utilisé
+⏵ Clôture — deux ajouts depuis le bilan, et l'état est propre
+
+\## Ce que j'ai ajouté après le bilan
+
+**1. Le second verrou n'est pas le masque** (`d2613e8f`). À 512 octets, l'attention locale ne laisse voir que les 256 précédents. J'ai élargi la fenêtre **à l'inférence** sur les mêmes modèles : 6,13 (fenêtre 256) → **6,37** (512) → 6,37 (1 024) pour R, et 5,46 → 5,42 pour DR. Élargir le masque **ne récupère rien**. Le second verrou est donc l'**entraînement** — le modèle n'a jamais vu plus de 128 octets de contexte — et non la fenêtre. Pour R1, lire 1 000 octets demandera des contextes longs à l'entraînement (les positions aléatoires étant la condition pour que les positions suivent), pas un réglage de masque.
+
+**2. Le levier « plus de texte » a un chiffre** (`18f28437`). Recensement avec les mêmes shingles que le corpus propre : `docs+journal` (995 documents) contient **27,67 Mo uniques** sur 48,73 bruts (−43,3 %), et avec `reports` (1 540 documents), **30,35 Mo**. Le corpus d'entraînement de N2.h fait 3,24 Mo : il y a **8,5 fois plus de français disponible** dans le dépôt que ce qui a été mangé. Réserve : `journal/sessions` contient des transcripts, à filtrer avant d'en faire un corpus. Manifeste : `reports/recensement-francais.json`.
+
+\## État final
+
+- **7 commits** cette nuit : `e36e8185` (corpus + porte honnête + longueur), `1da58752` (journal), `52cf5853` (combinaison), `88f598c3` (clôture), `3a6ae9ca` (capacité), `d2613e8f` (masque), `18f28437` (recensement).
+- **5 fiches** + 4 manifestes (`corpus-propre`, `corpus-litt-propre`, `n2-propre`, `recensement-francais`).
+- **20 points de contrôle (1,4 Go)** archivés sur deux disques (`backups/n2h/2026-11-01/`, `IA/artefacts/n2h/2026-11-01/`).
+- **Portes** : 80 portes, 76 vertes, 4 rouges connues ; les portes documentaires repassent vertes après le dernier commit.
+- **Revue de documentation, budget de contexte, état, journal, backlog, schémas** : tous verts, arbre de travail propre.
+- `docs/pilotage/en-cours.md` porte le plan, l'ambition, la stratégie, les résultats et **le prochain levier chiffré** (27,7 Mo de français unique, 8,5×).
+
+\## La question qui reste, désormais bien posée
+
+N2 n'a plus de levier d'entraînement à essayer : la position est réglée, la diversité mesurée, la capacité tranchée. Ce qui manque tient en une ligne — **le corpus est huit fois plus petit que ce que le dépôt contient**. Le prochain cycle n'a pas besoin de GPU pour commencer : il a besoin d'un corpus de français propre, filtré (
+… [75 caractères tronqués]
+
+### Tour 6 — vérifie l'état des autres sessions dsh et mets à jour les fichiers en-cours.md et roadmap.md
+
+*28 appels d'outils.* Actions notables :
+
+- bash — List session statuses
+- bash — Recent commits from all sessions
+- bash — Read the Pensée session plan and reports
+- bash — Read the R4.4 session plan and final report
+- bash — Read the R4.4 final verdict
+- bash — Check the Pensée session's deliverables
+- bash — Check the Pensée session's commits and code
+- bash — Read the R4.4 verdict and limits
+- bash — Locate R4.4 and Pensée references in the state
+- bash — Read the Pensée block and the in-progress bullets
+- bash — Locate R4.4 in the roadmap
+- bash — Find Pensée in the roadmap and read the order of day
+- bash — Inspect the B program table for a Pensée slot
+- bash — Measure budgets before editing
+- … et 14 autres
+
+**Synthèse produite :**
+
+⏵ Mise à jour de la roadmap : R4.4 mesurée, Pensée (B13), scans réels comme limite nommée
 
 ## 3. Travail accompli
 
@@ -308,7 +355,7 @@ N2 avait un défaut plus grave que son plateau : **son mètre mesurait de la mé
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 486 autres
+- … et 515 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -469,4 +516,5 @@ N2 avait un défaut plus grave que son plateau : **son mètre mesurait de la mé
 - N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS  À données, professeur et budget égaux, le modèle de 21,65 M (d_model 296, expert_hidden 416, ×1,
 - N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN  À 512 octets, l'attention locale (fenêtre 256) ne laisse voir
 - RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ  Le levier « plus de texte français unique » a un chiffre : avec les mêmes sh
+- ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE  Vérification des trois sessions : N2.h close (0b0a6a0d), R4.4 close (fe
 

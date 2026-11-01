@@ -28,9 +28,9 @@
 | chantier | ce qu'il couvre | état | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
-| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste | B10.3 attend un **encodeur qui porte** |
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : théorie écrite | B10.3 attend un **encodeur qui porte** ; **B13** : le state store v0 |
 | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : corpus propre, **3,0904** en domaine, **16,70 → 3,85** hors dépôt ; N4 partiel | **N2** (plus de français unique, capacité), **N4** (consigne) |
-| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.3 mesurées** ; **R4.4 partiel** | **R4.4** (scans réels, layout, exposants) ; R1/R2/R3 attendent N2 |
+| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) | **R4.4** : les **scans réels de bout en bout** ; R1/R2/R3 attendent N2 |
 
 ## L'ordre du jour (carpe diem)
 
@@ -42,12 +42,13 @@ L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est
    (AUC 0,839) sans règle qui transfère.
    **R4.1 — le bloc tableaux** est **mesurée** (996 cellules, **802** exactes, texte plat **0/3**),
    **R4.2 — le bloc code** aussi (294 fichiers, 24/24 extraits, texte seul **0/3**) et **R4.3 —
-   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est partielle** : sur
-   **100 scans simulés**, la photo passe de **55,9 %** à **7,0 %** de WER (test **5,3 %**) et la
-   **préservation** du lecteur atteint **90–97 %** (4 familles, propre **96,7 %**) ; les **colonnes** tombent de
-   **89,4 %** à **0,5 %**, les **tableaux** donnent **92,6 %** de cellules exactes, et **trois vrais scans** s'accordent à **7,10 %** et **88,4 %** de mots, et l'**ordre des colonnes** y est
-   prouvé (**15,3 %** contre **98,0 %** en ordre inverse) — les **scans réels** de bout en bout
-   restent ouverts.
+   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est mesurée** sur
+   **100 scans simulés** : la photo passe de **55,9 %** à **6,7 %** de WER (test **5,7 %**) et la
+   **préservation** du lecteur atteint **90–97 %** sur **4 familles sur 5** (propre **96,7 %** ;
+   fax **56,7 %**, la limite d'information) ; les **colonnes** tombent de **89,4 %** à **0,5 %**,
+   les **tableaux** donnent **92,6 %** de cellules exactes, et **trois vrais scans** s'accordent à
+   **7,10 %** et **88,4 %** de mots, l'**ordre des colonnes** prouvé (**15,3 %** contre **98,0 %**
+   en ordre inverse) — les **scans réels de bout en bout** restent ouverts.
 2. **N2 — la distillation** (en cours) : corpus dédupliqué (**0 %** de fuite), chaîne refaite
    (professeur 23,5 M, base 20 000 pas, distillation 20 000 pas × 3) ; **3,0904** en domaine — la porte
    < 2,5 est à **0,59** — et **16,70** sur de la littérature jamais vue. La **diversité
@@ -155,6 +156,7 @@ La ligne ouverte est **B10.3** (décodeur) ; **B12.10** et **B10.2bis** sont **c
 | **B10** | le protocole sémantique : encodeur `z`, décodeur, raisonnement | ✅ / ❌ / ⏳ | **B10.3 bloqué** ; 5 leviers : l'**objectif mot** lève le décodeur (**32,5** UDHR, **26,7** JW > plancher 17,1) mais le `z` ne porte que **1,5–2,6** points ; le **contrastif** ne le fait pas lire — le verrou est l'encodeur |
 | **B11** | la base d'universaux typés : schéma, parseur, codec, contexte | ✅ | **B11.10 close** (cartes, ambiguïtés refusées) ; le codec lit **100 %** |
 | **B12** | les modules cerveau-langage M1–M9 | ⚠️ / ❌ | **B12.10 close** (négatif : oracle = M8, M4 seul = 0) ; seul M1 est solide |
+| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | 🔬 **théorie et implantation écrites** (10 tours, 9 schémas, `moteur-de-pensee.md`) | **state store v0** dans `tools/pensee/` (candidats, hash Merkle, arbre, trace), puis A*/MCTS/AC-3 et le banc anytime |
 | **C3.2** | les modules par famille de langues | ✅ | aucune — **7/9 > 30 %**, moyenne **69,5 %**, contrôle **≤ 0,5 %** |
 
 **Ce qui compte pour R** : le **codec classique** lit **100 %** des surfaces ; c'est la preuve qu'un bloc
@@ -279,7 +281,7 @@ le **tampon en entrée** (qui lit déjà **+0,879**), pas par un entraînement d
 | **R4.1** | **tableaux** : parseur 2D, en-têtes, cellules, opérations classiques (filtre, jointure, agrégat) | ✅ **996 cellules**, **802** exactes, texte plat **0/3** | extraction exacte sur 100 cellules ; contrôle : texte plat |
 | **R4.2** | **code** : AST, portée, flux de données, exécuteur/interpréteur bloc | ✅ **294 fichiers**, **24/24** extraits, texte seul **0/3** | réponse par exécution exacte ; contrôle : lecture du texte seul |
 | **R4.3** | **maths** : LaTeX/MathML, définitions, preuve ; CAS bloc | ✅ **32 formules**, **10/10** dérivées, surface **0/3** | évaluation symbolique exacte ; contrôle : surface |
-| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel, mesuré sur scans simulés** : 5 familles (photo **55,9 → 6,7 %** de WER, test **5,3 %**), **préservation 90–97 %** (4 familles, propre 96,7), **colonnes 89,4 → 0,5 %**, **tableaux 92,6 %** de cellules, **trois vrais scans** (7,10 % ; et l'**ordre des colonnes** prouvé : 15,3 % contre 98,0 % en ordre inverse) | 10 pages **scannées réelles** avec vérité humaine — **non atteinte** ; le fax 1 bit et l'exposant fusionné restent des limites nommées |
+| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **mesuré sur scans simulés ; ouvert sur les scans réels** : 5 familles (photo **55,9 → 6,7 %** de WER, test **5,7 %**), **préservation 90–97 %** (4 familles, propre 96,7), **colonnes 89,4 → 0,5 %**, **tableaux 92,6 %** de cellules, **trois vrais scans** (7,10 % ; et l'**ordre des colonnes** prouvé : 15,3 % contre 98,0 % en ordre inverse) | 10 pages **scannées réelles** avec vérité humaine — **non atteinte** ; le fax 1 bit et l'exposant fusionné restent des limites nommées |
 
 **Principe** : ces blocs sont **classiques d'abord**. Le bus les accepte comme les blocs neuronaux ; un parseur
 de tableaux n'a pas besoin d'être appris.
@@ -329,7 +331,7 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 | A5.4 FPGA | l'accès au matériel Stratix V | la carte (le design existe) |
 | A6.2 MoE local | aucun MoE local ne tient dans 16 Go de VRAM | un MoE qui tient, ou une machine plus grande |
 | B10.3 raisonnement sur `z` | le décodeur est sous le plancher chrF | une attention croisée, 20–30 articles, 3 graines |
-| R4.4 les scans | pas de corpus de scans réels ; le pilote part du PDF vectoriel | 10 pages photocopiées, et une passe de robustesse (nettoyage, redressement, exposants) |
+| R4.4 les scans | pas de **vérité humaine** sur les scans réels : trois vrais scans (Internet Archive) donnent des **accords**, pas des vérités | 10 pages **scannées** avec vérité humaine ; le fax 1 bit reste une limite d'information |
 
 ## Les questions ouvertes
 

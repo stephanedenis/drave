@@ -18,10 +18,10 @@
 
 - **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
 - **Rôle** : **N2.h — le mètre propre** : corpus, distillation, évaluation.
-- **Plan** : corpus dédupliqué, chaîne refaite (professeur, base, distillation × 3), porte honnête + hors domaine + décomposition, diversité 50/50, verrou de longueur, capacité.
-- **Ambition** : sortir N2 du chiffre contaminé (**2,85** sur **32,8 %**) et donner à R un modèle qui lit du français général ; trancher le verrou de longueur.
+- **Plan** : corpus dédupliqué, chaîne refaite, porte honnête, diversité, longueur, capacité.
+- **Ambition** : sortir du chiffre contaminé (**2,85** sur **32,8 %**) et donner à R un modèle de français général.
 - **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, le corpus d'abord.
-- **Objectif final** : un **mètre honnête** — corpus sans fuite, chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
+- **Objectif final** : un **mètre honnête**, porte < 2,5 redéfinie.
 - **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité, longueur, combinaison et capacité
   mesurées (5 fiches).
 - **Résultat** (3 graines) : la chaîne propre vaut **3,09** en domaine (3,20 au test) et **16,70** sur la littérature jamais vue ; la **diversité** la ramène à **3,86** (÷ 4,3) et
@@ -31,9 +31,9 @@
   domaine, **4,10** en littérature, **3,49** à 256). La **capacité paie** peu (21,65 M : **3,03**) sans couvrir. Fiches `n2-propre`, `n2-diversite`,
   `n2-longueur`, `n2-combine`, `n2-capacite`. Prochain levier : **27,7 Mo de français unique**
   disponibles dans le dépôt (8,5× le corpus utilisé).
-- **Ce que font les autres** : **Pensée** et **R4.4** sans GPU ; **N4** en file.
+- **Ce que font les autres** : **Pensée** sans GPU ; **N4** en file.
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`, `journal/sessions/0b0a6a0d-…/`.
-- **Prochaine action** : **close** — quatre fiches committées, portes vertes.
+- **Prochaine action** : **close** — cinq fiches committées, portes vertes.
 - **Bloquants** : aucun — GPU rendus.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/).
 
@@ -45,9 +45,9 @@
 - **Ambition** : l'OCR comme **bloc classique robuste**, jugé par la **parité**.
 - **Stratégie** : brut d'abord, n'ajouter que ce qui paie, dev pour régler, test pour trancher.
 - **Objectif final** : **R4.4 mesurée** ; restent **scans réels de bout en bout**, **fax**, **exposant fusionné**.
-- **Ce qu'elle fait** : photo **55,9 → 6,7 %**, préservation **90–97 %** (4 familles), colonnes **89,4 → 0,5 %** (3 col. : **0–1 %**), tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+- **Ce qu'elle fait** : **terminée** (plan clos le 01/11 02 h 55) — photo **55,9 → 6,7 %**, préservation **90–97 %** (4 familles sur 5, fax **56,7 %**), colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
 - **Ce que font les autres** : N2.h a les GPU ; ne pas toucher `work/r44/`, `work/ocr/`, `reports/r44-*`.
-- **Prochaine action** : **fax** 1 bit et **exposant fusionné**.
+- **Prochaine action** : **close** ; reste pour une autre session : les **scans réels de bout en bout**, le **fax** 1 bit, l'**exposant fusionné**.
 - **Bloquants** : aucun — pas de scanner réel ; scans **simulés**, écrit.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md).
 
@@ -59,8 +59,10 @@
 - **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels, avec des opérateurs hétérogènes.
 - **Stratégie** : théorie d'abord, puis un **v0 petit et mesuré** ; réserver les fichiers ; ne pas toucher aux GPU de N2.
 - **Objectif final** : un **moteur de pensée v0 exécutable** — state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles — documenté, mesuré, committé.
-- **Ce qu'elle fait** : doc `pensee-iterative.md` (10 tours, 9 schémas), pointeurs ; prochaine étape : state store.
-- **Ce que font les autres** : **N2.h** et **R4.4** gardent leurs fichiers ; **N4** en file ; **A/B** gardent les leurs.
+- **Ce qu'elle fait** : la **théorie** (`pensee-iterative.md`, 10 tours, 9 schémas) et l'**implantation**
+  (`moteur-de-pensee.md` : types, store, stratégies) sont écrites ; `tools/pensee/` n'existe pas
+  encore — **session en pause** depuis le 31/10 22 h 49, heartbeat à rafraîchir.
+- **Ce que font les autres** : **Pensée** garde ses fichiers ; **N4** en file ; **A/B** gardent les leurs.
 - **Interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state`.
 - **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `journal/sessions/e181ce02-…/`.
 - **Prochaine action** : le state store v0 (candidats, hash Merkle, arbre, trace) ; le contrat est écrit.
@@ -78,8 +80,8 @@
   [`r06`](../../reports/rapport-r06-publication.md) (cascade à confiance **publiée**).
 - **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
   32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** est **mesurée sur scans
-  simulés** — photo **55,9 → 6,7 %**, préservation **90–97 %** (4/5, fax **56,7 %**), colonnes **89,4 → 0,5 %**,
-  tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
+  simulés (4/5 familles ≥ **90 %** de parité, fax **56,7 %**) ; fiche
+  [`r44-scans`](../../reports/rapport-r44-scans.md).
 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
   1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
   [`r13`](../../reports/rapport-r13-decision.md), spécification
@@ -124,7 +126,7 @@ action** — pas les statuts, qui dérivent. Vue d'ensemble :
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | aucune | B1.5 corpus ; B10.3 attend un encodeur | **B11.10 close** ; B10.3 bloquée |
 | **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; validation **contaminée (32,8 %)** ; N4 0/4 ; N5 gelé | **N2** (le corpus décontaminé) ; **N4** (consigne) |
-| **R — le lecteur** | aucune | R4.4 : scans réels de bout en bout, fax | **R4.4 mesurée sur scans simulés** ; R1/R2/R3 attendent N2 |
+| **R — le lecteur** | aucune | R4.4 : scans réels, fax | **R4.4 mesurée (4/5 ≥ 90 %)** ; les **scans réels** restent ; R1/R2/R3 attendent N2 |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
 

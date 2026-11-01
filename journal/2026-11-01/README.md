@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**27 commits** · **2 session(s)** · **5 thème(s)**
+**28 commits** · **2 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,14 +14,14 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 4 | [docs.md](docs.md) |
-| mesures | 19 | [mesures.md](mesures.md) |
+| mesures | 20 | [mesures.md](mesures.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 14.7 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 14.8 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 10.5 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -55,6 +55,7 @@
 | 04:02 | `88f598c3` | ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES |
 | 05:28 | `3a6ae9ca` | N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS |
 | 06:50 | `d2613e8f` | N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN |
+| 06:58 | `18f28437` | RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ |
 
 ## Le récit de la journée (écrit à la main)
 

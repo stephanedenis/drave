@@ -8733,3 +8733,544 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1037 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-526]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-526", "timeout_ms": 240000, "wait": true}`
+
+  ```
+14 files changed, 193 insertions(+), 23 deletions(-)
+ create mode 100644 journal/2026-11-01/attention.md
+ create mode 100644 reports/recensement-francais.json
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -6 | head -6; echo \"=== checks ===\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/verifie_journa … [235 caractères tronqués]`
+
+  ```
+18f28437 RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ
+d2613e8f N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN
+3a6ae9ca N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS
+88f598c3 ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES
+52cf5853 N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS
+0a802a61 R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER
+=== checks ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     sources et images relatives.
+=== status ===
+06:59
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture — deux ajouts depuis le bilan, et l'état est propre
+
+## Ce que j'ai ajouté après le bilan
+
+**1. Le second verrou n'est pas le masque** (`d2613e8f`). À 512 octets, l'attention locale ne laisse voir que les 256 précédents. J'ai élargi la fenêtre **à l'inférence** sur les mêmes modèles : 6,13 (fenêtre 256) → **6,37** (512) → 6,37 (1 024) pour R, et 5,46 → 5,42 pour DR. Élargir le masque **ne récupère rien**. Le second verrou est donc l'**entraînement** — le modèle n'a jamais vu plus de 128 octets de contexte — et non la fenêtre. Pour R1, lire 1 000 octets demandera des contextes longs à l'entraînement (les positions aléatoires étant la condition pour que les positions suivent), pas un réglage de masque.
+
+**2. Le levier « plus de texte » a un chiffre** (`18f28437`). Recensement avec les mêmes shingles que le corpus propre : `docs+journal` (995 documents) contient **27,67 Mo uniques** sur 48,73 bruts (−43,3 %), et avec `reports` (1 540 documents), **30,35 Mo**. Le corpus d'entraînement de N2.h fait 3,24 Mo : il y a **8,5 fois plus de français disponible** dans le dépôt que ce qui a été mangé. Réserve : `journal/sessions` contient des transcripts, à filtrer avant d'en faire un corpus. Manifeste : `reports/recensement-francais.json`.
+
+## État final
+
+- **7 commits** cette nuit : `e36e8185` (corpus + porte honnête + longueur), `1da58752` (journal), `52cf5853` (combinaison), `88f598c3` (clôture), `3a6ae9ca` (capacité), `d2613e8f` (masque), `18f28437` (recensement).
+- **5 fiches** + 4 manifestes (`corpus-propre`, `corpus-litt-propre`, `n2-propre`, `recensement-francais`).
+- **20 points de contrôle (1,4 Go)** archivés sur deux disques (`backups/n2h/2026-11-01/`, `IA/artefacts/n2h/2026-11-01/`).
+- **Portes** : 80 portes, 76 vertes, 4 rouges connues ; les portes documentaires repassent vertes après le dernier commit.
+- **Revue de documentation, budget de contexte, état, journal, backlog, schémas** : tous verts, arbre de travail propre.
+- `docs/pilotage/en-cours.md` porte le plan, l'ambition, la stratégie, les résultats et **le prochain levier chiffré** (27,7 Mo de français unique, 8,5×).
+
+## La question qui reste, désormais bien posée
+
+N2 n'a plus de levier d'entraînement à essayer : la position est réglée, la diversité mesurée, la capacité tranchée. Ce qui manque tient en une ligne — **le corpus est huit fois plus petit que ce que le dépôt contient**. Le prochain cycle n'a pas besoin de GPU pour commencer : il a besoin d'un corpus de français propre, filtré (sans transcripts), dédupliqué, et d'un split par document. Le reste suivra.
+
+
+## Tour 6
+
+### 👤 Utilisateur
+
+vérifie l'état des autres sessions dsh et mets à jour les fichiers en-cours.md et roadmap.md
+
+### 🤖 Assistant
+
+⏵ Vérification de l'état des sessions parallèles avant de mettre à jour l'état et la roadmap
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; python3 tools/sessions.py --status 2>&1 | head -20", "description": "List session statuses"}`
+
+  ```
+07:01
+sessions · plans de mandat
+    0b0a6a0d-05f5-4308 · terminé  · 202 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — journal, roadmap, portes, commit.
+    0b69f616-5c75-4c34 · terminé  · 1981 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 1152 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+      → clôture committée (`eff8d8e4`) — session close ; la suite est **N2** (la hiérarchie), portée par la session à ouvrir
+    71d57f53-8b41-4220 · terminé  · 2485 min · docs/pilotage/en-cours.md, docs/methode/continuite.md, tools/sessions.py
+      → aucune — coordination close ; les trois plans migrés et les sessions archivées par `22e518ee`.
+    8156fdcb-5033-4ba4 · terminé  · 2489 min · R0.1–R0.5
+      → la boucle de lecture (R11, dépend de N2) ou la restitution (R31, dépend de R21) — toutes deux hors R0 ; sinon consolidation.
+    N2-GPU             · terminé  · 2517 min · N2
+      → N2 — la **hiérarchie** (état de section), porte **< 2,5** (meilleur **2,6998**, plateau **2,708**) ; 
+… [581 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -15; echo \"=== depuis 1h ===\"; git log --oneline --since=\"2 hours ago\" | wc -l", "description": "Recent commits from all sessions"}`
+
+  ```
+18f28437 RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ
+d2613e8f N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN
+3a6ae9ca N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS
+88f598c3 ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES
+52cf5853 N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS
+0a802a61 R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER
+7452a447 SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION
+4aef1413 R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS
+1da58752 JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR
+e36e8185 N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE
+e7b51508 R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %)
+69bf5ecb R4.4 — LA GOUTTIÈRE UNIQUE DEVIENT MULTIPLE : TROIS COLONNES PASSENT DE 52,5 % À 0–1
+… [362 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md 2>/dev/null | head -30; echo \"=== rapports pens/rs n ===\"; ls -t reports/ | grep -iE \"pensee|rsn|moteur-de-pensee\" | head -10", "description": "Read the Pensée ses … [23 caractères tronqués]`
+
+  ```
+# Plan de session — Pensée, la RSN plurielle et le moteur N3
+
+> **Mandat vivant.** Ouvert le 2026-10-31 22 h 45 HAE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md). Ce plan est le **contrat de
+> synergie** : il dit ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
+> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+
+- **Session** : `e181ce02-cd50-488a-a6be-e84b79d40dcc`
+- **Rôle** : Pensée — RSN plurielle, arbre d'états, cycle multi-niveaux, moteur N3
+- **Périmètre** : Pensée
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`,
+  `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`,
+  `journal/sessions/e181ce02-…/`
+- **Heartbeat** : 2026-10-31 22:45 HAE
+- **Prochaine action** : écrire `docs/implantation/moteur-de-pensee.md` (types, store, stratégies),
+  puis le state store v0 dans `tools/pensee/` (candidats, hash Merkle, arbre, trace).
+- **État** : actif
+- **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
+  stratégies, contrat, anytime~~ ; 3) **state store** typé (candidats, hash Merkle, arbre,
+  compactio
+… [1261 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md 2>/dev/null | tail -12; echo \"=== fiche R4.4 ===\"; ls -t reports/ | grep -i r44 | head -5; head -20 reports/rapport-r44-scans.md 2>/dev/null", "description": "Read t … [39 caractères tronqués]`
+
+  ```
+`tools/mesurer_ocr.py`, `tools/porte-ocr.sh`, `reports/r44-*`,
+  `docs/implantation/encodeur-visuel.md`, `journal/sessions/fe3c05f0-…/` ;
+- l'état est **partagé** : une session écrit `en-cours` à la fois ; les faits
+  (`reports/`, roadmap, backlog) se committent **avec** leur ligne.
+
+## Critères de réussite (pré-enregistrés)
+
+- **dev** : WER ≤ 5 %, parité de passage **≥ 90 %**, parité de valeur rapportée ;
+- **test** : WER ≤ 8 % (le transfert), parité non mesurable (pas de questions) ;
+- **contrôles** : page noire → 0 mot ; page propre → plafond ; rejeu → identique ;
+- **porte** : les seuils ci-dessus, écrits dans `mesurer_scans.py`, et la porte échoue si on
+  lui donne une page noire ou une image sans OCR.
+=== fiche R4.4 ===
+rapport-r44-scans.md
+r44-seed3.json
+r44-seed2.json
+r44-sans-exposants.json
+r44-scans.json
+# R4.4 — les scans : la photo passe de 55,9 % à 6,7 % de WER, les colonnes de 89 % à 0,5 %
+
+> **Objet.** La ligne R4.4 était **partielle** : dix pages **rendues** lues, mais aucun scan.
+> Ce programme fabrique cinq familles de dégradations, mesure ce qu'elles coûtent, ajoute le
+> prétraitement, la récupération des exposants, l'ordre de lecture des colonnes et les cellules
+… [927 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 20,70p reports/rapport-r44-scans.md; echo \"=== plan R4.4 tail ===\"; grep -E \"État|Heartbeat|Prochaine\" journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md", "description": "Read the R4.4 final verdict"}`
+
+  ```
+dans le graphe R0.1, confiance dans la provenance.
+- **Prétraitement** : [`nettoyer_scan.py`](../tools/nettoyer_scan.py) — recadrage, correction
+  d'éclairage, redressement (seulement si franc et défini), échelle, lissage des images binaires.
+- **Exposants** : passe ciblée chiffres sur les petits mots du TSV
+  ([`graphe_document_ocr.py`](../tools/graphe_document_ocr.py)).
+- **Colonnes** : gouttière verticale, lecture colonne gauche entière puis droite.
+- **Tableaux** : traits → grille régulière → rangement des mots en cellules
+  ([`extraire_tableaux.py`](../tools/extraire_tableaux.py)).
+- **Mesure** : [`mesurer_scans.py`](../tools/mesurer_scans.py), `mesurer_colonnes.py`,
+  `mesurer_tables.py`, `mesurer_reel.py` ; JSON dans `reports/r44-*.json`.
+
+> **Seuils pré-enregistrés ? Non — et c'est écrit.** Les planchers par famille ont été fixés
+> **après** la première mesure. Ce sont des **bornes de non-régression**, pas des prédictions :
+> un plancher choisi après coup protège des régressions, il ne prouve pas une généralité.
+
+## 1. Les cinq familles, avant et après prétraitement
+
+WER mot à mot contre le texte natif de la même page ; **préservation** = la part des réponses que
+le lecteur
+… [2217 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline --author=\"\" --since=\"8 hours ago\" -- docs/theorie/pensee-iterative.md docs/implantation/moteur-de-pensee.md docs/schemas/ | head -10; echo \"=== fichiers pens ===\"; ls -la docs/theorie/pensee-iterative.md docs/ … [191 caractères tronqués]`
+
+  ```
+=== fichiers pens ===
+-rw-------. 1 stephane stephane 10452 31 oct 22:49 docs/implantation/moteur-de-pensee.md
+-rw-------. 1 stephane stephane 18371 31 oct 22:49 docs/theorie/pensee-iterative.md
+pensee-anytime.svg
+pensee-arbre.svg
+pensee-contrat.svg
+pensee-cycle.svg
+pensee-memoire.svg
+pas-de-pensee-14b.json
+pas-de-pensee-7b.json
+pas-de-pensee-contracte-3b.json
+pas-de-pensee-contracte-7b.json
+pas-de-pensee-corrige-14b.json
+pas-de-pensee-corrige-3b.json
+pas-de-pensee-corrige-7b.json
+pas-de-pensee-corrige-large.json
+pas-de-pensee-mlp-18.json
+pas-de-pensee-mlp-6.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline --since=\"10 hours ago\" --name-only | grep -B2 -A2 \"pensee\" | head -20; echo \"=== tools/pensee ===\"; ls tools/pensee 2>/dev/null || echo \"absent\"; echo \"=== derniers commits pens ===\"; git log --oneline -5  … [137 caractères tronqués]`
+
+  ```
+9a03d2dc ÉTAT — TROIS SESSIONS, PLAN/AMBITION/STRATÉGIE/OBJECTIF FINAL, ET LE CONTRAT DU MOTEUR
+docs/README.md
+docs/implantation/moteur-de-pensee.md
+docs/methode/continuite.md
+docs/pilotage/en-cours.md
+docs/theorie/pensee-iterative.md
+journal/2026-10-31/README.md
+journal/2026-10-31/apprentissage.md
+--
+docs/implantation/diehl-cook.md
+docs/schemas/README.md
+docs/schemas/pensee-anytime.svg
+docs/schemas/pensee-contrat.svg
+docs/schemas/pensee-memoire.svg
+docs/schemas/pensee-mesure.svg
+docs/schemas/pensee-meta.svg
+docs/theorie/modele-natif.md
+docs/theorie/pensee-iterative.md
+journal/2026-10-31/README.md
+journal/2026-10-31/apprentissage.md
+=== tools/pensee ===
+absent
+=== derniers commits pens ===
+9a03d2dc ÉTAT — TROIS SESSIONS, PLAN/AMBITION/STRATÉGIE/OBJECTIF FINAL, ET LE CONTRAT DU MOTEUR
+91f31faa PENSÉE — TOURS 5-10 : CONTRAT, ANYTIME, MÉTA, MÉMOIRE, MESURE
+0a296b75 PENSÉE — TOURS 3-4 : LE CYCLE MULTI-NIVEAUX ET LE PORTEFEUILLE DE STRATÉGIES
+3cb15674 PENSÉE — TOUR 1-2 : LA RSN PLURIELLE ET L'ARBRE D'ÉTATS
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## Verdict/,$p' reports/rapport-r44-scans.md | head -45", "description": "Read the R4.4 verdict and limits"}`
+
+  ```
+## Verdict
+
+**R4.4 — les scans sont mesurés, la mise en page est mesurée, deux vrais scans sont validés —
+dont l'ordre des colonnes, prouvé sur un lexique réel (15,3 % de WER contre 98,0 % en ordre
+inverse) ; la ligne reste ouverte pour les scans réels de bout en bout.** Le bloc OCR devient un
+**bloc classique robuste** du lecteur : cinq familles de dégradation, un split dev/test qui
+transfère, des colonnes à 0,5 % de WER, des cellules à 92,6 %, et une porte qui refuse les
+régressions.
+
+## Ce qui pourrait le rendre faux
+
+- **Le corpus est le mien** : cinq familles choisies et réglées par moi ; une vraie photocopie de
+  ces pages aurait d'autres défauts (agrafe, recto-verso, couleur).
+- **Les seuils sont postérieurs** à la mesure : bornes de non-régression, pas prédictions.
+- **La référence réelle est un OCR** : 7,10 %, 36,3 % et 88,4 % sont des accords, pas des
+  vérités ; deux livres, deux éditions, dont un avec des lexiques à deux colonnes.
+- **Les questions sont gabarits** (le premier nombre du passage) : les appels de note y jouent un
+  rôle démesuré ; un banc de paraphrases dirait autre chose.
+- **Les tableaux synthétiques** ont des traits nets : un tableau sans traits (aligné
+… [1186 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"R4.4\\|R4.1\\|Pensée\\|pensée\" docs/pilotage/en-cours.md | head -12; echo \"=== bloc sessions ===\"; sed -n '/Session `fe3c05f0/,/Session `e181ce02/p' docs/pilotage/en-cours.md | head -20", "description": "Locate R4.4 and  … [32 caractères tronqués]`
+
+  ```
+34:- **Ce que font les autres** : **Pensée** et **R4.4** sans GPU ; **N4** en file.
+40:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans
+43:- **Rôle** : **R4.4 — les scans** (CPU).
+47:- **Objectif final** : **R4.4 mesurée** ; restent **scans réels de bout en bout**, **fax**, **exposant fusionné**.
+54:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+57:- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3.
+61:- **Objectif final** : un **moteur de pensée v0 exécutable** — state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles — documenté, mesuré, committé.
+63:- **Ce que font les autres** : **N2.h** et **R4.4** gardent leurs fichiers ; **N4** en file ; **A/B** gardent les leurs.
+79:- **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
+80:  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** est **mesurée sur scans
+98:- **Pensée — RSN plurielle** : doc `pensee-iterative.md` (10 tours, 9 schémas) ; le **state store
+127:| **R — le lecteur** | aucune | R4.4 : scans réels de bout en bout, fax | **R4.4 mesurée sur scans simulés** ; R1/R2/R3 attendent
+… [1262 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/Session `e181ce02/,/Sessions archivées/p' docs/pilotage/en-cours.md; echo \"=== en cours R4/Pensée ===\"; sed -n 78,102p docs/pilotage/en-cours.md", "description": "Read the Pensée block and the in-progress bullets"}`
+
+  ```
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+
+- **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3.
+- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) **state store** typé ; 4) **moteur v0** (frontière, A*/MCTS/AC-3, trace) ; 5) **banc anytime** (AUC, regret, justification, rejeu) ; 6) intégration DRVM/DRVF.
+- **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels, avec des opérateurs hétérogènes.
+- **Stratégie** : théorie d'abord, puis un **v0 petit et mesuré** ; réserver les fichiers ; ne pas toucher aux GPU de N2.
+- **Objectif final** : un **moteur de pensée v0 exécutable** — state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles — documenté, mesuré, committé.
+- **Ce qu'elle fait** : doc `pensee-iterative.md` (10 tours, 9 schémas), pointeurs ; prochaine étape : state store.
+- **Ce que font les autres** : **N2.h** et **R4.4** gardent leurs fichiers ; **N4** en file ; **A/B** gardent les leurs.
+… [2931 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"R4.4\" docs/pilotage/roadmap.md | head -10; echo \"=== sections ===\"; sed -n 44,52p docs/pilotage/roadmap.md; echo \"---\"; sed -n '/| \\*\\*R4.4\\*\\*/,+2p' docs/pilotage/roadmap.md | head -6", "description": "Locate R4.4 … [17 caractères tronqués]`
+
+  ```
+33:| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.3 mesurées** ; **R4.4 partiel** | **R4.4** (scans réels, layout, exposants) ; R1/R2/R3 attendent N2 |
+45:   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est partielle** : sur
+90:[R4.4] lasts 1 day and is 60% complete and is colored in #b26a00
+106:[R4.4] starts at [R4.1–R4.3]'s end
+282:| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **partiel, mesuré sur scans simulés** : 5 familles (photo **55,9 → 6,7 %** de WER, test **5,3 %**), **préservation 90–97 %** (4 familles, propre 96,7), **colonnes 89,4 → 0,5 %**, **tableaux 92,6 %** de cellules, **trois vrais scans** (7,10 % ; et l'**ordre des colonnes** prouvé : 15,3 % contre 98,0 % en ordre inverse) | 10 pages **scannées réelles** avec vérité humaine — **non atteinte** ; le fax 1 bit et l'exposant fusionné restent des limites nommées |
+301:  classiques sont moins chers et mesurables. R4.4 vient après R4.1–R4.3.
+316:  **N3** (opérations natives) ; **A8.3b** (mode de lot) ; **R4.4** (les scans réels) ;
+332:| R4.4 les scans | pas de cor
+… [2003 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pensée\\|Pensée\\|RSN\" docs/pilotage/roadmap.md | head -12; echo \"=== ordre du jour ===\"; sed -n 40,44p docs/pilotage/roadmap.md; sed -n 52,62p docs/pilotage/roadmap.md", "description": "Find Pensée in the roadmap and re … [21 caractères tronqués]`
+
+  ```
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste | B10.3 attend un **encodeur qui porte** |
+141:L'étage 1 (langue) est mesuré ; l'étage 2 (pensée) est mesuré dans ses opérations, avec des négatifs nommés.
+147:| **B2** | représentation et raisonnement : RSN, composition, XNLI, 32 B | ✅ | aucune — l'échelle et la profondeur sont tracées |
+150:| **B5** | la sémantique des jeux : contrat RSN-jeu, cinq niveaux, bruit | ✅ | aucune — 112 items, **100 %** au niveau 4 |
+151:| **B6** | la logique dans la pensée : règles, recherche, cartes, invariance | ✅ | aucune — perft, **3/3** mats, dames **20/20**, cartes **79,7 %** |
+175:| **N1** | `drave-n0` : 11,47 M, 6 blocs, octets, attention locale, FFN creux, 3 têtes précoces | ✅ | aucune — PPL **3,465** avec pont (**4,080** sans) ; têtes **57,6 / 61,6 / 62,1 %** contre **62,7 %** ; réflexe **−24,05 %** de temps pour **−1,61** point ; pensée **λ = 0,709** ; cache **19,25×** |
+=== ordre du jour ===
+   30 % sur 5 types et **249 questions**) ; **R0.4** (tête de survo
+… [1387 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## Programme B/,/## Programme N/p' docs/pilotage/roadmap.md | grep -n \"^| \\*\\*B\" | tail -6; echo \"=== B12 ===\"; grep -n \"B12\" docs/pilotage/roadmap.md | head -4", "description": "Inspect the B program table for a Pen … [10 caractères tronqués]`
+
+  ```
+14:| **B7** | les langues : 71 langues, 1 433 couples, 449 surfaces | ✅ | aucune — **449/449**, **11/11** paires invariantes |
+15:| **B8** | les maîtres : 17 principes, 9 sources, livre, parties | ✅ | aucune — livre **10/10**, go 9×9 **10/10** contre 3/10, cartes **44,7 %** |
+16:| **B9** | le banc externe et l'élève natif : DeepSeek, 610/910 prompts | ✅ | resserrer la transition **9,23–9,96 M** ; porter le masque dans le trainer |
+17:| **B10** | le protocole sémantique : encodeur `z`, décodeur, raisonnement | ✅ / ❌ / ⏳ | **B10.3 bloqué** ; 5 leviers : l'**objectif mot** lève le décodeur (**32,5** UDHR, **26,7** JW > plancher 17,1) mais le `z` ne porte que **1,5–2,6** points ; le **contrastif** ne le fait pas lire — le verrou est l'encodeur |
+18:| **B11** | la base d'universaux typés : schéma, parseur, codec, contexte | ✅ | **B11.10 close** (cartes, ambiguïtés refusées) ; le codec lit **100 %** |
+19:| **B12** | les modules cerveau-langage M1–M9 | ⚠️ / ❌ | **B12.10 close** (négatif : oracle = M8, M4 seul = 0) ; seul M1 est solide |
+=== B12 ===
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bi
+… [296 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,'tools')\nfrom taille_documents import mots_hors_diagrammes\nfrom pathlib import Path\na=mots_hors_diagrammes(Path('AGENTS.md').read_text())\ne=mots_hors_diagrammes(Path('docs/pilotage … [387 caractères tronqués]`
+
+  ```
+AGENTS 1200 en-cours 1626 max méthode (1579, 'organisation-du-depot.md') T0 4405 marge -405
+roadmap 4617 budget T1 9000, marge 4383
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -4; wc -w docs/pilotage/en-cours.md", "description": "Confirm the context budget violation"}`
+
+  ```
+avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+1626 docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | head -20", "description": "Read the full budget report"}`
+
+  ```
+budget de contexte · documents chargeables
+    mots lignes  cat budget  document
+    5999    597 DATÉ      0  docs/implantation/contexte-long.md
+    4858    515   T1   5000  docs/theorie/glossaire/10-le-pont-linguistico-semantique-le-vocabu.md
+    4617    359   T1   9000  docs/pilotage/roadmap.md
+    4085    431 DATÉ      0  docs/implantation/numa-segregation.md
+    3131    294   T1   3500  README.md
+    3072    341 DATÉ      0  docs/implantation/convertisseur.md
+    2962    364   T1   5000  docs/theorie/glossaire/02-modeles-et-architectures.md
+    2896    352 DATÉ      0  docs/implantation/configuration-nvme-raid-amd.md
+    2474    178   T1   2500  docs/pilotage/references-non-regression.md
+    2111    218   T1   2500  docs/pilotage/utilisation.md
+    2013    183   T1   2500  docs/theorie/jeux-symboliques.md
+    2010    219   T1   5000  docs/theorie/glossaire/01-le-projet-ses-noms-sa-methode.md
+    1942    218   T1   5000  docs/theorie/glossaire/04-le-moteur-drave-execution-structures-out.md
+    1942    172   T1   2000  REPRISE.md
+    1932    108   T1   2500  docs/pilotage/manques.md
+    1931    185   T1   2500  docs/implantation/format-flux.md
+    1910    134   T1   2800  reports
+… [100 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E \"T0|en-cours|violation\" | head -8; echo \"---\"; python3 - <<'EOF'\nimport sys; sys.path.insert(0,'tools')\nimport importlib, taille_documents as td\nfrom pathlib import Path\n# repr … [373 caractères tronqués]`
+
+  ```
+T0 max : 4000 mots (budget 4 000)
+---
+AGENTS 1200
+en-cours 1626
+max methode (1579, 'organisation-du-depot.md')
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 140,175p tools/taille_documents.py", "description": "Read the T0 reporting code"}`
+
+  ```
+# T0 : la somme des trois lectures par défaut
+    def poids(rel: str) -> int:
+        q = RACINE / rel
+        return mots_hors_diagrammes(q.read_text(encoding="utf-8", errors="ignore")) if q.exists() else 0
+
+    # Le T0 est « AGENTS + en-cours + UN document de tâche », et le document de tâche est un
+    # T0 (≤ 1 200 mots) : les trois documents `specifiques` ci-dessus sont des T1, avec leur
+    # propre budget. Les compter ici faisait payer 1 579 mots au T0 (organisation-du-depot.md)
+    # au lieu des 1 134 du plus gros T0 — un budget faux de 445 mots, dans le sens qui bloque.
+    agents = [a for a in (RACINE / "docs/methode").glob("*.md") if a.name not in specifiques]
+    t0 = poids("AGENTS.md") + poids("docs/pilotage/en-cours.md") + max(
+        (poids(str(a.relative_to(RACINE))) for a in agents), default=0
+    )
+    if t0 > 4000:
+        violations.append(f"T0 : {t0} mots (AGENTS + en-cours + une tâche) > budget 4 000")
+
+    # classement
+    lignes.sort(reverse=True)
+    print("  budget de contexte · documents chargeables")
+    print(f"  {'mots':>6} {'lignes':>6} {'cat':>4} {'budget':>6}  document")
+    for n, l, rel, cat, budget in lignes[:18]:
+        print(f"  {n:6d} {l:6d} 
+… [466 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 18,40p docs/pilotage/en-cours.md", "description": "Read the N2.h session block exactly"}`
+
+  ```
+- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+- **Rôle** : **N2.h — le mètre propre** : corpus, distillation, évaluation.
+- **Plan** : corpus dédupliqué, chaîne refaite (professeur, base, distillation × 3), porte honnête + hors domaine + décomposition, diversité 50/50, verrou de longueur, capacité.
+- **Ambition** : sortir N2 du chiffre contaminé (**2,85** sur **32,8 %**) et donner à R un modèle qui lit du français général ; trancher le verrou de longueur.
+- **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, le corpus d'abord.
+- **Objectif final** : un **mètre honnête** — corpus sans fuite, chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
+- **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité, longueur, combinaison et capacité
+  mesurées (5 fiches).
+- **Résultat** (3 graines) : la chaîne propre vaut **3,09** en domaine (3,20 au test) et **16,70** sur la littérature jamais vue ; la **diversité** la ramène à **3,86** (÷ 4,3) et
+  l'anglais de **57,6** à **25,7** pour **+0,17** ; les **positions aléatoires** font passer 256
+  octets 
+… [1073 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de l'état : R4.4 close, Pensée en pause, blocs condensés pour le budget
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\n\n# 1. N2.h : condenser plan/ambition/objectif, corriger « quatre » → « cinq »\ns = s.replace(\"- **Plan** : corpus dédupliqué, chaîn … [2585 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4014 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · session « Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans » ne dit pas « **Ce qu'elle fait** »
+     · session « Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans » ne dit pas « **Prochaine action** »
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\n# R4.4 : garder les champs obligatoires\ns = s.replace(\"\"\"- **État** : **terminé** (plan clos le 01/11 02 h 55) — photo **55,9 → 6 … [1841 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4011 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  en-cours · 1637 mots · 7 sections · 3 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -A2 \"violation\"; grep -n \"R4.4\" docs/pilotage/en-cours.md | head -6; sed -n 78,84p docs/pilotage/en-cours.md", "description": "Inspect the violation and the R4.4 bullet"}`
+
+  ```
+❌ 1 violation(s) :
+     · T0 : 4011 mots (AGENTS + en-cours + une tâche) > budget 4 000
+40:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans
+43:- **Rôle** : **R4.4 — les scans** (CPU).
+47:- **Objectif final** : **R4.4 mesurée** ; restent **scans réels de bout en bout**, **fax**, **exposant fusionné**.
+65:- **Ce que font les autres** : **N2.h** et **R4.4** gardent leurs fichiers ; **N4** en file ; **A/B** gardent les leurs.
+82:  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** est **mesurée sur scans
+129:| **R — le lecteur** | aucune | R4.4 : scans réels de bout en bout, fax | **R4.4 mesurée sur scans simulés** ; R1/R2/R3 attendent N2 |
+  (négatif)** ; R0.6 **12/20** au pilote, **7/7** à la porte. Fiches
+  [`r04`](../../reports/rapport-r04-tete-survol.md), [`r07`](../../reports/rapport-r07-routeur.md),
+  [`r06`](../../reports/rapport-r06-publication.md) (cascade à confiance **publiée**).
+- **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
+  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; **R4.4** est **mesurée sur scans
+  simulés** — photo **55,9 → 6,7 %**, préservation **90–97 %** (4/5, fax *
+… [150 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"\"\"  simulés** — photo **55,9 → 6,7 %**, préservation **90–97 %** (4/5, fax **56,7 %**), colonnes **89,4 → 0,5 %**,\n  tableau … [823 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3992 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**Mis à jour : 2026-11-01, 00 h 25 HAE (heure locale, EST).**\",\n              \"**Mis à jour : 2026-11-01, 07 h 20  … [609 caractères tronqués]`
+
+  ```
+ok
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3994 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de la roadmap : R4.4 mesurée, Pensée (B13), scans réels comme limite nommée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\n\n# 1. Ligne R du tableau des programmes\na = \"| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | … [2725 caractères tronqués]`
+
+  ```
+roadmap R4.4 : 3 remplacements
+33:| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) | **R4.4** : les **scans réels de bout en bout** ; R1/R2/R3 attendent N2 |
+45:   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est mesurée** sur
+283:| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **mesuré sur scans simulés ; ouvert sur les scans réels** : 5 familles (photo **55,9 → 6,7 %** de WER, test **5,3 %**), **préservation 90–97 %** (4 familles, propre 96,7), **colonnes 89,4 → 0,5 %**, **tableaux 92,6 %** de cellules, **trois vrais scans** (7,10 % ; et l'**ordre des colonnes** prouvé : 15,3 % contre 98,0 % en ordre inverse) | 10 pages **scannées réelles** avec vérité humaine — **non atteinte** ; le fax 1 bit et l'exposant fusionné restent des limites nommées |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\n\n# 4. Le tableau des bloqués : la vérité humaine manque, pas le scan\na = \"| R4.4 les scans | pas de corpus de scans réels ; le pilo … [1942 caractères tronqués]`
+
+  ```
+roadmap : bloqués + B13 + résumé B
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : théorie écrite | B10.3 attend un **encodeur qui porte** ; **B13** : le state store v0 |
+159:| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | 🔬 **théorie et implantation écrites** (10 tours, 9 schémas, `moteur-de-pensee.md`) | **state store v0** dans `tools/pensee/` (candidats, hash Merkle, arbre, trace), puis A*/MCTS/AC-3 et le banc anytime |
+284:| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **mesuré sur scans simulés ; ouvert sur les scans réels** : 5 familles (photo **55,9 → 6,7 %** de WER, test **5,3 %**), **préservation 90–97 %** (4 familles, propre 96,7), **colonnes 89,4 → 0,5 %**, **tableaux 92,6 %** de cellules, **trois vrais scans** (7,10 % ; et l'**ordre des colonnes** prouvé : 15,3 % contre 98,0 % en ordre inverse) | 10 pages **scannées réelles** avec vérité humaine — **non atteinte** ; le fax 1 bit et l'exposant fusionné restent des li
+… [256 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\ns = s.replace(\"5 familles (photo **55,9 → 6,7 %** de WER, test **5,3 %**)\", \"5 familles (photo **55,9 → 6,7 %** de WER, test **5,7  … [316 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 377 fiche(s) · 455 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3994 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE\n\nVérification des trois sessions : N2.h close (0b0a6a … [1123 caractères tronqués]`
