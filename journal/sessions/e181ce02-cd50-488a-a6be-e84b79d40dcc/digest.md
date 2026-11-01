@@ -8126,3 +8126,48 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/programme-r.md docs/schemas/programme-r-phases.svg docs/schemas/programme-r-pipeline.svg docs/schemas/README.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git diff --cached --stat | tail -10 && timeou … [218 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md             |   8 +-
+ docs/pilotage/programme-r.md          | 359 ++++++++++++++++++++++++++++++----
+ docs/pilotage/roadmap.md              |   4 +-
+ docs/schemas/README.md                |   7 +
+ docs/schemas/programme-r-phases.svg   |  53 +++++
+ docs/schemas/programme-r-pipeline.svg |  56 ++++++
+ 6 files changed, 448 insertions(+), 39 deletions(-)
+[still running after 60000ms; moved to background job bash-284]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-284", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 73b00495] R — LA CHARTE DU PROGRAMME : SIX PHASES, TROIS LOIS, CE QUI TIENT ET CE QUI MANQUE
+ 24 files changed, 1685 insertions(+), 102 deletions(-)
+ create mode 100644 docs/schemas/programme-r-phases.svg
+ create mode 100644 docs/schemas/programme-r-pipeline.svg
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l -w docs/pilotage/programme-r.md; python3 tools/revue_documentation.py | tail -2; git log --oneline -1", "description": "Vérifier la taille et l'état final de la charte"}`
+
+  ```
+344  3437 docs/pilotage/programme-r.md
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 466 JSON, le disque en a 467
+73b00495 R — LA CHARTE DU PROGRAMME : SIX PHASES, TROIS LOIS, CE QUI TIENT ET CE QUI MANQUE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"| fichiers / JSON de résultats | **382** / **466** |\", \"| fichiers / JSON de résultats | **382** / **467** |\")\np.write_ … [191 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 382 fiche(s) · 467 JSON · 115 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1420 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && timeout 240 git commit -m \"ÉTAT — COMPTEUR JSON 467 (CORPUS WIKI)\" 2>&1 | tail -6; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer le compteur JSON à jour"}`

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**44 commits** · **3 session(s)** · **9 thème(s)**
+**45 commits** · **3 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 9 | [docs.md](docs.md) |
+| docs | 10 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 25 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -77,6 +77,7 @@
 | 11:22 | `74d7f0b9` | DONNÉES — LE CORPUS FRANÇAIS EST LÀ : 2,5 M ARTICLES WIKIPÉDIA, 594 M MOTS, 0 FUITE ENTRE SPLITS |
 | 11:27 | `8aaa3c13` | S — DES CONTEXTES PLUS LARGES, ET LA MESURE DE CE QU'IL FAUT POUR TRANCHER |
 | 11:44 | `e331ef42` | COLORATION — LA COUCHE HEURISTIQUE : CE QUE LE CPU ÉTIQUETTE AVANT LE RÉSEAU |
+| 12:34 | `73b00495` | R — LA CHARTE DU PROGRAMME : SIX PHASES, TROIS LOIS, CE QUI TIENT ET CE QUI MANQUE |
 
 ## Le récit de la journée (écrit à la main)
 

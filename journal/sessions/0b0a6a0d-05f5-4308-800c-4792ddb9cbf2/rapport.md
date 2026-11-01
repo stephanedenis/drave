@@ -9,8 +9,8 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 20.3 h |
 | Tours | 15 |
-| Messages | 947 |
-| Appels d'outils | 886 |
+| Messages | 948 |
+| Appels d'outils | 887 |
 | Fichiers touchés | 11 |
 | Commandes | 735 |
 | Sous-agents | 0 |
@@ -766,7 +766,7 @@ Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre
 
 ### Tour 15 — peux-tu comencer l'entrainement avec des phrases non ambigue et étudier les effets  sur la qualité du bloc linguistique.
 
-*48 appels d'outils.* Actions notables :
+*49 appels d'outils.* Actions notables :
 
 - bash — Measure the unambiguous subset of the clean corpus
 - bash — Build the unambiguous and control corpora and launch two bases

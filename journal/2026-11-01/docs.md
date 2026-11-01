@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (9)
+## Commits du jour (10)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -17,6 +17,7 @@
 | 10:56 | `48d2c064` | ÉTAT — N2.h ET R4.4 CLOSES, PENSÉE v0 ACTIVE : L'ÉTAT SUIT LES MANDATS | `en-cours.md`, `README.md`, `docs.md` (+7) |
 | 11:19 | `cdb82916` | ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION | `en-cours.md`, `README.md`, `attention.md` (+13) |
 | 11:44 | `e331ef42` | COLORATION — LA COUCHE HEURISTIQUE : CE QUE LE CPU ÉTIQUETTE AVANT LE RÉSEAU | `README.md`, `en-cours.md`, `README.md` (+25) |
+| 12:34 | `73b00495` | R — LA CHARTE DU PROGRAMME : SIX PHASES, TROIS LOIS, CE QUI TIENT ET CE QUI MANQUE | `en-cours.md`, `programme-r.md`, `roadmap.md` (+21) |
 
 ## Chiffres du jour
 

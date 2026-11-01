@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 19.9 h |
 | Tours | 9 |
-| Messages | 335 |
-| Appels d'outils | 372 |
+| Messages | 339 |
+| Appels d'outils | 376 |
 | Fichiers touchés | 22 |
-| Commandes | 284 |
+| Commandes | 287 |
 | Sous-agents | 2 |
-| Commits | 18 |
+| Commits | 19 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -484,7 +484,7 @@ Le générateur S (`tools/structures/generateur.py`, que j'ai lu sans y toucher)
 
 ### Tour 9 — détaille ce qu'est le pprogramme R : docs/pilotage/programme-r.md
 
-*24 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Vérifier si la charte existe et lire la ligne R de la roadmap
 - bash — Lire le programme R dans la lecture rapide
@@ -500,7 +500,7 @@ Le générateur S (`tools/structures/generateur.py`, que j'ai lu sans y toucher)
 - write `/tmp/gen_programme_r.py`
 - bash — Générer les deux schémas du programme R
 - bash — Corriger la branche de refus du pipeline
-- … et 10 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
@@ -582,7 +582,7 @@ Le générateur S (`tools/structures/generateur.py`, que j'ai lu sans y toucher)
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 244 autres
+- … et 247 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -736,4 +736,5 @@ Le générateur S (`tools/structures/generateur.py`, que j'ai lu sans y toucher)
 - ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - COLORATION — LA COUCHE HEURISTIQUE : CE QUE LE CPU ÉTIQUETTE AVANT LE RÉSEAU" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - R — LA CHARTE DU PROGRAMME : SIX PHASES, TROIS LOIS, CE QUI TIENT ET CE QUI MANQUE" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- ÉTAT — COMPTEUR JSON 467 (CORPUS WIKI)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

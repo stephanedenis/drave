@@ -12683,3 +12683,25 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-733", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-curriculum.log; ls work/n2j/base-curriculum.pt 2>/dev/null && echo CURR_OK", "description": "Check the curriculum progress"}`
+
+  ```
+12:34
+pas 15750 · perte 1.5173 · PPL val 4.336 · 716 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 180; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-curriculum.log; ls work/n2j/base-curriculum.pt 2>/dev/null && echo CURR_OK", "description": "Wait for the curriculum to finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-735]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-735", "timeout_ms": 300000, "wait": true}`
