@@ -6,7 +6,9 @@ sur son évaluation. Ce script vérifie deux choses, avec des chiffres :
 
 1. **les doublons de tronçons entre splits** : chaque ligne des fichiers (tronçon de 8 Ko écrit
    par `corpus_wikipedia.py`) est hachée ; un tronçon qui apparaît dans deux splits est une fuite
-   exacte (les quasi-doublons ne sont pas détectés — c'est dit) ;
+   exacte (les quasi-doublons ne sont pas détectés — c'est dit). Pour le **texte intégral**
+   (`corpus_wikipedia_texte.py`), l'unité est la **fenêtre** de 8 Ko coupée au mot
+   (`--taille-troncon 8192`), parce que les tronçons contiennent des retours à la ligne ;
 2. **le recouvrement avec les jeux d'évaluation** : des fenêtres de `--fenetre` octets,
    échantillonnées dans chaque fichier d'évaluation, sont cherchées dans l'entraînement par
    `mmap.find` — une fenêtre trouvée est une fuite.
@@ -33,27 +35,54 @@ def hache(bloc: bytes) -> str:
     return hashlib.blake2b(bloc, digest_size=16).hexdigest()
 
 
-def doublons_entre(train: pathlib.Path, autres: list[pathlib.Path]) -> dict:
+def troncons(chemin: pathlib.Path, taille: int):
+    """Les unités de comparaison : les lignes (défaut), ou des fenêtres de `taille` octets.
+
+    Le corpus de résumés écrit un tronçon par ligne ; le corpus de texte intégral écrit des
+    tronçons de 8 192 caractères qui contiennent des retours à la ligne (les paragraphes). Pour
+    ce dernier, l'unité de comparaison est la **fenêtre** de 8 Ko coupée au mot, pas la ligne —
+    sinon les titres de sections répétés (« Biographie », etc.) font un faux taux de 5 %.
+    """
+    if taille <= 0:
+        with chemin.open("rb") as f:
+            for ligne in f:
+                ligne = ligne.strip()
+                if len(ligne) >= 64:
+                    yield ligne
+        return
+    with chemin.open("rb") as f:
+        buf = b""
+        while True:
+            bloc = f.read(1 << 20)
+            if not bloc:
+                break
+            buf += bloc
+            while len(buf) >= taille:
+                coupe = buf.rfind(b" ", taille // 2, taille)
+                fin = coupe if coupe > 0 else taille
+                m = buf[:fin].strip()
+                if len(m) >= 64:
+                    yield m
+                buf = buf[fin:]
+        m = buf.strip()
+        if len(m) >= 64:
+            yield m
+
+
+def doublons_entre(train: pathlib.Path, autres: list[pathlib.Path], taille: int = 0) -> dict:
     vus: set[str] = set()
     n_train = 0
-    with train.open("rb") as f:
-        for ligne in f:
-            ligne = ligne.strip()
-            if len(ligne) >= 64:
-                vus.add(hache(ligne))
-                n_train += 1
+    for t in troncons(train, taille):
+        vus.add(hache(t))
+        n_train += 1
     resultat = {"train_troncons": n_train, "par_split": {}}
     for autre in autres:
         n = 0
         dup = 0
-        with autre.open("rb") as f:
-            for ligne in f:
-                ligne = ligne.strip()
-                if len(ligne) < 64:
-                    continue
-                n += 1
-                if hache(ligne) in vus:
-                    dup += 1
+        for t in troncons(autre, taille):
+            n += 1
+            if hache(t) in vus:
+                dup += 1
         resultat["par_split"][autre.name] = {"troncons": n, "doublons": dup,
                                              "taux": round(dup / max(n, 1), 6)}
     return resultat
@@ -87,6 +116,8 @@ def main() -> int:
     ap.add_argument("--fenetre", type=int, default=128)
     ap.add_argument("--pas", type=int, default=512)
     ap.add_argument("--echantillon", type=int, default=40)
+    ap.add_argument("--taille-troncon", type=int, default=0,
+                    help="0 = lignes ; 8192 = fenêtres de 8 Ko (texte intégral)")
     ap.add_argument("--sortie", type=pathlib.Path)
     args = ap.parse_args()
     autres = [p for p in (args.val, args.test) if p and p.exists()]
@@ -95,6 +126,10 @@ def main() -> int:
                 "recouvrement_eval": [recouvrement(args.train, p, args.fenetre, args.pas,
                                                    args.echantillon)
                                       for p in args.eval if p.exists()]}
+    if args.taille_troncon > 0:
+        resultat["taille_troncon"] = args.taille_troncon
+        resultat["doublons_entre_splits_troncon"] = doublons_entre(args.train, autres,
+                                                                   args.taille_troncon)
     print(json.dumps(resultat, ensure_ascii=False, indent=1))
     if args.sortie:
         args.sortie.write_text(json.dumps(resultat, ensure_ascii=False, indent=1) + "\n",

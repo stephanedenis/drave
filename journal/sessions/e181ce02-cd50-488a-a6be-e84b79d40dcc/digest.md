@@ -10348,3 +10348,261 @@ timeout 180 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/taquin.py tools/pensee/banc.py tools/pensee/autotest.py reports/rapport-pensee-banc.md reports/pensee-banc.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotage/road … [395 caractères tronqués]`
+
+  ```
+docs/pilotage/chantiers.md                         |   6 +-
+ docs/pilotage/en-cours.md                          |  20 +-
+ docs/pilotage/plan-travail.md                      |   2 +-
+ docs/pilotage/roadmap.md                           |   4 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |  11 +-
+ reports/README.md                                  |   1 +
+ reports/pensee-banc.json                           | 360 +++++++++++++++++++++
+ reports/rapport-pensee-banc.md                     |  84 +++++
+ tools/pensee/autotest.py                           |  17 +-
+ tools/pensee/banc.py                               | 126 ++++++++
+ tools/pensee/taquin.py                             | 113 +++++++
+ 12 files changed, 725 insertions(+), 23 deletions(-)
+[still running after 60000ms; moved to background job bash-369]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-369", "timeout_ms": 240000, "wait": true}`
+
+  ```
+[master deb0f96f] B13 — LE BANC ANYTIME : A* BUT EN 32 NŒUDS, AUC 0,528/0,624 CONTRE 0,246/0,116 À L'ALÉATOIRE
+ 30 files changed, 1185 insertions(+), 84 deletions(-)
+ create mode 100644 reports/pensee-banc.json
+ create mode 100644 reports/rapport-pensee-banc.md
+ create mode 100644 tools/pensee/banc.py
+ create mode 100644 tools/pensee/taquin.py
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 tools/revue_documentation.py | tail -2; python3 tools/verifie_en_cours.py | tail -2; python3 tools/sessions.py --check 2>&1 | tail -3; timeout 120 python3 -m tools.pensee.autotest 2>&1 | tail -2", … [50 caractères tronqués]`
+
+  ```
+deb0f96f B13 — LE BANC ANYTIME : A* BUT EN 32 NŒUDS, AUC 0,528/0,624 CONTRE 0,246/0,116 À L'ALÉATOIRE
+  revue de documentation · 391 fiche(s) · 478 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1612 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ⚠ mandat périmé (53 min) : fe3c05f0-834b-44f2-8739-501865d652c1 — heartbeat à rafraîchir
+  ✅ T7 banc anytime        AUC A* 0.5283 vs aléatoire 0.2458 ; but A* 32, aléatoire None ; regret A* 0.0
+  10/10 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ B13 v0 complet : banc 10/10, A* 32 nœuds ; le round suivant attaque le gold L
+
+Le round 1 du goal est livré : le **banc anytime** ferme la boucle B13. Commit **`deb0f96f`**.
+
+## Le banc
+
+| problème | stratégie | AUC | regret | but |
+|---|---|---:|---:|---:|
+| cruches | **A*/greedy** | **0,528** | **0** | **32 nœuds** |
+| cruches | BFS | 0,328 | 0 | 128 |
+| cruches | aléatoire | 0,246 | 0,50 | — |
+| taquin 3×3 (8 coups) | **A*/greedy** | **0,624** | **0** | **32 nœuds** |
+| taquin | BFS | 0,281 | 0 | 1024 |
+| taquin | aléatoire | 0,116 | 0,833 | — |
+
+L'A* est **2,1×** l'aléatoire sur les cruches, **5,4×** sur le taquin ; le MCTS-lite nu reste sous l'aléatoire (contrôle). La fiche [`rapport-pensee-banc.md`](../../reports/rapport-pensee-banc.md) et le JSON [`pensee-banc.json`](../../reports/pensee-banc.json) portent les courbes.
+
+**La limite est écrite** : A* = greedy sur ces deux problèmes, parce que le score `1/(1+distance)` contient déjà l'information que l'heuristique ajoute. Ce n'est pas une victoire de l'A* : c'est une limite du score ; un score 0/1 et un opérateur hétérogène les sépareraient.
+
+## B13 v0 — complet
+
+- **AC-3** et **alpha-bêta** : 8/8, 1 495 nœuds/296 coupes contre 18 730 au minimax.
+- **DRVF `thought`** : 9/9, 23 597 octets, 93 événements, rejeu identique, corruption refusée.
+- **Banc anytime** : 10/10, AUC/regret/budget du but.
+- Le contrat `moteur-de-pensee.md` a T7 et les fichiers `taquin.py`/`banc.py`.
+
+## L'état
+
+- `revue` : **391 fiches / 478 JSON / 118 docs / 81 portes** — ✅.
+- `en-cours` : **1 612 mots**, **2 sessions** (L et R4.4), 10 puces, 5 questions ; T0 dans le budget.
+- `sessions.py --check` : le plan **R4.4 `fe3c05f0`** est listé mais son heartbeat est périmé de 53 min ; la session R4.4 doit le rafraîchir — je ne l'ai pas touché.
+- `autotest` : **10/10** ; toutes les portes légères passent.
+
+## Le round suivant
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain**. La prochaine action du plan L est le **gold POS/syntagme/pragmatique** (100–200 phrases), puis la **qualification neuronale** et la **cascade mesurée** :
+
+- si le modèle local reste indisponible (`llama-cli` expiré), le gold mesurera l'**heuristique** et le **mock de contrat**, et la limite « neuronal non qualifié » restera écrite ;
+- si le gold bloque, la file prend les **opérateurs hétérogènes/DRVM** de B13, sans attendre.
+
+Le prochain round démarre sur le gold L.
+
+
+## Tour 15
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"POS_FERME\\|def _pos\\|def _modalite\\|def _morphemes\\|MOTS_DOUBLE\\|double_sens\" tools/bloc_linguistique.py | head -20; sed -n '300,360p' tools/bloc_linguistique.py", "description": "Repérer les lexiques et la POS à enri … [6 caractères tronqués]`
+
+  ```
+291:POS_FERME = {
+415:    def _modalite(phrase: str) -> bool:
+420:    def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
+421:        lex = POS_FERME.get(langue, POS_FERME["fr"])
+442:    def _morphemes(mot: str) -> list[tuple[str, int, int, str]]:
+469:        lex = POS_FERME.get(langue, POS_FERME["fr"])
+580:                etiquettes.append(Etiquette("pragmatique", "double_sens", "candidat", d, f,
+        "DET": set("the a an this that these those my your his her its our their".split()),
+        "PREP": set("of to in on at by with from for about into over under between through during without".split()),
+        "PRON": set("i you he she it we they me him her us them who whom which that".split()),
+        "CONJ": set("and or but nor for so yet because although while if when".split()),
+        "AUX": set("is are was were be been being have has had do does did can could will would shall should may might must".split()),
+    },
+}
+
+SUFFIXES = ("ment", "tions", "tion", "ités", "ité", "eux", "euse", "ables", "able", "isme",
+            "istes", "iste", "ance", "ence", "er", "ir", "ez", "ons", "ait", "aient", "ing",
+            "ed", "ly", "ness", "ful", "less", "ship", "ous", 
+… [2157 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '291,330p' tools/bloc_linguistique.py; sed -n '410,442p' tools/bloc_linguistique.py", "description": "Lire les lexiques et la fonction POS"}`
+
+  ```
+POS_FERME = {
+    "fr": {
+        "DET": set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs quel quelle quels quelles".split()),
+        "PREP": set("à a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis pendant durant contre malgré selon près loin devant derrière après avant".split()),
+        "PRON": set("je j tu il elle on nous vous ils elles me te se lui leur moi toi soi y en ce cela ça qui que quoi dont où".split()),
+        "CONJ": set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant".split()),
+        "AUX": set("est sont était étaient été être ai as a avons avez ont avait avaient eu avoir".split()),
+    },
+    "en": {
+        "DET": set("the a an this that these those my your his her its our their".split()),
+        "PREP": set("of to in on at by with from for about into over under between through during without".split()),
+        "PRON": set("i you he she it we they me him her us them who whom which that".split()),
+        "CONJ": set("and or but nor for so yet because although while if when".split()),
+        "AUX": set("is are was were be been being have has had do do
+… [3108 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        \"AUX\": set(\"est sont était étaient été être ai as a avons avez ont avait avaient eu avoir\".split()),\n    },\ … [5885 caractères tronqués]`
+
+  ```
+lexiques ok
+COMPILE=0
+langue=fr script=Latn source=heuristique refus=-
+  pos          DET            'Le' [0:2] conf=0.92 src=heuristique
+  pos          NOUN           'chat' [3:7] conf=0.30 src=heuristique
+  pos          PREP           'de' [8:10] conf=0.92 src=heuristique
+  pos          DET            'la' [11:13] conf=0.92 src=heuristique
+  pragmatique  acte           'assertion' [0:55] conf=0.45 src=heuristique
+  pragmatique  acte           'exclamation' [55:67] conf=0.45 src=heuristique
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/tests/linguistique/gold.py <<'PY'\n\"\"\"gold.py — le gold v0 du bloc linguistique : POS, syntagmes, pragmatique.\n\n20 phrases (14 françaises, 6 anglaises), **écrites à la main** après le bloc : elles ne sont pas\ntirées … [8487 caractères tronqués]`
+
+  ```
+20 phrases, 105 tokens → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold.json
+EXIT=0
+20 105
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/tests/linguistique/evaluer_gold.py <<'PY'\n\"\"\"evaluer_gold.py — mesure le bloc linguistique sur le gold v0.\n\nTrois niveaux : POS (token, exact), syntagmes (type + span, exact), pragmatique (acte, négation,\nmodalité, … [6929 caractères tronqués]`
+
+  ```
+"PREP": 3,
+     "AUX": 6
+    },
+    "CONJ": {
+     "CONJ": 1,
+     "PRON": 1,
+     "DET": 1
+    },
+    "DET": {
+     "DET": 21
+    },
+    "NOUN": {
+     "NOUN": 21
+    },
+    "PREP": {
+     "PREP": 9
+    },
+    "PRON": {
+     "PRON": 9
+    },
+    "VERB": {
+     "VERB": 21,
+     "NOUN": 3
+    }
+   }
+  },
+  "syntagme": {
+   "precision": 0.4706,
+   "rappel": 0.2857,
+   "f1": 0.3556,
+   "tp": 16,
+   "fp": 18,
+   "fn": 40
+  },
+  "pragmatique": {
+   "acte": 1.0,
+   "negation": 0.9,
+   "modalite": 0.9,
+   "double_sens": 0.9
+  },
+  "fraction_semantique": 0.525,
+  "appels_neuronal": 20
+ },
+ "reel": {
+  "statut": "non demandé"
+ },
+ "gold": {
+  "phrases": 20,
+  "tokens": 105
+ },
+ "verdict": {
+  "pos": true,
+  "syntagme": true,
+  "acte": true,
+  "cascade_pos": true,
+  "cascade_syntagme": true,
+  "reel_non_requis": true
+ },
+ "ok": true
+}
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/tests/linguistique/evaluer_gold.py --json reports/pensee-gold-linguistique.json --reel >/tmp/gold.out 2>&1; echo \"EXIT=$?\"; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-gold-linguistique … [588 caractères tronqués]`
+
+  ```
+EXIT=0
+heuristique POS 0.9238 ferme 0.9123 ouvert 0.9375 SEG F1 0.3556 acte 1.0 neg 1.0 mod 0.95 ds 0.9 frac 0.469 appels None
+mock_neuronal POS 0.4857 ferme 0.1053 ouvert 0.9375 SEG F1 0.2439 acte 1.0 neg 0.9 mod 0.9 ds 0.9 frac 0.525 appels None
+parallele POS 0.9238 ferme 0.9123 ouvert 0.9375 SEG F1 0.3556 acte 1.0 neg 0.9 mod 0.9 ds 0.9 frac 0.525 appels None
+cascade POS 0.9238 ferme 0.9123 ouvert 0.9375 SEG F1 0.3556 acte 1.0 neg 0.9 mod 0.9 ds 0.9 frac 0.525 appels 20
+reel {'statut': 'refus', 'detail': "RefusNeuronal: Command '['llama-cli', '-m', '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/Qwen2.5-0.5B-Q4_0.gguf', '-p', 'Tu es un étiqueteur linguistique. Réponds U"}
+verdict {'pos': True, 'syntagme': True, 'acte': True, 'cascade_pos': True, 'cascade_syntagme': True, 'reel_non_requis': True} ok True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nold='''def _supprimer_chevauchements(etiquettes: list[Etiquette]) -> list[Etiquette]:\n    \"\"\"À niveau égal, deux étiquettes qui se c … [3787 caractères tronqués]`
+
+  ```
+suppression ok
+COMPILE=0
+GOLD=0
+heuristique POS 0.9238 SEG 0.3556 acte 1.0 neg 1.0 mod 0.95 ds 0.9 frac 0.469 appels None
+mock_neuronal POS 0.4857 SEG 0.2439 acte 1.0 neg 0.9 mod 0.9 ds 0.9 frac 0.525 appels None
+parallele POS 0.9238 SEG 0.3556 acte 1.0 neg 1.0 mod 0.95 ds 0.9 frac 0.525 appels None
+cascade POS 0.9238 SEG 0.3556 acte 1.0 neg 1.0 mod 0.95 ds 0.9 frac 0.525 appels 20
+reel refus RefusNeuronal: Command '['llama-cli', '-m', '/home/stephane/Data13TB/stephane/Gi
+ok True
+  ```
+

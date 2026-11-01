@@ -14,7 +14,7 @@
   `reports/corpus-wiki-*`, `reports/corpus-wikipedia-*`, `reports/inventaire-*`,
   `reports/rapport-corpus-*`, `reports/r11-*`, `reports/r12-*`, `reports/a26-*`, `reports/a83-*`,
   `journal/sessions/fe3c05f0-…/`
-- **Heartbeat** : 2026-11-01 17:50
+- **Heartbeat** : 2026-11-01 18:50
 - **État** : en cours
 - **Prochaine action** : les **neuf langues** en texte intégral (les neuf lancées), puis la contamination, les fiches,
   le catalogue et l'extraction PDF/OCR.

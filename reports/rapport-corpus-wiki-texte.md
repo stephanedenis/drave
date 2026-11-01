@@ -2,9 +2,9 @@
 
 > **Verdict.** Le débaliseur `tools/corpus_wikipedia_texte.py` a produit le **texte intégral** du
 > français : **2 388 219 articles**, **8,025 G caractères**, **1,294 G mots** (estimés), **8,34 Go**,
-> résidus **1 / 20 000 lignes** (`{{`), **0 / 49 655** fenêtres de 8 Ko de la validation et
-> **0 / 49 148** du test retrouvées dans l'entraînement, **0 / 40** fenêtres sur les cinq jeux
-> d'évaluation. Le texte intégral vaut **2,18×** les résumés (3,68 Go) — et non les 7× du pilote :
+> résidus **1 / 20 000 lignes** (`{{`), **0 / 51 250** fenêtres de 8 Ko de la validation et
+> **0 / 50 730** du test retrouvées dans l'entraînement, **0 / 40** sur le XNLI et les trois jeux
+> locaux, **2 / 24** pour l'UDHR — **citée dans Wikipédia**. Le texte intégral vaut **2,18×** les résumés (3,68 Go) — et non les 7× du pilote :
 > le pilote n'était pas représentatif.
 >
 > **Date** : 2026-11-01. **Ligne** : Données (D/R/A). **Machine** : CPU seul.
@@ -64,10 +64,12 @@ run (8,34 Go).
 | articles train / val / test | 2 149 330 / 119 866 / 119 023 |
 | résidus (`{{` / `[[` / `<`) sur 20 000 lignes | **1 / 0 / 3** |
 
-**Aucune fuite entre splits.** Les **jeux d'évaluation** (XNLI fr, UDHR, trois jeux locaux)
-donnent **0 / 40** fenêtres chacun. Au **niveau du tronçon réel (8 Ko)**, **0 / 49 655** (validation)
-et **0 / 49 148** (test) fenêtres sont dans l'entraînement. Le contrôle standard (unité = ligne)
-signale 5,53 % et 5,47 % de lignes dupliquées — ce sont les **titres de sections répétés**
+**Aucune fuite de prose entre splits.** Le **XNLI fr** et les **trois jeux locaux** donnent
+**0 / 40** fenêtres chacun ; l'**UDHR** donne **2 / 24** — l'UDHR est **citée dans Wikipédia** (le
+français rejoint l'italien, le japonais et le portugais), ce n'est donc pas un jeu tenu à l'écart
+pour lui. Au **niveau du tronçon réel (8 Ko)**, **0 / 51 250** (validation) et **0 / 50 730**
+(test) fenêtres sont dans l'entraînement. Le contrôle standard (unité = ligne) signale 5,53 % et
+5,47 % de lignes dupliquées — ce sont les **titres de sections répétés**
 (« Biographie », « Notes et références »…) et les lignes de boîte, pas de la prose ; la fiche
 nomme la limite de ce contrôle et le contrôle 8 Ko qui le corrige.
 
@@ -85,8 +87,9 @@ les **tableaux** ; les liens deviennent des libellés, les titres de sections re
 - **La déduplication est exacte** : les quasi-doublons (traductions, copies) restent.
 - **La licence** : CC-BY-SA 4.0 (et GFDL) — le corpus reste local, l'attribution et le partage à
   l'identique s'appliquent à toute diffusion.
-- **Le contrôle 8 Ko est ad hoc** : il mérite d'entrer dans `verifie_contamination.py` comme
-  option de taille de tronçon.
+- **Le contrôle 8 Ko** est dans `verifie_contamination.py --taille-troncon 8192` ; les
+  **jeux d'évaluation** sont extraits par langue (`tools/extraire_evals_langues.py`) — l'UDHR
+  reste **citée** dans Wikipédia pour le fr, l'it, le ja et le pt.
 - **La langue** : seul le français est fait ; les neuf autres suivent le même outil.
 
 ## 6. La suite
@@ -98,6 +101,7 @@ leurs licences, puis la **préparation de R1.1/R1.2**.
 ## Fichiers
 
 - `tools/corpus_wikipedia_texte.py` — l'outil (dump → texte intégral).
+- `tools/extraire_evals_langues.py` — les jeux d'évaluation par langue.
 - `reports/corpus-wiki-fr-texte.json` — le manifeste du run complet (SHA-256 des trois fichiers).
 - `reports/corpus-wiki-fr-texte-contamination.json` — le contrôle du run complet.
 - `reports/corpus-wiki-fr-texte-pilote.json` — le manifeste du pilote (archivé pour comparaison).

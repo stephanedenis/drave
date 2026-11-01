@@ -14019,3 +14019,48 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=1 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal -- … [656 caractères tronqués]`
+
+  ```
+canal run 1502860
+[still running after 60000ms; moved to background job bash-819]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-819", "timeout_ms": 120000, "wait": true}`
+
+  ```
+placebo 186089472 octets
+pas 2250 · perte 2.1732 · PPL val 8.537 · 87 s
+18:42
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"add_argument\" tools/distiller_budget.py | head -16", "description": "Check the distiller options"}`
+
+  ```
+137:    ap.add_argument("--enseignant", default=str(ARTEFACTS / "route-teacher-20k"))
+138:    ap.add_argument("--init", default=str(ARTEFACTS / "drave-n0-base-20k.pt"))
+139:    ap.add_argument("--corpus", choices=("fr", "multi"), default="fr")
+140:    ap.add_argument("--manifeste", default="reports/native-corpus-multi.json")
+141:    ap.add_argument("--quotas", choices=("proportionnel", "equilibre"), default="proportionnel",
+143:    ap.add_argument("--train", default="data/corpus_fr_train.txt")
+144:    ap.add_argument("--val", default="data/corpus_fr_val.txt")
+145:    ap.add_argument("--stages", default="128:10000:1e-4,128:10000:3e-5")
+146:    ap.add_argument("--lot", type=int, default=16)
+147:    ap.add_argument("--temperature", type=float, default=2.0)
+148:    ap.add_argument("--alpha", type=float, default=0.7)
+149:    ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True)
+150:    ap.add_argument("--graine", type=int, default=1)
+151:    ap.add_argument("--positions-aleatoires", type=int, default=0,
+153:    ap.add_argument("--device", default="cuda")
+154:    ap.add_argument("--sortie", required=True)
+  ```
+
+- **bash** `{"command": "sleep 840; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/route-wiki 2>/dev/null | head -3; tail -2 work/n2j/teacher-wiki.log; tail -1 work/n2j/base-canal.log", "description": "Wait for the teacher and the channel run"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-821]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-821", "timeout_ms": 900000, "wait": true}`

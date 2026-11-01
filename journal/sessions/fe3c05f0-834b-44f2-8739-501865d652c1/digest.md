@@ -16007,3 +16007,63 @@ def main() -> int:
 … [972 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/verifie_contamination.py'); s=p.read_text()\nold='''def doublons_entre(train: pathlib.Path, autres: list[pathlib.Path]) -> dict:\n    vus: set[str] = set()\n    n_train = 0\n    w … [5491 caractères tronqués]`
+
+  ```
+checker : --taille-troncon
+OK
+    "taux": 0.0
+   }
+  }
+ }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('/tmp/verif-8k.json').read_text())\nprint('lignes:', d['doublons_entre_splits']['par_split'])\nprint('8 Ko:', d.get('doublons_entre_splits_troncon',{}).get('par_split'))\ … [187 caractères tronqués]`
+
+  ```
+lignes: {'val.txt': {'troncons': 1338332, 'doublons': 74001, 'taux': 0.055293}, 'test.txt': {'troncons': 1322490, 'doublons': 72352, 'taux': 0.054709}}
+8 Ko: {'val.txt': {'troncons': 51250, 'doublons': 0, 'taux': 0.0}, 'test.txt': {'troncons': 50730, 'doublons': 0, 'taux': 0.0}}
+taille 8192
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > tools/extraire_evals_langues.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"extraire_evals_langues.py — les jeux d'évaluation **par langue**, ciblés.\n\nPOURQUOI. `verifie_contamination.py --eval` échantillonne quarante fenêtres dans  … [3199 caractères tronqués]`
+
+  ```
+ar-xnli.txt : 598137 octets
+  de-xnli.txt : 459743 octets
+  en-xnli.txt : 398603 octets
+  es-xnli.txt : 443562 octets
+  fr-xnli.txt : 475235 octets
+  fr-udhr.txt : 12073 octets
+  ru-xnli.txt : 751579 octets
+  zh-xnli.txt : 349991 octets
+  it-udhr.txt : 11612 octets
+  ja-udhr.txt : 11899 octets
+  pt-udhr.txt : 22408 octets
+total 3476
+drwxr-xr-x. 1 stephane stephane    308  1 nov 18:44 .
+drwxr-xr-x. 1 stephane stephane      8  1 nov 18:44 ..
+-rw-r--r--. 1 stephane stephane 598137  1 nov 18:44 ar-xnli.txt
+-rw-r--r--. 1 stephane stephane 459743  1 nov 18:44 de-xnli.txt
+-rw-r--r--. 1 stephane stephane 398603  1 nov 18:44 en-xnli.txt
+-rw-r--r--. 1 stephane stephane 443562  1 nov 18:44 es-xnli.txt
+-rw-r--r--. 1 stephane stephane  12073  1 nov 18:44 fr-udhr.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 1200 python3 tools/verifie_contamination.py --train data/corpus_wiki_fr_texte/train.txt --val data/corpus_wiki_fr_texte/val.txt --test data/corpus_wiki_fr_texte/test.txt --eval work/dr/eval/fr-xnli.txt --eval work/dr/eval/fr-ud … [721 caractères tronqués]`
+
+  ```
+}
+ }
+}
+lignes: {'val.txt': {'troncons': 1338332, 'doublons': 74001, 'taux': 0.055293}, 'test.txt': {'troncons': 1322490, 'doublons': 72352, 'taux': 0.054709}}
+8 Ko: {'val.txt': {'troncons': 51250, 'doublons': 0, 'taux': 0.0}, 'test.txt': {'troncons': 50730, 'doublons': 0, 'taux': 0.0}}
+fr-xnli.txt 40 | 0
+fr-udhr.txt 24 | 2
+test.txt 40 | 0
+test.txt 40 | 0
+test.txt 40 | 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-corpus-wiki-texte.md'); s=p.read_text()\ns=s.replace(\"résidus **1 / 20 000 lignes** (`{{`), **0 / 49 655** fenêtres de 8 Ko de la validation et\\n> **0 / 49 148** du te … [4020 caractères tronqués]`

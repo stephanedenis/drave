@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 26.0 h |
-| Tours | 14 |
-| Messages | 437 |
-| Appels d'outils | 470 |
+| Durée | 26.2 h |
+| Tours | 15 |
+| Messages | 450 |
+| Appels d'outils | 481 |
 | Fichiers touchés | 25 |
-| Commandes | 369 |
+| Commandes | 380 |
 | Sous-agents | 2 |
 | Commits | 23 |
 | Compactages de contexte | 1 |
@@ -59,6 +59,8 @@
 **Tour 13** — suis le plan, continue jusqu'à 8h demain matin
 
 **Tour 14** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
+
+**Tour 15** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -775,7 +777,7 @@ Mon commit B13 a perdu la course : HEAD a été déplacé par le commit **`d51b4
 
 ### Tour 14 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Lire le score et l'heuristique des cruches
 - bash — Écrire le taquin et le banc anytime, l'exécuter
@@ -785,6 +787,66 @@ Mon commit B13 a perdu la course : HEAD a été déplacé par le commit **`d51b4
 - bash — Vérifier le banc et les compteurs
 - bash — Committer le banc anytime et la fiche
 - job_output
+- bash — Confirmer l'état final du round
+
+**Synthèse produite :**
+
+⏵ B13 v0 complet : banc 10/10, A* 32 nœuds ; le round suivant attaque le gold L
+
+Le round 1 du goal est livré : le **banc anytime** ferme la boucle B13. Commit **`deb0f96f`**.
+
+\## Le banc
+
+| problème | stratégie | AUC | regret | but |
+|---|---|---:|---:|---:|
+| cruches | **A*/greedy** | **0,528** | **0** | **32 nœuds** |
+| cruches | BFS | 0,328 | 0 | 128 |
+| cruches | aléatoire | 0,246 | 0,50 | — |
+| taquin 3×3 (8 coups) | **A*/greedy** | **0,624** | **0** | **32 nœuds** |
+| taquin | BFS | 0,281 | 0 | 1024 |
+| taquin | aléatoire | 0,116 | 0,833 | — |
+
+L'A* est **2,1×** l'aléatoire sur les cruches, **5,4×** sur le taquin ; le MCTS-lite nu reste sous l'aléatoire (contrôle). La fiche [`rapport-pensee-banc.md`](../../reports/rapport-pensee-banc.md) et le JSON [`pensee-banc.json`](../../reports/pensee-banc.json) portent les courbes.
+
+**La limite est écrite** : A* = greedy sur ces deux problèmes, parce que le score `1/(1+distance)` contient déjà l'information que l'heuristique ajoute. Ce n'est pas une victoire de l'A* : c'est une limite du score ; un score 0/1 et un opérateur hétérogène les sépareraient.
+
+\## B13 v0 — complet
+
+- **AC-3** et **alpha-bêta** : 8/8, 1 495 nœuds/296 coupes contre 18 730 au minimax.
+- **DRVF `thought`** : 9/9, 23 597 octets, 93 événements, rejeu identique, corruption refusée.
+- **Banc anytime** : 10/10, AUC/regret/budget du but.
+- Le contrat `moteur-de-pensee.md` a T7 et les fichiers `taquin.py`/`banc.py`.
+
+\## L'état
+
+- `revue` : **391 fiches / 478 JSON / 118 docs / 81 portes** — ✅.
+- `en-cours` : **1 612 mots**, **2 sessions** (L et R4.4), 10 puces, 5 questions ; T0 dans le budget.
+- `sessions.py --check` : le plan **R4.4 `fe3c05f0`** est listé mais son heartbeat est périmé de 53 min ; la session R4.4 doit le rafraîchir — je ne l'ai pas touché.
+- `autotest` : **10/10** ; toutes les portes légères passent.
+
+\## Le round suivant
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain**. La prochaine action du plan L est le **gold POS/syntagme/pragmatique** (100–200 phrases), puis la **qualification neuronale** et la **cascade mesurée** :
+
+- si le modèle local reste indisponible (`llama-cli` expiré), le gold mesurera l'**heuristique** et le **mock de contrat**, et la limite « neuronal non qualifié » restera écrite ;
+- si le gold bloque, la file prend les **opérateurs hétérogènes/DRVM** de B13, sans attendre.
+
+Le prochain round démarre sur le gold L.
+
+### Tour 15 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Repérer les lexiques et la POS à enrichir
+- bash — Lire les lexiques et la fonction POS
+- bash — Enrichir les lexiques POS et la pragmatique
+- bash — Écrire le gold v0 de 20 phrases
+- bash — Écrire l'évaluateur du gold et le lancer
+- bash — Générer le JSON du gold avec le test neuronal réel
+- bash — Corriger la fusion des types complémentaires et remesurer
+- bash — Ajouter le gold à la porte, la fiche et l'état
+- bash — Vérifier le budget T0 après le gold
+- bash — Rentrer dans le budget T0
 
 ## 3. Travail accompli
 
@@ -865,7 +927,7 @@ Mon commit B13 a perdu la course : HEAD a été déplacé par le commit **`d51b4
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 329 autres
+- … et 340 autres
 
 ## 4. Mesures et résultats marquants
 

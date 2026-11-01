@@ -17,18 +17,18 @@
  },
  "recouvrement_eval": [
   {
-   "fichier": "xnli.dev.tsv",
+   "fichier": "fr-xnli.txt",
    "fenetre": 128,
    "fenetres": 40,
    "trouvees": 0,
    "taux": 0.0
   },
   {
-   "fichier": "articles.jsonl",
+   "fichier": "fr-udhr.txt",
    "fenetre": 128,
-   "fenetres": 40,
-   "trouvees": 0,
-   "taux": 0.0
+   "fenetres": 24,
+   "trouvees": 2,
+   "taux": 0.0833
   },
   {
    "fichier": "test.txt",
@@ -51,5 +51,21 @@
    "trouvees": 0,
    "taux": 0.0
   }
- ]
+ ],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 916628,
+  "par_split": {
+   "val.txt": {
+    "troncons": 51250,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 50730,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
 }
