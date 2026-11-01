@@ -8171,3 +8171,137 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && timeout 240 git commit -m \"ÉTAT — COMPTEUR JSON 467 (CORPUS WIKI)\" 2>&1 | tail -6; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer le compteur JSON à jour"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-287]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-287", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 0a17760d] ÉTAT — COMPTEUR JSON 467 (CORPUS WIKI)
+ 9 files changed, 89 insertions(+), 19 deletions(-)
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Charte R réécrite : six phases, trois lois, le verrou de l'encodeur
+
+La page `docs/pilotage/programme-r.md` est passée d'une **synthèse de 600 mots datée du 29/10** à une **charte de 3 437 mots, 12 sections et 2 schémas**, à l'état du **2026-11-01**. Commit : **`73b00495`**, puis **`0a17760d`** pour le compteur JSON. Voici ce qu'elle dit.
+
+## 1. Ce qu'est R — et ce qu'il n'est pas
+
+Drave a quatre lignes : **A** (le moteur), **B** (le sens), **N** (le natif) et **R** (le lecteur). Les trois premières construisent des **capacités** ; R construit la **preuve d'usage** :
+
+> un document, une question, un budget → une réponse **avec sa source**, ou un **refus motivé**.
+
+R n'est donc **ni un modèle, ni un benchmark** : c'est un **programme** avec des phases (R0–R5), des blocs (R01–R52), des mesures, des fiches, des portes et des états. Il **assemble** des blocs classiques (parseurs, BM25, AST, sympy, OCR) et des blocs neuronaux (le 0,5 B, plus tard le natif). Sans R, N2 est une course à la perplexité et B10 un `z` qui ne dit pas ce qu'il contient.
+
+La distinction structurante :
+
+- **R0** est le lecteur **système**, sans entraînement, avec l'existant et un modèle externe ;
+- **R1–R5** sont le lecteur **natif** : fenêtre, mémoire, restitution, structure, croisé.
+
+## 2. La carte des six phases
+
+| phase | question | état |
+|---|---|---|
+| **R0 — lecteur v0** | lire un document, choisir, citer, refuser | ✅ **close** : R0.1–R0.3, R0.6 ; R0.4/R0.5 négatifs |
+| **R1 — fenêtre native** | 1 000 octets sans refaire 130–256 ? | 🟡 **R13 close (octets)** ; R1.1/R1.2 attendent le contexte |
+| **R2 — mémoire** | gist, entités, relire | ⛔ attend R1 et N5 |
+| **R3 — restitution** | répondre, résumer, extraire, citer | ⛔ attend N4 |
+| **R4 — blocs structurels** | tables, code, maths, scans | ✅ R4.1–R4.3 ; **R4.4 close avec limites** |
+| **R5 — lecture croisée** | comparer, recouper, traduire | ⛔ attend R3 et B10.3 |
+
+La charte contient le schéma des phases et de leurs dépendances (`programme-r-phases.svg`).
+
+## 3. Le pipeline R0.6
+
+`programme-r-pipeline.svg` montre l'assemblage :
+
+**document → R0.1 régions → R0.2 contrôleur → passages → un des trois lecteurs → réponse citée ou refus.**
+
+- **R0.1** : 16 PDF + 8 MD + 3 HTML + 3 DOCX/EPUB, **51 pages**, partition **1,000**, fidélité **1,000**.
+- **R0.2** : cinq modes (`survol`, `balayage`, `lecture`, `relecture`, `arrêt`), budget en **octets**, récupération **1,00** à **30 %** sur les 5 types.
+- **R0.3** : 30 documents, **249 questions lexicales + 84 paraphrases**, corpus gelé ; **0,231** contre **0,042** à la troncature.
+- **R0.6** : **20/20** réponses avec provenance, **12/20 justes** au pilote, **9/10** refus hors sujet, **7/8** au modèle sur les paraphrases (contre 3/8 à l'extractif).
+
+Trois régimes, un seul contrat : **extractif** (le passage répond), **span** (la valeur répond), **modèle/cascade** (la paraphrase). Le **refus** est un seuil ; la **cascade calibrée** égale l'oracle sur le lexical (**0,894**) et bat les deux choix fixes sur les paraphrases (**0,366** contre 0,341 et 0,317), pour **19** appels de modèle sur 123 questions lexicales et **18** sur 41 paraphrases. La calibration est **publiée dans un fichier daté**, pas tapée sur la ligne de commande.
+
+## 4. Ce qui tient, ce qui ne tient pas
+
+| tient | chiffre |
+|---|---|
+| R0.1 document | partition 1,000, fidélité 1,000 |
+| R0.2 contrôleur | 1,000 à 30 % |
+| R0.3 banc | 0,231 vs 0,042 |
+| R0.6 pipeline | 12/20, 9/10 refus, 7/8 modèle |
+| R06 calibration | 0,894 / 0,366 |
+| R05 balayage | rappel@10 0,984, 0,1 ms |
+| R4.1/R4.2/R4.3 | 996/802 cellules, 294/24 fichiers, 32/10 formules |
+| R4.4 scans | 4/5 ≥ 90 %, réel 7,10 % |
+| R13 | octets ; BPE +0,39/+4,09 % |
+
+| ne tient pas | chiffre | raison |
+|---|---|---|
+| R0.4 tête de survol | 0,540/0,720 | une sonde linéaire sur 0,5 B ne bat pas BM25 |
+| R0.5 routeur | AUC 0,839, transfert 0,819/0,313 | un signal qui prédit n'est pas une règle qui décide |
+| R06 relecture | 0/249 | relire plus ne change pas la modalité |
+| R4.4 fax | parité 56,7 % | 120 dpi, 1 bit : l'information n'est plus là |
+| R1/R2/R3/R5 | — | attendent N2/N5/N4/B10.3 |
+
+## 5. Les trois lois — et les deux règles de mesure
+
+1. **Le corpus décide du lecteur, pas la question.** Le choix automatique gagne **+0,109** sur un corpus de valeurs et **perd −0,150** sur un corpus mixte : un classifieur de forme ne sait pas ce que la réponse attend.
+2. **Un signal qui prédit n'est pas une règle qui décide.** L'AUC du signal BM25 est **0,839**, mais aucun seuil ne transfère ; la cascade se **calibre par corpus**.
+3. **Pour une valeur, rendre le passage ou le span bat générer à 0,5 B.** Span **0,944**, extractif **0,851**, modèle **0,381** ; le génératif ne gagne que sur les paraphrases (**7/8** contre **3/8**), et il faudra un plus grand modèle pour que ce soit net.
+
+Deux règles de mesure :
+
+- **la parité juge, pas le WER** : un WER de 6 % qui casse la réponse n'est pas une lecture ; c'est la réponse du **même lecteur** sur le natif et sur le scan qui décide (R4.4) ;
+- **le document d'abord** : sans régions, offsets et provenance (R0.1), il n'y a ni survol, ni citation, ni parité.
+
+## 6. L'ordre et le verrou
+
+L'ordre est **par valeur et dépendances**, pas par date :
+
+1. **R0** (fait) : prouver le lecteur système ;
+2. **R4** (fait) : enlever la structure au modèle ;
+3. **R1** (suivant) : une fenêtre native qui tient 1 000 octets, ou une autre route ;
+4. **R2**, puis **R3** : mémoire et restitution, quand N5/N4 le permettent ;
+5. **R5** : le croisé, quand B10.3 porte.
+
+Le **verrou** n'est pas un bloc de R : c'est un **encodeur qui porte**. R0.4 reste sous BM25, R0.5 ne transfère pas, B10.3 ne lit que ~7 % du sens, et la typoglycémie montre que le modèle lit les **lettres**, pas les **formes** (×17,8 au mélange intérieur, ×62,7 tout mélangé). Trois symptômes, une même cause : il manque une **représentation de forme** et un `z` qui la porte — E2 (encodeur de formes), E3 (politique de saccades), et la couche heuristique qui peut étiqueter la surface avant le réseau.
+
+## 7. Les niveaux L0–L6
+
+La charte reprend le diagnostic de la lecture rapide :
+
+- **L0 flux** ✅, **L1 saut de calcul** ✅ ;
+- **L2 document** ✅ R0.1 ; **L3 politique** 🟡 (contrôleur oui, têtes apprises non) ;
+- **L4 mémoire** ⛔ R2/N5 ; **L5 restitution** ⛔ R3/N4 ;
+- **L6 banc** 🟡 R0.3 (249 questions, pas encore la courbe vitesse–compréhension).
+
+Drave n'est pas à L6 ; R0 a couvert L2, L3 et une partie de L6. Le reste est le programme.
+
+## 8. Ce que la charte change
+
+- La page n'est plus « en une page » : elle a **12 sections**, les six phases détaillées, les lois, les dépendances, les questions ouvertes, les fichiers et les portes.
+- Deux schémas indexés : `programme-r-phases.svg` et `programme-r-pipeline.svg`.
+- La **roadmap** est alignée : « charte du programme R », R4.4 **close** (limites nommées), prochaine action **R1.1/R1.2** (contexte natif), R2/R3 attendent N5/N4.
+- `en-cours` : **1 420 mots**, 1 session, 10 puces, compteurs **382 fiches / 467 JSON / 115 docs / 80 portes**.
+- Commit **`73b00495`** ; compteur **`0a17760d`**.
+
+## 9. État des portes
+
+- `revue_documentation`, `taille_documents`, `verifier_schemas`, `verifie_journal`, `verifie_en_cours`, `sessions.py --check` : **verts**.
+- `porte-tableaux` : **une seule rouge, extérieure à la charte** — `reports/inventaire-donnees-entrainement.md` pointe vers `rapport-corpus-wikipedia.md`, qui n'existe pas encore (la session corpus écrit `rapport-corpus-wiki-fr.md` et les JSON multilingues). Les tableaux de la charte, eux, passent.
+
+## 10. La phrase à retenir
+
+**R n'est pas un modèle de plus : c'est le test qui dit si les modèles savent lire.** Tant que la réponse n'a pas sa provenance, que le budget n'est pas tenu et que la parité natif/scan n'est pas mesurée, le programme n'a pas fini — et la prochaine étape n'est pas R0, c'est **R1.1/R1.2**, ou un bloc de surface si le contexte natif bloque.
+

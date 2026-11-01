@@ -12705,3 +12705,102 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-735", "timeout_ms": 300000, "wait": true}`
+
+  ```
+12:37
+}
+work/n2j/base-curriculum.pt
+CURR_OK
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-733 (bash: sleep 840; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-curriculum.log; ls work/n2j/base-curriculum.pt 2>/dev/null && echo CURR_OK) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/base-curriculum.pt --decomposition --longueurs --corpus-dir data/wiki_fr/propre --sortie work/n2j/eval.json 2>&1 | grep -v Loading; ~/g … [223 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-736]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-736", "timeout_ms": 400000, "wait": true}`
+
+  ```
+{"fichier": "base-curriculum.pt", "params": 11814792, "val": 4.0494, "test": 4.1207, "litterature": 7.4492, "litterature_propre": 7.5737, "anglais": 13.0506, "wikitext2": 14.4092, "permute": 224.9823, "decomposition": {"complete": 3.9038, "apres_2_blocs": 4.7939, "apres_4_blocs": 4.1277, "apres_6_blocs": 3.9118, "sans_pensee": 12221024.736}, "longueurs": {"129": 4.0932, "192": 7.1626, "256": 9.5978, "384": 12.4358, "512": 13.7909}}
+{"fichier": "base-curriculum.pt", "params": 11814792, "val": 6.7843, "test": 6.7239, "litterature": 7.4492, "litterature_propre": 7.5737, "anglais": 13.0506, "wikitext2": 14.4092, "permute": 299.0795}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2j/remplit.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"remplit.py — remplit la fiche N2.j depuis les évaluations de work/n2j/.\"\"\"\nimport json, pathlib, statistics as st\n\ndef charge(nom):\n    p = pathlib.Path(f\"work/n … [3062 caractères tronqués]`
+
+  ```
+restes: []
+wiki 4,0284 7,42 12,41 | curriculum 4,0494 7,57 13,05
+## Ce qui est mesuré
+
+| base | val (son corpus) | val du dépôt | littérature | anglais | wikitext2 | 256 octets |
+|---|---:|---:|---:|---:|---:|---:|
+| **dépôt (3,24 Mo)** | 3,2402 | 3,2402 | 12,29 | 32,90 | 33,29 | 11,72 |
+| **wiki (186 Mo)** | 4,0284 | 6,7194 | 7,42 | 12,41 | 13,91 | 9,28 |
+| **wiki + non ambigu** | 4,0494 | 6,7843 | 7,57 | 13,05 | 14,41 | 9,60 |
+
+## Le filtre « non ambigu »
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2j/fiche.md'); s = p.read_text()\ns = s.replace(\"> Wikipédia français, le bloc linguistique vaut **7,23** sur la littérature et **12,41** en anglais,\",\n              \"> Wi … [364 caractères tronqués]`
+
+  ```
+ok
+# N2.j — Du vrai français : 186 Mo de Wikipédia, et ce que vaut le filtre « non ambigu »
+
+> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : entraîné sur **186 Mo** de
+> Wikipédia français, le bloc linguistique vaut **7,42** sur la littérature et **12,41** en anglais,
+> contre **12,29** et **32,90** pour la base du dépôt (×1,7 à ×2,6) — mais **6,72** sur le dépôt
+> (décalage de domaine). Le filtre « phrases non ambiguës », lui, **ne paie pas** : il garde 29,8 %
+> des phrases du dépôt (les **courtes**, 55 contre 153 caractères) et, à taille égale, il transfère
+> **moins bien** que le hasard (11,81 contre 10,11 sur la validation du dépôt).
+pas de 7,23 résiduel
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"  anglais — la donnée du dépôt **généralise** sans relever le domaine.\"\nb = \"\"\"  anglais — la donnée du dépôt **généralise … [1137 caractères tronqués]`
+
+  ```
+T0 max : 3794 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 382 fichiers, le disque en a 383
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+AssertionError: fin de puce N2 introuvable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -A4 \"N2.i\" docs/pilotage/en-cours.md | head -10", "description": "Find the current N2 bullet"}`
+
+  ```
+43:> `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close ; restes nommés : fax 1 bit,
+44-> exposant fusionné, parité réelle sans questions) — rapports dans [`journal/sessions/`](../../journal/sessions/).
+45-
+46-## Ce qui est en cours
+47-
+--
+76:  diversité (÷ 4,3 hors dépôt), longueur (14,11 → 3,25 à 256), combinaison et capacité ; **N2.i**
+77-  (4,84 Mo) : **12,93** littérature, **33,83** anglais — généralise sans relever le domaine. Fiches
+78-  [`n2-propre`](../../reports/rapport-n2-propre.md) · [`n2-corpus-elargi`](../../reports/rapport-n2-corpus-elargi.md). N4 **0/40**.
+79-- **Pensée — state store v0** : théorie (10 tours, 9 schémas) et **state store v0** (6/6 portes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"\"\"  (4,84 Mo) : **12,93** littérature, **33,83** anglais — généralise sans relever le domaine. Fiches\n  [`n2-propre`](.. … [1016 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3811 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+     · compteurs : en-cours.md dit 459 JSON, le disque en a 467
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1634 caractères tronqués]`

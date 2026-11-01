@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 20.3 h |
+| Durée | 20.4 h |
 | Tours | 15 |
-| Messages | 948 |
-| Appels d'outils | 887 |
+| Messages | 957 |
+| Appels d'outils | 895 |
 | Fichiers touchés | 11 |
-| Commandes | 735 |
+| Commandes | 742 |
 | Sous-agents | 0 |
-| Commits | 23 |
+| Commits | 24 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -766,7 +766,7 @@ Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre
 
 ### Tour 15 — peux-tu comencer l'entrainement avec des phrases non ambigue et étudier les effets  sur la qualité du bloc linguistique.
 
-*49 appels d'outils.* Actions notables :
+*57 appels d'outils.* Actions notables :
 
 - bash — Measure the unambiguous subset of the clean corpus
 - bash — Build the unambiguous and control corpora and launch two bases
@@ -782,7 +782,7 @@ Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre
 - bash — Sample the French Wikipedia text
 - bash — Extract 120k French Wikipedia articles
 - bash — Deduplicate and split the Wikipedia corpus
-- … et 24 autres
+- … et 31 autres
 
 **Synthèse produite :**
 
@@ -848,7 +848,7 @@ Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 695 autres
+- … et 702 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1019,4 +1019,5 @@ Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre
 - S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE  Le banc de structures ne force plus un verdict unique (submodule 7366191). Chaque l
 - ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON  Le compteur JSON suit les dépôts des autres sessions (corpus-wiki-fr.json) ; la revue rep
 - S — DES CONTEXTES PLUS LARGES, ET LA MESURE DE CE QU'IL FAUT POUR TRANCHER  Le contexte n'est plus un champ unique : il est gradué (0 sans contexte, 1 phrase d'
+- N2.j — 186 Mo DE VRAI FRANÇAIS : LE BLOC LINGUISTIQUE GAGNE ×1,7 À ×2,6 HORS DOMAINE  Sur l'inventaire local (132 Go de Wikipédia, base FR de 7,25 Go) : 120 000
 

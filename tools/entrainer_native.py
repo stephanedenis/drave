@@ -61,6 +61,8 @@ def main() -> None:
     ap.add_argument("--dim", type=int, default=224, help="d_model (224 = 11,47 M ; 296 = 21,65 M)")
     ap.add_argument("--expert-hidden", type=int, default=288,
                     help="largeur d'un expert (288 ; 416 pour 21,65 M)")
+    ap.add_argument("--init", default=None,
+                    help="checkpoint de départ (poids seuls, pour un curriculum)")
     ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True,
                     help="entraîner aussi les têtes précoces")
     a = ap.parse_args()
@@ -70,6 +72,10 @@ def main() -> None:
     train, val = data[:-n_val], data[-n_val:]
     cfg = NativeConfig(d_model=a.dim, expert_hidden=a.expert_hidden)
     modele = NativeModel(cfg).to(a.device)
+    if a.init:
+        ck = torch.load(a.init, map_location="cpu", weights_only=False)
+        modele.load_state_dict(ck["state"], strict=False)
+        print(f"  init : {a.init}", flush=True)
     opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)
     t0 = time.time(); pertes = []
     for pas in range(1, a.pas + 1):

@@ -1,0 +1,46 @@
+{
+ "source": "data/wiki_fr/articles.txt",
+ "source_octets": 237491315,
+ "source_sha256": "1f7d5ccb9dc206f968b78a6bf7c80926c2529a9e89de0ca5607b26ea81a877d8",
+ "methode": {
+  "deduplication": "shingles de Rabin-Karp (base 257, mod 2^61−1), première occurrence gardée, runs gardés ≥ 64 octets, joints par \\n",
+  "fenetre_shingle": 96,
+  "chunk_octets": 8192,
+  "split": "un chunk sur 20 en validation, le suivant sur 20 en test"
+ },
+ "propre_octets": 206749829,
+ "deduplication": {
+  "retires": 30797991,
+  "runs": 56506,
+  "plus_long_run": 209986,
+  "retires_pct": 12.97
+ },
+ "train_octets": 186089472,
+ "val_octets": 10330112,
+ "test_octets": 10330245,
+ "chunks": {
+  "train": 22716,
+  "val": 1261,
+  "test": 1262
+ },
+ "sha256": {
+  "train": "29d1e432960bc6d477d0dd824e7d507f7565f85badc8e45612a4d2cdcfbbceb7",
+  "val": "fbddef918166f1d659b6647a8d45aa8e88528ee7808d388990a88bce52b22ef5",
+  "test": "9423104631e4f318c222b26f93e216ea943d88b2c01410ac130f1a6210e69b1a"
+ },
+ "contamination": {
+  "validation": {
+   "fenetres": 100,
+   "contaminees": 0,
+   "taux": 0.0
+  },
+  "test": {
+   "fenetres": 100,
+   "contaminees": 0,
+   "taux": 0.0
+  }
+ },
+ "plus_longue_repetition_val_train": 0,
+ "licence": "corpus local, licence à vérifier — ne pas diffuser",
+ "note": "les corpus de data/ ne sont pas versionnés ; ce manifeste porte leur empreinte"
+}

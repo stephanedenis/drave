@@ -7,9 +7,9 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 19.9 h |
+| Durée | 20.0 h |
 | Tours | 9 |
-| Messages | 339 |
+| Messages | 340 |
 | Appels d'outils | 376 |
 | Fichiers touchés | 22 |
 | Commandes | 287 |
@@ -504,7 +504,46 @@ Le générateur S (`tools/structures/generateur.py`, que j'ai lu sans y toucher)
 
 **Synthèse produite :**
 
-⏵ Je dessine la carte des six phases R et le pipeline du lecteur, puis je réécris la charte
+⏵ Charte R réécrite : six phases, trois lois, le verrou de l'encodeur
+
+La page `docs/pilotage/programme-r.md` est passée d'une **synthèse de 600 mots datée du 29/10** à une **charte de 3 437 mots, 12 sections et 2 schémas**, à l'état du **2026-11-01**. Commit : **`73b00495`**, puis **`0a17760d`** pour le compteur JSON. Voici ce qu'elle dit.
+
+\## 1. Ce qu'est R — et ce qu'il n'est pas
+
+Drave a quatre lignes : **A** (le moteur), **B** (le sens), **N** (le natif) et **R** (le lecteur). Les trois premières construisent des **capacités** ; R construit la **preuve d'usage** :
+
+> un document, une question, un budget → une réponse **avec sa source**, ou un **refus motivé**.
+
+R n'est donc **ni un modèle, ni un benchmark** : c'est un **programme** avec des phases (R0–R5), des blocs (R01–R52), des mesures, des fiches, des portes et des états. Il **assemble** des blocs classiques (parseurs, BM25, AST, sympy, OCR) et des blocs neuronaux (le 0,5 B, plus tard le natif). Sans R, N2 est une course à la perplexité et B10 un `z` qui ne dit pas ce qu'il contient.
+
+La distinction structurante :
+
+- **R0** est le lecteur **système**, sans entraînement, avec l'existant et un modèle externe ;
+- **R1–R5** sont le lecteur **natif** : fenêtre, mémoire, restitution, structure, croisé.
+
+\## 2. La carte des six phases
+
+| phase | question | état |
+|---|---|---|
+| **R0 — lecteur v0** | lire un document, choisir, citer, refuser | ✅ **close** : R0.1–R0.3, R0.6 ; R0.4/R0.5 négatifs |
+| **R1 — fenêtre native** | 1 000 octets sans refaire 130–256 ? | 🟡 **R13 close (octets)** ; R1.1/R1.2 attendent le contexte |
+| **R2 — mémoire** | gist, entités, relire | ⛔ attend R1 et N5 |
+| **R3 — restitution** | répondre, résumer, extraire, citer | ⛔ attend N4 |
+| **R4 — blocs structurels** | tables, code, maths, scans | ✅ R4.1–R4.3 ; **R4.4 close avec limites** |
+| **R5 — lecture croisée** | comparer, recouper, traduire | ⛔ attend R3 et B10.3 |
+
+La charte contient le schéma des phases et de leurs dépendances (`programme-r-phases.svg`).
+
+\## 3. Le pipeline R0.6
+
+`programme-r-pipeline.svg` montre l'assemblage :
+
+**document → R0.1 régions → R0.2 contrôleur → passages → un des trois lecteurs → réponse citée ou refus.**
+
+- **R0.1** : 16 PDF + 8 MD + 3 HTML + 3 DOCX/EPUB, **51 pages**, partition **1,000**, fidélité **1,000**.
+- **R0.2** : cinq modes (`survol`, `balayage`, `lecture`, `relecture`, `arrêt`), budget en **octets**, récupération **1,00** à **30 %** sur les 5 types.
+- **R0.3** : 30 documents, **249 questi
+… [5445 caractères tronqués]
 
 ## 3. Travail accompli
 
