@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 24.5 h |
+| Durée | 24.6 h |
 | Tours | 17 |
-| Messages | 1034 |
-| Appels d'outils | 964 |
+| Messages | 1037 |
+| Appels d'outils | 966 |
 | Fichiers touchés | 11 |
-| Commandes | 796 |
+| Commandes | 797 |
 | Sous-agents | 0 |
 | Commits | 28 |
 | Compactages de contexte | 1 |
@@ -878,7 +878,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 
 ### Tour 17 — lire docs/pilotage/plan-travail.md et avancer
 
-*33 appels d'outils.* Actions notables :
+*35 appels d'outils.* Actions notables :
 
 - bash — Read the work plan
 - bash — Read the batch sampler and the position support
@@ -894,11 +894,50 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 - bash — Update the plan with the length result and check the capacity run
 - bash — Trim the state under budget
 - bash — Read the N2 bullet in full
-- … et 13 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
-⏵ Le plan lu : je prends la prochaine action N2 — le verrou de longueur sur le corpus réel
+⏵ Plan lu, action N2 avancée : verrou de longueur et capacité sur le corpus réel
+
+\## Ce que le plan demandait à la session N2
+
+> « N2 sur les corpus wiki fr/en ; le verrou 129→512 ; la capacité »
+
+Le wiki FR est fait (N2.j), l'anglais est couvert par le multilingue (N2.k). Restaient **le verrou** et **la capacité** — les deux sont faits, sur 186 Mo de Wikipédia.
+
+\## Le verrou de longueur tombe encore (N2.j2)
+
+Même base, mêmes 186 Mo, avec des **positions tirées dans [0, 384]** :
+
+| | 129 | 192 | **256** | 384 | **512** | val | littérature | anglais |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| positions fixes | 4,07 | 7,07 | **9,28** | 11,85 | **13,37** | 4,03 | 7,42 | 12,41 |
+| positions 0–384 | 4,39 | 4,37 | **4,49** | 5,05 | **5,67** | 4,39 | 7,90 | 13,72 |
+| | +8 % | **−38 %** | **−52 %** | **−57 %** | **−58 %** | +9 % | +6 % | +11 % |
+
+Le verrou n'était pas une propriété du petit corpus : **il est architectural**, et la randomisation le lève à l'échelle — pour +0,36 en domaine. C'est le second résultat qui se transporte, après le corpus réel lui-même.
+
+\## La capacité paie — quand les données suivent (N2.j3)
+
+| modèle | val wiki | littérature | anglais | 512 | val du dépôt |
+|---|---:|---:|---:|---:|---:|
+| 11,47 M | 4,3893 | 7,90 | 13,72 | 5,67 | 7,11 |
+| **21,65 M** | **4,2013** | **7,46** | **13,55** | **5,03** | **6,88** |
+
+Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, le même doublement donne **−0,19** et un gain **partout**. C'est une **interaction données × capacité** : un modèle plus gros a besoin de plus de texte pour amortir ses paramètres. La taille se choisit **après** le corpus — le prochain palier (40–50 M) ne se justifiera qu'avec quelques centaines de Mo de plus.
+
+\## L'état et les voisins
+
+- **`4db5aac0`** (N2.j2), **`1520b875`** (N2.j3) ; fiches `rapport-n2-longueur-reelle.md` et `rapport-n2-capacite-reelle.md`.
+- Le **plan de travail** a été mis à jour : le territoire N2 déclare désormais `work/n2j/`, `work/n2k/`, `data/wiki_*`, `reports/rapport-n2-*` et `tools/entrainer_native.py` — les fichiers que j'écris réellement.
+- Vérifications : revue ✅, état ✅, **T0 3 995 / 4 000**, plans cohérents ✅, serveur du banc toujours en ligne.
+- Les autres sessions avancent en parallèle : **D** a extrait le texte intégral de Wikipédia (pilote FR, 100 000 articles, 1,082 Go, 0 fuite) ; **L** a ajouté AC-3 et alpha-bêta au moteur de pensée (8/8 portes).
+
+\## Ce qui reste à N2
+
+1. **La distillation sur le corpus réel*
+… [515 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -960,7 +999,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 756 autres
+- … et 757 autres
 
 ## 4. Mesures et résultats marquants
 

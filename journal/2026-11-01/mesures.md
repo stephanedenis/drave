@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (30)
+## Commits du jour (31)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -38,25 +38,27 @@
 | 13:49 | `651bfc90` | BLOC LINGUISTIQUE — NEUF NIVEAUX, HEURISTIQUE ET NEURONAL, 398 LANGUES À 0,9687 | `README.md`, `bloc-linguistique.md`, `en-cours.md` (+30) |
 | 14:12 | `291f0f72` | N2.k — DIX LANGUES : LE FRANÇAIS PAIE 0,65 BIT/OCTET, LES AUTRES GAGNENT 0,8 À 3,4 | `en-cours.md`, `roadmap.md`, `README.md` (+18) |
 | 16:31 | `4db5aac0` | N2.j2 — POSITIONS ALÉATOIRES SUR 186 Mo : LE VERROU DE LONGUEUR TOMBE ENCORE (÷2,4 À 512) | `en-cours.md`, `roadmap.md`, `README.md` (+19) |
+| 16:50 | `1520b875` | N2.j3 — LA CAPACITÉ SUR 186 Mo : 21,65 M PAIE (4,39 → 4,20), DONNÉES × CAPACITÉ | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
 
 ## Chiffres du jour
 
-`÷2,4` · `186 Mo` · `0,9687` · `×1,7` · `×2,6` · `÷1,7` · `27,7 Mo` · `27200 %` · `97 %` · `90 %` · `96,7 %` · `52,5 %`
+`186 Mo` · `÷2,4` · `0,9687` · `×1,7` · `×2,6` · `÷1,7` · `27,7 Mo` · `27200 %` · `97 %` · `90 %` · `96,7 %` · `52,5 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 24.5 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 24.6 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `b6a672ec-3349-4a4c-9e23-4478aa823170` — Git push to origin remote (début 2026-11-01 13:28, 0.1 h) → [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 23.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 24.1 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 24.5 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-bloc-linguistique.md](../../reports/rapport-bloc-linguistique.md)
+- [reports/rapport-n2-capacite-reelle.md](../../reports/rapport-n2-capacite-reelle.md)
 - [reports/rapport-n2-capacite.md](../../reports/rapport-n2-capacite.md)
 - [reports/rapport-n2-combine.md](../../reports/rapport-n2-combine.md)
 - [reports/rapport-n2-corpus-elargi.md](../../reports/rapport-n2-corpus-elargi.md)

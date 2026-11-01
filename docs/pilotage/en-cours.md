@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-01, 16 h 30 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-01, 17 h 10 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -60,7 +60,7 @@
 - **Ambition** : le français réel pour N2 ; D, carburant de N2/L/S.
 - **Stratégie** : le dump, débaliseur mesuré, dédup, splits ; pilote avant run.
 - **Objectif final** : 10 corpus en texte intégral, mesurés et ficés.
-- **Ce qu'elle fait** : le **pilote FR** : 100 000 articles, 1,082 Go, **0 fuite 8 Ko**, **0/40** fenêtres d'éval ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md) ; run complet lancé.
+- **Ce qu'elle fait** : le **pilote FR** (100 000 art., 1,082 Go, **0 fuite 8 Ko**, **0/40** éval) et le **run complet** (2,8 M pages, 1,17 M art., 5,0 Go ; en cours) ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée (L/B13), S, N2 ; le hub tient l'état.
 - **Prochaine action** : le run complet FR (~26 Go), puis les 9 langues, PDF/OCR.
 - **Bloquants** : aucun.

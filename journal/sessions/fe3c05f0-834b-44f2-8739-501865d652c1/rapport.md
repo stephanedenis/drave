@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 24.1 h |
-| Tours | 10 |
-| Messages | 851 |
-| Appels d'outils | 851 |
+| Durée | 24.5 h |
+| Tours | 11 |
+| Messages | 857 |
+| Appels d'outils | 857 |
 | Fichiers touchés | 18 |
-| Commandes | 779 |
+| Commandes | 785 |
 | Sous-agents | 0 |
-| Commits | 38 |
+| Commits | 39 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -45,6 +45,8 @@
 **Tour 9** — organise le dossier pilotage pour qu'il soit à jour et qu'entre le en-cours.md et roadmap.md il y ait un plan de travail optimal pour plusieurs sessions bien balancées. Note tout se passe sur la même machine. Elle est bien ddtée en matériel, mais ils faut surveiller beaucoup de fichiers en mouvement par des sessions parallèles.
 
 **Tour 10** — lire docs/pilotage/plan-travail.md et avancer
+
+**Tour 11** — es-tu à jour? as-tu fait tout ce que tu pouvais?
 
 ## 2. Déroulé, étape par étape
 
@@ -583,6 +585,21 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - Deux bugs corrigés en route : le chemin `ElementTree` 
 … [538 caractères tronqués]
 
+### Tour 11 — es-tu à jour? as-tu fait tout ce que tu pouvais?
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check run progress, git status, and temp files
+- bash — Run gates, heartbeats, and roadmap overview
+- bash — Check state sections and clean temp pilot
+- bash — Add D and L roadmap rows and refresh heartbeat
+- bash — Wait for full-text run to finish
+- bash — Commit roadmap D/L rows and state update
+
+**Synthèse produite :**
+
+⏵ Vérification de l'état réel : run complet, dépôt, compteurs, heartbeats
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -650,7 +667,7 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 739 autres
+- … et 745 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -836,4 +853,5 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - PILOTAGE — LA CAPACITÉ SIMULTANÉE : 4 SESSIONS, 4 À 6 CHANTIERS, 2 À 4 SOUS-AGENTS, ET LES LIMITES MESURÉES" 2>&1 | tail -2; git log --oneline -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet python3 - <<'PY' import pathlib p=pathlib.Path('tools/surveille_sessions.py'); s=p.read_text() s=s.replace(''
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet for t in "python3 tools/revue_documentation.py" "python3 tools/taille_documents.py" "python3 tools/verifie_en
+- PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUIVI DANS L'ÉTAT" 2>&1 | tail -2; git log --oneline -1
 

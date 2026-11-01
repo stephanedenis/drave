@@ -15423,3 +15423,96 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - Le placeholder `tools/structures` reste **orphelin** : la session S doit ouvrir son plan dans le dépôt (le moniteur `surveille_sessions.py` le signale ; aucun conflit déclaré).
 - Le prochain checkpoint : le manifeste du run complet, la contamination sur le corpus entier, puis l'extraction PDF/OCR (les 104 livres, les 2 711 PDF du CEGEP) et la prépa R1.1/R1.2.
 
+
+## Tour 11
+
+### 👤 Utilisateur
+
+es-tu à jour? as-tu fait tout ce que tu pouvais?
+
+### 🤖 Assistant
+
+⏵ Vérification de l'état réel : run complet, dépôt, compteurs, heartbeats
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%Y-%m-%d %H:%M %Z'; echo \"=== run\"; ps -eo pid,etime,pcpu,cmd | grep \"corpus_wikipedia_texte.py --sortie data/corpus_wiki_fr_texte\" | grep -v grep | head -1; du -sh data/corpus_wiki_fr_texte 2>/dev/null; ls -la reports/corpu … [367 caractères tronqués]`
+
+  ```
+2026-11-01 16:53 EST
+=== run
+1454236       16:34 99.4 python3 tools/corpus_wikipedia_texte.py --sortie data/corpus_wiki_fr_texte --manifeste reports/corpus-wiki-fr-texte.json
+3,3G	data/corpus_wiki_fr_texte
+  [fr] 800000 lus · 453016 gardés · 2.79 G caractères
+  [fr] 1400000 lus · 616683 gardés · 3.35 G caractères
+=== git
+ m tools/docwatch
+ ? tools/structures
+1520b875 N2.j3 — LA CAPACITÉ SUR 186 Mo : 21,65 M PAIE (4,39 → 4,20), DONNÉES × CAPACITÉ
+6fbfbb80 DONNÉES — LE TEXTE INTÉGRAL DE WIKIPÉDIA : LE PILOTE FR (100 000 ARTICLES, 1,082 GO, 0 FUITE 8 KO)
+4db5aac0 N2.j2 — POSITIONS ALÉATOIRES SUR 186 Mo : LE VERROU DE LONGUEUR TOMBE ENCORE (÷2,4 À 512)
+=== tmp
+1,1G	/tmp/wiki-texte-pilote
+0	/tmp/wiki-texte-essai
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== gates\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|violation\" | head -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/sessions.py --che … [455 caractères tronqués]`
+
+  ```
+=== gates
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3995 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ plans cohérents
+=== heartbeats
+journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md:- **Heartbeat** : 2026-11-01 16:25
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md:- **Heartbeat** : 2026-11-01 16:30 EST
+3:**Mis à jour : 2026-11-01, 16 h 30 HNE (heure locale, EST).**
+=== roadmap rows
+| chantier | ce qu'il couvre | état | prochaine action |
+|---|---|---|---|
+| **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta**, **8/8 portes** | B10.3 attend un **encodeur qui porte** ; **
+… [1434 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"^### Session\\|^| \\*\\*[ABNRSLD]\" docs/pilotage/en-cours.md | head -12; echo \"=== chantier table\"; sed -n '/## Les chantiers et leurs bloquants/,/## Ce qui reste/p' docs/pilotage/en-cours.md | head -14; echo \"=== nettoya … [237 caractères tronqués]`
+
+  ```
+17:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+55:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+106:| **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
+107:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : AC-3/alpha-bêta 8/8** | **B11.10 close** ; **B13 : DRVF, banc** ; B10.3 bloquée |
+108:| **N — le natif** | **N3, N4** | N2.h close ; N2 < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2 close** ; **N4** (consigne) |
+109:| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R1/R2/R3 attendent N5/N4 | **R1.1/R1.2** (contexte natif) |
+111:| **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
+=== chantier table
+## Les chantiers et leurs bloquants
+
+**Les dépendances vivent dans le graphe** ([`dependances.md`](backlog/dependances.md) §5, schéma
+[`backlog-dependances.svg`](../schemas/backlog-dependances.svg)), recalculé par
+`tools/verifie_backlog.py`. Cette table ne garde que les **bloquants externes** et la **
+… [799 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\n# roadmap : lignes D et L dans « En un coup d'œil »\np=pathlib.Path('docs/pilotage/roadmap.md'); s=p.read_text()\nancre=\"| **S — les structures**\"\ni=s.find(ancre)\nif i>=0 and \"**D — les données**\ … [1827 caractères tronqués]`
+
+  ```
+roadmap D/L + heartbeat
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3995 mots (budget 4 000)
+=== run
+1454236       18:08 99.4
+  [fr] 1600000 lus · 702481 gardés · 3.64 G caractères
+3,6G	data/corpus_wiki_fr_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; n=0; while ps -p 1454236 >/dev/null 2>&1; do sleep 20; n=$((n+1)); [ $n -ge 28 ] && break; done; echo \"attente $((n*20))s\"; ps -p 1454236 >/dev/null 2>&1 && echo \"encore en cours\" || echo \"terminé\"; tail -2 /tmp/run-texte-fr.log; … [223 caractères tronqués]`
+
+  ```
+attente 560s
+encore en cours
+  [fr] 1600000 lus · 702481 gardés · 3.64 G caractères
+  [fr] 2800000 lus · 1171281 gardés · 4.92 G caractères
+5,0G	data/corpus_wiki_fr_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"**Mis à jour : 2026-11-01, 16 h 30 HNE (heure locale, EST).**\",\n            \"**Mis à jour : 2026-11-01, 17 h 10 HNE (heure … [1103 caractères tronqués]`

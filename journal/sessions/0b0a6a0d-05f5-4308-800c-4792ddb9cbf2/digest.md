@@ -13665,3 +13665,79 @@ roadmap ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-n2-capacite-reelle.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"N2.j3 — LA CAPACITÉ SUR 186 Mo : 21,65 M PAIE (4,39 → 4,20), DONNÉES × CAPACITÉ\n\nÀ données et budget ég … [777 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-796]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-796", "timeout_ms": 300000, "wait": true}`
+
+  ```
+[master 1520b875] N2.j3 — LA CAPACITÉ SUR 186 Mo : 21,65 M PAIE (4,39 → 4,20), DONNÉES × CAPACITÉ
+ 20 files changed, 289 insertions(+), 43 deletions(-)
+ create mode 100644 reports/rapport-n2-capacite-reelle.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4; echo \"=== checks ===\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py | tail -1; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅|❌\"; python3 tools/sessions. … [225 caractères tronqués]`
+
+  ```
+1520b875 N2.j3 — LA CAPACITÉ SUR 186 Mo : 21,65 M PAIE (4,39 → 4,20), DONNÉES × CAPACITÉ
+6fbfbb80 DONNÉES — LE TEXTE INTÉGRAL DE WIKIPÉDIA : LE PILOTE FR (100 000 ARTICLES, 1,082 GO, 0 FUITE 8 KO)
+4db5aac0 N2.j2 — POSITIONS ALÉATOIRES SUR 186 Mo : LE VERROU DE LONGUEUR TOMBE ENCORE (÷2,4 À 512)
+3c749d27 B13 — AC-3 ET ALPHA-BÊTA : 8/8 PORTES, 1 495 NŒUDS/296 COUPES CONTRE 18 730
+=== checks ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3995 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ plans cohérents
+=== serveur ===
+HTTP 200
+  ```
+
+### 🤖 Assistant
+
+⏵ Plan lu, action N2 avancée : verrou de longueur et capacité sur le corpus réel
+
+## Ce que le plan demandait à la session N2
+
+> « N2 sur les corpus wiki fr/en ; le verrou 129→512 ; la capacité »
+
+Le wiki FR est fait (N2.j), l'anglais est couvert par le multilingue (N2.k). Restaient **le verrou** et **la capacité** — les deux sont faits, sur 186 Mo de Wikipédia.
+
+## Le verrou de longueur tombe encore (N2.j2)
+
+Même base, mêmes 186 Mo, avec des **positions tirées dans [0, 384]** :
+
+| | 129 | 192 | **256** | 384 | **512** | val | littérature | anglais |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| positions fixes | 4,07 | 7,07 | **9,28** | 11,85 | **13,37** | 4,03 | 7,42 | 12,41 |
+| positions 0–384 | 4,39 | 4,37 | **4,49** | 5,05 | **5,67** | 4,39 | 7,90 | 13,72 |
+| | +8 % | **−38 %** | **−52 %** | **−57 %** | **−58 %** | +9 % | +6 % | +11 % |
+
+Le verrou n'était pas une propriété du petit corpus : **il est architectural**, et la randomisation le lève à l'échelle — pour +0,36 en domaine. C'est le second résultat qui se transporte, après le corpus réel lui-même.
+
+## La capacité paie — quand les données suivent (N2.j3)
+
+| modèle | val wiki | littérature | anglais | 512 | val du dépôt |
+|---|---:|---:|---:|---:|---:|
+| 11,47 M | 4,3893 | 7,90 | 13,72 | 5,67 | 7,11 |
+| **21,65 M** | **4,2013** | **7,46** | **13,55** | **5,03** | **6,88** |
+
+Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, le même doublement donne **−0,19** et un gain **partout**. C'est une **interaction données × capacité** : un modèle plus gros a besoin de plus de texte pour amortir ses paramètres. La taille se choisit **après** le corpus — le prochain palier (40–50 M) ne se justifiera qu'avec quelques centaines de Mo de plus.
+
+## L'état et les voisins
+
+- **`4db5aac0`** (N2.j2), **`1520b875`** (N2.j3) ; fiches `rapport-n2-longueur-reelle.md` et `rapport-n2-capacite-reelle.md`.
+- Le **plan de travail** a été mis à jour : le territoire N2 déclare désormais `work/n2j/`, `work/n2k/`, `data/wiki_*`, `reports/rapport-n2-*` et `tools/entrainer_native.py` — les fichiers que j'écris réellement.
+- Vérifications : revue ✅, état ✅, **T0 3 995 / 4 000**, plans cohérents ✅, serveur du banc toujours en ligne.
+- Les autres sessions avancent en parallèle : **D** a extrait le texte intégral de Wikipédia (pilote FR, 100 000 articles, 1,082 Go, 0 fuite) ; **L** a ajouté AC-3 et alpha-bêta au moteur de pensée (8/8 portes).
+
+## Ce qui reste à N2
+
+1. **La distillation sur le corpus réel** : le gain OOD de la base (7,42 / 12,41) et les positions aléatoires doivent passer dans le **modèle livré** (professeur + 3 graines) — c'est le test qui manque pour que ces résultats entrent en production.
+2. **La base anglaise seule** (le « en » du plan) : le multilingue donne 6,30 en anglais, mais la référence monolingue EN n'est pas mesurée.
+3. **Le canal d'annotation** (la structure ajoutée, pas retirée) — la seule voie que le filtre non ambigu n'a pas fermée, et la suite naturelle du banc de structures.
+

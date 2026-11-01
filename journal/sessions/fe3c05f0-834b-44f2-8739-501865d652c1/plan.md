@@ -14,10 +14,10 @@
   `reports/corpus-wiki-*`, `reports/corpus-wikipedia-*`, `reports/inventaire-*`,
   `reports/rapport-corpus-*`, `reports/r11-*`, `reports/r12-*`, `reports/a26-*`, `reports/a83-*`,
   `journal/sessions/fe3c05f0-…/`
-- **Heartbeat** : 2026-11-01 16:25
+- **Heartbeat** : 2026-11-01 16:55
 - **État** : en cours
-- **Prochaine action** : le **pilote du texte intégral FR** (100 000 articles) — measure, fiche,
-  puis le run complet ; ensuite l'extraction PDF/OCR et la prépa R1.1/R1.2.
+- **Prochaine action** : le **run complet du texte intégral FR** (en cours) ; puis les neuf
+  langues, l'extraction PDF/OCR et la prépa R1.1/R1.2.
 
 ## Objectif final
 
