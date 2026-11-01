@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 16.3 h |
-| Tours | 7 |
-| Messages | 794 |
-| Appels d'outils | 748 |
+| Durée | 18.2 h |
+| Tours | 9 |
+| Messages | 808 |
+| Appels d'outils | 759 |
 | Fichiers touchés | 11 |
-| Commandes | 615 |
+| Commandes | 625 |
 | Sous-agents | 0 |
-| Commits | 17 |
+| Commits | 18 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -41,6 +41,10 @@
 **Tour 6** — vérifie l'état des autres sessions dsh et mets à jour les fichiers en-cours.md et roadmap.md
 
 **Tour 7** — fais les deux en parallèle
+
+**Tour 8** — Est-on encore loin de pouvoir utiliser le système pour du vrai travail?
+
+**Tour 9** — peut-on s'éloigner du modèle octet et modèle token pour aller vers un modèle qui voit la structure du texte en surface avant un peu comme la perception humaine le fait avec la saccade et les mots dont on peut mélanger les lettres du milieu sans qu'on s'en rende compte à la lecture rapide.
 
 ## 2. Déroulé, étape par étape
 
@@ -323,7 +327,7 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 
 ### Tour 7 — fais les deux en parallèle
 
-*69 appels d'outils.* Actions notables :
+*70 appels d'outils.* Actions notables :
 
 - bash — Measure corpus candidates
 - bash — Read the Pensée implementation spec
@@ -343,7 +347,101 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 
 **Synthèse produite :**
 
-⏵ Clôture des deux chantiers parallèles
+⏵ Bilan des deux chantiers menés en parallèle
+
+\## Les deux ont abouti, et chacun a sa leçon
+
+\### 1. N2.i — le corpus élargi (GPU, 3 graines)
+
+**Le dispositif.** Le dépôt courant (docs + journal + rapports) donne 1 308 documents, 6,39 Mo bruts ; la déduplication en retire 16,2 % → **4,84 Mo d'entraînement** (contre 3,24), **0 fuite** vérifiée. Même recette : professeur 23,57 M, base 11,47 M, distillation 20 000 pas × 3 graines.
+
+| | N2.h (3,24 Mo) | N2.i (4,84 Mo) |
+|---|---:|---:|
+| validation (son corpus) | 3,0904 | **3,1278** |
+| validation (ancien corpus) | 3,0904 | **3,6996** |
+| littérature | 16,70 | **12,93** (−22 %) |
+| anglais | 57,58 | **33,83** (−40 %) |
+| wikitext2 | 56,88 | **35,53** (−38 %) |
+| 256 octets | 14,11 | 14,28 |
+
+**La lecture.** Le corpus du dépôt **n'est pas un levier de porte** : il dilue la prose (les rapports et les tableaux sont un autre registre), et la validation « domaine » ne se compare même plus entre les deux modèles. Mais sur des textes **identiques**, il **généralise fort** : anglais ÷1,7, littérature −22 %. C'est un levier de **lecteur** (R), pas de perplexité en domaine. Pour viser 2,5, il faut un corpus d'un autre ordre — du français réel en volume.
+
+\### 2. Pensée v0 — le state store (CPU, en parallèle)
+
+Pendant que les GPU tournaient, le contrat `moteur-de-pensee.md` a reçu son implémentation :
+
+- **`coeur.py`** — types canoniques (`Candidat`, `Etat`, `Decision`), JSON sans flottant, empreinte **Merkle** des candidats triés : deux ordres d'insertion donnent la même empreinte.
+- **`store.py`** — store content-addressed : `put/get/edge/children/frontier/compact/chemin`, plus `replay`, `diff` et `justification_valide`.
+- **`moteur.py`** — boucle anytime (budget de nœuds, trace rejouable, décision justifiée) et quatre stratégies : BFS, greedy, A*, MCTS-lite.
+- **`cruches.py`** — le jouet (3 L, 5 L, mesurer 4) avec l'heuristique **exacte** par BFS sur le graphe inversé — le piège étant que les opérateurs ne sont pas inversibles un pas pour un pas.
+- **`autotest.py`** — **6/6 portes tenues**, chacune avec son contrôle négatif : store canonique, rejeu (93 événements), divergence de graine, stratégies substituables, anytime non décroissant, justification valide. BFS/A*/greedy trouvent `(3,4)` en 92 nœuds ; MCTS-lite échoue à 200 nœuds — **limite mesurée**, pas excusée.
+
+\## Commits et état
+
+- **`a20de579`** — Pensée v0 (state store + moteur + 6 portes)
+- **`17ececfc`** — N2.i (corpus élargi, 3 graines, fiche + manifeste)
+- *
+… [957 caractères tronqués]
+
+### Tour 8 — Est-on encore loin de pouvoir utiliser le système pour du vrai travail?
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Find generation and end-to-end reports
+- bash — Check the service and reader numbers
+- bash — Read the reader numbers and a generation sample
+- bash — Check the service tools and generation output
+
+**Synthèse produite :**
+
+⏵ Réponse appuyée sur les mesures du dépôt
+
+\## La réponse courte
+
+Pour du travail **étroit et mesuré** — lire un document, en extraire les tableaux, le code, les formules, retrouver un passage — les briques existent et tiennent leurs portes. Pour du travail **général** — écrire, répondre, suivre une consigne — on en est loin, et la distance n'est pas une question de finition : c'est encore une question de **nature du modèle**.
+
+\## Ce qui marche déjà, avec ses chiffres
+
+| capacité | état mesuré |
+|---|---|
+| OCR de scans | **4 familles sur 5 ≥ 90 %** de parité (propre 96,7 %, photocopie 93,3 %, photo 90,0 %, papier 90,0 %) ; fax 56,7 % — limite d'information nommée |
+| tableaux | **92,6 %** de cellules exactes ; texte plat : 0/3 |
+| code | **24/24** fichiers, 294 extraits |
+| maths | **10/10** dérivées, 32 formules |
+| colonnes | **89,4 % → 0,5 %** de WER ; ordre prouvé sur un lexique réel (15,3 % contre 98,0 %) |
+| récupération | **1,000 à 30 %** du document, 249 questions, 5 types |
+| bus et modèle natif | DRVM/DRVF, `drave-n0` 11,47 M, cache 19,25×, service minimal 69 octets / 611 ms |
+| moteur de pensée | state store v0, **6/6 portes**, recherche tracée et rejouable sur petits problèmes |
+
+C'est déjà utilisable **comme outil de numérisation structurée** : on peut lui donner un PDF scanné et récupérer des tableaux, du code et des formules avec un taux d'erreur connu. C'est étroit, mais c'est réel.
+
+\## Ce qui ne marche pas, et qui bloque l'usage général
+
+**1. Le modèle n'écrit pas.** L'échantillon de `drave-n0` sur « La France est un pays » :
+
+> « La France est un pays de la couche 1 (le plafond de la porte de la couche 0 et le plus grand (le plus grand que le contexte de latinesplaronsesexinuiteuxin-cloraratesenouxitetrnsons »
+
+Localement français, globalement du **saladier de mots**. Ce n'est pas un problème de réglage : à 11,47 M de paramètres et 5 Mo de texte, le modèle calcule des régularités locales, il ne **sait** rien. La PPL de 3,09 par octet (≈ 1,63 bit/octet) est deux fois moins bonne qu'un modèle de français utilisable (≈ 0,8–1,0 bit/octet), et surtout elle ne mesure pas la cohérence.
+
+**2. La consigne ne tient pas.** SFT : **24/24 vus, 0/4 tenus**. Le modèle ne suit pas une instruction qu'il n'a pas vue — c'est le signe d'un modèle qui a mémorisé des formes, pas appris une tâche.
+
+**3. La restitution n'existe pas.** Le lecteur sait **retrouver** un passage (récupération), pas encore le **lire** et le **redire** : R21 (le gist) et R31 (la rest
+… [2367 caractères tronqués]
+
+### Tour 9 — peut-on s'éloigner du modèle octet et modèle token pour aller vers un modèle qui voit la structure du texte en surface a … [169 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Measure the model on letter-scrambled text
+- bash — Read the evaluation helpers
+- bash — Check the byte loader
+- bash — Fix the tensor conversion and run the scrambled-text test
+- bash — Write the typoglycemia report and update the state
+- bash — Commit the typoglycemia diagnostic
+
+**Synthèse produite :**
+
+⏵ La mesure est nette : je la consigne en fiche, puis je réponds
 
 ## 3. Travail accompli
 
@@ -405,7 +503,7 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 575 autres
+- … et 585 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -570,4 +668,5 @@ Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat d
 - PENSÉE v0 — LE STATE STORE EXISTE ET TIENT SES SIX PORTES  Le contrat docs/implantation/moteur-de-pensee.md a son implémentation : types canoniques (Candidat, E
 - N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE  À recette égale, le corpus du dépôt courant (docs + journal + rapports, 1 308 documen
 - SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES  Les deux chantiers menés en parallèle sont committés : N2.i (17ececf
+- LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE)  Trois variantes du même texte de validation, mêmes octets, même protocole : p
 

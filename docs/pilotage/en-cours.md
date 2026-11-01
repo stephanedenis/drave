@@ -28,8 +28,8 @@
   l'anglais de **57,6** à **25,7** pour **+0,17** ; les **positions aléatoires** font passer 256
   octets de **14,11** à **3,25** ; la base vaut **12,29**
   hors domaine : **distiller spécialise**. Les leviers **se composent** (DR : **3,47** / **4,10** / **3,49** à 256). La **capacité paie** peu (21,65 M : **3,03**) sans couvrir. Fiches `n2-propre`, `n2-diversite`,
-  `n2-longueur`, `n2-combine`, `n2-capacite`. **N2.i** (4,84 Mo) : **3,13** et **3,70** en domaine, **12,93** en littérature, **33,83** en
-  anglais — la donnée du dépôt **généralise** sans relever le domaine.
+  `n2-longueur`, `n2-combine`, `n2-capacite`. **N2.i** (4,84 Mo) : **12,93** en littérature, **33,83** en anglais — **généralise** sans
+  relever le domaine.
 - **Ce que font les autres** : **Pensée** sans GPU ; **N4** en file.
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`, `journal/sessions/0b0a6a0d-…/`.
 - **Prochaine action** : **close** — six fiches committées, portes vertes.
@@ -108,7 +108,7 @@
 |---|---|---|
 | portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **379** / **456** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **380** / **456** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **114** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
@@ -125,7 +125,7 @@ action** — pas les statuts, qui dérivent. Vue d'ensemble :
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | aucune | B1.5 corpus ; B10.3 attend un encodeur | **B11.10 close** ; B10.3 bloquée |
 | **N — le natif** | **N2, N3, N4** | N2 < 2,5 ; validation **contaminée (32,8 %)** ; N4 0/4 ; N5 gelé | **N2** (le corpus décontaminé) ; **N4** (consigne) |
-| **R — le lecteur** | aucune | R4.4 : scans réels, fax | **R4.4 mesurée (4/5 ≥ 90 %)** ; les **scans réels** restent ; R1/R2/R3 attendent N2 |
+| **R — le lecteur** | aucune | R4.4 : scans réels, fax | **R4.4 mesurée (4/5 ≥ 90 %)** ; les **scans réels** restent ; **le modèle lit des lettres** (×17,8 au mélange) ; R1/R2/R3 attendent N2 |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
 

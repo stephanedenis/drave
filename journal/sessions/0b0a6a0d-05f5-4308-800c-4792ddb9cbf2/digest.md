@@ -10403,3 +10403,320 @@ A user may also invoke a skill directly; its <skill_content> block then appears 
 ⏵ Clôture des deux chantiers parallèles
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md && timeout 300 git commit -m \"SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES\n\nLes deux chantiers menés en parallèle  … [538 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-615]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+- **job_output** `{"job_id": "bash-615", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 95d17ae6] SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES
+ 12 files changed, 293 insertions(+), 27 deletions(-)
+=== checks ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3998 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+95d17ae6 SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES
+17ececfc N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE
+a20de579 PENSÉE v0 — LE STATE STORE EXISTE ET TIENT SES SIX PORTES
+43a7b3fe ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE
+18f28437 RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan des deux chantiers menés en parallèle
+
+## Les deux ont abouti, et chacun a sa leçon
+
+### 1. N2.i — le corpus élargi (GPU, 3 graines)
+
+**Le dispositif.** Le dépôt courant (docs + journal + rapports) donne 1 308 documents, 6,39 Mo bruts ; la déduplication en retire 16,2 % → **4,84 Mo d'entraînement** (contre 3,24), **0 fuite** vérifiée. Même recette : professeur 23,57 M, base 11,47 M, distillation 20 000 pas × 3 graines.
+
+| | N2.h (3,24 Mo) | N2.i (4,84 Mo) |
+|---|---:|---:|
+| validation (son corpus) | 3,0904 | **3,1278** |
+| validation (ancien corpus) | 3,0904 | **3,6996** |
+| littérature | 16,70 | **12,93** (−22 %) |
+| anglais | 57,58 | **33,83** (−40 %) |
+| wikitext2 | 56,88 | **35,53** (−38 %) |
+| 256 octets | 14,11 | 14,28 |
+
+**La lecture.** Le corpus du dépôt **n'est pas un levier de porte** : il dilue la prose (les rapports et les tableaux sont un autre registre), et la validation « domaine » ne se compare même plus entre les deux modèles. Mais sur des textes **identiques**, il **généralise fort** : anglais ÷1,7, littérature −22 %. C'est un levier de **lecteur** (R), pas de perplexité en domaine. Pour viser 2,5, il faut un corpus d'un autre ordre — du français réel en volume.
+
+### 2. Pensée v0 — le state store (CPU, en parallèle)
+
+Pendant que les GPU tournaient, le contrat `moteur-de-pensee.md` a reçu son implémentation :
+
+- **`coeur.py`** — types canoniques (`Candidat`, `Etat`, `Decision`), JSON sans flottant, empreinte **Merkle** des candidats triés : deux ordres d'insertion donnent la même empreinte.
+- **`store.py`** — store content-addressed : `put/get/edge/children/frontier/compact/chemin`, plus `replay`, `diff` et `justification_valide`.
+- **`moteur.py`** — boucle anytime (budget de nœuds, trace rejouable, décision justifiée) et quatre stratégies : BFS, greedy, A*, MCTS-lite.
+- **`cruches.py`** — le jouet (3 L, 5 L, mesurer 4) avec l'heuristique **exacte** par BFS sur le graphe inversé — le piège étant que les opérateurs ne sont pas inversibles un pas pour un pas.
+- **`autotest.py`** — **6/6 portes tenues**, chacune avec son contrôle négatif : store canonique, rejeu (93 événements), divergence de graine, stratégies substituables, anytime non décroissant, justification valide. BFS/A*/greedy trouvent `(3,4)` en 92 nœuds ; MCTS-lite échoue à 200 nœuds — **limite mesurée**, pas excusée.
+
+## Commits et état
+
+- **`a20de579`** — Pensée v0 (state store + moteur + 6 portes)
+- **`17ececfc`** — N2.i (corpus élargi, 3 graines, fiche + manifeste)
+- **`95d17ae6`** — clôture des deux sessions
+- Points de contrôle : `work/n2i/` (4 modèles + professeur, **271 Mo**) archivés sur **deux disques**.
+- **État et roadmap** : la ligne N2 porte N2.i et la prochaine action (« un corpus d'un autre ordre ») ; **B13** passe à « state store v0, 6/6 portes » avec AC-3/DRVF comme suite ; les trois blocs de session sont clos.
+- **Vérifications** : revue de documentation ✅, état ✅, **T0 3 998 / 4 000**, journal ✅, schémas ✅, arbre de travail propre.
+
+## Ce que je retiens des deux
+
+Le même motif apparaît des deux côtés : **ce n'est pas le volume qui paie, c'est la structure**. Côté N2, ajouter 49 % de texte du dépôt améliore la généralité de 40 % mais ne déplace pas la porte — parce que le registre compte plus que la masse. Côté Pensée, un store de 300 lignes, avec des empreintes Merkle et une trace rejouable, suffit à rendre une recherche **justifiable et reproductible** : la structure y fait tout le travail.
+
+
+## Tour 8
+
+### 👤 Utilisateur
+
+Est-on encore loin de pouvoir utiliser le système pour du vrai travail?
+
+### 🤖 Assistant
+
+⏵ Je rassemble les preuves : ce qui marche déjà, ce qui manque, et à quelle distance
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -iE \"generation|echantillon|service|demo|restitution|r31|r02|r03\" | head -12; echo \"=== génération ===\"; grep -rl \"échantillon\\|génération\" reports/*.md 2>/dev/null | head -5", "description": "Find generatio … [26 caractères tronqués]`
+
+  ```
+n3.2a-service.json
+n3.5e-generation.json
+n3.6-service-briques.json
+native-best-service.json
+native-generation.json
+native-service-auth.json
+native-service.json
+native-service-rust.json
+r02-banc-lecture.json
+r03-banc-durci-extractif.json
+r03-banc-durci-modele.json
+r03-banc-extractif.json
+=== génération ===
+reports/alignement-verne.md
+reports/bilan-multi-materiel.md
+reports/campagne-benefices.md
+reports/fiche-nuit-17-10.md
+reports/historique-passes-portes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"69 octets\\|611 ms\\|service\" docs/pilotage/en-cours.md docs/pilotage/roadmap.md | head -5; echo \"=== R0.2/R0.3 ===\"; grep -rn \"R0.2\\|R0.3\" docs/pilotage/roadmap.md | head -6", "description": "Check the service and r … [15 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md:58:4. **N4 — l'usage** : la **consigne courte** tenue à l'écart ; SFT **24/24 vus, 0/4 tenus** ; service 69 octets /
+docs/pilotage/roadmap.md:59:   611 ms. La restitution depuis un document lu est **R31**.
+docs/pilotage/roadmap.md:179:| **N3** | les opérations natives : k-WTA, routes, sortie précoce, pont, rejeu, placement | 🔬 **couvert par brique ; service composé** | **N3.2a/b0/b1/b2 · N3.3a/b/c · N3.4a/b/c · N3.4d · N3.5a/b/c/d/e/f · N3.6 service ✅** (pont actif, placement métadonnée ; saut de calcul conditionnel) |
+docs/pilotage/roadmap.md:180:| **N4** | l'usage : génération, service, SFT, sûreté | ✅ / ⚠️ | **N4** — la **consigne courte** tenue à l'écart (**24/24 vus, 0/4 tenus**) ; la lecture est **R31** |
+=== R0.2/R0.3 ===
+33:| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) | **R4.4** : les **scans réels de bout en bout** ; R1/R2/R3 attendent N2 |
+39:1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
+61:6. **R21/R31 — la mémoire et la 
+… [216 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 39,43p docs/pilotage/roadmap.md; echo \"=== sample génération ===\"; grep -n -A6 -i \"échantillon\\|exemple de génération\\|texte produit\" reports/alignement-verne.md 2>/dev/null | head -30", "description": "Read the reader n … [32 caractères tronqués]`
+
+  ```
+1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
+   30 % sur 5 types et **249 questions**) ; **R0.4** (tête de survol) et **R0.5** (routeur) sont
+   **closes en négatif** — 0,540 contre BM25 0,720 sur le corpus gelé, et un signal qui prédit
+   (AUC 0,839) sans règle qui transfère.
+   **R4.1 — le bloc tableaux** est **mesurée** (996 cellules, **802** exactes, texte plat **0/3**),
+=== sample génération ===
+119:**Par chapitre** (≥ 5 occurrences distinctives) : le rappel à distance 0 va de 45,5 % (chapitre 9) à 100,0 % (chapitre 6). Les chapitres sous 70 % sont : 9 (45,5 %), 17 (57,1 %), 15 (65,0 %), 14 (65,5 %). Les effectifs par chapitre sont petits (5 à 53 occurrences) : ces variations sont du bruit d'échantillonnage autant que des différences de traduction.
+120-
+121-Les chapitres 9 et 14-17 sont les plus bas pour cette raison : le traducteur y remplace des noms par des périphrases (« la rade d'Aden » → « the roadstead », « les îles Salcette » → « the islands in the bay »), et l'ancre disparaît sans que la phrase ait bougé.
+122-
+123-**Phrases sans ancre** : 55,1 % des phrases françaises et 51,4 % des phrases anglaises ne contiennen
+… [256 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/ | grep -iE \"service|demo|cli\" | head -10; echo \"=== generation json ===\"; cat reports/native-generation.json 2>/dev/null | head -20", "description": "Check the service tools and generation output"}`
+
+  ```
+porte-n3-service-briques.sh
+porte-n3-service.sh
+=== generation json ===
+{
+ "modele": "/tmp/drave-n0-distille.pt",
+ "parametres": 11469192,
+ "prompt": "La France est un pays",
+ "n": 160,
+ "top_k": 0,
+ "temperature": 0.0,
+ "octets": 181,
+ "texte": "La France est un pays de la couche 1 (le plafond de la porte de la couche 0 et le plus grand (le plus grand que le contexte de latinesplaronsesexinuiteuxin-cloraratesenouxitetrnsons"
+}
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse appuyée sur les mesures du dépôt
+
+## La réponse courte
+
+Pour du travail **étroit et mesuré** — lire un document, en extraire les tableaux, le code, les formules, retrouver un passage — les briques existent et tiennent leurs portes. Pour du travail **général** — écrire, répondre, suivre une consigne — on en est loin, et la distance n'est pas une question de finition : c'est encore une question de **nature du modèle**.
+
+## Ce qui marche déjà, avec ses chiffres
+
+| capacité | état mesuré |
+|---|---|
+| OCR de scans | **4 familles sur 5 ≥ 90 %** de parité (propre 96,7 %, photocopie 93,3 %, photo 90,0 %, papier 90,0 %) ; fax 56,7 % — limite d'information nommée |
+| tableaux | **92,6 %** de cellules exactes ; texte plat : 0/3 |
+| code | **24/24** fichiers, 294 extraits |
+| maths | **10/10** dérivées, 32 formules |
+| colonnes | **89,4 % → 0,5 %** de WER ; ordre prouvé sur un lexique réel (15,3 % contre 98,0 %) |
+| récupération | **1,000 à 30 %** du document, 249 questions, 5 types |
+| bus et modèle natif | DRVM/DRVF, `drave-n0` 11,47 M, cache 19,25×, service minimal 69 octets / 611 ms |
+| moteur de pensée | state store v0, **6/6 portes**, recherche tracée et rejouable sur petits problèmes |
+
+C'est déjà utilisable **comme outil de numérisation structurée** : on peut lui donner un PDF scanné et récupérer des tableaux, du code et des formules avec un taux d'erreur connu. C'est étroit, mais c'est réel.
+
+## Ce qui ne marche pas, et qui bloque l'usage général
+
+**1. Le modèle n'écrit pas.** L'échantillon de `drave-n0` sur « La France est un pays » :
+
+> « La France est un pays de la couche 1 (le plafond de la porte de la couche 0 et le plus grand (le plus grand que le contexte de latinesplaronsesexinuiteuxin-cloraratesenouxitetrnsons »
+
+Localement français, globalement du **saladier de mots**. Ce n'est pas un problème de réglage : à 11,47 M de paramètres et 5 Mo de texte, le modèle calcule des régularités locales, il ne **sait** rien. La PPL de 3,09 par octet (≈ 1,63 bit/octet) est deux fois moins bonne qu'un modèle de français utilisable (≈ 0,8–1,0 bit/octet), et surtout elle ne mesure pas la cohérence.
+
+**2. La consigne ne tient pas.** SFT : **24/24 vus, 0/4 tenus**. Le modèle ne suit pas une instruction qu'il n'a pas vue — c'est le signe d'un modèle qui a mémorisé des formes, pas appris une tâche.
+
+**3. La restitution n'existe pas.** Le lecteur sait **retrouver** un passage (récupération), pas encore le **lire** et le **redire** : R21 (le gist) et R31 (la restitution depuis un document) ne sont pas construits. Il n'y a donc pas de chaîne « document → réponse citée ».
+
+**4. Le service est une démonstration.** 69 octets, 611 ms : c'est une preuve de bout en bout du bus, pas une API.
+
+## La distance, en trois questions
+
+**Écrire du français utilisable** : il faudrait **2 à 3 ordres de grandeur** de corpus (5 Mo aujourd'hui ; 10 à 100 Go pour un français solide) et un modèle **~100× plus gros** — ou une architecture qui fasse autre chose que prédire l'octet suivant. La porte < 2,5 est un proxy à **0,59**, mais le vrai test est humain, et il est plus loin que 0,59.
+
+**Lire et restituer** : c'est le chemin le plus court. Les briques de lecture sont mesurées ; il manque le **gist** (R21) — un état de lecture, pas un sac de passages — et la **restitution** (R31) — répondre en citant, avec un banc de questions réelles (le banc actuel est de la récupération, pas de la compréhension). Un modèle de 11 M peut suffire pour **extraire et citer** ; il ne suffit pas pour **rédiger**.
+
+**Servir** : l'API, la latence, la robustesse, la persistance — quelques semaines de travail d'ingénierie, pas de recherche. C'est le chantier le moins risqué et le plus rentable, mais il n'a de sens qu'une fois R31 debout.
+
+## Ce que je ferais pour rendre le système utile le plus vite
+
+1. **Finir le lecteur** : R21 (gist) + R31 (restitution citée) sur un corpus de documents réels, avec un banc de **questions à réponse vérifiable** — pas un banc de récupération. C'est là que le système peut devenir un outil : « lis ce PDF et réponds en citant la page ».
+2. **Ne pas attendre le grand modèle** pour ça : l'extraction et la citation sont des blocs classiques ; le modèle natif sert à **choisir** et à **formuler**, pas à savoir.
+3. **Traiter la génération comme un programme séparé** : corpus d'un autre ordre, modèle plus large, et un **banc humain** — pas la PPL comme juge unique.
+
+**Le verdict honnête** : le système est aujourd'hui un **lecteur de documents en pièces détachées**, pas un assistant. La partie « lire » est à quelques chantiers mesurables de l'usage réel ; la partie « écrire et répondre librement » demande un changement d'échelle que le projet n'a pas encore les moyens de payer — et c'est précisément pour cela que la thèse « la structure avant la taille » doit se prouver sur la lecture, pas sur la génération.
+
+
+## Tour 9
+
+### 👤 Utilisateur
+
+peut-on s'éloigner du modèle octet et modèle token pour aller vers un modèle qui voit la structure du texte en surface avant un peu comme la perception humaine le fait avec la saccade et les mots dont on peut mélanger les lettres du milieu sans qu'on s'en rende compte à la lecture rapide.
+
+### 🤖 Assistant
+
+⏵ Avant de répondre, je mesure : le modèle lit-il les lettres ou les formes ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2i/typoglycemie.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"typoglycemie.py — le modèle lit-il les lettres, ou la forme des mots ?\n\nTrois variantes du MÊME texte (mêmes octets, même longueur) :\n  propre          le texte  … [1852 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2i/typoglycemie.py", line 50, in <module>
+    p = ppl_protocole(m, texte.encode('utf-8'), 128, 16, 8192, device='cuda')
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_propre.py", line 82, in ppl_protocole
+    x = fenetres_dans_chunks(data, lot, long + 1, compteur + k * lot, chunk, device)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_propre.py", line 67, in fenetres_dans_chunks
+    return torch.stack(out).to(device)
+           ~~~~~~~~~~~^^^^^
+TypeError: expected Tensor as element 0 in argument 0, but got bytes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 50,95p tools/eval_n2_propre.py", "description": "Read the evaluation helpers"}`
+
+  ```
+m.eval()
+    return m
+
+
+def fenetres_dans_chunks(data, n, long, compteur, chunk, device="cuda"):
+    """n fenêtres de `long` octets, chacune **dans** un chunk (jamais sur un collage)."""
+    n_chunks = max(1, len(data) // chunk)
+    out = []
+    for k in range(n):
+        c = departs_vdc(compteur + k, 1, n_chunks, long)[0]
+        debut = c * chunk
+        marge = min(chunk, len(data) - debut) - long - 1
+        if marge <= 0:
+            continue
+        r = departs_vdc(compteur + 10_000_003 + k, 1, marge, long)[0]
+        j = debut + r
+        out.append(data[j:j + long])
+    return torch.stack(out).to(device)
+
+
+def ppl_sur_fenetres(m, x):
+    with torch.no_grad():
+        logits = m(x[:, :-1])["logits"]
+        tot = float(F.cross_entropy(logits.reshape(-1, 256), x[:, 1:].reshape(-1),
+                                    reduction="sum"))
+    return math.exp(tot / x[:, 1:].numel())
+
+
+def ppl_protocole(m, data, long, lot, chunk, compteur=0, n_lots=8, device="cuda"):
+    tot, n = 0.0, 0
+    with torch.no_grad():
+        for k in range(n_lots):
+            x = fenetres_dans_chunks(data, lot, long + 1, compteur + k * lot, chunk, device)
+            logits = m(x[:, :-1])["logits"]
+   
+… [441 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -A6 \"def charger_bytes\" tools/eval_n2_propre.py", "description": "Check the byte loader"}`
+
+  ```
+40:def charger_bytes(chemin) -> torch.Tensor:
+41-    return torch.tensor(list(pathlib.Path(chemin).read_bytes()), dtype=torch.long)
+42-
+43-
+44-def charge(chemin, device="cuda"):
+45-    ck = torch.load(chemin, map_location="cpu", weights_only=False)
+46-    cfg = NativeConfig(**{k: v for k, v in ck["config"].items()
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2i/typoglycemie.py'); s = p.read_text()\ns = s.replace(\"import random, sys, pathlib\", \"import random, sys, pathlib\\nimport torch\")\ns = s.replace(\"    p = ppl_protocole( … [436 caractères tronqués]`
+
+  ```
+ok
+propre  ·   3.0555 · 180223 octets
+milieu  ·  54.2655 · 180223 octets
+tout    · 191.4059 · 180223 octets
+  ```
+
+### 🤖 Assistant
+
+⏵ La mesure est nette : je la consigne en fiche, puis je réponds
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-typoglycemie.md <<'EOF'\n# La typoglycémie du modèle : il lit les lettres, pas les formes\n\n> **Ligne de roadmap** : R (la lecture de surface) · **Date** : 2026-11-01 · **Verdict** : sur le\n> texte de validati … [4882 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3998 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 379 fichiers, le disque en a 380
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1343 caractères tronqués]`
