@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,6 +16,7 @@
 | 01:15 | `b859f27f` | R4.4 — LE REDRESSEMENT SERT JUSQU'À 6°, PUIS DÉCROCHE : 10° DONNENT 43,5 % DE WER | `en-cours.md`, `README.md`, `docs.md` (+7) |
 | 01:17 | `53fa2e5a` | R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 % | `R44-encodeur-visuel.md`, `en-cours.md`, `roadmap.md` (+16) |
 | 01:25 | `50e59804` | R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %) | `en-cours.md`, `README.md`, `distribue.md` (+11) |
+| 01:29 | `1e0dfa83` | R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 | 01:43 | `dc737497` | R4.4 — LE FOND D'ÉCLAIRAGE SE CALCULE SUR UNE VIGNETTE : 9,5 S → 1,4 S, LE PAPIER GAGNE 6,6 POINTS DE PRÉSERVATION | `R44-encodeur-visuel.md`, `en-cours.md`, `roadmap.md` (+19) |
 | 01:56 | `1776f53e` | R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER | `en-cours.md`, `roadmap.md`, `README.md` (+12) |
 
@@ -27,8 +28,8 @@
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 9.1 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 8.9 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 9.2 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 9.0 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 

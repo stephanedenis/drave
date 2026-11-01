@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 8.9 h |
+| Durée | 9.0 h |
 | Tours | 2 |
-| Messages | 541 |
-| Appels d'outils | 544 |
+| Messages | 547 |
+| Appels d'outils | 550 |
 | Fichiers touchés | 18 |
-| Commandes | 486 |
+| Commandes | 492 |
 | Sous-agents | 0 |
-| Commits | 21 |
+| Commits | 22 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*359 appels d'outils.* Actions notables :
+*365 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,7 +101,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 329 autres
+- … et 335 autres
 
 **Synthèse produite :**
 
@@ -174,7 +174,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 446 autres
+- … et 452 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -343,4 +343,5 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - ÉTAT — LE BUDGET DE CONTEXTE REPASSE SOUS 4 000 MOTS (5 MOTS RETIRÉS)" 2>&1 | tail -2 git log --oneline -1; date +%H:%M
 - cat > /tmp/msg-sondes.txt <<'EOF' R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %)  Deux sondes de rob
 - python3 - <<'PY' import pathlib,re p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s2=re.sub(r"\*\*Mis à jour : [^*]+\*\*", "**Mis à jour : 2026-11
+- R4.4 — LA SPÉCIFICATION DIT ENFIN CE QUE LE BLOC FAIT : GOUTTIÈRE SUR LES MOTS, GRILLE ADAPTATIVE, COÛT, ET LES LIMITES NOMMÉES" 2>&1 | tail -3 git log --onelin
 

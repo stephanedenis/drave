@@ -7188,3 +7188,120 @@ ok
   ```
 
 - **job_output** `{"job_id": "bash-405", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-399 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c "✅\|❌" work/n2h/portes.log; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt 2>/dev/null; tail -1 work/n2h/portes.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -1 work/n2h/portes.log", "description": "Check gate progress"}`
+
+  ```
+01:30
+26
+  porte-greffe           ✅                         656 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -1 work/n2h/portes.log", "description": "Wait 30 minutes for the gates", "run_in_background": true}`
+
+  ```
+started background job bash-416
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfor nom, fichier in ((\"fiche1.md\", \"rapport-n2-propre.md\"), (\"fiche2.md\", \"rapport-n2-diversite.md\")):\n    p = pathlib.Path('work/n2h/' + nom); s = p.read_text()\n    s = s.replace(\"- Point … [802 caractères tronqués]`
+
+  ```
+ok
+  [`n2-propre.json`](n2-propre.json).
+- Corpus : `data/corpus_propre/` (hors dépôt, manifeste versionné).
+- Points de contrôle : `work/n2h/` (14 `.pt`, 903 Mo) archivés sur deux disques —
+  `/home/stephane/Data13TB/stephane/backups/n2h/2026-11-01/` et
+  `/home/stephane/IA/artefacts/n2h/2026-11-01/`.
+- Corpus : `data/corpus_mixte_propre.txt`, `data/corpus_litt_propre/`, manifeste
+  [`corpus-litt-propre.json`](corpus-litt-propre.json).
+- Points de contrôle : `work/n2h/D-mixte-g{1,2,3}.pt`, archivés sur deux disques
+  (`backups/n2h/2026-11-01/` et `IA/artefacts/n2h/2026-11-01/`).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; git status --short | grep -v \"^ m tools/docwatch\" | head -15; date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt", "description": "Check repo state before the commit"}`
+
+  ```
+1e0dfa83 R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR
+50e59804 R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %)
+5a681326 ÉTAT — LE BUDGET DE CONTEXTE REPASSE SOUS 4 000 MOTS (5 MOTS RETIRÉS)
+ M docs/pilotage/backlog/N2-distillation.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/distiller_budget.py
+ M tools/entrainer_native.py
+ M tools/native_model.py
+?? reports/corpus-litt-propre.json
+?? reports/corpus-propre.json
+?? reports/n2-propre.json
+?? reports/rapport-n2-diversite.md
+?? reports/rapport-n2-longueur.md
+?? reports/rapport-n2-propre.md
+?? tools/corpus_propre.py
+?? tools/eval_n2_propre.py
+01:31
+26
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3 -- docs/pilotage/en-cours.md docs/pilotage/roadmap.md; echo \"=== roadmap N2 row ===\"; grep -n \"N2.h —\" docs/pilotage/roadmap.md | head -3; grep -n \"3,0904\" docs/pilotage/roadmap.md | head -2; echo \"=== en- … [153 caractères tronqués]`
+
+  ```
+1e0dfa83 R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR
+50e59804 R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %)
+5a681326 ÉTAT — LE BUDGET DE CONTEXTE REPASSE SOUS 4 000 MOTS (5 MOTS RETIRÉS)
+=== roadmap N2 row ===
+32:| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : corpus propre, **3,0904** en domaine, **16,70 → 3,85** hors dépôt ; N4 partiel | **N2** (plus de français unique, capacité), **N4** (consigne) |
+52:   (professeur 23,5 M, base 20 000 pas, distillation 20 000 pas × 3) ; **3,0904** en domaine — la porte
+=== en-cours result ===
+26:- **Résultat** (3 graines) : la chaîne propre vaut **3,09** en domaine (3,20 au test) — pas 2,85
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:docs/pilotage/roadmap.md | grep -c \"3,0904\"; git show HEAD:docs/pilotage/en-cours.md | grep -c \"Résultat\\*\\* (3 graines)\"; git show --stat 1e0dfa83 | head -12", "description": "Confirm the doc edits are in HEAD"}`
+
+  ```
+4
+1
+commit 1e0dfa835981075500850516230e55b9e781619b
+Author: Stéphane <stephane@localhost>
+Date:   Sun Nov 1 01:29:35 2026 -0500
+
+    R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR
+    
+    Le journal du 1er novembre porte le récit complet du programme R4.4 : les cinq familles et leurs
+    chiffres, les trois lectures réelles qui ont **corrigé le lecteur** (l'en-tête qui traversait la
+    gouttière, le fond d'éclairage calculé sur 8 millions de pixels), les contre-intuitions écrites
+    (agrandir une photocopie double son WER ; le redressement sert jusqu'à 6° puis décroche à 10°),
+    la variance entre graines (23 points de préservation) et la porte verte.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout tools/entrainer_native.py && git status --short | grep -v \"^ m tools/docwatch\" | head -12; echo \"=== portes ===\"; wc -l < /tmp/portes-1101-n2h/registre.txt; date '+%H:%M'", "description": "Revert the untested capacit … [9 caractères tronqués]`
+
+  ```
+M docs/pilotage/backlog/N2-distillation.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/distiller_budget.py
+ M tools/native_model.py
+?? reports/corpus-litt-propre.json
+?? reports/corpus-propre.json
+?? reports/n2-propre.json
+?? reports/rapport-n2-diversite.md
+?? reports/rapport-n2-longueur.md
+?? reports/rapport-n2-propre.md
+?? tools/corpus_propre.py
+=== portes ===
+26
+01:31
+[stderr]
+Updated 1 path from the index
+  ```
+
+- **job_output** `{"job_id": "bash-416", "timeout_ms": 1800000, "wait": true}`

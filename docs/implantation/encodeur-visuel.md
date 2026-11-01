@@ -94,8 +94,13 @@ l'OCR manque, avec la commande qui l'installe) puis `tools/mesurer_ocr.py --port
 zéro** : la mesure de la porte ne modifie pas la fiche JSON commitée. Ses seuils sont dans
 `mesurer_ocr.py`, avec la mesure qui les a produits dans `reports/`.
 
-Ce que la porte **ne vérifie pas** : les **scans réels**, les colonnes denses, les tableaux, les
-exposants. Ce sont les étapes 2 et 3 de R4.4, et elles restent ouvertes.
+Ce que la porte **ne vérifie pas** : les **scans réels**, les sondes de robustesse (rotation,
+gradient, flou). Ils sont mesurés dans la fiche, pas certifiés par la porte.
+
+`tools/porte-ocr-scans.sh` (la 80e porte) couvre les **familles** de scans (WER et préservation
+par famille, page noire), les **colonnes** (deux colonnes, mono-colonne, contrôle sans gouttière)
+et les **tableaux** (cellules exactes, grilles, sans redressement, texte à plat). Ses seuils sont
+des **planchers mesurés**, écrits après la mesure. Elle est verte sur le code courant.
 
 ## 7 bis. Le prétraitement : des étapes nommées, et deux pièges
 
@@ -112,8 +117,14 @@ Deux leçons mesurées, contre-intuitives, sont dans le code :
    détruit. Le seuil est 1,5° **et** 2 000 px de large.
 
 La **correction d'éclairage** (division par un fond estimé) est le levier principal : une photo
-de téléphone passe de 55,9 % à 7,0 % de WER sur le corpus de R4.4. Une étape qui ne paie pas est
-retirée : le prétraitement est mesuré, pas décoratif.
+de téléphone passe de 55,9 % à **6,7 %** de WER sur le corpus de R4.4, et un gradient **1,2** est
+encore corrigé (28,9 → 3,3 %). Le fond se calcule sur une **vignette** (quart de largeur) remontée
+à la taille d'origine : un champ basse fréquence estimé sur 8 millions de pixels coûtait 9,1 s par
+page, il coûte 0,13 s — le prétraitement complet passe de 9,5 s à **1,4 s** sur une page propre.
+Une étape qui ne paie pas est retirée : le prétraitement est mesuré, pas décoratif.
+
+Le **coût** est un terme de la mesure (`tools/mesurer_cout.py`) : 0,4 s de prétraitement contre
+2,4–2,9 s d'OCR par page sur les scans ; 1,4 s sur une page propre, où il est du pur surcoût.
 
 ## 7 ter. Les exposants
 
@@ -125,35 +136,63 @@ crédible (confiance ≥ 30). Elle est optionnelle (`exposants=True`) et version
 
 ## 7 quater. Les colonnes
 
-`bande_vide` cherche une **gouttière** — une bande verticale sans encre entre 15 % et 85 % de la
-largeur, avec au moins 20 % des lignes de chaque côté — et `ordre_de_lecture` lit alors la
-colonne gauche entière, puis la droite. Sans gouttière, l'ordre reste `(y, x)`. Sur une page
-mono-colonne, la détection ne change rien (contrôle : écart 0,00 pt) ; sur une page à deux
-colonnes, elle fait passer le WER de 89 % à 0,5 %.
+La gouttière se cherche sur les **mots**, pas sur les lignes : sur un lexique réel à deux
+colonnes, tesseract groupe la gauche et la droite dans la même ligne TSV, et une gouttière
+cherchée sur les lignes n'existe plus. L'occupation se mesure en **couverture verticale** (somme
+des hauteurs de mots / hauteur de page) : un **en-tête centré** qui traverse la gouttière ne pèse
+plus que 2 % et ne la bloque plus. Des garde-fous de largeur (2,5 % à 15 % de la largeur)
+écartent les faux vides : un espace de justification (1,6 %) et une page à moitié blanche (70 %)
+ne sont pas des gouttières. `ordre_de_lecture` lit alors la colonne gauche entière, puis la
+droite. Sans gouttière, l'ordre reste `(y, x)`.
+
+Mesures : sur une page mono-colonne, la détection ne change rien (contrôle : écart 0,00 pt) ; sur
+une page à deux colonnes synthétique, elle fait passer le WER de 89 % à **0,5 %** ; sur un
+**lexique réel**, de **93 % à 15,3 %** — et l'**ordre inverse** échoue à 98 %, ce qui prouve la
+direction. Limite nommée : une gouttière très étroite ou une page à **plus de deux colonnes** ne
+sont pas revendiquées.
 
 ## 7 quinquies. Les tableaux
 
 `extraire_tableaux.py` lit la **grille**, pas les mots seuls : les traits horizontaux et verticaux
 sont détectés par **continuité** (la plus longue suite de pixels d'un trait — une ligne de texte
 ne l'est pas), filtrés par une **suite arithmétique** (les traits sont régulièrement espacés, le
-texte non), puis chaque mot est rangé dans la cellule qui contient son centre. Deux préalables
+texte non), puis chaque mot est rangé dans la cellule qui contient son centre. Le seuil nominal
+(60 % horizontaux, 55 % verticaux) a un **repli tolérant** (50/45/40/35 %) pour les photos où un
+trait est interrompu, avec l'**étendue du tableau** comme garde : une progression de lignes de
+texte ne couvre pas la largeur, elle est refusée. Deux préalables
 mesurés : redresser le tableau (l'angle est estimé sur le masque binaire, pas sur le gris) et
 **effacer les traits avant l'OCR** (sinon tesseract saute une ligne sur deux : 56 mots au lieu de
-86). Sans traits, l'outil **refuse** de deviner des colonnes.
+86). Résultats : **92,6 %** de cellules exactes sur un rendu, **69,1 %** sur une photocopie,
+**62,4 %** sur une photo (8 grilles sur 10 ; le repli tolérant a fait passer la photo de 6/10 à
+8/10). Sans traits, l'outil **refuse** de deviner des colonnes ; le contrôle « texte à plat »
+donne 0 cellule localisée.
 
-## 8. Ce que le bloc ne fait pas
+## 8. Ce que le bloc ne fait pas, et ses limites nommées
 
-- **Pas de modèle de layout** : hauteur, écart, retrait et **gouttière**. Une page à deux
-  colonnes est lue correctement si la gouttière est nette ; une colonne dense, un tableau sans
-  traits ou une mise en page irrégulière ne sont pas revendiqués.
-- **Pas de scans réels de bout en bout** : la validation externe existe (un PDF d'Internet
-  Archive, comparé à sa couche OCR), mais elle n'est pas une vérité humaine et ne remplace pas
-  un corpus de photocopies.
-- **Pas d'exposants** : un appel de note `10` peut devenir `!`. C'est nommé dans la fiche du
-  pilote ; la correction (nettoyage typographique, seconde passe ciblée) n'est pas faite.
-- **Pas de tableaux** : un tableau non balisé est du texte, comme en PDF natif (R4.1 le traite).
-- **Pas de langue non latine** : `fra`, `eng`, `spa` sont installés pour le corpus ; le choix
-  n'est pas mesuré au-delà.
+- **Pas de modèle de layout** : hauteur, écart, retrait et **gouttière**. Deux colonnes sont lues
+  correctement si la gouttière est nette ; une gouttière très étroite, une page à **plus de deux
+  colonnes** ou une mise en page irrégulière ne sont pas revendiquées.
+- **Pas de vérité humaine sur les scans réels** : trois livres d'Internet Archive sont mesurés
+  contre leur **couche OCR** (7,10 % ; 8,73 % ; et 88,4 % de mots sur un lexique) — ce sont des
+  accords entre moteurs, pas des exactitudes. La couche `pdftotext -layout` d'un lexique lit les
+  colonnes entrelacées : le WER contre elle (36,3 %) n'est pas une erreur de reconnaissance, et
+  la référence d'ordre des colonnes (coordonnées DjVu) le prouve (15,3 % contre 98 % en ordre
+  inverse).
+- **Pas de tableaux sans traits** : l'outil **refuse** de deviner des colonnes ; un tableau non
+  balisé reste du texte, comme en PDF natif (R4.1 le traite). Les tableaux **avec** traits sont
+  mesurés jusqu'à **62,4 %** de cellules exactes sur une photo (8 grilles sur 10) ; deux pages
+  photo restent hors grille (ombre, trait interrompu).
+- **Pas de déconvolution** : un flou σ=4 n'est pas réparé (49,6 % brut → 53,2 % après
+  prétraitement) — une photo floue ne se répare pas ici, et le prétraitement l'aggrave un peu.
+- **Redressement borné** : utile jusqu'à **6°** (13,1 → 4,3 %), il **décroche à 10°** (96,3 →
+  43,5 %) parce que l'estimateur cherche dans ±3°.
+- **Fax 1 bit** : **21,9 %** de WER et **53,3 %** de préservation — c'est une limite
+  d'**information** (120 dpi, deux niveaux), pas de réglage ; un second passage à 3000 px ne paie
+  pas (9 pages sur 10).
+- **Exposants fusionnés** : un appel de note collé au mot (`développement,` + `10`) n'est pas
+  récupéré ; les appels **séparés** le sont (§ 7 ter), et le plafond du texte propre monte de
+  83,3 % à 90,0 %.
+- **Langue non latine** : `fra`, `eng`, `spa` sont installés ; le choix n'est pas mesuré au-delà.
 
 ## 9. Installation et reproductibilité
 

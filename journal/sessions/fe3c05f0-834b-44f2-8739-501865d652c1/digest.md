@@ -9450,3 +9450,101 @@ récit ajouté
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns2=re.sub(r\"\\*\\*Mis à jour : [^*]+\\*\\*\", \"**Mis à jour : 2026-11-01, 01 h 30 HAE (heure locale, EST).**\", s, count=1)\nassert s2!=s\np.write_text(s2)\nPY\npython3 tools/revue_docum … [1463 caractères tronqués]`
+
+  ```
+revue de documentation · 375 fiche(s) · 453 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 4000 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ index : aucun fait stagé sans état
+[master 1e0dfa83] R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR
+ 12 files changed, 171 insertions(+), 25 deletions(-)
+1e0dfa83 R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/advancedsearch.php?q=title%3A%28dictionnaire%29+AND+year%3A%5B1880+TO+1910%5D+AND+language%3Afre&fl%5B%5D=identifier&fl%5B%5D=year&fl%5B%5D=title&rows=8&output=json\" | python3 -c \"import json,sys;d=json.load(sys.stdin);[print(x) for x in d['res … [173 caractères tronqués]`
+
+  ```
+{'identifier': 'armorialgnra02rietuoft', 'title': "Armorial général : précédé d'un dictionnaire des Termes du blason", 'year': 1884}
+{'identifier': 'lecuisiniermoder01garl', 'title': "Le cuisinier moderne, ou, Les secrets de l'art culinaire : menus, haute cuisine, pâtisserie, glaces, office, etc. : suivi d'un dictionnaire complet des termes techniques", 'year': 1889}
+{'identifier': 'dictionnairetopo00brunuoft', 'title': "Dictionnaire topographique du département de la Drôme, comprenant les noms de lieu anciens et modernes; rédigé sous les auspices de la Société d'archéologie et de statistique de la Drôme", 'year': 1891}
+{'identifier': 'robertestienneet00bran', 'title': 'Robert Estienne et de Dictionnaire français aux XVIe siècle', 'year': 1904}
+{'identifier': 'sc_0001000369_00000001658728', 'title': "Dictionnaire-manuel-illustré d'agriculture", 'year': 1904}
+{'identifier': 'petitdictionnai00dumagoog', 'title': 'Petit dictionnaire de cuisine', 'year': 1882}
+{'identifier': 'petitdictionnai00littgoog', 'title': "Petit dictionnaire universel : on abrégé du dictionnaire française de É. Littré ... augmenté d'une partie mythologique, historique, biographique et géographique", 'yea
+… [193 caractères tronqués]
+  ```
+
+- **bash** `{"command": "wc -l docs/implantation/encodeur-visuel.md; sed -n '1,80p' docs/implantation/encodeur-visuel.md", "description": "Read the OCR implementation spec", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+180 docs/implantation/encodeur-visuel.md
+# L'encodeur visuel — l'OCR comme bloc classique du lecteur
+
+> **Ce que ce document est.** La **spécification** du bloc OCR de R4.4 : ce qu'il reçoit, ce
+> qu'il rend, ce qu'il promet sur la provenance et la confiance, et la porte qui le vérifie.
+> Le code est [`graphe_document_ocr.py`](../../tools/graphe_document_ocr.py) ; la mesure est
+> [`mesurer_ocr.py`](../../tools/mesurer_ocr.py) ; la porte est
+> [`porte-ocr.sh`](../../tools/porte-ocr.sh) ; les **chiffres** sont dans
+> [`reports/`](../../reports/), jamais ici.
+>
+> **Chargement** : lire § 2 et § 4 pour coder contre le bloc ; le reste est la justification.
+
+## 1. Le besoin
+
+Une partie des documents n'existe qu'en **image** : photocopies, scans, pages de revue. R0.1
+découpe le texte déjà extrait d'un PDF, d'un HTML, d'un DOCX ou d'un Markdown ; il ne sait pas
+lire des pixels. Sans OCR, le lecteur s'arrête à la frontière du texte natif — et R4.4 était
+**bloquée** par cette absence, pas par une idée à trouver.
+
+Le bloc OCR ne remplace pas le lecteur : il produit des **régions**, et le lecteur les lit comme
+les autres. C'est le principe des blocs de R4 : **classique d'abord**. Un OCR n'a pas
+… [3874 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '80,180p' docs/implantation/encodeur-visuel.md", "description": "Read rest of the OCR spec", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+## 6. Les contrôles négatifs
+
+Une mesure d'OCR sans contrôle négatif mesure la bonne volonté de l'OCR :
+
+| contrôle | ce qu'il doit produire |
+|---|---|
+| **sans OCR** | un manifeste **vide** ; aucune réponse ne sort. Si une réponse sort, elle vient d'ailleurs |
+| **page dégradée** | une **photo simulée** (définition réduite, flou, JPEG de mauvaise qualité, rotation légère) : le WER doit **monter** et la parité **baisser**. Une dégradation qui ne change rien ne prouve rien |
+| **rejeu** | deux passes donnent le même agrégat et les mêmes questions — les rendus et l'OCR sont en cache, et la clé du cache porte l'empreinte du PDF |
+
+## 7. La porte
+
+`tools/porte-ocr.sh` appelle `tools/installer_ocr.sh --verifie` (environnementale : code 2 si
+l'OCR manque, avec la commande qui l'installe) puis `tools/mesurer_ocr.py --porte`. Elle **écrit
+zéro** : la mesure de la porte ne modifie pas la fiche JSON commitée. Ses seuils sont dans
+`mesurer_ocr.py`, avec la mesure qui les a produits dans `reports/`.
+
+Ce que la porte **ne vérifie pas** : les **scans réels**, les colonnes denses, les tableaux, les
+exposants. Ce sont les étapes 2 et 3 de R4.4, et elles restent ouvertes.
+
+## 7 bis. Le prétraiteme
+… [5074 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/encodeur-visuel.md'); s=p.read_text()\n# 1) porte : ce qu'elle vérifie maintenant\ns=s.replace('''Ce que la porte **ne vérifie pas** : les **scans réels**, les colonnes denses, les tableaux, les\nexposants. Ce sont les  … [5348 caractères tronqués]`
+
+  ```
+sections 7 bis/quater/quinquies mises à jour
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/encodeur-visuel.md'); s=p.read_text()\ndebut=s.index('## 8. Ce que le bloc ne fait pas')\nfin=s.index('## 9. Installation et reproductibilité')\nnew='''## 8. Ce que le bloc ne fait pas, et ses limites nommées\n\n- **Pas … [2302 caractères tronqués]`
+
+  ```
+§ 8 réécrit
+181:- **Pas de tableaux sans traits** : l'outil **refuse** de deviner des colonnes ; un tableau non
+219 docs/implantation/encodeur-visuel.md
+  ```
+
+- **bash** `{"command": "git add docs/implantation/encodeur-visuel.md\ngit commit -m \"R4.4 — LA SPÉCIFICATION DIT ENFIN CE QUE LE BLOC FAIT : GOUTTIÈRE SUR LES MOTS, GRILLE ADAPTATIVE, COÛT, ET LES LIMITES NOMMÉES\" 2>&1 | tail -3\ngit log --oneline -1", "description": "Commit updated OCR specification", "time … [77 caractères tronqués]`

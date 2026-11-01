@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**12 commits** · **2 session(s)** · **3 thème(s)**
+**13 commits** · **2 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,14 +13,14 @@
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 1 | [docs.md](docs.md) |
-| mesures | 10 | [mesures.md](mesures.md) |
+| mesures | 11 | [mesures.md](mesures.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 9.1 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 8.9 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 9.2 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 9.0 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -36,6 +36,7 @@
 | 01:17 | `5a681326` | ÉTAT — LE BUDGET DE CONTEXTE REPASSE SOUS 4 000 MOTS (5 MOTS RETIRÉS) |
 | 01:17 | `53fa2e5a` | R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 % |
 | 01:25 | `50e59804` | R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %) |
+| 01:29 | `1e0dfa83` | R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR |
 | 01:43 | `dc737497` | R4.4 — LE FOND D'ÉCLAIRAGE SE CALCULE SUR UNE VIGNETTE : 9,5 S → 1,4 S, LE PAPIER GAGNE 6,6 POINTS DE PRÉSERVATION |
 | 01:56 | `1776f53e` | R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER |
 
