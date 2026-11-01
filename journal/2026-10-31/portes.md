@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 12:40 | `2edb3079` | JEUX — LE SAN L'EMPORTE SUR LA CASE QUAND UNE POSITION EST FOURNIE (110/112 → 112/112) | `README.md`, `modele.md`, `README.md` (+2) |
 | 12:59 | `3b9d179c` | PORTES — CINQ ÉCHECS SILENCIEUX CORRIGÉS : UNE PASSE VIDE, UNE ASSERTION PERDUE, UN HOOK MUET | `README.md`, `distribue.md`, `THEMES.md` (+12) |
+| 22:40 | `3dc2fe27` | ÉTAT — LA SESSION N2.h PORTE SON PLAN, SON AMBITION ET SA STRATÉGIE DANS LA PAGE D'ÉTAT | `en-cours.md`, `README.md`, `apprentissage.md` (+15) |
 
 ## Sessions actives ce jour
 
@@ -19,8 +20,8 @@
 - `22e518ee-81b8-4081-ae1b-f0d7a777a1d7` — Compléter les autres sessions avant le backlog (début 2026-10-31 11:13, 0.2 h) → [rapport](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/rapport.md) · [digest](../sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/digest.md)
 - `bc3c0b97-cae0-4773-921d-ef27c8285461` — Cohérence de la documentation et recommandations (début 2026-10-27 08:56, 104.7 h) → [rapport](../sessions/bc3c0b97-cae0-4773-921d-ef27c8285461/rapport.md) · [digest](../sessions/bc3c0b97-cae0-4773-921d-ef27c8285461/digest.md)
 - `df1b1098-d54e-4763-bfc2-2a8cc1498cec` — Tu es relecteur visuel de (début 2026-10-31 17:52, 0.0 h) → [rapport](../sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) · [digest](../sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 5.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 5.1 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 5.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 5.2 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 <!-- notes -->
 

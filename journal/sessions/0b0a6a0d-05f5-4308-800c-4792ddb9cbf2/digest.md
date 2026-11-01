@@ -5559,3 +5559,53 @@ Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/ses
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md && git commit -m \"ÉTAT — LA SESSION N2.h PORTE SON PLAN, SON AMBITION ET SA STRATÉGIE DANS LA PAGE D'ÉTAT\n\nLa page d'état doit suffire … [873 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-288]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-288", "timeout_ms": 180000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 3dc2fe27] ÉTAT — LA SESSION N2.h PORTE SON PLAN, SON AMBITION ET SA STRATÉGIE DANS LA PAGE D'ÉTAT
+ 18 files changed, 735 insertions(+), 117 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt work/n2h/route-teacher-propre 2>/dev/null | head; tail -1 work/n2h/teacher.log; tail -1 work/n2h/A-propre-g1.log 2>/dev/null; tail -1 work/n2h/teacher-mixte.log", "description": "Check campaign state a … [23 caractères tronqués]`
+
+  ```
+22:42
+work/n2h/base-propre.pt
+  pas  15000 · perte 0.8470 · val 1.3636 bits/octet · 1222 s
+  pas   4000 · perte 1.2791 · val 1.7448 bits/octet · 333 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche du corpus propre pendant que la distillation tourne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/fiche1.md <<'EOF'\n# N2.h1 — La validation n'était pas tenue à l'écart : le corpus propre, et la porte honnête\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-10-31 · **Verdict** : le corpus de N2 se recopiait\n> (32, … [3522 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null; for f in A-propre-g1 A-propre-g2; do tail -1 work/n2h/$f.log 2>/dev/null; done; tail -1 work/n2h/D-mixte-g1.log 2>/dev/null", "description": "Wait 25 minutes for the first clea … [43 caractères tronqués]`
+
+  ```
+started background job bash-291
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2h/teacher.log; ls work/n2h/*.pt 2>/dev/null; grep -c \"\" work/n2h/A-propre-g1.log 2>/dev/null", "description": "Quick check of teacher completion"}`
+
+  ```
+22:42
+  pas  15000 · perte 0.8470 · val 1.3636 bits/octet · 1222 s
+work/n2h/base-propre.pt
+[exit code: 2]
+  ```
+
+- **job_output** `{"job_id": "bash-291", "timeout_ms": 1800000, "wait": true}`

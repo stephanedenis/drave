@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 5.0 h |
+| Durée | 5.1 h |
 | Tours | 5 |
-| Messages | 196 |
-| Appels d'outils | 220 |
-| Fichiers touchés | 13 |
-| Commandes | 157 |
+| Messages | 212 |
+| Appels d'outils | 236 |
+| Fichiers touchés | 15 |
+| Commandes | 170 |
 | Sous-agents | 2 |
 | Commits | 9 |
 | Compactages de contexte | 0 |
@@ -251,7 +251,7 @@ J'ai intégré la correction de fond : **la RSN canonique unique était le résu
 
 ### Tour 5 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*22 appels d'outils.* Actions notables :
 
 - bash — Lire l'état courant et les variables DSH
 - bash — Lire le contrat des sessions
@@ -259,6 +259,15 @@ J'ai intégré la correction de fond : **la RSN canonique unique était le résu
 - bash — Vérifier la session et le format des plans
 - bash — Lire la vérification des plans et de l'état
 - bash — Lire l'heure et les budgets des documents
+- bash — Lister les plans de session et leurs états
+- bash — Lire les plans N2 et R4.4
+- bash — Lire la fin de l'état courant
+- bash — Lire le bloc de session à remplacer
+- bash — Lire le début du bloc N2
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md`
+- bash — Mettre à jour l'état avec la session Pensée
+- bash — Compter les sessions et lire la question
+- … et 8 autres
 
 **Synthèse produite :**
 
@@ -283,6 +292,8 @@ J'ai intégré la correction de fond : **la RSN canonique unique était le résu
 | `/tmp/enrichir.py` | 1 | 0 |
 | `/tmp/gen_pensee.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/pensee-iterative.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md` | 0 | 1 |
 
 ### Sous-agents lancés
 
@@ -331,7 +342,7 @@ J'ai intégré la correction de fond : **la RSN canonique unique était le résu
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 117 autres
+- … et 130 autres
 
 ## 4. Mesures et résultats marquants
 

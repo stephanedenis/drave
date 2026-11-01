@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 5.4 h |
 | Tours | 4 |
-| Messages | 356 |
-| Appels d'outils | 350 |
+| Messages | 362 |
+| Appels d'outils | 356 |
 | Fichiers touchés | 11 |
-| Commandes | 288 |
+| Commandes | 292 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -171,7 +171,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 4 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Check active sessions, state, and campaign
 - bash — Measure the context budget headroom
@@ -184,10 +184,14 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md`
 - bash — Write the session plan and validate
 - bash — Commit the state update for other sessions
+- job_output
+- bash — Check campaign state after the state commit
+- bash — Draft the clean-corpus report
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Mise à jour d'`en-cours` : plan complet, ambition et stratégie de la session N2.h
+⏵ Rédaction de la fiche du corpus propre pendant que la distillation tourne
 
 ## 3. Travail accompli
 
@@ -249,7 +253,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 248 autres
+- … et 252 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -377,7 +381,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ## 5. Erreurs rencontrées
 
-22 sorties en erreur ou divergentes. Les premières :
+23 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5

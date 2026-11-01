@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 5.1 h |
+| Durée | 5.2 h |
 | Tours | 2 |
-| Messages | 203 |
-| Appels d'outils | 223 |
-| Fichiers touchés | 10 |
-| Commandes | 191 |
+| Messages | 212 |
+| Appels d'outils | 231 |
+| Fichiers touchés | 11 |
+| Commandes | 196 |
 | Sous-agents | 0 |
-| Commits | 3 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*38 appels d'outils.* Actions notables :
+*46 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,11 +101,11 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 23 autres
+- … et 31 autres
 
 **Synthèse produite :**
 
-⏵ Démarrage : corpus de scans, baseline et journal de bord
+⏵ Mise à jour de l'état partagé : mandat, ambition, stratégie et plan de la session
 
 ## 3. Travail accompli
 
@@ -123,6 +123,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/simuler_scan.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/nettoyer_scan.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_scans.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md` | 2 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -166,7 +167,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 151 autres
+- … et 156 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -309,4 +310,5 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - GIT_INDEX_FILE=/tmp/index.r44 git commit -F /tmp/r44-msg.txt 2>&1 | tail -12; echo "[commit ${PIPESTATUS[0]}]"
 - set -e PATHS=(  docs/implantation/encodeur-visuel.md  docs/pilotage/backlog/R44-encodeur-visuel.md  docs/pilotage/backlog/index.md  docs/pilotage/en-cours.md  d
 - git diff --cached --name-only | head; echo "[staged: $(git diff --cached --name-only | wc -l)]"; git add docs/pilotage/en-cours.md journal/sessions/fe3c05f0-834
+- set -e PATHS=(docs/pilotage/en-cours.md journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md tools/simuler_scan.py tools/nettoyer_scan.py tools/mesurer
 

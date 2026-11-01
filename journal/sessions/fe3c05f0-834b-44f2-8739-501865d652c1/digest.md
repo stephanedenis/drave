@@ -4397,3 +4397,132 @@ ok
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/nettoyer_scan.py'); s=p.read_text()\nold='''def lissage(im: Image.Image, seuil: int = 160) -> Image.Image:\n    \"\"\"Pour une image binaire : adoucir AVANT de re-seuiller. L'upscaling d'un fax 1 bit\n    fabrique des marches ; san … [3888 caractères tronqués]`
+
+  ```
+auto corrigé
+propre      brut  WER= 4.46% conf= 93.3 parité= 87.0%
+propre      auto  WER= 4.46% conf= 93.2 parité= 87.0%
+photocopie  brut  WER= 6.55% conf= 90.4 parité= 62.2%
+photocopie  auto  WER= 6.58% conf= 90.1 parité= 48.0%
+photo       brut  WER=55.85% conf= 86.6 parité=  7.4%
+photo       auto  WER= 7.29% conf= 92.4 parité= 69.6%
+fax         brut  WER=27.05% conf= 70.3 parité=  2.2%
+fax         auto  WER=21.93% conf= 77.1 parité= 11.5%
+papier      brut  WER=13.02% conf= 91.3 parité= 62.6%
+papier      auto  WER=13.07% conf= 92.0 parité= 73.9%
+  ```
+
+### 👤 Utilisateur
+
+en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon travail en maintenant ce document à jour pour que les autres sessions locales puissent être en synergie avec tes travaux.
+
+### 🤖 Assistant
+
+⏵ Mise à jour de l'état partagé : mandat, ambition, stratégie et plan de la session
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git status --short | head -10; echo \"=== en-cours mots\"; python3 -c \"\nimport sys,pathlib;sys.path.insert(0,'tools');import taille_documents as td\nprint(td.mots_hors_diagrammes(pathlib.Path('docs/pilotage/en-cours.md').read_text(errors='ignore')))\"", "descriptio … [101 caractères tronqués]`
+
+  ```
+22:44:11
+ M tools/distiller_budget.py
+ m tools/docwatch
+ M tools/native_model.py
+?? reports/corpus-litt-propre.json
+?? reports/corpus-propre.json
+?? tools/corpus_propre.py
+?? tools/eval_n2_propre.py
+?? tools/mesurer_scans.py
+?? tools/nettoyer_scan.py
+?? tools/simuler_scan.py
+=== en-cours mots
+1305
+  ```
+
+- **bash** `{"command": "sed -n 20,70p docs/pilotage/en-cours.md", "description": "Read current sessions section", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — plan et journal dans
+  [`journal/sessions/0b0a6a0d-…/`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+- **Rôle** : **N2.h — le mètre propre**, mandat libre de 10 h (nuit du 31/10 au 1/11).
+- **Objectif final** : donner à la ligne N2 un **mètre honnête** — corpus dédupliqué et split
+  sans fuite, chaîne refaite dessus, porte < 2,5 **redéfinie** sur ce jeu — puis trancher ce
+  qu'aucun chiffre contaminé ne pouvait trancher : la **généralité** et le **verrou de longueur**.
+- **Plan** : 1) `tools/corpus_propre.py` : dédup par shingles, split par chunks, **0 %** de
+  contamination vérifiée ; 2) chaîne propre — professeur 23,5 M, base 20 000 pas, distillation
+  20 000 pas × 3 graines, curriculum 129 × 3 ; 3) **porte honnête** + profil hors domaine
+  (littérature, anglais, wikitext2) et décomposition (têtes précoces, pensée) ; 4) **diversité
+  française** — moitié dépôt, moitié littérature, × 3 graines : ce que la généralité coûte ;
+  5) **verrou de longueur** — courbe 129→512 et positions aléatoires × 3 ; 6) fiches, portes, commit.
+- **Stratégie** : un seul changement à la fois, trois graines, contrôle par permut
+… [2762 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib, datetime\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\nassert \"> **Sessions archivées**\" in s\nsection = '''### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans (nuit du 31/10 au 1/11)\n\n- **Id** : `fe3c05f0-…` — plan … [3086 caractères tronqués]`
+
+  ```
+en-cours mis à jour
+  en-cours · 1651 mots · 7 sections · 2 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3985 mots (budget 4 000)
+  ✅ plans cohérents
+  ```
+
+- **write** `{"content": "# Plan de session — R4.4, les scans (mandat libre de 10 h)\n\n> **Mandat ouvert** le 2026-10-31 22 h 50 HAE depuis\n> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) — le heartbeat est celui de\n> l'état ; la session le met à jour à chaque cycle. **Échéance : 2026-11-0 … [5361 caractères tronqués]`
+
+  ```
+Error: cannot modify "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md": file has not been read — read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — R4.4, l'OCR et sa parité
+2: 
+3: > **Mandat ouvert** le 2026-10-31 18 h 00 HAE depuis
+4: > [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) — le heartbeat est celui de
+5: > l'état ; la session le met à jour à chaque cycle.
+6: 
+7: - **Session** : `fe3c05f0-834b-44f2-8739-501865d652c1`
+8: - **Rôle** : **R4.4, l'OCR et sa parité** — **sans GPU**, les deux GPU étant réservés par N2.
+9: - **Périmètre** : R4.4 — l'encodeur visuel : installer l'OCR sans root, le brancher sur le graphe
+10:   R0.1 (mêmes régions, mêmes offsets, confiance dans la provenance), mesurer le **WER**, la
+11:   **parité** des réponses et les **contrôles négatifs** sur 10 pages. Ne pas toucher à N2 :
+12:   `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`, ni lancer `toutes-les-portes.sh`.
+13: - **Fichiers réservés** : `work/ocr/`, `tools/installer_ocr.sh`, `tools/graphe_document_ocr.py`,
+14:   `tools/mesurer_ocr.py`, `tools/porte-ocr.sh`, `reports/r44-*`,
+15:   `docs/implantation/encodeur-visuel.md`, `journal/sessions/fe3
+… [313 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Plan de session — R4.4, les scans (mandat libre de 10 h)\n\n> **Mandat ouvert** le 2026-10-31 22 h 50 HAE depuis\n> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) — le heartbeat est celui de\n> l'état ; la session le met à jour à chaque cycle. **Échéance : 2026-11-0 … [5420 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "git diff --cached --name-only | head -5; echo \"[staged $(git diff --cached --name-only | wc -l)]\"; git status --short | grep -E \"^\\?\\?|^ M\" | head -12", "description": "Check index before committing tools", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+[staged 0]
+ M docs/pilotage/en-cours.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md
+ M tools/distiller_budget.py
+ M tools/native_model.py
+?? journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+?? reports/corpus-litt-propre.json
+?? reports/corpus-propre.json
+?? tools/corpus_propre.py
+?? tools/eval_n2_propre.py
+?? tools/mesurer_scans.py
+?? tools/nettoyer_scan.py
+?? tools/simuler_scan.py
+  ```
+
+- **bash** `{"command": "set -e\nPATHS=(docs/pilotage/en-cours.md journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md tools/simuler_scan.py tools/nettoyer_scan.py tools/mesurer_scans.py)\ngit add \"${PATHS[@]}\"\nrm -f /tmp/index.r44\nGIT_INDEX_FILE=/tmp/index.r44 git read-tree HEAD\nGIT_INDEX_FILE=/t … [2131 caractères tronqués]`

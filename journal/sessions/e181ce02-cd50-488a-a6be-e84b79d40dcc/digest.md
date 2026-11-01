@@ -4207,3 +4207,224 @@ def _cle(s: str) -> str
  2439 total
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in journal/sessions/*/plan.md; do echo \"=== $f\"; grep -E \"Session|Rôle|Périmètre|État|Heartbeat\" \"$f\" | head -5; done 2>/dev/null | head -40", "description": "Lister les plans de session et leurs états"}`
+
+  ```
+=== journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md
+- **Session** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2`
+- **Rôle** : calcul : distillation ; corpus ; évaluation
+- **Périmètre** : N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+- **Heartbeat** : 2026-10-31 22:40 HAE
+- **État** : en cours
+=== journal/sessions/0b69f616-5c75-4c34-b97a-ae05564812af/plan.md
+- **Session** : `0b69f616-5c75-4c34-b97a-ae05564812af`
+- **Rôle** : clôture des chantiers ouverts du lecteur (R0.4, R0.5, R13) et consolidation de l'état
+- **Périmètre** : R0.4, R0.5, R13, R4.1–R4.3 ; en-cours, roadmap, backlog
+- **Heartbeat** : 2026-10-30 22:01 HAE
+- **État** : terminé
+=== journal/sessions/22e518ee-81b8-4081-ae1b-f0d7a777a1d7/plan.md
+- **Session** : `22e518ee-81b8-4081-ae1b-f0d7a777a1d7`
+- **Rôle** : clôture des sessions (`8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`) et remise d'aplomb de l'état
+- **Périmètre** : archives de sessions, journal, en-cours, roadmap, backlog ; outillage d'archivage
+- **Heartbeat** : 2026-10-31 11:50 HAE
+- **État** : terminé
+=== journal/sessions/71d57f53-8b41-4220-84dd-7bb9eedc88d9/plan.md
+- **Session** : `71d57f53-8b41-4220-84dd-7bb9eedc88d
+… [1038 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md && echo '=== R4.4 ===' && sed -n '1,30p' journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md", "description": "Lire les plans N2 et R4.4"}`
+
+  ```
+# Plan de session — N2.h, le mètre propre
+
+> **Mandat ouvert** le 2026-10-31 22 h 30 HAE depuis [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md)
+> — mandat libre de 10 h (nuit du 31/10 au 1/11). Le heartbeat est celui de l'état.
+
+- **Session** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2`
+- **Rôle** : calcul : distillation ; corpus ; évaluation
+- **Périmètre** : N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+- **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`,
+  `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`,
+  `journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/`
+- **Heartbeat** : 2026-10-31 22:40 HAE
+- **Objectif final** : un **mètre honnête** pour N2 — corpus dédupliqué (0 % de fenêtres de
+  validation dans l'entraînement), chaîne refaite dessus, porte < 2,5 redéfinie — puis trancher
+  ce que les chiffres contaminés ne pouvaient pas trancher : la **généralité hors dépôt** et le
+  **verrou de longueur**.
+- **Plan** : 1) `tools/corpus_propre.py` (dédup shingles, split par chunks, vérification) ;
+  2) chaîne propre (professeur 23,5 M, base 20 000 pas, distillation 20 000 pas × 3 graines,
+  curriculum 129 × 3) ;
+… [1996 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '110,139p' docs/pilotage/en-cours.md", "description": "Lire la fin de l'état courant"}`
+
+  ```
+| **R — le lecteur** | aucune | R4.4 : scans réels, layout, exposants | **R4.4 partielle** (scans réels) ; R1/R2/R3 attendent N2 |
+| **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
+| **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
+
+**Les sept chantiers C** (hors graphe, transférés au journal) : **C1** corpus · **C2**
+traduction · **C3** restitution · **C4** styles (date à contrôler) · **C5** domaines · **C6**
+documentation · **C7** pensée — mesurés, et désormais du récit, pas du plan.
+
+## Ce qui reste
+
+**N2** — le **corpus propre** et la porte honnête (N2.h, en cours) ; **N4** — la consigne
+courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — les scans réels.
+**Bloqués** : A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local), B1.5 (corpus).
+
+## Les questions ouvertes
+
+- **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.1** (état de section) puis **R1.2**
+  (curriculum) tranchent ; la hiérarchie de N2 est écartée.
+- **N2** : **< 2,5** — et **sur quel jeu** ? La validation se recopie (32,8 % verbatim) →
+  le **split par document** tranche.
+- **N4** : une **consigne courte** tient-elle hors du vu 
+… [540 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '24,58p' docs/pilotage/en-cours.md", "description": "Lire le bloc de session à remplacer"}`
+
+  ```
+- **Objectif final** : donner à la ligne N2 un **mètre honnête** — corpus dédupliqué et split
+  sans fuite, chaîne refaite dessus, porte < 2,5 **redéfinie** sur ce jeu — puis trancher ce
+  qu'aucun chiffre contaminé ne pouvait trancher : la **généralité** et le **verrou de longueur**.
+- **Plan** : 1) `tools/corpus_propre.py` : dédup par shingles, split par chunks, **0 %** de
+  contamination vérifiée ; 2) chaîne propre — professeur 23,5 M, base 20 000 pas, distillation
+  20 000 pas × 3 graines, curriculum 129 × 3 ; 3) **porte honnête** + profil hors domaine
+  (littérature, anglais, wikitext2) et décomposition (têtes précoces, pensée) ; 4) **diversité
+  française** — moitié dépôt, moitié littérature, × 3 graines : ce que la généralité coûte ;
+  5) **verrou de longueur** — courbe 129→512 et positions aléatoires × 3 ; 6) fiches, portes, commit.
+- **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, et **le
+  corpus d'abord** — un levier mesuré sur un mètre faux ne vaut rien.
+- **Ambition** : sortir N2 du chiffre qui flattait (**2,85** sur un jeu contaminé à **32,8 %**),
+  donner à R un modèle qui lit du **français général**, et trancher le verrou de lo
+… [1435 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '18,32p' docs/pilotage/en-cours.md", "description": "Lire le début du bloc N2"}`
+
+  ```
+### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre
+
+- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — plan et journal dans
+  [`journal/sessions/0b0a6a0d-…/`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+- **Rôle** : **N2.h — le mètre propre**, mandat libre de 10 h (nuit du 31/10 au 1/11).
+- **Objectif final** : donner à la ligne N2 un **mètre honnête** — corpus dédupliqué et split
+  sans fuite, chaîne refaite dessus, porte < 2,5 **redéfinie** sur ce jeu — puis trancher ce
+  qu'aucun chiffre contaminé ne pouvait trancher : la **généralité** et le **verrou de longueur**.
+- **Plan** : 1) `tools/corpus_propre.py` : dédup par shingles, split par chunks, **0 %** de
+  contamination vérifiée ; 2) chaîne propre — professeur 23,5 M, base 20 000 pas, distillation
+  20 000 pas × 3 graines, curriculum 129 × 3 ; 3) **porte honnête** + profil hors domaine
+  (littérature, anglais, wikitext2) et décomposition (têtes précoces, pensée) ; 4) **diversité
+  française** — moitié dépôt, moitié littérature, × 3 graines : ce que la généralité coûte ;
+  5) **verrou de longueur** — courbe 129→512 et positions aléatoires × 3 ; 6) fiches, portes, commit.
+  ```
+
+- **write** `{"content": "# Plan de session — Pensée, la RSN plurielle et le moteur N3\n\n> **Mandat vivant.** Ouvert le 2026-10-31 22 h 45 HAE depuis\n> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md). Ce plan est le **contrat de\n> synergie** : il dit ce que la session réserve, ce qu'elle att … [2475 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\n\nt=t.replace(\"**Mis à jour : 2026-10-31, 18 h 15 HAE (heure locale, EDT).**\",\n            \"**Mis à jour : 2026-10-31, 22 h 45 HAE (h … [5157 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 2093 mots · 7 sections · 3 session(s) · 9 puces · 5 questions
+  ❌ 2 anomalie(s) :
+     · 2093 mots > budget 2 000
+     · question sans ce qui la débloque (`→`) : **Pensée** : un état pluriel se rejoue-t-il à l'identique, e
+EXIT=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^### \\|^> \\*\\*Sessions archivées\" docs/pilotage/en-cours.md && echo '--- question' && grep -n -A2 \"Pensée.*état pluriel\" docs/pilotage/en-cours.md", "description": "Compter les sessions et lire la question"}`
+
+  ```
+19:### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre
+49:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans (nuit du 31/10 au 1/11)
+84:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+120:> **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`,
+--- question
+210:- **Pensée** : un état pluriel se rejoue-t-il à l'identique, et une stratégie se substitue-t-elle ?
+211-  → le **state store v0** et le banc anytime tranchent.
+212-
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '49,83p' docs/pilotage/en-cours.md", "description": "Lire le bloc R4.4 actif"}`
+
+  ```
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans (nuit du 31/10 au 1/11)
+
+- **Id** : `fe3c05f0-…` — plan et journal dans
+  [`journal/sessions/fe3c05f0-…/`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **R4.4 — les scans**, mandat libre de 10 h (nuit du 31/10 au 1/11).
+- **Objectif final** : R4.4 **mesurée** — un lecteur qui lit des **scans** (photocopie, photo de
+  téléphone, fax, papier) avec la même réponse que le texte natif : **WER ≤ 5 %** et **parité
+  ≥ 90 %** sur les pages de **test** jamais vues, et la porte `porte-ocr` resserrée sur ce
+  corpus. Échéance : 2026-11-01 07 h 14.
+- **Plan** : 1) corpus de scans **simulés** (5 familles, dev/test, vérité terrain) ✅ ; 2)
+  prétraitement nommé, mesuré étape par étape (photo **55,9 → 7,3 %**, fax **27,1 → 21,9 %**) ;
+  3) **exposants** (passe chiffres ciblée) ; 4) **colonnes + tables** ; 5) **second moteur**
+  (RapidOCR) comparé ; 6) porte resserrée, fiche, spec, roadmap, journal, commit.
+- **Stratégie** : mesurer le **brut** famille par famille, n'ajouter que les étapes qui
+  **paient** (agrandir une photocopie a **doublé** son WER : retiré), régler sur **dev**,
+  trancher 
+… [1273 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\nt=open('docs/pilotage/en-cours.md').read()\nm=re.search(r'^## Ce qui est en cours\\s*$',t,re.M); d=m.end()\ns=re.search(r'^## ',t[d:],re.M); sec=t[d:d+s.start()] if s else t[d:]\nfor b in [x for x in sec. … [136 caractères tronqués]`
+
+  ```
+15 - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4 close (négatif)** ; **R0.5 close
+13 - **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
+16 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
+15 - **B10.2bis — décodeur** : 3×3 : **11,1** ; capacité 11,8 ; **mots 32,5** ;
+16 - **A8.0 : 19** ; **A8.3b refusé** (lot) ; **A8.3c/d** : lot 1≠≥2, ctx stable, threads
+15 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
+15 - **Backlog — graphe** : 37 fiches, 43 arêtes, **4 à la frontière** ; `tools/verifie_backlog.py`.
+18 - **N2** : GPU ; **N2.d** — le budget plein (20 000 pas, 41 Mo, 3 graines) paie
+16 - **Pensée — RSN plurielle** : doc `pensee-iterative.md` (10 tours, 9 schémas) ; le **state store
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"Heartbeat|État|Objectif final|Plan|Stratégie|Ambition\" journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md | head -10", "description": "Vérifier l'état du plan R4.4"}`
+
+  ```
+# Plan de session — R4.4, les scans (mandat libre de 10 h)
+- **Heartbeat** : 2026-10-31 22:50
+- **État** : en cours
+## Objectif final
+## Ambition
+## Stratégie
+## Plan par phases (avec l'état au fil de l'eau)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## Ce qui est en cours/,/## Les chiffres/p' docs/pilotage/en-cours.md", "description": "Lire la section Ce qui est en cours"}`
+
+  ```
+## Ce qui est en cours
+
+- **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4 close (négatif)** ; **R0.5 close
+  (négatif)** ; R0.6 **12/20** au pilote, **7/7** à la porte. Fiches
+  [`r04`](../../reports/rapport-r04-tete-survol.md), [`r07`](../../reports/rapport-r07-routeur.md),
+  [`r06`](../../reports/rapport-r06-publication.md) (cascade à confiance **publiée**).
+- **R4.1–R4.3 — les blocs structurels** : **mesurées** — 996 cellules/802, 294 fichiers/24,
+  32 formules/10 dérivées, **miroir 34/34, 296/296, 42/42** ; fiches
+  [`r41`](../../reports/rapport-r41-bloc-tableaux.md), [`r42`](../../reports/rapport-r42-bloc-code.md),
+  [`r43`](../../reports/rapport-r43-bloc-maths.md), [`miroir`](../../reports/rapport-miroir-blocs.md).
+  **R4.4 partielle** : OCR installé sans root, **10 pages rendues** à **WER 4,48 %** et
+  **parité 90 %** ; page dégradée **26,7 %** ; fiche [`r44`](../../reports/rapport-r44-ocr-pilote.md).
+- **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
+  1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
+  [`r13`](../../reports/rapport-r13-decision.md), spécification
+  [`tokenisation`](../implantation/tokenisation.md).
+- *
+… [1737 caractères tronqués]
+  ```
+
