@@ -1852,5 +1852,19 @@
    "details": []
   }
  ],
- "dispositif": "rotation ajoutée à une page propre (3° et 0,8°), mesure brut vs auto — sonde de la politique de redressement"
+ "dispositif": "rotation ajoutée à une page propre (3° et 0,8°), mesure brut vs auto — sonde de la politique de redressement",
+ "sondes": {
+  "6,0°": {
+   "wer_brut": 0.1308,
+   "wer_auto": 0.043,
+   "preservation_brut": 0.6842,
+   "preservation_auto": 0.7368
+  },
+  "10,0°": {
+   "wer_brut": 0.9631,
+   "wer_auto": 0.4346,
+   "preservation_brut": 0.0,
+   "preservation_auto": 0.3684
+  }
+ }
 }

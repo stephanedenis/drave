@@ -101,14 +101,17 @@ rotation **après coup** à une page propre, pour mesurer la politique elle-mêm
 
 | rotation | WER brut | WER auto | préservation brut | préservation auto |
 |---|---:|---:|---:|---:|
-| 3,0° | 8,94 % | **4,40 %** | 63,3 % | **80,0 %** |
 | 0,8° | 5,60 % | 5,65 % | 76,7 % | 76,7 % |
+| 3,0° | 8,94 % | **4,40 %** | 63,3 % | **80,0 %** |
+| 6,0° | 13,08 % | **4,30 %** | 68,4 % | **73,7 %** |
+| 10,0° | 96,31 % | 43,46 % | 0,0 % | 36,8 % |
 
-À 3°, le redressement reprend **4,5 points** de WER et **16,7 points** de préservation, et ramène
-la page au niveau du texte propre (4,14 %). À 0,8°, il ne touche à rien (le seuil de 1,5° est un
-**choix**, pas un hasard) : le coût de la petite rotation est celui du rendu, pas du prétraitement.
-C'est la première mesure du redressement sur un cas où il sert — les cinq familles ne le
-déclenchaient jamais.
+À 3° et à 6°, le redressement reprend **4,5 et 8,8 points** de WER et ramène la page au niveau du
+texte propre (4,1–4,4 %) ; à 0,8°, il ne touche à rien (le seuil de 1,5° est un **choix**, pas un
+hasard). À **10°**, il ne suffit plus : **43,5 %** de WER (contre 96,3 % brut), préservation
+36,8 %. L'estimateur cherche dans **±3°** ; au-delà, il reste un résidu que rien ne rattrape — c'est
+la **limite nommée** du redressement. C'est la première mesure du redressement sur des cas où il
+sert : les cinq familles ne le déclenchaient jamais.
 
 ## 3. Les colonnes : 89 % de WER sans gouttière, 0,5 % avec
 

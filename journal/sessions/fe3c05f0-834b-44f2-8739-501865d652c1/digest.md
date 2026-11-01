@@ -9145,3 +9145,129 @@ grep: work/r44/rot.log: No such file or directory
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('work/r44/rot.json').read_text())\nd['dispositif']='rotation ajoutée à une page propre (3° et 0,8°), mesure brut vs auto — sonde de la politique de redressement'\npathlib.Path('reports/r44-rotation.json').write_text(json.d … [2877 caractères tronqués]`
+
+  ```
+rotation ajoutée à la fiche
+  revue de documentation · 375 fiche(s) · 453 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3996 mots (budget 4 000)
+  ✅ index : aucun fait stagé sans état
+ 12 files changed, 2067 insertions(+), 33 deletions(-)
+ create mode 100644 reports/r44-rotation.json
+6bedea0f R4.4 — LA ROTATION : 3° COÛTENT 4,5 POINTS DE WER, LE REDRESSEMENT LES REPREND ; 0,8° N'EST PAS TOUCHÉ
+  ```
+
+- **bash** `{"command": "grep -n \"def angle_de_redressement\" -A 14 tools/nettoyer_scan.py | head -18; grep -n \"1.5\\|2000\" tools/nettoyer_scan.py | head -8", "description": "Read deskew range and thresholds", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+89:def angle_de_redressement(im: Image.Image) -> float:
+90-    """L'angle qui rend les lignes les plus horizontales : on maximise la variance du profil
+91-    horizontal (des lignes de texte alignées font des pics). Sur une vignette, c'est rapide."""
+92-    g = _gris(im)
+93-    petit = Image.fromarray(g.astype(np.uint8)).resize(
+94-        (max(int(im.width * 0.2), 60), max(int(im.height * 0.2), 60)), Image.BILINEAR)
+95-    a = np.asarray(petit, dtype=np.float64)
+96-    encre = (a < np.percentile(a, 25)).astype(np.float64)
+97-    meilleur, score_max = 0.0, -1.0
+98-    for angle in np.arange(-3.0, 3.001, 0.25):
+99-        tourne = rotate(encre, angle, reshape=False, order=1, mode="nearest")
+100-        score = float(np.var(tourne.sum(axis=1)))
+101-        if score > score_max:
+102-            meilleur, score_max = float(angle), score
+103-    return meilleur
+179:    # Le papier japonais du simulateur a un fond à 1,33 : sous l'ancien seuil (1,5) il
+186:    angle = angle_de_redressement(im) if im.width >= 2000 else 0.0
+187:    if abs(angle) >= 1.5:
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\nfrom PIL import Image\nsrc=json.loads(pathlib.Path('work/r44/scans/manifeste.json').read_text())\npages=[e for e in src['entrees'] if e['famille']=='propre' and e['split']=='dev'][:5]\nsortie=pathlib.Path('work/r44/scans-rot6'); sortie.mkdir(parent … [1148 caractères tronqués]`
+
+  ```
+5 images
+  contrôle page noire : 0 mot(s) lu(s), 0 région(s)
+
+  ✅ page noire : aucun mot lu
+
+  10 mesures en 45 s → work/r44/rot6.json
+  ```
+
+- **bash** `{"command": "python3 -c \"\nimport json;d=json.load(open('work/r44/rot6.json'))['agregat']\nfor k,v in sorted(d.items()):print(k,round(v['wer'],4),v.get('preservation'))\"", "description": "Read 6-degree rotation results", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+rot6|dev|auto 0.043 0.7368
+rot6|dev|brut 0.1308 0.6842
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport nettoyer_scan as ns, mesurer_ocr as mo\nfrom PIL import Image\np=pathlib.Path('work/r44/scans-rot6/A_RES_80_10-fr-p2-s1-propre-rot6.png')\nim=Image.open(p).convert('RGB')\na=ns.angle_de_redressement(im); print('ang … [254 caractères tronqués]`
+
+  ```
+angle estimé -3.0
+auto ['recadrage', 'redressement(-3.00)']
+angle après auto -3.0
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\nfrom PIL import Image\nsrc=json.loads(pathlib.Path('work/r44/scans/manifeste.json').read_text())\npages=[e for e in src['entrees'] if e['famille']=='propre' and e['split']=='dev'][:5]\nsortie=pathlib.Path('work/r44/scans-rot10'); sortie.mkdir(paren … [1209 caractères tronqués]`
+
+  ```
+rot10|dev|auto 0.4346 0.3684
+rot10|dev|brut 0.9631 0.0
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\nrot=json.loads(pathlib.Path('reports/r44-rotation.json').read_text())\nrot['sondes']={'6,0°':{'wer_brut':0.1308,'wer_auto':0.043,'preservation_brut':0.6842,'preservation_auto':0.7368},\n               '10,0°':{'wer_brut':0.9631,'wer_auto':0.4346,'p … [3098 caractères tronqués]`
+
+  ```
+fiche rotation complétée
+  revue de documentation · 375 fiche(s) · 453 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3996 mots (budget 4 000)
+  ❌ commit refusé : 2 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/r44-rotation.json
+     · reports/rapport-r44-scans.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"restent les **scans réels de bout en bout**, le fax 1 bit et l'**exposant fusionné**.\",\n            \"restent les **scans réels**, le fax 1 bit et l'**exposant fusionné** ; re … [919 caractères tronqués]`
+
+  ```
+T0 3956
+  T0 max : 3996 mots (budget 4 000)
+  ❌ commit refusé : 2 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/r44-rotation.json
+     · reports/rapport-r44-scans.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "git log --oneline -2; echo \"=== diff HEAD en-cours\"; git diff HEAD --stat -- docs/pilotage/en-cours.md; echo \"=== alt index\"; rm -f /tmp/index.r44; GIT_INDEX_FILE=/tmp/index.r44 git read-tree HEAD; GIT_INDEX_FILE=/tmp/index.r44 git add reports/rapport-r44-scans.md reports/r44-rotati … [330 caractères tronqués]`
+
+  ```
+6bedea0f R4.4 — LA ROTATION : 3° COÛTENT 4,5 POINTS DE WER, LE REDRESSEMENT LES REPREND ; 0,8° N'EST PAS TOUCHÉ
+d6b4da35 R4.4 — TROIS GRAINES ET UN PETIT TEXTE : LA PRÉSERVATION VARIE DE 23 POINTS, L'AGRANDISSEMENT GAGNE 0,6 POINT
+=== diff HEAD en-cours
+=== alt index
+reports/r44-rotation.json
+reports/rapport-r44-scans.md
+=== check
+  ❌ commit refusé : 2 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/r44-rotation.json
+     · reports/rapport-r44-scans.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+[code 1]
+  ```
+
+- **bash** `{"command": "grep -n \"redressement\\|scans réels\\|vrais scans\\|JSON de résultats\" docs/pilotage/en-cours.md | head -6; echo \"=== git show HEAD en-cours (extrait)\"; git show HEAD:docs/pilotage/en-cours.md | grep -n \"redressement\\|vrais scans\" | head -4", "description": "Inspect state file co … [86 caractères tronqués]`
+
+  ```
+44:- **Objectif final** : **R4.4 mesurée** ; restent **scans réels de bout en bout**, **fax**, **exposant fusionné**.
+45:- **Ce qu'elle fait** : photo **55,9 → 6,7 %**, préservation **70–87 %**, colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** (trois livres) — [`r44-scans`](../../reports/rapport-r44-scans.md).
+79:  tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** (trois livres) ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
+106:| fichiers / JSON de résultats | **375** / **453** | `reports/*.md` / `reports/*.json` |
+123:| **R — le lecteur** | aucune | R4.4 : scans réels de bout en bout, fax | **R4.4 mesurée sur scans simulés** ; R1/R2/R3 attendent N2 |
+137:l'encodeur ; **R4.4** — les scans réels.
+=== git show HEAD en-cours (extrait)
+45:- **Ce qu'elle fait** : photo **55,9 → 6,7 %**, préservation **70–87 %**, colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** (trois livres) — [`r44-scans`](../../reports/rapport-r44-scans.md).
+79:  tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** (trois livres) ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"vrais scans **7,10 / 88,4 %** (trois livres) — [`r44-scans`]\",\n            \"vrais scans **7,10 / 88,4 %** (trois livres) ; redressement utile **≤ 6°** (10° : **43 %**) — [`r4 … [845 caractères tronqués]`

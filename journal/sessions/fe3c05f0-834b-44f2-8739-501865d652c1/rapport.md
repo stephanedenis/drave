@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 8.6 h |
+| Durée | 8.7 h |
 | Tours | 2 |
-| Messages | 517 |
-| Appels d'outils | 520 |
+| Messages | 527 |
+| Appels d'outils | 530 |
 | Fichiers touchés | 18 |
-| Commandes | 462 |
+| Commandes | 472 |
 | Sous-agents | 0 |
-| Commits | 15 |
+| Commits | 18 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*335 appels d'outils.* Actions notables :
+*345 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,7 +101,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 305 autres
+- … et 315 autres
 
 **Synthèse produite :**
 
@@ -174,7 +174,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 422 autres
+- … et 432 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -302,7 +302,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ## 5. Erreurs rencontrées
 
-21 sorties en erreur ou divergentes. Les premières :
+23 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -337,4 +337,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - python3 - <<'PY' import pathlib,re p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s2=re.sub(r"\| fichiers / JSON de résultats \| \*\*372\*\* / \*\
 - python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("| fichiers / JSON de résultats | **375** / **450** |",
 - python3 - <<'PY' import json,pathlib d=json.loads(pathlib.Path('work/r44/rot.json').read_text()) d['dispositif']='rotation ajoutée à une page propre (3° et 0,8°
+- python3 - <<'PY' import json,pathlib rot=json.loads(pathlib.Path('reports/r44-rotation.json').read_text()) rot['sondes']={'6,0°':{'wer_brut':0.1308,'wer_auto':0
+- python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("restent les **scans réels de bout en bout**, le fax 1 
+- python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("vrais scans **7,10 / 88,4 %** (trois livres) — [`r44-s
 
