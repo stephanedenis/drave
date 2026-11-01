@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 24.5 h |
 | Tours | 11 |
-| Messages | 857 |
-| Appels d'outils | 857 |
+| Messages | 858 |
+| Appels d'outils | 858 |
 | Fichiers touchés | 18 |
-| Commandes | 785 |
+| Commandes | 786 |
 | Sous-agents | 0 |
-| Commits | 39 |
+| Commits | 40 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -587,7 +587,7 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 
 ### Tour 11 — es-tu à jour? as-tu fait tout ce que tu pouvais?
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Check run progress, git status, and temp files
 - bash — Run gates, heartbeats, and roadmap overview
@@ -595,6 +595,7 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - bash — Add D and L roadmap rows and refresh heartbeat
 - bash — Wait for full-text run to finish
 - bash — Commit roadmap D/L rows and state update
+- bash — Restore T0 budget and check run
 
 **Synthèse produite :**
 
@@ -667,7 +668,7 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 745 autres
+- … et 746 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -854,4 +855,5 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet python3 - <<'PY' import pathlib p=pathlib.Path('tools/surveille_sessions.py'); s=p.read_text() s=s.replace(''
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet for t in "python3 tools/revue_documentation.py" "python3 tools/taille_documents.py" "python3 tools/verifie_en
 - PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUIVI DANS L'ÉTAT" 2>&1 | tail -2; git log --oneline -1
+- ÉTAT — LE BUDGET T0 REVIENT À 3 998 (TRIM DU BLOC D/R/A)" 2>&1 | tail -1 echo "=== run"; ps -p 1454236 -o pid,etime,pcpu --no-headers 2>/dev/null || echo "termi
 

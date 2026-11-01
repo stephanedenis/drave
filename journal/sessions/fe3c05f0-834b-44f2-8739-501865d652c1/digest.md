@@ -15516,3 +15516,15 @@ encore en cours
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"**Mis à jour : 2026-11-01, 16 h 30 HNE (heure locale, EST).**\",\n            \"**Mis à jour : 2026-11-01, 17 h 10 HNE (heure … [1103 caractères tronqués]`
+
+  ```
+en-cours : run en cours
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4004 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master f4c200d0] PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUIVI DANS L'ÉTAT
+ 20 files changed, 281 insertions(+), 50 deletions(-)
+f4c200d0 PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUIVI DANS L'ÉTAT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"- **Ambition** : le français réel pour N2 ; D, carburant de N2/L/S.\",\n            \"- **Ambition** : le français réel pour  … [1009 caractères tronqués]`

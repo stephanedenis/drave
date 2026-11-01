@@ -57,11 +57,11 @@
 - **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
 - **Rôle** : **D/R/A** — le texte intégral, l'extraction PDF/OCR, la prépa R1.1/R1.2, A2.6/A8.3.
 - **Plan** : le texte intégral (pilote FR), puis PDF/OCR, puis R1.1/R1.2.
-- **Ambition** : le français réel pour N2 ; D, carburant de N2/L/S.
-- **Stratégie** : le dump, débaliseur mesuré, dédup, splits ; pilote avant run.
+- **Ambition** : le français réel pour N2 ; D, carburant.
+- **Stratégie** : le dump, débaliseur mesuré, dédup, splits.
 - **Objectif final** : 10 corpus en texte intégral, mesurés et ficés.
 - **Ce qu'elle fait** : le **pilote FR** (100 000 art., 1,082 Go, **0 fuite 8 Ko**, **0/40** éval) et le **run complet** (2,8 M pages, 1,17 M art., 5,0 Go ; en cours) ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
-- **Ce que font les autres** : Pensée (L/B13), S, N2 ; le hub tient l'état.
+- **Ce que font les autres** : Pensée, S, N2 ; le hub tient l'état.
 - **Prochaine action** : le run complet FR (~26 Go), puis les 9 langues, PDF/OCR.
 - **Bloquants** : aucun.
 - **Journal** : [le 01/11](../../journal/2026-11-01/README.md).

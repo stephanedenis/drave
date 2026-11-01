@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**58 commits** · **4 session(s)** · **9 thème(s)**
+**59 commits** · **4 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 3 | [distribue.md](distribue.md) |
-| docs | 14 | [docs.md](docs.md) |
+| docs | 15 | [docs.md](docs.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 31 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -92,6 +92,7 @@
 | 16:31 | `4db5aac0` | N2.j2 — POSITIONS ALÉATOIRES SUR 186 Mo : LE VERROU DE LONGUEUR TOMBE ENCORE (÷2,4 À 512) |
 | 16:37 | `6fbfbb80` | DONNÉES — LE TEXTE INTÉGRAL DE WIKIPÉDIA : LE PILOTE FR (100 000 ARTICLES, 1,082 GO, 0 FUITE 8 KO) |
 | 16:50 | `1520b875` | N2.j3 — LA CAPACITÉ SUR 186 Mo : 21,65 M PAIE (4,39 → 4,20), DONNÉES × CAPACITÉ |
+| 17:05 | `f4c200d0` | PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUIVI DANS L'ÉTAT |
 
 ## Le récit de la journée (écrit à la main)
 
