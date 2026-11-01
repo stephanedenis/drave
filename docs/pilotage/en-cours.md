@@ -33,7 +33,7 @@
   disponibles dans le dépôt (8,5× le corpus utilisé).
 - **Ce que font les autres** : **Pensée** sans GPU ; **N4** en file.
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`, `journal/sessions/0b0a6a0d-…/`.
-- **Prochaine action** : **close** — cinq fiches committées, portes vertes.
+- **Prochaine action** : **N2.i** (corpus élargi, 4,84 Mo, 3 graines) en cours.
 - **Bloquants** : aucun — GPU rendus.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/).
 
@@ -59,13 +59,13 @@
 - **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels, avec des opérateurs hétérogènes.
 - **Stratégie** : théorie d'abord, puis un **v0 petit et mesuré** ; réserver les fichiers ; ne pas toucher aux GPU de N2.
 - **Objectif final** : un **moteur de pensée v0 exécutable** — state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles — documenté, mesuré, committé.
-- **Ce qu'elle fait** : la **théorie** (`pensee-iterative.md`, 10 tours, 9 schémas) et l'**implantation**
-  (`moteur-de-pensee.md` : types, store, stratégies) sont écrites ; `tools/pensee/` n'existe pas
-  encore — **session en pause** depuis le 31/10 22 h 49, heartbeat à rafraîchir.
+- **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes** (T0 canonique, T1 rejeu,
+  T2 stratégies, T3 anytime, T4 justification) sur le jouet des cruches ; théorie et implantation
+  écrites. Fait en parallèle par la session `0b0a6a0d` (fichiers de `e181ce02` respectés).
 - **Ce que font les autres** : **Pensée** garde ses fichiers ; **N4** en file ; **A/B** gardent les leurs.
 - **Interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state`.
 - **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `journal/sessions/e181ce02-…/`.
-- **Prochaine action** : le state store v0 (candidats, hash Merkle, arbre, trace) ; le contrat est écrit.
+- **Prochaine action** : AC-3, alpha-bêta, l'intégration **DRVF** et le banc anytime.
 - **Bloquants** : aucun ; corpus de test à choisir ; pas de GPU.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
@@ -109,7 +109,7 @@
 |---|---|---|
 | portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **377** / **455** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **378** / **456** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **114** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

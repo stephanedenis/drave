@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 14.8 h |
-| Tours | 6 |
-| Messages | 717 |
-| Appels d'outils | 677 |
+| Durée | 15.0 h |
+| Tours | 7 |
+| Messages | 750 |
+| Appels d'outils | 709 |
 | Fichiers touchés | 11 |
-| Commandes | 555 |
+| Commandes | 586 |
 | Sous-agents | 0 |
-| Commits | 14 |
+| Commits | 15 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -39,6 +39,8 @@
 **Tour 5** — continue
 
 **Tour 6** — vérifie l'état des autres sessions dsh et mets à jour les fichiers en-cours.md et roadmap.md
+
+**Tour 7** — fais les deux en parallèle
 
 ## 2. Déroulé, étape par étape
 
@@ -273,7 +275,7 @@ N2 n'a plus de levier d'entraînement à essayer : la position est réglée, la 
 
 ### Tour 6 — vérifie l'état des autres sessions dsh et mets à jour les fichiers en-cours.md et roadmap.md
 
-*28 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - bash — List session statuses
 - bash — Recent commits from all sessions
@@ -289,11 +291,59 @@ N2 n'a plus de levier d'entraînement à essayer : la position est réglée, la 
 - bash — Find Pensée in the roadmap and read the order of day
 - bash — Inspect the B program table for a Pensée slot
 - bash — Measure budgets before editing
-- … et 14 autres
+- … et 16 autres
 
 **Synthèse produite :**
 
-⏵ Mise à jour de la roadmap : R4.4 mesurée, Pensée (B13), scans réels comme limite nommée
+⏵ Bilan de la vérification des sessions et des mises à jour
+
+\## L'état des trois sessions
+
+| session | état | dernier travail | prochaine action |
+|---|---|---|---|
+| `0b0a6a0d` — **N2.h** | **close** | 7 commits, 5 fiches, portes vertes | close — le levier est chiffré (27,7 Mo de français unique) |
+| `fe3c05f0` — **R4.4** | **close** (plan clos le 01/11 02 h 55) | 100 scans simulés, 5 familles, 3 vrais scans | reste pour une autre session : **scans réels de bout en bout** avec vérité humaine, fax, exposant fusionné |
+| `e181ce02` — **Pensée** | **plan actif, session en pause** depuis le 31/10 22 h 49 (heartbeat périmé de 504 min) | théorie (`pensee-iterative.md`, 10 tours, 9 schémas) **et** implantation (`moteur-de-pensee.md`) écrites ; `tools/pensee/` absent | **state store v0** — c'est la seule chose qui manque pour démarrer le moteur |
+
+Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat du plan de Pensée, resté au 31/10 22 h 45 : la session ne tourne plus, mais son plan dit encore « actif ». Je l'ai **noté dans l'état** plutôt que de réécrire son fichier (il est réservé) ; à rafraîchir ou à clore à sa reprise.
+
+\## Ce que j'ai mis à jour
+
+**`docs/pilotage/en-cours.md`**
+- **R4.4** : le bloc passe de « ce qu'elle fait » à **« terminée »** (plan clos le 01/11 02 h 55), avec les chiffres alignés sur la fiche (`r44-scans`) : photo **55,9 → 6,7 %** de WER, **4/5 familles ≥ 90 %** de parité, fax **56,7 %** (limite d'information), colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, trois vrais scans **7,10 / 88,4 %**. La prochaine action dit désormais **close**, et ce qui reste est nommé pour une autre session.
+- **Pensée** : « théorie et implantation écrites, `tools/pensee/` absent, **session en pause** ».
+- **Puce R4.4** de « Ce qui est en cours » condensée (elle dupliquait le bloc de session), ligne **R** des chantiers mise à jour, horodatage **2026-11-01 07 h 20 HNE**.
+- Les trois blocs de session ont été **condensés** pour que le budget de contexte repasse sous la barre : **T0 = 3 994 mots** (plafond 4 000), sans perdre le plan, l'ambition, la stratégie et l'objectif de chaque session.
+
+**`docs/pilotage/roadmap.md`**
+- Ligne **R** du tableau des programmes : `R4.4 partiel` → **`R4.1–R4.4 mesurées`** (4/5 ≥ 90 %), la prochaine action devenant les **scans réels de bout en bout**.
+- **Ordre du jour, item 1** : R4.4 y est dite **mesurée** (et non « partielle »), avec le test à **5,7 %** (la fiche disait 5,68 %, l'ancien texte 5,3 %).
+- Lig
+… [1382 caractères tronqués]
+
+### Tour 7 — fais les deux en parallèle
+
+*30 appels d'outils.* Actions notables :
+
+- bash — Measure corpus candidates
+- bash — Read the Pensée implementation spec
+- bash — Inspect a session digest
+- bash — Build the enlarged clean corpus from the current repo
+- bash — Launch the teacher and base on the enlarged corpus
+- bash — Read the rest of the Pensée implementation spec
+- bash — Write the core types and test the Merkle fingerprint
+- bash — Write the state store and smoke-test it
+- bash — Refactor the frontier to insertion order
+- bash — Write the engine and strategies
+- bash — Fix the frozen state and remove the dead stub
+- bash — Write the water-jug problem and run the four strategies
+- bash — Debug the engine loop
+- bash — Fix the budget counting and MCTS applicability
+- … et 16 autres
+
+**Synthèse produite :**
+
+⏵ Mise à jour de l'état pour la Pensée v0 et le corpus élargi en cours
 
 ## 3. Travail accompli
 
@@ -355,7 +405,7 @@ N2 n'a plus de levier d'entraînement à essayer : la position est réglée, la 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 515 autres
+- … et 546 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -483,7 +533,7 @@ N2 n'a plus de levier d'entraînement à essayer : la position est réglée, la 
 
 ## 5. Erreurs rencontrées
 
-40 sorties en erreur ou divergentes. Les premières :
+41 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5
@@ -517,4 +567,5 @@ N2 n'a plus de levier d'entraînement à essayer : la position est réglée, la 
 - N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN  À 512 octets, l'attention locale (fenêtre 256) ne laisse voir
 - RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ  Le levier « plus de texte français unique » a un chiffre : avec les mêmes sh
 - ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE  Vérification des trois sessions : N2.h close (0b0a6a0d), R4.4 close (fe
+- PENSÉE v0 — LE STATE STORE EXISTE ET TIENT SES SIX PORTES  Le contrat docs/implantation/moteur-de-pensee.md a son implémentation : types canoniques (Candidat, E
 

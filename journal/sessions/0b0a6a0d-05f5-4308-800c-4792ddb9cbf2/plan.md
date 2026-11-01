@@ -9,7 +9,7 @@
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`,
   `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`,
   `journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/`
-- **Heartbeat** : 2026-11-01 03:40 HAE
+- **Heartbeat** : 2026-11-01 07:20 EST
 - **Objectif final** : un **mètre honnête** pour N2 — corpus dédupliqué (0 % de fenêtres de
   validation dans l'entraînement), chaîne refaite dessus, porte < 2,5 redéfinie — puis trancher
   ce que les chiffres contaminés ne pouvaient pas trancher : la **généralité hors dépôt** et le
@@ -20,5 +20,6 @@
   aléatoires : 256 octets **14,11 → 3,25**, 512 **32,41 → 5,93** ; la base supervisée vaut
   **12,29** hors domaine — la distillation spécialise. Trois fiches : `n2-propre`,
   `n2-diversite`, `n2-longueur`.
-- **Prochaine action** : close — journal, roadmap, portes, commit.
-- **État** : terminé
+- **Prochaine action** : **N2.i** (corpus élargi, 4,84 Mo) et le **state store de Pensée v0**
+  (6/6 portes), en parallèle.
+- **État** : en cours

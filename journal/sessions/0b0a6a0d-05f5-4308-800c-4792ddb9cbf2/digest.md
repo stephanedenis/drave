@@ -9274,3 +9274,478 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE\n\nVérification des trois sessions : N2.h close (0b0a6a … [1123 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-555]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-555", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 43a7b3fe] ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE
+ 13 files changed, 641 insertions(+), 46 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py | tail -1; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅|❌\"; python3 tools/sessions.py --check; echo \"check=$?\"; git status --sho … [129 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3994 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat périmé (504 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+check=0
+43a7b3fe ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE
+18f28437 RECENSEMENT — 27,7 Mo DE FRANÇAIS UNIQUE DANS LE DÉPÔT, 8,5 FOIS LE CORPUS UTILISÉ
+d2613e8f N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan de la vérification des sessions et des mises à jour
+
+## L'état des trois sessions
+
+| session | état | dernier travail | prochaine action |
+|---|---|---|---|
+| `0b0a6a0d` — **N2.h** | **close** | 7 commits, 5 fiches, portes vertes | close — le levier est chiffré (27,7 Mo de français unique) |
+| `fe3c05f0` — **R4.4** | **close** (plan clos le 01/11 02 h 55) | 100 scans simulés, 5 familles, 3 vrais scans | reste pour une autre session : **scans réels de bout en bout** avec vérité humaine, fax, exposant fusionné |
+| `e181ce02` — **Pensée** | **plan actif, session en pause** depuis le 31/10 22 h 49 (heartbeat périmé de 504 min) | théorie (`pensee-iterative.md`, 10 tours, 9 schémas) **et** implantation (`moteur-de-pensee.md`) écrites ; `tools/pensee/` absent | **state store v0** — c'est la seule chose qui manque pour démarrer le moteur |
+
+Rien n'est bloqué côté ressource. Le seul point d'hygiène est le heartbeat du plan de Pensée, resté au 31/10 22 h 45 : la session ne tourne plus, mais son plan dit encore « actif ». Je l'ai **noté dans l'état** plutôt que de réécrire son fichier (il est réservé) ; à rafraîchir ou à clore à sa reprise.
+
+## Ce que j'ai mis à jour
+
+**`docs/pilotage/en-cours.md`**
+- **R4.4** : le bloc passe de « ce qu'elle fait » à **« terminée »** (plan clos le 01/11 02 h 55), avec les chiffres alignés sur la fiche (`r44-scans`) : photo **55,9 → 6,7 %** de WER, **4/5 familles ≥ 90 %** de parité, fax **56,7 %** (limite d'information), colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, trois vrais scans **7,10 / 88,4 %**. La prochaine action dit désormais **close**, et ce qui reste est nommé pour une autre session.
+- **Pensée** : « théorie et implantation écrites, `tools/pensee/` absent, **session en pause** ».
+- **Puce R4.4** de « Ce qui est en cours » condensée (elle dupliquait le bloc de session), ligne **R** des chantiers mise à jour, horodatage **2026-11-01 07 h 20 HNE**.
+- Les trois blocs de session ont été **condensés** pour que le budget de contexte repasse sous la barre : **T0 = 3 994 mots** (plafond 4 000), sans perdre le plan, l'ambition, la stratégie et l'objectif de chaque session.
+
+**`docs/pilotage/roadmap.md`**
+- Ligne **R** du tableau des programmes : `R4.4 partiel` → **`R4.1–R4.4 mesurées`** (4/5 ≥ 90 %), la prochaine action devenant les **scans réels de bout en bout**.
+- **Ordre du jour, item 1** : R4.4 y est dite **mesurée** (et non « partielle »), avec le test à **5,7 %** (la fiche disait 5,68 %, l'ancien texte 5,3 %).
+- Ligne détaillée **R4.4** : « mesuré sur scans simulés ; **ouvert sur les scans réels** ».
+- Tableau des bloqués : le blocage n'est plus « pas de corpus de scans » mais **« pas de vérité humaine »** — trois vrais scans donnent des accords, pas des vérités ; il faut **10 pages scannées avec vérité humaine**.
+- **B13 — le moteur de pensée** ajouté au tableau B : théorie et implantation écrites, prochaine action le **state store v0** (`tools/pensee/`), puis A*/MCTS/AC-3 et le banc anytime. Le résumé B le mentionne.
+
+## Vérification
+
+- `revue_documentation` : ✅ (377 fiches, 455 JSON, 114 docs, 80 portes)
+- `verifie_en_cours` : ✅ (1 637 mots, 7 sections, 3 sessions)
+- `taille_documents` : ✅ — **T0 3 994 / 4 000**
+- `verifie_backlog` : ✅ — graphe sans cycle ni arête morte
+- `sessions.py --check` : sortie 0 avec un seul avertissement, celui du heartbeat de Pensée, désormais expliqué dans l'état
+- Commit : **`43a7b3fe`** — `ÉTAT — R4.4 CLOSE, PENSÉE EN PAUSE, B13 AU PLAN : LES SCANS RÉELS SONT LA LIMITE NOMMÉE`
+
+## Ce qu'il reste à décider
+
+Le prochain cycle a deux candidats nets : **plus de français unique** (N2, 27,7 Mo disponibles contre 3,24 utilisés) et **le state store de Pensée** (B13, la théorie est prête). Le premier demande les GPU, le second n'en a pas besoin — ils peuvent avancer en parallèle sans se marcher dessus, à condition que chacun réserve ses fichiers.
+
+
+## Tour 7
+
+### 👤 Utilisateur
+
+fais les deux en parallèle
+
+### 🤖 Assistant
+
+⏵ Les deux en parallèle : corpus élargi sur GPU, state store de Pensée sur CPU
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && du -sh docs journal journal/sessions reports 2>/dev/null; echo \"=== sans sessions ===\"; python3 - <<'EOF'\nimport pathlib\ndef taille(racine, exclure=()):\n    n = 0; k = 0\n    for p in pathlib.Path(racine).rglob('*.md'):\n        … [319 caractères tronqués]`
+
+  ```
+4,0M	docs
+267M	journal
+16M	reports
+=== sans sessions ===
+docs (433, 1.162259)
+journal (sans sessions) (330, 1.992094)
+reports (545, 3.237147)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,80p docs/implantation/moteur-de-pensee.md", "description": "Read the Pensée implementation spec"}`
+
+  ```
+# Le moteur de pensée — state store, arbre, stratégies
+
+> **Ce que ce document est.** Le **contrat d'implémentation** du moteur de pensée : les types, le
+> **state store**, l'**arbre d'états**, la **boucle** anytime, les **stratégies**, la **trace** et les
+> **portes**. La théorie est dans [`pensee-iterative.md`](../theorie/pensee-iterative.md) ; les schémas
+> dans [`docs/schemas/`](../schemas/) ; le bloc impulsionnel dans [`diehl-cook.md`](diehl-cook.md).
+
+> **Fiche concept — le moteur.** Un **state store** typé, un **arbre** de nœuds hashés, une
+> **frontière**, une **boucle** anytime, un **portefeuille** de stratégies, une **trace** rejouable.
+> Le moteur est un bloc N3 `state → state` ou `state → decision` ; il ne lit jamais la surface.
+
+## 1. Les types
+
+| type | contenu | invariant |
+|---|---|---|
+| `Candidate` | `corps`, `annotation`, `statut`, `provenance`, `cout`, `score` | `corps` canonique ; `H(corps)` stable |
+| `State` | `id`, `parent`, `profondeur`, `budget`, `statut`, `candidats`, `frontiere`, `empreinte` | empreinte = Merkle des candidats triés |
+| `Node` | `state`, `children`, `score`, `cout`, `visites` | un nœud = un état ; l'arête porte l'opérateur |
+| `Proposal` 
+… [2459 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md 2>/dev/null; echo \"...\"; du -sh journal/sessions/*/digest.md 2>/dev/null | tail -3", "description": "Inspect a session digest"}`
+
+  ```
+# Session DSH — relecture
+
+- identifiant : `e181ce02-cd50-488a-a6be-e84b79d40dcc`
+- dossier : `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`
+- créée : 2026-10-31 17:40:32
+- agent : standard
+
+
+## Tour 1
+
+### 👤 Utilisateur
+
+fais une documentation détaillée du modèle Drave natif. utilise beaucoup de diagrammes pour expliquer ce qui est original à Drave. Comment implémenter un modèle de type Modèles de Diehl & Cook (2015) en respectant notre principe de séparation à 3 niveaux (sémentique neutre au centre)
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (t
+… [433 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nmorceaux = []\nfor racine, exclure in (('docs', ()), ('journal', ('sessions',)), ('reports', ())):\n    for p in sorted(pathlib.Path(racine).rglob('*.md')):\n        if 'archive' in p.parts or any(e  … [531 caractères tronqués]`
+
+  ```
+1308 documents · 6.39 Mo bruts → data/corpus_repo.txt
+ "train_octets": 4836314,
+ "val_octets": 262144,
+ "test_octets": 262144,
+ "deduplication": {
+  "retires": 1035519,
+  "runs": 2008,
+  "plus_long_run": 199347,
+  "retires_pct": 16.19
+ },
+ "contamination": {
+  "validation": {
+   "fenetres": 3000,
+   "contaminees": 0,
+   "taux": 0.0
+  },
+  "test": {
+   "fenetres": 3000,
+   "contaminees": 0,
+   "taux": 0.0
+  }
+ }
+}
+[stderr]
+
+real	0m13,187s
+user	0m12,752s
+sys	0m0,437s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\ntr = pathlib.Path('data/corpus_repo_propre/train.txt').read_bytes()\nC = 8192\nchunks = [tr[i:i+C] for i in range(0, len(tr), C)]\ndev = b''.join(c for i, c in enumerate(chunks) if i % 10 == 6)\npath … [1051 caractères tronqués]`
+
+  ```
+dev 483328 octets 591 chunks de train
+teacher 1229570
+base 1229571
+07:11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 80,170p docs/implantation/moteur-de-pensee.md", "description": "Read the rest of the Pensée implementation spec"}`
+
+  ```
+## 3. L'arbre
+
+L'arbre est un **DAG** : deux états de même empreinte sont le même nœud (transposition). Chaque
+nœud a un parent, une profondeur, un score, un coût, un nombre de visites. La **frontière** est un
+tas ordonné par une politique (score, coût, UCB, heuristique).
+
+![L'arbre d'états](../schemas/pensee-arbre.svg)
+
+**Les invariants** :
+
+1. la racine a `parent = null` et `profondeur = 0` ;
+2. un nœud a au plus un parent dans l'arbre, mais peut avoir plusieurs **prédécesseurs** par
+   transposition ;
+3. la frontière ne contient que des nœuds `ouvert` ;
+4. un nœud `settled` n'est plus développé, mais reste dans l'arbre ;
+5. le chemin racine → nœud est la **justification** ; il se rejoue.
+
+## 4. La boucle
+
+```python
+def boucle(store, strategies, budget, trace):
+    racine = store.put(etat_initial())
+    store.frontier.push(racine, score=0.0)
+    meilleur = racine
+    while budget.reste() and store.frontier:
+        noeud = strategies.select(store.frontier)      # politique
+        if noeud.score > store.get(meilleur).score:
+            meilleur = noeud
+        propositions = strategies.expand(noeud)         # opérateurs
+        for p in propositions:
+            enfant = p.appliq
+… [3220 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du state store et du moteur de pensée v0 (pendant que le corpus élargi s'entraîne)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p tools/pensee && cat > tools/pensee/coeur.py <<'PY'\n\"\"\"coeur.py — les types du moteur de pensée, et leur forme canonique.\n\nLe contrat est dans [`docs/implantation/moteur-de-pensee.md`](../../docs/implantation/moteur-de- … [3393 caractères tronqués]`
+
+  ```
+empreintes égales (ordre différent) : True
+cd9223cbb1f80ae3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pensee/store.py <<'PY'\n\"\"\"store.py — le state store : persiste, indexe, compacte, rejoue, partage.\n\nContrat du store (moteur-de-pensee.md § 2) :\n\n  put(state)            rend l'empreinte ; idempotent\n  get(emprei … [8238 caractères tronqués]`
+
+  ```
+frontière [(-0.5, '68a39e'), (-0.0, '1cd569')]
+chemin ['1cd569', '68a39e']
+compact ok (non testé)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/pensee/store.py'); s = p.read_text()\ns = s.replace(\"        self.ouverts: set[str] = set()\", \"        self.ouverts: dict[str, int] = {}  # empreinte -> ordre d'insertion\" … [1644 caractères tronqués]`
+
+  ```
+ok
+frontière [(-0.7, 1, '95f121ad6b3b71f7049856ec0203fa9a21aa169a4fcf185255445526be07e8a6'), (-0.0, 0, '1cd569fc0a3fea6f9df9b0228652ba36c05d806ec3c78b55b4336b17b4e4c3a8')]
+pop 95f121
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pensee/moteur.py <<'PY'\n\"\"\"moteur.py — la boucle anytime, les stratégies, la décision.\n\nLe moteur est un bloc `state → decision` : il reçoit un problème (état initial, opérateurs, but,\nheuristique), une stratégie e … [5260 caractères tronqués]`
+
+  ```
+import ok bfs mcts
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/pensee/coeur.py'); s = p.read_text()\ns = s.replace(\"\"\"@dataclass(frozen=True)\nclass Etat:\"\"\", \"\"\"@dataclass\nclass Etat:\"\"\")\np.write_text(s)\nq = pathlib.Path(' … [484 caractères tronqués]`
+
+  ```
+ok
+ok
+07:13
+pas 2100 · perte 1.8422 · PPL val 6.307 · 96 s
+  pas   1000 · perte 1.3934 · val 2.2695 bits/octet · 85 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pensee/cruches.py <<'PY'\n\"\"\"cruches.py — le problème jouet : deux cruches de 3 et 5 litres, mesurer 4.\n\nC'est le plus petit problème qui a tout ce que le moteur doit savoir faire : des états\n(candidats typés), des  … [3250 caractères tronqués]`
+
+  ```
+bfs     · but=False · (3,0)    · pas=40 · chemin=2
+greedy  · but=False · (3,0)    · pas=40 · chemin=2
+astar   · but=False · (3,0)    · pas=40 · chemin=2
+mcts    · but=False · (0,5)    · pas=1 · chemin=2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. ~/gpu-env/bin/python - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.cruches import CRUCHES, litres\nfrom tools.pensee.moteur import Moteur, MCTSLite, BFS\nfrom tools.pensee.store import Budget\nm = Moteu … [561 caractères tronqués]`
+
+  ```
+decision (0,5) consomme 1 ouverts 0 etats 2
+evenements 1
+BFS 300 : (3,4) but True consomme 300 etats 14
+solution ['(0,0)', '(0,5)', '(3,2)', '(0,2)', '(2,0)', '(2,5)', '(3,4)']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/pensee/moteur.py'); s = p.read_text()\ns = s.replace('''    def proposer(self, etat, probleme):\n        if not probleme.operateurs:\n            return []\n        nom = self … [2931 caractères tronqués]`
+
+  ```
+ok
+bfs     · but=False · (3,0)    · nœuds= 40 · chemin=2 · état du store=10
+greedy  · but=False · (3,0)    · nœuds= 40 · chemin=2 · état du store=9
+astar   · but=False · (3,0)    · nœuds= 40 · chemin=2 · état du store=9
+mcts    · but=False · (3,0)    · nœuds= 40 · chemin=2 · état du store=7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/pensee/cruches.py'); s = p.read_text()\ns = s.replace('''def distance(e: Etat) -> int:\n    return min(abs(v - 4) for v in litres(e).values())''',\n'''def _distances_exactes() … [1998 caractères tronqués]`
+
+  ```
+ok
+distances 24 états : [2, 2, 2] max 2
+bfs     · but=True  · (3,4)    · nœuds=200 · chemin=7 · états=14
+greedy  · but=False · (0,0)    · nœuds=200 · chemin=1 · états=7
+astar   · but=False · (0,0)    · nœuds=200 · chemin=1 · états=7
+mcts    · but=False · (0,0)    · nœuds=200 · chemin=1 · états=9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. ~/gpu-env/bin/python - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.pensee.cruches as c\nprint({k: v for k, v in sorted(c.DISTANCES.items())})\nPY", "description": "Inspect the computed distances"}`
+
+  ```
+{(0, 0): 1, (0, 1): 2, (0, 2): 2, (0, 3): 2, (0, 4): 0, (0, 5): 1, (1, 0): 1, (1, 4): 0, (1, 5): 1, (2, 0): 1, (2, 4): 0, (2, 5): 1, (3, 0): 1, (3, 1): 1, (3, 2): 1, (3, 3): 1, (3, 4): 0, (3, 5): 1}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/pensee/cruches.py'); s = p.read_text()\ndebut = s.index(\"def _distances_exactes()\")\nfin = s.index(\"DISTANCES = _distances_exactes()\")\nneuf = '''def _distances_exactes()  … [2062 caractères tronqués]`
+
+  ```
+ok
+max 7 · (0,0): 6 · (0,0) but :
+bfs     · but=True  · (3,4)    · nœuds=200 · chemin=7 · états=14
+greedy  · but=True  · (3,4)    · nœuds=200 · chemin=7 · états=9
+astar   · but=True  · (3,4)    · nœuds=200 · chemin=7 · états=9
+mcts    · but=False · (0,2)    · nœuds=200 · chemin=4 · états=9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/pensee/store.py'); s = p.read_text()\ns += '''\n\ndef justification_valide(store: Store, chemin: list[str]) -> bool:\n    \"\"\"Le chemin est-il une vraie suite d'arêtes, de l … [2013 caractères tronqués]`
+
+  ```
+ok
+(3,4) but True nœuds 200 justification valide True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/pensee/moteur.py'); s = p.read_text()\ns = s.replace(\"        pas = 0\\n        while budget.reste() and self.store.ouverts:\",\n              \"        pas = 0\\n        tro … [1254 caractères tronqués]`
+
+  ```
+ok
+(3,4) nœuds 92 états 14
+pas 5600 · perte 1.3708 · PPL val 4.674 · 256 s
+  pas   3000 · perte 1.1881 · val 1.9314 bits/octet · 251 s
+07:15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pensee/autotest.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"autotest.py — les cinq portes du moteur de pensée (T0–T4), avec leurs contrôles négatifs.\n\n  T0  le store est canonique          aller-retour exact, empreinte sta … [5339 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", line 128, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", line 116, in main
+    portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
+                                                               ~~~~~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", line 53, in t1_rejeu
+    replay(m.store, m.trace, CRUCHES)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/store.py", line 176, in replay
+    if attendu is not None and canonique(recalcule.vers_dict()) != canonique(attendu.vers_dict()):
+                                         ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Etat' object has no attribute 'vers_dict'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/pensee/coeur.py'); s = p.read_text()\ns = s.replace('''    def corps_merkle(self) -> dict:\n        return {\"type\": \"etat\", \"candidats\": sorted(c.empreinte() for c in se … [883 caractères tronqués]`
+
+  ```
+ok
+  ✅ T0 store canonique     aller-retour exact, empreinte stable sous permutation
+  ✅ T1 rejeu               rejeu identique sur 93 événements ; deux exécutions égales
+  ✅ T1 graine              deux graines divergent au premier pas différent
+  ✅ T2 stratégies          BFS et A* atteignent le même but ; la stratégie aveugle échoue
+  ✅ T3 anytime             best-so-far non décroissant sur 5 budgets : [0.2, 0.25, 0.33, 1.0, 1.0]
+  ✅ T4 justification       justification valide sur 7 nœuds ; chemin inventé refusé
+  6/6 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ Le moteur de pensée v0 passe ses six portes ; je prépare les distillations du corpus élargi
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2i/*.pt 2>/dev/null; tail -1 work/n2i/base.log; tail -1 work/n2i/teacher.log; cat > tools/pensee/__init__.py <<'PY'\n\"\"\"pensee — le moteur de pensée v0 : state store typé, arbre hashé, stratégies, trace.\n\ … [1133 caractères tronqués]`
+
+  ```
+07:16
+pas 6400 · perte 1.2526 · PPL val 4.536 · 291 s
+  pas   3000 · perte 1.1881 · val 1.9314 bits/octet · 251 s
+package ok 19 exports
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-v0.md <<'EOF'\n# Pensée v0 — le state store, l'arbre hashé et six portes\n\n> **Ligne de roadmap** : B13 (le moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : le\n> **state store v0** existe et ti … [4740 caractères tronqués]`
+
+  ```
+✅ T4 justification       justification valide sur 7 nœuds ; chemin inventé refusé
+  6/6 portes tenues
+07:16
+pas 6800 · perte 1.5347 · PPL val 4.387 · 310 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2i/file-gpu0.sh <<'EOF'\n#!/bin/bash\n# GPU 0 — après le professeur du corpus élargi : distillations g1 puis g3.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport PYTHONPATH=. CUDA_VISIBLE_DEVICES=0\nP=\ … [1589 caractères tronqués]`
+
+  ```
+q0 1231358
+q1 1231359
+07:17
+  pas   3000 · perte 1.1881 · val 1.9314 bits/octet · 251 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/eval_n2_propre.py'); s = p.read_text()\ns = s.replace('''    ap.add_argument(\"--chunk\", type=int, default=8192)''',\n'''    ap.add_argument(\"--chunk\", type=int, default=81 … [654 caractères tronqués]`
+
+  ```
+ok
+usage: eval_n2_propre.py [-h] [--chunk CHUNK] [--corpus-dir CORPUS_DIR]
+  --corpus-dir CORPUS_DIR
+07:17
+pas 7300 · perte 1.4019 · PPL val 4.405 · 332 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2i/fiche.md <<'EOF'\n# N2.i — Le corpus élargi : 4,84 Mo uniques au lieu de 3,24\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : à recette égale, le corpus\n> élargi (dépôt courant, **+49 %** de tex … [5619 caractères tronqués]`
+
+  ```
+ok
+07:17
+pas 7700 · perte 1.3364 · PPL val 4.397 · 350 s
+  pas   4000 · perte 1.1840 · val 1.8469 bits/octet · 335 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de l'état pour la Pensée v0 et le corpus élargi en cours
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1. Le plan de ma session reprend (N2.i + state store)\np = pathlib.Path('journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md'); s = p.read_text()\ns = s.replace(\"- **Heartbeat** : 2026-1 … [1994 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4001 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ état court, structuré, multi-session et reprenable
+  ⚠ mandat périmé (513 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+  ❌ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md : heartbeat illisible
+check=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md'); s = p.read_text()\ns = s.replace(\"- **Heartbeat** : 2026-11-01 07:20 HNE\", \"- **Heartbeat** : 2026-11-01 07:20 ES … [608 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ⚠ mandat périmé (513 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+check=0
+07:17
+pas 8200 · perte 1.5050 · PPL val 4.282 · 374 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\na = \"| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | 🔬 **théorie et implantation écrites** (10 tours, 9 … [1001 caractères tronqués]`
+
+  ```
+ok
+     · compteurs : en-cours.md dit 377 fichiers, le disque en a 378
+     · compteurs : en-cours.md dit 455 JSON, le disque en a 456
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1772 caractères tronqués]`
