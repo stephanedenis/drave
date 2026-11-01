@@ -3,12 +3,13 @@
  "ligne": "R4.4",
  "nature": "scan RÉEL",
  "reference": "couche OCR du PDF (Internet Archive) — pas une vérité humaine",
- "source": "Voyage au centre de la terre, Internet Archive voyageaucentrede00vernuoft (LuraDocument, 300 dpi)",
+ "source": "Voyage au centre de la terre — Internet Archive voyageaucentrede00vernuoft, scan 300 dpi",
  "agregat": {
   "pages": 10,
   "mots_reference": 4494,
   "wer": 0.071,
   "wer_brut": 0.0705,
+  "rappel": 0.9372,
   "confiance": 91.1
  },
  "pages": [
@@ -18,6 +19,8 @@
    "mots_ocr": 476,
    "wer": 0.0768,
    "wer_brut": 0.0768,
+   "rappel": 0.9253,
+   "precision": 0.937,
    "confiance": 89.9,
    "trace": [
     "recadrage"
@@ -29,6 +32,8 @@
    "mots_ocr": 381,
    "wer": 0.0731,
    "wer_brut": 0.0731,
+   "rappel": 0.9269,
+   "precision": 0.9318,
    "confiance": 92.4,
    "trace": [
     "recadrage"
@@ -40,6 +45,8 @@
    "mots_ocr": 547,
    "wer": 0.08,
    "wer_brut": 0.0782,
+   "rappel": 0.9218,
+   "precision": 0.9269,
    "confiance": 90.6,
    "trace": [
     "recadrage"
@@ -51,6 +58,8 @@
    "mots_ocr": 460,
    "wer": 0.0821,
    "wer_brut": 0.0821,
+   "rappel": 0.9201,
+   "precision": 0.9261,
    "confiance": 91.1,
    "trace": [
     "recadrage"
@@ -62,6 +71,8 @@
    "mots_ocr": 411,
    "wer": 0.0799,
    "wer_brut": 0.0799,
+   "rappel": 0.9274,
+   "precision": 0.9319,
    "confiance": 90.2,
    "trace": [
     "recadrage"
@@ -73,6 +84,8 @@
    "mots_ocr": 462,
    "wer": 0.0452,
    "wer_brut": 0.0452,
+   "rappel": 0.9613,
+   "precision": 0.9675,
    "confiance": 92.0,
    "trace": [
     "recadrage"
@@ -84,6 +97,8 @@
    "mots_ocr": 411,
    "wer": 0.0725,
    "wer_brut": 0.07,
+   "rappel": 0.942,
+   "precision": 0.9489,
    "confiance": 90.0,
    "trace": [
     "recadrage"
@@ -95,6 +110,8 @@
    "mots_ocr": 468,
    "wer": 0.0425,
    "wer_brut": 0.0425,
+   "rappel": 0.9575,
+   "precision": 0.9637,
    "confiance": 91.6,
    "trace": [
     "recadrage"
@@ -106,6 +123,8 @@
    "mots_ocr": 404,
    "wer": 0.0931,
    "wer_brut": 0.0931,
+   "rappel": 0.9461,
+   "precision": 0.9554,
    "confiance": 91.9,
    "trace": [
     "recadrage"
@@ -117,11 +136,13 @@
    "mots_ocr": 440,
    "wer": 0.0674,
    "wer_brut": 0.0674,
+   "rappel": 0.9461,
+   "precision": 0.9568,
    "confiance": 91.1,
    "trace": [
     "recadrage"
    ]
   }
  ],
- "dispositif": "outils de R4.4 (simuler_scan, nettoyer_scan, mesurer_scans, mesurer_colonnes, mesurer_tables, mesurer_reel)"
+ "dispositif": "tools/mesurer_reel.py (couche OCR du PDF comme référence, dite comme telle)"
 }

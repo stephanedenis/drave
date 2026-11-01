@@ -120,24 +120,30 @@ La détection de grille par **continuité** (plus longue suite de pixels d'un tr
 la trouver sur un scan bruité ; un simple comptage de pixels sombres prenait les lignes de texte
 denses pour des traits et décalait toutes les lignes (mesuré : 56 mots lus au lieu de 86).
 
-## 5. Le vrai scan : 7,10 % d'accord avec la couche OCR d'Internet Archive
+## 5. Les vrais scans : 7,10 % sur un texte, 88,5 % de mots retrouvés sur un second
 
-Un PDF **réellement scanné** — Jules Verne, *Voyage au centre de la terre*, Internet Archive
-`voyageaucentrede00vernuoft`, scan LuraDocument 300 dpi — et sa **couche texte** comme référence,
-page par page, même page. 10 pages, 4 494 mots de référence :
+Deux PDF **réellement scannés** d'Internet Archive, leur **couche texte** comme référence, page par
+page, même page. La référence est un **autre moteur**, pas une vérité humaine : les chiffres sont
+des **accords entre moteurs**, pas des exactitudes.
 
-| mesure | valeur |
-|---|---:|
-| WER vs couche OCR d'IA | **7,10 %** |
-| WER sans prétraitement | 7,05 % |
-| confiance moyenne | 91,1 |
-| pages | 30, 50, 70, 90, 110, 130, 150, 170, 190, 210 |
+| livre | pages | WER | rappel multiensemble | confiance |
+|---|---:|---:|---:|---:|
+| *Voyage au centre de la terre* (`voyageaucentrede00vernuoft`) | 10 | **7,10 %** | **93,72 %** | 91,1 |
+| *Vingt mille lieues sous les mers*, 1902 (`vingtmillelieu00vern`) | 10 | **23,27 %** | **88,53 %** | 89,2 |
 
-**Ce que ce chiffre vaut, et ce qu'il ne vaut pas.** La référence est un **autre moteur**, pas une
-vérité humaine : 7,10 % est un **accord entre moteurs** sur un vrai scan, pas une exactitude. Ce
-qu'il prouve : la chaîne tourne sur du papier réel, et le prétraitement n'y dégrade rien (il est
-neutre, à −0,05 point). Un scan de bibliothèque est propre : c'est la photo de téléphone qui pose
-problème, et c'est là que la correction d'éclairage paie.
+Le second livre est le cas intéressant : son WER est **23,3 %** mais son **rappel multiensemble**
+est **88,5 %** — les mots sont lus, c'est l'**ordre** qui diffère. La raison est nommée : plusieurs
+pages sont des **lexiques à deux colonnes** ; la couche OCR de référence lit les lignes
+**entrelacées** (ordre visuel), notre lecteur lit la **colonne gauche puis la droite**. Le WER
+compte ce désaccord d'ordre, le rappel ne le compte pas. C'est la capacité « colonnes » qui
+fonctionne — contre une référence qui, elle, ne la fait pas. Les deux chiffres sont publiés
+ensemble, et la page la plus faible (rappel 71,2 %, une planche illustrée) est dans le JSON.
+
+**Ce que ces chiffres valent.** La chaîne tourne sur du papier réel ; le prétraitement y est neutre
+(7,05 % brut contre 7,10 % nettoyé) parce qu'un scan de bibliothèque est propre — c'est la photo de
+téléphone qui pose problème, et c'est là que la correction d'éclairage paie. Un seul des deux
+livres est de la prose pure : le second prouve la lecture par colonnes, pas la reconnaissance sur
+des pages illustrées.
 
 ## 6. Le second moteur : un contrôle, pas un candidat
 
@@ -208,8 +214,8 @@ robuste** du lecteur : cinq familles de dégradation, un split dev/test qui tran
 - **Le corpus est le mien** : cinq familles choisies et réglées par moi ; une vraie photocopie de
   ces pages aurait d'autres défauts (agrafe, recto-verso, couleur).
 - **Les seuils sont postérieurs** à la mesure : bornes de non-régression, pas prédictions.
-- **La référence réelle est un OCR** : 7,10 % est un accord, pas une vérité ; un seul livre, une
-  seule édition.
+- **La référence réelle est un OCR** : 7,10 % et 88,5 % sont des accords, pas des vérités ; deux
+  livres, deux éditions, dont un avec des lexiques à deux colonnes.
 - **Les questions sont gabarits** (le premier nombre du passage) : les appels de note y jouent un
   rôle démesuré ; un banc de paraphrases dirait autre chose.
 - **Les tableaux synthétiques** ont des traits nets : un tableau sans traits (aligné par espaces)
@@ -226,6 +232,7 @@ robuste** du lecteur : cinq familles de dégradation, un split dev/test qui tran
   [`mesurer_tables.py`](../tools/mesurer_tables.py), [`mesurer_reel.py`](../tools/mesurer_reel.py).
 - Porte : [`porte-ocr-scans.sh`](../tools/porte-ocr-scans.sh).
 - JSON : [`r44-scans.json`](r44-scans.json) · [`r44-colonnes.json`](r44-colonnes.json) ·
-  [`r44-tableaux.json`](r44-tableaux.json) · [`r44-reel.json`](r44-reel.json).
+  [`r44-tableaux.json`](r44-tableaux.json) · [`r44-reel.json`](r44-reel.json) ·
+  [`r44-reel-second.json`](r44-reel-second.json).
 - Spécification : [`docs/implantation/encodeur-visuel.md`](../docs/implantation/encodeur-visuel.md).
 - Ligne de roadmap : **R4.4** (programme R).

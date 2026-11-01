@@ -63,6 +63,11 @@ def mesure(pdf: pathlib.Path, page: int) -> dict:
     ref = mesurer_ocr.jetons(reference(pdf, page))
     m = mesurer_scans.manifeste_ocr(chemin, "fra", exposants=True, colonnes=True)
     hyp = mesurer_ocr.jetons(mesurer_ocr.texte_du_manifeste(m))
+    # le RAPPEL MULTIENSEMBLE ne dépend pas de l'ordre : sur une page à deux colonnes, la
+    # couche de référence peut lire en lignes entrelacées et notre lecteur par colonne — le WER
+    # compte alors un désaccord d'ORDRE, pas de reconnaissance. Les deux chiffres sont dits.
+    from collections import Counter
+    commun = sum((Counter(ref) & Counter(hyp)).values())
     # contrôle : la même page sans prétraitement (l'écart dit ce que le nettoyage apporte
     # sur un scan réel — parfois rien, et c'est une information)
     m_brut = mesurer_scans.manifeste_ocr(png, "fra", exposants=True, colonnes=True)
@@ -70,6 +75,8 @@ def mesure(pdf: pathlib.Path, page: int) -> dict:
     return {"page": page, "mots_reference": len(ref), "mots_ocr": len(hyp),
             "wer": round(mesurer_ocr.wer(ref, hyp) / max(len(ref), 1), 4),
             "wer_brut": round(mesurer_ocr.wer(ref, hyp_brut) / max(len(ref), 1), 4),
+            "rappel": round(commun / max(len(ref), 1), 4),
+            "precision": round(commun / max(len(hyp), 1), 4),
             "confiance": mesurer_ocr.confiance_moyenne(m),
             "trace": trace}
 
@@ -79,6 +86,7 @@ def agrege(lignes: list[dict]) -> dict:
     return {"pages": len(lignes), "mots_reference": mots,
             "wer": round(sum(round(l["wer"] * l["mots_reference"]) for l in lignes) / max(mots, 1), 4),
             "wer_brut": round(sum(round(l["wer_brut"] * l["mots_reference"]) for l in lignes) / max(mots, 1), 4),
+            "rappel": round(sum(round(l["rappel"] * l["mots_reference"]) for l in lignes) / max(mots, 1), 4),
             "confiance": round(sum(l["confiance"] * l["mots_reference"] for l in lignes) / max(mots, 1), 1)}
 
 
@@ -94,7 +102,8 @@ def main() -> int:
         ligne = mesure(args.pdf, page)
         lignes.append(ligne)
         print(f"  page {page:3d} · WER {ligne['wer']:6.2%} (brut {ligne['wer_brut']:6.2%}) "
-              f"· conf {ligne['confiance']:5.1f} · {ligne['mots_reference']} mots", flush=True)
+              f"· rappel {ligne['rappel']:6.2%} · conf {ligne['confiance']:5.1f} "
+              f"· {ligne['mots_reference']} mots", flush=True)
     resultat = {"date": "2026-10-31", "ligne": "R4.4", "nature": "scan RÉEL",
                 "reference": "couche OCR du PDF (Internet Archive) — pas une vérité humaine",
                 "source": "Voyage au centre de la terre, Internet Archive "
@@ -105,7 +114,8 @@ def main() -> int:
                            encoding="utf-8")
     a = resultat["agregat"]
     print(f"\n  {a['pages']} pages · WER {a['wer']:.2%} nettoyé · {a['wer_brut']:.2%} brut "
-          f"· confiance {a['confiance']:.1f} → {args.sortie}")
+          f"· rappel multiensemble {a['rappel']:.2%} · confiance {a['confiance']:.1f} "
+          f"→ {args.sortie}")
     return 0
 
 

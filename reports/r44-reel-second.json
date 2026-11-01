@@ -1,0 +1,158 @@
+{
+ "date": "2026-10-31",
+ "ligne": "R4.4",
+ "nature": "scan RÉEL",
+ "reference": "couche OCR du PDF (Internet Archive) — pas une vérité humaine",
+ "source": "Vingt mille lieues sous les mers (1902) — Internet Archive vingtmillelieu00vern, scan 300 dpi",
+ "agregat": {
+  "pages": 10,
+  "mots_reference": 2686,
+  "wer": 0.2327,
+  "wer_brut": 0.2301,
+  "rappel": 0.8853,
+  "confiance": 89.2
+ },
+ "pages": [
+  {
+   "page": 40,
+   "mots_reference": 303,
+   "mots_ocr": 295,
+   "wer": 0.1287,
+   "wer_brut": 0.1287,
+   "rappel": 0.901,
+   "precision": 0.9254,
+   "confiance": 91.1,
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ]
+  },
+  {
+   "page": 60,
+   "mots_reference": 246,
+   "mots_ocr": 243,
+   "wer": 0.0935,
+   "wer_brut": 0.0976,
+   "rappel": 0.9065,
+   "precision": 0.9177,
+   "confiance": 90.7,
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ]
+  },
+  {
+   "page": 80,
+   "mots_reference": 278,
+   "mots_ocr": 268,
+   "wer": 0.1223,
+   "wer_brut": 0.1331,
+   "rappel": 0.8921,
+   "precision": 0.9254,
+   "confiance": 92.2,
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ]
+  },
+  {
+   "page": 100,
+   "mots_reference": 255,
+   "mots_ocr": 246,
+   "wer": 0.098,
+   "wer_brut": 0.098,
+   "rappel": 0.9098,
+   "precision": 0.9431,
+   "confiance": 91.6,
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ]
+  },
+  {
+   "page": 120,
+   "mots_reference": 279,
+   "mots_ocr": 266,
+   "wer": 0.1183,
+   "wer_brut": 0.1219,
+   "rappel": 0.8961,
+   "precision": 0.9398,
+   "confiance": 92.3,
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ]
+  },
+  {
+   "page": 140,
+   "mots_reference": 306,
+   "mots_ocr": 297,
+   "wer": 0.1405,
+   "wer_brut": 0.1242,
+   "rappel": 0.8987,
+   "precision": 0.9259,
+   "confiance": 91.1,
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ]
+  },
+  {
+   "page": 160,
+   "mots_reference": 267,
+   "mots_ocr": 256,
+   "wer": 0.3034,
+   "wer_brut": 0.2921,
+   "rappel": 0.7116,
+   "precision": 0.7422,
+   "confiance": 80.9,
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ]
+  },
+  {
+   "page": 180,
+   "mots_reference": 248,
+   "mots_ocr": 248,
+   "wer": 0.6129,
+   "wer_brut": 0.621,
+   "rappel": 0.8871,
+   "precision": 0.8871,
+   "confiance": 86.2,
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ]
+  },
+  {
+   "page": 200,
+   "mots_reference": 254,
+   "mots_ocr": 254,
+   "wer": 0.1693,
+   "wer_brut": 0.1299,
+   "rappel": 0.9528,
+   "precision": 0.9528,
+   "confiance": 87.6,
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ]
+  },
+  {
+   "page": 210,
+   "mots_reference": 250,
+   "mots_ocr": 249,
+   "wer": 0.608,
+   "wer_brut": 0.624,
+   "rappel": 0.9,
+   "precision": 0.9036,
+   "confiance": 87.7,
+   "trace": [
+    "recadrage",
+    "echelle(1800)"
+   ]
+  }
+ ],
+ "dispositif": "tools/mesurer_reel.py (couche OCR du PDF comme référence, dite comme telle)"
+}

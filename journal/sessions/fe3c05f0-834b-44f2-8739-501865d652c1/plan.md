@@ -65,7 +65,7 @@ rendus vectoriels. Trois idées portent le programme :
 | 6 | **colonnes** : gouttière verticale, ordre de lecture | pages 2 colonnes synthétiques | ✅ **89,4 → 0,5 %** de WER |
 | 7 | **tables** : mots → lignes/colonnes → cellules | exactitude de cellules | ✅ **92,6 %** (propre), **69,1 %** (photocopie) |
 | 8 | **second moteur** : RapidOCR (ONNX, CPU) comparé | un tableau, un verdict | ✅ contrôle : 3 à 10× pire sur le français |
-| 9 | **scan réel** : Internet Archive + couche OCR | un accord entre moteurs, dit comme tel | ✅ **7,10 %** sur 10 pages |
+| 9 | **scan réel** : Internet Archive + couche OCR | un accord entre moteurs, dit comme tel | ✅ **7,10 %** (Verne 1) et **88,5 % de rappel** (Verne 2, lexiques à 2 colonnes) |
 | 10 | **consolidation** : porte `porte-ocr-scans`, fiche, spec, roadmap, journal | commit | ✅ fait |
 
 ## Ce que les autres sessions peuvent réutiliser

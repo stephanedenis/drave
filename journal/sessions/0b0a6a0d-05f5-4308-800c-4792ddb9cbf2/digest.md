@@ -6242,3 +6242,10 @@ ok
 pas   750 · seq 129 · perte 45.7731 · PPL 128/4 3.1869 · 53 s
   ```
 
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt | tr '\\n' ' '; echo; for f in R-pos-g1 R-pos-g2; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Wait 30 minutes for random positions", "run_in_background":  … [5 caractères tronqués]`
+
+  ```
+started background job bash-341
+  ```
+
+- **job_output** `{"job_id": "bash-341", "timeout_ms": 1800000, "wait": true}`

@@ -6886,3 +6886,209 @@ journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns2=re.sub(r\"\\*\\*Mis à jour : [^*]+\\*\\*\", \"**Mis à jour : 2026-11-01, 00 h 25 HAE (heure locale, EST).**\", s, count=1)\nassert s2!=s\np.write_text(s2)\nprint(re.search(r\"\\*\\*Mis  … [519 caractères tronqués]`
+
+  ```
+**Mis à jour : 2026-11-01, 00 h 25 HAE (heure locale, EST).**
+[master a9211299] ÉTAT — LA PAGE VIVANTE PASSE AU 1er NOVEMBRE : LA REVUE EXIGE LA DATE DU DERNIER COMMIT
+ 10 files changed, 256 insertions(+), 24 deletions(-)
+ create mode 100644 journal/2026-11-01/mesures.md
+  revue de documentation · 372 fiche(s) · 445 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[revue 0]
+[tableaux 0]
+  ✅ 1289 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-01)
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/advancedsearch.php?q=title%3A%28vingt+mille+lieues%29+AND+language%3Afre&fl%5B%5D=identifier&fl%5B%5D=year&fl%5B%5D=title&rows=6&output=json\" | python3 -c \"import json,sys;d=json.load(sys.stdin);[print(x) for x in d['response']['docs']]\" 2>&1  … [148 caractères tronqués]`
+
+  ```
+{'identifier': 'vingtmillelieues0000vern_g3v9', 'title': 'Vingt mille lieues sous les mers', 'year': 1982}
+{'identifier': 'vingtmillelieues0000vern', 'title': 'Vingt mille lieues sous les mers', 'year': 2001}
+{'identifier': 'vingtmillelieues0000vern_n6p5', 'title': 'Vingt mille lieues sous la mer', 'year': 2008}
+{'identifier': 'vingtmillelieu00vern', 'title': 'Vingt mille lieues sous les mers', 'year': 1902}
+{'identifier': 'vingt_mille_lieues_sous_les_mers_adaptation', 'title': 'Vingt mille lieues sous les mers adaptation', 'year': 2020}
+{'identifier': 'verne-vingt-mille-lieues-sous-les-mers', 'title': 'Vingt Mille Lieues Sous Les Mers. Jules Verne'}
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/metadata/vingtmillelieu00vern\" | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nm=d.get('metadata',{}); print('titre',m.get('title'),'| langue',m.get('language'),'| date',m.get('date'))\nfor f in d.get('files',[]):\n    n=f['name']\n    … [239 caractères tronqués]`
+
+  ```
+titre Vingt mille lieues sous les mers | langue fre | date 1902
+vingtmillelieu00vern.pdf 11146603
+vingtmillelieu00vern_djvu.txt 377747
+  ```
+
+- **bash** `{"command": "set -e\ncd work/r44/reel\n[ -s verne2.pdf ] || curl -sSL -o verne2.pdf \"https://archive.org/download/vingtmillelieu00vern/vingtmillelieu00vern.pdf\"\npdfinfo verne2.pdf | grep -E \"Pages|Page size\"\ncd ../../..\ntimeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/verne2.pdf … [271 caractères tronqués]`
+
+  ```
+[stderr]
+Syntax Warning: May not be a PDF file (continuing anyway)
+Syntax Error (2): Illegal character <68> in hex string
+Syntax Error (3): Illegal character <74> in hex string
+Syntax Error (4): Illegal character <6d> in hex string
+Syntax Error (5): Illegal character <6c> in hex string
+Syntax Error (10): Illegal character <68> in hex string
+Syntax Error (16): Illegal character <74> in hex string
+Syntax Error (17): Illegal character <69> in hex string
+Syntax Error (18): Illegal character <74> in hex string
+Syntax Error (19): Illegal character <6c> in hex string
+Syntax Error: Couldn't find trailer dictionary
+Syntax Error: Couldn't find trailer dictionary
+Syntax Error: Couldn't read xref table
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd work/r44/reel; ls -la verne2.pdf; head -c 200 verne2.pdf; echo; timeout 60 curl -sSI \"https://archive.org/download/vingtmillelieu00vern/vingtmillelieu00vern.pdf\" | head -5", "description": "Diagnose second book download", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/ste … [22 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 170  1 nov 00:25 verne2.pdf
+<html>
+<head><title>500 Internal Server Error</title></head>
+<body>
+<center><h1>500 Internal Server Error</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+HTTP/2 302 
+server: nginx/1.31.3
+date: Sun, 01 Nov 2026 04:25:16 GMT
+content-type: text/html; charset=UTF-8
+location: https://dn721908.ca.archive.org/0/items/vingtmillelieu00vern/vingtmillelieu00vern.pdf
+  ```
+
+- **bash** `{"command": "cd work/r44/reel\nfor f in vingtmillelieu00vern.pdf vingtmillelieu00vern_bw.pdf; do\n  timeout 120 curl -sSL -A \"Mozilla/5.0\" -o verne2.tmp \"https://archive.org/download/vingtmillelieu00vern/$f\" && \\\n  if head -c 4 verne2.tmp | grep -q \"%PDF\"; then mv verne2.tmp verne2.pdf; echo … [305 caractères tronqués]`
+
+  ```
+OK vingtmillelieu00vern.pdf 11146603
+-rw-r--r--. 1 stephane stephane 11146603  1 nov 00:25 verne2.pdf
+%PDF-1.5
+  ```
+
+- **bash** `{"command": "pdfinfo work/r44/reel/verne2.pdf | grep -E \"Pages|Page size\"; timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/verne2.pdf --pages 40,60,80,100,120,140,160,180,200,220 --sortie work/r44/reel2.json 2>&1 | tail -13; echo \"[code ${PIPESTATUS[0]}]\"", "description": "Measure … [111 caractères tronqués]`
+
+  ```
+Pages:           216
+Page size:       276.9 x 438.192 pts
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_reel.py", line 57, in mesure
+    png = rendu(pdf, page)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_reel.py", line 44, in rendu
+    subprocess.run(["pdftoppm", "-r", "300", "-f", str(page), "-l", str(page),
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    "-singlefile", "-png", str(pdf), str(png.with_suffix(""))],
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                   check=True, capture_output=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['pdftoppm', '-r', '300', '-f', '220', '-l', '220', '-singlefile', '-png', 'work/r44/reel/verne2.pdf', '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/reel/verne2-p220']' returned non-zero exit status 99.
+[code 1]
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/verne2.pdf --pages 40,60,80,100,120,140,160,180,200,210 --sortie work/r44/reel2.json 2>&1 | tail -13; echo \"[code ${PIPESTATUS[0]}]\"", "description": "Measure second book within page range", "timeoutMs": 1800000, "workdir" … [52 caractères tronqués]`
+
+  ```
+page  40 · WER 12.87% (brut 12.87%) · conf  91.1 · 303 mots
+  page  60 · WER  9.35% (brut  9.76%) · conf  90.7 · 246 mots
+  page  80 · WER 12.23% (brut 13.31%) · conf  92.2 · 278 mots
+  page 100 · WER  9.80% (brut  9.80%) · conf  91.6 · 255 mots
+  page 120 · WER 11.83% (brut 12.19%) · conf  92.3 · 279 mots
+  page 140 · WER 14.05% (brut 12.42%) · conf  91.1 · 306 mots
+  page 160 · WER 30.34% (brut 29.21%) · conf  80.9 · 267 mots
+  page 180 · WER 61.29% (brut 62.10%) · conf  86.2 · 248 mots
+  page 200 · WER 16.93% (brut 12.99%) · conf  87.6 · 254 mots
+  page 210 · WER 60.80% (brut 62.40%) · conf  87.7 · 250 mots
+
+  10 pages · WER 23.27% nettoyé · 23.01% brut · confiance 89.2 → work/r44/reel2.json
+[code 0]
+  ```
+
+- **bash** `{"command": "cd work/r44/reel; pdftotext -f 180 -l 180 -layout verne2.pdf - | head -12; echo \"=== ocr\"; python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport mesurer_scans as ms, mesurer_ocr as mo\np=pathlib.Path('work/r44/reel/verne2-p180-net.png')\nif p.exists():\n    m=ms.man … [538 caractères tronqués]`
+
+  ```
+I/O                           VOCABULARY
+
+envie,/., longing, wish, désire.        esprit, m., mind, spirit.
+environ, about.                         essayer, to try, feel.
+environs, m. pL, vicinity, envi-        est, w., East.
+  rons.                                 estimer, to estimate, value,
+envoyer, to send.                       établir, to establish, fix, make.
+épais, -se, thick, heavy.               étanche, water-tight.
+épaisseur,/., thickness.                état, m., State, condition.
+épargner, to spare, save.               Etats-Unis, 7n.pi., United States,
+épars, -e, scattered,                   éteindre, to extinguish ; s* — , to
+épaté, -€, flat.
+=== ocr
+=== stats
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+ModuleNotFoundError: No module named 'mesurer_scans'
+Traceback (most recent call last):
+  File "<string>", line 4, in <module>
+    im=Image.open(f'work/r44/reel/verne2-p{page}.png').convert('L'); a=np.asarray(im)
+       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/site-packages/PIL/Image.py", line 3654, in open
+    fp = builtins.open(filename, "rb")
+FileNotFoundError: [Errno 2] No such file or dir
+… [54 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_reel.py'); s=p.read_text()\ns=s.replace('''    ref = mesurer_ocr.jetons(reference(pdf, page))\n    m = mesurer_scans.manifeste_ocr(chemin, \"fra\", exposants=True, colonnes=True)\n    hyp = mesurer_ocr.jetons(mesurer_ocr.te … [3712 caractères tronqués]`
+
+  ```
+rappel multiensemble ajouté
+  page  40 · WER 12.87% (brut 12.87%) · rappel 90.10% · conf  91.1 · 303 mots
+  page  60 · WER  9.35% (brut  9.76%) · rappel 90.65% · conf  90.7 · 246 mots
+  page  80 · WER 12.23% (brut 13.31%) · rappel 89.21% · conf  92.2 · 278 mots
+  page 100 · WER  9.80% (brut  9.80%) · rappel 90.98% · conf  91.6 · 255 mots
+  page 120 · WER 11.83% (brut 12.19%) · rappel 89.61% · conf  92.3 · 279 mots
+  page 140 · WER 14.05% (brut 12.42%) · rappel 89.87% · conf  91.1 · 306 mots
+  page 160 · WER 30.34% (brut 29.21%) · rappel 71.16% · conf  80.9 · 267 mots
+  page 180 · WER 61.29% (brut 62.10%) · rappel 88.71% · conf  86.2 · 248 mots
+  page 200 · WER 16.93% (brut 12.99%) · rappel 95.28% · conf  87.6 · 254 mots
+  page 210 · WER 60.80% (brut 62.40%) · rappel 90.00% · conf  87.7 · 250 mots
+
+  10 pages · WER 23.27% nettoyé · 23.01% brut · rappel multiensemble 88.53% · confiance 89.2 → work/r44/reel2.json
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/livre.pdf --pages 30,50,70,90,110,130,150,170,190,210 --sortie work/r44/reel.json 2>&1 | tail -12; python3 - <<'PY'\nimport json,pathlib\ndef copie(src,dst,source):\n    d=json.loads(pathlib.Path(src).read_text()); d['source … [685 caractères tronqués]`
+
+  ```
+page  30 · WER  7.68% (brut  7.68%) · rappel 92.53% · conf  89.9 · 482 mots
+  page  50 · WER  7.31% (brut  7.31%) · rappel 92.69% · conf  92.4 · 383 mots
+  page  70 · WER  8.00% (brut  7.82%) · rappel 92.18% · conf  90.6 · 550 mots
+  page  90 · WER  8.21% (brut  8.21%) · rappel 92.01% · conf  91.1 · 463 mots
+  page 110 · WER  7.99% (brut  7.99%) · rappel 92.74% · conf  90.2 · 413 mots
+  page 130 · WER  4.52% (brut  4.52%) · rappel 96.13% · conf  92.0 · 465 mots
+  page 150 · WER  7.25% (brut  7.00%) · rappel 94.20% · conf  90.0 · 414 mots
+  page 170 · WER  4.25% (brut  4.25%) · rappel 95.75% · conf  91.6 · 471 mots
+  page 190 · WER  9.31% (brut  9.31%) · rappel 94.61% · conf  91.9 · 408 mots
+  page 210 · WER  6.74% (brut  6.74%) · rappel 94.61% · conf  91.1 · 445 mots
+
+  10 pages · WER 7.10% nettoyé · 7.05% brut · rappel multiensemble 93.72% · confiance 91.1 → work/r44/reel.json
+reports/r44-reel.json ok
+reports/r44-reel-second.json ok
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-r44-scans.md'); s=p.read_text()\nold='''## 5. Le vrai scan : 7,10 % d'accord avec la couche OCR d'Internet Archive\n\nUn PDF **réellement scanné** — Jules Verne, *Voyage au centre de la terre*, Internet Archive\n`voyageau … [3539 caractères tronqués]`
+
+  ```
+fiche : second livre ajouté
+47:- **Ce qu'elle fait** : photo **55,9 → 7,0 %**, préservation **86,7 %**, colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrai scan **7,10 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+81:  tableaux **92,6 %**, vrai scan **7,10 %** ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"tableaux **92,6 %**, vrai scan **7,10 %** — [`r44-scans`]\",\"tableaux **92,6 %**, vrais scans **7,10 / 88,5 %** — [`r44-scans`]\")\ns=s.replace(\"tableaux **92,6 %**, vrai scan … [1534 caractères tronqués]`
+
+  ```
+en-cours ajusté
+mots 1624 T0 3958
+  en-cours · 1624 mots · 7 sections · 3 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+plan actualisé
+  ```
+
+- **bash** `{"command": "cat > /tmp/msg-reel2.txt <<'EOF'\nR4.4 — UN SECOND VRAI SCAN : 23,3 % DE WER MAIS 88,5 % DES MOTS — C'EST L'ORDRE DES COLONNES\n\nLa validation réelle ne tenait qu'un livre de prose. Le second — *Vingt mille lieues sous les\nmers*, édition 1902, Internet Archive — donne un WER de **23,2 … [1546 caractères tronqués]`

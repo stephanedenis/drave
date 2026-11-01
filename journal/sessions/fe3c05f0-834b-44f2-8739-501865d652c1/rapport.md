@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 6.8 h |
+| Durée | 6.9 h |
 | Tours | 2 |
-| Messages | 371 |
-| Appels d'outils | 386 |
+| Messages | 384 |
+| Appels d'outils | 399 |
 | Fichiers touchés | 18 |
-| Commandes | 329 |
+| Commandes | 342 |
 | Sous-agents | 0 |
-| Commits | 7 |
+| Commits | 8 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*201 appels d'outils.* Actions notables :
+*214 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,7 +101,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 172 autres
+- … et 185 autres
 
 **Synthèse produite :**
 
@@ -174,7 +174,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 289 autres
+- … et 302 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -302,7 +302,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ## 5. Erreurs rencontrées
 
-14 sorties en erreur ou divergentes. Les premières :
+16 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -318,6 +318,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T2** : [stderr] Traceback (most recent call last):   File "<stdin>", line 19, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/graphe_document_ocr.py", line 359, in manifeste     blo
 - **T2** : === reports/r44-scans.json   fax|dev|auto {'wer': 0.219, 'preservation': 0.5333, 'confiance': 77.1}   fax|test|auto {'wer': 0.1552, 'preservation': None, 'confiance': 81.3}   papier|dev|auto {'wer': 0
 - **T2** : 606803       10:43  0.0 bash -c cat > tools/porte-ocr-scans.sh <<'EOF' #!/bin/bash # porte-ocr-scans.sh — R4.4 : les scans (5 familles), les colonnes, les tableaux. # # POURQUOI CETTE PORTE EXISTE. La
+- **T2** : [stderr] Syntax Warning: May not be a PDF file (continuing anyway) Syntax Error (2): Illegal character <68> in hex string Syntax Error (3): Illegal character <74> in hex string Syntax Error (4): Illeg
 
 ## 6. Commits
 
@@ -328,4 +329,5 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - cat > /tmp/msg-r44-scans.txt <<'EOF' R4.4 — LES SCANS : LA PHOTO PASSE DE 55,9 % À 7,0 % DE WER, LES COLONNES DE 89 % À 0,5 %, UN VRAI LIVRE TIENT 7,10 %  La li
 - ÉTAT — LA PAGE VIVANTE PASSE AU 1er NOVEMBRE : LA REVUE EXIGE LA DATE DU DERNIER COMMIT" 2>&1 | tail -3 python3 tools/revue_documentation.py 2>&1 | tail -2; ech
 - ÉTAT — LA PAGE VIVANTE PASSE AU 1er NOVEMBRE : LA REVUE EXIGE LA DATE DU DERNIER COMMIT" 2>&1 | tail -3 python3 tools/revue_documentation.py 2>&1 | tail -2; ech
+- cat > /tmp/msg-reel2.txt <<'EOF' R4.4 — UN SECOND VRAI SCAN : 23,3 % DE WER MAIS 88,5 % DES MOTS — C'EST L'ORDRE DES COLONNES  La validation réelle ne tenait qu
 
