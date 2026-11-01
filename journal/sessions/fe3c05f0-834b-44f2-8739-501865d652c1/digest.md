@@ -12344,3 +12344,61 @@ journal : inventaire ajouté
   ```
 
 - **bash** `{"command": "for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_etat_a_jour.py\"; do time … [2085 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py [0]   ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocab
+python3 tools/taille_documents.py  [0]   ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+python3 tools/verifie_en_cours.py  [0]   ✅ état court, structuré, multi-session et reprenable
+python3 tools/verifie_journal.py   [0]   ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+python3 tools/verifie_backlog.py   [0] ✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+python3 tools/verifier_schemas.py  [0]      sources et images relatives.
+python3 tools/verifie_etat_a_jour.py [0]   ✅ aucun fait commité après le dernier état
+ create mode 100644 reports/inventaire-donnees-entrainement.json
+ create mode 100644 reports/inventaire-donnees-entrainement.md
+1c9d3d26 DONNÉES — L'INVENTAIRE LOCAL : 132 GO DE WIKIPÉDIA, 228 GO DE DOCUMENTS, 2,8 TO DE VIDÉOS QUI NE SONT PAS DU TEXTE
+  ```
+
+### 🤖 Assistant
+
+⏵ Inventaire local terminé et committé
+
+J'ai fait le tour du disque et écrit l'inventaire : **59 entrées** avec taille, format, rôle, état, dans `reports/inventaire-donnees-entrainement.json`, et une fiche lisible : `reports/inventaire-donnees-entrainement.md`. Commit `1c9d3d26`, toutes les revues passent.
+
+## Le disque, en grand
+
+| volume | taille | utilisé | libre |
+|---|---:|---:|---:|
+| `/home/stephane/Data13TB` (btrfs) | 11 To | **8,9 To** | 2,0 To |
+| `/home/stephane/IA` (RAID ext4) | 938 Go | **895 Go — 97 %** | **34 Go** |
+| `/` (NVMe) | 828 Go | 121 Go | 706 Go |
+
+Le point de vigilance immédiat : **IA est presque plein** (34 Go libres), et c'est là que vivent les modèles.
+
+## Le texte déjà là
+
+- **Wikipédia : 132 Go**, 10 langues — bases sqlite v14 (66 Go) + dumps `xml.bz2` (67 Go). **Français : 7,25 Go de base + 7,13 Go de dump.**
+- **`corpus/wiki_apparie` : 12 Go** d'articles Wikipédia en texte brut (6 084 fichiers, de/en/fr/es/it…), appariés par titre — recoupe les dumps, à dédoublonner.
+- **Corpus du dépôt `data/` : 6,6 Go** — 15,5 M mots anglais, 18,7 M multilingues, 2,76 M de littérature française, 0,79 M de français local, 1,01 M de prose du dépôt.
+- **Corpus propres déjà préparés** : `corpus_propre` (3,24 Mo train), `corpus_litt_propre` (15,3 Mo), `corpus_repo_propre` (4,84 Mo), avec splits et **contamination 0/2 814** mesurée.
+- Traduction : MultiUN 1,2 Go, OpenSubtitles 1,2 Go, WikiMatrix 326 Mo, TED2020 109 Mo, JRC 48 Mo, EUR-Lex 10 Mo. SFT : 2 000 consignes FR, paires de raisonnement, distillations DeepSeek. UDHR 28 Mo, textes parallèles 261 Mo.
+
+## À extraire, et à exclure
+
+- **~228 Go de documents** : `Biblio_large` 22 Go (2 345 Kindle **kfx-zip DRM** + 104 PDF + 87 xhtml), `CEGEP` 11 Go (2 711 PDF, 3 774 xlsx…), `collections` 36 Go, `Documents` 159 Go. Les PDF scannés passent par la chaîne **R4.4** (90–97 % de parité, ~3 s/page).
+- **Exclus** : **2,8 To de vidéos récupérées** (PhotoRec), 27 Go de récupération brute, 87 Go d'audio, 5,4 Go de builds, 159 Go de Documents personnels, 3 629 azw, et les **traces DRVF** (21 Go d'UDHR pour 2,2 Mo de texte réel).
+- **Quarantaine d'évaluation** : XNLI 2,3 Go, Wikitext-2, DACCORD, gqnli-fr, DiaBLa, splits test/val, questions ONU, scans R4.4.
+- **Enseignants, pas données** : DeepSeek-V4.1-Flash Q2 (341 Go), Qwen3-30B (77 Go), logits KLD 6,4 Go, HF hub 119 Go (Qwen2.5 0,5–7B, gemma, whisper).
+
+## Ce que j'en retiens pour l'entraînement
+
+1. **Le levier français, c'est Wikipédia, pas le dépôt** : 5,36 Mo uniques de prose du dépôt contre 7,25 Go de base FR. C'est le seul stock local d'un autre ordre de grandeur — à dédupliquer, filtrer et séparer des évaluations.
+2. **Les documents sont un gisement, pas un corpus** : 228 Go demandent extraction, tri de droits et OCR pour les scannés.
+3. **DRM et personnel ne sont pas des données** : Kindle kfx/azw et `Documents/` exclus sans base légale et sans tri.
+4. **L'espace est la contrainte** : 2,8 To de vidéos récupérées sont le plus gros poste supprimable ; IA à 97 %.
+
+## Ce qui rendrait l'inventaire faux
+
+Le `du` complet de `/home/stephane` a été interrompu (trop lent) : le volume affiche **8,9 To utilisés pour ~3,5 To visibles**, probablement des snapshots btrfs/CoW — à vérifier avec `btrfs filesystem du`. Certaines tailles sont des mesures ciblées, certains comptages sont absents (`None` dans le JSON), et les licences (presse, JW, pidgin, OpenSubtitles, CEGEP/collections) ne sont pas vérifiées pièce par pièce.
+
+Si tu veux, l'étape suivante naturelle est de **construire le corpus FR à partir de Wikipédia** (base sqlite ou dump), avec la dédup et le contrôle de contamination déjà outillés, puis d'y ajouter les PDF extraits/OCRisés.
+

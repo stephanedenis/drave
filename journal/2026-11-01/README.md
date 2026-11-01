@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**34 commits** · **3 session(s)** · **7 thème(s)**
+**35 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 5 | [docs.md](docs.md) |
+| docs | 6 | [docs.md](docs.md) |
 | mesures | 22 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -65,6 +65,7 @@
 | 08:34 | `95d17ae6` | SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES |
 | 10:31 | `68b5e819` | LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE) |
 | 10:51 | `ae9ad3be` | S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS |
+| 10:54 | `1c9d3d26` | DONNÉES — L'INVENTAIRE LOCAL : 132 GO DE WIKIPÉDIA, 228 GO DE DOCUMENTS, 2,8 TO DE VIDÉOS QUI NE SONT PAS DU TEXTE |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 18.3 h |
 | Tours | 6 |
-| Messages | 233 |
-| Appels d'outils | 262 |
+| Messages | 238 |
+| Appels d'outils | 267 |
 | Fichiers touchés | 16 |
-| Commandes | 193 |
+| Commandes | 197 |
 | Sous-agents | 2 |
-| Commits | 10 |
+| Commits | 11 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -298,7 +298,7 @@ Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.
 
 ### Tour 6 — étudie les sessions dsh actives et assure-toi que notre doc est à jour
 
-*16 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Lire l'état des plans de session
 - bash — Extraire les champs de tous les plans
@@ -314,7 +314,7 @@ Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.
 - bash — Voir les modifications récentes de l'état
 - bash — Identifier les sessions DSH des processus actifs
 - read
-- … et 2 autres
+- … et 7 autres
 
 **Synthèse produite :**
 
@@ -390,7 +390,7 @@ Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 153 autres
+- … et 157 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -534,4 +534,5 @@ Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.
 - PENSÉE — TOURS 3-4 : LE CYCLE MULTI-NIVEAUX ET LE PORTEFEUILLE DE STRATÉGIES" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - PENSÉE — TOURS 5-10 : CONTRAT, ANYTIME, MÉTA, MÉMOIRE, MESURE" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - ÉTAT — TROIS SESSIONS, PLAN/AMBITION/STRATÉGIE/OBJECTIF FINAL, ET LE CONTRAT DU MOTEUR" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- ÉTAT — N2.h ET R4.4 CLOSES, PENSÉE v0 ACTIVE : L'ÉTAT SUIT LES MANDATS" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 

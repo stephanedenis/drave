@@ -11,15 +11,14 @@
 - **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`,
   `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`,
   `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-10-31 22:45 HAE
-- **Prochaine action** : écrire `docs/implantation/moteur-de-pensee.md` (types, store, stratégies),
-  puis le state store v0 dans `tools/pensee/` (candidats, hash Merkle, arbre, trace).
+- **Heartbeat** : 2026-11-01 10:55 EST
+- **Prochaine action** : AC-3, alpha-bêta, l'intégration DRVF et le banc anytime — le state store
+  v0 et ses six portes sont committés (`a20de579`).
 - **État** : actif
 - **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
-  stratégies, contrat, anytime~~ ; 3) **state store** typé (candidats, hash Merkle, arbre,
-  compaction) ; 4) **moteur v0** (frontière, opérateurs, A*/MCTS/AC-3, trace, anytime) ;
-  5) **banc de pensée** (anytime AUC, regret, justification, rejeu, contrôles) ;
-  6) **intégration** DRVM/DRVF, index, portes, commit.
+  stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
+  (BFS, greedy, A*, MCTS-lite)~~ ; 5) **AC-3, alpha-bêta, DRVF** ; 6) **banc anytime** (AUC,
+  regret, justification, rejeu) et intégration DRVM/DRVF.
 - **Ambition** : faire de Drave un **runtime cognitif** où penser est une **recherche tracée** sur
   des **états pluriels**, avec des opérateurs hétérogènes (neuronaux, classiques, matériel) et des
   décisions justifiables et rejouables.
