@@ -8,9 +8,9 @@
 - **Périmètre** : N2 — le budget complet, les données et le curriculum
 - **Fichiers réservés** : `work/n2d/`, `tools/distiller_budget.py`, `reports/n2-*`,
   `journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/`
-- **Heartbeat** : 2026-10-31 17:35 HAE
-- **Prochaine action** : N2 — la hiérarchie est écartée deux fois ; restent **le curriculum et
-  les données** (41 Mo, 4 sources, 20 000 pas) et la capacité. Mesurer le budget complet sur le
-  dispositif reconstruit, trois graines, avec le protocole qui a produit **2,7078** (8 lots ×
-  16 × 128) et **2,6998** (8 lots × 15 × 129), plus le contrôle par permutation.
-- **État** : en cours
+- **Heartbeat** : 2026-10-31 20:10 HAE
+- **Prochaine action** : **close** — N2.d est mesuré : budget **2,9355 → 2,8527**, quatre sources
+  **3,7591**, quotas égaux **3,4350**, curriculum **2,8471 / 2,8327**, et **32,8 % des fenêtres de
+  validation sont verbatim dans l'entraînement**. La suite appartient au corpus, pas à
+  l'entraînement.
+- **État** : terminé

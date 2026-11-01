@@ -1,0 +1,49 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 570" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Ce que la règle apprend : compétition, traces, homéostasie</title>
+<desc>STDP, inhibition et seuil adaptatif forment un clustering compétitif en ligne : le gagnant se rapproche de l&#x27;entrée, les autres sont retenus.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="570" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Ce que la règle apprend : compétition, traces, homéostasie</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Un k-means en ligne, stochastique, avec une contrainte de norme et un contrôle de fréquence.</text>
+<rect x="30" y="90" width="440" height="210" rx="9" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="250" y="116" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">a · la fenêtre STDP</text>
+<line x1="70" y1="200" x2="430" y2="200" stroke="#94a3b8" stroke-width="1.5"/>
+<line x1="240" y1="145" x2="240" y2="265" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="4 3"/>
+<path d="M75,200 C140,200 170,252 225,252" fill="none" stroke="#b91c1c" stroke-width="2.2" marker-end="url(#f)"/>
+<path d="M255,200 C310,148 360,142 425,142" fill="none" stroke="#15803d" stroke-width="2.2" marker-end="url(#f)"/>
+<text x="150" y="274" text-anchor="middle" font-size="10" font-weight="bold" fill="#b91c1c">post avant pré</text>
+<text x="340" y="274" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">pré avant post</text>
+<text x="420" y="286" text-anchor="middle" font-size="10" fill="#475569">Δt</text>
+<text x="58" y="150" text-anchor="middle" font-size="10" fill="#475569">Δw</text>
+<text x="250" y="136" text-anchor="middle" font-size="9" fill="#475569">0</text>
+<rect x="490" y="90" width="440" height="210" rx="9" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="710" y="116" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">b · les poids d&#x27;un prototype</text>
+<line x1="530" y1="200" x2="900" y2="200" stroke="#94a3b8" stroke-width="1.5"/>
+<line x1="530" y1="130" x2="530" y2="270" stroke="#94a3b8" stroke-width="1.5"/>
+<path d="M530,190 C600,185 650,160 700,150 C760,142 830,140 900,139" fill="none" stroke="#1d4ed8" stroke-width="2.2" marker-end="url(#f)"/>
+<path d="M530,198 C610,196 680,190 740,185 C800,181 850,180 900,179" fill="none" stroke="#6d28d9" stroke-width="2.2" marker-end="url(#f)"/>
+<path d="M530,200 C620,200 700,198 780,197 C830,196 870,196 900,196" fill="none" stroke="#b45309" stroke-width="2.2" marker-end="url(#f)"/>
+<text x="560" y="152" text-anchor="start" font-size="9.5" fill="#475569">w_max</text>
+<text x="890" y="218" text-anchor="middle" font-size="9" fill="#475569">exemples</text>
+<text x="710" y="286" text-anchor="middle" font-size="9.5" fill="#475569">les synapses utiles montent, les autres décrochent</text>
+<rect x="30" y="320" width="440" height="210" rx="9" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="250" y="346" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">c · le seuil adaptatif</text>
+<line x1="70" y1="440" x2="430" y2="440" stroke="#94a3b8" stroke-width="1.5"/>
+<line x1="70" y1="370" x2="70" y2="500" stroke="#94a3b8" stroke-width="1.5"/>
+<path d="M70,470 L110,470 L110,450 L150,452 L150,432 L190,434 L190,414 L230,416 L230,396 L270,398 L270,380 L310,382 L310,364 L350,366 L350,350 L400,352" fill="none" stroke="#b45309" stroke-width="2.2" marker-end="url(#f)"/>
+<text x="250" y="512" text-anchor="middle" font-size="9.5" fill="#475569">chaque spike monte θ ; la décroissance est lente</text>
+<text x="80" y="365" text-anchor="start" font-size="9" fill="#475569">seuil</text>
+<rect x="490" y="320" width="440" height="210" rx="9" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="710" y="346" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">d · l&#x27;inhibition laisse un gagnant</text>
+<line x1="530" y1="490" x2="900" y2="490" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="570" y="420" width="50" height="70" rx="3" fill="#94a3b8" stroke="#94a3b8" stroke-width="0"/>
+<text x="595" y="506" text-anchor="middle" font-size="10" font-weight="bold" fill="#475569">A</text>
+<rect x="660" y="340" width="50" height="150" rx="3" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<text x="685" y="506" text-anchor="middle" font-size="10" font-weight="bold" fill="#475569">B</text>
+<rect x="750" y="380" width="50" height="110" rx="3" fill="#94a3b8" stroke="#94a3b8" stroke-width="0"/>
+<text x="775" y="506" text-anchor="middle" font-size="10" font-weight="bold" fill="#475569">C</text>
+<text x="685" y="360" text-anchor="middle" font-size="10" font-weight="bold" fill="#b91c1c">gagnant</text>
+<line x1="660" y1="420" x2="600" y2="450" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#fr)"/>
+<line x1="660" y1="420" x2="790" y2="450" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#fr)"/>
+<text x="710" y="552" text-anchor="middle" font-size="9.5" fill="#475569">les autres sont inhibés : un seul prototype s&#x27;adapte</text>
+</svg>

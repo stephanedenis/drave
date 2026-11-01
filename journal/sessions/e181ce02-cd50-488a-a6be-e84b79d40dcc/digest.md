@@ -2632,3 +2632,419 @@ Ils sont indexés dans [`docs/schemas/README.md`](docs/schemas/README.md) et ré
 
 Le résultat publié de Diehl & Cook (**95 %** à 6 400 neurones) est cité comme **résultat du papier**, pas comme une mesure Drave. La suite naturelle est le **v0** du simulateur : 100 excitateurs, 2 000 exemples, et les portes D0–D4 avant de prétendre à un score.
 
+
+## Tour 2
+
+### 👤 Utilisateur
+
+continue tes réflexions et enrichit le document. Tu dois aller plus loin
+
+### 🤖 Assistant
+
+⏵ Approfondissement : sémantique formelle, types, neutralité, déterminisme — 4 nouveaux schémas
+
+- **write** `{"content": "import sys, pathlib\nsys.path.insert(0, \"/tmp\")\nfrom svgkit import *\n\nOUT = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas\")\n\n\ndef quotient():\n    s = SVG(960, 590, \"La RSN est un quotient, pas un vecteur\",\n            \"Plusieurs surfaces, un m … [11724 caractères tronqués]`
+
+  ```
+<path>/tmp/gen_plus.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cat >> /tmp/gen_plus.py <<'PY'\n\n\nif __name__ == \"__main__\":\n    quotient()\n    types()\n    neutralite()\n    rejeu()\nPY\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/gen_plus.py", "description": "Générer les quatre nouveaux schémas formels"}`
+
+  ```
+✓ natif-quotient.svg
+  ✓ natif-types.svg
+  ✓ natif-neutralite.svg
+  ✓ natif-rejeu.svg
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/gen_plus.py'); t=p.read_text()\nt=t.replace('s.rect(170, 220, 620, 64, \"#fffbeb\", \"#f59e0b\", 10, 2)',\n            's.rect(100, 220, 760, 64, \"#fffbeb\", \"#f59e0b\", 10, 2)')\nt=t.replace('s.boite(720, 308, 210, 112 … [664 caractères tronqués]`
+
+  ```
+ok
+  ✓ natif-quotient.svg
+  ```
+
+### 🤖 Assistant
+
+⏵ Cinq schémas d'analyse : dynamique, taux, banc, conformité, mémoire N2
+
+- **bash** `{"command": "cat >> /tmp/gen_plus.py <<'PY'\n\n\ndef dynamique():\n    s = SVG(960, 570, \"Ce que la règle apprend : compétition, traces, homéostasie\",\n            \"STDP, inhibition et seuil adaptatif forment un clustering compétitif en ligne : \"\n            \"le gagnant se rapproche de l'entré … [13629 caractères tronqués]`
+
+  ```
+⚠ diehl-cook-dynamique.svg
+     chevauchement de textes : 'A' / "les autres sont inhibés : un seul prototype s'adapte" (dx=8, dy=4)
+     chevauchement de textes : 'B' / "les autres sont inhibés : un seul prototype s'adapte" (dx=8, dy=4)
+     chevauchement de textes : 'C' / "les autres sont inhibés : un seul prototype s'adapte" (dx=7, dy=4)
+  ✓ diehl-cook-taux.svg
+  ✓ diehl-cook-banc.svg
+  ✓ diehl-cook-conformite.svg
+  ✓ diehl-cook-memoire.svg
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/gen_plus.py'); t=p.read_text()\nt=t.replace('s.texte(710, 512, \"les autres sont inhibés : un seul prototype s\\'adapte\", 9.5, \"#475569\", \"middle\")',\n            's.texte(710, 552, \"les autres sont inhibés : un seu … [751 caractères tronqués]`
+
+  ```
+ok
+  ✓ diehl-cook-dynamique.svg
+  ✓ diehl-cook-conformite.svg
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re,glob,sys\nsys.path.insert(0,'/tmp')\nfrom svgkit import largeur\nfor f in sorted(glob.glob('docs/schemas/natif-*.svg')+glob.glob('docs/schemas/diehl-cook-*.svg')):\n    t=open(f).read()\n    for m in re.fi … [475 caractères tronqués]`
+
+  ```
+diehl-cook-architecture.svg      x=  480 y=  34 w=  721 21.0 'Diehl &amp; Cook (2015) : une mémoire compétitive à spikes'
+diehl-cook-architecture.svg      x=  480 y=  58 w=  797 13.0 'Un apprentissage local, sans rétropropagation et sans étiquette ; les class'
+diehl-cook-architecture.svg      x=  245 y= 522 w=  282 11.5 'Apprentissage : STDP local, aucune étiquette'
+diehl-cook-architecture.svg      x=  245 y= 542 w=  261 10.5 'la rétropropagation n&#x27;entre pas dans la boucle'
+diehl-cook-architecture.svg      x=  715 y= 522 w=  235 11.5 'Lecture : réponse moyenne par classe'
+diehl-cook-architecture.svg      x=  715 y= 542 w=  296 10.5 'l&#x27;assignation est la seule étape qui voit les étiquettes'
+diehl-cook-banc.svg              x=  480 y=  34 w=  311 21.0 'Le banc v0, pré-enregistré'
+diehl-cook-banc.svg              x=  480 y=  58 w=  452 13.0 'Un contrôle de mécanismes, pas une reproduction du 95 % du papier.'
+diehl-cook-banc.svg              x=  480 y= 204 w=  225 12.5 'les hypothèses et leurs contrôles'
+diehl-cook-banc.svg              x=  480 y= 494 w=  565 11.5 '3 graines · 1 passage · pas d&#x27;arrêt sur le test · les seuils sont écri'
+diehl-cook-banc.svg              x=
+… [12824 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat >> /tmp/gen_plus.py <<'PY'\n\n\ndef anti_patrons():\n    s = SVG(960, 540, \"Six anti-patrons, et le test qui les attrape\",\n            \"La séparation n'est pas une intention : c'est une propriété qui se teste et qui peut échouer.\")\n    s.texte(480, 58, \"Le plus fréquent est l … [2009 caractères tronqués]`
+
+  ```
+✓ natif-anti-patrons.svg
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"C'est le contrat déjà utilisé\\|### Niveau, étage, couche\\|Deux étages, trois niveaux\\|### Le miroir\\|Ce que la mesure a déjà tranché\\|## 10. Ce qui pourrait\\|## 11. Où lire\" docs/theorie/modele-natif.md && echo '===  … [378 caractères tronqués]`
+
+  ```
+83:C'est le contrat déjà utilisé par les jeux symboliques : voir [`jeux-symboliques.md`](jeux-symboliques.md). Ce
+87:### Niveau, étage, couche — ne pas confondre
+94:**Deux étages, trois niveaux** : l'étage 1 contient N1 et N2 ; l'étage 2 est N3. C'est pour cela que la vision
+98:### Le miroir
+237:**Ce que la mesure a déjà tranché** — et qui contraint la suite :
+333:## 10. Ce qui pourrait rendre ce document faux
+348:## 11. Où lire la suite
+=== doc2 ===
+75:**La phrase à retenir** : *le spike n'est pas le sens*. Un train de spikes est un **code interne** ; la RSN est
+79:## 3. Le principe à trois niveaux, appliqué
+126:**Pourquoi deux blocs D&C et pas un seul ?** Parce que le **même algorithme** peut rendre deux services
+138:**La tête typée (N1)** est un bloc **classique**, pas un réseau :
+437:**Le coût, en projection** (à mesurer, pas à croire) : pour 784 entrées à 20 Hz pendant 350 ms, environ
+444:## 8. L'entraînement
+473:![La boucle d'entraînement et ses contrôles](../schemas/diehl-cook-boucle.svg)
+475:## 9. La RSN de sortie
+540:## 11. Les portes D
+553:**D1 est la porte la plus dure**, et c'est voulu : deux implémentations du même pas doivent donner **le même
+558:## 12. Le plan d'impl
+… [10 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Insertion des sections approfondies dans les deux documents
+
+- **write** `{"content": "import pathlib\n\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\n\n\ndef inserer(chemin, marqueur, bloc):\n    p = RACINE / chemin\n    t = p.read_text(encoding=\"utf-8\")\n    if t.count(marqueur) != 1:\n        raise SystemExit(f\"marqueur {marqueur!r} : { … [19952 caractères tronqués]`
+
+  ```
+<path>/tmp/enrichir.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/enrichir.py && echo '---' && grep -n \"^## \\|^### \" docs/theorie/modele-natif.md | head -40 && echo '=== doc2 ===' && grep -n \"^## \\|^### \" docs/implantation/diehl-cook.md | head -40", "description": "Insérer les se … [43 caractères tronqués]`
+
+  ```
+✓ docs/theorie/modele-natif.md : +321 mots
+  ✓ docs/theorie/modele-natif.md : +519 mots
+  ✓ docs/theorie/modele-natif.md : +247 mots
+  ✓ docs/theorie/modele-natif.md : anti-patrons + renumérotation
+  ✓ docs/implantation/diehl-cook.md : +467 mots
+  ✓ docs/implantation/diehl-cook.md : +235 mots
+  ✓ docs/implantation/diehl-cook.md : +231 mots
+  ✓ docs/implantation/diehl-cook.md : +320 mots
+  ✓ docs/implantation/diehl-cook.md : +249 mots
+  ✓ docs/implantation/diehl-cook.md : +325 mots
+---
+19:## 1. Ce qu'on appelle « natif »
+44:## 2. Les trois niveaux — surface, RSN, pensée
+46:### Le problème
+68:### Ce que la RSN est, et ce qu'elle n'est pas
+87:### La RSN comme quotient
+116:### Niveau, étage, couche — ne pas confondre
+127:### Le système de types et la légalité du graphe
+162:### Neutralité et informativité
+187:### Le miroir
+202:## 3. Le bus — des faits, pas des matrices
+227:## 4. Le graphe — blocs, régions, routes, têtes
+284:## 5. DRVM — le conteneur
+314:## 6. Le régime d'exécution
+326:### Rejouer : la pile de déterminisme
+363:## 7. L'objectif d'entraînement
+384:## 8. Ce qui est original
+426:## 9. Les portes N
+447:## 10. Les anti-patrons
+465:## 11. Ce qui pourrait rendre ce document faux
+… [945 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '20,50p' docs/schemas/README.md", "description": "Lire le tableau des schémas à compléter"}`
+
+  ```
+| [jeux-symboliques.svg](jeux-symboliques.svg) | surface → RSN-jeu → décision, l'étage 2 ne voit jamais la surface | [les jeux](../theorie/jeux-symboliques.md) |
+| [format-flux.svg](format-flux.svg) | l'en-tête DRVF de 79 octets et le contrat d'activation | [le format](../implantation/format-flux.md) |
+| [backlog-dependances.svg](backlog-dependances.svg) | le graphe des dépendances du backlog A/B/N/R, par couche | [le graphe](../pilotage/backlog/dependances.md) |
+
+## Les schémas du natif et de l'impulsionnel
+
+| schéma | ce qu'il montre | où il est utilisé |
+|---|---|---|
+| [natif-niveaux.svg](natif-niveaux.svg) | N1 surface → N2 RSN → N3 pensée, et le raccourci interdit | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-cout-activite.svg](natif-cout-activite.svg) | les listes valuées : le coût suit l'activité, pas la taille | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-drvm.svg](natif-drvm.svg) | les quatre sections de DRVM et les trois formats | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-graphe-n0.svg](natif-graphe-n0.svg) | `drave-n0` : blocs, régions, têtes précoces, pont, pensée | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-pertes
+… [1864 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md", "limit": 25, "offset": 27}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md</path>
+<type>file</type>
+<content>
+27: |---|---|---|
+28: | [natif-niveaux.svg](natif-niveaux.svg) | N1 surface → N2 RSN → N3 pensée, et le raccourci interdit | [le modèle natif](../theorie/modele-natif.md) |
+29: | [natif-cout-activite.svg](natif-cout-activite.svg) | les listes valuées : le coût suit l'activité, pas la taille | [le modèle natif](../theorie/modele-natif.md) |
+30: | [natif-drvm.svg](natif-drvm.svg) | les quatre sections de DRVM et les trois formats | [le modèle natif](../theorie/modele-natif.md) |
+31: | [natif-graphe-n0.svg](natif-graphe-n0.svg) | `drave-n0` : blocs, régions, têtes précoces, pont, pensée | [le modèle natif](../theorie/modele-natif.md) |
+32: | [natif-pertes.svg](natif-pertes.svg) | les sept pertes du natif et ce qu'elles empêchent | [le modèle natif](../theorie/modele-natif.md) |
+33: | [natif-original.svg](natif-original.svg) | les six gestes qui distinguent Drave | [le modèle natif](../theorie/modele-natif.md) |
+34: | [natif-portes.svg](natif-portes.svg) | les portes N0 → N4 | [le modèle natif](../theorie/modele-natif.md) |
+35: | [diehl-cook-architecture.svg](diehl-cook-archi
+… [1581 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md", "new_string": "| [natif-portes.svg](natif-portes.svg) | les portes N0 → N4 | [le modèle natif](../theorie/modele-natif.md) |\n| [natif-quotient.svg](natif-quotient.svg) | la RSN comme quotient : surfaces, corps,  … [818 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md", "new_string": "| [diehl-cook-boucle.svg](diehl-cook-boucle.svg) | la boucle d'entraînement et ses contrôles négatifs | [le bloc D&C](../implantation/diehl-cook.md) |\n| [diehl-cook-dynamique.svg](diehl-cook-dynam … [907 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des nouveaux schémas et des sections enrichies
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifier_schemas.py >/tmp/k1 2>&1; echo \"schemas=$?\"; cat /tmp/k1; bash tools/porte-tableaux.sh >/tmp/k2 2>&1; echo \"tableaux=$?\"; tail -4 /tmp/k2", "description": "Vérifier schémas et tableaux après enrichissement" … [1 caractères tronqués]`
+
+  ```
+schemas=0
+  schémas · 431 document(s) · 45 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+tableaux=0
+  ✅ 1325 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 1264 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-10-31)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py >/tmp/k3 2>&1; echo \"revue=$?\"; cat /tmp/k3", "description": "Relancer la revue de documentation"}`
+
+  ```
+revue=0
+  revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/modele-natif.md'); t=p.read_text()\nt=t.replace(\"\"\"Un bloc a une **signature** : `b : (τ_1, …, τ_n) → (σ_1, …, σ_m)`, où chaque type est `surface`, `rsn`, `code`\nou ` … [3886 caractères tronqués]`
+
+  ```
+ok
+ok
+  ✓ natif-quotient.svg
+  ✓ natif-types.svg
+  ✓ diehl-cook-placements.svg
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/diehl-cook.md'); t=p.read_text()\nt=t.replace(\"Un D&C peut aussi servir de **lecture associative** en N3 (RSN → RSN), mais ce n'est pas la cible : la lecture\",\n   … [519 caractères tronqués]`
+
+  ```
+ok
+  ✓ diehl-cook-placements.svg
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md", "limit": 120, "offset": 85}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md</path>
+<type>file</type>
+<content>
+85: **porté par le format** (ports typés, graphe, refus) et **mesuré** (sonde de format, invariance, restitution).
+86: 
+87: ### La RSN comme quotient
+88: 
+89: Une RSN n'est pas un vecteur : c'est une **classe d'équivalence**. Soit `S` l'ensemble des surfaces et `~` la
+90: relation « dire la même chose ». La RSN est le quotient `S/~`, représenté par deux fonctions :
+91: 
+92: - `c : S → C`, le **canoniseur**, qui rend le **corps** ; il doit vérifier `c(s) = c(s') ⇔ s ~ s'` ;
+93: - `a : S → A`, l'**annotation**, qui rend le bruit : langue, format, confiance, ambiguïtés, source.
+94: 
+95: Le **corps** est l'invariant ; l'**annotation** est le chemin. L'empreinte est `h = H(c(s))` : elle ne dépend que
+96: du corps. Deux surfaces du même sens ont le même `h`, même si l'une est un PNG et l'autre une phrase.
+97: 
+98: ![La RSN est un quotient, pas un vecteur](../schemas/natif-quotient.svg)
+99: 
+100: **Le miroir est une rétraction.** Un décodeur `d : C × A → S` est un miroir si `c(d(c(s), a(s))) = c(s)` : il
+101: peut changer la surface, pas le sens. La restitution exacte (`d(
+… [6260 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/implantation/diehl-cook.md", "limit": 125, "offset": 75}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/implantation/diehl-cook.md</path>
+<type>file</type>
+<content>
+75: **La phrase à retenir** : *le spike n'est pas le sens*. Un train de spikes est un **code interne** ; la RSN est
+76: un **contrat externe**. Confondre les deux, c'est refaire l'erreur que le dépôt combat depuis le début : appeler
+77: « jeton » ce qui est une unité de sens.
+78: 
+79: ### Ce que la règle apprend
+80: 
+81: D&C n'est pas une boîte noire : c'est un **clustering compétitif en ligne**. Chaque excitateur `j` porte un
+82: vecteur de poids `w_j` ; le potentiel de membrane est une intégrale filtrée de `Σ_i w_ij r_i` ; l'inhibition
+83: laisse un **gagnant** ; la STDP rapproche `w_j` de l'entrée qui l'a fait gagner ; la normalisation et le seuil
+84: adaptatif empêchent un neurone de tout prendre.
+85: 
+86: ![Ce que la règle apprend](../schemas/diehl-cook-dynamique.svg)
+87: 
+88: On peut l'écrire comme un objectif informel — une **analogie opérationnelle**, pas une équivalence exacte :
+89: 
+90: - **assignation** (E-step) : le gagnant est l'argmax de `Σ_i w_ij r_i` (soft WTA) ;
+91: - **mise à jour** (M-step) : `w_j ← w_j + η (r − w_j)` sur les entrées actives, a
+… [7136 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/diehl-cook.md'); t=p.read_text()\nt=t.replace(\"**N3** pensée ; une arête porte un **type**, et le type décide du niveau. Un bloc D&C peut être placé à trois\",\n    … [1440 caractères tronqués]`
+
+  ```
+ok
+  ✓ diehl-cook-taux.svg
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout des contreparties : coût de la séparation, positionnement de D&C
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n\ndef ins(chemin, marqueur, bloc):\n    p = pathlib.Path(chemin); t = p.read_text()\n    assert t.count(marqueur) == 1, (marqueur, t.count(marqueur))\n    p.write_text(t.replace(marqueur, bloc + marq … [4467 caractères tronqués]`
+
+  ```
+✓ docs/theorie/modele-natif.md + 123 mots
+  ✓ docs/theorie/modele-natif.md + 173 mots
+  ✓ docs/implantation/diehl-cook.md + 191 mots
+  ✓ docs/implantation/diehl-cook.md + 183 mots
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifier_schemas.py >/tmp/m1 2>&1; echo \"schemas=$?\"; tail -3 /tmp/m1; bash tools/porte-tableaux.sh >/tmp/m2 2>&1; echo \"tableaux=$?\"; tail -4 /tmp/m2; python3 tools/revue_documentation.py >/tmp/m3 2>&1; echo \"revu … [88 caractères tronqués]`
+
+  ```
+schemas=0
+  schémas · 431 document(s) · 45 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+tableaux=0
+  ✅ 1325 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 1264 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-10-31)
+revue=0
+  revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py >/tmp/m4 2>&1; echo \"taille=$?\"; tail -4 /tmp/m4; python3 tools/verifie_en_cours.py >/tmp/m5 2>&1; echo \"etat=$?\"; tail -2 /tmp/m5", "description": "Vérifier budget et état"}`
+
+  ```
+taille=0
+  avertissements :
+     · 14 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+etat=0
+  en-cours · 1270 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -w docs/theorie/modele-natif.md docs/implantation/diehl-cook.md && echo '---' && git status --porcelain | grep -E \"modele-natif|diehl-cook|schemas/README|natif-|diehl-cook-\" && echo '---' && git diff --stat -- docs/theorie/model … [134 caractères tronqués]`
+
+  ```
+5215 docs/theorie/modele-natif.md
+ 8070 docs/implantation/diehl-cook.md
+13285 total
+---
+ M docs/implantation/diehl-cook.md
+ M docs/schemas/README.md
+ M docs/schemas/diehl-cook-placements.svg
+ M docs/theorie/modele-natif.md
+?? docs/schemas/diehl-cook-banc.svg
+?? docs/schemas/diehl-cook-conformite.svg
+?? docs/schemas/diehl-cook-dynamique.svg
+?? docs/schemas/diehl-cook-memoire.svg
+?? docs/schemas/diehl-cook-taux.svg
+?? docs/schemas/natif-anti-patrons.svg
+?? docs/schemas/natif-neutralite.svg
+?? docs/schemas/natif-quotient.svg
+?? docs/schemas/natif-rejeu.svg
+?? docs/schemas/natif-types.svg
+---
+ docs/implantation/diehl-cook.md | 235 +++++++++++++++++++++++++++++++++++++++-
+ docs/schemas/README.md          |  10 ++
+ docs/theorie/modele-natif.md    | 165 +++++++++++++++++++++++++++-
+ 3 files changed, 403 insertions(+), 7 deletions(-)
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe finale des portes, puis commit de l'enrichissement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/verifier_schemas.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" … [182 caractères tronqués]`
+
+  ```
+python3 tools/verifier_schemas.py             EXIT=0
+bash tools/porte-tableaux.sh                  EXIT=0
+python3 tools/revue_documentation.py          EXIT=0
+python3 tools/taille_documents.py             EXIT=0
+python3 tools/verifie_en_cours.py             EXIT=0
+python3 tools/verifie_journal.py              EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/theorie/modele-natif.md docs/implantation/diehl-cook.md docs/schemas/README.md docs/schemas/diehl-cook-placements.svg docs/schemas/natif-quotient.svg docs/schemas/natif-types.svg docs/schemas/natif-neutralite.svg docs/sc … [334 caractères tronqués]`
+
+  ```
+docs/implantation/diehl-cook.md        | 235 ++++++++++++++++++++++++++++++++-
+ docs/schemas/README.md                 |  10 ++
+ docs/schemas/diehl-cook-banc.svg       | 113 ++++++++++++++++
+ docs/schemas/diehl-cook-conformite.svg |  32 +++++
+ docs/schemas/diehl-cook-dynamique.svg  |  49 +++++++
+ docs/schemas/diehl-cook-memoire.svg    |  51 +++++++
+ docs/schemas/diehl-cook-placements.svg |   2 +-
+ docs/schemas/diehl-cook-taux.svg       | 122 +++++++++++++++++
+ docs/schemas/natif-anti-patrons.svg    |  46 +++++++
+ docs/schemas/natif-neutralite.svg      |  43 ++++++
+ docs/schemas/natif-quotient.svg        |  63 +++++++++
+ docs/schemas/natif-rejeu.svg           |  56 ++++++++
+ docs/schemas/natif-types.svg           |  48 +++++++
+ docs/theorie/modele-natif.md           | 165 ++++++++++++++++++++++-
+ 14 files changed, 1027 insertions(+), 8 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 240 git commit -m \"DOCS — LE MODÈLE NATIF ET DIEHL & COOK ENRICHIS : QUOTIENT, TYPES, NEUTRALITÉ, DÉTERMINISME, BANC, CONFORMITÉ\" 2>&1 | tail -12; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer l'enrichissement  … [20 caractères tronqués]`

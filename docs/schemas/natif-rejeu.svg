@@ -1,0 +1,56 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 550" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Rejouer : la pile de déterminisme</title>
+<desc>Chaque couche a une source de non-déterminisme et un test ; le rejeu est exact quand toutes les couches sont fixées.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="550" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Rejouer : la pile de déterminisme</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le rejeu n&#x27;est pas une propriété du format : c&#x27;est une pile de décisions, et chaque étage peut la casser.</text>
+<rect x="30" y="96" width="520" height="50" rx="7" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="44" y="116" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">graine</text>
+<text x="180" y="116" text-anchor="start" font-size="9.5" fill="#334155">déclarée dans le manifeste</text>
+<text x="44" y="134" text-anchor="start" font-size="9" fill="#475569">test : deux runs, même graine</text>
+<rect x="30" y="156" width="520" height="50" rx="7" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="44" y="176" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">RNG contré</text>
+<text x="180" y="176" text-anchor="start" font-size="9.5" fill="#334155">hash(seed, exemple, pas, neurone)</text>
+<text x="44" y="194" text-anchor="start" font-size="9" fill="#475569">test : permuter l&#x27;ordre des neurones</text>
+<rect x="30" y="216" width="520" height="50" rx="7" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="44" y="236" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">ordre</text>
+<text x="180" y="236" text-anchor="start" font-size="9.5" fill="#334155">réduction fixe, pas de pool</text>
+<text x="44" y="254" text-anchor="start" font-size="9" fill="#475569">test : 1 thread contre 4</text>
+<rect x="30" y="276" width="520" height="50" rx="7" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="44" y="296" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">arithmétique</text>
+<text x="180" y="296" text-anchor="start" font-size="9.5" fill="#334155">f64, pas de fast-math, NaN canonique</text>
+<text x="44" y="314" text-anchor="start" font-size="9" fill="#475569">test : deux machines</text>
+<rect x="30" y="336" width="520" height="50" rx="7" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="44" y="356" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">trace</text>
+<text x="180" y="356" text-anchor="start" font-size="9.5" fill="#334155">JSON canonique, clés triées</text>
+<text x="44" y="374" text-anchor="start" font-size="9" fill="#475569">test : hash de la trace</text>
+<rect x="30" y="396" width="520" height="50" rx="7" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="44" y="416" text-anchor="start" font-size="11.5" font-weight="bold" fill="#0f172a">hash</text>
+<text x="180" y="416" text-anchor="start" font-size="9.5" fill="#334155">SHA-256</text>
+<text x="44" y="434" text-anchor="start" font-size="9" fill="#475569">test : deux traces égales → même hash</text>
+<rect x="590" y="96" width="340" height="300" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="760" y="120" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#0f172a">le diff localise la divergence</text>
+<line x1="620" y1="170" x2="900" y2="170" stroke="#1d4ed8" stroke-width="2"/>
+<line x1="620" y1="220" x2="900" y2="220" stroke="#b91c1c" stroke-width="2"/>
+<text x="610" y="174" text-anchor="end" font-size="10" font-weight="bold" fill="#1d4ed8">A</text>
+<text x="610" y="224" text-anchor="end" font-size="10" font-weight="bold" fill="#b91c1c">B</text>
+<line x1="780" y1="150" x2="780" y2="240" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="4 3"/>
+<circle cx="780" cy="170" r="4" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="780" cy="220" r="4" fill="#b91c1c" stroke="#b91c1c" stroke-width="0"/>
+<text x="780" y="260" text-anchor="middle" font-size="10" font-weight="bold" fill="#b91c1c">pas 137</text>
+<text x="760" y="300" text-anchor="middle" font-size="10" fill="#475569">neurone 42</text>
+<text x="760" y="330" text-anchor="middle" font-size="10" fill="#475569">premier écart</text>
+<text x="760" y="360" text-anchor="middle" font-size="9.5" fill="#15803d">avant : identique</text>
+<text x="760" y="378" text-anchor="middle" font-size="9.5" fill="#b91c1c">après : à expliquer</text>
+<rect x="30" y="450" width="280" height="62" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="170.0" y="474" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">bit-exact</text>
+<text x="170.0" y="496.0" text-anchor="middle" font-size="10" fill="#334155">mêmes spikes, mêmes poids</text>
+<rect x="340" y="450" width="280" height="62" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="480.0" y="474" text-anchor="middle" font-size="12" font-weight="bold" fill="#b45309">tolérant</text>
+<text x="480.0" y="496.0" text-anchor="middle" font-size="10" fill="#334155">mêmes logits à ε près</text>
+<rect x="650" y="450" width="280" height="62" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="790.0" y="474" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">sémantique</text>
+<text x="790.0" y="496.0" text-anchor="middle" font-size="10" fill="#334155">même corps de RSN</text>
+<text x="480" y="534" text-anchor="middle" font-size="11" fill="#475569">Un bloc qui ne peut pas dire lequel il garantit ne garantit rien.</text>
+</svg>

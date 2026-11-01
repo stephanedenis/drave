@@ -65,6 +65,19 @@ index — peut être N1, N2 ou N3 selon ce qu'il **reçoit** et ce qu'il **rend*
 N1 ; un bloc qui rend une décision sans RSN n'est ni N2 ni N3 : il **fuit** la surface vers le raisonnement, et
 c'est cette fuite que le format doit refuser.
 
+**Pourquoi trois niveaux, et pas deux.** À deux niveaux, il n'y a que deux architectures possibles, et les deux
+échouent :
+
+- **surface → pensée** : la pensée dépend de la surface ; deux écritures du même sens peuvent donner deux
+  décisions, et l'invariance n'est pas testable ;
+- **surface → RSN** : c'est un encodeur sans opération ; il peut classer, pas raisonner, et il n'y a pas de
+  contrat pour brancher un solveur.
+
+Le troisième niveau insère le **contrat** qui manque : la RSN est ce qui rend la pensée **substituable** (un
+solveur ou un réseau au même endroit) et **mesurable** (la même RSN, la même décision). Ce n'est pas un étage de
+plus : c'est la **condition** des deux autres.
+
+
 ### Ce que la RSN est, et ce qu'elle n'est pas
 
 La RSN est une **structure multi-niveaux** (graphémique/phonologique, morphologique, syntaxique, sémantique,
@@ -84,6 +97,35 @@ C'est le contrat déjà utilisé par les jeux symboliques : voir [`jeux-symboliq
 qui est **original** ici n'est pas l'idée d'une interlingua — elle est ancienne — mais le fait que le contrat soit
 **porté par le format** (ports typés, graphe, refus) et **mesuré** (sonde de format, invariance, restitution).
 
+### La RSN comme quotient
+
+Une RSN n'est pas un vecteur : c'est une **classe d'équivalence**. Soit `S` l'ensemble des surfaces et `~` la
+relation « dire la même chose ». La RSN est le quotient `S/~`, représenté par deux fonctions :
+
+- `c : S → C`, le **canoniseur**, qui rend le **corps** ; il doit vérifier `c(s) = c(s') ⇔ s ~ s'` ;
+- `a : S → A`, l'**annotation**, qui rend le bruit : langue, format, confiance, ambiguïtés, source.
+
+Le **corps** est l'invariant ; l'**annotation** est le chemin. L'empreinte est `h = H(c(s))` : elle ne dépend que
+du corps. Deux surfaces du même sens ont le même `h`, même si l'une est un PNG et l'autre une phrase.
+
+![La RSN est un quotient, pas un vecteur](../schemas/natif-quotient.svg)
+
+**Le miroir est une rétraction.** Un décodeur `d : C × A → S` est un miroir si `c(d(c(s), a(s))) = c(s)` : il
+peut changer la surface, pas le sens. La restitution exacte (`d(c(s), a(s)) = s`) est plus forte ; elle n'est pas
+toujours possible — une image perdue ne se reconstruit pas — et c'est pourquoi le contrat demande la **fidélité du
+corps**, pas la copie de l'octet.
+
+**Trois conséquences opérationnelles** :
+
+1. **l'annotation n'entre pas dans `c`** — sinon deux surfaces du même sens n'ont plus le même corps ;
+2. **le corps ne contient pas de flottant** — sinon l'équivalence dépend de l'arrondi de la machine ;
+3. **le hash n'est pas le sens** — c'est un représentant ; ce qui fait foi, c'est `c`, pas `h`.
+
+**Ce que le quotient achète** : la neutralité devient une **propriété de l'image de `c`**, pas une intention. On
+peut la tester : si `c` dépend encore du format, deux surfaces équivalentes n'ont pas le même corps, et le test
+le dit. C'est pour cela que la RSN est un **contrat** et pas un espace latent de plus.
+
+
 ### Niveau, étage, couche — ne pas confondre
 
 > **Note de vocabulaire.** Un **niveau** est un **contrat de port** : N1 surface, N2 RSN, N3 pensée. Un **étage**
@@ -94,6 +136,82 @@ qui est **original** ici n'est pas l'idée d'une interlingua — elle est ancien
 **Deux étages, trois niveaux** : l'étage 1 contient N1 et N2 ; l'étage 2 est N3. C'est pour cela que la vision
 parle de **deux étages** sans contredire la séparation à **trois niveaux** : le niveau du milieu est le contrat
 qui sépare les deux étages.
+
+### Le système de types et la légalité du graphe
+
+Un bloc a une **signature** : `b : (τ_1, …, τ_n) → (σ_1, …, σ_m)`, où chaque type est `surface`, `rsn`, `code`
+ou `trace`. Son **niveau** est **déclaré** dans le manifeste et **vérifié** contre sa signature : la signature
+**borne** les niveaux possibles, elle ne les devine pas.
+
+| signature | niveaux possibles | exemple |
+|---|---|---|
+| `surface → rsn` | N1 | encodeur |
+| `rsn → surface` | N1 | décodeur |
+| `rsn → rsn` | N2 **ou** N3, déclaré | mémoire / opération |
+
+**Les règles** :
+
+- `surface` n'entre jamais dans un bloc N2 ou N3 ;
+- `code` — le code interne, spikes ou latent — **ne traverse jamais une arête** : il est privé au bloc ;
+- `rsn` circule entre N1, N2 et N3 ;
+- `trace` est un port de sortie, jamais une entrée de calcul.
+
+![Le système de types](../schemas/natif-types.svg)
+
+**Théorème (pas de fuite de surface).** Dans un graphe légal, tout chemin d'une entrée `surface` vers un bloc N3
+traverse au moins une arête `rsn`. *Preuve.* Une arête `surface` ne peut entrer que dans un bloc **déclaré N1**
+(le chargeur le vérifie). La sortie d'un bloc N1 est soit `surface` (décodeur), soit `rsn` (encodeur). Pour
+atteindre N3, le chemin doit donc emprunter une arête `rsn`. ∎
+
+**La composition ne change pas la règle.** Le niveau d'un bloc composé est **déclaré** ; sa signature externe le
+contraint : un composite `surface → rsn` est N1, même s'il contient une mémoire N2 à l'intérieur. C'est ce qui
+permet de **substituer** un encodeur par un autre sans toucher au reste du graphe.
+
+**Le raffinement.** `b'` raffine `b` au niveau L si `b'` a la même signature et si, pour toute entrée,
+`c(b'(x)) = c(b(x))` (même corps) et les annotations sont compatibles. La substituabilité est un **raffinement
++ une trace** : on remplace, on rejoue, on compare. C'est la définition opérationnelle du bus.
+
+
+### Neutralité et informativité
+
+La neutralité seule est un piège : un code **constant** est parfaitement neutre et parfaitement inutile. La
+propriété utile est un **couple** :
+
+- **neutre** : le format (langue, notation, appareil) n'est pas prédictible depuis le corps ;
+- **informatif** : la classe (le sens) est prédictible depuis le corps.
+
+Deux sondes, deux attendus :
+
+| sonde | entrée | attendu | si ça échoue |
+|---|---|---|---|
+| `P_f` format | `c(s)` | **échec** (chance) | la RSN fuit la surface |
+| `P_y` classe | `c(s)` | **succès** | la RSN a détruit le sens |
+
+![Neutre et informatif : les deux sondes](../schemas/natif-neutralite.svg)
+
+Le **marginal sémantique** est `I − N` (informatif moins neutre) ; on veut les deux hauts. Le diagramme montre
+les quatre quadrants et les deux pièges : le **collapse** (constant) et la **fuite** (code de surface).
+
+**La neutralité est relative au corpus.** Si toutes les images françaises sont des 7 et toutes les anglaises des
+1, la sonde de format apprend la classe : ce n'est pas une fuite de la RSN, c'est un corpus **confondu**. Le
+contrôle est un corpus **équilibré** par format et une sonde **linéaire** — pas un réseau profond qui mémorise.
+
+
+### Ce que la séparation coûte
+
+La séparation n'est pas gratuite, et il faut l'écrire :
+
+- **deux fois le travail** : un encodeur et un décodeur (le miroir), deux jeux de mesures ;
+- **un canoniseur par modalité** : le corps n'est pas donné, il se construit et se maintient ;
+- **des sondes** : la neutralité se mesure, donc elle se paie en corpus et en évaluations ;
+- **une latence** : le passage par la RSN ajoute une étape, et parfois un goulot ;
+- **une perte** : tout ce qui n'entre pas dans le corps est perdu pour le raisonnement — il reste dans
+  l'annotation, mais l'annotation n'est pas le sens ;
+- **un risque de collapse** : un corps trop pauvre est parfaitement neutre et parfaitement inutile.
+
+Le bon critère n'est pas « la séparation est belle », c'est « la séparation **rapporte** plus qu'elle ne coûte »
+sur une tâche mesurée. C'est pourquoi les sondes et le miroir sont dans le contrat, pas dans les bonnes intentions.
+
 
 ### Le miroir
 
@@ -234,6 +352,31 @@ Le graphe ne sert à rien s'il n'est pas **exécuté autrement**. Cinq mécanism
 | **FFN creux routé** | 8 experts, top-2, k-WTA 25 % : la sparsité est un budget | [`roadmap.md`](../pilotage/roadmap.md) § N |
 | **cache et placement** | le cache KV natif, le placement par bloc | [`rapport-native-cache.md`](../../reports/rapport-native-cache.md) |
 
+### Rejouer : la pile de déterminisme
+
+Le rejeu n'est pas une propriété du format : c'est une **pile** de décisions, et chaque étage peut la casser.
+
+| étage | source de non-déterminisme | décision | test |
+|---|---|---|---|
+| graine | tirage implicite | graine déclarée dans le manifeste | deux runs, même graine |
+| RNG | ordre d'appel | tirage **contré** `hash(seed, exemple, pas, neurone)` | permuter l'ordre des neurones |
+| ordre | réduction flottante | ordre fixe, réduction séquentielle ou arbre déterministe | 1 thread contre 4 |
+| arithmétique | fast-math, FMA | f64, pas de contraction, NaN canonique | même résultat sur deux machines |
+| trace | ordre des clés | JSON canonique, clés triées | hash de la trace |
+| hash | collision | SHA-256 | deux traces égales → même hash |
+
+![Rejouer : la pile de déterminisme](../schemas/natif-rejeu.svg)
+
+**Trois niveaux de rejeu**, et il faut dire lequel on revendique :
+
+1. **bit-exact** : mêmes spikes, mêmes poids — c'est ce que D&C revendique ;
+2. **tolérant** : mêmes logits à `ε` près — pour les blocs flottants non déterministes ;
+3. **sémantique** : même corps de RSN — pour les blocs qui changent de surface.
+
+Un bloc qui ne peut pas dire **lequel** il garantit ne garantit rien. Le diff n'est pas un supplément d'âme :
+c'est ce qui transforme « ça a l'air de marcher » en « voici le premier pas qui diverge ».
+
+
 **Ce que la mesure a déjà tranché** — et qui contraint la suite :
 
 - **le contexte est le verrou** : 129 octets est le meilleur point, 130 est négatif, 2 000 octets font
@@ -330,7 +473,25 @@ un centre qui type, un rejeu qui compare.
 **Une porte rouge n'est pas un échec** : c'est une information qui nomme ce qui manque. Le registre se lit par
 le **code de sortie**, jamais par un marqueur. Voir [`portes.md`](../methode/portes.md).
 
-## 10. Ce qui pourrait rendre ce document faux
+## 10. Les anti-patrons
+
+Six façons de casser la séparation, et le test qui les attrape :
+
+![Six anti-patrons, et le test qui les attrape](../schemas/natif-anti-patrons.svg)
+
+| anti-patron | symptôme | test |
+|---|---|---|
+| **le code promu** | le code de spikes s'appelle « RSN » | la sonde de format réussit sur le corps |
+| **la surface au raisonneur** | N3 lit les pixels ou le texte | changer le format change la décision |
+| **l'annotation dans le corps** | la langue ou le format est dans l'empreinte | deux surfaces du même sens → deux hashes |
+| **le jeton déguisé** | la RSN est une suite de jetons | changer le tokeniseur change le sens |
+| **le faux miroir** | le décodeur invente, l'encodeur ne restitue pas | `c(d(c(s))) ≠ c(s)` |
+| **le niveau décoratif** | le manifeste dit N2, le bloc lit la surface | la sonde de format réussit sur un bloc N2 |
+
+**Le plus fréquent est le premier** : un bloc impulsionnel produit un beau vecteur creux, on l'appelle
+« représentation sémantique », et personne ne vérifie qu'il est neutre. Le test est la sonde, pas l'intuition.
+
+## 11. Ce qui pourrait rendre ce document faux
 
 - **Trop petit** : 12 M ne parle pas ; `drave-n0` est un **banc de mécanismes**, pas un assistant. Si on le juge
   comme un chat, il échoue — et ce n'est pas une information sur le régime.
@@ -345,7 +506,7 @@ le **code de sortie**, jamais par un marqueur. Voir [`portes.md`](../methode/por
 - **Le graphe n'est pas utilisé** : si retirer le pont, les routes ou les têtes précoces ne change rien, alors le
   modèle est une pile qui s'ignore. Chaque arête doit avoir une ablation.
 
-## 11. Où lire la suite
+## 12. Où lire la suite
 
 - **Le format** : [`architecture-native.md`](architecture-native.md) · [`format-flux.md`](../implantation/format-flux.md) ·
   [`format-clusters.md`](../implantation/format-clusters.md)

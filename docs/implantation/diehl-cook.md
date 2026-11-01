@@ -48,6 +48,24 @@ de score à revendiquer.
 classe des chiffres écrits en pixels. C'est précisément pour cela qu'il est un bon **premier bloc** : le
 mécanisme est simple, la littérature est stable, et la question « où le placer ? » est tout le sujet.
 
+### Pourquoi D&C, et pas un classifieur
+
+D&C n'est pas le meilleur classifieur de MNIST, et ce n'est pas son rôle. Le comparer sur l'accuracy seule rate
+la question :
+
+| approche | apprentissage | frontière | qualité MNIST | ce qu'elle apporte |
+|---|---|---|---|---|
+| **D&C** | local, non supervisé | prototypes | ~95 % à 6 400 | parcimonie, interprétabilité, pas de rétropropagation |
+| **kNN / SVM** | supervisé (ou paresseux) | globale | ~95–97 % | simplicité, garanties |
+| **CNN** | rétropropagation | globale, hiérarchique | > 99 % | composition, transfert |
+| **CNN impulsionnel** | rétropropagation | hiérarchique | > 99 % | parcimonie, mais pas local |
+
+**La niche de D&C** : une **mémoire de prototypes qui apprend sans étiquette**, avec un coût d'exécution
+proportionnel aux spikes. Ce n'est ni un modèle de langue ni un raisonneur ; c'est un **bloc de représentation**
+qui peut être N1 ou N2, et qui rend le bus plus riche. Le jour où la tâche demande de la composition ou du
+contexte long, ce n'est pas D&C qu'il faut : c'est un autre bloc, au même contrat.
+
+
 ## 2. Ce que le modèle est, et ce qu'il n'est pas
 
 **C'est une mémoire compétitive de prototypes.** Chaque neurone excitateur apprend un prototype moyen des
@@ -76,10 +94,56 @@ typage** — la tête RSN — et c'est ce travail qui fait la différence entre 
 un **contrat externe**. Confondre les deux, c'est refaire l'erreur que le dépôt combat depuis le début : appeler
 « jeton » ce qui est une unité de sens.
 
+### Ce que la règle apprend
+
+D&C n'est pas une boîte noire : c'est un **clustering compétitif en ligne**. Chaque excitateur `j` porte un
+vecteur de poids `w_j` ; le potentiel de membrane est une intégrale filtrée de `Σ_i w_ij r_i` ; l'inhibition
+laisse un **gagnant** ; la STDP rapproche `w_j` de l'entrée qui l'a fait gagner ; la normalisation et le seuil
+adaptatif empêchent un neurone de tout prendre.
+
+![Ce que la règle apprend](../schemas/diehl-cook-dynamique.svg)
+
+On peut l'écrire comme un objectif informel — une **analogie opérationnelle**, pas une équivalence exacte :
+
+- **assignation** (E-step) : le gagnant est l'argmax de `Σ_i w_ij r_i` (soft WTA) ;
+- **mise à jour** (M-step) : `w_j ← w_j + η (r − w_j)` sur les entrées actives, avec une contrainte de norme ;
+- **homéostasie** : `θ_j` monte quand `j` gagne, pour égaliser les fréquences de victoire ;
+- **répulsion** : l'inhibition décorrèle les prototypes.
+
+C'est un **k-means en ligne, stochastique, avec une contrainte de norme et un contrôle de fréquence** — pas un
+réseau profond, pas un modèle génératif explicite. Cette lecture explique les forces (prototypes interprétables,
+apprentissage local) et les faiblesses (une seule couche, pas de composition, pas de discrimination apprise).
+
+**Ce que la règle n'apprend pas** : la hiérarchie, le temps, la syntaxe, la classe. La classe est **assignée**
+après, et c'est une décision de lecture, pas d'apprentissage. Une seule couche de prototypes ne devient pas un
+raisonneur parce qu'elle a beaucoup de neurones.
+
+
+### Pourquoi c'est un modèle de taux
+
+L'entrée est poissonnienne, le neurone intègre, la lecture somme des spikes. Le calcul dépend donc des **taux**,
+pas des instants. En régime linéaire (`g_e` petit devant 1), on peut l'écrire :
+
+- `E[V(T)] ≈ V_rest + (E_exc − V_rest) · (1 − e^{−T/τ_m}) · Σ_i γ_i r_i τ_ge`, avec `γ_i = w_i / 1 nS` ;
+- `Var[V(T)] = O(Σ_i γ_i² r_i τ_ge)` ;
+- la décision est l'argmax de `Σ_i w_i r_i`, estimé avec une erreur qui décroît en `1/√T`.
+
+![Pourquoi c'est un modèle de taux](../schemas/diehl-cook-taux.svg)
+
+Avec `T = 350 ms` et `τ_m = 100 ms`, l'intégration est longue : le taux est bien estimé, et le temps n'ajoute
+que du bruit. **Le spike est un substrat de parcimonie et d'apprentissage local, pas un code temporel.** Ce n'est
+pas un défaut : c'est ce qui rend le modèle compatible avec le bus (des événements rares) et avec la STDP (des
+traces locales). Mais il faut le dire, sinon on revendique un code temporel qu'on n'a pas.
+
+**Le contrôle qui tranche** : une lecture **taux seul** (moyenne des spikes par neurone) contre la lecture par
+spikes. Si les deux font aussi bien, le timing n'apporte rien. S'il fait moins bien, il y a un effet temporel à
+expliquer — et c'est une découverte, pas une hypothèse. C'est le contrôle H4 du banc v0.
+
+
 ## 3. Le principe à trois niveaux, appliqué
 
 Le contrat est celui de [`modele-natif.md`](../theorie/modele-natif.md) § 2 : **N1** surface, **N2** RSN,
-**N3** pensée ; une arête porte un **type**, et le type décide du niveau. Un bloc D&C peut être placé à trois
+**N3** pensée ; une arête porte un **type**, et le niveau est **déclaré** puis vérifié contre ce type. Un bloc D&C peut être placé à trois
 endroits, et **pas un seul de plus** :
 
 ![Où placer un bloc Diehl & Cook](../schemas/diehl-cook-placements.svg)
@@ -87,8 +151,8 @@ endroits, et **pas un seul de plus** :
 | placement | entrée → sortie | verdict | pourquoi |
 |---|---|---|---|
 | **N1 — encodeur** | surface → RSN | **légal** | il voit la surface, mais il **rend** une RSN typée ; c'est le bootstrap MNIST |
-| **N2 — mémoire** | RSN → RSN | **la cible** | il voit `φ(RSN)`, jamais la surface ; les prototypes sont des prototypes de **sens** |
-| **N3 — lecture** | RSN → RSN | **légal si règle** | une opération vérifiable sur la RSN ; l'A/B classique contre neuronal tranche |
+| **N2 — mémoire** | RSN → RSN enrichie | **la cible** | il voit `φ(RSN)`, jamais la surface ; les prototypes sont des prototypes de **sens** |
+| **N3 — lecture** | RSN → RSN d'action | **légal si règle** | une opération vérifiable sur la RSN ; l'A/B classique contre neuronal tranche |
 | **surface → décision** | surface → décision | **interdit** | c'est le raccourci qui rend l'invariance invérifiable |
 
 **La recommandation** : commencer par **N1** (c'est le seul placement où le résultat publié est reproductible
@@ -96,7 +160,7 @@ tel quel), puis **déplacer le même code en N2** dès qu'un encodeur RSN existe
 l'algorithme : il change le **port d'entrée** et le **type de la sortie**. C'est exactement ce que la
 séparation à trois niveaux rend possible — et c'est ce qui rend le bloc **substituable**.
 
-Un D&C peut aussi servir de **lecture associative** en N3 (RSN → RSN), mais ce n'est pas la cible : la lecture
+Un D&C peut aussi servir de **lecture associative** en N3 (RSN → RSN d'action), mais ce n'est pas la cible : la lecture
 de référence est **classique et exacte**, et l'A/B tranche. Le centre reste N2 ; N3 est une opération, pas une
 représentation.
 
@@ -120,7 +184,7 @@ représentation.
    typée** qui transforme le code de population en `corps` + `annotation`.
 2. **N2 — `M_proto`** : RSN → RSN. C'est le **même code D&C**, mais son entrée est `φ(RSN)` et sa sortie est une
    RSN enrichie d'une annotation de **prototype** (identifiant, distance, confiance). Il ne voit jamais un pixel.
-3. **N3 — `T_lecture`** : RSN → RSN. C'est une **règle classique** (plus proche prototype, table, solveur) ou un
+3. **N3 — `T_lecture`** : RSN → RSN d'action. C'est une **règle classique** (plus proche prototype, table, solveur) ou un
    petit réseau ; elle rend une RSN d'action (la classe, ou `null` + candidats).
 
 **Pourquoi deux blocs D&C et pas un seul ?** Parce que le **même algorithme** peut rendre deux services
@@ -134,6 +198,31 @@ différents, et que la séparation oblige à le dire :
 Le **v0** peut n'implémenter que **N1** (c'est le banc MNIST). Le **v1** ajoute **N2** dès que `φ` et la RSN
 existent. Le **v2** branche **N3** et compare une lecture classique à une lecture neuronale sur la **même**
 RSN — c'est l'A/B qui justifie l'hybridation.
+
+### La mémoire N2
+
+En N2, le bloc ne classe plus des chiffres : il **mémoire des sens**. Le pipeline :
+
+![La mémoire N2 : des prototypes de sens, pas des pixels](../schemas/diehl-cook-memoire.svg)
+
+1. **corpus de RSN** : des objets canoniques, annotés, issus de N1 ;
+2. **`φ`** : un encodeur typé, fitté sur le **corps** seulement, qui rend un vecteur de dimension déclarée ;
+3. **D&C** : `n_e` prototypes dans l'espace `φ` ; le gagnant est le prototype le plus proche ;
+4. **annotation** : `prototype`, `distance_pm`, `confiance_pm` ajoutés à la RSN ;
+5. **graphe de prototypes** : les prototypes qui co-activent ou qui sont proches sont reliés ; c'est la mémoire
+   associative, pas un raisonneur.
+
+**Ce qu'on peut mesurer** :
+
+- **récupération** : une RSN partielle ou bruitée retrouve le bon prototype (top-1, top-5) ;
+- **invariance** : deux annotations du même corps donnent le même prototype ;
+- **open-set** : une RSN inconnue a une distance au-dessus du seuil (AUC) ;
+- **complétion** : un champ manquant est proposé par le prototype (exactitude) ;
+- **composition** : le bloc ne compose pas ; c'est N3 qui compose, et c'est le test de la frontière.
+
+**La limite** : une mémoire de prototypes n'infère pas. Elle reconnaît, elle rapproche, elle complète ; elle ne
+déduit pas. C'est pour cela qu'elle est N2 et pas N3 : elle porte le sens, elle ne le travaille pas.
+
 
 **La tête typée (N1)** est un bloc **classique**, pas un réseau :
 
@@ -441,6 +530,33 @@ non contré.
 **durée**. C'est exactement l'argument de Drave — mais c'est une **projection**, et la porte **D5** la remplace
 par une mesure sur la machine.
 
+### Le coût
+
+**Exécution.** Pour la couche entrée → E :
+
+- événements : `E = n_input · r · T · n_e` (r en spikes/ms) ;
+- dense : `D = n_input · n_e · T` ;
+- rapport : `D/E = 1/(r · dt)` — il ne dépend **ni de n_e ni de T**, seulement du taux et du pas.
+
+À 20 Hz et `dt = 0,5 ms`, `r·dt = 0,01` : **100×** moins d'opérations. C'est la projection ; la mesure D5 la
+remplace.
+
+**Apprentissage.** La STDP touche `n_input` poids par spike post et `n_e` par spike pré ; la **normalisation**
+touche `n_input · n_e` par exemple, même si peu de neurones ont gagné. C'est le **coût caché** :
+
+| opération | poids touchés par exemple | proportion |
+|---|---:|---:|
+| STDP (spikes) | `n_input · s_post` | faible |
+| normalisation | `n_input · n_e` | **100 %** |
+| inhibition | `n_e · s_e` | faible |
+
+**Mémoire.** `w_in` : `n_input · n_e` f32 ; les traces : `x_pre` (même taille), `post1/post2` (`n_e`), `θ` (`n_e`).
+Pour 6 400 E et 784 entrées : ~20 Mo de poids, ~20 Mo de traces — portable, mais pas gratuit.
+
+**La leçon** : l'exécution est creuse ; l'apprentissage ne l'est pas encore. C'est le chantier que la porte D5b
+nomme, et c'est plus utile que de célébrer les 100× de l'inférence.
+
+
 ## 8. L'entraînement
 
 **Le protocole, dans l'ordre** :
@@ -471,6 +587,38 @@ donnent des résultats proches. C'est un argument de **robustesse**, pas une per
 choisit **une**, on la teste, et on garde les autres comme **contrôle de sensibilité**.
 
 ![La boucle d'entraînement et ses contrôles](../schemas/diehl-cook-boucle.svg)
+
+### Le banc v0, pré-enregistré
+
+Avant de coder, on écrit ce qui pourrait échouer. Le banc v0 est un **contrôle de mécanismes**, pas une
+reproduction du 95 %.
+
+![Le banc v0, pré-enregistré](../schemas/diehl-cook-banc.svg)
+
+**Les hypothèses** :
+
+| # | hypothèse | mesure | contrôle |
+|---|---|---|---|
+| H1 | STDP apprend mieux que des poids gelés | accuracy tenue à l'écart | poids aléatoires gelés |
+| H2 | l'inhibition diversifie les prototypes | similarité pairwise moyenne | inhibition coupée |
+| H3 | l'homéostasie égalise les taux | entropie des taux | seuil fixe |
+| H4 | le taux suffit | accuracy taux vs spikes | lecture taux seul |
+| H5 | la RSN est neutre | sonde de format sur `φ(corps)` | code de spikes (doit réussir) |
+| H6 | le rejeu est exact | diff de spikes | graine changée (doit diverger) |
+
+**Le dispositif** : 100 excitateurs, 2 000 exemples d'entraînement, 1 000 de validation, 1 000 de test ; 1 passage ;
+3 graines ; `dt = 0,5 ms` ; 350 + 150 ms. Le test n'est **jamais** lu avant le gel. Pas d'arrêt sur le test.
+
+**Le corpus** : un jeu étiqueté de petite taille (8×8, ou MNIST sous-échantillonné si le corpus est présent),
+versionné dans `data/`, avec un split **par classe** et un split **par format** pour la sonde H5.
+
+**Ce qui rendrait le banc faux** : un corpus confondu (format = classe), une assignation sur le test, une
+normalisation non comptée, un contrôle qui réussit aussi bien que le traitement. Le banc est **pré-enregistré** :
+les hypothèses et les seuils sont écrits avant la première mesure.
+
+**Ce que le banc n'est pas** : une chasse au 95 %. 100 neurones et 1 passage ne reproduisent pas 6 400 neurones
+et 15 passages. Le banc dit si les **mécanismes** fonctionnent ; le score vient après, et il vient avec le corpus.
+
 
 ## 9. La RSN de sortie
 
@@ -537,6 +685,25 @@ que la lecture par neurones. Si c'est le cas, il faut le **dire** : le spike app
 **coût événementiel**, pas un code temporel. Ce n'est pas un échec ; c'est une clarification. La revendication
 « le temps porte l'information » serait, elle, une erreur.
 
+### Les modes de défaillance
+
+| mode | symptôme | cause | test | remède |
+|---|---|---|---|---|
+| **neurones morts** | fraction morte > 10 % | inhibition trop forte, θ trop haut | compter les gagnants | baisser l'inhibition, θ |
+| **effondrement** | similarité pairwise > 0,9 | inhibition trop faible | cosine pairwise | augmenter l'inhibition |
+| **monopole** | entropie des taux basse | θ trop lent | entropie | θ_plus, décroissance |
+| **explosion** | max poids > 1 | pas de normalisation | max, somme | normaliser, borner |
+| **ordre** | deux ordres, deux scores | apprentissage en ligne | deux permutations | mélanger, moyenner |
+| **biais Poisson** | deux graines, deux scores | trop peu de spikes | 3 graines | allonger T, taux |
+| **assignation ambiguë** | ex æquo | peu de neurones | fraction d'ex æquo | plus de neurones |
+| **fuite de format** | sonde de format > chance | φ lit l'annotation | sonde | φ sur le corps seul |
+| **rejeu divergent** | diff > 0 | RNG/ordre/FP | deux runs | tirage contré, f64 |
+| **coût caché** | poids touchés = 100 % | normalisation dense | compteur | colonnes actives |
+
+**Le plus insidieux est le dernier** : on mesure les spikes, on oublie la normalisation, et on croit que
+l'apprentissage est creux. Le compteur de **poids touchés** est la mesure qui manque à presque tous les bancs SNN.
+
+
 ## 11. Les portes D
 
 | porte | question | critère | contrôle négatif |
@@ -554,6 +721,64 @@ que la lecture par neurones. Si c'est le cas, il faut le **dire** : le spike app
 spike au même tick**. Si elles divergent, ce n'est pas « un détail de virgule flottante » : c'est un ordre
 d'opération, un seuil, un délai ou un tirage qui n'est pas le même. Un bloc qu'on ne peut pas confronter à une
 référence n'est pas un bloc, c'est une boîte.
+
+### La suite de conformité
+
+Un bloc ne se déclare pas conforme ; il passe des tests qui peuvent échouer. La pyramide :
+
+![La suite de conformité](../schemas/diehl-cook-conformite.svg)
+
+| étage | ce qu'on teste | exemple | tolérance |
+|---|---|---|---|
+| **unité** | une fonction | un pas de LIF, une trace, un seuil | exact |
+| **propriété** | une loi | normalisation = 78, θ monte, hash idempotent | exact |
+| **intégration** | un contrat | DRVM → bloc → DRVF → rejeu | spikes exacts |
+| **banc** | un mécanisme | H1–H6, ablations, 3 graines | statistique |
+
+**Les tests de propriété** sont les plus rentables : ils attrapent les bugs que les exemples ne voient pas.
+
+- **permutation** : permuter les neurones permute les spikes, pas l'accuracy ;
+- **monotonie** : plus de taux d'entrée → plus de spikes (pour un neurone isolé) ;
+- **normalisation** : la somme d'une colonne vaut 78 après normalisation ;
+- **idempotence** : `canon(canon(x)) = canon(x)` ;
+- **refus** : un graphe illégal, un kind inconnu, un tenseur manquant **échouent** ;
+- **rejeu** : deux runs, même graine, zéro différence.
+
+**Le test le plus important** : un graphe illégal doit être **refusé**. Si le chargeur accepte tout, la
+séparation n'est pas dans le format ; elle est dans la discipline, et la discipline ne se teste pas.
+
+### Le protocole de substitution
+
+Deux blocs qui prétendent au même contrat se comparent sur la **même** entrée RSN :
+
+1. mêmes RSN d'entrée, même graine, même trace ;
+2. comparer les **corps** (égalité canonique) et les **annotations** (tolérance déclarée) ;
+3. comparer le **coût** (événements, poids touchés, mémoire) ;
+4. comparer le **rejeu** (bit-exact ou tolérant) ;
+5. conclure : l'un raffine l'autre, ou ils sont incompatibles.
+
+C'est la définition opérationnelle du bus : **même entrée, même sortie attendue, même trace**. Sans le point 2,
+on compare des surfaces ; avec lui, on compare des sens.
+
+
+### Ce que le bloc achète, et ce qu'il coûte
+
+| apport | ce qu'il donne | ce qu'il coûte |
+|---|---|---|
+| **apprentissage local** | pas de rétropropagation, pas de professeur | qualité < gradient, une seule couche |
+| **parcimonie** | ~100× moins d'événements en projection | normalisation dense, matériel événementiel |
+| **interprétabilité** | prototypes visualisables | pas de composition, pas de syntaxe |
+| **substituabilité** | même contrat RSN, même trace | il faut `φ` et un corpus de RSN |
+| **rejeu** | trace exacte, diff | f64, RNG contré, pas de fast-math |
+
+**La règle de décision** :
+
+- **D&C** si la tâche est de **reconnaître, rapprocher ou compléter** des motifs dans un format fixe, sans
+  étiquette, et si le coût d'exécution domine ;
+- **un readout classique** si la RSN est déjà structurée et la décision exacte ;
+- **un bloc de type transformeur** si la tâche demande de la **composition**, du **contexte long** ou de la
+  **langue** — et alors il vit au même niveau, derrière le même contrat, pas à la place du contrat.
+
 
 ## 12. Le plan d'implémentation
 

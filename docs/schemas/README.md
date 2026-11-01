@@ -32,12 +32,22 @@
 | [natif-pertes.svg](natif-pertes.svg) | les sept pertes du natif et ce qu'elles empêchent | [le modèle natif](../theorie/modele-natif.md) |
 | [natif-original.svg](natif-original.svg) | les six gestes qui distinguent Drave | [le modèle natif](../theorie/modele-natif.md) |
 | [natif-portes.svg](natif-portes.svg) | les portes N0 → N4 | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-quotient.svg](natif-quotient.svg) | la RSN comme quotient : surfaces, corps, annotation, miroir | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-types.svg](natif-types.svg) | la matrice des types et le théorème de non-fuite de la surface | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-neutralite.svg](natif-neutralite.svg) | neutre et informatif : les deux sondes et les quatre quadrants | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-rejeu.svg](natif-rejeu.svg) | la pile de déterminisme et le diff qui localise la divergence | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-anti-patrons.svg](natif-anti-patrons.svg) | six façons de casser la séparation, et leur test | [le modèle natif](../theorie/modele-natif.md) |
 | [diehl-cook-architecture.svg](diehl-cook-architecture.svg) | Poisson, LIF, STDP, inhibition latérale, seuil adaptatif | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-placements.svg](diehl-cook-placements.svg) | les trois placements légaux et le raccourci interdit | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-contrat.svg](diehl-cook-contrat.svg) | ports, `φ(RSN)`, annotation et refus du chargeur | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-temps.svg](diehl-cook-temps.svg) | du spike au fait DRVF : 0,5 ms, 1 000 pas, une trace | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-pipeline.svg](diehl-cook-pipeline.svg) | le pipeline de référence à trois niveaux et le miroir | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-boucle.svg](diehl-cook-boucle.svg) | la boucle d'entraînement et ses contrôles négatifs | [le bloc D&C](../implantation/diehl-cook.md) |
+| [diehl-cook-dynamique.svg](diehl-cook-dynamique.svg) | STDP, poids, seuil adaptatif et WTA : le clustering compétitif | [le bloc D&C](../implantation/diehl-cook.md) |
+| [diehl-cook-taux.svg](diehl-cook-taux.svg) | pourquoi c'est un modèle de taux, et le contrôle qui tranche | [le bloc D&C](../implantation/diehl-cook.md) |
+| [diehl-cook-memoire.svg](diehl-cook-memoire.svg) | la mémoire N2 : RSN, φ, prototypes, graphe, annotation | [le bloc D&C](../implantation/diehl-cook.md) |
+| [diehl-cook-banc.svg](diehl-cook-banc.svg) | le banc v0 pré-enregistré : hypothèses et contrôles | [le bloc D&C](../implantation/diehl-cook.md) |
+| [diehl-cook-conformite.svg](diehl-cook-conformite.svg) | la pyramide des tests et les tolérances | [le bloc D&C](../implantation/diehl-cook.md) |
 
 Le **schéma des chantiers** n'est plus un fichier : c'est un bloc **PlantUML inline** dans
 [`en-cours.md`](../pilotage/en-cours.md) (structure et états, sans axe de temps) et un **Gantt

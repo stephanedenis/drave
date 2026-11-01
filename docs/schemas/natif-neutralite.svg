@@ -1,0 +1,43 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Neutre et informatif : les deux sondes</title>
+<desc>Un code constant est parfaitement neutre et parfaitement inutile ; une RSN doit passer l&#x27;une et échouer à l&#x27;autre.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="540" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Neutre et informatif : les deux sondes</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">La neutralité seule est un piège : le couple (neutre, informatif) est la propriété utile.</text>
+<rect x="80" y="100" width="500" height="340" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+<line x1="330.0" y1="100" x2="330.0" y2="440" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="4 4"/>
+<line x1="80" y1="270.0" x2="580" y2="270.0" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="4 4"/>
+<text x="330.0" y="466" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">informatif  (P_y : classe)  →</text>
+<text x="70" y="112" text-anchor="end" font-size="11" font-weight="bold" fill="#334155">neutre</text>
+<text x="70" y="128" text-anchor="end" font-size="10" fill="#475569">(1 − P_f)</text>
+<text x="200" y="160" text-anchor="middle" font-size="13" font-weight="bold" fill="#64748b">bruit</text>
+<text x="200" y="182" text-anchor="middle" font-size="9.5" fill="#64748b">neutre, inutile</text>
+<text x="460" y="160" text-anchor="middle" font-size="14" font-weight="bold" fill="#15803d">RSN</text>
+<text x="460" y="182" text-anchor="middle" font-size="9.5" fill="#15803d">neutre + informatif</text>
+<text x="200" y="370" text-anchor="middle" font-size="13" font-weight="bold" fill="#64748b">constante</text>
+<text x="200" y="392" text-anchor="middle" font-size="9.5" fill="#64748b">neutre, sans sens</text>
+<text x="460" y="370" text-anchor="middle" font-size="13" font-weight="bold" fill="#b91c1c">code de surface</text>
+<text x="460" y="392" text-anchor="middle" font-size="9.5" fill="#b91c1c">informatif, non neutre</text>
+<circle cx="200" cy="280" r="8" fill="#94a3b8" stroke="#64748b" stroke-width="1.8"/>
+<circle cx="460" cy="280" r="8" fill="#15803d" stroke="#15803d" stroke-width="1.8"/>
+<circle cx="200" cy="400" r="8" fill="#94a3b8" stroke="#64748b" stroke-width="1.8"/>
+<circle cx="460" cy="400" r="8" fill="#b91c1c" stroke="#b91c1c" stroke-width="1.8"/>
+<text x="460" y="416" text-anchor="middle" font-size="8.5" fill="#b91c1c">D&amp;C brut</text>
+<text x="460" y="296" text-anchor="middle" font-size="8.5" fill="#15803d">la cible</text>
+<rect x="620" y="110" width="300" height="120" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.6"/>
+<text x="770" y="138" text-anchor="middle" font-size="13" font-weight="bold" fill="#15803d">P_f : sonde de format</text>
+<text x="770" y="162" text-anchor="middle" font-size="10.5" fill="#334155">entrée : c(s) (le corps)</text>
+<text x="770" y="182" text-anchor="middle" font-size="11" font-weight="bold" fill="#b91c1c">attendu : ÉCHEC (chance)</text>
+<text x="770" y="204" text-anchor="middle" font-size="9.5" fill="#475569">sinon : la RSN fuit la surface</text>
+<rect x="620" y="250" width="300" height="120" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.6"/>
+<text x="770" y="278" text-anchor="middle" font-size="13" font-weight="bold" fill="#15803d">P_y : sonde de classe</text>
+<text x="770" y="302" text-anchor="middle" font-size="10.5" fill="#334155">entrée : c(s) (le corps)</text>
+<text x="770" y="322" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">attendu : RÉUSSITE</text>
+<text x="770" y="344" text-anchor="middle" font-size="9.5" fill="#475569">sinon : la RSN a détruit le sens</text>
+<rect x="620" y="392" width="300" height="80" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.2"/>
+<text x="770" y="416" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f172a">marginal sémantique</text>
+<text x="770" y="438" text-anchor="middle" font-size="9.5" fill="#475569">I − N : on veut les deux hauts</text>
+<text x="770" y="456" text-anchor="middle" font-size="9" font-style="italic" fill="#475569">mais la neutralité est relative au corpus</text>
+<text x="480" y="512" text-anchor="middle" font-size="10.5" fill="#475569">Un corpus confondu (format = classe) fait réussir la sonde de format sans que la RSN fuie : équilibrer, puis sonder.</text>
+</svg>

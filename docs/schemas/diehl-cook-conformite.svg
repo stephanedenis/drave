@@ -1,0 +1,32 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="DejaVu Sans, Arial, sans-serif">
+<title>La suite de conformité : la pyramide des tests</title>
+<desc>Un bloc ne se déclare pas conforme ; il passe des tests qui peuvent échouer.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="540" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">La suite de conformité : la pyramide des tests</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Les tests de propriété attrapent les bugs que les exemples ne voient pas.</text>
+<rect x="70.0" y="390" width="520" height="58" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+<text x="330.0" y="414" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">unité</text>
+<text x="330.0" y="434" text-anchor="middle" font-size="9.5" fill="#475569">un pas de LIF, une trace, un seuil</text>
+<rect x="120.0" y="320" width="420" height="58" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.5"/>
+<text x="330.0" y="344" text-anchor="middle" font-size="13" font-weight="bold" fill="#6d28d9">propriété</text>
+<text x="330.0" y="364" text-anchor="middle" font-size="9.5" fill="#475569">normalisation = 78, θ monte, hash idempotent</text>
+<rect x="170.0" y="250" width="320" height="58" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<text x="330.0" y="274" text-anchor="middle" font-size="13" font-weight="bold" fill="#b45309">intégration</text>
+<text x="330.0" y="294" text-anchor="middle" font-size="9.5" fill="#475569">DRVM → bloc → DRVF → rejeu</text>
+<rect x="220.0" y="180" width="220" height="58" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+<text x="330.0" y="204" text-anchor="middle" font-size="13" font-weight="bold" fill="#15803d">banc</text>
+<text x="330.0" y="224" text-anchor="middle" font-size="9.5" fill="#475569">H1–H6, ablations, 3 graines</text>
+<rect x="650" y="120" width="280" height="230" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="790" y="146" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">les tolérances</text>
+<text x="670" y="180" text-anchor="start" font-size="10.5" fill="#334155">spikes</text>
+<text x="910" y="180" text-anchor="end" font-size="10.5" font-weight="bold" fill="#15803d">exact</text>
+<text x="670" y="214" text-anchor="start" font-size="10.5" fill="#334155">poids</text>
+<text x="910" y="214" text-anchor="end" font-size="10.5" font-weight="bold" fill="#b45309">1e-6</text>
+<text x="670" y="248" text-anchor="start" font-size="10.5" fill="#334155">logits</text>
+<text x="910" y="248" text-anchor="end" font-size="10.5" font-weight="bold" fill="#b45309">1e-5</text>
+<text x="670" y="282" text-anchor="start" font-size="10.5" fill="#334155">corps de RSN</text>
+<text x="910" y="282" text-anchor="end" font-size="10.5" font-weight="bold" fill="#15803d">hash exact</text>
+<rect x="30" y="470" width="900" height="44" rx="8" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.2"/>
+<text x="480" y="497" text-anchor="middle" font-size="11" font-weight="bold" fill="#7f1d1d">Le test le plus important : un graphe illégal, un kind inconnu ou un tenseur manquant doivent ÉCHOUER.</text>
+</svg>

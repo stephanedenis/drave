@@ -1,0 +1,122 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Pourquoi c&#x27;est un modèle de taux</title>
+<desc>Le potentiel intègre des taux ; le temps n&#x27;ajoute que de la variance — sauf si on lit le timing.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="540" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Pourquoi c&#x27;est un modèle de taux</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le spike est un substrat de parcimonie et d&#x27;apprentissage local, pas un code temporel.</text>
+<text x="170" y="100" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">entrées de Poisson</text>
+<text x="34" y="144" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#475569">r1</text>
+<circle cx="163.57109284235645" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="189.34537265931903" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="276.81054016569504" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="166.7560168239456" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="176.88190553494508" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="195.97235892397526" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="99.3184825251704" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="177.8580733700333" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="206.17185285203246" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="245.31444940478863" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="77.58962949501243" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="127.81630302988611" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="76.76092899804146" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="249.31468824812262" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="221.42523580989737" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="65.05128072876305" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="290.7264209917068" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="286.541867470136" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="211.9414080481217" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="202.735049098857" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="92.79858283363899" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="58.600176867905176" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="181.8115038809149" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="69.2922652405252" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="100.64998307150299" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="113.06632327965154" cy="140" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<text x="34" y="179" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#475569">r2</text>
+<circle cx="62.219821413949255" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="166.34427069358827" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="160.7274679975976" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="257.1825108444477" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="179.5897875433784" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="208.6700099006025" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="174.94555652962998" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="213.98788765368835" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="164.75917158389385" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="121.75909591933261" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="294.4374881111403" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="293.9659939974878" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="256.6517318782868" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="224.87430915950787" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="130.66653208373197" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="110.11981638589734" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="124.36958735540851" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="71.85363989438221" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="238.9090927384977" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="151.09595318043785" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="258.1800692514829" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="147.7632476094243" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="284.93017199675523" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="258.3543455926731" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="55.13078489333691" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="105.33217953510668" cy="175" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<text x="34" y="214" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#475569">r3</text>
+<circle cx="273.46526274500354" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="167.79694624327993" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="290.2861458818301" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="150.38185313902747" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="72.5292025200875" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="206.0691789361658" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="241.8426060823962" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="119.74614084403424" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="75.91460760452082" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="134.8205501112035" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="286.37829198250336" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="236.92972407850212" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="83.31800306069219" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="114.1331077343512" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="79.25111414960922" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="69.37441670585841" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="246.28516284255377" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="97.64275076760788" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="189.23083398649476" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="162.38197060024515" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="100.76425966968785" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="230.65461177144408" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="86.43210009198873" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="209.4916296906801" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="82.96191703352935" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<circle cx="155.98134813914103" cy="210" r="2.6" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="0"/>
+<text x="170" y="246" text-anchor="middle" font-size="9.5" fill="#475569">des taux, pas des instants</text>
+<line x1="300" y1="175" x2="328" y2="175" stroke="#1d4ed8" stroke-width="2" marker-end="url(#fb)"/>
+<rect x="330" y="100" width="300" height="200" rx="9" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="480" y="124" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">le potentiel intègre</text>
+<line x1="355" y1="260" x2="610" y2="260" stroke="#94a3b8" stroke-width="1.2"/>
+<line x1="355" y1="140" x2="355" y2="275" stroke="#94a3b8" stroke-width="1.2"/>
+<line x1="355" y1="165" x2="610" y2="165" stroke="#b91c1c" stroke-width="1.2" stroke-dasharray="4 3"/>
+<path d="M355,255 C390,250 410,238 430,225 C450,212 465,205 480,190 C495,176 510,170 525,158" fill="none" stroke="#1d4ed8" stroke-width="2.2" marker-end="url(#f)"/>
+<text x="600" y="160" text-anchor="end" font-size="9" font-weight="bold" fill="#b91c1c">seuil</text>
+<text x="480" y="280" text-anchor="middle" font-size="9.5" fill="#334155">V(T) ≈ V_rest + ΔE · Σ γ_i r_i τ_ge</text>
+<text x="480" y="294" text-anchor="middle" font-size="9" fill="#334155">× (1 − e^{−T/τ_m})</text>
+<rect x="330" y="320" width="300" height="100" rx="9" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.2"/>
+<text x="480" y="344" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#0f172a">l&#x27;espérance</text>
+<text x="480" y="366" text-anchor="middle" font-size="10.5" fill="#334155">E[V] ∝ Σ w_i r_i</text>
+<text x="480" y="388" text-anchor="middle" font-size="10.5" fill="#334155">Var[V] = O(Σ γ_i² r_i τ_ge)</text>
+<text x="480" y="408" text-anchor="middle" font-size="9.5" fill="#475569">la décision est un argmax de taux</text>
+<rect x="660" y="100" width="270" height="200" rx="9" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="795" y="124" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">l&#x27;erreur d&#x27;estimation</text>
+<line x1="690" y1="260" x2="910" y2="260" stroke="#94a3b8" stroke-width="1.2"/>
+<line x1="690" y1="140" x2="690" y2="275" stroke="#94a3b8" stroke-width="1.2"/>
+<path d="M695,150 C720,190 760,225 810,240 C845,250 880,254 905,256" fill="none" stroke="#15803d" stroke-width="2.2" marker-end="url(#f)"/>
+<text x="700" y="140" text-anchor="start" font-size="9" font-weight="bold" fill="#15803d">1/√T</text>
+<line x1="835" y1="250" x2="835" y2="262" stroke="#b91c1c" stroke-width="1.2"/>
+<text x="835" y="278" text-anchor="middle" font-size="9" fill="#b91c1c">T = 350 ms</text>
+<text x="795" y="286" text-anchor="middle" font-size="9" fill="#475569">le taux est bien estimé</text>
+<rect x="660" y="320" width="270" height="100" rx="9" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2"/>
+<text x="795" y="344" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#15803d">le contrôle qui tranche</text>
+<text x="795" y="366" text-anchor="middle" font-size="10.5" fill="#334155">lecture taux seul</text>
+<text x="795" y="388" text-anchor="middle" font-size="9.5" fill="#475569">si elle fait aussi bien,</text>
+<text x="795" y="406" text-anchor="middle" font-size="9.5" fill="#475569">le timing n&#x27;apporte rien.</text>
+<rect x="30" y="448" width="900" height="44" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+<text x="480" y="476" text-anchor="middle" font-size="10.5" fill="#334155">Si la lecture taux seul fait moins bien, il y a un effet temporel à expliquer — une découverte, pas une hypothèse.</text>
+</svg>

@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 0.6 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 160 |
-| Appels d'outils | 179 |
+| Messages | 165 |
+| Appels d'outils | 185 |
 | Fichiers touchés | 7 |
-| Commandes | 155 |
+| Commandes | 161 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — lis le fichier en-cours.md et prends une tâche qui n'est pas en conflit avec l'autre session
 
-*179 appels d'outils.* Actions notables :
+*185 appels d'outils.* Actions notables :
 
 - read
 - bash — Check active sessions status
@@ -41,11 +41,40 @@
 - bash — Verify no gate script still running
 - bash — List processes touching the repo
 - bash — List documentary gate scripts
-- … et 153 autres
+- … et 159 autres
 
 **Synthèse produite :**
 
-⏵ Vérification des portes documentaires avant de choisir la tâche
+⏵ Bilan de la session R4.4
+
+J'ai pris **R4.4 — l'OCR** : aucun conflit avec N2 (pas de GPU, pas de fichier réservé, pas de `toutes-les-portes.sh`). La ligne était bloquée par une ressource absente, pas par une question ouverte.
+
+**Ce qui a été fait**
+
+- tesseract **5.5.3 installé sans root** dans `work/ocr/` (`tools/installer_ocr.sh`, RPM openSUSE, ni `sudo` ni paquet système) ;
+- l'OCR rend des **blocs** au graphe R0.1 par la même fonction de manifeste que le PDF natif (`tools/graphe_document_ocr.py`) : offsets, partition, provenance identiques, **confiance par bloc** dans la provenance ;
+- mesure (`tools/mesurer_ocr.py`) sur **10 pages rendues à 300 dpi**, 6 PDF, fr/en/es ; nouvelle porte `tools/porte-ocr.sh` (la 79e).
+
+**Résultat** (`0088fc2f`)
+
+| mesure | valeur |
+|---|---|
+| WER mot à mot | **4,48 %** (169 éditions / 3 771 mots), rappel 97,37 %, confiance 93,2 |
+| parité de passage (même lecteur R0.2) | **27/30 = 90,0 %**, F1 médian 1,000 |
+| valeur exacte | 25/30 = 83,3 % |
+| contrôle **sans OCR** | **0/30** |
+| contrôle **page « photo » simulée** | WER 17,08 %, parité **26,7 %** |
+
+Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par tesseract, deux **en-têtes découpés autrement** (`Point 13`), un `XXI` lu `XXD`. R4.4 passe de **bloquée à partielle** : la porte de la roadmap (vraies pages **scannées**) reste ouverte, et le contrôle dégradé en donne la mesure.
+
+**Livrables** : `reports/rapport-r44-ocr-pilote.md`, `reports/r44-ocr-pilote.json`, `docs/implantation/encodeur-visuel.md`, backlog R44 mis à jour, roadmap et `en-cours` à jour. Session `fe3c05f0` close et archivée (`b8683d00`).
+
+**Deux choses à signaler**
+
+- Au tout début, une commande mal composée a lancé `toutes-les-portes.sh` par erreur : **tuée en moins de 60 s**, aucun processus de porte restant, et les deux entraînements N2 ont continué normalement (g1/g2 finis, g3 en cours, aucune erreur). Les PPL ne dépendent pas du temps.
+- `tools/taille_documents.py` comptait le budget **T0** contre un document **T1** (`organisation-du-depot`, 1 579 mots) : 445 mots de budget faux, dans le sens qui bloque. Corrigé et commité — T0 à **3 702** mots pour 4 000.
+
+**Portes** : revue de documentation, tableaux, état, document, schémas, journal, sessions, backlog, budget et OCR — **toutes vertes**.
 
 ## 3. Travail accompli
 
@@ -103,7 +132,7 @@
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 115 autres
+- … et 121 autres
 
 ## 4. Mesures et résultats marquants
 

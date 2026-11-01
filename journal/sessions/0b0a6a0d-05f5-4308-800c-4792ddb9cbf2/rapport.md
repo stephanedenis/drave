@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 0.8 h |
+| Durée | 3.7 h |
 | Tours | 2 |
-| Messages | 172 |
-| Appels d'outils | 174 |
+| Messages | 281 |
+| Appels d'outils | 280 |
 | Fichiers touchés | 9 |
-| Commandes | 145 |
+| Commandes | 233 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -79,7 +79,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 2 — <goal_round> Objective: "N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / … [791 caractères tronqués]
 
-*78 appels d'outils.* Actions notables :
+*184 appels d'outils.* Actions notables :
 
 - bash — Check campaign status
 - bash — Compute manifest source shares
@@ -95,7 +95,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py`
 - bash — Check for seed 1 final results
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/robustesse.py`
-- … et 54 autres
+- … et 137 autres
 
 **Synthèse produite :**
 
@@ -159,7 +159,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 105 autres
+- … et 193 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -249,10 +249,45 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T2** `> **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par`
 - **T2** `0, 1164 MiB, 78 %`
 - **T2** `1, 1164 MiB, 80 %`
+- **T2** `| [2026-09-29](2026-09-29/attention.md) | `+6 %` · `×2,8` · `×1,8` · `×2,3` |`
+- **T2** `| [2026-09-30](2026-09-30/attention.md) | `−61 %` · `−24 %` · `7,59 ms` |`
+- **T2** `| [2026-10-01](2026-10-01/attention.md) | `85,1 s` · `× 3` |`
+- **T2** `| [2026-10-02](2026-10-02/attention.md) | `×9,34` · `4,5 %` · `1003 ms` · `×3` |`
+- **T2** `| bras | graines | protocole 8×16×128 | fenêtres propres | fenêtres contaminées |`
+- **T2** `| B — 20 000 pas, manifeste 4 sources (82,5 % anglais) | 3 | **3.7591** | **3.8573** | **3.4554** |`
+- **T2** `| Bp — 20 000 pas, 4 sources à quotas égaux (25 %) | 3 | **3.4350** | **3.5634** | **3.1177** |`
+- **T2** `> complet (20 000 pas, 41 Mo) fait baisser la PPL de **2,9355 à 2,8527** sous le protocole de N2.19 ;`
+- **T2** `> le corpus à quatre sources la fait **monter** à **3,7591** ; et **32,8 % des fenêtres du protocole`
+- **T2** `**20,48 Mo d'un seul corpus en 5 000 pas**, la moitié du budget de N2 (41 Mo, 20 000 pas, quatre`
+- **T2** `| distillation courte | 5 000 pas · 20,48 Mo · **2,9355** (3 graines) | `artefacts/temoin-g{1,2,3}.pt` |`
+- **T2** `Corput), et un décalage de fenêtres par graine `(graine − 1) × 10 000 019` — sans lui, deux graines`
+- **T2** `Plan des bras, **budget strictement égal** (20 000 pas × 16 × 128 = **41 Mo vus**), lr 1e-4 sur`
+- **T2** `| **B** | manifeste 4 sources : fr 3,8 %, UDHR 3,6 %, **en 82,5 %**, litt. 10,1 % | la diversité, telle que le manifeste la définit |`
+- **T2** `| **B′** | 4 sources à **quotas égaux** (25 % chacune) | la part de l'anglais dans l'effet de B |`
+- **T2** `| bras | graines | protocole 8×16×128 | fenêtres propres | fenêtres contaminées | 8×15×129 |`
+- **T2** `| **B** — 20 000 pas, manifeste 4 sources (82,5 % anglais) | 3 | 3,7591 ±0,0075 | 3,8573 ±0,0161 | 3,4554 ±0,0109 | 3,8218 ±0,0092 |`
+- **T2** `| **Bp** — 20 000 pas, 4 sources à quotas égaux (25 %) | 3 | 3,4350 ±0,0022 | 3,5634 ±0,0039 | 3,1177 ±0,0052 | 3,4848 ±0,0041 |`
+- **T2** `- **30,7 %** d'un échantillon de 300 fenêtres de validation apparaissent **verbatim** dans`
+- **T2** `l'entraînement ; **32,8 %** des 128 fenêtres du protocole (42 sur 128) ;`
+- **T2** `- **23,5 %** d'un échantillon de 200 fenêtres d'entraînement apparaissent **plus d'une fois** dans`
+- **T2** `protocole. Le manifeste est à 82,5 % anglais alors que le professeur est **français** : les`
+- **T2** `- **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;`
+- **T2** `-  **N2.h2** (distillation, professeur refait, 3 graines) : **2,9935** contre **2,9927** (+0,029 %) ;`
+- **T2** `+- **N2** : GPU ; **N2.d** — le budget plein (20 000 pas, 41 Mo, 3 graines) paie`
+- **T2** `+  **2,9355 → 2,8527** ; les quatre sources coûtent **+0,9064** (professeur français, 82,5 %`
+- **T2** `+  à 129. **La validation n'est pas tenue à l'écart : 32,8 % des fenêtres du protocole sont`
+- **T2** `+129 ; et **32,8 % des fenêtres du protocole de validation sont verbatim dans l'entraînement**`
+- **T2** `+| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2 : budget **−0,08**, **validation contaminée (32,8 %)** ; N4 partiel | **N2** (le corpus dé`
+- **T2** `+| **N2** | la distillation : 49 999 fenêtres, 4 sources, professeur Qwen/DeepSeek | 🔬 | **N2.d** — le budget plein paie **2,936 → 2,853** ; les quatre sources coûtent **+0,906** ; **la validation est`
+- **T2** `+   jeu **contaminé à 32,8 %** — voir [N2.d](../../reports/rapport-n2-budget.md)) ; **130** est négatif`
+- **T2** `+  recopie (32,8 % des fenêtres du protocole sont verbatim dans l'entraînement) : la question n'a de`
+- **T2** `0088fc2f R4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 %`
+- **T2** `la question était simple : le dispositif reconstruit hier n'avait vu que **20,48 Mo** d'un seul`
+- … (tronqué)
 
 ## 5. Erreurs rencontrées
 
-9 sorties en erreur ou divergentes. Les premières :
+18 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5
@@ -263,6 +298,12 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T2** : 17:38 pas 12000 · seq 128 · perte 49.2191 · PPL 128/4 2.4135 · 818 s [exit code: 1]
 - **T2** : 17:40:04 pas 13000 · seq 128 · perte 53.7650 · PPL 128/4 2.4008 · 886 s pas 13000 · seq 128 · perte 84.8568 · PPL 128/4 3.7372 · 877 s [exit code: 1]
 - **T2** : 17:42:32 pas 15250 · seq 128 · perte 45.0087 · PPL 128/4 2.4105 · 1037 s pas 15250 · seq 128 · perte 81.7393 · PPL 128/4 3.7293 · 1027 s [exit code: 1]
+- **T2** : 18:19 6 -- A-fr-g3 pas  6750 · seq 128 · perte 53.3343 · PPL 128/4 2.5292 · 453 s -- B-multi-g3 pas  6500 · seq 128 · perte 87.6959 · PPL 128/4 3.7325 · 442 s -- C-129-g1 -- Bp-equilibre-g1 [exit code
+- **T2** : 18:29 work/n2d/A-fr-g1.json work/n2d/A-fr-g2.json work/n2d/B-multi-g1.json work/n2d/B-multi-g2.json work/n2d/contamination.json work/n2d/evaluations-finales.json -- A-fr-g3 pas 16000 · seq 128 · perte
+- **T2** : 18:40 8 -- C-129-g1 pas  6000 · seq 129 · perte 51.6991 · PPL 128/4 2.4037 · 403 s -- Bp-equilibre-g1 pas  5750 · seq 128 · perte 104.8664 · PPL 128/4 3.3953 · 377 s -- C-129-g2 -- Bp-equilibre-g2 [ex
+- **T2** : 18:40 [exit code: 2]
+- **T2** : 18:51 work/n2d/A-fr-g1.json work/n2d/A-fr-g2.json work/n2d/A-fr-g3.json work/n2d/B-multi-g1.json work/n2d/B-multi-g2.json work/n2d/B-multi-g3.json work/n2d/C-129-g1.json work/n2d/contamination.json wo
+- **T2** : 19:03 [exit code: 2]
 
 ## 6. Commits
 

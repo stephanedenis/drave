@@ -3588,3 +3588,188 @@ clôture écrite
   ```
 
 - **bash** `{"command": "git diff --cached --name-only | head; echo \"[staged: $(git diff --cached --name-only | wc -l)]\"; git add docs/pilotage/en-cours.md journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md\ncat > /tmp/close-msg.txt <<'EOF'\nSESSION — R4.4 SE FERME SUR `0088fc2f` : L'OCR EST MESURÉ … [769 caractères tronqués]`
+
+  ```
+[staged: 0]
+  ✅ index : aucun fait stagé sans état
+[master b8683d00] SESSION — R4.4 SE FERME SUR `0088fc2f` : L'OCR EST MESURÉ, R4.4 RESTE OUVERTE AUX SCANS
+ 9 files changed, 191 insertions(+), 36 deletions(-)
+[commit 0]
+  ```
+
+- **bash** `{"command": "for t in \"python3 tools/revue_documentation.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifie_etat_a_jour.py\"; do echo … [232 caractères tronqués]`
+
+  ```
+=== python3 tools/revue_documentation.py
+  revue de documentation · 370 fiche(s) · 438 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[code 0]
+=== python3 tools/verifie_journal.py
+  journal · 37 jour(s) · 110 session(s) · 1702 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[code 0]
+=== python3 tools/taille_documents.py
+     · 14 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[code 0]
+=== python3 tools/verifie_en_cours.py
+  en-cours · 1219 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[code 0]
+=== python3 tools/sessions.py --check
+  ✅ plans cohérents
+[code 0]
+=== python3 tools/verifie_backlog.py
+  frontière (4) : A2.6, N2, N3, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorit
+… [170 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for g in porte-tableaux porte-etat porte-document; do echo \"=== $g\"; timeout 600 bash tools/$g.sh > /tmp/$g.log 2>&1; c=$?; tail -3 /tmp/$g.log; echo \"[code $c]\"; done", "description": "Run table, state and document gates", "timeoutMs": 900000, "workdir": "/home/stephane/Data13TB/st … [23 caractères tronqués]`
+
+  ```
+=== porte-tableaux
+  ✅ 1324 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 1257 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-10-31)
+[code 0]
+=== porte-etat
+  ✅ aucun fait commité après le dernier état
+  ✅ autotest : 6 cas, dont 3 refus attendus et 3 passes
+✅ porte état verte : aucun fait commité après le dernier état
+[code 0]
+=== porte-document
+✅ les 50 pages sont découpées, les partitions exactes, le rejeu identique,
+   la fidélité ≥ 0,99 et les trois contrôles négatifs se comportent comme prévu.
+✅ porte document verte
+[code 0]
+  ```
+
+- **bash** `{"command": "timeout 900 bash tools/porte-ocr.sh 2>&1 | tail -14; echo \"[ocr ${PIPESTATUS[0]}]\"", "description": "Final OCR gate run", "timeoutMs": 960000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+PARITÉ de région (F1 ≥ 0,90) : 90.00% · médiane F1 1.000 · valeur stricte 83.33% (30 questions)
+  page dégradée : WER 17.08% · exactitude 40.00% · parité région 26.67%
+  sans OCR : 0.00% de réponses
+
+  ✅ pages ≥ 10
+  ✅ WER ≤ 10%
+  ✅ rappel ≥ 90%
+  ✅ parité de région ≥ 90%
+  ✅ F1 médian ≥ 0.95
+  ✅ exactitude natif ≥ 90%
+  ✅ sans OCR : aucune réponse
+  ✅ le WER MONTE sur la page dégradée
+  ✅ la parité de région BAISSE sur la page dégradée
+✅ porte OCR verte : 10 pages lues, WER sous le seuil, parité tenue et contrôles en échec
+[ocr 0]
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_schemas.py 2>&1 | tail -4; echo \"[schemas ${PIPESTATUS[0]}]\"; echo \"=== git\"; git status --short; echo \"=== log\"; git log --oneline -4", "description": "Verify schemas and final tree state", "timeoutMs": 300000, "workdir": "/home/stephane/Data13TB/stephane/G … [15 caractères tronqués]`
+
+  ```
+schémas · 431 document(s) · 35 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+[schemas 0]
+=== git
+ M .gitignore
+ m tools/docwatch
+?? tools/distiller_budget.py
+?? tools/eval_n2_budget.py
+=== log
+b8683d00 SESSION — R4.4 SE FERME SUR `0088fc2f` : L'OCR EST MESURÉ, R4.4 RESTE OUVERTE AUX SCANS
+0088fc2f R4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 %
+58103738 DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS
+bb3bfefe DOCS — LE MODÈLE NATIF ET DIEHL & COOK, 13 SCHÉMAS : LA SÉPARATION À TROIS NIVEAUX
+  ```
+
+- **bash** `{"command": "ls -la --time-style=+%H:%M work/n2d/ | tail -8; echo \"=== logs\"; for f in work/n2d/*.log; do echo \"--- $f\"; tail -2 \"$f\" 2>/dev/null | cut -c1-120; done; echo \"=== procs\"; pgrep -af \"distiller_budget\" | head", "description": "Check N2 training jobs are healthy", "workdir": "/h … [47 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane        0 17:27 file-gpu0.out
+-rwxr-xr-x. 1 stephane stephane      818 17:27 file-gpu0.sh
+-rw-r--r--. 1 stephane stephane        0 17:27 file-gpu1.out
+-rwxr-xr-x. 1 stephane stephane      863 17:27 file-gpu1.sh
+-rw-------. 1 stephane stephane     2025 17:56 journal-notes.md
+-rw-r--r--. 1 stephane stephane     2659 18:08 remplit.py
+-rw-------. 1 stephane stephane     2419 17:37 robustesse.py
+-rw-r--r--. 1 stephane stephane     1708 17:34 verifie-grille.py
+=== logs
+--- work/n2d/A-fr-g1.log
+ "duree_s": 1360.37691116333
+}
+--- work/n2d/A-fr-g2.log
+ "duree_s": 1383.649160861969
+}
+--- work/n2d/A-fr-g3.log
+pas  2250 · seq 128 · perte 63.1112 · PPL 128/4 2.6714 · 153 s
+pas  2500 · seq 128 · perte 57.7034 · PPL 128/4 2.6703 · 170 s
+--- work/n2d/B-multi-g1.log
+ "duree_s": 1349.451422214508
+}
+--- work/n2d/B-multi-g2.log
+ "duree_s": 1405.7434709072113
+}
+--- work/n2d/B-multi-g3.log
+pas  1750 · seq 128 · perte 112.9893 · PPL 128/4 3.5745 · 120 s
+pas  2000 · seq 128 · perte 116.1208 · PPL 128/4 3.6451 · 139 s
+=== procs
+53386 /home/stephane/gpu-env/bin/python tools/distiller_budget.py --corpus fr --stages 128:10000:1e-4,128:10000:3e-5 --lot 16 --graine 3 --sortie work
+… [466 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show HEAD:reports/r44-ocr-pilote.json | python3 -c \"import json,sys;d=json.load(sys.stdin);print({k:d['agregat'][k] for k in ('pages','pages_avec_questions','questions','wer','rappel','parite_region','parite_valeur','sans_ocr','wer_bruitee','parite_region_bruitee')})\"; echo \"===  … [193 caractères tronqués]`
+
+  ```
+{'pages': 10, 'pages_avec_questions': 9, 'questions': 30, 'wer': 0.0448, 'rappel': 0.9737, 'parite_region': 0.9, 'parite_valeur': 0.8333, 'sans_ocr': 0.0, 'wer_bruitee': 0.1708, 'parite_region_bruitee': 0.2667}
+=== fichiers du commit R4.4
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/digest.md |  68 ++
+ .../rapport.md                                     |  17 +-
+ reports/INDEX.md                                   |   5 +-
+ reports/r44-ocr-pilote.json                        | 689 +++++++++++++++++++++
+ reports/rapport-r44-ocr-pilote.md                  | 152 +++++
+ tools/graphe_document.py                           |  40 +-
+ tools/graphe_document_ocr.py                       | 283 +++++++++
+ tools/installer_ocr.sh                             |  84 +++
+ tools/mesurer_ocr.py                               | 419 +++++++++++++
+ tools/porte-ocr.sh                                 |  29 +
+ tools/taille_documents.py                          |   6 +-
+ 29 files changed, 2176 insertions(+), 85 deletions(-)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan de la session R4.4
+
+J'ai pris **R4.4 — l'OCR** : aucun conflit avec N2 (pas de GPU, pas de fichier réservé, pas de `toutes-les-portes.sh`). La ligne était bloquée par une ressource absente, pas par une question ouverte.
+
+**Ce qui a été fait**
+
+- tesseract **5.5.3 installé sans root** dans `work/ocr/` (`tools/installer_ocr.sh`, RPM openSUSE, ni `sudo` ni paquet système) ;
+- l'OCR rend des **blocs** au graphe R0.1 par la même fonction de manifeste que le PDF natif (`tools/graphe_document_ocr.py`) : offsets, partition, provenance identiques, **confiance par bloc** dans la provenance ;
+- mesure (`tools/mesurer_ocr.py`) sur **10 pages rendues à 300 dpi**, 6 PDF, fr/en/es ; nouvelle porte `tools/porte-ocr.sh` (la 79e).
+
+**Résultat** (`0088fc2f`)
+
+| mesure | valeur |
+|---|---|
+| WER mot à mot | **4,48 %** (169 éditions / 3 771 mots), rappel 97,37 %, confiance 93,2 |
+| parité de passage (même lecteur R0.2) | **27/30 = 90,0 %**, F1 médian 1,000 |
+| valeur exacte | 25/30 = 83,3 % |
+| contrôle **sans OCR** | **0/30** |
+| contrôle **page « photo » simulée** | WER 17,08 %, parité **26,7 %** |
+
+Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par tesseract, deux **en-têtes découpés autrement** (`Point 13`), un `XXI` lu `XXD`. R4.4 passe de **bloquée à partielle** : la porte de la roadmap (vraies pages **scannées**) reste ouverte, et le contrôle dégradé en donne la mesure.
+
+**Livrables** : `reports/rapport-r44-ocr-pilote.md`, `reports/r44-ocr-pilote.json`, `docs/implantation/encodeur-visuel.md`, backlog R44 mis à jour, roadmap et `en-cours` à jour. Session `fe3c05f0` close et archivée (`b8683d00`).
+
+**Deux choses à signaler**
+
+- Au tout début, une commande mal composée a lancé `toutes-les-portes.sh` par erreur : **tuée en moins de 60 s**, aucun processus de porte restant, et les deux entraînements N2 ont continué normalement (g1/g2 finis, g3 en cours, aucune erreur). Les PPL ne dépendent pas du temps.
+- `tools/taille_documents.py` comptait le budget **T0** contre un document **T1** (`organisation-du-depot`, 1 579 mots) : 445 mots de budget faux, dans le sens qui bloque. Corrigé et commité — T0 à **3 702** mots pour 4 000.
+
+**Portes** : revue de documentation, tableaux, état, document, schémas, journal, sessions, backlog, budget et OCR — **toutes vertes**.
+

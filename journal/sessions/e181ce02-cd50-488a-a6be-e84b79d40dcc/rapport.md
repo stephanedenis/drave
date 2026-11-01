@@ -7,19 +7,21 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 0.5 h |
-| Tours | 1 |
-| Messages | 97 |
-| Appels d'outils | 123 |
-| Fichiers touchés | 9 |
-| Commandes | 89 |
+| Durée | 3.3 h |
+| Tours | 2 |
+| Messages | 124 |
+| Appels d'outils | 152 |
+| Fichiers touchés | 11 |
+| Commandes | 110 |
 | Sous-agents | 2 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
 
 **Tour 1** — fais une documentation détaillée du modèle Drave natif. utilise beaucoup de diagrammes pour expliquer ce qui est original à Drave. Comment implémenter un modèle de type Modèles de Diehl & Cook (2015) en respectant notre principe de séparation à 3 niveaux (sémentique neutre au centre)
+
+**Tour 2** — continue tes réflexions et enrichit le document. Tu dois aller plus loin
 
 ## 2. Déroulé, étape par étape
 
@@ -78,6 +80,30 @@ Le point non négociable : **le code de spikes n'est jamais la RSN**. C'est un c
 Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau`, `ports`, les tenseurs (`w_in`, `w_ei`, `w_ie`, `theta`, `assign`), les règles de refus du chargeur, l
 … [1692 caractères tronqués]
 
+### Tour 2 — continue tes réflexions et enrichit le document. Tu dois aller plus loin
+
+*29 appels d'outils.* Actions notables :
+
+- write `/tmp/gen_plus.py`
+- bash — Générer les quatre nouveaux schémas formels
+- bash — Corriger le branchement du canoniseur
+- bash — Générer les cinq schémas d'analyse
+- bash — Corriger la note WTA et centrer la pyramide
+- bash — Repérer les textes longs des nouveaux schémas
+- bash — Générer le schéma des six anti-patrons
+- bash — Repérer les points d'insertion exacts
+- write `/tmp/enrichir.py`
+- bash — Insérer les sections enrichies et vérifier la structure
+- bash — Lire le tableau des schémas à compléter
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md`
+- … et 13 autres
+
+**Synthèse produite :**
+
+⏵ Passe finale des portes, puis commit de l'enrichissement
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -92,7 +118,9 @@ Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/README.md` | 0 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/carte.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md` | 0 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md` | 0 | 4 |
+| `/tmp/gen_plus.py` | 1 | 0 |
+| `/tmp/enrichir.py` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -141,7 +169,7 @@ Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 49 autres
+- … et 70 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -271,4 +299,5 @@ Le document donne aussi le contrat DRVM concret : `kind: "spiking_map"`, `niveau
 
 - DOCS — LE MODÈLE NATIF ET DIEHL & COOK, 13 SCHÉMAS : LA SÉPARATION À TROIS NIVEAUX" 2>&1 | tail -30; echo "EXIT=${PIPESTATUS[0]}"
 - DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
+- DOCS — LE MODÈLE NATIF ET DIEHL & COOK ENRICHIS : QUOTIENT, TYPES, NEUTRALITÉ, DÉTERMINISME, BANC, CONFORMITÉ" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
 

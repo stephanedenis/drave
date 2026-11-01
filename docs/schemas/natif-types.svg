@@ -1,0 +1,48 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Le système de types : ce qui a le droit de traverser</title>
+<desc>Une arête porte un type ; le type décide du niveau ; le chargeur refuse le reste. Le code interne ne traverse jamais une arête.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="540" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Le système de types : ce qui a le droit de traverser</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le niveau est une propriété de la signature, pas de l&#x27;algorithme.</text>
+<text x="290.0" y="116" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">vers N1</text>
+<text x="490.0" y="116" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">vers N2</text>
+<text x="690.0" y="116" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">vers N3</text>
+<text x="176" y="168.0" text-anchor="end" font-size="10.5" font-weight="bold" fill="#334155">depuis le monde</text>
+<text x="176" y="236.0" text-anchor="end" font-size="10.5" font-weight="bold" fill="#334155">depuis N1</text>
+<text x="176" y="304.0" text-anchor="end" font-size="10.5" font-weight="bold" fill="#334155">depuis N2</text>
+<text x="176" y="372.0" text-anchor="end" font-size="10.5" font-weight="bold" fill="#334155">depuis N3</text>
+<rect x="190" y="130" width="194" height="62" rx="7" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+<text x="287.0" y="165.0" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1d4ed8">surface</text>
+<rect x="390" y="130" width="194" height="62" rx="7" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+<text x="487.0" y="165.0" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b91c1c">interdit</text>
+<rect x="590" y="130" width="194" height="62" rx="7" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+<text x="687.0" y="165.0" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b91c1c">interdit</text>
+<rect x="190" y="198" width="194" height="62" rx="7" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+<text x="287.0" y="233.0" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1d4ed8">surface ou RSN</text>
+<rect x="390" y="198" width="194" height="62" rx="7" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<text x="487.0" y="233.0" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">RSN</text>
+<rect x="590" y="198" width="194" height="62" rx="7" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<text x="687.0" y="233.0" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">RSN</text>
+<rect x="190" y="266" width="194" height="62" rx="7" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<text x="287.0" y="301.0" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">RSN (décodeur)</text>
+<rect x="390" y="266" width="194" height="62" rx="7" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<text x="487.0" y="301.0" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">RSN</text>
+<rect x="590" y="266" width="194" height="62" rx="7" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<text x="687.0" y="301.0" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">RSN</text>
+<rect x="190" y="334" width="194" height="62" rx="7" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<text x="287.0" y="369.0" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">RSN (action)</text>
+<rect x="390" y="334" width="194" height="62" rx="7" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<text x="487.0" y="369.0" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">RSN</text>
+<rect x="590" y="334" width="194" height="62" rx="7" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<text x="687.0" y="369.0" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">RSN</text>
+<rect x="820" y="130" width="120" height="130" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.8"/>
+<text x="880" y="156" text-anchor="middle" font-size="14" font-weight="bold" fill="#b91c1c">code</text>
+<text x="880" y="180" text-anchor="middle" font-size="10" fill="#7f1d1d">privé au</text>
+<text x="880" y="198" text-anchor="middle" font-size="10" fill="#7f1d1d">bloc</text>
+<text x="880" y="224" text-anchor="middle" font-size="9.5" fill="#7f1d1d">ne traverse</text>
+<text x="880" y="240" text-anchor="middle" font-size="9.5" fill="#7f1d1d">aucune arête</text>
+<rect x="60" y="420" width="840" height="66" rx="10" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.6"/>
+<text x="480" y="446" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">Théorème — tout chemin du monde à N3 traverse au moins une arête RSN.</text>
+<text x="480" y="468" text-anchor="middle" font-size="10.5" fill="#475569">Une arête surface n&#x27;entre que dans N1 ; la sortie d&#x27;un N1 est surface (décodeur) ou RSN (encodeur).</text>
+</svg>

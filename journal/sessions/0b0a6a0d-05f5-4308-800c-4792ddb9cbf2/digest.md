@@ -3199,3 +3199,1336 @@ ok
   ```
 
 - **job_output** `{"job_id": "bash-132", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai; for f in A-fr-g2 A-fr-g3 B-multi-g2 B-multi-g3; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "description": "Check campaign progress"}`
+
+  ```
+18:18
+work/n2d/A-fr-g1.json
+work/n2d/A-fr-g2.json
+work/n2d/B-multi-g1.json
+work/n2d/B-multi-g2.json
+work/n2d/contamination.json
+work/n2d/evaluations-finales.json
+-- A-fr-g2
+}
+-- A-fr-g3
+pas  6250 · seq 128 · perte 46.8063 · PPL 128/4 2.5462 · 420 s
+-- B-multi-g2
+}
+-- B-multi-g3
+pas  5750 · seq 128 · perte 81.8413 · PPL 128/4 3.7961 · 393 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nfor f in ('work/n2d/A-fr-g2.json','work/n2d/B-multi-g2.json'):\n    d=json.load(open(f)); print(f, {k:round(v,4) if isinstance(v,float) else v for k,v in d.items() if k in ('ppl_128_lot16','ppl_129_lot15', … [92 caractères tronqués]`
+
+  ```
+work/n2d/A-fr-g2.json {'ppl_128_lot16': 2.8535, 'ppl_128_lot8': 2.8496, 'ppl_129_lot15': 2.8891, 'ppl_permute': 986.7774, 'precision_main': 0.7137}
+work/n2d/B-multi-g2.json {'ppl_128_lot16': 3.7954, 'ppl_128_lot8': 3.8393, 'ppl_129_lot15': 3.8349, 'ppl_permute': 626.1502, 'precision_main': 0.2906}
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai; for f in C-129-g1 Bp-equilibre-g1; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "description": "Wait 15 minutes for seed 3 and curriculum start", "run_in … [19 caractères tronqués]`
+
+  ```
+started background job bash-148
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,40p journal/THEMES.md", "description": "Read journal theme keywords"}`
+
+  ```
+# Thèmes du journal
+
+> Généré par `tools/journal_auto.py` — c'est la **règle de classement** des fichiers
+> `journal/AAAA-MM-JJ/<thème>.md`. Un commit (ou une étape de session) est classé par
+> le **premier** thème dont un mot-clé apparaît dans son texte ; à défaut, par les
+> **chemins** touchés ; à défaut, en `divers`. Pour changer le classement, éditer la
+> table `THEMES` du script et relancer : rien d'autre n'est à toucher.
+
+| thème | ce qu'il couvre | mots-clés | chemins |
+|---|---|---|---|
+| `attention` | Attention, fenêtre, puits | attention, fenêtre, fenetre, puits, sinks, attn-, softmax, swa |  |
+| `memoire` | Mémoire épisodique, consolidation, greffe | mémoire, memoire, épisodique, episodique, greffe, consolid, rappel, indice, magasin, c6, c7, clé, cle | episodique.rs |
+| `apprentissage` | Règles locales, hebbien, modulateurs, distillation | hebb, décorrélation, decorrelation, modulateur, nouveauté, nouveaute, règle locale, regle locale, apprentissage, distill, impulsion, décharge, decharge, spiking, log-normal, élagage appris, k-wta appris |  |
+| `distribue` | Régions, flux, protocoles, budgets, pannes | topologie, région, region, nœud, noeud, flux, bus, latence, budget, 
+… [1941 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_journal.py 2>&1 | tail -8", "description": "Check journal verification"}`
+
+  ```
+journal · 37 jour(s) · 110 session(s) · 1702 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifier_schemas.py 2>&1 | tail -4", "description": "Verify schemas"}`
+
+  ```
+schémas · 431 document(s) · 35 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai | wc -l; for f in A-fr-g3 B-multi-g3 C-129-g1 Bp-equilibre-g1; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "description": "Check seed 3 and curriculum start"}`
+
+  ```
+18:19
+6
+-- A-fr-g3
+pas  6750 · seq 128 · perte 53.3343 · PPL 128/4 2.5292 · 453 s
+-- B-multi-g3
+pas  6500 · seq 128 · perte 87.6959 · PPL 128/4 3.7325 · 442 s
+-- C-129-g1
+-- Bp-equilibre-g1
+[exit code: 1]
+  ```
+
+- **job_output** `{"job_id": "bash-148", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-132 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai | wc -l; tail -1 work/n2d/A-fr-g3.log 2>/dev/null; tail -1 work/n2d/C-129-g1.log 2>/dev/null) finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai; for f in A-fr-g3 B-multi-g3 C-129-g1 Bp-equilibre-g1; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "description": "Check campaign after 25-minute wait"}`
+
+  ```
+18:29
+work/n2d/A-fr-g1.json
+work/n2d/A-fr-g2.json
+work/n2d/B-multi-g1.json
+work/n2d/B-multi-g2.json
+work/n2d/contamination.json
+work/n2d/evaluations-finales.json
+-- A-fr-g3
+pas 16000 · seq 128 · perte 47.4620 · PPL 128/4 2.4026 · 1066 s
+-- B-multi-g3
+pas 15500 · seq 128 · perte 67.7423 · PPL 128/4 3.7959 · 1041 s
+-- C-129-g1
+-- Bp-equilibre-g1
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('work/n2d/fiche.md'); s=p.read_text()\ns=s.replace(\"\"\"- Code : [`tools/distiller_budget.py`](../tools/distiller_budget.py) · évaluation\n  `work/n2d/evalue-final.py` · agrégat [`n2 … [519 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "sleep 2400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai; tail -1 work/n2d/C-129-g2.log 2>/dev/null; tail -1 work/n2d/Bp-equilibre-g2.log 2>/dev/null", "description": "Wait 40 minutes for the campaign", "run_in_background": true … [1 caractères tronqués]`
+
+  ```
+started background job bash-155
+  ```
+
+- **job_output** `{"job_id": "bash-155", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-148 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai; for f in C-129-g1 Bp-equilibre-g1; do echo "-- $f"; tail -1 work/n2d/$f.log 2>/dev/null; done) finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai; for f in C-129-g1 Bp-equilibre-g1; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "description": "Check whether curriculum and balanced arms started"}`
+
+  ```
+18:39
+work/n2d/A-fr-g1.json
+work/n2d/A-fr-g2.json
+work/n2d/A-fr-g3.json
+work/n2d/B-multi-g1.json
+work/n2d/B-multi-g2.json
+work/n2d/B-multi-g3.json
+work/n2d/contamination.json
+work/n2d/evaluations-finales.json
+-- C-129-g1
+pas  5250 · seq 129 · perte 40.8452 · PPL 128/4 2.3931 · 353 s
+-- Bp-equilibre-g1
+pas  5000 · seq 128 · perte 95.3112 · PPL 128/4 3.4000 · 328 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nfor f in ('work/n2d/A-fr-g3.json','work/n2d/B-multi-g3.json'):\n    d=json.load(open(f)); print(f, {k:round(v,4) if isinstance(v,float) else v for k,v in d.items() if k in ('ppl_128_lot16','ppl_129_lot15', … [87 caractères tronqués]`
+
+  ```
+work/n2d/A-fr-g3.json {'ppl_128_lot16': 2.8517, 'ppl_129_lot15': 2.8804, 'ppl_permute': 950.7276, 'precision_main': 0.7345, 'duree_s': 1336.3981}
+work/n2d/B-multi-g3.json {'ppl_128_lot16': 3.7737, 'ppl_129_lot15': 3.8093, 'ppl_permute': 600.4342, 'precision_main': 0.2715, 'duree_s': 1340.0632}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/distiller_budget.py'); s=p.read_text()\nancien = '''    bons = [0] * (len(cfg.early_blocks) + 1); n_ev = 0\n    with torch.no_grad():\n        for k in range(4):\n            x … [1552 caractères tronqués]`
+
+  ```
+ok
+parse ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2d/finalise.sh <<'EOF'\n#!/bin/bash\n# Attend la fin des deux files, puis évalue les 16 points de contrôle, agrège et remplit la fiche.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nART=/home/stephane/Data1 … [1169 caractères tronqués]`
+
+  ```
+finaliseur 64233
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai | wc -l; for f in C-129-g1 Bp-equilibre-g1 C-129-g2 Bp-equilibre-g2; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "description": "Check curriculum arm progress"}`
+
+  ```
+18:40
+8
+-- C-129-g1
+pas  6000 · seq 129 · perte 51.6991 · PPL 128/4 2.4037 · 403 s
+-- Bp-equilibre-g1
+pas  5750 · seq 128 · perte 104.8664 · PPL 128/4 3.3953 · 377 s
+-- C-129-g2
+-- Bp-equilibre-g2
+[exit code: 1]
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-48 [bash] completed — sleep 150; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== A ==="; tail -3 work/n2d/A-fr-g1.log 2>/dev/null; echo "=== B ==="; tail -3 work/n2d/B-multi-g1.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader
+bash-81 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md journal/README.md && git commit -m "ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40
+
+Une seconde session peut démarrer : en-cours nomme désormais la session active
+(0b0a6a0d), son mandat et ses fichiers réservés (work/n2d/, tools/distiller_budget.py,
+reports/n2-*). La campagne tourne sur les deux GPU — A français seul, B manifeste
+quatre sources, B' quotas égaux, C curriculum 129, trois graines chacune.
+
+Ce que l'autre session peut prendre sans collision : documentation, backlog, N4 (sans
+GPU), portes documentaires. Ce qu'elle ne doit pas prendre : tools/toutes-les-portes.sh
+(la passe complète utilise les deux cartes et fausserait les mesures), les fichiers
+réservés, ni la page d'ét
+… [1451 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/C-129-g1.json 2>/dev/null && python3 -c \"\nimport json; d=json.load(open('work/n2d/C-129-g1.json'))\nprint({k:round(v,4) if isinstance(v,float) else v for k,v in d.items() if k in ('ppl_128_lot16','ppl_129 … [92 caractères tronqués]`
+
+  ```
+18:40
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && while [ ! -f work/n2d/finalise.termine ]; do sleep 30; done; date '+%H:%M'; cat work/n2d/agregat.log", "description": "Wait for the finalizer and print the aggregate", "run_in_background": true}`
+
+  ```
+started background job bash-162
+  ```
+
+- **job_output** `{"job_id": "bash-162", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai; for f in C-129-g1 C-129-g2 Bp-equilibre-g1 Bp-equilibre-g2; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "description": "Check curriculum and balanced arm progress" … [1 caractères tronqués]`
+
+  ```
+18:51
+work/n2d/A-fr-g1.json
+work/n2d/A-fr-g2.json
+work/n2d/A-fr-g3.json
+work/n2d/B-multi-g1.json
+work/n2d/B-multi-g2.json
+work/n2d/B-multi-g3.json
+work/n2d/C-129-g1.json
+work/n2d/contamination.json
+work/n2d/evaluations-finales.json
+-- C-129-g1
+}
+-- C-129-g2
+pas  5000 · seq 129 · perte 45.4495 · PPL 128/4 2.3762 · 351 s
+-- Bp-equilibre-g1
+pas 15250 · seq 128 · perte 70.9172 · PPL 128/4 3.4172 · 1008 s
+-- Bp-equilibre-g2
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json; d=json.load(open('work/n2d/C-129-g1.json'))\nprint({k:round(v,4) if isinstance(v,float) else v for k,v in d.items() if k in ('ppl_128_lot16','ppl_129_lot15','ppl_permute','precision_main','duree_s')})\npri … [86 caractères tronqués]`
+
+  ```
+{'ppl_128_lot16': 2.839, 'ppl_129_lot15': 2.8217, 'ppl_permute': 967.0087, 'precision_main': 0.6935, 'duree_s': 672.9645}
+courbe fin: {'pas': 10000, 'seq': 129, 'perte': 44.278648376464844, 'ppl': 2.398044897343873}
+  ```
+
+- **job_output** `{"job_id": "bash-162", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai | wc -l; for f in C-129-g3 Bp-equilibre-g2; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "description": "Check remaining runs"}`
+
+  ```
+19:01
+11
+-- C-129-g3
+pas  4000 · seq 129 · perte 45.2516 · PPL 128/4 2.3967 · 273 s
+-- Bp-equilibre-g2
+pas  4250 · seq 128 · perte 93.0802 · PPL 128/4 3.3877 · 293 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2d/maj-docs.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"maj-docs.py — applique les mises à jour d'état, de roadmap et de backlog du résultat N2.d.\"\"\"\nimport json, pathlib\n\nagg = json.loads(pathlib.Path('reports/n2-budg … [3086 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2d/maj-roadmap.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"maj-roadmap.py — roadmap : N2 après N2.d (budget, données, curriculum, validation contaminée).\"\"\"\nimport json, pathlib\n\nagg = json.loads(pathlib.Path('reports/ … [2535 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai | wc -l; for f in C-129-g3 Bp-equilibre-g2; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "description": "Check remaining runs"}`
+
+  ```
+19:02
+11
+-- C-129-g3
+pas  4500 · seq 129 · perte 42.9175 · PPL 128/4 2.4081 · 309 s
+-- Bp-equilibre-g2
+pas  5000 · seq 128 · perte 86.2991 · PPL 128/4 3.3269 · 341 s
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/fiche.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/fiche.md</path>
+<type>file</type>
+<content>
+1: # N2 — le budget paie, les quatre sources coûtent, et la validation n'est pas tenue à l'écart
+2: 
+3: > **Ligne de roadmap** : N2 (la distillation) · **Date** : 2026-10-31 · **Verdict** : le budget
+4: > complet (20 000 pas, 41 Mo) fait baisser la PPL de **2,9355 à {{A}}** sous le protocole de N2.19 ;
+5: > le corpus à quatre sources la fait **monter** à **{{B}}** ; et **32,8 % des fenêtres du protocole
+6: > de validation sont verbatim dans l'entraînement** — sur les fenêtres propres, le meilleur élève
+7: > est à **{{A_propre}}**, pas à {{A}}.
+8: 
+9: ## La question
+10: 
+11: La hiérarchie est écartée deux fois (N2.h1, N2.h2 : 2,9935 contre 2,9927). La roadmap désigne
+12: ensuite **le curriculum et les données** : le dispositif reconstruit la veille n'avait vu que
+13: **20,48 Mo d'un seul corpus en 5 000 pas**, la moitié du budget de N2 (41 Mo, 20 000 pas, quatre
+14: sources). Ce dispositif est mesuré ici à budget plein, avec trois graines, et comparé à trois
+15: témoins : la base supervisée, la distillation courte de la veille, et le corpus à quatre sources.
+16: 
+17: ## Le disp
+… [6871 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('work/n2d/fiche.md'); s=p.read_text()\ns=s.replace(\"est à **{{A_propre}}**, pas à {{A}}.\", \"est à **{{A_PROPRE}}**, pas à {{A}}.\")\ns=s.replace(\"**Contrôle de grille.** Sur les q … [1543 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai | wc -l; for f in C-129-g3 Bp-equilibre-g2; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "description": "Check end of curriculum arm"}`
+
+  ```
+19:02
+11
+-- C-129-g3
+pas  4750 · seq 129 · perte 43.9112 · PPL 128/4 2.4037 · 326 s
+-- Bp-equilibre-g2
+pas  5000 · seq 128 · perte 86.2991 · PPL 128/4 3.3269 · 341 s
+  ```
+
+- **bash** `{"command": "timeout 55 sleep 50; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/C-129-g3.json 2>/dev/null && python3 -c \"\nimport json,glob,statistics as st\nvals=[]\nfor f in sorted(glob.glob('work/n2d/C-129-g*.json')):\n    d=json.load(open(f)); vals.append((d[' … [188 caractères tronqués]`
+
+  ```
+19:03
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "timeout 55 sleep 50; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai | wc -l; tail -1 work/n2d/C-129-g3.log", "description": "Wait for curriculum seed 3"}`
+
+  ```
+19:04
+11
+pas  6250 · seq 129 · perte 39.8914 · PPL 128/4 2.4049 · 428 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\ntextes = {\n 'docs/pilotage/en-cours.md': [\"- **N2** : GPU ; meilleur **2,6998** ; porte **< 2,5** non atteinte ; N4 **0/40**.\"],\n 'docs/pilotage/backlog/N2-distillation.md': [\"Lancer la série * … [1209 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md OK - **N2** : GPU ; meilleur **2,6998** ; porte **< 2
+docs/pilotage/backlog/N2-distillation.md OK Lancer la série **hiérarchie** (état de section, l
+docs/pilotage/roadmap.md OK | **N — le natif** | DRVM, `drave-n0`, distillatio
+docs/pilotage/roadmap.md OK | **N2** | la distillation : 49 999 fenêtres, 4 so
+docs/pilotage/roadmap.md OK 1. **Le contexte est le verrou.** 129 octets est l
+docs/pilotage/roadmap.md OK - **non bloqué, à faire** : **N2** (la hiérarchie)
+docs/pilotage/roadmap.md OK - **N2** : le student peut-il descendre sous **2,5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('work/n2d/remplit.py'); s=p.read_text()\ns=s.replace('''vals = {\n    'TABLE': table,''','''C_TEXTE = (f\"gagne **{fmt(A129 - C129)}** sur le protocole 129 (comparaison appariée) et \ … [347 caractères tronqués]`
+
+  ```
+ok
+39:C_TEXTE = (f"gagne **{fmt(A129 - C129)}** sur le protocole 129 (comparaison appariée) et "
+43:    'C_TEXTE': C_TEXTE,
+  ```
+
+- **job_output** `{"job_id": "bash-162", "timeout_ms": 2700000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-155 (bash: sleep 2400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai; tail -1 work/n2d/C-129-g2.log 2>/dev/null; tail -1 work/n2d/Bp-equilibre-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2d/*.json | grep -v essai | wc -l; for f in Bp-equilibre-g2 Bp-equilibre-g3; do echo \"-- $f\"; tail -1 work/n2d/$f.log 2>/dev/null; done", "description": "Check balanced arm progress"}`
+
+  ```
+19:14
+12
+-- Bp-equilibre-g2
+pas 16000 · seq 128 · perte 63.6670 · PPL 128/4 3.3973 · 1083 s
+-- Bp-equilibre-g3
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n2d/*.json | grep -v essai; python3 -c \"\nimport json,glob,statistics as st\nfor pat in ('C-129-g','Bp-equilibre-g'):\n    vals=[]\n    for f in sorted(glob.glob(f'work/n2d/{pat}*.json')):\n        d=json.load(open(f)); vals … [252 caractères tronqués]`
+
+  ```
+work/n2d/A-fr-g1.json
+work/n2d/A-fr-g2.json
+work/n2d/A-fr-g3.json
+work/n2d/B-multi-g1.json
+work/n2d/B-multi-g2.json
+work/n2d/B-multi-g3.json
+work/n2d/Bp-equilibre-g1.json
+work/n2d/C-129-g1.json
+work/n2d/C-129-g2.json
+work/n2d/C-129-g3.json
+work/n2d/contamination.json
+work/n2d/evaluations-finales.json
+work/n2d/C-129-g1.json (2.8390335417857058, 2.821709373353746)
+work/n2d/C-129-g2.json (2.857352154718007, 2.841104248944136)
+work/n2d/C-129-g3.json (2.850963154909223, 2.8338340026294264)
+C-129-g moy 2.8491 2.8322
+work/n2d/Bp-equilibre-g1.json (3.439860937056148, 3.4777227504594252)
+Bp-equilibre-g moy 3.4399 3.4777
+  ```
+
+- **job_output** `{"job_id": "bash-162", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2d/Bp-equilibre-g3.log 2>/dev/null; ls work/n2d/gpu1.termine 2>/dev/null && echo \"GPU1 FINI\"", "description": "Check final run progress"}`
+
+  ```
+19:24
+pas  5000 · seq 128 · perte 104.7800 · PPL 128/4 3.2993 · 339 s
+[exit code: 2]
+  ```
+
+- **job_output** `{"job_id": "bash-162", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2d/Bp-equilibre-g3.log 2>/dev/null; ls work/n2d/gpu1.termine work/n2d/finalise.termine 2>/dev/null", "description": "Check final progression"}`
+
+  ```
+19:34
+pas 14250 · seq 128 · perte 75.9870 · PPL 128/4 3.3361 · 940 s
+pas 14500 · seq 128 · perte 86.7039 · PPL 128/4 3.3542 · 956 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && while [ ! -f work/n2d/finalise.termine ]; do sleep 20; done; date '+%H:%M' > work/n2d/portes-debut.txt; JOURNAUX=/tmp/portes-1031-n2d DELAI=1800 bash tools/toutes-les-portes.sh > work/n2d/portes.log 2>&1; date '+%H:%M' > work/n2d/por … [137 caractères tronqués]`
+
+  ```
+started background job bash-179
+  ```
+
+- **job_output** `{"job_id": "bash-162", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+19:42
+| bras | graines | protocole 8×16×128 | fenêtres propres | fenêtres contaminées |
+|---|---:|---:|---:|---:|
+| A — 20 000 pas, français seul | 3 | **2.8527** | **2.9795** | **2.5862** |
+| B — 20 000 pas, manifeste 4 sources (82,5 % anglais) | 3 | **3.7591** | **3.8573** | **3.4554** |
+| Bp — 20 000 pas, 4 sources à quotas égaux (25 %) | 3 | **3.4350** | **3.5634** | **3.1177** |
+| C — curriculum 129 sur A (10 000 pas) | 3 | **2.8471** | **2.9783** | **2.5746** |
+# A: protocole 2.8527 ±0.0031 · propres 2.9795 ±0.0071 · contaminées 2.5862 · valeurs [2.8569, 2.8495, 2.8516]
+# B: protocole 3.7591 ±0.0075 · propres 3.8573 ±0.0161 · contaminées 3.4554 · valeurs [3.7609, 3.7673, 3.7492]
+# Bp: protocole 3.435 ±0.0022 · propres 3.5634 ±0.0039 · contaminées 3.1177 · valeurs [3.4329, 3.4341, 3.438]
+# C: protocole 2.8471 ±0.0037 · propres 2.9783 ±0.0047 · contaminées 2.5746 · valeurs [2.8442, 2.8523, 2.8447]
+agrege=0
+restes : []
+A 2.8527 T5k None B 3.7591 Bp 3.435 C 2.8471 A129 2.8743 C129 2.8327
+remplit=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('work/n2d/agrege.py'); s=p.read_text()\ns=s.replace('''BRAS = [\n    (\"base\", \"base supervisée 20 000 pas\", \"drave-n0-base-20k\"),\n    (\"T5k\", \"5 000 pas, français (campagne  … [509 caractères tronqués]`
+
+  ```
+ok
+| bras | graines | protocole 8×16×128 | fenêtres propres | fenêtres contaminées |
+|---|---:|---:|---:|---:|
+| A — 20 000 pas, français seul | 3 | **2.8527** | **2.9795** | **2.5862** |
+| B — 20 000 pas, manifeste 4 sources (82,5 % anglais) | 3 | **3.7591** | **3.8573** | **3.4554** |
+| Bp — 20 000 pas, 4 sources à quotas égaux (25 %) | 3 | **3.4350** | **3.5634** | **3.1177** |
+| C — curriculum 129 sur A (10 000 pas) | 3 | **2.8471** | **2.9783** | **2.5746** |
+# A: protocole 2.8527 ±0.0031 · propres 2.9795 ±0.0071 · contaminées 2.5862 · valeurs [2.8569, 2.8495, 2.8516]
+# B: protocole 3.7591 ±0.0075 · propres 3.8573 ±0.0161 · contaminées 3.4554 · valeurs [3.7609, 3.7673, 3.7492]
+# Bp: protocole 3.435 ±0.0022 · propres 3.5634 ±0.0039 · contaminées 3.1177 · valeurs [3.4329, 3.4341, 3.438]
+# C: protocole 2.8471 ±0.0037 · propres 2.9783 ±0.0047 · contaminées 2.5746 · valeurs [2.8442, 2.8523, 2.8447]
+restes : []
+A 2.8527 T5k None B 3.7591 Bp 3.435 C 2.8471 A129 2.8743 C129 2.8327
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('work/n2d/agrege.py'); s=p.read_text()\ns=s.replace('''def fichier_de(motif):\n    return sorted(glob.glob(f\"work/n2d/{motif}*.pt\"))''','''def fichier_de(motif):\n    chemin = motif … [332 caractères tronqués]`
+
+  ```
+ok
+| bras | graines | protocole 8×16×128 | fenêtres propres | fenêtres contaminées |
+|---|---:|---:|---:|---:|
+| A — 20 000 pas, français seul | 3 | **2.8527** | **2.9795** | **2.5862** |
+| B — 20 000 pas, manifeste 4 sources (82,5 % anglais) | 3 | **3.7591** | **3.8573** | **3.4554** |
+| Bp — 20 000 pas, 4 sources à quotas égaux (25 %) | 3 | **3.4350** | **3.5634** | **3.1177** |
+| C — curriculum 129 sur A (10 000 pas) | 3 | **2.8471** | **2.9783** | **2.5746** |
+# A: protocole 2.8527 ±0.0031 · propres 2.9795 ±0.0071 · contaminées 2.5862 · valeurs [2.8569, 2.8495, 2.8516]
+# B: protocole 3.7591 ±0.0075 · propres 3.8573 ±0.0161 · contaminées 3.4554 · valeurs [3.7609, 3.7673, 3.7492]
+# Bp: protocole 3.435 ±0.0022 · propres 3.5634 ±0.0039 · contaminées 3.1177 · valeurs [3.4329, 3.4341, 3.438]
+# C: protocole 2.8471 ±0.0037 · propres 2.9783 ±0.0047 · contaminées 2.5746 · valeurs [2.8442, 2.8523, 2.8447]
+restes : []
+A 2.8527 T5k None B 3.7591 Bp 3.435 C 2.8471 A129 2.8743 C129 2.8327
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('work/n2d/evaluations-finales.json'))\nprint(len(d)); print([x['fichier'] for x in d])\n\" ; head -3 work/n2d/eval-finale.log", "description": "Inspect the final evaluation JSON"}`
+
+  ```
+16
+['drave-n0-base-20k.pt', 'temoin-g1.pt', 'temoin-g2.pt', 'temoin-g3.pt', 'A-fr-g1.pt', 'A-fr-g2.pt', 'A-fr-g3.pt', 'B-multi-g1.pt', 'B-multi-g2.pt', 'B-multi-g3.pt', 'Bp-equilibre-g1.pt', 'Bp-equilibre-g2.pt', 'Bp-equilibre-g3.pt', 'C-129-g1.pt', 'C-129-g2.pt', 'C-129-g3.pt']
+{"fichier": "drave-n0-base-20k.pt", "params": 11814792, "ppl_protocole": 3.2161, "ppl_129": 3.2653, "ppl_propres": 3.245, "ppl_contaminees": 3.0756, "ppl_permute": 544.3581, "precision_main": 0.6544, "grilles": {"0/16": 3.2161, "0/8": 3.2296, "1000003/16": 3.2494, "1000003/8": 3.1856, "2000009/16": 3.2985, "2000009/8": 3.4194, "3000029/16": 3.0943, "3000029/8": 3.0611}}
+{"fichier": "temoin-g1.pt", "params": 11814792, "ppl_protocole": 2.9406, "ppl_129": 2.9631, "ppl_propres": 3.0612, "ppl_contaminees": 2.7059, "ppl_permute": 1228.3835, "precision_main": 0.6844, "grilles": {"0/16": 2.9406, "0/8": 2.9399, "1000003/16": 3.0375, "1000003/8": 2.9865, "2000009/16": 3.0428, "2000009/8": 3.1897, "3000029/16": 2.8269, "3000029/8": 2.796}}
+{"fichier": "temoin-g2.pt", "params": 11814792, "ppl_protocole": 2.9345, "ppl_129": 2.961, "ppl_propres": 3.056, "ppl_contaminees": 2.6991, "ppl_permute": 1131.9621, "precision_main
+… [183 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 20,32p work/n2d/agrege.py; python3 -c \"\nimport glob\nART='/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts'\nprint(glob.glob(ART + '/drave-n0-base-20k' + '*.pt'))\nprint(glob.glob(ART + '/temoin' + '*.pt'))\n … [48 caractères tronqués]`
+
+  ```
+("C", "curriculum 129 sur A (10 000 pas)", "C-129"),
+]
+METRIQUES = ("ppl_protocole", "ppl_129", "ppl_propres", "ppl_contaminees", "ppl_permute",
+             "ppl_multi_val", "precision_main")
+
+
+def main():
+    evals = {f["fichier"]: f for f in
+             json.loads(pathlib.Path("work/n2d/evaluations-finales.json").read_text())}
+    out, lignes = {}, []
+    for cle, nom, motif in BRAS:
+        fichiers = [pathlib.Path(f).name for f in sorted(glob.glob(f"work/n2d/{motif}*.pt"))]
+        runs = [evals[f] for f in fichiers if f in evals]
+['/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts/drave-n0-base-20k.pt']
+['/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts/temoin-g1.pt', '/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts/temoin-g2.pt', '/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts/temoin-g3.pt']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('work/n2d/agrege.py'); s=p.read_text()\nvieux = '        fichiers = [pathlib.Path(f).name for f in sorted(glob.glob(f\"work/n2d/{motif}*.pt\"))]'\nneuf = '''        motif_complet = mo … [426 caractères tronqués]`
+
+  ```
+ok
+| B — 20 000 pas, manifeste 4 sources (82,5 % anglais) | 3 | **3.7591** | **3.8573** | **3.4554** |
+| Bp — 20 000 pas, 4 sources à quotas égaux (25 %) | 3 | **3.4350** | **3.5634** | **3.1177** |
+| C — curriculum 129 sur A (10 000 pas) | 3 | **2.8471** | **2.9783** | **2.5746** |
+# base: protocole 3.2161 ±None · propres 3.245 ±None · contaminées 3.0756 · valeurs [3.2161]
+# T5k: protocole 2.9355 ±0.0039 · propres 3.0534 ±0.0076 · contaminées 2.7041 · valeurs [2.9406, 2.9345, 2.9313]
+# A: protocole 2.8527 ±0.0031 · propres 2.9795 ±0.0071 · contaminées 2.5862 · valeurs [2.8569, 2.8495, 2.8516]
+# B: protocole 3.7591 ±0.0075 · propres 3.8573 ±0.0161 · contaminées 3.4554 · valeurs [3.7609, 3.7673, 3.7492]
+# Bp: protocole 3.435 ±0.0022 · propres 3.5634 ±0.0039 · contaminées 3.1177 · valeurs [3.4329, 3.4341, 3.438]
+# C: protocole 2.8471 ±0.0037 · propres 2.9783 ±0.0047 · contaminées 2.5746 · valeurs [2.8442, 2.8523, 2.8447]
+restes : []
+A 2.8527 T5k 2.9355 B 3.7591 Bp 3.435 C 2.8471 A129 2.8743 C129 2.8327
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,60p reports/rapport-n2-budget.md", "description": "Read the generated report"}`
+
+  ```
+# N2 — le budget paie, les quatre sources coûtent, et la validation n'est pas tenue à l'écart
+
+> **Ligne de roadmap** : N2 (la distillation) · **Date** : 2026-10-31 · **Verdict** : le budget
+> complet (20 000 pas, 41 Mo) fait baisser la PPL de **2,9355 à 2,8527** sous le protocole de N2.19 ;
+> le corpus à quatre sources la fait **monter** à **3,7591** ; et **32,8 % des fenêtres du protocole
+> de validation sont verbatim dans l'entraînement** — sur les fenêtres propres, le meilleur élève
+> est à **2,9795**, pas à 2,8527.
+
+## La question
+
+La hiérarchie est écartée deux fois (N2.h1, N2.h2 : 2,9935 contre 2,9927). La roadmap désigne
+ensuite **le curriculum et les données** : le dispositif reconstruit la veille n'avait vu que
+**20,48 Mo d'un seul corpus en 5 000 pas**, la moitié du budget de N2 (41 Mo, 20 000 pas, quatre
+sources). Ce dispositif est mesuré ici à budget plein, avec trois graines, et comparé à trois
+témoins : la base supervisée, la distillation courte de la veille, et le corpus à quatre sources.
+
+## Le dispositif — reconstruit, archivé, rejoué
+
+Tout vient de la campagne du 31/10 conservée sur deux disques
+(`/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/`, 1,4 Go, 
+… [2769 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 60,125p reports/rapport-n2-budget.md", "description": "Read the rest of the report"}`
+
+  ```
+3 000 029), A reste **sous** le témoin de 5 000 pas : −0,075 à −0,113. La PPL absolue, elle,
+varie de 2,75 à 2,95 selon la grille : le jeu de validation n'est pas homogène, et c'est la
+comparaison **appariée** qui porte le résultat, pas le chiffre absolu.
+
+## Le contrôle négatif
+
+- **permutation** : mêmes octets de validation, ordre détruit — la PPL s'effondre (1086,7460),
+  le modèle exploite bien l'ordre et pas les fréquences d'octets ;
+- **la base** (aucune distillation) et **la distillation courte** (5 000 pas) encadrent le budget ;
+- **B′ contre B** : même budget, même professeur, seule la part de l'anglais change ;
+- **C contre A** : comparaison appariée graine par graine, même fenêtres.
+
+## La validation n'est pas tenue à l'écart
+
+C'est le résultat qui change la lecture de la porte. `corpus_fr_val.txt` est la **queue** de
+`corpus_fr.txt`, `corpus_fr_train.txt` sa **tête** : les positions sont disjointes (`train + val`
+reconstitue exactement les 4 633 889 octets), mais le **contenu se répète** — le corpus empile des
+documents qui se recopient.
+
+- **30,7 %** d'un échantillon de 300 fenêtres de validation apparaissent **verbatim** dans
+  l'entraînement ; **32,8 %** des 128 fenê
+… [3185 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, statistics as st\nd = {x['fichier']: x for x in json.load(open('work/n2d/evaluations-finales.json'))}\nfor g in ('1','2','3'):\n    a = d[f'A-fr-g{g}.pt']['grilles']; t = d[f'temoin-g{g}.pt']['grilles' … [750 caractères tronqués]`
+
+  ```
+1 {'0/16': -0.0837, '1000003/16': -0.0902, '2000009/16': -0.113, '3000029/16': -0.0746}
+2 {'0/16': -0.085, '1000003/16': -0.0961, '2000009/16': -0.1167, '3000029/16': -0.0943}
+3 {'0/16': -0.0797, '1000003/16': -0.1016, '2000009/16': -0.1237, '3000029/16': -0.1026}
+moyennes par grille (lot 16) :
+0/16 -0.0828 valeurs [-0.0837, -0.085, -0.0797]
+1000003/16 -0.096 valeurs [-0.0902, -0.0961, -0.1016]
+2000009/16 -0.1178 valeurs [-0.113, -0.1167, -0.1237]
+3000029/16 -0.0905 valeurs [-0.0746, -0.0943, -0.1026]
+PPL absolue A par grille : {'0/16': 2.8527, '1000003/16': 2.9378, '2000009/16': 2.9208, '3000029/16': 2.7485}
+PPL absolue T5k par grille : {'0/16': 2.9355, '1000003/16': 3.0338, '2000009/16': 3.0386, '3000029/16': 2.839}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\nremplacements = [\n (\"contre **2,9881** sur les\", \"contre **2,9795** sur les\"),\n (\"la distillation courte **0,35**, A **0,40** :\", \"la distillation courte **0,35**, A **0,39** :\"),\n (\"l'a … [1034 caractères tronqués]`
+
+  ```
+work/n2d/fiche.md 3 remplacements
+reports/rapport-n2-budget.md 7 remplacements
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 work/n2d/maj-docs.py && python3 work/n2d/maj-roadmap.py && git diff --stat docs/ && git diff docs/pilotage/en-cours.md | head -50", "description": "Apply state and roadmap updates"}`
+
+  ```
+en-cours : puce N2 mise à jour
+backlog N2 : prochaine action mise à jour
+roadmap : 5 remplacements appliqués
+ docs/pilotage/backlog/N2-distillation.md |  6 +++++-
+ docs/pilotage/en-cours.md                | 15 ++++++++-------
+ docs/pilotage/roadmap.md                 | 13 ++++++++-----
+ 3 files changed, 21 insertions(+), 13 deletions(-)
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index d44e6bed..d3d6b751 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -69,13 +69,14 @@
+ - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
+   [`b1110`](../../reports/rapport-b1110-cartes.md).
+ - **Backlog — graphe** : 37 fiches, 43 arêtes, **4 à la frontière** ; `tools/verifie_backlog.py`.
+-- **N2** : GPU ; meilleur **2,6998** ; porte **< 2,5** non atteinte ; N4 **0/40**.
+-  **N2.h1** : 3,9759 contre 3,9617, contrôle 3,9764 — rien ne se lit.
+-  **N2.h2** (distillation, professeur refait, 3 graines) : **2,9935** contre **2,9927** (+0,029 %) ;
+-  l'état bat son contrôle sans état (−0,0017) mais coûte ce qu'il rapporte. Points de
+-  contrôle **conservés** (Data13TB + disque IA, manifeste vérifié). Fiches
+-  [`n2-hier
+… [883 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff docs/pilotage/roadmap.md docs/pilotage/backlog/N2-distillation.md", "description": "Review roadmap and backlog diffs"}`
+
+  ```
+diff --git a/docs/pilotage/backlog/N2-distillation.md b/docs/pilotage/backlog/N2-distillation.md
+index f04f5baf..ee47c2cf 100644
+--- a/docs/pilotage/backlog/N2-distillation.md
++++ b/docs/pilotage/backlog/N2-distillation.md
+@@ -27,7 +27,11 @@ PPL < 2,5 sur le jeu tenu à l'écart, avec le contrôle par permutation et le m
+ 
+ ## Prochaine action
+ 
+-Lancer la série **hiérarchie** (état de section, longueurs croissantes) avec 3 graines et le même budget ; garder la porte < 2,5 comme mesure de la distillation, et passer la main à R11 pour la fenêtre. Ne pas allonger le contexte **brut**.
++**Le budget est mesuré (N2.d), le levier suivant est le corpus.** Le budget plein paie
++2,9355 → 2,8527 (−0,08) ; les quatre sources coûtent +0,93 ; le curriculum 129 gagne 0,05 à
++129 ; et **32,8 % des fenêtres du protocole de validation sont verbatim dans l'entraînement**
++— sur fenêtres propres, A est à 2,9795. Prochaine action : **dédupliquer le corpus et séparer
++train/validation par document**, puis remesurer la porte < 2,5 : elle n'a de sens qu'après.
+ 
+ ## Voir aussi
+ 
+diff --git a/docs/pilotage/roadmap.md b/docs/pilotage/roadmap.md
+index 57ca95a4..5b4729eb 100644
+--- a/docs/pilotage/roadmap.md
+++
+… [5127 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -5; echo \"=== status ===\"; git status --short; echo \"=== other session? ===\"; python3 tools/sessions.py --status 2>&1 | head -8", "description": "Check for concurrent session commits"}`
+
+  ```
+b8683d00 SESSION — R4.4 SE FERME SUR `0088fc2f` : L'OCR EST MESURÉ, R4.4 RESTE OUVERTE AUX SCANS
+0088fc2f R4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 %
+58103738 DOCS — DIEHL & COOK : UNITÉS, DÉLAIS ET TRACE DES INHIBITEURS
+bb3bfefe DOCS — LE MODÈLE NATIF ET DIEHL & COOK, 13 SCHÉMAS : LA SÉPARATION À TROIS NIVEAUX
+54dc7a26 ÉTAT — LA CAMPAGNE N2 BUDGET ET DONNÉES EST OUVERTE, LES GPU RÉSERVÉS JUSQU'À 19 h 40
+=== status ===
+ M .gitignore
+ M docs/pilotage/backlog/N2-distillation.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/README.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md
+ m tools/docwatch
+?? reports/n2-budget.json
+?? reports/rapport-n2-budget.md
+?? tools/distiller_budget.py
+?? tools/eval_n2_budget.py
+=== other session? ===
+sessions · plans de mandat
+  ⏰ 0b0a6a0d-05f5-4308 · en cours · 129 min · N2 — le budget complet, les données et le c
+… [637 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -8; echo \"=== compte portes ===\"; ls tools/porte-*.sh | wc -l; ls reports/*.md | wc -l; ls reports/*.json | wc -l; ls docs/**/*.md 2>/dev/null | wc -l", "description": "C … [49 caractères tronqués]`
+
+  ```
+revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 370 fichiers, le disque en a 371
+     · compteurs : en-cours.md dit 438 JSON, le disque en a 439
+=== compte portes ===
+79
+371
+439
+93
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 80,95p docs/pilotage/en-cours.md", "description": "Read the counters table"}`
+
+  ```
+## Les chiffres de l'état
+
+> **Source unique.** Ces valeurs sont vérifiées par `tools/revue_documentation.py`.
+
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **79** (73 vertes, 5 rouges à la passe du 31/10 ; 1 porte ajoutée depuis, hors passe) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **370** / **438** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **112** (hors archive et README) | `docs/**/*.md` |
+| dernière passe complète | **1 h 37** (31/10 12 h 54) | `docs/pilotage/references-non-regression.md` |
+
+## Les chantiers et leurs bloquants
+
+**Les dépendances ne sont pas dans cette page.** Elles vivent dans le **graphe** du backlog —
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 20,60p .git/hooks/pre-commit; echo \"=== portes ===\"; tail -3 work/n2d/portes.log 2>/dev/null; ls /tmp/portes-1031-n2d/ 2>/dev/null | head", "description": "Inspect hook journal step and gate progress"}`
+
+  ```
+#    accompagner le code, pas le suivre.
+python3 tools/archive_sessions.py --quiet >/dev/null || { echo "  ⛔ archivage des sessions en échec"; exit 1; }
+python3 tools/session_report.py --quiet >/dev/null || { echo "  ⛔ rapport de session en échec"; exit 1; }
+# Le journal du jour, par thème (sources : git + journal/sessions). L'index README est
+# régénéré ensuite pour lister les fichiers produits.
+python3 tools/journal_auto.py --quiet >/dev/null || { echo "  ⛔ journal du jour en échec"; exit 1; }
+git add journal || { echo "  ⛔ journal non ajouté à l'index"; exit 1; }
+exit 0
+=== portes ===
+=== PASSE COMPLÈTE DES PORTES (79 portes, borne 1800 s) ===
+    journaux : /tmp/portes-1031-n2d
+  porte-adaptateur-sortie ✅                          65 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+porte-adaptateur-sortie.log
+porte-audit-drapeaux.log
+registre.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"| fichiers / JSON de résultats | **370** / **438** |\", \"| fichiers / JSON de résultats | **371** / **439** |\")\np.write … [698 caractères tronqués]`
+
+  ```
+ok
+  368 fiches → reports/INDEX.md
+200:| [rapport-n2-budget.md](rapport-n2-budget.md) | N2 — le budget paie, les quatre sources coûtent, et la validation n'est pas tenue à l'écart |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/2026-10-31/; echo \"=== notes apprentissage ===\"; sed -n '/<!-- notes -->/,$p' journal/2026-10-31/apprentissage.md | head -20", "description": "Inspect today's journal theme files"}`
+
+  ```
+apprentissage.md
+distribue.md
+docs.md
+mesures.md
+modele.md
+portes.md
+README.md
+=== notes apprentissage ===
+<!-- notes -->
+
+<!-- /notes -->
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np = pathlib.Path('journal/2026-10-31/apprentissage.md'); s = p.read_text()\nnotes = \"\"\"<!-- notes -->\n\n### N2 — le budget, les quatre sources, et le mètre faussé\n\nLa journée avait commencé pa … [2056 caractères tronqués]`
+
+  ```
+ok
+<!-- notes -->
+
+### N2 — le budget, les quatre sources, et le mètre faussé
+
+La journée avait commencé par deux négatifs nets sur la hiérarchie. En reprenant N2 l'après-midi,
+la question était simple : le dispositif reconstruit hier n'avait vu que **20,48 Mo** d'un seul
+corpus en **5 000 pas** — que donne-t-il à budget plein, **41 Mo, 20 000 pas**, et à quatre
+sources ?
+
+Douze distillations, trois graines, deux cartes. Le budget paie : **2,8527** contre **2,9355**
+(−0,0828), du même ordre que la chaîne historique. Les quatre sources coûtent : **3,7591** sur le
+protocole (+0,91) et **3,4350** à quotas égaux (+0,58) — l'anglais du manifeste (82,5 %) explique
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -5; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py | tail -3; echo \"=== budget ===\"; python3 tools/taille_documents.py 2>&1 | tail -3", "description": "Run  … [32 caractères tronqués]`
+
+  ```
+revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== en-cours ===
+  en-cours · 1248 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== budget ===
+     · 14 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_backlog.py 2>&1 | tail -4; python3 tools/verifie_journal.py 2>&1 | tail -2; python3 tools/verifier_schemas.py 2>&1 | tail -2", "description": "Verify backlog, journal and schemas"}`
+
+  ```
+profondeur 5 : R01 → R02 → R03 → R31 → R32 → R51
+  frontière (4) : A2.6, N2, N3, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  journal · 37 jour(s) · 110 session(s) · 1702 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## Ce que ça change/,/## Ce qui pourrait/p' reports/rapport-n2-budget.md", "description": "Read the impact section"}`
+
+  ```
+## Ce que ça change pour N2
+
+1. **Le budget paie, mais peu** : **−0,0828** de PPL pour 20 000 pas de plus (2,8527 contre
+   2,9355), du même ordre que la chaîne historique (≈ −0,09 par 20 000 pas à lr 3e-5, N2.23).
+   La porte < 2,5 n'est pas approchée : il manque **0,3527** sur le protocole, et
+   **0,4795** sur les fenêtres propres. À ce rendement — qui décroît — il faudrait de
+   l'ordre de **90 000 pas de plus** pour espérer 2,5 ; la chaîne historique en a enchaîné plus de
+   100 000 pour arriver à 2,70.
+2. **Les données, telles que le manifeste les définit, coûtent** : B perd 0,9064 sur le
+   protocole. Le manifeste est à 82,5 % anglais alors que le professeur est **français** : les
+   cibles anglaises qu'il donne sont faibles, et le français se dilue. B′ dit quelle part revient à
+   l'anglais : à quotas égaux elle coûte encore **+0,58** ; dans les deux cas, la diversité
+   **n'aide pas la porte française**.
+3. **Le curriculum 129** : gagne **0,0416** sur le protocole 129 (comparaison appariée) et **0,0056** sur le protocole 128 — réel, mais marginal : il ne déplace pas la porte.
+4. **Le prochain levier de N2 n'est pas un levier d'entraînement, c'est le corpus** : reconstruire
+… [260 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('reports/rapport-n2-budget.md'); s=p.read_text()\ns=s.replace(\"\"\"   cibles anglaises qu'il donne sont faibles, et le français se dilue. B′ dit quelle part revient à\n   l'anglais : … [979 caractères tronqués]`
+
+  ```
+ok
+## Ce que ça change pour N2
+
+1. **Le budget paie, mais peu** : **−0,0828** de PPL pour 20 000 pas de plus (2,8527 contre
+   2,9355), du même ordre que la chaîne historique (≈ −0,09 par 20 000 pas à lr 3e-5, N2.23).
+   La porte < 2,5 n'est pas approchée : il manque **0,3527** sur le protocole, et
+   **0,4795** sur les fenêtres propres. À ce rendement — qui décroît — il faudrait de
+   l'ordre de **90 000 pas de plus** pour espérer 2,5 ; la chaîne historique en a enchaîné plus de
+   100 000 pour arriver à 2,70.
+2. **Les données, telles que le manifeste les définit, coûtent** : B perd 0,9064 sur le
+   protocole. Le manifeste est à 82,5 % anglais alors que le professeur est **français** : les
+   cibles anglaises qu'il donne sont faibles, et le français se dilue. B′ (quotas égaux, 25 % par
+   source) coûte encore **+0,58** : l'anglais explique une partie de la perte, pas toute ; dans les
+   deux cas, la diversité **n'aide pas la porte française**.
+3. **Le curriculum 129** : gagne **0,0416** sur le protocole 129 (comparaison appariée) et
+   **0,0056** sur le protocole 128 — réel, mais marginal : il ne déplace pas la porte.
+4. **Le prochain levier de N2 n'est pas un levier d'entraînemen
+… [295 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -4 work/n2d/portes.log; echo \"=== registre ===\"; cat /tmp/portes-1031-n2d/registre.txt 2>/dev/null | wc -l", "description": "Check gate pass progress"}`
+
+  ```
+19:44
+=== PASSE COMPLÈTE DES PORTES (79 portes, borne 1800 s) ===
+    journaux : /tmp/portes-1031-n2d
+  porte-adaptateur-sortie ✅                          65 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+=== registre ===
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\nfor f in ('reports/rapport-n2-budget.md','work/n2d/fiche.md'):\n    p=pathlib.Path(f); s=p.read_text()\n    s=s.replace(\"fenêtres propres — l'écart est de **0,40 de PPL** ;\",\"fenêtres propres — l … [196 caractères tronqués]`
+
+  ```
+ok
+84:  fenêtres propres — l'écart est de **0,39 de PPL** ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && du -sh work/n2d; df -h /home/stephane/IA | tail -1", "description": "Check checkpoint size and secondary disk space"}`
+
+  ```
+632M	work/n2d
+/dev/md0        938G  893G   36G  97% /home/stephane/IA
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /home/stephane/Data13TB/stephane/backups/n2/2026-10-31/n2d && rsync -a --exclude 'essai-*' work/n2d/ /home/stephane/Data13TB/stephane/backups/n2/2026-10-31/n2d/ && du -sh /home/stephane/Data13TB/stephane/backups/n2/2026-10-3 … [150 caractères tronqués]`
+
+  ```
+542M	/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/n2d
+12
+  ```
+
+- **bash** `{"command": "mkdir -p /home/stephane/IA/artefacts/n2/2026-10-31/n2d && rsync -a --exclude 'essai-*' /home/stephane/Data13TB/stephane/backups/n2/2026-10-31/n2d/ /home/stephane/IA/artefacts/n2/2026-10-31/n2d/ && du -sh /home/stephane/IA/artefacts/n2/2026-10-31/n2d && df -h /home/stephane/IA | tail -1" … [63 caractères tronqués]`
+
+  ```
+542M	/home/stephane/IA/artefacts/n2/2026-10-31/n2d
+/dev/md0        938G  893G   35G  97% /home/stephane/IA
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\nfor f in ('reports/rapport-n2-budget.md','work/n2d/fiche.md'):\n    p=pathlib.Path(f); s=p.read_text()\n    s=s.replace(\"\"\"- Points de contrôle : `work/n2d/*.pt` (hors dépôt, à archiver avec la c … [405 caractères tronqués]`
+
+  ```
+ok
+- Code : [`tools/distiller_budget.py`](../tools/distiller_budget.py) (entraînement) ·
+  [`tools/eval_n2_budget.py`](../tools/eval_n2_budget.py) (évaluation et contamination) ·
+  agrégat [`n2-budget.json`](n2-budget.json).
+- Points de contrôle : **12 `.pt` (542 Mo) archivés sur deux disques** —
+  `/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/n2d/` et
+  `/home/stephane/IA/artefacts/n2/2026-10-31/n2d/` ; `work/n2d/` reste la copie de travail.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -3 work/n2d/portes.log; wc -l < /tmp/portes-1031-n2d/registre.txt", "description": "Check gate progress"}`
+
+  ```
+19:45
+=== PASSE COMPLÈTE DES PORTES (79 portes, borne 1800 s) ===
+    journaux : /tmp/portes-1031-n2d
+  porte-adaptateur-sortie ✅                          65 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\n\n# 1. La section de session : close, prochaine session désignée.\ndebut = s.index(\"### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cb … [2965 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 anomalie(s) :
+     · question sans ce qui la débloque (`→`) : **N2** : **< 2,5** — et **sur quel jeu** ? La validation se 
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"\"\"- **N2** : **< 2,5** — et **sur quel jeu** ? La validation se recopie (32,8 % verbatim) : la\n  question n'a de sens q … [476 caractères tronqués]`
+
+  ```
+en-cours · 1259 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib, datetime\np=pathlib.Path('journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md'); s=p.read_text()\ns=s.replace(\"- **Heartbeat** : 2026-10-31 17:35 HAE\", \"- **Heartbeat** : 2026-10-31 20: … [946 caractères tronqués]`
+
+  ```
+ok
+  ✅ plans cohérents
+19:46
+  porte-b1110-hybride    ✅                           0 s  PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case
+  porte-balayage         ✅                           0 s  ✅ porte balayage verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short; echo \"=== diff stat ===\"; git diff --stat", "description": "Review the full working tree state"}`
+
+  ```
+M .gitignore
+ M docs/pilotage/backlog/N2-distillation.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/2026-10-31/apprentissage.md
+ M journal/README.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md
+ M reports/INDEX.md
+ M reports/README.md
+ m tools/docwatch
+?? reports/n2-budget.json
+?? reports/rapport-n2-budget.md
+?? tools/distiller_budget.py
+?? tools/eval_n2_budget.py
+=== diff stat ===
+ .gitignore                                         |   3 +
+ docs/pilotage/backlog/N2-distillation.md           |   6 +-
+ docs/pilotage/en-cours.md                          |  59 ++-
+ docs/pilotage/roadmap.md                           |  13 +-
+ journal/2026-10-31/apprentissage.md                |  27 ++
+ journal/README.md                                  |   4 +-
+ .../0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md | 426 +++++++++++++++++++++
+ .../0b0a6a0d-05f5-430
+… [523 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2d/commit-msg.txt <<'EOF'\nN2 — LE BUDGET PAIE 2,8 %, LES QUATRE SOURCES COÛTENT 91 %, ET LA VALIDATION EST CONTAMINÉE À 32,8 %\n\nLe budget plein (20 000 pas, 41 Mo, trois graines) amène l'élève distillé de 2,9355 à\n2,8 … [1660 caractères tronqués]`
+
+  ```
+24 work/n2d/commit-msg.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\nfor f in ('reports/rapport-n2-budget.md','work/n2d/fiche.md'):\n    p=pathlib.Path(f); s=p.read_text()\n    s=s.replace(\"témoins : la base supervisée, la distillation courte de la veille, et le cor … [496 caractères tronqués]`
+
+  ```
+ok
+12:ensuite **le curriculum et les données** : le dispositif reconstruit la veille n'avait vu que
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\nfor f in ('reports/rapport-n2-budget.md','work/n2d/fiche.md'):\n    p=pathlib.Path(f); s=p.read_text()\n    s=s.replace(\"le dispositif reconstruit la veille n'avait vu que\", \"le dispositif recons … [269 caractères tronqués]`
+
+  ```
+ok
+aucune mention de la veille
+19:46
+  porte-bloc-maths       ✅                           1 s  ✅ porte bloc maths verte
+  porte-bloc-tableaux    ✅                           1 s  ✅ porte bloc tableaux verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. ~/gpu-env/bin/python tools/distiller_budget.py --help 2>&1 | head -12; echo \"===\"; PYTHONPATH=. ~/gpu-env/bin/python tools/eval_n2_budget.py --help 2>&1 | head -12", "description": "Smoke-test the new tools' CLIs"}`
+
+  ```
+usage: distiller_budget.py [-h] [--enseignant ENSEIGNANT] [--init INIT]
+                           [--corpus {fr,multi}] [--manifeste MANIFESTE]
+                           [--quotas {proportionnel,equilibre}]
+                           [--train TRAIN] [--val VAL] [--stages STAGES]
+                           [--lot LOT] [--temperature TEMPERATURE]
+                           [--alpha ALPHA] [--tetes | --no-tetes]
+                           [--graine GRAINE] [--device DEVICE] --sortie SORTIE
+                           [--log LOG]
+
+options:
+  -h, --help            show this help message and exit
+  --enseignant ENSEIGNANT
+===
+usage: eval_n2_budget.py [-h] [--contamination] [--grilles]
+                         [--manifeste MANIFESTE] [--sortie SORTIE]
+                         [--device DEVICE]
+                         [points ...]
+
+positional arguments:
+  points
+
+options:
+  -h, --help            show this help message and exit
+  --contamination
+  --grilles             PPL sur quatre compteurs et deux tailles de lot
+  ```
+
+- **job_output** `{"job_id": "bash-179", "timeout_ms": 3600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1031-n2d/registre.txt; awk '$2 != 0' /tmp/portes-1031-n2d/registre.txt; tail -2 work/n2d/portes.log", "description": "Check gate progress and any reds"}`
+
+  ```
+19:56
+19
+  porte-diff-couche      ✅                          18 s    ✅ le contrat est tenu : la divergence commence à la couche 1, premier jeton tracé
+  porte-document         ✅                           6 s  ✅ porte document verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,12p docs/pilotage/references-non-regression.md", "description": "Read the top of the non-regression reference"}`
+
+  ```
+# Références de non-régression
+
+> **Dernière passe complète — 2026-10-31 à 12 h 54 :** **78 portes, 73 vertes, 5 rouges, 1 h 37**
+> (journaux `/tmp/portes-1031-11h17`). `porte-indice`, `porte-melange` : les **structurelles
+> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé
+> au démarrage. `porte-jeux` : **vraie régression** corrigée le jour même (`2edb3079` — le SAN
+> perdait contre la case, 110/112). `porte-reparti-moteur` : PPL épinglée 9,1748 non reproduite
+> (8,7434), écart de flux nul — à trancher.
+
+> **Passe précédente — 2026-10-29 à 22 h 09 :** 62 portes, 60 vertes, 2 rouges, 1 h 46 ;
+> mêmes structurelles connues, **aucune régression**. Journaux : `/tmp/portes-1029-20h23` ;
+> historique : [`reports/historique-passes-portes.md`](../../reports/historique-passes-portes.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lt tools/porte-*.sh | head -3; git log --oneline -3 -- tools/porte-*.sh", "description": "Identify the newly added gate"}`
+
+  ```
+-rwxr-xr-x. 1 stephane stephane  1382 31 oct 17:55 tools/porte-ocr.sh
+-rwxr-xr-x. 1 stephane stephane  8140 31 oct 12:55 tools/porte-tableaux.sh
+-rwxr-xr-x. 1 stephane stephane 18501 31 oct 12:55 tools/porte-gain.sh
+0088fc2f R4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 %
+3b9d179c PORTES — CINQ ÉCHECS SILENCIEUX CORRIGÉS : UNE PASSE VIDE, UNE ASSERTION PERDUE, UN HOOK MUET
+277103ff A8.3d — LE LOT N'EST PAS LES THREADS : L'ÉCART DE 1,90 % SURVIT À 1 THREAD
+  ```
+
+- **job_output** `{"job_id": "bash-179", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1031-n2d/registre.txt; awk '$2 != 0' /tmp/portes-1031-n2d/registre.txt", "description": "Check gate progress"}`
+
+  ```
+20:07
+25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 24,62p docs/pilotage/en-cours.md", "description": "Review the state file's session and N2 sections"}`
+
+  ```
+> l'état en retard le corrige — elle n'attend pas qu'on désigne une « principale ».
+
+### Session à ouvrir — N2, le corpus décontaminé
+
+- **Id** : aucune session active — `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` est **close** (la
+  campagne N2.d est committée).
+- **Rôle** : **N2, le corpus** — **32,8 %** des fenêtres de validation sont verbatim dans
+  l'entraînement ; il faut dédupliquer et séparer train/validation **par document** avant que la
+  porte < 2,5 ait un sens.
+- **Ce qu'elle fait** : reconstruire `data/corpus_fr.txt` sans répétitions, un split par document,
+  puis remesurer la base et le meilleur élève ; la porte sera **redéfinie** sur ce jeu-là.
+- **Ce que font les autres** : **R4.4** (les scans réels) est ouverte et non bloquante ; **N4**
+  (consigne courte) prend la file si N2 bloque.
+- **Fichiers réservés** : `data/`, `tools/corpus*`, `reports/n2-*`, `journal/sessions/<id>/`.
+- **Prochaine action** : le script de déduplication et le split par document.
+- **Bloquants** : aucun côté N2 ; **R4.4** attend des scans, pas un blocage.
+- **Journal** : [le 30/10](../../journal/2026-10-30/README.md) · [le 31/10](../../journal/2026-10-31/README.md).
+
+> **Sessions archivées** : `81
+… [1420 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\nvieux = \"\"\"> **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`,\n> `fe3c05f0`\n> — rappor … [494 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1260 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"hiérarchie\" docs/pilotage/roadmap.md docs/pilotage/en-cours.md docs/pilotage/backlog/index.md | head -12", "description": "Find stale hierarchy references"}`
+
+  ```
+docs/pilotage/roadmap.md:48:2. **N2 — la distillation et la hiérarchie** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734**
+docs/pilotage/roadmap.md:50:   atteinte**. Le levier retenu est la **hiérarchie** (état de section), portée par N2.
+docs/pilotage/roadmap.md:242:**Ce qui bloque** : les 130–256 sont **tous négatifs**. R1.1 doit être tenté **avant** R1.2 : si la hiérarchie
+docs/pilotage/roadmap.md:328:- **R1** : la **hiérarchie portée par N2** suffit-elle à lire **1 000 octets** sans refaire les négatifs 130–256 ?
+docs/pilotage/en-cours.md:118:**N2** — la **hiérarchie** et les **données** sont écartées ; le **budget** paie **−0,08** ; la
+docs/pilotage/en-cours.md:125:- **R1** : **1 000 octets** sans refaire 130–256 ? → **N2** (hiérarchie), puis **R1.1**, tranchent.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 40,56p docs/pilotage/roadmap.md; echo \"=== 236,246 ===\"; sed -n 236,246p docs/pilotage/roadmap.md", "description": "Read the order-of-day N2 entry and R1 note"}`
+
+  ```
+30 % sur 5 types et **249 questions**) ; **R0.4** (tête de survol) et **R0.5** (routeur) sont
+   **closes en négatif** — 0,540 contre BM25 0,720 sur le corpus gelé, et un signal qui prédit
+   (AUC 0,839) sans règle qui transfère.
+   **R4.1 — le bloc tableaux** est **mesurée** (996 cellules, **802** exactes, texte plat **0/3**),
+   **R4.2 — le bloc code** aussi (294 fichiers, 24/24 extraits, texte seul **0/3**) et **R4.3 —
+   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est partielle** :
+   l'OCR est installé, **10 pages rendues** sont lues à **4,48 %** de WER avec une **parité de
+   passage 90 %**, et la **page dégradée** tombe à **26,7 %** — les **scans réels** restent ouverts.
+2. **N2 — la distillation et la hiérarchie** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734**
+   (0,794 bit/octet) ; student **3,123** à 20 000 pas ; meilleur **2,6998** ; plateau **2,708** ; porte **< 2,5 non
+   atteinte**. Le levier retenu est la **hiérarchie** (état de section), portée par N2.
+3. ~~N0.3b — la parité de perplexité DRVM ↔ GGUF~~ **close** : conversion **68,1917 / 92,1875**, natif **4,6585 / 18,6394**.
+4. **N4 — l'usage** : la **consigne courte**
+… [1449 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('docs/pilotage/roadmap.md'); s=p.read_text()\ns=s.replace(\"\"\"2. **N2 — la distillation et la hiérarchie** (en cours) : 49 999 fenêtres, 4 sources ; professeur 30k **1,734**\n   (0, … [2068 caractères tronqués]`
+
+  ```
+ok
+docs/pilotage/roadmap.md:332:  puis **R1.2** (curriculum) tranchent ; la hiérarchie portée par N2 est écartée deux fois.
+docs/pilotage/en-cours.md:118:**N2** — la **hiérarchie** et les **données** sont écartées ; le **budget** paie **−0,08** ; la
+docs/pilotage/en-cours.md:126:  (curriculum) tranchent ; la hiérarchie de N2 est écartée.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -3; python3 tools/verifie_en_cours.py | tail -2; python3 tools/taille_documents.py 2>&1 | tail -2; date '+%H:%M'; wc -l < /tmp/portes-1031-n2d/registre.txt", "description": … [35 caractères tronqués]`
+
+  ```
+revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1270 mots · 7 sections · 1 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+20:08
+25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 work/n2d/portes.log; echo \"=== registre queue ===\"; tail -3 /tmp/portes-1031-n2d/registre.txt; ps -eo pid,etime,cmd | grep -E \"porte-|toutes-les-portes\" | grep -v grep | head -3", "description": "Identify the currently ru … [12 caractères tronqués]`
+
+  ```
+porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          24 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         209 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+=== registre queue ===
+porte-flux 0 24
+porte-fusion 0 8
+porte-gain 0 209
+  81759       33:08 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && while [ ! -f work/n2d/finalise.termine ]; do sleep 20; done; date '+%H:%M' > work/n2d/portes-debut.txt; JOURNAUX=/tmp/portes-1031-n2d DELAI=1800 bash tools/toutes-les-portes.sh > work/n2d/portes.log 2>&1; date '+%H:%M' > work/n2d/portes-fin.txt; echo TERMINE >> work/n2d/portes.log
+  83970       26:08 bash tools/toutes-les-portes.sh
+ 240587       04:04 timeout 1800 bash tools/porte-greffe.sh
+  ```
+
+- **job_output** `{"job_id": "bash-179", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\\|❌\" work/n2d/portes.log; awk '$2 != 0' /tmp/portes-1031-n2d/registre.txt; tail -1 work/n2d/portes.log", "description": "Check gate progress again"}`
+
+  ```
+20:18
+29
+porte-homeostasie 2 0
+  porte-horloge          ✅                          25 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  ```
+
+- **job_output** `{"job_id": "bash-179", "timeout_ms": 2700000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\\|❌\" work/n2d/portes.log; awk '$2 != 0' /tmp/portes-1031-n2d/registre.txt; tail -1 work/n2d/portes.log", "description": "Check gate progress"}`
+
+  ```
+20:28
+29
+porte-homeostasie 2 0
+  porte-horloge          ✅                          25 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,etime,cmd | grep -E \"porte-|python\" | grep -v grep | head -5; ls -lt /tmp/portes-1031-n2d/*.log | head -3", "description": "Identify the long-running gate"}`
+
+  ```
+2031    03:12:22 /usr/bin/python3.13 /usr/sbin/firewalld --nofork --nopid
+   2210    03:12:20 /usr/bin/python3.13 /usr/bin/fail2ban-server -xf start
+   3193    03:12:10 /home/stephane/.local/share/pipx/venvs/docwatch/bin/python -E /home/stephane/.local/bin/docwatch --config /home/stephane/.config/docwatch/config.toml --no-browser
+ 249287       11:39 timeout 1800 bash tools/porte-indice.sh
+ 249288       11:39 bash tools/porte-indice.sh
+-rw-r--r--. 1 stephane stephane  690 31 oct 20:27 /tmp/portes-1031-n2d/porte-indice.log
+-rw-r--r--. 1 stephane stephane  769 31 oct 20:16 /tmp/portes-1031-n2d/porte-horloge.log
+-rw-r--r--. 1 stephane stephane  172 31 oct 20:16 /tmp/portes-1031-n2d/porte-homeostasie.log
+  ```
+
+- **job_output** `{"job_id": "bash-179", "timeout_ms": 2700000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\\|❌\" work/n2d/portes.log; awk '$2 != 0' /tmp/portes-1031-n2d/registre.txt; tail -1 work/n2d/portes.log", "description": "Check gate progress"}`
+
+  ```
+20:38
+57
+porte-homeostasie 2 0
+porte-indice 1 838
+porte-melange 1 106
+  porte-occupation-elagage ✅                          59 s  ✅ porte occupation × élagage : la cible annoncée est VÉRIFIÉE dans le fichier exporté
+  ```
+
+- **job_output** `{"job_id": "bash-179", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\\|❌\" work/n2d/portes.log; awk '$2 != 0' /tmp/portes-1031-n2d/registre.txt; tail -2 work/n2d/portes.log", "description": "Check gate progress"}`
+
+  ```
+20:48
+63
+porte-homeostasie 2 0
+porte-indice 1 838
+porte-melange 1 106
+  porte-poids-creux      ✅                         322 s  ✅ porte poids creux : le noyau creux est EXACT et il paie la sparsité — paires divisées sur
+  porte-pont             ✅                          82 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+  ```
+
+- **job_output** `{"job_id": "bash-179", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\\|❌\" work/n2d/portes.log; awk '$2 != 0' /tmp/portes-1031-n2d/registre.txt; tail -2 work/n2d/portes.log", "description": "Check gate progress"}`
+
+  ```
+20:58
+64
+porte-homeostasie 2 0
+porte-indice 1 838
+porte-melange 1 106
+  porte-pont             ✅                          82 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+  porte-prechargement    ✅                         184 s    PORTE TENUE
+  ```
+
+- **job_output** `{"job_id": "bash-179", "timeout_ms": 1800000, "wait": true}`

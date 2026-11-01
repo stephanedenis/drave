@@ -1,0 +1,46 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Six anti-patrons, et le test qui les attrape</title>
+<desc>La séparation n&#x27;est pas une intention : c&#x27;est une propriété qui se teste et qui peut échouer.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="540" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Six anti-patrons, et le test qui les attrape</text>
+<text x="480" y="58" text-anchor="middle" font-size="12.5" fill="#475569">Le plus fréquent est le premier : un beau vecteur creux appelé « représentation sémantique » sans preuve de neutralité.</text>
+<rect x="30" y="96" width="440" height="112" rx="9" fill="#ffffff" stroke="#b91c1c" stroke-width="1.4"/>
+<circle cx="56" cy="122" r="13" fill="#b91c1c" stroke="#b91c1c" stroke-width="1.8"/>
+<text x="56" y="126" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">1</text>
+<text x="78" y="127" text-anchor="start" font-size="13" font-weight="bold" fill="#b91c1c">le code promu</text>
+<text x="50" y="158" text-anchor="start" font-size="10" fill="#334155">symptôme : le code de spikes s&#x27;appelle « RSN »</text>
+<text x="50" y="182" text-anchor="start" font-size="10" fill="#7f1d1d">test : la sonde de format réussit sur le corps</text>
+<rect x="500" y="96" width="440" height="112" rx="9" fill="#ffffff" stroke="#b91c1c" stroke-width="1.4"/>
+<circle cx="526" cy="122" r="13" fill="#b91c1c" stroke="#b91c1c" stroke-width="1.8"/>
+<text x="526" y="126" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">2</text>
+<text x="548" y="127" text-anchor="start" font-size="13" font-weight="bold" fill="#b91c1c">la surface au raisonneur</text>
+<text x="520" y="158" text-anchor="start" font-size="10" fill="#334155">symptôme : N3 lit les pixels ou le texte</text>
+<text x="520" y="182" text-anchor="start" font-size="10" fill="#7f1d1d">test : changer le format change la décision</text>
+<rect x="30" y="222" width="440" height="112" rx="9" fill="#ffffff" stroke="#b91c1c" stroke-width="1.4"/>
+<circle cx="56" cy="248" r="13" fill="#b91c1c" stroke="#b91c1c" stroke-width="1.8"/>
+<text x="56" y="252" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">3</text>
+<text x="78" y="253" text-anchor="start" font-size="13" font-weight="bold" fill="#b91c1c">l&#x27;annotation dans le corps</text>
+<text x="50" y="284" text-anchor="start" font-size="10" fill="#334155">symptôme : la langue ou le format est dans l&#x27;empreinte</text>
+<text x="50" y="308" text-anchor="start" font-size="10" fill="#7f1d1d">test : deux surfaces du même sens → deux hashes</text>
+<rect x="500" y="222" width="440" height="112" rx="9" fill="#ffffff" stroke="#b91c1c" stroke-width="1.4"/>
+<circle cx="526" cy="248" r="13" fill="#b91c1c" stroke="#b91c1c" stroke-width="1.8"/>
+<text x="526" y="252" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">4</text>
+<text x="548" y="253" text-anchor="start" font-size="13" font-weight="bold" fill="#b91c1c">le jeton déguisé</text>
+<text x="520" y="284" text-anchor="start" font-size="10" fill="#334155">symptôme : la RSN est une suite de jetons</text>
+<text x="520" y="308" text-anchor="start" font-size="10" fill="#7f1d1d">test : changer le tokeniseur change le sens</text>
+<rect x="30" y="348" width="440" height="112" rx="9" fill="#ffffff" stroke="#b91c1c" stroke-width="1.4"/>
+<circle cx="56" cy="374" r="13" fill="#b91c1c" stroke="#b91c1c" stroke-width="1.8"/>
+<text x="56" y="378" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">5</text>
+<text x="78" y="379" text-anchor="start" font-size="13" font-weight="bold" fill="#b91c1c">le faux miroir</text>
+<text x="50" y="410" text-anchor="start" font-size="10" fill="#334155">symptôme : le décodeur invente, l&#x27;encodeur ne restitue pas</text>
+<text x="50" y="434" text-anchor="start" font-size="10" fill="#7f1d1d">test : c(d(c(s))) ≠ c(s)</text>
+<rect x="500" y="348" width="440" height="112" rx="9" fill="#ffffff" stroke="#b91c1c" stroke-width="1.4"/>
+<circle cx="526" cy="374" r="13" fill="#b91c1c" stroke="#b91c1c" stroke-width="1.8"/>
+<text x="526" y="378" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#ffffff">6</text>
+<text x="548" y="379" text-anchor="start" font-size="13" font-weight="bold" fill="#b91c1c">le niveau décoratif</text>
+<text x="520" y="410" text-anchor="start" font-size="10" fill="#334155">symptôme : le manifeste dit N2, le bloc lit la surface</text>
+<text x="520" y="434" text-anchor="start" font-size="10" fill="#7f1d1d">test : la sonde de format réussit sur un bloc N2</text>
+<rect x="30" y="480" width="900" height="38" rx="8" fill="#fee2e2" stroke="#b91c1c" stroke-width="1"/>
+<text x="480" y="504" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#7f1d1d">Un anti-patron qui n&#x27;a pas de test est une opinion, pas une architecture.</text>
+</svg>

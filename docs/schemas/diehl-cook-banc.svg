@@ -1,0 +1,113 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 580" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Le banc v0, pré-enregistré</title>
+<desc>Six hypothèses, quatre ablations, un test tenu à l&#x27;écart : les seuils sont écrits avant la première mesure.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="580" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Le banc v0, pré-enregistré</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Un contrôle de mécanismes, pas une reproduction du 95 % du papier.</text>
+<rect x="30" y="96" width="140" height="70" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="100.0" y="120" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">corpus</text>
+<text x="100.0" y="142.0" text-anchor="middle" font-size="9.5" fill="#334155">2 000 ex.</text>
+<line x1="171" y1="131" x2="183" y2="131" stroke="#334155" stroke-width="1.6" marker-end="url(#f)"/>
+<rect x="185" y="96" width="140" height="70" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="255.0" y="120" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">split</text>
+<text x="255.0" y="142.0" text-anchor="middle" font-size="9.5" fill="#334155">train/val/test</text>
+<line x1="326" y1="131" x2="338" y2="131" stroke="#334155" stroke-width="1.6" marker-end="url(#f)"/>
+<rect x="340" y="96" width="140" height="70" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="410.0" y="120" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">STDP</text>
+<text x="410.0" y="142.0" text-anchor="middle" font-size="9.5" fill="#334155">1 passage</text>
+<line x1="481" y1="131" x2="493" y2="131" stroke="#334155" stroke-width="1.6" marker-end="url(#f)"/>
+<rect x="495" y="96" width="140" height="70" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="565.0" y="120" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">gel</text>
+<text x="565.0" y="142.0" text-anchor="middle" font-size="9.5" fill="#334155">η = 0, θ figé</text>
+<line x1="636" y1="131" x2="648" y2="131" stroke="#334155" stroke-width="1.6" marker-end="url(#f)"/>
+<rect x="650" y="96" width="140" height="70" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="720.0" y="120" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">assignation</text>
+<text x="720.0" y="142.0" text-anchor="middle" font-size="9.5" fill="#334155">train seul</text>
+<line x1="791" y1="131" x2="803" y2="131" stroke="#334155" stroke-width="1.6" marker-end="url(#f)"/>
+<rect x="805" y="96" width="140" height="70" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="875.0" y="120" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">test</text>
+<text x="875.0" y="142.0" text-anchor="middle" font-size="9.5" fill="#334155">jamais lu avant</text>
+<text x="480" y="204" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">les hypothèses et leurs contrôles</text>
+<text x="252.5" y="212" text-anchor="middle" font-size="9" font-weight="bold" fill="#334155">traitement</text>
+<text x="377.5" y="212" text-anchor="middle" font-size="9" font-weight="bold" fill="#334155">gelé</text>
+<text x="502.5" y="212" text-anchor="middle" font-size="9" font-weight="bold" fill="#334155">sans inh.</text>
+<text x="627.5" y="212" text-anchor="middle" font-size="9" font-weight="bold" fill="#334155">sans hom.</text>
+<text x="752.5" y="212" text-anchor="middle" font-size="9" font-weight="bold" fill="#334155">taux seul</text>
+<text x="877.5" y="212" text-anchor="middle" font-size="9" font-weight="bold" fill="#334155">permuté</text>
+<rect x="30" y="220" width="160" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="38" y="242" text-anchor="start" font-size="9.5" font-weight="bold" fill="#0f172a">H1 · STDP apprend</text>
+<rect x="190" y="220" width="121" height="34" rx="4" fill="#f0fdf4" stroke="#cbd5e1" stroke-width="1"/>
+<text x="250.5" y="242" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">✓</text>
+<rect x="315" y="220" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="375.5" y="242" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="440" y="220" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="500.5" y="242" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="565" y="220" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="625.5" y="242" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="690" y="220" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="750.5" y="242" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="30" y="258" width="160" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="38" y="280" text-anchor="start" font-size="9.5" font-weight="bold" fill="#0f172a">H2 · inhibition diversifie</text>
+<rect x="190" y="258" width="121" height="34" rx="4" fill="#f0fdf4" stroke="#cbd5e1" stroke-width="1"/>
+<text x="250.5" y="280" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">✓</text>
+<rect x="315" y="258" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="375.5" y="280" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="440" y="258" width="121" height="34" rx="4" fill="#f0fdf4" stroke="#cbd5e1" stroke-width="1"/>
+<text x="500.5" y="280" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">✓</text>
+<rect x="565" y="258" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="625.5" y="280" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="690" y="258" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="750.5" y="280" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="30" y="296" width="160" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="38" y="318" text-anchor="start" font-size="9.5" font-weight="bold" fill="#0f172a">H3 · homéostasie égalise</text>
+<rect x="190" y="296" width="121" height="34" rx="4" fill="#f0fdf4" stroke="#cbd5e1" stroke-width="1"/>
+<text x="250.5" y="318" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">✓</text>
+<rect x="315" y="296" width="121" height="34" rx="4" fill="#f0fdf4" stroke="#cbd5e1" stroke-width="1"/>
+<text x="375.5" y="318" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">✓</text>
+<rect x="440" y="296" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="500.5" y="318" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="565" y="296" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="625.5" y="318" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="690" y="296" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="750.5" y="318" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="30" y="334" width="160" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="38" y="356" text-anchor="start" font-size="9.5" font-weight="bold" fill="#0f172a">H4 · le taux suffit</text>
+<rect x="190" y="334" width="121" height="34" rx="4" fill="#f0fdf4" stroke="#cbd5e1" stroke-width="1"/>
+<text x="250.5" y="356" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">✓</text>
+<rect x="315" y="334" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="375.5" y="356" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="440" y="334" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="500.5" y="356" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="565" y="334" width="121" height="34" rx="4" fill="#f0fdf4" stroke="#cbd5e1" stroke-width="1"/>
+<text x="625.5" y="356" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">✓</text>
+<rect x="690" y="334" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="750.5" y="356" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="30" y="372" width="160" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="38" y="394" text-anchor="start" font-size="9.5" font-weight="bold" fill="#0f172a">H5 · RSN neutre</text>
+<rect x="190" y="372" width="121" height="34" rx="4" fill="#f0fdf4" stroke="#cbd5e1" stroke-width="1"/>
+<text x="250.5" y="394" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">✓</text>
+<rect x="315" y="372" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="375.5" y="394" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="440" y="372" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="500.5" y="394" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="565" y="372" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="625.5" y="394" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="690" y="372" width="121" height="34" rx="4" fill="#f0fdf4" stroke="#cbd5e1" stroke-width="1"/>
+<text x="750.5" y="394" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">✓</text>
+<rect x="30" y="410" width="160" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="38" y="432" text-anchor="start" font-size="9.5" font-weight="bold" fill="#0f172a">H6 · rejeu exact</text>
+<rect x="190" y="410" width="121" height="34" rx="4" fill="#f0fdf4" stroke="#cbd5e1" stroke-width="1"/>
+<text x="250.5" y="432" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">✓</text>
+<rect x="315" y="410" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="375.5" y="432" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="440" y="410" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="500.5" y="432" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="565" y="410" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="625.5" y="432" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="690" y="410" width="121" height="34" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="750.5" y="432" text-anchor="middle" font-size="11" font-weight="bold" fill="#94a3b8">—</text>
+<rect x="30" y="470" width="900" height="54" rx="9" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5"/>
+<text x="480" y="494" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#0f172a">3 graines · 1 passage · pas d&#x27;arrêt sur le test · les seuils sont écrits avant la mesure</text>
+<text x="480" y="514" text-anchor="middle" font-size="10" fill="#475569">Ce que le banc n&#x27;est pas : une chasse au 95 %. C&#x27;est un test de mécanismes, et un négatif est un résultat.</text>
+</svg>
