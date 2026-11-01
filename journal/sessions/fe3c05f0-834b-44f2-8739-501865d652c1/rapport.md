@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 8.7 h |
 | Tours | 2 |
-| Messages | 527 |
-| Appels d'outils | 530 |
+| Messages | 528 |
+| Appels d'outils | 531 |
 | Fichiers touchés | 18 |
-| Commandes | 472 |
+| Commandes | 473 |
 | Sous-agents | 0 |
-| Commits | 18 |
+| Commits | 19 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*345 appels d'outils.* Actions notables :
+*346 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,7 +101,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 315 autres
+- … et 316 autres
 
 **Synthèse produite :**
 
@@ -174,7 +174,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 432 autres
+- … et 433 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -340,4 +340,5 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - python3 - <<'PY' import json,pathlib rot=json.loads(pathlib.Path('reports/r44-rotation.json').read_text()) rot['sondes']={'6,0°':{'wer_brut':0.1308,'wer_auto':0
 - python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("restent les **scans réels de bout en bout**, le fax 1 
 - python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("vrais scans **7,10 / 88,4 %** (trois livres) — [`r44-s
+- ÉTAT — LE BUDGET DE CONTEXTE REPASSE SOUS 4 000 MOTS (5 MOTS RETIRÉS)" 2>&1 | tail -2 git log --oneline -1; date +%H:%M
 

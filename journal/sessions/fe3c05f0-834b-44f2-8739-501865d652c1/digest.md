@@ -9271,3 +9271,14 @@ reports/rapport-r44-scans.md
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"vrais scans **7,10 / 88,4 %** (trois livres) — [`r44-scans`]\",\n            \"vrais scans **7,10 / 88,4 %** (trois livres) ; redressement utile **≤ 6°** (10° : **43 %**) — [`r4 … [845 caractères tronqués]`
+
+  ```
+T0 3965
+  T0 max : 4005 mots (budget 4 000)
+  ✅ index : aucun fait stagé sans état
+[master b859f27f] R4.4 — LE REDRESSEMENT SERT JUSQU'À 6°, PUIS DÉCROCHE : 10° DONNENT 43,5 % DE WER
+ 10 files changed, 175 insertions(+), 27 deletions(-)
+b859f27f R4.4 — LE REDRESSEMENT SERT JUSQU'À 6°, PUIS DÉCROCHE : 10° DONNENT 43,5 % DE WER
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"vrais scans **7,10 / 88,4 %** (trois livres) ; redressement utile **≤ 6°** (10° : **43 %**) — [`r44-scans`]\",\n            \"vrais scans **7,10 / 88,4 %** ; redressement **≤ 6° … [483 caractères tronqués]`
