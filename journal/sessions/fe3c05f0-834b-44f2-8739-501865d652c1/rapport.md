@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 26.0 h |
 | Tours | 12 |
-| Messages | 875 |
-| Appels d'outils | 874 |
+| Messages | 876 |
+| Appels d'outils | 875 |
 | Fichiers touchés | 18 |
-| Commandes | 801 |
+| Commandes | 802 |
 | Sous-agents | 0 |
-| Commits | 43 |
+| Commits | 44 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -649,7 +649,7 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 
 ### Tour 12 — suis le plan, continue jusqu'à 8h demain matin
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create long goal and check nine language dumps
@@ -657,6 +657,7 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - bash — Update plan and state for nine languages
 - bash — Launch remaining four language extractions
 - bash — Commit nine-of-nine launch state via alt index
+- bash — Restore T0 and commit state fix
 
 **Synthèse produite :**
 
@@ -729,7 +730,7 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 761 autres
+- … et 762 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -920,4 +921,5 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet python3 - <<'PY' import pathlib,re p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=re.sub(r"\|
 - DONNÉES — LE TEXTE INTÉGRAL PASSE AUX NEUF LANGUES : EN, DE, RU, ES, JA LANCÉS" 2>&1 | tail -2; git log --oneline -1
 - ÉTAT — LES NEUF LANGUES SONT LANCÉES (9/9) ; EN ATTENTE DES MANIFESTES" 2>&1 | tail -1 git reset -q; git log --oneline -1
+- ÉTAT — T0 REVIENT À 3 993 (LISTE DES LANGUES DANS LE PLAN)" 2>&1 | tail -1 git reset -q; git log --oneline -1; echo "=== runs"; ps -eo pid,etime,pcpu,cmd | grep
 

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**62 commits** · **4 session(s)** · **9 thème(s)**
+**63 commits** · **4 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 4 | [distribue.md](distribue.md) |
-| docs | 15 | [docs.md](docs.md) |
+| docs | 16 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
 | mesures | 32 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -96,6 +96,7 @@
 | 17:07 | `993f147e` | ÉTAT — LE BUDGET T0 REVIENT À 3 998 (TRIM DU BLOC D/R/A) |
 | 17:38 | `79bce783` | DONNÉES — LE TEXTE INTÉGRAL FR EST LÀ : 2 388 219 ARTICLES, 8,025 G CARACTÈRES, 8,34 GO, 0 FUITE |
 | 18:31 | `d51b4df0` | DONNÉES — LE TEXTE INTÉGRAL PASSE AUX NEUF LANGUES : EN, DE, RU, ES, JA LANCÉS |
+| 18:34 | `0f1fed91` | ÉTAT — LES NEUF LANGUES SONT LANCÉES (9/9) ; EN ATTENTE DES MANIFESTES |
 
 ## Le récit de la journée (écrit à la main)
 

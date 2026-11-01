@@ -10133,3 +10133,141 @@ Date:   Sun Nov 1 18:31:43 2026 -0500
 … [1907 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo '=== HEAD has ? ==='; git show --stat HEAD | grep -E \"trace|drvf|autotest|pensee\" || echo 'non'; echo '=== status our ==='; git status --short | grep -E \"trace|drvf|autotest|moteur-de-pensee|en-cours|plan.md\" | head -15; ech … [394 caractères tronqués]`
+
+  ```
+=== HEAD has ? ===
+ docs/implantation/moteur-de-pensee.md              |  10 +-
+ reports/pensee-drvf.json                           |  18 +++
+ reports/rapport-pensee-drvf.md                     |  70 +++++++++++
+ tools/pensee/autotest.py                           |  34 +++++-
+ tools/pensee/trace.py                              | 127 ++++++++++++++++++++
+=== status our ===
+ M docs/pilotage/en-cours.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md
+=== HEAD content DRVF ===
+153:La trace est un flux **DRVF** de profil `thought` : une liste par événement, avec les champs
+158:**Le profil `thought`** (implémenté dans `trace.py`) : enveloppe `DRVF` (4 octets), version
+21:- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes)~~ ; 4) ~~moteur v0 (BFS, greedy, A*, MCTS-lite)~~ ; 5) ~~AC-3, alpha-bêta~~ (**8/8**) ; ~~DRVF~~ (**9/9**) ; 6) **banc anytime** (AUC, regret, justification, rejeu) et intégration ; 7) ~~reprise R4.4~~ ; 8) ~~couche heuristique~~ (analyse, 5 schémas) ; 9) **bloc linguistique** (R0.7).
+34:- **Moteur B13** : **AC-3, alpha-bêta (8/8)** et **DRVF `thought` (9/9)** — la trace se relit,
+47
+… [963 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff HEAD -- docs/pilotage/en-cours.md | head -40; echo '=== reports README ==='; git show HEAD:reports/README.md | grep -n \"drvf\" | head; echo '=== revue ==='; python3 tools/revue_documentation.py 2>&1 | tail -3; echo '=== ses … [133 caractères tronqués]`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 18f2feb4..5dbe87e4 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -60,7 +60,7 @@
+ - **Ambition** : le français réel pour N2 ; D, carburant.
+ - **Stratégie** : le dump, débaliseur mesuré, dédup, splits.
+ - **Objectif final** : 10 corpus en texte intégral, mesurés et ficés.
+-- **Ce qu'elle fait** : le **texte intégral FR** (**2,39 M articles**, **8,3 Go**, **0 fuite 8 Ko**, **0/40** éval) ; les **9 langues** en cours (en, de, ru, es, ja) ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
++- **Ce qu'elle fait** : le **texte intégral FR** (**2,39 M articles**, **8,3 Go**, **0 fuite 8 Ko**, **0/40** éval) ; les **9 langues** en cours (en, de, ru, es, ja, it, zh, pt, ar) ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
+ - **Ce que font les autres** : Pensée, S, N2 ; le hub tient l'état.
+ - **Prochaine action** : les 9 langues, la contamination et les fiches, puis PDF/OCR.
+ - **Bloquants** : aucun.
+=== reports README ===
+18:| [`rapport-pensee-drvf.md`](rapport-pensee-drvf.md) | **B13** — le DRVF `thought` : 23 597 octets, 93 événements, rejeu identique, corruption refusée, **9
+… [331 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ DRVF `thought` livré (9/9) ; le goal continue vers le banc anytime
+
+Le tour DRVF est fait, et le goal créé pour tenir jusqu'à **8 h demain** continue.
+
+## Ce qui est livré
+
+- **`tools/pensee/trace.py`** : enveloppe `DRVF` (magic, version `u16`, profil `thought u16`, longueur `u32`) + charge JSON canonique `{probleme, racine, evenements}`. La racine porte l'état complet ; chaque événement porte `parent`, `enfant`, `operateur`, `params`, `score`, `cout`, `strategie`, `pas`.
+- **Rejeu** : les 93 enfants sont **recalculés** par les opérateurs, empreintes et scores vérifiés ; `diff(trace, rejeu) = None`.
+- **Corruption** : un score modifié dans le fichier **lève** ; `diff_fichiers` localise l'événement 0.
+- **Mesure** : **23 597 octets**, **93 événements**, rejeu identique, diff 0.
+- **Portes** : `python3 -m tools.pensee.autotest` → **9/9** (T0–T6 + T1 DRVF).
+- **Fiche** : [`rapport-pensee-drvf.md`](../../reports/rapport-pensee-drvf.md) ; JSON [`pensee-drvf.json`](../../reports/pensee-drvf.json) ; contrat `moteur-de-pensee.md` §6.
+
+## La course de commit
+
+Mon commit B13 a perdu la course : HEAD a été déplacé par le commit **`d51b4df0`** (D/R/A, « texte intégral 9 langues »), qui a **emporté les fichiers déjà stagés** — `trace.py`, `autotest.py`, la fiche, le JSON, les docs. Le contenu est donc **dans HEAD**, mais le message du commit est celui de D/R/A, pas « B13 — DRVF ». Je le note : la prochaine fenêtre d'intégration peut ajouter un commit B13 pour le banc, avec le bon chiffre.
+
+## L'état
+
+- `en-cours`, `roadmap`, `chantiers`, `plan-travail`, plan `e181ce02` : B13 passe à **DRVF fait (9/9), banc anytime** ; L garde **gold/neuronal**.
+- `revue_documentation` : **390 fiches / 477 JSON / 118 docs / 81 portes** — ✅.
+- `taille`, `porte-tableaux`, `verifier_schemas`, `verifie_journal`, `verifie_en_cours`, `autotest 9/9` — ✅.
+- Le working tree a une ligne D/R/A (9 langues en cours) que je n'ai **pas** committée : elle appartient à D/R/A.
+- `sessions.py --check` signale le plan **`fe3c05f0` (R4.4)** actif, non listé et périmé de 45 min ; je ne l'ai pas touché — le hub doit l'intégrer ou le clore.
+
+## La suite, dans l'ordre du plan
+
+1. **B13 — banc anytime** : budgets croissants, best-so-far, **AUC**, **regret**, par stratégie (BFS, greedy, A*, MCTS-lite) sur les cruches et un taquin 3×3 ; fiche + JSON + porte.
+2. **B13 — DRVF pour AC-3/alpha-bêta** si le banc le demande.
+3. **L — gold** POS/syntagme/pragmatique (100–200 phrases) ; puis **modèle neuronal qualifié** et **cascade mesurée**.
+4. Si une ligne bloque : la suivante de la file (D/R/A, S, N2), sans attente.
+
+Le goal `goal-7beacaeb` est actif ; il enchaîne les rounds jusqu'à **2026-11-02 08:00 EST**, avec un résultat mesuré, une fiche/JSON, l'état et un commit par round.
+
+
+## Tour 14
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def score\\|def but\\|def heuristique\\|CRUCHES =\\|class Probleme\" tools/pensee/cruches.py; sed -n '80,140p' tools/pensee/cruches.py", "description": "Lire le score et l'heuristique des cruches"}`
+
+  ```
+106:def but(e: Etat) -> bool:
+110:def score(e: Etat) -> float:
+114:CRUCHES = Probleme(
+        source = etat(a, b)
+        for op in ("remplir_a", "remplir_b", "vider_a", "vider_b",
+                   "verser_a_vers_b", "verser_b_vers_a"):
+            for enfant in globals()[op](source, {}):
+                l = litres(enfant)
+                inverse[(l["a"], l["b"])].append((a, b))
+    buts = [(3, 4), (2, 4), (1, 4), (0, 4)]
+    dist = {e: 0 for e in buts}
+    file = deque(buts)
+    while file:
+        courant = file.popleft()
+        for pred in inverse[courant]:
+            if pred not in dist:
+                dist[pred] = dist[courant] + 1
+                file.append(pred)
+    return dist
+
+
+DISTANCES = _distances_exactes()
+
+
+def distance(e: Etat) -> int:
+    l = litres(e)
+    return DISTANCES.get((l["a"], l["b"]), 99)
+
+
+def but(e: Etat) -> bool:
+    return 4 in litres(e).values()
+
+
+def score(e: Etat) -> float:
+    return 1.0 if but(e) else 1.0 / (1.0 + distance(e))
+
+
+CRUCHES = Probleme(
+    nom="cruches",
+    initial=lambda: etat(0, 0),
+    operateurs={"remplir_a": remplir_a, "remplir_b": remplir_b, "vider_a": vider_a,
+                "vider_b": vider_b, "verser_a_vers_b": verse
+… [143 caractères tronqués]
+  ```
+

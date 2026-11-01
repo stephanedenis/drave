@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 25.9 h |
 | Tours | 14 |
-| Messages | 429 |
-| Appels d'outils | 462 |
+| Messages | 430 |
+| Appels d'outils | 463 |
 | Fichiers touchés | 25 |
-| Commandes | 362 |
+| Commandes | 363 |
 | Sous-agents | 2 |
 | Commits | 22 |
 | Compactages de contexte | 1 |
@@ -775,6 +775,10 @@ Mon commit B13 a perdu la course : HEAD a été déplacé par le commit **`d51b4
 
 ### Tour 14 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
+*1 appels d'outils.* Actions notables :
+
+- bash — Lire le score et l'heuristique des cruches
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -854,7 +858,7 @@ Mon commit B13 a perdu la course : HEAD a été déplacé par le commit **`d51b4
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 322 autres
+- … et 323 autres
 
 ## 4. Mesures et résultats marquants
 

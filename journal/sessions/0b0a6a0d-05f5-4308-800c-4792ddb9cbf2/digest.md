@@ -13894,3 +13894,20 @@ ok
 texte 10330112 · canal 10330112 · alignés True
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 tools/canal_structure.py --entree data/wiki_fr/propre/train.txt --sortie data/wiki_fr/propre/train.canal > work/n2j/canal-train.log 2>&1 & echo \"canal train $!\"; sleep 45; cat work/n2j/canal-train.log; ls -la data/wik … [92 caractères tronqués]`
+
+  ```
+canal train 1498331
+-rw-r--r--. 1 stephane stephane 186089328  1 nov 18:35 data/wiki_fr/propre/train.canal
+-rw-r--r--. 1 stephane stephane  10330112  1 nov 18:34 data/wiki_fr/propre/val.canal
+18:35
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nbrut = pathlib.Path('data/wiki_fr/propre/train.txt').read_bytes()\ntexte = brut.decode('utf-8', 'surrogateescape')\nre = texte.encode('utf-8', 'surrogateescape')\nprint('fichier', len(brut), '· round … [400 caractères tronqués]`
+
+  ```
+fichier 186089472 · round-trip 186089472 · écart 0
+surrogates : 144
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/canal_structure.py'); s = p.read_text()\ns = s.replace('    texte = pathlib.Path(a.entree).read_text(encoding=\"utf-8\", errors=\"surrogateescape\")',\n              '    with … [1005 caractères tronqués]`

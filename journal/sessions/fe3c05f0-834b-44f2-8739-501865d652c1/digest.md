@@ -15825,3 +15825,13 @@ ar 1497611
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"les **9 langues** en cours (en, de, ru, es, ja)\",\"les **9 langues** en cours (en, de, ru, es, ja, it, zh, pt, ar)\")\np.wri … [1192 caractères tronqués]`
+
+  ```
+T0 max : 4002 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ index : aucun fait stagé sans état
+ 20 files changed, 287 insertions(+), 53 deletions(-)
+0f1fed91 ÉTAT — LES NEUF LANGUES SONT LANCÉES (9/9) ; EN ATTENTE DES MANIFESTES
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"les **9 langues** en cours (en, de, ru, es, ja, it, zh, pt, ar)\",\"les **9 langues** en cours\")\np.write_text(s)\nPY\npytho … [816 caractères tronqués]`

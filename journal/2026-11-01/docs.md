@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -23,6 +23,7 @@
 | 15:20 | `e20d0cd8` | PILOTAGE — LA CAPACITÉ SIMULTANÉE : 4 SESSIONS, 4 À 6 CHANTIERS, 2 À 4 SOUS-AGENTS, ET LES LIMITES MESURÉES | `chantiers.md`, `README.md`, `attention.md` (+14) |
 | 15:40 | `ac1f9436` | PILOTAGE — LE DOSSIER REMIS À PLAT : INDEX, PLAN MULTI-SESSIONS, TERRITOIRES ET SURVEILLANCE | `README.md`, `README.md`, `en-cours.md` (+18) |
 | 17:05 | `f4c200d0` | PILOTAGE — LA ROADMAP À JOUR (L ET D), LE RUN DU TEXTE INTÉGRAL SUIVI DANS L'ÉTAT | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
+| 18:34 | `0f1fed91` | ÉTAT — LES NEUF LANGUES SONT LANCÉES (9/9) ; EN ATTENTE DES MANIFESTES | `en-cours.md`, `README.md`, `attention.md` (+17) |
 
 ## Chiffres du jour
 
