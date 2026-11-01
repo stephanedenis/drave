@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 18.6 h |
 | Tours | 11 |
-| Messages | 836 |
-| Appels d'outils | 784 |
+| Messages | 842 |
+| Appels d'outils | 789 |
 | Fichiers touchés | 11 |
-| Commandes | 649 |
+| Commandes | 653 |
 | Sous-agents | 0 |
 | Commits | 19 |
 | Compactages de contexte | 1 |
@@ -523,7 +523,7 @@ La troisième est la vraie différenciation : spaCy, Stanza ou displaCy colorien
 
 ### Tour 11 — allons-y, mais créons d'abord un outil pour humain dans un projet distinct (submodule git) qui permet d'afficher en web  … [308 caractères tronqués]
 
-*20 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - bash — Check the environment for the sub-project
 - bash — Create the structures repository with seed data
@@ -539,11 +539,47 @@ La troisième est la vraie différenciation : spaCy, Stanza ou displaCy colorien
 - bash — Add the tool as a git submodule
 - bash — Retry the submodule with the file transport allowed
 - bash — Add the structures tool to the state
-- … et 6 autres
+- … et 11 autres
 
 **Synthèse produite :**
 
-⏵ Création du sous-projet web (submodule) : structures candidates, validation humaine, évaluation LLM
+⏵ Bilan : le banc de structures est en place, testé et branché
+
+\## Ce qui existe maintenant
+
+**Un sous-projet autonome** — `drave-structures` — monté dans le dépôt principal comme **submodule** : `tools/structures` (commit `ccb1006`, dépôt local `../drave-structures` ; un remote pourra être ajouté pour le rendre portable).
+
+**Une interface web sans aucune dépendance** (stdlib : HTTP, JSON, `urllib`), qui montre pour chaque phrase **plusieurs structures d'interprétation candidates** :
+
+- la phrase **colorée par type de segment** — GN, GV, GP, REL, SUB, PHRASE ;
+- les **blocs indentés** par profondeur d'attachement — l'indentation *est* la structure ;
+- l'**attachement explicite** : `qui dort → le chat` contre `qui dort → la voisine` ;
+- une **lecture en français courant** pour chaque candidat ;
+- trois verdicts — **✓ acceptable / ~ discutable / ✗ non** — avec une note libre.
+
+**Le geste central est la validation humaine.** Chaque verdict s'ajoute à `donnees/validations.jsonl` (append-only, jamais réécrit). L'export `/api/export` ne garde que les candidats **acceptés** et rend **une ligne JSONL par structure** — la banque, prête à devenir un corpus d'entraînement.
+
+**Le grand modèle est branché** : `llm.py` appelle l'API DeepSeek (`chat/completions`, température 0) et demande un JSON `{choix, justification, confiance, ambigu}`. **Sans clé, on ne simule pas** : la **baseline** locale — *attachement à la cible la plus proche*, une heuristique explicable — est rendue et le mode est marqué `sans-clé`. C'est le témoin auquel comparer humains et grand modèle.
+
+\## Le contenu v0
+
+**6 phrases, 12 candidats, 6 ambiguïtés réelles** : relative (`qui dort`), GP (`avec le télescope`, `dans le parc`), portée (`hier`), rôle (`pour`), possession (`son projet`). Les spans sont **vérifiés par sous-chaîne** (`construire_donnees.py`) — un segment qui n'apparaît pas dans la phrase est refusé, pas deviné.
+
+\## Lancer et tester
+
+```bash
+python3 tools/structures/serveur.py          # http://127.0.0.1:8765
+export DEEPSEEK_API_KEY=sk-…                 # pour l'évaluation par le grand modèle
+cd tools/structures && python3 -m unittest discover -s tests   # 5 tests, OK
+```
+
+Tests : alignement des spans, validation + export, verdict invalide refusé, baseline, page statique.
+
+\## L'intégration au projet
+
+- La ligne **S — les structures** entre au plan : `v0 (outil web)`, prochaine action « générer les candidats par un analyseur, brancher l'export au corpus d'entraînement ».
+- L'état la menti
+… [837 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -605,7 +641,7 @@ La troisième est la vraie différenciation : spaCy, Stanza ou displaCy colorien
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 609 autres
+- … et 613 autres
 
 ## 4. Mesures et résultats marquants
 

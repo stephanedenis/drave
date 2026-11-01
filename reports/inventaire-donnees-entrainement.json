@@ -1,0 +1,712 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "methode": {
+  "volumes": "df -hT, lsblk ; du -sh par répertoire (timeouts) ; find -type f pour les comptages et extensions",
+  "limites": "le du complet de /home/stephane (10,9 To) a été interrompu (trop lent) ; les tailles des répertoires profonds sont des mesures ciblées ; certaines entrées sont des ordres de grandeur (\"~\", None pour les comptages non faits)"
+ },
+ "volumes": [
+  {
+   "point": "/home/stephane/Data13TB (btrfs, sda)",
+   "taille": "11 To",
+   "utilise": "8,9 To",
+   "libre": "2,0 To",
+   "note": "3,0 To archives (dont 2,8 To de vidéos récupérées), 159 Go Documents, 132 Go data (Wikipédia), 35 Go corpus, 22 Go Biblio_large"
+  },
+  {
+   "point": "/home/stephane/IA (ext4, md0)",
+   "taille": "938 Go",
+   "utilise": "895 Go (97 %)",
+   "libre": "34 Go",
+   "note": "341 Go DeepSeek + 122 Go artefacts + 123 Go cache (dont 119 Go HF) + 77 Go modeles ; volume presque plein"
+  },
+  {
+   "point": "/ (btrfs, nvme)",
+   "taille": "828 Go",
+   "utilise": "121 Go",
+   "libre": "706 Go",
+   "note": "système et logiciels"
+  }
+ ],
+ "sources": [
+  {
+   "chemin": "data/corpus_en.txt",
+   "taille": "100,3 Mo",
+   "octets": 100276153,
+   "fichiers": 1,
+   "format": "txt",
+   "contenu": "15,5 M mots anglais (Wikitext/Gutenberg assemblé)",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": "déjà utilisé par N2 ; vérifier la source exacte"
+  },
+  {
+   "chemin": "data/corpus_multi.txt",
+   "taille": "121,5 Mo",
+   "octets": 121523142,
+   "fichiers": 1,
+   "format": "txt",
+   "contenu": "18,7 M mots multilingues (en/fr/es/…)",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": "train 115,4 Mo / val 6,1 Mo"
+  },
+  {
+   "chemin": "data/corpus_fr_litterature.txt",
+   "taille": "17,0 Mo",
+   "octets": 17031747,
+   "fichiers": 1,
+   "format": "txt",
+   "contenu": "2,76 M mots de littérature française",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": "project Gutenberg / Ebooks libres"
+  },
+  {
+   "chemin": "data/corpus_fr.txt",
+   "taille": "4,6 Mo",
+   "octets": 4633889,
+   "fichiers": 1,
+   "format": "txt",
+   "contenu": "0,79 M mots français",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": "source locale ; dédup N2.h 22,2 %"
+  },
+  {
+   "chemin": "data/corpus_repo.txt",
+   "taille": "6,4 Mo",
+   "octets": 6394114,
+   "fichiers": 1,
+   "format": "txt",
+   "contenu": "1,01 M mots : prose du dépôt (docs+journal+reports)",
+   "role": "pretrain/SFT",
+   "etat": "pret",
+   "note": "recensement N2.i : 1 308 documents"
+  },
+  {
+   "chemin": "data/corpus_mixte.txt",
+   "taille": "10,6 Mo",
+   "octets": 10647410,
+   "fichiers": 1,
+   "format": "txt",
+   "contenu": "1,72 M mots mixtes",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": "mélange maison"
+  },
+  {
+   "chemin": "data/corpus_mixte_litt.txt",
+   "taille": "12,2 Mo",
+   "octets": 12233263,
+   "fichiers": 1,
+   "format": "txt",
+   "contenu": "1,92 M mots, dominante littérature",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": ""
+  },
+  {
+   "chemin": "data/corpus_mixte_propre.txt",
+   "taille": "6,1 Mo",
+   "octets": 6144000,
+   "fichiers": 1,
+   "format": "txt",
+   "contenu": "1,02 M mots, dédupliqué",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": ""
+  },
+  {
+   "chemin": "data/corpus_propre/",
+   "taille": "3,8 Mo",
+   "octets": 3800000,
+   "fichiers": 4,
+   "format": "txt (train/val/test/dev)",
+   "contenu": "prose française dédupliquée : train 3,24 Mo, val 180 Ko, test 180 Ko",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": "dedup 22,2 % ; contamination val/test 0/2814 ; fiche corpus-propre.json"
+  },
+  {
+   "chemin": "data/corpus_litt_propre/",
+   "taille": "17,0 Mo",
+   "octets": 17000000,
+   "fichiers": 3,
+   "format": "txt (train/val/test)",
+   "contenu": "littérature dédupliquée : train 15,33 Mo",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": "dedup 0,07 % ; contamination 0/2814"
+  },
+  {
+   "chemin": "data/corpus_repo_propre/",
+   "taille": "5,6 Mo",
+   "octets": 5600000,
+   "fichiers": 4,
+   "format": "txt (train/val/test/dev)",
+   "contenu": "prose du dépôt dédupliquée : train 4,84 Mo",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": "dedup 16,2 % ; contamination 0/3000 ; fiche corpus-repo-propre.json"
+  },
+  {
+   "chemin": "data/consignes_train.jsonl",
+   "taille": "98 Ko",
+   "octets": 98000,
+   "fichiers": 1,
+   "format": "jsonl",
+   "contenu": "2 000 consignes FR (SFT) + 40 val",
+   "role": "SFT",
+   "etat": "pret",
+   "note": ""
+  },
+  {
+   "chemin": "data/instructions_fr.jsonl",
+   "taille": "1,3 Ko",
+   "octets": null,
+   "fichiers": 1,
+   "format": "jsonl",
+   "contenu": "24 instructions FR",
+   "role": "SFT",
+   "etat": "pret",
+   "note": ""
+  },
+  {
+   "chemin": "data/raisonnement/",
+   "taille": "7,9 Mo",
+   "octets": null,
+   "fichiers": 7,
+   "format": "json",
+   "contenu": "paires de raisonnement synthétiques (transitif, profondeur, 3-4 langues)",
+   "role": "SFT",
+   "etat": "pret",
+   "note": ""
+  },
+  {
+   "chemin": "data/deepseek/",
+   "taille": "13 Mo",
+   "octets": null,
+   "fichiers": 941,
+   "format": "json/txt/jsonl",
+   "contenu": "distillations DeepSeek (300/600 pas, cache)",
+   "role": "distillation",
+   "etat": "pret",
+   "note": "méta-texte généré, pas du français réel"
+  },
+  {
+   "chemin": "data/presse/",
+   "taille": "752 Ko",
+   "octets": null,
+   "fichiers": 46,
+   "format": "json",
+   "contenu": "articles de presse",
+   "role": "pretrain",
+   "etat": "a_verifier",
+   "note": "droits de reproduction à vérifier"
+  },
+  {
+   "chemin": "data/pidgin/ (symlink IA/drave-data/pidgin)",
+   "taille": "314 Mo",
+   "octets": null,
+   "fichiers": 70,
+   "format": "json/zip",
+   "contenu": "corpus bibliques (bible, bible_web, KJV, WEB)",
+   "role": "pretrain",
+   "etat": "a_verifier",
+   "note": "licences à vérifier ; pidgin.old est un doublon (314 Mo)"
+  },
+  {
+   "chemin": "data/udhr/",
+   "taille": "28 Mo",
+   "octets": null,
+   "fichiers": 55,
+   "format": "jsonl/txt/json",
+   "contenu": "traductions de la Déclaration universelle des droits de l'homme",
+   "role": "pretrain/traduction",
+   "etat": "pret",
+   "note": "domaine public (ONU)"
+  },
+  {
+   "chemin": "data/multiun/",
+   "taille": "1,2 Go",
+   "octets": 1276271220,
+   "fichiers": 2,
+   "format": "tmx.gz/json",
+   "contenu": "MultiUN en-fr (ONU)",
+   "role": "traduction",
+   "etat": "pret",
+   "note": "ONU, licence à vérifier"
+  },
+  {
+   "chemin": "data/opensubtitles/",
+   "taille": "1,2 Go",
+   "octets": null,
+   "fichiers": 2,
+   "format": "gz/json",
+   "contenu": "sous-titres parallèles",
+   "role": "traduction",
+   "etat": "a_verifier",
+   "note": "licence OpenSubtitles"
+  },
+  {
+   "chemin": "data/wikimatrix/",
+   "taille": "326 Mo",
+   "octets": null,
+   "fichiers": 2,
+   "format": "json/gz",
+   "contenu": "paires de phrases WikiMatrix",
+   "role": "traduction",
+   "etat": "pret",
+   "note": "CC-BY-SA"
+  },
+  {
+   "chemin": "data/ted2020/",
+   "taille": "109 Mo",
+   "octets": null,
+   "fichiers": 2,
+   "format": "json/gz",
+   "contenu": "TED2020 parallèle",
+   "role": "traduction",
+   "etat": "pret",
+   "note": "CC-BY-NC-ND (non commercial)"
+  },
+  {
+   "chemin": "data/jrc/",
+   "taille": "48 Mo",
+   "octets": null,
+   "fichiers": 2,
+   "format": "json/gz",
+   "contenu": "JRC Acquis (UE)",
+   "role": "traduction",
+   "etat": "pret",
+   "note": "UE, réutilisable"
+  },
+  {
+   "chemin": "data/eurlex/",
+   "taille": "10 Mo",
+   "octets": null,
+   "fichiers": 32,
+   "format": "xhtml/json",
+   "contenu": "EUR-Lex (UE)",
+   "role": "traduction/pretrain",
+   "etat": "pret",
+   "note": "UE, réutilisable"
+  },
+  {
+   "chemin": "data/jw/",
+   "taille": "36 Mo",
+   "octets": null,
+   "fichiers": 73,
+   "format": "html/json",
+   "contenu": "textes des Témoins de Jéhovah",
+   "role": "pretrain",
+   "etat": "a_verifier",
+   "note": "droits à vérifier"
+  },
+  {
+   "chemin": "data/glottolog/",
+   "taille": "23 Mo",
+   "octets": null,
+   "fichiers": 2,
+   "format": "csv",
+   "contenu": "métadonnées de langues (codes, familles)",
+   "role": "référentiel",
+   "etat": "pret",
+   "note": "pas du texte d'entraînement"
+  },
+  {
+   "chemin": "data/onu/",
+   "taille": "9,9 Mo",
+   "octets": null,
+   "fichiers": 81,
+   "format": "docx/pdf/txt",
+   "contenu": "résolutions ONU (dont le banc R0.3)",
+   "role": "benchmark/pretrain",
+   "etat": "quarantaine partielle",
+   "note": "les questions R0.3 et les PDF servent de banc ; ne pas entraîner sur les questions"
+  },
+  {
+   "chemin": "data/xnli/",
+   "taille": "2,3 Go",
+   "octets": null,
+   "fichiers": 52,
+   "format": "tsv/jsonl",
+   "contenu": "XNLI (inférence en 15 langues)",
+   "role": "évaluation",
+   "etat": "quarantaine",
+   "note": "ne jamais entraîner dessus"
+  },
+  {
+   "chemin": "data/daccord/",
+   "taille": "536 Ko",
+   "octets": null,
+   "fichiers": 2,
+   "format": "tsv",
+   "contenu": "DACCORD (contradictions FR)",
+   "role": "évaluation",
+   "etat": "quarantaine",
+   "note": ""
+  },
+  {
+   "chemin": "data/diabla/",
+   "taille": "2,1 Mo",
+   "octets": null,
+   "fichiers": 8,
+   "format": "json/ref/orig",
+   "contenu": "DiaBLa (traduction FR-EN)",
+   "role": "évaluation",
+   "etat": "quarantaine",
+   "note": ""
+  },
+  {
+   "chemin": "data/glottolog/",
+   "taille": "23 Mo",
+   "octets": null,
+   "fichiers": 2,
+   "format": "csv",
+   "contenu": "référentiel",
+   "role": "référentiel",
+   "etat": "pret",
+   "note": ""
+  },
+  {
+   "chemin": "data/wikitext2_test.txt",
+   "taille": "359 Ko",
+   "octets": null,
+   "fichiers": 1,
+   "format": "txt",
+   "contenu": "Wikitext-2 test (évaluation N2)",
+   "role": "évaluation",
+   "etat": "quarantaine",
+   "note": "déjà exclu par N2"
+  },
+  {
+   "chemin": "data/wikipedia/",
+   "taille": "132 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "sqlite v14 + xml.bz2",
+   "contenu": "Wikipédia 10 langues : 10 bases (66 Go) + 10 dumps (67 Go)",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": "FR : base 7,25 Go + dump 7,13 Go ; EN : 19,5 Go + 25 Go"
+  },
+  {
+   "chemin": "data/wikipedia/db/",
+   "taille": "66 Go",
+   "octets": null,
+   "fichiers": 10,
+   "format": "sqlite (v14)",
+   "contenu": "bases Wikipédia par langue (ar,de,en,es,fr,it,ja,pt,ru,zh)",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": "forme structurée prête à interroger"
+  },
+  {
+   "chemin": "data/wikipedia/dumps/",
+   "taille": "67 Go",
+   "octets": null,
+   "fichiers": 10,
+   "format": "xml.bz2",
+   "contenu": "dumps complets par langue",
+   "role": "pretrain",
+   "etat": "a_extraire",
+   "note": "le FR fait 7,13 Go compressés"
+  },
+  {
+   "chemin": "corpus/wiki_apparie/",
+   "taille": "12 Go",
+   "octets": null,
+   "fichiers": 6084,
+   "format": "txt",
+   "contenu": "articles Wikipédia par langue (de_,en_,fr_,es_,it_…), appariés par titre",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": "texte brut prêt ; recoupe les dumps (dédoublonner)"
+  },
+  {
+   "chemin": "corpus/parallele_crime/",
+   "taille": "261 Mo",
+   "octets": null,
+   "fichiers": 56,
+   "format": "txt",
+   "contenu": "textes parallèles (Crime et Châtiment)",
+   "role": "traduction",
+   "etat": "pret",
+   "note": ""
+  },
+  {
+   "chemin": "corpus/parallele_rj/",
+   "taille": "988 Mo",
+   "octets": null,
+   "fichiers": 48,
+   "format": "drvf",
+   "contenu": "TRACES (format DRVF v2), pas du texte",
+   "role": "traces",
+   "etat": "exclu",
+   "note": "pour l'analyse, pas le pré-entraînement"
+  },
+  {
+   "chemin": "corpus/udhr/",
+   "taille": "21 Go",
+   "octets": null,
+   "fichiers": 3550,
+   "format": "drvf + zip",
+   "contenu": "TRACES UDHR (le texte brut ne fait que 2,2 Mo dans udhr.zip)",
+   "role": "traces",
+   "etat": "exclu",
+   "note": "21 Go de traces pour 2,2 Mo de texte"
+  },
+  {
+   "chemin": "corpus/wiki_traces/",
+   "taille": "1,8 Go",
+   "octets": null,
+   "fichiers": 480,
+   "format": "drvf",
+   "contenu": "TRACES Wikipédia",
+   "role": "traces",
+   "etat": "exclu",
+   "note": ""
+  },
+  {
+   "chemin": "Biblio_large/",
+   "taille": "22 Go",
+   "octets": null,
+   "fichiers": 3253,
+   "format": "kfx-zip/pdf/xhtml/jpg",
+   "contenu": "bibliothèque : 2 345 Kindle kfx-zip (DRM), 104 PDF, 87 xhtml, images",
+   "role": "livres",
+   "etat": "a_extraire",
+   "note": "PDF/xhtml exploitables ; kfx/azw = DRM, ne pas convertir sans base légale"
+  },
+  {
+   "chemin": "archives/CEGEP/",
+   "taille": "11 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "pdf/xlsx/docx/pptx/epub",
+   "contenu": "cours de cégep : 2 711 PDF, 3 774 xlsx, 454 docx, 362 pptx, 109 epub",
+   "role": "documents",
+   "etat": "a_extraire",
+   "note": "droits pédagogiques à vérifier ; extraction PDF puis OCR R4.4 si scanné"
+  },
+  {
+   "chemin": "archives/collections/",
+   "taille": "36 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "docx/doc/html/jpg/zip",
+   "contenu": "collections documentaires : 384 docx, 206 doc, 193 html, 1 250 jpg",
+   "role": "documents",
+   "etat": "a_extraire",
+   "note": "droits à vérifier"
+  },
+  {
+   "chemin": "Documents/",
+   "taille": "159 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "txt/html/xml/pdf/azw/md",
+   "contenu": "documents personnels : 42 832 txt, 9 005 html, 6 486 xml, 6 441 pdf, 3 629 azw",
+   "role": "personnel",
+   "etat": "exclu",
+   "note": "vie privée ; ne pas entraîner sans tri explicite"
+  },
+  {
+   "chemin": "archives/Google-Takeout/",
+   "taille": "4,6 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "json/html",
+   "contenu": "export Google personnel",
+   "role": "personnel",
+   "etat": "exclu",
+   "note": ""
+  },
+  {
+   "chemin": "archives/audio/",
+   "taille": "87 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "audio",
+   "contenu": "audio (musique/voix)",
+   "role": "audio",
+   "etat": "exclu",
+   "note": "pas du texte ; pour un modèle audio, autre chantier"
+  },
+  {
+   "chemin": "archives/kld-logits-2026-09-24/",
+   "taille": "6,4 Go",
+   "octets": null,
+   "fichiers": 7,
+   "format": "kld/txt",
+   "contenu": "logits de distillation (codestral 537 Mo, ds14b 2,49 Go, q32 1,25 Go, vl7b 2,49 Go) + wiki-test-200k + wikitext-2-raw",
+   "role": "distillation",
+   "etat": "pret",
+   "note": "pour la distillation seulement ; wikitext-2 = éval"
+  },
+  {
+   "chemin": "archives/opt/",
+   "taille": "5,4 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "builds",
+   "contenu": "builds logiciels",
+   "role": "exclu",
+   "etat": "exclu",
+   "note": ""
+  },
+  {
+   "chemin": "archives/recovery-raw/.../Videos/",
+   "taille": "2,8 To",
+   "octets": null,
+   "fichiers": null,
+   "format": "vidéos",
+   "contenu": "récupération PhotoRec : vidéos",
+   "role": "exclu",
+   "etat": "exclu",
+   "note": "le plus gros poste du disque ; à archiver/supprimer après tri"
+  },
+  {
+   "chemin": "archives/recovery-raw/.../PhotoRec/",
+   "taille": "3,5 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "pdf/ogg/xls",
+   "contenu": "1 358 PDF récupérés (noms aléatoires), audio",
+   "role": "documents",
+   "etat": "a_verifier",
+   "note": "doublons probables, PDF possiblement tronqués"
+  },
+  {
+   "chemin": "archives/recup_dir_root/",
+   "taille": "27 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "récupération",
+   "contenu": "récupération brute",
+   "role": "exclu",
+   "etat": "exclu",
+   "note": ""
+  },
+  {
+   "chemin": "IA/modeles-lourds/",
+   "taille": "341 Go",
+   "octets": 365713686528,
+   "fichiers": 1,
+   "format": "gguf",
+   "contenu": "DeepSeek-V4.1-Flash-Q2 (365,7 Go)",
+   "role": "enseignant",
+   "etat": "pret",
+   "note": "modèle de distillation/inférence, pas une donnée"
+  },
+  {
+   "chemin": "IA/modeles/",
+   "taille": "77 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "gguf/ollama",
+   "contenu": "Qwen3-30B-a3b Q4 (18,5 Go) + modèles ollama",
+   "role": "enseignant",
+   "etat": "pret",
+   "note": ""
+  },
+  {
+   "chemin": "IA/cache/huggingface/hub/",
+   "taille": "119 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "safetensors/gguf",
+   "contenu": "Qwen2.5 0,5B/1,5B/3B/7B (15 Go), Qwen3-0,6B, gemma-3-1b, whisper ; 14B/32B = configs seules ; jeux daccord/gqnli/DiaBLa",
+   "role": "modèles/éval",
+   "etat": "pret",
+   "note": "les jeux HF sont des évaluations (quarantaine)"
+  },
+  {
+   "chemin": "IA/artefacts/modeles-optimises/",
+   "taille": "116 Go",
+   "octets": null,
+   "fichiers": 4,
+   "format": "modèles optimisés",
+   "contenu": "qwen3-30b-8clusters, v4flash-8clusters, v4flash-topk2",
+   "role": "artefacts",
+   "etat": "pret",
+   "note": "poids produits par les chantiers, pas des données"
+  },
+  {
+   "chemin": "IA/artefacts/n2*/ + sessions-dsh/",
+   "taille": "3,1+1,4+0,27+0,8 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "json/pt/traces",
+   "contenu": "checkpoints et traces des sessions N2/N2h/N2i",
+   "role": "artefacts",
+   "etat": "pret",
+   "note": ""
+  },
+  {
+   "chemin": "models/ (dépôt)",
+   "taille": "2,5 Go",
+   "octets": null,
+   "fichiers": 3,
+   "format": "gguf",
+   "contenu": "Qwen2.5-0,5B Q4/Q8 + vision",
+   "role": "modèle",
+   "etat": "pret",
+   "note": ""
+  },
+  {
+   "chemin": "work/n2d + n2h + n2i/",
+   "taille": "~4 Go",
+   "octets": null,
+   "fichiers": null,
+   "format": "pt/json/log",
+   "contenu": "checkpoints d'entraînement et mesures N2",
+   "role": "artefacts",
+   "etat": "pret",
+   "note": ""
+  },
+  {
+   "chemin": "docs/ + journal/ + reports/",
+   "taille": "6,39 Mo bruts",
+   "octets": 6390000,
+   "fichiers": 1308,
+   "format": "md",
+   "contenu": "prose du dépôt (recensement N2.i)",
+   "role": "pretrain",
+   "etat": "pret",
+   "note": "5,36 Mo uniques après dédup"
+  }
+ ],
+ "totaux": {
+  "sources_inventoriees": 59,
+  "texte_pret_ou_a_extraire": "Wikipédia 132 Go + wiki_apparie 12 Go + corpus dépôt 6,6 Go + pidgin 314 Mo + UDHR 28 Mo + parallèle 261 Mo",
+  "a_extraire": "~228 Go de documents (Biblio_large 22, CEGEP 11, collections 36, Documents 159) dont 2 345 Kindle DRM",
+  "ecarte": "2,8 To vidéos + 27 Go récupération + 87 Go audio + 5,4 Go builds + 159 Go personnel + caches",
+  "eval_quarantaine": [
+   "xnli",
+   "wikitext2",
+   "daccord",
+   "gqnli-fr",
+   "DiaBLa",
+   "splits test/val des corpus propres",
+   "questions ONU R0.3",
+   "scans R4.4"
+  ]
+ },
+ "recommandations": [
+  "Priorité 1 : extraire Wikipédia FR (base sqlite 7,25 Go ou dump 7,13 Go) + corpus/wiki_apparie/fr_* → corpus de prose, dédup/contamination avec tools/corpus_propre.py.",
+  "Priorité 2 : extraire les PDF (Biblio_large 104, CEGEP 2 711, collections, PhotoRec 1 358) ; pour les scannés, la chaîne OCR R4.4 est prête (90–97 % de parité sur 4 familles) et coûte ~3 s/page.",
+  "Priorité 3 : ne pas convertir les 2 345 Kindle kfx-zip (DRM) ni les 3 629 azw des Documents sans base légale ; les exclure du corpus.",
+  "Quarantaine : xnli, wikitext2, daccord, gqnli-fr, DiaBLa, splits test/val, questions ONU et scans R4.4 — vérifier 0 contamination avant tout entraînement.",
+  "Distillation : logits KLD 6,4 Go + DeepSeek-V4.1-Flash (341 Go) + Qwen3-30B (77 Go) sont des enseignants, pas des données.",
+  "Espace : IA à 97 % ; les 2,8 To de vidéos récupérées sont le plus gros poste supprimable après tri ; Data13TB a 2,0 To libres."
+ ],
+ "limites": [
+  "Droits : Kindle kfx/azw (DRM), Documents personnels, presse/JW/pidgin à vérifier ; rien n'est publié, le corpus reste local.",
+  "Le du de /home/stephane a été interrompu : le volume Data13TB affiche 8,9 To utilisés pour ~3,5 To visibles (snapshots/CoW probables) — à vérifier avec btrfs filesystem du.",
+  "Les .drvf (21 Go UDHR, 1,8 Go wiki_traces, 988 Mo parallele_rj) sont des TRACES, pas du texte : ne pas les compter comme corpus.",
+  "Le corpus FR « réel » hors Wikipédia reste petit : 2,76 M mots de littérature, 0,79 M de français local, 5,36 Mo de prose du dépôt."
+ ]
+}

@@ -11152,3 +11152,118 @@ S inséré après la ligne 33
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add .gitmodules tools/structures docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS\n\nNouveau sous-projet (submo … [1313 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-649]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-649", "timeout_ms": 240000, "wait": true}`
+
+  ```
+[master ae9ad3be] S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS
+ 21 files changed, 1789 insertions(+), 53 deletions(-)
+ create mode 100644 journal/2026-11-01/modele.md
+ create mode 160000 tools/structures
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git submodule status; echo \"=== tests depuis le submodule ===\"; cd tools/structures && PYTHONPATH=. python3 -m unittest discover -s tests 2>&1 | tail -3; nohup python3 serveur.py --port 8766 > /tmp/banc2.log 2>&1 & sleep 1.2; curl  … [394 caractères tronqués]`
+
+  ```
+95e94c47007672e4a64e6a4952944e071f92ef94 tools/docwatch (v0.4.1)
+ ccb100616e98cb7a84eeb70730eb5c92782f4bc2 tools/structures (heads/master)
+=== tests depuis le submodule ===
+Ran 5 tests in 2.613s
+
+OK
+API ok : 6 phrases
+=== état principal ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py | tail -1; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅|❌\"; python3 tools/verifie_journal.py 2>&1 | tail -1; python3 tools/verifier_schemas.py 2>&1 | tail -1; git log --oneline -3; ls … [77 caractères tronqués]`
+
+  ```
+✅ état court, structuré, multi-session et reprenable
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     sources et images relatives.
+ae9ad3be S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS
+68b5e819 LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE)
+95d17ae6 SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES
+construire_donnees.py
+donnees
+llm.py
+__pycache__
+README.md
+serveur.py
+static
+tests
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git status --short; git log --oneline -1; echo \"=== données ===\"; ls donnees/; python3 -c \"import json; d=json.load(open('donnees/phrases.json')); print(len(d['phrases']),'phrases,',sum(len(p['candidats']) for p i … [195 caractères tronqués]`
+
+  ```
+ccb1006 v0 — le banc de structures : phrases, candidats, validation, LLM, banque
+=== données ===
+phrases.json
+6 phrases, 12 candidats
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -v \"^ m tools/docwatch\"", "description": "Check the remaining working-tree entry"}`
+
+  ```
+?? reports/inventaire-donnees-entrainement.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan : le banc de structures est en place, testé et branché
+
+## Ce qui existe maintenant
+
+**Un sous-projet autonome** — `drave-structures` — monté dans le dépôt principal comme **submodule** : `tools/structures` (commit `ccb1006`, dépôt local `../drave-structures` ; un remote pourra être ajouté pour le rendre portable).
+
+**Une interface web sans aucune dépendance** (stdlib : HTTP, JSON, `urllib`), qui montre pour chaque phrase **plusieurs structures d'interprétation candidates** :
+
+- la phrase **colorée par type de segment** — GN, GV, GP, REL, SUB, PHRASE ;
+- les **blocs indentés** par profondeur d'attachement — l'indentation *est* la structure ;
+- l'**attachement explicite** : `qui dort → le chat` contre `qui dort → la voisine` ;
+- une **lecture en français courant** pour chaque candidat ;
+- trois verdicts — **✓ acceptable / ~ discutable / ✗ non** — avec une note libre.
+
+**Le geste central est la validation humaine.** Chaque verdict s'ajoute à `donnees/validations.jsonl` (append-only, jamais réécrit). L'export `/api/export` ne garde que les candidats **acceptés** et rend **une ligne JSONL par structure** — la banque, prête à devenir un corpus d'entraînement.
+
+**Le grand modèle est branché** : `llm.py` appelle l'API DeepSeek (`chat/completions`, température 0) et demande un JSON `{choix, justification, confiance, ambigu}`. **Sans clé, on ne simule pas** : la **baseline** locale — *attachement à la cible la plus proche*, une heuristique explicable — est rendue et le mode est marqué `sans-clé`. C'est le témoin auquel comparer humains et grand modèle.
+
+## Le contenu v0
+
+**6 phrases, 12 candidats, 6 ambiguïtés réelles** : relative (`qui dort`), GP (`avec le télescope`, `dans le parc`), portée (`hier`), rôle (`pour`), possession (`son projet`). Les spans sont **vérifiés par sous-chaîne** (`construire_donnees.py`) — un segment qui n'apparaît pas dans la phrase est refusé, pas deviné.
+
+## Lancer et tester
+
+```bash
+python3 tools/structures/serveur.py          # http://127.0.0.1:8765
+export DEEPSEEK_API_KEY=sk-…                 # pour l'évaluation par le grand modèle
+cd tools/structures && python3 -m unittest discover -s tests   # 5 tests, OK
+```
+
+Tests : alignement des spans, validation + export, verdict invalide refusé, baseline, page statique.
+
+## L'intégration au projet
+
+- La ligne **S — les structures** entre au plan : `v0 (outil web)`, prochaine action « générer les candidats par un analyseur, brancher l'export au corpus d'entraînement ».
+- L'état la mentionne ; les budgets passent (**T0 4 000 / 4 000**, en-cours ✅, revue ✅, journal ✅, schémas ✅).
+- Commit principal : **`ae9ad3be`**.
+
+## Ce que ce v0 rend possible dès maintenant
+
+1. **Voir** ce que le modèle devrait apprendre : les structures sont lisibles, comparables, validables.
+2. **Comparer** trois juges sur la même phrase : l'humain, la baseline (attachement le plus proche), et le grand modèle — et mesurer où ils divergent.
+3. **Construire la banque** : chaque ✓ est une ligne de corpus ; l'export est déjà au format d'entraînement.
+
+La suite naturelle, dans l'ordre : **un générateur de candidats** (l'analyseur de la « coloration »), **plus de phrases par lot**, puis le branchement de l'export sur le corpus du projet — et l'expérience E2 (canal de structure en entrée du modèle), avec le placebo et l'ablation qui vont avec.
+

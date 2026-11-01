@@ -4829,3 +4829,147 @@ drwxr-xr-x. 1 stephane stephane   270  1 nov 07:16 __pycache__
 … [9694 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff -- docs/pilotage/en-cours.md | head -120", "description": "Voir les modifications non committées de l'état"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat 95d17ae6 | head -40; echo '=== a20de579 ==='; git show --stat a20de579 | head -30; echo '=== 17ececfc ==='; git show --stat 17ececfc | head -30", "description": "Lire les commits de clôture N2.i/Pensée v0"}`
+
+  ```
+commit 95d17ae6df6d2713b018a4acf6c4da6d3b860f69
+Author: Stéphane <stephane@localhost>
+Date:   Sun Nov 1 08:34:21 2026 -0500
+
+    SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES
+    
+    Les deux chantiers menés en parallèle sont committés : N2.i (17ececfc) et Pensée v0 (le state
+    store et ses six portes). Le plan repasse à terminé, heartbeat 08 h 35 HNE.
+
+ journal/2026-11-01/README.md                       |   7 +-
+ journal/2026-11-01/attention.md                    |   2 +-
+ journal/2026-11-01/distribue.md                    |   2 +-
+ journal/2026-11-01/docs.md                         |   2 +-
+ journal/2026-11-01/mesures.md                      |   8 +-
+ journal/2026-11-01/portes.md                       |   2 +-
+ journal/README.md                                  |   2 +-
+ journal/THEMES.md                                  |   2 +-
+ .../0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md | 263 +++++++++++++++++++++
+ .../0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md   |   7 +-
+ .../rapport.md                                     |  21 +-
+ journal/sessions/MANIFEST.md                       |   2 +-
+ 12 files changed, 293 insertions(+), 27 dele
+… [3716 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '140,230p' docs/pilotage/en-cours.md", "description": "Lire la fin de l'état courant"}`
+
+  ```
+**N2.h** — le **corpus propre** et la porte honnête (en cours) ; **Pensée** — le **state store v0**
+et le moteur N3 (session `e181ce02`) ; **N4** — la consigne courte ; **B10.3** — le `z` et
+l'encodeur ; **R4.4** — les scans réels.
+
+## Les questions ouvertes
+
+- **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.1** (état de section) puis **R1.2**
+  (curriculum) tranchent ; la hiérarchie de N2 est écartée.
+- **N2** : **< 2,5** — et **sur quel jeu** ? La validation se recopie (32,8 % verbatim) →
+  le **split par document** tranche.
+- **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
+- **B10.3** : chrF **> 39,6** ? → **B10.3** (attention croisée) tranche.
+- **Pensée** : un état pluriel se rejoue-t-il à l'identique, et une stratégie se substitue-t-elle ? →
+  le **state store v0** et le banc anytime tranchent.
+
+## La carte
+
+- **Méthode** : [contexte](../methode/contexte.md) · [continuité](../methode/continuite.md) ·
+  [résultats](../methode/resultats.md) · [portes](../methode/portes.md).
+- **Plan** : [roadmap.md](roadmap.md) · [backlog](backlog/index.md) · [graphe](backlog/dependances.md) ·
+  [carte](../theorie/carte.md) · [inventaire](../README
+… [143 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat 68b5e819 | head -40; echo '=== DATE ==='; git log -1 --format='%ad %s' --date=iso; echo '=== DIFF ==='; git diff --stat; echo '=== STATUS ==='; git status --porcelain", "description": "Inspecter le dernier commit et l … [19 caractères tronqués]`
+
+  ```
+commit 68b5e81903db4b1845d348062a555960de8f7bbb
+Author: Stéphane <stephane@localhost>
+Date:   Sun Nov 1 10:31:06 2026 -0500
+
+    LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE)
+    
+    Trois variantes du même texte de validation, mêmes octets, même protocole : propre 3,0555 ;
+    intérieur des mots mélangé (première et dernière gardées) 54,2655 (×17,8) ; toutes les lettres
+    mélangées 191,4059 (×62,7). Modèle A-propre-g1 (11,47 M), mélange déterministe.
+    
+    L'effet humain « l'ordre intérieur des lettres ne compte pas » repose sur un lexique, une
+    prédiction top-down et une forme globale que ce modèle n'a pas : mélanger l'intérieur d'un mot
+    détruit exactement ce qu'il lit. La différence milieu/tout (×3,5) montre que les lettres
+    extérieures portent encore un peu de signal.
+    
+    Ce que le test ne dit pas : qu'un modèle de formes serait meilleur (il aurait son propre test),
+    ni rien de la structure de page (R4.4, mesurée séparément). Ce qu'il ouvre : un encodeur de
+    formes (E2), une politique de saccades hébergée par le moteur de pensée (E3), et le mélange
+    comme métrique de robustesse du projet.
+    
+    Fiche : reports
+… [1200 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py > /tmp/rev 2>&1; echo \"EXIT=$?\"; cat /tmp/rev; echo '=== dernieres fiches ==='; ls -lt reports/*.md | head -8", "description": "Lire les compteurs réels et les dernières fiches"}`
+
+  ```
+EXIT=0
+  revue de documentation · 380 fiche(s) · 456 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== dernieres fiches ===
+-rw-r--r--. 1 stephane stephane  3882  1 nov 10:30 reports/rapport-typoglycemie.md
+-rw-r--r--. 1 stephane stephane 50633  1 nov 08:31 reports/INDEX.md
+-rw-r--r--. 1 stephane stephane  4333  1 nov 08:30 reports/rapport-n2-corpus-elargi.md
+-rw-r--r--. 1 stephane stephane  4818  1 nov 07:16 reports/rapport-pensee-v0.md
+-rw-r--r--. 1 stephane stephane  4488  1 nov 06:50 reports/rapport-n2-longueur.md
+-rw-r--r--. 1 stephane stephane 15675  1 nov 05:28 reports/README.md
+-rw-r--r--. 1 stephane stephane  3265  1 nov 05:28 reports/rapport-n2-capacite.md
+-rw-r--r--. 1 stephane stephane  3268  1 nov 03:58 reports/rapport-n2-combine.md
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -5; echo '=== typo en-cours ==='; git show 68b5e819 -- docs/pilotage/en-cours.md | head -60; echo '=== structures en-cours ==='; git log -1 --format='%H %ad %s' --date=iso; git show HEAD -- docs/pilotage/en-cours.md … [73 caractères tronqués]`
+
+  ```
+ae9ad3be S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS
+68b5e819 LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE)
+95d17ae6 SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES
+17ececfc N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE
+a20de579 PENSÉE v0 — LE STATE STORE EXISTE ET TIENT SES SIX PORTES
+=== typo en-cours ===
+commit 68b5e81903db4b1845d348062a555960de8f7bbb
+Author: Stéphane <stephane@localhost>
+Date:   Sun Nov 1 10:31:06 2026 -0500
+
+    LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE)
+    
+    Trois variantes du même texte de validation, mêmes octets, même protocole : propre 3,0555 ;
+    intérieur des mots mélangé (première et dernière gardées) 54,2655 (×17,8) ; toutes les lettres
+    mélangées 191,4059 (×62,7). Modèle A-propre-g1 (11,47 M), mélange déterministe.
+    
+    L'effet humain « l'ordre intérieur des lettres ne compte pas » repose sur un lexique, une
+    prédiction top-down et une forme globale que ce modèle n'a pas : mélanger l'intérieur d'un mot
+    détruit exactement ce qu'il lit. La différence
+… [7905 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for p in 6207 7237 13617; do echo \"=== PID $p\"; ps -o pid,lstart,tty,etime,cmd -p $p --no-headers 2>/dev/null; tr '\\0' '\\n' < /proc/$p/environ 2>/dev/null | grep -E '^DSH_SESSION_ID|^DSH_PROFILE=' ; done", "description": "Identifier les sessions DSH des processus actifs"}`
+
+  ```
+=== PID 6207
+   6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+=== PID 7237
+   7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+=== PID 13617
+  13617 sam oct 31 17:35:22 2026 pts/1       18:18:32 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+[exit code: 1]
+  ```
+

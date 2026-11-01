@@ -39,11 +39,11 @@
 
 - **Id** : `fe3c05f0-…` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
 - **Rôle** : **R4.4 — les scans** (CPU).
-- **Plan** : corpus ✅, prétraitement ✅, exposants ✅, colonnes/tables ✅, fiche ✅.
+- **Plan** : corpus, prétraitement, exposants, colonnes/tables, fiche : **faits**.
 - **Ambition** : l'OCR comme **bloc classique robuste**, jugé par la **parité**.
 - **Stratégie** : brut d'abord, n'ajouter que ce qui paie, dev pour régler, test pour trancher.
 - **Objectif final** : **R4.4 mesurée** ; restent **scans réels de bout en bout**, **fax**, **exposant fusionné**.
-- **Ce qu'elle fait** : **terminée** (plan clos le 01/11 02 h 55) — photo **55,9 → 6,7 %**, préservation **90–97 %** (4 familles sur 5, fax **56,7 %**), colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+- **Ce qu'elle fait** : **terminée** (plan clos) — photo **55,9 → 6,7 %**, préservation **90–97 %**, colonnes **0,5 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
 - **Ce que font les autres** : N2.h a les GPU ; ne pas toucher `work/r44/`, `work/ocr/`, `reports/r44-*`.
 - **Prochaine action** : **close** ; reste pour une autre session : les **scans réels de bout en bout**, le **fax** 1 bit, l'**exposant fusionné**.
 - **Bloquants** : aucun — pas de scanner réel ; scans **simulés**, écrit.
@@ -79,6 +79,8 @@
 - **R4.1–R4.4 — les blocs** : **mesurés** — 996/802 cellules, 294/24 fichiers,
   32/10 formules ; **R4.4** scans simulés (4/5 ≥ **90 %**) ;
   fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
+- **Données — l'inventaire local** : Wikipédia **132 Go** (10 langues), documents **~228 Go**
+  (DRM exclu), **2,8 To** de vidéos exclues ; fiche [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md).
 - **S — le banc de structures** : outil web (`tools/structures`, submodule) : 6 phrases, 12
   candidats, validation, LLM, export ; candidats à la main.
 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
@@ -108,7 +110,7 @@
 |---|---|---|
 | portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **380** / **456** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **381** / **457** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **114** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

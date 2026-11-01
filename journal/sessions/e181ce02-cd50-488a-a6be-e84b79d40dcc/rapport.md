@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 18.2 h |
+| Durée | 18.3 h |
 | Tours | 6 |
-| Messages | 227 |
-| Appels d'outils | 255 |
+| Messages | 233 |
+| Appels d'outils | 262 |
 | Fichiers touchés | 16 |
-| Commandes | 187 |
+| Commandes | 193 |
 | Sous-agents | 2 |
 | Commits | 10 |
 | Compactages de contexte | 0 |
@@ -298,7 +298,7 @@ Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.
 
 ### Tour 6 — étudie les sessions dsh actives et assure-toi que notre doc est à jour
 
-*9 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Lire l'état des plans de session
 - bash — Extraire les champs de tous les plans
@@ -309,10 +309,16 @@ Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.
 - bash — Voir les modifications non committées de l'état
 - bash — Lire les commits de clôture N2.i/Pensée v0
 - bash — Lire la fin de l'état courant
+- bash — Inspecter le dernier commit et l'arbre de travail
+- bash — Lire les compteurs réels et les dernières fiches
+- bash — Voir les modifications récentes de l'état
+- bash — Identifier les sessions DSH des processus actifs
+- read
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ L'état a un jour de retard : N2 et R4.4 sont closes, la Pensée a un v0 committé — je vérifie les faits
+⏵ N2.h et R4.4 sont closes, Pensée a un v0 : je réécris l'état sur les seuls mandats actifs
 
 ## 3. Travail accompli
 
@@ -384,7 +390,7 @@ Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 147 autres
+- … et 153 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -509,6 +515,12 @@ Chaque session renvoie à son **plan complet** dans `journal/sessions/<id>/plan.
 - **T1** `la naissance, jamais modifié : perplexité 5,0472 contre 4,9959, événements **÷4,1**,`
 - **T1** `débit **×2,1** (§ 4 bis de `biologie-pour-drave.md`). **La structure peut être`
 - … (tronqué)
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 
 ## 6. Commits
 

@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 18.3 h |
 | Tours | 4 |
-| Messages | 687 |
-| Appels d'outils | 698 |
+| Messages | 694 |
+| Appels d'outils | 705 |
 | Fichiers touchés | 18 |
-| Commandes | 636 |
+| Commandes | 643 |
 | Sous-agents | 0 |
-| Commits | 30 |
+| Commits | 31 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -200,7 +200,7 @@ Le reste du programme tient : colonnes **89,4 → 0,5 %** (deux colonnes), **52,
 
 ### Tour 4 — révise nos sources de données pour l'entrainement. fais le tour du disque dur pour avoir un inventaire local pour l'entr … [9 caractères tronqués]
 
-*37 appels d'outils.* Actions notables :
+*44 appels d'outils.* Actions notables :
 
 - bash — Show mounted filesystems and volumes
 - bash — Measure home and data volume top-level sizes
@@ -216,7 +216,7 @@ Le reste du programme tient : colonnes **89,4 → 0,5 %** (deux colonnes), **52,
 - bash — Inspect model caches and stores
 - bash — Inspect recovery raw archive structure
 - bash — Inventory HuggingFace cache
-- … et 23 autres
+- … et 30 autres
 
 **Synthèse produite :**
 
@@ -291,7 +291,7 @@ Je commence par cartographier les volumes et les répertoires les plus gros, pui
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 596 autres
+- … et 603 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -469,4 +469,5 @@ Je commence par cartographier les volumes et les répertoires les plus gros, pui
 - python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("préservation **90–97 %** (4 familles), colonnes **89,4
 - SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION" 2>&1 | tail -2 git log --oneline -1; tail -3 work/r44/gate-v8.l
 - R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER" 2>&1 | tail -2 git log --oneline -1
+- for t in "python3 tools/revue_documentation.py" "python3 tools/taille_documents.py" "python3 tools/verifie_en_cours.py" "python3 tools/verifie_journal.py" "pyth
 

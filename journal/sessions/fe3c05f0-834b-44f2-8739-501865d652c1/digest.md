@@ -12281,3 +12281,66 @@ non_document
 35G	/home/stephane/Data13TB/stephane/corpus
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json, pathlib, datetime\nE=[]\ndef add(chemin,taille,fichiers,format_,contenu,role,etat,note=\"\",octets=None):\n    E.append({\"chemin\":chemin,\"taille\":taille,\"octets\":octets,\"fichiers\":fichiers,\n      … [13755 caractères tronqués]`
+
+  ```
+reports/inventaire-donnees-entrainement.json 59 entrées
+-rw-r--r--. 1 stephane stephane 19856  1 nov 10:53 reports/inventaire-donnees-entrainement.json
+59 sources
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > reports/inventaire-donnees-entrainement.md <<'EOF'\n# L'inventaire local des données pour l'entraînement\n\n> **Ligne de roadmap** : Données · **Date** : 2026-11-01 · **Verdict** : le disque porte\n> **132 Go de Wikipédia** (10 l … [8699 caractères tronqués]`
+
+  ```
+113 reports/inventaire-donnees-entrainement.md
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 380 fichiers, le disque en a 381
+     · compteurs : en-cours.md dit 456 JSON, le disque en a 457
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|violation\" | head -1; sed -n '40,50p;74,82p' docs/pilotage/en-cours.md", "description": "Read state sections and budget", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+T0 max : 4000 mots (budget 4 000)
+- **Id** : `fe3c05f0-…` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **R4.4 — les scans** (CPU).
+- **Plan** : corpus ✅, prétraitement ✅, exposants ✅, colonnes/tables ✅, fiche ✅.
+- **Ambition** : l'OCR comme **bloc classique robuste**, jugé par la **parité**.
+- **Stratégie** : brut d'abord, n'ajouter que ce qui paie, dev pour régler, test pour trancher.
+- **Objectif final** : **R4.4 mesurée** ; restent **scans réels de bout en bout**, **fax**, **exposant fusionné**.
+- **Ce qu'elle fait** : **terminée** (plan clos le 01/11 02 h 55) — photo **55,9 → 6,7 %**, préservation **90–97 %** (4 familles sur 5, fax **56,7 %**), colonnes **89,4 → 0,5 %**, tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+- **Ce que font les autres** : N2.h a les GPU ; ne pas toucher `work/r44/`, `work/ocr/`, `reports/r44-*`.
+- **Prochaine action** : **close** ; reste pour une autre session : les **scans réels de bout en bout**, le **fax** 1 bit, l'**exposant fusionné**.
+- **Bloquants** : aucun — pas de scanner réel ; scans **simulés**, écrit.
+- **Journal** : [le 31/10](../..
+… [667 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\n# 1) compteurs\ns=s.replace(\"| fichiers / JSON de résultats | **380** / **456** |\",\"| fichiers / JSON de résultats | **381** / **457** |\")\n# 2) la ligne Données après le bullet R4\nancre … [1521 caractères tronqués]`
+
+  ```
+T0 max : 4016 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 381 fiche(s) · 457 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"- **Données — l'inventaire local** : Wikipédia **132 Go** (10 langues), articles bruts **12 Go**,\\n  corpus prêts **6,6 Go**, documents **~228 Go** (2 345 Kindle DRM exclus), * … [769 caractères tronqués]`
+
+  ```
+T0 max : 3998 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-01/README.md'); s=p.read_text()\npara='''**L'inventaire des données.** Le disque a été passé au crible pour l'entraînement : **132 Go de\nWikipédia** (10 langues, bases sqlite 66 Go + dumps 67 Go ; FR 7,25 + 7,13 Go), **1 … [1053 caractères tronqués]`
+
+  ```
+journal : inventaire ajouté
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+ M docs/pilotage/en-cours.md
+ M journal/2026-11-01/README.md
+?? reports/inventaire-donnees-entrainement.json
+?? reports/inventaire-donnees-entrainement.md
+  ```
+
+- **bash** `{"command": "for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_etat_a_jour.py\"; do time … [2085 caractères tronqués]`

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**33 commits** · **3 session(s)** · **7 thème(s)**
+**34 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 5 | [docs.md](docs.md) |
-| mesures | 21 | [mesures.md](mesures.md) |
+| mesures | 22 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 2 | [portes.md](portes.md) |
@@ -24,7 +24,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 18.6 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 18.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 18.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 18.3 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -64,10 +64,21 @@
 | 08:32 | `17ececfc` | N2.i — LE CORPUS ÉLARGI GÉNÉRALISE (ANGLAIS ÷1,7) SANS RELEVER LE DOMAINE |
 | 08:34 | `95d17ae6` | SESSION — N2.i ET PENSÉE v0 CLOS : LE CORPUS ÉLARGI GÉNÉRALISE, LE MOTEUR TIENT SES PORTES |
 | 10:31 | `68b5e819` | LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE) |
+| 10:51 | `ae9ad3be` | S — LE BANC DE STRUCTURES : UN OUTIL HUMAIN POUR VOIR ET VALIDER LES INTERPRÉTATIONS |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**L'inventaire des données.** Le disque a été passé au crible pour l'entraînement : **132 Go de
+Wikipédia** (10 langues, bases sqlite 66 Go + dumps 67 Go ; FR 7,25 + 7,13 Go), **12 Go
+d'articles Wikipédia en texte brut** (`corpus/wiki_apparie`), **6,6 Go de corpus déjà préparés**
+(dont 5,36 Mo de prose du dépôt unique), **~228 Go de documents à extraire** (2 345 Kindle sous
+DRM exclus, 2 711 PDF de cégep, 6 441 PDF personnels), et **2,8 To de vidéos récupérées** qui ne
+sont pas du texte. Le volume IA est à **97 %** (34 Go libres). Le levier français reste Wikipédia,
+pas le dépôt : la fiche [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md)
+dit quoi utiliser, quoi extraire (avec l'OCR R4.4 pour les scans), quoi mettre en quarantaine
+d'évaluation, et quoi exclure.
+
 **R4.4 — la nuit des scans.** La ligne R4.4 était partielle : dix pages *rendues* lues, aucun
 scan. La nuit a fabriqué ce que la machine ne peut pas produire — cent dégradations simulées,
 cinq familles, un split dev/test, une vérité qui ne bouge pas — puis a mesuré, corrigé, et
