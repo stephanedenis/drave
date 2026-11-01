@@ -11015,3 +11015,42 @@ e7b51508 R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"préservation **90–97 %** (4 familles), colonnes **89,4 → 0,5 %**,\\n  tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** (trois livres) ; fiche\",\n            \"préservation ** … [1089 caractères tronqués]`
+
+  ```
+T0 max : 4000 mots (budget 4 000)
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+  ✅ index : aucun fait stagé sans état
+[master 4aef1413] R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS
+ 22 files changed, 2264 insertions(+), 876 deletions(-)
+4aef1413 R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS
+  ```
+
+- **bash** `{"command": "sleep 120; tail -8 work/r44/gate-v8.log; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l; date +%H:%M", "description": "Check final gate verdict", "timeoutMs": 240000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+✅ photocopie · dev : préservation ≥ 60% (mesuré 93.3%)
+  ✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 96.7%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 91 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+3
+02:54
+  ```
+
+- **bash** `{"command": "for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_etat_a_jour.py\"; do time … [1000 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py [0]   ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohére
+python3 tools/taille_documents.py  [0]   ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+python3 tools/verifie_en_cours.py  [0]   ✅ état court, structuré, multi-session et reprenable
+python3 tools/verifie_journal.py   [0]   ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+python3 tools/verifie_backlog.py   [0] ✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inve
+python3 tools/verifier_schemas.py  [0]      sources et images relatives.
+python3 tools/verifie_etat_a_jour.py [0]   ✅ aucun fait commité après le dernier état
+  ⚠ mandat périmé (250 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "git add journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md\ngit commit -m \"SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION\" 2>&1 | tail -2\ngit log --oneline -1; tail -3 work/r44/gate-v8.log; pgrep -af \"porte-ocr-scans\" | gr … [160 caractères tronqués]`

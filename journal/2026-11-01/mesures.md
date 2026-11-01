@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -23,10 +23,11 @@
 | 01:56 | `1776f53e` | R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER | `en-cours.md`, `roadmap.md`, `README.md` (+12) |
 | 02:24 | `e7b51508` | R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %) | `encodeur-visuel.md`, `R44-encodeur-visuel.md`, `en-cours.md` (+18) |
 | 02:45 | `e36e8185` | N2.h — LE CORPUS PROPRE : 3,09 EN DOMAINE (PAS 2,85), 16,70 HORS DÉPÔT, ET LE VERROU DE LONGUEUR TOMBE | `N2-distillation.md`, `en-cours.md`, `references-non-regression.md` (+23) |
+| 02:51 | `4aef1413` | R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS | `encodeur-visuel.md`, `R44-encodeur-visuel.md`, `en-cours.md` (+19) |
 
 ## Chiffres du jour
 
-`90 %` · `96,7 %` · `52,5 %` · `1,1 %` · `3,3 %` · `53,2 %` · `43,5 %` · `8,73 %` · `93 %` · `15 %` · `23,3 %` · `88,5 %`
+`97 %` · `90 %` · `96,7 %` · `52,5 %` · `1,1 %` · `3,3 %` · `53,2 %` · `43,5 %` · `8,73 %` · `93 %` · `15 %` · `23,3 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

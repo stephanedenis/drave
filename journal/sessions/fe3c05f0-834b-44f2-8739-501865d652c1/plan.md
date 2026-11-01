@@ -11,8 +11,8 @@
 - **Fichiers réservés** : `work/r44/`, `work/ocr/`, `tools/simuler_scan.py`, `tools/nettoyer_scan.py`,
   `tools/mesurer_scans.py`, `tools/graphe_document_ocr.py`, `tools/mesurer_ocr.py`, `tools/porte-ocr.sh`,
   `reports/r44-*`, `docs/implantation/encodeur-visuel.md`, `journal/sessions/fe3c05f0-…/`
-- **Heartbeat** : 2026-11-01 01:45
-- **État** : en cours
+- **Heartbeat** : 2026-11-01 02:55
+- **État** : terminé
 - **Prochaine action** : la **parité** sur photocopie (6,6 % de WER mais 48 % de parité), puis
   exposants et colonnes.
 
@@ -66,7 +66,7 @@ rendus vectoriels. Trois idées portent le programme :
 | 7 | **tables** : mots → lignes/colonnes → cellules | exactitude de cellules | ✅ **92,6 %** (propre), **69,1 %** (photocopie) |
 | 8 | **second moteur** : RapidOCR (ONNX, CPU) comparé | un tableau, un verdict | ✅ contrôle : 3 à 10× pire sur le français |
 | 9 | **scan réel** : Internet Archive + couche OCR | un accord entre moteurs, dit comme tel | ✅ **7,10 %** (Verne 1) ; **ordre des colonnes prouvé** sur Verne 2 (**15,3 / 7,1 / 12,8 %** contre **98 %** en ordre inverse) — la validation réelle a corrigé la gouttière |
-| 10 | **consolidation** : porte `porte-ocr-scans`, fiche, spec, roadmap, journal | commit | ✅ fait — porte **verte**, fiche à jour, récit du 1/11 écrit |
+| 10 | **consolidation** : porte `porte-ocr-scans`, fiche, spec, roadmap, journal | commit | ✅ fait — parité **90–97 %** sur 4 familles (fax 56,7 %, limite 1 bit), porte relancée, fiche et récit à jour |
 
 ## Ce que les autres sessions peuvent réutiliser
 
