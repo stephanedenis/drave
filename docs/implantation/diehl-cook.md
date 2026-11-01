@@ -331,6 +331,32 @@ confiance sont des ports séparés, et un bloc qui décide dessus doit le décla
 **manifeste** et dans le **lecteur**. Un graphe interdit est refusé **avant** l'exécution, pas signalé après.
 C'est la différence entre une architecture et une convention.
 
+### Le bloc peut changer de technologie
+
+Le contrat de ports ne dit **rien** de la technologie. Le même bloc D&C peut être :
+
+| réalisation | représentation | force | limite | rejeu |
+|---|---|---|---|---|
+| Python (référence) | f64, numpy | clarté, parité | lent | bit-exact |
+| Rust (`impulsion.rs`) | f64/f32, std | rapide, portable | à écrire | bit-exact |
+| FPGA | bits, shift-and-add | énergie, déterminisme | surface, horloge | bit-exact |
+| neuromorphe | LIF/STDP natifs | énergie, parallélisme | précision, outils | tolérant |
+| service distant | DRVF/TCP | placement, réutilisation | latence, transport | tolérant |
+
+![Le contrat est l'invariant, la technologie est la variable](../schemas/natif-modes.svg)
+
+**Ce qui change** : la latence, le coût, la précision, le niveau de rejeu.
+**Ce qui ne change pas** : les ports, le corps de la RSN, l'empreinte, la trace.
+
+**Le mode d'apprentissage est privé** : STDP locale, gradient hors ligne, règle classique. Le contrat ne voit
+que la sortie ; mais le bloc doit déclarer son mode et son niveau de rejeu (`bit-exact`, `tolérant`,
+`sémantique`), sinon la trace n'est pas reproductible.
+
+**La conséquence pour la taille** : un bloc D&C de 100–400 excitateurs tient sur un device ; on **compose** des
+blocs plutôt que de gonfler un monolithe. La mémoire N2 peut être un petit bloc à côté d'un transformeur N1,
+lui-même à côté d'un solveur N3 — et le bus ne voit que des RSN.
+
+
 ## 6. Les équations et le pas de temps
 
 ### Le neurone

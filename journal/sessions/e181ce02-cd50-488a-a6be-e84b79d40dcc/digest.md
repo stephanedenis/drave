@@ -3320,3 +3320,75 @@ Le **v0 exécutable n'est pas encore lancé** : le document le pré-enregistre, 
 
 Si tu veux, je passe maintenant au **v0 exécutable** : `tools/neuro/` + le petit corpus + les six hypothèses, avec la fiche et le JSON de résultats. Le document est prêt à être confronté à la mesure.
 
+
+## Tour 3
+
+### 👤 Utilisateur
+
+Il est important que le RSN comme les autres blocs puissent accomplir leur tâches indépendamment du mode d'opération. C'est à dire que pour chaque bloc (et on veut que ces blocs soient petits) peut utiliser la technologie et les moyens les plus appropriés pour arriver à leur fins. Bref on a une modularité extréme où les neurones et le approches technoliques plus natives au matériel se coitoient naturellement. L'interface reste Drave, où des flux de donnnées typées transigent dans des réseaux dynamiques puissants et apprenants.
+
+### 🤖 Assistant
+
+⏵ Nouvel axe : le contrat est l'invariant, la technologie est la variable — deux schémas
+
+- **bash** `{"command": "cat >> /tmp/gen_plus.py <<'PY'\n\n\ndef modes():\n    s = SVG(960, 600, \"Le contrat est l'invariant, la technologie est la variable\",\n            \"Cinq réalisations du même contrat typé ; le bus ne voit pas des neurones, il voit des types.\")\n    s.texte(480, 58, \"Le consommateur  … [4471 caractères tronqués]`
+
+  ```
+✓ natif-modes.svg
+  ✓ natif-granularite.svg
+  ```
+
+### 🤖 Assistant
+
+⏵ Insertion du principe d'indépendance technologique dans les deux documents
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n\nMODES = \"\"\"\n\n### Le mode d'opération est privé\n\n**La RSN n'est pas un bloc.** C'est le **type** qui circule. Les blocs qui la produisent ou la consomment —\nencodeur, mémoire, décodeur — son … [6036 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"natif-anti-patrons\\|natif-portes\\|diehl-cook-conformite\" docs/schemas/README.md", "description": "Repérer les lignes du tableau des schémas"}`
+
+  ```
+34:| [natif-portes.svg](natif-portes.svg) | les portes N0 → N4 | [le modèle natif](../theorie/modele-natif.md) |
+39:| [natif-anti-patrons.svg](natif-anti-patrons.svg) | six façons de casser la séparation, et leur test | [le modèle natif](../theorie/modele-natif.md) |
+50:| [diehl-cook-conformite.svg](diehl-cook-conformite.svg) | la pyramide des tests et les tolérances | [le bloc D&C](../implantation/diehl-cook.md) |
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md", "limit": 8, "offset": 36}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md</path>
+<type>file</type>
+<content>
+36: | [natif-types.svg](natif-types.svg) | la matrice des types et le théorème de non-fuite de la surface | [le modèle natif](../theorie/modele-natif.md) |
+37: | [natif-neutralite.svg](natif-neutralite.svg) | neutre et informatif : les deux sondes et les quatre quadrants | [le modèle natif](../theorie/modele-natif.md) |
+38: | [natif-rejeu.svg](natif-rejeu.svg) | la pile de déterminisme et le diff qui localise la divergence | [le modèle natif](../theorie/modele-natif.md) |
+39: | [natif-anti-patrons.svg](natif-anti-patrons.svg) | six façons de casser la séparation, et leur test | [le modèle natif](../theorie/modele-natif.md) |
+40: | [diehl-cook-architecture.svg](diehl-cook-architecture.svg) | Poisson, LIF, STDP, inhibition latérale, seuil adaptatif | [le bloc D&C](../implantation/diehl-cook.md) |
+41: | [diehl-cook-placements.svg](diehl-cook-placements.svg) | les trois placements légaux et le raccourci interdit | [le bloc D&C](../implantation/diehl-cook.md) |
+42: | [diehl-cook-contrat.svg](diehl-cook-contrat.svg) | ports, `φ(RSN)`, annotation et refus du chargeur | [le bloc 
+… [260 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md", "new_string": "| [natif-anti-patrons.svg](natif-anti-patrons.svg) | six façons de casser la séparation, et leur test | [le modèle natif](../theorie/modele-natif.md) |\n| [natif-modes.svg](natif-modes.svg) | cinq  … [511 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/verifier_schemas.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" … [269 caractères tronqués]`
+
+  ```
+python3 tools/verifier_schemas.py             EXIT=0
+bash tools/porte-tableaux.sh                  EXIT=0
+python3 tools/revue_documentation.py          EXIT=0
+python3 tools/taille_documents.py             EXIT=0
+python3 tools/verifie_en_cours.py             EXIT=0
+python3 tools/verifie_journal.py              EXIT=0
+---
+482:même contrat se remplacent **sans toucher au bus**. Le bloc est **aveugle à sa technologie** : le même contrat
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/theorie/modele-natif.md docs/implantation/diehl-cook.md docs/schemas/README.md docs/schemas/natif-modes.svg docs/schemas/natif-granularite.svg && git diff --cached --stat && timeout 240 git commit -m \"DOCS — LE CONTRAT  … [206 caractères tronqués]`

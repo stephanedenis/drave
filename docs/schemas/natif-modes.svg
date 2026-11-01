@@ -1,0 +1,44 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Le contrat est l&#x27;invariant, la technologie est la variable</title>
+<desc>Cinq réalisations du même contrat typé ; le bus ne voit pas des neurones, il voit des types.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="600" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Le contrat est l&#x27;invariant, la technologie est la variable</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le consommateur ne sait pas quelle technologie est derrière ; il voit le type et la trace.</text>
+<rect x="50" y="100" width="230" height="90" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="165.0" y="124" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#1d4ed8">transformeur dense</text>
+<text x="165.0" y="146.0" text-anchor="middle" font-size="10" fill="#334155">GPU · f32</text>
+<text x="165.0" y="160.5" text-anchor="middle" font-size="10" fill="#334155">attention, FFN</text>
+<text x="64" y="178" text-anchor="start" font-size="8.5" fill="#475569">in : rsn  ·  out : rsn</text>
+<rect x="680" y="100" width="230" height="90" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="795.0" y="124" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#b45309">D&amp;C impulsionnel</text>
+<text x="795.0" y="146.0" text-anchor="middle" font-size="10" fill="#334155">CPU / neuromorphe</text>
+<text x="795.0" y="160.5" text-anchor="middle" font-size="10" fill="#334155">spikes, STDP</text>
+<text x="694" y="178" text-anchor="start" font-size="8.5" fill="#475569">in : rsn  ·  out : rsn</text>
+<rect x="50" y="260" width="230" height="90" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="165.0" y="284" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#15803d">règle classique</text>
+<text x="165.0" y="306.0" text-anchor="middle" font-size="10" fill="#334155">CPU</text>
+<text x="165.0" y="320.5" text-anchor="middle" font-size="10" fill="#334155">solveur, table</text>
+<text x="64" y="338" text-anchor="start" font-size="8.5" fill="#475569">in : rsn  ·  out : rsn</text>
+<rect x="680" y="260" width="230" height="90" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+<text x="795.0" y="284" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#6d28d9">bloc FPGA</text>
+<text x="795.0" y="306.0" text-anchor="middle" font-size="10" fill="#334155">bits</text>
+<text x="795.0" y="320.5" text-anchor="middle" font-size="10" fill="#334155">shift-and-add</text>
+<text x="694" y="338" text-anchor="start" font-size="8.5" fill="#475569">in : rsn  ·  out : rsn</text>
+<rect x="365" y="440" width="230" height="90" rx="10" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+<text x="480.0" y="464" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">service distant</text>
+<text x="480.0" y="486.0" text-anchor="middle" font-size="10" fill="#334155">DRVF / TCP</text>
+<text x="480.0" y="500.5" text-anchor="middle" font-size="10" fill="#334155">autre nœud</text>
+<text x="379" y="518" text-anchor="start" font-size="8.5" fill="#475569">in : rsn  ·  out : rsn</text>
+<rect x="360" y="250" width="240" height="100" rx="12" fill="#fffbeb" stroke="#f59e0b" stroke-width="2.4"/>
+<text x="480" y="278" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">contrat typé</text>
+<text x="480" y="304" text-anchor="middle" font-size="13" font-weight="bold" fill="#b45309">RSN → RSN</text>
+<text x="480" y="328" text-anchor="middle" font-size="9.5" fill="#475569">mêmes ports, même trace</text>
+<line x1="280" y1="190" x2="380" y2="250" stroke="#334155" stroke-width="1.8" marker-end="url(#f)"/>
+<line x1="680" y1="190" x2="580" y2="250" stroke="#334155" stroke-width="1.8" marker-end="url(#f)"/>
+<line x1="280" y1="305" x2="358" y2="305" stroke="#334155" stroke-width="1.8" marker-end="url(#f)"/>
+<line x1="680" y1="305" x2="602" y2="305" stroke="#334155" stroke-width="1.8" marker-end="url(#f)"/>
+<line x1="480" y1="438" x2="480" y2="352" stroke="#334155" stroke-width="1.8" marker-end="url(#f)"/>
+<rect x="30" y="548" width="900" height="40" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+<text x="480" y="573" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#334155">bus Drave : listes valuées typées · trace · rejeu   —   le mode d&#x27;opération est privé</text>
+</svg>

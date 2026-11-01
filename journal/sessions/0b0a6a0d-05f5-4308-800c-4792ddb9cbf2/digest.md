@@ -4794,3 +4794,99 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/references-non-regression.md && git commit -m \"RÉFÉRENCES — LA PASSE DU 31 À 19 h 42 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET\n\nLa passe complète de clôture (79 portes, 75 vertes, 4 rouges, 1 h 39, journau … [564 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-248]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-248", "timeout_ms": 180000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 10fa4f42] RÉFÉRENCES — LA PASSE DU 31 À 19 h 42 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET
+ 13 files changed, 144 insertions(+), 34 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/verifie_journal.py 2>&1 | tail -1; python3 tools/verifie_ba … [222 caractères tronqués]`
+
+  ```
+revue de documentation · 371 fiche(s) · 439 JSON · 112 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+     sources et images relatives.
+=== git ===
+10fa4f42 RÉFÉRENCES — LA PASSE DU 31 À 19 h 42 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET
+c3bcbe99 N2 — LE BUDGET PAIE 2,8 %, LES QUATRE SOURCES COÛTENT 91 %, ET LA VALIDATION EST CONTAMINÉE À 32,8 %
+c83f17d5 DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-371547c2-8e61-4925-8ab3-dab60674eec4","revision":1,"objective":"N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / 20 000 pas, 4 sources contre français seul, puis curriculum 129), avec contrôle négatif et trois graines ; écrire la fiche dans reports/, le récit dans journal/, committer avec le chiffre et mettre docs/pilotage/en-cours.md et la roadmap à jour.","phase":"active","roundsStarted":1,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"goal_id": "goal-371547c2-8e61-4925-8ab3-dab60674eec4", "revision": 1, "action": "complete"}`
+
+> **Objectif** (complete) : N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / 20 000 pas, 4 sources contre français seul, puis curriculum 129), avec contrôle négatif et trois graines ; écrire la fiche dans reports/, le récit dans journal/, committer avec le chiffre et mettre docs/pilotage/en-cours.md et la roadmap à jour.
+
+
+  ```
+{"goal":{"id":"goal-371547c2-8e61-4925-8ab3-dab60674eec4","revision":2,"objective":"N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / 20 000 pas, 4 sources contre français seul, puis curriculum 129), avec contrôle négatif et trois graines ; écrire la fiche dans reports/, le récit dans journal/, committer avec le chiffre et mettre docs/pilotage/en-cours.md et la roadmap à jour.","phase":"complete","roundsStarted":1,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / 20 000 pas, 4 sources contre français seul, puis curriculum 129), avec contrôle négatif et trois graines ; écrire la fiche dans reports/, le récit dans journal/, committer avec le chiffre et mettre docs/pilotage/en-cours.md et la roadmap à jour."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Clôture : N2.d mesuré, écrit, committé, portes vertes
+
+## Ce qui est établi
+
+**La campagne N2.d** — 12 distillations, 3 graines par bras, deux GPU, ~3 h :
+
+| bras | protocole 8×16×128 | fenêtres propres | 8×15×129 |
+|---|---:|---:|---:|
+| base supervisée | 3,2161 | 3,2450 | 3,2653 |
+| **T5k** (5 000 pas, réf.) | 2,9355 | 3,0534 | 2,9623 |
+| **A** — 20 000 pas, français seul | **2,8527** | **2,9795** | 2,8743 |
+| **B** — 4 sources (82,5 % anglais) | 3,7591 | 3,8573 | 3,8218 |
+| **B′** — 4 sources à quotas égaux | 3,4350 | 3,5634 | 3,4848 |
+| **C** — curriculum 129 sur A | 2,8471 | 2,9783 | **2,8327** |
+
+- **Le budget paie peu** : −0,0828, du même ordre que la chaîne historique ; la porte < 2,5 reste à 0,35 (protocole) / 0,48 (fenêtres propres).
+- **Les données coûtent** : +0,91 pour le manifeste, +0,58 même à quotas égaux (professeur français sur octets anglais : confondant nommé).
+- **Le curriculum 129** gagne 0,0416 à 129, 0,0056 à 128.
+
+**Le résultat qui change la lecture** : la validation n'est **pas** tenue à l'écart. 32,8 % des fenêtres du protocole (42/128) sont **verbatim** dans l'entraînement ; 23,5 % des fenêtres d'entraînement y apparaissent plus d'une fois. Les fenêtres contaminées donnent 0,39 de PPL de moins que les propres, et l'écart croît avec le budget (0,17 → 0,35 → 0,39). **2,7078 et 2,6998 sont mesurés sur ce même jeu contaminé** : la porte < 2,5 n'a jamais été une mesure de généralisation.
+
+## Vérification
+
+- Trois graines par bras, écart-type 0,002–0,008 ; comparaison appariée (mêmes fenêtres).
+- Contrôles : permutation (PPL ≈ 1087), base sans distillation, distillation courte, B′ contre B, C contre A graine par graine.
+- Robustesse : sur quatre grilles de fenêtres, A reste sous T5k (−0,083 à −0,118).
+- **Portes** : passe complète 79 portes, **75 vertes, 4 rouges** — les quatre connues et tolérées (`porte-indice`, `porte-melange`, `porte-homéostasie`, `porte-reparti-moteur`) ; `porte-ocr` verte. Journaux `/tmp/portes-1031-n2d`, 1 h 39.
+- Revue de documentation, budget de contexte, état, journal, backlog et schémas : tous verts.
+
+## Artefacts
+
+- Fiche : `reports/rapport-n2-budget.md` · agrégat `reports/n2-budget.json` · récit `journal/2026-10-31/apprentissage.md`.
+- Code : `tools/distiller_budget.py`, `tools/eval_n2_budget.py`.
+- Points de contrôle : 542 Mo sur deux disques (`backups/n2/2026-10-31/n2d/`, `IA/artefacts/n2/2026-10-31/n2d/`).
+- Commits : **`c3bcbe99`** (résultat) et `10fa4f42` (références des portes).
+- État et roadmap : N2 désigne désormais **le corpus** (déduplication, split par document), pas un levier d'entraînement.
+
+## À relire / à faire ensuite
+
+Deux choses méritent ton œil : la **définition de la porte** (elle doit être redéfinie sur un jeu décontaminé) et le **manifeste 4 sources**, qui est à 82,5 % anglais malgré sa description « quotas équilibrés » dans N2.6. Un point d'attention : une seconde session travaillait en parallèle (R4.4, docs Diehl & Cook) ; ses fichiers de journal ont été emportés par les hooks `git add journal` de mes commits — rien de perdu, mais l'historique mêle nos traces.
+

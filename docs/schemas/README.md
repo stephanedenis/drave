@@ -37,6 +37,8 @@
 | [natif-neutralite.svg](natif-neutralite.svg) | neutre et informatif : les deux sondes et les quatre quadrants | [le modèle natif](../theorie/modele-natif.md) |
 | [natif-rejeu.svg](natif-rejeu.svg) | la pile de déterminisme et le diff qui localise la divergence | [le modèle natif](../theorie/modele-natif.md) |
 | [natif-anti-patrons.svg](natif-anti-patrons.svg) | six façons de casser la séparation, et leur test | [le modèle natif](../theorie/modele-natif.md) |
+| [natif-modes.svg](natif-modes.svg) | cinq réalisations du même contrat typé, et le bus qui ne voit que le type | [le modèle natif](../theorie/modele-natif.md) · [le bloc D&C](../implantation/diehl-cook.md) |
+| [natif-granularite.svg](natif-granularite.svg) | la granularité : monolithe contre petits blocs, et le coût de la liaison | [le modèle natif](../theorie/modele-natif.md) |
 | [diehl-cook-architecture.svg](diehl-cook-architecture.svg) | Poisson, LIF, STDP, inhibition latérale, seuil adaptatif | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-placements.svg](diehl-cook-placements.svg) | les trois placements légaux et le raccourci interdit | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-contrat.svg](diehl-cook-contrat.svg) | ports, `φ(RSN)`, annotation et refus du chargeur | [le bloc D&C](../implantation/diehl-cook.md) |

@@ -310,6 +310,70 @@ couches. Une **sortie précoce** est une arête qui court-circuite la fin ; un *
 régions ; une **route** est une arête conditionnelle ; la **pensée** est une arête qui boucle. Une pile ne sait
 pas dire ces choses ; un graphe, si.
 
+### Le mode d'opération est privé
+
+**La RSN n'est pas un bloc.** C'est le **type** qui circule. Les blocs qui la produisent ou la consomment —
+encodeur, mémoire, décodeur — sont, eux, **technologiquement libres**. Confondre les deux, c'est croire qu'un
+format est une machine.
+
+**Le principe** : un bloc est défini par sa **signature typée**, son **contrat** (ce que le corps doit être), sa
+**trace** et son **coût** — pas par sa technologie. Le mode d'opération (dense, impulsionnel, classique, FPGA,
+neuromorphe, distant) est **privé** : il ne regarde ni le bus, ni le consommateur. Le bus ne voit pas des
+neurones ; il voit des types.
+
+![Le contrat est l'invariant, la technologie est la variable](../schemas/natif-modes.svg)
+
+**Le théorème d'indifférence.** Si deux blocs ont la même signature et satisfont le même contrat — même corps
+pour les mêmes entrées, annotations compatibles, même trace — alors ils sont **substituables**, quelle que soit
+leur technologie. Le consommateur ne peut les distinguer que par le **coût** et la **trace**. *Preuve.* Le
+consommateur ne lit que le type et le corps ; par hypothèse, ils sont égaux. ∎
+
+**Ce que l'indifférence exige** : un **test de contrat** (les sondes), une **trace** (le rejeu), un **coût**
+(le placement). Sans les trois, l'hétérogénéité n'est pas une modularité, c'est un zoo.
+
+**Le mode d'apprentissage est privé aussi.** Un bloc peut apprendre par STDP locale, par gradient hors ligne,
+par une règle classique, ou ne pas apprendre. Le contrat ne voit que la sortie ; mais le bloc doit **déclarer**
+son mode et son niveau de rejeu, sinon la trace n'est pas reproductible.
+
+**Le corollaire pour la RSN** : un encodeur RSN peut être un transformeur, un réseau impulsionnel, un analyseur
+à règles ou un service distant. Le consommateur ne le sait pas ; il voit une RSN, une empreinte et une trace.
+C'est ce qui rend le centre **neutre vis-à-vis de la technologie**, pas seulement de la langue.
+
+### La granularité : petit, mais pas trop
+
+**Pourquoi petit** : un bloc petit a un contrat simple, un coût mesurable, une place possible sur un device, et
+une chance d'être remplacé. Un monolithe n'a aucune de ces quatre propriétés.
+
+**Pourquoi pas trop petit** : chaque arête paie une **liaison** (sérialisation, transport, synchronisation,
+trace). Le coût total est :
+
+`coût_total = coût_bloc + k · nombre_d_arêtes`
+
+Si le bloc est trop petit, `k · arêtes` domine ; s'il est trop gros, la substitution meurt. L'optimum dépend de
+la tâche et du matériel : il se **mesure**, il ne se décrète pas.
+
+![La bonne granularité](../schemas/natif-granularite.svg)
+
+**La règle de conception** : un bloc doit tenir sur **un** device (ou un nœud), avoir **un** contrat, et payer
+une liaison **négligeable** devant son coût. Quand ce n'est pas le cas, on découpe ou on fusionne — et on
+remesure.
+
+### Le graphe dynamique
+
+**Le graphe n'est pas figé.** Les routes changent (top-2, seuils), les sorties précoces court-circuitent la fin,
+la pensée boucle, les blocs apprennent. Ce qui ne change pas, c'est le **type des ports** et la **trace** : le
+graphe peut être reconfiguré sans casser les contrats.
+
+| dynamicité | ce qui change | ce qui reste | où c'est tracé |
+|---|---|---|---|
+| **routage** | quelles arêtes sont actives | les ports | la route, par pas |
+| **profondeur** | combien de blocs sont traversés | le contrat de sortie | la sortie précoce |
+| **apprentissage** | les poids, les prototypes | la signature | les événements d'apprentissage |
+
+**La règle** : une dynamicité qui change le **type** n'est pas une dynamicité, c'est un **autre graphe**. Un
+graphe qui change de contrat en cours de route n'est pas dynamique ; il est inconsistant.
+
+
 ## 5. DRVM — le conteneur
 
 **DRVM** (Drave Model) est un conteneur **versionné**, **mmap-able**, **par bloc**, avec quatre sections :
@@ -415,7 +479,8 @@ qu'avec les données — c'est la leçon de B9, et elle n'a pas changé.
 ![Ce qui est original, en six gestes](../schemas/natif-original.svg)
 
 **1. Le bloc, pas la couche.** L'unité de conception a des ports, un coût et une trace ; deux implémentations du
-même contrat se remplacent **sans toucher au bus**. C'est ce qui rend la comparaison honnête : même entrée, même
+même contrat se remplacent **sans toucher au bus**. Le bloc est **aveugle à sa technologie** : le même contrat
+accepte un transformeur, un réseau impulsionnel, un solveur ou un service distant. C'est ce qui rend la comparaison honnête : même entrée, même
 sortie attendue, même trace.
 
 **2. Le format porte le graphe.** DRVM ne stocke pas seulement des tenseurs : il stocke des **blocs**, des

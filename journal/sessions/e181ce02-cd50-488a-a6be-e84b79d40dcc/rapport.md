@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 3.5 h |
-| Tours | 2 |
-| Messages | 137 |
-| Appels d'outils | 164 |
+| Durée | 4.5 h |
+| Tours | 3 |
+| Messages | 146 |
+| Appels d'outils | 172 |
 | Fichiers touchés | 11 |
-| Commandes | 119 |
+| Commandes | 124 |
 | Sous-agents | 2 |
-| Commits | 5 |
+| Commits | 6 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -22,6 +22,8 @@
 **Tour 1** — fais une documentation détaillée du modèle Drave natif. utilise beaucoup de diagrammes pour expliquer ce qui est original à Drave. Comment implémenter un modèle de type Modèles de Diehl & Cook (2015) en respectant notre principe de séparation à 3 niveaux (sémentique neutre au centre)
 
 **Tour 2** — continue tes réflexions et enrichit le document. Tu dois aller plus loin
+
+**Tour 3** — Il est important que le RSN comme les autres blocs puissent accomplir leur tâches indépendamment du mode d'opération. C'est à dire que pour chaque bloc (et on veut que ces blocs soient petits) peut utiliser la technologie et les moyens les plus appropriés pour arriver à leur fins. Bref on a une modularité extréme où les neurones et le approches technoliques plus natives au matériel se coitoient na … [132 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -133,6 +135,23 @@ Six étages : graine → RNG contré → ordre des opérations → arithmétique
 C'est le point que je n'avais pas vu en écrivant la première version. La règle du code de démonstration met à jour les poids **à chaq
 … [4153 caractères tronqués]
 
+### Tour 3 — Il est important que le RSN comme les autres blocs puissent accomplir leur tâches indépendamment du mode d'opération. C' … [412 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Générer les schémas modes et granularité
+- bash — Insérer le mode privé, la granularité et le graphe dynamique
+- bash — Repérer les lignes du tableau des schémas
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md`
+- bash — Passer les portes après l'ajout du mode privé
+- bash — Committer le principe d'indépendance technologique
+- job_output
+
+**Synthèse produite :**
+
+⏵ Insertion du principe d'indépendance technologique dans les deux documents
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -147,7 +166,7 @@ C'est le point que je n'avais pas vu en écrivant la première version. La règl
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/README.md` | 0 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/carte.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md` | 0 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/README.md` | 0 | 5 |
 | `/tmp/gen_plus.py` | 1 | 0 |
 | `/tmp/enrichir.py` | 1 | 0 |
 
@@ -198,7 +217,7 @@ C'est le point que je n'avais pas vu en écrivant la première version. La règl
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 79 autres
+- … et 84 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -331,4 +350,5 @@ C'est le point que je n'avais pas vu en écrivant la première version. La règl
 - DOCS — LE MODÈLE NATIF ET DIEHL & COOK ENRICHIS : QUOTIENT, TYPES, NEUTRALITÉ, DÉTERMINISME, BANC, CONFORMITÉ" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
 - DOCS — LE COÛT CACHÉ DE LA STDP SYMÉTRIQUE, LA LECTURE D'UN PAS ET LES QUESTIONS OUVERTES" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- DOCS — LE CONTRAT EST L'INVARIANT, LA TECHNOLOGIE EST LA VARIABLE : MODES, GRANULARITÉ, GRAPHE DYNAMIQUE" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 

@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 4.1 h |
 | Tours | 2 |
-| Messages | 300 |
-| Appels d'outils | 298 |
+| Messages | 306 |
+| Appels d'outils | 302 |
 | Fichiers touchés | 9 |
-| Commandes | 248 |
+| Commandes | 249 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -20,6 +20,8 @@
 ## Objectifs déclarés
 
 - **create** — N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / 20 000 pas, 4 sources contre français seul, puis curriculum 129), avec contrôle négatif et trois graines ; écrire la fiche dans reports/, le récit dans journal/, committer avec le chiffre et mettre docs/p
+… [41 caractères tronqués]
+- **complete** — N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / 20 000 pas, 4 sources contre français seul, puis curriculum 129), avec contrôle négatif et trois graines ; écrire la fiche dans reports/, le récit dans journal/, committer avec le chiffre et mettre docs/p
 … [41 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -79,7 +81,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 2 — <goal_round> Objective: "N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / … [791 caractères tronqués]
 
-*202 appels d'outils.* Actions notables :
+*206 appels d'outils.* Actions notables :
 
 - bash — Check campaign status
 - bash — Compute manifest source shares
@@ -95,11 +97,47 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/agrege.py`
 - bash — Check for seed 1 final results
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/robustesse.py`
-- … et 151 autres
+- … et 154 autres
 
 **Synthèse produite :**
 
-⏵ Versant l'évaluation et la mesure de contamination dans `tools/` (versionnées)
+⏵ Clôture : N2.d mesuré, écrit, committé, portes vertes
+
+\## Ce qui est établi
+
+**La campagne N2.d** — 12 distillations, 3 graines par bras, deux GPU, ~3 h :
+
+| bras | protocole 8×16×128 | fenêtres propres | 8×15×129 |
+|---|---:|---:|---:|
+| base supervisée | 3,2161 | 3,2450 | 3,2653 |
+| **T5k** (5 000 pas, réf.) | 2,9355 | 3,0534 | 2,9623 |
+| **A** — 20 000 pas, français seul | **2,8527** | **2,9795** | 2,8743 |
+| **B** — 4 sources (82,5 % anglais) | 3,7591 | 3,8573 | 3,8218 |
+| **B′** — 4 sources à quotas égaux | 3,4350 | 3,5634 | 3,4848 |
+| **C** — curriculum 129 sur A | 2,8471 | 2,9783 | **2,8327** |
+
+- **Le budget paie peu** : −0,0828, du même ordre que la chaîne historique ; la porte < 2,5 reste à 0,35 (protocole) / 0,48 (fenêtres propres).
+- **Les données coûtent** : +0,91 pour le manifeste, +0,58 même à quotas égaux (professeur français sur octets anglais : confondant nommé).
+- **Le curriculum 129** gagne 0,0416 à 129, 0,0056 à 128.
+
+**Le résultat qui change la lecture** : la validation n'est **pas** tenue à l'écart. 32,8 % des fenêtres du protocole (42/128) sont **verbatim** dans l'entraînement ; 23,5 % des fenêtres d'entraînement y apparaissent plus d'une fois. Les fenêtres contaminées donnent 0,39 de PPL de moins que les propres, et l'écart croît avec le budget (0,17 → 0,35 → 0,39). **2,7078 et 2,6998 sont mesurés sur ce même jeu contaminé** : la porte < 2,5 n'a jamais été une mesure de généralisation.
+
+\## Vérification
+
+- Trois graines par bras, écart-type 0,002–0,008 ; comparaison appariée (mêmes fenêtres).
+- Contrôles : permutation (PPL ≈ 1087), base sans distillation, distillation courte, B′ contre B, C contre A graine par graine.
+- Robustesse : sur quatre grilles de fenêtres, A reste sous T5k (−0,083 à −0,118).
+- **Portes** : passe complète 79 portes, **75 vertes, 4 rouges** — les quatre connues et tolérées (`porte-indice`, `porte-melange`, `porte-homéostasie`, `porte-reparti-moteur`) ; `porte-ocr` verte. Journaux `/tmp/portes-1031-n2d`, 1 h 39.
+- Revue de documentation, budget de contexte, état, journal, backlog et schémas : tous verts.
+
+\## Artefacts
+
+- Fiche : `reports/rapport-n2-budget.md` · agrégat `reports/n2-budget.json` · récit `journal/2026-10-31/apprentissage.md`.
+- Code : `tools/distiller_budget.py`, `tools/eval_n2_budget.py`.
+- Points de contrôle : 542 Mo sur deux disques (`backups/n2/2026-10-31/n2d/`, `IA/artefacts/n2/2026-10-31/n2d/`).
+- Commits : **`c3bcbe99`** (résultat) et `10fa4f42` (références des portes).
+- État et roadmap 
+… [593 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -159,7 +197,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 208 autres
+- … et 209 autres
 
 ## 4. Mesures et résultats marquants
 
