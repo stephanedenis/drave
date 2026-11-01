@@ -2,11 +2,9 @@
 
 **Mis à jour : 2026-10-31, 22 h 50 HAE (heure locale, EDT).**
 
-> **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
-> **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
-> [`contexte.md`](../methode/contexte.md), contrat des sessions dans [`continuite.md`](../methode/continuite.md).
-> Les résultats sont dans [`reports/`](../../reports/) ; l'histoire dans
-> [`journal/`](../../journal/) ; le plan dans [`roadmap.md`](roadmap.md).
+> **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
+> avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
+> [`reports/`](../../reports/). Histoire : [`journal/`](../../journal/). Plan : [`roadmap.md`](roadmap.md).
 
 ## Sessions en cours
 
@@ -25,10 +23,12 @@
 - **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, le corpus d'abord.
 - **Objectif final** : un **mètre honnête** — corpus dédupliqué (0 % de validation dans l'entraînement), chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
 - **Ce qu'elle fait** : la dédup et le split sont faits ; la distillation A tourne (3 graines).
-- **Résultat intermédiaire** (graine 1) : **3,10** en domaine, **3,21** au test ; **17,1** sur
-  la littérature jamais vue, **60,7** en anglais ; le verrou de longueur est intact (**3,13** à
-  129, **14,46** à 256) ; la tête précoce du 6ᵉ bloc bat le complet (**3,0562** contre
-  **3,1298**) — la boucle de pensée coûte **0,07**.
+- **Résultat intermédiaire** : la chaîne propre vaut **3,10** en domaine (3,21 au test) — pas
+  2,85 — et **17,1** sur la littérature jamais vue : c'est un spécialiste du dépôt. Le bras
+  **diversité** (moitié dépôt, moitié littérature) la ramène à **3,86** (÷ 4,4) et l'anglais de
+  **60,7** à **26,3**, pour **+0,16** en domaine. Le verrou de longueur est intact
+  (**3,13** à 129, **14,46** à 256) ; la tête du 6ᵉ bloc bat le complet (**3,0562** contre
+  **3,1298**) : la boucle de pensée coûte **0,07**.
 - **Ce que font les autres** : **Pensée** et **R4.4** sans GPU ; **N4** en file ; **A/B** gardent leurs fichiers.
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`, `journal/sessions/0b0a6a0d-…/`.
 - **Prochaine action** : les 3 graines de A, puis la diversité française (D) et les positions
@@ -128,9 +128,8 @@ action** — pas les statuts, qui dérivent. Vue d'ensemble :
 > **P — la pensée** (session `e181ce02`) : RSN plurielle, arbre, moteur N3 ; fichiers réservés ;
 > ni GPU ni `toutes-les-portes.sh`.
 
-**Les sept chantiers C** (hors graphe, transférés au journal) : **C1** corpus · **C2**
-traduction · **C3** restitution · **C4** styles (date à contrôler) · **C5** domaines · **C6**
-documentation · **C7** pensée — mesurés, et désormais du récit, pas du plan.
+**Les sept chantiers C** — **C1** corpus · **C2** traduction · **C3** restitution · **C4**
+styles · **C5** domaines · **C6** documentation · **C7** pensée — hors graphe, mesurés, du récit.
 
 ## Ce qui reste
 

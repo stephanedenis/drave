@@ -5873,3 +5873,171 @@ started background job bash-308
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && timeout 300 git commit -m \"ÉTAT — N2.h : LA CHAÎNE PROPRE DONNE 3,10 EN DOMAINE, PAS 2,85\n\nLe premier point de contrôle de la chaîne refaite sur le corpus dédupliqué est évalué : 3,10 en\ndomai … [439 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-310]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-310", "timeout_ms": 180000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 47db37ba] ÉTAT — N2.h : LA CHAÎNE PROPRE DONNE 3,10 EN DOMAINE, PAS 2,85
+ 19 files changed, 1262 insertions(+), 52 deletions(-)
+ create mode 100644 journal/2026-10-31/moteur.md
+[status: completed, exit code: 0]
+  ```
+
+- **job_output** `{"job_id": "bash-308", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | tr '\\n' ' '; echo; for f in A-propre-g3 C-propre-g1 D-mixte-g1 D-mixte-g2; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Check campaign progress at the m … [10 caractères tronqués]`
+
+  ```
+23:38
+work/n2h/A-propre-g1.pt work/n2h/A-propre-g2.pt work/n2h/base-mixte.pt work/n2h/base-propre.pt 
+-- A-propre-g3
+pas  2250 · seq 128 · perte 65.1979 · PPL 128/4 3.3508 · 155 s
+-- C-propre-g1
+-- D-mixte-g1
+pas 17000 · seq 128 · perte 27.6824 · PPL 128/4 3.3579 · 1174 s
+-- D-mixte-g2
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nfor f in ('work/n2h/A-propre-g1.json','work/n2h/A-propre-g2.json'):\n    d=json.load(open(f)); print(f, {k:round(v,4) if isinstance(v,float) else v for k,v in d.items() if k in ('ppl_128_lot16','ppl_129_lo … [65 caractères tronqués]`
+
+  ```
+work/n2h/A-propre-g1.json {'ppl_128_lot16': 3.1925, 'ppl_129_lot15': 3.1739, 'ppl_permute': 1380.8955}
+work/n2h/A-propre-g2.json {'ppl_128_lot16': 3.1623, 'ppl_129_lot15': 3.1489, 'ppl_permute': 1253.6504}
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | tr '\\n' ' '; echo; tail -1 work/n2h/D-mixte-g1.log 2>/dev/null; tail -1 work/n2h/A-propre-g3.log", "description": "Wait for the first mixed-arm result", "run_in_background": t … [4 caractères tronqués]`
+
+  ```
+started background job bash-313
+  ```
+
+- **job_output** `{"job_id": "bash-313", "timeout_ms": 900000, "wait": true}`
+
+  ```
+23:45
+work/n2h/A-propre-g1.pt work/n2h/A-propre-g2.pt work/n2h/base-mixte.pt work/n2h/base-propre.pt work/n2h/D-mixte-g1.pt 
+}
+pas  8250 · seq 128 · perte 56.3000 · PPL 128/4 3.2037 · 580 s
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-300 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | tr '\n' ' '; echo; for f in A-propre-g3 C-propre-g1 D-mixte-g1; do tail -1 work/n2h/$f.log 2>/dev/null; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 900 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/D-mixte-g1.pt --decomposition --longueurs 2>&1 | grep -v Loading", "description": "Evaluate the first mixed model"}`
+
+  ```
+{"fichier": "D-mixte-g1.pt", "params": 11814792, "val": 3.2605, "test": 3.3195, "litterature": 3.5306, "litterature_propre": 3.8566, "anglais": 26.3189, "wikitext2": 26.5323, "permute": 482.468, "decomposition": {"complete": 3.2872, "apres_2_blocs": 4.2693, "apres_4_blocs": 3.4896, "apres_6_blocs": 3.2562, "sans_pensee": 4817836.3858}, "longueurs": {"129": 3.304, "192": 7.5647, "256": 11.2344, "384": 16.5044, "512": 20.1983}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Le bras diversité divise la PPL hors domaine par 4,4 pour 0,16 en domaine
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | wc -l; for f in A-propre-g3 C-propre-g1 D-mixte-g2; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Wait for seed 3 and the curriculum", "run_in_ … [18 caractères tronqués]`
+
+  ```
+started background job bash-315
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | tr '\\n' ' '; echo; tail -1 work/n2h/A-propre-g3.log 2>/dev/null; tail -1 work/n2h/D-mixte-g2.log 2>/dev/null", "description": "Check progress"}`
+
+  ```
+23:46
+work/n2h/A-propre-g1.pt work/n2h/A-propre-g2.pt work/n2h/base-mixte.pt work/n2h/base-propre.pt work/n2h/D-mixte-g1.pt 
+pas  9000 · seq 128 · perte 54.2723 · PPL 128/4 3.1984 · 633 s
+pas  3750 · seq 128 · perte 37.1792 · PPL 128/4 3.4795 · 264 s
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null | tr '\\n' ' '; echo; for f in C-propre-g1 C-propre-g2 D-mixte-g2; do echo \"-- $f\"; tail -1 work/n2h/$f.log 2>/dev/null; done", "description": "Wait for the clean seeds and cur … [36 caractères tronqués]`
+
+  ```
+started background job bash-317
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nvieux = \"\"\"- **Résultat intermédiaire** (graine 1) : **3,10** en domaine, **3,21** au test ; **17,1** sur\n  la littérature jamais … [999 caractères tronqués]`
+
+  ```
+ok
+  ✅ état court, structuré, multi-session et reprenable
+     · T0 : 4031 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"\"\"**Les sept chantiers C** (hors graphe, transférés au journal) : **C1** corpus · **C2**\ntraduction · **C3** restitution · * … [680 caractères tronqués]`
+
+  ```
+ok
+  ✅ état court, structuré, multi-session et reprenable
+     · T0 : 4010 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"\"\"> **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son\n> **bloqua … [957 caractères tronqués]`
+
+  ```
+ok
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · structure : 0 chantiers sur 7 dans en-cours.md ([])
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"chantiers\" tools/revue_documentation.py | head -10; sed -n \"$(grep -n 'chantiers sur' tools/revue_documentation.py | head -1 | cut -d: -f1),+12p\" tools/revue_documentation.py", "description": "Inspect the chantiers check … [21 caractères tronqués]`
+
+  ```
+6:  2. structure  : les sept chantiers de en-cours.md ont leur entrée, leur état et leur fiche ;
+133:    # 2. les sept chantiers
+136:        alertes.append(f"structure : {len(ids)} chantiers sur 7 dans en-cours.md ({ids})")
+        alertes.append(f"structure : {len(ids)} chantiers sur 7 dans en-cours.md ({ids})")
+
+    # 4. fraîcheur : la date de la page, ET aucun fait commité après le dernier état.
+    #    La date seule ne suffit pas : deux commits du même jour passaient (A8.0, 29/10).
+    m = re.search(r"Mis à jour : (\d{4}-\d\d-\d\d)", t)
+    if not m:
+        alertes.append("fraîcheur : en-cours.md n'a pas de date « Mis à jour : AAAA-MM-JJ »")
+    else:
+        page, dernier = m.group(1), date_dernier_commit()
+        if dernier and page != dernier:
+            alertes.append(
+                f"fraîcheur : en-cours.md dit {page}, le dernier commit date du {dernier}"
+            )
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 125,137p tools/revue_documentation.py", "description": "Read the seven-chantiers regex"}`
+
+  ```
+def main() -> int:
+    alertes: list[str] = []
+    en = RACINE / "docs/pilotage/en-cours.md"
+    if not en.exists():
+        print("✗ docs/pilotage/en-cours.md absent")
+        return 1
+    t = en.read_text()
+
+    # 2. les sept chantiers
+    ids = sorted(set(re.findall(r"\*\*(C[1-7])\*\*", t)))
+    if len(ids) < 7:
+        alertes.append(f"structure : {len(ids)} chantiers sur 7 dans en-cours.md ({ids})")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"\"\"**Les sept chantiers C** (C1 corpus → C7 pensée) sont hors graphe, mesurés et désormais du\nrécit : le journal, pas le plan … [487 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && timeout 300 git commit -m \"ÉTAT — N2.h : LA DIVERSITÉ FRANÇAISE DIVISE LA PPL HORS DÉPÔT PAR 4,4\n\nLe bras diversité (moitié dépôt, moitié littérature française, même budget, mêmes trois graines … [435 caractères tronqués]`

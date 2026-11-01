@@ -5463,3 +5463,657 @@ photo      dev  auto  WER= 7.29% F1med=0.96 exNa
 started background job bash-253
   ```
 
+- **job_output** `{"job_id": "bash-253"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"fabriquer_tables.py — des pages à TABLEAU, avec la vérité terrain des cellules.\n\nPOURQUOI CE FICHIER. R4.1 a mesuré les tableaux **texte** (Markdown/HTML). Un tableau\n**scanné** est un autre problème : les cellules n'existent plus, il n'y a que des mots  … [4597 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/fabriquer_tables.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"extraire_tableaux.py — un tableau scanné : les traits d'abord, les cellules ensuite.\n\nPOURQUOI CE FICHIER. Sur un scan, une cellule n'existe pas : il y a des mots et des **traits**.\nUn OCR qui rend du texte à plat ne peut pas dire « 2,3 % est dans la col … [6037 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/extraire_tableaux.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extraire_tableaux.py'); s=p.read_text()\nold='''def extraire(image: pathlib.Path, langue: str = \"fra\", redresser: bool = True,\n             mots: list[dict] | None = None) -> dict:\n    im = Image.open(image).convert(\"RGB\")\n  … [2523 caractères tronqués]`
+
+  ```
+extraire corrigé (OCR sur l’image redressée)
+  2 tableaux 6×9 → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables
+{
+ "xs": [
+  166,
+  524,
+  882,
+  1240,
+  1597,
+  1955,
+  2313
+ ],
+ "ys": [
+  349,
+  417,
+  484,
+  552,
+  619,
+  687,
+  754,
+  822,
+  889,
+  957
+ ],
+ "raison": "",
+ "angle": 0.0,
+ "grille": [
+  [
+   "Région",
+   "R4.4 Population",
+   "tableau — Taux",
+   "6 1 — Superficie",
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extraire_tableaux.py'); s=p.read_text()\ns=s.replace('''    for mot in les_mots:\n        cx = mot[\"left\"] + mot[\"width\"] / 2\n        cy = mot[\"top\"] + mot[\"height\"] / 2\n        i = sum(1 for y in ys[1:-1] if cy > y)\n    … [1101 caractères tronqués]`
+
+  ```
+Région | Population | Taux | Superficie | Capitale | Indice
+Paris | 140 450 | | 3,2% | 138 | Est | 2.3
+Lyon | 153 450 | 43% | | 275 | Ouest | 3.6
+Lille | 166 450 | 5,4% | | 412 | Centre | 4.9
+Nice | 179 450 | | 6,5% | 549 | Littoral | 5.2
+Nantes | 192 450 | 2,6% | | 686 | Montagne | 6.5
+Brest | 205 450 | 3,7% | | 823 | Plaine | 7.8
+Metz | 218 450 | 4,8% | | 960 | Nord | 8.1
+Dijon | 231 450 | 5,9% | | 1097 | Sud | 9.4
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et\nfrom PIL import Image\nim=Image.open('work/r44/tables/p1.png').convert('RGB')\nim2,a=et.redresser_tableau(im)\ngr=et.grille(im2)\nprint('angle',a,'xs',gr['xs'],'ys',gr['ys'])\nprint('l … [426 caractères tronqués]`
+
+  ```
+angle 0.0 xs [166, 524, 882, 1240, 1597, 1955, 2313] ys [349, 417, 484, 552, 619, 687, 754, 822, 889, 957]
+largeurs [358, 358, 358, 357, 358, 358]
+colonnes 6 lignes 9
+6 | Région | Population | Taux | Superficie | Capitale | Indice
+6 | Paris | 140 450 | | 3,2% | 138 | Est | 2.3
+6 | Lyon | 153 450 | 43% | | 275 | Ouest | 3.6
+6 | Lille | 166 450 | 5,4% | | 412 | Centre | 4.9
+6 | Nice | 179 450 | | 6,5% | 549 | Littoral | 5.2
+6 | Nantes | 192 450 | 2,6% | | 686 | Montagne | 6.5
+6 | Brest | 205 450 | 3,7% | | 823 | Plaine | 7.8
+6 | Metz | 218 450 | 4,8% | | 960 | Nord | 8.1
+6 | Dijon | 231 450 | 5,9% | | 1097 | Sud | 9.4
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extraire_tableaux.py'); s=p.read_text()\ns=s.replace('''    for mot in les_mots:\n        cx = mot[\"left\"] + mot[\"width\"] / 2''','''    import re\n    artifacts = re.compile(r\"^[|\\\\-_—~^]+$\")\n    for mot in les_mots:\n     … [1014 caractères tronqués]`
+
+  ```
+cellules exactes 53 / 54 98.1%
+  écart: '4,3 %' != '43%'
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"mesurer_tables.py — R4.4 : les tableaux SCANNÉS, cellule par cellule.\n\nPOURQUOI CE FICHIER. R4.1 a montré qu'un tableau lu comme du texte à plat ne répond pas\n(0/3). Le même contrôle vaut pour un scan : l'information peut être là — les mots sont lus —\ns … [9143 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_tables.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_tables.py'); s=p.read_text()\nold = s[s.index('def controle_plat('):s.index('def verdict(')]\nnew = '''def controle_plat(entree: dict) -> dict:\n    \"\"\"Le contrôle : le texte à plat contient-il les valeurs, et les locali … [1370 caractères tronqués]`
+
+  ```
+controle_plat corrigé
+  4 tableaux 6×9 → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_tables.py", line 181, in main
+    ligne = mesure(entree, famille)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_tables.py", line 80, in mesure
+    propre = Image.open(rendu(CORPUS / entree["pdf"], entree["page"])).convert("RGB")
+                        ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_tables.py", line 49, in rendu
+    subprocess.run(["pdftoppm", "-r", "300", "-f", str(page), "-l", str(page),
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    "-singlefile", "-png", str(pdf), str(png.with_suffix(""))],
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                   check=True, capture_output=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                        
+… [356 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_tables.py'); s=p.read_text()\ns=s.replace('''def rendu(pdf: pathlib.Path, page: int) -> pathlib.Path:\n    RENDUS.mkdir(parents=True, exist_ok=True)\n    png = RENDUS / f\"{pdf.stem}.png\"\n    if not png.exists():\n        … [1141 caractères tronqués]`
+
+  ```
+page 3 · propre     : 29/54 cellules · grille oui
+  page 3 · photocopie : 44/54 cellules · grille oui
+  page 3 · photo      : 23/54 cellules · grille non
+=== R4.4 — LES TABLEAUX SCANNÉS, CELLULE PAR CELLULE ===
+  famille     redressé   pages  cellules  exactes    taux  grilles
+  photocopie  oui            3       162       81   50.0%     3/3
+  photocopie  non            3         0        0    0.0%     0/3
+  photo       oui            3       162       58   35.8%     1/3
+  propre      oui            3       162       87   53.7%     3/3
+
+  contrôle texte à plat : 29/54 valeurs présentes (53.7%), 0 localisée
+
+  ❌ propre : cellules exactes ≥ 90% (mesuré 53.7%)
+  ✅ propre : grilles de bonne forme (mesuré 3/3)
+  ❌ photocopie : cellules exactes ≥ 80% (mesuré 50.0%)
+  ✅ photocopie : grilles de bonne forme (mesuré 3/3)
+  ❌ photo : cellules exactes ≥ 60% (mesuré 35.8%)
+  ❌ photo : grilles de bonne forme (mesuré 1/3)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables.json
+[code 0]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et, mesurer_tables as mt\nman=json.load(open('work/r44/tables/manifeste.json'))\ne=[x for x in man['entrees'] if x['page']==3][0]\nr=et.extraire(pathlib.Path('work/r44/tables/scans/tableau … [394 caractères tronqués]`
+
+  ```
+angle 0.0 xs [25, 383, 741, 1099, 1456, 1814, 2172]
+ys [162, 230, 297, 365, 432, 500, 567, 635, 702, 770]
+--- détecté
+Région | Population | Taux | Superficie | Capitale | Indice
+Paris | 154 450 | 3,4% | 140 | Centre | 4.3
+ |  |  |  |  | 
+Lille | 180 450 | 5,6% | 414 | Montagne | 6.9
+ |  |  |  |  | 
+Nantes | 206 450 | 2,8% | 688 | Nord | 8.5
+ |  |  |  |  | 
+Metz | 232 450 | 40% | 962 | Est | 10.1
+ |  |  |  |  | 
+--- vérité
+Région | Population | Taux | Superficie | Capitale | Indice
+Paris | 154 450 | 3,4 % | 140 | Centre | 4.3
+Lyon | 167 450 | 4,5 % | 277 | Littoral | 5.6
+Lille | 180 450 | 5,6 % | 414 | Montagne | 6.9
+Nice | 193 450 | 6,7 % | 551 | Plaine | 7.2
+Nantes | 206 450 | 2,8 % | 688 | Nord | 8.5
+Brest | 219 450 | 3,9 % | 825 | Sud | 9.8
+Metz | 232 450 | 4,0 % | 962 | Est | 10.1
+Dijon | 245 450 | 5,1 % | 1099 | Ouest | 11.4
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extraire_tableaux.py'); s=p.read_text()\ns=s.replace('''def _groupes(indices: np.ndarray, ecart: int = 3) -> list[int]:''','''def _plus_longue_serie(masque: np.ndarray) -> np.ndarray:\n    \"\"\"La plus longue suite de pixels allum … [2316 caractères tronqués]`
+
+  ```
+détection par continuité
+page 1 xs 7 ys 10 taux 0.537 grille True
+page 3 xs 7 ys 10 taux 0.537 grille True
+   Région | Population | Taux | Superficie | Capitale | Indice
+   Paris | 154 450 | 3,4% | 140 | Centre | 4.3
+    |  |  |  |  | 
+   Lille | 180 450 | 5,6% | 414 | Montagne | 6.9
+    |  |  |  |  | 
+   Nantes | 206 450 | 2,8% | 688 | Nord | 8.5
+    |  |  |  |  | 
+   Metz | 232 450 | 40% | 962 | Est | 10.1
+    |  |  |  |  |
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et, graphe_document_ocr as gco\nfrom PIL import Image\nim2,a=et.redresser_tableau(Image.open('work/r44/tables/scans/tableau-p3-propre.png').convert('RGB'))\ngr=et.grille(im2)\nprint('ys',g … [344 caractères tronqués]`
+
+  ```
+ys [162, 230, 297, 365, 432, 500, 567, 635, 702, 770]
+xs [25, 383, 741] ...
+'R4.4' top 24 h 55 left 550
+'—' top 56 h 7 left 723
+'tableau' top 24 h 57 left 820
+'3' top 25 h 56 left 1105
+'—' top 56 h 7 left 1164
+'6' top 25 h 56 left 1263
+'colonnes' top 24 h 57 left 1327
+'Région' top 183 h 35 left 53
+'Population' top 180 h 43 left 411
+'Taux' top 184 h 27 left 767
+'Superficie' top 180 h 43 left 1125
+'Capitale' top 180 h 43 left 1483
+'Indice' top 184 h 27 left 1842
+'Paris' top 248 h 43 left 53
+'154' top 252 h 27 left 592
+'450' top 252 h 27 left 658
+'3,4%' top 252 h 31 left 984
+'|' top 248 h 43 left 1091
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et, graphe_document_ocr as gco\nfrom PIL import Image\nim2,a=et.redresser_tableau(Image.open('work/r44/tables/scans/tableau-p3-propre.png').convert('RGB'))\np=pathlib.Path('/tmp/t3b.png'); im2. … [390 caractères tronqués]`
+
+  ```
+nb mots 56
+0 6 Région Population Taux Superficie Capitale Indice
+1 8 Paris 154 450 3,4% | 140 Centre 4.3
+2 0 
+3 8 Lille 180 450 5,6% | 414 Montagne 6.9
+4 0 
+5 8 Nantes 206 450 2,8% | 688 Nord 8.5
+6 0 
+7 8 Metz 232 450 40% | 962 Est 10.1
+8 0
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco\np=pathlib.Path('work/r44/tables/scans/tableau-p3-propre.png')\nfor psm in (3,4,6,11,12):\n    mots=gco.mots(p,'fra',psm)\n    print('psm',psm,'mots',len(mots),'|', ' '.join(m['texte'] fo … [155 caractères tronqués]`
+
+  ```
+psm 3 mots 56 | R4.4 — tableau 3 — 6 colonnes Région Population Taux Superficie Capitale Indice Paris 154 450 3,4% | 140 Centr
+psm 4 mots 56 | R4.4 — tableau 3 — 6 colonnes Région Population Taux Superficie Capitale Indice Paris 154 450 3,4% | 140 Centr
+psm 6 mots 35 | R4.4 — tableau 3 — 6 colonnes Cégion [Popuiton [rex [supemée [copie [de [ue fie  séwfate [mama [es Fame | wo  
+psm 11 mots 53 | R4.4 — tableau 3 — 6 colonnes Région Population Taux Superficie Capitale Indice 3,4% 140 Centre 4,5 % 277 Litt
+psm 12 mots 47 | R4.4 — tableau 3 — 6 colonnes Région Population Taux Superficie Capitale Indice 140 Centre 277 Littoral Lille
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nimport numpy as np\nfrom PIL import Image\nfrom scipy.ndimage import binary_dilation\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco, extraire_tableaux as et\nimg=pathlib.Path('work/r44/tables/scans/tableau-p3-propre.png')\nim=Image.o … [1243 caractères tronqués]`
+
+  ```
+psm 3 mots 86 | Région Paris Lyon Lille Nice Nantes Brest Metz Dijon Le tableau ci-dessus résume les grandeurs retenues pour la région étudiée. R4.4 — table
+psm 6 mots 80 | R4.4 — tableau 3 — 6 colonnes Région Population Taux Superticie Capitale Indice Paris 154 450 3,4% 140 Centre 4.3 Lyon 167 450 4,5% 277 Litt
+psm 4 mots 80 | R4.4 — tableau 3 — 6 colonnes Région Population Taux Superticie Capitale Indice Paris 154 450 3,4% 140 Centre 4.3 Lyon 167 450 45% 277 Litto
+psm 11 mots 86 | R4.4 — tableau 3 — 6 colonnes Région Population Taux Superficie Capitale Indice Paris 154 450 3,4% 140 Centre 43 Lyon 167 450 4,5 % 277 Litt
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extraire_tableaux.py'); s=p.read_text()\ns=s.replace('''def grille(im: Image.Image) -> dict:''','''def effacer_traits(im: Image.Image) -> Image.Image:\n    \"\"\"Enlève les TRAITS du tableau avant l'OCR. Sans cela, tesseract lit un … [2551 caractères tronqués]`
+
+  ```
+effacement des traits + psm 6
+  page 3 · photo      : 0/0 cellules · grille non
+=== R4.4 — LES TABLEAUX SCANNÉS, CELLULE PAR CELLULE ===
+  famille     redressé   pages  cellules  exactes    taux  grilles
+  photocopie  oui            3         0        0    0.0%     0/3
+  photocopie  non            3         0        0    0.0%     0/3
+  photo       oui            3         0        0    0.0%     0/3
+  propre      oui            3       162      152   93.8%     3/3
+
+  contrôle texte à plat : 29/54 valeurs présentes (53.7%), 0 localisée
+
+  ✅ propre : cellules exactes ≥ 90% (mesuré 93.8%)
+  ✅ propre : grilles de bonne forme (mesuré 3/3)
+  ❌ photocopie : cellules exactes ≥ 80% (mesuré 0.0%)
+  ❌ photocopie : grilles de bonne forme (mesuré 0/3)
+  ❌ photo : cellules exactes ≥ 60% (mesuré 0.0%)
+  ❌ photo : grilles de bonne forme (mesuré 0/3)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables.json
+[code 0]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nimport numpy as np\nfrom PIL import Image\nfrom scipy.ndimage import binary_closing\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et\nfor fam in ('propre','photocopie','photo'):\n    p=pathlib.Path(f'work/r44/tables/scans/tableau-p1-{fam} … [820 caractères tronqués]`
+
+  ```
+propre angle 0.0 raison '' xs 7 ys 10
+   runs horizontaux max 2150 largeur 2198 seuil 0.8 1758
+   après fermeture 2150 nb lignes>0.8 25
+photocopie angle 0.5 raison 'trop peu de traits horizontaux (0)' xs 0 ys 0
+   runs horizontaux max 1106 largeur 1676 seuil 0.8 1340
+   après fermeture 1180 nb lignes>0.8 0
+photo angle -0.25 raison 'trop peu de traits horizontaux (1)' xs 0 ys 0
+   runs horizontaux max 1071 largeur 1329 seuil 0.8 1063
+   après fermeture 1078 nb lignes>0.8 1
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nimport numpy as np\nfrom PIL import Image\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et\nfor fam in ('photocopie','photo'):\n    im=Image.open(f'work/r44/tables/scans/tableau-p1-{fam}.png').convert('RGB')\n    im2,a=et.redresser_tablea … [488 caractères tronqués]`
+
+  ```
+photocopie seuil 128 frac 0.6 lignes 5
+photocopie seuil 128 frac 0.7 lignes 0
+photocopie seuil 160 frac 0.6 lignes 14
+photocopie seuil 160 frac 0.7 lignes 5
+photocopie seuil 190 frac 0.6 lignes 15
+photocopie seuil 190 frac 0.7 lignes 12
+photocopie seuil 210 frac 0.6 lignes 20
+photocopie seuil 210 frac 0.7 lignes 15
+photo seuil 128 frac 0.6 lignes 4
+photo seuil 128 frac 0.7 lignes 1
+photo seuil 160 frac 0.6 lignes 11
+photo seuil 160 frac 0.7 lignes 6
+photo seuil 190 frac 0.6 lignes 19
+photo seuil 190 frac 0.7 lignes 13
+photo seuil 210 frac 0.6 lignes 26
+photo seuil 210 frac 0.7 lignes 18
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extraire_tableaux.py'); s=p.read_text()\ns=s.replace('''def _groupes(indices: np.ndarray, ecart: int = 3) -> list[int]:''','''def _grille_reguliere(indices: list[int], tolerance: float = 0.15) -> list[int]:\n    \"\"\"Parmi des can … [2603 caractères tronqués]`
+
+  ```
+grille régulière
+  famille     redressé   pages  cellules  exactes    taux  grilles
+  photocopie  oui            3       162        5    3.1%     0/3
+  photocopie  non            3         0        0    0.0%     0/3
+  photo       oui            3       162        4    2.5%     0/3
+  propre      oui            3       162        3    1.8%     0/3
+
+  contrôle texte à plat : 29/54 valeurs présentes (53.7%), 0 localisée
+
+  ❌ propre : cellules exactes ≥ 90% (mesuré 1.8%)
+  ❌ propre : grilles de bonne forme (mesuré 0/3)
+  ❌ photocopie : cellules exactes ≥ 80% (mesuré 3.1%)
+  ❌ photocopie : grilles de bonne forme (mesuré 0/3)
+  ❌ photo : cellules exactes ≥ 60% (mesuré 2.5%)
+  ❌ photo : grilles de bonne forme (mesuré 0/3)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables.json
+[code 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-253 (bash: timeout 2400 python3 tools/mesurer_colonnes.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/colonnes.json > work/r44/colonnes.log 2>&1; echo "[code $?]"; tail -16 work/r44/colonnes.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extraire_tableaux.py'); s=p.read_text()\ndebut=s.index('def _grille_reguliere(')\nfin=s.index('def _groupes(')\nnew='''def _grille_reguliere(indices: list[int], tolerance: float = 0.2) -> list[int]:\n    \"\"\"Parmi des candidats ( … [1676 caractères tronqués]`
+
+  ```
+grille régulière stricte
+propre 1 xs 7 ys 10 
+propre 3 xs 7 ys 10 
+photocopie 1 xs 0 ys 0 trop peu de traits horizontaux (0)
+photocopie 3 xs 0 ys 0 trop peu de traits horizontaux (0)
+photo 1 xs 0 ys 0 trop peu de traits horizontaux (0)
+photo 3 xs 4 ys 10
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nimport numpy as np\nfrom PIL import Image\nfrom scipy.ndimage import rotate\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et\nfor fam in ('propre','photocopie','photo'):\n    im=Image.open(f'work/r44/tables/scans/tableau-p1-{fam}.png').co … [835 caractères tronqués]`
+
+  ```
+propre angle 0.0 max run 2150 / 2198 lignes>0.8 25 >0.6 25
+photocopie angle 0.4 max run 1434 / 1654 lignes>0.8 17 >0.6 17
+photo angle -0.4 max run 1295 / 1325 lignes>0.8 9 >0.6 15
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extraire_tableaux.py'); s=p.read_text()\ns=s.replace('''def redresser_tableau(im: Image.Image) -> tuple[Image.Image, float]:\n    \"\"\"Un tableau supporte mal l'inclinaison : les traits verticaux se couchent sur plusieurs\n    col … [3081 caractères tronqués]`
+
+  ```
+angle tableau par masque binaire
+propre 1 angle 0.0 xs 7 ys 10 
+propre 3 angle 0.0 xs 7 ys 10 
+photocopie 1 angle 0.40000000000000213 xs 7 ys 10 
+photocopie 3 angle 1.2000000000000028 xs 7 ys 10 
+photo 1 angle -0.2999999999999985 xs 7 ys 10 
+photo 3 angle 0.0 xs 4 ys 10
+  ```
+
+- **bash** `{"command": "timeout 1200 python3 tools/mesurer_tables.py --pages 3 --familles propre,photocopie,photo 2>&1 | tail -18; echo \"[code ${PIPESTATUS[0]}]\"", "description": "Rerun table benchmark with mask deskew", "timeoutMs": 1200000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+page 3 · photo      : 17/54 cellules · grille non
+=== R4.4 — LES TABLEAUX SCANNÉS, CELLULE PAR CELLULE ===
+  famille     redressé   pages  cellules  exactes    taux  grilles
+  photocopie  oui            3       162      114   70.4%     3/3
+  photocopie  non            3         0        0    0.0%     0/3
+  photo       oui            3       162       77   47.5%     2/3
+  propre      oui            3       162      152   93.8%     3/3
+
+  contrôle texte à plat : 29/54 valeurs présentes (53.7%), 0 localisée
+
+  ✅ propre : cellules exactes ≥ 90% (mesuré 93.8%)
+  ✅ propre : grilles de bonne forme (mesuré 3/3)
+  ❌ photocopie : cellules exactes ≥ 80% (mesuré 70.4%)
+  ✅ photocopie : grilles de bonne forme (mesuré 3/3)
+  ❌ photo : cellules exactes ≥ 60% (mesuré 47.5%)
+  ❌ photo : grilles de bonne forme (mesuré 2/3)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables.json
+[code 0]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json,subprocess,os,tempfile\nimport numpy as np\nfrom PIL import Image, ImageFilter\nsys.path.insert(0,'tools')\nimport extraire_tableaux as et, graphe_document_ocr as gco, mesurer_tables as mt\nROOT=pathlib.Path('work/ocr/root'); env=dict(os.environ … [1723 caractères tronqués]`
+
+  ```
+propre 1 cellules 0.9444 grille True
+    Région | Population | Taux | Superficie | Capitale | Indice
+    Paris | 140 450 | 3,2 % | 138 | Est | 2.3
+    Lyon | 153 450 | 4,3 | 275 | Ouest | 3.6
+propre 3 cellules 0.9815 grille True
+photocopie 1 cellules 0.2222 grille True
+    Région Le | Population | Taux | Superficie | Capitale | | Indice
+    Paris _ | 7 140450 |  | 138 | Est L LL | 
+    Lyon or | : 153 450 | | 43% | 275 | Ouest a | 
+photocopie 3 cellules 0.1667 grille True
+  ```
+
+- **bash** `{"command": "timeout 2400 python3 tools/mesurer_tables.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/tables.json > work/r44/tables.log 2>&1; echo \"[code $?]\"; tail -16 work/r44/tables.log", "description": "Run full 10-page table benchmark", "run_in_background": true, "workdir" … [52 caractères tronqués]`
+
+  ```
+started background job bash-275
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\ns=s.replace('''def affiche(agregat: dict, noir: dict) -> None:''','''SEUILS_PORTE = {\n    # sur les pages de DÉVELOPPEMENT, où les questions existent\n    \"wer_dev\": 0.08, \"preservation\": 0 … [2632 caractères tronqués]`
+
+  ```
+porte des scans ajoutée
+OK
+  ```
+
+- **job_output** `{"job_id": "bash-275"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms\nman=json.load(open('work/r44/scans/manifeste.json'))\nsel=[e for e in man['entrees'] if e['split']=='dev' and e['famille']=='photocopie'][:4]\nfor e in sel:\n    pdf=pat … [556 caractères tronqués]`
+
+  ```
+A_RES_80_10-fr-p2-s1-photocopie.pn colonnes False WER 0.0573
+A_RES_80_10-fr-p2-s1-photocopie.pn colonnes True WER 0.0573
+A_RES_80_10-en-p2-s1-photocopie.pn colonnes False WER 0.0311
+A_RES_80_10-en-p2-s1-photocopie.pn colonnes True WER 0.0311
+A_RES_80_10-es-p2-s1-photocopie.pn colonnes False WER 0.0433
+A_RES_80_10-es-p2-s1-photocopie.pn colonnes True WER 0.0433
+A_RES_80_1-en-p1-s1-photocopie.png colonnes False WER 0.0408
+A_RES_80_1-en-p1-s1-photocopie.png colonnes True WER 0.0408
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\ns=s.replace('''def mesure_entree(entree: dict, pipeline: str, questions: dict,\n                  exposants: bool = False) -> dict:''','''def mesure_entree(entree: dict, pipeline: str, questions … [1777 caractères tronqués]`
+
+  ```
+flag colonnes ajouté à la mesure des scans
+OK
+=== table job
+  page 1 · photocopie : 35/54 cellules · grille oui
+  page 1 · photo      : 39/54 cellules · grille oui
+  page 2 · propre     : 50/54 cellules · grille oui
+4
+  ```
+
+- **bash** `{"command": "timeout 3000 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --sortie work/r44/mesure-final-exp-col.json > work/r44/mesure-final-exp-col.log 2>&1; echo \"[code $?]\"; tail -8 work/r44/mesure-final-exp-col.log", "description": "Run final scans measurement with exp  … [102 caractères tronqués]`
+
+  ```
+started background job bash-279
+  ```
+
+- **bash** `{"command": "sleep 60; echo \"=== tables\"; tail -4 work/r44/tables.log; wc -l < work/r44/tables.log; echo \"=== scans\"; tail -3 work/r44/mesure-final-exp-col.log; wc -l < work/r44/mesure-final-exp-col.log; date +%H:%M:%S", "description": "Check both jobs progress", "timeoutMs": 120000, "workdir":  … [50 caractères tronqués]`
+
+  ```
+=== tables
+  page 3 · photocopie : 41/54 cellules · grille oui
+  page 3 · photo      : 17/54 cellules · grille non
+  page 4 · propre     : 48/54 cellules · grille oui
+  page 4 · photocopie : 38/54 cellules · grille oui
+11
+=== scans
+  [7/100] A_RES_80_10-en-p2-s1-photocopie.png      auto         WER  3.11% conf  92.1
+  [8/100] A_RES_80_10-en-p2-s1-photo.png           auto         WER  3.30% conf  95.0
+  [9/100] A_RES_80_10-en-p2-s1-fax.png             auto         WER 17.58% conf  79.2
+10
+23:43:49
+  ```
+
+- **bash** `{"command": "head -c 400 data/corpus_fr_litterature.txt; echo; echo \"=== taille\"; wc -w data/corpus_fr_litterature.txt; echo \"=== titres possibles\"; grep -o -m3 \"Verne\\|Tour du monde\\|Hugo\\|Zola\" data/corpus_fr_litterature.txt | head", "description": "Inspect literature corpus for a text tw … [66 caractères tronqués]`
+
+  ```
+Au lecteur
+
+  Cette version électronique reproduit dans son intégralité
+  la version originale.
+
+  La ponctuation n'a pas été modifiée hormis quelques corrections
+  mineures.
+
+  L'orthographe a été conservée. Seuls quelques mots ont été modifiés.
+  La liste des modifications se trouve à la fin du texte.
+
+
+
+
+  AVENTURES D'ALICE
+
+  AU
+
+  PAYS DES MERVEILLES.
+
+
+
+
+  AVENTURES D'ALICE
+
+  _
+=== taille
+2755917 data/corpus_fr_litterature.txt
+=== titres possibles
+Verne
+Hugo
+Verne
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/advancedsearch.php?q=title%3A%28voyage+au+centre+de+la+terre%29+AND+language%3Afre&fl%5B%5D=identifier&fl%5B%5D=title&fl%5B%5D=year&rows=8&output=json\" | python3 -c \"import json,sys;d=json.load(sys.stdin);[print(x) for x in d['response']['docs' … [168 caractères tronqués]`
+
+  ```
+{'identifier': 'voyage-au-centre-de-la-terre-2-lile-mysterieuse-3-d-2012', 'title': "Voyage au Centre de la Terre 2 - L'île Mystérieuse 3D (2012) - Blu-ray Cover", 'year': 2012}
+{'identifier': 'Voyage-au-centre-de-la-Terre', 'title': 'Voyage au centre de la terre. Jules Verne'}
+{'identifier': 'unvoyageimaginai0000comp', 'title': 'Un Voyage imaginaire de Jules Verne : "Voyage au centre de la terre"', 'year': 1977}
+{'identifier': 'voyageaucentrede04791gut', 'title': 'Voyage au Centre de la Terre'}
+{'identifier': 'voyageaucentrede00vernuoft', 'title': 'Voyage au centre de la terre'}
+{'identifier': 'voyageaucentrede0000vern_u0v2', 'title': 'Voyage au centre de la terre', 'year': 2008}
+{'identifier': 'voyageaucentrede0000vern_k5b6', 'title': 'Voyage au centre de la terre', 'year': 2005}
+{'identifier': 'voyageaucentrede0000vern_j7t3', 'title': 'Voyage au centre de la terre', 'year': 1993}
+  ```
+
+### 👤 Utilisateur
+
+background job bash-275 (bash: timeout 2400 python3 tools/mesurer_tables.py --pages 10 --familles propre,photocopie,photo --sortie work/r44/tables.json > work/r44/tables.log 2>&1; echo "[code $?]"; tail -16 work/r44/tables.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "tail -18 work/r44/tables.log", "description": "Read full table benchmark results", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+page 4 · photo      : 37/54 cellules · grille oui
+=== R4.4 — LES TABLEAUX SCANNÉS, CELLULE PAR CELLULE ===
+  famille     redressé   pages  cellules  exactes    taux  grilles
+  photocopie  oui            4       216      152   70.4%     4/4
+  photocopie  non            4         0        0    0.0%     0/4
+  photo       oui            4       216      114   52.8%     3/4
+  propre      oui            4       216      200   92.6%     4/4
+
+  contrôle texte à plat : 29/54 valeurs présentes (53.7%), 0 localisée
+
+  ✅ propre : cellules exactes ≥ 90% (mesuré 92.6%)
+  ✅ propre : grilles de bonne forme (mesuré 4/4)
+  ❌ photocopie : cellules exactes ≥ 80% (mesuré 70.4%)
+  ✅ photocopie : grilles de bonne forme (mesuré 4/4)
+  ❌ photo : cellules exactes ≥ 60% (mesuré 52.8%)
+  ❌ photo : grilles de bonne forme (mesuré 3/4)
+
+  → work/r44/tables.json
+  ```
+
+- **bash** `{"command": "timeout 60 curl -s \"https://archive.org/metadata/voyageaucentrede00vernuoft\" | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nprint('titre',d.get('metadata',{}).get('title'),'| langue',d.get('metadata',{}).get('language'))\nfor f in d.get('files',[]):\n    n=f['name']\n    if … [253 caractères tronqués]`
+
+  ```
+titre Voyage au centre de la terre | langue fre
+scandata.zip 46765214
+voyageaucentrede00vernuoft.djvu 7219786
+voyageaucentrede00vernuoft.pdf 12398348
+voyageaucentrede00vernuoft_bw.pdf 13177592
+voyageaucentrede00vernuoft_djvu.txt 515178
+voyageaucentrede00vernuoft_djvu.xml 5687005
+voyageaucentrede00vernuoft_jp2.zip 98003433
+voyageaucentrede00vernuoft_raw_jp2.zip 155174270
+  ```
+
+- **bash** `{"command": "set -e\nmkdir -p work/r44/reel\ncd work/r44/reel\n[ -s livre.pdf ] || curl -sSL -o livre.pdf \"https://archive.org/download/voyageaucentrede00vernuoft/voyageaucentrede00vernuoft.pdf\" &\n[ -s livre_djvu.xml ] || curl -sSL -o livre_djvu.xml \"https://archive.org/download/voyageaucentrede … [286 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane  5687005 23:44 livre_djvu.xml
+-rw-r--r--. 1 stephane stephane 12398348 23:44 livre.pdf
+Producer:        Recoded by LuraDocument PDF v2.28
+CreationDate:    Thu Jan 31 23:05:42 2008 EST
+ModDate:         Thu Jan 31 23:31:57 2008 EST
+Custom Metadata: no
+Metadata Stream: no
+Tagged:          no
+  ```
+
+- **bash** `{"command": "cd work/r44/reel\npdfinfo livre.pdf | grep -E \"Pages|Page size\"; echo \"=== couche texte p30\"; pdftotext -f 30 -l 30 -layout livre.pdf - | head -8; echo \"=== djvu.xml début\"; head -c 700 livre_djvu.xml", "description": "Check embedded text layer and djvu XML", "timeoutMs": 120000,  … [61 caractères tronqués]`
+
+  ```
+Pages:           244
+Page size:       472 x 753 pts
+=== couche texte p30
+18                    VOYAGE AU CENTRE DE LA TERRE
+     «   Qu'est-ce que cela signifie?            »
+
+  Je cherchai à grouper ces lettres de manière à former des mots. Impossible                                                      !
+
+
+
+
+=== djvu.xml début
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DjVuXML>
+<DjVuXML>
+ <BODY>
+  <OBJECT data="file://localhost/var/tmp/autoclean/derive/voyageaucentrede00vernuoft/voyageaucentrede00vernuoft.djvu" type="image/x.djvu" usemap="voyageaucentrede00vernuoft_0001.djvu" width="1968" height="3138">
+   <PARAM name="PAGE" value="voyageaucentrede00vernuoft_0001.djvu"/>
+   <PARAM name="DPI" value="300"/>
+   <HIDDENTEXT>
+    <PAGECOLUMN>
+     <REGION>
+      <PARAGRAPH>
+       <LINE>
+        <WORD coords="1090,600,1137,573" x-confidence="0">;;&lt;K</WORD>
+       </LINE>
+      </PARAGRAPH>
+     </REGION>
+    </PAGECOLUMN>
+    <PAGECOLUMN>
+     <REGION>
+      <PARAGRAPH>
+       <LINE>
+        <WORD coords="976,
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,subprocess\nimport numpy as np\nfrom PIL import Image\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms, nettoyer_scan as ns\nbase=pathlib.Path('work/r44/reel')\npdf=base/'livre.pdf'\nfor page in (40,80,120):\n    png=base/f' … [869 caractères tronqués]`
+
+  ```
+page 40: trace ['recadrage'] | mots ref 449 ocr 460 | WER 8.24% | conf 88.4
+page 80: trace ['recadrage'] | mots ref 438 ocr 435 | WER 5.71% | conf 91.0
+page 120: trace ['recadrage'] | mots ref 378 ocr 378 | WER 7.41% | conf 89.6
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"mesurer_reel.py — R4.4 : un VRAI scan, et un jumeau qui n'est pas parfait.\n\nPOURQUOI CE FICHIER. Les scans de `simuler_scan.py` sont des dégradations **simulées** : ils\nmesurent la robustesse, pas la réalité du papier. Il n'y a pas de scanner sur la mach … [5475 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_reel.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_reel.py --pdf work/r44/reel/livre.pdf --pages 30,50,70,90,110,130,150,170,190,210 --sortie work/r44/reel.json 2>&1 | tail -16; echo \"[code ${PIPESTATUS[0]}]\"", "description": "Measure OCR on ten real scanned pages", "timeoutMs": 1800000, "workdir": " … [49 caractères tronqués]`
