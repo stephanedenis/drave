@@ -18,17 +18,20 @@
 
 - **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
 - **Rôle** : **N2.h — le mètre propre** : corpus, distillation, évaluation.
-- **Plan** : 1) `tools/corpus_propre.py` (dédup, split par chunks) ; 2) chaîne propre (professeur 23,5 M, base 20k, distillation 20k × 3, curriculum 129 × 3) ; 3) porte honnête + hors domaine + décomposition ; 4) diversité FR 50/50 ; 5) verrou de longueur 129→512 × 3 ; 6) fiches, portes, commit.
+- **Plan** : 1) `tools/corpus_propre.py` (dédup, split par chunks) ; 2) chaîne propre (professeur 23,5 M, base 20k, distillation 20k × 3, curriculum 129 × 3) ; 3) porte honnête + hors domaine + décomposition ; 4) diversité FR 50/50 ; 5) verrou de longueur 129→512 × 3.
 - **Ambition** : sortir N2 du chiffre contaminé (**2,85** sur **32,8 %**) et donner à R un modèle qui lit du français général ; trancher le verrou de longueur.
 - **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, le corpus d'abord.
-- **Objectif final** : un **mètre honnête** — corpus dédupliqué (0 % de validation dans l'entraînement), chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
-- **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité et longueur mesurées (3 fiches).
+- **Objectif final** : un **mètre honnête** — corpus sans fuite, chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
+- **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité, longueur et combinaison mesurées
+  (4 fiches).
 - **Résultat** (3 graines) : la chaîne propre vaut **3,09** en domaine (3,20 au test) — pas 2,85
   — et **16,70** sur la littérature jamais vue ; la **diversité** la ramène à **3,86** (÷ 4,3) et
   l'anglais de **57,6** à **25,7** pour **+0,17** ; les **positions aléatoires** font passer 256
-  octets de **14,11** à **3,25** et 512 de **32,41** à **5,93** ; la base supervisée vaut **12,29**
-  hors domaine : **la distillation spécialise**. Fiches `n2-propre`, `n2-diversite`, `n2-longueur`.
-- **Ce que font les autres** : **Pensée** et **R4.4** sans GPU ; **N4** en file ; **A/B** gardent leurs fichiers.
+  octets de **14,11** à **3,25** ; la base supervisée vaut **12,29**
+  hors domaine : **distiller spécialise**. Les deux leviers **se composent** (DR : **3,47** en
+  domaine, **4,10** en littérature, **3,49** à 256). Fiches `n2-propre`, `n2-diversite`,
+  `n2-longueur`, `n2-combine`.
+- **Ce que font les autres** : **Pensée** et **R4.4** sans GPU ; **N4** en file.
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`, `journal/sessions/0b0a6a0d-…/`.
 - **Prochaine action** : clôture — journal, roadmap, portes, commit.
 - **Bloquants** : aucun — GPU rendus.
@@ -89,8 +92,9 @@
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
 - **N2.h — le mètre propre** : corpus dédupliqué (**0 %** de fuite), chaîne propre **3,09** en
-  domaine, diversité (÷ 4,3 hors dépôt) et longueur (14,11 → 3,25 à 256) mesurées ; fiches
-  [`n2-propre`](../../reports/rapport-n2-propre.md) · [`n2-diversite`](../../reports/rapport-n2-diversite.md) · [`n2-longueur`](../../reports/rapport-n2-longueur.md). N4 **0/40**.
+  domaine, diversité (÷ 4,3 hors dépôt), longueur (14,11 → 3,25 à 256) et combinaison mesurées ; fiches [`n2-propre`](../../reports/rapport-n2-propre.md) ·
+  [`n2-diversite`](../../reports/rapport-n2-diversite.md) · [`n2-longueur`](../../reports/rapport-n2-longueur.md) ·
+  [`n2-combine`](../../reports/rapport-n2-combine.md). N4 **0/40**.
 - **Pensée — RSN plurielle** : doc `pensee-iterative.md` (10 tours, 9 schémas) ; le **state store
   v0** est la prochaine action ; fichiers réservés dans la session `e181ce02`.
 
@@ -103,7 +107,7 @@
 |---|---|---|
 | portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **375** / **454** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **376** / **454** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **114** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

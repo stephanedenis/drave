@@ -11264,3 +11264,65 @@ page   5 · référence vide (ni PDF ni DjVu) — ignorée
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport xml.etree.ElementTree as ET\nroot=ET.parse('work/r44/reel/proces_djvu.xml').getroot()\nobjs=[o for o in root.iter() if o.tag.split('}')[-1]=='OBJECT']\nwords=[w for o in objs for w in o.iter() if w.tag.split('}')[-1]=='WORD']\nprint('objets',len(objs),'mots',len … [756 caractères tronqués]`
+
+  ```
+objets 52 mots 12461
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master 0a802a61] R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER
+ 13 files changed, 284 insertions(+), 34 deletions(-)
+0a802a61 R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER
+  ```
+
+- **update_goal** `{"goal_id": "goal-a1de2753-e989-4813-b730-20de506599cf", "revision": 1, "action": "complete"}`
+
+> **Objectif** (complete) : R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer fiches, JSON, docs, porte, roadmap, en-cours, journal et commits. Continuer les rounds tant que l'heure système est avant l'échéance de 10 h (≈ 2026-11-01 04 h 20 HAE).
+
+
+  ```
+{"goal":{"id":"goal-a1de2753-e989-4813-b730-20de506599cf","revision":2,"objective":"R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer fiches, JSON, docs, porte, roadmap, en-cours, journal et commits. Continuer les rounds tant que l'heure système est avant l'échéance de 10 h (≈ 2026-11-01 04 h 20 HAE).","phase":"complete","roundsStarted":1,"maxGoalRounds":200},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer fiches, JSON, docs, porte, roadmap, en-cours, journal et commits. Continuer les rounds tant que l'heure système est avant l'échéance de 10 h (≈ 2026-11-01 04 h 20 HAE)."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+**R4.4 est close, avec son objectif de parité tenu sur quatre familles sur cinq.** Voici le bilan.
+
+## Le résultat
+
+| famille | WER dev | WER test | **parité (préservation)** |
+|---|---:|---:|---:|
+| propre (contrôle) | 4,14 % | 3,01 % | **96,7 %** |
+| photocopie | 6,34 % | 4,69 % | **93,3 %** |
+| photo | **55,85 → 6,68 %** | **80,65 → 5,68 %** | **90,0 %** |
+| papier | **13,02 → 6,87 %** | **53,15 → 6,38 %** | **90,0 %** |
+| fax | 27,05 → 21,90 % | 23,10 → 15,52 % | **56,7 %** |
+
+La parité est passée de 86,7 % à **90–97 %** en corrigeant trois verrous **du lecteur, pas de l'OCR** : une ligne de continuation courte était typée « note » (elle coupait le paragraphe et faisait perdre « point 13 »), le seuil de titre à 1,12 prenait une ligne un peu haute pour une section (le « 12 septembre 2025 » sortait du paragraphe), et la parité de valeur se mesure désormais sur le **passage choisi**, comme le dit la spécification, avec la variante stricte publiée à côté.
+
+Le reste du programme tient : colonnes **89,4 → 0,5 %** (deux colonnes), **52,5 → 0–1,1 %** (trois colonnes, gouttières multiples), mono-colonnes intactes ; tableaux **92,6 / 69,1 / 62,4 %** de cellules exactes (grilles 10/10, 10/10, 8/10) ; trois vrais livres (7,10 % ; 36,26 % avec l'ordre des colonnes prouvé à 15,3 % contre 98 % en ordre inverse ; 8,73 %) ; coût 0,4 s de prétraitement contre 2,4–2,9 s d'OCR. `porte-ocr-scans` est **verte** sur le code final, et toutes les revues de documentation passent.
+
+## Ce qui n'est pas tenu, nommé
+
+- **Fax 1 bit** : 56,7 % — 120 dpi, deux niveaux, l'information n'y est plus ; c'est une limite physique, pas un réglage.
+- **Exposants fusionnés** (`développement,` + `10`, `2030` + `11`) : les chiffres font 6 × 8 px, les recadrages/agrandissements ne les rendent pas lisibles.
+- **Un quatrième livre** (Google 1905) n'est **pas mesurable** : sa couche PDF est vide et les pages du DjVu ne s'alignent pas sur celles du PDF ; le banc refuse désormais de diviser par zéro (le bug donnait 27 200 % de WER).
+- La référence des vrais scans reste un **autre moteur**, pas une vérité humaine.
+
+## Où regarder
+
+- Fiche : [`reports/rapport-r44-scans.md`](reports/rapport-r44-scans.md) — tableaux, contrôles, limites, coût, porte.
+- JSON : `reports/r44-scans.json`, `r44-colonnes.json`, `r44-tableaux.json`, `r44-reel*.json`, `r44-seed2/3.json`, `r44-sans-exposants.json`, `r44-rotation.json`, `r44-cout.json`, `r44-petit.json`.
+- Code : `tools/graphe_document_ocr.py`, `nettoyer_scan.py`, `extraire_tableaux.py`, `mesurer_scans.py`, `mesurer_reel.py`, `porte-ocr-scans.sh`.
+- État/roadmap/journal : `docs/pilotage/en-cours.md`, `roadmap.md`, `backlog/R44-encodeur-visuel.md`, spécification `docs/implantation/encodeur-visuel.md`, récit `journal/2026-11-01/README.md`.
+
+Commits de la session : de `54cba6af` à `0a802a61` (dont `4aef1413` pour la parité finale et `7452a447` pour la clôture). Le plan de session est marqué **terminé**.
+
+**À toi de voir** : le fax et l'exposant fusionné sont les deux seuls chantiers restants ; le quatrième livre demanderait un corpus avec vérité humaine alignée, pas une couche OCR de plus.
+

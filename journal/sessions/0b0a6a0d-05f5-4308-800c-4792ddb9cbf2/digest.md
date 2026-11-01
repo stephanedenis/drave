@@ -7760,3 +7760,230 @@ started background job bash-454
   ```
 
 - **job_output** `{"job_id": "bash-454", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g1.pt 2>/dev/null && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/DR-pos-g1.pt --longueurs 2>&1 | grep -v Loading", "description": "Evaluate t … [25 caractères tronqués]`
+
+  ```
+03:10
+work/n2h/DR-pos-g1.pt
+{"fichier": "DR-pos-g1.pt", "params": 11814792, "val": 3.4618, "test": 3.5285, "litterature": 3.8019, "litterature_propre": 4.0995, "anglais": 29.8008, "wikitext2": 31.3253, "permute": 540.8583, "longueurs": {"129": 3.4619, "192": 3.4513, "256": 3.5258, "384": 4.4506, "512": 5.462}}
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g2.pt 2>/dev/null && echo DR2_OK; tail -1 work/n2h/DR-pos-g3.log 2>/dev/null", "description": "Wait for the second combined seed", "run_in_background": true}`
+
+  ```
+started background job bash-456
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2h/fiche4.md'); s = p.read_text()\nvieux = \"\"\"C'est le **candidat** pour la ligne R : un modèle qui lit du français (pas seulement le dépôt) et\nqui tient au-delà de 128 oc … [839 caractères tronqués]`
+
+  ```
+ok
+03:11
+pas   500 · seq 128 · perte 77.3023 · PPL 128/4 3.8919 · 37 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2h/remplit4.py'); s = p.read_text()\ns = s.replace('''    \"A_256\": f2(lg(A, \"256\")), \"A_VAL\": f(moy(A, \"val\")), \"D_LITT\": f2(moy(D, \"litterature_propre\")),''',\n'' … [466 caractères tronqués]`
+
+  ```
+started background job bash-458
+  ```
+
+- **job_output** `{"job_id": "bash-458", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+ok
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-454 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g1.pt 2>/dev/null && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/DR-pos-g1.pt --longueurs 2>&1 | grep -v Loading) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-451 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g1.pt 2>/dev/null && echo DR1_OK; tail -1 work/n2h/DR-pos-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g2.pt 2>/dev/null && echo DR2_OK; tail -1 work/n2h/DR-pos-g2.log; tail -1 work/n2h/DR-pos-g3.log 2>/dev/null", "description": "Check combined seed 2"}`
+
+  ```
+03:21
+pas  9500 · seq 128 · perte 54.8801 · PPL 128/4 3.6932 · 647 s
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g3.pt 2>/dev/null && echo DR3_OK; tail -1 work/n2h/DR-pos-g3.log 2>/dev/null", "description": "Wait 30 minutes for combined seed 3", "run_in_background": true}`
+
+  ```
+started background job bash-460
+  ```
+
+- **job_output** `{"job_id": "bash-460", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g3.pt 2>/dev/null && echo DR3_OK; tail -1 work/n2h/DR-pos-g3.log 2>/dev/null", "description": "Check combined seed 3"}`
+
+  ```
+03:31
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la work/n2h/DR-pos-g*.log 2>/dev/null | tail -3; tail -2 work/n2h/DR-pos-g2.log; date '+%H:%M'", "description": "Inspect the combined arm logs"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 6167  1 nov 03:10 work/n2h/DR-pos-g1.log
+-rw-r--r--. 1 stephane stephane 5282  1 nov 03:31 work/n2h/DR-pos-g2.log
+pas 18750 · seq 128 · perte 38.8638 · PPL 128/4 3.6046 · 1253 s
+pas 19000 · seq 128 · perte 40.8617 · PPL 128/4 3.5747 · 1270 s
+03:31
+  ```
+
+- **job_output** `{"job_id": "bash-460", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-458 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'
+import pathlib
+p = pathlib.Path('work/n2h/remplit4.py'); s = p.read_text()
+s = s.replace('''    "A_256": f2(lg(A, "256")), "A_VAL": f(moy(A, "val")), "D_LITT": f2(moy(D, "litterature_propre")),''',
+'''    "A_256": f2(lg(A, "256")), "A_VAL": f(moy(A, "val")), "D_LITT": f2(moy(D, "litterature_propre")),
+    "A_LITT": f2(moy(A, "litterature_propre")),''')
+p.write_text(s); print('ok')
+PY
+sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g2.pt 2>/dev/null && echo DR2_OK; tail -1 work/n2h/DR-pos-g3.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-456 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g2.pt 2>/dev/null && echo DR2_OK; tail -1 work/n2h/DR-pos-g3.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g*.pt | tr '\\n' ' '; echo; tail -1 work/n2h/DR-pos-g3.log 2>/dev/null; ls work/n2h/combine.termine 2>/dev/null && echo COMBINE_FINI", "description": "Check the end of the combined arm"}`
+
+  ```
+03:41
+work/n2h/DR-pos-g1.pt work/n2h/DR-pos-g2.pt 
+pas  7750 · seq 128 · perte 59.9067 · PPL 128/4 3.8467 · 524 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g3.pt 2>/dev/null && echo DR3_OK; ls work/n2h/combine.termine 2>/dev/null && echo FINI", "description": "Wait for the last combined run", "run_in_background": true}`
+
+  ```
+started background job bash-464
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"\"\"- **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité et longueur mesurées (3 fiches).\"\"\"\nb = \"\"\"- **Ce q … [351 caractères tronqués]`
+
+  ```
+ok
+  ✅ état court, structuré, multi-session et reprenable
+03:41
+81
+  ```
+
+- **job_output** `{"job_id": "bash-464", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-460 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g3.pt 2>/dev/null && echo DR3_OK; tail -1 work/n2h/DR-pos-g3.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g3.pt 2>/dev/null && echo DR3_OK; tail -1 work/n2h/DR-pos-g3.log; ls work/n2h/combine.termine 2>/dev/null", "description": "Check the last run"}`
+
+  ```
+03:52
+pas 17000 · seq 128 · perte 44.3561 · PPL 128/4 3.5935 · 1145 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/DR-pos-g3.pt 2>/dev/null && echo DR3_OK; for g in 1 2 3; do PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/DR-pos-g$g.pt --decomposition --l … [125 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-467]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-467", "timeout_ms": 600000, "wait": true}`
+
+  ```
+03:57
+work/n2h/DR-pos-g3.pt
+DR3_OK
+{"fichier": "DR-pos-g1.pt", "params": 11814792, "val": 3.4618, "test": 3.5285, "litterature": 3.8019, "litterature_propre": 4.0995, "anglais": 29.8008, "wikitext2": 31.3253, "permute": 540.8583, "decomposition": {"complete": 3.4786, "apres_2_blocs": 4.6619, "apres_4_blocs": 3.7179, "apres_6_blocs": 3.4276, "sans_pensee": 958881662.7815}, "longueurs": {"129": 3.4619, "192": 3.4513, "256": 3.5258, "384": 4.4506, "512": 5.462}}
+{"fichier": "DR-pos-g2.pt", "params": 11814792, "val": 3.4738, "test": 3.5261, "litterature": 3.8008, "litterature_propre": 4.0982, "anglais": 28.6347, "wikitext2": 30.5884, "permute": 511.9259, "decomposition": {"complete": 3.4808, "apres_2_blocs": 4.6698, "apres_4_blocs": 3.7243, "apres_6_blocs": 3.4262, "sans_pensee": 1011336976.9492}, "longueurs": {"129": 3.4732, "192": 3.4355, "256": 3.4665, "384": 4.587, "512": 5.3455}}
+{"fichier": "DR-pos-g3.pt", "params": 11814792, "val": 3.4681, "test": 3.5284, "litterature": 3.8066, "litterature_propre": 4.0992, "anglais": 28.4332, "wikitext2": 30.1395, "permute": 504.1069, "decomposition": {"complete": 3.4818, "apres_2_blocs": 4.6786, "apres_4_blocs": 3.7312, "apres_6_blocs": 3.4385
+… [157 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 work/n2h/remplit4.py && sed -n 1,12p reports/rapport-n2-combine.md", "description": "Fill the combined report"}`
+
+  ```
+restes: []
+DR 3,4679 4,10 3,49
+# N2.h4 — Les deux leviers ensemble : lire du français **et** 256 octets
+
+> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : le corpus mixte
+> ([`n2-diversite`](rapport-n2-diversite.md)) et les positions aléatoires
+> ([`n2-longueur`](rapport-n2-longueur.md)) **se composent** : le modèle combiné vaut **3,4679**
+> en domaine, **4,10** sur la littérature jamais vue, et sa PPL à 256 octets est
+> **3,49** contre **14,11** pour le modèle à positions fixes.
+
+## La question
+
+Deux leviers ont été mesurés séparément : la diversité du corpus répare la généralité (16,70 →
+3,85 hors dépôt) pour +0,17 en domaine ; les positions aléatoires réparent la longueur (14,11 →
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"\"\"  hors domaine : **la distillation spécialise**. Fiches `n2-propre`, `n2-diversite`, `n2-longueur`.\"\"\"\nb = \"\"\"  hors … [1349 caractères tronqués]`
+
+  ```
+ok
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 violation(s) :
+     · T0 : 4026 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"hors domaine : **la distillation spécialise**. Les deux leviers **se composent** (DR : **3,47** en\\n  domaine, **4,1 … [830 caractères tronqués]`
+
+  ```
+ok
+     · T0 : 4014 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"5) verrou de longueur 129→512 × 3 ; 6) fiches, portes, commit.\", \"5) verrou de longueur 129→512 × 3.\")\ns = s.repl … [804 caractères tronqués]`
+
+  ```
+ok
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+     · compteurs : en-cours.md dit 375 fichiers, le disque en a 376
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [775 caractères tronqués]`
+
+  ```
+ok
+  373 fiches → reports/INDEX.md
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-n2-combine.md reports/INDEX.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS\n\nL … [685 caractères tronqués]`
