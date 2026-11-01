@@ -1,0 +1,57 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "langue": "it",
+ "nature": "corpus Wikipédia it (résumés)",
+ "source": {
+  "db": "/home/stephane/Data13TB/stephane/data/wikipedia/db/itwiki_v14.db",
+  "table": "articles",
+  "champ": "summary",
+  "octets_db": 4569493504,
+  "note": "résumé d'article tronqué à 8 000 caractères, déjà débalisé"
+ },
+ "methode": {
+  "filtre": "n_chars >= 300",
+  "nettoyage": "entités HTML, balises résiduelles, espaces, caractères de contrôle ; espace aux jointures minuscule→majuscule et apostrophe restaurée devant majuscule",
+  "deduplication_articles": "empreinte BLAKE2b du texte normalisé, première occurrence gardée",
+  "deduplication_troncons": "tronçons de 8192 caractères coupés aux mots, BLAKE2b, première occurrence gardée (train seulement)",
+  "split": "hash salé (graine 1) de page_id : 5% val, 5% test, le reste train ; un article n'est que dans un split",
+  "mots": "caractères / 6,2 (estimation)"
+ },
+ "articles_db": 1967379,
+ "articles_lus": 1592717,
+ "articles_gardes": 1592477,
+ "articles_courts": 0,
+ "articles_vides": 0,
+ "articles_doublons": 240,
+ "caracteres_gardes": 2263090233,
+ "troncons": 1592477,
+ "troncons_doublons": 0,
+ "octets": {
+  "train": 2057853478,
+  "val": 114454995,
+  "test": 113601124
+ },
+ "articles": {
+  "train": 1433554,
+  "val": 79854,
+  "test": 79069
+ },
+ "troncons_par_split": {
+  "train": 1433554,
+  "val": 79854,
+  "test": 79069
+ },
+ "mots_estimes": 365014553,
+ "note_mots": "caractères / 6,2 : estimation pour les langues à espaces ; pour le japonais et le chinois, le caractère est l'unité de volume",
+ "sha256_train": "7ef5f91474e1f7caf1445b9b7481472626296c97084857cef9a915cc52bbafe9",
+ "sha256_val": "468c02466ebb62592b1ce83c26e030847fe29f3f0220512f430b9d9cd1066aa9",
+ "sha256_test": "1875dad3feb7394326da87b4ecf25aa557c278db97ab734cc237618777248a29",
+ "licence": "Wikipédia : CC-BY-SA 4.0 (et GFDL) — attribution et partage à l'identique ; corpus local, non diffusé",
+ "limites": [
+  "résumés tronqués à 8 000 caractères (le lead et le début des sections), pas l'article entier",
+  "artefacts de débalisage : dates de modèles vides (« né le à »), parenthèses de prononciation, titres de sections restés dans le texte",
+  "déduplication exacte seulement : les quasi-doublons (stubs similaires) restent",
+  "le texte intégral demanderait le dump xml.bz2 et un débaliseur complet"
+ ]
+}

@@ -12804,3 +12804,79 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1634 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-742]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-742", "timeout_ms": 300000, "wait": true}`
+
+  ```
+21 files changed, 482 insertions(+), 59 deletions(-)
+ create mode 100644 reports/corpus-wiki-propre.json
+ create mode 100644 reports/rapport-n2-corpus-reel.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; echo \"=== checks ===\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py | tail -1; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅|❌\"; python3 tools/verifie_j … [321 caractères tronqués]`
+
+  ```
+c96eb475 N2.j — 186 Mo DE VRAI FRANÇAIS : LE BLOC LINGUISTIQUE GAGNE ×1,7 À ×2,6 HORS DOMAINE
+0a17760d ÉTAT — COMPTEUR JSON 467 (CORPUS WIKI)
+73b00495 R — LA CHARTE DU PROGRAMME : SIX PHASES, TROIS LOIS, CE QUI TIENT ET CE QUI MANQUE
+=== checks ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3811 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+=== serveur ===
+HTTP 200
+=== corpus ===
+424M	data/wiki_fr/
+5
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat : le corpus réel tient ses promesses, le filtre non ambigu non
+
+## Ce qui a été fait
+
+J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki_v14.db`, 7,25 Go) contient **2,76 M d'articles** et **7,0 Go de texte**. J'en ai extrait **120 000 articles** (237,5 Mo bruts), dédupliqué par shingles (−13,0 %) → **186,1 Mo d'entraînement**, 10,3 de validation, 10,3 de test, **0/100 fenêtres contaminées**. Puis la base 11,47 M, 20 000 pas, recette identique à N2.h.
+
+## Le bloc linguistique sur du vrai français
+
+| base | val (son corpus) | val du dépôt | littérature | anglais | wikitext2 | 256 octets |
+|---|---:|---:|---:|---:|---:|---:|
+| dépôt (3,24 Mo) | 3,2402 | 3,2402 | 12,29 | 32,90 | 33,29 | 11,72 |
+| **wiki (186 Mo)** | 4,0284 | 6,7194 | **7,42** | **12,41** | **13,91** | **9,28** |
+
+**×1,7 en littérature, ×2,65 en anglais, ×2,4 sur wikitext2** — à recette et budget identiques. Sur le dépôt, 6,72 : c'est le décalage de domaine (le wiki est encyclopédique, le dépôt est de la prose de projet). Le corpus réel est bien **le levier hors domaine** que N2.i annonçait.
+
+## Le filtre « phrases non ambiguës » — essayé, mesuré, négatif
+
+- Il garde **29,8 %** des phrases du dépôt et **15,4 %** d'un échantillon de 200 000 phrases de wiki — et ce sont les **courtes** (55 caractères contre 153).
+- À taille égale (345 Ko, même recette) : **non ambigu 11,81** contre **témoin aléatoire 10,11** sur la validation du dépôt — le filtre **transfère moins bien** que le hasard. (Les deux sont de toute façon très loin de la base pleine à 3,24 Mo : à cette taille, le volume domine tout.)
+- En **curriculum** — 2 000 pas sur le non ambigu puis 18 000 sur le wiki — il **dégrade légèrement les cinq mesures** : 4,05 contre 4,03, 7,57 contre 7,42, 13,05 contre 12,41, 6,78 contre 6,72.
+
+**La conclusion** : retirer l'ambiguïté du texte, c'est retirer du signal. Si la structure doit aider, elle doit être **ajoutée** au texte — un canal d'annotation par octet — et non retirée. C'est exactement l'expérience E2 que la discussion avait posée, et elle a maintenant un corpus digne de ce nom : 186 Mo.
+
+## L'état
+
+- **`c96eb475`** — fiche `reports/rapport-n2-corpus-reel.md`, manifeste `reports/corpus-wiki-propre.json`, `--init` ajouté au trainer (curriculum).
+- Points de contrôle : `work/n2j/` (5 bases) ; corpus : `data/wiki_fr/` (424 Mo, non versionné).
+- Vérifications : revue ✅, état ✅, **T0 3 811 / 4 000**, journal ✅. **Serveur du banc toujours en ligne** (HTTP 200).
+
+## Ce qui manque, et qui est nommé
+
+- **Une seule graine, 11 % du corpus vu** (20 000 pas = 20,5 Mo sur 186) : la base n'est pas convergée ; les écarts OOD sont grands, l'intervalle n'est pas mesuré.
+- **La distillation sur le wiki n'est pas faite** : le gain OOD de la base survivra-t-il au professeur ? C'est la prochaine étape naturelle (professeur + 3 graines, ~1 h 30).
+- **Le texte wiki est du wikitexte nettoyé** : les titres de section sont collés au texte ; le « vrai français » y est encyclopédique.
+- **Licences** : CC-BY-SA, corpus non versionné, manifeste avec empreinte.
+
+La suite que je propose : **distiller sur le wiki** (le gain OOD est trop gros pour ne pas être testé sur le modèle final), puis **le canal d'annotation** — la structure ajoutée, pas retirée.
+

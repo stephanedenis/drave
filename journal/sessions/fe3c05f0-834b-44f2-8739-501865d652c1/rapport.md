@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 20.1 h |
+| Durée | 20.3 h |
 | Tours | 6 |
-| Messages | 762 |
-| Appels d'outils | 765 |
+| Messages | 772 |
+| Appels d'outils | 775 |
 | Fichiers touchés | 18 |
-| Commandes | 698 |
+| Commandes | 707 |
 | Sous-agents | 0 |
-| Commits | 33 |
+| Commits | 34 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -329,7 +329,7 @@ C'est **cent fois** la prose du dépôt (5,36 Mo uniques).
 
 ### Tour 6 — constitue les corpus des autres langues et assure-toi que tous les agents s'y retrouvent pour leurs besoins
 
-*31 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - bash — Inspect all Wikipedia language databases
 - bash — List language DB sizes while counts run
@@ -345,7 +345,7 @@ C'est **cent fois** la prose du dépôt (5,36 Mo uniques).
 - bash — Poll extraction after ten minutes
 - bash — Run Arabic corpus contamination check
 - bash — Check completed language manifests
-- … et 13 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
@@ -420,7 +420,7 @@ Je regarde d'abord les neuf autres bases (schéma, articles, volume de résumés
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 658 autres
+- … et 667 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -601,4 +601,5 @@ Je regarde d'abord les neuf autres bases (schéma, articles, volume de résumés
 - for t in "python3 tools/revue_documentation.py" "python3 tools/taille_documents.py" "python3 tools/verifie_en_cours.py" "python3 tools/verifie_journal.py" "pyth
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet cat > /tmp/msg-wiki.txt <<'EOF' DONNÉES — LE CORPUS FRANÇAIS EST LÀ : 2,5 M ARTICLES WIKIPÉDIA, 594 M MOTS, 0
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet set -e rm -f /tmp/index.r44 GIT_INDEX_FILE=/tmp/index.r44 git read-tree HEAD GIT_INDEX_FILE=/tmp/index.r44 gi
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("| f
 

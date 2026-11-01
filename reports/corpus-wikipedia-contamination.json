@@ -1,0 +1,316 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "methode": {
+  "doublons": "tronçons (lignes) des splits hachés en BLAKE2b ; un tronçon présent dans deux splits est une fuite exacte",
+  "eval": "fenêtres de 128 octets échantillonnées (stride 512, max 30) dans un jeu d'évaluation, cherchées dans train.txt par mmap.find",
+  "limite": "contrôle d'exactitude : paraphrases et quasi-doublons non détectés"
+ },
+ "langues": {
+  "fr": {
+   "doublons_entre_splits": {
+    "train_troncons": 2273294,
+    "par_split": {
+     "val.txt": {
+      "troncons": 126636,
+      "doublons": 0,
+      "taux": 0.0
+     },
+     "test.txt": {
+      "troncons": 125972,
+      "doublons": 0,
+      "taux": 0.0
+     }
+    }
+   },
+   "recouvrement_eval": [
+    {
+     "fichier": "test.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    },
+    {
+     "fichier": "test.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    },
+    {
+     "fichier": "test.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    },
+    {
+     "fichier": "wikitext2_test.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    },
+    {
+     "fichier": "fr.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    }
+   ],
+   "note": ""
+  },
+  "en": {
+   "doublons_entre_splits": {
+    "train_troncons": 5897431,
+    "par_split": {
+     "val.txt": {
+      "troncons": 327337,
+      "doublons": 0,
+      "taux": 0.0
+     },
+     "test.txt": {
+      "troncons": 327877,
+      "doublons": 0,
+      "taux": 0.0
+     }
+    }
+   },
+   "recouvrement_eval": [
+    {
+     "fichier": "en.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    },
+    {
+     "fichier": "wikitext2_test.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    }
+   ],
+   "note": ""
+  },
+  "de": {
+   "doublons_entre_splits": {
+    "train_troncons": 2596408,
+    "par_split": {
+     "val.txt": {
+      "troncons": 143986,
+      "doublons": 0,
+      "taux": 0.0
+     },
+     "test.txt": {
+      "troncons": 144033,
+      "doublons": 0,
+      "taux": 0.0
+     }
+    }
+   },
+   "recouvrement_eval": [
+    {
+     "fichier": "de.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    }
+   ],
+   "note": ""
+  },
+  "es": {
+   "doublons_entre_splits": {
+    "train_troncons": 1711098,
+    "par_split": {
+     "val.txt": {
+      "troncons": 94932,
+      "doublons": 0,
+      "taux": 0.0
+     },
+     "test.txt": {
+      "troncons": 94530,
+      "doublons": 0,
+      "taux": 0.0
+     }
+    }
+   },
+   "recouvrement_eval": [
+    {
+     "fichier": "es.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    }
+   ],
+   "note": ""
+  },
+  "ru": {
+   "doublons_entre_splits": {
+    "train_troncons": 1761368,
+    "par_split": {
+     "val.txt": {
+      "troncons": 97650,
+      "doublons": 0,
+      "taux": 0.0
+     },
+     "test.txt": {
+      "troncons": 97198,
+      "doublons": 0,
+      "taux": 0.0
+     }
+    }
+   },
+   "recouvrement_eval": [
+    {
+     "fichier": "ru.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    }
+   ],
+   "note": ""
+  },
+  "it": {
+   "doublons_entre_splits": {
+    "train_troncons": 1433554,
+    "par_split": {
+     "val.txt": {
+      "troncons": 79854,
+      "doublons": 0,
+      "taux": 0.0
+     },
+     "test.txt": {
+      "troncons": 79069,
+      "doublons": 0,
+      "taux": 0.0
+     }
+    }
+   },
+   "recouvrement_eval": [
+    {
+     "fichier": "it.txt",
+     "fenetre": 128,
+     "fenetres": 23,
+     "trouvees": 1,
+     "taux": 0.0435
+    }
+   ],
+   "note": "UDHR citée dans Wikipédia : ce n'est pas un jeu d'évaluation tenu à l'écart"
+  },
+  "ja": {
+   "doublons_entre_splits": {
+    "train_troncons": 913879,
+    "par_split": {
+     "val.txt": {
+      "troncons": 50693,
+      "doublons": 0,
+      "taux": 0.0
+     },
+     "test.txt": {
+      "troncons": 50830,
+      "doublons": 0,
+      "taux": 0.0
+     }
+    }
+   },
+   "recouvrement_eval": [
+    {
+     "fichier": "ja.txt",
+     "fenetre": 128,
+     "fenetres": 23,
+     "trouvees": 1,
+     "taux": 0.0435
+    }
+   ],
+   "note": "UDHR citée dans Wikipédia : ce n'est pas un jeu d'évaluation tenu à l'écart"
+  },
+  "zh": {
+   "doublons_entre_splits": {
+    "train_troncons": 741221,
+    "par_split": {
+     "val.txt": {
+      "troncons": 41175,
+      "doublons": 0,
+      "taux": 0.0
+     },
+     "test.txt": {
+      "troncons": 41005,
+      "doublons": 0,
+      "taux": 0.0
+     }
+    }
+   },
+   "recouvrement_eval": [
+    {
+     "fichier": "zh.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    }
+   ],
+   "note": ""
+  },
+  "pt": {
+   "doublons_entre_splits": {
+    "train_troncons": 892163,
+    "par_split": {
+     "val.txt": {
+      "troncons": 49641,
+      "doublons": 0,
+      "taux": 0.0
+     },
+     "test.txt": {
+      "troncons": 49585,
+      "doublons": 0,
+      "taux": 0.0
+     }
+    }
+   },
+   "recouvrement_eval": [
+    {
+     "fichier": "pt.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    }
+   ],
+   "note": ""
+  },
+  "ar": {
+   "doublons_entre_splits": {
+    "train_troncons": 943622,
+    "par_split": {
+     "val.txt": {
+      "troncons": 52203,
+      "doublons": 0,
+      "taux": 0.0
+     },
+     "test.txt": {
+      "troncons": 52033,
+      "doublons": 0,
+      "taux": 0.0
+     }
+    }
+   },
+   "recouvrement_eval": [
+    {
+     "fichier": "ar.txt",
+     "fenetre": 128,
+     "fenetres": 30,
+     "trouvees": 0,
+     "taux": 0.0
+    }
+   ],
+   "note": ""
+  }
+ }
+}

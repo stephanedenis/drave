@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**46 commits** · **3 session(s)** · **9 thème(s)**
+**47 commits** · **3 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 11 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 25 | [mesures.md](mesures.md) |
+| mesures | 26 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -27,7 +27,7 @@
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 20.4 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 20.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 20.1 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 20.3 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -79,18 +79,20 @@
 | 11:44 | `e331ef42` | COLORATION — LA COUCHE HEURISTIQUE : CE QUE LE CPU ÉTIQUETTE AVANT LE RÉSEAU |
 | 12:34 | `73b00495` | R — LA CHARTE DU PROGRAMME : SIX PHASES, TROIS LOIS, CE QUI TIENT ET CE QUI MANQUE |
 | 12:36 | `0a17760d` | ÉTAT — COMPTEUR JSON 467 (CORPUS WIKI) |
+| 12:40 | `c96eb475` | N2.j — 186 Mo DE VRAI FRANÇAIS : LE BLOC LINGUISTIQUE GAGNE ×1,7 À ×2,6 HORS DOMAINE |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
-**Le corpus Wikipédia FR est construit.** 2 755 035 articles dans la base, **2 525 902 gardés**,
-**3,68 G caractères**, **593,6 M mots** — le premier stock local d'un autre ordre de grandeur que
-les 5,36 Mo de prose du dépôt. Nettoyage (jointures recollées, apostrophes restaurées), dédup
-exacte (204 doublons), split **par article** (2 273 294 / 126 636 / 125 972) : **0 doublon de
-tronçon entre splits** et **0/30 fenêtres** de chaque jeu d'évaluation retrouvées dans
-l'entraînement. Limites écrites : résumés tronqués à 8 000 caractères, titres de sections restés
-dans le texte, dédup exacte seulement, licence **CC-BY-SA 4.0**. Fiche
-[`corpus-wiki-fr`](../../reports/rapport-corpus-wiki-fr.md).
+**Les corpus Wikipédia par langue sont construits.** Dix langues (ar, de, en, es, fr, it, ja, pt,
+ru, zh), **21 630 731 articles**, **31,42 G caractères** (4 643 M mots pour les langues à espaces,
+ja/zh comptés en caractères), **38,8 Go** — le stock multilingue qui manquait, contre 5,36 Mo de
+prose du dépôt. Nettoyage, dédup exacte, split **par article** : **0 doublon de tronçon entre
+splits** partout, et **0/30 fenêtres** des jeux d'évaluation (XNLI, wikitext2, jeux locaux) —
+sauf l'UDHR **citée dans Wikipédia** (1/23 pour l'italien et le japonais, 0/30 pour le portugais),
+qui n'est donc pas un jeu d'évaluation tenu à l'écart. Limites écrites : résumés tronqués à
+8 000 caractères, artefacts de débalisage, dédup exacte seulement, licence **CC-BY-SA 4.0**.
+Fiche [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md).
 
 **L'inventaire des données.** Le disque a été passé au crible pour l'entraînement : **132 Go de
 Wikipédia** (10 langues, bases sqlite 66 Go + dumps 67 Go ; FR 7,25 + 7,13 Go), **12 Go

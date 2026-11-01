@@ -28,6 +28,7 @@ téléchargement de modèle.
 | source | taille | volume | état |
 |---|---:|---|---|
 | `data/wikipedia/` | **132 Go** | 10 langues : bases sqlite v14 (66 Go) + dumps `xml.bz2` (67 Go) ; **FR 7,25 Go + 7,13 Go** | **prêt** (bases) / à extraire (dumps) |
+| `data/corpus_wiki_<langue>/` | **38,8 Go** | 10 corpus de prose, un par langue (ar, de, en, es, fr, it, ja, pt, ru, zh), splits train/val/test, manifestes `reports/corpus-wiki-<langue>.json` | **prêt** — voir [`rapport-corpus-wikipedia`](rapport-corpus-wikipedia.md) |
 | `corpus/wiki_apparie/` | **12 Go** | 6 084 fichiers d'articles Wikipédia en texte brut (de_, en_, fr_, es_, it_…), appariés par titre | **prêt** (recoupe les dumps : dédoublonner) |
 | `data/` (corpus du dépôt) | 6,6 Go | `corpus_en.txt` 15,5 M mots ; `corpus_multi` 18,7 M ; `corpus_fr_litterature` 2,76 M ; `corpus_fr` 0,79 M ; `corpus_repo` 1,01 M | **prêt** |
 | `data/corpus_propre/`, `corpus_litt_propre/`, `corpus_repo_propre/` | 3,8 + 17 + 5,6 Mo | prose dédupliquée, splits train/val/test, **contamination 0/2 814** | **prêt** (fiches `corpus-*.json`) |

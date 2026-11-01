@@ -52,5 +52,7 @@
   "artefacts de débalisage : dates de modèles vides (« né le à »), parenthèses de prononciation",
   "déduplication exacte seulement : les quasi-doublons (stubs similaires) restent",
   "le texte intégral demanderait le dump xml.bz2 et un débaliseur complet"
- ]
+ ],
+ "langue": "fr",
+ "note_mots": "caractères / 6,2 : estimation pour les langues à espaces ; pour le japonais et le chinois, le caractère est l'unité de volume"
 }

@@ -13340,3 +13340,213 @@ started background job bash-695
   ```
 
 - **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== reste\"; tail -3 work/corpus-wiki-reste.log; ls reports/corpus-wiki-*.json; echo \"=== en job\"; tail -3 /tmp/contam-en.log 2>/dev/null; date +%H:%M", "description": "Poll Portuguese and English check", "timeoutMs … [72 caractères tronqués]`
+
+  ```
+=== reste
+  [ru] 600000/2098102 lus · 599997 gardés · 599997 tronçons
+  [ru] 800000/2098102 lus · 799996 gardés · 799996 tronçons
+  [ru] 1000000/2098102 lus · 999991 gardés · 999991 tronçons
+reports/corpus-wiki-ar.json
+reports/corpus-wiki-de.json
+reports/corpus-wiki-en.json
+reports/corpus-wiki-es.json
+reports/corpus-wiki-fr-contamination.json
+reports/corpus-wiki-fr.json
+reports/corpus-wiki-it.json
+reports/corpus-wiki-ja.json
+reports/corpus-wiki-propre.json
+reports/corpus-wiki-pt.json
+=== en job
+  }
+ ]
+}
+12:41
+  ```
+
+### 👤 Utilisateur
+
+background job bash-695 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 1800 python3 tools/verifie_contamination.py --train data/corpus_wiki_en/train.txt --val data/corpus_wiki_en/val.txt --test data/corpus_wiki_en/test.txt --eval /tmp/eval-langues/en.txt --eval data/wikitext2_test.txt --echantillon 30 --sortie /tmp/contam-en.json > /tmp/contam-en.log 2>&1; echo "[en $?]"; python3 -c "
+import json;d=json.load(open('/tmp/contam-en.json'));print(d['doublons_entre_splits']);print(d['recouvrement_eval'])") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-695"}`
+
+  ```
+[en 0]
+{'train_troncons': 5897431, 'par_split': {'val.txt': {'troncons': 327337, 'doublons': 0, 'taux': 0.0}, 'test.txt': {'troncons': 327877, 'doublons': 0, 'taux': 0.0}}}
+[{'fichier': 'en.txt', 'fenetre': 128, 'fenetres': 30, 'trouvees': 0, 'taux': 0.0}, {'fichier': 'wikitext2_test.txt', 'fenetre': 128, 'fenetres': 30, 'trouvees': 0, 'taux': 0.0}]
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 900 python3 tools/verifie_contamination.py --train data/corpus_wiki_pt/train.txt --val data/corpus_wiki_pt/val.txt --test data/corpus_wiki_pt/test.txt --eval /tmp/eval-langues/pt.txt --echantillon 30 --sortie /tmp/contam-pt.jso … [370 caractères tronqués]`
+
+  ```
+[pt 0]
+{'train_troncons': 892163, 'par_split': {'val.txt': {'troncons': 49641, 'doublons': 0, 'taux': 0.0}, 'test.txt': {'troncons': 49585, 'doublons': 0, 'taux': 0.0}}}
+[{'fichier': 'pt.txt', 'fenetre': 128, 'fenetres': 30, 'trouvees': 0, 'taux': 0.0}]
+  [ru] 800000/2098102 lus · 799996 gardés · 799996 tronçons
+  [ru] 1000000/2098102 lus · 999991 gardés · 999991 tronçons
+12:41
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -4 work/corpus-wiki-reste.log; ls reports/corpus-wiki-*.json; du -sh data/corpus_wiki_* 2>/dev/null | tail -10; date +%H:%M", "description": "Poll Russian and Chinese extraction", "timeoutMs": 720000, "workdir": "/home/ … [43 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-699]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-699"}`
+
+  ```
+"val": 104277218,
+  "test": 104525764
+ }
+}
+reports/corpus-wiki-ar.json
+reports/corpus-wiki-de.json
+reports/corpus-wiki-en.json
+reports/corpus-wiki-es.json
+reports/corpus-wiki-fr-contamination.json
+reports/corpus-wiki-fr.json
+reports/corpus-wiki-it.json
+reports/corpus-wiki-ja.json
+reports/corpus-wiki-propre.json
+reports/corpus-wiki-pt.json
+reports/corpus-wiki-ru.json
+reports/corpus-wiki-zh.json
+1,9G	data/corpus_wiki_ar
+4,5G	data/corpus_wiki_de
+9,3G	data/corpus_wiki_en
+2,7G	data/corpus_wiki_es
+3,6G	data/corpus_wiki_fr
+2,2G	data/corpus_wiki_it
+4,2G	data/corpus_wiki_ja
+1,3G	data/corpus_wiki_pt
+4,9G	data/corpus_wiki_ru
+2,0G	data/corpus_wiki_zh
+12:51
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-699 (bash: sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -4 work/corpus-wiki-reste.log; ls reports/corpus-wiki-*.json; du -sh data/corpus_wiki_* 2>/dev/null | tail -10; date +%H:%M) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 1200 python3 tools/verifie_contamination.py --train data/corpus_wiki_ru/train.txt --val data/corpus_wiki_ru/val.txt --test data/corpus_wiki_ru/test.txt --eval /tmp/eval-langues/ru.txt --echantillon 30 --sortie /tmp/contam-ru.js … [320 caractères tronqués]`
+
+  ```
+[ru 0]
+{'train_troncons': 1761368, 'par_split': {'val.txt': {'troncons': 97650, 'doublons': 0, 'taux': 0.0}, 'test.txt': {'troncons': 97198, 'doublons': 0, 'taux': 0.0}}}
+[{'fichier': 'ru.txt', 'fenetre': 128, 'fenetres': 30, 'trouvees': 0, 'taux': 0.0}]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 1200 python3 tools/verifie_contamination.py --train data/corpus_wiki_zh/train.txt --val data/corpus_wiki_zh/val.txt --test data/corpus_wiki_zh/test.txt --eval /tmp/eval-langues/zh.txt --echantillon 30 --sortie /tmp/contam-zh.js … [320 caractères tronqués]`
+
+  ```
+[zh 0]
+{'train_troncons': 741221, 'par_split': {'val.txt': {'troncons': 41175, 'doublons': 0, 'taux': 0.0}, 'test.txt': {'troncons': 41005, 'doublons': 0, 'taux': 0.0}}}
+[{'fichier': 'zh.txt', 'fenetre': 128, 'fenetres': 30, 'trouvees': 0, 'taux': 0.0}]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport json, pathlib, subprocess\nR=pathlib.Path('.')\nlangues=['fr','en','de','es','ru','it','ja','zh','pt','ar']\ntot={'a':0,'c':0,'m':0,'o':0}\nlignes=[]\nfor l in langues:\n    d=json.loads((R/f'reports/corpus-wik … [1121 caractères tronqués]`
+
+  ```
+| langue | articles | caractères | mots (est.) | train / val / test | manifeste |
+|---|---:|---:|---:|---:|---|
+| **fr** | 2 525 902 | 3.68 G | 594 M | 3.43 / 191 / 190 | [`corpus-wiki-fr.json`](corpus-wiki-fr.json) |
+| **en** | 6 552 645 | 9.91 G | 1599 M | 8.98 / 498 / 498 | [`corpus-wiki-en.json`](corpus-wiki-en.json) |
+| **de** | 2 884 427 | 4.72 G | 762 M | 4.33 / 240 / 240 | [`corpus-wiki-de.json`](corpus-wiki-de.json) |
+| **es** | 1 900 560 | 2.79 G | 451 M | 2.57 / 143 / 142 | [`corpus-wiki-es.json`](corpus-wiki-es.json) |
+| **ru** | 1 956 216 | 2.93 G | 473 M | 4.66 / 259 / 257 | [`corpus-wiki-ru.json`](corpus-wiki-ru.json) |
+| **it** | 1 592 477 | 2.26 G | 365 M | 2.06 / 114 / 114 | [`corpus-wiki-it.json`](corpus-wiki-it.json) |
+| **ja** | 1 355 856 | 1.76 G | 284 M | 3.97 / 220 / 220 | [`corpus-wiki-ja.json`](corpus-wiki-ja.json) |
+| **zh** | 823 401 | 0.87 G | 140 M | 1.89 / 104 / 105 | [`corpus-wiki-zh.json`](corpus-wiki-zh.json) |
+| **pt** | 991 389 | 1.35 G | 218 M | 1.25 / 70 / 70 | [`corpus-wiki-pt.json`](corpus-wiki-pt.json) |
+| **ar** | 1 047 858 | 1.13 G | 183 M | 1.78 / 98 / 98 | [`corpus-wiki-ar.json`](corpus-wiki-ar.json) |
+
+**Total : 21 630 731 articles · 31
+… [115 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/catalogue_corpus.py'); s=p.read_text()\ns=s.replace('''        octets = sum(d.get(\"octets\", {}).values())\n        total_a += d[\"articles_gardes\"]\n        total_c += d[\"cara … [3967 caractères tronqués]`
+
+  ```
+catalogue : ja/zh en caractères
+| **pt** | 991 389 | 1.35 G | 218 M | 1.25 / 70 / 70 Go | [`corpus-wiki-pt.json`](corpus-wiki-pt.json) |
+| **ar** | 1 047 858 | 1.13 G | 183 M | 1.78 / 98 / 98 Go | [`corpus-wiki-ar.json`](corpus-wiki-ar.json) |
+
+**Total : 21 630 731 articles · 31.42 G caractères · 4643 M mots (langues à espaces ; ja/zh comptés en caractères) · 38.8 Go**
+combined écrit
+fr tronçons dict_keys(['val.txt', 'test.txt']) évals [('test.txt', 0, 30), ('test.txt', 0, 30), ('test.txt', 0, 30), ('wikitext2_test.txt', 0, 30), ('fr.txt', 0, 30)]
+en tronçons dict_keys(['val.txt', 'test.txt']) évals [('en.txt', 0, 30), ('wikitext2_test.txt', 0, 30)]
+de tronçons dict_keys(['val.txt', 'test.txt']) évals [('de.txt', 0, 30)]
+es tronçons dict_keys(['val.txt', 'test.txt']) évals [('es.txt', 0, 30)]
+ru tronçons dict_keys(['val.txt', 'test.txt']) évals [('ru.txt', 0, 30)]
+it tronçons dict_keys(['val.txt', 'test.txt']) évals [('it.txt', 1, 23)]
+ja tronçons dict_keys(['val.txt', 'test.txt']) évals [('ja.txt', 1, 23)]
+zh tronçons dict_keys(['val.txt', 'test.txt']) évals [('zh.txt', 0, 30)]
+pt tronçons dict_keys(['val.txt', 'test.txt']) évals [('pt.txt', 0, 30)]
+ar tronçons dict_keys(['val.txt
+… [41 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/catalogue_corpus.py'); s=p.read_text()\ns=s.replace('''            f\"| {mots} | {d['octets']['train'] / 1e9:.2f} / \"\n            f\"{d['octets']['val'] / 1e6:.0f} / {d['octets' … [4010 caractères tronqués]`
+
+  ```
+| langue | articles | caractères | mots (est.) | train / val / test | manifeste |
+|---|---:|---:|---:|---:|---|
+| **fr** | 2 525 902 | 3.68 G | 594 M | 3.43 Go / 191 Mo / 190 Mo | [`corpus-wiki-fr.json`](corpus-wiki-fr.json) |
+| **en** | 6 552 645 | 9.91 G | 1599 M | 8.98 Go / 498 Mo / 498 Mo | [`corpus-wiki-en.json`](corpus-wiki-en.json) |
+
+**Total : 21 630 731 articles · 31.42 G caractères · 4643 M mots (langues à espaces ; ja/zh comptés en caractères) · 38.8 Go**
+fiche écrite 1323 mots
+# Les corpus Wikipédia par langue
+
+> **Ligne de roadmap** : Données · **Date** : 2026-11-01 · **Verdict** : **10 langues**,
+> **21 630 731 articles**, **31,42 G caractères**, **4 643 M mots** (langues à espaces ; ja/zh
+> comptés en caractères), **38,8 Go** de prose, splits par article, **0 fuite exacte** entre
+> splits, échantillons d'évaluation **0/30** partout sauf l'UDHR citée (it/ja, 1/23) — le stock
+> multilingue qui manquait, avec ses limites écrites.
+
+## 1. La source
+
+Dix bases `data/wikipedia/db/<langue>wiki_v14.db`, une par langue (ar, de, en, es, fr, it, ja, pt,
+ru, zh), **66 Go** au total. La table `articles` porte `page_id`, `title`, `summary`, `n_chars`,
+`n_words` ; le champ `summary`
+… [424 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"^## \" reports/rapport-corpus-wikipedia.md; echo \"=== en-cours\"; grep -n \"Données\\|corpus-wiki\\|JSON de résultats\" docs/pilotage/en-cours.md | head -6; echo \"=== journal\"; grep -n \"corpus-wiki-fr\\|corpus FR\" journa … [302 caractères tronqués]`
+
+  ```
+9:## 1. La source
+20:## 2. La méthode, commune aux dix langues
+42:## 3. Les dix corpus
+61:## 4. Les fuites, mesurées
+79:## 5. Ce que ces corpus valent, et ce qu'ils ne valent pas
+96:## 6. Où les agents les trouvent
+118:## 7. Ce qui pourrait rendre ces corpus faux
+129:## Fichiers
+=== en-cours
+56:- **Données** : inventaire local (Wikipédia **132 Go**, documents **~228 Go**, DRM et vidéos exclus) ;
+59:  [`corpus-wiki-fr`](../../reports/rapport-corpus-wiki-fr.md).
+94:| fichiers / JSON de résultats | **383** / **467** | `reports/*.md` / `reports/*.json` |
+=== journal
+93:[`corpus-wiki-fr`](../../reports/rapport-corpus-wiki-fr.md).
+=== inventaire
+31:| `data/corpus_wiki_<langue>/` | **~60 Go** | 10 corpus de prose, un par langue (ar, de, en, es, fr, it, ja, pt, ru, zh), splits train/val/test, manifestes `reports/corpus-wiki-<langue>.json` | **prêt** — voir [`rapport-corpus-wikipedia`](rapport-corpus-wikipedia.md) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit rm -q reports/rapport-corpus-wiki-fr.md reports/corpus-wiki-fr-contamination.json && echo \"anciens fichiers retirés\"\npython3 - <<'PY'\nimport pathlib\n# en-cours\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s … [2996 caractères tronqués]`
+
+  ```
+anciens fichiers retirés
+état, journal, inventaire mis à jour
+383
+469
+  revue de documentation · 383 fiche(s) · 469 JSON · 115 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 467 JSON, le disque en a 469
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"| fichiers / JSON de résultats | **383** / **467** |\",\"| fichiers / JSON de résultats | **383** / **469** |\")\np.write_tex … [3373 caractères tronqués]`

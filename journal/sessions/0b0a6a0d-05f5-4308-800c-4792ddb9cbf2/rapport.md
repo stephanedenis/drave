@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 20.4 h |
 | Tours | 15 |
-| Messages | 957 |
-| Appels d'outils | 895 |
+| Messages | 960 |
+| Appels d'outils | 897 |
 | Fichiers touchés | 11 |
-| Commandes | 742 |
+| Commandes | 743 |
 | Sous-agents | 0 |
 | Commits | 24 |
 | Compactages de contexte | 1 |
@@ -766,7 +766,7 @@ Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre
 
 ### Tour 15 — peux-tu comencer l'entrainement avec des phrases non ambigue et étudier les effets  sur la qualité du bloc linguistique.
 
-*57 appels d'outils.* Actions notables :
+*59 appels d'outils.* Actions notables :
 
 - bash — Measure the unambiguous subset of the clean corpus
 - bash — Build the unambiguous and control corpora and launch two bases
@@ -782,11 +782,39 @@ Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre
 - bash — Sample the French Wikipedia text
 - bash — Extract 120k French Wikipedia articles
 - bash — Deduplicate and split the Wikipedia corpus
-- … et 31 autres
+- … et 32 autres
 
 **Synthèse produite :**
 
-⏵ Je lis l'inventaire pour basculer sur les vraies données locales
+⏵ Résultat : le corpus réel tient ses promesses, le filtre non ambigu non
+
+\## Ce qui a été fait
+
+J'ai utilisé l'inventaire : la base FR de Wikipédia (`data/wikipedia/db/frwiki_v14.db`, 7,25 Go) contient **2,76 M d'articles** et **7,0 Go de texte**. J'en ai extrait **120 000 articles** (237,5 Mo bruts), dédupliqué par shingles (−13,0 %) → **186,1 Mo d'entraînement**, 10,3 de validation, 10,3 de test, **0/100 fenêtres contaminées**. Puis la base 11,47 M, 20 000 pas, recette identique à N2.h.
+
+\## Le bloc linguistique sur du vrai français
+
+| base | val (son corpus) | val du dépôt | littérature | anglais | wikitext2 | 256 octets |
+|---|---:|---:|---:|---:|---:|---:|
+| dépôt (3,24 Mo) | 3,2402 | 3,2402 | 12,29 | 32,90 | 33,29 | 11,72 |
+| **wiki (186 Mo)** | 4,0284 | 6,7194 | **7,42** | **12,41** | **13,91** | **9,28** |
+
+**×1,7 en littérature, ×2,65 en anglais, ×2,4 sur wikitext2** — à recette et budget identiques. Sur le dépôt, 6,72 : c'est le décalage de domaine (le wiki est encyclopédique, le dépôt est de la prose de projet). Le corpus réel est bien **le levier hors domaine** que N2.i annonçait.
+
+\## Le filtre « phrases non ambiguës » — essayé, mesuré, négatif
+
+- Il garde **29,8 %** des phrases du dépôt et **15,4 %** d'un échantillon de 200 000 phrases de wiki — et ce sont les **courtes** (55 caractères contre 153).
+- À taille égale (345 Ko, même recette) : **non ambigu 11,81** contre **témoin aléatoire 10,11** sur la validation du dépôt — le filtre **transfère moins bien** que le hasard. (Les deux sont de toute façon très loin de la base pleine à 3,24 Mo : à cette taille, le volume domine tout.)
+- En **curriculum** — 2 000 pas sur le non ambigu puis 18 000 sur le wiki — il **dégrade légèrement les cinq mesures** : 4,05 contre 4,03, 7,57 contre 7,42, 13,05 contre 12,41, 6,78 contre 6,72.
+
+**La conclusion** : retirer l'ambiguïté du texte, c'est retirer du signal. Si la structure doit aider, elle doit être **ajoutée** au texte — un canal d'annotation par octet — et non retirée. C'est exactement l'expérience E2 que la discussion avait posée, et elle a maintenant un corpus digne de ce nom : 186 Mo.
+
+\## L'état
+
+- **`c96eb475`** — fiche `reports/rapport-n2-corpus-reel.md`, manifeste `reports/corpus-wiki-propre.json`, `--init` ajouté au trainer (curriculum).
+- Points de contrôle : `work/n2j/` (5 bases) ; corpus : `data/wiki_fr/` (424 Mo, non versionné).
+- Vérifications : revue ✅, état ✅, **T0 3 811 / 4 000**, journal ✅. **Serveur du banc toujours en ligne** (HTTP 200
+… [781 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -848,7 +876,7 @@ Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 702 autres
+- … et 703 autres
 
 ## 4. Mesures et résultats marquants
 
