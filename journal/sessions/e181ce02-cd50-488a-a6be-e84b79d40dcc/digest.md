@@ -10271,3 +10271,80 @@ CRUCHES = Probleme(
 … [143 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pensee/taquin.py <<'PY'\n\"\"\"taquin.py — le taquin 3×3 : un problème anytime, avec une heuristique exacte en distance.\n\nLe but est `(1,2,3,4,5,6,7,8,0)` (0 = case vide). Les opérateurs sont quatre noms sans\nparamètre … [8177 caractères tronqués]`
+
+  ```
+COMPILE=0
+cruches  bfs     AUC 0.188  regret 0.750  but None  nœuds 63  0.01s  [0.1429, 0.1667, 0.1667, 0.2, 0.2, 0.25]
+cruches  greedy  AUC 0.371  regret 0.000  but 32  nœuds 51  0.01s  [0.1429, 0.1667, 0.1667, 0.25, 0.5, 1.0]
+cruches  astar   AUC 0.371  regret 0.000  but 32  nœuds 51  0.01s  [0.1429, 0.1667, 0.1667, 0.25, 0.5, 1.0]
+cruches  mcts    AUC 0.220  regret 0.750  but None  nœuds 63  0.02s  [0.1667, 0.2, 0.2, 0.25, 0.25, 0.25]
+cruches  random  AUC 0.203  regret 0.750  but None  nœuds 63  0.01s  [0.1667, 0.2, 0.2, 0.2, 0.2, 0.25]
+taquin   bfs     AUC 0.155  regret 0.800  but None  nœuds 1023  0.55s  [0.1111, 0.125, 0.125, 0.1429, 0.1429, 0.1667, 0.1667, 0.1667, 0.2, 0.2]
+taquin   greedy  AUC 0.170  regret 0.800  but None  nœuds 1023  0.45s  [0.1111, 0.125, 0.125, 0.1667, 0.1667, 0.2, 0.2, 0.2, 0.2, 0.2]
+taquin   astar   AUC 0.170  regret 0.800  but None  nœuds 1023  0.48s  [0.1111, 0.125, 0.125, 0.1667, 0.1667, 0.2, 0.2, 0.2, 0.2, 0.2]
+taquin   mcts    AUC 0.160  regret 0.833  but None  nœuds 1023  0.65s  [0.125, 0.1429, 0.1667, 0.1667, 0.1667, 0.1667, 0.1667, 0.1667, 0.1667, 0.1667]
+taquin   random  AUC 0.174  regret 0.800  but None  nœuds 1023  0.68s  [0.125, 0.1429, 0.
+… [46 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/taquin.py'); t=p.read_text().replace('DÉPART = melange(20, 0)', 'DÉPART = melange(8, 0)')\np.write_text(t)\np=pathlib.Path('tools/pensee/banc.py'); t=p.read_text()\nt=t.r … [416 caractères tronqués]`
+
+  ```
+ok
+cruches  bfs     AUC 0.328  regret 0.000  but 128  nœuds 219  0.04s  [0.1429, 0.1667, 0.1667, 0.2, 0.2, 0.25, 0.5, 1.0]
+cruches  greedy  AUC 0.528  regret 0.000  but 32  nœuds 91  0.01s  [0.1429, 0.1667, 0.1667, 0.25, 0.5, 1.0, 1.0, 1.0]
+cruches  astar   AUC 0.528  regret 0.000  but 32  nœuds 91  0.01s  [0.1429, 0.1667, 0.1667, 0.25, 0.5, 1.0, 1.0, 1.0]
+cruches  mcts    AUC 0.227  regret 0.750  but None  nœuds 255  0.04s  [0.1667, 0.2, 0.2, 0.25, 0.25, 0.25, 0.25, 0.25]
+cruches  random  AUC 0.246  regret 0.500  but None  nœuds 255  0.05s  [0.1667, 0.2, 0.2, 0.2, 0.2, 0.25, 0.25, 0.5]
+taquin   bfs     AUC 0.281  regret 0.000  but 1024  nœuds 1629  0.66s  [0.1111, 0.125, 0.125, 0.1429, 0.1429, 0.1667, 0.2, 0.25, 0.3333, 0.5, 1.0]
+taquin   greedy  AUC 0.624  regret 0.000  but 32  nœuds 157  0.07s  [0.1111, 0.125, 0.125, 0.1667, 0.3333, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+taquin   astar   AUC 0.624  regret 0.000  but 32  nœuds 157  0.07s  [0.1111, 0.125, 0.125, 0.1667, 0.3333, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+taquin   mcts    AUC 0.130  regret 0.857  but None  nœuds 2047  1.50s  [0.1111, 0.1111, 0.1111, 0.1111, 0.125, 0.1429, 0.1429, 0.1429, 0.1429, 0.1429, 0.1429]
+taquin   random  AUC 0.116
+… [133 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T6  alpha-bêta décide               gagner en un coup, bloquer, couper ; le minimax exact\\n                               … [1840 caractères tronqués]`
+
+  ```
+ok
+  ✅ T0 store canonique     aller-retour exact, empreinte stable sous permutation
+  ✅ T1 rejeu               rejeu identique sur 93 événements ; deux exécutions égales
+  ✅ T1 graine              deux graines divergent au premier pas différent
+  ✅ T1 DRVF thought        DRVF 23597 octets, 93 événements rejoués ; score corrompu refusé ; diff 0
+  ✅ T2 stratégies          BFS et A* atteignent le même but ; la stratégie aveugle échoue
+  ✅ T3 anytime             best-so-far non décroissant sur 5 budgets : [0.2, 0.25, 0.33, 1.0, 1.0]
+  ✅ T4 justification       justification valide sur 7 nœuds ; chemin inventé refusé
+  ✅ T5 AC-3                chaîne {'A': ('r',), 'B': ('g',), 'C': ('r',)} ; carte 3-colorable non réduite ; contradiction domaine vide = True
+  ✅ T6 alpha-bêta          gain en 2 ; blocage en 5 ; profondeur 1 rate (1) ; alpha-bêta 1495 nœuds/296 coupes vs minimax 18730
+  ✅ T7 banc anytime        AUC A* 0.5283 vs aléatoire 0.2458 ; but A* 32, aléatoire None ; regret A* 0.0
+  10/10 portes tenues
+EXIT=0
+BANC=0
+taquin   greedy  AUC 0.624  regret 0.000  but 32  nœuds 157  0.06s  [0.1111, 0.125, 0.125, 0.1667, 0.3333, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+taquin   astar   AUC 0.624  regre
+… [497 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-banc.md <<'MD'\n# B13 — le banc anytime : l'A* atteint le but en 32 nœuds, l'aléatoire n'y arrive pas\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> ** … [11781 caractères tronqués]`
+
+  ```
+docs ok
+2026-11-01 18:40 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [267 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+timeout 180 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/taquin.py tools/pensee/banc.py tools/pensee/autotest.py reports/rapport-pensee-banc.md reports/pensee-banc.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotage/road … [395 caractères tronqués]`

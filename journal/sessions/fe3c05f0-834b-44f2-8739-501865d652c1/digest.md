@@ -15835,3 +15835,175 @@ T0 max : 4002 mots (budget 4 000)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"les **9 langues** en cours (en, de, ru, es, ja, it, zh, pt, ar)\",\"les **9 langues** en cours\")\np.write_text(s)\nPY\npytho … [816 caractères tronqués]`
+
+  ```
+T0 max : 3993 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ index : aucun fait stagé sans état
+ 11 files changed, 200 insertions(+), 27 deletions(-)
+dd2ed894 ÉTAT — T0 REVIENT À 3 993 (LISTE DES LANGUES DANS LE PLAN)
+=== runs
+9
+902M	data/corpus_wiki_ar_texte
+1,5G	data/corpus_wiki_de_texte
+1,3G	data/corpus_wiki_en_texte
+1,3G	data/corpus_wiki_es_texte
+7,8G	data/corpus_wiki_fr_texte
+722M	data/corpus_wiki_it_texte
+2,0G	data/corpus_wiki_ja_texte
+687M	data/corpus_wiki_pt_texte
+1,8G	data/corpus_wiki_ru_texte
+785M	data/corpus_wiki_zh_texte
+  ```
+
+### 🤖 Assistant
+
+⏵ Objectif persisté, neuf runs lancés, état committé — la suite tourne toute la nuit
+
+**Le mandat est pris : objectif persisté jusqu'au 2/11 8 h**, et les neuf langues sont en extraction. Le plan est suivi : la session D/R/A continue, le hub tient l'état, les autres sessions gardent leurs territoires.
+
+## Lancé
+
+- **Les neuf dumps sont là** : en 25 Go, de 7,6, ru 5,7, es 5,0, ja 4,5, it 4,1, zh 3,3, pt 2,6, ar 2,0 — et les **neuf runs tournent en parallèle** (9 cœurs sur 40, ~2-4 Go de RAM, sorties déjà à 0,7–2,0 Go chacune, le français terminé à 8,34 Go).
+- **La chaîne est la même** que pour le français : débaliseur regex, déduplication exacte, split par article, SHA-256, manifeste par langue. Les finitions attendues : ar, it, pt, zh d'abord ; de, ru, es, ja ensuite ; en dernier (~2-3 h, c'est le plus gros dump).
+
+## Le plan des rounds suivants (automatiques, jusqu'à 8 h)
+
+1. **Les manifestes** au fil des fins de run ; la **contamination** par langue (fenêtres des jeux d'évaluation : XNLI pour ar/de/en/es/ru/zh, UDHR pour it/ja/pt, jeux locaux pour fr) et le **contrôle 8 Ko** ; les **fiches** et le **catalogue des dix corpus**.
+2. **L'extraction PDF/OCR** : les 104 livres, les 2 711 PDF du CEGEP, les collections — texte natif puis OCR pour les scannés, avec les licences (local, droits réservés pour les non-libres).
+3. **R1.1/R1.2** (préparation du contexte natif) et **A2.6/A8.3** (mesures du moteur), selon le plan.
+4. Chaque livraison : **mesure, fiche, JSON, commit, ligne d'état** ; les compteurs et la roadmap suivent ; les commits en **index alterné** pour ne pas embarquer les fichiers des autres sessions.
+
+## Ce qui est committé
+
+`d51b4df0` (les cinq premiers runs, l'état, le plan, la roadmap, le journal), `0f1fed91` (9/9), `dd2ed894` (T0 3 993/4 000) — revue, état, journal, sessions et schémas verts. Note : le premier de ces commits a embarqué deux fichiers de la session Pensée (index partagé) ; c'est corrigé pour les suivants (index alterné).
+
+La suite se fait sans toi : le goal reste actif jusqu'à 8 h, les runs finissent, les fiches et les commits s'enchaînent. Si quelque chose bloque (disque, corpus, licence), je le consigne et je prends la tâche suivante du plan.
+
+
+## Tour 13
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== processus\"; ps -eo pid,etime,pcpu,cmd | grep \"corpus_wikipedia_texte.py --langue\" | grep -v grep | awk '{print $1,$2,$3,$NF}'; echo \"=== manifestes\"; ls -la reports/corpus-wiki-*-texte.json 2>/dev/null; echo \"=== taill … [332 caractères tronqués]`
+
+  ```
+=== processus
+1494795 07:36 98.0 reports/corpus-wiki-en-texte.json
+1494796 07:36 98.2 reports/corpus-wiki-de-texte.json
+1494797 07:36 98.1 reports/corpus-wiki-ru-texte.json
+1494798 07:36 97.9 reports/corpus-wiki-es-texte.json
+1494799 07:36 98.5 reports/corpus-wiki-ja-texte.json
+1497608 04:51 98.0 reports/corpus-wiki-it-texte.json
+1497609 04:51 96.8 reports/corpus-wiki-zh-texte.json
+1497610 04:51 96.7 reports/corpus-wiki-pt-texte.json
+1497611 04:51 97.4 reports/corpus-wiki-ar-texte.json
+=== manifestes
+-rw-r--r--. 1 stephane stephane 4060  1 nov 17:27 reports/corpus-wiki-fr-texte.json
+=== tailles
+1,1G	data/corpus_wiki_ar_texte
+1,6G	data/corpus_wiki_de_texte
+1,4G	data/corpus_wiki_en_texte
+1,5G	data/corpus_wiki_es_texte
+7,8G	data/corpus_wiki_fr_texte
+890M	data/corpus_wiki_it_texte
+2,2G	data/corpus_wiki_ja_texte
+833M	data/corpus_wiki_pt_texte
+2,0G	data/corpus_wiki_ru_texte
+923M	data/corpus_wiki_zh_texte
+=== logs
+ar:   [ar] 400000 lus · 134401 gardés · 0.50 G caractères
+it: pt: zh: de:   [de] 200000 lus · 138753 gardés · 1.37 G caractères
+ru:   [ru] 400000 lus · 148951 gardés · 0.99 G caractères
+es: ja:   [ja] 400000 lus · 224037 gardés · 0.83 G caractères
+en:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '1,60p' tools/verifie_contamination.py; echo \"=== funcs\"; grep -n \"def \\|troncons\" tools/verifie_contamination.py | head -20", "description": "Inspect contamination checker structure", "timeoutMs": 120000, "workdir": "/home … [44 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_contamination.py — les fuites entre splits et entre corpus, mesurées.
+
+POURQUOI CE FICHIER. Un corpus d'entraînement sans contrôle de fuite est un corpus qui mentira
+sur son évaluation. Ce script vérifie deux choses, avec des chiffres :
+
+1. **les doublons de tronçons entre splits** : chaque ligne des fichiers (tronçon de 8 Ko écrit
+   par `corpus_wikipedia.py`) est hachée ; un tronçon qui apparaît dans deux splits est une fuite
+   exacte (les quasi-doublons ne sont pas détectés — c'est dit) ;
+2. **le recouvrement avec les jeux d'évaluation** : des fenêtres de `--fenetre` octets,
+   échantillonnées dans chaque fichier d'évaluation, sont cherchées dans l'entraînement par
+   `mmap.find` — une fenêtre trouvée est une fuite.
+
+Ce n'est pas un détecteur de paraphrase : deux textes reformulés passent. C'est un contrôle
+d'**exactitude**, celui qui doit être à zéro avant d'entraîner.
+
+Usage :
+  python3 tools/verifie_contamination.py --train data/corpus_wiki_fr/train.txt \
+      --val data/corpus_wiki_fr/val.txt --test data/corpus_wiki_fr/test.txt \
+      --eval data/corpus_propre/test.txt --eval data/wikitext2_test.txt
+"""
+from __future__ import annotations
+
+… [1403 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; head -2 data/xnli/XNLI-1.0/xnli.dev.tsv | cut -c1-300; echo \"=== udhr\"; head -2 data/udhr/articles.jsonl | cut -c1-300; echo \"=== xnli langues\"; cut -f1 data/xnli/XNLI-1.0/xnli.dev.tsv | sort | uniq -c | head", "description": "Insp … [110 caractères tronqués]`
+
+  ```
+language	gold_label	sentence1_binary_parse	sentence2_binary_parse	sentence1_parse	sentence2_parse	sentence1	sentence2	promptID	pairID	genre	label1	label2	label3	label4	label5	sentence1_tokenized	sentence2_tokenized	match
+ar	neutral					وقال، ماما، لقد عدت للمنزل.	اتصل بأمه حالما أوصلته حافلة المدرسية.	1	1	facetoface	neutral	contradiction	neutral	neutral	neutral	وقال ، ماما ، لقد عدت للمنزل .	اتصل بأمه حالما أوصلته حافلة المدرسية .	True
+=== udhr
+{"fichier": "udhr_007.xml", "iso3": "cri", "nom": "Sãotomense", "script": "Latn", "art": 0, "titre": "Préambule", "texte": "Punda dignidade di tudo nguê di mundu e dirêtu d'inem igual e andeji cu a na pô bêndê fa sá stê di liberdade, di justiça e di paz ni mundu; Punda fata di conheximentu e displêz
+{"fichier": "udhr_007.xml", "iso3": "cri", "nom": "Sãotomense", "script": "Latn", "art": 1, "titre": "", "texte": "Tudu nguê di mundu ca nancê livli e igual ni dignidade e ni dirêtu. Punda nen ca pensá e nen tê cunxensa, selá nen fé tudu cuá cu tençón de lumón."}
+=== xnli langues
+   2490 ar
+   2490 bg
+   2490 de
+   2490 el
+   2490 en
+   2490 es
+   2490 fr
+   2490 hi
+      1 language
+   2490 ru
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '60,140p' tools/verifie_contamination.py", "description": "Read contamination checker main", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+def recouvrement(train: pathlib.Path, eval_: pathlib.Path, fenetre: int,
+                 pas: int, echantillon: int) -> dict:
+    with eval_.open("rb") as f:
+        texte = f.read()
+    if len(texte) <= fenetre:
+        return {"fichier": eval_.name, "fenetres": 0, "trouvees": 0, "taux": 0.0}
+    positions = list(range(0, len(texte) - fenetre, pas))
+    if echantillon and len(positions) > echantillon:
+        pas_ech = max(len(positions) // echantillon, 1)
+        positions = positions[::pas_ech][:echantillon]
+    trouvees = 0
+    with train.open("rb") as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+        for p in positions:
+            if mm.find(texte[p:p + fenetre]) != -1:
+                trouvees += 1
+    return {"fichier": eval_.name, "fenetre": fenetre, "fenetres": len(positions),
+            "trouvees": trouvees, "taux": round(trouvees / max(len(positions), 1), 4)}
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--train", type=pathlib.Path, required=True)
+    ap.add_argument("--val", type=pathlib.Path)
+    ap.add_argument("--test", type=pathlib.Path)
+    ap.add_argument("--eval", type=pathlib.Path, action="ap
+… [972 caractères tronqués]
+  ```
+

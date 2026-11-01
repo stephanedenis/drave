@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 26.0 h |
-| Tours | 12 |
-| Messages | 876 |
-| Appels d'outils | 875 |
+| Durée | 26.1 h |
+| Tours | 13 |
+| Messages | 882 |
+| Appels d'outils | 880 |
 | Fichiers touchés | 18 |
-| Commandes | 802 |
+| Commandes | 807 |
 | Sous-agents | 0 |
 | Commits | 44 |
 | Compactages de contexte | 2 |
@@ -51,6 +51,8 @@
 **Tour 11** — es-tu à jour? as-tu fait tout ce que tu pouvais?
 
 **Tour 12** — suis le plan, continue jusqu'à 8h demain matin
+
+**Tour 13** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -661,7 +663,37 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 
 **Synthèse produite :**
 
-⏵ Mandat long : objectif persisté jusqu'à 8 h, puis lancement des neuf langues
+⏵ Objectif persisté, neuf runs lancés, état committé — la suite tourne toute la nuit
+
+**Le mandat est pris : objectif persisté jusqu'au 2/11 8 h**, et les neuf langues sont en extraction. Le plan est suivi : la session D/R/A continue, le hub tient l'état, les autres sessions gardent leurs territoires.
+
+\## Lancé
+
+- **Les neuf dumps sont là** : en 25 Go, de 7,6, ru 5,7, es 5,0, ja 4,5, it 4,1, zh 3,3, pt 2,6, ar 2,0 — et les **neuf runs tournent en parallèle** (9 cœurs sur 40, ~2-4 Go de RAM, sorties déjà à 0,7–2,0 Go chacune, le français terminé à 8,34 Go).
+- **La chaîne est la même** que pour le français : débaliseur regex, déduplication exacte, split par article, SHA-256, manifeste par langue. Les finitions attendues : ar, it, pt, zh d'abord ; de, ru, es, ja ensuite ; en dernier (~2-3 h, c'est le plus gros dump).
+
+\## Le plan des rounds suivants (automatiques, jusqu'à 8 h)
+
+1. **Les manifestes** au fil des fins de run ; la **contamination** par langue (fenêtres des jeux d'évaluation : XNLI pour ar/de/en/es/ru/zh, UDHR pour it/ja/pt, jeux locaux pour fr) et le **contrôle 8 Ko** ; les **fiches** et le **catalogue des dix corpus**.
+2. **L'extraction PDF/OCR** : les 104 livres, les 2 711 PDF du CEGEP, les collections — texte natif puis OCR pour les scannés, avec les licences (local, droits réservés pour les non-libres).
+3. **R1.1/R1.2** (préparation du contexte natif) et **A2.6/A8.3** (mesures du moteur), selon le plan.
+4. Chaque livraison : **mesure, fiche, JSON, commit, ligne d'état** ; les compteurs et la roadmap suivent ; les commits en **index alterné** pour ne pas embarquer les fichiers des autres sessions.
+
+\## Ce qui est committé
+
+`d51b4df0` (les cinq premiers runs, l'état, le plan, la roadmap, le journal), `0f1fed91` (9/9), `dd2ed894` (T0 3 993/4 000) — revue, état, journal, sessions et schémas verts. Note : le premier de ces commits a embarqué deux fichiers de la session Pensée (index partagé) ; c'est corrigé pour les suivants (index alterné).
+
+La suite se fait sans toi : le goal reste actif jusqu'à 8 h, les runs finissent, les fiches et les commits s'enchaînent. Si quelque chose bloque (disque, corpus, licence), je le consigne et je prends la tâche suivante du plan.
+
+### Tour 13 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check nine runs and manifests
+- bash — Inspect contamination checker structure
+- bash — Inspect XNLI and UDHR formats
+- bash — Read contamination checker main
+- bash — Add 8KB window control and test on French
 
 ## 3. Travail accompli
 
@@ -730,7 +762,7 @@ J'ai lu `docs/pilotage/plan-travail.md` et avancé sur la première action du ma
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 762 autres
+- … et 767 autres
 
 ## 4. Mesures et résultats marquants
 

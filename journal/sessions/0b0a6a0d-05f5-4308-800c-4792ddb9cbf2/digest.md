@@ -13911,3 +13911,111 @@ surrogates : 144
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/canal_structure.py'); s = p.read_text()\ns = s.replace('    texte = pathlib.Path(a.entree).read_text(encoding=\"utf-8\", errors=\"surrogateescape\")',\n              '    with … [1005 caractères tronqués]`
+
+  ```
+ok
+10330112 octets de canal · data/wiki_fr/propre/val.canal
+10330245 octets de canal · data/wiki_fr/propre/test.canal
+val 10330112 10330112 alignés
+test 10330245 10330245 alignés
+train 186089472 186089328 DÉCALÉS
+18:36
+  ```
+
+- **bash** `{"command": "sleep 60; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport pathlib\nt = len(pathlib.Path('data/wiki_fr/propre/train.txt').read_bytes())\nc = len(pathlib.Path('data/wiki_fr/propre/train.canal').read_bytes())\nprint('train', t, c, 'alignés' if t == c else 'DÉCAL … [184 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-812]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-812", "timeout_ms": 300000, "wait": true}`
+
+  ```
+train 186089472 186089472 alignés
+186089472 octets de canal · data/wiki_fr/propre/train.canal
+18:37
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-812 (bash: sleep 60; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c "
+import pathlib
+t = len(pathlib.Path('data/wiki_fr/propre/train.txt').read_bytes())
+c = len(pathlib.Path('data/wiki_fr/propre/train.canal').read_bytes())
+print('train', t, c, 'alignés' if t == c else 'DÉCALÉS')"; cat work/n2j/canal-train.log; date '+%H:%M'; tail -2 work/n2j/teacher-wiki.log; ls work/n2j/route-wiki 2>/dev/null | head -2) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 300 ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal --pas 30 --lot 2 --seq 128 --sortie /tmp/essai-canal.pt --d … [92 caractères tronqués]`
+
+  ```
+File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_native.py", line 48, in ppl
+    x, y = lot(data, lot_n, seq, device, compteur + _ * lot_n)
+    ^^^^
+ValueError: too many values to unpack (expected 2)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 40,60p tools/entrainer_native.py", "description": "Read the ppl function"}`
+
+  ```
+def charger_canal(chemin: str) -> torch.Tensor:
+    return torch.tensor(list(pathlib.Path(chemin).read_bytes()), dtype=torch.long)
+
+
+def ppl(modele, data, seq, lot_n, device, n_lots=8, compteur=0, canal=None):
+    modele.eval(); total = 0.0; n = 0
+    with torch.no_grad():
+        for _ in range(n_lots):
+            x, y = lot(data, lot_n, seq, device, compteur + _ * lot_n)
+            logits = modele(x)["logits"]
+            total += float(F.cross_entropy(logits.reshape(-1, 256), y.reshape(-1),
+                                           reduction="sum"))
+            n += y.numel()
+    return math.exp(total / max(1, n)), n
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--corpus", default="data/corpus_fr.txt")
+    ap.add_argument("--pas", type=int, default=200)
+    ap.add_argument("--seq", type=int, default=128)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/entrainer_native.py'); s = p.read_text()\ns = s.replace('''            x, y = lot(data, lot_n, seq, device, compteur + _ * lot_n)\n            logits = modele(x)[\"logits\"]'' … [513 caractères tronqués]`
+
+  ```
+ok
+    x, y = lot(val, a.lot, a.seq, a.device, 10_000_000 + _ * a.lot)
+    ^^^^
+ValueError: too many values to unpack (expected 2)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"lot(\\|modele(x\" tools/entrainer_native.py", "description": "Find all batch and forward calls"}`
+
+  ```
+31:def lot(data: torch.Tensor, n: int, seq: int, device: str, compteur: int, canal=None):
+48:            x, y, c = lot(data, lot_n, seq, device, compteur + _ * lot_n, canal)
+49:            logits = modele(x, canal=c)["logits"]
+95:        x, y, c = lot(train, a.lot, a.seq, a.device, pas * a.lot, canal_train)
+97:        sortie = modele(x, pos_debut=pos, canal=c)
+114:            x, y = lot(val, a.lot, a.seq, a.device, 10_000_000 + _ * a.lot)
+115:            s = modele(x)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/entrainer_native.py'); s = p.read_text()\ns = s.replace('''            x, y = lot(val, a.lot, a.seq, a.device, 10_000_000 + _ * a.lot)\n            s = modele(x)''',\n'''      … [497 caractères tronqués]`
+
+  ```
+ok
+ "sha256_drvm": "28ce4d377cf63a5905729c97b99d0b8192f88f772cdd3de57275f588d470b302",
+ "duree_s": 1.9278504848480225
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/route-wiki 2>/dev/null | head -3; tail -3 work/n2j/teacher-wiki.log; ps -eo pid,etime,cmd | grep entrainer_moteur | grep -v grep | wc -l", "description": "Check the teacher status"}`
+
+  ```
+18:40
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=1 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal -- … [656 caractères tronqués]`

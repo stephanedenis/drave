@@ -11,6 +11,7 @@
                                       arc-consistante ne se réduit pas (contrôle)
   T6  alpha-bêta décide               gagner en un coup, bloquer, couper ; le minimax exact
                                       visite plus de nœuds ; la profondeur 1 sans évaluation rate
+  T7  le banc anytime                 best-so-far monotone, AUC A* > AUC aléatoire, but atteint
 
 Usage : PYTHONPATH=. ~/gpu-env/bin/python tools/pensee/autotest.py
 """
@@ -200,12 +201,26 @@ def t6_alphabeta() -> tuple[bool, str]:
                 f"alpha-bêta {ab.noeuds} nœuds/{ab.coupes} coupes vs minimax {mm.noeuds}")
 
 
+def t7_banc() -> tuple[bool, str]:
+    """Le banc : la courbe best-so-far, l'AUC, le regret, le budget du but."""
+    from .banc import Random, executer
+    budgets = [1, 2, 4, 8, 16, 32, 64, 128]
+    a = executer(CRUCHES, AStar, budgets)
+    r = executer(CRUCHES, lambda: Random(0), budgets)
+    monotone = all(b + 1e-9 >= a2 for a2, b in zip(a.qualites, a.qualites[1:]))
+    ok = (monotone and a.auc > r.auc and a.budget_but is not None
+          and r.budget_but is None and a.regret == 0.0)
+    return ok, (f"AUC A* {a.auc} vs aléatoire {r.auc} ; but A* {a.budget_but}, "
+                f"aléatoire {r.budget_but} ; regret A* {a.regret}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
               ("T2 stratégies", t2_strategies()),
               ("T3 anytime", t3_anytime()), ("T4 justification", t4_justification()),
-              ("T5 AC-3", t5_ac3()), ("T6 alpha-bêta", t6_alphabeta())]
+              ("T5 AC-3", t5_ac3()), ("T6 alpha-bêta", t6_alphabeta()),
+              ("T7 banc anytime", t7_banc())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

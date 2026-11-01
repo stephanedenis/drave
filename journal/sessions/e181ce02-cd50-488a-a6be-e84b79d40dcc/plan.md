@@ -17,7 +17,7 @@
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
 - **Heartbeat** : 2026-11-01 18:35 EST
 - **Prochaine action** : le bloc linguistique v0 est livré (398 langues) et **AC-3/alpha-bêta**
-  sont mesurés (8/8) et le DRVF est livré (9/9) ; qualifier un gold et un modèle neuronal ; puis le **banc anytime**
+  sont mesurés (8/8), le DRVF (9/9) et le banc (10/10) ; qualifier un gold et un modèle neuronal ; puis les **opérateurs hétérogènes/DRVM**
   (S reste à l'autre TUI).
 - **État** : actif
 - **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
@@ -39,10 +39,11 @@
   CPU + neuronal de contrat, parallèle/cascade, activation 51–76 %) ; **398 langues à 0,9687**,
   script **1,0000**, profils permutés **0,0022** ; le modèle réel local n'est pas qualifié ;
   fiche [`bloc`](../../reports/rapport-bloc-linguistique.md) et porte.
-- **Moteur B13** : **AC-3, alpha-bêta (8/8)** et **DRVF `thought` (9/9)** ; 23 597 octets,
-  93 événements, rejeu identique, score corrompu refusé ; fiches
-  [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md) et
-  [`pensee-drvf`](../../reports/rapport-pensee-drvf.md) ; prochain : **banc anytime**.
+- **Moteur B13** : **AC-3, alpha-bêta (8/8)**, **DRVF `thought` (9/9)**, **banc anytime
+  (10/10)** ; A* 32 nœuds, AUC 0,528/0,624 contre 0,246/0,116 à l'aléatoire ; fiches
+  [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
+  [`pensee-drvf`](../../reports/rapport-pensee-drvf.md),
+  [`pensee-banc`](../../reports/rapport-pensee-banc.md) ; prochain : **opérateurs hétérogènes/DRVM**.
 - **Objectif final** : un **moteur de pensée v0 exécutable** — state store typé, arbre d'états,
   A*/MCTS/AC-3 sur le même contrat, trace/rejeu, banc anytime avec contrôles — documenté, mesuré
   et committé.
