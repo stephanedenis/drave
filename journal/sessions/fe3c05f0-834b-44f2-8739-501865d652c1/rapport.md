@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 9.0 h |
 | Tours | 2 |
-| Messages | 547 |
-| Appels d'outils | 550 |
+| Messages | 553 |
+| Appels d'outils | 556 |
 | Fichiers touchés | 18 |
-| Commandes | 492 |
+| Commandes | 498 |
 | Sous-agents | 0 |
-| Commits | 22 |
+| Commits | 23 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*365 appels d'outils.* Actions notables :
+*371 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,7 +101,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 335 autres
+- … et 341 autres
 
 **Synthèse produite :**
 
@@ -174,7 +174,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 452 autres
+- … et 458 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -302,7 +302,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ## 5. Erreurs rencontrées
 
-23 sorties en erreur ou divergentes. Les premières :
+24 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -344,4 +344,5 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - cat > /tmp/msg-sondes.txt <<'EOF' R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %)  Deux sondes de rob
 - python3 - <<'PY' import pathlib,re p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s2=re.sub(r"\*\*Mis à jour : [^*]+\*\*", "**Mis à jour : 2026-11
 - R4.4 — LA SPÉCIFICATION DIT ENFIN CE QUE LE BLOC FAIT : GOUTTIÈRE SUR LES MOTS, GRILLE ADAPTATIVE, COÛT, ET LES LIMITES NOMMÉES" 2>&1 | tail -3 git log --onelin
+- python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("vrais scans **7,10 / 88,4 %** ; redressement **≤ 6°** 
 

@@ -147,6 +147,12 @@ La gouttière (une bande verticale sans encre entre 15 % et 85 % de la largeur) 
 sur une page mono-colonne — c'est le contrôle qui compte : un détecteur qui « trouve » une
 gouttière partout serait un détecteur qui casse les pages simples.
 
+**Et trois colonnes ?** Une sonde a rendu trois pages à **trois** colonnes (même texte, ordre
+connu : colonne 1, 2, 3). La gouttière unique est trouvée, mais elle ne coupe la page qu'en
+**deux** : la moitié droite contient deux colonnes entrelacées, et le WER monte à **52,5 %**
+(contrôle deux colonnes : 0,5 %). La détection à **une** gouttière ne suffit pas au-delà de deux
+colonnes — c'est une **limite nommée**, pas un réglage à faire à l'aveugle.
+
 ## 4. Les tableaux : 92,6 % des cellules exactes sur un rendu, 69,1 % sur une photocopie
 
 Corpus : 10 tableaux 6×9 à vérité connue, une grille à traits. La chaîne : traits → grille

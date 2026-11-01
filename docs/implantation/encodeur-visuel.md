@@ -171,7 +171,9 @@ donne 0 cellule localisée.
 
 - **Pas de modèle de layout** : hauteur, écart, retrait et **gouttière**. Deux colonnes sont lues
   correctement si la gouttière est nette ; une gouttière très étroite, une page à **plus de deux
-  colonnes** ou une mise en page irrégulière ne sont pas revendiquées.
+  colonnes** ou une mise en page irrégulière ne sont pas revendiquées — mesuré : trois colonnes
+  donnent **52,5 %** de WER (la gouttière unique coupe la page en deux, la moitié droite
+  entrelace deux colonnes) contre 0,5 % à deux colonnes.
 - **Pas de vérité humaine sur les scans réels** : trois livres d'Internet Archive sont mesurés
   contre leur **couche OCR** (7,10 % ; 8,73 % ; et 88,4 % de mots sur un lexique) — ce sont des
   accords entre moteurs, pas des exactitudes. La couche `pdftotext -layout` d'un lexique lit les

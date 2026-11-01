@@ -1210,5 +1210,11 @@
    "wer": 0.003
   }
  ],
- "dispositif": "outils de R4.4 (simuler_scan, nettoyer_scan, mesurer_scans, mesurer_colonnes, mesurer_tables, mesurer_reel)"
+ "dispositif": "outils de R4.4 (simuler_scan, nettoyer_scan, mesurer_scans, mesurer_colonnes, mesurer_tables, mesurer_reel)",
+ "sonde_trois_colonnes": {
+  "pages": 3,
+  "wer_ordre_trois_colonnes": 0.5249,
+  "wer_deux_colonnes_controle": 0.0054,
+  "note": "la gouttière unique coupe la page en deux ; la moitié droite contient deux colonnes entrelacées"
+ }
 }

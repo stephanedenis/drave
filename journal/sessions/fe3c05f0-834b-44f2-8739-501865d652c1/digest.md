@@ -9548,3 +9548,84 @@ sections 7 bis/quater/quinquies mises à jour
   ```
 
 - **bash** `{"command": "git add docs/implantation/encodeur-visuel.md\ngit commit -m \"R4.4 — LA SPÉCIFICATION DIT ENFIN CE QUE LE BLOC FAIT : GOUTTIÈRE SUR LES MOTS, GRILLE ADAPTATIVE, COÛT, ET LES LIMITES NOMMÉES\" 2>&1 | tail -3\ngit log --oneline -1", "description": "Commit updated OCR specification", "time … [77 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 6332b8cb] R4.4 — LA SPÉCIFICATION DIT ENFIN CE QUE LE BLOC FAIT : GOUTTIÈRE SUR LES MOTS, GRILLE ADAPTATIVE, COÛT, ET LES LIMITES NOMMÉES
+ 11 files changed, 312 insertions(+), 55 deletions(-)
+6332b8cb R4.4 — LA SPÉCIFICATION DIT ENFIN CE QUE LE BLOC FAIT : GOUTTIÈRE SUR LES MOTS, GRILLE ADAPTATIVE, COÛT, ET LES LIMITES NOMMÉES
+  ```
+
+- **bash** `{"command": "for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_backlog.py\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_etat_a_jour.py\" \"python … [437 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py [0]   ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulair
+python3 tools/taille_documents.py    [0]   ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+python3 tools/verifie_en_cours.py    [0]   ✅ état court, structuré, multi-session et reprenable
+python3 tools/verifie_journal.py     [0]   ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+python3 tools/verifie_backlog.py     [0] ✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+python3 tools/verifier_schemas.py    [0]      sources et images relatives.
+python3 tools/verifie_etat_a_jour.py [0]   ✅ aucun fait commité après le dernier état
+python3 tools/sessions.py --check    [0]   ⚠ mandat périmé (169 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+=== porte etat
+[0]
+✅ porte état verte : aucun fait commité après le dernier état
+=== tree
+ M docs/pilotage/backlog/N2-distillation.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/distiller_budget.py
+ m tools/docwatch
+ M tools/native_model.py
+?? reports/corpus-litt-propre.json
+?? reports/corpus-propre.json
+?? reports/
+… [115 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"def fabriquer\\|colonnes\\|gouttiere\" tools/fabriquer_colonnes.py | head -15; sed -n \"$(grep -n 'def fabriquer' tools/fabriquer_colonnes.py | cut -d: -f1),+30p\" tools/fabriquer_colonnes.py", "description": "Read the column page generator", "workdir": "/home/stephane/Data13T … [27 caractères tronqués]`
+
+  ```
+2:"""fabriquer_colonnes.py — un corpus de pages à DEUX COLONNES, avec sa vérité terrain.
+5:page à deux colonnes, un lecteur naïf entrelace la gauche et la droite, et le WER mot à mot
+7:On fabrique donc des PDF à deux colonnes dont on CONNAÎT l'ordre de lecture — colonne gauche
+15:  python3 tools/fabriquer_colonnes.py --sortie work/r44/colonnes --pages 10
+54:    # Deux colonnes : 2 × 240 pt utiles ; on distribution ~55 caractères par ligne.
+67:        colonnes = [" ".join(paquet[:moitie]), " ".join(paquet[moitie:])]
+69:        for mono, chemin in ((True, sortie / f"colonnes-mono-p{page}.pdf"),
+70:                             (False, sortie / f"colonnes-deux-p{page}.pdf")):
+74:                      f"{'mono-colonne (contrôle)' if mono else 'deux colonnes'}")
+79:                texte = " ".join(colonnes)
+88:                for indice, (x, texte) in enumerate(zip((colonne_l, colonne_r), colonnes)):
+97:        entrees.append({"page": page, "mono": f"colonnes-mono-p{page}.pdf",
+98:                        "deux": f"colonnes-deux-p{page}.pdf",
+100:    manifeste = {"date": "2026-10-31", "ligne": "R4.4", "nature": "colonnes synthétiques",
+109:    ap.add_argument("--sortie", type=pathlib.Path
+… [115 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json,subprocess\nsys.path.insert(0,'tools')\nfrom reportlab.lib.pagesizes import A4\nfrom reportlab.pdfgen import canvas\nfrom reportlab.lib.units import mm\nimport mesurer_ocr as mo, graphe_document_ocr as gco, nettoyer_scan as ns\nfrom PIL import I … [2482 caractères tronqués]`
+
+  ```
+page 1: WER 3 colonnes 52.49% | mots 804/804 | colonnes détectées: None
+page 2: WER 3 colonnes 52.49% | mots 804/804 | colonnes détectées: None
+page 3: WER 3 colonnes 52.49% | mots 804/804 | colonnes détectées: None
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nimport numpy as np\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco\np=pathlib.Path('work/r44/trois-colonnes/trois-p1.png')\nmots=gco.mots(p,'fra'); largeur=max(m['left']+m['width'] for m in mots); hauteur=max(m['top']+m['height'] for  … [851 caractères tronqués]`
+
+  ```
+largeur 2259 mots 768 bandes faibles [(806, 922, 116), (1526, 1642, 116)]
+gouttière (806.0, 922.0)
+x min max 199 2259
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('reports/r44-colonnes.json'); d=json.loads(p.read_text())\nd['sonde_trois_colonnes']={'pages':3,'wer_ordre_trois_colonnes':0.5249,'wer_deux_colonnes_controle':0.0054,\n                            'note':\"la gouttière unique coupe la … [1970 caractères tronqués]`
+
+  ```
+sonde 3 colonnes ajoutée
+  T0 max : 4002 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"vrais scans **7,10 / 88,4 %** ; redressement **≤ 6°** — [`r44-scans`]\",\n            \"vrais scans **7,10 / 88,4 %** — [`r44-scans`]\")\np.write_text(s)\nPY\npython3 tools/tail … [1370 caractères tronqués]`
