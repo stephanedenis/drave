@@ -8061,3 +8061,388 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/README.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES\n\nLa page d'état passe la session N2.h en close : les quatre fiches (n2-propre, n2-divers … [406 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-478]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-478", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 88f598c3] ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES
+ 8 files changed, 94 insertions(+), 15 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -6; echo \"=== status ===\"; git status --short | grep -v \"^ m tools/docwatch\" | head -6; echo \"=== checks ===\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py | tail -1;  … [160 caractères tronqués]`
+
+  ```
+88f598c3 ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES
+52cf5853 N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS
+0a802a61 R4.4 — UNE PAGE SANS RÉFÉRENCE N'EST PAS UN WER DE 27 200 % : LE BANC RÉEL REFUSE DE MESURER
+7452a447 SESSION — R4.4 CLOSE : QUATRE FAMILLES AU-DESSUS DE 90 %, LE FAX RESTE UNE LIMITE D'INFORMATION
+4aef1413 R4.4 — LA PARITÉ ATTEINT 90–97 % SUR QUATRE FAMILLES : LA HAUTEUR DE PAGE, LE SEUIL DE TITRE ET LE PASSAGE ÉTAIENT LES VERROUS
+1da58752 JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR
+=== status ===
+=== checks ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernier bras : la capacité (21,65 M) sur le mètre propre, deux graines, avant la clôture
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/entrainer_native.py'); s = p.read_text()\ns = s.replace('''    ap.add_argument(\"--graine\", type=int, default=1)''',\n'''    ap.add_argument(\"--graine\", type=int, default=1 … [734 caractères tronqués]`
+
+  ```
+flags ok
+ "sha256_drvm": "e40ea9d25c8b11a37bfa3e3de01ba610e385f3c53abc43ae79452af9327b494a",
+ "duree_s": 2.47611665725708
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/file-capacite.sh <<'EOF'\n#!/bin/bash\n# Bras capacité : base 21,65 M + 2 distillations sur le corpus propre, même professeur, même budget.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport PYTHONPATH … [992 caractères tronqués]`
+
+  ```
+capacité 1171900
+pas  450 · perte 2.5060 · PPL val 12.340 · 23 s
+pas  500 · perte 2.2680 · PPL val 11.744 · 26 s
+04:04
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/fiche5.md <<'EOF'\n# N2.h5 — La capacité sur le mètre propre : 21,65 M contre 11,47 M\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : à données, professeur et\n> budget égaux, le modèle de **21,6 … [2125 caractères tronqués]`
+
+  ```
+ok
+04:04
+pas  700 · perte 2.1026 · PPL val 9.817 · 36 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/remplit5.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"remplit5.py — remplit la fiche capacité depuis work/n2h/eval.json.\"\"\"\nimport json, pathlib, statistics as st\n\nev = {r[\"fichier\"]: r for r in json.loads(pathlib. … [2849 caractères tronqués]`
+
+  ```
+ok
+04:05
+pas  850 · perte 2.0086 · PPL val 8.788 · 43 s
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/base-capacite.pt 2>/dev/null && echo BASE_OK; tail -1 work/n2h/CAP-g1.log 2>/dev/null; tail -1 work/n2h/base-capacite.log", "description": "Wait for the capacity base", "run_in_background": true … [1 caractères tronqués]`
+
+  ```
+started background job bash-484
+  ```
+
+- **job_output** `{"job_id": "bash-484", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/base-capacite.pt 2>/dev/null && echo BASE_OK; tail -1 work/n2h/base-capacite.log; tail -1 work/n2h/CAP-g1.log 2>/dev/null", "description": "Check the capacity base"}`
+
+  ```
+04:15
+pas 13250 · perte 1.1882 · PPL val 4.133 · 664 s
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; cat work/n2h/base-capacite.pt.json 2>/dev/null | head -12; tail -1 work/n2h/CAP-g1.log 2>/dev/null", "description": "Wait and check the capacity base result", "run_in_background": true}`
+
+  ```
+started background job bash-486
+  ```
+
+- **job_output** `{"job_id": "bash-486", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; cat work/n2h/base-capacite.pt.json 2>/dev/null | head -14; tail -1 work/n2h/CAP-g1.log 2>/dev/null", "description": "Check the capacity base and first distillation"}`
+
+  ```
+04:25
+{
+ "modele": "drave-n0",
+ "parametres": 21646224,
+ "corpus": "data/corpus_propre/train.txt",
+ "octets": 3244858,
+ "pas": 20000,
+ "seq": 128,
+ "lot": 8,
+ "lr": 0.0003,
+ "graine": 1,
+ "perte_finale": 1.1384395360946655,
+ "ppl_val": 3.6274793347430814,
+ "jetons_val": 8192,
+ "tetes": true,
+pas  2750 · seq 128 · perte 51.6210 · PPL 128/4 3.2665 · 271 s
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g1.pt 2>/dev/null && echo CAP1_OK; tail -1 work/n2h/CAP-g2.log 2>/dev/null; tail -1 work/n2h/CAP-g1.log", "description": "Wait for the first capacity distillation", "run_in_background": true … [1 caractères tronqués]`
+
+  ```
+started background job bash-488
+  ```
+
+- **job_output** `{"job_id": "bash-488", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-484 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/base-capacite.pt 2>/dev/null && echo BASE_OK; tail -1 work/n2h/CAP-g1.log 2>/dev/null; tail -1 work/n2h/base-capacite.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g1.pt 2>/dev/null && echo CAP1_OK; tail -2 work/n2h/CAP-g1.log; tail -1 work/n2h/CAP-g2.log 2>/dev/null", "description": "Check the capacity distillation"}`
+
+  ```
+04:35
+pas  9000 · seq 128 · perte 49.6240 · PPL 128/4 3.2175 · 864 s
+pas  9250 · seq 128 · perte 46.5899 · PPL 128/4 3.1910 · 888 s
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g1.pt 2>/dev/null && echo CAP1_OK; tail -1 work/n2h/CAP-g2.log 2>/dev/null", "description": "Wait for capacity seed 1", "run_in_background": true}`
+
+  ```
+started background job bash-490
+  ```
+
+- **job_output** `{"job_id": "bash-490", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-486 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; cat work/n2h/base-capacite.pt.json 2>/dev/null | head -12; tail -1 work/n2h/CAP-g1.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g1.pt 2>/dev/null && echo CAP1_OK; tail -1 work/n2h/CAP-g2.log 2>/dev/null; tail -1 work/n2h/CAP-g1.log", "description": "Check capacity seed 1"}`
+
+  ```
+04:46
+pas 15750 · seq 128 · perte 42.8272 · PPL 128/4 3.1465 · 1501 s
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g1.pt 2>/dev/null && echo CAP1_OK; tail -1 work/n2h/CAP-g2.log 2>/dev/null", "description": "Wait for capacity seed 1 to finish", "run_in_background": true}`
+
+  ```
+started background job bash-492
+  ```
+
+- **job_output** `{"job_id": "bash-492", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-488 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g1.pt 2>/dev/null && echo CAP1_OK; tail -1 work/n2h/CAP-g2.log 2>/dev/null; tail -1 work/n2h/CAP-g1.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g1.pt 2>/dev/null && echo CAP1_OK; tail -1 work/n2h/CAP-g2.log 2>/dev/null", "description": "Check capacity seed 1 completion"}`
+
+  ```
+04:56
+work/n2h/CAP-g1.pt
+CAP1_OK
+pas  2000 · seq 128 · perte 59.8355 · PPL 128/4 3.2727 · 199 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/CAP-g1.pt --longueurs --sortie work/n2h/eval.json 2>&1 | grep -v Loading", "description": "Evaluate the first capacity model"}`
+
+  ```
+{"fichier": "CAP-g1.pt", "params": 21646224, "val": 3.0364, "test": 3.1669, "litterature": 16.2791, "litterature_propre": 17.3667, "anglais": 59.176, "wikitext2": 59.5726, "permute": 1431.2253, "longueurs": {"129": 3.0752, "192": 8.6101, "256": 14.4507, "384": 25.2962, "512": 33.3265}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2h/remplit5.py'); s = p.read_text()\nvieux = '''    \"CHANGEMENT\": (f\"La capacité n'est pas le levier de N2 : à budget égal, +85 % de paramètres \"\n                   f\"do … [1587 caractères tronqués]`
+
+  ```
+ok
+parse ok
+04:57
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g2.pt 2>/dev/null && echo CAP2_OK; tail -1 work/n2h/CAP-g2.log", "description": "Wait for capacity seed 2", "run_in_background": true}`
+
+  ```
+started background job bash-496
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 24,34p docs/pilotage/en-cours.md; date '+%H:%M'", "description": "Read the session result bullet"}`
+
+  ```
+- **Objectif final** : un **mètre honnête** — corpus sans fuite, chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
+- **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité, longueur et combinaison mesurées
+  (4 fiches).
+- **Résultat** (3 graines) : la chaîne propre vaut **3,09** en domaine (3,20 au test) — pas 2,85
+  — et **16,70** sur la littérature jamais vue ; la **diversité** la ramène à **3,86** (÷ 4,3) et
+  l'anglais de **57,6** à **25,7** pour **+0,17** ; les **positions aléatoires** font passer 256
+  octets de **14,11** à **3,25** ; la base supervisée vaut **12,29**
+  hors domaine : **distiller spécialise**. Les deux leviers **se composent** (DR : **3,47** en
+  domaine, **4,10** en littérature, **3,49** à 256). Fiches `n2-propre`, `n2-diversite`,
+  `n2-longueur`, `n2-combine`.
+- **Ce que font les autres** : **Pensée** et **R4.4** sans GPU ; **N4** en file.
+04:57
+  ```
+
+- **job_output** `{"job_id": "bash-496", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-490 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g1.pt 2>/dev/null && echo CAP1_OK; tail -1 work/n2h/CAP-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-492 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g1.pt 2>/dev/null && echo CAP1_OK; tail -1 work/n2h/CAP-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g2.pt 2>/dev/null && echo CAP2_OK; tail -1 work/n2h/CAP-g2.log; ls work/n2h/capacite.termine 2>/dev/null", "description": "Check capacity seed 2"}`
+
+  ```
+05:07
+pas  9000 · seq 128 · perte 46.2865 · PPL 128/4 3.1973 · 863 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/bilan.md <<'EOF'\n# N2.h — la nuit du mètre propre\n\n## Ce qui a changé\n\nN2 avait un problème plus grave que son plateau : **son mètre mesurait de la mémoire**. 32,8 % des\nfenêtres de validation étaient verbatim da … [2997 caractères tronqués]`
+
+  ```
+ok
+05:07
+pas  9000 · seq 128 · perte 46.2865 · PPL 128/4 3.1973 · 863 s
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g2.pt 2>/dev/null && echo CAP2_OK; tail -1 work/n2h/CAP-g2.log", "description": "Wait for capacity seed 2", "run_in_background": true}`
+
+  ```
+started background job bash-500
+  ```
+
+- **job_output** `{"job_id": "bash-500", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g2.pt 2>/dev/null && echo CAP2_OK; tail -1 work/n2h/CAP-g2.log", "description": "Check capacity seed 2"}`
+
+  ```
+05:17
+pas 15500 · seq 128 · perte 38.5872 · PPL 128/4 3.1670 · 1468 s
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g2.pt 2>/dev/null && echo CAP2_OK; tail -1 work/n2h/CAP-g2.log", "description": "Wait for capacity seed 2 to finish", "run_in_background": true}`
+
+  ```
+started background job bash-502
+  ```
+
+- **job_output** `{"job_id": "bash-502", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+05:27
+work/n2h/CAP-g2.pt
+CAP2_OK
+}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-496 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g2.pt 2>/dev/null && echo CAP2_OK; tail -1 work/n2h/CAP-g2.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-500 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/CAP-g2.pt 2>/dev/null && echo CAP2_OK; tail -1 work/n2h/CAP-g2.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Capacité : évaluation de la graine 2 et rédaction de la cinquième fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/CAP-g2.pt --longueurs --sortie work/n2h/eval.json 2>&1 | grep -v Loading && python3 work/n2h/remplit5.py", "description": "Evaluate … [38 caractères tronqués]`
+
+  ```
+{"fichier": "CAP-g2.pt", "params": 21646224, "val": 3.0209, "test": 3.133, "litterature": 15.5202, "litterature_propre": 16.6831, "anglais": 55.1608, "wikitext2": 54.9112, "permute": 1303.8302, "longueurs": {"129": 3.0573, "192": 8.2811, "256": 13.6897, "384": 23.5538, "512": 30.6672}}
+restes: []
+CAP 3,0286 17,02 vs A 3,0904 16,70 ecart -0,062
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,10p reports/rapport-n2-capacite.md; echo \"...\"; sed -n '/## Lecture/,/## Ce qui pourrait/p' reports/rapport-n2-capacite.md", "description": "Review the capacity report"}`
+
+  ```
+# N2.h5 — La capacité sur le mètre propre : 21,65 M contre 11,47 M
+
+> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : à données, professeur et
+> budget égaux, le modèle de **21,65 M** (×1,83) vaut **3,0286** en domaine contre **3,0904**
+> et **17,02** sur la littérature jamais vue contre **16,70** — la capacité **paie**.
+
+## La question
+
+La roadmap laissait une question ouverte après N2.5b et N2.9 : la capacité paie-t-elle ? Les deux
+mesures historiques étaient faites sur le jeu **contaminé** (5 000 pas : −8,1 % pour 21,63 M ;
+...
+## Lecture
+
+En domaine, le modèle double vaut **3,0286** contre **3,0904** (**−0,062**) ; sur la littérature, **17,02** contre **16,70** ; en anglais, **57,17** contre **57,58** ; et à 256 octets, **14,07** contre **14,11**. Doubler la largeur ne rapproche donc pas la porte < 2,5 : le budget et les données pèsent plus que la capacité.
+
+## Ce que ça change pour N2
+
+La capacité **paie**, mais elle ne **couvre pas** : +89 % de paramètres donnent **−0,062** en domaine, alors que la généralité (littérature : 17,02 contre 16,70) et la longueur (256 : 14,07 contre 14,11) ne bougent pas. C'est un gain de **précision**, pas de **couverture** : le
+… [172 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2h/remplit5.py'); s = p.read_text()\nvieux = '''    \"LECTURE\": (f\"En domaine, le modèle double vaut **{f(cap_val)}** contre **{f(a_val)}** \"\n                f\"(**{f(ecar … [1487 caractères tronqués]`
+
+  ```
+ok
+CAP 3,0286 17,02 vs A 3,0904 16,70 ecart -0,062
+phrase corrigée
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"- **Plan** : 1) `tools/corpus_propre.py` (dédup, split par chunks) ; 2) chaîne propre (professeur 23,5 M, base 20k, distillatio … [1282 caractères tronqués]`
+
+  ```
+ok
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\na = \"les deux leviers **se composent** (DR : 3,47 en domaine, 4,10 en littérature, 3,49 à 256). Prochaine action : **plus de texte fr … [531 caractères tronqués]`
+
+  ```
+ok
+  374 fiches → reports/INDEX.md
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 376 fichiers, le disque en a 377
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [259 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/README.md'); s = p.read_text()\na = \"| [`rapport-n2-combine.md`](rapport-n2-combine.md) | **N2.h4** — les deux leviers se composent : **3,47** en domaine, **4,10** hors dép … [1466 caractères tronqués]`

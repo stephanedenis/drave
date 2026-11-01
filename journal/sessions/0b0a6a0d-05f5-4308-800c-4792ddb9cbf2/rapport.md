@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 11.7 h |
+| Durée | 13.2 h |
 | Tours | 4 |
-| Messages | 616 |
-| Appels d'outils | 584 |
+| Messages | 663 |
+| Appels d'outils | 624 |
 | Fichiers touchés | 11 |
-| Commandes | 478 |
+| Commandes | 509 |
 | Sous-agents | 0 |
-| Commits | 10 |
+| Commits | 11 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -171,7 +171,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 4 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*245 appels d'outils.* Actions notables :
+*285 appels d'outils.* Actions notables :
 
 - bash — Check active sessions, state, and campaign
 - bash — Measure the context budget headroom
@@ -187,11 +187,11 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - job_output
 - bash — Check campaign state after the state commit
 - bash — Draft the clean-corpus report
-- … et 177 autres
+- … et 206 autres
 
 **Synthèse produite :**
 
-⏵ Clôture : archivage des points de contrôle et portes documentaires
+⏵ Capacité : évaluation de la graine 2 et rédaction de la cinquième fiche
 
 ## 3. Travail accompli
 
@@ -253,7 +253,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 438 autres
+- … et 469 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -381,7 +381,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ## 5. Erreurs rencontrées
 
-37 sorties en erreur ou divergentes. Les premières :
+40 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5
@@ -411,4 +411,5 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - JOURNAL — N2.h : LE MÈTRE PROPRE, LA GÉNÉRALITÉ, ET LE VERROU DE LONGUEUR  Le récit de la nuit : la validation se recopiait (32,8 %), le corpus dédupliqué tombe
 - N2.h4 — LES DEUX LEVIERS SE COMPOSENT : 3,47 EN DOMAINE, 4,10 HORS DÉPÔT, 3,49 À 256 OCTETS  Le corpus mixte (moitié dépôt, moitié littérature) et les positions
 - ÉTAT — N2.h CLOSE : QUATRE FICHES COMMITTÉES, PORTES VERTES  La page d'état passe la session N2.h en close : les quatre fiches (n2-propre, n2-diversite, n2-long
+- N2.h5 — LA CAPACITÉ PAIE EN DOMAINE (−0,06) MAIS NE COUVRE PAS  À données, professeur et budget égaux, le modèle de 21,65 M (d_model 296, expert_hidden 416, ×1,
 

@@ -58,6 +58,9 @@ def main() -> None:
     ap.add_argument("--sortie", default="/tmp/drave-n0.pt")
     ap.add_argument("--drvm", default="/tmp/drave-n0.drvm")
     ap.add_argument("--graine", type=int, default=1)
+    ap.add_argument("--dim", type=int, default=224, help="d_model (224 = 11,47 M ; 296 = 21,65 M)")
+    ap.add_argument("--expert-hidden", type=int, default=288,
+                    help="largeur d'un expert (288 ; 416 pour 21,65 M)")
     ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True,
                     help="entraîner aussi les têtes précoces")
     a = ap.parse_args()
@@ -65,7 +68,7 @@ def main() -> None:
     data = charger(a.corpus)
     n_val = max(10_000, len(data) // 20)
     train, val = data[:-n_val], data[-n_val:]
-    cfg = NativeConfig()
+    cfg = NativeConfig(d_model=a.dim, expert_hidden=a.expert_hidden)
     modele = NativeModel(cfg).to(a.device)
     opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)
     t0 = time.time(); pertes = []
