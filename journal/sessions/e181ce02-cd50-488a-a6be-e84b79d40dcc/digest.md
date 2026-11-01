@@ -9874,3 +9874,100 @@ timeout 120 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/csp.py tools/pensee/jeux.py tools/pensee/moteur.py tools/pensee/autotest.py reports/rapport-pensee-ac3-alphabeta.md reports/pensee-ac3-alphabeta.json reports/README.md docs/implantation/moteur-de-pensee.md docs/p … [421 caractères tronqués]`
+
+  ```
+docs/implantation/moteur-de-pensee.md              |  21 +--
+ docs/pilotage/chantiers.md                         |   8 +-
+ docs/pilotage/en-cours.md                          |  23 ++-
+ docs/pilotage/plan-travail.md                      |   6 +-
+ docs/pilotage/roadmap.md                           |   4 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |  13 +-
+ reports/README.md                                  |   1 +
+ reports/pensee-ac3-alphabeta.json                  |  21 +++
+ reports/rapport-pensee-ac3-alphabeta.md            | 135 ++++++++++++++
+ tools/pensee/autotest.py                           |  62 ++++++-
+ tools/pensee/csp.py                                | 199 +++++++++++++++++++++
+ tools/pensee/jeux.py                               | 187 +++++++++++++++++++
+ tools/pensee/moteur.py                             |   1 +
+ 13 files changed, 646 insertions(+), 35 deletions(-)
+[still running after 60000ms; moved to background job bash-352]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-352", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 3c749d27] B13 — AC-3 ET ALPHA-BÊTA : 8/8 PORTES, 1 495 NŒUDS/296 COUPES CONTRE 18 730
+ 32 files changed, 2008 insertions(+), 186 deletions(-)
+ create mode 100644 reports/pensee-ac3-alphabeta.json
+ create mode 100644 reports/rapport-pensee-ac3-alphabeta.md
+ create mode 100644 tools/pensee/csp.py
+ create mode 100644 tools/pensee/jeux.py
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Plan lu, B13 avancé : AC-3 et alpha-bêta tiennent 8/8 portes
+
+J'ai lu `docs/pilotage/plan-travail.md` : la session **L** (langue et pensée, c'est la nôtre) a pour mandat le bloc langue, la cascade, la pragmatique et **B13** ; sa prochaine action était « le contrat, puis la mesure 71 langues ; **AC-3/alpha-bêta** ». Le contrat et les 398 langues étaient faits ; j'ai avancé **B13 : AC-3 et alpha-bêta**. Commit **`3c749d27`**.
+
+## 1. AC-3 : la contrainte propage
+
+`tools/pensee/csp.py` : le CSP, l'opérateur `retirer`, la stratégie `AC3` branchée sur la **même** boucle `Moteur`/`Store`/`Trace` que BFS/A*.
+
+| cas | résultat |
+|---|---|
+| **chaîne** `A∈{r}`, `B∈{r,g}`, `C∈{r,g}`, `A≠B`, `B≠C` | B perd `r`, C perd `g` → **A=r, B=g, C=r** ; 2 valeurs retirées ; arc-consistance vraie ; solution ; `settled` |
+| **carte d'Australie** (7 variables, 3 couleurs, 9 contraintes) | **aucune réduction** : la carte est déjà arc-consistante ; le backtracking trouve `WA=g, NT=b, SA=r, Q=g, NSW=b, V=g, T=b` |
+| **contradiction** `A∈{r}`, `B∈{r}`, `A≠B` | domaine de A **vide** ; `resoudre` rend `None` |
+
+La carte est le **contrôle** : AC-3 ne prouve pas une solution, il **réduit** ; quand il n'y a rien à réduire, il ne dit rien. La contradiction est **vue**, pas devinée.
+
+## 2. Alpha-bêta : gagner, bloquer, couper
+
+`tools/pensee/jeux.py` : le morpion, le décideur `AlphaBeta`, le minimax exact comme contrôle.
+
+| cas | résultat |
+|---|---|
+| **gagner en un coup** `X X . / O O . / . . .` | joue **case 2**, X gagne |
+| **bloquer** `X . . / O O . / X . .` | joue **case 5** |
+| **contrôle négatif** profondeur 1, évaluation nulle | joue **case 1** : il ne voit pas la menace |
+| **coupe** plateau vide, profondeur 5 | **1 495 nœuds / 296 coupes** contre **18 730 nœuds** au minimax — même coup, **12,5× moins de nœuds** |
+
+Le contrat est respecté au niveau des types : mêmes `Etat`, `Probleme`, `Decision`, `Store`, `Trace`, mêmes opérateurs. **Mais alpha-bêta n'est pas une stratégie de la boucle anytime** : la valeur remonte l'arbre, alors que la boucle la propage vers l'avant. C'est un **décideur** deux joueurs ; le rapport le dit au lieu de le cacher.
+
+## 3. Les portes
+
+`python3 -m tools.pensee.autotest` → **8/8** :
+
+- T0 store canonique, T1 rejeu, T1 graine, T2 stratégies, T3 anytime, T4 justification ;
+- **T5 AC-3** : chaîne, carte, contradiction ;
+- **T6 alpha-bêta** : gain, blocage, profondeur 1 qui rate, coupe.
+
+Les portes T5/T6 du contrat — « un solveur se branche », « le coût est compté » — sont **instanciées** par AC-3 et alpha-bêta. La fiche est [`rapport-pensee-ac3-alphabeta.md`](../../reports/rapport-pensee-ac3-alphabeta.md), le JSON [`pensee-ac3-alphabeta.json`](../../reports/pensee-ac3-alphabeta.json).
+
+## 4. L'état
+
+- `en-cours` : **1 624 mots**, 1 session, 10 puces ; le champ **Moteur B13** et la prochaine action sont à jour.
+- Plan `e181ce02` : étape 5) **AC-3/alpha-bêta (8/8)**, reste **DRVF** ; heartbeat 16 h 30.
+- Roadmap : B13 passe à **DRVF, banc anytime** ; la ligne L passe à **contrat + bloc, 398 langues**.
+- `chantiers` : L et B13 passent de « analyse/state store » à « contrat + 8/8 ».
+- `plan-travail` : la ligne L dit désormais « contrat/bloc (398 langues) et AC-3/alpha-bêta faits ; gold/neuronal ; DRVF/banc ».
+- Commit **`3c749d27`** ; toutes les portes passent : `revue` (386 fiches / 472 JSON / 118 docs / 81 portes), `taille` (T0 dans le budget), `porte-tableaux`, `verifier_schemas`, `verifie_journal`, `verifie_en_cours`, `sessions.py --check`, autotest 8/8.
+
+## 5. Deux notes de coordination
+
+1. **La mesure 71 langues** du plan L est **couverte** par la mesure 398 langues du bloc (les 71 du dépôt sont un sous-ensemble) ; le contrat/bloc est marqué fait.
+2. **Le plan `fe3c05f0` (R4.4) est repassé actif** et n'est pas listé dans `en-cours` : `sessions.py --check` le signale (sortie 0, avertissement). Je ne l'ai **pas touché** — c'est au hub d'ajouter sa section ou de le clore, selon la règle « un écrivain à la fois ».
+
+## 6. La suite
+
+- **B13** : le **DRVF** `thought` (trace, rejeu, diff) et le **banc anytime** (AUC, regret) ; AC-3/alpha-bêta sont mesurés.
+- **L** : le **gold** POS/syntagme/pragmatique et un **modèle neuronal qualifié** ; la cascade mesurée sur le gold.
+- **S** : l'analyseur plus riche et l'export (TUI S) ; **D** : les corpus et R1.1/R1.2 ; **N2** : le natif sur les corpus wiki.
+
+Le plan est lu, la prochaine action de L/B13 est faite ; le prochain pas est le **DRVF**, pas un nouveau détour.
+

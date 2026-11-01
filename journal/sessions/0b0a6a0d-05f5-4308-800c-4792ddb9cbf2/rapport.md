@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 24.2 h |
 | Tours | 17 |
-| Messages | 1012 |
-| Appels d'outils | 943 |
+| Messages | 1020 |
+| Appels d'outils | 951 |
 | Fichiers touchés | 11 |
-| Commandes | 779 |
+| Commandes | 787 |
 | Sous-agents | 0 |
-| Commits | 26 |
+| Commits | 27 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -878,7 +878,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 
 ### Tour 17 — lire docs/pilotage/plan-travail.md et avancer
 
-*12 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Read the work plan
 - bash — Read the batch sampler and the position support
@@ -890,6 +890,11 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 - bash — Check the position-randomized training
 - bash — Wait for the position-randomized base to finish
 - bash — Evaluate the position-randomized wiki base
+- bash — Write the length report and launch the capacity arm on the real corpus
+- bash — Update the plan with the length result and check the capacity run
+- bash — Trim the state under budget
+- bash — Read the N2 bullet in full
+- … et 4 autres
 
 **Synthèse produite :**
 
@@ -955,7 +960,7 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 739 autres
+- … et 747 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1129,4 +1134,5 @@ Sur les jeux externes français (littérature, anglais, wikitext2), le multiling
 - N2.j — 186 Mo DE VRAI FRANÇAIS : LE BLOC LINGUISTIQUE GAGNE ×1,7 À ×2,6 HORS DOMAINE  Sur l'inventaire local (132 Go de Wikipédia, base FR de 7,25 Go) : 120 000
 - N2.k — DIX LANGUES : LE FRANÇAIS PAIE 0,65 BIT/OCTET, LES AUTRES GAGNENT 0,8 À 3,4  Dix langues extraites des bases sqlite (fr, en, de, es, it, pt, ru, ar, ja, 
 - ÉTAT — COMPTEUR JSON 471 (DIX LANGUES)  Les corpus et les évaluations multilingues de l'autre session font passer le compteur à 471 ; la revue repasse." && git 
+- N2.j2 — POSITIONS ALÉATOIRES SUR 186 Mo : LE VERROU DE LONGUEUR TOMBE ENCORE (÷2,4 À 512)  La base du corpus réel (186 Mo de Wikipédia, N2.j) entraînée avec des
 

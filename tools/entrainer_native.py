@@ -11,6 +11,7 @@ import argparse
 import json
 import math
 import pathlib
+import random
 import time
 
 import torch
@@ -61,6 +62,8 @@ def main() -> None:
     ap.add_argument("--dim", type=int, default=224, help="d_model (224 = 11,47 M ; 296 = 21,65 M)")
     ap.add_argument("--expert-hidden", type=int, default=288,
                     help="largeur d'un expert (288 ; 416 pour 21,65 M)")
+    ap.add_argument("--positions-aleatoires", type=int, default=0,
+                    help="décalage de position tiré dans [0, N] à chaque pas (0 = positions fixes)")
     ap.add_argument("--init", default=None,
                     help="checkpoint de départ (poids seuls, pour un curriculum)")
     ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True,
@@ -81,7 +84,8 @@ def main() -> None:
     for pas in range(1, a.pas + 1):
         modele.train()
         x, y = lot(train, a.lot, a.seq, a.device, pas * a.lot)
-        sortie = modele(x)
+        pos = random.randint(0, a.positions_aleatoires) if a.positions_aleatoires else 0
+        sortie = modele(x, pos_debut=pos)
         pertes = [F.cross_entropy(sortie["logits"].reshape(-1, 256), y.reshape(-1))]
         if a.tetes:
             for e in sortie["early"]:

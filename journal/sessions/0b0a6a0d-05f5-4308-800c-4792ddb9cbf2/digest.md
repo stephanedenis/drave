@@ -13450,3 +13450,102 @@ POS_OK
 background job bash-776 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-pos.log; ls work/n2j/base-wiki-pos.pt 2>/dev/null && echo POS_OK) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/base-wiki-pos.pt --decomposition --longueurs --corpus-dir data/wiki_fr/propre --sortie work/n2j/eval-pos.json 2>&1 | grep -v Loading; ~ … [187 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-779]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-779", "timeout_ms": 400000, "wait": true}`
+
+  ```
+{"fichier": "base-wiki-pos.pt", "params": 11814792, "val": 4.3893, "test": 4.4477, "litterature": 7.7401, "litterature_propre": 7.9005, "anglais": 13.723, "wikitext2": 14.9385, "permute": 204.3383, "decomposition": {"complete": 4.2799, "apres_2_blocs": 5.7634, "apres_4_blocs": 4.6629, "apres_6_blocs": 4.3203, "sans_pensee": 20755382.9988}, "longueurs": {"129": 4.394, "192": 4.3709, "256": 4.4905, "384": 5.0508, "512": 5.6691}}
+{"fichier": "base-wiki-pos.pt", "params": 11814792, "val": 7.1141, "test": 7.1081, "litterature": 7.7401, "litterature_propre": 7.9005, "anglais": 13.723, "wikitext2": 14.9385, "permute": 275.841}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-longueur-reelle.md <<'EOF'\n# N2.j2 — Positions aléatoires sur 186 Mo : le verrou de longueur tombe encore (÷2,4 à 512)\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : la base du corpus … [4554 caractères tronqués]`
+
+  ```
+fiche écrite
+capacité 1447571
+16:30
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 30; tail -3 work/n2j/base-wiki-cap.log; date '+%H:%M'; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"\"\"  (**10 langues**, 237 Mo) : fr **5,68** (à données égales **3 … [1424 caractères tronqués]`
+
+  ```
+pas  600 · perte 2.5120 · PPL val 12.211 · 30 s
+pas  650 · perte 2.5419 · PPL val 12.262 · 32 s
+pas  700 · perte 2.5484 · PPL val 12.111 · 35 s
+16:30
+en-cours ok
+roadmap ok
+  T0 max : 4019 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"positions aléatoires : 256 octets **14,11 → 3,25** ;\", \"\")\ns = s.replace(\"**N2.k**\\n  (**10 langues**, 237 Mo)  … [414 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4013 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ état court, structuré, multi-session et reprenable
+     · compteurs : en-cours.md dit 386 fichiers, le disque en a 387
+     · compteurs : en-cours.md dit 472 JSON, le disque en a 473
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/N2.h — le mètre propre/,/N4 \\*\\*0\\/40\\*\\*/p' docs/pilotage/en-cours.md", "description": "Read the N2 bullet in full"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"N2.h\\|N2.i\\|N2.j\\|N2.k\" docs/pilotage/en-cours.md | head -6; sed -n 72,84p docs/pilotage/en-cours.md", "description": "Locate and read the N2 bullet"}`
+
+  ```
+43:- **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
+52:> `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close ; restes nommés : fax 1 bit,
+84:- **N2.h — close** : corpus dédupliqué (**0 %** de fuite), chaîne propre **3,09** en domaine,
+85:  diversité (÷ 4,3 hors dépôt), longueur (14,11 → 3,25 à 256), combinaison et capacité ; **N2.i**
+86:  (4,84 Mo) : **12,93** littérature, **33,83** anglais — généralise sans relever le domaine ; **N2.j**
+87:  (**186 Mo** de Wikipédia) : **7,42** / **12,41**, filtre non ambigu sans effet ; **N2.k**
+  la banque reçoit déjà des validations réelles ; [`README`](../../tools/structures/README.md).
+- **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
+  1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
+  [`r13`](../../reports/rapport-r13-decision.md), spécification
+  [`tokenisation`](../implantation/tokenisation.md).
+- **B10.2bis — décodeur** : 3×3 : **11,1** ; capacité 11,8 ; **mots 32,5** ;
+  **JW 26,7** (plancher 17,1) ; `z` 1,5–2,6 points ; **contrastif négatif** ; fiches
+  [`b102bis`](../../reports/rapport-b102bis-decodeur.md), [`mots`](../../report
+… [623 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 84,93p docs/pilotage/en-cours.md", "description": "Read the N2 bullet lines"}`
+
+  ```
+- **N2.h — close** : corpus dédupliqué (**0 %** de fuite), chaîne propre **3,09** en domaine,
+  diversité (÷ 4,3 hors dépôt), longueur (14,11 → 3,25 à 256), combinaison et capacité ; **N2.i**
+  (4,84 Mo) : **12,93** littérature, **33,83** anglais — généralise sans relever le domaine ; **N2.j**
+  (**186 Mo** de Wikipédia) : **7,42** / **12,41**, filtre non ambigu sans effet ; **N2.k**
+  (10 langues) : fr **5,68**, anglais **6,30**, chinois **9,65** ; **N2.j2** (positions 0–384 sur le wiki) : 256 octets **9,28 → 4,49**, 512
+  **13,37 → 5,67**, coût **+0,36**. Fiches
+  [`n2-propre`](../../reports/rapport-n2-propre.md) · [`n2-corpus-elargi`](../../reports/rapport-n2-corpus-elargi.md) ·
+  [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md) ·
+  [`n2-multilingue`](../../reports/rapport-n2-multilingue.md) ·
+  [`n2-longueur-reelle`](../../reports/rapport-n2-longueur-reelle.md). N4 **0/40**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"diversité (÷ 4,3 hors dépôt), longueur (14,11 → 3,25 à 256), combinaison et capacité ;\",\n              \"divers … [907 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+     · compteurs : en-cours.md dit 473 JSON, le disque en a 474
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1200 caractères tronqués]`

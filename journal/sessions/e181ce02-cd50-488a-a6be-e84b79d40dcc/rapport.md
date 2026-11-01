@@ -9,7 +9,7 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 23.8 h |
 | Tours | 12 |
-| Messages | 413 |
+| Messages | 414 |
 | Appels d'outils | 450 |
 | Fichiers touchés | 25 |
 | Commandes | 352 |
@@ -676,7 +676,45 @@ Deux schémas : `bloc-linguistique-niveaux.svg` et `bloc-linguistique-substituti
 
 **Synthèse produite :**
 
-⏵ J'attaque la suite B13 : AC-3 branché sur la boucle, alpha-bêta pour les jeux
+⏵ Plan lu, B13 avancé : AC-3 et alpha-bêta tiennent 8/8 portes
+
+J'ai lu `docs/pilotage/plan-travail.md` : la session **L** (langue et pensée, c'est la nôtre) a pour mandat le bloc langue, la cascade, la pragmatique et **B13** ; sa prochaine action était « le contrat, puis la mesure 71 langues ; **AC-3/alpha-bêta** ». Le contrat et les 398 langues étaient faits ; j'ai avancé **B13 : AC-3 et alpha-bêta**. Commit **`3c749d27`**.
+
+\## 1. AC-3 : la contrainte propage
+
+`tools/pensee/csp.py` : le CSP, l'opérateur `retirer`, la stratégie `AC3` branchée sur la **même** boucle `Moteur`/`Store`/`Trace` que BFS/A*.
+
+| cas | résultat |
+|---|---|
+| **chaîne** `A∈{r}`, `B∈{r,g}`, `C∈{r,g}`, `A≠B`, `B≠C` | B perd `r`, C perd `g` → **A=r, B=g, C=r** ; 2 valeurs retirées ; arc-consistance vraie ; solution ; `settled` |
+| **carte d'Australie** (7 variables, 3 couleurs, 9 contraintes) | **aucune réduction** : la carte est déjà arc-consistante ; le backtracking trouve `WA=g, NT=b, SA=r, Q=g, NSW=b, V=g, T=b` |
+| **contradiction** `A∈{r}`, `B∈{r}`, `A≠B` | domaine de A **vide** ; `resoudre` rend `None` |
+
+La carte est le **contrôle** : AC-3 ne prouve pas une solution, il **réduit** ; quand il n'y a rien à réduire, il ne dit rien. La contradiction est **vue**, pas devinée.
+
+\## 2. Alpha-bêta : gagner, bloquer, couper
+
+`tools/pensee/jeux.py` : le morpion, le décideur `AlphaBeta`, le minimax exact comme contrôle.
+
+| cas | résultat |
+|---|---|
+| **gagner en un coup** `X X . / O O . / . . .` | joue **case 2**, X gagne |
+| **bloquer** `X . . / O O . / X . .` | joue **case 5** |
+| **contrôle négatif** profondeur 1, évaluation nulle | joue **case 1** : il ne voit pas la menace |
+| **coupe** plateau vide, profondeur 5 | **1 495 nœuds / 296 coupes** contre **18 730 nœuds** au minimax — même coup, **12,5× moins de nœuds** |
+
+Le contrat est respecté au niveau des types : mêmes `Etat`, `Probleme`, `Decision`, `Store`, `Trace`, mêmes opérateurs. **Mais alpha-bêta n'est pas une stratégie de la boucle anytime** : la valeur remonte l'arbre, alors que la boucle la propage vers l'avant. C'est un **décideur** deux joueurs ; le rapport le dit au lieu de le cacher.
+
+\## 3. Les portes
+
+`python3 -m tools.pensee.autotest` → **8/8** :
+
+- T0 store canonique, T1 rejeu, T1 graine, T2 stratégies, T3 anytime, T4 justification ;
+- **T5 AC-3** : chaîne, carte, contradiction ;
+- **T6 alpha-bêta** : gain, blocage, profondeur 1 qui rate, coupe.
+
+Les portes T5/T6 du contrat — « un solveur se branche », « le coût est 
+… [1983 caractères tronqués]
 
 ## 3. Travail accompli
 

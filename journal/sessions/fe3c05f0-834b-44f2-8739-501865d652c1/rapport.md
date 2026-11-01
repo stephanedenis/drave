@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 23.9 h |
+| Durée | 24.0 h |
 | Tours | 10 |
-| Messages | 833 |
-| Appels d'outils | 834 |
+| Messages | 837 |
+| Appels d'outils | 838 |
 | Fichiers touchés | 18 |
-| Commandes | 762 |
+| Commandes | 766 |
 | Sous-agents | 0 |
 | Commits | 37 |
 | Compactages de contexte | 2 |
@@ -528,7 +528,7 @@ Le **hub** tient l'état, la roadmap, les compteurs, le journal et la revue ; il
 
 ### Tour 10 — lire docs/pilotage/plan-travail.md et avancer
 
-*15 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - read
 - bash — Read current state plan and French dump
@@ -544,7 +544,7 @@ Le **hub** tient l'état, la roadmap, les compteurs, le journal et la revue ; il
 - bash — Open D/R/A session plan and update territory
 - bash — Fix field parser headings and check pilot
 - bash — Inspect pilot sample and status
-- … et 1 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
@@ -617,7 +617,7 @@ Le **hub** tient l'état, la roadmap, les compteurs, le journal et la revue ; il
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 722 autres
+- … et 726 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -15092,3 +15092,81 @@ En 1897, il soutient sa thèse pour le doctorat ès lettres (Recherches sur l'em
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 60); do [ -f reports/corpus-wiki-fr-texte-pilote.json ] && break; sleep 5; done; tail -3 /tmp/pilote-texte.log; echo \"=== manifeste\"; python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('reports/corpus-wiki-fr-text … [614 caractères tronqués]`
+
+  ```
+"lignes_echantillon": 20000
+ }
+}
+=== manifeste
+articles_lus : 146250
+articles_gardes : 100000
+articles_rediriges : 31998
+articles_courts : 3574
+articles_doublons : 0
+caracteres_gardes : 1045085924
+mots_estimes : 168562245
+octets : {'train': 972627365, 'val': 56335398, 'test': 52664369}
+articles : {'train': 89914, 'val': 5105, 'test': 4981}
+residus : {'modele': 1, 'lien': 0, 'balise': 3, 'lignes_echantillon': 20000}
+echantillon: --- | Antoine Meillet | Antoine Meillet, né le à Moulins (Allier) et mort le à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du . |  | Biographie | Enfance et formation | Paul Jules Antoine Meillet est d'origine bourbonnaise, fils d'un notaire de Châ
+1,1G	/tmp/wiki-texte-pilote
+4,0K	reports/corpus-wiki-fr-texte-pilote.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 600 python3 tools/verifie_contamination.py --train /tmp/wiki-texte-pilote/train.txt --val /tmp/wiki-texte-pilote/val.txt --test /tmp/wiki-texte-pilote/test.txt --eval data/xnli/XNLI-1.0/xnli.dev.tsv --eval data/udhr/articles.js … [329 caractères tronqués]`
+
+  ```
+"trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "articles.jsonl",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  }
+ ]
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/corpus-wiki-fr-texte-pilote-contamination.json').read_text())\nprint(json.dumps({k:v for k,v in d.items() if k!='evals'}, ensure_ascii=False, indent=1)[:1200])\n … [269 caractères tronqués]`
+
+  ```
+{
+ "train": "/tmp/wiki-texte-pilote/train.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 2938969,
+  "par_split": {
+   "val.txt": {
+    "troncons": 170703,
+    "doublons": 6240,
+    "taux": 0.036555
+   },
+   "test.txt": {
+    "troncons": 159658,
+    "doublons": 5576,
+    "taux": 0.034925
+   }
+  }
+ },
+ "recouvrement_eval": [
+  {
+   "fichier": "xnli.dev.tsv",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "articles.jsonl",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  }
+ ]
+}
+=== evals
+  ```
+
