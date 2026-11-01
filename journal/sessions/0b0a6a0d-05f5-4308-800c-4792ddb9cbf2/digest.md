@@ -7484,3 +7484,105 @@ porte-melange 1 112
   ```
 
 - **job_output** `{"job_id": "bash-433", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt; tail -1 work/n2h/portes.log; ps -eo pid,etime,cmd | grep \"porte-\" | grep -v grep | head -2", "description": "Check the end o … [17 caractères tronqués]`
+
+  ```
+02:33
+79
+porte-homeostasie 2 0
+porte-indice 1 921
+porte-melange 1 112
+porte-reparti-moteur 1 3
+  porte-trace            ✅                          27 s    ✅ la trace fausse est détectée et nommée
+1015658       16:04 bash -c timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-v7.log 2>&1; echo "[gate $?]"; tail -3 work/r44/gate-v7.log
+1015731       16:04 timeout 2400 bash tools/porte-ocr-scans.sh
+  ```
+
+- **job_output** `{"job_id": "bash-433", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+02:38
+79
+porte-homeostasie 2 0
+porte-indice 1 921
+porte-melange 1 112
+porte-reparti-moteur 1 3
+  porte-tokenizer-kimi   ✅                           6 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                          96 s    ✅ PPL épinglées : reference 17.4702 · historique 30.4363 · topologie 30.4363 · relais 2 42.547
+  porte-trace            ✅                          27 s    ✅ la trace fausse est détectée et nommée
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,etime,cmd | grep -E \"porte-vision|toutes-les-portes\" | grep -v grep | head -3; date '+%H:%M'; tail -1 /tmp/portes-1101-n2h/porte-vision.log 2>/dev/null", "description": "Check the last gate"}`
+
+  ```
+657672    01:42:14 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env JOURNAUX=/tmp/portes-1101-n2h DELAI=1800 bash tools/toutes-les-portes.sh > work/n2h/portes.log 2>&1 & echo "portes $!"; date '+%H:%M'
+ 657673    01:42:14 bash tools/toutes-les-portes.sh
+1129372       05:28 timeout 1800 bash tools/porte-vision.sh
+02:38
+  ✅ 1. un modèle sans tour de vision est refusé en le disant
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; wc -l < /tmp/portes-1101-n2h/registre.txt; tail -3 work/n2h/portes.log; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt", "description": "Wait for the last gate and read the verdict", "run_in_background": tr … [3 caractères tronqués]`
+
+  ```
+started background job bash-437
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/maj-portes.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"maj-portes.py — consigne la passe N2.h dans references-non-regression et en-cours.\"\"\"\nimport pathlib, re\n\nreg = pathlib.Path('/tmp/portes-1101-n2h/registre.txt' … [2130 caractères tronqués]`
+
+  ```
+ok
+02:38
+  ```
+
+- **job_output** `{"job_id": "bash-437", "timeout_ms": 900000, "wait": true}`
+
+  ```
+02:45
+81
+      perplexité répartie : 8.7434 · écart de flux : 0.00e0
+    PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti
+Journaux complets : /tmp/portes-1101-n2h
+porte-homeostasie 2 0
+porte-indice 1 921
+porte-melange 1 112
+porte-reparti-moteur 1 3
+--- 76 vertes, 4 rouges ---
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Portes : 80 portes, 76 vertes, 4 rouges connues — aucune régression
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 work/n2h/maj-portes.py; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -1", "description": "Record the gate pass in the references and state"}`
+
+  ```
+80 portes, 76 vertes, 4 rouges, 1 h 46
+  rouge: porte-homeostasie 2 0
+  rouge: porte-indice 1 921
+  rouge: porte-melange 1 112
+  rouge: porte-reparti-moteur 1 3
+references mis à jour
+en-cours mis à jour
+  revue de documentation · 375 fiche(s) · 454 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · docs/pilotage/references-non-regression.md : 2543 mots > budget 2500 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\na = \"\"\"> **Dernière passe complète — 2026-11-01 à 00 h 56 :** **80 portes, 76 vertes, 4 rouges, 1 h 46**\n> (jour … [1765 caractères tronqués]`
+
+  ```
+ok
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/N2-distillation.md docs/pilotage/en-cours.md docs/pilotage/references-non-regression.md reports/INDEX.md reports/README.md reports/corpus-litt-propre.json reports/corpus-propre.json reports/n2-propre.jso … [300 caractères tronqués]`

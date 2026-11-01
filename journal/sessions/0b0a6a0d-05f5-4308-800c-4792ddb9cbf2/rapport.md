@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 10.1 h |
+| Durée | 10.5 h |
 | Tours | 4 |
-| Messages | 553 |
-| Appels d'outils | 527 |
+| Messages | 562 |
+| Appels d'outils | 536 |
 | Fichiers touchés | 11 |
-| Commandes | 434 |
+| Commandes | 441 |
 | Sous-agents | 0 |
-| Commits | 6 |
+| Commits | 7 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -171,7 +171,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 4 — en-cours.md doit contenir pour chaque session tout ton plan, ambition et stratégie et objectif final. Continue ton bon t … [120 caractères tronqués]
 
-*188 appels d'outils.* Actions notables :
+*197 appels d'outils.* Actions notables :
 
 - bash — Check active sessions, state, and campaign
 - bash — Measure the context budget headroom
@@ -187,11 +187,11 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - job_output
 - bash — Check campaign state after the state commit
 - bash — Draft the clean-corpus report
-- … et 134 autres
+- … et 141 autres
 
 **Synthèse produite :**
 
-⏵ Préparation du bras capacité (21,65 M) pour après le commit : options de taille au trainer
+⏵ Portes : 80 portes, 76 vertes, 4 rouges connues — aucune régression
 
 ## 3. Travail accompli
 
@@ -253,7 +253,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 394 autres
+- … et 401 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -407,4 +407,5 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - ÉTAT — LA SESSION N2.h PORTE SON PLAN, SON AMBITION ET SA STRATÉGIE DANS LA PAGE D'ÉTAT  La page d'état doit suffire à une autre session : en-cours expose maint
 - ÉTAT — N2.h : LA CHAÎNE PROPRE DONNE 3,10 EN DOMAINE, PAS 2,85  Le premier point de contrôle de la chaîne refaite sur le corpus dédupliqué est évalué : 3,10 en 
 - ÉTAT — N2.h : LA DIVERSITÉ FRANÇAISE DIVISE LA PPL HORS DÉPÔT PAR 4,4  Le bras diversité (moitié dépôt, moitié littérature française, même budget, mêmes trois g
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/N2-distillation.md docs/pilotage/en-cours.md docs/pilotage/references-non-re
 

@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 9.8 h |
+| Durée | 10.2 h |
 | Tours | 3 |
-| Messages | 606 |
-| Appels d'outils | 605 |
+| Messages | 640 |
+| Appels d'outils | 638 |
 | Fichiers touchés | 18 |
-| Commandes | 546 |
+| Commandes | 579 |
 | Sous-agents | 0 |
 | Commits | 26 |
 | Compactages de contexte | 1 |
@@ -144,7 +144,7 @@ Deux défauts que le synthétique ne voyait pas : un **en-tête centré** traver
 
 ### Tour 3 — <goal_round> Objective: "R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité … [917 caractères tronqués]
 
-*27 appels d'outils.* Actions notables :
+*60 appels d'outils.* Actions notables :
 
 - bash — Inspect failed parity questions
 - bash — Inspect scan entry structure
@@ -160,7 +160,7 @@ Deux défauts que le synthétique ne voyait pas : un **en-tête centré** traver
 - bash — Read scans results after note fix
 - bash — List remaining parity failures
 - bash — Inspect the 2030-11 value failure
-- … et 13 autres
+- … et 46 autres
 
 ## 3. Travail accompli
 
@@ -229,7 +229,7 @@ Deux défauts que le synthétique ne voyait pas : un **en-tête centré** traver
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 506 autres
+- … et 539 autres
 
 ## 4. Mesures et résultats marquants
 

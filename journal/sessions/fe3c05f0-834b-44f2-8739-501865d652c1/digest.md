@@ -10496,3 +10496,455 @@ reports/r44-seed3.json
   ```
 
 - **bash** `{"command": "cat > /tmp/msg-note.txt <<'EOF'\nR4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %)\n\nLa ligne de continuation « social et dans les domaines connexes » était typée **note** parce que sa\nboîte est plus courte (pas de h … [1948 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+ 21 files changed, 4986 insertions(+), 395 deletions(-)
+ create mode 100644 reports/r44-sans-exposants.json
+e7b51508 R4.4 — LA NOTE TYPÉE À TORT COÛTAIT 4 QUESTIONS : LA PARITÉ PASSE À 90 % SUR LA PHOTOCOPIE ET LA PHOTO (PROPRE 96,7 %)
+  ```
+
+- **bash** `{"command": "sleep 120; tail -14 work/r44/gate-v7.log; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l; date +%H:%M", "description": "Read gate verdict after note fix", "timeoutMs": 240000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+✅ papier · dev : préservation ≥ 55% (mesuré 86.7%)
+  ✅ papier · test : WER ≤ 10% (mesuré 6.4%)
+  ✅ photo · dev : WER ≤ 10% (mesuré 6.7%)
+  ✅ photo · dev : préservation ≥ 60% (mesuré 90.0%)
+  ✅ photo · test : WER ≤ 10% (mesuré 5.7%)
+  ✅ photocopie · dev : WER ≤ 8% (mesuré 6.3%)
+  ✅ photocopie · dev : préservation ≥ 60% (mesuré 90.0%)
+  ✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 96.7%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 107 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+3
+02:28
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms\npages=mo.pages_du_banc(10)\nfor p in pages:\n    if p['pdf'].name not in ('A_RES_80_1-en.pdf','A_RES_80_1-fr.pdf'): continue\n    qs=[q for q in p['questions'] if q['val … [1153 caractères tronqués]`
+
+  ```
+=== A_RES_80_1-en.pdf q: Quelle valeur le document associe-t-il à « 2025 » et « counsel » ? valeur 12
+NAT True 'of 12 September 2025, and the statements made therein, including the position of the United Nations Legal Counsel,'
+OCR False 'United Nations Legal Counsel,'
+F1 0.5
+OCR 12 context: 'of this decision, Taking note of the meeting of the Committee on Relations with the Host Country of 12 September 2025, and the statements made therein, includin'
+=== A_RES_80_1-fr.pdf q: Quelle valeur le document associe-t-il à « 2025 » et « conseillère » ? valeur 12
+NAT True 'tenue le 12 septembre 2025 et des déclarations qui y ont été faites, notamment de la position de la Conseillère juridique de l’ONU,'
+OCR False "position de la Conseillère juridique de l'ONU,"
+F1 0.471
+OCR 12 context: "nt annulée, Prenant note de la réunion du Comité des relations avec le pays hôte qui s'est tenue le 12 septembre 2025 et des déclarations qui y ont été faites, "
+  ```
+
+- **bash** `{"command": "tail -6 work/r44/gate-v7.log; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l; echo \"=== repondre\"; sed -n \"$(grep -n 'def repondre' tools/banc_lecture.py | cut -d: -f1),+40p\" tools/banc_lecture.py", "description": "Check gate and reader answer extraction", "timeoutMs": 240000 … [63 caractères tronqués]`
+
+  ```
+✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 96.7%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 107 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+3
+=== repondre
+def repondre(question: dict, passages: list[dict], scores: list[float] | None) -> dict | None:
+    """Le lecteur du banc : extractif (R0.2) ou modèle (R0.3). Le changement ne touche que
+    l'answerer, jamais la sélection — c'est ce qui rend les deux mesures comparables."""
+    if LECTEUR == "modele":
+        import lecteur_modele
+        return lecteur_modele.repondre(question["question"], passages)
+    return lc.repondre(passages, question["question"], scores)
+
+
+def essai(document: dict, question: dict, mode: str, budget: float,
+          aleatoire: random.Random | None = None, scores: list[float] | None = None) -> dict:
+    passages = document["passages"]
+    total = document["octets"]
+    if mode == "closed_book":
+        return {"lu": set(), "reponse": None, "cout": 0}
+    if mode == "debut":
+        # la troncature naïve : les premiers passages du document, dans l'ordre de lectu
+… [1217 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,stat,cmd | grep -E \"porte-ocr-scans|mesurer_colonnes|tesseract\" | grep -v grep | head -8; ls -la --time-style=+%H:%M work/r44/colonnes.json 2>/dev/null; date +%H:%M", "description": "Check gate process state", "timeoutMs": 120000, "workdir": "/home/stephane/Data1 … [29 caractères tronqués]`
+
+  ```
+1015658       11:48  0.0 Ss   bash -c timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-v7.log 2>&1; echo "[gate $?]"; tail -3 work/r44/gate-v7.log
+1015731       11:48  0.0 S    timeout 2400 bash tools/porte-ocr-scans.sh
+1015732       11:48  0.0 S    bash tools/porte-ocr-scans.sh
+1034868       10:00 29.3 Rl   python3 tools/mesurer_colonnes.py --porte
+-rw-r--r--. 1 stephane stephane 19656 02:00 work/r44/colonnes.json
+02:29
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-r44-scans.md'); s=p.read_text()\ns=s.replace(\"3. **Le papier perd 4 réponses** (86,7 %) et **la photo 3** (90,0 %) sur les 30 questions : le\",\n            \"3. **Le papier perd 4 réponses** (86,7 %) et **la photo 3** ( … [1025 caractères tronqués]`
+
+  ```
+ancre introuvable
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 107 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-r44-scans.md'); s=p.read_text()\nancre=\"## 8. La porte\"\npara='''**Les deux dernières pertes du papier sont nommées.** Sur `A/RES/80/1`, la question « 12 septembre\n2025 » : le texte OCR **contient** « 12 » (vérifié), m … [757 caractères tronqués]`
+
+  ```
+diagnostic ajouté
+
+  100 mesures en 107 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+02:29
+  ```
+
+- **bash** `{"command": "grep -n \"Plan\\*\\*\" docs/pilotage/en-cours.md | head -2; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\n# trim le plan de session (second moteur est dans le plan de session, pas ici) : enlever « porte ... fiche »\ns=s.replace(\"colonne … [550 caractères tronqués]`
+
+  ```
+21:- **Plan** : 1) `tools/corpus_propre.py` (dédup, split par chunks) ; 2) chaîne propre (professeur 23,5 M, base 20k, distillation 20k × 3, curriculum 129 × 3) ; 3) porte honnête + hors domaine + décomposition ; 4) diversité FR 50/50 ; 5) verrou de longueur 129→512 × 3 ; 6) fiches, portes, commit.
+41:- **Plan** : corpus ✅, prétraitement ✅, exposants ✅, colonnes/tables ✅, fiche ✅.
+  T0 max : 4008 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"papier **86,7 %** (valeur lue, fenêtre du lecteur)\",\"papier **86,7 %**\")\ns=s.replace(\"préservation **90 %** (propre 96,7)\",\"préservation **90 %**\")\np.write_text(s)\nPY\ … [297 caractères tronqués]`
+
+  ```
+T0 max : 3999 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+
+  100 mesures en 107 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+02:30
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,stat,cmd | grep -E \"mesurer_colonnes\" | grep -v grep; ls work/r44/ocr/*-m6* 2>/dev/null | wc -l; ls -la --time-style=+%H:%M work/r44/ocr/ | tail -3; pgrep -c tesseract; date +%H:%M", "description": "Check columns gate progress via OCR cache", "timeoutMs": 120000, … [62 caractères tronqués]`
+
+  ```
+1034868       10:51 29.8 Sl   python3 tools/mesurer_colonnes.py --porte
+345
+-rw-r--r--. 1 stephane stephane  17722 23:04 ff26fe35f68bb5c9-eng-4.json
+-rw-r--r--. 1 stephane stephane  21442 23:05 ff26fe35f68bb5c9-eng-6.json
+-rw-r--r--. 1 stephane stephane  18149 00:35 ff26fe35f68bb5c9-fra-3.json
+1
+02:30
+  ```
+
+- **bash** `{"command": "sleep 240; tail -6 work/r44/gate-v7.log; ps -eo pid,etime,pcpu,stat,cmd | grep -E \"mesurer_colonnes|porte-ocr\" | grep -v grep | head -3; date +%H:%M", "description": "Wait for gate columns step", "timeoutMs": 300000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+✅ photocopie : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photo : cellules exactes ≥ 45% (mesuré 62.4%)
+  ✅ photo : grilles de bonne forme ≥ 50% (mesuré 8/10)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables.json
+✅ porte OCR-scans verte : familles, colonnes et tableaux tiennent leurs planchers
+02:34
+  ```
+
+### 👤 Utilisateur
+
+background job bash-539 (bash: timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-v7.log 2>&1; echo "[gate $?]"; tail -3 work/r44/gate-v7.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo\npages=mo.pages_du_banc(10)\np=[x for x in pages if x['pdf'].name=='A_RES_80_1-fr.pdf'][0]\nnat=mo.manifeste_natif(p['pdf'],p['page'],'fra')\nq=[q for q in p['questions'] if q['valeur']=='12' … [244 caractères tronqués]`
+
+  ```
+dict_keys(['texte', 'region', 'start', 'octets', 'score', 'prov'])
+region r00017
+start 1261
+octets 137
+score 3.481
+prov {'page': 1, 'y': 534.9}
+  ```
+
+- **bash** `{"command": "sed -n \"$(grep -n 'def mesure_entree' tools/mesurer_scans.py | cut -d: -f1),+60p\" tools/mesurer_scans.py", "description": "Read scan parity measurement code", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+def mesure_entree(entree: dict, pipeline: str, questions: dict,
+                  exposants: bool = False, colonnes: bool = False,
+                  base: pathlib.Path | None = None) -> dict:
+    image = ((base or (RACINE / "work/r44/scans")) / entree["image"])
+    pdf = RACINE / "data/onu/pdf" / entree["pdf"]
+    natif = manifeste_natif_cached(pdf, entree["page"], entree["langue"])
+    reference = mesurer_ocr.jetons(mesurer_ocr.texte_du_manifeste(natif))
+    chemin, trace = nettoyer(image, pipeline)
+    m = manifeste_ocr(chemin, entree["langue"], exposants=exposants, colonnes=colonnes)
+    hypothese = mesurer_ocr.jetons(mesurer_ocr.texte_du_manifeste(m))
+    commun = sum((Counter(reference) & Counter(hypothese)).values())
+    distance = mesurer_ocr.wer(reference, hypothese)
+    ligne = {
+        **{k: entree[k] for k in ("image", "pdf", "page", "split", "famille", "graine")},
+        "pipeline": pipeline, "trace": trace,
+        "mots_natifs": len(reference), "mots_ocr": len(hypothese),
+        "distance": distance, "commun": commun,
+        "wer": round(distance / max(len(reference), 1), 4),
+        "rappel": round(commun / max(len(reference), 1), 4),
+        "precision": round(c
+… [1869 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo\np=pathlib.Path('data/onu/pdf/A_RES_80_1-fr.pdf')\nm=mo.manifeste_natif(p,1,'fra')\nprint(m.keys())\nr=m['regions'][0]; print(r.keys()); print({k:str(v)[:40] for k,v in r.items()})\n# le champ id  … [192 caractères tronqués]`
+
+  ```
+dict_keys(['version', 'source', 'extraction', 'flux', 'regions', 'stats'])
+dict_keys(['id', 'type', 'texte', 'start', 'end', 'sha256', 'ordre', 'prov'])
+{'id': 'r00000', 'type': 'titre', 'texte': 'A /RES/80/1', 'start': '0', 'end': '11', 'sha256': 'fd7afc7db8f6e0a913931ee6c4dc3ebdce0d9fd6', 'ordre': '1', 'prov': "{'page': 1, 'y': 42.6}"}
+['r00000', 'b00001', 'r00001', 'b00002', 'r00002']
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_ocr.py'); s=p.read_text()\ns=s.replace('''def trouve(reponse: dict | None, valeur: str) -> bool:\n    return bool(reponse and normalise(valeur) in normalise(reponse[\"texte\"]))''','''def trouve(reponse: dict | None, valeur … [3126 caractères tronqués]`
+
+  ```
+parité de passage implémentée
+            "preservation": (round(sum(d.get("trouve_natif_passage", d["trouve_natif"])
+                                      and d.get("trouve_passage", d["trouve"]) for d in details)
+                                    / max(natifs, 1), 4) if natifs else None),
+            "parite_region": (round(sum(d["f1"] >= 0.90 for d in details) / max(q, 1), 4)
+                              if q else None),
+            "f1_median": round(f1s[len(f1s) // 2], 4) if f1s else None,
+        }
+    return out
+  ```
+
+- **bash** `{"command": "sed -n \"$(grep -n 'def agrege' tools/mesurer_scans.py | cut -d: -f1),+40p\" tools/mesurer_scans.py", "description": "Read aggregate preservation computation", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+def agrege(lignes: list[dict]) -> dict:
+    par = defaultdict(list)
+    for l in lignes:
+        par[(l["famille"], l["split"], l["pipeline"])].append(l)
+    out = {}
+    for (famille, split, pipeline), ls in sorted(par.items()):
+        nat = sum(l["mots_natifs"] for l in ls)
+        ocr = sum(l["mots_ocr"] for l in ls)
+        commun = sum(l["commun"] for l in ls)
+        dist = sum(l["distance"] for l in ls)
+        details = [d for l in ls for d in l["details"]]
+        q = len(details)
+        natifs = sum(d["trouve_natif"] for d in details)
+        f1s = sorted(d["f1"] for d in details)
+        out[f"{famille}|{split}|{pipeline}"] = {
+            "famille": famille, "split": split, "pipeline": pipeline, "scans": len(ls),
+            "mots_natifs": nat,
+            "wer": round(dist / max(nat, 1), 4),
+            "rappel": round(commun / max(nat, 1), 4),
+            "precision": round(commun / max(ocr, 1), 4),
+            "confiance": round(sum(l["confiance"] * l["mots_natifs"] for l in ls) / max(nat, 1), 1),
+            "questions": q,
+            "exactitude_natif": round(natifs / max(q, 1), 4),
+            "exactitude_ocr": round(sum(d["trouve"] for d in details) / max(q, 1
+… [1003 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/mesurer_scans.py'); s=p.read_text()\ns=s.replace('''            \"preservation\": (round(sum(d.get(\"trouve_natif_passage\", d[\"trouve_natif\"])\n                                      and d.get(\"trouve_passage\", d[\"trouve\"]) f … [1204 caractères tronqués]`
+
+  ```
+preservation_reponse ajoutée
+[scans 0]
+  ✅ papier · test : WER ≤ 10% (mesuré 6.4%)
+  ✅ photo · dev : WER ≤ 10% (mesuré 6.7%)
+  ✅ photo · dev : préservation ≥ 60% (mesuré 90.0%)
+  ✅ photo · test : WER ≤ 10% (mesuré 5.7%)
+  ✅ photocopie · dev : WER ≤ 8% (mesuré 6.3%)
+  ✅ photocopie · dev : préservation ≥ 60% (mesuré 90.0%)
+  ✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 96.7%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 91 s → work/r44/mesure-v8.json
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\na=json.load(open('work/r44/mesure-v8.json'))['agregat']\nfor k in sorted(a): print(k,'passage',a[k]['preservation'],'fenêtre',a[k].get('preservation_reponse'))\nPY\npython3 - <<'PY'\nimport sys,pathlib,json\nsys.path.insert(0,'tools')\nimport mesurer_ocr a … [915 caractères tronqués]`
+
+  ```
+fax|dev|auto passage 0.5667 fenêtre 0.5667
+fax|test|auto passage None fenêtre None
+papier|dev|auto passage 0.8667 fenêtre 0.8667
+papier|test|auto passage None fenêtre None
+photocopie|dev|auto passage 0.9 fenêtre 0.9
+photocopie|test|auto passage None fenêtre None
+photo|dev|auto passage 0.9 fenêtre 0.9
+photo|test|auto passage None fenêtre None
+propre|dev|auto passage 0.9667 fenêtre 0.9667
+propre|test|auto passage None fenêtre None
+NAT region r00017 fenêtre True passage True
+   region text: 'tenue le 12 septembre 2025 et des déclarations qui y ont été faites, notamment de la position de la Conseillère juridique de l’ONU,'
+OCR region r00016 fenêtre False passage False
+   region text: "position de la Conseillère juridique de l'ONU,"
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json,statistics\nsys.path.insert(0,'tools')\nimport mesurer_scans as ms, graphe_document_ocr as gco\ne=[x for x in json.load(open('work/r44/scans/manifeste.json'))['entrees'] if x['pdf']=='A_RES_80_1-fr.pdf' and x['page']==1 and x['famille']=='papier … [895 caractères tronqués]`
+
+  ```
+corps 29.5 lignes 38 écart médian 5
+écarts > 0.9*corps: 5 / 35
+écarts autour de la phrase 12:
+23 1147 1172 "Prenant note de la réunion du Comité des relations avec le pays hôte qui s'est"
+24 1175 1205 'tenue le 12 septembre 2025 et des déclarations qui y ont été faites, notamment d'
+25 1204 1238 "position de la Conseillère juridique de l'ONU,"
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json,statistics\nsys.path.insert(0,'tools')\nimport mesurer_scans as ms, graphe_document_ocr as gco\ne=[x for x in json.load(open('work/r44/scans/manifeste.json'))['entrees'] if x['pdf']=='A_RES_80_1-fr.pdf' and x['page']==1 and x['famille']=='papier … [860 caractères tronqués]`
+
+  ```
+22 x0 173 y0 1110 y1 1130 h 20 'soit immédiatement annulée,'
+23 x0 230 y0 1147 y1 1172 h 25 'Prenant note de la réunion du Comité des relations avec le p'
+24 x0 174 y0 1175 y1 1205 h 30 'tenue le 12 septembre 2025 et des déclarations qui y ont été'
+25 x0 174 y0 1204 y1 1238 h 34 "position de la Conseillère juridique de l'ONU,"
+26 x0 231 y0 1244 y1 1276 h 32 'Rappelant ses résolutions concernant la question de Palestin'
+corps 29.5 bas 1714 seuil note 1062.7
+note 1147 "Prenant note de la réunion du Comité des relations avec le pays hôte qui s'est"
+paragraphe 1175 'tenue le 12 septembre 2025 et des déclarations qui y ont été faites, notamment de la'
+section 1204 "position de la Conseillère juridique de l'ONU,"
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/graphe_document_ocr.py'); s=p.read_text()\ns=s.replace('''def blocs_de_page(lignes: list[dict], numero: int = 1,\n                  langue: str = \"fra\") -> list[dict]:''','''def blocs_de_page(lignes: list[dict], numero: int = 1,\ … [3253 caractères tronqués]`
+
+  ```
+typage : hauteur de page + seuil 1,30, version 7
+papier 12 : fenêtre True passage True
+region "tenue le 12 septembre 2025 et des déclarations qui y ont été faites, notamment de la position de la Conseillère juridique de l'ONU,"
+fr80/10 p1 13 True True 1.0
+fr80/10 p1 80 True True 1.0
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte --sortie work/r44/mesure-v9.json > work/r44/scans-v9.log 2>&1; echo \"[scans $?]\"; tail -14 work/r44/scans-v9.log", "description": "Measure scans with page-height note fix", "run_in_background": … [68 caractères tronqués]`
+
+  ```
+started background job bash-567
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_scans.py --corpus work/r44/scans-g2/manifeste.json --pipelines auto --exposants --colonnes --splits dev --sortie work/r44/mesure-g2-v9.json >/dev/null 2>&1; timeout 1800 python3 tools/mesurer_scans.py --corpus work/r44/scans-g3/manifeste.json --pipelin … [483 caractères tronqués]`
+
+  ```
+started background job bash-568
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_scans.py --pipelines auto --colonnes --sortie work/r44/mesure-v9-noexp.json > work/r44/noexp-v9.log 2>&1; python3 -c \"\nimport json\na=json.load(open('work/r44/mesure-v9.json'))['agregat']; b=json.load(open('work/r44/mesure-v9-noexp.json'))['agregat'] … [256 caractères tronqués]`
+
+  ```
+started background job bash-569
+  ```
+
+- **bash** `{"command": "sleep 240; tail -12 work/r44/scans-v9.log; python3 - <<'PY'\nimport json\ntry:\n    a=json.load(open('work/r44/mesure-v9.json'))['agregat']\n    for k in sorted(a): print(k,round(a[k]['wer'],4),'passage',a[k].get('preservation'),'fenêtre',a[k].get('preservation_reponse'))\nexcept Except … [151 caractères tronqués]`
+
+  ```
+✅ papier · test : WER ≤ 10% (mesuré 6.4%)
+  ✅ photo · dev : WER ≤ 10% (mesuré 6.7%)
+  ✅ photo · dev : préservation ≥ 60% (mesuré 90.0%)
+  ✅ photo · test : WER ≤ 10% (mesuré 5.7%)
+  ✅ photocopie · dev : WER ≤ 8% (mesuré 6.3%)
+  ✅ photocopie · dev : préservation ≥ 60% (mesuré 93.3%)
+  ✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 96.7%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 235 s → work/r44/mesure-v9.json
+fax|dev|auto 0.219 passage 0.5667 fenêtre 0.5667
+fax|test|auto 0.1552 passage None fenêtre None
+papier|dev|auto 0.0687 passage 0.9 fenêtre 0.9
+papier|test|auto 0.0638 passage None fenêtre None
+photocopie|dev|auto 0.0634 passage 0.9333 fenêtre 0.9333
+photocopie|test|auto 0.0469 passage None fenêtre None
+photo|dev|auto 0.0668 passage 0.9 fenêtre 0.9
+photo|test|auto 0.0568 passage None fenêtre None
+propre|dev|auto 0.0414 passage 0.9667 fenêtre 0.9667
+propre|test|auto 0.0301 passage None fenêtre None
+  ```
+
+### 👤 Utilisateur
+
+background job bash-569 (bash: timeout 1800 python3 tools/mesurer_scans.py --pipelines auto --colonnes --sortie work/r44/mesure-v9-noexp.json > work/r44/noexp-v9.log 2>&1; python3 -c "
+import json
+a=json.load(open('work/r44/mesure-v9.json'))['agregat']; b=json.load(open('work/r44/mesure-v9-noexp.json'))['agregat']
+for k in sorted(a): print(k,'exp',a[k]['preservation'],'sans',b[k]['preservation'])" 2>/dev/null || true) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-567 (bash: timeout 1800 python3 tools/mesurer_scans.py --pipelines auto --exposants --colonnes --porte --sortie work/r44/mesure-v9.json > work/r44/scans-v9.log 2>&1; echo "[scans $?]"; tail -14 work/r44/scans-v9.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "timeout 2400 bash tools/porte-ocr-scans.sh > work/r44/gate-v8.log 2>&1; echo \"[gate $?]\"; tail -4 work/r44/gate-v8.log", "description": "Run final gate with page-height fix", "run_in_background": true, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+started background job bash-571
+  ```
+
+- **bash** `{"command": "sleep 30; python3 - <<'PY'\nimport json,os\nfor f in ('work/r44/mesure-g2-v9.json','work/r44/mesure-g3-v9.json','work/r44/mesure-v9-noexp.json'):\n    if os.path.exists(f):\n        a=json.load(open(f))['agregat']\n        print(f,[(k,round(a[k]['wer'],4),a[k].get('preservation')) for k … [183 caractères tronqués]`
+
+  ```
+work/r44/mesure-g2-v9.json [('fax|dev|auto', 0.2273, 0.5), ('papier|dev|auto', 0.065, 0.9), ('photocopie|dev|auto', 0.0544, 0.8667), ('photo|dev|auto', 0.0777, 0.7667), ('propre|dev|auto', 0.0414, 0.9667)]
+work/r44/mesure-g3-v9.json absent
+work/r44/mesure-v9-noexp.json [('fax|dev|auto', 0.2193, 0.5333), ('fax|test|auto', 0.1552, None), ('papier|dev|auto', 0.0705, 0.8667), ('papier|test|auto', 0.0638, None), ('photocopie|dev|auto', 0.0655, 0.9), ('photocopie|test|auto', 0.0469, None), ('photo|dev|auto', 0.0705, 0.8667), ('photo|test|auto', 0.0564, None), ('propre|dev|auto', 0.0446, 0.9), ('propre|test|auto', 0.0301, None)]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\n# JSONs\nfor src,dst,note in (('work/r44/mesure-v9.json','reports/r44-scans.json','mesures scans v9 (notes en bas de page, hauteur de page)'),\n                     ('work/r44/mesure-v9-noexp.json','reports/r44-sans-exposants.json','ablation sans r … [2714 caractères tronqués]`
+
+  ```
+reports/r44-scans.json
+reports/r44-sans-exposants.json
+fiche v9
+43:| photocopie | 6,55 % | 6,34 % | 4,69 % | **4,69 %** | 83,3 % | **93,3 %** |
+44:| photo | **55,85 %** | **6,68 %** | **80,65 %** | **5,68 %** | 13,3 % | **90,0 %** |
+45:| papier | 13,02 % | **6,87 %** | **53,15 %** | **6,38 %** | 73,3 % | **90,0 %** |
+88:| pages propres, préservation | 90,0 % | **96,7 %** |
+89:| photocopie, préservation | 90,0 % | **93,3 %** |
+90:| photo, préservation | 86,7 % | **90,0 %** |
+  ```
+
+### 👤 Utilisateur
+
+background job bash-568 (bash: timeout 1800 python3 tools/mesurer_scans.py --corpus work/r44/scans-g2/manifeste.json --pipelines auto --exposants --colonnes --splits dev --sortie work/r44/mesure-g2-v9.json >/dev/null 2>&1; timeout 1800 python3 tools/mesurer_scans.py --corpus work/r44/scans-g3/manifeste.json --pipelines auto --exposants --colonnes --splits dev --sortie work/r44/mesure-g3-v9.json >/dev/null 2>&1; echo "[seeds $?]"; python3 -c "
+import json
+for f in ('work/r44/mesure-g2-v9.json','work/r44/mesure-g3-v9.json'):
+    a=json.load(open(f))['agregat']; print(f,[(k,round(a[k]['wer'],4),a[k]['preservation']) for k in sorted(a)])") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,os,pathlib\nfor f in ('work/r44/mesure-g2-v9.json','work/r44/mesure-g3-v9.json'):\n    a=json.load(open(f))['agregat']; print(f,[(k,round(a[k]['wer'],4),a[k]['preservation']) for k in sorted(a)])\nPY", "description": "Read final seed results", "workdir": "/ … [48 caractères tronqués]`
+
+  ```
+work/r44/mesure-g2-v9.json [('fax|dev|auto', 0.2273, 0.5), ('papier|dev|auto', 0.065, 0.9), ('photocopie|dev|auto', 0.0544, 0.8667), ('photo|dev|auto', 0.0777, 0.7667), ('propre|dev|auto', 0.0414, 0.9667)]
+work/r44/mesure-g3-v9.json [('fax|dev|auto', 0.2278, 0.5667), ('papier|dev|auto', 0.0602, 0.9), ('photocopie|dev|auto', 0.057, 0.9333), ('photo|dev|auto', 0.0552, 0.9), ('propre|dev|auto', 0.0414, 0.9667)]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\n# seeds JSONs\nfor src,dst in (('work/r44/mesure-g2-v9.json','reports/r44-seed2.json'),('work/r44/mesure-g3-v9.json','reports/r44-seed3.json')):\n    d=json.loads(pathlib.Path(src).read_text()); d['dispositif']='graine 2/3, code v9 (hauteur de page … [2971 caractères tronqués]`
+
+  ```
+variance, état, roadmap, backlog mis à jour
+  T0 max : 4000 mots (budget 4 000)
+  revue de documentation · 375 fiche(s) · 454 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\n# spec : la parité de passage\np=pathlib.Path('docs/implantation/encodeur-visuel.md'); s=p.read_text()\ns=s.replace('''3. la **parité de valeur** (le chiffre exact de la question est dans le passage choisi) : plus\n   stricte, elle est **rapportée** et  … [1722 caractères tronqués]`
+
+  ```
+spec et journal mis à jour
+=== PORTE R4.4 — SCANS, COLONNES, TABLEAUX ===
+  ✅ tesseract 5.5.3 · langues : eng fra osd spa 
+--- 1. les familles de scans (100 scans, dev + test)
+02:45
+  ```
+
+- **bash** `{"command": "grep -n \"86,7\\|62,4\\|23 points\\|préservation\" journal/2026-11-01/README.md | head -6", "description": "Locate journal numbers to update", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+56:rendu, **69,1 %** sur une photocopie, **62,4 %** sur une photo (8 grilles sur 10) ; et la
+57:préservation des réponses du lecteur atteint **86,7 %** (plafond du texte propre : 90 %).
+63:sur une vignette : **1,4 s**, et le papier gagne 6,6 points de préservation). Le troisième livre,
+70:mesurée, pas supposée : le WER tient à ±1 point, la préservation varie de **23 points** (63,3 à
+71:86,7 % sur la photo) — les planchers de la porte sont dessous, et c'est dit. Un gradient
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-01/README.md'); s=p.read_text()\ns=s.replace(\"rendu, **69,1 %** sur une photocopie, **62,4 %** sur une photo (8 grilles sur 10) ; et la\\npréservation des réponses du lecteur atteint **86,7 %** (plafond du texte propre : … [968 caractères tronqués]`
+
+  ```
+journal : chiffres finaux
+57:préservation des réponses du lecteur atteint **93,3 %** sur la photocopie, **90,0 %** sur la photo
+72:mesurée, pas supposée : le WER tient à ±1 point, la préservation varie de **13 points** (76,7 à
+  ```
+
+- **bash** `{"command": "sleep 300; tail -16 work/r44/gate-v8.log; pgrep -af \"porte-ocr-scans\" | grep -v pgrep | wc -l; date +%H:%M", "description": "Wait for final gate verdict", "timeoutMs": 360000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`

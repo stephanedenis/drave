@@ -148,6 +148,8 @@ def main() -> None:
     ap.add_argument("--alpha", type=float, default=0.7)
     ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True)
     ap.add_argument("--graine", type=int, default=1)
+    ap.add_argument("--positions-aleatoires", type=int, default=0,
+                    help="décalage maximal des positions à chaque pas (0 = positions fixes)")
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--sortie", required=True)
     ap.add_argument("--log", default=None)
@@ -206,7 +208,9 @@ def main() -> None:
             x, y = x[:, :-1], cible(x)
             with torch.no_grad():
                 lp = prof(x).logits
-            sortie_m = etu(x)
+            offset = (int(torch.randint(0, a.positions_aleatoires + 1, (1,)))
+                      if a.positions_aleatoires > 0 else 0)
+            sortie_m = etu(x, offset)
             ls = sortie_m["logits"]
             T = a.temperature
             kd = F.kl_div(F.log_softmax(ls / T, -1), F.softmax(lp / T, -1),
@@ -264,6 +268,7 @@ def main() -> None:
     res["precision_main"] = bons[0] / max(1, n_ev)
     res["precision_early"] = [b / max(1, n_ev) for b in bons[1:]]
     res["duree_s"] = time.time() - t0
+    res["positions_aleatoires"] = a.positions_aleatoires
     res["courbe"] = courbe
     torch.save({"config": cfg.__dict__, "state": etu.state_dict()}, sortie)
     sortie.with_suffix(".json").write_text(json.dumps(res, ensure_ascii=False, indent=1) + "\n")

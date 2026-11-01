@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **369 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **372 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -199,7 +199,10 @@
 | [rapport-mur-memoire-4bits.md](rapport-mur-memoire-4bits.md) | Le mur mémoire, et ce que les 4 bits achètent vraiment |
 | [rapport-n2-budget.md](rapport-n2-budget.md) | N2 — le budget paie, les quatre sources coûtent, et la validation n'est pas tenue à l'écart |
 | [rapport-n2-distillation.md](rapport-n2-distillation.md) | N2 — la hiérarchie ne paie pas non plus sur le dispositif de distillation |
+| [rapport-n2-diversite.md](rapport-n2-diversite.md) | N2.h2 — La diversité française : un modèle de français plutôt qu'un modèle du dépôt |
 | [rapport-n2-hierarchie.md](rapport-n2-hierarchie.md) | N2 — l'état de section ne paie pas : le contrôle étranger fait aussi bien |
+| [rapport-n2-longueur.md](rapport-n2-longueur.md) | N2.h3 — Le verrou de longueur : les positions absolues, pas le contexte |
+| [rapport-n2-propre.md](rapport-n2-propre.md) | N2.h1 — Le corpus propre : la validation n'était pas tenue à l'écart, et la porte honnête vaut 3,09 |
 | [rapport-n3.1-etat.md](rapport-n3.1-etat.md) | N3.1 — l’état des opérations natives : une porte composée serait prématurée |
 | [rapport-n3.2a-service.md](rapport-n3.2a-service.md) | N3.2a — le service natif répond, et il est déterministe |
 | [rapport-n3.2b0-profondeur.md](rapport-n3.2b0-profondeur.md) | N3.2b0 — la profondeur de service est branchée, et le service lisait mal les requêtes |
@@ -338,7 +341,7 @@
 | [rapport-r42-bloc-code.md](rapport-r42-bloc-code.md) | R4.2 — le bloc code : 294 fichiers, 453 038 nœuds, 24/24 extraits exécutés |
 | [rapport-r43-bloc-maths.md](rapport-r43-bloc-maths.md) | R4.3 — le bloc maths : 32 formules exactes, 10/10 dérivées, l'oracle sympy d'accord |
 | [rapport-r44-ocr-pilote.md](rapport-r44-ocr-pilote.md) | R4.4 — l'OCR lit dix pages à 4,48 % de WER, parité 90 %, et la page « photo » tombe à 26,7 % |
-| [rapport-r44-scans.md](rapport-r44-scans.md) | R4.4 — les scans : la photo passe de 55,9 % à 7,0 % de WER, les colonnes de 89 % à 0,5 % |
+| [rapport-r44-scans.md](rapport-r44-scans.md) | R4.4 — les scans : la photo passe de 55,9 % à 6,7 % de WER, les colonnes de 89 % à 0,5 % |
 | [rapport-raid0-nvme.md](rapport-raid0-nvme.md) | Le raid0 de 4 NVMe en service — débits, QPI, et ce que le moteur n'en voit pas |
 | [rapport-regle-placement-perte.md](rapport-regle-placement-perte.md) | A8.3 — la règle place et perte choisit le KV comme la main |
 | [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |

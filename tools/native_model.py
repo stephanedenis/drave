@@ -113,9 +113,9 @@ class NativeModel(nn.Module):
         self.head_byte = nn.Linear(self.cfg.d_model, self.cfg.vocab)
         self.head_rsn = nn.Linear(self.cfg.d_model, self.cfg.rsn_dim)
 
-    def forward(self, ids):
+    def forward(self, ids, pos_debut: int = 0):
         b, s = ids.shape
-        x = self.embed(ids) + self.pos(torch.arange(s, device=ids.device))[None]
+        x = self.embed(ids) + self.pos(torch.arange(s, device=ids.device) + pos_debut)[None]
         early = []; local = []
         for i, bloc in enumerate(self.blocks):
             x = bloc(x)
@@ -134,10 +134,10 @@ class NativeModel(nn.Module):
         return {"logits": self.head_byte(x), "early": early, "local": local,
                 "thought": x, "rsn": self.head_rsn(x)}
 
-    def forward_jusqua(self, ids, n_blocs: int):
+    def forward_jusqua(self, ids, n_blocs: int, pos_debut: int = 0):
         """Passe avant arrêtée après `n_blocs` blocs (réflexe)."""
         b, s = ids.shape
-        x = self.embed(ids) + self.pos(torch.arange(s, device=ids.device))[None]
+        x = self.embed(ids) + self.pos(torch.arange(s, device=ids.device) + pos_debut)[None]
         early = None
         for i, bloc in enumerate(self.blocks[:n_blocs]):
             x = bloc(x)

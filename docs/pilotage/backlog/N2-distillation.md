@@ -13,11 +13,16 @@ Le student plafonne à 2,708 et la porte < 2,5 n'est pas atteinte. Les 130–256
 
 ## L'état
 
-49 999 fenêtres, 4 sources ; professeur 30k 1,734 (0,794 bit/octet) ; student 3,123 à 20 000 pas ; meilleur 2,6998 ; plateau 2,708. Le 21,63 M à budget égal donne −8,1 %, mais à 20 000 pas il est pire (3,381 contre 3,123).
+Le budget est mesuré (N2.d) : 2,9355 → 2,8527, mais **sur un jeu contaminé à 32,8 %**. N2.h a
+refait le mètre : corpus dédupliqué (−22,2 % de texte), split par chunks, **0 % de fuite** ; la
+chaîne propre vaut **3,09** en domaine et **16,7** sur de la littérature jamais vue — le modèle de
+N2 est un **spécialiste du dépôt**. La diversité française (moitié dépôt, moitié littérature)
+ramène la littérature à **3,86** pour **+0,17** en domaine.
 
 ## La porte
 
-PPL < 2,5 sur le jeu tenu à l'écart, avec le contrôle par permutation et le même budget de calcul.
+PPL < 2,5 sur le **corpus propre**, tenu à l'écart par construction, avec le contrôle par
+permutation et le même budget de calcul. L'élève honnête est à **3,09** : la porte est à **0,59**.
 
 ## Contrôles négatifs
 
@@ -27,11 +32,10 @@ PPL < 2,5 sur le jeu tenu à l'écart, avec le contrôle par permutation et le m
 
 ## Prochaine action
 
-**Le budget est mesuré (N2.d), le levier suivant est le corpus.** Le budget plein paie
-2,9355 → 2,8527 (−0,08) ; les quatre sources coûtent +0,93 ; le curriculum 129 gagne 0,05 à
-129 ; et **32,8 % des fenêtres du protocole de validation sont verbatim dans l'entraînement**
-— sur fenêtres propres, A est à 2,9795. Prochaine action : **dédupliquer le corpus et séparer
-train/validation par document**, puis remesurer la porte < 2,5 : elle n'a de sens qu'après.
+**Le corpus est le levier, pas le budget.** Sur le mètre propre, la diversité française
+divise la PPL hors dépôt par 4,3 (16,7 → 3,86) pour +0,17 en domaine, et le verrou de longueur
+tombe avec des positions aléatoires. Prochaine action : **plus de texte français unique** (le
+corpus propre fait 3,2 Mo d'entraînement) et la **capacité** sur ce mètre ; puis la longueur.
 
 ## Voir aussi
 
