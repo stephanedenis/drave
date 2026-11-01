@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-01, 11 h 45 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-01, 12 h 05 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -89,7 +89,7 @@
 |---|---|---|
 | portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **382** / **459** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **382** / **466** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **115** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
@@ -106,7 +106,7 @@ action** — pas les statuts, qui dérivent. Vue d'ensemble :
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | aucune | B1.5 corpus ; B10.3 attend un encodeur | **B11.10 close** ; B10.3 bloquée |
 | **N — le natif** | **N3, N4** | N2.h close ; N2 < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2 close** ; **N4** (consigne) |
-| **R — le lecteur** | aucune | R4.4 : scans réels, fax | **R4.4 mesurée (4/5 ≥ 90 %)** ; les **scans réels** restent ; **le modèle lit des lettres** (×17,8 au mélange) ; R1/R2/R3 attendent N2 |
+| **R — le lecteur** | aucune | R4.4 close (limites : fax, exposant, parité réelle) ; R1/R2/R3 attendent N5/N4 | **R1.1/R1.2** (contexte natif) ; **R4.4 close** |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
 
@@ -120,7 +120,7 @@ styles · **C5** domaines · **C6** documentation · **C7** pensée — hors gra
 
 **N2.h** — **close** (N2.i : 12,93 littérature, 33,83 anglais ; porte < 2,5 non atteinte) ;
 **Pensée** — AC-3, alpha-bêta, DRVF, banc anytime (session `e181ce02`) ; **N4** — la consigne
-courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — les scans réels ; **S** — l'export au corpus.
+courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — close, limites nommées ; **R1.1/R1.2** — le contexte natif ; **S** — l'export au corpus.
 
 ## Les questions ouvertes
 

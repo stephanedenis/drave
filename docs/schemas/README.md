@@ -31,6 +31,13 @@
 | [heuristique-cout.svg](heuristique-cout.svg) | octets contre jetons, couverture/precision, le seuil | [la couche heuristique](../theorie/pre-traitement-linguistique.md) |
 | [heuristique-multilingue.svg](heuristique-multilingue.svg) | universel, famille, langue ; le repli réseau | [la couche heuristique](../theorie/pre-traitement-linguistique.md) |
 
+## Les schémas du programme R
+
+| schéma | ce qu'il montre | où il est utilisé |
+|---|---|---|
+| [programme-r-phases.svg](programme-r-phases.svg) | les six phases R0–R5, leurs états et leurs dépendances | [le programme R](../pilotage/programme-r.md) |
+| [programme-r-pipeline.svg](programme-r-pipeline.svg) | le pipeline R0.6 : document → régions → contrôleur → lecteurs → réponse citée | [le programme R](../pilotage/programme-r.md) |
+
 ## Les schémas du natif et de l'impulsionnel
 
 | schéma | ce qu'il montre | où il est utilisé |

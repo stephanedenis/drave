@@ -7589,3 +7589,540 @@ docs/README.md                                     |   1 +
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 240 git commit -m \"COLORATION — LA COUCHE HEURISTIQUE : CE QUE LE CPU ÉTIQUETTE AVANT LE RÉSEAU\" 2>&1 | tail -8; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Committer l'analyse de la couche heuristique"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-265]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-265", "timeout_ms": 240000, "wait": true}`
+
+  ```
+[master e331ef42] COLORATION — LA COUCHE HEURISTIQUE : CE QUE LE CPU ÉTIQUETTE AVANT LE RÉSEAU
+ 28 files changed, 2001 insertions(+), 77 deletions(-)
+ create mode 100644 docs/schemas/heuristique-cascade.svg
+ create mode 100644 docs/schemas/heuristique-coloration.svg
+ create mode 100644 docs/schemas/heuristique-cout.svg
+ create mode 100644 docs/schemas/heuristique-multilingue.svg
+ create mode 100644 docs/schemas/heuristique-niveaux.svg
+ create mode 100644 docs/theorie/pre-traitement-linguistique.md
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse livrée : la couche heuristique retire la surface, le réseau garde l'ambiguïté
+
+L'analyse est dans [`docs/theorie/pre-traitement-linguistique.md`](../../docs/theorie/pre-traitement-linguistique.md), avec **5 schémas** (`heuristique-niveaux`, `cascade`, `coloration`, `cout`, `multilingue`) et un commit : **`e331ef42`**. Voici la substance.
+
+## La thèse
+
+Le réseau ne paie pas seulement le sens : il paie la **surface** — normalisation Unicode, script, langue, frontières de mots et de phrases, classes fermées, régions de document. Ces opérations sont **locales, déterministes et bon marché** : un CPU les fait en O(octets), à des ordres de grandeur d'un passage dans un transformer.
+
+Mais l'heuristique ne doit pas **décider l'ambigu**. Elle doit :
+
+1. **étiqueter le sûr** avec une source et une confiance ;
+2. **énumérer le plausible** quand plusieurs analyses sont possibles ;
+3. laisser le **résidu** au réseau (ou à l'humain).
+
+C'est la différence entre un étiqueteur et un **générateur de candidats** — et c'est exactement le contrat de la coloration.
+
+## Les niveaux : ce qui s'enlève au réseau
+
+| niveau | ce que le CPU fait bien | ce qui reste au réseau |
+|---|---|---|
+| **octet / Unicode** | script, NFC/NFKC, ponctuation, chiffres, dates, URLs | rien |
+| **morphème** | affixes réguliers, diacritiques, lemmes productifs | irréguliers, allomorphes, agglutinants |
+| **mot** | frontières sur scripts à espaces, nombres, emoji | CJK, thaï, khmer (segmentation) |
+| **syntagme** | **candidats** GN/GV/GP/REL/SUB, rôles par préposition, attachements | choix de l'attachement, rôle final |
+| **phrase** | frontières, type, négation | bruit OCR, ponctuation absente, portée |
+| **paragraphe** | titres, listes, tableaux, régions, code | scans, layouts inédits |
+| **document** | TOC, structure, provenance, renvois | compréhension, résumé |
+| **multilingue** | langue sur texte long, script, famille | langues proches, codes mêlés, texte court |
+
+Le point clé : **la couche heuristique ne remplace pas le réseau, elle lui retire la surface**. Le réseau garde le choix, le sens, l'inférence.
+
+## Le cas de la coloration
+
+Le générateur S (`tools/structures/generateur.py`, que j'ai lu sans y toucher) est le bon modèle :
+
+- il reconnaît les **classes fermées** (déterminants, prépositions, relatifs, pronoms, auxiliaires) ;
+- il segmente en **GN, GV, GP, REL, SUB** ;
+- il **varie l'attachement** du segment ambigu : sur « Le chat de la voisine qui dort sur le toit se réveille. », il rend **deux candidats** — « qui dort » sur le chat, ou sur la voisine ;
+- un humain ou un réseau **tranche**.
+
+Le CPU fait donc la segmentation et les classes fermées ; le réseau ne fait que **classer un petit ensemble**. C'est un allègement de la **sortie** du réseau, pas seulement de son entrée. La limite est assumée : le prototype est **français**, petit (7 phrases, 11 tests), et ses attachements sont des heuristiques de proximité. C'est un banc, pas une revendication.
+
+## Multilingue : trois étages, pas 71 traductions
+
+![Universel, famille, langue](../../docs/schemas/heuristique-multilingue.svg)
+
+- **universel** : Unicode, scripts, directions, chiffres, dates, URLs, ponctuation ;
+- **famille** : latin, cyrillique, arabe, CJK, indien, agglutinant vs fusional ;
+- **langue** : dictionnaires de classes fermées, morphologie, romanisation — un **paquet versionné**.
+
+Le dépôt a déjà les deux bouts : **71 langues / 449/449** au banc des maîtres, **15 champs / 502 classes** pour les universaux, un `z` de 128 dimensions mesuré sur 10 langues. Mais la coloration actuelle est française : passer à 71 langues, ce n'est pas traduire ses listes, c'est **découper** la couche et mesurer ce que chaque étage couvre. La langue est une **annotation** de la RSN, jamais le corps : une heuristique peut être language-aware sans contaminer le sens.
+
+## Le coût : la bonne métrique
+
+Le débit ne suffit pas. Le modèle est :
+
+**C = c_cpu · B + c_porte · T + c_réseau · (1 − x) · T**
+
+où `B` est le nombre d'octets, `T` le nombre de jetons, `x` la couverture acceptée. Le gain est positif si :
+
+**x · c_réseau > c_cpu · B/T + c_porte + c_erreur**
+
+Autrement dit : **il faut que la couverture soit grande, la précision bonne, et la porte bon marché**. Une heuristique rapide mais fausse coûte plus qu'un appel réseau — c'est le contrôle négatif obligatoire. Les ordres de grandeur (CPU en Mo/s, réseau en dizaines à milliers de jetons/s) sont des **projections** dans la note, pas des mesures.
+
+## Les bénéfices, nommés
+
+- **Coût et latence** : le CPU paie les octets, le réseau les jetons ; la surface traitée en O(octets) est retirée du réseau **si** la porte l'accepte.
+- **Contexte libéré** : le contexte natif de `drave-n0` est de 129 octets (PPL 2,6998) ; à 2 000 octets, PPL 54,04. La couche ne l'agrandit pas, elle **réduit la matière** (phrases, régions, segments).
+- **Typage** : le réseau reçoit `langue`, `script`, `segments`, `candidats` en annotation ; le corps RSN reste le lieu du sens.
+- **Déterminisme / rejeu** : mêmes octets, mêmes étiquettes, même trace ; une règle versionnée se diff, se retire, se rejoue (DRVF).
+- **Document** : le niveau **L2** manque à la lecture rapide ; un bloc CPU `document` (régions, titres, tableaux, provenance) est un prérequis **sans entraînement**.
+- **Audit / offline** : la source et la confiance sont dans la trace ; la couche tourne sur la machine, dans les 71 langues, sans API.
+
+## Les risques
+
+Propagation d'erreur (une frontière fausse change le sens), couverture qui s'effondre sur le bruit, maintenance de 71 paquets, biais de langue, porte mal calibrée, dépendance du réseau à la couche, confond d'évaluation, et surtout **fuite de la surface dans le corps de la RSN**. La règle est stricte : la surface va dans l'**annotation**, jamais dans le corps.
+
+## Le protocole
+
+Mesurer, par niveau et par langue : **couverture**, **précision**, **rappel de l'ensemble des candidats**, **réduction d'appels réseau**, **qualité de bout en bout**, **coût**, **trace**. Contrôles : réseau seul, heuristique seule, cascade, **porte aléatoire** de même couverture, **heuristique corrompue**, **langue tenue à l'écart**. Corpus : les 71 langues du banc des maîtres, UDHR, les 7 phrases de la coloration, les scans R4.4, la typoglycémie. Pré-enregistrement : seuils, split, gold — le test ne règle jamais la porte.
+
+La première expérience est petite et négative : **langue + frontières sur 71 langues**, puis **coloration sur les 7 phrases**, avec une heuristique corrompue. Si la cascade n'est pas meilleure par unité de calcul, elle ne vaut pas.
+
+## La décision
+
+**Le CPU fait ce qui est invariant, local et énumérable ; le réseau fait ce qui est ambigu, global et sémantique.**
+
+- **Heuristique pure** : Unicode/script, langue longue, classes fermées, frontières de phrase/mot (scripts à espaces), régions de document.
+- **Cascade** : morphologie riche, POS ouvertes, segmentation CJK/thaï, attachements de la coloration, post-correction OCR.
+- **Réseau / humain** : rôle final, coréférence, discours, pragmatique, traduction, sens.
+
+Ce qui rendrait l'analyse fausse : précision sous la porte, cascade plus chère de bout en bout, paquets impossibles à maintenir, réseau déjà bon marché sur la surface, fuite dans le corps, ou coloration qui ne passe pas du jouet à l'échelle. Chacune a un test.
+
+## État
+
+- Note : `docs/theorie/pre-traitement-linguistique.md` ; 5 schémas indexés.
+- `en-cours` : la coloration est déclarée dans la session Pensée ; **1 425 mots**, 1 session, 10 puces.
+- Portes : `revue_documentation`, `taille_documents`, `porte-tableaux`, `verifier_schemas`, `verifie_journal`, `verifie_en_cours`, `sessions.py --check` — **vertes**.
+- Commit : **`e331ef42`**.
+- Je n'ai pas touché `tools/structures` : la session S y travaille ; l'analyse la cite en lecture seule.
+
+
+## Tour 9
+
+### 👤 Utilisateur
+
+détaille ce qu'est le pprogramme R : docs/pilotage/programme-r.md
+
+### 🤖 Assistant
+
+⏵ Je rassemble l'état réel du programme R avant d'écrire sa charte détaillée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/pilotage/programme-r.md 2>/dev/null || echo 'ABSENT'; echo '=== roadmap R ==='; grep -n \"R —\\|R0\\|R1\\|R2\\|R3\\|R4\\|R13\\|lecteur\" docs/pilotage/roadmap.md | head -40", "description": "Vérifier si la charte existe et li … [29 caractères tronqués]`
+
+  ```
+docs/pilotage/programme-r.md
+=== roadmap R ===
+3:> **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+22:  **A** (moteur), **B** (intelligence), **N** (natif) et **R** (lecteur). A et B sont l'existant ; N est la ligne
+23:  native ; R est la **nouvelle ligne lecteur**, qui donne une cible mesurable aux deux autres. On charge **un**
+33:| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) | **R4.4** : les **scans réels de bout en bout** ; R1/R2/R3 attendent N2 |
+40:1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
+41:   30 % sur 5 types et **249 questions**) ; **R0.4** (tête de survol) et **R0.5** (routeur) sont
+44:   **R4.1 — le bloc tableaux** est **mesurée** (996 cellules, **802** exactes, texte plat **0/3**),
+45:   **R4.2 — le bloc code** aussi (294 fichiers, 24/24 extraits, texte seul **0/3**) et **R4.3 —
+46:   le bloc maths** (32 formules, 10/10 dérivées, surface **0/3**) ; **R4.4 est mesurée** sur
+48:  
+… [3697 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"programme R\\|R0\\|R1\\|R2\\|R3\\|R4\\|R13\\|R4.4\\|R0.6\" docs/theorie/lecture-rapide.md | head -50", "description": "Lire le programme R dans la lecture rapide"}`
+
+  ```
+5:> chiffres cités sont ceux des fiches [`reports/`](../../reports/) ; le plan qui en découle est le **programme R**
+233:- **R0 — le lecteur v0** : graphe de document, contrôleur classique, banc. **Sans entraînement**, avec le moteur
+235:- **R1 — la fenêtre native** : contexte hiérarchique, curriculum, tokenisation. Dépend de N1/N2.
+236:- **R2 — la mémoire** : gist, entités, store épisodique, relecture. Dépend de N5 et R1.
+237:- **R3 — la restitution** : SFT de lecture, citations. Dépend de N4 et R0.
+238:- **R4 — les blocs structurels** : tableaux, code, maths, vision. Dépend de R0.
+239:- **R5 — la lecture croisée** : multi-documents, retrieval, multilingue. Dépend de R3.
+241:Autrement dit, les **cinq couches** de la § 5 se projettent sur ces six phases : **R0** porte le document, la
+242:politique et le banc ; **R1** la fenêtre ; **R2** la mémoire ; **R3** la restitution ; **R4/R5** les extensions
+252:  n'est pas le premier blocage : le contrôleur suffit pour la v0, et R1 peut attendre.
+254:  `z`-basé, et R2.1 change de forme.
+262:*Sources principales : [`docs/pilotage/roadmap.md`](../pilotage/roadmap.md) (programme R, états A/B/N) ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"R0\\|R1\\|R2\\|R3\\|R4\\|R13\" docs/pilotage/backlog/index.md | head -50; echo '=== reports R ==='; ls reports/ | grep -E \"rapport-r[0-9]|r0|r13|r44\" | head -30", "description": "Lire le backlog R et les fiches"}`
+
+  ```
+46:long est `R01 → R02 → R03 → R31 → R32 → R51`.
+50:| R01 | [Graphe de document et registre de régions](R01-graphe-document.md) | mesurée | P0 | — | R0.1 |
+51:| R02 | [Contrôleur de lecture](R02-controleur-lecture.md) | mesurée | P0 | R01 | R0.2 |
+52:| R03 | [Banc de lecture rapide](R03-banc-lecture-rapide.md) | mesurée | P0 | R01, R02 | R0.3 |
+53:| R04 | [Tête de survol](R04-tete-survol.md) | mesurée | P1 | R03, R01 | R0.4 |
+54:| R05 | [Tête de balayage](R05-tete-balayage.md) | mesurée | P1 | R03, R01 | R0.4 |
+55:| R06 | [Tête de relecture](R06-tete-relecture.md) | partiel | P2 | R03, R21, R22 | R0.4 |
+56:| R07 | [Routeur extractif / génératif](R07-routeur-extractif-generatif.md) | mesurée | P1 | R02, R03 | R0.5 |
+57:| R11 | [Contexte hiérarchique et état de section](R11-contexte-hierarchique.md) | spécifiée | P1 | R01, N1, N2 | R1.1 |
+58:| R12 | [Curriculum de contexte long](R12-curriculum-contexte.md) | spécifiée | P1 | R11 | R1.2 |
+59:| R13 | [Tokenisation : octets ou BPE](R13-tokenisation-bpe.md) | mesurée | P2 | — | R1.3 |
+60:| R21 | [Mémoire de travail et gist](R21-memoire-travail-gist.md) | spécifiée | P1 | R01, R11 | R2.1 |
+61:| R22 | [Mémoire épisodique et relecture](R22-
+… [1524 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l -w docs/pilotage/programme-r.md; sed -n '1,240p' docs/pilotage/programme-r.md", "description": "Lire la charte R existante"}`
+
+  ```
+51  600 docs/pilotage/programme-r.md
+# Le programme R en une page — ce qui tient, ce qui ne tient pas
+
+> **État au 2026-10-29** · les fiches de résultat sont dans `reports/`, les contrats dans
+> `docs/implantation/`, les chiffres dans les JSON. Cette page ne remplace ni les unes ni les
+> autres : elle dit ce qu'on peut **affirmer** et ce qu'on ne peut pas.
+
+## 1. Ce qui tient — mesuré, contrôlé, rejouable
+
+| brique | dispositif | chiffre | fiche |
+|---|---|---|---|
+| **le document** (R0.1) | 16 PDF + 8 MD + 3 HTML + 3 DOCX/EPUB | partition **1,0000**, fidélité **1,0000**, 51 pages | `rapport-r01` |
+| **le contrôleur** (R0.2) | 20 questions main, 5 types | récupération **1,000** à 30 % du budget | `rapport-r02` |
+| **le banc** (R0.3) | 248 questions lexicales + 83 paraphrases, **corpus gelé** | 0 problème de vérification | `rapport-corpus-gele` |
+| **le pipeline** (R0.6) | pilote + 3 jeux | pilote **0,600**, lexical **0,976**, paraphrases **0,325** | `rapport-r06-pipeline` |
+| **le balayage** (R05) | index de spans, offsets exacts | rappel@10 **0,984** (lexical), **0,1 ms** | `rapport-r05-balayage` |
+
+## 2. Ce qui ne tient pas — et pourquoi, nommé
+
+| tentative | chiffre | la raison 
+… [2357 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -E \"^rapport-r\" | sort; echo '=== R0.6 ==='; sed -n '1,80p' reports/rapport-r06-pipeline.md 2>/dev/null; echo '=== R13 ==='; sed -n '1,50p' reports/rapport-r13-decision.md 2>/dev/null", "description": "Lister les … [28 caractères tronqués]`
+
+  ```
+rapport-r01-graphe-document.md
+rapport-r02-controleur.md
+rapport-r03-banc-complet.md
+rapport-r03-banc-durci.md
+rapport-r03-lecteur-modele.md
+rapport-r04-tete-survol.md
+rapport-r05-balayage.md
+rapport-r06-calibration.md
+rapport-r06-cascade-confiance.md
+rapport-r06-cascade.md
+rapport-r06-declencheur.md
+rapport-r06-pipeline.md
+rapport-r06-publication.md
+rapport-r06-relecture.md
+rapport-r07-routeur.md
+rapport-r13.1-bpe.md
+rapport-r13.1-campagne.md
+rapport-r13.1-condition.md
+rapport-r13.2-vocab1024.md
+rapport-r13.3-anglais.md
+rapport-r13.4-graines.md
+rapport-r13-decision.md
+rapport-r13-tokenisation.md
+rapport-r41-bloc-tableaux.md
+rapport-r42-bloc-code.md
+rapport-r43-bloc-maths.md
+rapport-r44-ocr-pilote.md
+rapport-r44-scans.md
+rapport-raid0-nvme.md
+rapport-regle-placement-perte.md
+rapport-restitution.md
+rapport-reutilisation-experts.md
+rapport-routage-experts.md
+rapport-routeur-confiance.md
+rapport-routeur-m1-m2.md
+=== R0.6 ===
+# R0.6 — le pipeline de lecture : 12/20 au pilote, 10/10 refusés, 7/8 au modèle
+
+> **Ligne de roadmap** : R0.6 · **Date** : 2026-10-29 · **Verdict** : ✅ **le contrat est tenu** —
+> 20/20 réponses acceptées au pilote dont **12 justes** (0,600), **provenance vérifié
+… [7154 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"R0.6\\|R0.4\\|R0.5\\|R4.4\\|R13\\|R1\\|R2\\|R3\" docs/pilotage/en-cours.md | head -30; echo '=== questions ==='; sed -n '/## Les questions/,/## /p' docs/pilotage/en-cours.md | head -40", "description": "Lire l'état R et les … [21 caractères tronqués]`
+
+  ```
+20:- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; reprise R4.4 ; **analyse de la couche heuristique**.
+21:- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes)~~ ; 4) ~~moteur v0 (BFS, greedy, A*, MCTS-lite)~~ ; 5) **AC-3, alpha-bêta, DRVF** ; 6) **banc anytime** (AUC, regret, justification, rejeu) et intégration ; 7) ~~reprise R4.4~~ ; 8) **couche heuristique** (analyse, 5 schémas).
+25:- **Reprise** : **R4.4** — note de clôture des trois limites (fax 1 bit, exposant fusionné,
+34:- **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
+43:> `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close ; restes nommés : fax 1 bit,
+48:- **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4 close (négatif)** ; **R0.5 close
+49:  (négatif)** ; R0.6 **12/20** au pilote, **7/7** à la porte. Fiches
+52:- **R4.1–R4.4 — les blocs** : **mesurés** — 996/802 cellules, 294/24 fichiers,
+53:  32/10 formules ; **R4.4** scans simulés (4/5 ≥ **90 %**) ; **typoglycémie** : le modèle lit les
+64:- **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit
+… [1057 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-*.sh | tr '\\n' ' '; echo; grep -n \"R0\\|lecture\\|ocr\\|r06\" docs/pilotage/references-non-regression.md | head -20", "description": "Trouver les portes du programme R"}`
+
+  ```
+tools/porte-adaptateur-sortie.sh tools/porte-audit-drapeaux.sh tools/porte-b1110-hybride.sh tools/porte-balayage.sh tools/porte-bloc-code.sh tools/porte-bloc-maths.sh tools/porte-bloc-tableaux.sh tools/porte-budget.sh tools/porte-bus.sh tools/porte-bus-socket.sh tools/porte-c4-retard.sh tools/porte-cerveau.sh tools/porte-consolidation.sh tools/porte-coupe.sh tools/porte-cycle-c2.sh tools/porte-deepseek.sh tools/porte-delais.sh tools/porte-diff-couche.sh tools/porte-document.sh tools/porte-echange-experts.sh tools/porte-episodique.sh tools/porte-etat.sh tools/porte-flux.sh tools/porte-fusion.sh tools/porte-gain.sh tools/porte-greffe.sh tools/porte-harnais-invariants.sh tools/porte-homeostasie.sh tools/porte-horloge.sh tools/porte-indice.sh tools/porte-jeux.sh tools/porte-jumeaux.sh tools/porte-lecteur.sh tools/porte-lecture.sh tools/porte-m5-brouillon.sh tools/porte-melange.sh tools/porte-memoire.sh tools/porte-miroir-blocs.sh tools/porte-mistral.sh tools/porte-n3-cache.sh tools/porte-n3-composition.sh tools/porte-n3-deux-processus.sh tools/porte-n3-deux-regions.sh tools/porte-n3-generation.sh tools/porte-n3-placement.sh tools/porte-n3-pont.sh tools/porte-n3-positions.sh tools/porte
+… [1105 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,45p' reports/rapport-r03-banc-complet.md; echo '=== R06 publication ==='; sed -n '1,55p' reports/rapport-r06-publication.md", "description": "Lire les chiffres du banc et de la publication R0.6"}`
+
+  ```
+# R0.3 — le banc complet : 249 questions, 30 documents, et le modèle sur GPU
+
+> **Ligne de roadmap** : R0.3 · **Date** : 2026-10-29 · **Verdict** : ✅ **la sélection est
+> validée à l'échelle** — le contrôleur est **5,5× meilleur** que la troncature naïve
+> (**0,231** contre **0,042**) et gagne sur les **5 types** ; ⚠️ mais le **modèle de 0,5 B
+> répond moins bien que le lecteur extractif** sur les valeurs (0,23 contre 0,72–1,00), parce
+> qu'il **paraphrase** au lieu d'extraire.
+>
+> **Dispositif** : 30 documents, 5 types, **249 questions** générées à valeur numérique ;
+> lecteur **extractif** (R0.2) et lecteur **modèle** (Qwen2.5-0.5B, `llama-cli` **CUDA**,
+> 1,9 s/appel) ; budgets 10/30/50 % ; JSON bruts
+> [`r03-banc-extractif.json`](r03-banc-extractif.json) et [`r03-banc-modele.json`](r03-banc-modele.json) ;
+> spec [`banc-lecture.md`](../docs/implantation/banc-lecture.md) § 7.
+
+## La question
+
+Le banc pilote (20 questions main) ne faisait pas un taux : un cas valait 0,25. À l'échelle de
+30 documents, la sélection tient-elle encore ? Et que fait un **modèle** dans la boucle — le
+plafond de 25–75 % du lecteur extractif était-il celui du lecteur ou du document ?
+
+## Le corpus et les 
+… [4327 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"controle\\|contrôle\\|echo\\|OK\\|KO\" tools/porte-lecture.sh | head -40; echo '=== implementation ==='; sed -n '1,60p' docs/implantation/pipeline-lecture.md", "description": "Lire la porte de lecture et le pipeline"}`
+
+  ```
+10:echo "=== PORTE R0.6 — LE PIPELINE DE LECTURE ==="
+14:  echo "--- la calibration publiée se reproduit ---"
+18:[ "$CODE" = 0 ] && echo "✅ porte lecture verte" || echo "❌ porte lecture ROUGE (code $CODE)"
+=== implementation ===
+# Le pipeline de lecture (R0.6) — de la question à la réponse citée
+
+> **Ligne de roadmap** : R0.6 · **Code** : `tools/lecture.py` · **Porte** : `tools/porte-lecture.sh`
+> **Dépend de** : R0.1 (le document), R0.2 (le contrôleur), R0.3 (le banc).
+
+## 1. Le besoin
+
+R0.1 a donné le manifeste, R0.2 le contrôleur, R0.3 le banc — et R0.4/R0.5 ont mesuré les
+limites (une tête apprise ne bat pas BM25 ; un routeur global ne transfère pas). Il manquait
+l'**assemblage** : une commande qui prend un document et une question, et rend une réponse
+**avec sa source**, dans un budget, avec une trace **rejouable**. Sans elle, les trois briques
+restent des mesures, pas un lecteur.
+
+## 2. Le contrat
+
+| élément | contenu |
+|---|---|
+| **entrée** | un document (chemin), une question, un budget (fraction du document), un lecteur |
+| **sortie** | la réponse **ou** un refus motivé, la source (région, offset, sha), la trace, le coût |
+| **budget** | le coût est en **octets lus** ; il
+… [2376 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' reports/rapport-r44-scans.md; echo '=== R41 ==='; sed -n '1,30p' reports/rapport-r41-bloc-tableaux.md", "description": "Lire les chiffres R4.4 et R4.1"}`
+
+  ```
+# R4.4 — les scans : la photo passe de 55,9 % à 6,7 % de WER, les colonnes de 89 % à 0,5 %
+
+> **Objet.** La ligne R4.4 était **partielle** : dix pages **rendues** lues, mais aucun scan.
+> Ce programme fabrique cinq familles de dégradations, mesure ce qu'elles coûtent, ajoute le
+> prétraitement, la récupération des exposants, l'ordre de lecture des colonnes et les cellules
+> des tableaux — et valide la chaîne sur un **vrai scan** d'Internet Archive.
+>
+> **Ce que ce n'est pas.** Les scans sont **simulés** (il n'y a pas de scanner sur la machine) ;
+> la validation réelle compare à la **couche OCR** d'Internet Archive, pas à une vérité humaine.
+> Les deux limites sont dites, pas contournées.
+
+## Dispositif
+
+- **100 scans simulés** : 10 pages de développement (9 portent les 30 questions du banc R0.3) et
+  10 pages de test, × **5 familles** : `propre` (contrôle), `photocopie` (200 dpi, flou, 1,2°,
+  mouchetures, JPEG q45), `photo` (180 dpi, perspective, éclairage inégal + ombre, flou de
+  mouvement, bruit, JPEG q25), `fax` (120 dpi, binarisation dure, sel-et-poivre), `papier`
+  (170 dpi, texture, jaunissement, vignettage, taches, rotation).
+- **OCR** : tesseract 5.5.3 sans root ([`instal
+… [4439 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/implantation/ | grep -E \"banc|corpus-gele|pipeline|tete-balayage|encodeur-visuel|bloc-\" ; echo '=== roadmap line ==='; sed -n '200,205p' docs/pilotage/roadmap.md; echo '=== R42/R43 ==='; sed -n '1,12p' reports/rapport-r42-b … [121 caractères tronqués]`
+
+  ```
+banc-lecture.md
+bloc-code.md
+bloc-maths.md
+bloc-tableaux.md
+corpus-gele.md
+encodeur-visuel.md
+pipeline-lecture.md
+tete-balayage.md
+=== roadmap line ===
+
+## Programme R
+
+**Synthèse : [le programme R en une page](programme-r.md)** — ce qui tient, ce qui ne tient pas, les trois lois. — Le lecteur (la nouvelle cible)
+
+**La cible** : lire un document **comme un humain lit vite** — survoler, balayer, lire sélectivement, revenir — en
+=== R42/R43 ===
+# R4.2 — le bloc code : 294 fichiers, 453 038 nœuds, 24/24 extraits exécutés
+
+> **Ligne de roadmap** : R4.2 · **Date** : 2026-10-29 · **Verdict** : ✅ **le code se lit par
+> son AST et son exécution** — **294/294** fichiers de `tools/` acceptés (**453 038** nœuds,
+> **1 722** fonctions, **73** classes), **24/24** extraits exécutés à la valeur exacte,
+> **7/7** refus nommés, et le contrôle « texte seul » **échoue 3/3** (2**10+24 : texte 2,
+> exécution 1048).
+>
+> **Dispositif** : CPU seul, aucun modèle ; langage **Python 3** (`ast`), interpréteur **en
+> sable** (liste blanche de nœuds, pas d'import, pas d'attribut, pas, itérations et
+> profondeur bornés) ; fixtures `tools/tests/code/` ; JSON brut
+> [`r42-bloc-code.json`](r42-bloc-code.json) ; spe
+… [837 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je dessine la carte des six phases R et le pipeline du lecteur, puis je réécris la charte
+
+- **write** `{"content": "import sys, pathlib\nsys.path.insert(0, \"/tmp\")\nfrom svgkit import *\n\nOUT = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas\")\n\n\ndef phases():\n    s = SVG(960, 600, \"Le programme R — six phases, un lecteur\",\n            \"R0 assemble le lecteur sy … [4668 caractères tronqués]`
+
+  ```
+<path>/tmp/gen_programme_r.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/gen_programme_r.py; echo \"EXIT=$?\"", "description": "Générer les deux schémas du programme R"}`
+
+  ```
+✓ programme-r-phases.svg
+  ✓ programme-r-pipeline.svg
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/gen_programme_r.py'); t=p.read_text()\nt=t.replace('s.boite(780, 310, 150, 60, \"refus\", [\"score < seuil\"], ROUGE, 10.5, 8.5)',\n            's.boite(390, 310, 160, 60, \"refu … [318 caractères tronqués]`
+
+  ```
+ok
+  ✓ programme-r-phases.svg
+  ✓ programme-r-pipeline.svg
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short docs/pilotage/programme-r.md docs/schemas/programme-r-*.svg 2>/dev/null; wc -w docs/pilotage/programme-r.md", "description": "Vérifier l'état du fichier à réécrire"}`
+
+  ```
+?? docs/schemas/programme-r-phases.svg
+?? docs/schemas/programme-r-pipeline.svg
+600 docs/pilotage/programme-r.md
+  ```
+
+- **write** `{"content": "# Le programme R — le lecteur, de la surface à la réponse\n\n> **Charte de programme.** Ce document dit ce qu'est **R**, pourquoi il existe, ses six phases, ses\n> lois, ce qui tient et ce qui ne tient pas, ses dépendances et sa prochaine action. **État au\n> 2026-11-01.** Les chiffres  … [21581 caractères tronqués]`
+
+  ```
+Error: cannot modify "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/programme-r.md": file has not been read — read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/programme-r.md", "limit": 10}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/programme-r.md</path>
+<type>file</type>
+<content>
+1: # Le programme R en une page — ce qui tient, ce qui ne tient pas
+2: 
+3: > **État au 2026-10-29** · les fiches de résultat sont dans `reports/`, les contrats dans
+4: > `docs/implantation/`, les chiffres dans les JSON. Cette page ne remplace ni les unes ni les
+5: > autres : elle dit ce qu'on peut **affirmer** et ce qu'on ne peut pas.
+6: 
+7: ## 1. Ce qui tient — mesuré, contrôlé, rejouable
+8: 
+9: | brique | dispositif | chiffre | fiche |
+10: |---|---|---|---|
+
+(Showing lines 1-10 of 51. Use offset=11 to continue.)
+</content>
+  ```
+
+- **write** `{"content": "# Le programme R — le lecteur, de la surface à la réponse\n\n> **Charte de programme.** Ce document dit ce qu'est **R**, pourquoi il existe, ses six phases, ses\n> lois, ce qui tient et ce qui ne tient pas, ses dépendances et sa prochaine action. **État au\n> 2026-11-01.** Les chiffres  … [21581 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/programme-r.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/schemas/README.md'); t=p.read_text()\nt=t.replace(\"\"\"## Les schémas du natif et de l'impulsionnel\"\"\",\n\"\"\"## Les schémas du programme R\n\n| schéma | ce qu'il montre | o … [1644 caractères tronqués]`
+
+  ```
+ok
+  schémas · 434 document(s) · 63 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+SCHEMAS=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [229 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py       EXIT=1
+  revue de documentation · 382 fiche(s) · 466 JSON · 115 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 459 JSON, le disque en a 466
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=1
+  ✅ 1351 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ❌ 1 lien(s) relatif(s) ne résolvent pas (sur 1350 examinés) :
+     reports/inventaire-donnees-entrainement.md → rapport-corpus-wikipedia.md
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"R — le lecteur\\|R4.4 — les scans\\|459\" docs/pilotage/en-cours.md; echo '=== wiki reports ==='; ls reports/ | grep -i wiki", "description": "Repérer les lignes R et le lien manquant"}`
+
+  ```
+92:| fichiers / JSON de résultats | **382** / **459** | `reports/*.md` / `reports/*.json` |
+109:| **R — le lecteur** | aucune | R4.4 : scans réels, fax | **R4.4 mesurée (4/5 ≥ 90 %)** ; les **scans réels** restent ; **le modèle lit des lettres** (×17,8 au mélange) ; R1/R2/R3 attendent N2 |
+=== wiki reports ===
+corpus-wiki-ar.json
+corpus-wiki-de.json
+corpus-wiki-en.json
+corpus-wiki-es.json
+corpus-wiki-fr-contamination.json
+corpus-wiki-fr.json
+corpus-wiki-it.json
+corpus-wiki-ja.json
+corpus-wiki-propre.json
+kfold-wiki-0210.json
+rapport-corpus-wiki-fr.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**Mis à jour : 2026-11-01, 11 h 45 HNE (heure locale, EST).**\",\n            \"**Mis à jour : 2026-11-01, 12 h 05 HNE (heu … [963 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 382 fiche(s) · 466 JSON · 115 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1420 mots · 7 sections · 1 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ 1351 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ❌ 1 lien(s) relatif(s) ne résolvent pas (sur 1350 examinés) :
+     reports/inventaire-donnees-entrainement.md → rapport-corpus-wikipedia.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/programme-r.md docs/schemas/programme-r-phases.svg docs/schemas/programme-r-pipeline.svg docs/schemas/README.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git diff --cached --stat | tail -10 && timeou … [218 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 19.4 h |
+| Durée | 20.3 h |
 | Tours | 15 |
-| Messages | 917 |
-| Appels d'outils | 856 |
+| Messages | 947 |
+| Appels d'outils | 886 |
 | Fichiers touchés | 11 |
-| Commandes | 713 |
+| Commandes | 735 |
 | Sous-agents | 0 |
 | Commits | 23 |
 | Compactages de contexte | 1 |
@@ -766,7 +766,7 @@ Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre
 
 ### Tour 15 — peux-tu comencer l'entrainement avec des phrases non ambigue et étudier les effets  sur la qualité du bloc linguistique.
 
-*18 appels d'outils.* Actions notables :
+*48 appels d'outils.* Actions notables :
 
 - bash — Measure the unambiguous subset of the clean corpus
 - bash — Build the unambiguous and control corpora and launch two bases
@@ -782,7 +782,7 @@ Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre
 - bash — Sample the French Wikipedia text
 - bash — Extract 120k French Wikipedia articles
 - bash — Deduplicate and split the Wikipedia corpus
-- … et 2 autres
+- … et 24 autres
 
 **Synthèse produite :**
 
@@ -848,7 +848,7 @@ Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 673 autres
+- … et 695 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -976,7 +976,7 @@ Il y a deux « contextes » dans cette histoire, et il ne faut pas les confondre
 
 ## 5. Erreurs rencontrées
 
-46 sorties en erreur ou divergentes. Les premières :
+47 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5

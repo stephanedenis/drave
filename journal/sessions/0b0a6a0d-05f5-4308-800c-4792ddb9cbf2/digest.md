@@ -12360,3 +12360,326 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-713", "timeout_ms": 400000, "wait": true}`
+
+  ```
+11:48
+total 231928
+drwxr-xr-x. 1 stephane stephane        24  1 nov 11:41 .
+drwxr-xr-x. 1 stephane stephane      1710  1 nov 11:47 ..
+-rw-r--r--. 1 stephane stephane 237491315  1 nov 11:41 articles.txt
+pas 15750 · perte 0.6959 · PPL val 8.660 · 632 s
+pas 13400 · perte 0.8682 · PPL val 5.724 · 631 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,etime,time,pcpu,cmd | grep \"corpus_propre\" | grep -v grep; tail -2 work/n2j/wiki-dedup.log; ls -la data/wiki_fr/ | head; date '+%H:%M'", "description": "Check the dedup process progress"}`
+
+  ```
+1321753       06:25 00:00:00  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 tools/corpus_propre.py --source data/wiki_fr/articles.txt --sortie data/wiki_fr/propre --manifeste reports/corpus-wiki-propre.json --verif-max 3000 > work/n2j/wiki-dedup.log 2>&1 & echo "dedup $!"; sleep 60; tail -3 work/n2j/wiki-dedup.log; date '+%H:%M'; tail -1 work/n2j/base-nonambigu.log; tail -1 work/n2j/base-temoin.log
+1321755       06:25 00:06:25 99.9 python3 tools/corpus_propre.py --source data/wiki_fr/articles.txt --sortie data/wiki_fr/propre --manifeste reports/corpus-wiki-propre.json --verif-max 3000
+total 231928
+drwxr-xr-x. 1 stephane stephane        36  1 nov 11:48 .
+drwxr-xr-x. 1 stephane stephane      1710  1 nov 11:47 ..
+-rw-r--r--. 1 stephane stephane 237491315  1 nov 11:41 articles.txt
+drwxr-xr-x. 1 stephane stephane        48  1 nov 11:48 propre
+11:48
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && kill 1321755 2>/dev/null; sleep 1; rm -rf data/wiki_fr/propre; grep -n \"verif_max\\|def contamine\\|def verifie\" tools/corpus_propre.py | head -8; nohup python3 tools/corpus_propre.py --source data/wiki_fr/articles.txt --sortie dat … [213 caractères tronqués]`
+
+  ```
+186:    contam = taux_contamination(train, val, maxi=a.verif_max)
+187:    contam_test = taux_contamination(train, test, maxi=a.verif_max)
+dedup2 1324855
+11:48
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -A20 \"def taux_contamination\" tools/corpus_propre.py | head -26", "description": "Read the contamination check implementation"}`
+
+  ```
+125:def taux_contamination(train: bytes, val: bytes, fenetre: int = 128, pas: int = 64,
+126-                       maxi: int | None = None) -> dict:
+127-    n = len(val) - fenetre - 1
+128-    positions = list(range(0, max(0, n), pas))
+129-    if maxi:
+130-        positions = positions[:maxi]
+131-    touchees = sum(1 for j in positions if val[j:j + fenetre + 1] in train)
+132-    return {"fenetres": len(positions), "contaminees": touchees,
+133-            "taux": round(touchees / max(1, len(positions)), 4)}
+134-
+135-
+136-def plus_longue_repetition(train: bytes, val: bytes, essais: int = 40, graine: int = 0) -> int:
+137-    """Plus longue extension d'une fenêtre de validation retrouvée dans l'entraînement."""
+138-    import random
+139-    rng = random.Random(graine)
+140-    n = len(val) - 129
+141-    if n <= 0:
+142-        return 0
+143-    pire = 0
+144-    for _ in range(essais):
+145-        j = rng.randrange(0, n)
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -6 work/n2j/wiki-dedup.log; ls -la data/wiki_fr/propre/ 2>/dev/null | head -4; ls work/n2j/*.pt 2>/dev/null", "description": "Wait for the wiki dedup and the small bases"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-717]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-717", "timeout_ms": 400000, "wait": true}`
+
+  ```
+11:53
+work/n2j/base-nonambigu.pt
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ps -eo pid,etime,pcpu,cmd | grep -E \"corpus_propre|entrainer_native\" | grep -v grep | head -3; tail -2 work/n2j/base-temoin.log; ls work/n2j/*.pt 2>/dev/null; tail -3 work/n2j/wiki-dedup.log", "description": "Check t … [34 caractères tronqués]`
+
+  ```
+11:53
+1320172       15:25  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=1 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/corpus_nonambigu/temoin.txt --pas 20000 --seq 128 --lot 8 --lr 3e-4 --graine 1 --sortie work/n2j/base-temoin.pt --drvm work/n2j/base-temoin.drvm > work/n2j/base-temoin.log 2>&1
+1320175       15:25  100 /home/stephane/gpu-env/bin/python tools/entrainer_native.py --corpus data/corpus_nonambigu/temoin.txt --pas 20000 --seq 128 --lot 8 --lr 3e-4 --graine 1 --sortie work/n2j/base-temoin.pt --drvm work/n2j/base-temoin.drvm
+1324855       04:23 99.1 python3 tools/corpus_propre.py --source data/wiki_fr/articles.txt --sortie data/wiki_fr/propre --manifeste reports/corpus-wiki-propre.json --verif-max 100
+pas 19800 · perte 0.5948 · PPL val 8.489 · 919 s
+pas 19850 · perte 0.6743 · PPL val 8.491 · 921 s
+work/n2j/base-nonambigu.pt
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -8 work/n2j/wiki-dedup.log; ls -la data/wiki_fr/propre/ 2>/dev/null | head -5; ls work/n2j/*.pt 2>/dev/null", "description": "Wait for the wiki dedup to finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-719]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-719", "timeout_ms": 400000, "wait": true}`
+
+  ```
+11:57
+  },
+  "test": {
+   "fenetres": 100,
+   "contaminees": 0,
+   "taux": 0.0
+  }
+ }
+}
+total 201908
+drwxr-xr-x. 1 stephane stephane        48  1 nov 11:54 .
+drwxr-xr-x. 1 stephane stephane        36  1 nov 11:54 ..
+-rw-r--r--. 1 stephane stephane  10330245  1 nov 11:54 test.txt
+-rw-r--r--. 1 stephane stephane 186089472  1 nov 11:54 train.txt
+work/n2j/base-nonambigu.pt
+work/n2j/base-temoin.pt
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_fr/propre/train.txt --pas 20000 --seq 128 --lot 8 --lr 3e-4 -- … [548 caractères tronqués]`
+
+  ```
+wiki base 1327151
+=== éval des deux bases non ambiguës ===
+{"fichier": "base-nonambigu.pt", "params": 11814792, "val": 11.8054, "test": 12.2777, "litterature": 75.975, "litterature_propre": 89.8294, "anglais": 477.8352, "wikitext2": 443.9921, "permute": 12121.6972}
+{"fichier": "base-temoin.pt", "params": 11814792, "val": 10.1055, "test": 10.7283, "litterature": 72.621, "litterature_propre": 79.9418, "anglais": 463.3269, "wikitext2": 430.0326, "permute": 11391.2248}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2j/filtre_wiki.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"filtre_wiki.py — échantillonne des phrases de Wikipédia et garde les non ambiguës.\"\"\"\nimport random, re, pathlib, sys\nsys.path.insert(0, 'tools/structures')\nim … [1280 caractères tronqués]`
+
+  ```
+filtre 1327636
+[still running after 60000ms; moved to background job bash-721]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-721", "timeout_ms": 300000, "wait": true}`
+
+  ```
+200000 phrases · 30786 non ambiguës
+non ambiguës : 30786 (15.4 %)
+écrit
+=== wiki base ===
+pas 2800 · perte 1.9247 · PPL val 6.655 · 133 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki.log; ls work/n2j/base-wiki.pt 2>/dev/null && echo WIKI_OK", "description": "Wait for the Wikipedia base training"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-722]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-722", "timeout_ms": 600000, "wait": true}`
+
+  ```
+12:08
+pas 13150 · perte 1.4482 · PPL val 4.613 · 629 s
+[status: completed, exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('reports/corpus-wiki-propre.json'))\nprint({k: v for k, v in d.items() if not isinstance(v, dict)})\nprint('train/val/test :', d.get('train_octets'), d.get('val_octets'), d.get('test_octet … [153 caractères tronqués]`
+
+  ```
+{'source': 'data/wiki_fr/articles.txt', 'source_octets': 237491315, 'source_sha256': '1f7d5ccb9dc206f968b78a6bf7c80926c2529a9e89de0ca5607b26ea81a877d8', 'propre_octets': 206749829, 'train_octets': 186089472, 'val_octets': 10330112, 'test_octets': 10330245, 'plus_longue_repetition_val_train': 0, 'licence': 'corpus local, licence à vérifier — ne pas diffuser', 'note': 'les corpus de data/ ne sont pas versionnés ; ce manifeste porte leur empreinte'}
+train/val/test : 186089472 10330112 10330245
+dédup : {'retires': 30797991, 'runs': 56506, 'plus_long_run': 209986, 'retires_pct': 12.97}
+contamination : {'validation': {'fenetres': 100, 'contaminees': 0, 'taux': 0.0}, 'test': {'fenetres': 100, 'contaminees': 0, 'taux': 0.0}}
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki.log; ls work/n2j/base-wiki.pt 2>/dev/null && echo WIKI_OK", "description": "Wait for the Wikipedia base to finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-724]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-724", "timeout_ms": 600000, "wait": true}`
+
+  ```
+12:15
+}
+work/n2j/base-wiki.pt
+WIKI_OK
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; echo \"=== wiki val ===\"; ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/base-wiki.pt --decomposition --longueurs --corpus-dir data/wiki_fr/propre --sortie work/n2j/eval.json 2>&1 | … [290 caractères tronqués]`
+
+  ```
+=== wiki val ===
+[still running after 60000ms; moved to background job bash-725]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-725", "timeout_ms": 400000, "wait": true}`
+
+  ```
+{"fichier": "base-wiki.pt", "params": 11814792, "val": 4.0284, "test": 4.1023, "litterature": 7.2312, "litterature_propre": 7.4248, "anglais": 12.4113, "wikitext2": 13.9121, "permute": 199.1374, "decomposition": {"complete": 3.8902, "apres_2_blocs": 4.8002, "apres_4_blocs": 4.1328, "apres_6_blocs": 3.9026, "sans_pensee": 2944949.4972}, "longueurs": {"129": 4.0685, "192": 7.0665, "256": 9.2772, "384": 11.8489, "512": 13.3744}}
+=== repo val (transfert) ===
+{"fichier": "base-wiki.pt", "params": 11814792, "val": 6.7194, "test": 6.6647, "litterature": 7.2312, "litterature_propre": 7.4248, "anglais": 12.4113, "wikitext2": 13.9121, "permute": 264.3971}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"add_argument\" tools/entrainer_native.py | head -12", "description": "Check the native trainer options"}`
+
+  ```
+52:    ap.add_argument("--corpus", default="data/corpus_fr.txt")
+53:    ap.add_argument("--pas", type=int, default=200)
+54:    ap.add_argument("--seq", type=int, default=128)
+55:    ap.add_argument("--lot", type=int, default=8)
+56:    ap.add_argument("--lr", type=float, default=3e-4)
+57:    ap.add_argument("--device", default="cuda")
+58:    ap.add_argument("--sortie", default="/tmp/drave-n0.pt")
+59:    ap.add_argument("--drvm", default="/tmp/drave-n0.drvm")
+60:    ap.add_argument("--graine", type=int, default=1)
+61:    ap.add_argument("--dim", type=int, default=224, help="d_model (224 = 11,47 M ; 296 = 21,65 M)")
+62:    ap.add_argument("--expert-hidden", type=int, default=288,
+64:    ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"torch.save\\|load_state_dict\\|randint\\|randrange\\|def pas\\|echantillon\" tools/entrainer_native.py | head -12; echo \"=== charge ===\"; sed -n 44,58p tools/eval_n2_propre.py", "description": "Check the checkpoint format … [15 caractères tronqués]`
+
+  ```
+104:    torch.save({"config": cfg.__dict__, "state": modele.state_dict()}, a.sortie)
+=== charge ===
+def charge(chemin, device="cuda"):
+    ck = torch.load(chemin, map_location="cpu", weights_only=False)
+    cfg = NativeConfig(**{k: v for k, v in ck["config"].items()
+                          if k in NativeConfig.__annotations__})
+    m = NativeModel(cfg).to(device)
+    m.load_state_dict(ck["state"], strict=False)
+    m.eval()
+    return m
+
+
+def fenetres_dans_chunks(data, n, long, compteur, chunk, device="cuda"):
+    """n fenêtres de `long` octets, chacune **dans** un chunk (jamais sur un collage)."""
+    n_chunks = max(1, len(data) // chunk)
+    out = []
+    for k in range(n):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 66,104p tools/entrainer_native.py", "description": "Read the native training loop"}`
+
+  ```
+a = ap.parse_args()
+    torch.manual_seed(a.graine)
+    data = charger(a.corpus)
+    n_val = max(10_000, len(data) // 20)
+    train, val = data[:-n_val], data[-n_val:]
+    cfg = NativeConfig(d_model=a.dim, expert_hidden=a.expert_hidden)
+    modele = NativeModel(cfg).to(a.device)
+    opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)
+    t0 = time.time(); pertes = []
+    for pas in range(1, a.pas + 1):
+        modele.train()
+        x, y = lot(train, a.lot, a.seq, a.device, pas * a.lot)
+        sortie = modele(x)
+        pertes = [F.cross_entropy(sortie["logits"].reshape(-1, 256), y.reshape(-1))]
+        if a.tetes:
+            for e in sortie["early"]:
+                pertes.append(F.cross_entropy(e.reshape(-1, 256), y.reshape(-1)))
+        perte = sum(pertes) / len(pertes)
+        opt.zero_grad(); perte.backward()
+        torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
+        opt.step(); pertes.append(float(perte))
+        if pas % 50 == 0 or pas == 1:
+            p, n = ppl(modele, val, a.seq, a.lot, a.device, n_lots=2)
+            print(f"pas {pas:4d} · perte {float(perte):.4f} · PPL val {p:.3f} · {time.time()-t0:.0f} s", flush=True)
+    p_val, n_
+… [773 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/entrainer_native.py'); s = p.read_text()\ns = s.replace('''    ap.add_argument(\"--tetes\", action=argparse.BooleanOptionalAction, default=True,''',\n'''    ap.add_argument(\" … [1209 caractères tronqués]`
+
+  ```
+--init ajouté
+syntaxe ok
+unamb base 1333578
+pas  800 · perte 2.3590 · PPL val 10.456 · 38 s
+pas  850 · perte 2.3388 · PPL val 10.160 · 40 s
+  ```
+
+- **bash** `{"command": "sleep 120; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/base-unamb.pt 2>/dev/null && echo UNAMB_OK; tail -1 work/n2j/base-unamb.log", "description": "Wait for the unambiguous pretraining"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-730]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-730", "timeout_ms": 300000, "wait": true}`
+
+  ```
+12:21
+work/n2j/base-unamb.pt
+UNAMB_OK
+}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_fr/propre/train.txt --pas 18000 --seq 128 --lot 8 --lr 3e-4 -- … [322 caractères tronqués]`
+
+  ```
+curriculum 1334494
+pas   50 · perte 1.9657 · PPL val 7.696 · 2 s
+pas  100 · perte 1.9039 · PPL val 7.686 · 5 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2j/fiche.md <<'EOF'\n# N2.j — Du vrai français : 186 Mo de Wikipédia, et ce que vaut le filtre « non ambigu »\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : entraîné sur **186 Mo** de\n> Wikipédia  … [4514 caractères tronqués]`
+
+  ```
+fiche écrite
+12:22
+pas  950 · perte 1.9728 · PPL val 6.773 · 43 s
+  ```
+
+- **bash** `{"command": "sleep 840; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-curriculum.log; ls work/n2j/base-curriculum.pt 2>/dev/null && echo CURR_OK", "description": "Wait for the curriculum training"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-733]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-733", "timeout_ms": 900000, "wait": true}`

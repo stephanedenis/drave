@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 19.2 h |
+| Durée | 20.0 h |
 | Tours | 6 |
-| Messages | 741 |
-| Appels d'outils | 746 |
+| Messages | 759 |
+| Appels d'outils | 763 |
 | Fichiers touchés | 18 |
-| Commandes | 682 |
+| Commandes | 697 |
 | Sous-agents | 0 |
 | Commits | 33 |
 | Compactages de contexte | 1 |
@@ -329,7 +329,7 @@ C'est **cent fois** la prose du dépôt (5,36 Mo uniques).
 
 ### Tour 6 — constitue les corpus des autres langues et assure-toi que tous les agents s'y retrouvent pour leurs besoins
 
-*12 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Inspect all Wikipedia language databases
 - bash — List language DB sizes while counts run
@@ -343,6 +343,9 @@ C'est **cent fois** la prose du dépôt (5,36 Mo uniques).
 - bash — Write corpus catalogue generator and check progress
 - bash — Check extraction rate and disk space
 - bash — Poll extraction after ten minutes
+- bash — Run Arabic corpus contamination check
+- bash — Check completed language manifests
+- … et 12 autres
 
 **Synthèse produite :**
 
@@ -417,7 +420,7 @@ Je regarde d'abord les neuf autres bases (schéma, articles, volume de résumés
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 642 autres
+- … et 657 autres
 
 ## 4. Mesures et résultats marquants
 

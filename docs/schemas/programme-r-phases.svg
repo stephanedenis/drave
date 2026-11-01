@@ -1,0 +1,53 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Le programme R — six phases, un lecteur</title>
+<desc>R0 assemble le lecteur système ; R1–R5 le rendent natif, mémoire, restitution, structure et croisé.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="600" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Le programme R — six phases, un lecteur</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">R ne remplace ni N ni B : il leur donne une cible mesurable, la lecture d&#x27;un document.</text>
+<rect x="30" y="88" width="900" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<rect x="42" y="96" width="74" height="48" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="79.0" y="120" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">R0</text>
+<text x="132" y="114" text-anchor="start" font-size="10" font-weight="bold" fill="#0f172a">R0.1 document · R0.2 contrôleur · R0.3 banc</text>
+<text x="132" y="133" text-anchor="start" font-size="9" fill="#475569">R0.4/R0.5 négatifs · R0.6 pipeline</text>
+<rect x="700" y="106" width="215" height="26" rx="13" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+<text x="807.5" y="123.0" text-anchor="middle" font-size="9" font-weight="bold" fill="#15803d">✅ R0 close</text>
+<rect x="30" y="164" width="900" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<rect x="42" y="172" width="74" height="48" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="79.0" y="196" text-anchor="middle" font-size="12" font-weight="bold" fill="#b45309">R1</text>
+<text x="132" y="190" text-anchor="start" font-size="10" font-weight="bold" fill="#0f172a">R11 état de section · R12 curriculum</text>
+<text x="132" y="209" text-anchor="start" font-size="9" fill="#475569">R13 tokenisation (close : octets)</text>
+<rect x="700" y="182" width="215" height="26" rx="13" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<text x="807.5" y="199.0" text-anchor="middle" font-size="9" font-weight="bold" fill="#b45309">🟡 R13 close ; R1.1/1.2</text>
+<rect x="30" y="240" width="900" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<rect x="42" y="248" width="74" height="48" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+<text x="79.0" y="272" text-anchor="middle" font-size="12" font-weight="bold" fill="#b91c1c">R2</text>
+<text x="132" y="266" text-anchor="start" font-size="10" font-weight="bold" fill="#0f172a">R21 gist · R22 épisodique</text>
+<text x="132" y="285" text-anchor="start" font-size="9" fill="#475569">mémoire de travail et relecture</text>
+<rect x="700" y="258" width="215" height="26" rx="13" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+<text x="807.5" y="275.0" text-anchor="middle" font-size="9" font-weight="bold" fill="#b91c1c">⛔ attend R1 / N5</text>
+<rect x="30" y="316" width="900" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<rect x="42" y="324" width="74" height="48" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+<text x="79.0" y="348" text-anchor="middle" font-size="12" font-weight="bold" fill="#b91c1c">R3</text>
+<text x="132" y="342" text-anchor="start" font-size="10" font-weight="bold" fill="#0f172a">R31 SFT de lecture · R32 citations</text>
+<text x="132" y="361" text-anchor="start" font-size="9" fill="#475569">restitution et provenance</text>
+<rect x="700" y="334" width="215" height="26" rx="13" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+<text x="807.5" y="351.0" text-anchor="middle" font-size="9" font-weight="bold" fill="#b91c1c">⛔ attend N4</text>
+<rect x="30" y="392" width="900" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<rect x="42" y="400" width="74" height="48" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="79.0" y="424" text-anchor="middle" font-size="12" font-weight="bold" fill="#b45309">R4</text>
+<text x="132" y="418" text-anchor="start" font-size="10" font-weight="bold" fill="#0f172a">R41 tableaux · R42 code · R43 maths</text>
+<text x="132" y="437" text-anchor="start" font-size="9" fill="#475569">R44 scans (5 familles, réel)</text>
+<rect x="700" y="410" width="215" height="26" rx="13" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<text x="807.5" y="427.0" text-anchor="middle" font-size="9" font-weight="bold" fill="#b45309">✅ 3 blocs ; R44 limites</text>
+<rect x="30" y="468" width="900" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+<rect x="42" y="476" width="74" height="48" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+<text x="79.0" y="500" text-anchor="middle" font-size="12" font-weight="bold" fill="#b91c1c">R5</text>
+<text x="132" y="494" text-anchor="start" font-size="10" font-weight="bold" fill="#0f172a">R51 croisé · R52 multilingue</text>
+<text x="132" y="513" text-anchor="start" font-size="9" fill="#475569">retrieval, comparaison, traduction</text>
+<rect x="700" y="486" width="215" height="26" rx="13" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+<text x="807.5" y="503.0" text-anchor="middle" font-size="9" font-weight="bold" fill="#b91c1c">⛔ attend R3 / B10.3</text>
+<rect x="30" y="552" width="900" height="34" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+<text x="480" y="574" text-anchor="middle" font-size="9.5" fill="#334155">R0 : le lecteur système, sans entraînement · R1–R5 : le lecteur natif, la mémoire, la restitution, les blocs, le croisé</text>
+<text x="480" y="596" text-anchor="middle" font-size="8.8" font-style="italic" fill="#475569">vert : mesuré · ambre : partiel ou limite nommée · rouge : attend une dépendance</text>
+</svg>

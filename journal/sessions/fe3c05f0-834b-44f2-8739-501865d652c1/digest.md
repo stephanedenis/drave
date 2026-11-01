@@ -13098,3 +13098,245 @@ background job bash-676 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrine
 11:44
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -4 work/corpus-wiki-langues.log; du -sh data/corpus_wiki_* 2>/dev/null; df -h /home/stephane/Data13TB | tail -1; date +%H:%M", "description": "Check extraction rate and disk space", "timeoutMs": 180000, "workdir": "/home/stephane/ … [34 caractères tronqués]`
+
+  ```
+===== ar (3.5 Go) =====
+  [ar] 200000/1310867 lus · 199997 gardés · 199997 tronçons
+  [ar] 400000/1310867 lus · 399990 gardés · 399990 tronçons
+1003M	data/corpus_wiki_ar
+3,6G	data/corpus_wiki_fr
+/dev/mapper/system-root   11T  8,9T  2,0T  82% /home/stephane/Data13TB
+11:45
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -6 work/corpus-wiki-langues.log; ls data/ | grep corpus_wiki; du -sh data/corpus_wiki_* 2>/dev/null; date +%H:%M", "description": "Poll extraction after ten minutes", "timeoutMs": 720000, "workdir": "/home/stephane/Data … [30 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-682]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-682"}`
+
+  ```
+[de] 600000/3117787 lus · 599997 gardés · 599997 tronçons
+  [de] 800000/3117787 lus · 799994 gardés · 799994 tronçons
+  [de] 1000000/3117787 lus · 999993 gardés · 999993 tronçons
+  [de] 1200000/3117787 lus · 1199990 gardés · 1199990 tronçons
+  [de] 1400000/3117787 lus · 1399965 gardés · 1399965 tronçons
+  [de] 1600000/3117787 lus · 1599961 gardés · 1599961 tronçons
+corpus_wiki_ar
+corpus_wiki_de
+corpus_wiki_fr
+1,9G	data/corpus_wiki_ar
+2,8G	data/corpus_wiki_de
+3,6G	data/corpus_wiki_fr
+11:55
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-682 (bash: sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -6 work/corpus-wiki-langues.log; ls data/ | grep corpus_wiki; du -sh data/corpus_wiki_* 2>/dev/null; date +%H:%M) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 900 python3 tools/verifie_contamination.py --train data/corpus_wiki_ar/train.txt --val data/corpus_wiki_ar/val.txt --test data/corpus_wiki_ar/test.txt --eval /tmp/eval-langues/ar.txt --echantillon 30 --sortie /tmp/contam-ar.jso … [321 caractères tronqués]`
+
+  ```
+[ar 0]
+{'train_troncons': 943622, 'par_split': {'val.txt': {'troncons': 52203, 'doublons': 0, 'taux': 0.0}, 'test.txt': {'troncons': 52033, 'doublons': 0, 'taux': 0.0}}}
+[{'fichier': 'ar.txt', 'fenetre': 128, 'fenetres': 30, 'trouvees': 0, 'taux': 0.0}]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls reports/corpus-wiki-*.json; tail -3 work/corpus-wiki-langues.log; date +%H:%M", "description": "Check completed language manifests", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+reports/corpus-wiki-ar.json
+reports/corpus-wiki-fr-contamination.json
+reports/corpus-wiki-fr.json
+reports/corpus-wiki-propre.json
+  [de] 1400000/3117787 lus · 1399965 gardés · 1399965 tronçons
+  [de] 1600000/3117787 lus · 1599961 gardés · 1599961 tronçons
+  [de] 1800000/3117787 lus · 1799961 gardés · 1799961 tronçons
+11:56
+  ```
+
+- **bash** `{"command": "cat > /tmp/fiche-corpus-narratif.md <<'EOF'\n## 1. La source\n\nDix bases `data/wikipedia/db/<langue>wiki_v14.db`, une par langue (ar, de, en, es, fr, it, ja, pt,\nru, zh), **66 Go** au total. La table `articles` porte `page_id`, `title`, `summary`, `n_chars`,\n`n_words` ; le champ `sum … [5392 caractères tronqués]`
+
+  ```
+narratif prêt
+reports/corpus-wiki-ar.json
+reports/corpus-wiki-fr-contamination.json
+reports/corpus-wiki-fr.json
+reports/corpus-wiki-propre.json
+  [de] 1800000/3117787 lus · 1799961 gardés · 1799961 tronçons
+  [de] 2000000/3117787 lus · 1999961 gardés · 1999961 tronçons
+11:56
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/inventaire-donnees-entrainement.md'); s=p.read_text()\ns=s.replace('''| `data/wikipedia/` | **132 Go** | 10 langues : bases sqlite v14 (66 Go) + dumps `xml.bz2` (67 Go) ; **FR 7 … [1257 caractères tronqués]`
+
+  ```
+inventaire mis à jour
+31:| `data/corpus_wiki_<langue>/` | **~60 Go** | 10 corpus de prose, un par langue (ar, de, en, es, fr, it, ja, pt, ru, zh), splits train/val/test, manifestes `reports/corpus-wiki-<langue>.json` | **prêt** — voir [`rapport-corpus-wikipedia`](rapport-corpus-wikipedia.md) |
+  [de] 1800000/3117787 lus · 1799961 gardés · 1799961 tronçons
+  [de] 2000000/3117787 lus · 1999961 gardés · 1999961 tronçons
+11:56
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -5 work/corpus-wiki-langues.log; ls reports/corpus-wiki-*.json; du -sh data/corpus_wiki_* 2>/dev/null | tail -6; date +%H:%M", "description": "Poll extraction after nine minutes", "timeoutMs": 660000, "workdir": "/home/ … [43 caractères tronqués]`
+
+  ```
+}
+}
+===== en (19.5 Go) =====
+  [en] 200000/7176400 lus · 200000 gardés · 200000 tronçons
+  [en] 400000/7176400 lus · 400000 gardés · 400000 tronçons
+reports/corpus-wiki-ar.json
+reports/corpus-wiki-de.json
+reports/corpus-wiki-fr-contamination.json
+reports/corpus-wiki-fr.json
+reports/corpus-wiki-propre.json
+1,9G	data/corpus_wiki_ar
+4,5G	data/corpus_wiki_de
+718M	data/corpus_wiki_en
+3,6G	data/corpus_wiki_fr
+12:05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nohup bash -c 'for l in es it ja pt ru zh; do python3 tools/corpus_wikipedia.py --db /home/stephane/Data13TB/stephane/data/wikipedia/db/${l}wiki_v14.db --sortie data/corpus_wiki_$l --manifeste reports/corpus-wiki-$l.json; done' > work/ … [664 caractères tronqués]`
+
+  ```
+job reste 1329508
+[de 0]
+{'train_troncons': 2596408, 'par_split': {'val.txt': {'troncons': 143986, 'doublons': 0, 'taux': 0.0}, 'test.txt': {'troncons': 144033, 'doublons': 0, 'taux': 0.0}}}
+[{'fichier': 'de.txt', 'fenetre': 128, 'fenetres': 30, 'trouvees': 0, 'taux': 0.0}]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 900 python3 tools/verifie_contamination.py --train data/corpus_wiki_fr/train.txt --val data/corpus_wiki_fr/val.txt --test data/corpus_wiki_fr/test.txt --eval /tmp/eval-langues/fr.txt --echantillon 30 --sortie /tmp/contam-fr-xnl … [382 caractères tronqués]`
+
+  ```
+[fr 0]
+{'train_troncons': 2273294, 'par_split': {'val.txt': {'troncons': 126636, 'doublons': 0, 'taux': 0.0}, 'test.txt': {'troncons': 125972, 'doublons': 0, 'taux': 0.0}}}
+[{'fichier': 'fr.txt', 'fenetre': 128, 'fenetres': 30, 'trouvees': 0, 'taux': 0.0}]
+12:07
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== en\"; tail -2 work/corpus-wiki-langues.log; echo \"=== reste\"; tail -3 work/corpus-wiki-reste.log; ls reports/corpus-wiki-*.json | wc -l; du -sh data/corpus_wiki_* 2>/dev/null | tail -8; date +%H:%M", "descriptio … [118 caractères tronqués]`
+
+  ```
+=== en
+  [en] 3000000/7176400 lus · 2999983 gardés · 2999983 tronçons
+  [en] 3200000/7176400 lus · 3199977 gardés · 3199977 tronçons
+=== reste
+  "test": 141745847
+ }
+}
+6
+1,9G	data/corpus_wiki_ar
+4,5G	data/corpus_wiki_de
+4,9G	data/corpus_wiki_en
+2,7G	data/corpus_wiki_es
+3,6G	data/corpus_wiki_fr
+110M	data/corpus_wiki_it
+12:16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls reports/corpus-wiki-*.json; timeout 900 python3 tools/verifie_contamination.py --train data/corpus_wiki_es/train.txt --val data/corpus_wiki_es/val.txt --test data/corpus_wiki_es/test.txt --eval /tmp/eval-langues/es.txt --echantillon … [349 caractères tronqués]`
+
+  ```
+reports/corpus-wiki-ar.json
+reports/corpus-wiki-de.json
+reports/corpus-wiki-es.json
+reports/corpus-wiki-fr-contamination.json
+reports/corpus-wiki-fr.json
+reports/corpus-wiki-propre.json
+[es 0]
+{'train_troncons': 1711098, 'par_split': {'val.txt': {'troncons': 94932, 'doublons': 0, 'taux': 0.0}, 'test.txt': {'troncons': 94530, 'doublons': 0, 'taux': 0.0}}}
+[{'fichier': 'es.txt', 'fenetre': 128, 'fenetres': 30, 'trouvees': 0, 'taux': 0.0}]
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== en\"; tail -2 work/corpus-wiki-langues.log; echo \"=== reste\"; tail -3 work/corpus-wiki-reste.log; ls reports/corpus-wiki-*.json; du -sh data/corpus_wiki_* 2>/dev/null | tail -9; date +%H:%M", "description": "Pol … [115 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-692]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-692"}`
+
+  ```
+=== en
+  [en] 6000000/7176400 lus · 5999894 gardés · 5999894 tronçons
+  [en] 6200000/7176400 lus · 6199894 gardés · 6199894 tronçons
+=== reste
+  [ja] 400000/1500075 lus · 400000 gardés · 400000 tronçons
+  [ja] 600000/1500075 lus · 600000 gardés · 600000 tronçons
+  [ja] 800000/1500075 lus · 800000 gardés · 800000 tronçons
+reports/corpus-wiki-ar.json
+reports/corpus-wiki-de.json
+reports/corpus-wiki-es.json
+reports/corpus-wiki-fr-contamination.json
+reports/corpus-wiki-fr.json
+reports/corpus-wiki-it.json
+reports/corpus-wiki-propre.json
+1,9G	data/corpus_wiki_ar
+4,5G	data/corpus_wiki_de
+8,8G	data/corpus_wiki_en
+2,7G	data/corpus_wiki_es
+3,6G	data/corpus_wiki_fr
+2,2G	data/corpus_wiki_it
+3,0G	data/corpus_wiki_ja
+12:27
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-692 (bash: sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo "=== en"; tail -2 work/corpus-wiki-langues.log; echo "=== reste"; tail -3 work/corpus-wiki-reste.log; ls reports/corpus-wiki-*.json; du -sh data/corpus_wiki_* 2>/dev/null | tail -9; date +%H:%M) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 900 python3 tools/verifie_contamination.py --train data/corpus_wiki_it/train.txt --val data/corpus_wiki_it/val.txt --test data/corpus_wiki_it/test.txt --eval /tmp/eval-langues/it.txt --echantillon 30 --sortie /tmp/contam-it.jso … [318 caractères tronqués]`
+
+  ```
+[it 0]
+{'train_troncons': 1433554, 'par_split': {'val.txt': {'troncons': 79854, 'doublons': 0, 'taux': 0.0}, 'test.txt': {'troncons': 79069, 'doublons': 0, 'taux': 0.0}}}
+[{'fichier': 'it.txt', 'fenetre': 128, 'fenetres': 23, 'trouvees': 1, 'taux': 0.0435}]
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== en\"; tail -2 work/corpus-wiki-langues.log; echo \"=== reste\"; tail -3 work/corpus-wiki-reste.log; ls reports/corpus-wiki-*.json; date +%H:%M", "description": "Poll for English and Japanese completion", "timeoutM … [73 caractères tronqués]`
+
+  ```
+=== en
+  [ja] 600000/1500075 lus · 600000 gardés · 600000 tronçons
+  [ja] 800000/1500075 lus · 800000 gardés · 800000 tronçons
+=== reste
+}
+  [pt] 200000/1170577 lus · 199999 gardés · 199999 tronçons
+  [pt] 400000/1170577 lus · 399966 gardés · 399966 tronçons
+reports/corpus-wiki-ar.json
+reports/corpus-wiki-de.json
+reports/corpus-wiki-en.json
+reports/corpus-wiki-es.json
+reports/corpus-wiki-fr-contamination.json
+reports/corpus-wiki-fr.json
+reports/corpus-wiki-it.json
+reports/corpus-wiki-ja.json
+reports/corpus-wiki-propre.json
+12:33
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 1800 python3 tools/verifie_contamination.py --train data/corpus_wiki_en/train.txt --val data/corpus_wiki_en/val.txt --test data/corpus_wiki_en/test.txt --eval /tmp/eval-langues/en.txt --eval data/wikitext2_test.txt --echantillo … [356 caractères tronqués]`
+
+  ```
+started background job bash-695
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 900 python3 tools/verifie_contamination.py --train data/corpus_wiki_ja/train.txt --val data/corpus_wiki_ja/val.txt --test data/corpus_wiki_ja/test.txt --eval /tmp/eval-langues/ja.txt --echantillon 30 --sortie /tmp/contam-ja.jso … [319 caractères tronqués]`
+
+  ```
+[ja 0]
+{'train_troncons': 913879, 'par_split': {'val.txt': {'troncons': 50693, 'doublons': 0, 'taux': 0.0}, 'test.txt': {'troncons': 50830, 'doublons': 0, 'taux': 0.0}}}
+[{'fichier': 'ja.txt', 'fenetre': 128, 'fenetres': 23, 'trouvees': 1, 'taux': 0.0435}]
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== reste\"; tail -3 work/corpus-wiki-reste.log; ls reports/corpus-wiki-*.json; echo \"=== en job\"; tail -3 /tmp/contam-en.log 2>/dev/null; date +%H:%M", "description": "Poll Portuguese and English check", "timeoutMs … [72 caractères tronqués]`

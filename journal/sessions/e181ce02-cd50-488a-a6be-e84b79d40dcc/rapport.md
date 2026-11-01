@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 19.1 h |
-| Tours | 8 |
-| Messages | 315 |
-| Appels d'outils | 348 |
-| Fichiers touchés | 20 |
-| Commandes | 265 |
+| Durée | 19.9 h |
+| Tours | 9 |
+| Messages | 335 |
+| Appels d'outils | 372 |
+| Fichiers touchés | 22 |
+| Commandes | 284 |
 | Sous-agents | 2 |
-| Commits | 17 |
+| Commits | 18 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -45,6 +45,8 @@
 **Tour 7** — prends en charge ici les sessions en suspend pour les compléter
 
 **Tour 8** — on une session active sur l'analyse linguistique par heuristique (coloration). J'aimerais de ce côté-ci (cette session parallèle) que tu analyse les bénéfices d'avoir une couche linguistique de prétraitement par heuristique pour l'étiquetage des différents niveaux du mot jusqu'au document en plusieurs langues. Je vise ici à alléger le traitement linguistique des réseaux de neurones en utilisant de … [60 caractères tronqués]
+
+**Tour 9** — détaille ce qu'est le pprogramme R : docs/pilotage/programme-r.md
 
 ## 2. Déroulé, étape par étape
 
@@ -440,7 +442,69 @@ Mon premier jet d'export (`exporter_corpus.py`, 14 tests) a été **supplanté**
 
 **Synthèse produite :**
 
-⏵ J'écris l'analyse : niveaux, cascade, coloration, multilingue, coût et protocole de mesure
+⏵ Analyse livrée : la couche heuristique retire la surface, le réseau garde l'ambiguïté
+
+L'analyse est dans [`docs/theorie/pre-traitement-linguistique.md`](../../docs/theorie/pre-traitement-linguistique.md), avec **5 schémas** (`heuristique-niveaux`, `cascade`, `coloration`, `cout`, `multilingue`) et un commit : **`e331ef42`**. Voici la substance.
+
+\## La thèse
+
+Le réseau ne paie pas seulement le sens : il paie la **surface** — normalisation Unicode, script, langue, frontières de mots et de phrases, classes fermées, régions de document. Ces opérations sont **locales, déterministes et bon marché** : un CPU les fait en O(octets), à des ordres de grandeur d'un passage dans un transformer.
+
+Mais l'heuristique ne doit pas **décider l'ambigu**. Elle doit :
+
+1. **étiqueter le sûr** avec une source et une confiance ;
+2. **énumérer le plausible** quand plusieurs analyses sont possibles ;
+3. laisser le **résidu** au réseau (ou à l'humain).
+
+C'est la différence entre un étiqueteur et un **générateur de candidats** — et c'est exactement le contrat de la coloration.
+
+\## Les niveaux : ce qui s'enlève au réseau
+
+| niveau | ce que le CPU fait bien | ce qui reste au réseau |
+|---|---|---|
+| **octet / Unicode** | script, NFC/NFKC, ponctuation, chiffres, dates, URLs | rien |
+| **morphème** | affixes réguliers, diacritiques, lemmes productifs | irréguliers, allomorphes, agglutinants |
+| **mot** | frontières sur scripts à espaces, nombres, emoji | CJK, thaï, khmer (segmentation) |
+| **syntagme** | **candidats** GN/GV/GP/REL/SUB, rôles par préposition, attachements | choix de l'attachement, rôle final |
+| **phrase** | frontières, type, négation | bruit OCR, ponctuation absente, portée |
+| **paragraphe** | titres, listes, tableaux, régions, code | scans, layouts inédits |
+| **document** | TOC, structure, provenance, renvois | compréhension, résumé |
+| **multilingue** | langue sur texte long, script, famille | langues proches, codes mêlés, texte court |
+
+Le point clé : **la couche heuristique ne remplace pas le réseau, elle lui retire la surface**. Le réseau garde le choix, le sens, l'inférence.
+
+\## Le cas de la coloration
+
+Le générateur S (`tools/structures/generateur.py`, que j'ai lu sans y toucher) est le bon modèle :
+
+- il reconnaît les **classes fermées** (déterminants, prépositions, relatifs, pronoms, auxiliaires) ;
+- il segmente en **GN, GV, GP, REL, SUB** ;
+- il **varie l'attachement** du segment ambigu : sur « Le chat de la voisine qui dort sur le toit se réveille. », il 
+… [5328 caractères tronqués]
+
+### Tour 9 — détaille ce qu'est le pprogramme R : docs/pilotage/programme-r.md
+
+*24 appels d'outils.* Actions notables :
+
+- bash — Vérifier si la charte existe et lire la ligne R de la roadmap
+- bash — Lire le programme R dans la lecture rapide
+- bash — Lire le backlog R et les fiches
+- bash — Lire la charte R existante
+- bash — Lister les fiches R et lire R0.6/R13
+- bash — Lire l'état R et les questions ouvertes
+- bash — Trouver les portes du programme R
+- bash — Lire les chiffres du banc et de la publication R0.6
+- bash — Lire la porte de lecture et le pipeline
+- bash — Lire les chiffres R4.4 et R4.1
+- bash — Vérifier les documents et les fiches R4
+- write `/tmp/gen_programme_r.py`
+- bash — Générer les deux schémas du programme R
+- bash — Corriger la branche de refus du pipeline
+- … et 10 autres
+
+**Synthèse produite :**
+
+⏵ Je dessine la carte des six phases R et le pipeline du lecteur, puis je réécris la charte
 
 ## 3. Travail accompli
 
@@ -468,6 +532,8 @@ Mon premier jet d'export (`exporter_corpus.py`, 14 tests) a été **supplanté**
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_export.py` | 1 | 0 |
 | `/tmp/gen_heuristique.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/pre-traitement-linguistique.md` | 1 | 0 |
+| `/tmp/gen_programme_r.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/programme-r.md` | 2 | 0 |
 
 ### Sous-agents lancés
 
@@ -516,7 +582,7 @@ Mon premier jet d'export (`exporter_corpus.py`, 14 tests) a été **supplanté**
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 225 autres
+- … et 244 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -669,4 +735,5 @@ Mon premier jet d'export (`exporter_corpus.py`, 14 tests) a été **supplanté**
 - ÉTAT — R4.4 CLOSE PAR SES LIMITES ; S RESTE À L'AUTRE TUI (11 TESTS)" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - ÉTAT — COMPTEUR JSON 459 APRÈS LE CORPUS CONTAMINATION" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - COLORATION — LA COUCHE HEURISTIQUE : CE QUE LE CPU ÉTIQUETTE AVANT LE RÉSEAU" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- R — LA CHARTE DU PROGRAMME : SIX PHASES, TROIS LOIS, CE QUI TIENT ET CE QUI MANQUE" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 

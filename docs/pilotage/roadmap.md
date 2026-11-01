@@ -30,7 +30,7 @@
 | **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** | **A2.6** (experts : A6.2 bloqué) ; réduire le lot |
 | **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0, 6/6 portes | B10.3 attend un **encodeur qui porte** ; **B13** : AC-3, DRVF |
 | **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : corpus propre, **3,0904** en domaine, **16,70 → 3,85** hors dépôt ; N4 partiel | **N2** (plus de français unique, capacité), **N4** (consigne) |
-| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) | **R4.4** : les **scans réels de bout en bout** ; R1/R2/R3 attendent N2 |
+| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) | **R4.4 close** (limites nommées) ; **R1.1/R1.2** (contexte natif) ; R2/R3 attendent N5/N4 |
 | **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | 🔬 **v0** : 7 phrases + **générateur** + **pragmatique** (statuts, double sens conservé, **niveaux 0–4**, niveau minimal), LLM, export | **analyseur plus riche** (rôles, subordonnées), puis brancher l'export au corpus |
 
 ## L'ordre du jour (carpe diem)
@@ -200,7 +200,7 @@ mécanismes Drave. Détail complet : [`roadmap-native-2026-10-29.md`](../archive
 
 ## Programme R
 
-**Synthèse : [le programme R en une page](programme-r.md)** — ce qui tient, ce qui ne tient pas, les trois lois. — Le lecteur (la nouvelle cible)
+**Charte : [le programme R](programme-r.md)** — les six phases, ce qui tient, ce qui ne tient pas, les trois lois. — Le lecteur (la nouvelle cible)
 
 **La cible** : lire un document **comme un humain lit vite** — survoler, balayer, lire sélectivement, revenir — en
 payant le calcul au prorata de ce qui est lu, et **prouver** la compréhension par la restitution. Le concept, les
