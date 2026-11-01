@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 19.0 h |
-| Tours | 13 |
-| Messages | 880 |
-| Appels d'outils | 823 |
+| Durée | 19.2 h |
+| Tours | 14 |
+| Messages | 894 |
+| Appels d'outils | 836 |
 | Fichiers touchés | 11 |
-| Commandes | 684 |
+| Commandes | 697 |
 | Sous-agents | 0 |
-| Commits | 22 |
+| Commits | 23 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -53,6 +53,8 @@
 **Tour 12** — lance le serveur et continue
 
 **Tour 13** — Les phrases présentées sont ambigues et ne peuvent être résolues hors contexte, même par un humain. En contexte, cette ambiguité peut avoir une intention humouristique. on doit donc avoir un nuveau pragmatique pour trancher et conserver les 2 sens.
+
+**Tour 14** — ça va prendre des contextes plus larges pour trancher sur les interprétations ambigues.
 
 ## 2. Déroulé, étape par étape
 
@@ -701,6 +703,28 @@ Les phrases du banc étaient ambiguës **par construction** — c'était le but 
 Ce n'est pas un détail d'interface : c'est la **RSN plurielle** appliquée à l'interprétation. Un sens n'est pas un parse unique mais un **état à plusieurs lectures**, chacune avec un statut ; le contexte est ce qui **décide**, et quand l'intention est humoristique, la décision est de **garder les deux**. C'est exactement ce que le moteur de pensée v0 sait représenter (états pluriels, justification, trace) — et le corpus qui en sort est rare : des **lectures doubles validées avec leur contexte**, ce qu'aucun corp
 … [734 caractères tronqués]
 
+### Tour 14 — ça va prendre des contextes plus larges pour trancher sur les interprétations ambigues.
+
+*13 appels d'outils.* Actions notables :
+
+- bash — Add example contexts at different levels
+- bash — Add context levels and the minimal level metric to the server
+- bash — Add the context level to the LLM prompt
+- bash — Update the UI with context levels
+- bash — Test the context levels and minimal level
+- bash — Read the failing test
+- bash — Fix the JSON key access in the test
+- bash — Commit the context levels in the sub-project
+- bash — Update the submodule and test the level flow
+- bash — Inspect the validation journal
+- bash — Update the plan for context levels
+- bash — Find the current S roadmap line
+- bash — Fix the S line and commit the context levels
+
+**Synthèse produite :**
+
+⏵ Oui — et je rends ça mesurable : niveaux de contexte, et le niveau minimal pour trancher
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -761,7 +785,7 @@ Ce n'est pas un détail d'interface : c'est la **RSN plurielle** appliquée à l
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 644 autres
+- … et 657 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -931,4 +955,5 @@ Ce n'est pas un détail d'interface : c'est la **RSN plurielle** appliquée à l
 - S — LE GÉNÉRATEUR DE CANDIDATS : UNE PHRASE BRUTE → DES STRUCTURES À VALIDER  Le banc de structures gagne son analyseur v0 (submodule tools/structures, commit a
 - S — LE NIVEAU PRAGMATIQUE : LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE  Le banc de structures ne force plus un verdict unique (submodule 7366191). Chaque l
 - ÉTAT — COMPTEURS APRÈS LE BANC DE STRUCTURES : 381 FICHIERS, 458 JSON  Le compteur JSON suit les dépôts des autres sessions (corpus-wiki-fr.json) ; la revue rep
+- S — DES CONTEXTES PLUS LARGES, ET LA MESURE DE CE QU'IL FAUT POUR TRANCHER  Le contexte n'est plus un champ unique : il est gradué (0 sans contexte, 1 phrase d'
 

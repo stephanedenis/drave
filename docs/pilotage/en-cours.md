@@ -55,9 +55,9 @@
   [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md),
   [`corpus-wiki-fr`](../../reports/rapport-corpus-wiki-fr.md).
 - **S — le banc de structures** : outil web (`tools/structures`, submodule) ; **générateur**
-  heuristique, **niveau pragmatique** (contexte, statuts, **double sens conservé**) et **export
-  corpus** JSONL (11 tests) ; 7 phrases, 14 candidats ; banque vide tant qu'un humain ne valide
-  pas ; [`README`](../../tools/structures/README.md).
+  heuristique, **pragmatique** (statuts, **double sens conservé**, **niveaux de contexte 0–4**,
+  **niveau minimal** mesuré) et **export corpus** JSONL (12 tests) ; 7 phrases, 14 candidats ;
+  la banque reçoit déjà des validations réelles ; [`README`](../../tools/structures/README.md).
 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 % (bruit), BPE
   1024 +4,09 %, anglais +4,22/+6,59 % à octets égaux ; fiche
   [`r13`](../../reports/rapport-r13-decision.md), spécification

@@ -11879,3 +11879,135 @@ Ce n'est pas un détail d'interface : c'est la **RSN plurielle** appliquée à l
 
 La suite naturelle : un lot de phrases avec leur contexte, la validation par lots, et l'export comme **corpus de lectures plurielles** — pour entraîner, un jour, un modèle qui ne choisit pas un sens mais **sait qu'il y en a deux**.
 
+
+## Tour 14
+
+### 👤 Utilisateur
+
+ça va prendre des contextes plus larges pour trancher sur les interprétations ambigues.
+
+### 🤖 Assistant
+
+⏵ Oui — et je rends ça mesurable : niveaux de contexte, et le niveau minimal pour trancher
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('construire_donnees.py'); s = p.read_text()\n# ajouter un contexte d'exemple (niveau + texte) à trois phrases\ns = s.replace('''\"version\": 1,\n          \"note\"''', '''\" … [1347 caractères tronqués]`
+
+  ```
+builder patché
+7 phrases, 14 candidats, spans vérifiés
+p001 niveau 2 · La voisine est partie en vacances. Son chat, lui, est resté 
+p002 niveau 2 · Le détective surveille la maison d'en face. Il a vu l'homme 
+p007 niveau 3 · Dans ce dessin animé, le canard parle et réclame son dîner :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('serveur.py'); s = p.read_text()\ns = s.replace('''STATUTS = {\"resolu\", \"compatible\", \"exclu\", \"double_sens\"}''',\n'''STATUTS = {\"resolu\", \"compatible\", \"exclu\ … [4457 caractères tronqués]`
+
+  ```
+serveur : niveaux
+syntaxe ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('llm.py'); s = p.read_text()\ns = s.replace('''def _prompt(phrase, candidats, contexte):\n    lignes = [f\"Phrase : « {phrase} »\", \"\"]\n    lignes.append(f\"Contexte : «  … [2547 caractères tronqués]`
+
+  ```
+llm : niveaux
+{'fournisseur': 'baseline', 'modele': 'attachement-le-plus-proche', 'mode': 'local', 'lectures': [{'id': 'p007-c2', 'statut': 'compatible'}], 'intention': 'inconnu', 'confiance': 0.5, 'justification': 'Attachement à la cible la plus proche.', 'niveau_requis': None}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('static/app.js'); s = p.read_text()\ns = s.replace('''function contexteDe(phraseId) {\n  const v = etat.validations.filter((x) => x.phrase_id === phraseId && (x.contexte ||  … [4234 caractères tronqués]`
+
+  ```
+ui niveaux ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tests/test_serveur.py'); s = p.read_text()\ns = s.replace('''            code, r = b.post(\"/api/valider\", {\"phrase_id\": \"p001\", \"candidat_id\": \"p001-c1\",\n        … [1963 caractères tronqués]`
+
+  ```
+tests patchés
+Ran 12 tests in 3.634s
+
+FAILED (errors=1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && PYTHONPATH=. python3 -m unittest discover -s tests 2>&1 | grep -A8 \"ERROR\\|FAIL:\"", "description": "Read the failing test"}`
+
+  ```
+ERROR: test_niveau_minimal (test_serveur.TestBanc.test_niveau_minimal)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/drave-structures/tests/test_serveur.py", line 108, in test_niveau_minimal
+    self.assertEqual(d["niveaux"][2], "paragraphe")
+                     ~~~~~~~~~~~~^^^
+KeyError: 2
+
+----------------------------------------------------------------------
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tests/test_serveur.py'); s = p.read_text()\ns = s.replace('self.assertEqual(d[\"niveaux\"][2], \"paragraphe\")', 'self.assertEqual(d[\"niveaux\"][\"2\"], \"paragraphe\")')\ … [156 caractères tronqués]`
+
+  ```
+ok
+Ran 12 tests in 3.638s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('README.md'); s = p.read_text()\ns = s.replace('''Le contexte est un champ libre sur chaque phrase (la phrase d'avant, la situation, le ton). Il est\nenregistré avec chaque  … [2601 caractères tronqués]`
+
+  ```
+readme ok
+733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+7366191 PRAGMATIQUE — LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && fuser -k 8765/tcp 2>/dev/null; sleep 0.4; git -C tools/structures fetch -q origin && git -C tools/structures checkout -q 733b1a4 && git -C tools/structures log --oneline -1; nohup python3 tools/structures/serveur.py --port 8765 > /tm … [1151 caractères tronqués]`
+
+  ```
+1305973733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+=== niveaux ===
+phrases 7 · niveaux {'0': 'sans contexte', '1': "phrase d'avant", '2': 'paragraphe', '3': 'section / document', '4': 'genre / registre'} · minimaux {'p003': 0, 'p004': 0}
+=== trancher p001 au niveau 2 ===
+p001-c1 resolu niveau 2
+=== minimal ===
+{'p003': 0, 'p004': 0, 'p001': 2}
+=== export ===
+6 ligne(s) · niveau 2 · statut resolu
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git status --short; wc -l donnees/validations.jsonl 2>/dev/null; cat donnees/validations.jsonl 2>/dev/null | head -8", "description": "Inspect the validation journal"}`
+
+  ```
+?? donnees/validations.jsonl
+8 donnees/validations.jsonl
+{"phrase_id": "p001", "candidat_id": "p001-c1", "statut": "double_sens", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:20:57"}
+{"phrase_id": "p002", "candidat_id": "p002-c1", "statut": "double_sens", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:21:23"}
+{"phrase_id": "p003", "candidat_id": "p003-c1", "statut": "resolu", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:22:09"}
+{"phrase_id": "p002", "candidat_id": "p002-c2", "statut": "double_sens", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:22:29"}
+{"phrase_id": "p003", "candidat_id": "p003-c2", "statut": "exclu", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:22:40"}
+{"phrase_id": "p004", "candidat_id": "p004-c1", "statut": "resolu", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:22:51"}
+{"phrase_id": "p004", "candidat_id": "p004-c2", "statut": "resolu", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:23:01"}
+{"phrase_id": "p001", "candidat_id": "p001-c1", "statut": 
+… [172 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"  heuristique, **niveau pragmatique** (contexte, statuts, **double sens conservé**) et **export\\n  corpus** JSONL (11 tests) ; … [1342 caractères tronqués]`
+
+  ```
+en-cours ok
+  T0 max : 3746 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 11, in <module>
+AssertionError: ligne S introuvable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"S — les structures\" docs/pilotage/roadmap.md", "description": "Find the current S roadmap line"}`
+
+  ```
+34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | 🔬 **v0** : 6 phrases + **générateur** de candidats, validation + baseline + export JSONL | **analyseur plus riche** (rôles, subordonnées), puis brancher l'export au corpus |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); lignes = p.read_text().splitlines(keepends=True)\ni = next(k for k, l in enumerate(lignes) if l.startswith(\"| **S — les structures**\"))\nlignes[i] = (\ … [1503 caractères tronqués]`

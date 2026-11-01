@@ -12872,3 +12872,67 @@ index 809dca18..c79f4675 100644
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nset -e\nrm -f /tmp/index.r44\nGIT_INDEX_FILE=/tmp/index.r44 git read-tree HEAD\nGIT_INDEX_FILE=/tmp/index.r44 git add tools/verifie_contamination.py tools/corpus_wikipedia.py reports/rapport-corpus-wiki-fr.md reports/corpus-wiki-fr.jso … [477 caractères tronqués]`
+
+  ```
+tools/corpus_wikipedia.py                          | 263 ++++++++++++++-------
+ tools/verifie_contamination.py                     | 106 +++++++++
+ 13 files changed, 592 insertions(+), 94 deletions(-)
+  ✅ index : aucun fait stagé sans état
+ create mode 100644 reports/corpus-wiki-fr.json
+ create mode 100644 reports/rapport-corpus-wiki-fr.md
+ create mode 100644 tools/verifie_contamination.py
+74d7f0b9 DONNÉES — LE CORPUS FRANÇAIS EST LÀ : 2,5 M ARTICLES WIKIPÉDIA, 594 M MOTS, 0 FUITE ENTRE SPLITS
+  ```
+
+### 🤖 Assistant
+
+⏵ Corpus français construit et committé
+
+C'est fait : le premier corpus local de prose française d'un autre ordre de grandeur que le dépôt est construit, nettoyé, dédupliqué, découpé et contrôlé.
+
+## Ce qui est sur le disque
+
+`data/corpus_wiki_fr/{train,val,test}.txt` — **3,8 Go**, depuis la base Wikipédia FR (`frwiki_v14.db`, 2 755 035 articles) :
+
+| | valeur |
+|---|---:|
+| articles gardés (≥ 300 caractères) | **2 525 902** |
+| caractères | **3,68 G** |
+| mots (est.) | **593,6 M** |
+| train | **2 273 294 articles · 3,43 Go** |
+| val | 126 636 articles · 191 Mo |
+| test | 125 972 articles · 190 Mo |
+| doublons exacts retirés | 204 |
+
+C'est **cent fois** la prose du dépôt (5,36 Mo uniques).
+
+## La méthode
+
+- **Nettoyage mesuré** : entités HTML, balises, espaces ; **~92 700 jointures minuscule→majuscule dans 200 Mo** (« bourbonnaiseSa ») recollées, soit ~3,2 M sur le corpus ; apostrophes restaurées devant majuscule (« lOfficial »).
+- **Déduplication exacte** : articles (BLAKE2b du texte normalisé) et tronçons — sur ce corpus, 1 tronçon par article (les résumés sont plafonnés à 8 000 caractères, sous les 8 192 du découpage).
+- **Split par article** : hash salé de `page_id`, 5 % val / 5 % test — un article n'est jamais dans deux splits.
+- **Contrôles** : **0 doublon exact de tronçon** entre splits (0/126 636, 0/125 972) et **0/30 fenêtres** de chacun des quatre jeux d'évaluation (`corpus_propre`, `corpus_litt_propre`, `corpus_repo_propre`, `wikitext2`) retrouvées dans l'entraînement.
+
+## Les limites, écrites dans la fiche
+
+- Ce sont des **résumés tronqués à 8 000 caractères**, pas les articles entiers : la fin de chaque article manque.
+- Le débalisage de la base laisse des artefacts : dates vides (« né le à »), titres de sections restés dans le texte (« Biographie Enfance et formation »).
+- La déduplication est **exacte** : les quasi-doublons restent.
+- Licence **CC-BY-SA 4.0** (et GFDL) : entraînement libre, redistribution avec attribution et partage à l'identique — le corpus reste local, non diffusé.
+
+## Les fichiers
+
+- Outils : `tools/corpus_wikipedia.py` (extraction/nettoyage/split) et `tools/verifie_contamination.py` (fuites entre splits et vs évaluations).
+- Manifeste : `reports/corpus-wiki-fr.json` (chiffres, SHA-256 des trois fichiers, licence, limites).
+- Contamination : `reports/corpus-wiki-fr-contamination.json`.
+- Fiche : `reports/rapport-corpus-wiki-fr.md`.
+- Commit : `74d7f0b9`.
+
+## La suite naturelle
+
+1. **N2** : prendre un échantillon de ce corpus (même budget d'octets que `corpus_fr`, ~4,6 Mo) et mesurer la PPL en domaine et hors domaine — c'est le test qui dira si Wikipédia sort le modèle du dépôt.
+2. **Filtrer** les stubs (< 1 000 caractères) et les pages de listes avant l'entraînement.
+3. **Passer au texte intégral** : dump `xml.bz2` (7,13 Go) + débaliseur complet — le vrai corpus long, à construire ensuite.
+
+Dis-moi si je lance le pilote N2 sur un échantillon, ou si je passe directement au texte intégral.
+
