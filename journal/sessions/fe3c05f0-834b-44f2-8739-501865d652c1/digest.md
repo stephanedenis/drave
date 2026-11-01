@@ -9108,3 +9108,40 @@ AssertionError
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"| fichiers / JSON de résultats | **375** / **450** |\",\"| fichiers / JSON de résultats | **375** / **452** |\")\np.write_text(s)\nPY\npython3 tools/revue_documentation.py 2>&1  … [610 caractères tronqués]`
+
+  ```
+revue de documentation · 375 fiche(s) · 452 JSON · 114 doc(s) · 80 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ index : aucun fait stagé sans état
+ create mode 100644 reports/r44-petit.json
+ create mode 100644 reports/r44-seed3.json
+d6b4da35 R4.4 — TROIS GRAINES ET UN PETIT TEXTE : LA PRÉSERVATION VARIE DE 23 POINTS, L'AGRANDISSEMENT GAGNE 0,6 POINT
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\nfrom PIL import Image\nsrc=json.loads(pathlib.Path('work/r44/scans/manifeste.json').read_text())\npages=[e for e in src['entrees'] if e['famille']=='propre' and e['split']=='dev']\nsortie=pathlib.Path('work/r44/scans-rot'); sortie.mkdir(parents=Tru … [1273 caractères tronqués]`
+
+  ```
+20 images tournées
+  rot3       dev   auto                  10   4.40%  97.32%   93.3   1.00    80.0%   76.7%
+  rot3       dev   brut                  10   8.94%  96.63%   92.5   0.75    63.3%   33.3%
+
+  contrôle page noire : 0 mot(s) lu(s), 0 région(s)
+
+  ✅ page noire : aucun mot lu
+
+  40 mesures en 142 s → work/r44/rot.json
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('work/r44/rot.json'))['agregat']\nfor k,v in sorted(d.items()): print(k, round(v['wer'],4), v.get('preservation'), v.get('angle_trouve'))\nPY\ngrep -n \"sans toucher\" work/r44/rot.log | head -3; grep -n \"rot08\" work/r44/rot.log | head - … [115 caractères tronqués]`
+
+  ```
+rot08|dev|auto 0.0565 0.7667 None
+rot08|dev|brut 0.056 0.7667 None
+rot3|dev|auto 0.044 0.8 None
+rot3|dev|brut 0.0894 0.6333 None
+[stderr]
+grep: work/r44/rot.log: No such file or directory
+grep: work/r44/rot.log: No such file or directory
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('work/r44/rot.json').read_text())\nd['dispositif']='rotation ajoutée à une page propre (3° et 0,8°), mesure brut vs auto — sonde de la politique de redressement'\npathlib.Path('reports/r44-rotation.json').write_text(json.d … [2877 caractères tronqués]`

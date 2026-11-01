@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 8.5 h |
+| Durée | 8.6 h |
 | Tours | 2 |
-| Messages | 514 |
-| Appels d'outils | 517 |
+| Messages | 517 |
+| Appels d'outils | 520 |
 | Fichiers touchés | 18 |
-| Commandes | 459 |
+| Commandes | 462 |
 | Sous-agents | 0 |
-| Commits | 14 |
+| Commits | 15 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -85,7 +85,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 ### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
 
-*332 appels d'outils.* Actions notables :
+*335 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Record start time, deadline and machine resources
@@ -101,7 +101,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - read_image
 - bash — Baseline WER on sample scans
 - bash — Calibrate scan degradation families
-- … et 302 autres
+- … et 305 autres
 
 **Synthèse produite :**
 
@@ -174,7 +174,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 419 autres
+- … et 422 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -336,4 +336,5 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - cat > /tmp/msg-trois.txt <<'EOF' R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER  Les deux premiers livres (Verne) donnai
 - python3 - <<'PY' import pathlib,re p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s2=re.sub(r"\| fichiers / JSON de résultats \| \*\*372\*\* / \*\
 - python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text() s=s.replace("| fichiers / JSON de résultats | **375** / **450** |",
+- python3 - <<'PY' import json,pathlib d=json.loads(pathlib.Path('work/r44/rot.json').read_text()) d['dispositif']='rotation ajoutée à une page propre (3° et 0,8°
 

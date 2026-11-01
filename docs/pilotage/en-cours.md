@@ -31,8 +31,8 @@
 - **Ce que font les autres** : **Pensée** et **R4.4** sans GPU ; **N4** en file ; **A/B** gardent leurs fichiers.
 - **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`, `journal/sessions/0b0a6a0d-…/`.
 - **Prochaine action** : clôture — journal, roadmap, portes, commit.
-- **Bloquants** : aucun — GPU occupés.
-- **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [la session](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/).
+- **Bloquants** : aucun — GPU rendus.
+- **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/).
 
 ### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — R4.4, les scans
 
@@ -103,7 +103,7 @@
 |---|---|---|
 | portes | **80** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **375** / **452** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **375** / **453** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **114** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 39** (31/10 19 h 42) | `docs/pilotage/references-non-regression.md` |
 

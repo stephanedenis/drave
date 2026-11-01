@@ -94,6 +94,22 @@ Le plafond du texte **propre** est 90 % : les trois échecs restants sont un exp
 dans son mot (« développement 10, » — la boîte a une confiance nulle, non récupérée) et deux
 **en-têtes** dont la découpe de phrase diffère. Ils sont nommés, pas cachés.
 
+### La rotation : 3° coûtent 4,5 points, le redressement les reprend ; 0,8° n'est pas touché
+
+Le corpus photocopie tourne de ±1,2° — sous le seuil de redressement (1,5°). Une sonde ajoute une
+rotation **après coup** à une page propre, pour mesurer la politique elle-même :
+
+| rotation | WER brut | WER auto | préservation brut | préservation auto |
+|---|---:|---:|---:|---:|
+| 3,0° | 8,94 % | **4,40 %** | 63,3 % | **80,0 %** |
+| 0,8° | 5,60 % | 5,65 % | 76,7 % | 76,7 % |
+
+À 3°, le redressement reprend **4,5 points** de WER et **16,7 points** de préservation, et ramène
+la page au niveau du texte propre (4,14 %). À 0,8°, il ne touche à rien (le seuil de 1,5° est un
+**choix**, pas un hasard) : le coût de la petite rotation est celui du rendu, pas du prétraitement.
+C'est la première mesure du redressement sur un cas où il sert — les cinq familles ne le
+déclenchaient jamais.
+
 ## 3. Les colonnes : 89 % de WER sans gouttière, 0,5 % avec
 
 Corpus : 10 pages à **deux colonnes** dont la vérité terrain est la lecture colonne gauche puis

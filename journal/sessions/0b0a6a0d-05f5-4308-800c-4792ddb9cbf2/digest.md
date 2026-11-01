@@ -7035,3 +7035,125 @@ def main() -> None:
   ```
 
 - **job_output** `{"job_id": "bash-399", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\\|❌\" work/n2h/portes.log; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt 2>/dev/null; tail -1 work/n2h/portes.log", "description": "Check gate progress"}`
+
+  ```
+01:08
+14
+  porte-coupe            ✅                         139 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  ```
+
+- **bash** `{"command": "date; date -u; timedatectl status 2>/dev/null | head -5; ls -la --time-style=full-iso /tmp/portes-1101-n2h/registre.txt", "description": "Check the system clock consistency"}`
+
+  ```
+dim 01 nov 2026 01:08:42 EST
+dim 01 nov 2026 06:08:42 UTC
+               Local time: dim 2026-11-01 01:08:42 EST
+           Universal time: dim 2026-11-01 06:08:42 UTC
+                 RTC time: dim 2026-11-01 06:08:42
+                Time zone: America/Toronto (EST, -0500)
+System clock synchronized: yes
+-rw-r--r--. 1 stephane stephane 303 2026-11-01 01:08:08.988033962 -0500 /tmp/portes-1101-n2h/registre.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation du bras capacité (21,65 M) pour après le commit : options de taille au trainer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/entrainer_native.py'); s = p.read_text()\ns = s.replace('''    ap.add_argument(\"--graine\", type=int, default=1)''',\n'''    ap.add_argument(\"--graine\", type=int, default=1 … [788 caractères tronqués]`
+
+  ```
+ok
+11,47 M : 11814792
+21,65 M : 21646224
+01:09
+14
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/file-capacite.sh <<'EOF'\n#!/bin/bash\n# Bras capacité : base 21,65 M + distillation ×3 sur le corpus propre, même professeur, même budget.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport PYTHONPATH … [895 caractères tronqués]`
+
+  ```
+ok
+01:09
+  porte-coupe            ✅                         139 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\\|❌\" work/n2h/portes.log; awk '$2 != 0' /tmp/portes-1101-n2h/registre.txt 2>/dev/null; tail -1 work/n2h/portes.log", "description": "Wait 30 minutes for the gates", "run_in_background": true}`
+
+  ```
+started background job bash-405
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 15,36p docs/pilotage/en-cours.md; echo \"...\"; grep -n \"N2.h — le mètre propre\" -A 3 docs/pilotage/en-cours.md", "description": "Review the session block and the N2 bullet"}`
+
+  ```
+> le corrige.
+
+### Session `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — N2.h, le mètre propre
+
+- **Id** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — [`plan.md`](../../journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md).
+- **Rôle** : **N2.h — le mètre propre** : corpus, distillation, évaluation.
+- **Plan** : 1) `tools/corpus_propre.py` (dédup, split par chunks) ; 2) chaîne propre (professeur 23,5 M, base 20k, distillation 20k × 3, curriculum 129 × 3) ; 3) porte honnête + hors domaine + décomposition ; 4) diversité FR 50/50 ; 5) verrou de longueur 129→512 × 3 ; 6) fiches, portes, commit.
+- **Ambition** : sortir N2 du chiffre contaminé (**2,85** sur **32,8 %**) et donner à R un modèle qui lit du français général ; trancher le verrou de longueur.
+- **Stratégie** : un seul changement à la fois, trois graines, contrôle par permutation, le corpus d'abord.
+- **Objectif final** : un **mètre honnête** — corpus dédupliqué (0 % de validation dans l'entraînement), chaîne refaite, porte < 2,5 redéfinie, généralité et verrou tranchés.
+- **Ce qu'elle fait** : corpus propre, chaîne refaite, diversité et longueur mesurées (3 fiches).
+- **Résultat** (3 graines) : la chaîne propre vaut **3,09** e
+… [2099 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"- **Bloquants** : aucun — GPU occupés.\\n- **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [la session … [509 caractères tronqués]`
+
+  ```
+ok
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/ | tail -3; ls journal/2026-11-01/ 2>/dev/null | head; date '+%H:%M'; grep -c \"✅\\|❌\" work/n2h/portes.log", "description": "Check the 01/11 journal exists"}`
+
+  ```
+README.md
+sessions
+THEMES.md
+docs.md
+mesures.md
+README.md
+01:09
+14
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 work/n2h/portes.log; ps -eo pid,etime,cmd | grep -E \"porte-|toutes-les-portes\" | grep -v grep | head -2", "description": "Check the running gate"}`
+
+  ```
+porte-consolidation    ✅                          70 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+  porte-coupe            ✅                         139 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+ 657672       13:46 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env JOURNAUX=/tmp/portes-1101-n2h DELAI=1800 bash tools/toutes-les-portes.sh > work/n2h/portes.log 2>&1 & echo "portes $!"; date '+%H:%M'
+ 657673       13:46 bash tools/toutes-les-portes.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/file-combine.sh <<'EOF'\n#!/bin/bash\n# Bras combiné : corpus mixte (dépôt + littérature) ET positions aléatoires — les deux leviers ensemble.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport PYTHONP … [699 caractères tronqués]`
+
+  ```
+ok
+01:10
+14
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l < /tmp/portes-1101-n2h/registre.txt; tail -3 /tmp/portes-1101-n2h/registre.txt; date '+%H:%M'", "description": "Check the gate register"}`
+
+  ```
+14
+porte-cerveau 0 10
+porte-consolidation 0 70
+porte-coupe 0 139
+01:10
+  ```
+
+- **job_output** `{"job_id": "bash-405", "timeout_ms": 1800000, "wait": true}`
