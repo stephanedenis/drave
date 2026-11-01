@@ -14064,3 +14064,23 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-821", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/route-wiki 2>/dev/null | head -3; tail -2 work/n2j/teacher-wiki.log; tail -1 work/n2j/base-canal.log", "description": "Check the teacher and channel status"}`
+
+  ```
+18:54
+pas 19250 · perte 1.6175 · PPL val 4.471 · 778 s
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/route-wiki 2>/dev/null | head -2; tail -2 work/n2j/teacher-wiki.log; ls work/n2j/base-canal.pt 2>/dev/null && echo CANAL_OK; tail -1 work/n2j/base-canal.log", "description": "Wait for the teacher … [24 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-823]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+

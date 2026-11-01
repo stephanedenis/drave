@@ -293,8 +293,10 @@ POS_FERME = {
         "DET": set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs quel quelle quels quelles".split()),
         "PREP": set("à a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis pendant durant contre malgré selon près loin devant derrière après avant".split()),
         "PRON": set("je j tu il elle on nous vous ils elles me te se lui leur moi toi soi y en ce cela ça qui que quoi dont où".split()),
-        "CONJ": set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant".split()),
-        "AUX": set("est sont était étaient été être ai as a avons avez ont avait avaient eu avoir".split()),
+        "CONJ": set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant qu".split()),
+        "AUX": set("est sont était étaient été être ai as a avons avez ont avait avaient eu avoir suis es sommes êtes".split()),
+        "ADV": set("ne n pas plus jamais rien très bien mal ici hier demain aujourd'hui peut-être fort souvent toujours déjà encore tard tôt ainsi alors aussi".split()),
+        "NUM": set("deux trois quatre cinq six sept huit neuf dix".split()),
     },
     "en": {
         "DET": set("the a an this that these those my your his her its our their".split()),
@@ -302,8 +304,44 @@ POS_FERME = {
         "PRON": set("i you he she it we they me him her us them who whom which that".split()),
         "CONJ": set("and or but nor for so yet because although while if when".split()),
         "AUX": set("is are was were be been being have has had do does did can could will would shall should may might must".split()),
+        "ADV": set("not never very well here yesterday today tomorrow often always already still too".split()),
+        "NUM": set("one two three four five six seven eight nine ten".split()),
     },
 }
+
+VERBES = {
+    "fr": set("dort dorment dormait mange mangeons mangent mangeait court courent courait vu voir vois "
+              "voit voyons voyez voient dit disons dites disent viendrait viens vient venons venez "
+              "viennent aboie aboient joue jouons jouent jouait lit lisons lisez lisent pars partons "
+              "partez partent fini finis finit finissons finissez finissent arrive arrives arrivez "
+              "arrivent pleut pleuvoir habite habites habitent parle parlons parlez parlent explique "
+              "expliquons expliquez expliquent souffle soufflent chante chantent chantes peut peux "
+              "pouvons pouvez peuvent doit devons devez doivent pourrait pourrais pourrions pourriez "
+              "pourraient devrait devrais voudrais voudrait veux veut voulons voulez veulent prend "
+              "prends prenons prenez prennent donne donnes donnons donnez donnent trouve trouves "
+              "trouvons trouvez trouvent cherche cherches cherchons cherchez cherchent regarde "
+              "regardes regardons regardez regardent écoute écoutes écoutons écoutez écoutent ouvre "
+              "ouvres ouvrons ouvrez ouvrent ferme fermes fermons fermez ferment commence commences "
+              "commençons commencez commencent essaie essaies essayons essayez essaient attrape "
+              "attrapes attrapons attrapez attrapent".split()),
+    "en": set("sleeps sleep slept saw see seen says said comes came plays played reads read is are "
+              "was were have has had does did do come go goes went make makes made take takes took "
+              "give gives gave find finds found open opens opened close closes closed start starts "
+              "started finish finishes finished look looks looked listen listens listened buy buys "
+              "bought sell sells sold rain rains rained eat eats ate".split()),
+}
+ADJECTIFS = {
+    "fr": set("petite petit petits petites grand grande grands grandes rouge rouges vieille vieux "
+              "vieilles vieil intéressant intéressante intéressants intéressantes malade malades prêt "
+              "prête prêts prêtes content contents heureux heureuse triste beau belle beaux belles "
+              "joli jolie bon bonne bons bonnes mauvais mauvaise jeune jeunes nouveau nouvelle "
+              "nouveaux nouvelles chaud chaude froid froide noir noire blanc blanche vert verte bleu "
+              "bleue long longue court courte facile difficile important importante".split()),
+    "en": set("ready interesting old young big small red blue green black white good bad happy sad "
+              "beautiful nice long short easy difficult important".split()),
+}
+MOTS_DOUBLE_SENS = set("canard avocat livre temps voler glace note carte point mousse manche mode "
+                       "duck".split())
 
 SUFFIXES = ("ment", "tions", "tion", "ités", "ité", "eux", "euse", "ables", "able", "isme",
             "istes", "iste", "ance", "ence", "er", "ir", "ez", "ons", "ait", "aient", "ing",
@@ -413,8 +451,9 @@ class Heuristique:
 
     @staticmethod
     def _modalite(phrase: str) -> bool:
-        return bool(re.search(r"\b(?:peut|peuvent|doit|doivent|pourrait|pourraient|devrait|devraient|"
-                              r"might|may|must|should|could|would|can)\b", phrase, re.I))
+        return bool(re.search(r"\b(?:peut|peuvent|peux|pouvons|pouvez|doit|doivent|devons|devez|"
+                              r"pourrait|pourraient|pourrais|devrait|devraient|voudrais|voudrait|"
+                              r"faut|falloir|might|may|must|should|could|would|can)\b", phrase, re.I))
 
     # -- POS ----------------------------------------------------------------
     def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
@@ -423,6 +462,10 @@ class Heuristique:
         for classe, mots in lex.items():
             if n in mots:
                 return classe, False, 0.92
+        if n in VERBES.get(langue, VERBES["fr"]):
+            return "VERB", True, 0.72
+        if n in ADJECTIFS.get(langue, ADJECTIFS["fr"]):
+            return "ADJ", True, 0.68
         if re.fullmatch(r"\d+(?:[.,]\d+)*", mot):
             return "NUM", False, 0.95
         if mot[:1].isupper() and mot[1:].islower() and mot not in {"Le", "La", "Les", "Un", "Une", "The"}:
@@ -576,7 +619,8 @@ class Heuristique:
             etiquettes.append(Etiquette("pragmatique", "acte", acte, d, f, self.nom, 0.45,
                                         candidats=["assertion", "question", "ordre"],
                                         langue=lg, script=script))
-            if " ou " in p or "«" in p or "“" in p:
+            if (" ou " in p or "«" in p or "“" in p
+                    or any(m in _normaliser(p) for m in MOTS_DOUBLE_SENS)):
                 etiquettes.append(Etiquette("pragmatique", "double_sens", "candidat", d, f,
                                             self.nom, 0.25, candidats=["littéral", "figuré"],
                                             langue=lg, script=script))
@@ -784,24 +828,31 @@ class NeuronalLLM:
 
 
 def _supprimer_chevauchements(etiquettes: list[Etiquette]) -> list[Etiquette]:
-    """À niveau égal, deux étiquettes qui se chevauchent sont des **alternatives** : on garde
-    la plus confiante, et on laisse les autres niveaux (mot, phrase, syntagme) coexister."""
-    niveaux = ("pos", "syntagme", "phrase", "pragmatique", "discours", "document")
-    gardees: list[Etiquette] = [e for e in etiquettes if e.niveau not in niveaux]
-    for niveau in niveaux:
-        if niveau == "syntagme":
-            candidates = sorted((e for e in etiquettes if e.niveau == niveau),
-                                key=lambda e: (0 if e.source == "heuristique" else 1,
-                                               e.fin - e.debut, -e.confiance))
-        else:
-            candidates = sorted((e for e in etiquettes if e.niveau == niveau),
-                                key=lambda e: (-e.confiance, e.debut, e.fin))
-        retenues: list[Etiquette] = []
-        for e in candidates:
-            if any(not (e.fin <= g.debut or e.debut >= g.fin) for g in retenues):
-                continue
-            retenues.append(e)
-        gardees.extend(retenues)
+    """Les alternatives se suppriment **par type** quand les types sont complémentaires.
+
+    `pos` et `syntagme` sont des alternatives de **span** : on garde la plus confiante.
+    `phrase` (type/négation/modalité), `pragmatique` (acte/double_sens/contexte), `discours`
+    (paragraphe/connecteur) et `document` (titre/paragraphe) portent des types **complémentaires**
+    sur le même span : les supprimer ensemble effacerait la négation au profit du type."""
+    modes = {"pos": "span", "syntagme": "span", "phrase": "type", "pragmatique": "type",
+             "discours": "type", "document": "type"}
+    gardees: list[Etiquette] = [e for e in etiquettes if e.niveau not in modes]
+    for niveau, mode in modes.items():
+        groupes = {}
+        for e in (x for x in etiquettes if x.niveau == niveau):
+            groupes.setdefault(e.type if mode == "type" else "", []).append(e)
+        for _, es in groupes.items():
+            if niveau == "syntagme":
+                candidates = sorted(es, key=lambda e: (0 if e.source == "heuristique" else 1,
+                                                       e.fin - e.debut, -e.confiance))
+            else:
+                candidates = sorted(es, key=lambda e: (-e.confiance, e.debut, e.fin))
+            retenues: list[Etiquette] = []
+            for e in candidates:
+                if any(not (e.fin <= g.debut or e.debut >= g.fin) for g in retenues):
+                    continue
+                retenues.append(e)
+            gardees.extend(retenues)
     return sorted(gardees, key=lambda e: (e.debut, e.fin, e.niveau))
 
 

@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 26.3 h |
 | Tours | 13 |
-| Messages | 886 |
-| Appels d'outils | 884 |
+| Messages | 888 |
+| Appels d'outils | 886 |
 | Fichiers touchés | 18 |
-| Commandes | 811 |
+| Commandes | 813 |
 | Sous-agents | 0 |
-| Commits | 45 |
+| Commits | 46 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -687,7 +687,7 @@ La suite se fait sans toi : le goal reste actif jusqu'à 8 h, les runs finissent
 
 ### Tour 13 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Check nine runs and manifests
 - bash — Inspect contamination checker structure
@@ -698,6 +698,8 @@ La suite se fait sans toi : le goal reste actif jusqu'à 8 h, les runs finissent
 - bash — Extract per-language evaluation sets
 - bash — Run full French contamination with targeted evals
 - bash — Update report and commit reproducible 8KB control
+- bash — Measure disk contention across nine runs
+- bash — Fix counters and journal for round one
 
 ## 3. Travail accompli
 
@@ -766,7 +768,7 @@ La suite se fait sans toi : le goal reste actif jusqu'à 8 h, les runs finissent
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 771 autres
+- … et 773 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -959,4 +961,5 @@ La suite se fait sans toi : le goal reste actif jusqu'à 8 h, les runs finissent
 - ÉTAT — LES NEUF LANGUES SONT LANCÉES (9/9) ; EN ATTENTE DES MANIFESTES" 2>&1 | tail -1 git reset -q; git log --oneline -1
 - ÉTAT — T0 REVIENT À 3 993 (LISTE DES LANGUES DANS LE PLAN)" 2>&1 | tail -1 git reset -q; git log --oneline -1; echo "=== runs"; ps -eo pid,etime,pcpu,cmd | grep
 - DONNÉES — LE CONTRÔLE 8 KO DEVIENT REPRODUCTIBLE : FR 0/51 250 ET 0/50 730, L'UDHR 2/24 (CITÉE) ; JEUX D'ÉVALUATION PAR LANGUE" 2>&1 | tail -1 git reset -q; git
+- ÉTAT — COMPTEURS 389/479, JOURNAL DU CONTRÔLE 8 KO ET DE L'UDHR 2/24" 2>&1 | tail -1 git reset -q; git log --oneline -1
 

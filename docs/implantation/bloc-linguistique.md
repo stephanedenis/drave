@@ -239,16 +239,21 @@ La porte [`porte-bloc-linguistique.sh`](../../tools/porte-bloc-linguistique.sh) 
 3. le verdict `ok` ; la fiche et le JSON [`bloc-linguistique.json`](../../reports/bloc-linguistique.json).
 
 Les **contrôles négatifs** : profils permutés (0,0022), texte vide, ponctuation seule, langue
-inconnue (`und`), indice faux (`und`), rejeu identique. Ce qui manque encore : un **gold** pour
-les niveaux profonds (POS, syntagme, pragmatique) et un **modèle neuronal qualifié** ; sans eux,
-la couverture des niveaux profonds est **déclarée**, pas **prouvée**.
+inconnue (`und`), indice faux (`und`), rejeu identique.
+
+**Le gold v0** (`tools/tests/linguistique/gold.py`, 20 phrases, 105 tokens) mesure les niveaux
+profonds : POS **0,924**, syntagmes F1 **0,356**, acte **1,0**, négation **1,0**, modalité
+**0,95**, double sens **0,9** ; la cascade (mock de contrat) préserve ces chiffres et couvre
+**52,5 %** en unités sémantiques. Le **vrai** modèle neuronal est **refusé** (`llama-cli`
+expire) : la qualification neuronale reste à faire, et le gold à étendre à 100–200 phrases.
 
 ## 10. Les limites
 
 - **La langue n'est pas la traduction** : 398 langues identifiées ne veulent pas dire 398
   langues analysées ; les classes fermées et les affixes sont français/anglais.
-- **Les niveaux profonds sont des candidats** : morphème, syntagme, pragmatique ont des
-  confiances basses ; le neuronal (ou l'humain) doit trancher.
+- **Les niveaux profonds sont mesurés sur 20 phrases** : POS 0,924, syntagmes 0,356,
+  pragmatique 0,9–1,0 ; c'est un v0, pas une précision stable ; le syntagme F1 mesure surtout un
+  désaccord de segmentation.
 - **Le neuronal réel n'est pas qualifié** : le modèle local a expiré ; le mock est un contrat,
   pas une qualité.
 - **Le corpus UDHR est parallèle et propre** : 0,9687 en langue ne se transporte pas tel quel

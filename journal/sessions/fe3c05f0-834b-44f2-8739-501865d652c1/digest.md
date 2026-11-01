@@ -16067,3 +16067,56 @@ test.txt 40 | 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-corpus-wiki-texte.md'); s=p.read_text()\ns=s.replace(\"résidus **1 / 20 000 lignes** (`{{`), **0 / 49 655** fenêtres de 8 Ko de la validation et\\n> **0 / 49 148** du te … [4020 caractères tronqués]`
+
+  ```
+fiche : 8 Ko + UDHR
+  T0 max : 3989 mots (budget 4 000)
+     · compteurs : en-cours.md dit 478 JSON, le disque en a 479
+  ✅ index : aucun fait stagé sans état
+ create mode 100644 tools/extraire_evals_langues.py
+d6c422a0 DONNÉES — LE CONTRÔLE 8 KO DEVIENT REPRODUCTIBLE : FR 0/51 250 ET 0/50 730, L'UDHR 2/24 (CITÉE) ; JEUX D'ÉVALUATION PAR LANGUE
+=== runs
+reports/corpus-wiki-fr-texte.json
+9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== tailles maintenant\"; du -sh data/corpus_wiki_*_texte 2>/dev/null | sort -k2; echo \"=== io\"; iostat -x 1 2 2>/dev/null | tail -8 | head -6; echo \"=== vmstat\"; vmstat 1 3 2>/dev/null | tail -3; echo \"=== logs\"; for l in … [260 caractères tronqués]`
+
+  ```
+=== tailles maintenant
+3,4G	data/corpus_wiki_ar_texte
+4,6G	data/corpus_wiki_de_texte
+4,0G	data/corpus_wiki_en_texte
+3,9G	data/corpus_wiki_es_texte
+7,8G	data/corpus_wiki_fr_texte
+3,2G	data/corpus_wiki_it_texte
+5,6G	data/corpus_wiki_ja_texte
+2,9G	data/corpus_wiki_pt_texte
+5,5G	data/corpus_wiki_ru_texte
+2,5G	data/corpus_wiki_zh_texte
+=== io
+=== vmstat
+13  0 1961604 5943640 13836 95041560 0   20 104576 1517 11775   5 10  1 88  1  0  0
+15  0 1961604 3456740 13836 95082524 0    0 20852     0 44605 11106 34 5 61 0  0  0
+15  0 1961604 1361540 13836 95124904 0    0 20496     0 39857 12640 35 4 62 0  0  0
+=== logs
+ar:   [ar] 3800000 lus · 972972 gardés · 1.90 G caractères
+
+it:   [it] 2000000 lus · 854211 gardés · 3.24 G caractères
+
+pt:   [pt] 1800000 lus · 665889 gardés · 2.03 G caractères
+
+zh:   [zh] 4200000 lus · 571254 gardés · 0.94 G caractères
+
+de:   [de] 1800000 lus · 965350 gardés · 4.77 G caractères
+
+ru:   [ru] 1800000 lus · 677316 gardés · 2.70 G caractères
+
+es:   [es] 2400000 lus · 800100 gardés · 3.50 G caractères
+
+ja:   [ja] 1800000 lus · 819024 gardés · 2.01 G caractères
+
+en:   [en] 600000 lus · 317134 gardés · 3.27 G caractères
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n         \"| fichiers / JSON de résultats | … [1724 caractères tronqués]`

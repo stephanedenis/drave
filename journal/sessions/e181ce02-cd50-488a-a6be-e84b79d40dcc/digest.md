@@ -10606,3 +10606,80 @@ reel refus RefusNeuronal: Command '['llama-cli', '-m', '/home/stephane/Data13TB/
 ok True
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-gold-linguistique.md <<'MD'\n# L — le gold v0 : 20 phrases, POS 0,924, syntagmes 0,356, pragmatique 1,0/1,0/0,95/0,9\n\n> **Ligne de roadmap** : **R0.7** (bloc linguistique) / **L** · **Date** : 2026-11-0 … [13451 caractères tronqués]`
+
+  ```
+docs ok
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+PORTE=0
+  revue de documentation · 392 fiche(s) · 479 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -4; python3 tools/verifie_en_cours.py 2>&1 | tail -2; grep -n \"Gold L\\|Moteur B13\\|fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Vérifier le budget T0 après le gold"}`
+
+  ```
+· 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4038 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1664 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+34:- **Moteur B13** : **AC-3, alpha-bêta (8/8)**, **DRVF `thought` (9/9)** et **banc anytime
+38:- **Gold L v0** : **20 phrases / 105 tokens** ; POS **0,924**, syntagmes F1 **0,356**,
+96:| fichiers / JSON de résultats | **392** / **479** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"\"\"- **Bloc linguistique** : **R0.7** — le contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)\n  (9 nivea … [2006 caractères tronqués]`
+
+  ```
+ok
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  en-cours · 1617 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "date '+%Y-%m-%d %H:%M %Z'; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nimport re\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-01, \\d+ h \\d+ HNE \\(heure locale, EST\\)\\.\\*\\*\", \"** … [870 caractères tronqués]`
+
+  ```
+2026-11-01 18:54 EST
+dates ok
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text().replace(\"19 h 20 HNE\", \"18 h 55 HNE\")\np.write_text(t)\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md' … [864 caractères tronqués]`
+
+  ```
+dates ok
+ docs/pilotage/chantiers.md                         |    2 +-
+ docs/pilotage/en-cours.md                          |   22 +-
+ docs/pilotage/plan-travail.md                      |    2 +-
+ docs/pilotage/roadmap.md                           |    2 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |    2 +-
+ reports/README.md                                  |    1 +
+ reports/pensee-gold-linguistique.json              |  250 ++++
+ reports/rapport-pensee-gold-linguistique.md        |   82 ++
+ tools/bloc_linguistique.py                         |   97 +-
+ tools/porte-bloc-linguistique.sh                   |    2 +
+ tools/tests/linguistique/evaluer_gold.py           |  152 +++
+ tools/tests/linguistique/gold.json                 | 1274 ++++++++++++++++++++
+ tools/tests/linguistique/gold.py                   |  113 ++
+ 14 files changed, 1973 insertions(+), 43 deletions(-)
+[still running after 60000ms; moved to background job bash-382]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-382", "timeout_ms": 240000, "wait": true}`

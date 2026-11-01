@@ -1,0 +1,250 @@
+{
+ "date": null,
+ "heuristique": {
+  "bloc": "heuristique",
+  "phrases": 20,
+  "pos": {
+   "exactitude": 0.9238,
+   "exactitude_ferme": 0.9123,
+   "exactitude_ouvert": 0.9375,
+   "tokens": 105,
+   "confusions": {
+    "ADJ": {
+     "ADJ": 3
+    },
+    "ADV": {
+     "ADV": 6
+    },
+    "AUX": {
+     "PREP": 3,
+     "AUX": 6
+    },
+    "CONJ": {
+     "CONJ": 1,
+     "PRON": 1,
+     "DET": 1
+    },
+    "DET": {
+     "DET": 21
+    },
+    "NOUN": {
+     "NOUN": 21
+    },
+    "PREP": {
+     "PREP": 9
+    },
+    "PRON": {
+     "PRON": 9
+    },
+    "VERB": {
+     "VERB": 21,
+     "NOUN": 3
+    }
+   }
+  },
+  "syntagme": {
+   "precision": 0.4706,
+   "rappel": 0.2857,
+   "f1": 0.3556,
+   "tp": 16,
+   "fp": 18,
+   "fn": 40
+  },
+  "pragmatique": {
+   "acte": 1.0,
+   "negation": 1.0,
+   "modalite": 0.95,
+   "double_sens": 0.9
+  },
+  "fraction_semantique": 0.469
+ },
+ "mock_neuronal": {
+  "bloc": "mock_neuronal",
+  "phrases": 20,
+  "pos": {
+   "exactitude": 0.4857,
+   "exactitude_ferme": 0.1053,
+   "exactitude_ouvert": 0.9375,
+   "tokens": 105,
+   "confusions": {
+    "ADJ": {
+     "ADJ": 3
+    },
+    "ADV": {
+     "ADV": 6
+    },
+    "AUX": {
+     "?": 9
+    },
+    "CONJ": {
+     "?": 3
+    },
+    "DET": {
+     "?": 21
+    },
+    "NOUN": {
+     "NOUN": 21
+    },
+    "PREP": {
+     "?": 9
+    },
+    "PRON": {
+     "?": 9
+    },
+    "VERB": {
+     "VERB": 21,
+     "NOUN": 3
+    }
+   }
+  },
+  "syntagme": {
+   "precision": 0.3846,
+   "rappel": 0.1786,
+   "f1": 0.2439,
+   "tp": 10,
+   "fp": 16,
+   "fn": 46
+  },
+  "pragmatique": {
+   "acte": 1.0,
+   "negation": 0.9,
+   "modalite": 0.9,
+   "double_sens": 0.9
+  },
+  "fraction_semantique": 0.525
+ },
+ "parallele": {
+  "bloc": "parallele",
+  "phrases": 20,
+  "pos": {
+   "exactitude": 0.9238,
+   "exactitude_ferme": 0.9123,
+   "exactitude_ouvert": 0.9375,
+   "tokens": 105,
+   "confusions": {
+    "ADJ": {
+     "ADJ": 3
+    },
+    "ADV": {
+     "ADV": 6
+    },
+    "AUX": {
+     "PREP": 3,
+     "AUX": 6
+    },
+    "CONJ": {
+     "CONJ": 1,
+     "PRON": 1,
+     "DET": 1
+    },
+    "DET": {
+     "DET": 21
+    },
+    "NOUN": {
+     "NOUN": 21
+    },
+    "PREP": {
+     "PREP": 9
+    },
+    "PRON": {
+     "PRON": 9
+    },
+    "VERB": {
+     "VERB": 21,
+     "NOUN": 3
+    }
+   }
+  },
+  "syntagme": {
+   "precision": 0.4706,
+   "rappel": 0.2857,
+   "f1": 0.3556,
+   "tp": 16,
+   "fp": 18,
+   "fn": 40
+  },
+  "pragmatique": {
+   "acte": 1.0,
+   "negation": 1.0,
+   "modalite": 0.95,
+   "double_sens": 0.9
+  },
+  "fraction_semantique": 0.525
+ },
+ "cascade": {
+  "bloc": "cascade",
+  "phrases": 20,
+  "pos": {
+   "exactitude": 0.9238,
+   "exactitude_ferme": 0.9123,
+   "exactitude_ouvert": 0.9375,
+   "tokens": 105,
+   "confusions": {
+    "ADJ": {
+     "ADJ": 3
+    },
+    "ADV": {
+     "ADV": 6
+    },
+    "AUX": {
+     "PREP": 3,
+     "AUX": 6
+    },
+    "CONJ": {
+     "CONJ": 1,
+     "PRON": 1,
+     "DET": 1
+    },
+    "DET": {
+     "DET": 21
+    },
+    "NOUN": {
+     "NOUN": 21
+    },
+    "PREP": {
+     "PREP": 9
+    },
+    "PRON": {
+     "PRON": 9
+    },
+    "VERB": {
+     "VERB": 21,
+     "NOUN": 3
+    }
+   }
+  },
+  "syntagme": {
+   "precision": 0.4706,
+   "rappel": 0.2857,
+   "f1": 0.3556,
+   "tp": 16,
+   "fp": 18,
+   "fn": 40
+  },
+  "pragmatique": {
+   "acte": 1.0,
+   "negation": 1.0,
+   "modalite": 0.95,
+   "double_sens": 0.9
+  },
+  "fraction_semantique": 0.525,
+  "appels_neuronal": 20
+ },
+ "reel": {
+  "statut": "refus",
+  "detail": "RefusNeuronal: Command '['llama-cli', '-m', '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/Qwen2.5-0.5B-Q4_0.gguf', '-p', 'Tu es un étiqueteur linguistique. Réponds U"
+ },
+ "gold": {
+  "phrases": 20,
+  "tokens": 105
+ },
+ "verdict": {
+  "pos": true,
+  "syntagme": true,
+  "acte": true,
+  "cascade_pos": true,
+  "cascade_syntagme": true,
+  "reel_non_requis": true
+ },
+ "ok": true
+}

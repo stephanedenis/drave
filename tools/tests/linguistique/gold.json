@@ -1,0 +1,1274 @@
+{
+ "version": 1,
+ "phrases": [
+  {
+   "id": "g001",
+   "langue": "fr",
+   "texte": "Le chat dort.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chat",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "dort",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 12
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chat",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "dort",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 12
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   }
+  },
+  {
+   "id": "g002",
+   "langue": "fr",
+   "texte": "Le chat de la voisine dort.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chat",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "de",
+     "pos": "PREP",
+     "debut": 8,
+     "fin": 10
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 11,
+     "fin": 13
+    },
+    {
+     "texte": "voisine",
+     "pos": "NOUN",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "texte": "dort",
+     "pos": "VERB",
+     "debut": 22,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chat",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GP",
+     "texte": "de la voisine",
+     "role": "possession",
+     "debut": 8,
+     "fin": 21
+    },
+    {
+     "type": "GV",
+     "texte": "dort",
+     "role": "prédicat",
+     "debut": 22,
+     "fin": 26
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   }
+  },
+  {
+   "id": "g003",
+   "langue": "fr",
+   "texte": "La femme a vu l'homme dans le parc.",
+   "mots": [
+    {
+     "texte": "La",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "femme",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "a",
+     "pos": "AUX",
+     "debut": 9,
+     "fin": 10
+    },
+    {
+     "texte": "vu",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 13
+    },
+    {
+     "texte": "l'homme",
+     "pos": "DET",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "texte": "dans",
+     "pos": "PREP",
+     "debut": 22,
+     "fin": 26
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 27,
+     "fin": 29
+    },
+    {
+     "texte": "parc",
+     "pos": "NOUN",
+     "debut": 30,
+     "fin": 34
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "La femme",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "a vu",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "l'homme",
+     "role": "patient",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "type": "GP",
+     "texte": "dans le parc",
+     "role": "lieu",
+     "debut": 22,
+     "fin": 34
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   }
+  },
+  {
+   "id": "g004",
+   "langue": "fr",
+   "texte": "Il a couru pour attraper le bus.",
+   "mots": [
+    {
+     "texte": "Il",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "a",
+     "pos": "AUX",
+     "debut": 3,
+     "fin": 4
+    },
+    {
+     "texte": "couru",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 10
+    },
+    {
+     "texte": "pour",
+     "pos": "PREP",
+     "debut": 11,
+     "fin": 15
+    },
+    {
+     "texte": "attraper",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 24
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 25,
+     "fin": 27
+    },
+    {
+     "texte": "bus",
+     "pos": "NOUN",
+     "debut": 28,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Il",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "a couru",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "type": "GP",
+     "texte": "pour attraper le bus",
+     "role": "but",
+     "debut": 11,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   }
+  },
+  {
+   "id": "g005",
+   "langue": "fr",
+   "texte": "Elle a dit qu'elle viendrait hier.",
+   "mots": [
+    {
+     "texte": "Elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "a",
+     "pos": "AUX",
+     "debut": 5,
+     "fin": 6
+    },
+    {
+     "texte": "dit",
+     "pos": "VERB",
+     "debut": 7,
+     "fin": 10
+    },
+    {
+     "texte": "qu'elle",
+     "pos": "CONJ",
+     "debut": 11,
+     "fin": 18
+    },
+    {
+     "texte": "viendrait",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 28
+    },
+    {
+     "texte": "hier",
+     "pos": "ADV",
+     "debut": 29,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Elle",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "a dit",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 10
+    },
+    {
+     "type": "SUB",
+     "texte": "qu'elle viendrait",
+     "role": "contenu",
+     "debut": 11,
+     "fin": 28
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   }
+  },
+  {
+   "id": "g006",
+   "langue": "fr",
+   "texte": "Le chien du voisin aboie la nuit.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chien",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "du",
+     "pos": "PREP",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "texte": "voisin",
+     "pos": "NOUN",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "texte": "aboie",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 24
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 25,
+     "fin": 27
+    },
+    {
+     "texte": "nuit",
+     "pos": "NOUN",
+     "debut": 28,
+     "fin": 32
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chien",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GP",
+     "texte": "du voisin",
+     "role": "possession",
+     "debut": 9,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "aboie",
+     "role": "prédicat",
+     "debut": 19,
+     "fin": 24
+    },
+    {
+     "type": "GN",
+     "texte": "la nuit",
+     "role": "temps",
+     "debut": 25,
+     "fin": 32
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   }
+  },
+  {
+   "id": "g007",
+   "langue": "fr",
+   "texte": "Les enfants jouent dans le jardin.",
+   "mots": [
+    {
+     "texte": "Les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "enfants",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "jouent",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "texte": "dans",
+     "pos": "PREP",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "texte": "jardin",
+     "pos": "NOUN",
+     "debut": 27,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Les enfants",
+     "role": "agent",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "jouent",
+     "role": "prédicat",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "type": "GP",
+     "texte": "dans le jardin",
+     "role": "lieu",
+     "debut": 19,
+     "fin": 33
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   }
+  },
+  {
+   "id": "g008",
+   "langue": "fr",
+   "texte": "Marie lit un livre.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "lit",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 10,
+     "fin": 12
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 13,
+     "fin": 18
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "lit",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "un livre",
+     "role": "patient",
+     "debut": 10,
+     "fin": 18
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   }
+  },
+  {
+   "id": "g009",
+   "langue": "fr",
+   "texte": "Il ne dort pas.",
+   "mots": [
+    {
+     "texte": "Il",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 3,
+     "fin": 5
+    },
+    {
+     "texte": "dort",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 10
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 11,
+     "fin": 14
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Il",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "ne dort pas",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 14
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "negation": true
+   }
+  },
+  {
+   "id": "g010",
+   "langue": "fr",
+   "texte": "Viens ici !",
+   "mots": [
+    {
+     "texte": "Viens",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "ici",
+     "pos": "ADV",
+     "debut": 6,
+     "fin": 9
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Viens",
+     "role": "prédicat",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GP",
+     "texte": "ici",
+     "role": "lieu",
+     "debut": 6,
+     "fin": 9
+    }
+   ],
+   "pragma": {
+    "acte": "exclamation"
+   }
+  },
+  {
+   "id": "g011",
+   "langue": "fr",
+   "texte": "Le livre que j'ai lu est intéressant.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "texte": "j'ai",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 17
+    },
+    {
+     "texte": "lu",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "intéressant",
+     "pos": "ADJ",
+     "debut": 25,
+     "fin": 36
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le livre",
+     "role": "patient",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "REL",
+     "texte": "que j'ai lu",
+     "role": "qualité",
+     "debut": 9,
+     "fin": 20
+    },
+    {
+     "type": "GV",
+     "texte": "est intéressant",
+     "role": "prédicat",
+     "debut": 21,
+     "fin": 36
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   }
+  },
+  {
+   "id": "g012",
+   "langue": "fr",
+   "texte": "Le canard est prêt à manger.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "canard",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "texte": "prêt",
+     "pos": "ADJ",
+     "debut": 14,
+     "fin": 18
+    },
+    {
+     "texte": "à",
+     "pos": "PREP",
+     "debut": 19,
+     "fin": 20
+    },
+    {
+     "texte": "manger",
+     "pos": "VERB",
+     "debut": 21,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le canard",
+     "role": "agent",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "est prêt",
+     "role": "prédicat",
+     "debut": 10,
+     "fin": 18
+    },
+    {
+     "type": "GP",
+     "texte": "à manger",
+     "role": "but",
+     "debut": 19,
+     "fin": 27
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "double_sens": true
+   }
+  },
+  {
+   "id": "g013",
+   "langue": "fr",
+   "texte": "Peux-tu venir ?",
+   "mots": [
+    {
+     "texte": "Peux-tu",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "texte": "venir",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 13
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Peux-tu venir",
+     "role": "prédicat",
+     "debut": 0,
+     "fin": 13
+    }
+   ],
+   "pragma": {
+    "acte": "question"
+   }
+  },
+  {
+   "id": "g014",
+   "langue": "fr",
+   "texte": "J'ai vu l'homme avec le télescope.",
+   "mots": [
+    {
+     "texte": "J'ai",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "vu",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 7
+    },
+    {
+     "texte": "l'homme",
+     "pos": "DET",
+     "debut": 8,
+     "fin": 15
+    },
+    {
+     "texte": "avec",
+     "pos": "PREP",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 21,
+     "fin": 23
+    },
+    {
+     "texte": "télescope",
+     "pos": "NOUN",
+     "debut": 24,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "J'ai",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "vu",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 7
+    },
+    {
+     "type": "GN",
+     "texte": "l'homme",
+     "role": "patient",
+     "debut": 8,
+     "fin": 15
+    },
+    {
+     "type": "GP",
+     "texte": "avec le télescope",
+     "role": "moyen",
+     "debut": 16,
+     "fin": 33
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   }
+  },
+  {
+   "id": "g015",
+   "langue": "en",
+   "texte": "The cat sleeps.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "cat",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "sleeps",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 14
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The cat",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "sleeps",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 14
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   }
+  },
+  {
+   "id": "g016",
+   "langue": "en",
+   "texte": "The woman saw the man in the park.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "woman",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "saw",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "man",
+     "pos": "NOUN",
+     "debut": 18,
+     "fin": 21
+    },
+    {
+     "texte": "in",
+     "pos": "PREP",
+     "debut": 22,
+     "fin": 24
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 25,
+     "fin": 28
+    },
+    {
+     "texte": "park",
+     "pos": "NOUN",
+     "debut": 29,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The woman",
+     "role": "agent",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "saw",
+     "role": "prédicat",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "the man",
+     "role": "patient",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "type": "GP",
+     "texte": "in the park",
+     "role": "lieu",
+     "debut": 22,
+     "fin": 33
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   }
+  },
+  {
+   "id": "g017",
+   "langue": "en",
+   "texte": "She said that she would come yesterday.",
+   "mots": [
+    {
+     "texte": "She",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "said",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "that",
+     "pos": "CONJ",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "texte": "she",
+     "pos": "PRON",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "would",
+     "pos": "AUX",
+     "debut": 18,
+     "fin": 23
+    },
+    {
+     "texte": "come",
+     "pos": "VERB",
+     "debut": 24,
+     "fin": 28
+    },
+    {
+     "texte": "yesterday",
+     "pos": "ADV",
+     "debut": 29,
+     "fin": 38
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "She",
+     "role": "agent",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "said",
+     "role": "prédicat",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "type": "SUB",
+     "texte": "that she would come",
+     "role": "contenu",
+     "debut": 9,
+     "fin": 28
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "modalite": true
+   }
+  },
+  {
+   "id": "g018",
+   "langue": "en",
+   "texte": "He does not sleep.",
+   "mots": [
+    {
+     "texte": "He",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "does",
+     "pos": "AUX",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "not",
+     "pos": "ADV",
+     "debut": 8,
+     "fin": 11
+    },
+    {
+     "texte": "sleep",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "He",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "does not sleep",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 17
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "negation": true
+   }
+  },
+  {
+   "id": "g019",
+   "langue": "en",
+   "texte": "It might rain.",
+   "mots": [
+    {
+     "texte": "It",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "might",
+     "pos": "AUX",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "rain",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 13
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "It",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "might rain",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 13
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "modalite": true
+   }
+  },
+  {
+   "id": "g020",
+   "langue": "en",
+   "texte": "The duck is ready to eat.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "duck",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "texte": "ready",
+     "pos": "ADJ",
+     "debut": 12,
+     "fin": 17
+    },
+    {
+     "texte": "to",
+     "pos": "PREP",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "eat",
+     "pos": "VERB",
+     "debut": 21,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The duck",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "is ready",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 17
+    },
+    {
+     "type": "GP",
+     "texte": "to eat",
+     "role": "but",
+     "debut": 18,
+     "fin": 24
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "double_sens": true
+   }
+  }
+ ],
+ "note": "Gold v0, écrit à la main ; spans calculés par sous-chaîne."
+}

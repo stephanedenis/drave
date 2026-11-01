@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-01, 18 h 50 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-01, 18 h 55 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -27,14 +27,14 @@
 - **Coloration** : analyse [`pre-traitement-linguistique`](../theorie/pre-traitement-linguistique.md)
   (5 schémas) — le CPU étiquette la surface et énumère le plausible, le réseau tranche l'ambiguïté ;
   la cascade se juge sur la couverture × la précision par unité de calcul, pas sur le débit.
-- **Bloc linguistique** : **R0.7** — le contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
-  (9 niveaux, heuristique CPU + neuronal de contrat, parallèle/cascade, activation 51–76 %) ;
-  **398 langues à 0,9687**, script **1,0000**, permuté **0,0022** ; fiche et porte ; le modèle
-  réel local n'est pas qualifié.
-- **Moteur B13** : **AC-3, alpha-bêta (8/8)**, **DRVF `thought` (9/9)** et **banc anytime
-  (10/10)** — A* but en **32 nœuds** (AUC **0,528** cruches, **0,624** taquin) contre l'aléatoire
-  (**0,246**, **0,116**) ; fiches [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
+- **Bloc linguistique** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
+  (9 niveaux, heuristique/neuronal, parallèle/cascade) ; **398 langues à 0,9687** ; fiche et porte.
+- **Moteur B13** : **AC-3/alpha-bêta (8/8)**, **DRVF (9/9)**, **banc (10/10)** ; fiches
+  [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
   [`pensee-drvf`](../../reports/rapport-pensee-drvf.md), [`pensee-banc`](../../reports/rapport-pensee-banc.md).
+- **Gold L v0** : **20 phrases** ; POS **0,924**, syntagmes **0,356**, pragmatique
+  **1,0/1,0/0,95/0,9** ; cascade (mock) **52,5 %** ; vrai neuronal **refusé** ; fiche
+  [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain : **gold 100–200 + modèle qualifié**.
 - **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes** (T0 canonique, T1 rejeu,
   T2 stratégies, T3 anytime, T4 justification) sur le jouet des cruches ; BFS, greedy, A* et
   MCTS-lite ; puis **AC-3 et alpha-bêta** (8/8 ; 1 495/296 contre 18 730) ; fiches
@@ -44,7 +44,7 @@
   avance ; **N4** en file ; **A/B** gardent les leurs.
 - **Interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state`.
 - **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `reports/r44-*`, `docs/theorie/pre-traitement-linguistique.md`, `docs/schemas/heuristique-*.svg`, `tools/bloc_linguistique.py`, `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`, `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`, `reports/bloc-*`, `journal/sessions/e181ce02-…/`.
-- **Prochaine action** : **L** — gold POS/syntagme/pragmatique et modèle neuronal ; **B13** v0 complet, opérateurs hétérogènes/DRVM.
+- **Prochaine action** : **L** — étendre le gold à 100–200 phrases et qualifier un modèle neuronal ; **B13** v0 complet, opérateurs hétérogènes/DRVM.
 - **Bloquants** : aucun ; corpus de test à choisir ; pas de GPU.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
@@ -89,7 +89,7 @@
 |---|---|---|
 | portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **391** / **478** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **392** / **479** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
@@ -119,7 +119,7 @@ styles · **C5** domaines · **C6** documentation · **C7** pensée — hors gra
 ## Ce qui reste
 
 **N2.h** — **close** (N2.i : 12,93 littérature, 33,83 anglais ; porte < 2,5 non atteinte) ;
-**Pensée** — **gold/neural L, opérateurs B13** (AC-3/alpha-bêta/DRVF/banc faits ; session `e181ce02`) ; **N4** — la consigne
+**Pensée** — **gold 100/neural L, opérateurs B13** (AC-3/alpha-bêta/DRVF/banc/gold v0 faits ; session `e181ce02`) ; **N4** — la consigne
 courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — close, limites nommées ; **R0.7** — gold/neuronal ; **R1.1/R1.2** — le contexte natif ; **S** — l'export au corpus.
 
 - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).

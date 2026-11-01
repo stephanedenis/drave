@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 26.2 h |
+| Durée | 26.3 h |
 | Tours | 15 |
-| Messages | 450 |
-| Appels d'outils | 481 |
+| Messages | 453 |
+| Appels d'outils | 484 |
 | Fichiers touchés | 25 |
-| Commandes | 380 |
+| Commandes | 382 |
 | Sous-agents | 2 |
-| Commits | 23 |
+| Commits | 24 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -835,7 +835,7 @@ Le prochain round démarre sur le gold L.
 
 ### Tour 15 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Repérer les lexiques et la POS à enrichir
 - bash — Lire les lexiques et la fonction POS
@@ -847,6 +847,9 @@ Le prochain round démarre sur le gold L.
 - bash — Ajouter le gold à la porte, la fiche et l'état
 - bash — Vérifier le budget T0 après le gold
 - bash — Rentrer dans le budget T0
+- bash — Passer toutes les portes après le gold
+- bash — Committer le gold v0 et l'évaluation
+- job_output
 
 ## 3. Travail accompli
 
@@ -927,7 +930,7 @@ Le prochain round démarre sur le gold L.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 340 autres
+- … et 342 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1090,4 +1093,5 @@ Le prochain round démarre sur le gold L.
 - B13 — AC-3 ET ALPHA-BÊTA : 8/8 PORTES, 1 495 NŒUDS/296 COUPES CONTRE 18 730" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — DRVF THOUGHT : 23 597 OCTETS, 93 ÉVÉNEMENTS, REJEU IDENTIQUE, CORRUPTION REFUSÉE" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LE BANC ANYTIME : A* BUT EN 32 NŒUDS, AUC 0,528/0,624 CONTRE 0,246/0,116 À L'ALÉATOIRE" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- L — GOLD v0 : 20 PHRASES, POS 0,924, SYNTAGMES 0,356, PRAGMATIQUE 1,0/1,0/0,95/0,9" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 
