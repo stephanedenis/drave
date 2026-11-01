@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (11)
+## Commits du jour (12)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -17,12 +17,13 @@
 | 01:17 | `53fa2e5a` | R4.4 — LA VALIDATION RÉELLE CORRIGE LE LECTEUR : UN EN-TÊTE TRAVERSAIT LA GOUTTIÈRE, LE LEXIQUE PASSE DE 93 % À 15 % | `R44-encodeur-visuel.md`, `en-cours.md`, `roadmap.md` (+16) |
 | 01:25 | `50e59804` | R4.4 — LE PRÉTRAITEMENT TIENT UN GRADIENT 1,2 (28,9 → 3,3 %) ET NE RÉPARE PAS UN FLOU FORT (49,6 → 53,2 %) | `en-cours.md`, `README.md`, `distribue.md` (+11) |
 | 01:29 | `1e0dfa83` | R4.4 — LE RÉCIT DE LA NUIT : CE QUE LES SCANS ONT APPRIS AU LECTEUR | `en-cours.md`, `README.md`, `distribue.md` (+9) |
+| 01:36 | `caff2033` | R4.4 — TROIS COLONNES : LA GOUTTIÈRE UNIQUE COUPE LA PAGE EN DEUX ET LE WER MONTE À 52,5 % | `encodeur-visuel.md`, `en-cours.md`, `README.md` (+7) |
 | 01:43 | `dc737497` | R4.4 — LE FOND D'ÉCLAIRAGE SE CALCULE SUR UNE VIGNETTE : 9,5 S → 1,4 S, LE PAPIER GAGNE 6,6 POINTS DE PRÉSERVATION | `R44-encodeur-visuel.md`, `en-cours.md`, `roadmap.md` (+19) |
 | 01:56 | `1776f53e` | R4.4 — UN TROISIÈME VRAI SCAN OÙ LE PRÉTRAITEMENT PAIE : GERMINAL, 1900, 8,73 % DE WER | `en-cours.md`, `roadmap.md`, `README.md` (+12) |
 
 ## Chiffres du jour
 
-`3,3 %` · `53,2 %` · `43,5 %` · `8,73 %` · `93 %` · `15 %` · `23,3 %` · `88,5 %` · `55,9 %` · `7,0 %` · `89 %` · `0,5 %`
+`52,5 %` · `3,3 %` · `53,2 %` · `43,5 %` · `8,73 %` · `93 %` · `15 %` · `23,3 %` · `88,5 %` · `55,9 %` · `7,0 %` · `89 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

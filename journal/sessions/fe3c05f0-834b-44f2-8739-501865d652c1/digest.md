@@ -9629,3 +9629,29 @@ sonde 3 colonnes ajoutée
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"vrais scans **7,10 / 88,4 %** ; redressement **≤ 6°** — [`r44-scans`]\",\n            \"vrais scans **7,10 / 88,4 %** — [`r44-scans`]\")\np.write_text(s)\nPY\npython3 tools/tail … [1370 caractères tronqués]`
+
+  ```
+T0 max : 4002 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ index : aucun fait stagé sans état
+[master caff2033] R4.4 — TROIS COLONNES : LA GOUTTIÈRE UNIQUE COUPE LA PAGE EN DEUX ET LE WER MONTE À 52,5 %
+ 10 files changed, 116 insertions(+), 18 deletions(-)
+caff2033 R4.4 — TROIS COLONNES : LA GOUTTIÈRE UNIQUE COUPE LA PAGE EN DEUX ET LE WER MONTE À 52,5 %
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | head -8; grep -n \"vrais scans\\|redressement\\|3 col\" docs/pilotage/en-cours.md | head -4", "description": "Inspect T0 violation details", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+budget de contexte · documents chargeables
+    mots lignes  cat budget  document
+    5999    597 DATÉ      0  docs/implantation/contexte-long.md
+    4858    515   T1   5000  docs/theorie/glossaire/10-le-pont-linguistico-semantique-le-vocabu.md
+    4567    358   T1   9000  docs/pilotage/roadmap.md
+    4085    431 DATÉ      0  docs/implantation/numa-segregation.md
+    3131    294   T1   3500  README.md
+    3072    341 DATÉ      0  docs/implantation/convertisseur.md
+45:- **Ce qu'elle fait** : photo **55,9 → 6,7 %**, préservation **70–87 %**, colonnes **89,4 → 0,5 %** (3 col. : **52 %**), tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** ; gradient **1,2 corrigé**, flou **non** — [`r44-scans`](../../reports/rapport-r44-scans.md).
+79:  tableaux **92,6 %**, vrais scans **7,10 / 88,4 %** (trois livres) ; fiche [`r44-scans`](../../reports/rapport-r44-scans.md).
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"vrais scans **7,10 / 88,4 %** ; gradient **1,2 corrigé**, flou **non** — [`r44-scans`]\",\n            \"vrais scans **7,10 / 88,4 %** — [`r44-scans`]\")\np.write_text(s)\nPY\np … [370 caractères tronqués]`
