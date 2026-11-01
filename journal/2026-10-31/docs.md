@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,6 +14,7 @@
 | 21:05 | `2ac27021` | DOCS — LE COÛT CACHÉ DE LA STDP SYMÉTRIQUE, LA LECTURE D'UN PAS ET LES QUESTIONS OUVERTES | `diehl-cook.md`, `modele-natif.md`, `README.md` (+10) |
 | 21:06 | `c83f17d5` | DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT | `diehl-cook.md`, `README.md`, `apprentissage.md` (+9) |
 | 22:11 | `77ceb533` | DOCS — LE CONTRAT EST L'INVARIANT, LA TECHNOLOGIE EST LA VARIABLE : MODES, GRANULARITÉ, GRAPHE DYNAMIQUE | `diehl-cook.md`, `README.md`, `natif-granularite.svg` (+15) |
+| 22:26 | `3cb15674` | PENSÉE — TOUR 1-2 : LA RSN PLURIELLE ET L'ARBRE D'ÉTATS | `README.md`, `README.md`, `pensee-arbre.svg` (+17) |
 
 ## Chiffres du jour
 

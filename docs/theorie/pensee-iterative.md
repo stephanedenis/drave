@@ -136,15 +136,73 @@ choix ne pense pas ; il exécute un plan.
 compacte ; il se rejoue par l'empreinte de ses nœuds. Un arbre sans trace n'est pas une pensée : c'est un nuage
 de nœuds.
 
-## 4. Ce que la suite doit résoudre
+## 4. Le cycle de pensée multi-niveaux
+
+Un cycle n'est pas une passe : c'est une **boucle** avec un point d'arrêt explicite.
+
+**Les sept gestes** :
+
+1. **observer** : N1 transforme une surface en candidats (plusieurs lectures) ;
+2. **proposer** : N2/N3 génèrent des transitions (raffiner, contraindre, planifier) ;
+3. **contraindre** : les contraintes éliminent ou marquent des candidats ;
+4. **évaluer** : un score, une preuve, une simulation ;
+5. **sélectionner** : une stratégie choisit le prochain nœud/opérateur ;
+6. **commettre ou revenir** : on développe, on élague, on backtracke ;
+7. **arrêter** : settled, budget, contradiction, méta-décision.
+
+**Trois niveaux de boucle** :
+
+| niveau | ce qu'il choisit | exemple |
+|---|---|---|
+| **objet** | le prochain candidat/opérateur | raffiner le glyphe 7 |
+| **stratégie** | la stratégie de recherche | passer de greedy à MCTS |
+| **méta** | la politique de sélection des stratégies | apprendre que MCTS paie sur ce jeu |
+
+**Le cycle est indenté, pas plat** : le niveau stratégie peut suspendre le niveau objet, changer de stratégie,
+puis reprendre. La trace garde les deux.
+
+![Le cycle de pensée multi-niveaux](../schemas/pensee-cycle.svg)
+
+**La règle** : un cycle sans **point d'arrêt explicite** est une boucle infinie ; un cycle sans **trace** est une
+boîte noire. Les deux sont des bugs, pas des fonctionnalités.
+
+## 5. Le portefeuille de stratégies
+
+Une stratégie n'est pas un algorithme codé en dur : c'est une **politique de choix** sur l'arbre. Le moteur
+embarque un **portefeuille**, et le méta-niveau choisit.
+
+![Le portefeuille de stratégies](../schemas/pensee-portefeuille.svg)
+
+| famille | stratégies | ce qu'elles demandent | quand |
+|---|---|---|---|
+| **non informée** | BFS, DFS, IDDFS | une frontière, un coût | arbre petit, pas d'heuristique |
+| **informée** | A*, IDA*, best-first, beam | une heuristique, un coût | heuristique disponible |
+| **adversariale** | minimax, alpha-bêta | une alternance, une évaluation | deux joueurs |
+| **stochastique** | MCTS/UCT, rollouts | un simulateur, un budget | grand arbre, incertitude |
+| **contraintes** | AC-3, forward checking, backtracking | des domaines, des contraintes | CSP |
+| **SAT/SMT** | DPLL, CDCL, théories | des clauses, un modèle | preuve, cohérence |
+| **planification** | STRIPS/PDDL, HTN, means-ends | des opérateurs, des préconditions | plans |
+| **probabiliste** | belief propagation, particle filter | des croyances, des observations | incertitude |
+| **locale** | hill climbing, recuit, génétique | un voisinage, un score | optimisation |
+| **cas-based** | analogie, réutilisation | des cas, une similarité | expérience |
+| **méta** | bandit, portfolio, RL | un historique, une récompense | choisir |
+
+**Le point** : ces stratégies ne sont pas des blocs neufs ; ce sont des **politiques** qui appellent les mêmes
+**opérateurs** sur le même **arbre**, avec les mêmes **types**. Le bus ne voit que des états et des propositions.
+
+**Le portefeuille est un bloc N3.** Il a la signature `state → stratégie` (ou `state → décision`), il est tracé,
+et il peut être classique (une règle) ou appris (un bandit). La stratégie choisie est un **paramètre** de la
+trace, pas un nouveau type de données.
+
+## 6. Ce que la suite doit résoudre
 
 Ce document est le **premier tour** d'une refonte en **dix tours**. Les tours suivants :
 
 1. ~~le diagnostic et la RSN plurielle~~ ;
 2. ~~l'arbre d'états~~ ;
-3. **le cycle de pensée multi-niveaux** : observer, proposer, contraindre, évaluer, sélectionner, revenir,
+3. ~~le cycle de pensée multi-niveaux~~ : observer, proposer, contraindre, évaluer, sélectionner, revenir,
    commettre, arrêter ;
-4. **le portefeuille de stratégies** : recherche non informée, A*, beam, MCTS, alpha-bêta, contraintes, SAT/SMT,
+4. ~~le portefeuille de stratégies~~ : recherche non informée, A*, beam, MCTS, alpha-bêta, contraintes, SAT/SMT,
    planification, probabiliste, locale, cas-based, méta ;
 5. **le contrat de la pensée** : types `state`, `proposal`, `score`, `constraint`, `decision`, `trace` ;
 6. **l'itération indéfinie et l'arrêt** : anytime, budget, settled, contradiction, méta-décision ;

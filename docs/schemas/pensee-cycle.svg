@@ -1,0 +1,72 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 580" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Le cycle de pensée multi-niveaux</title>
+<desc>Trois boucles imbriquées : l&#x27;objet choisit le candidat, la stratégie choisit la recherche, la méta choisit la politique.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="580" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Le cycle de pensée multi-niveaux</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Un cycle sans point d&#x27;arrêt explicite est une boucle infinie ; un cycle sans trace est une boîte noire.</text>
+<text x="50" y="120" text-anchor="start" font-size="13" font-weight="bold" fill="#6d28d9">méta</text>
+<rect x="120" y="96" width="230" height="60" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+<text x="235.0" y="120" text-anchor="middle" font-size="12" font-weight="bold" fill="#6d28d9">apprendre la politique</text>
+<text x="235.0" y="142.0" text-anchor="middle" font-size="9" fill="#334155">des traces, du regret</text>
+<rect x="380" y="96" width="180" height="60" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+<text x="470.0" y="120" text-anchor="middle" font-size="12" font-weight="bold" fill="#6d28d9">portfolio</text>
+<text x="470.0" y="142.0" text-anchor="middle" font-size="9" fill="#334155">choisir la famille</text>
+<rect x="590" y="96" width="230" height="60" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+<text x="705.0" y="120" text-anchor="middle" font-size="12" font-weight="bold" fill="#6d28d9">budget global</text>
+<text x="705.0" y="142.0" text-anchor="middle" font-size="9" fill="#334155">nœuds, temps, énergie</text>
+<line x1="350" y1="126" x2="378" y2="126" stroke="#6d28d9" stroke-width="1.5" marker-end="url(#f)"/>
+<line x1="560" y1="126" x2="588" y2="126" stroke="#6d28d9" stroke-width="1.5" marker-end="url(#f)"/>
+<path d="M705,96 L705,78 L235,78 L235,94" fill="none" stroke="#6d28d9" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#f)"/>
+<text x="470" y="72" text-anchor="middle" font-size="9" font-style="italic" fill="#6d28d9">épisode suivant</text>
+<text x="50" y="260" text-anchor="start" font-size="13" font-weight="bold" fill="#15803d">stratégie</text>
+<rect x="120" y="230" width="180" height="60" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="210.0" y="254" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">choisir</text>
+<text x="210.0" y="276.0" text-anchor="middle" font-size="9" fill="#334155">A*, MCTS, CSP…</text>
+<rect x="330" y="230" width="180" height="60" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="420.0" y="254" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">allouer</text>
+<text x="420.0" y="276.0" text-anchor="middle" font-size="9" fill="#334155">le budget du nœud</text>
+<rect x="540" y="230" width="180" height="60" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="630.0" y="254" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">élaguer</text>
+<text x="630.0" y="276.0" text-anchor="middle" font-size="9" fill="#334155">borne, contrainte</text>
+<rect x="750" y="230" width="180" height="60" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="840.0" y="254" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">replanifier</text>
+<text x="840.0" y="276.0" text-anchor="middle" font-size="9" fill="#334155">changer de stratégie</text>
+<line x1="300" y1="260" x2="328" y2="260" stroke="#15803d" stroke-width="1.5" marker-end="url(#f)"/>
+<line x1="510" y1="260" x2="538" y2="260" stroke="#15803d" stroke-width="1.5" marker-end="url(#f)"/>
+<line x1="720" y1="260" x2="748" y2="260" stroke="#15803d" stroke-width="1.5" marker-end="url(#f)"/>
+<text x="50" y="430" text-anchor="start" font-size="13" font-weight="bold" fill="#1d4ed8">objet</text>
+<rect x="110" y="400" width="100" height="60" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="160.0" y="424" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1d4ed8">observer</text>
+<line x1="211" y1="430" x2="226" y2="430" stroke="#334155" stroke-width="1.3" marker-end="url(#f)"/>
+<rect x="228" y="400" width="100" height="60" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="278.0" y="424" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1d4ed8">proposer</text>
+<line x1="329" y1="430" x2="344" y2="430" stroke="#334155" stroke-width="1.3" marker-end="url(#f)"/>
+<rect x="346" y="400" width="100" height="60" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="396.0" y="424" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1d4ed8">contraindre</text>
+<line x1="447" y1="430" x2="462" y2="430" stroke="#334155" stroke-width="1.3" marker-end="url(#f)"/>
+<rect x="464" y="400" width="100" height="60" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="514.0" y="424" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1d4ed8">évaluer</text>
+<line x1="565" y1="430" x2="580" y2="430" stroke="#334155" stroke-width="1.3" marker-end="url(#f)"/>
+<rect x="582" y="400" width="100" height="60" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="632.0" y="424" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1d4ed8">sélectionner</text>
+<line x1="683" y1="430" x2="698" y2="430" stroke="#334155" stroke-width="1.3" marker-end="url(#f)"/>
+<rect x="700" y="400" width="100" height="60" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="750.0" y="424" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">commettre</text>
+<line x1="801" y1="430" x2="816" y2="430" stroke="#334155" stroke-width="1.3" marker-end="url(#f)"/>
+<rect x="818" y="400" width="100" height="60" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="868.0" y="424" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">arrêter</text>
+<text x="868" y="392" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#15803d">settled → décision</text>
+<path d="M840,460 L840,510 L160,510 L160,460" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#fr)"/>
+<text x="500" y="528" text-anchor="middle" font-size="9.5" fill="#b91c1c">retour arrière : une arête de plus, pas un échec</text>
+<line x1="235" y1="156" x2="235" y2="228" stroke="#6d28d9" stroke-width="1.5" marker-end="url(#f)"/>
+<line x1="235" y1="290" x2="235" y2="398" stroke="#15803d" stroke-width="1.5" marker-end="url(#f)"/>
+<line x1="800" y1="398" x2="800" y2="292" stroke="#15803d" stroke-width="1.5" marker-end="url(#f)"/>
+<line x1="800" y1="228" x2="800" y2="158" stroke="#6d28d9" stroke-width="1.5" marker-end="url(#f)"/>
+<text x="250" y="190" text-anchor="start" font-size="9" fill="#6d28d9">décide</text>
+<text x="250" y="330" text-anchor="start" font-size="9" fill="#15803d">applique</text>
+<text x="810" y="330" text-anchor="start" font-size="9" fill="#15803d">remonte</text>
+<text x="810" y="190" text-anchor="start" font-size="9" fill="#6d28d9">remonte</text>
+<line x1="930" y1="96" x2="930" y2="500" stroke="#94a3b8" stroke-width="2"/>
+<text x="930" y="86" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#334155">trace</text>
+</svg>

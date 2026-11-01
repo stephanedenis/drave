@@ -5289,3 +5289,68 @@ positions par défaut identiques : True
 offset 5 change : True
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/file-gpu0.sh <<'EOF'\n#!/bin/bash\n# GPU 0 — après le professeur propre : distillation A ×3, curriculum ×3, positions aléatoires ×3.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport CUDA_VISIBLE_DEVI … [3050 caractères tronqués]`
+
+  ```
+queue0 559161
+queue1 559162
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && kill 559161 2>/dev/null; sleep 1; python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('work/n2h/file-gpu0.sh'); s=p.read_text()\ns=s.replace('P=\"~/gpu-env/bin/python\"', 'P=\"$HOME/gpu-env/bin/python\"')\np.write_text(s)\nprint('P=' i … [234 caractères tronqués]`
+
+  ```
+True fixé
+queue0 relancé 559337
+22:26
+  pas   3000 · perte 1.2308 · val 1.8002 bits/octet · 243 s
+pas 7550 · perte 1.4324 · PPL val 4.618 · 322 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/evalue-tout.sh <<'EOF'\n#!/bin/bash\n# Évalue tous les points de contrôle N2.h : porte honnête, hors domaine, décomposition, longueurs.\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport PYTHONPATH=. C … [1240 caractères tronqués]`
+
+  ```
+ok
+22:27
+pas 8000 · perte 1.3161 · PPL val 4.554 · 339 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2h/base.log; tail -1 work/n2h/teacher.log; ls work/n2h/*.pt 2>/dev/null", "description": "Check training progress"}`
+
+  ```
+22:27
+pas 8400 · perte 1.3595 · PPL val 4.573 · 355 s
+  pas   4000 · perte 1.1263 · val 1.7392 bits/octet · 325 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null; tail -1 work/n2h/base.log; tail -1 work/n2h/teacher.log; tail -1 work/n2h/teacher-mixte.log 2>/dev/null", "description": "Wait 10 minutes and check the chain", "run_in_backgroun … [9 caractères tronqués]`
+
+  ```
+started background job bash-275
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2h/*.pt 2>/dev/null; tail -1 work/n2h/base.log; tail -1 work/n2h/teacher.log", "description": "Check base completion"}`
+
+  ```
+22:27
+pas 8700 · perte 1.5051 · PPL val 4.505 · 366 s
+  pas   4000 · perte 1.1263 · val 1.7392 bits/octet · 325 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2h/agrege.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"agrege.py — tableau par bras de N2.h (porte honnête, hors domaine, longueurs).\"\"\"\nimport json, pathlib, statistics as st\n\nBRAS = [\n    (\"ancien base\", \"drave-n0 … [2409 caractères tronqués]`
+
+  ```
+ok
+22:27
+pas 8950 · perte 1.2669 · PPL val 4.528 · 378 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib, random\ntr = pathlib.Path('data/corpus_propre/train.txt').read_bytes()\nva = pathlib.Path('data/corpus_propre/val.txt').read_bytes()\nrng = random.Random(1)\nN = len(va) - 129\nhits64 = hits32 = 0\n … [745 caractères tronqués]`
+
+  ```
+fenêtres de validation dont les 64 premiers octets sont dans train : 7/300
+... 32 premiers octets : 33/300
+plus long préfixe retrouvé dans train (sur 50 fenêtres) : 48
+  ```
+
+- **job_output** `{"job_id": "bash-275", "timeout_ms": 900000, "wait": true}`

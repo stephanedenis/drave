@@ -4193,3 +4193,120 @@ A_RES_80_10-fr-p2-s1-photocopie.png inegal 0.045 ratio fond 1.13 binaire 0.86 an
 A_RES_80_10-fr-p2-s1-propre.png inegal 0.043 ratio fond 1.13 binaire 0.966 angle 0.0 inclinaison_auto 0.0
   ```
 
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/nettoyer_scan.py'); s=p.read_text()\nold='''def diagnostic(im: Image.Image) -> dict:\n    \"\"\"Ce que l'image est, avant de décider ce qu'on lui fait.\"\"\"\n    g = _gris(im)\n    h, w = g.shape\n    binaire = float(((g < 10) | ( … [2861 caractères tronqués]`
+
+  ```
+diagnostic corrigé
+=== propre
+{
+ "diagnostic": {
+  "largeur": 2550,
+  "hauteur": 3300,
+  "binaire": 0.443,
+  "fond_ratio": 1.12,
+  "petit": false,
+  "inclinaison": 0.0
+ },
+ "trace": [
+  "recadrage"
+ ],
+ "sortie": [
+  2102,
+=== photocopie
+{
+ "diagnostic": {
+  "largeur": 1700,
+  "hauteur": 2200,
+  "binaire": 0.021,
+  "fond_ratio": 1.12,
+  "petit": true,
+  "inclinaison": -0.75
+ },
+ "trace": [
+  "recadrage",
+  "redressement(-0.75)",
+  "echelle"
+ ],
+=== photo
+{
+ "diagnostic": {
+  "largeur": 1530,
+  "hauteur": 1980,
+  "binaire": 0.001,
+  "fond_ratio": 1.71,
+  "petit": true,
+  "inclinaison": 0.0
+ },
+ "trace": [
+  "recadrage",
+  "eclairage",
+  "echelle"
+ ],
+=== fax
+{
+ "diagnostic": {
+  "largeur": 1060,
+  "hauteur": 1360,
+  "binaire": 1.0,
+  "fond_ratio": 1.11,
+  "petit": true,
+  "inclinaison": 0.0
+ },
+ "trace": [
+  "echelle",
+  "lissage"
+ ],
+ "sortie": [
+=== papier
+{
+ "diagnostic": {
+  "largeur": 1445,
+  "hauteur": 1870,
+  "binaire": 0.0,
+  "fond_ratio": 1.21,
+  "petit": true,
+  "inclinaison": -0.75
+ },
+ "trace": [
+  "recadrage",
+  "redressement(-0.75)",
+  "echelle"
+ ],
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,json,time\nsys.path.insert(0,'tools')\nimport mesurer_ocr as mo, mesurer_scans as ms\npdf=pathlib.Path('data/onu/pdf/A_RES_80_10-fr.pdf'); page=2\nquestions=ms.questions_par_page()\nfor fam in ('propre','photocopie','photo','fax','papier'):\n    entr … [519 caractères tronqués]`
+
+  ```
+propre      brut  WER=  2.15% rappel= 97.85% conf= 94.3 trace=
+propre      auto  WER=  2.15% rappel= 97.85% conf= 94.2 trace=recadrage
+photocopie  brut  WER=  5.73% rappel= 95.34% conf= 89.9 trace=
+photocopie  auto  WER=  9.50% rappel= 92.47% conf= 83.8 trace=recadrage,redressement(-0.75),echelle
+photo       brut  WER= 51.79% rappel= 49.10% conf= 92.4 trace=
+photo       auto  WER=  2.87% rappel= 97.31% conf= 93.9 trace=recadrage,eclairage,echelle
+fax         brut  WER= 28.32% rappel= 74.01% conf= 66.0 trace=
+fax         auto  WER= 30.65% rappel= 74.91% conf= 63.6 trace=echelle,lissage
+papier      brut  WER=  6.27% rappel= 95.70% conf= 92.1 trace=
+papier      auto  WER=  5.73% rappel= 95.16% conf= 91.0 trace=recadrage,redressement(-0.75),echelle
+  ```
+
+### 👤 Utilisateur
+
+background job bash-179 (bash: rm -rf work/r44/scans && timeout 1800 python3 tools/simuler_scan.py --sortie work/r44/scans --pages 10 --test 10 --graines 1 2>&1 | tail -6) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nm=json.load(open('work/r44/scans/manifeste.json'))\nprint(len(m['entrees']),'scans')\nfrom collections import Counter\nprint(Counter((e['famille'],e['split']) for e in m['entrees']))\nfor e in m['entrees']:\n    if e['image']=='A_RES_80_10-fr-p2-s1-photoco … [296 caractères tronqués]`
+
+  ```
+100 scans
+Counter({('propre', 'dev'): 10, ('photocopie', 'dev'): 10, ('photo', 'dev'): 10, ('fax', 'dev'): 10, ('papier', 'dev'): 10, ('propre', 'test'): 10, ('photocopie', 'test'): 10, ('photo', 'test'): 10, ('fax', 'test'): 10, ('papier', 'test'): 10})
+angle photocopie: 0.84
+papier: {'famille': 'papier', 'graine': 1, 'dpi': 170, 'texture': True, 'jaunissement': 0.8, 'vignettage': 0.3, 'taches': 2, 'rotation': 0.6, 'flou': 0.8, 'jpeg': 28}
+60M	work/r44/scans
+  ```
+
+- **bash** `{"command": "timeout 1800 python3 tools/mesurer_scans.py --pipelines brut --sortie work/r44/mesure-brut.json > work/r44/mesure-brut.log 2>&1; echo \"[code $?]\"; tail -4 work/r44/mesure-brut.log", "description": "Run full baseline measurement on scans", "run_in_background": true, "workdir": "/home/s … [42 caractères tronqués]`
+
+  ```
+started background job bash-186
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nimport numpy as np\nfrom PIL import Image, ImageFilter\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco, mesurer_ocr as mo\npdf=pathlib.Path('data/onu/pdf/A_RES_80_10-fr.pdf'); page=2\nnat=mo.manifeste_natif(pdf,page,'fra'); ref=mo.jet … [1187 caractères tronqués]`

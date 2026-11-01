@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 5.2 h |
 | Tours | 3 |
-| Messages | 335 |
-| Appels d'outils | 330 |
+| Messages | 341 |
+| Appels d'outils | 336 |
 | Fichiers touchés | 11 |
-| Commandes | 273 |
+| Commandes | 278 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -145,7 +145,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ### Tour 3 — je te donnes 10h de liberté totale. impressionne-moi. je serai décu si tu as terminé à temps.
 
-*28 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Determine which repo files compose the French corpus
 - bash — Measure the size of duplicated passages
@@ -161,7 +161,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - bash — Check whether the teacher early-stops on validation
 - bash — Check checkpoint selection in the teacher trainer
 - bash — Launch teacher and base training on the clean corpus
-- … et 14 autres
+- … et 20 autres
 
 **Synthèse produite :**
 
@@ -227,7 +227,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 233 autres
+- … et 238 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -355,7 +355,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ## 5. Erreurs rencontrées
 
-20 sorties en erreur ou divergentes. Les premières :
+21 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5

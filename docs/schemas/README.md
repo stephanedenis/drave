@@ -41,6 +41,8 @@
 | [natif-granularite.svg](natif-granularite.svg) | la granularité : monolithe contre petits blocs, et le coût de la liaison | [le modèle natif](../theorie/modele-natif.md) |
 | [pensee-rsn-plurielle.svg](pensee-rsn-plurielle.svg) | un état, plusieurs candidats : corps, statut, provenance, empreinte | [la pensée itérative](../theorie/pensee-iterative.md) |
 | [pensee-arbre.svg](pensee-arbre.svg) | l'arbre d'états : frontière, transposition, élagage, meilleur nœud | [la pensée itérative](../theorie/pensee-iterative.md) |
+| [pensee-cycle.svg](pensee-cycle.svg) | trois boucles imbriquées : objet, stratégie, méta | [la pensée itérative](../theorie/pensee-iterative.md) |
+| [pensee-portefeuille.svg](pensee-portefeuille.svg) | A*, MCTS, alpha-bêta, contraintes, planification, méta autour du même arbre | [la pensée itérative](../theorie/pensee-iterative.md) |
 | [diehl-cook-architecture.svg](diehl-cook-architecture.svg) | Poisson, LIF, STDP, inhibition latérale, seuil adaptatif | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-placements.svg](diehl-cook-placements.svg) | les trois placements légaux et le raccourci interdit | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-contrat.svg](diehl-cook-contrat.svg) | ports, `φ(RSN)`, annotation et refus du chargeur | [le bloc D&C](../implantation/diehl-cook.md) |

@@ -1,0 +1,40 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" font-family="DejaVu Sans, Arial, sans-serif">
+<title>Le portefeuille de stratégies</title>
+<desc>Les mêmes opérateurs, le même arbre, les mêmes types : une stratégie est une politique de choix, pas un bloc neuf.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="560" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">Le portefeuille de stratégies</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">On ne code pas une intelligence : on code un portefeuille, et une politique qui choisit.</text>
+<rect x="370" y="230" width="220" height="100" rx="12" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+<text x="480" y="258" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">arbre d&#x27;états</text>
+<text x="480" y="282" text-anchor="middle" font-size="9.5" fill="#475569">frontière, scores, coûts</text>
+<text x="480" y="304" text-anchor="middle" font-size="9.5" fill="#b45309">mêmes opérateurs</text>
+<rect x="60" y="96" width="220" height="80" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="170.0" y="120" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#1d4ed8">A* / beam</text>
+<text x="170.0" y="142.0" text-anchor="middle" font-size="9.5" fill="#334155">heuristique + coût</text>
+<rect x="680" y="96" width="220" height="80" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="790.0" y="120" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#15803d">MCTS / UCT</text>
+<text x="790.0" y="142.0" text-anchor="middle" font-size="9.5" fill="#334155">rollouts, budget</text>
+<rect x="60" y="250" width="220" height="80" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="170.0" y="274" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#b45309">contraintes</text>
+<text x="170.0" y="296.0" text-anchor="middle" font-size="9.5" fill="#334155">AC-3, forward checking</text>
+<rect x="680" y="250" width="220" height="80" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+<text x="790.0" y="274" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#b91c1c">alpha-bêta</text>
+<text x="790.0" y="296.0" text-anchor="middle" font-size="9.5" fill="#334155">deux joueurs</text>
+<rect x="60" y="404" width="220" height="80" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+<text x="170.0" y="428" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#6d28d9">planification</text>
+<text x="170.0" y="450.0" text-anchor="middle" font-size="9.5" fill="#334155">STRIPS, HTN</text>
+<rect x="680" y="404" width="220" height="80" rx="10" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+<text x="790.0" y="428" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0f172a">méta</text>
+<text x="790.0" y="450.0" text-anchor="middle" font-size="9.5" fill="#334155">bandit, portfolio</text>
+<line x1="280" y1="160" x2="370" y2="240" stroke="#1d4ed8" stroke-width="1.6" marker-end="url(#f)"/>
+<line x1="680" y1="160" x2="590" y2="240" stroke="#15803d" stroke-width="1.6" marker-end="url(#f)"/>
+<line x1="280" y1="290" x2="368" y2="290" stroke="#b45309" stroke-width="1.6" marker-end="url(#f)"/>
+<line x1="680" y1="290" x2="592" y2="290" stroke="#b91c1c" stroke-width="1.6" marker-end="url(#f)"/>
+<line x1="280" y1="430" x2="380" y2="330" stroke="#6d28d9" stroke-width="1.6" marker-end="url(#f)"/>
+<line x1="680" y1="430" x2="580" y2="330" stroke="#334155" stroke-width="1.6" marker-end="url(#f)"/>
+<path d="M680,444 C600,500 300,500 280,444" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#f)"/>
+<text x="480" y="516" text-anchor="middle" font-size="9.5" fill="#475569">le méta choisit la famille, alloue le budget, et apprend du regret</text>
+<rect x="30" y="530" width="900" height="22" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+<text x="480" y="546" text-anchor="middle" font-size="9.5" fill="#334155">Le bus ne voit que des états et des propositions ; la stratégie est privée, comme la technologie.</text>
+</svg>
