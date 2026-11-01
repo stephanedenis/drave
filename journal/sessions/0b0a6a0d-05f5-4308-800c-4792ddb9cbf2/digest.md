@@ -4890,3 +4890,402 @@ The goal is marked complete and this autonomous run is ending. Write the closing
 
 Deux choses méritent ton œil : la **définition de la porte** (elle doit être redéfinie sur un jeu décontaminé) et le **manifeste 4 sources**, qui est à 82,5 % anglais malgré sa description « quotas équilibrés » dans N2.6. Un point d'attention : une seconde session travaillait en parallèle (R4.4, docs Diehl & Cook) ; ses fichiers de journal ont été emportés par les hooks `git add journal` de mes commits — rien de perdu, mais l'historique mêle nos traces.
 
+
+## Tour 3
+
+### 👤 Utilisateur
+
+je te donnes 10h de liberté totale. impressionne-moi. je serai décu si tu as terminé à temps.
+
+### 🤖 Assistant
+
+⏵ Cadrage : d'où vient le corpus français, et que peut-on reconstruire avec ses documents ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\nfr = pathlib.Path('data/corpus_fr.txt').read_bytes()\nprint('corpus_fr', len(fr), 'octets')\n# combien de fichiers du dépôt retrouve-t-on verbatim ?\nfichiers = list(pathlib.Path('docs').rglob('*.md … [560 caractères tronqués]`
+
+  ```
+corpus_fr 4633889 octets
+fichiers candidats 1030
+retrouvés 0 octets 0 absent 1027
+exemples absents ['docs/README.md', 'docs/archive/README.md', 'docs/archive/architecture-cerveau-et-drave.md', 'docs/archive/architecture-kimi-k3.md', 'docs/archive/biologie-pour-drave.md']
+  ```
+
+### 🤖 Assistant
+
+⏵ Anatomie de la contamination : passages recopiés ou formulettes éparses ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\ntr = pathlib.Path('data/corpus_fr_train.txt').read_bytes()\nva = pathlib.Path('data/corpus_fr_val.txt').read_bytes()\n# pour chaque fenêtre de 128 octets de val (pas de 128), marquer si verbatim dan … [1120 caractères tronqués]`
+
+  ```
+fenêtres 1810 contaminées 594 32.8 %
+blocs contigus (octets) : [1792, 1664, 1536, 1536, 1536, 1536, 1408, 1408, 1408, 1408, 1280, 1280, 1280, 1280, 1280] ... total blocs 127
+offset  107904 : passage identique de 1275 octets
+offset  113536 : passage identique de 1101 octets
+offset    9856 : passage identique de 341 octets
+offset   85248 : passage identique de 1154 octets
+offset  174592 : passage identique de 374 octets
+  ```
+
+### 🤖 Assistant
+
+⏵ Cadrage du programme : durée du professeur, taille des corpus externes, structure de la duplication
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ART=/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts; tail -3 $ART/teacher.log 2>/dev/null; head -20 data/corpus_fr_litterature.txt; echo \"...\"; head -5 data/corpus_en.txt; echo \"=== tailles ===\"; ls -la data/corp … [136 caractères tronqués]`
+
+  ```
+# meilleur point : pas 20000 · val 0.9195 bits/octet
+  # écrit dans /tmp/n2-campagne/route-teacher-20k · 23.57 M paramètres · 1.46 M poids lus/jeton/couche
+Au lecteur
+
+  Cette version électronique reproduit dans son intégralité
+  la version originale.
+
+  La ponctuation n'a pas été modifiée hormis quelques corrections
+  mineures.
+
+  L'orthographe a été conservée. Seuls quelques mots ont été modifiés.
+  La liste des modifications se trouve à la fin du texte.
+
+
+
+
+  AVENTURES D'ALICE
+
+  AU
+
+  PAYS DES MERVEILLES.
+
+...
+Anarchism is a political philosophy and movement that seeks to abolish all institutions that perpetuate authority, coercion, or hierarchy, primarily targeting the state and capitalism. Anarchism advocates for the replacement of the state with stateless societies and voluntary free associations.
+
+Although traces of anarchist ideas are found all throughout history, modern anarchism emerged from the Enlightenment. During the latter half of the 19th and the first decades of the 20th century, the anarchist movement flourished in most parts of the world and had a significant role in workers' struggles for emancipation. Various anarchist schools of thought formed during this per
+… [1135 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ART=/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts; grep -E \"^pas (5000|10000|15000|20000)\" $ART/teacher.log | tail -4; echo \"=== base ===\"; grep -E \"^pas (10000|20000)\" $ART/base.log | tail -2; echo \"=== lig … [111 caractères tronqués]`
+
+  ```
+=== base ===
+pas 10000 · perte 1.3044 · PPL val 4.260 · 456 s
+pas 20000 · perte 1.2159 · PPL val 4.024 · 880 s
+=== lignes ===
+   27 /home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts/teacher.log
+  430 /home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts/base.log
+  457 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ART=/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts; cat $ART/teacher.log | head -12; echo \"...\"; sed -n 20,27p $ART/teacher.log", "description": "Read the teacher log for duration"}`
+
+  ```
+/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/cuda/__init__.py:1061: UserWarning: Can't initialize NVML
+  raw_cnt = _raw_device_count_nvml()
+# route · 23.57 M paramètres · 1.46 M poids LUS par jeton et par couche · 4.06 M stockés · corpus 4402195 octets · cuda
+  pas   1000 · perte 1.3041 · val 1.7570 bits/octet · 88 s
+  pas   2000 · perte 1.2619 · val 1.5613 bits/octet · 173 s
+  pas   3000 · perte 1.1178 · val 1.4415 bits/octet · 253 s
+  pas   4000 · perte 1.0672 · val 1.3662 bits/octet · 337 s
+  pas   5000 · perte 0.9546 · val 1.2951 bits/octet · 421 s
+  pas   6000 · perte 1.0541 · val 1.2375 bits/octet · 505 s
+  pas   7000 · perte 0.9645 · val 1.1749 bits/octet · 589 s
+  pas   8000 · perte 0.9621 · val 1.1453 bits/octet · 673 s
+  pas   9000 · perte 1.0031 · val 1.1271 bits/octet · 757 s
+...
+  pas  17000 · perte 0.8939 · val 0.9716 bits/octet · 1437 s
+  pas  18000 · perte 0.7532 · val 0.9462 bits/octet · 1519 s
+  pas  19000 · perte 0.8127 · val 0.9254 bits/octet · 1605 s
+  pas  20000 · perte 0.8175 · val 0.9195 bits/octet · 1688 s
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  6.01it/s]Writing m
+… [217 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Programme des 10 h : le mètre d'abord, puis la capacité et le verrou de longueur
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "N2.h — le mètre propre : construire un corpus dédupliqué avec split train/val/test sans répétition (outil versionné + manifeste + vérification), refaire toute la chaîne sur ce corpus (professeur 23,5 M, base supervisée, distillation 20k × 3 graines, curriculum … [386 caractères tronqués]`
+
+> **Objectif** (create) : N2.h — le mètre propre : construire un corpus dédupliqué avec split train/val/test sans répétition (outil versionné + manifeste + vérification), refaire toute la chaîne sur ce corpus (professeur 23,5 M, base supervisée, distillation 20k × 3 graines, curriculum 129), mesurer la porte honnête et le profil hors domaine (littérature française, anglais, wikitext2), trancher la capacité (21,63 M) sur ce mètre, mesurer la décomposition (blocs, têtes précoces, pensée), puis attaquer le verrou de longueur avec des positions aléatoires (3 graines, 129→512 octets) ; écrire les fiches, le journal, l'état et la roadmap, passer les portes, committer.
+
+
+  ```
+{"goal":{"id":"goal-7e5e03db-88c5-4373-9ab3-8ed001aa777a","revision":1,"objective":"N2.h — le mètre propre : construire un corpus dédupliqué avec split train/val/test sans répétition (outil versionné + manifeste + vérification), refaire toute la chaîne sur ce corpus (professeur 23,5 M, base supervisée, distillation 20k × 3 graines, curriculum 129), mesurer la porte honnête et le profil hors domaine (littérature française, anglais, wikitext2), trancher la capacité (21,63 M) sur ce mètre, mesurer la décomposition (blocs, têtes précoces, pensée), puis attaquer le verrou de longueur avec des positions aléatoires (3 graines, 129→512 octets) ; écrire les fiches, le journal, l'état et la roadmap, passer les portes, committer.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **todo_write** `{"todos": [{"content": "Écrire tools/corpus_propre.py : déduplication par shingles, split par chunks, manifeste, vérification", "status": "in_progress"}, {"content": "Construire et vérifier data/corpus_propre/ (0 % de contamination, stats)", "status": "pending"}, {"content": "Entraîner le professeur … [745 caractères tronqués]`
+
+  ```
+Updated todo list: 9 pending, 1 in progress, 0 completed.
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"corpus_propre.py — un corpus sans répétition, et un split qui ne fuit pas.\n\nPOURQUOI. N2.d a mesuré que **32,8 %** des fenêtres du protocole de validation\napparaissent **verbatim** dans l'entraînement : le corpus empile des passages qui se\nrecopient (12 … [8947 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_propre.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys; sys.path.insert(0,'tools')\nfrom corpus_propre import deduit, hachages, couverture\ndata = b\"Le chat dort. Le chat mange. Le chat dort. Le chat mange. Il pleut.\"\npropre, stats = deduit(data, 8, min_r … [340 caractères tronqués]`
+
+  ```
+b'Le chat dort. \nIl pleut.'
+{'retires': 44, 'runs': 2, 'plus_long_run': 14}
+fenêtres répétées 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/corpus_propre.py'); s=p.read_text()\ns=s.replace('''    for i, c in enumerate(chunks):\n        if i % val_un_sur == val_un_sur - 1:\n            val.append(c)\n        elif i  … [1209 caractères tronqués]`
+
+  ```
+ok
+{
+ "source_octets": 4633889,
+ "propre_octets": 3605306,
+ "train_octets": 3244858,
+ "val_octets": 180224,
+ "test_octets": 180224,
+ "deduplication": {
+  "retires": 1029993,
+  "runs": 1411,
+  "plus_long_run": 540086,
+  "retires_pct": 22.23
+ },
+ "contamination": {
+  "validation": {
+   "fenetres": 2814,
+   "contaminees": 0,
+   "taux": 0.0
+  },
+  "test": {
+   "fenetres": 2814,
+   "contaminees": 0,
+   "taux": 0.0
+  }
+ }
+}
+[stderr]
+
+real	0m9,681s
+user	0m9,373s
+sys	0m0,310s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 400 data/corpus_propre/val.txt; echo; echo \"=== seams ===\"; python3 -c \"\nd=open('data/corpus_propre/val.txt','rb').read()\nprint(repr(d[8180:8200]))\nprint('taille', len(d), 'chunks', len(d)/8192)\n\"; echo \"=== entraine … [167 caractères tronqués]`
+
+  ```
+, la lecture n'en transfère que 0,638, et l'écart ne se réduit ni par plus
+de langues, ni par normalisation.
+3. L'attrition ne généralise pas : elle réduit la taille à coût faible et
+monotone. Le critère de validation est trop indulgent pour l'arrêter au bon
+13. RECTIFICATION — l'oracle du §10.2 était faux, et le plafond se décompose
+Le diagnostic du §10.2 (oracle 0,7762 contre nou
+=== seams ===
+b'e un doublonporte \xc3\xa0'
+taille 180224 chunks 22.0
+=== entrainer_moteur flags ===
+usage: entrainer_moteur.py [-h] [--famille {dense,route}]
+                           [--donnees DONNEES [DONNEES ...]]
+                           [--validation VALIDATION] [--dim DIM]
+                           [--couches COUCHES] [--tetes TETES] [--cache CACHE]
+                           [--cache-perle CACHE_PERLE] [--experts EXPERTS]
+                           [--k K] [--seq SEQ] [--lot LOT] [--pas PAS]
+                           [--lr LR] [--graine GRAINE] [--verifier-sauvegarde]
+                           [--init INIT] [--recurrence-max RECURRENCE_MAX]
+                           [--partage] [--alignement ALIGNEMENT]
+                           [--enseignant ENSEIGNANT]
+                           [--alp
+… [876 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"meilleur\\|best\\|validation\" tools/entrainer_moteur.py | head -12; echo \"=== native ===\"; PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --help 2>&1 | head -20", "description": "Check whether the teacher ea … [25 caractères tronqués]`
+
+  ```
+145:    (13,06 contre 7,57) et bien meilleur à 25 % (17,50 contre 49,43). Mais le variant diffère du
+250:    alors plus le modèle entraîné (validation **3,6465** → **8,8257** bits/octet), et la
+283:        # 1,097 au lieu de −2,8, et une validation d'entraînement à 3,0713 bits/octet au lieu de
+416:def perte_de_validation(modele, val, a, dev):
+427:    # parfait au PREMIER pas ✓✗ — c'est ce qui est arrivé au modèle français seul (927 octets de validation pour
+428:    # 2 048 par lot ✓✓) : le fichier écrit est celui du pas 500, pas le meilleur ✓✗. On répète le texte pour
+448:    poids qui ne reproduisaient PAS le modèle entraîné — validation 2,2662 bits/octet
+459:    qu'on a calculé. C'est là que la perte de validation passait de **3,6465** à **8,8257**
+730:    p.add_argument("--validation", default="data/corpus_en_val.txt")
+744:                   help="APRÈS l'écriture : recalculer la perte de validation avec le modèle EN "
+752:                        "(mesuré ailleurs : sans cela, le bloc répété est meilleur à t=1 (82,9 contre "
+826:    val = charger([a.validation])
+=== native ===
+usage: entrainer_native.py [-h] [--corpus CORPUS] [--pas PAS] [--seq SEQ]
+                           [-
+… [419 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"meilleur_pas\\|meilleure\\|sauve\\|\\[.meilleur\\|argmin\\|min(\" tools/entrainer_moteur.py | head -15", "description": "Check checkpoint selection in the teacher trainer"}`
+
+  ```
+262:    # `tools/porte-sauvegarde-modele.sh` le voit et passe au ROUGE.
+434:        for k in range(max(1, min(8, (len(val) - 1) // (a.seq * a.lot)))):
+743:    p.add_argument("--verifier-sauvegarde", action="store_true",
+793:                        "M8 (le fichier sauve ne reproduisait pas le modele entraine) est "
+888:        a.lr = min(a.lr, 3e-4)
+985:            # ⚠️ REMETTRE LA FORME DE BASE APRÈS CHAQUE PAS ✗✓ : le trainer sauvegarde le **meilleur point
+1010:            frac = min(1.0, pas / max(1, a.pas * 0.5)) ** 3
+1019:                for k in range(min(8, (len(val) - 1) // (a.seq * a.lot))):
+1043:    t_avant = perte_de_validation(modele, val, a, dev) if a.verifier_sauvegarde else None
+1046:    # l'état du pas où la validation était la meilleure : si c'est le pas 1000, le fichier porte
+1059:    t_restaure = perte_de_validation(modele, val, a, dev) if a.verifier_sauvegarde else None
+1089:    # l'oublier faisait sauver des clés `parametrizations.weight.original` que l'exporteur ne
+1093:    t_materialise = perte_de_validation(modele, val, a, dev) if a.verifier_sauvegarde else None
+1111:    # fait le poids lié ✓), et la bibliothèque **refuse** de sauvegarder des tenseurs partagé
+… [46 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/n2h && python3 - <<'EOF'\nimport pathlib\ntr = pathlib.Path('data/corpus_propre/train.txt').read_bytes()\nchunk = 8192\nmorceaux = [tr[i:i+chunk] for i in range(0, len(tr), chunk)]\ndev = b''.join(m for i, m in enumerat … [1110 caractères tronqués]`
+
+  ```
+dev 320314 octets 397 chunks de train
+=== lancement professeur (GPU0) et base (GPU1) ===
+teacher pid 556252
+base pid 556253
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"eval_n2_propre.py — la porte honnête : PPL sur un corpus dédupliqué, et hors domaine.\n\nLe corpus de `data/corpus_propre/` est construit par `tools/corpus_propre.py` : passages\nrépétés retirés, split par chunks contigus, **zéro fenêtre de validation dans\ … [6378 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_propre.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 900 ~/gpu-env/bin/python tools/eval_n2_propre.py \\\n  /home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts/temoin-g1.pt --decomposition --longueurs 2>&1 | grep -v Loading", "de … [66 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_propre.py", line 150, in <module>
+    main()
+    ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_propre.py", line 137, in main
+    r["decomposition"] = decompose(m, val, a.chunk, a.device)
+                         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_propre.py", line 97, in decompose
+    res["complete"] = round(math.exp(float(F.cross_entropy(
+                            ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+        s["logits"].reshape(-1, 256), y.reshape(-1))), 4))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: math.exp() takes exactly one argument (2 given)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/eval_n2_propre.py'); s=p.read_text()\ns=s.replace('''        res[\"complete\"] = round(math.exp(float(F.cross_entropy(\n            s[\"logits\"].reshape(-1, 256), y.reshape(-1 … [944 caractères tronqués]`
+
+  ```
+ok
+{"fichier": "temoin-g1.pt", "params": 11814792, "val": 2.9079, "test": 2.9355, "litterature": 15.5376, "anglais": 51.8854, "wikitext2": 50.7895, "permute": 1146.6567, "decomposition": {"complete": 2.9234, "apres_2_blocs": 3.719, "apres_4_blocs": 3.0789, "apres_6_blocs": 2.8708, "sans_pensee": 40758083.6251}, "longueurs": {"129": 2.9535, "192": 8.1301, "256": 13.3328, "384": 22.4291, "512": 28.9747}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2h/teacher.log; tail -2 work/n2h/base.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Check teacher and base training progress"}`
+
+  ```
+22:23
+# route · 23.57 M paramètres · 1.46 M poids LUS par jeton et par couche · 4.06 M stockés · corpus 3244858 octets · cuda
+  pas   1000 · perte 1.3509 · val 2.0747 bits/octet · 83 s
+pas 2550 · perte 1.7994 · PPL val 5.945 · 112 s
+pas 2600 · perte 1.5981 · PPL val 5.863 · 115 s
+0, 1228 MiB, 54 %
+1, 730 MiB, 49 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/corpus_propre.py'); s=p.read_text()\ns=s.replace('''    ap.add_argument(\"--test\", type=int, default=20)''','''    ap.add_argument(\"--test\", type=int, default=20)\n    ap.ad … [745 caractères tronqués]`
+
+  ```
+ok
+ "train_octets": 15332926,
+ "val_octets": 843776,
+ "test_octets": 843776,
+ "deduplication": {
+  "retires": 11337,
+  "runs": 69,
+  "plus_long_run": 1816753,
+  "retires_pct": 0.07
+ },
+ "contamination": {
+  "validation": {
+   "fenetres": 3000,
+   "contaminees": 0,
+   "taux": 0.0
+  },
+  "test": {
+   "fenetres": 3000,
+   "contaminees": 0,
+   "taux": 0.0
+  }
+ }
+}
+[stderr]
+
+real	0m41,742s
+user	0m40,772s
+sys	0m0,968s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\nrepo = pathlib.Path('data/corpus_propre/train.txt').read_bytes()\nlitt = pathlib.Path('data/corpus_litt_propre/train.txt').read_bytes()\nC = 8192\nrc = [repo[i:i+C] for i in range(0, len(repo), C)]\ … [815 caractères tronqués]`
+
+  ```
+mixte 6144000 (35 % repo / 65 % littérature… en fait 50/50 par construction)
+repo 3244858 litt échantillon 3072000 dev 614400
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/eval_n2_propre.py'); s=p.read_text()\ns=s.replace('''    lit = charger_bytes(RACINE / \"data/corpus_fr_litterature.txt\")''',\n'''    lit = charger_bytes(RACINE / \"data/corpus … [838 caractères tronqués]`
+
+  ```
+ok
+22:24
+  pas   2000 · perte 1.2665 · val 1.8957 bits/octet · 162 s
+pas 4500 · perte 1.3484 · PPL val 5.098 · 198 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"21 634 536\\|21634536\\|21,63 M\\|21.63\" reports/*.md docs/ | head -8; echo \"=== config native ===\"; grep -n \"d_model\\|dim\\|21\" reports/rapport-native-21m-20k.md | head -10", "description": "Find the 21.63M model co … [13 caractères tronqués]`
+
+  ```
+reports/INDEX.md:224:| [rapport-native-21m-20k.md](rapport-native-21m-20k.md) | N2.9 — student 21,63 M sur 20 000 pas : 3,381, toujours derrière 11,47 M |
+reports/INDEX.md:231:| [rapport-native-capacite-egal.md](rapport-native-capacite-egal.md) | N2.5b — capacité à budget égal : 21,63 M bat 11,47 M de 4,1 % |
+reports/rapport-coherence-docs-2.md:82:| 28 | `docs/implantation/format-flux.md:58-61`, `REPRISE.md:248,340-341`, `docs/pilotage/roadmap.md:94` | v3 : **45 079 930 o** (−32,1 % vs v2), rejeu 19,4029 (+0,074 %), 21 630 645 actifs | valeurs cohérentes entre documents ; l'exécution courte confirme le sens (v3 plus petite, 166 206 actifs contre 171 554 sur la même trace de 4 jetons) | OK |
+reports/rapport-n2-distillation.md:84:capacité** (le 21,63 M à budget égal donnait −8,1 %), et **la fenêtre brute**, que R11 doit
+reports/rapport-native-21m-20k.md:1:# N2.9 — student 21,63 M sur 20 000 pas : 3,381, toujours derrière 11,47 M
+reports/rapport-native-21m-20k.md:3:> **Objet.** Donner au student de 21,63 M un **vrai budget** (20 000 pas) pour voir si la capacité
+reports/rapport-native-21m-20k.md:9:- Student : **21 634 536** paramètres, initialisation aléatoire, **20 000 pas**, lot 8, 
+… [771 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nfrom tools.native_model import NativeConfig, NativeModel\ncible = 21_634_536\nbest = []\nfor d in range(224, 449, 8):\n    for eh in (288, 320, 352, 384, 416, 448, 512):\n        c = NativeConfig(d_model=d, expert_ … [331 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/native_model.py", line 17, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. ~/gpu-env/bin/python - <<'EOF'\nfrom tools.native_model import NativeConfig, NativeModel\ncible = 21_634_536\nbest = []\nfor d in range(224, 481, 8):\n    for eh in (288, 320, 352, 384, 416, 448, 512, 576):\n        c =  … [361 caractères tronqués]`
+
+  ```
+écart  11688 · d_model 296 · expert_hidden 416 · 21,646,224 paramètres
+écart  16280 · d_model 280 · expert_hidden 448 · 21,650,816 paramètres
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout des positions aléatoires (attaque du verrou de longueur) au modèle et au distillateur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/native_model.py'); s=p.read_text()\ns=s.replace('''    def forward(self, ids):\n        b, s = ids.shape\n        x = self.embed(ids) + self.pos(torch.arange(s, device=ids.devi … [2268 caractères tronqués]`
+
+  ```
+native_model ok
+distiller_budget ok
+positions par défaut identiques : True
+offset 5 change : True
+  ```
+

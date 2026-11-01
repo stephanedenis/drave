@@ -3773,3 +3773,423 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 **Portes** : revue de documentation, tableaux, état, document, schémas, journal, sessions, backlog, budget et OCR — **toutes vertes**.
 
+
+## Tour 2
+
+### 👤 Utilisateur
+
+tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it que tu n'y est pas arrivée. J'accueille tes résultars et écarts sans jugement.
+
+### 🤖 Assistant
+
+⏵ Ouverture d'un programme de 10 h : rendre R4.4 robuste aux scans
+
+- **create_goal** `{"objective": "R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négat … [209 caractères tronqués]`
+
+> **Objectif** (create) : R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer fiches, JSON, docs, porte, roadmap, en-cours, journal et commits. Continuer les rounds tant que l'heure système est avant l'échéance de 10 h (≈ 2026-11-01 04 h 20 HAE).
+
+
+  ```
+{"goal":{"id":"goal-a1de2753-e989-4813-b730-20de506599cf","revision":1,"objective":"R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer fiches, JSON, docs, porte, roadmap, en-cours, journal et commits. Continuer les rounds tant que l'heure système est avant l'échéance de 10 h (≈ 2026-11-01 04 h 20 HAE).","phase":"active","roundsStarted":0,"maxGoalRounds":200},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "date \"+%Y-%m-%d %H:%M:%S %Z\"; echo start=$(date +%s) > /tmp/r44-echeance.txt; echo deadline=$(date -d \"+10 hours\" +%s) >> /tmp/r44-echeance.txt; cat /tmp/r44-echeance.txt; date -d @$(grep deadline /tmp/r44-echeance.txt | cut -d= -f2) \"+échéance %Y-%m-%d %H:%M\"; nproc; free -g | he … [156 caractères tronqués]`
+
+  ```
+2026-10-31 22:14:53 EDT
+start=1793499293
+deadline=1793535293
+échéance 2026-11-01 07:14
+40
+               total        used        free      shared  buff/cache   available
+Mem:             125          15          86           6          31         109
+/dev/mapper/system-root   11T  8,9T  2,0T  82% /home/stephane/Data13TB
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport importlib\nfor m in [\"numpy\",\"cv2\",\"scipy\",\"skimage\",\"PIL\",\"reportlab\",\"matplotlib\",\"pandas\"]:\n    try:\n        mod=importlib.import_module(m); print(m,\"OK\",getattr(mod,\"__version__\",\"\"))\n    except Exception as e: print(m,\"absent\")\nP … [253 caractères tronqués]`
+
+  ```
+numpy OK 2.5.3
+cv2 absent
+scipy OK 1.18.1
+skimage absent
+PIL OK 13.0.0
+reportlab OK 4.5.1
+matplotlib OK 3.10.9
+pandas absent
+=== outils
+convert: /usr/bin/convert
+magick: /usr/bin/magick
+pdftoppm: /usr/bin/pdftoppm
+pdfimages: /usr/bin/pdfimages
+gs: /usr/bin/gs
+  ```
+
+### 🤖 Assistant
+
+⏵ Démarrage : corpus de scans, baseline et journal de bord
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; python3 tools/sessions.py --status 2>&1 | head -8; echo \"=== git\"; git log --oneline -2; echo \"=== autres sessions actives\"; pgrep -af \"distiller_budget\" | grep -v pgrep | wc -l", "description": "Check concurrent sessions and clock", "workdir": "/home/stephane/ … [34 caractères tronqués]`
+
+  ```
+22:15:32
+sessions · plans de mandat
+    0b0a6a0d-05f5-4308 · terminé  · 126 min · N2 — le budget complet, les données et le curriculum
+      → **close** — N2.d est mesuré : budget **2,9355 → 2,8527**, quatre sources
+    0b69f616-5c75-4c34 · terminé  · 1455 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 626 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+      → clôture committée (`eff8d8e4`) — session close ; la suite est **N2** (la hiérarchie), portée par la session à ouvrir
+    71d57f53-8b41-4220 · terminé  · 1959 min · docs/pilotage/en-cours.md, docs/methode/continuite.md, tools/sessions.py
+=== git
+77ceb533 DOCS — LE CONTRAT EST L'INVARIANT, LA TECHNOLOGIE EST LA VARIABLE : MODES, GRANULARITÉ, GRAPHE DYNAMIQUE
+10fa4f42 RÉFÉRENCES — LA PASSE DU 31 À 19 h 42 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET
+=== autres sessions actives
+0
+  ```
+
+- **bash** `{"command": "mkdir -p work/r44\ncat > work/r44/journal.md <<'EOF'\n# Journal de bord — OCR robuste (R4.4), programme 10 h\nÉchéance : 2026-11-01 07:14 (epoch dans /tmp/r44-echeance.txt)\nEOF\necho \"=== PDFs du corpus\"; find data -iname \"*.pdf\" | sed 's#data/##' | cut -d/ -f1-2 | sort | uniq -c | … [381 caractères tronqués]`
+
+  ```
+=== PDFs du corpus
+     25 onu/pdf
+=== pages sans texte (candidats scans)
+  ```
+
+- **bash** `{"command": "sed -n 1,80p docs/pilotage/en-cours.md", "description": "Read current state after 4 hours", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-10-31, 18 h 15 HAE (heure locale, EDT).**
+
+> **État courant, pas histoire.** Une sous-section par **session active** ; une ligne par **chantier** avec son
+> **bloquant**. Les détails de méthode sont dans [`methode/`](../methode/) — chargement et budget dans
+> [`contexte.md`](../methode/contexte.md), contrat des sessions dans [`continuite.md`](../methode/continuite.md).
+> Les résultats sont dans [`reports/`](../../reports/) ; l'histoire dans
+> [`journal/`](../../journal/) ; le plan dans [`roadmap.md`](roadmap.md).
+
+## Sessions en cours
+
+> Contrat et budget : [`continuite.md`](../methode/continuite.md) ; sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/).
+
+> **Plan d'abord.** Chaque session active expose son mandat dans
+> [`journal/sessions/`](../../journal/sessions/) (`<id>/plan.md`) ; `python3 tools/sessions.py --status`
+> avant d'écrire ici.
+
+> **Écriture.** Toute session écrit l'état, **une à la fois** : un commit est atomique, et
+> aucun fait (`reports/`, roadmap, backlog) ne se commite sans sa ligne. La garantie est au
+> commit, pas dans un rôle : `tools/verifie_etat_a_jour.py` refuse le commit (hook
+> `pre-commit`) et la p
+… [4273 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git log --oneline 0088fc2f..HEAD | head -20; echo \"=== R4.4 depuis\"; git log --oneline -S\"R4.4\" -- docs | head -8", "description": "See commits since my result", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+77ceb533 DOCS — LE CONTRAT EST L'INVARIANT, LA TECHNOLOGIE EST LA VARIABLE : MODES, GRANULARITÉ, GRAPHE DYNAMIQUE
+10fa4f42 RÉFÉRENCES — LA PASSE DU 31 À 19 h 42 ENTRE EN TÊTE, LA PAGE RESTE SOUS SON BUDGET
+c3bcbe99 N2 — LE BUDGET PAIE 2,8 %, LES QUATRE SOURCES COÛTENT 91 %, ET LA VALIDATION EST CONTAMINÉE À 32,8 %
+c83f17d5 DOCS — SEUILS PRÉ-ENREGISTRÉS ET COÛT DE LA STDP : LE RENVERSEMENT
+2ac27021 DOCS — LE COÛT CACHÉ DE LA STDP SYMÉTRIQUE, LA LECTURE D'UN PAS ET LES QUESTIONS OUVERTES
+ffad1c53 DOCS — LE MODÈLE NATIF ET DIEHL & COOK ENRICHIS : QUOTIENT, TYPES, NEUTRALITÉ, DÉTERMINISME, BANC, CONFORMITÉ
+b8683d00 SESSION — R4.4 SE FERME SUR `0088fc2f` : L'OCR EST MESURÉ, R4.4 RESTE OUVERTE AUX SCANS
+=== R4.4 depuis
+c3bcbe99 N2 — LE BUDGET PAIE 2,8 %, LES QUATRE SOURCES COÛTENT 91 %, ET LA VALIDATION EST CONTAMINÉE À 32,8 %
+b8683d00 SESSION — R4.4 SE FERME SUR `0088fc2f` : L'OCR EST MESURÉ, R4.4 RESTE OUVERTE AUX SCANS
+0088fc2f R4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 %
+eff8d8e4 SESSIONS — 104 ARCHIVES RETROUVÉES, CINQ CLÔTURES, L'ÉTAT À UNE SEULE SESSION
+68590bf0 LE GRAPHE CONFRONTE L'INDEX, L'ÉTAT POINTE LA FRONTIÈ
+… [286 caractères tronqués]
+  ```
+
+- **todo_write** `{"todos": [{"content": "Construire le simulateur de scans (5 familles, vérité terrain, manifeste)", "status": "in_progress"}, {"content": "Mesurer la baseline OCR sur les scans (WER, parité, contrôles)", "status": "pending"}, {"content": "Implémenter le prétraitement (recadrage, redressement, débrui … [584 caractères tronqués]`
+
+  ```
+Updated todo list: 7 pending, 1 in progress, 0 completed.
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"simuler_scan.py — le corpus de scans SIMULÉS de R4.4, avec sa vérité terrain.\n\nPOURQUOI CE FICHIER. Le pilote R4.4 a mesuré des pages **rendues** (vectorielles) : propre,\nmais ce n'est pas un scan. Il n'y a pas de scanner sur la machine, et un corpus de  … [12231 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/simuler_scan.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/simuler_scan.py'); s=p.read_text()\ns=s.replace('''import argparse\nimport json\nimport pathlib\nimport subprocess\nimport sys''','''import argparse\nimport hashlib\nimport json\nimport pathlib\nimport sys''')\ns=s.replace('''def _ … [1187 caractères tronqués]`
+
+  ```
+ok
+compile OK
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/simuler_scan.py", line 79, in _perspective
+    return im.transform((w, h), Image.PERSPECTIVE, tuple(coeffs),
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        resample=Image.BICUBIC, fillcolor=(255, 255, 255))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/site-packages/PIL/Image.py", line 3002, in transform
+    im = new(self.mode, size, fillcolor)
+  File "/usr/lib64/python3.13/site-packages/PIL/Image.py", line 3228, in new
+    _check_size(size)
+    ~~~~~~~~~~~^^^^^^
+  File "/usr/lib64/python3.13/site-packages/PIL/Image.py", line 3204, in _check_size
+    if size[0] < 0 or size[1] < 0:
+                      ^^^^^^^^^^^
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/simuler_scan.py'); s=p.read_text()\ns=s.replace('''    b = dst.reshape(-1)\n    h = np.linalg.solve(np.array(a), b)\n    h = np.append(h, 1.0).reshape(3, 3)\n    h_inv = np.linalg.inv(h)\n    coeffs = (h_inv / h_inv[2, 2]).flatten( … [553 caractères tronqués]`
+
+  ```
+A_RES_80_10-fr-p2-s1-propre.png · 2550×3300
+  A_RES_80_10-fr-p2-s1-photocopie.png · 1700×2200
+  A_RES_80_10-fr-p2-s1-photo.png · 1530×1980
+  A_RES_80_10-fr-p2-s1-fax.png · 1060×1360
+  A_RES_80_10-fr-p2-s1-papier.png · 2125×2750
+  A_RES_80_10-en-p2-s1-propre.png · 2550×3300
+  A_RES_80_10-en-p2-s1-photocopie.png · 1700×2200
+  A_RES_80_10-en-p2-s1-photo.png · 1530×1980
+  A_RES_80_10-en-p2-s1-fax.png · 1060×1360
+  A_RES_80_10-en-p2-s1-papier.png · 2125×2750
+
+10 scans → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/scans/manifeste.json
+  ```
+
+- **read_image** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/scans/A_RES_80_10-fr-p2-s1-photo.png"}`
+
+  ```
+Error: cannot read "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/scans/A_RES_80_10-fr-p2-s1-photo.png" as an image: model "deepseek-flash" does not declare image input; switch to an image-capable model to read images
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json,pathlib,time\nimport numpy as np\nfrom PIL import Image\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco, graphe_document_pdf as gdp, mesurer_ocr as mo\nman=json.load(open('work/r44/scans/manifeste.json'))\nnat_cache={}\nfor e in man['entr … [887 caractères tronqués]`
+
+  ```
+A_RES_80_10-fr-p2-s1-propre.png              2550x3300 moy=243.5 ect= 49.0 WER= 2.15% mots= 552 conf= 94.3  3.2s
+A_RES_80_10-fr-p2-s1-photocopie.png          1700x2200 moy=240.4 ect= 41.4 WER= 5.73% mots= 549 conf= 89.9  2.7s
+A_RES_80_10-fr-p2-s1-photo.png               1530x1980 moy=179.1 ect= 39.3 WER=51.79% mots= 279 conf= 92.4  1.6s
+A_RES_80_10-fr-p2-s1-fax.png                 1060x1360 moy=243.8 ect= 46.1 WER=71.86% mots= 468 conf= 37.8  2.1s
+A_RES_80_10-fr-p2-s1-papier.png              2125x2750 moy=186.9 ect= 33.1 WER= 2.15% mots= 552 conf= 94.3  3.4s
+A_RES_80_10-en-p2-s1-propre.png              2550x3300 moy=242.7 ect= 50.6 WER= 1.10% mots= 540 conf= 94.8  3.3s
+A_RES_80_10-en-p2-s1-photocopie.png          1700x2200 moy=239.6 ect= 42.7 WER= 3.11% mots= 540 conf= 92.1  2.8s
+A_RES_80_10-en-p2-s1-photo.png               1530x1980 moy=178.5 ect= 39.9 WER=50.37% mots= 276 conf= 95.0  1.6s
+A_RES_80_10-en-p2-s1-fax.png                 1060x1360 moy=243.0 ect= 47.8 WER=65.20% mots= 454 conf= 47.3  2.0s
+A_RES_80_10-en-p2-s1-papier.png              2125x2750 moy=186.3 ect= 34.1 WER= 1.28% mots= 541 conf= 94.8  3.5s
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,time\nsys.path.insert(0,'tools')\nimport simuler_scan as ss, graphe_document_ocr as gco, mesurer_ocr as mo\nfrom PIL import Image\npdf=pathlib.Path('data/onu/pdf/A_RES_80_10-fr.pdf'); page=2\npropre=ss.rendre_300(pdf,page)\nnat=mo.manifeste_natif(pdf … [2420 caractères tronqués]`
+
+  ```
+photo_doux                         WER= 1.79% mots= 553 conf= 94.1  3.1s
+photo_moyen                        WER= 2.33% mots= 549 conf= 92.7  2.9s
+photo_actuel                       WER= 5.38% mots= 548 conf= 89.7  2.7s
+papier_doux                        WER= 4.12% mots= 547 conf= 91.2  3.1s
+papier_fort                        WER=53.41% mots= 274 conf= 89.2  1.6s
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,time\nimport numpy as np\nfrom PIL import Image, ImageOps, ImageFilter\nfrom scipy.ndimage import gaussian_filter, uniform_filter, median_filter\nsys.path.insert(0,'tools')\nimport graphe_document_ocr as gco, mesurer_ocr as mo\npdf=pathlib.Path('data … [1743 caractères tronqués]`
+
+  ```
+photo_brut                       psm3 WER=51.79% mots= 279 conf= 92.4  1.5s
+photo_psm1                       psm1 WER=51.79% mots= 279 conf= 92.4  1.9s
+photo_psm4                       psm4 WER=51.61% mots= 281 conf= 92.3  1.5s
+photo_psm6                       psm6 WER=45.88% mots= 333 conf= 88.6  1.6s
+photo_eclair                     psm3 WER= 3.76% mots= 545 conf= 93.8  2.1s
+photo_eclair_x2                  psm3 WER= 3.23% mots= 546 conf= 93.2  3.2s
+photo_eclair_sauvola             psm3 WER= 3.94% mots= 546 conf= 91.7  2.1s
+fax_brut                         psm3 WER=71.86% mots= 468 conf= 37.8  2.2s
+fax_x3                           psm3 WER=94.44% mots= 598 conf= 26.8  4.3s
+fax_x3_sauvola                   psm3 WER=87.63% mots= 565 conf= 29.2  3.8s
+fax_x3_eclair                    psm3 WER=97.85% mots= 616 conf= 27.2  4.8s
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,time\nimport numpy as np\nfrom PIL import Image, ImageOps, ImageFilter\nfrom scipy.ndimage import map_coordinates, median_filter\nsys.path.insert(0,'tools')\nimport simuler_scan as ss, graphe_document_ocr as gco, mesurer_ocr as mo\npdf=pathlib.Path(' … [1450 caractères tronqués]`
+
+  ```
+fax_150_brut                   psm3 WER=18.82% mots= 533 conf= 76.0 2.2s
+fax_150_med_x2                 psm3 WER=37.63% mots= 547 conf= 60.6 3.4s
+fax_180_brut                   psm3 WER=13.08% mots= 545 conf= 82.0 2.3s
+fax_180_med_x2                 psm3 WER=16.67% mots= 540 conf= 79.9 3.8s
+fax_200_brut                   psm3 WER= 7.35% mots= 548 conf= 86.3 2.4s
+fax_200_med_x2                 psm3 WER= 9.14% mots= 541 conf= 85.0 4.1s
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,time\nimport numpy as np\nfrom PIL import Image, ImageFilter\nfrom scipy.ndimage import map_coordinates\nsys.path.insert(0,'tools')\nimport simuler_scan as ss, graphe_document_ocr as gco, mesurer_ocr as mo\npdf=pathlib.Path('data/onu/pdf/A_RES_80_10- … [2055 caractères tronqués]`
+
+  ```
+fax_120_sans_gigue             psm3 WER=29.93% mots= 538 conf= 64.9
+fax_140_sans_gigue             psm3 WER=18.82% mots= 533 conf= 72.4
+fax_160_sans_gigue             psm3 WER=16.49% mots= 541 conf= 76.8
+fax_140_gigue03                psm3 WER=23.66% mots= 533 conf= 72.2
+fax_160_gigue03                psm3 WER=17.03% mots= 533 conf= 77.8
+papier_180_b1.2_q25            psm3 WER=20.25% mots= 467 conf= 90.5
+papier_200_b0.8_q30            psm3 WER= 3.23% mots= 547 conf= 92.9
+papier_160_b1.0_q25            psm3 WER=20.07% mots= 461 conf= 92.1
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nimport numpy as np\nfrom PIL import Image, ImageFilter\nfrom scipy.ndimage import map_coordinates, median_filter, grey_opening, grey_closing\nsys.path.insert(0,'tools')\nimport simuler_scan as ss, graphe_document_ocr as gco, mesurer_ocr as mo\npdf=p … [1411 caractères tronqués]`
+
+  ```
+brut                               psm3 WER=29.93% conf= 64.9
+med3_x2                            psm3 WER=97.85% conf= 23.8
+med3_x2_flou05                     psm3 WER=98.39% conf= 23.3
+med3_x3                            psm3 WER=110.22% conf= 25.5
+med3_x3_flou05                     psm3 WER=109.68% conf= 25.5
+ouv3_x2                            psm3 WER=73.48% conf= 38.7
+ouv3_x2_flou05                     psm3 WER=72.22% conf= 39.6
+ouv3_x3                            psm3 WER=75.27% conf= 39.4
+ouv3_x3_flou05                     psm3 WER=76.16% conf= 39.2
+[stderr]
+aucun bloc OCR : /tmp/faxr-ferm3_x2.png
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib,subprocess,time\nimport numpy as np\nfrom PIL import Image, ImageFilter\nsys.path.insert(0,'tools')\nimport simuler_scan as ss, graphe_document_ocr as gco, mesurer_ocr as mo\npdf=pathlib.Path('data/onu/pdf/A_RES_80_10-fr.pdf'); page=2\npropre=ss.rend … [2417 caractères tronqués]`
+
+  ```
+brut_dpi_defaut                WER=34.59% mots=538
+brut_dpi120                    WER=34.59% mots=538
+brut_dpi300                    WER=35.84% mots=525
+x1.5_flou_seuil                WER=48.92% mots=540
+x2.0_flou_seuil                WER=22.04% mots=539
+brut_psm4                       WER=31.54% mots=538
+brut_psm6                       WER=27.42% mots=543
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport graphe_document_pdf as gdp, mesurer_ocr as mo\ndev={(p['pdf'].name,p['page']) for p in mo.pages_du_banc(10)}\nprint('dev:',sorted(dev))\nfor pdf in sorted(pathlib.Path('data/onu/pdf').glob('A_RES_80_1*.pdf'))+sorte … [300 caractères tronqués]`
+
+  ```
+dev: [('A_RES_80_1-en.pdf', 1), ('A_RES_80_1-en.pdf', 2), ('A_RES_80_1-es.pdf', 1), ('A_RES_80_1-fr.pdf', 1), ('A_RES_80_10-en.pdf', 1), ('A_RES_80_10-en.pdf', 2), ('A_RES_80_10-es.pdf', 1), ('A_RES_80_10-es.pdf', 2), ('A_RES_80_10-fr.pdf', 1), ('A_RES_80_10-fr.pdf', 2)]
+A_RES_80_1-en.pdf 2 pages []
+A_RES_80_1-es.pdf 2 pages [2]
+A_RES_80_1-fr.pdf 2 pages [2]
+A_RES_80_1-ru.pdf 2 pages [1, 2]
+A_RES_80_1-zh.pdf 2 pages [1, 2]
+A_RES_80_10-en.pdf 3 pages [3]
+A_RES_80_10-es.pdf 3 pages [3]
+A_RES_80_10-fr.pdf 3 pages [3]
+A_RES_80_10-ru.pdf 3 pages [1, 2, 3]
+A_RES_80_10-zh.pdf 3 pages [1, 2, 3]
+A_RES_80_10-en.pdf 3 pages [3]
+A_RES_80_10-es.pdf 3 pages [3]
+A_RES_80_10-fr.pdf 3 pages [3]
+A_RES_80_10-ru.pdf 3 pages [1, 2, 3]
+A_RES_80_10-zh.pdf 3 pages [1, 2, 3]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/simuler_scan.py'); s=p.read_text()\n\n# --- fax : 120 dpi, binarisation dure, sel-et-poivre, SANS gigue (la gigue rendait le texte\n#     irrécupérable même en upscalant : une famille qu'aucun prétraitement ne relève ne mesure rien … [7904 caractères tronqués]`
+
+  ```
+simulateur calibré
+OK
+  ```
+
+- **bash** `{"command": "rm -rf work/r44/scans && timeout 1800 python3 tools/simuler_scan.py --sortie work/r44/scans --pages 10 --test 10 --graines 1 2>&1 | tail -6", "description": "Generate full scan corpus", "run_in_background": true, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+started background job bash-179
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"nettoyer_scan.py — le prétraitement d'un scan, par étapes NOMMÉES et mesurables.\n\nPOURQUOI CE FICHIER. Un OCR ne voit pas un document, il voit des pixels. Le pilote R4.4 l'a\nmontré sur une photo simulée : **51,8 %** de WER sur l'image brute, **3,8 %** ap … [8349 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/nettoyer_scan.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **job_output** `{"job_id": "bash-179"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"mesurer_scans.py — R4.4 : les scans SIMULÉS, mesurés famille par famille et pipeline par pipeline.\n\nPOURQUOI CE FICHIER. Le pilote R4.4 a mesuré des pages rendues, pas des scans. `simuler_scan.py`\nfabrique cinq familles de scans (photocopie, photo, fax,  … [10757 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_scans.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **job_output** `{"job_id": "bash-179"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ls work/r44/scans/*.png 2>/dev/null | wc -l; ls work/r44/scans/ | tail -3; date +%H:%M:%S; pgrep -af simuler_scan | grep -v pgrep | head -2", "description": "Check scan corpus generation progress", "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+42
+A_RES_80_1-fr-p1-s1-photo.png
+A_RES_80_1-fr-p1-s1-propre.png
+_tmp.jpg
+22:25:27
+557444 bash -c rm -rf work/r44/scans && timeout 1800 python3 tools/simuler_scan.py --sortie work/r44/scans --pages 10 --test 10 --graines 1 2>&1 | tail -6
+557452 timeout 1800 python3 tools/simuler_scan.py --sortie work/r44/scans --pages 10 --test 10 --graines 1
+  ```
+
+- **bash** `{"command": "for f in A_RES_80_10-fr-p2-s1-photo.png A_RES_80_10-fr-p2-s1-fax.png A_RES_80_10-fr-p2-s1-papier.png A_RES_80_10-fr-p2-s1-photocopie.png; do echo \"=== $f\"; timeout 120 python3 tools/nettoyer_scan.py work/r44/scans/$f --sortie /tmp/net-$f --json 2>&1 | tail -9; done", "description": "T … [125 caractères tronqués]`
+
+  ```
+=== A_RES_80_10-fr-p2-s1-photo.png
+ "trace": [
+  "recadrage",
+  "echelle"
+ ],
+ "sortie": [
+  2500,
+  3462
+ ]
+}
+=== A_RES_80_10-fr-p2-s1-fax.png
+ "trace": [
+  "echelle",
+  "lissage"
+ ],
+ "sortie": [
+  2500,
+  3207
+ ]
+}
+=== A_RES_80_10-fr-p2-s1-papier.png
+  "recadrage",
+  "redressement(-0.75)",
+  "echelle"
+ ],
+ "sortie": [
+  2500,
+  3535
+ ]
+}
+=== A_RES_80_10-fr-p2-s1-photocopie.png
+  "recadrage",
+  "redressement(-0.75)",
+  "echelle"
+ ],
+ "sortie": [
+  2500,
+  3213
+ ]
+}
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,pathlib\nsys.path.insert(0,'tools')\nimport nettoyer_scan as ns\nfrom PIL import Image\nimport numpy as np\nfrom scipy.ndimage import gaussian_filter\nfor f in sorted(pathlib.Path('work/r44/scans').glob('A_RES_80_10-fr-p2-*.png')):\n    im=Image.open(f).conv … [485 caractères tronqués]`
+
+  ```
+A_RES_80_10-fr-p2-s1-fax.png inegal 0.041 ratio fond 1.12 binaire 1.0 angle 0.0 inclinaison_auto 0.0
+A_RES_80_10-fr-p2-s1-papier.png inegal 0.061 ratio fond 1.38 binaire 0.004 angle -0.75 inclinaison_auto -0.75
+A_RES_80_10-fr-p2-s1-photo.png inegal 0.156 ratio fond 1.85 binaire 0.002 angle 0.0 inclinaison_auto 0.0
+A_RES_80_10-fr-p2-s1-photocopie.png inegal 0.045 ratio fond 1.13 binaire 0.86 angle -0.75 inclinaison_auto -0.75
+A_RES_80_10-fr-p2-s1-propre.png inegal 0.043 ratio fond 1.13 binaire 0.966 angle 0.0 inclinaison_auto 0.0
+  ```
+

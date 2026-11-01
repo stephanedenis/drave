@@ -39,6 +39,8 @@
 | [natif-anti-patrons.svg](natif-anti-patrons.svg) | six façons de casser la séparation, et leur test | [le modèle natif](../theorie/modele-natif.md) |
 | [natif-modes.svg](natif-modes.svg) | cinq réalisations du même contrat typé, et le bus qui ne voit que le type | [le modèle natif](../theorie/modele-natif.md) · [le bloc D&C](../implantation/diehl-cook.md) |
 | [natif-granularite.svg](natif-granularite.svg) | la granularité : monolithe contre petits blocs, et le coût de la liaison | [le modèle natif](../theorie/modele-natif.md) |
+| [pensee-rsn-plurielle.svg](pensee-rsn-plurielle.svg) | un état, plusieurs candidats : corps, statut, provenance, empreinte | [la pensée itérative](../theorie/pensee-iterative.md) |
+| [pensee-arbre.svg](pensee-arbre.svg) | l'arbre d'états : frontière, transposition, élagage, meilleur nœud | [la pensée itérative](../theorie/pensee-iterative.md) |
 | [diehl-cook-architecture.svg](diehl-cook-architecture.svg) | Poisson, LIF, STDP, inhibition latérale, seuil adaptatif | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-placements.svg](diehl-cook-placements.svg) | les trois placements légaux et le raccourci interdit | [le bloc D&C](../implantation/diehl-cook.md) |
 | [diehl-cook-contrat.svg](diehl-cook-contrat.svg) | ports, `φ(RSN)`, annotation et refus du chargeur | [le bloc D&C](../implantation/diehl-cook.md) |

@@ -7,19 +7,26 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 0.7 h |
-| Tours | 1 |
-| Messages | 165 |
-| Appels d'outils | 185 |
-| Fichiers touchés | 7 |
-| Commandes | 161 |
+| Durée | 4.9 h |
+| Tours | 2 |
+| Messages | 194 |
+| Appels d'outils | 216 |
+| Fichiers touchés | 10 |
+| Commandes | 184 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
 
+## Objectifs déclarés
+
+- **create** — R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer 
+… [168 caractères tronqués]
+
 ## 1. Ce qui a été demandé
 
 **Tour 1** — lis le fichier en-cours.md et prends une tâche qui n'est pas en conflit avec l'autre session
+
+**Tour 2** — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it que tu n'y est pas arrivée. J'accueille tes résultars et écarts sans jugement.
 
 ## 2. Déroulé, étape par étape
 
@@ -76,6 +83,30 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 
 **Portes** : revue de documentation, tableaux, état, document, schémas, journal, sessions, backlog, budget et OCR — **toutes vertes**.
 
+### Tour 2 — tu dois être plus ambitieux. je te donne 10h humain (pas tes estimés, continue d'itérer tant que l'heure système te it q … [77 caractères tronqués]
+
+*31 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Record start time, deadline and machine resources
+- bash — Check image-processing libraries available
+- bash — Check concurrent sessions and clock
+- bash — Create work journal and look for scanned PDFs
+- bash — Read current state after 4 hours
+- bash — See commits since my result
+- todo_write
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/simuler_scan.py`
+- bash — Fix reproducibility and generate sample scans
+- bash — Fix perspective shadowing and generate scans
+- read_image
+- bash — Baseline WER on sample scans
+- bash — Calibrate scan degradation families
+- … et 16 autres
+
+**Synthèse produite :**
+
+⏵ Démarrage : corpus de scans, baseline et journal de bord
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -89,6 +120,9 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-r44-ocr-pilote.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/implantation/encodeur-visuel.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/README.md` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/simuler_scan.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/nettoyer_scan.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_scans.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -132,7 +166,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 121 autres
+- … et 144 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -214,10 +248,53 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** `+  **R4.4 partielle** : OCR installé sans root, **10 pages rendues** à **WER 4,48 %** et`
 - **T1** `+  **parité 90 %** ; page dégradée **26,7 %** ; fiche [`r44`](../../reports/rapport-r44-ocr-pilote.md).`
 - **T1** `0088fc2f R4.4 — L'OCR LIT DIX PAGES À 4,48 % DE WER, LA PARITÉ DE PASSAGE TIENT À 90 %, LA PAGE « PHOTO » TOMBE À 26,7 %`
+- **T2** `- **Rôle** : **N2, le corpus** — **32,8 %** des fenêtres de validation sont verbatim dans`
+- **T2** `**R4.4 partielle** : OCR installé sans root, **10 pages rendues** à **WER 4,48 %** et`
+- **T2** `**parité 90 %** ; page dégradée **26,7 %** ; fiche [`r44`](../../reports/rapport-r44-ocr-pilote.md).`
+- **T2** `- **B10.2bis — décodeur** : 3×3 : **11,1** ; capacité 11,8 ; **mots 32,5** ;`
+- **T2** `- **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;`
+- **T2** `- **N2** : GPU ; **N2.d** — le budget plein (20 000 pas, 41 Mo, 3 graines) paie`
+- **T2** `**2,9355 → 2,8527** ; les quatre sources coûtent **+0,9064** (professeur français, 82,5 %`
+- **T2** `à 129. **La validation n'est pas tenue à l'écart : 32,8 % des fenêtres du protocole sont`
+- **T2** `c3bcbe99 N2 — LE BUDGET PAIE 2,8 %, LES QUATRE SOURCES COÛTENT 91 %, ET LA VALIDATION EST CONTAMINÉE À 32,8 %`
+- **T2** `A_RES_80_10-fr-p2-s1-propre.png · 2550×3300`
+- **T2** `A_RES_80_10-fr-p2-s1-photocopie.png · 1700×2200`
+- **T2** `A_RES_80_10-fr-p2-s1-photo.png · 1530×1980`
+- **T2** `A_RES_80_10-fr-p2-s1-fax.png · 1060×1360`
+- **T2** `A_RES_80_10-fr-p2-s1-papier.png · 2125×2750`
+- **T2** `A_RES_80_10-en-p2-s1-propre.png · 2550×3300`
+- **T2** `A_RES_80_10-en-p2-s1-photocopie.png · 1700×2200`
+- **T2** `A_RES_80_10-en-p2-s1-photo.png · 1530×1980`
+- **T2** `A_RES_80_10-en-p2-s1-fax.png · 1060×1360`
+- **T2** `A_RES_80_10-en-p2-s1-papier.png · 2125×2750`
+- **T2** `A_RES_80_10-fr-p2-s1-propre.png              2550x3300 moy=243.5 ect= 49.0 WER= 2.15% mots= 552 conf= 94.3  3.2s`
+- **T2** `A_RES_80_10-fr-p2-s1-photocopie.png          1700x2200 moy=240.4 ect= 41.4 WER= 5.73% mots= 549 conf= 89.9  2.7s`
+- **T2** `A_RES_80_10-fr-p2-s1-photo.png               1530x1980 moy=179.1 ect= 39.3 WER=51.79% mots= 279 conf= 92.4  1.6s`
+- **T2** `A_RES_80_10-fr-p2-s1-fax.png                 1060x1360 moy=243.8 ect= 46.1 WER=71.86% mots= 468 conf= 37.8  2.1s`
+- **T2** `A_RES_80_10-fr-p2-s1-papier.png              2125x2750 moy=186.9 ect= 33.1 WER= 2.15% mots= 552 conf= 94.3  3.4s`
+- **T2** `A_RES_80_10-en-p2-s1-propre.png              2550x3300 moy=242.7 ect= 50.6 WER= 1.10% mots= 540 conf= 94.8  3.3s`
+- **T2** `A_RES_80_10-en-p2-s1-photocopie.png          1700x2200 moy=239.6 ect= 42.7 WER= 3.11% mots= 540 conf= 92.1  2.8s`
+- **T2** `A_RES_80_10-en-p2-s1-photo.png               1530x1980 moy=178.5 ect= 39.9 WER=50.37% mots= 276 conf= 95.0  1.6s`
+- **T2** `A_RES_80_10-en-p2-s1-fax.png                 1060x1360 moy=243.0 ect= 47.8 WER=65.20% mots= 454 conf= 47.3  2.0s`
+- **T2** `A_RES_80_10-en-p2-s1-papier.png              2125x2750 moy=186.3 ect= 34.1 WER= 1.28% mots= 541 conf= 94.8  3.5s`
+- **T2** `photo_doux                         WER= 1.79% mots= 553 conf= 94.1  3.1s`
+- **T2** `photo_moyen                        WER= 2.33% mots= 549 conf= 92.7  2.9s`
+- **T2** `photo_actuel                       WER= 5.38% mots= 548 conf= 89.7  2.7s`
+- **T2** `papier_doux                        WER= 4.12% mots= 547 conf= 91.2  3.1s`
+- **T2** `papier_fort                        WER=53.41% mots= 274 conf= 89.2  1.6s`
+- **T2** `photo_brut                       psm3 WER=51.79% mots= 279 conf= 92.4  1.5s`
+- **T2** `photo_psm1                       psm1 WER=51.79% mots= 279 conf= 92.4  1.9s`
+- **T2** `photo_psm4                       psm4 WER=51.61% mots= 281 conf= 92.3  1.5s`
+- **T2** `photo_psm6                       psm6 WER=45.88% mots= 333 conf= 88.6  1.6s`
+- **T2** `photo_eclair                     psm3 WER= 3.76% mots= 545 conf= 93.8  2.1s`
+- **T2** `photo_eclair_x2                  psm3 WER= 3.23% mots= 546 conf= 93.2  3.2s`
+- **T2** `photo_eclair_sauvola             psm3 WER= 3.94% mots= 546 conf= 91.7  2.1s`
+- **T2** `fax_brut                         psm3 WER=71.86% mots= 468 conf= 37.8  2.2s`
+- … (tronqué)
 
 ## 5. Erreurs rencontrées
 
-6 sorties en erreur ou divergentes. Les premières :
+7 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -225,6 +302,7 @@ Les 5 écarts sont nommés : trois **appels de note en exposant** lus `!` par te
 - **T1** : [stderr] head: cannot open '/tmp/ocrout.tsv' for reading: No such file or directory grep: /tmp/ocrout.tsv: No such file or directory [exit code: 2]
 - **T1** : [stderr] ls: cannot access 'work/ocr/root/usr/share/tessdata/': No such file or directory [exit code: 2]
 - **T1** : [code 0]   exactitude de la valeur : natif 100.00% · OCR 83.33%   PARITÉ de région (F1 ≥ 0,90) : 90.00% · médiane F1 1.000 · valeur stricte 83.33% (30 questions)   page dégradée : WER 17.08% · exactit
+- **T2** : brut                               psm3 WER=29.93% conf= 64.9 med3_x2                            psm3 WER=97.85% conf= 23.8 med3_x2_flou05                     psm3 WER=98.39% conf= 23.3 med3_x3       
 
 ## 6. Commits
 

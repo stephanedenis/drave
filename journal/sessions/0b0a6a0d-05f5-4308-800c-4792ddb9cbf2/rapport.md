@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 4.1 h |
-| Tours | 2 |
-| Messages | 306 |
-| Appels d'outils | 302 |
-| Fichiers touchés | 9 |
-| Commandes | 249 |
+| Durée | 5.2 h |
+| Tours | 3 |
+| Messages | 335 |
+| Appels d'outils | 330 |
+| Fichiers touchés | 11 |
+| Commandes | 273 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -23,12 +23,16 @@
 … [41 caractères tronqués]
 - **complete** — N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / 20 000 pas, 4 sources contre français seul, puis curriculum 129), avec contrôle négatif et trois graines ; écrire la fiche dans reports/, le récit dans journal/, committer avec le chiffre et mettre docs/p
 … [41 caractères tronqués]
+- **create** — N2.h — le mètre propre : construire un corpus dédupliqué avec split train/val/test sans répétition (outil versionné + manifeste + vérification), refaire toute la chaîne sur ce corpus (professeur 23,5 M, base supervisée, distillation 20k × 3 graines, curriculum 129), mesurer la porte honnête et le pr
+… [344 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
 **Tour 1** — continue
 
 **Tour 2** — <goal_round> Objective: "N2 — mesurer le curriculum et les données sur le dispositif reconstruit (budget complet 41 Mo / 20 000 pas, 4 sources contre français seul, puis curriculum 129), avec contrôle négatif et trois graines ; écrire la fiche dans reports/, le récit dans journal/, committer avec le chiffre et mettre docs/pilotage/en-cours.md et la roadmap à jour." Round: 1/1000  Continue working  … [511 caractères tronqués]
+
+**Tour 3** — je te donnes 10h de liberté totale. impressionne-moi. je serai décu si tu as terminé à temps.
 
 ## 2. Déroulé, étape par étape
 
@@ -139,6 +143,30 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - État et roadmap 
 … [593 caractères tronqués]
 
+### Tour 3 — je te donnes 10h de liberté totale. impressionne-moi. je serai décu si tu as terminé à temps.
+
+*28 appels d'outils.* Actions notables :
+
+- bash — Determine which repo files compose the French corpus
+- bash — Measure the size of duplicated passages
+- bash — Check teacher time and external corpora
+- bash — Extract teacher and base training durations
+- bash — Read the teacher log for duration
+- create_goal
+- todo_write
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_propre.py`
+- bash — Test dedupe on a synthetic text
+- bash — Build the deduplicated corpus
+- bash — Inspect clean corpus seams and trainer CLI
+- bash — Check whether the teacher early-stops on validation
+- bash — Check checkpoint selection in the teacher trainer
+- bash — Launch teacher and base training on the clean corpus
+- … et 14 autres
+
+**Synthèse produite :**
+
+⏵ Ajout des positions aléatoires (attaque du verrou de longueur) au modèle et au distillateur
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -154,6 +182,8 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/fiche.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_budget.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2d/journal-notes.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/corpus_propre.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_propre.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -197,7 +227,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 209 autres
+- … et 233 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -325,7 +355,7 @@ Au passage : `work/` est désormais dans `.gitignore` — sinon un `git add -A` 
 
 ## 5. Erreurs rencontrées
 
-19 sorties en erreur ou divergentes. Les premières :
+20 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5

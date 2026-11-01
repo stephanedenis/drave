@@ -1,0 +1,60 @@
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" font-family="DejaVu Sans, Arial, sans-serif">
+<title>L&#x27;arbre d&#x27;états : la mémoire de travail de la pensée</title>
+<desc>Chaque nœud est un état pluriel ; chaque arête est un opérateur ; la frontière est ce qui reste à explorer.</desc>
+<defs><marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker><marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker><marker id="fv" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#15803d"/></marker><marker id="fb" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#1d4ed8"/></marker><marker id="fa" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b45309"/></marker></defs>
+<rect width="960" height="640" fill="#f8fafc"/>
+<text x="480.0" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">L&#x27;arbre d&#x27;états : la mémoire de travail de la pensée</text>
+<text x="480" y="58" text-anchor="middle" font-size="13" fill="#475569">Le retour arrière est une arête de plus, pas un échec ; le meilleur nœud n&#x27;est pas toujours une feuille.</text>
+<rect x="400" y="96" width="160" height="72" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="480.0" y="120" text-anchor="middle" font-size="14" font-weight="bold" fill="#b45309">S0</text>
+<text x="480.0" y="142.0" text-anchor="middle" font-size="9.5" fill="#334155">score 0,20</text>
+<text x="480.0" y="155.775" text-anchor="middle" font-size="9.5" fill="#334155">frontière</text>
+<rect x="120" y="210" width="160" height="72" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="200.0" y="234" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">S1</text>
+<text x="200.0" y="256.0" text-anchor="middle" font-size="9.5" fill="#334155">score 0,45</text>
+<text x="200.0" y="269.775" text-anchor="middle" font-size="9.5" fill="#334155">ouvert</text>
+<line x1="480" y1="168" x2="200" y2="208" stroke="#334155" stroke-width="1.8" marker-end="url(#f)"/>
+<rect x="400" y="210" width="160" height="72" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="480.0" y="234" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">S2</text>
+<text x="480.0" y="256.0" text-anchor="middle" font-size="9.5" fill="#334155">score 0,38</text>
+<text x="480.0" y="269.775" text-anchor="middle" font-size="9.5" fill="#334155">ouvert</text>
+<line x1="480" y1="168" x2="480" y2="208" stroke="#334155" stroke-width="1.8" marker-end="url(#f)"/>
+<rect x="680" y="210" width="160" height="72" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="760.0" y="234" text-anchor="middle" font-size="13" font-weight="bold" fill="#15803d">S3</text>
+<text x="760.0" y="256.0" text-anchor="middle" font-size="9.5" fill="#334155">score 0,71</text>
+<text x="760.0" y="269.775" text-anchor="middle" font-size="9.5" fill="#334155">ouvert</text>
+<line x1="480" y1="168" x2="760" y2="208" stroke="#334155" stroke-width="1.8" marker-end="url(#f)"/>
+<rect x="40" y="340" width="150" height="72" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="115.0" y="364" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">S4</text>
+<text x="115.0" y="386.0" text-anchor="middle" font-size="9" fill="#334155">score 0,52</text>
+<text x="115.0" y="399.05" text-anchor="middle" font-size="9" fill="#334155">feuille</text>
+<line x1="200" y1="282" x2="115" y2="338" stroke="#1d4ed8" stroke-width="1.6" marker-end="url(#f)"/>
+<rect x="220" y="340" width="150" height="72" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="295.0" y="364" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">S5</text>
+<text x="295.0" y="386.0" text-anchor="middle" font-size="9" fill="#334155">score 0,66</text>
+<text x="295.0" y="399.05" text-anchor="middle" font-size="9" fill="#334155">feuille</text>
+<line x1="200" y1="282" x2="295" y2="338" stroke="#15803d" stroke-width="1.6" marker-end="url(#f)"/>
+<rect x="400" y="340" width="150" height="72" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="475.0" y="364" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">S6</text>
+<text x="475.0" y="386.0" text-anchor="middle" font-size="9" fill="#334155">score 0,81</text>
+<text x="475.0" y="399.05" text-anchor="middle" font-size="9" fill="#334155">feuille</text>
+<line x1="480" y1="282" x2="475" y2="338" stroke="#15803d" stroke-width="1.6" marker-end="url(#f)"/>
+<rect x="580" y="340" width="150" height="72" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+<text x="655.0" y="364" text-anchor="middle" font-size="12" font-weight="bold" fill="#b91c1c">S7</text>
+<text x="655.0" y="386.0" text-anchor="middle" font-size="9" fill="#334155">score 0,30</text>
+<text x="655.0" y="399.05" text-anchor="middle" font-size="9" fill="#334155">élagué</text>
+<line x1="480" y1="282" x2="655" y2="338" stroke="#b91c1c" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#f)"/>
+<rect x="740" y="340" width="150" height="72" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+<text x="815.0" y="364" text-anchor="middle" font-size="12" font-weight="bold" fill="#b91c1c">S8</text>
+<text x="815.0" y="386.0" text-anchor="middle" font-size="9" fill="#334155">score —</text>
+<text x="815.0" y="399.05" text-anchor="middle" font-size="9" fill="#334155">élagué</text>
+<line x1="760" y1="282" x2="815" y2="338" stroke="#b91c1c" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#f)"/>
+<rect x="40" y="450" width="880" height="70" rx="9" fill="#f0fdf4" stroke="#86efac" stroke-width="1.4"/>
+<text x="480" y="476" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#0f172a">frontière = { S4, S5, S6 }   ·   meilleur = S6 (0,81)   ·   prochain = développer S6</text>
+<text x="480" y="498" text-anchor="middle" font-size="9.5" fill="#475569">Un nœud garde son score, son coût, sa profondeur et son parent ; la frontière est un tas.</text>
+<path d="M115,412 C115,430 650,430 655,412" fill="none" stroke="#6d28d9" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#f)"/>
+<text x="385" y="442" text-anchor="middle" font-size="9" fill="#6d28d9">transposition : même empreinte, même sous-arbre mémoïsé</text>
+<rect x="40" y="552" width="880" height="54" rx="9" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.4"/>
+<text x="480" y="576" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#0f172a">Le score n&#x27;est pas la réponse : c&#x27;est une hypothèse de valeur. La réponse est le meilleur état settled.</text>
+<text x="480" y="594" text-anchor="middle" font-size="9.5" fill="#475569">Un arbre sans trace n&#x27;est pas une pensée : c&#x27;est un nuage de nœuds.</text>
+</svg>

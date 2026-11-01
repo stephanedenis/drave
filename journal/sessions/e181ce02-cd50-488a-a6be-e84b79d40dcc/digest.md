@@ -3392,3 +3392,208 @@ python3 tools/verifie_journal.py              EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/theorie/modele-natif.md docs/implantation/diehl-cook.md docs/schemas/README.md docs/schemas/natif-modes.svg docs/schemas/natif-granularite.svg && git diff --cached --stat && timeout 240 git commit -m \"DOCS — LE CONTRAT  … [206 caractères tronqués]`
+
+  ```
+docs/implantation/diehl-cook.md    | 26 +++++++++++++++
+ docs/schemas/README.md             |  2 ++
+ docs/schemas/natif-granularite.svg | 46 ++++++++++++++++++++++++++
+ docs/schemas/natif-modes.svg       | 44 +++++++++++++++++++++++++
+ docs/theorie/modele-natif.md       | 67 +++++++++++++++++++++++++++++++++++++-
+ 5 files changed, 184 insertions(+), 1 deletion(-)
+[still running after 60000ms; moved to background job bash-124]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-124", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 77ceb533] DOCS — LE CONTRAT EST L'INVARIANT, LA TECHNOLOGIE EST LA VARIABLE : MODES, GRANULARITÉ, GRAPHE DYNAMIQUE
+ 18 files changed, 442 insertions(+), 31 deletions(-)
+ create mode 100644 docs/schemas/natif-granularite.svg
+ create mode 100644 docs/schemas/natif-modes.svg
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Principe intégré : le contrat est l'invariant, la technologie est la variable
+
+Oui — et c'est un déplacement important, parce qu'il ne faut pas confondre **la RSN et les blocs RSN**. La RSN n'est pas un bloc : c'est le **type** qui circule. Les blocs qui la produisent ou la consomment — encodeur, mémoire, décodeur — sont, eux, technologiquement libres. Un format n'est pas une machine.
+
+J'ai ajouté cette axe aux deux documents, avec deux schémas.
+
+## 1. Le théorème d'indifférence
+
+Si deux blocs ont la même **signature typée**, le même **contrat** (même corps pour les mêmes entrées, annotations compatibles) et la même **trace**, alors ils sont **substituables**, quelle que soit leur technologie. Le consommateur ne peut les distinguer que par le **coût** et la **trace**.
+
+C'est la version formelle de ce que tu décris : le bus ne voit pas des neurones, il voit des **types**. Un transformeur dense, un réseau impulsionnel, un solveur classique, un bloc FPGA ou un service distant peuvent occuper le même port.
+
+Mais l'indifférence a un prix, et le document le dit : il faut **un test de contrat** (les sondes), **une trace** (le rejeu) et **un coût** (le placement). Sans les trois, l'hétérogénéité n'est pas une modularité, c'est un zoo.
+
+## 2. Le mode d'opération et le mode d'apprentissage sont privés
+
+Un bloc peut être :
+
+| réalisation | représentation | ce qu'elle apporte |
+|---|---|---|
+| transformeur dense | f32, attention | composition, langue |
+| D&C impulsionnel | spikes, STDP | parcimonie, apprentissage local |
+| règle classique | symboles, table | exactitude, auditabilité |
+| FPGA | bits, shift-and-add | énergie, déterminisme |
+| service distant | DRVF/TCP | placement, réutilisation |
+
+**Ce qui change** : la latence, le coût, la précision, le niveau de rejeu.
+**Ce qui ne change pas** : les ports, le corps de la RSN, l'empreinte, la trace.
+
+Le mode d'apprentissage est privé aussi : STDP locale, gradient hors ligne, règle classique, ou aucun. Le contrat ne voit que la sortie ; mais le bloc doit **déclarer** son mode et son niveau de rejeu — `bit-exact`, `tolérant`, `sémantique` — sinon la trace n'est pas reproductible.
+
+## 3. La granularité : petit, mais pas trop
+
+Tu demandes des blocs petits. Le document formalise le compromis :
+
+`coût_total = coût_bloc + k · nombre_d_arêtes`
+
+Un bloc trop gros n'est ni mesurable, ni plaçable, ni substituable. Un bloc trop petit paie la liaison — sérialisation, transport, synchronisation, trace. L'optimum dépend de la tâche et du matériel : il se **mesure**, il ne se décrète pas. La règle de conception : un bloc doit tenir sur **un** device (ou un nœud), avoir **un** contrat, et payer une liaison **négligeable** devant son coût.
+
+C'est la version opérationnelle de « la structure bat la taille » : on **compose** des blocs plutôt que de gonfler un monolithe. Un D&C de 100–400 excitateurs tient sur un device ; la mémoire N2 peut être un petit bloc à côté d'un transformeur N1, lui-même à côté d'un solveur N3 — et le bus ne voit que des RSN.
+
+## 4. Le graphe est dynamique, les types ne le sont pas
+
+| dynamicité | ce qui change | ce qui reste | où c'est tracé |
+|---|---|---|---|
+| **routage** | quelles arêtes sont actives | les ports | la route, par pas |
+| **profondeur** | combien de blocs sont traversés | le contrat de sortie | la sortie précoce |
+| **apprentissage** | les poids, les prototypes | la signature | les événements d'apprentissage |
+
+Une dynamicité qui change le **type** n'est pas une dynamicité : c'est un **autre graphe**. C'est la ligne de démarcation entre un réseau qui s'adapte et un réseau qui devient inconsistant.
+
+## 5. Ce que ça change pour Diehl & Cook
+
+Le même bloc D&C peut être le Python de référence, le bloc Rust, un FPGA, un neuromorphe ou un service distant. Le contrat de ports ne bouge pas ; ce qui bouge, c'est le coût, la latence, la précision et le niveau de rejeu. La conséquence pratique : on garde le bloc **petit**, on le **compose**, et on laisse le scheduler choisir la réalisation par la mesure — pas par doctrine.
+
+## Fichiers et commits
+
+- [`docs/theorie/modele-natif.md`](docs/theorie/modele-natif.md) — nouvelles sections « Le mode d'opération est privé », « La granularité », « Le graphe dynamique ».
+- [`docs/implantation/diehl-cook.md`](docs/implantation/diehl-cook.md) — nouvelle section « Le bloc peut changer de technologie ».
+- Deux schémas : `natif-modes.svg` (cinq réalisations, un contrat) et `natif-granularite.svg` (monolithe contre petits blocs, coût de la liaison). **25 schémas** au total.
+- Commit : **`77ceb533`**.
+- Portes : schémas, tableaux, revue, budget, état, journal — **toutes vertes**.
+
+La phrase qui résume l'axe : **le contrat est l'invariant, la technologie est la variable — et le bus ne voit pas des neurones, il voit des types.**
+
+
+## Tour 4
+
+### 👤 Utilisateur
+
+tu commence à peine à comprendre la portée de ce quie je te demande. le RSN (le pluriel sera plus approprié ca tu dois avoir pleusieurs candidats) est une représentation de données interne qui te permen d'itérer indéfiniment dans de4s cicles de pensées à plunieurs niveauc. Il te faudra donc un arbre d'états et toutes les streatégies de l'ia traditionelle, pour pouvoir "penser". Prends au moins 10 tours de rafinnement pour comprendre ce que je te dis. tu ne pourras pas résoudre ça avec goal < 1000.
+
+### 🤖 Assistant
+
+⏵ Création du goal long (1 000 rounds) : RSN plurielle, arbre d'états, moteur de pensée
+
+- **create_goal** `{"objective": "Refondre la documentation de l'architecture Drave autour de la RSN plurielle (plusieurs candidats, pas un objet canonique unique) comme représentation interne permettant des cycles de pensée itératifs multi-niveaux : arbre d'états, opérateurs neuronaux/classiques, portefeuille de stra … [298 caractères tronqués]`
+
+> **Objectif** (create) : Refondre la documentation de l'architecture Drave autour de la RSN plurielle (plusieurs candidats, pas un objet canonique unique) comme représentation interne permettant des cycles de pensée itératifs multi-niveaux : arbre d'états, opérateurs neuronaux/classiques, portefeuille de stratégies d'IA classique (recherche, contraintes, planification, adversarial, MCTS, méta), méta-apprentissage, mesure et rejeu. Produire au moins 10 tours de raffinement documentés, avec schémas SVG, mises à jour des documents existants, index et portes vertes, puis commit.
+
+
+  ```
+{"goal":{"id":"goal-c26e365b-e64b-4736-be51-e625b760564e","revision":1,"objective":"Refondre la documentation de l'architecture Drave autour de la RSN plurielle (plusieurs candidats, pas un objet canonique unique) comme représentation interne permettant des cycles de pensée itératifs multi-niveaux : arbre d'états, opérateurs neuronaux/classiques, portefeuille de stratégies d'IA classique (recherche, contraintes, planification, adversarial, MCTS, méta), méta-apprentissage, mesure et rejeu. Produire au moins 10 tours de raffinement documentés, avec schémas SVG, mises à jour des documents existants, index et portes vertes, puis commit.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 1/10 — diagnostic : la RSN canonique unique était le résultat, pas la représentation de travail
+
+- **write** `{"content": "import sys, pathlib\nsys.path.insert(0, \"/tmp\")\nfrom svgkit import *\n\nOUT = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas\")\n\n\ndef rsn_plurielle():\n    s = SVG(960, 620, \"La RSN est plurielle : un état, plusieurs candidats\",\n            \"Le cor … [5280 caractères tronqués]`
+
+  ```
+<path>/tmp/gen_pensee.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cat >> /tmp/gen_pensee.py <<'PY'\n\n\nif __name__ == \"__main__\":\n    rsn_plurielle()\n    arbre()\nPY\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/gen_pensee.py", "description": "Générer les deux premiers schémas de la pensée"}`
+
+  ```
+✓ pensee-rsn-plurielle.svg
+  ⚠ pensee-arbre.svg
+     lignes hors boîte : 'S0'
+     lignes hors boîte : 'S1'
+     lignes hors boîte : 'S2'
+     lignes hors boîte : 'S3'
+     lignes hors boîte : 'S4'
+     lignes hors boîte : 'S5'
+     lignes hors boîte : 'S6'
+     lignes hors boîte : 'S7'
+     lignes hors boîte : 'S8'
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/gen_pensee.py'); t=p.read_text()\nt=t.replace('s.boite(400, 96, 160, 60, \"S0\"', 's.boite(400, 96, 160, 72, \"S0\"')\nt=t.replace('s.boite(x, 210, 160, 60, nom', 's.boite(x, 210, 160, 72, nom')\nt=t.replace('s.boite(x, 3 … [718 caractères tronqués]`
+
+  ```
+ok
+  ✓ pensee-arbre.svg
+  ```
+
+### 🤖 Assistant
+
+⏵ Tour 1/10 — la RSN de travail est un ensemble de candidats, pas un quotient unique
+
+- **write** `{"content": "# La pensée itérative — la RSN plurielle, l'arbre d'états et les stratégies\n\n> **Ce que ce document est.** La **théorie du moteur de pensée** de Drave. La RSN n'est pas un objet canonique\n> unique : c'est une **représentation plurielle**, un **ensemble de candidats** qui sert de **mé … [8632 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/pensee-iterative.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n\np=pathlib.Path('docs/theorie/modele-natif.md'); t=p.read_text()\nt=t.replace(\"\"\"**Ce que le quotient achète** : la neutralité devient une **propriété de l'image de `c`**, pas une intention. On\n … [4217 caractères tronqués]`
+
+  ```
+ok
+python3 tools/verifier_schemas.py             EXIT=0
+bash tools/porte-tableaux.sh                  EXIT=0
+python3 tools/revue_documentation.py          EXIT=1
+  revue de documentation · 371 fiche(s) · 441 JSON · 113 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ❌ 3 anomalie(s) :
+     · compteurs : en-cours.md dit 112 documents, le disque en a 113
+     · compteurs : en-cours.md dit 439 JSON, le disque en a 441
+     · annotation : docs/theorie/pensee-iterative.md → ../implantation/moteur-de-pensee.md (cassé)
+python3 tools/taille_documents.py             EXIT=0
+python3 tools/verifie_en_cours.py             EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/pensee-iterative.md'); t=p.read_text()\nt=t.replace(\"l'**implémentation** dans [`moteur-de-pensee.md`](../implantation/moteur-de-pensee.md).\",\n            \"l'**implém … [578 caractères tronqués]`
+
+  ```
+ok
+revue=1
+  revue de documentation · 371 fiche(s) · 441 JSON · 113 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 439 JSON, le disque en a 441
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fichiers / JSON\\|documents de\" docs/pilotage/en-cours.md", "description": "Lire les lignes de compteurs exactes"}`
+
+  ```
+86:| fichiers / JSON de résultats | **371** / **439** | `reports/*.md` / `reports/*.json` |
+87:| documents de `docs/` | **113** (hors archive et README) | `docs/**/*.md` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"| fichiers / JSON de résultats | **371** / **439** |\", \"| fichiers / JSON de résultats | **371** / **441** |\")\np.write_ … [169 caractères tronqués]`
+
+  ```
+ok
+revue=0
+  revue de documentation · 371 fiche(s) · 441 JSON · 113 doc(s) · 79 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/theorie/pensee-iterative.md docs/schemas/pensee-rsn-plurielle.svg docs/schemas/pensee-arbre.svg docs/README.md docs/schemas/README.md && git diff --cached --stat && timeout 240 git commit -m \"PENSÉE — TOUR 1-2 : LA RSN  … [137 caractères tronqués]`
