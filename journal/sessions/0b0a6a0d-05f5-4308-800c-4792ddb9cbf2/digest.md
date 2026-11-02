@@ -17246,3 +17246,25 @@ pas  250 · perte 2.6630 · PPL val 15.285 · 13 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export GIT_INDEX_FILE=/tmp/index.n2; git read-tree HEAD && git add docs/pilotage/plan-travail.md && git commit -q -m \"PLAN — LA SESSION N2 A MESURÉ LA CHAÎNE RÉELLE, SA PROCHAINE ACTION CHANGE\n\nLe plan de travail disait « N2 sur l … [385 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1021]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1021", "timeout_ms": 300000, "wait": true}`
+
+  ```
+ace1717b PLAN — LA SESSION N2 A MESURÉ LA CHAÎNE RÉELLE, SA PROCHAINE ACTION CHANGE
+02:19
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/base-en-34m.pt 2>/dev/null && echo OK; tail -1 work/n2k/base-en-34m.log", "description": "Wait for the English 34M base"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1022]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1022", "timeout_ms": 900000, "wait": true}`

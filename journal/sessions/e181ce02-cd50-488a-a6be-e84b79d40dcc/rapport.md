@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 33.6 h |
+| Durée | 33.7 h |
 | Tours | 94 |
-| Messages | 1225 |
-| Appels d'outils | 1088 |
+| Messages | 1226 |
+| Appels d'outils | 1089 |
 | Fichiers touchés | 25 |
-| Commandes | 879 |
+| Commandes | 880 |
 | Sous-agents | 2 |
-| Commits | 120 |
+| Commits | 121 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4986,12 +4986,13 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round lisse la courbe avec **2
 
 ### Tour 94 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Tester la vérité qui change (porte cachée)
 - bash — Ajouter la porte T77 (vérité qui change)
 - bash — Écrire la fiche de la vérité qui change
 - bash — Trim README et portes
+- bash — Committer la vérité qui change
 
 ## 3. Travail accompli
 
@@ -5072,7 +5073,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round lisse la courbe avec **2
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 839 autres
+- … et 840 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5340,4 +5341,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round lisse la courbe avec **2
 - B13 — LA COURBE DU SEUIL : 0,35→0,50, 0 → 80 % → 100 %, CREUX À 0,45 ; 79/79" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "COURBE DU SEUIL"; then ech
 - ÉTAT — COMPTEURS ALIGNÉS (572 JSON)" 2>&1 | tail -2; git log -1 --format='%h %s'
 - ÉTAT — COMPTEURS RÉELS (480/571)" 2>&1 | tail -2; git log -1 --format='%h %s'
+- B13 — LA VÉRITÉ QUI CHANGE : PORTE CACHÉE, 20/20 AUX DEUX PHASES ; 80/80" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VÉRITÉ QUI CHANGE"; then echo 
 

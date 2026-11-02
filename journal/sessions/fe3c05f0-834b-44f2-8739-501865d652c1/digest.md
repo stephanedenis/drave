@@ -32148,3 +32148,11 @@ journal/2026-11-02/README.md:91:- **Le corpus OCR** : 11 livres, 4 042 pages, 10
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; for i in 1 2 3 4; do git read-tree HEAD; git add reports/rapport-ocr-pdf.md reports/ocr-pdf-contamination.json docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/2026-11-02/README.md; if gi … [308 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at ace1717b0010595dd0192d54bebd2730ffaf4df2 but expected f332e287c843ea5dcddbe2e6eca380d2943b5c6e
+ace1717b PLAN — LA SESSION N2 A MESURÉ LA CHAÎNE RÉELLE, SA PROCHAINE ACTION CHANGE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; ok=0; for i in 1 2 3 4 5; do git read-tree HEAD; git add reports/rapport-ocr-pdf.md reports/ocr-pdf-contamination.json docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/2026-11-02/README.m … [419 caractères tronqués]`

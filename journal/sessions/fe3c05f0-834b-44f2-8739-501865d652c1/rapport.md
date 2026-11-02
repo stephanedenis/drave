@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 33.7 h |
 | Tours | 346 |
-| Messages | 2094 |
-| Appels d'outils | 1396 |
+| Messages | 2095 |
+| Appels d'outils | 1397 |
 | Fichiers touchés | 26 |
-| Commandes | 1232 |
+| Commandes | 1233 |
 | Sous-agents | 0 |
-| Commits | 78 |
+| Commits | 79 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -8121,12 +8121,13 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 346 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Re-run OCR contamination check for 11 books
 - bash — Update OCR fiche to 11 books
 - bash — Update state, roadmap and journal to 11 books
 - bash — Commit OCR 11 books update
+- bash — Commit OCR 11 books with correct retry
 
 ## 3. Travail accompli
 
@@ -8203,7 +8204,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1192 autres
+- … et 1193 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8429,4 +8430,5 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - DONNÉES — LA ROADMAP ET LE RÉCIT PORTENT L'OCR DES 8 LIVRES : 2 815 PAGES, 7,69 M CARACTÈRES, 951 FENÊTRES 8 KO" 2>&1 | tail -4; then break; fi; sleep 8; done; 
 - DONNÉES — LE CONTRÔLE OCR CONTRE LES ÉVALUATIONS EST MESURÉ : 0/40, 0/24, 0/40" 2>&1 | tail -4; then break; fi; sleep 8; done; git log --oneline -1
 - DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40" 2>&1 | tail -4; then break; fi; sleep 8; done; git log --oneline
+- DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40" > /tmp/commit-ocr.log 2>&1; code=$?; tail -4 /tmp/commit-ocr.log
 
