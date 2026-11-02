@@ -1,0 +1,49 @@
+{
+ "date": "2026-11-02",
+ "ligne": "Données",
+ "nature": "corpus OCR des PDF scannés du CEGEP",
+ "dispositif": {
+  "ocr": "tesseract 5.5.3 sans root (work/ocr/root)",
+  "langues": "fra+eng",
+  "dpi": 300,
+  "psm": 3,
+  "split": "hash salé du chemin : 5% val, 5% test",
+  "deduplication": "documents + tronçons"
+ },
+ "racines": [
+  {
+   "nom": "CEGEP",
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP",
+   "licence": "notes de cours — droits réservés, usage local, non diffusé"
+  }
+ ],
+ "pdfs": 41,
+ "scannes": 10,
+ "ocrises": 10,
+ "pages_ocr": 1596,
+ "caracteres": 2519507,
+ "troncons": 307,
+ "documents": {
+  "train": 0,
+  "val": 0,
+  "test": 0
+ },
+ "octets": {
+  "train": 2464185,
+  "val": 86688,
+  "test": 0
+ },
+ "temps_s": 0,
+ "mots_estimes": 406372,
+ "sha256_train": "be8475e1c80d0b40fdd2a87f3f0e379a2da14c572a88d86ef9b4bf6ee604afb8",
+ "sha256_val": "13ba376d1d2c87026b665765a62fd30f034e6458cd0deedd1ccfc31d23541fa0",
+ "sha256_test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+ "limites": [
+  "OCR brut : rotation/contraste/colonnes non traités",
+  "WER non mesurée",
+  "licences : droits réservés, corpus local non diffusé",
+  "manifeste reconstruit après interruption à 10 notes : documents par split non recomptés",
+  "le 11e PDF (Encyclopedia of Algorithms, >1 000 p) a dépassé le timeout pdftoppm de 1800 s et fait tomber le run : limite de l'outil (utiliser --max-pages)"
+ ],
+ "note_interruption": "lot de 40 interrompu à 10 notes le 2/11 à 11 h 25 (TimeoutExpired pdftoppm sur Encyclopedia of Algorithms)"
+}

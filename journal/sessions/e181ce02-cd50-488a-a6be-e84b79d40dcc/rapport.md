@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 42.8 h |
-| Tours | 137 |
-| Messages | 1642 |
-| Appels d'outils | 1412 |
+| Tours | 138 |
+| Messages | 1647 |
+| Appels d'outils | 1415 |
 | Fichiers touchés | 25 |
-| Commandes | 1149 |
+| Commandes | 1152 |
 | Sous-agents | 2 |
 | Commits | 173 |
 | Compactages de contexte | 5 |
@@ -309,6 +309,8 @@
 **Tour 136** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 137** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 138** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7275,6 +7277,51 @@ Je continue : prochain round, **la restitution sémantique** — la seule mesure
 - bash — Committer la restitution sémantique
 - job_output
 
+**Synthèse produite :**
+
+⏵ Restitution sémantique : le résumé rappelle 78 % (0,7834 heur / 0,7472 cascade) ; 122/122
+
+Le round 123 est livré : la **règle 6 est complète** — trois sorties, trois mesures. Le résumé par les syntagmes couvre **78 %** des mots. Commit **`7e1b15de`**.
+
+\## Les cinq restitutions
+
+| restitution | source | **mesure** |
+|---|---|---:|
+| graphèmes (surface) | 587 phrases | 1,0000 |
+| POS + intervalles | 587 phrases | 1,0000 |
+| **résumé (syntagmes)** | 587 phrases | **0,7834** (heur) / 0,7472 (cascade) |
+
+**Ce que ça dit** :
+
+- **Le résumé n'est pas le texte** : 78 % des mots couverts, 22 % perdus (les déterminants, les pronoms, la ponctuation) — c'est la **vraie** restitution sémantique.
+- **La cascade perd 3,6 points** (0,7472) : ses syntagmes supplémentaires ont des `valeur` plus courtes (le mock) ; le résumé est moins complet.
+- **La règle 6 est complète** : la surface (1,0), le POS (1,0 avec spans), le sémantique (0,78) — trois sorties, trois mesures, pas une.
+- **La fluidité (1,0) n'est toujours pas la fidélité** (0,78).
+
+\## L'état
+
+- Fiche : [`rapport-pensee-miroir-resume.md`](../../reports/rapport-pensee-miroir-resume.md) ; JSON [`pensee-miroir-resume.json`](../../reports/pensee-miroir-resume.json) ; T119 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **122/122 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **530 fiches / 618 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` à jour (11 h 52).
+- L'horloge réelle est **11 h 29 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **La réponse** : une reformulation, pas une répétition — la mesure suivante.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **la réponse** — la seule sortie que le miroir n'a pas encore mesurée.
+
+### Tour 138 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Ajouter la réponse et mesurer sur les questions
+- bash — Écrire la fiche de la réponse et la porte T120
+- bash — Trim T0/README et passer toutes les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7354,7 +7401,7 @@ Je continue : prochain round, **la restitution sémantique** — la seule mesure
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1109 autres
+- … et 1112 autres
 
 ## 4. Mesures et résultats marquants
 

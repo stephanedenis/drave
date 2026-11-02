@@ -20400,3 +20400,29 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1186", "timeout_ms": 800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; ps -eo pid,etime,rss,cmd | grep big-60k | grep -v grep  … [59 caractères tronqués]`
+
+  ```
+11:29
+pas 14500 · perte 1.5314 · PPL val 4.448 · 782 s
+pas 12600 · perte 1.5805 · PPL val 3.938 · 654 s
+0, 1322 MiB, 96 %
+1, 1322 MiB, 95 %
+3497463       13:51  2132 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal --pas 60000 --seq 128 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --positions-aleatoires 384 --sortie work/n2w/fr-60k.pt --drvm work/n2w/fr-60k.drvm > work/n2w/fr-60k.log 2>&1' > /dev/null 2>&1 & echo "fr60 $!" nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=1 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_big/propre/train.txt --canal data/wiki_big/propre/train.canal --pas 60000 --seq 128 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --positions-aleatoires 384 --sortie work/n2w/big-60k.pt --drvm work/n2w/big-60k.drvm > work/n2w/big-60k.log 2>&1' > /dev/null 2>&1 & echo "big60 $!" sleep 45; tail -1 work/n2w/fr-60k.log 2>/dev/null; t
+… [580 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -3", "description": "Check the current counters"}`
+
+  ```
+revue de documentation · 530 fiche(s) · 618 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null", "description": "Wait for the 60k trainings"}`

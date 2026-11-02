@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 11 h 30 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 11 h 33 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -37,7 +37,7 @@
 - **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
   avance ; **N4** en file ; **A/B** gardent les leurs.
 - **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `docs/theorie/pre-traitement-linguistique.md`, `tools/bloc_linguistique.py`, `tools/tests/linguistique/`, `docs/implantation/bloc-linguistique.md`, `journal/sessions/e181ce02-…/`.
-- **Prochaine action** : **L** — la **réponse** (une reformulation, pas une répétition) après la **restitution sémantique** (T119 : résumé 0,7834 heur / 0,7472 cascade) ;
+- **Prochaine action** : **L** — la **réponse au contenu** (T120 : 19/19 par l'acte ; répondre à la question, pas à son type) ;
   **B13** — DRVM/native **bloqué**, la cascade mesurée reste la lecture.
 - **Bloquants** : **neuronal réel bloqué** — `llama-cli` refuse/timeout, aucun tagger (`spacy`,
   `stanza`, `nltk`, `transformers`), aucun poids `drave-n0` ; le mock reste un contrat. Trois
@@ -88,7 +88,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges à la passe du 02/11 06 h : les 4 connues + greffe à la borne 700 s, rejouée verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **530** / **618** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **531** / **619** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

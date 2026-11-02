@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 42.9 h |
 | Tours | 386 |
-| Messages | 2340 |
-| Appels d'outils | 1557 |
+| Messages | 2342 |
+| Appels d'outils | 1559 |
 | Fichiers touchés | 26 |
-| Commandes | 1383 |
+| Commandes | 1385 |
 | Sous-agents | 0 |
-| Commits | 91 |
+| Commits | 93 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -9111,7 +9111,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 
 ### Tour 386 — continue pendent 3h
 
-*20 appels d'outils.* Actions notables :
+*22 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — First 5-min check of CEGEP lot 40
@@ -9127,7 +9127,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - bash — Wait 15 min then check Encyclopedia render
 - bash — Write 10-note CEGEP manifest and check
 - bash — Update CEGEP fiche and docs to 10 notes
-- … et 1 autres
+- … et 3 autres
 
 **Synthèse produite :**
 
@@ -9208,7 +9208,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1343 autres
+- … et 1345 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9447,4 +9447,6 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - PILOTAGE — LE DOSSIER PORTE L'OCR DES 20 LIVRES + 7 NOTES CEGEP ET LE LOT SUIVANT (21e-40e)" > /tmp/commit-pilotage.log 2>&1; code=$?; tail -3 /tmp/commit-pilot
 - PILOTAGE — LE RESTE DE L'OCR EST LE FONDS CEGEP : 137 SCANS (LES 20 LIVRES SONT TOUS FAITS), LOT DE 40 LANCÉ" > /tmp/commit-pilotage2.log 2>&1; code=$?; tail -3
 - DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA, 1 000+ P) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE DÉSORMAIS" > /tmp/commi
+- DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA, 1 000+ P) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE DÉSORMAIS" > /tmp/commi
+- DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE" > /tmp/commit-cegep10c.log 2>&1;
 

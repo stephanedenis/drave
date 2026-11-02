@@ -35364,3 +35364,32 @@ docs/pilotage/en-cours.md:62:- **Prochaine action** : l'**OCR complet** — le *
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/ocr_pdf.py'); t = p.read_text(encoding='utf-8')\nold = '''        cmd += [str(pdf), str(tmp / \"p\")]\n        subprocess.run(cmd, capture_output=True, timeout=18 … [1230 caractères tronqués]`
+
+  ```
+11:27
+ok
+compile-ok
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 7e1b15deaf57430be40245231bf80a62f3727a63 but expected bfc2d1b4b26874d1c04d30b9d0eb1af8ea3e3206
+code=128
+7e1b15de B13 — LA RESTITUTION SÉMANTIQUE : LE RÉSUMÉ RAPPELLE 78 % (0,7834 HEUR / 0,7472 CASCADE) ; 122/122
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; ok=0; for i in 1 2 3 4 5; do git read-tree HEAD; git add reports/ocr-pdf-cegep.json reports/ocr-pdf-cegep-contamination.json reports/rapport-ocr-cegep.md tools/ocr_pdf.py docs/pilotage/en-cours.md  … [578 caractères tronqués]`
+
+  ```
+mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+ok=0
+7e1b15de B13 — LA RESTITUTION SÉMANTIQUE : LE RÉSUMÉ RAPPELLE 78 % (0,7834 HEUR / 0,7472 CASCADE) ; 122/122
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; git diff HEAD --stat -- docs/pilotage/en-cours.md; sed -n '3p' docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); t = p.read_text(encoding='utf-8')\nt, n = re. … [1010 caractères tronqués]`
