@@ -1,0 +1,45 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "36/36",
+ "entrainement": 0.8,
+ "etats_q": 74,
+ "lignes": [
+  {
+   "p_ouverture": 0.5,
+   "but": true,
+   "pas": 10,
+   "essais": 3
+  },
+  {
+   "p_ouverture": 0.6,
+   "but": true,
+   "pas": 10,
+   "essais": 3
+  },
+  {
+   "p_ouverture": 0.7,
+   "but": true,
+   "pas": 10,
+   "essais": 3
+  },
+  {
+   "p_ouverture": 0.8,
+   "but": true,
+   "pas": 9,
+   "essais": 2
+  },
+  {
+   "p_ouverture": 0.9,
+   "but": true,
+   "pas": 8,
+   "essais": 1
+  },
+  {
+   "p_ouverture": 0.95,
+   "but": true,
+   "pas": 8,
+   "essais": 1
+  }
+ ]
+}

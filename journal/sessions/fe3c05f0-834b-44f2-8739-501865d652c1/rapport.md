@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 30.0 h |
+| Durée | 30.2 h |
 | Tours | 35 |
-| Messages | 1046 |
-| Appels d'outils | 991 |
+| Messages | 1048 |
+| Appels d'outils | 993 |
 | Fichiers touchés | 18 |
-| Commandes | 912 |
+| Commandes | 914 |
 | Sous-agents | 0 |
-| Commits | 60 |
+| Commits | 61 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1388,10 +1388,12 @@ Le **contrôle anglais** (~20-30 min) → la **fiche et le catalogue des dix** �
 
 ### Tour 35 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Check English contamination progress and documents
 - bash — Wait for English contamination result
+- bash — Update report and state for ten languages
+- bash — Commit ten-language corpus with memory limit
 
 ## 3. Travail accompli
 
@@ -1460,7 +1462,7 @@ Le **contrôle anglais** (~20-30 min) → la **fiche et le catalogue des dix** �
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 872 autres
+- … et 874 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1668,4 +1670,5 @@ Le **contrôle anglais** (~20-30 min) → la **fiche et le catalogue des dix** �
 - A2.6/A8.3 — LE LOT SUR LE DISQUE : IL NE DIVISE PAS LES LECTURES (503→502 MIO), IL ACCÉLÈRE LE CALCUL (+27 %)" 2>/tmp/commit.err; then echo "commit OK"; break; 
 - DONNÉES — L'OCR DES SCANS (tesseract 5.5.3) ET LES 7 496 DOCUMENTS LANCÉS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /t
 - ÉTAT — DOCUMENTS 1 000/7 496 (295 MO), OCR EN COURS, ANGLAIS 19,4/25,6 M" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /tm
+- DONNÉES — LES DIX CORPUS EN TEXTE INTÉGRAL : 20,53 M ARTICLES, 67,73 G CARACTÈRES, 81,2 GO (ANGLAIS CLOS À 99,2 %, LIMITE MÉMOIRE NOMMÉE)" 2>/tmp/commit.err; th
 

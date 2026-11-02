@@ -554,6 +554,20 @@ def t32_mobile_graines() -> tuple[bool, str]:
         f"mobile graines : {d0}/5 d0, {d1}/5 d1")
 
 
+def t33_bruit() -> tuple[bool, str]:
+    """Le bruit variable : la politique entraînée à 80 % tient de 50 % à 95 %."""
+    from .courbe import seule_sto
+    from .operateurs import PolitiqueAppriseOuverte
+    p = PolitiqueAppriseOuverte(episodes=1000, graine=0)
+    p.apprendre()
+    res = []
+    for po in (0.5, 0.6, 0.7, 0.8, 0.9, 0.95):
+        ok, pas, essais = seule_sto(p, graine=0, p_ouvre=po)
+        res.append((po, ok, pas, essais))
+    return all(r[1] for r in res), (f"bruit 50–95 % : {sum(1 for r in res if r[1])}/{len(res)} "
+                                   f"buts (essais {[r[3] for r in res]})")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -585,7 +599,8 @@ def main() -> int:
               ("T29 curriculum open", t29_ouverte()),
               ("T30 robustesse sur 5 graines", t30_graines()),
               ("T31 porte mobile", t31_mobile()),
-              ("T32 porte mobile sur 5 graines", t32_mobile_graines())]
+              ("T32 porte mobile sur 5 graines", t32_mobile_graines()),
+              ("T33 bruit variable", t33_bruit())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

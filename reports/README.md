@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-bruit.md`](rapport-pensee-bruit.md) | **B13** — le bruit variable : 50–95 %, 6/6 buts, effort 3 → 1 essai, **36/36** |
 | [`rapport-pensee-mobile-graines.md`](rapport-pensee-mobile-graines.md) | **B13** — la porte mobile sur 5 graines : 5/5 d0, 5/5 d1, 147–184 états-Q, **35/35** |
 | [`rapport-pensee-mobile.md`](rapport-pensee-mobile.md) | **B13** — la porte mobile : 2 positions, A* 2/2, politique seule but/8, 170 états-Q, **34/34** |
 | [`rapport-pensee-graines.md`](rapport-pensee-graines.md) | **B13** — la robustesse sur 5 graines : 5/5 bruits, 5/5 stables, **33/33** |

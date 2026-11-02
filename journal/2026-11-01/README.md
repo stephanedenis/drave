@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**119 commits** · **4 session(s)** · **10 thème(s)**
+**120 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -20,7 +20,7 @@
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
-| portes | 5 | [portes.md](portes.md) |
+| portes | 6 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -33,7 +33,7 @@
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 30.4 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 30.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 30.0 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 30.2 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -158,10 +158,18 @@
 | 22:32 | `7367b314` | B13 — LE CURRICULUM OPEN : 74 ÉTATS-Q, BRUIT BUT/9 ET STABLE BUT/8 ; 32/32 |
 | 22:36 | `efaaa945` | B13 — LA ROBUSTESSE SUR 5 GRAINES : 5/5 BRUITS, 5/5 STABLES ; 33/33 |
 | 22:40 | `bd93762d` | B13 — LA PORTE MOBILE : 2 POSITIONS, A* 2/2, POLITIQUE SEULE BUT/8, 170 ÉTATS-Q ; 34/34 |
+| 22:43 | `fa524ac5` | B13 — LA PORTE MOBILE SUR 5 GRAINES : 5/5 D0, 5/5 D1, 147–184 ÉTATS-Q ; 35/35 |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Les dix corpus en texte intégral sont mesurés.** L'anglais a été **clos à 99,2 %** : 25,4 M
+pages sur 25,6 M, **6 023 249 articles**, 21,98 G caractères, 22,20 Go, **8 Ko 0**, XNLI **0/40**,
+wikitext2 **0/40**. Le run avait bloqué son écriture à 125/125 Go de mémoire (~75 Go de résidence
+pour 6 M d'articles) ; le manifeste a été reconstruit depuis le journal et les SHA-256. Les dix :
+**20,53 M articles**, **67,73 G caractères**, **81,2 Go**. Limite nommée : sur un dump de 25 Go,
+dédupliquer par tranches ou prévoir ~80 Go de RAM.
+
 **L'état des trois fronts.** Les **Documents** : 1 000 PDF sur 7 496, 295 Mo, 243,1 M caractères
 (le parcours prendra ~2 h 30). L'**OCR** : la détection des scannés sur les 2 785 PDF est longue
 (le `pdftotext` de deux pages par document), le premier livre est passé. L'**anglais** : 19,4 M
