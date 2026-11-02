@@ -16130,3 +16130,27 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-945", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W34-g*.pt 2>/dev/null; tail -1 work/n2j/W34-g1.log; tail -1 work/n2j/W34-g2.log; tail -2 /tmp/portes-nuit.out", "description": "Check the 34M students and the gates"}`
+
+  ```
+23:37
+pas  8000 · seq 128 · perte 17.1660 · PPL 128/4 3.7050 · 940 s
+pas  8250 · seq 128 · perte 17.6487 · PPL 128/4 3.7040 · 947 s
+  porte-fusion           ✅                           9 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         227 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W34-g*.pt 2>/dev/null; tail -1 work/n2j/W34-g1.log; tail -1 work/n2j/W34-g2.log; tail -2 /tmp/portes-nuit.out", "description": "Wait for the 34M students to finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-947]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-947", "timeout_ms": 1500000, "wait": true}`

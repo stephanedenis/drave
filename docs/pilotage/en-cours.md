@@ -26,7 +26,7 @@
   parité réelle sans questions) ; **S** est actif dans une autre TUI (export pragmatique, 11 tests).
 - **Coloration** : analyse [`pre-traitement-linguistique`](../theorie/pre-traitement-linguistique.md)
   (5 schémas) — le CPU étiquette, le réseau tranche
-  la cascade se juge sur couverture × précision
+  la cascade : couverture × précision
 - **Bloc** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
   (9 niveaux) ; **398 langues à 0,9687** ; fiche et porte.
 - **Moteur B13** : **AC-3/alpha-bêta (8/8)**, **DRVF (9/9)**, **banc (10/10)**, **opérateurs 11/11**, **nécessaire 12/12**, **labyrinthe 13/13** ; fiches
@@ -40,7 +40,7 @@
   [`pensee-minute-seule`](../../reports/rapport-pensee-minute-seule.md), [`pensee-minute-entrainee`](../../reports/rapport-pensee-minute-entrainee.md),
   [`pensee-shaping`](../../reports/rapport-pensee-shaping.md), [`pensee-reseau`](../../reports/rapport-pensee-reseau.md),
   [`pensee-mlp`](../../reports/rapport-pensee-mlp.md), [`pensee-professeur`](../../reports/rapport-pensee-professeur.md),
-  [`pensee-sans-none`](../../reports/rapport-pensee-sans-none.md), [`pensee-correction`](../../reports/rapport-pensee-correction.md), [`pensee-audit`](../../reports/rapport-pensee-audit.md), [`pensee-ouverte`](../../reports/rapport-pensee-ouverte.md), [`pensee-graines`](../../reports/rapport-pensee-graines.md), [`pensee-mobile`](../../reports/rapport-pensee-mobile.md), [`pensee-mobile-graines`](../../reports/rapport-pensee-mobile-graines.md), [`pensee-bruit`](../../reports/rapport-pensee-bruit.md), [`pensee-bouge`](../../reports/rapport-pensee-bouge.md), [`pensee-bouge-graines`](../../reports/rapport-pensee-bouge-graines.md), [`pensee-periode`](../../reports/rapport-pensee-periode.md), [`pensee-phase`](../../reports/rapport-pensee-phase.md), [`pensee-phase-graines`](../../reports/rapport-pensee-phase-graines.md), [`pensee-aleatoire`](../../reports/rapport-pensee-aleatoire.md), [`pensee-hasard`](../../reports/rapport-pensee-hasard.md), [`pensee-partielle`](../../reports/rapport-pensee-partielle.md), [`pensee-croyance`](../../reports/rapport-pensee-croyance.md), [`pensee-curieuse`](../../reports/rapport-pensee-curieuse.md), [`pensee-observatrice`](../../reports/rapport-pensee-observatrice.md), [`pensee-bruitee`](../../reports/rapport-pensee-bruitee.md).
+  [`pensee-sans-none`](../../reports/rapport-pensee-sans-none.md), [`pensee-correction`](../../reports/rapport-pensee-correction.md), [`pensee-audit`](../../reports/rapport-pensee-audit.md), [`pensee-ouverte`](../../reports/rapport-pensee-ouverte.md), [`pensee-graines`](../../reports/rapport-pensee-graines.md), [`pensee-mobile`](../../reports/rapport-pensee-mobile.md), [`pensee-mobile-graines`](../../reports/rapport-pensee-mobile-graines.md), [`pensee-bruit`](../../reports/rapport-pensee-bruit.md), [`pensee-bouge`](../../reports/rapport-pensee-bouge.md), [`pensee-bouge-graines`](../../reports/rapport-pensee-bouge-graines.md), [`pensee-periode`](../../reports/rapport-pensee-periode.md), [`pensee-phase`](../../reports/rapport-pensee-phase.md), [`pensee-phase-graines`](../../reports/rapport-pensee-phase-graines.md), [`pensee-aleatoire`](../../reports/rapport-pensee-aleatoire.md), [`pensee-hasard`](../../reports/rapport-pensee-hasard.md), [`pensee-partielle`](../../reports/rapport-pensee-partielle.md), [`pensee-croyance`](../../reports/rapport-pensee-croyance.md), [`pensee-curieuse`](../../reports/rapport-pensee-curieuse.md), [`pensee-observatrice`](../../reports/rapport-pensee-observatrice.md), [`pensee-bruitee`](../../reports/rapport-pensee-bruitee.md), [`pensee-votante`](../../reports/rapport-pensee-votante.md).
 - **Gold 360** : **200 + 160 synthétiques** ; POS **0,772** (fermé 0,939/ouvert 0,621),
   syntagmes exacts **0,194**/**tête 0,560**, pragmatique **0,994–1,0** ; cascade (mock) ; **attachement tête 1,0/0,966/0,932** (59 ambiguës), hasard 0,015 ; neuronal
   **refusé** ; fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :
@@ -98,7 +98,7 @@
 |---|---|---|
 | portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **438** / **533** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **444** / **539** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
@@ -113,7 +113,7 @@ action** — pas les statuts, qui dérivent. Vue d'ensemble :
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : AC-3/alpha-bêta 8/8, DRVF 9/9, banc 10/10, opérateurs 48** | **B11.10 close** ; **B13 : DRVM/native** ; B10.3 bloquée |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : AC-3/alpha-bêta 8/8, DRVF 9/9, banc 10/10, opérateurs 49** | **B11.10 close** ; **B13 : DRVM/native** ; B10.3 bloquée |
 | **N — le natif** | **N3, N4** | N2.h close ; N2 < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2 close** ; **N4** (consigne) |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R1/R2/R3 attendent N5/N4 | **R1.1/R1.2** (contexte natif) |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |

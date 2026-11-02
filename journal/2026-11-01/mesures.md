@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (55)
+## Commits du jour (56)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -63,19 +63,20 @@
 | 23:22 | `ef47fd92` | B13 — LA CROYANCE : 0/20 BUTS, LA DISTRIBUTION SEULE NE SUFFIT PAS ; 45/45 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 | 23:26 | `e5fea549` | B13 — LA CURIOSITÉ : 0/20 BUTS, LE BONUS DE CERTITUDE NE SUFFIT PAS ; 46/46 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+15) |
 | 23:33 | `f3b70959` | B13 — L'OBSERVATION BRUITÉE : 10 % D'ERREUR CASSE LA POLITIQUE (0/20) ; 48/48 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
+| 23:36 | `7e819b56` | DONNÉES — LE GENRE SE MESURE : ENCYCLOPÉDIE 103-147 CAR/LIGNE, LIVRES 32-37 ; LIGNES DUPLIQUÉES 8,7-24 %, OCR 4,8 % | `en-cours.md`, `README.md`, `mesures.md` (+10) |
 
 ## Chiffres du jour
 
-`10 %` · `60 %` · `95 %` · `+27 %` · `0,772` · `0,966` · `0,946` · `0,773` · `0,962` · `0,936` · `0,774` · `0,954`
+`-24 %` · `4,8 %` · `10 %` · `60 %` · `95 %` · `+27 %` · `0,772` · `0,966` · `0,946` · `0,773` · `0,962` · `0,936`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 31.2 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 31.3 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `b6a672ec-3349-4a4c-9e23-4478aa823170` — Git push to origin remote (début 2026-11-01 13:28, 0.1 h) → [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 30.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 31.0 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 31.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 31.1 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -84,6 +85,7 @@
 - [reports/rapport-a26-lot-disque.md](../../reports/rapport-a26-lot-disque.md)
 - [reports/rapport-bloc-linguistique.md](../../reports/rapport-bloc-linguistique.md)
 - [reports/rapport-corpus-wiki-texte.md](../../reports/rapport-corpus-wiki-texte.md)
+- [reports/rapport-genres.md](../../reports/rapport-genres.md)
 - [reports/rapport-n2-anglais.md](../../reports/rapport-n2-anglais.md)
 - [reports/rapport-n2-canal.md](../../reports/rapport-n2-canal.md)
 - [reports/rapport-n2-capacite-34m.md](../../reports/rapport-n2-capacite-34m.md)

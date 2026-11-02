@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 31.0 h |
-| Tours | 75 |
-| Messages | 1190 |
-| Appels d'outils | 1046 |
+| Durée | 31.1 h |
+| Tours | 76 |
+| Messages | 1197 |
+| Appels d'outils | 1051 |
 | Fichiers touchés | 22 |
-| Commandes | 963 |
+| Commandes | 968 |
 | Sous-agents | 0 |
-| Commits | 64 |
+| Commits | 65 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -177,6 +177,8 @@
 **Tour 74** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 75** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 76** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2280,7 +2282,55 @@ Les deux fiches sont écrites **en cours** et portent la mention que leurs chiff
 
 **Synthèse produite :**
 
-⏵ Round 63 : la comparaison des genres est mesurée (13 corpus, 200 Mo chacun) — j'écris la fiche
+⏵ Round 63 : la comparaison des genres est mesurée et committée (le genre sépare l'encyclopédie des livres)
+
+**Round 63/1000 — une livraison neuve : le genre se mesure.**
+
+Pendant que les extractions tournent, j'ai écrit `tools/compare_genres.py` et mesuré les **13 corpus** (200 Mo chacun) : la longueur de ligne, les lignes dupliquées, la couverture lexicale.
+
+| corpus | car/ligne | lignes dup. |
+|---|---:|---:|
+| en (wiki) | 146,8 | 9,6 % |
+| es (wiki) | 127,4 | 10,7 % |
+| pt (wiki) | 116,9 | 15,1 % |
+| de (wiki) | 115,8 | 8,7 % |
+| it (wiki) | 113,1 | 18,4 % |
+| fr (wiki) | 111,1 | 15,1 % |
+| ru (wiki) | 107,2 | 13,5 % |
+| ar (wiki) | 103,1 | 16,2 % |
+| ja (wiki) | 42,0 | 11,8 % |
+| zh (wiki) | 40,8 | 13,5 % |
+| pdf (livres) | 37,2 | 23,8 % |
+| documents | 37,5 | 22,1 % |
+| ocr (scannés) | 32,1 | 4,8 % |
+
+**Le constat** : la longueur de ligne **sépare les genres** — l'encyclopédie écrit des paragraphes longs (103 à 147 caractères), les livres et documents des lignes courtes (32 à 37) ; les lignes dupliquées sont le fait du PDF et des documents (22 à 24 % : en-têtes, numéros de page), l'OCR le moins (4,8 %). C'est la **mise en page**, pas le contenu — et c'est exactement ce qu'un modèle de langue doit apprendre à distinguer.
+
+La fiche (`reports/rapport-genres.md`) et les chiffres (`reports/corpus-genres.json`) sont committés (`7e819b56`). **Les documents** sont à 6 000/7 496 (799,7 Mo) et **l'OCR** à son 6e livre (3,8 M) ; leurs fiches sont déjà committées (`1da205d7`), leurs chiffres seront figés aux manifestes.
+
+**La suite** : les manifestes Documents/OCR → les chiffres figés ; les 159 scans ; puis la comparaison des trigrammes et la préparation R1.1/R1.2. Le goal reste actif.
+
+### Tour 76 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check documents and OCR status
+- bash — Read documents manifest and final counts
+- bash — Finalize documents fiche and launch 8KB check
+- bash — Wait for documents contamination result
+- bash — Commit documents corpus closure
+
+**Synthèse produite :**
+
+⏵ Round 64 : le manifeste Documents est écrit — 7 459 PDF, 3 384 documents, 872 M caractères
+
+**Round 64/1000 — les documents ont fini : leur manifeste est là.**
+
+`reports/corpus-pdf-documents.json` est écrit : **7 459 PDF**, **803 817 pages**, **3 384 documents gardés** (sur 7 459), **1 017 scannés**, **1 316 courts**, **1 742 doublons**, **871 972 648 caractères**, **107 976 tronçons** (dont 372 doublons), train 803,0 Mo / val 49,6 Mo / test 34,4 Mo, SHA-256 des trois fichiers, licences **personnelles** (usage local, non diffusé). Le parcours a donc été au bout — plus vite que prévu.
+
+Je mets à jour la fiche (`rapport-corpus-documents.md`) avec ces chiffres définitifs et je lance le **contrôle 8 Ko** sur les documents (le même outil que pour les corpus Wikipédia). Pendant ce temps, l'OCR est toujours sur son 6e livre (3,8 M).
+
+La suite : le contrôle 8 Ko → la fiche figée et committée ; puis l'OCR (ses 6 livres et les 159 scans) ; la comparaison des trigrammes ; la préparation R1.1/R1.2. Le goal reste actif.
 
 ## 3. Travail accompli
 
@@ -2353,7 +2403,7 @@ Les deux fiches sont écrites **en cours** et portent la mention que leurs chiff
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 923 autres
+- … et 928 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2565,4 +2615,5 @@ Les deux fiches sont écrites **en cours** et portent la mention que leurs chiff
 - DONNÉES — FICHES DU CORPUS DOCUMENTS ET DU CORPUS OCR (EN COURS, CHIFFRES FIXÉS À LA CLÔTURE)" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus
 - DONNÉES — FICHES DU CORPUS DOCUMENTS ET DU CORPUS OCR (EN COURS, CHIFFRES FIXÉS À LA CLÔTURE)" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus
 - DONNÉES — LE GENRE SE MESURE : ENCYCLOPÉDIE 103-147 CAR/LIGNE, LIVRES 32-37 ; LIGNES DUPLIQUÉES 8,7-24 %, OCR 4,8 %" 2>/tmp/commit.err; then echo "commit OK"; b
+- DONNÉES — LE CORPUS DOCUMENTS EST CLOS : 7 459 PDF, 3 384 DOCUMENTS, 872 M CARACTÈRES, 8 KO 2,07 % (TEST)" 2>/tmp/commit.err; then echo "commit OK"; break; else
 

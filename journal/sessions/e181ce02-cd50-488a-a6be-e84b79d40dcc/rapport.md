@@ -7,10 +7,10 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 30.9 h |
+| Durée | 31.0 h |
 | Tours | 63 |
-| Messages | 937 |
-| Appels d'outils | 862 |
+| Messages | 938 |
+| Appels d'outils | 863 |
 | Fichiers touchés | 25 |
 | Commandes | 697 |
 | Sous-agents | 2 |
@@ -3359,13 +3359,14 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait **voter deux observ
 
 ### Tour 63 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Tester l'observation votante
 - bash — Ajouter la porte T46 (observation votante)
 - bash — Écrire la fiche de l'observation votante
 - bash — Aligner les compteurs, trim et portes
 - bash — Committer l'observation votante
+- job_output
 
 ## 3. Travail accompli
 

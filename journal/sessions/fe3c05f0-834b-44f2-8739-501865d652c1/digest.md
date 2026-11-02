@@ -20663,3 +20663,157 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| [^|]+ \\|\", \"| fichiers / JSON de résultats | **438** / **533** |\", s)\ns=s.replace( … [893 caractères tronqués]`
+
+  ```
+T0 max : 4000 mots (budget 4 000)
+     · compteurs : en-cours.md dit 533 JSON, le disque en a 538
+refus
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at f3b70959483c697494ac36c21ea9b2954e04dcb6 but expected 4aa8e1d835fa38f64585abcdf557523086e335d2
+[master 7e819b56] DONNÉES — LE GENRE SE MESURE : ENCYCLOPÉDIE 103-147 CAR/LIGNE, LIVRES 32-37 ; LIGNES DUPLIQUÉES 8,7-24 %, OCR 4,8 %
+ 13 files changed, 489 insertions(+), 16 deletions(-)
+ create mode 100644 reports/corpus-genres.json
+ create mode 100644 reports/rapport-genres.md
+ create mode 100644 tools/compare_genres.py
+commit OK
+7e819b56 DONNÉES — LE GENRE SE MESURE : ENCYCLOPÉDIE 103-147 CAR/LIGNE, LIVRES 32-37 ; LIGNES DUPLIQUÉES 8,7-24 %, OCR 4,8 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 63 : la comparaison des genres est mesurée et committée (le genre sépare l'encyclopédie des livres)
+
+**Round 63/1000 — une livraison neuve : le genre se mesure.**
+
+Pendant que les extractions tournent, j'ai écrit `tools/compare_genres.py` et mesuré les **13 corpus** (200 Mo chacun) : la longueur de ligne, les lignes dupliquées, la couverture lexicale.
+
+| corpus | car/ligne | lignes dup. |
+|---|---:|---:|
+| en (wiki) | 146,8 | 9,6 % |
+| es (wiki) | 127,4 | 10,7 % |
+| pt (wiki) | 116,9 | 15,1 % |
+| de (wiki) | 115,8 | 8,7 % |
+| it (wiki) | 113,1 | 18,4 % |
+| fr (wiki) | 111,1 | 15,1 % |
+| ru (wiki) | 107,2 | 13,5 % |
+| ar (wiki) | 103,1 | 16,2 % |
+| ja (wiki) | 42,0 | 11,8 % |
+| zh (wiki) | 40,8 | 13,5 % |
+| pdf (livres) | 37,2 | 23,8 % |
+| documents | 37,5 | 22,1 % |
+| ocr (scannés) | 32,1 | 4,8 % |
+
+**Le constat** : la longueur de ligne **sépare les genres** — l'encyclopédie écrit des paragraphes longs (103 à 147 caractères), les livres et documents des lignes courtes (32 à 37) ; les lignes dupliquées sont le fait du PDF et des documents (22 à 24 % : en-têtes, numéros de page), l'OCR le moins (4,8 %). C'est la **mise en page**, pas le contenu — et c'est exactement ce qu'un modèle de langue doit apprendre à distinguer.
+
+La fiche (`reports/rapport-genres.md`) et les chiffres (`reports/corpus-genres.json`) sont committés (`7e819b56`). **Les documents** sont à 6 000/7 496 (799,7 Mo) et **l'OCR** à son 6e livre (3,8 M) ; leurs fiches sont déjà committées (`1da205d7`), leurs chiffres seront figés aux manifestes.
+
+**La suite** : les manifestes Documents/OCR → les chiffres figés ; les 159 scans ; puis la comparaison des trigrammes et la préparation R1.1/R1.2. Le goal reste actif.
+
+
+## Tour 76
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 64/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_pdf_documents/train.txt data/corpus_ocr/train.txt; tail -1 /tmp/pdf-documents.log; tail -1 /tmp/ocr-pilote.log; ls reports/corpus-pdf-documents.json reports/ocr-pdf.json 2>&1 | tail -2", "description": … [117 caractères tronqués]`
+
+  ```
+23:38
+-rw-r--r--. 1 stephane stephane   3802658  1 nov 23:09 data/corpus_ocr/train.txt
+-rw-r--r--. 1 stephane stephane 802954509  1 nov 23:30 data/corpus_pdf_documents/train.txt
+}
+  Biblio_large · 004.0 Inconnu(e) 2009, Dictionnaire des  · 249 p · 1202859 car
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+reports/corpus-pdf-documents.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/corpus-pdf-documents.json').read_text())\nfor k,v in d.items():\n    if isinstance(v,(str,int,float)): print(f\"{k}: {v}\")\n    elif isinstance(v … [351 caractères tronqués]`
+
+  ```
+23:38
+date: 2026-11-01
+ligne: Données
+nature: corpus PDF local (texte natif)
+methode: {'extraction': 'pdftotext -enc UTF-8', 'page': 'pdfinfo', 'scanne': 'moins de 50 caractères/page', 'deduplication': 'documents + tronçons (BLAKE2b)', 'split': 'hash salé du chemin : 5% val, 5% test'}
+racines: 1 éléments
+pdfs: 7459
+pages: 803817
+documents_gardes: 3384
+documents_scannes: 1017
+documents_courts: 1316
+documents_doublons: 1742
+caracteres_gardes: 871972648
+troncons: 107976
+troncons_doublons: 372
+octets: {'train': 802954509, 'val': 49570820, 'test': 34389340}
+documents: {'train': 3071, 'val': 166, 'test': 147}
+echantillon: ---
+Avis de cotisation ARC 2025 (version HTML)
+16/07/2026 19:41
+
+Avis de cotisation (version HTML)
+
+Avis de cotisation (version HTML)
+Détails concernant l'avis
+Adresse :
+STÉPHANE DENIS
+10-915 RUE SAINT-PIERRE OSAINT-HYACINTHE QC J2T 1N9
+Numéro d'assurance sociale : XXX XX9 035
+Année d'imposition : 2025
+Date de l'avis : 11 mai 2026
+Centre Fiscal : JONQUIÈRE QC G7S 5J1
+Code d'accès : GG7N8BX7
+Nous avons
+---
+DictionnaireGenealofiqueFamillesCanadienne - Bibliotheque et Archives nationales du Que
+DICTIONNAIRE
+
+GENEALOGIQUE
+DES
+
+FAMILLES CANADIENNES
+
+DICTIONNAIRE
+
+DES
+
+F A 
+… [804 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 64 : le manifeste Documents est écrit — 7 459 PDF, 3 384 documents, 872 M caractères
+
+**Round 64/1000 — les documents ont fini : leur manifeste est là.**
+
+`reports/corpus-pdf-documents.json` est écrit : **7 459 PDF**, **803 817 pages**, **3 384 documents gardés** (sur 7 459), **1 017 scannés**, **1 316 courts**, **1 742 doublons**, **871 972 648 caractères**, **107 976 tronçons** (dont 372 doublons), train 803,0 Mo / val 49,6 Mo / test 34,4 Mo, SHA-256 des trois fichiers, licences **personnelles** (usage local, non diffusé). Le parcours a donc été au bout — plus vite que prévu.
+
+Je mets à jour la fiche (`rapport-corpus-documents.md`) avec ces chiffres définitifs et je lance le **contrôle 8 Ko** sur les documents (le même outil que pour les corpus Wikipédia). Pendant ce temps, l'OCR est toujours sur son 6e livre (3,8 M).
+
+La suite : le contrôle 8 Ko → la fiche figée et committée ; puis l'OCR (ses 6 livres et les 159 scans) ; la comparaison des trigrammes ; la préparation R1.1/R1.2. Le goal reste actif.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-corpus-documents.md'); s=p.read_text()\ns=s.replace(\"**Statut** : en cours (6 000 PDF sur 7 496 au 1/11 23 h 12) ; les chiffres finaux seront ajoutés à la clôture.\",\n … [1907 caractères tronqués]`
+
+  ```
+fiche Documents : chiffres définitifs
+check documents 1909899
+23:39
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 40); do [ -f reports/corpus-pdf-documents-contamination.json ] && break; sleep 15; done; echo \"attente $((i*15))s\"; ls -la reports/corpus-pdf-documents-contamination.json 2>/dev/null || { echo \"check: pas encore\";  … [508 caractères tronqués]`
+
+  ```
+attente 15s
+-rw-r--r--. 1 stephane stephane 616  1 nov 23:39 reports/corpus-pdf-documents-contamination.json
+lignes {'val.txt': 0.046635, 'test.txt': 0.077208}
+8 Ko {'val.txt': 0.0, 'test.txt': 0.02068}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| [^|]+ \\|\", \"| fichiers / JSON de résultats | **440** / **535** |\", s)\ns=s.replace( … [917 caractères tronqués]`

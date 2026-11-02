@@ -1198,6 +1198,35 @@ def seule_observatrice_bruitee(p: PolitiqueAppriseObservatriceBruitee,
     return seule_observatrice(p, max_pas)
 
 
+class PolitiqueAppriseVotante(PolitiqueAppriseObservatrice):
+    """L'observatrice qui **vote deux fois** : 10 % d'erreur par look, 1 % sur le vote."""
+
+    nom = "votante"
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, p_saut: float = 0.2,
+                 p_erreur: float = 0.1):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma,
+                         eps=eps, p_saut=p_saut)
+        self.p_erreur = p_erreur
+
+    def _pas(self, cle, action, d: int):
+        x, y, o, b = cle
+        if action == "observer":
+            v1 = d if self.rng.random() >= self.p_erreur else 1 - d
+            v2 = d if self.rng.random() >= self.p_erreur else 1 - d
+            if v1 == v2:
+                b2 = 3 if v1 == 0 else 0
+            else:
+                b2 = 1 if v1 == 0 else 2      # égalité : la croyance reste hésitante
+            return (x, y, o, b2), -0.2, d
+        return super()._pas(cle, action, d)
+
+
+def seule_votante(p: PolitiqueAppriseVotante, max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 
