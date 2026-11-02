@@ -1290,6 +1290,34 @@ def seule_bayes(p: PolitiqueAppriseBayes, max_pas: int = 200) -> tuple[bool, int
     return seule_observatrice(p, max_pas)
 
 
+class PolitiqueAppriseBayes2(PolitiqueAppriseBayes):
+    """Le bayésien à **deux looks** : deux mises à jour successives (0,99 de confiance)."""
+
+    nom = "bayes2"
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, p_saut: float = 0.2,
+                 p_erreur: float = 0.1, looks: int = 2):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma,
+                         eps=eps, p_saut=p_saut, p_erreur=p_erreur)
+        self.looks = looks
+
+    def _pas(self, cle, action, d: int):
+        x, y, o, b = cle
+        if action == "observer":
+            p = _BAYES_P[min(b, 9)]
+            for _ in range(self.looks):
+                vu = d if self.rng.random() >= self.p_erreur else 1 - d
+                v = 1.0 - self.p_erreur if vu == 0 else self.p_erreur
+                p = p * v / (p * v + (1 - p) * (1 - v))
+            return (x, y, o, _bayes_bucket(p)), -0.1 * self.looks, d
+        return super()._pas(cle, action, d)
+
+
+def seule_bayes2(p: PolitiqueAppriseBayes2, max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

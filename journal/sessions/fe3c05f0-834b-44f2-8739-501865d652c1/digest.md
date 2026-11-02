@@ -21229,3 +21229,232 @@ Round: 75/1000
 Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
 </goal_round>
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_ocr/train.txt; tail -1 /tmp/ocr-pilote.log; ps --ppid 1616198 -o pid,stat,etime,cmd 2>/dev/null | head -2; tail -1 /tmp/ocr-pilote.log; ls reports/ocr-pdf.json 2>&1", "description": "Check OCR progress … [98 caractères tronqués]`
+
+  ```
+23:47
+-rw-r--r--. 1 stephane stephane 4177206  1 nov 23:42 data/corpus_ocr/train.txt
+  Biblio_large · 004.0 Inconnu(e) 2011, La maison de A à  · 178 p · 362368 car
+    PID STAT     ELAPSED CMD
+1956952 Rl         00:09 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-49fepar0/p-14.png stdout -l fra+eng --psm 3
+  Biblio_large · 004.0 Inconnu(e) 2011, La maison de A à  · 178 p · 362368 car
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 75 : l'OCR océrise la page p-14 du 7e livre
+
+**Round 75/1000 — l'OCR progresse.**
+
+- **L'OCR** : train **4 177 206 octets** (23 h 42) ; `tesseract` océrise la page `p-14.png` (0:09) du 7e livre (*Product Manual (F7G110XED)*). Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3** et la **comparaison des genres** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : l'OCR avance régulièrement (14 pages sur 16). Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
+
+
+## Tour 88
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 76/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_ocr/train.txt; tail -1 /tmp/ocr-pilote.log; ps --ppid 1616198 -o pid,stat,etime,cmd 2>/dev/null | head -2; ls reports/ocr-pdf.json 2>&1", "description": "Check OCR progress and manifest", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+23:48
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+    PID STAT     ELAPSED CMD
+1957423 R          00:00 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/004 CS Linux/004.0 CS General/004.0 Sprenger 2025, inflammationcycling.pdf /tmp/ocr-pdf-3cx_a7f4/p
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 76 : l'OCR a écrit le 7e livre (16 p) et enchaîne sur le 8e (inflammationcycling)
+
+**Round 76/1000 — l'OCR avance, un livre après l'autre.**
+
+- **L'OCR** : train **4 193 550 octets** (23 h 48, +16 Ko) — le 7e livre *Product Manual (F7G110XED)* (16 p, 16 196 caractères) est écrit ; `pdftoppm` rend maintenant le **8e livre** (*Sprenger 2025, inflammationcycling*). Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3** et la **comparaison des genres** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : l'OCR enchaîne (7 livres écrits, le 8e en cours). Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
+
+
+## Tour 89
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 77/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_ocr/train.txt; tail -1 /tmp/ocr-pilote.log; ps --ppid 1616198 -o pid,stat,etime,cmd 2>/dev/null | head -2; ls reports/ocr-pdf.json 2>&1", "description": "Check OCR progress and manifest", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+23:48
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+    PID STAT     ELAPSED CMD
+1957423 R          00:21 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/004 CS Linux/004.0 CS General/004.0 Sprenger 2025, inflammationcycling.pdf /tmp/ocr-pdf-3cx_a7f4/p
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 77 : l'OCR rend le 8e livre (inflammationcycling), train à 4,19 Mo
+
+**Round 77/1000 — l'OCR enchaîne les livres.**
+
+- **L'OCR** : train **4 193 550 octets** (23 h 48) ; `pdftoppm` rend le **8e livre** (*Sprenger 2025, inflammationcycling*) depuis 21 s. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3** et la **comparaison des genres** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : l'OCR avance livre après livre (7 écrits, le 8e en cours). Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
+
+
+## Tour 90
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 78/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_ocr/train.txt; tail -1 /tmp/ocr-pilote.log; ps --ppid 1616198 -o pid,stat,etime,cmd 2>/dev/null | head -2; ls reports/ocr-pdf.json 2>&1", "description": "Check OCR progress and manifest", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+23:48
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+    PID STAT     ELAPSED CMD
+1957423 R          00:41 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/004 CS Linux/004.0 CS General/004.0 Sprenger 2025, inflammationcycling.pdf /tmp/ocr-pdf-3cx_a7f4/p
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; echo \"=== roadmap D\"; grep -n \"^| D —\" docs/pilotage/roadmap.md | head -2 | cut -c1-200; echo \"=== état D/R/A\"; grep -n \"D/R/A\" docs/pilotage/en-cours.md | head -2 | cut -c1-200; echo \"=== journal\"; tail -4 jou … [171 caractères tronqués]`
+
+  ```
+23:48
+=== roadmap D
+=== état D/R/A
+64:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+67:- **Rôle** : **D/R/A** — le texte intégral, l'extraction PDF/OCR, la prépa R1.1/R1.2, A2.6/A8.3.
+=== journal
+planchers, page noire comprise. Restent ouverts, nommés : les scans réels de bout en bout avec
+vérité humaine, le fax 1 bit (limite d'information), l'exposant fusionné, les tableaux sans
+traits. Le bloc OCR est devenu un **bloc classique robuste** — et il a appris en lisant du vrai.
+<!-- /notes -->
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"| D\" docs/pilotage/roadmap.md | head -5 | cut -c1-220", "description": "Find D row in roadmap", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+32:| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : corpus propre, **3,0904** en domaine, **16,70 → 3,85** hors dépôt ; N4 partiel | **N2** (plus de françai
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '24,38p' docs/pilotage/roadmap.md | cut -c1-260", "description": "Read roadmap table rows", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+chantier, pas le document entier.
+
+## En un coup d'œil
+
+| chantier | ce qu'il couvre | état | prochaine action |
+|---|---|---|---|
+| **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** ; **A2.6/A8.3 : le lot ne divise pas les lectures denses (+27 % calcul, PPL
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée
+| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : corpus propre, **3,0904** en domaine, **16,70 → 3,85** hors dépôt ; N4 partiel | **N2** (plus de français unique, capacité), **N4** (consigne) |
+| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ; **R0.7 — bloc linguistique** (398 langu
+| **S — les structures** | c
+… [1007 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 78 : je mets la ligne D de la roadmap à jour (10 corpus, PDF, documents, OCR, genres)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md", "old_string": "| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/OCR | ✅ inventaire local ; **10 corpus** (21,6 M art., 38,8 Go) ; **texte intégral FR** (2,39 M art., 8,34 Go) ; **9 lan … [492 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"| D —\" docs/pilotage/roadmap.md | cut -c1-300", "description": "Re-read D row after external change", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '28,40p' docs/pilotage/roadmap.md | cut -c1-240; echo \"=== git\"; git log --oneline -2; git status --short docs/pilotage/roadmap.md", "description": "Read roadmap rows and check git state", "timeoutMs": 120000, "workdir": "/hom … [45 caractères tronqués]`
+
+  ```
+| chantier | ce qu'il couvre | état | prochaine action |
+|---|---|---|---|
+| **A — le moteur** | formats, placement, transport, rejeu, matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** ; **A2.6/A8.3 : le lot ne divise pas les lectures dense
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13
+| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : corpus propre, **3,0904** en domaine, **16,70 → 3,85** hors dépôt ; N4 partiel | **N2** (plus de français unique, capacité), **
+| **R — le lecteur** | document, politique de lecture, fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ; **R0.7 — bloc lingu
+| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | 🔬 **v0** : 7 phrases + **générateur** + **pragmatique** (statuts, do
+… [1023 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md", "new_string": "| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/OCR, documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; … [463 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md')\ns = p.read_text()\nold = \"| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/OCR | ✅ inventaire local ; **10 corpus** (21,6 M art. … [934 caractères tronqués]`
+
+  ```
+ligne D mise à jour
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '64,86p' docs/pilotage/en-cours.md | cut -c1-230", "description": "Read D/R/A section of state", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **D/R/A** — le texte intégral, l'extraction PDF/OCR, la prépa R1.1/R1.2, A2.6/A8.3.
+- **Plan** : le texte intégral, le PDF, l'OCR.
+- **Ambition** : le français réel.
+- **Stratégie** : le dump, débaliseur.
+- **Objectif final** : 10 corpus, ficés.
+- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (322 Mo) ; **Documents** 4 000/7 496 ; **OCR** 3 livres ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
+- **Ce que font les autres** : Pensée, S, N2.
+- **Prochaine action** : l'**en**, le catalogue ; l'OCR des 159 scans ; les collections.
+- **Bloquants** : aucun.
+- **Journal** : [le 01/11](../../journal/2026-11-01/README.md).
+
+## Ce qui est en cours
+
+- **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte ; fiches [`r04`](../../reports/rapport-r04-tete-survol.md), [`r07`](../../reports/rapport-r07-routeur.m
+- **R4.1–R4.4** : **mesur
+… [1276 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md')\ns = p.read_text()\nold = \"- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (322 Mo) ; **Documents** 4 000/7 49 … [1345 caractères tronqués]`

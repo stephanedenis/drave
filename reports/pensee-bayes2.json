@@ -1,0 +1,31 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "52/52",
+ "p_erreur": 0.1,
+ "looks": 2,
+ "confiance": 0.99,
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 544,
+  "runs": 20,
+  "buts": 20,
+  "pas_moyen": 8.0
+ },
+ "contraste": {
+  "un_look": {
+   "buts": 20,
+   "pas": 9.4
+  },
+  "votante": {
+   "buts": 20,
+   "pas": 8.0
+  }
+ },
+ "limites": [
+  "vraisemblance connue",
+  "deux looks",
+  "toy"
+ ]
+}

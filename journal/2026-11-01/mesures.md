@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (58)
+## Commits du jour (59)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -66,6 +66,7 @@
 | 23:36 | `7e819b56` | DONNÉES — LE GENRE SE MESURE : ENCYCLOPÉDIE 103-147 CAR/LIGNE, LIVRES 32-37 ; LIGNES DUPLIQUÉES 8,7-24 %, OCR 4,8 % | `en-cours.md`, `README.md`, `mesures.md` (+10) |
 | 23:38 | `2bd6bcc4` | B13 — L'OBSERVATION VOTANTE : DEUX LOOKS, 20/20 BUTS, 1 % D'ERREUR ; 49/49 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+26) |
 | 23:43 | `332cc56a` | B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
+| 23:47 | `74c0a0d8` | B13 — LA CROYANCE BAYÉSIENNE : UN SEUL LOOK, 20/20 DÈS 2000 ÉPISODES, 9,4 PAS ; 51/51 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+25) |
 
 ## Chiffres du jour
 
@@ -75,9 +76,9 @@
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 31.3 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 31.6 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `b6a672ec-3349-4a4c-9e23-4478aa823170` — Git push to origin remote (début 2026-11-01 13:28, 0.1 h) → [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 31.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 31.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 31.2 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
@@ -103,6 +104,7 @@
 - [reports/rapport-n2-multilingue.md](../../reports/rapport-n2-multilingue.md)
 - [reports/rapport-n2-propre.md](../../reports/rapport-n2-propre.md)
 - [reports/rapport-pensee-audit.md](../../reports/rapport-pensee-audit.md)
+- [reports/rapport-pensee-bayes.md](../../reports/rapport-pensee-bayes.md)
 - [reports/rapport-pensee-bruit.md](../../reports/rapport-pensee-bruit.md)
 - [reports/rapport-pensee-bruitee.md](../../reports/rapport-pensee-bruitee.md)
 - [reports/rapport-pensee-correction.md](../../reports/rapport-pensee-correction.md)

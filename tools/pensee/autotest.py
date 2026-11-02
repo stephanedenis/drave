@@ -783,6 +783,22 @@ def t48_bayes() -> tuple[bool, str]:
                       f"{round(pas_total / 20, 1)} pas")
 
 
+def t49_bayes2() -> tuple[bool, str]:
+    """Le bayésien à deux looks : 20/20 buts, 8,0 pas (0,99 de confiance)."""
+    from .operateurs import PolitiqueAppriseBayes2, seule_bayes2
+    p = PolitiqueAppriseBayes2(episodes=4000, graine=0)
+    p.apprendre()
+    ok = 0
+    pas_total = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, pas = seule_bayes2(p)
+        ok += b
+        pas_total += pas
+    return ok == 20, (f"bayes2 : {ok}/20 buts, {len(p.q)} états-Q, "
+                      f"{round(pas_total / 20, 1)} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -830,7 +846,8 @@ def main() -> int:
               ("T45 observation bruitée", t45_bruitee()),
               ("T46 observation votante", t46_votante()),
               ("T47 trois looks", t47_votante3()),
-              ("T48 croyance bayésienne", t48_bayes())]
+              ("T48 croyance bayésienne", t48_bayes()),
+              ("T49 bayésien deux looks", t49_bayes2())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

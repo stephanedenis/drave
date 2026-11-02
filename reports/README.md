@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-bayes2.md`](rapport-pensee-bayes2.md) | **B13** — le bayésien à deux looks : 20/20, 8,0 pas, 0,99 de confiance, **52/52** |
 | [`rapport-pensee-bayes.md`](rapport-pensee-bayes.md) | **B13** — la croyance bayésienne : un look, 20/20 dès 2000 épisodes, 9,4 pas, **51/51** |
 | [`rapport-pensee-votante3.md`](rapport-pensee-votante3.md) | **B13** — trois looks : 20/20 à 4000 épisodes, 9,2 pas, **50/50** |
 | [`rapport-pensee-votante.md`](rapport-pensee-votante.md) | **B13** — l'observation votante : 2 looks, 20/20 buts, 1 % d'erreur, **49/49** |

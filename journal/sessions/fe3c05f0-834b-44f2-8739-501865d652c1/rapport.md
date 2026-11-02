@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 31.2 h |
 | Tours | 90 |
-| Messages | 1238 |
-| Appels d'outils | 1064 |
-| Fichiers touchés | 22 |
-| Commandes | 981 |
+| Messages | 1250 |
+| Appels d'outils | 1075 |
+| Fichiers touchés | 23 |
+| Commandes | 990 |
 | Sous-agents | 0 |
-| Commits | 65 |
+| Commits | 66 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2600,6 +2600,24 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 
 ### Tour 90 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
+*11 appels d'outils.* Actions notables :
+
+- bash — Check OCR progress and manifest
+- bash — Read roadmap and state D row
+- bash — Find D row in roadmap
+- bash — Read roadmap table rows
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md`
+- bash — Re-read D row after external change
+- bash — Read roadmap rows and check git state
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md`
+- bash — Update D row via python
+- bash — Read D/R/A section of state
+- bash — Update state and commit roadmap
+
+**Synthèse produite :**
+
+⏵ Round 78 : je mets la ligne D de la roadmap à jour (10 corpus, PDF, documents, OCR, genres)
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2628,6 +2646,7 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-pdf.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_genres.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-genres.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 2 |
 
 ### Commandes exécutées (échantillon)
 
@@ -2671,7 +2690,7 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 941 autres
+- … et 950 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2799,7 +2818,7 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 
 ## 5. Erreurs rencontrées
 
-50 sorties en erreur ou divergentes. Les premières :
+51 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -2884,4 +2903,5 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 - DONNÉES — FICHES DU CORPUS DOCUMENTS ET DU CORPUS OCR (EN COURS, CHIFFRES FIXÉS À LA CLÔTURE)" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus
 - DONNÉES — LE GENRE SE MESURE : ENCYCLOPÉDIE 103-147 CAR/LIGNE, LIVRES 32-37 ; LIGNES DUPLIQUÉES 8,7-24 %, OCR 4,8 %" 2>/tmp/commit.err; then echo "commit OK"; b
 - DONNÉES — LE CORPUS DOCUMENTS EST CLOS : 7 459 PDF, 3 384 DOCUMENTS, 872 M CARACTÈRES, 8 KO 2,07 % (TEST)" 2>/tmp/commit.err; then echo "commit OK"; break; else
+- DONNÉES — ROADMAP ET ÉTAT : LES DIX CORPUS, LE PDF, LES DOCUMENTS (8 KO 2,07 %), L'OCR ET LES GENRES" 2>/tmp/commit.err; then echo "commit OK"; break; else echo
 

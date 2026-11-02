@@ -16154,3 +16154,26 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-947", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W34-g*.pt 2>/dev/null; tail -1 work/n2j/W34-g1.log; tail -1 work/n2j/W34-g2.log; tail -1 /tmp/portes-nuit.out", "description": "Check the 34M students"}`
+
+  ```
+23:48
+pas 13750 · seq 128 · perte 15.7374 · PPL 128/4 3.6689 · 1631 s
+pas 14250 · seq 128 · perte 13.3059 · PPL 128/4 3.6994 · 1635 s
+  porte-horloge          ✅                          28 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W34-g*.pt 2>/dev/null; tail -1 work/n2j/W34-g1.log; tail -1 work/n2j/W34-g2.log; tail -1 /tmp/portes-nuit.out", "description": "Wait for the 34M students"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-949]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-949", "timeout_ms": 900000, "wait": true}`
