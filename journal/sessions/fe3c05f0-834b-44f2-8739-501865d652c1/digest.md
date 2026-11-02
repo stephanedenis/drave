@@ -21458,3 +21458,37 @@ ligne D mise à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md')\ns = p.read_text()\nold = \"- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (322 Mo) ; **Documents** 4 000/7 49 … [1345 caractères tronqués]`
+
+  ```
+état : D/R/A à jour
+  T0 max : 4017 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+refus
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 72f4395513bcbf2164169bb179bed364fec58897 but expected 74c0a0d800a4e42ffe59adc854dd67647aa31884
+On branch master
+Your branch is ahead of 'origin/master' by 95 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+  (commit or discard the untracked or modified content in submodules)
+	modified:   docs/implantation/bloc-linguistique.md
+	modified:   tools/distiller_budget.py
+	modified:   tools/docwatch (modified content)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	reports/corpus-wiki-it-texte-contamination.json
+	reports/corpus-wiki-it-texte.json
+	reports/pensee-bayes-appris.json
+	reports/pensee-partielle.json
+	reports/rapport-n2-fenetre-r1.md
+	reports/rapport-pensee-bayes-appris.md
+	reports/rapport-pensee-partielle.md
+	tools/extrait_pdf.py
+… [404 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md')\ns = p.read_text()\ns = s.replace(\" ; fiches [`wiki`](../../reports/rapport-corpus-wiki-texte.md), [`documents`](../../reports/rapport-corpus-documents.md … [892 caractères tronqués]`

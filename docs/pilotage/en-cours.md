@@ -25,7 +25,7 @@
 - **Reprise** : **R4.4** — note de clôture des trois limites (fax 1 bit, exposant fusionné,
   parité réelle sans questions) ; **S** est actif dans une autre TUI (export pragmatique, 11 tests).
 - **Coloration** : analyse [`pre-traitement-linguistique`](../theorie/pre-traitement-linguistique.md)
-  (5 schémas) — le CPU étiquette, le réseau tranche
+  (5 schémas) — le CPU étiquette
   la cascade : couverture
 - **Bloc** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
   (9 niveaux) ; **398 langues à 0,9687** ; fiche et porte.
@@ -61,7 +61,7 @@
 - **Ambition** : le français réel.
 - **Stratégie** : le dump, débaliseur.
 - **Objectif final** : 10 corpus, ficés.
-- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 7 livres ; **genres** mesurés ; fiches [`wiki`](../../reports/rapport-corpus-wiki-texte.md), [`documents`](../../reports/rapport-corpus-documents.md), [`genres`](../../reports/rapport-genres.md).
+- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 7 livres ; **genres** mesurés ; fiches [`wiki`](../../reports/rapport-corpus-wiki-texte.md), [`documents`](../../reports/rapport-corpus-documents.md).
 - **Ce que font les autres** : Pensée, S, N2.
 - **Prochaine action** : l'**en**, le catalogue ; l'OCR des 159 scans ; les collections.
 - **Bloquants** : aucun.

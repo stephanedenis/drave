@@ -9,8 +9,8 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 31.2 h |
 | Tours | 67 |
-| Messages | 973 |
-| Appels d'outils | 890 |
+| Messages | 974 |
+| Appels d'outils | 891 |
 | Fichiers touchés | 25 |
 | Commandes | 721 |
 | Sous-agents | 2 |
@@ -3565,7 +3565,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round apprend la **vraisemblan
 
 ### Tour 67 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Tester la vraisemblance apprise
 - bash — Ajouter la porte T50 (vraisemblance apprise)
@@ -3575,6 +3575,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round apprend la **vraisemblan
 - bash — Trim final et portes
 - bash — Trim final pour T0
 - bash — Committer la vraisemblance apprise
+- job_output
 
 ## 3. Travail accompli
 

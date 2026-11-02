@@ -19469,3 +19469,10 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-bayes-appris.md reports/pensee-bayes-appris.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/e … [495 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-721]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-721", "timeout_ms": 600000, "wait": true}`

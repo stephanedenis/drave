@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**143 commits** · **4 session(s)** · **10 thème(s)**
+**144 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 3 | [apprentissage.md](apprentissage.md) |
 | attention | 2 | [attention.md](attention.md) |
 | distribue | 16 | [distribue.md](distribue.md) |
-| docs | 36 | [docs.md](docs.md) |
+| docs | 37 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 60 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
@@ -33,7 +33,7 @@
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 31.6 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 31.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 31.2 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 31.3 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -182,6 +182,7 @@
 | 23:43 | `332cc56a` | B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50 |
 | 23:47 | `74c0a0d8` | B13 — LA CROYANCE BAYÉSIENNE : UN SEUL LOOK, 20/20 DÈS 2000 ÉPISODES, 9,4 PAS ; 51/51 |
 | 23:50 | `72f43955` | B13 — LE BAYÉSIEN À DEUX LOOKS : 20/20, 8,0 PAS, 0,99 DE CONFIANCE ; 52/52 |
+| 23:53 | `7abe12ea` | DONNÉES — ROADMAP ET ÉTAT : LES DIX CORPUS, LE PDF, LES DOCUMENTS (8 KO 2,07 %), L'OCR ET LES GENRES |
 
 ## Le récit de la journée (écrit à la main)
 

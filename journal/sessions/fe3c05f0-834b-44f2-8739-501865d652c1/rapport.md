@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 31.2 h |
+| Durée | 31.3 h |
 | Tours | 90 |
-| Messages | 1250 |
-| Appels d'outils | 1075 |
+| Messages | 1251 |
+| Appels d'outils | 1076 |
 | Fichiers touchés | 23 |
-| Commandes | 990 |
+| Commandes | 991 |
 | Sous-agents | 0 |
-| Commits | 66 |
+| Commits | 67 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2600,7 +2600,7 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 
 ### Tour 90 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Check OCR progress and manifest
 - bash — Read roadmap and state D row
@@ -2613,6 +2613,7 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 - bash — Update D row via python
 - bash — Read D/R/A section of state
 - bash — Update state and commit roadmap
+- bash — Trim state under T0 budget and commit
 
 **Synthèse produite :**
 
@@ -2690,7 +2691,7 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 950 autres
+- … et 951 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2904,4 +2905,5 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 - DONNÉES — LE GENRE SE MESURE : ENCYCLOPÉDIE 103-147 CAR/LIGNE, LIVRES 32-37 ; LIGNES DUPLIQUÉES 8,7-24 %, OCR 4,8 %" 2>/tmp/commit.err; then echo "commit OK"; b
 - DONNÉES — LE CORPUS DOCUMENTS EST CLOS : 7 459 PDF, 3 384 DOCUMENTS, 872 M CARACTÈRES, 8 KO 2,07 % (TEST)" 2>/tmp/commit.err; then echo "commit OK"; break; else
 - DONNÉES — ROADMAP ET ÉTAT : LES DIX CORPUS, LE PDF, LES DOCUMENTS (8 KO 2,07 %), L'OCR ET LES GENRES" 2>/tmp/commit.err; then echo "commit OK"; break; else echo
+- ÉTAT — T0 REVENU SOUS 4 000 MOTS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err; sleep 8; fi done git reset -q; gi
 
