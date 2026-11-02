@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 34.3 h |
 | Tours | 352 |
-| Messages | 2118 |
-| Appels d'outils | 1408 |
+| Messages | 2119 |
+| Appels d'outils | 1409 |
 | Fichiers touchés | 26 |
-| Commandes | 1244 |
+| Commandes | 1245 |
 | Sous-agents | 0 |
 | Commits | 79 |
 | Compactages de contexte | 4 |
@@ -8262,6 +8262,10 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 352 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait 7 min then check OCR progress
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8337,7 +8341,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1204 autres
+- … et 1205 autres
 
 ## 4. Mesures et résultats marquants
 

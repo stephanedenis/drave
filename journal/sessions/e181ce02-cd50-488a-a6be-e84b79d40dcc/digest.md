@@ -24006,3 +24006,80 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-phase-devine.md reports/pensee-phase-devine.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/e … [500 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-902]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-902", "timeout_ms": 600000, "wait": true}`
+
+  ```
+26 files changed, 584 insertions(+), 69 deletions(-)
+ create mode 100644 reports/pensee-phase-devine.json
+ create mode 100644 reports/rapport-pensee-phase-devine.md
+COMMIT OK 1
+37e024cd B13 — LA PHASE DEVINÉE : SIGNAL 90 %, 0/20 AU BUT 0, BOUCLE (3,0)↔(4,0) ; 83/83
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Phase devinée : signal 90 %, 0/20 au but 0, boucle (3,0)↔(4,0) ; 83/83
+
+Le round 84 du goal est livré : **10 % de bruit** sur le signal de phase suffisent à casser la politique — la Q-table tourne en boucle. Commit **`37e024cd`**.
+
+## La phase devinée
+
+Même monde que T79, mais la phase n'est **pas donnée** : un signal la désigne avec 90 % de justesse. La clé contient le **signal** (0/1), pas la phase.
+
+| but | buts | états-Q | pas |
+|---|---|---:|---:|
+| **0 : (4,4)** | **0/20** | 136 | 200 |
+| **1 : (4,0)** | **20/20** | 136 | 4 |
+
+**Ce que ça dit** :
+
+- **10 % de bruit suffisent à casser** : le signal 0 (juste 90 % du temps) mêle le but `(4,4)` au but `(4,0)` dans la même clé ; la Q-table donne au `(4,0)` la valeur d'un but (le signal erroné), et la politique tourne `(3,0) ↔ (4,0)` au lieu d'aller au `(4,4)`.
+- **La trace est explicite** : `(0,0) → (1,0) → (2,0) → (3,0) → (4,0) → (3,0) → …` en boucle ; le `(4,0)`'s « gauche » (0,815) bat le « bas » (0,81) d'un cheveu.
+- **Le coût du bruit est asymétrique** : le but 0 échoue, le but 1 réussit — l'erreur du signal est absorbée quand elle pointe vers le vrai but.
+- **La négative est explicite** : 0/20 au but 0.
+
+## L'état
+
+- Fiche : [`rapport-pensee-phase-devine.md`](../../reports/rapport-pensee-phase-devine.md) ; JSON [`pensee-phase-devine.json`](../../reports/pensee-phase-devine.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T80 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **83/83 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **485 fiches / 575 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~11 min** ; les portes tiennent avec `timeout 1200`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Vote de signaux** : 3 looks, la croyance vote ; le bruit tombe (le vrai POMDP).
+2. **20 graines** : lisser la courbe du seuil.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute le **vote de signaux** — la croyance qui réduit le bruit.
+
+
+## Tour 98
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 85/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [2264 caractères tronqués]`
+
+  ```
+37e024cd B13 — LA PHASE DEVINÉE : SIGNAL 90 %, 0/20 AU BUT 0, BOUCLE (3,0)↔(4,0) ; 83/83
+ok
+4000 q 163 but 0: 0 /20 but 1: 20 /20
+8000 q 162 but 0: 0 /20 but 1: 20 /20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''    nom = \"verite5\"\n    looks = 3\n\n    def _vote''','''    nom = \"verite5\"\n    looks = 5\n\n    def _vote''')\np. … [610 caractères tronqués]`

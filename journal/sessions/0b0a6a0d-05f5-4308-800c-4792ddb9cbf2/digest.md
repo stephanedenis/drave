@@ -17388,3 +17388,11 @@ pas  5500 · seq 128 · perte 17.9702 · PPL 128/4 4.4479 · 631 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d{2} h \\d{2} HNE \\(heure locale, EST\\)\\.\\*\\*\",\n           \"**Mis à jour : … [903 caractères tronqués]`
+
+  ```
+ok
+[still running after 60000ms; moved to background job bash-1033]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1033", "timeout_ms": 300000, "wait": true}`

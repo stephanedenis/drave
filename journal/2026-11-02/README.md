@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**52 commits** · **3 session(s)** · **7 thème(s)**
+**53 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | attention | 3 | [attention.md](attention.md) |
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 7 | [docs.md](docs.md) |
-| memoire | 4 | [memoire.md](memoire.md) |
+| memoire | 5 | [memoire.md](memoire.md) |
 | mesures | 30 | [mesures.md](mesures.md) |
 | portes | 4 | [portes.md](portes.md) |
 
@@ -24,7 +24,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 34.6 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 34.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 34.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 34.3 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -83,6 +83,7 @@
 | 02:23 | `58f47624` | B13 — LA VÉRITÉ QUI CHANGE : PORTE CACHÉE, 20/20 AUX DEUX PHASES ; 80/80 |
 | 02:32 | `e97e3d4d` | B13 — LES ROUTES CONCURRENTES : BUT CACHÉ, 0/20 ET 20/20, LA PHASE DOIT ENTRER ; 81/81 |
 | 02:40 | `81c71956` | B13 — LA PHASE DANS L'ÉTAT : LE CORRECTIF, 20/20 AUX DEUX BUTS, 6,0 PAS ; 82/82 |
+| 02:52 | `37e024cd` | B13 — LA PHASE DEVINÉE : SIGNAL 90 %, 0/20 AU BUT 0, BOUCLE (3,0)↔(4,0) ; 83/83 |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 34.2 h |
-| Tours | 97 |
-| Messages | 1263 |
-| Appels d'outils | 1116 |
+| Durée | 34.3 h |
+| Tours | 98 |
+| Messages | 1269 |
+| Appels d'outils | 1120 |
 | Fichiers touchés | 25 |
-| Commandes | 902 |
+| Commandes | 906 |
 | Sous-agents | 2 |
 | Commits | 125 |
 | Compactages de contexte | 4 |
@@ -225,6 +225,8 @@
 **Tour 96** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 97** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 98** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5156,6 +5158,53 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **phase devin
 - bash — Committer la phase devinée
 - job_output
 
+**Synthèse produite :**
+
+⏵ Phase devinée : signal 90 %, 0/20 au but 0, boucle (3,0)↔(4,0) ; 83/83
+
+Le round 84 du goal est livré : **10 % de bruit** sur le signal de phase suffisent à casser la politique — la Q-table tourne en boucle. Commit **`37e024cd`**.
+
+\## La phase devinée
+
+Même monde que T79, mais la phase n'est **pas donnée** : un signal la désigne avec 90 % de justesse. La clé contient le **signal** (0/1), pas la phase.
+
+| but | buts | états-Q | pas |
+|---|---|---:|---:|
+| **0 : (4,4)** | **0/20** | 136 | 200 |
+| **1 : (4,0)** | **20/20** | 136 | 4 |
+
+**Ce que ça dit** :
+
+- **10 % de bruit suffisent à casser** : le signal 0 (juste 90 % du temps) mêle le but `(4,4)` au but `(4,0)` dans la même clé ; la Q-table donne au `(4,0)` la valeur d'un but (le signal erroné), et la politique tourne `(3,0) ↔ (4,0)` au lieu d'aller au `(4,4)`.
+- **La trace est explicite** : `(0,0) → (1,0) → (2,0) → (3,0) → (4,0) → (3,0) → …` en boucle ; le `(4,0)`'s « gauche » (0,815) bat le « bas » (0,81) d'un cheveu.
+- **Le coût du bruit est asymétrique** : le but 0 échoue, le but 1 réussit — l'erreur du signal est absorbée quand elle pointe vers le vrai but.
+- **La négative est explicite** : 0/20 au but 0.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-phase-devine.md`](../../reports/rapport-pensee-phase-devine.md) ; JSON [`pensee-phase-devine.json`](../../reports/pensee-phase-devine.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T80 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **83/83 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **485 fiches / 575 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~11 min** ; les portes tiennent avec `timeout 1200`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Vote de signaux** : 3 looks, la croyance vote ; le bruit tombe (le vrai POMDP).
+2. **20 graines** : lisser la courbe du seuil.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute le **vote de signaux** — la croyance qui réduit le bruit.
+
+### Tour 98 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Tester le vote de signaux (3 looks)
+- bash — Tester le vote à 5 et 9 looks
+- bash — Tracer la politique vote 5 looks
+- bash — Ajouter la porte T81 (vote de 5 signaux)
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5235,7 +5284,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **phase devin
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 862 autres
+- … et 866 autres
 
 ## 4. Mesures et résultats marquants
 
