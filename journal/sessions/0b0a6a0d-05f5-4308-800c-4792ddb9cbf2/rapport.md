@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 40.9 h |
+| Durée | 41.0 h |
 | Tours | 20 |
-| Messages | 1572 |
-| Appels d'outils | 1443 |
+| Messages | 1586 |
+| Appels d'outils | 1456 |
 | Fichiers touchés | 11 |
-| Commandes | 1140 |
+| Commandes | 1150 |
 | Sous-agents | 0 |
 | Commits | 81 |
 | Compactages de contexte | 2 |
@@ -1062,7 +1062,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 
 ### Tour 20 — mets le dossier de pilotage à jour et continue
 
-*8 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Read the state's N2 section and timestamp
 - read
@@ -1072,6 +1072,13 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - bash — Read the roadmap's S row
 - bash — Update the roadmap and plan
 - bash — Commit the pilotage update
+- job_output
+- bash — Verify the commit and read the canal evaluator
+- bash — Read the evaluator's main
+- bash — Find the Wikipedia extraction tool
+- bash — Read the extraction tool's options
+- bash — Look at the earlier extraction script
+- … et 5 autres
 
 **Synthèse produite :**
 
@@ -1137,7 +1144,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1100 autres
+- … et 1110 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1265,7 +1272,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 
 ## 5. Erreurs rencontrées
 
-66 sorties en erreur ou divergentes. Les premières :
+67 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5

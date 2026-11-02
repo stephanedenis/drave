@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 39.3 h |
-| Tours | 384 |
-| Messages | 2308 |
-| Appels d'outils | 1530 |
+| Durée | 40.7 h |
+| Tours | 385 |
+| Messages | 2314 |
+| Appels d'outils | 1535 |
 | Fichiers touchés | 26 |
-| Commandes | 1360 |
+| Commandes | 1365 |
 | Sous-agents | 0 |
-| Commits | 88 |
+| Commits | 89 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -797,6 +797,8 @@
 **Tour 383** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 384** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 385** — mets le dossier pilotage à jour et continue
 
 ## 2. Déroulé, étape par étape
 
@@ -9066,6 +9068,20 @@ La campagne D/R/A est close, et le goal est marqué **complete** à 07 h 55, à 
 - **Les portes** : la passe complète du 02/11 06 h (`6c7bff9b`) donne **76 vertes, 5 rouges** — les 4 connues de `references-non-regression.md` plus `porte-greffe` à la borne ; la revue passe (**516 fiches, 604 JSON, 118
 … [916 caractères tronqués]
 
+### Tour 385 — mets le dossier pilotage à jour et continue
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Audit pilotage folder and counters
+- bash — Read state D/R/A section and roadmap D
+- bash — Read open questions and other pilotage docs
+- bash — Update pilotage state, plan, chantiers, roadmap
+- bash — Commit pilotage update
+
+**Synthèse produite :**
+
+⏵ Mise à jour du dossier pilotage, puis relance de l'OCR complet
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -9141,7 +9157,7 @@ La campagne D/R/A est close, et le goal est marqué **complete** à 07 h 55, à 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1320 autres
+- … et 1325 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9377,4 +9393,5 @@ La campagne D/R/A est close, et le goal est marqué **complete** à 07 h 55, à 
 - ÉTAT — COMPTEURS 509/597, T0 SOUS 4 000, LES PILOTES OCR (20 LIVRES + 5 NOTES CEGEP) SONT CLOS" > /tmp/commit-etat.log 2>&1; code=$?; tail -3 /tmp/commit-etat.l
 - ÉTAT — COMPTEURS 509/597, T0 SOUS 4 000, LES PILOTES OCR (20 LIVRES + 5 NOTES CEGEP) SONT CLOS" > /tmp/commit-etat2.log 2>&1; code=$?; tail -3 /tmp/commit-etat2
 - DONNÉES — LE CEGEP PASSE À 7 NOTES : 739 PAGES, 1,21 M CARACTÈRES (2 ALGORITHMS ILLUMINATED AJOUTÉS)" > /tmp/commit-cegep7.log 2>&1; code=$?; tail -3 /tmp/commi
+- PILOTAGE — LE DOSSIER PORTE L'OCR DES 20 LIVRES + 7 NOTES CEGEP ET LE LOT SUIVANT (21e-40e)" > /tmp/commit-pilotage.log 2>&1; code=$?; tail -3 /tmp/commit-pilot
 

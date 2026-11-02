@@ -19507,3 +19507,288 @@ plan ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg-pilotage.txt <<'EOF'\nPILOTAGE — LA NUIT N2 EST CLOSE : LE MEILLEUR MODÈLE EST LE 34,3 M + CANAL (3,53)\n\nL'état, la roadmap et le plan sont alignés sur les résultats de la nuit : le 34,3 M + canal de\nstructure vaut  … [905 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1140]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1140", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+4cbc84a3 PILOTAGE — LA NUIT N2 EST CLOSE : LE MEILLEUR MODÈLE EST LE 34,3 M + CANAL (3,53)
+MM docs/pilotage/en-cours.md
+MM docs/pilotage/plan-travail.md
+MM docs/pilotage/roadmap.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:docs/pilotage/en-cours.md | grep -c \"N2.z\"; sed -n 1,40p work/n2j/evalue_canal.py", "description": "Verify the commit and read the canal evaluator"}`
+
+  ```
+1
+#!/usr/bin/env python3
+"""evalue_canal.py — PPL avec et sans le canal de structure, par longueur, et au mélange."""
+import json, math, pathlib, random, sys
+import torch, torch.nn.functional as F
+sys.path.insert(0, '.')
+from tools.eval_n2_propre import charge, charger_bytes, departs_vdc
+from tools.canal_structure import canal as canal_de
+
+CHUNK = 8192
+
+
+def fenetres(data, canal, n, long, compteur):
+    n_chunks = max(1, len(data) // CHUNK)
+    xs, cs = [], []
+    for k in range(n):
+        c = departs_vdc(compteur + k, 1, n_chunks, long)[0]
+        debut = c * CHUNK
+        marge = min(CHUNK, len(data) - debut) - long - 1
+        if marge <= 0:
+            continue
+        r = departs_vdc(compteur + 10_000_003 + k, 1, marge, long)[0]
+        j = debut + r
+        xs.append(data[j:j + long])
+        cs.append(canal[j:j + long] if canal is not None else torch.zeros(long, dtype=torch.long))
+    return torch.stack(xs).cuda(), (torch.stack(cs).cuda() if canal is not None else None)
+
+
+def ppl(m, data, canal, long=128, n_lots=8, avec_canal=True):
+    m.eval(); tot, n = 0.0, 0
+    with torch.no_grad():
+        for k in range(n_lots):
+            x, c = fenetres(data, canal, 16, long + 1, 
+… [367 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 40,75p work/n2j/evalue_canal.py", "description": "Read the evaluator's main"}`
+
+  ```
+rng = random.Random(graine)
+    sortie, mot = [], []
+    for ch in texte:
+        if ch.isalpha() or ch in "'’":
+            mot.append(ch)
+        else:
+            if mot:
+                sortie.append(_mot(''.join(mot), rng, tout)); mot = []
+            sortie.append(ch)
+    if mot:
+        sortie.append(_mot(''.join(mot), rng, tout))
+    return ''.join(sortie)
+
+
+def _mot(m, rng, tout):
+    l = list(m)
+    if len(l) <= 3:
+        return m
+    if tout:
+        rng.shuffle(l); return ''.join(l)
+    mid = l[1:-1]; rng.shuffle(mid)
+    return l[0] + ''.join(mid) + l[-1]
+
+
+if __name__ == "__main__":
+    pt = sys.argv[1]
+    m = charge(pt)
+    val = charger_bytes('data/wiki_fr/propre/val.txt')
+    canal_val = torch.tensor(list(pathlib.Path('data/wiki_fr/propre/val.canal').read_bytes()), dtype=torch.long)
+    res = {"fichier": pathlib.Path(pt).name}
+    for L in (128, 256, 512):
+        res[f"L{L}_canal"] = ppl(m, val, canal_val, L, avec_canal=True)
+        res[f"L{L}_sans"] = ppl(m, val, canal_val, L, avec_canal=False)
+    # typoglycémie : le canal est recalculé sur le texte mélangé
+    texte = pathlib.Path('data/wiki_fr/propre/val.txt').read_text(encoding='utf-8', errors='replace')
+ 
+… [86 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/ | grep -i \"wiki\\|corpus\" ; echo \"=== usage ===\"; python3 tools/corpus_wikipedia.py --aide 2>&1 | head -5 || sed -n 1,20p tools/corpus_wikipedia.py", "description": "Find the Wikipedia extraction tool"}`
+
+  ```
+c8_corpus.sh
+catalogue_corpus.py
+corpus_diabla.py
+corpus_eurlex.py
+corpus_gele.py
+corpus_jrc.py
+corpus_jw.py
+corpus_natif.py
+corpus_neuf.py
+corpus_onu.py
+corpus_opensubtitles.py
+corpus_pidgin_asp_raw.py
+corpus_pidgin_bbc.py
+corpus_pidgin_bible.py
+corpus_pidgin.py
+corpus_pidgin_wiki_local.py
+corpus_presse.py
+corpus_propre.py
+corpus_raisonnement_paires.py
+corpus_raisonnement.py
+_corpus.sh
+corpus_wikimatrix.py
+corpus_wikipedia.py
+corpus_wikipedia_texte.py
+cribler_corpus.py
+extrait_wikipedia.py
+index_wiki_en.py
+wiki_apparie.py
+=== usage ===
+usage: corpus_wikipedia.py [-h] [--db DB] [--sortie SORTIE]
+                           [--manifeste MANIFESTE] [--langue LANGUE]
+                           [--toutes-les-langues] [--force]
+                           [--min-chars MIN_CHARS] [--chunk CHUNK] [--val VAL]
+                           [--test TEST] [--graine GRAINE]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/corpus_wikipedia.py --aide 2>&1 | head -20; grep -n \"offset\\|OFFSET\\|limite\\|limit\" tools/corpus_wikipedia.py | head -5", "description": "Read the extraction tool's options"}`
+
+  ```
+usage: corpus_wikipedia.py [-h] [--db DB] [--sortie SORTIE]
+                           [--manifeste MANIFESTE] [--langue LANGUE]
+                           [--toutes-les-langues] [--force]
+                           [--min-chars MIN_CHARS] [--chunk CHUNK] [--val VAL]
+                           [--test TEST] [--graine GRAINE]
+                           [--max-articles MAX_ARTICLES]
+corpus_wikipedia.py: error: unrecognized arguments: --aide
+7:dédupliqués et découpés** — un par langue — avec leur provenance et leurs limites écrites.
+20:6. écrit `train.txt`, `val.txt`, `test.txt` et un manifeste JSON (chiffres, empreintes, limites).
+165:        "limites": [
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n2j/*.py work/n2k/*.py 2>/dev/null; head -30 work/n2j/extrait.py 2>/dev/null", "description": "Look at the earlier extraction script"}`
+
+  ```
+work/n2j/evalue_canal.py
+work/n2j/filtre_wiki.py
+work/n2j/remplit.py
+work/n2j/typo_sans.py
+work/n2k/evalue.py
+work/n2k/evalue_un.py
+work/n2k/extrait_en.py
+work/n2k/extrait.py
+work/n2k/remplit.py
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -25 work/n2k/extrait.py; echo \"=== ===\"; grep -n \"OFFSET\\|LIMIT\\|limit\\|offset\" work/n2k/extrait.py | head -5", "description": "Read the extraction script"}`
+
+  ```
+#!/usr/bin/env python3
+"""extrait.py — 12 000 articles par langue depuis les bases sqlite de Wikipédia."""
+import random, sqlite3, pathlib
+
+LANGUES = ["fr", "en", "de", "es", "it", "pt", "ru", "ar", "ja", "zh"]
+BASE = "/home/stephane/Data13TB/stephane/data/wikipedia/db"
+SORTIE = pathlib.Path("data/wiki_multi")
+N, N_VAL = 12000, 1000
+
+for lang in LANGUES:
+    src = f"{BASE}/{lang}wiki_v14.db"
+    if not pathlib.Path(src).exists():
+        print(f"{lang} : base absente", flush=True); continue
+    con = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
+    cur = con.cursor()
+    lignes = cur.execute(
+        "SELECT title, summary FROM articles WHERE n_chars BETWEEN 800 AND 40000 "
+        "AND summary IS NOT NULL ORDER BY page_id LIMIT ? OFFSET 200000", (N,)).fetchall()
+    con.close()
+    blocs = [f"{t}\n\n{(s or '').strip()}\n\n" for t, s in lignes if (s or '').strip()]
+    rng = random.Random(0)
+    rng.shuffle(blocs)
+    val, train = blocs[:N_VAL], blocs[N_VAL:]
+    (SORTIE / f"{lang}_val.txt").write_text("".join(val), encoding="utf-8")
+    (SORTIE / f"{lang}_train.txt").write_text("".join(train), encoding="utf-8")
+=== ===
+18:        "AND summary IS NOT NULL ORDER BY page_id LIMIT
+… [35 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/n2w data/wiki_big && cat > work/n2w/extraire_big.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"extraire_big.py — 600 000 articles français (offset 1 000 000), disjoints du corpus N2.j.\"\"\"\nimport sqlite3, pathlib, sys\n\n … [1076 caractères tronqués]`
+
+  ```
+extraction 3439834
+[still running after 60000ms; moved to background job bash-1147]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1147", "timeout_ms": 300000, "wait": true}`
+
+  ```
+extraction…
+600000 articles
+09:13
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1147 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/n2w data/wiki_big && cat > work/n2w/extraire_big.py <<'PY'
+#!/usr/bin/env python3
+"""extraire_big.py — 600 000 articles français (offset 1 000 000), disjoints du corpus N2.j."""
+import sqlite3, pathlib, sys
+
+BASE = "/home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db"
+SORTIE = pathlib.Path("data/wiki_big/brut.txt")
+N, OFFSET = 600_000, 1_000_000
+
+con = sqlite3.connect(f"file:{BASE}?mode=ro", uri=True)
+cur = con.cursor()
+print("extraction…", flush=True)
+lignes = cur.execute(
+    "SELECT title, summary FROM articles WHERE n_chars BETWEEN 800 AND 40000 "
+    "AND summary IS NOT NULL ORDER BY page_id LIMIT ? OFFSET ?", (N, OFFSET)).fetchall()
+con.close()
+print(f"{len(lignes)} articles", flush=True)
+with SORTIE.open("w", encoding="utf-8") as f:
+    for t, s in lignes:
+        s = (s or "").strip()
+        if s:
+            f.write(f"{t}\n\n{s}\n\n")
+print(f"écrit {SORTIE} · {SORTIE.stat().st_size/1e6:.0f} Mo", flush=True)
+PY
+nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 work/n2w/extraire_big.py > work/n2w/extraire_big.log 2>&1' > /dev/null 2>&1 & echo "extraction $!"; sleep 60; cat work/n2w/extraire_big.log; date '+%H:%M') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 30; cat work/n2w/extraire_big.log; ls -la data/wiki_big/ 2>/dev/null; date '+%H:%M'", "description": "Check the extraction output"}`
+
+  ```
+extraction…
+600000 articles
+écrit data/wiki_big/brut.txt · 1048 Mo
+total 1022976
+drwxr-xr-x. 1 stephane stephane         16  2 nov 09:13 .
+drwxr-xr-x. 1 stephane stephane       2468  2 nov 09:12 ..
+-rw-r--r--. 1 stephane stephane 1047525530  2 nov 09:13 brut.txt
+09:13
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,30p tools/corpus_propre.py; python3 tools/corpus_propre.py --help 2>&1 | head -15", "description": "Read the clean-corpus tool's usage"}`
+
+  ```
+#!/usr/bin/env python3
+"""corpus_propre.py — un corpus sans répétition, et un split qui ne fuit pas.
+
+POURQUOI. N2.d a mesuré que **32,8 %** des fenêtres du protocole de validation
+apparaissent **verbatim** dans l'entraînement : le corpus empile des passages qui se
+recopient (127 blocs contigus, jusqu'à 1,8 Ko). Toute PPL mesurée sur ce jeu est donc
+une PPL de mémoire, pas de généralisation — et 2,7078 comme 2,6998 sont mesurées dessus.
+
+CE QUE FAIT L'OUTIL.
+
+1. **Déduplication par shingles.** On roule un hachage de Rabin-Karp sur des fenêtres de
+   `--fenetre` octets (96 par défaut). La première occurrence d'un shingle est gardée ;
+   toute position couverte par un shingle déjà vu est retirée. Conséquence : après
+   nettoyage, **aucune fenêtre de 128 octets ne se répète** dans le texte — donc aucune
+   fenêtre de validation ne peut apparaître dans l'entraînement.
+2. **Split par chunks contigus.** Le texte nettoyé est découpé en chunks de `--chunk`
+   octets ; un chunk sur `--val` va en validation, le suivant en test, le reste en
+   entraînement. Les fenêtres d'évaluation sont tirées **dans** leur fichier : elles ne
+   traversent jamais une frontière.
+3. **Vérification.** On recomp
+… [942 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/corpus_propre.py --source data/wiki_big/brut.txt --sortie data/wiki_big/propre --manifeste reports/corpus-wiki-big-propre.json > work/n2w/corpus_big.l … [163 caractères tronqués]`

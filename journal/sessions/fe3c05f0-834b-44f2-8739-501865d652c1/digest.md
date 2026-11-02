@@ -34887,3 +34887,104 @@ La campagne D/R/A est close, et le goal est marqué **complete** à 07 h 55, à 
 
 Le prochain round repart de `docs/pilotage/en-cours.md` et de la ligne D/R/A du plan.
 
+
+## Tour 385
+
+### 👤 Utilisateur
+
+mets le dossier pilotage à jour et continue
+
+### 🤖 Assistant
+
+⏵ Mise à jour du dossier pilotage, puis relance de l'OCR complet
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls docs/pilotage/; echo \"---\"; ls reports/*.md | wc -l; ls reports/*.json | wc -l; echo \"---\"; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; grep -n \"Mis à jour\" docs/pilotage/en-cours.md; echo \"--- plan\ … [274 caractères tronqués]`
+
+  ```
+09:13
+backlog
+chantiers.md
+en-cours.md
+manques.md
+plan-travail.md
+programme-r.md
+README.md
+references-non-regression.md
+roadmap.md
+utilisation.md
+---
+516
+604
+---
+96:| fichiers / JSON de résultats | **516** / **604** | `reports/*.md` / `reports/*.json` |
+3:**Mis à jour : 2026-11-02, 09 h 12 HNE (heure locale, EST).**
+--- plan
+41:| **D/R/A — les données, le lecteur, le moteur** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | le texte intégral des 10 corpus (**fait**), l'extraction PDF/OCR (**documents clos, OCR 20 livres + 5 notes CEGEP clos, les 159 scans ensuite**), la prépa R1 (**fiche faite**) |
+110:- **CPU** : 2 à 3 gros travaux à la fois (un entraînement 8–16 cœurs, un OCR 1–2, une extraction
+--- chantiers
+89:| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (322 Mo), **documents** (872 M car., 8 Ko 2,07 %), **OCR** (20 livres, 7 381 p, 15,36 M car., 8 Ko 0) ; dédup, splits | texte intégral (dumps), PDF/OCR, filtrage des stubs, licences | — | N2, L, S
+… [216 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '58,72p' docs/pilotage/en-cours.md; echo \"=== questions\"; grep -n \"Questions\\|question\" docs/pilotage/en-cours.md | head -5; echo \"=== roadmap D\"; sed -n '36p' docs/pilotage/roadmap.md | cut -c1-400", "description": "Read … [119 caractères tronqués]`
+
+  ```
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **D/R/A** — le texte intégral, l'extraction PDF/OCR, la prépa R1.1/R1.2, A2.6/A8.3.
+- **Plan** : le texte intégral, le PDF, l'OCR.
+- **Ambition** : le français réel.
+- **Stratégie** : le dump, débaliseur.
+- **Objectif final** : 10 corpus, ficés.
+- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 8 Ko 0 ; éval 0/40) ; **OCR CEGEP** (7 notes, 739 p, 1,21 M car. ; 8 Ko 0) ; **genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
+- **Ce que font les autres** : Pensée, S, N2.
+- **Prochaine action** : l'**OCR complet** (les 159 scans + le fonds CEGEP) ; la clôture de la session à 8 h ; les collections.
+- **Bloquants** : aucun.
+- **Journal** : [le 01/11](../../journal/2026-11-01/README.md).
+
+## Ce qui est en cours
+
+=== questions
+26:  parité réelle sans questions) ; **S** est actif dans une autre TUI (export pragmatique, 11 tests).
+55:> 
+… [557 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '131,150p' docs/pilotage/en-cours.md; echo \"=== manques\"; grep -n \"OCR\" docs/pilotage/manques.md | head -5; echo \"=== programme-r\"; grep -n \"OCRL\\|OCR\" docs/pilotage/programme-r.md | head -5", "description": "Read open  … [118 caractères tronqués]`
+
+  ```
+## Les questions ouvertes
+
+- **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.1** (état de section) puis **R1.2**
+  (curriculum) tranchent ; la hiérarchie de N2 est écartée.
+- **N2** : le corpus réel (186 Mo) donne **3,53** — la porte **< 2,5** demande-t-elle un corpus d'un autre ordre (les **132 Go** de wiki) ? → N2 tranche.
+- **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
+- **B10.3** : chrF **> 39,6** ? → **B10.3** (attention croisée) tranche.
+- **Pensée** : l'A* = greedy sur ces scores ; un score 0/1 et un opérateur hétérogène les séparent-ils ? →
+  le **v0 suivant** tranche.
+
+## La carte
+
+- **Méthode** : [contexte](../methode/contexte.md) · [continuité](../methode/continuite.md) ·
+  [résultats](../methode/resultats.md) · [portes](../methode/portes.md).
+- **Plan** : [roadmap.md](roadmap.md) · [backlog](backlog/index.md) · [graphe](backlog/dependances.md) ·
+  [carte](../theorie/carte.md) · [inventaire](../README.md).
+- **Preuves** : [reports/](../../reports/) · [journal/](../../journal/) ·
+  [état transféré](../../journal/2026-10-29/etat-transfere.md).
+=== manques
+=== programme-r
+26:- il **assemble** des blocs classiques (parseurs, B
+… [243 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib, re\n# 1. en-cours : prochaine action + journal + horodatage\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nold = \"- **Prochaine action** : l'**OC … [2259 caractères tronqués]`
+
+  ```
+09:14
+ok
+docs/pilotage/en-cours.md:67:- **Prochaine action** : l'**OCR complet** — le lot suivant des livres (21e-40e) et des notes CEGEP ; les collections ; la clôture de la session.
+docs/pilotage/en-cours.md:69:- **Journal** : [le 02/11](../../journal/2026-11-02/README.md) (la nuit D/R/A).
+docs/pilotage/plan-travail.md:41:| **D/R/A — les données, le lecteur, le moteur** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | le texte intégral des 10 corpus (**fait**), l'extraction PDF/OCR (**documents clos, OCR 20 livres + 7 notes CEGEP clos, les 159 scans ensuite**), la prépa R1 (**fiche faite**) |
+docs/pilotage/chantiers.md:89:| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (322 Mo), **documents** (872 M car., 8 Ko 2,07 %), **OCR** (20 livres, 7 381 p, 15,36 M car. ; 7 notes CEGEP, 739 p, 1,21 M car. ; 8 Ko 0) ; dédup, splits | texte intégral (dumps), PDF/OCR, filtrage des stubs, licences | — | N2, L, S, R03 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add docs/pilotage/en-cours.md docs/pilotage/plan-travail.md docs/pilotage/chantiers.md docs/pilotage/roadmap.md; git diff --cached --name-only; git commit -m \"PILOTAGE — LE … [324 caractères tronqués]`

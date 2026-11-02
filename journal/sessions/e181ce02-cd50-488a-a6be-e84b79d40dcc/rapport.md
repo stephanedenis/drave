@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 39.0 h |
-| Tours | 124 |
-| Messages | 1511 |
-| Appels d'outils | 1308 |
+| Durée | 40.6 h |
+| Tours | 125 |
+| Messages | 1515 |
+| Appels d'outils | 1313 |
 | Fichiers touchés | 25 |
-| Commandes | 1061 |
+| Commandes | 1063 |
 | Sous-agents | 2 |
 | Commits | 159 |
 | Compactages de contexte | 4 |
@@ -30,6 +30,8 @@
 - **create** — Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantier
 … [253 caractères tronqués]
 - **block** — Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantier
+… [253 caractères tronqués]
+- **resume** — Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantier
 … [253 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -281,6 +283,8 @@
 **Tour 123** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 124** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 125** — mets le dossier de pilotage à jour et continue
 
 ## 2. Déroulé, étape par étape
 
@@ -6616,6 +6620,20 @@ Au choix, un seul suffit :
 1. **Un modèle local fonctionnel** : un `llama-cli` qui répond (chemin du binaire + du GGUF), ou un tagger installabl
 … [918 caractères tronqués]
 
+### Tour 125 — mets le dossier de pilotage à jour et continue
+
+*5 appels d'outils.* Actions notables :
+
+- get_goal
+- bash — Vérifier l'heure, le HEAD et les compteurs
+- update_goal
+- bash — Repérer les lignes B13/L dans la roadmap, les chantiers et le plan
+- read
+
+**Synthèse produite :**
+
+⏵ Réarmer le goal et remettre le pilotage à jour
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6695,7 +6713,7 @@ Au choix, un seul suffit :
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1021 autres
+- … et 1023 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 09 h 12 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 09 h 15 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -64,9 +64,9 @@
 - **Objectif final** : 10 corpus, ficés.
 - **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 8 Ko 0 ; éval 0/40) ; **OCR CEGEP** (7 notes, 739 p, 1,21 M car. ; 8 Ko 0) ; **genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée, S, N2.
-- **Prochaine action** : l'**OCR complet** (les 159 scans + le fonds CEGEP) ; la clôture de la session à 8 h ; les collections.
+- **Prochaine action** : l'**OCR complet** — le lot suivant des livres (21e-40e) et des notes CEGEP ; les collections ; la clôture de la session.
 - **Bloquants** : aucun.
-- **Journal** : [le 01/11](../../journal/2026-11-01/README.md).
+- **Journal** : [le 02/11](../../journal/2026-11-02/README.md) (la nuit D/R/A).
 
 ## Ce qui est en cours
 
