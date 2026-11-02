@@ -30859,3 +30859,155 @@ bash-202 [bash] completed — cat >> work/r44/journal.md <<'EOF'
 … [41564 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Round 304 : revue des jobs — six heures de campagne, l'attente du manifeste arrive à échéance
+
+**Round 304/1000 — le job d'attente `bash-1053` arrive au bout de ses 60 min.**
+
+- **`bash-1053`** (l'attente de `reports/ocr-pdf.json`, 120 × 30 s) va conclure « manifeste absent après 60 min » ; c'est normal : le manifeste n'est écrit qu'à la fin des 20 livres ou par le finisher à 06:45.
+- **Le CSS** est en OCR (page ~117/718) ; **le train** reste à **7 776 329 octets**.
+- **Le commit `6eff8d8d`** porte la fiche des 8 livres et le contrôle `ocr-pdf-contamination.json`.
+- **La roadmap** (ligne 36) et le **récit du 2/11** (ligne 75) portent encore l'avant-8e (« 7 livres, 4,2 M ») ; le lot de clôture les alignera sur les mesures.
+- **Les portes d'état** ✅ (`204b5998`, 1 563 mots) ; **la revue** ✅ ; **le budget de docs** ✅.
+- **Les documents** sont **clos** (`5c27a3fb`) ; **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : l'attente longue expire, l'OCR continue, le finisher couvre le manifeste. Le goal reste actif.
+
+
+## Tour 317
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 305/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **job_kill** `{"job_id": "bash-1053", "reason": "Attente de 60 min expirée ; le finisher (PID 2275241) couvre désormais le manifeste et le cutoff 06:45."}`
+
+  ```
+requested cancellation of job bash-1053
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1", "description": "Check CSS OCR progress", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+01:33
+2285254 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-pua534bm/p-156.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 305 : CSS en OCR à 156/718, l'ancien job d'attente est tué
+
+**Round 305/1000 — le 9e livre avance (156/718 pages).**
+
+- **`tesseract`** lit la page **156/718** du CSS (~3 s/page) ; il finira vers **02 h 00**.
+- **Le job `bash-1053`** (attente de 60 min) est **arrêté** : le **finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45**.
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le commit `6eff8d8d`** porte la fiche des 8 livres (2 815 p, 7,69 M car., 951 fenêtres 8 Ko, val/test vides) et le contrôle `ocr-pdf-contamination.json`.
+- **Les portes d'état** ✅ (`204b5998`, 1 563 mots) ; **la revue** ✅ ; **le budget de docs** ✅.
+- **Les documents** sont **clos** (`5c27a3fb`) ; **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : l'attente redondante est nettoyée, l'OCR continue. Le goal reste actif.
+
+
+## Tour 318
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 306/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -1 /tmp/ocr-pilote.log", "description": "Check CSS OCR progress", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHu … [11 caractères tronqués]`
+
+  ```
+01:33
+2285969 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-pua534bm/p-177.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  Biblio_large · 004.0 Sprenger 2025, inflammationcycling · 1264 p · 3571780 car
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 306 : CSS en OCR à 177/718 pages
+
+**Round 306/1000 — le 9e livre avance (177/718 pages).**
+
+- **`tesseract`** lit la page **177/718** du CSS ; il finira vers **02 h 05-02 h 15**.
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45** ; **le surveillant** (PID 2136539) fera le **contrôle 8 Ko** final.
+- **Le commit `6eff8d8d`** porte la fiche des 8 livres (2 815 p, 7,69 M car., 951 fenêtres 8 Ko, val/test vides) et le contrôle `ocr-pdf-contamination.json`.
+- **Les portes d'état** ✅ (`204b5998`, 1 563 mots) ; **la revue** ✅ ; **le budget de docs** ✅.
+- **Les documents** sont **clos** (`5c27a3fb`) ; **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le CSS avance ; la livraison OCR est committée ; le goal reste actif.
+
+
+## Tour 319
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 307/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ps -p 1616198 -o etime= 2>/dev/null; ls -la reports/ocr-pdf.json 2>&1", "description": "Check CSS OCR progress and runtime", "timeoutMs": 120000, "workdir": "/home/stephane/Dat … [31 caractères tronqués]`
+
+  ```
+01:34
+2286193 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-pua534bm/p-188.png stdout -l fra+eng --psm 3
+   04:48:49
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 307 : CSS en OCR à 188/718, l'OCR total à 4 h 49
+
+**Round 307/1000 — le 9e livre avance (188/718 pages), l'OCR tourne depuis 4 h 49.**
+
+- **`tesseract`** lit la page **188/718** du CSS (~11 pages/min) ; il finira vers **02 h 20**.
+- **Le processus OCR** (PID 1616198) tourne depuis **4 h 48 min 49 s** ; **le train** est à **7 776 329 octets** (les 8 livres).
+- **Le commit `6eff8d8d`** porte la fiche des 8 livres (2 815 p, 7,69 M car., 951 fenêtres 8 Ko, val/test vides) et le contrôle `ocr-pdf-contamination.json`.
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45** ; **le surveillant** (PID 2136539) fera le **contrôle 8 Ko** final.
+- **Les portes d'état** ✅ (`204b5998`, 1 563 mots) ; **la revue** ✅ ; **le budget de docs** ✅.
+- **Les documents** sont **clos** (`5c27a3fb`) ; **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : l'OCR est au 9e livre ; la livraison des 8 est committée ; le goal reste actif.
+
+
+## Tour 320
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 308/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\n# roadmap : la ligne D\np = pathlib.Path(\"docs/pilotage/roadmap.md\")\nt = p.read_text(encoding=\"utf-8\")\nold = \"**OCR** (7 livres, 4,2 M)\"\nnew = \"**OCR** (8 livres, 2 815 p, 7,7 M, 951 fenêtres … [1212 caractères tronqués]`
+
+  ```
+ok
+36:| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/OCR, documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (8 livres, 2 815 p, 7,7 M, 951 fenêtres 8 Ko) ; **genres** mesurés | **l'OCR complet** (159 scans), la préparation R1.1/R1.2 |
+290:| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **mesuré sur scans simulés ; ouvert sur les scans réels** : 5 familles (photo **55,9 → 6,7 %** de WER, test **5,7 %**), **préservation 90–97 %** (4 familles, propre 96,7), **colonnes 89,4 → 0,5 %**, **tableaux 92,6 %** de cellules, **trois vrais scans** (7,10 % ; et l'**ordre des colonnes** prouvé : 15,3 % contre 98,0 % en ordre inverse) | 10 pages **scannées réelles** avec vérité humaine — **non atteinte** ; le fax 1 bit et l'exposant fusionné restent des limites nommées |
+79:- **Le corpus OCR** : 8 livres, 2 815 pages, 7,7 M caractères (le 8e, *inflammationcycling*, fait 1 264 pages).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; for i in 1 2 3 4; do git read-tree HEAD; git add docs/pilotage/roadmap.md journal/2026-11-02/README.md docs/pilotage/en-cours.md; if git commit -m \"DONNÉES — LA ROADMAP ET LE RÉCIT PORTENT L'OCR D … [277 caractères tronqués]`

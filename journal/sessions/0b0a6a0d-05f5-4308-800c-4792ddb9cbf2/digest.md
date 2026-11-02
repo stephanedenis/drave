@@ -16726,3 +16726,18 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-985", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/T-g3.pt work/n2k/M34-g1.pt 2>/dev/null; tail -1 work/n2j/T-g3.log 2>/dev/null; tail -1 work/n2k/M34-g1.log 2>/dev/null", "description": "Check T-g3 and M34-g1"}`
+
+  ```
+01:35
+pas 12250 · seq 128 · perte 28.6247 · PPL 128/4 3.9501 · 857 s
+pas  5000 · seq 128 · perte 29.1387 · PPL 128/4 5.9626 · 556 s
+  ```
+
+- **bash** `{"command": "sleep 660; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/T-g3.pt 2>/dev/null && echo OK; tail -1 work/n2j/T-g3.log; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/T-g3.pt --corpus-dir data/wiki_fr/ … [121 caractères tronqués]`

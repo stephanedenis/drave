@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 32.9 h |
-| Tours | 88 |
-| Messages | 1167 |
-| Appels d'outils | 1042 |
+| Tours | 89 |
+| Messages | 1174 |
+| Appels d'outils | 1047 |
 | Fichiers touchés | 25 |
-| Commandes | 845 |
+| Commandes | 850 |
 | Sous-agents | 2 |
-| Commits | 111 |
+| Commits | 112 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -207,6 +207,8 @@
 **Tour 87** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 88** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 89** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4669,6 +4671,56 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil d'ou
 - bash — Committer le seuil d'oubli (2e essai)
 - bash — Aligner le compteur JSON et committer
 
+**Synthèse produite :**
+
+⏵ Seuil d'oubli : ×0,5 réussit, ×0,2 échoue, seuil dans (0,2 ; 0,5] ; 74/74
+
+Le round 75 du goal est livré : le **seuil d'oubli** est localisé dans **(0,2 ; 0,5]**. Commits **`b82ac41e`** (le seuil) et **`83a85c2c`** (compteurs).
+
+\## Le seuil d'oubli
+
+Même monde que T69 (look à l'épisode 3000), mais le facteur d'oubli est un **paramètre**.
+
+| facteur | buts | états-Q | pas |
+|---|---:|---:|---:|
+| 0,5 (T69) | **20/20** | 586 | 8,0 |
+| 0,2 | **0/20** | 646 | 200 |
+| 0,1 | **0/20** | 647 | 200 |
+| 0,05 | **0/20** | 649 | 200 |
+
+**Ce que ça dit** :
+
+- **Le seuil est dans (0,2 ; 0,5]** : à 0,5 la politique réussit, à 0,2 elle échoue.
+- **Le nombre d'états ne fait pas la différence** (646–649) : c'est la **valeur** qui compte, pas la couverture.
+- **La mémoire doit durer** : un oubli trop fort efface la porte avant que la politique ne l'utilise.
+- **La négative est explicite** : 0/20 à × 0,2.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-seuil.md`](../../reports/rapport-pensee-seuil.md) ; JSON [`pensee-seuil.json`](../../reports/pensee-seuil.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T71 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **74/74 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **473 fiches / 566 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `reports/ocr-pdf-contamination.json` d'une autre session (course d'index ; le fichier est sur le disque).
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Seuil fin** : 0,3 et 0,4 ; localiser.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **seuil** (0,3 / 0,4).
+
+### Tour 89 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Affiner le seuil d'oubli 0,3–0,45
+- bash — Ajouter la porte T72 (seuil fin)
+- bash — Écrire la fiche du seuil fin
+- bash — Trim README et portes
+- bash — Committer le seuil fin
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4748,7 +4800,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil d'ou
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 805 autres
+- … et 810 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5007,4 +5059,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil d'ou
 - B13 — LE SEUIL D'OUBLI : ×0,5 RÉUSSIT, ×0,2 ÉCHOUE, SEUIL DANS (0,2 ; 0,5] ; 74/74" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL D'OUBLI"; then
 - B13 — LE SEUIL D'OUBLI : ×0,5 RÉUSSIT, ×0,2 ÉCHOUE, SEUIL DANS (0,2 ; 0,5] ; 74/74" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL D'OUBLI"; then
 - ÉTAT — COMPTEUR JSON ALIGNÉ (566)" 2>&1 | tail -2; git log -1 --format='%h %s'
+- B13 — LE SEUIL FIN : ×0,4 RÉUSSIT, ×0,45 ÉCHOUE (NON MONOTONE) ; 75/75" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL FIN"; then echo "COMMIT OK
 

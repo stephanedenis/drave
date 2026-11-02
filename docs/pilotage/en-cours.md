@@ -62,7 +62,7 @@
 - **Ambition** : le français réel.
 - **Stratégie** : le dump, débaliseur.
 - **Objectif final** : 10 corpus, ficés.
-- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 8 livres ; **genres** mesurés ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
+- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 8 livres (2 815 p, 7,69 M car. ; 951 fenêtres 8 Ko) ; **genres** mesurés ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée, S, N2.
 - **Prochaine action** : l'**OCR complet** (les 159 scans après les 8 livres ; le 9e — CSS, 718 p — est en OCR) ; la clôture de la session à 8 h ; les collections.
 - **Bloquants** : aucun.
