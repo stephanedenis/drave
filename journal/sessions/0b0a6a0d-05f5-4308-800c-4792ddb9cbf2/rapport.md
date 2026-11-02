@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 35.8 h |
 | Tours | 18 |
-| Messages | 1428 |
-| Appels d'outils | 1322 |
+| Messages | 1430 |
+| Appels d'outils | 1324 |
 | Fichiers touchés | 11 |
-| Commandes | 1055 |
+| Commandes | 1056 |
 | Sous-agents | 0 |
-| Commits | 67 |
+| Commits | 68 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*356 appels d'outils.* Actions notables :
+*358 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 241 autres
+- … et 242 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1015 autres
+- … et 1016 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1244,4 +1244,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-n2-echantillon.md'); s = p.read_text() a
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
 

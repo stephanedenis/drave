@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (31)
+## Commits du jour (32)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -39,10 +39,11 @@
 | 02:15 | `f332e287` | S — L'ANALYSEUR CONTRE LES STRUCTURES ÉCRITES À LA MAIN : 7/7 SÉQUENCES, 93,9 % DE COUVERTURE | `en-cours.md`, `README.md`, `apprentissage.md` (+13) |
 | 02:32 | `e97e3d4d` | B13 — LES ROUTES CONCURRENTES : BUT CACHÉ, 0/20 ET 20/20, LA PHASE DOIT ENTRER ; 81/81 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 | 03:29 | `64d4f399` | B13 — LA COURBE SUR 20 GRAINES : 20 % À 0,35, 100 % À 0,41, SEUIL ~0,41 ; 86/86 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
+| 04:04 | `d9acb4a6` | B13 — LE GOLD À 200 RÉELS : POS 0,7738, 1 782 TOKENS, LA CIBLE EST ATTEINTE ; 88/88 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 
 ## Chiffres du jour
 
-`20 %` · `100 %` · `93,9 %` · `80 %` · `×0,36` · `×0,40` · `×0,42` · `×0,44` · `×0,35` · `×0,4` · `×0,45` · `×0,5`
+`0,7738` · `20 %` · `100 %` · `93,9 %` · `80 %` · `×0,36` · `×0,40` · `×0,42` · `×0,44` · `×0,35` · `×0,4` · `×0,45`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -56,6 +57,7 @@
 
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-n2-anglais-34m.md](../../reports/rapport-n2-anglais-34m.md)
+- [reports/rapport-n2-canal-distille.md](../../reports/rapport-n2-canal-distille.md)
 - [reports/rapport-n2-echantillon.md](../../reports/rapport-n2-echantillon.md)
 - [reports/rapport-n2-multilingue-34m-distille.md](../../reports/rapport-n2-multilingue-34m-distille.md)
 - [reports/rapport-n2-multilingue-34m.md](../../reports/rapport-n2-multilingue-34m.md)
@@ -70,6 +72,7 @@
 - [reports/rapport-pensee-derive.md](../../reports/rapport-pensee-derive.md)
 - [reports/rapport-pensee-frequent.md](../../reports/rapport-pensee-frequent.md)
 - [reports/rapport-pensee-glisse.md](../../reports/rapport-pensee-glisse.md)
+- [reports/rapport-pensee-gold-200.md](../../reports/rapport-pensee-gold-200.md)
 - [reports/rapport-pensee-hasard2.md](../../reports/rapport-pensee-hasard2.md)
 - [reports/rapport-pensee-intra.md](../../reports/rapport-pensee-intra.md)
 - [reports/rapport-pensee-limite.md](../../reports/rapport-pensee-limite.md)

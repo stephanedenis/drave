@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**62 commits** · **3 session(s)** · **7 thème(s)**
+**63 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 8 | [docs.md](docs.md) |
 | memoire | 7 | [memoire.md](memoire.md) |
-| mesures | 31 | [mesures.md](mesures.md) |
+| mesures | 32 | [mesures.md](mesures.md) |
 | portes | 4 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -93,6 +93,7 @@
 | 03:39 | `4bad0fab` | N2 — LES FICHES DE LA FIN DE NUIT : PROFESSEUR, MULTILINGUE 34 M, ÉCHANTILLON, FENÊTRE, ANGLAIS 34 M |
 | 03:45 | `cc65ff92` | B13 — LE BORD FIN : 73 % À 0,38, 100 % À 0,41 (400 ESSAIS), SEUIL ROBUSTE 0,41 ; 87/87 |
 | 04:02 | `0f0449f2` | N2.x — LA DISTILLATION DU CANAL : −0,03 EN DOMAINE, +0,24 À 512 OCTETS |
+| 04:04 | `d9acb4a6` | B13 — LE GOLD À 200 RÉELS : POS 0,7738, 1 782 TOKENS, LA CIBLE EST ATTEINTE ; 88/88 |
 
 ## Le récit de la journée (écrit à la main)
 

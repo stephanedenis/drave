@@ -17787,3 +17787,29 @@ Dans les années 1950 du réseau de Paris, Mariage Pour certaines proposes, le m
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-n2-echantillon.md'); s = p.read_text()\na = \"## Lecture\"\nb = \"\"\"### La pénalité de répétition casse la boucle, pas le collage\n\nAvec une **pénalité de répétit … [2547 caractères tronqués]`
+
+  ```
+fiche échantillon enrichie
+en-cours ok
+  T0 max : 4001 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · compteurs : en-cours.md dit 493 fichiers, le disque en a 492
+[still running after 60000ms; moved to background job bash-1055]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1055", "timeout_ms": 300000, "wait": true}`
+
+  ```
+course 1
+course 2
+course 3
+course 4
+course 5
+course 6
+d9acb4a6 B13 — LE GOLD À 200 RÉELS : POS 0,7738, 1 782 TOKENS, LA CIBLE EST ATTEINTE ; 88/88
+04:06
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.s** : pénalité de répétition — boucle cassée, mots inventés ;\", \"**N2.s** : pénalité — boucle cassée, mots … [758 caractères tronqués]`
