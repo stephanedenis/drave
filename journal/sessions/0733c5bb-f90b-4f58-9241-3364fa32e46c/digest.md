@@ -3512,3 +3512,10 @@ pas 143500 · perte 1.2313 · PPL val 3.241 · 8249 s
   ```
 
 - **bash** `{"command": "sleep 480; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_zero.out; tail -1 work/n2ac/zero-rope-40k.log; grep -E \"ppl_val\" work/n2ac/zero-rope-40k.pt.json 2>/dev/null", "description": "Wait for 40k completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-142]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-142", "timeout_ms": 480000, "wait": true}`

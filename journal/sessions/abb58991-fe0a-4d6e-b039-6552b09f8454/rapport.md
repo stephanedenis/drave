@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 2.4 h |
-| Tours | 3 |
-| Messages | 288 |
-| Appels d'outils | 392 |
-| Fichiers touchés | 24 |
-| Commandes | 274 |
+| Durée | 2.5 h |
+| Tours | 4 |
+| Messages | 305 |
+| Appels d'outils | 409 |
+| Fichiers touchés | 26 |
+| Commandes | 287 |
 | Sous-agents | 0 |
-| Commits | 4 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -29,6 +29,8 @@
 **Tour 2** — continue toute la nuit
 
 **Tour 3** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
+
+**Tour 4** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -119,7 +121,7 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 
 ### Tour 3 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*78 appels d'outils.* Actions notables :
+*81 appels d'outils.* Actions notables :
 
 - bash — Inspect repo, plan, and 7B server state
 - bash — Check sessions status and en-cours
@@ -135,11 +137,49 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - bash — Refresh plan heartbeat during cascade run
 - bash — Find DRVM/native references
 - bash — Read heterogeneous operators
-- … et 60 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
-⏵ Tests finaux, index explicite et commit du fait DRVM/native
+⏵ Bilan de la nuit : trois faits B13 committés (syntagmes, cascade, DRVM)
+
+**Trois faits mesurés, contrôlés, ficés, committés** (le POS `7ef0199c` était le premier) :
+
+| fait | commit | mesure clé |
+|---|---|---|
+| **Syntagmes neuronaux** | `df899b90` | exact **0,6173**, tête **0,7606** (heur. 0,1992/0,5614) ; cascade confiance **0,7592** |
+| **Cascade complète** | `01838589` | POS **0,9415**, syntagmes **0,7539**, acte **1,0** ; ablations **exactes** |
+| **Politique DRVM/native** | `9250b1c3` | cadenas **3 nœuds** avec la règle, **0** sans ; labyrinthe **2 sonde** ; porte **négative** |
+
+- **La cascade complète est additive** : la complète vaut la cascade POS (0,9415) **et** la cascade syntagmes (0,6088/0,7539) ; la politique `confiance` vaut **+0,1869** de tête sur le défaut (0,5670), et la pragmatique de l'heuristique est préservée (acte 1,0, 0 perte).
+- **La politique DRVM/native** entre dans le conteneur : le même 7B dit `arriere` à la position 0 avec le prompt minimal (**0 nœud**, échec) et `avant` avec la règle explicite (**3 nœuds**, 3 appels, 5,5 s). Le labyrinthe utilise la sonde **2 fois** comme l'oracle ; la porte reste un **négatif** (sa règle n'est pas dans le prompt) et le **hasard** l'ouvre par chance (44 nœuds) — la porte n'est pas un contrôle propre.
+- **Portes** : 15 tests du bloc + 5 tests de la politique verts ; revue documentation, tableaux, T0 **3938/4000**, état **1564 mots**, `verifie_etat_a_jour` et journal verts. La porte B13 reste à **134/140** (six rouges S, hors tagger). `sessions --check --strict` est rouge sur **N2, S et le hub** (heartbeats 46/109/124 min), pas sur `e181ce02`.
+- **État du dépôt** : seul `reports/n2-r11.json`/`rapport-n2-r11.md` (N2) reste non committé ; la clôture D/R/A est passée par le hub (`83f78803`).
+
+Le goal reste **actif** ; la suite de la nuit : la **porte DRVM** (règle dans le prompt), la **pragmatique neuronale**, le **gold 200+ phrases réelles**, puis la **porte B13** (six rouges S).
+
+### Tour 4 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
+
+*14 appels d'outils.* Actions notables :
+
+- bash — Inspect repo, plan, server at round 2
+- bash — Locate porte problem code
+- bash — Read LABYRINTHE_PORTE implementation
+- bash — Add porte prompt to PolitiqueLLM
+- bash — Add porte prompt test
+- write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_drvm.py`
+- bash — Run porte DRVM measurement with rule prompt
+- write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-llm.md`
+- bash — Check time and state before porte updates
+- bash — Update README row and index for porte fact
+- bash — Apply porte state updates and check budgets
+- bash — Add porte journal note and run tests/gates
+- bash — Stage porte fact and check hook
+- bash — Commit the porte DRVM fact
+
+**Synthèse produite :**
+
+⏵ Index explicite et commit de la porte rouverte
 
 ## 3. Travail accompli
 
@@ -171,6 +211,8 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_politique_drvm.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-cascade.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-politique-llm.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_drvm.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-llm.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -214,7 +256,7 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 234 autres
+- … et 247 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -301,4 +343,5 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592" 2>&1 | tail -15; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA PORTE DRVM S'OUVRE AVEC LA RÈGLE : 27 NŒUDS, 4 SONDE (200 SANS ; PAS DE BUT)" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}"
 

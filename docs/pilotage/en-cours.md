@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 18 h 40 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 18 h 46 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
 > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
@@ -78,13 +78,13 @@
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
 - **Fait** : B13 **140/140**, gold **432** ; **gold neuronal** POS/syntagmes, **cascade
-  complète** 0,9415/0,7539/1,0 ; **DRVM/native** — cadenas **3 nœuds** (règle), minimal **0**,
-  labyrinthe **2 sonde**, porte **négatif** ;
-  [fiche](../../reports/rapport-pensee-politique-llm.md).
+  complète** 0,9415/0,7539/1,0 ; **DRVM/native** — cadenas **3 nœuds** (règle), porte **27
+  nœuds** (règle ; 200 sans), labyrinthe **2 sonde** ;
+  [fiche](../../reports/rapport-pensee-porte-llm.md).
 - **Ce qu'elle fait** : **gold neuronal et politique DRVM** mesurés ; reprise **16 h 16**.
 - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
-- **Prochaine action** : **pragmatique** ; **DRVM/native — porte** (règle).
-- **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM ; restent **pragmatique** et **porte**.
+- **Prochaine action** : **pragmatique** ; **gold 200+ phrases**.
+- **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM ; restent **pragmatique** et **gold 200+**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 > **Session close** : `fe3c05f0` (D/R/A) — **147 scans détectés** (91 uniques, 2 053 p),
@@ -114,7 +114,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **556** / **643** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **557** / **644** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
 
@@ -126,7 +126,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : pragmatique** ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : pragmatique ; gold 200+** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N3, N4** | N2 : **N2.ac 1 Go — 3,49 domaine / 6,03 littérature** ; < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2** : 200 k pas **en cours** (session `0733c5bb`), puis **R1.1/R1.2** ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R1/R2/R3 attendent N5/N4 | **R1.1/R1.2** (contexte natif) |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
@@ -137,7 +137,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **porte DRVM, pragmatique** ; **S** — la **validation
+**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **pragmatique, gold 200+** ; **S** — la **validation
 humaine** de la banque et la frontière du GN (h033) ; **N4** — la consigne ; **B10.3** — le `z` ;
 **R0.7** — le tagger complet ; **D** — l'**OCR est clos** (91 scans uniques, 1 982 p) ; les 8 scans
 `.PDF` (58 p) restent une limite nommée.

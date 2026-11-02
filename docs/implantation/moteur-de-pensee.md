@@ -334,11 +334,11 @@ RSN-visuelles déjà produit par N1. Pas de GPU ; le CPU suffit pour 10³–10�
 `PolitiqueLLM` (Qwen2.5-7B-Instruct, `llama-server` CPU, grammaire GBNF d'un mot de direction).
 Sur le cadenas, le prompt minimal échoue (le modèle dit `arriere` à la position 0, 0 nœud) et
 la règle explicite ouvre en **3 nœuds** ; sur le labyrinthe, il utilise la sonde **2 fois**
-(comme l'oracle) ; la porte reste un **négatif** (sa règle n'est pas dans le prompt, et le
-hasard l'ouvre par chance). Fiche
-[`pensee-politique-llm`](../../reports/rapport-pensee-politique-llm.md). La ligne B13 n'est plus
-bloquée par l'absence de poids — elle est limitée par la **qualité de la politique** sur les
-problèmes non décrits.
+(comme l'oracle) ; la **porte** s'ouvre quand sa règle est dans le prompt (**27 nœuds**,
+4 sonde) et **pas** sans elle (200 nœuds, sans but) ; le hasard l'ouvre par chance, l'aveugle
+échoue. Fiches [`pensee-politique-llm`](../../reports/rapport-pensee-politique-llm.md) et
+[`pensee-porte-llm`](../../reports/rapport-pensee-porte-llm.md). La ligne B13 n'est plus bloquée
+par l'absence de poids — le modèle **suit** une règle ; il ne la **découvre** pas.
 
 ## 9. Ce qui rendrait le moteur faux
 

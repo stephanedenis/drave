@@ -1,0 +1,127 @@
+{
+  "date": "2026-11-02 18:45 EST",
+  "modele": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf",
+  "endpoint": "http://127.0.0.1:18082",
+  "probleme": {
+    "nom": "labyrinthe_porte",
+    "porte": [
+      3,
+      3
+    ],
+    "but": [
+      4,
+      4
+    ],
+    "regle": "depuis (3,2), la sonde ouvre la porte si la politique dit bas",
+    "budget": 200
+  },
+  "politique": {
+    "classe": "PolitiqueLLM",
+    "jeu": "porte",
+    "contrainte": "grammaire GBNF, quatre directions"
+  },
+  "mesures": {
+    "oracle": {
+      "noeuds": 28,
+      "but": true,
+      "par_operateur": {
+        "pas": 13,
+        "saut": 10,
+        "sonde": 5
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 58.0,
+      "appels": 7,
+      "budget": 26,
+      "politique": "manhattan",
+      "score": 1.0,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.004
+    },
+    "aveugle": {
+      "noeuds": 200,
+      "but": false,
+      "par_operateur": {
+        "pas": 100,
+        "saut": 39,
+        "sonde": 61
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 483.0,
+      "appels": 66,
+      "budget": 200,
+      "politique": "aveugle",
+      "score": 0.25,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.023
+    },
+    "hasard": {
+      "noeuds": 44,
+      "but": true,
+      "par_operateur": {
+        "pas": 23,
+        "saut": 14,
+        "sonde": 7
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 86.0,
+      "appels": 14,
+      "budget": 43,
+      "politique": "hasard",
+      "score": 1.0,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.005
+    },
+    "llm": {
+      "noeuds": 27,
+      "but": true,
+      "par_operateur": {
+        "pas": 13,
+        "saut": 10,
+        "sonde": 4
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 53.0,
+      "appels": 7,
+      "budget": 25,
+      "politique": "llm",
+      "score": 1.0,
+      "latence_s": 11.972,
+      "erreurs": 0,
+      "duree_s": 11.976
+    }
+  },
+  "seuils": {
+    "oracle_but": true,
+    "aveugle_non": true,
+    "llm_sonde": true,
+    "aucune_erreur_llm": true,
+    "latence_mesuree": true
+  },
+  "verdict": true,
+  "limites": [
+    "Le hasard ouvre la porte par chance ; l'aveugle échoue : le contrôle propre est l'aveugle.",
+    "L'ancien prompt (sans la règle de la porte) a donné 200 nœuds, 3 appels, 179,5 s, sans but (fiche DRVM/native) : c'est le contrôle négatif du prompt.",
+    "La latence inclut la file du serveur ; CPU seulement.",
+    "Une seule graine de serveur, température 0, grammaire."
+  ]
+}

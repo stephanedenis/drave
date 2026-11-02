@@ -7195,3 +7195,393 @@ CHECK=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -m \"B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE\" 2>&1 | tail -12; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Commit the DRVM/native policy fact", "timeoutMs": 300000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 9250b1c3] B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE
+ 30 files changed, 1139 insertions(+), 61 deletions(-)
+ create mode 100644 reports/pensee-politique-llm.json
+ create mode 100644 reports/rapport-pensee-politique-llm.md
+ create mode 100644 tools/tests/qualifier_politique_drvm.py
+ create mode 100644 tools/tests/test_pensee_politique.py
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit `9250b1c3` ; vérification post-commit et bilan des trois faits de la nuit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -4 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '=== STATUS ==='; git status --short | head -10; echo '=== ETAT ==='; python3 tools/verifie_etat_a_jour.py --head; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille … [189 caractères tronqués]`
+
+  ```
+9250b1c3 18:41:09 B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE
+83f78803 18:37:41 DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS
+01838589 18:23:31 B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES
+df899b90 17:53:59 B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592
+=== STATUS ===
+?? reports/n2-r11.json
+?? reports/rapport-n2-r11.md
+=== ETAT ===
+  état · dernier fait 9250b1c3 · dernier état 9250b1c3
+  ✅ aucun fait commité après le dernier état
+  revue de documentation · 556 fiche(s) · 643 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3938 mots (budget 4 000)
+  en-cours · 1564 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Les trois faits de la nuit sont committés ; je mets à jour le goal vers la suite (porte, pragmatique, 200+)
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-781186f0-1fb6-48ba-af64-5c056d667196","revision":1,"objective":"Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque.","phase":"active","roundsStarted":1,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "edit", "goal_id": "goal-781186f0-1fb6-48ba-af64-5c056d667196", "objective": "Poursuivre la session L/B13 toute la nuit : rouvrir la porte DRVM avec sa règle dans le prompt (mesure + contrôle), mesurer la pragmatique neuronale (acte/négation/modalité), étendre le gold à 200+ phrases réell … [275 caractères tronqués]`
+
+  ```
+Error: this goal operation requires a direct human turn on a top-level agent
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan de la nuit : trois faits B13 committés (syntagmes, cascade, DRVM)
+
+**Trois faits mesurés, contrôlés, ficés, committés** (le POS `7ef0199c` était le premier) :
+
+| fait | commit | mesure clé |
+|---|---|---|
+| **Syntagmes neuronaux** | `df899b90` | exact **0,6173**, tête **0,7606** (heur. 0,1992/0,5614) ; cascade confiance **0,7592** |
+| **Cascade complète** | `01838589` | POS **0,9415**, syntagmes **0,7539**, acte **1,0** ; ablations **exactes** |
+| **Politique DRVM/native** | `9250b1c3` | cadenas **3 nœuds** avec la règle, **0** sans ; labyrinthe **2 sonde** ; porte **négative** |
+
+- **La cascade complète est additive** : la complète vaut la cascade POS (0,9415) **et** la cascade syntagmes (0,6088/0,7539) ; la politique `confiance` vaut **+0,1869** de tête sur le défaut (0,5670), et la pragmatique de l'heuristique est préservée (acte 1,0, 0 perte).
+- **La politique DRVM/native** entre dans le conteneur : le même 7B dit `arriere` à la position 0 avec le prompt minimal (**0 nœud**, échec) et `avant` avec la règle explicite (**3 nœuds**, 3 appels, 5,5 s). Le labyrinthe utilise la sonde **2 fois** comme l'oracle ; la porte reste un **négatif** (sa règle n'est pas dans le prompt) et le **hasard** l'ouvre par chance (44 nœuds) — la porte n'est pas un contrôle propre.
+- **Portes** : 15 tests du bloc + 5 tests de la politique verts ; revue documentation, tableaux, T0 **3938/4000**, état **1564 mots**, `verifie_etat_a_jour` et journal verts. La porte B13 reste à **134/140** (six rouges S, hors tagger). `sessions --check --strict` est rouge sur **N2, S et le hub** (heartbeats 46/109/124 min), pas sur `e181ce02`.
+- **État du dépôt** : seul `reports/n2-r11.json`/`rapport-n2-r11.md` (N2) reste non committé ; la clôture D/R/A est passée par le hub (`83f78803`).
+
+Le goal reste **actif** ; la suite de la nuit : la **porte DRVM** (règle dans le prompt), la **pragmatique neuronale**, le **gold 200+ phrases réelles**, puis la **porte B13** (six rouges S).
+
+
+## Tour 4
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 2 : état du dépôt, heartbeat et serveur, puis la porte DRVM
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -2 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '=== STATUS ==='; git status --short | head -10; echo '=== PLAN ==='; grep -E \"Heartbeat|État|Prochaine\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | head -4; echo '== … [139 caractères tronqués]`
+
+  ```
+9250b1c3 18:41:09 B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE
+83f78803 18:37:41 DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS
+=== STATUS ===
+?? reports/n2-r11.json
+?? reports/rapport-n2-r11.md
+=== PLAN ===
+- **Heartbeat** : 2026-11-02 18:40 EST
+- **Prochaine action** : la **politique DRVM/native** est mesurée (cadenas **3 nœuds** avec
+- **État** : actif
+=== SERVEUR ===
+{"status":"ok"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"MURS_P\\|LABYRINTHE_PORTE\\|def _etat_p\\|def _deplacer_p\\|def sonde_p\\|def but_p\\|REGISTRE_P\\|def porte\" tools/pensee/operateurs.py | head -30", "description": "Locate porte problem code"}`
+
+  ```
+735:MURS_P = {(0, 1), (1, 1), (2, 1), (4, 1), (4, 2), (1, 2), (2, 2), (1, 3), (3, 4)}
+740:def _etat_p(x: int, y: int, open_: bool, parent: str | None = None,
+757:    if not (0 <= x < 5 and 0 <= y < 5) or (x, y) in MURS_P:
+762:def _deplacer_p(e: Etat, dx: int, dy: int, profondeur: int = 1,
+780:def sonde_p(e: Etat, _p: dict | None = None) -> list[Etat]:
+799:def but_p(e: Etat) -> bool:
+817:REGISTRE_P = Registre({
+823:LABYRINTHE_PORTE = Probleme(
+826:    operateurs={n: o.applique for n, o in REGISTRE_P.operateurs.items()},
+835:def sonde_p_sto(e: Etat, _p: dict | None = None) -> list[Etat]:
+859:REGISTRE_PSTO = Registre({
+865:LABYRINTHE_PORTE_STO = Probleme(
+868:    operateurs={n: o.applique for n, o in REGISTRE_PSTO.operateurs.items()},
+877:def _deplacer_pf(e: Etat, dx: int, dy: int, profondeur: int = 1) -> list[Etat]:
+895:def sonde_pf(e: Etat, _p: dict | None = None) -> list[Etat]:
+914:REGISTRE_PF = Registre({
+920:LABYRINTHE_PORTE_FERME = Probleme(
+923:    operateurs={n: o.applique for n, o in REGISTRE_PF.operateurs.items()},
+932:def sonde_pm(e: Etat, _p: dict | None = None) -> list[Etat]:
+953:REGISTRE_PM = Registre({
+959:LABYRINTHE_PORTE_MINUTE = Probleme(
+962:    operateurs={n: o.app
+… [489 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du labyrinthe-porte (murs, porte, règle) pour le prompt
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '735,835p' tools/pensee/operateurs.py", "description": "Read LABYRINTHE_PORTE implementation"}`
+
+  ```
+MURS_P = {(0, 1), (1, 1), (2, 1), (4, 1), (4, 2), (1, 2), (2, 2), (1, 3), (3, 4)}
+PORTE = (3, 3)
+P_BUT = (4, 4)
+
+
+def _etat_p(x: int, y: int, open_: bool, parent: str | None = None,
+            profondeur: int = 0) -> Etat:
+    return Etat(f"p{x}:{y}:{int(open_)}", parent, profondeur,
+                (Candidat("x", {"v": x}), Candidat("y", {"v": y}),
+                 Candidat("open", {"v": bool(open_)})))
+
+
+def _xy_p(e: Etat) -> tuple[int, int]:
+    d = {c.id: c.corps["v"] for c in e.candidats}
+    return int(d["x"]), int(d["y"])
+
+
+def _open_p(e: Etat) -> bool:
+    return bool(next(c.corps["v"] for c in e.candidats if c.id == "open"))
+
+
+def _libre_p(x: int, y: int, open_: bool) -> bool:
+    if not (0 <= x < 5 and 0 <= y < 5) or (x, y) in MURS_P:
+        return False
+    return (x, y) != PORTE or open_
+
+
+def _deplacer_p(e: Etat, dx: int, dy: int, profondeur: int = 1,
+                open_: bool | None = None) -> list[Etat]:
+    x, y = _xy_p(e)
+    o = _open_p(e) if open_ is None else open_
+    nx, ny = x + dx, y + dy
+    if not _libre_p(nx, ny, o):
+        return []
+    return [_etat_p(nx, ny, o, e.empreinte(), e.profondeur + profondeur)]
+
+
+def pas_p(e: Etat, _p: dict | None = None)
+… [2023 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte a une règle précise (ouvrir en (3,2) par `bas`) ; j'ajoute le prompt `jeu="porte"`
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py')\nt=p.read_text(encoding='utf-8')\nancre = \"\"\"        x, y = _xy_l(etat)\n        murs = \", \".join(f\"({a},{b})\" for a, b in sorted(MURS))\n        return (\"Tu es la  … [1770 caractères tronqués]`
+
+  ```
+ok
+127:        if self.jeu == "porte":
+128-            x, y = _xy_p(etat)
+129-            ouvert = "oui" if _open_p(etat) else "non"
+130-            murs = ", ".join(f"({a},{b})" for a, b in sorted(MURS_P))
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du prompt porte et banc dédié (`qualifier_porte_drvm.py`)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_pensee_politique.py')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"from tools.pensee.operateurs import (BUT_C, CADENAS, LABYRINTHE, L_BUT,  # noqa: E402\\n                           … [906 caractères tronqués]`
+
+  ```
+ok
+Ran 6 tests in 0.001s
+
+OK
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"qualifier_porte_drvm.py — la porte DRVM avec sa règle **dans le prompt**.\n\nL'ancien prompt du labyrinthe ne décrivait pas la porte : le 7B échouait (200 nœuds, 3 appels,\nsans but). Ici la politique `jeu=\"porte\"` reçoit les murs du labyrinthe-porte, la  … [5358 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_drvm.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure de la porte avec la règle dans le prompt (oracle, aveugle, hasard, LLM)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/tests/qualifier_porte_drvm.py && time python3 tools/tests/qualifier_porte_drvm.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-porte-llm.json 2>&1 | tail -60", "description": "Run porte DRVM measurement with ru … [33 caractères tronqués]`
+
+  ```
+{
+ "verdict": true,
+ "seuils": {
+  "oracle_but": true,
+  "aveugle_non": true,
+  "llm_sonde": true,
+  "aucune_erreur_llm": true,
+  "latence_mesuree": true
+ },
+ "mesures": {
+  "oracle": [
+   true,
+   28,
+   58.0,
+   7,
+   5,
+   0.0,
+   0
+  ],
+  "aveugle": [
+   false,
+   200,
+   483.0,
+   66,
+   61,
+   0.0,
+   0
+  ],
+  "hasard": [
+   true,
+   44,
+   86.0,
+   14,
+   7,
+   0.0,
+   0
+  ],
+  "llm": [
+   true,
+   27,
+   53.0,
+   7,
+   4,
+   11.972,
+   0
+  ]
+ }
+}
+écrit : reports/pensee-porte-llm.json
+[stderr]
+
+real	0m12,253s
+user	0m0,273s
+sys	0m0,016s
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte s'ouvre avec la règle : **27 nœuds, 4 sonde, 12 s** contre 200 nœuds sans la règle ; je rédige la fiche
+
+- **write** `{"content": "# B13 — la porte DRVM : la règle dans le prompt l'ouvre (27 nœuds, 4 sonde)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 ·\n> **Verdict** : ✅ **la porte est rouverte par la règle** — avec le prompt `porte` qui décrit la\n> porte `(3,3)` et la règle « de … [6023 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-llm.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ README/index, doc, état et plan pour la porte rouverte
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M %Z'; git log -1 --format='%h %s'; git status --short docs/pilotage/en-cours.md docs/pilotage/roadmap.md; echo \"MD=$(ls reports/*.md|wc -l) JSON=$(ls reports/*.json|wc -l)\"; grep -n \"Mis à jour\\|fichiers / JSON\" docs/pilotage … [74 caractères tronqués]`
+
+  ```
+2026-11-02 18:46 EST
+9250b1c3 B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE
+MD=557 JSON=644
+3:**Mis à jour : 2026-11-02, 18 h 40 HNE (heure locale, EST).**
+117:| fichiers / JSON de résultats | **556** / **643** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-pensee-politique-llm.md`](rapport-pensee-politique-llm.md) | **B13** **3 nœuds** |\",\n            \"| [`rapport-pensee-p … [263 caractères tronqués]`
+
+  ```
+readme ok
+  554 fiches → reports/INDEX.md
+2800 reports/README.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Application de l'état « porte rouverte » (en-cours, roadmap, plan, doc, chantiers)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re, time\n# en-cours\np=pathlib.Path('docs/pilotage/en-cours.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace('**Mis à jour : 2026-11-02, 18 h 40 HNE (heure locale, EST).**','**Mis à jour : 2026-11-02, 18 h 46 HNE ( … [5945 caractères tronqués]`
+
+  ```
+ok 2026-11-02 18:46 EST
+EN-COURS: 1570
+  T0 max : 3944 mots (budget 4 000)
+  en-cours · 1570 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 557 fiche(s) · 644 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Note de journal « porte rouverte », tests et contrôles avant commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-02/README.md')\nt=p.read_text(encoding='utf-8')\nnote = \"\"\"\n**18 h 44 — la porte DRVM s'ouvre avec la règle : 27 nœuds, 4 sonde.**\n\nLe 7B, avec le prompt `porte` (murs, porte (3,3 … [990 caractères tronqués]`
+
+  ```
+ok
+Ran 6 tests in 0.001s
+
+OK
+Ran 15 tests in 0.053s
+
+OK
+  ✅ 1563 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 2659 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+  journal · 39 jour(s) · 117 session(s) · 1854 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ```
+
+### 🤖 Assistant
+
+⏵ Index explicite et commit de la porte rouverte
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -12; echo '=== ADD ==='; git add tools/pensee/operateurs.py tools/tests/test_pensee_politique.py tools/tests/qualifier_porte_drvm.py reports/pensee-porte-llm.json reports/rapport-pensee-porte-llm.md reports/README.md reports/ … [414 caractères tronqués]`
+
+  ```
+M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/2026-11-02/README.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/pensee/operateurs.py
+ M tools/tests/test_pensee_politique.py
+?? reports/n2-r11.json
+?? reports/pensee-porte-llm.json
+=== ADD ===
+ journal/2026-11-02/README.md                       |  10 ++
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |  11 +-
+ reports/INDEX.md                                   |   3 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-porte-llm.json                      | 127 +++++++++++++++++++++
+ reports/rapport-pensee-porte-llm.md                | 104 +++++++++++++++++
+ tools/pensee/operateurs.py                         |  10 ++
+ tools/tests/qualifier_porte_drvm.py                | 119 +++++++++++++++++++
+ tools/tests/test_pensee_politique.py               |  11 +-
+ 13 files changed, 407 insertions(+), 30 deletions(-)
+  ✅ index : aucun fait stagé sans état
+HOOK=0
+CHECK=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -m \"B13 — LA PORTE DRVM S'OUVRE AVEC LA RÈGLE : 27 NŒUDS, 4 SONDE (200 SANS ; PAS DE BUT)\" 2>&1 | tail -10; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Commit the porte DRVM fact", "timeoutMs": 300000}`

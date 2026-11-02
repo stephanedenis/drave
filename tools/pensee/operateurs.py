@@ -124,6 +124,16 @@ class PolitiqueLLM(Politique):
                     "La position augmente quand on va avant et diminue quand on va arriere. "
                     "Si la position est inférieure au but, réponds avant ; sinon réponds arriere. "
                     "Réponds uniquement par avant ou arriere.")
+        if self.jeu == "porte":
+            x, y = _xy_p(etat)
+            ouvert = "oui" if _open_p(etat) else "non"
+            murs = ", ".join(f"({a},{b})" for a, b in sorted(MURS_P))
+            return ("Tu es la politique d'un moteur de recherche dans une grille 5x5. "
+                    "x va vers la droite, y vers le bas. "
+                    f"Murs : {murs}. La porte (3,3) est fermée. Depuis (3,2), la sonde ouvre "
+                    "la porte si tu réponds bas. Une fois la porte ouverte, va en (4,4). "
+                    f"Position : ({x},{y}). Porte ouverte : {ouvert}. But : (4,4). "
+                    "Réponds uniquement par droite, gauche, bas ou haut. Ne propose pas un mur.")
         x, y = _xy_l(etat)
         murs = ", ".join(f"({a},{b})" for a, b in sorted(MURS))
         return ("Tu es la politique d'un moteur de recherche dans une grille 5x5. "

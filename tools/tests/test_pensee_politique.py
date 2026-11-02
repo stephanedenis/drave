@@ -5,8 +5,8 @@ import unittest
 
 RACINE = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(RACINE))
-from tools.pensee.operateurs import (BUT_C, CADENAS, LABYRINTHE, L_BUT,  # noqa: E402
-                                     PolitiqueLLM)
+from tools.pensee.operateurs import (BUT_C, CADENAS, LABYRINTHE, LABYRINTHE_PORTE,  # noqa: E402
+                                     L_BUT, P_BUT, PolitiqueLLM)
 
 
 class TestPolitiqueLLM(unittest.TestCase):
@@ -21,6 +21,13 @@ class TestPolitiqueLLM(unittest.TestCase):
         regle = PolitiqueLLM("faux", jeu="cadenas", variante="regle")
         self.assertNotIn("augmente", minimal._invite(etat, BUT_C))
         self.assertIn("augmente", regle._invite(etat, BUT_C))
+
+    def test_porte(self):
+        p = PolitiqueLLM("faux", jeu="porte", transport=lambda *_: "bas")
+        self.assertEqual(p.propose(LABYRINTHE_PORTE.initial(), P_BUT), "bas")
+        invite = p._invite(LABYRINTHE_PORTE.initial(), P_BUT)
+        self.assertIn("porte", invite.lower())
+        self.assertIn("(3,2)", invite)
 
     def test_labyrinthe(self):
         p = PolitiqueLLM("faux", transport=lambda *_: "droite")

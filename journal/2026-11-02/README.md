@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**168 commits** · **10 session(s)** · **10 thème(s)**
+**169 commits** · **10 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 6 | [attention.md](attention.md) |
-| distribue | 14 | [distribue.md](distribue.md) |
+| distribue | 15 | [distribue.md](distribue.md) |
 | docs | 26 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 84 | [mesures.md](mesures.md) |
@@ -30,7 +30,7 @@
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 45.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 1.4 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
 | `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 2.2 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
-| `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 2.4 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
+| `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 2.5 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
 | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 2.4 h | [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md) |
 | `caaf3018-e3e2-4416-8446-11f0335910aa` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 0.5 h | [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md) |
@@ -209,6 +209,7 @@
 | 17:53 | `df899b90` | B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592 |
 | 18:23 | `01838589` | B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES |
 | 18:37 | `83f78803` | DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS |
+| 18:41 | `9250b1c3` | B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -285,4 +286,13 @@ le prompt **minimal** fait dire `arriere` à la position 0 : **0 nœud**, échec
 (44 nœuds) : la porte n'est pas un contrôle propre. Fiche
 [`pensee-politique-llm`](../../reports/rapport-pensee-politique-llm.md), JSON
 [`pensee-politique-llm.json`](../../reports/pensee-politique-llm.json).
+
+**18 h 44 — la porte DRVM s'ouvre avec la règle : 27 nœuds, 4 sonde.**
+
+Le 7B, avec le prompt `porte` (murs, porte (3,3), règle « depuis (3,2), réponds bas »), ouvre
+la porte et atteint le but en **27 nœuds, 4 sonde, 7 appels, 12 s** ; l'ancien prompt (sans la
+règle) échouait à **200 nœuds, 3 appels, 179,5 s**. L'oracle 28/5, l'aveugle 200/61 sans but,
+le hasard 44/7 par chance. Le modèle **suit** une règle ; il ne la découvre pas. Fiche
+[`pensee-porte-llm`](../../reports/rapport-pensee-porte-llm.md), JSON
+[`pensee-porte-llm.json`](../../reports/pensee-porte-llm.json).
 <!-- /notes -->

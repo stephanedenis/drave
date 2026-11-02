@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-pensee-politique-llm.md`](rapport-pensee-politique-llm.md) | **B13** **3 nœuds** |
+| [`rapport-pensee-porte-llm.md`](rapport-pensee-porte-llm.md) | **B13** **27 nœuds** |
 | [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
 | [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
 | [`rapport-pensee-miroir.md`](rapport-pensee-miroir.md) | **B13** — le miroir entrée/sortie : surface 1,0, mots 0,2095, **119/119** |

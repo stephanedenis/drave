@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **553 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **554 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -436,6 +436,7 @@
 | [rapport-pensee-pieges.md](rapport-pensee-pieges.md) | B13 — les questions pièges : 0/5, la règle du `si` est cassée |
 | [rapport-pensee-politique-llm.md](rapport-pensee-politique-llm.md) | B13 — la politique DRVM/native : le 7B ouvre le cadenas avec la règle, pas sans |
 | [rapport-pensee-porte-apprise.md](rapport-pensee-porte-apprise.md) | B13 — la porte apprise : la Q-table trouve la porte seule |
+| [rapport-pensee-porte-llm.md](rapport-pensee-porte-llm.md) | B13 — la porte DRVM : la règle dans le prompt l'ouvre (27 nœuds, 4 sonde) |
 | [rapport-pensee-porte.md](rapport-pensee-porte.md) | B13 — la porte neuronale : la bonne politique ouvre, l'aveugle échoue |
 | [rapport-pensee-professeur.md](rapport-pensee-professeur.md) | B13 — le professeur complet : 56 états-Q, il échoue encore seul |
 | [rapport-pensee-rapide.md](rapport-pensee-rapide.md) | B13 — la bascule très fréquente : 1/10, 20/20 |
