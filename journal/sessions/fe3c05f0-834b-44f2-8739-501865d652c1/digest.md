@@ -34751,3 +34751,60 @@ manifeste ocrises 5 pages 292 car 506801
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 180; date '+%H:%M'; tail -4 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json')); print('manifeste ocrises', d['ocrises … [244 caractères tronqués]`
+
+  ```
+07:47
+  CEGEP · inscription AQPC.pdf · 2 p · 2582 car
+  CEGEP · programme_du_colloque_2016_de_laqpc.pdf · 66 p · 205021 car
+  CEGEP · Algorithms Illuminated (Part 2) Graph Al · 221 p · 342432 car
+  CEGEP · Algorithms Illuminated (Part 3) Greedy A · 226 p · 359423 car
+    PID            
+3011320       54:27
+manifeste ocrises 5 pages 292 car 506801
+-rw-r--r--. 1 stephane stephane 1144982  2 nov 07:44 data/corpus_ocr_cegep/train.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 180; date '+%H:%M'; tail -3 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json')); print('manifeste ocrises', d['ocrises … [222 caractères tronqués]`
+
+  ```
+07:51
+  CEGEP · programme_du_colloque_2016_de_laqpc.pdf · 66 p · 205021 car
+  CEGEP · Algorithms Illuminated (Part 2) Graph Al · 221 p · 342432 car
+  CEGEP · Algorithms Illuminated (Part 3) Greedy A · 226 p · 359423 car
+    PID            
+3011320       57:45
+manifeste ocrises 5 pages 292 car 506801 docs {'train': 3, 'val': 2, 'test': 0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ps -p 3011320 -o pid= 2>/dev/null && kill 3011320; sleep 3; ps -p 3011320 -o stat= 2>/dev/null || echo \"CEGEP run arrêté\"; tail -2 /tmp/ocr-cegep2.log", "description": "Stop CEGEP run at 7 notes", "timeoutMs": 120000,  … [61 caractères tronqués]`
+
+  ```
+07:51
+3011320
+CEGEP run arrêté
+  CEGEP · Algorithms Illuminated (Part 2) Graph Al · 221 p · 342432 car
+  CEGEP · Algorithms Illuminated (Part 3) Greedy A · 226 p · 359423 car
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport json, pathlib, hashlib\nlog = pathlib.Path('/tmp/ocr-cegep2.log')\nlignes = [l for l in log.read_text(encoding='utf-8', errors='ignore').splitlines() if ' · ' in l and l.strip().startswith('CEGEP … [3003 caractères tronqués]`
+
+  ```
+07:51
+manifeste 7 notes : 7 scans, 739 pages, 1208656 car ; {'train': 1144982, 'val': 84021, 'test': 0}
+[check 0]
+8 Ko train 140 | val {'troncons': 11, 'doublons': 0, 'taux': 0.0} | éval [(0, 40), (0, 24), (0, 40)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib, json\nm = json.load(open('reports/ocr-pdf-cegep.json')); c = json.load(open('reports/ocr-pdf-cegep-contamination.json'))\nfen = c['doublons_entre_splits_troncon']['train_troncons']; val  … [4119 caractères tronqués]`
+
+  ```
+07:52
+ok 7 739 1208656 140 {'troncons': 11, 'doublons': 0, 'taux': 0.0}
+reports/rapport-ocr-cegep.md:1:# Le corpus OCR du CEGEP — 7 notes scannées, 1 208 656 caractères
+reports/rapport-ocr-cegep.md:47:> **Note** : le manifeste a été reconstruit après l'arrêt à 7 notes à 07 h 52 (fenêtre de clôture) ; `documents` (train/val/test) n'est pas recompté, les octets et les SHA-256 sont ceux du disque.
+docs/pilotage/en-cours.md:65:- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 8 Ko 0 ; éval 0/40) ; **OCR CEGEP** (7 notes, 739 p, 1,21 M car. ; 8 Ko 0) ; **genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
+docs/pilotage/roadmap.md:36:| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/OCR, documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; CEGEP 7 notes, 739 p,
+… [371 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add reports/ocr-pdf-cegep.json reports/ocr-pdf-cegep-contamination.json reports/rapport-ocr-cegep.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/2026-11-02/RE … [380 caractères tronqués]`

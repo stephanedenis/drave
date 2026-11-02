@@ -19250,3 +19250,160 @@ reports/rapport-n2-professeur.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/generer_natif.py; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d{2} h \\d{2} HNE \\(heure locale, EST\ … [1605 caractères tronqués]`
+
+  ```
+M tools/generer_natif.py
+ts ok
+[still running after 60000ms; moved to background job bash-1128]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1128", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+b788ba04 N2 — RESTAURATION DES FICHES EFFACÉES PAR UNE COURSE DE COMMIT
+dans HEAD : 30
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git ls-tree HEAD reports/ | grep -c \"rapport-s-analyseur\"; git status --short reports/ | grep \"??\" | grep -c \"rapport-n2\\|rapport-s\"; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅|❌\"; python3 tools/verifie_en_co … [145 caractères tronqués]`
+
+  ```
+1
+10
+  T0 max : 3965 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+07:46
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short reports/ | grep \"??\" | head -12; echo \"=== HEAD ===\"; git ls-tree HEAD reports/ | grep \"rapport-n2\" | awk '{print $4}' | tail -5; echo \"=== log ===\"; git log --oneline -2", "description": "Inspect the untra … [14 caractères tronqués]`
+
+  ```
+?? reports/corpus-wiki-it-texte-contamination.json
+?? reports/corpus-wiki-it-texte.json
+?? reports/ocr-pdf-cegep-contamination.json
+?? reports/ocr-pdf-cegep.json
+?? reports/ocr-pdf-contamination.json
+?? reports/ocr-pdf.json
+?? reports/pensee-partielle.json
+?? reports/rapport-n2-anglais-34m.md
+?? reports/rapport-n2-canal-34m.md
+?? reports/rapport-n2-canal-distille.md
+?? reports/rapport-n2-canal-kd-34m.md
+?? reports/rapport-n2-echantillon.md
+=== HEAD ===
+reports/rapport-n2-multilingue-capacite.md
+reports/rapport-n2-multilingue-distille.md
+reports/rapport-n2-multilingue.md
+reports/rapport-n2-professeur.md
+reports/rapport-n2-propre.md
+=== log ===
+b788ba04 N2 — RESTAURATION DES FICHES EFFACÉES PAR UNE COURSE DE COMMIT
+6c7bff9b ÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 06 h : 76 VERTES, 5 ROUGES (LES 4 CONNUES + GREFFE À LA BORNE)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git cat-file -e HEAD:reports/rapport-n2-canal-34m.md && echo \"canal-34m dans HEAD\" || echo \"absent\"; git status --short reports/rapport-n2-canal-34m.md; echo \"=== HEAD only ===\"; comm -23 <(git ls-tree HEAD reports/ | awk '{pri … [291 caractères tronqués]`
+
+  ```
+canal-34m dans HEAD
+D  reports/rapport-n2-canal-34m.md
+?? reports/rapport-n2-canal-34m.md
+=== HEAD only ===
+=== disque only ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-n2-*.md reports/rapport-s-analyseur.md 2>/dev/null; git status --short reports/ | grep -E \"rapport-n2|rapport-s\" | head -5; echo \"=== count ===\"; git status --short reports/ | grep -c \"rapport-n2\\|rappor … [99 caractères tronqués]`
+
+  ```
+=== count ===
+0
+ 20 files changed, 57 insertions(+), 649 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --cached --stat | head -22; echo \"=== sur disque ? ===\"; git diff --cached --name-only --diff-filter=D | head -6 | while read f; do [ -e \"$f\" ] && echo \"EXISTE $f\" || echo \"absent $f\"; done", "description": "Inspect  … [22 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                          |   4 +-
+ journal/2026-11-02/README.md                       |  12 +-
+ journal/2026-11-02/apprentissage.md                |   4 +-
+ journal/2026-11-02/attention.md                    |   4 +-
+ journal/2026-11-02/distribue.md                    |   4 +-
+ journal/2026-11-02/docs.md                         |   4 +-
+ journal/2026-11-02/memoire.md                      |   7 +-
+ journal/2026-11-02/mesures.md                      |  10 +-
+ journal/2026-11-02/modele.md                       |   4 +-
+ journal/2026-11-02/portes.md                       |   4 +-
+ journal/README.md                                  |   6 +-
+ journal/THEMES.md                                  |   2 +-
+ .../0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md | 268 ---------------------
+ .../rapport.md                                     |  77 +-----
+ journal/sessions/MANIFEST.md                       |   8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 148 ------------
+ .../rapport.md                                     |  94 +-------
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/digest.md |  24 --
+ .../rapport.md                                     |  13 +-
+ to
+… [132 caractères tronqués]
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-7e5e03db-88c5-4373-9ab3-8ed001aa777a","revision":3,"objective":"Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, session S (analyseur plus riche, export), intégration hub. Chaque étape rend un résultat mesuré, une fiche, un commit, et met à jour en-cours/roadmap ; les portes et la revue restent vertes.","phase":"active","roundsStarted":1,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"goal_id": "goal-7e5e03db-88c5-4373-9ab3-8ed001aa777a", "revision": 3, "action": "complete"}`
+
+> **Objectif** (complete) : Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, session S (analyseur plus riche, export), intégration hub. Chaque étape rend un résultat mesuré, une fiche, un commit, et met à jour en-cours/roadmap ; les portes et la revue restent vertes.
+
+
+  ```
+{"goal":{"id":"goal-7e5e03db-88c5-4373-9ab3-8ed001aa777a","revision":4,"objective":"Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, session S (analyseur plus riche, export), intégration hub. Chaque étape rend un résultat mesuré, une fiche, un commit, et met à jour en-cours/roadmap ; les portes et la revue restent vertes.","phase":"complete","roundsStarted":1,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, session S (analyseur plus riche, export), intégration hub. Chaque étape rend un résultat mesuré, une fiche, un commit, et met à jour en-cours/roadmap ; les portes et la revue restent vertes."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+## La nuit est finie — objectif atteint
+
+Les cinq volets du mandat sont mesurés, écrits et committés. Le dernier obstacle n'était pas scientifique : une **course de commit** avait effacé neuf fiches de `HEAD` (un commit parallèle, `edb54a29`, est reparti d'un arbre qui ne les avait pas). Elles ont été restaurées et vérifiées.
+
+### Ce qui est fait, item par item
+
+**1. Distillation sur le corpus réel** (professeur 23,57 M, 3 graines, positions aléatoires) — `reports/rapport-n2-distillation-reelle.md` : **3,8761** en domaine (base 4,3893), ±0,004 entre graines ; `work/n2j/W-g{1,2,3}.pt`.
+
+**2. Canal d'annotation de structure** (placebo et ablation) — `reports/rapport-n2-canal.md` : canal **4,1738**, placebo **4,5154** (le canal mélangé est *pire* que l'absence), ablation **9,60**. La nuit a ajouté le renversement : à 34,3 M le canal vaut **3,5250** (2 graines), le meilleur modèle — `rapport-n2-canal-34m.md`, et les deux compositions négatives `rapport-n2-canal-distille.md` / `rapport-n2-canal-kd-34m.md`.
+
+**3. Base anglaise monolingue** — `corpus-wiki-en-propre.json` (204,6 Mo, 0 fuite) ; base **4,4234** (`rapport-n2-anglais.md`), distillée **3,9403** (3 graines), 34,3 M distillé **3,7651** (`rapport-n2-anglais-34m.md`).
+
+**4. Session S** (analyseur plus riche, export) — le sous-projet est fusionné en **`3b68143`** (pragmatique + export + analyseur) ; `rapport-s-analyseur.md` : **7/7** séquences de types et **93,9 %** de couverture des structures écrites à la main, après trois corrections (adverbe de temps, « qu'elle » élidé, coordination). Les **19 tests passent** (relancés depuis `tools/structures`).
+
+**5. Intégration hub** — `en-cours` (3 965/4 000 mots), `roadmap`, `plan-travail`, `journal/2026-11-01/nuit-n2.md`. Passe complète des portes du 02/11 06 h : **76 vertes, 5 rouges** — les **4 connues** (indice, mélange, homéostasie, réparti) plus **greffe** qui dépasse la borne de 700 s (référence 829 s) ; **rejouée seule à 1 200 s : verte** (« l'injection d'état est BRANCHÉE »). Revue documentaire ✅, budget ✅, doc gates 7/7.
+
+### Les résultats qui resteront
+
+| | domaine | 512 octets |
+|---|---:|---:|
+| **34,3 M + canal** (2 graines) | **3,5250** | **3,6632** |
+| 34,3 M distillé | 3,6852 | 4,09 |
+| anglais 34,3 M distillé | 3,7651 | 4,19 |
+
+La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M, −0,47 à 34 M), la distillation **sature** avec l'élève, et un professeur 29 % plus gros ne gagne **rien en domaine**. Le filtre des phrases non ambiguës, lui, est rejeté (transfert pire qu'un témoin aléatoire).
+
+### Ce qu'il faut regarder
+
+- **`reports/rapport-n2-canal-34m.md`** (le meilleur modèle) et **`reports/rapport-n2-fenetre-r1.md`** (ce que R1.1/R1.2 doivent tester) : ce sont les deux documents à lire en premier.
+- **La porte < 2,5** n'est pas franchie : elle est à 0,59 sur le corpus propre, et le chemin qui reste est le **corpus**, pas la capacité.
+- **La course de commit** : vérifiez que `git ls-tree HEAD reports/ | grep -c rapport-n2` donne bien 30 ; la restauration est `b788ba04`.
+
+Le serveur de la banque de structures tourne toujours (http://127.0.0.1:8765, 7 phrases, 14 candidats) si vous voulez valider à la main.
+

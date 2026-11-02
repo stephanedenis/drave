@@ -1,0 +1,48 @@
+{
+ "date": "2026-11-02",
+ "ligne": "Données",
+ "nature": "corpus OCR des PDF scannés du CEGEP",
+ "dispositif": {
+  "ocr": "tesseract 5.5.3 sans root (work/ocr/root)",
+  "langues": "fra+eng",
+  "dpi": 300,
+  "psm": 3,
+  "split": "hash salé du chemin : 5% val, 5% test",
+  "deduplication": "documents + tronçons"
+ },
+ "racines": [
+  {
+   "nom": "CEGEP",
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP",
+   "licence": "notes de cours — droits réservés, usage local, non diffusé"
+  }
+ ],
+ "pdfs": 41,
+ "scannes": 7,
+ "ocrises": 7,
+ "pages_ocr": 739,
+ "caracteres": 1208656,
+ "troncons": 147,
+ "documents": {
+  "train": 0,
+  "val": 0,
+  "test": 0
+ },
+ "octets": {
+  "train": 1144982,
+  "val": 84021,
+  "test": 0
+ },
+ "temps_s": 3465,
+ "mots_estimes": 194944,
+ "sha256_train": "47336480f62fcd1d7fbc426c98891549876fb9d7361c5660ee608825c90df29f",
+ "sha256_val": "03ebeeb65a7db5a2ab2389f882233e6cde9e18dc4ff8b4028f9103601fbbf624",
+ "sha256_test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+ "limites": [
+  "OCR brut : rotation/contraste/colonnes non traités",
+  "WER non mesurée",
+  "licences : droits réservés, corpus local non diffusé",
+  "manifeste reconstruit après arrêt à 7 notes (fenêtre de clôture de 8 h) : documents par split non recomptés"
+ ],
+ "note_interruption": "run --max-doc 8 arrêté après 7 notes à 07 h 52 (fenêtre de 8 h)"
+}

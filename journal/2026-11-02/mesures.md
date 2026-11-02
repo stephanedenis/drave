@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (54)
+## Commits du jour (55)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -62,6 +62,7 @@
 | 07:22 | `0d2e86f4` | B13 — LA VALIDATION CROISÉE : 5 PLIS, 25/30, LE DERNIER NOM GÉNÉRALISE ; 107/107 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 07:30 | `69a3787d` | B13 — LA CV SUR 20 GRAINES : 0,8467 ± 0,051, LE DERNIER NOM GÉNÉRALISE ; 108/108 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 | 07:37 | `a4cd8ab0` | B13 — LE BILAN DE L'ANAPHORE : 27/30, CV 0,847, HUIT MESURES ; 109/109 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
+| 07:44 | `b788ba04` | N2 — RESTAURATION DES FICHES EFFACÉES PAR UNE COURSE DE COMMIT | `en-cours.md`, `README.md`, `apprentissage.md` (+24) |
 
 ## Chiffres du jour
 
@@ -73,7 +74,7 @@
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 39.5 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 39.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 39.2 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 39.3 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -82,7 +83,9 @@
 - [reports/rapport-n2-anglais-34m.md](../../reports/rapport-n2-anglais-34m.md)
 - [reports/rapport-n2-canal-34m.md](../../reports/rapport-n2-canal-34m.md)
 - [reports/rapport-n2-canal-distille.md](../../reports/rapport-n2-canal-distille.md)
+- [reports/rapport-n2-canal-kd-34m.md](../../reports/rapport-n2-canal-kd-34m.md)
 - [reports/rapport-n2-echantillon.md](../../reports/rapport-n2-echantillon.md)
+- [reports/rapport-n2-fenetre-r1.md](../../reports/rapport-n2-fenetre-r1.md)
 - [reports/rapport-n2-multilingue-34m-distille.md](../../reports/rapport-n2-multilingue-34m-distille.md)
 - [reports/rapport-n2-multilingue-34m.md](../../reports/rapport-n2-multilingue-34m.md)
 - [reports/rapport-n2-professeur.md](../../reports/rapport-n2-professeur.md)

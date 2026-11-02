@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 39.2 h |
+| Durée | 39.3 h |
 | Tours | 384 |
-| Messages | 2299 |
-| Appels d'outils | 1523 |
+| Messages | 2304 |
+| Appels d'outils | 1528 |
 | Fichiers touchés | 26 |
-| Commandes | 1354 |
+| Commandes | 1359 |
 | Sous-agents | 0 |
-| Commits | 87 |
+| Commits | 88 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -9019,7 +9019,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 384 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Wait 8 min then check CEGEP 8 progress
 - bash — Wait 9 min then check CEGEP 8
@@ -9029,6 +9029,11 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Wait 4 min then check CEGEP 8 manifest
 - bash — Wait 4 min then check CEGEP 8 finish
 - bash — Check CEGEP 8 finish near window
+- bash — Check CEGEP 8 manifest
+- bash — Stop CEGEP run at 7 notes
+- bash — Write manual CEGEP manifest and run check
+- bash — Update CEGEP fiche and docs to 7 notes
+- bash — Commit CEGEP 7 notes
 
 ## 3. Travail accompli
 
@@ -9105,7 +9110,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1314 autres
+- … et 1319 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9340,4 +9345,5 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - DONNÉES — LE CEGEP ENTRE DANS L'OCR : 5 NOTES, 292 PAGES, 506 801 CARACTÈRES, 8 KO 0" > /tmp/commit-cegep.log 2>&1; code=$?; tail -3 /tmp/commit-cegep.log; echo
 - ÉTAT — COMPTEURS 509/597, T0 SOUS 4 000, LES PILOTES OCR (20 LIVRES + 5 NOTES CEGEP) SONT CLOS" > /tmp/commit-etat.log 2>&1; code=$?; tail -3 /tmp/commit-etat.l
 - ÉTAT — COMPTEURS 509/597, T0 SOUS 4 000, LES PILOTES OCR (20 LIVRES + 5 NOTES CEGEP) SONT CLOS" > /tmp/commit-etat2.log 2>&1; code=$?; tail -3 /tmp/commit-etat2
+- DONNÉES — LE CEGEP PASSE À 7 NOTES : 739 PAGES, 1,21 M CARACTÈRES (2 ALGORITHMS ILLUMINATED AJOUTÉS)" > /tmp/commit-cegep7.log 2>&1; code=$?; tail -3 /tmp/commi
 

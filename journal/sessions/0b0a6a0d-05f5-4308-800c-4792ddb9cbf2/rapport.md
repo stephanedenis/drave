@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 39.5 h |
 | Tours | 19 |
-| Messages | 1553 |
-| Appels d'outils | 1427 |
+| Messages | 1563 |
+| Appels d'outils | 1435 |
 | Fichiers touchés | 11 |
-| Commandes | 1128 |
+| Commandes | 1133 |
 | Sous-agents | 0 |
 | Commits | 80 |
 | Compactages de contexte | 2 |
@@ -28,6 +28,8 @@
 - **edit** — Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, s
 … [189 caractères tronqués]
 - **resume** — Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, s
+… [189 caractères tronqués]
+- **complete** — Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, s
 … [189 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -1009,7 +1011,7 @@ Le renversement de la nuit : le **canal de structure**, qui ne valait que −0,2
 
 ### Tour 19 — <goal_round> Objective: "Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie j … [939 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Verify each objective item's evidence
 - bash — Diagnose the sub-project test failures
@@ -1021,6 +1023,40 @@ Le renversement de la nuit : le **canal de structure**, qui ne valait que −0,2
 - bash — List the N2 reports missing from HEAD
 - bash — Inspect the deleting commit's scope
 - bash — Restore the deleted report files
+- job_output
+- bash — Final verification of the restored state
+- bash — Inspect the untracked reports
+- bash — Compare HEAD and disk report lists precisely
+- … et 4 autres
+
+**Synthèse produite :**
+
+\## La nuit est finie — objectif atteint
+
+Les cinq volets du mandat sont mesurés, écrits et committés. Le dernier obstacle n'était pas scientifique : une **course de commit** avait effacé neuf fiches de `HEAD` (un commit parallèle, `edb54a29`, est reparti d'un arbre qui ne les avait pas). Elles ont été restaurées et vérifiées.
+
+\### Ce qui est fait, item par item
+
+**1. Distillation sur le corpus réel** (professeur 23,57 M, 3 graines, positions aléatoires) — `reports/rapport-n2-distillation-reelle.md` : **3,8761** en domaine (base 4,3893), ±0,004 entre graines ; `work/n2j/W-g{1,2,3}.pt`.
+
+**2. Canal d'annotation de structure** (placebo et ablation) — `reports/rapport-n2-canal.md` : canal **4,1738**, placebo **4,5154** (le canal mélangé est *pire* que l'absence), ablation **9,60**. La nuit a ajouté le renversement : à 34,3 M le canal vaut **3,5250** (2 graines), le meilleur modèle — `rapport-n2-canal-34m.md`, et les deux compositions négatives `rapport-n2-canal-distille.md` / `rapport-n2-canal-kd-34m.md`.
+
+**3. Base anglaise monolingue** — `corpus-wiki-en-propre.json` (204,6 Mo, 0 fuite) ; base **4,4234** (`rapport-n2-anglais.md`), distillée **3,9403** (3 graines), 34,3 M distillé **3,7651** (`rapport-n2-anglais-34m.md`).
+
+**4. Session S** (analyseur plus riche, export) — le sous-projet est fusionné en **`3b68143`** (pragmatique + export + analyseur) ; `rapport-s-analyseur.md` : **7/7** séquences de types et **93,9 %** de couverture des structures écrites à la main, après trois corrections (adverbe de temps, « qu'elle » élidé, coordination). Les **19 tests passent** (relancés depuis `tools/structures`).
+
+**5. Intégration hub** — `en-cours` (3 965/4 000 mots), `roadmap`, `plan-travail`, `journal/2026-11-01/nuit-n2.md`. Passe complète des portes du 02/11 06 h : **76 vertes, 5 rouges** — les **4 connues** (indice, mélange, homéostasie, réparti) plus **greffe** qui dépasse la borne de 700 s (référence 829 s) ; **rejouée seule à 1 200 s : verte** (« l'injection d'état est BRANCHÉE »). Revue documentaire ✅, budget ✅, doc gates 7/7.
+
+\### Les résultats qui resteront
+
+| | domaine | 512 octets |
+|---|---:|---:|
+| **34,3 M + canal** (2 graines) | **3,5250** | **3,6632** |
+| 34,3 M distillé | 3,6852 | 4,09 |
+| anglais 34,3 M distillé | 3,7651 | 4,19 |
+
+La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M, −0,47 à 34 M), la distillation **sature** avec l'élève, et un professeur 29 % plus gros ne gagne **rien en domaine**. Le filtre des phrases non am
+… [693 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -1082,7 +1118,7 @@ Le renversement de la nuit : le **canal de structure**, qui ne valait que −0,2
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1088 autres
+- … et 1093 autres
 
 ## 4. Mesures et résultats marquants
 
