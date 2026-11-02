@@ -32632,3 +32632,51 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf|pdftoppm\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 7 min then check OCR progress", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+03:28
+  Biblio_large · 005.11 Inconnu(e) 2022, Raff 2022, Insid · 602 p · 1210468 car
+  Biblio_large · 005.276 Author 2023, Title.pdf · 105 p · 125524 car
+2362847 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af "tesseract.*ocr-pdf|pdftoppm" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 11642918  2 nov 03:18 data/corpus_ocr/train.txt
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract|pdftoppm\" | head -1; ls /tmp/ocr-pdf-t50_fioi/ 2>/dev/null | wc -l; ps -p 1616198 -o stat,etime= 2>/dev/null", "description": "Check 16th OCR progress", "timeoutMs": 120000, "workdir": "/home/steph … [38 caractères tronqués]`
+
+  ```
+03:28
+2363415 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/005 Logiciels/005.3 Architecture/005.3 Inconnu(e) 2025, metapatterns.pdf /tmp/ocr-pdf-_m5882by/p
+0
+STAT            
+S       06:42:56
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 344 : 16e livre — encore un `metapatterns.pdf`, doublon probable
+
+**Round 344/1000 — le 16e livre est un autre `metapatterns.pdf`.**
+
+- **`pdftoppm`** rend `005.3 Architecture/… metapatterns.pdf` — **le même livre que le 14e** (et le 3e) : encore ~15 min d'OCR avant le rejet par la déduplication.
+- **Le corpus reste : 14 livres, 4 864 pages, 11 528 066 caractères** ; le train **11 642 918 octets**.
+- **La limite est nette** : le fonds `Biblio_large` contient le même livre dans plusieurs dossiers, et la déduplication (par empreinte du texte) ne peut trancher qu'**après** l'OCR — 15 min payées par doublon.
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le 16e est un doublon probable ; le goal reste actif.
+
+
+## Tour 357
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 345/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf|pdftoppm\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 7 min then check OCR progress", "timeoutMs":  … [69 caractères tronqués]`

@@ -1,0 +1,94 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "86/86",
+ "graines": 20,
+ "lignes": [
+  {
+   "facteur": 0.35,
+   "buts": 20,
+   "runs": 100
+  },
+  {
+   "facteur": 0.36,
+   "buts": 75,
+   "runs": 100
+  },
+  {
+   "facteur": 0.37,
+   "buts": 70,
+   "runs": 100
+  },
+  {
+   "facteur": 0.38,
+   "buts": 75,
+   "runs": 100
+  },
+  {
+   "facteur": 0.39,
+   "buts": 95,
+   "runs": 100
+  },
+  {
+   "facteur": 0.4,
+   "buts": 95,
+   "runs": 100
+  },
+  {
+   "facteur": 0.41,
+   "buts": 100,
+   "runs": 100
+  },
+  {
+   "facteur": 0.42,
+   "buts": 100,
+   "runs": 100
+  },
+  {
+   "facteur": 0.43,
+   "buts": 100,
+   "runs": 100
+  },
+  {
+   "facteur": 0.44,
+   "buts": 100,
+   "runs": 100
+  },
+  {
+   "facteur": 0.45,
+   "buts": 95,
+   "runs": 100
+  },
+  {
+   "facteur": 0.46,
+   "buts": 100,
+   "runs": 100
+  },
+  {
+   "facteur": 0.47,
+   "buts": 100,
+   "runs": 100
+  },
+  {
+   "facteur": 0.48,
+   "buts": 100,
+   "runs": 100
+  },
+  {
+   "facteur": 0.49,
+   "buts": 100,
+   "runs": 100
+  },
+  {
+   "facteur": 0.5,
+   "buts": 100,
+   "runs": 100
+  }
+ ],
+ "seuil": "~0,41",
+ "limites": [
+  "5 exécutions par graine",
+  "0,35 = 20 % (échantillon)",
+  "toy"
+ ]
+}

@@ -78,3 +78,26 @@ des fragments. Une PPL de 3,69 ne fait pas un rédacteur.
 
 **Les portes.** Passe complète du 02/11 00 h 03 : **77 vertes, 4 rouges** — les quatre connues
 (homeostasie, indice, mélange, réparti-moteur). Aucune régression.
+
+## La fin de nuit : l'anglais, le professeur, la structure
+
+**L'anglais suit le français, chiffre pour chiffre.** Base 34,3 M : 4,2396 ; distillée (2 graines) :
+**3,7651**, avec 4,394 sur le banc anglais et **4,185 à 512 octets** — la même courbe plate que le
+français (4,09). Les deux meilleurs modèles de la nuit : **français 3,685** (N2.r), **anglais
+3,765** (N2.w), tous deux à 34,3 M distillé.
+
+**Le professeur plus gros ne paie presque pas.** Un professeur de 30,29 M (au lieu de 23,57 M) donne
+3,8888 en domaine (3,8761) et gagne 0,3 hors domaine (N2.u) : l'élève de 11,47 M a saturé sa
+capacité. Pour gagner en domaine, il faut doubler l'élève, pas le professeur.
+
+**Le multilingue sature.** À recette égale, le français multilingue passe de 6,68 (11,47 M) à 5,89
+(21,65 M) puis 5,58 (34,3 M) : −0,79 puis −0,31, le premier rendement décroissant de la loi. La
+distillation à 34,3 M (4,79) réduit l'écart au monolingue (3,69) sans l'annuler.
+
+**La structure.** L'analyseur du banc de structures retrouve **7/7** séquences de types et couvre
+**93,9 %** des octets des structures écrites à la main (après trois corrections : l'adverbe de
+temps, le « qu'elle » élidé, la coordination). Le sous-projet est fusionné (pragmatique, export,
+analyseur) avec **19 tests**.
+
+**Ce qui reste ouvert** : la distillation du canal (relancée à 03 h 30), la fenêtre (R1, note de
+passage écrite), et la restitution (R31) — toujours pas construite.

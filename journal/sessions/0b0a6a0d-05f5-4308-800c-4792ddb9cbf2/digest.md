@@ -17491,3 +17491,59 @@ en-cours ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.w** : anglais 34,3 M distillé **3,77**, 512 **4,18** ;\", \"**N2.w** : anglais 34,3 M **3,77**, 512 **4,18** … [1504 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3999 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · compteurs : en-cours.md dit 572 JSON, le disque en a 578
+[still running after 60000ms; moved to background job bash-1040]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1040", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+03e4963c N2.w — L'ANGLAIS À 34,3 M DISTILLÉ : 3,77, ET 4,18 À 512 OCTETS
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && free -g | head -2; for gpu in 0 1; do g=$((gpu+1)); nohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=$gpu PYTHONPATH=. ~/gpu-env/bin/python tools/distiller_budget.py --corpus fr --train data/ … [589 caractères tronqués]`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          14          43           6          75         111
+C-g1 2366353
+C-g2 2366354
+[still running after 60000ms; moved to background job bash-1041]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/C-g1.log 2>/dev/null; tail -1 work/n2j/C-g2.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Check the channel distillation s … [6 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1042]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1041 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && free -g | head -2; for gpu in 0 1; do g=$((gpu+1)); nohup bash -c "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=$gpu PYTHONPATH=. ~/gpu-env/bin/python tools/distiller_budget.py --corpus fr --train data/wiki_fr/propre/train.txt --val data/wiki_fr/propre/val.txt --enseignant work/n2j/route-wiki --init work/n2j/base-canal.pt --canal data/wiki_fr/propre/train.canal --canal-val data/wiki_fr/propre/val.canal --stages '128:10000:1e-4,128:10000:3e-5' --lot 16 --graine $g --positions-aleatoires 384 --sortie work/n2j/C-g$g.pt --log work/n2j/C-g$g.log > work/n2j/C-g$g.out 2>&1" > /dev/null 2>&1 & echo "C-g$g $!"; done; sleep 60; tail -1 work/n2j/C-g1.log 2>/dev/null; tail -1 work/n2j/C-g2.log 2>/dev/null; date '+%H:%M') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2j/C-g1.log 2>/dev/null; tail -2 work/n2j/C-g2.log 2>/dev/null; tail -3 work/n2j/C-g1.out 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Chec … [28 caractères tronqués]`
+
+  ```
+03:30
+# init work/n2j/base-canal.pt · manquants [] · graine 1 · décalage 0
+# stage seq 128 · 10000 pas · lr 0.0001
+# init work/n2j/base-canal.pt · manquants [] · graine 2 · décalage 10000019
+# stage seq 128 · 10000 pas · lr 0.0001
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/distiller_budget.py:238: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  opt.step(); pertes.append(float(perte))
+0, 1164 MiB, 78 %
+1, 1164 MiB, 77 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> journal/2026-11-01/nuit-n2.md <<'EOF'\n\n## La fin de nuit : l'anglais, le professeur, la structure\n\n**L'anglais suit le français, chiffre pour chiffre.** Base 34,3 M : 4,2396 ; distillée (2 graines) :\n**3,7651**, avec 4,39 … [1948 caractères tronqués]`

@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
 | Durée | 34.9 h |
-| Tours | 356 |
-| Messages | 2137 |
-| Appels d'outils | 1419 |
+| Tours | 357 |
+| Messages | 2140 |
+| Appels d'outils | 1420 |
 | Fichiers touchés | 26 |
-| Commandes | 1255 |
+| Commandes | 1256 |
 | Sous-agents | 0 |
 | Commits | 79 |
 | Compactages de contexte | 4 |
@@ -739,6 +739,8 @@
 **Tour 355** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 356** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 357** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8359,6 +8361,26 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Wait 7 min then check OCR progress
 - bash — Check 16th OCR progress
 
+**Synthèse produite :**
+
+⏵ Round 344 : 16e livre — encore un `metapatterns.pdf`, doublon probable
+
+**Round 344/1000 — le 16e livre est un autre `metapatterns.pdf`.**
+
+- **`pdftoppm`** rend `005.3 Architecture/… metapatterns.pdf` — **le même livre que le 14e** (et le 3e) : encore ~15 min d'OCR avant le rejet par la déduplication.
+- **Le corpus reste : 14 livres, 4 864 pages, 11 528 066 caractères** ; le train **11 642 918 octets**.
+- **La limite est nette** : le fonds `Biblio_large` contient le même livre dans plusieurs dossiers, et la déduplication (par empreinte du texte) ne peut trancher qu'**après** l'OCR — 15 min payées par doublon.
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le 16e est un doublon probable ; le goal reste actif.
+
+### Tour 357 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait 7 min then check OCR progress
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8434,7 +8456,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1215 autres
+- … et 1216 autres
 
 ## 4. Mesures et résultats marquants
 

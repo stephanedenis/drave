@@ -1320,6 +1320,15 @@ def t82_cycle() -> tuple[bool, str]:
                                     f"but 1 {ok1}/20 (le cycle tient)")
 
 
+def t83_courbe20() -> tuple[bool, str]:
+    """La courbe élargie : 5 graines, × 0,35 échoue, × 0,41 réussit."""
+    from .graines import executer_courbe
+    lignes = executer_courbe(graines=5)
+    par = {l["facteur"]: l["buts"] for l in lignes}
+    ok = par[0.35] == 0 and par[0.41] == 25
+    return ok, f"courbe 5 graines : ×0,35 {par[0.35]}/25, ×0,41 {par[0.41]}/25"
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1401,7 +1410,8 @@ def main() -> int:
               ("T79 phase dans l'état", t79_phase_etat()),
               ("T80 phase devinée", t80_phase_devinee()),
               ("T81 vote de 5 signaux", t81_vote()),
-              ("T82 pénalité -1", t82_cycle())]
+              ("T82 pénalité -1", t82_cycle()),
+              ("T83 courbe élargie", t83_courbe20())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

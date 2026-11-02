@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**56 commits** · **3 session(s)** · **7 thème(s)**
+**57 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 3 | [apprentissage.md](apprentissage.md) |
+| apprentissage | 4 | [apprentissage.md](apprentissage.md) |
 | attention | 4 | [attention.md](attention.md) |
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 7 | [docs.md](docs.md) |
@@ -24,7 +24,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 35.2 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 34.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 34.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 34.9 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -87,6 +87,7 @@
 | 02:54 | `a58e91cb` | ROADMAP — LA PROCHAINE ACTION N2 CHANGE : DISTILLATION DU CANAL, ANGLAIS 34,3 M, PUIS LA FENÊTRE |
 | 03:01 | `8592fee3` | B13 — LE VOTE DE SIGNAUX : 5 LOOKS, 0/20, LE CYCLE EST STRUCTUREL ; 84/84 |
 | 03:10 | `2469d4fc` | B13 — LA PÉNALITÉ -1 NE CASSE PAS LE CYCLE : 0/20, (3,0) STALE ; 85/85 |
+| 03:27 | `03e4963c` | N2.w — L'ANGLAIS À 34,3 M DISTILLÉ : 3,77, ET 4,18 À 512 OCTETS |
 
 ## Le récit de la journée (écrit à la main)
 

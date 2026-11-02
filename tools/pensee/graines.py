@@ -151,6 +151,16 @@ def main() -> int:
         print(f"graine {l['graine']}  Q {l['etats_q']:3d}  "
               f"bruit {l['sto_but']}/{l['sto_pas']} pas ({l['sto_essais']} essais)  "
               f"stable {l['stable_but']}/{l['stable_pas']} pas")
+    if args.json and "courbe20" in args.json:
+        lignes_c = executer_courbe(graines=20)
+        for l in lignes_c:
+            print(f"facteur {l['facteur']:.2f}  {l['buts']}/{l['runs']} buts")
+        pth = pathlib.Path(args.json)
+        pth.parent.mkdir(parents=True, exist_ok=True)
+        pth.write_text(json.dumps({"date": "2026-11-02", "ligne": "B13",
+                                   "graines": list(range(20)), "lignes": lignes_c},
+                                  ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        return 0
     if args.json and "courbe" in args.json:
         lignes_c = executer_courbe()
         for l in lignes_c:
