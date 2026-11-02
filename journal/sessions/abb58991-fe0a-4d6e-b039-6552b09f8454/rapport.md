@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 2.5 h |
-| Tours | 4 |
-| Messages | 305 |
-| Appels d'outils | 409 |
+| Durée | 2.6 h |
+| Tours | 5 |
+| Messages | 316 |
+| Appels d'outils | 421 |
 | Fichiers touchés | 26 |
-| Commandes | 287 |
+| Commandes | 299 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -31,6 +31,8 @@
 **Tour 3** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 **Tour 4** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
+
+**Tour 5** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -160,7 +162,7 @@ Le goal reste **actif** ; la suite de la nuit : la **porte DRVM** (règle dans l
 
 ### Tour 4 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Inspect repo, plan, server at round 2
 - bash — Locate porte problem code
@@ -176,10 +178,50 @@ Le goal reste **actif** ; la suite de la nuit : la **porte DRVM** (règle dans l
 - bash — Add porte journal note and run tests/gates
 - bash — Stage porte fact and check hook
 - bash — Commit the porte DRVM fact
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Index explicite et commit de la porte rouverte
+⏵ Round 2 : la porte DRVM est rouverte (27 nœuds) et committée ; la nuit continue
+
+**Fait de la nuit** — commit **`aeace14b`** : la porte DRVM s'ouvre avec la règle.
+
+| porte : politique | but | nœuds | sonde | appels | latence |
+|---|---|---:|---:|---:|---:|
+| oracle | ✅ | 28 | 5 | 7 | 0 |
+| aveugle | ❌ | 200 | 61 | 66 | 0 |
+| hasard | ✅ | 44 | 7 | 14 | 0 |
+| LLM, ancien prompt (sans la porte) | ❌ | 200 | 3 | 95 | **179,5 s** |
+| **LLM, prompt `porte`** | ✅ | **27** | **4** | **7** | **12,0 s** |
+
+- La règle « depuis `(3,2)`, réponds `bas` » fait passer le 7B de **200 nœuds sans but** à **27 nœuds avec but**, **4 sonde** (l'oracle en a 5), 7 appels, 12 s. Le **hasard** ouvre la porte par chance (44 nœuds) ; l'**aveugle** échoue (200, 61 sonde).
+- Le modèle **suit** une règle ; il ne la **découvre** pas. C'est le résultat, et sa limite.
+
+**Nuit B13 committée** : POS `7ef0199c` ; syntagmes `df899b90` ; cascade complète `01838589` ; politique DRVM `9250b1c3` ; porte `aeace14b`. La clôture D/R/A `83f78803` est passée par le hub.
+
+**Contrôles** : 6 tests de la politique + 15 du bloc verts ; T0 **3944/4000** ; revue **557/644** ; `verifie_etat_a_jour` et journal verts ; état **1570 mots**. `sessions --check --strict` reste rouge sur **N2** (54 min), **S** (117) et le **hub** (132), pas sur `e181ce02`. Seuls les fichiers N2 (`n2-r11`) restent non committés.
+
+Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est atteint, mais la nuit continue sur la **pragmatique neuronale**, le **gold 200+ phrases réelles** et la **porte B13** (six rouges S).
+
+### Tour 5 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Check state and server at round 3
+- bash — Inspect gold pragmatics and heuristic tags
+- bash — Locate insertion point for pragmatics class
+- bash — Add pragmatics tagger class and grammar
+- bash — Add pragmatics unit test and run
+- bash — Test pragmatics tagger on 8 diverse gold sentences
+- bash — Test pragmatics grammar and capture server error
+- bash — Read pragmatics grammar/prompt source
+- bash — Fix pragmatics GBNF escaping and print grammar
+- bash — Test corrected pragmatics grammar
+- bash — Test pragmatics tagger on 8 diverse sentences
+
+**Synthèse produite :**
+
+⏵ Grammaire corrigée ; test serveur et 8 phrases diverses
 
 ## 3. Travail accompli
 
@@ -256,7 +298,7 @@ Le goal reste **actif** ; la suite de la nuit : la **porte DRVM** (règle dans l
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 247 autres
+- … et 259 autres
 
 ## 4. Mesures et résultats marquants
 

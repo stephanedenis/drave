@@ -7585,3 +7585,131 @@ CHECK=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -m \"B13 — LA PORTE DRVM S'OUVRE AVEC LA RÈGLE : 27 NŒUDS, 4 SONDE (200 SANS ; PAS DE BUT)\" 2>&1 | tail -10; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Commit the porte DRVM fact", "timeoutMs": 300000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master aeace14b] B13 — LA PORTE DRVM S'OUVRE AVEC LA RÈGLE : 27 NŒUDS, 4 SONDE (200 SANS ; PAS DE BUT)
+ 28 files changed, 879 insertions(+), 59 deletions(-)
+ create mode 100644 reports/pensee-porte-llm.json
+ create mode 100644 reports/rapport-pensee-porte-llm.md
+ create mode 100644 tools/tests/qualifier_porte_drvm.py
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit `aeace14b` ; vérification post-commit et état de la nuit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -3 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '=== STATUS ==='; git status --short | head -8; echo '=== ETAT ==='; python3 tools/verifie_etat_a_jour.py --head; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_ … [331 caractères tronqués]`
+
+  ```
+aeace14b 18:47:21 B13 — LA PORTE DRVM S'OUVRE AVEC LA RÈGLE : 27 NŒUDS, 4 SONDE (200 SANS ; PAS DE BUT)
+9250b1c3 18:41:09 B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE
+83f78803 18:37:41 DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS
+=== STATUS ===
+?? reports/n2-r11.json
+?? reports/rapport-n2-r11.md
+=== ETAT ===
+  état · dernier fait aeace14b · dernier état aeace14b
+  ✅ aucun fait commité après le dernier état
+  revue de documentation · 557 fiche(s) · 644 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3944 mots (budget 4 000)
+  en-cours · 1570 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== SESSIONS ===
+EXIT=1
+  ❌ mandat périmé (54 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — heartbeat à rafraîchir
+  ❌ mandat périmé (117 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+  ❌ mandat périmé (132 min) : 536cd5d6-9
+… [51 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 2 : la porte DRVM est rouverte (27 nœuds) et committée ; la nuit continue
+
+**Fait de la nuit** — commit **`aeace14b`** : la porte DRVM s'ouvre avec la règle.
+
+| porte : politique | but | nœuds | sonde | appels | latence |
+|---|---|---:|---:|---:|---:|
+| oracle | ✅ | 28 | 5 | 7 | 0 |
+| aveugle | ❌ | 200 | 61 | 66 | 0 |
+| hasard | ✅ | 44 | 7 | 14 | 0 |
+| LLM, ancien prompt (sans la porte) | ❌ | 200 | 3 | 95 | **179,5 s** |
+| **LLM, prompt `porte`** | ✅ | **27** | **4** | **7** | **12,0 s** |
+
+- La règle « depuis `(3,2)`, réponds `bas` » fait passer le 7B de **200 nœuds sans but** à **27 nœuds avec but**, **4 sonde** (l'oracle en a 5), 7 appels, 12 s. Le **hasard** ouvre la porte par chance (44 nœuds) ; l'**aveugle** échoue (200, 61 sonde).
+- Le modèle **suit** une règle ; il ne la **découvre** pas. C'est le résultat, et sa limite.
+
+**Nuit B13 committée** : POS `7ef0199c` ; syntagmes `df899b90` ; cascade complète `01838589` ; politique DRVM `9250b1c3` ; porte `aeace14b`. La clôture D/R/A `83f78803` est passée par le hub.
+
+**Contrôles** : 6 tests de la politique + 15 du bloc verts ; T0 **3944/4000** ; revue **557/644** ; `verifie_etat_a_jour` et journal verts ; état **1570 mots**. `sessions --check --strict` reste rouge sur **N2** (54 min), **S** (117) et le **hub** (132), pas sur `e181ce02`. Seuls les fichiers N2 (`n2-r11`) restent non committés.
+
+Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est atteint, mais la nuit continue sur la **pragmatique neuronale**, le **gold 200+ phrases réelles** et la **porte B13** (six rouges S).
+
+
+## Tour 5
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 3/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 3 : la pragmatique neuronale ; j'inspecte le gold et les confiances de l'heuristique
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; git status --short | head -6; grep -E \"Heartbeat|Prochaine\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | head -3; curl -s --max-time 3 http://127.0.0.1:18082/health || echo absent", "description": "Che … [32 caractères tronqués]`
+
+  ```
+aeace14b B13 — LA PORTE DRVM S'OUVRE AVEC LA RÈGLE : 27 NŒUDS, 4 SONDE (200 SANS ; PAS DE BUT)
+?? reports/n2-r11.json
+?? reports/rapport-n2-r11.md
+- **Heartbeat** : 2026-11-02 18:46 EST
+- **Prochaine action** : la **porte** DRVM est rouverte par la règle (**27 nœuds**, 4 sonde,
+{"status":"ok"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,collections,sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\ns=json.load(open('tools/tests/linguistique/gold_synthetique.json'))['phrases … [499 caractères tronqués]`
+
+  ```
+Counter({('double_sens', False): 166, ('modalite', False): 159, ('negation', False): 157, 'assertion': 136, 'exclamation': 29, ('negation', True): 23, ('modalite', True): 21, 'question': 15, ('double_sens', True): 14})
+g001 Le chat dort. [('phrase', 'type', 'déclarative', 0.85), ('pragmatique', 'acte', 'assertion', 0.45)]
+g002 Le chat de la voisine dort. [('phrase', 'type', 'déclarative', 0.85), ('pragmatique', 'acte', 'assertion', 0.45)]
+g003 La femme a vu l'homme dans le parc. [('phrase', 'type', 'déclarative', 0.85), ('pragmatique', 'acte', 'assertion', 0.45)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation du tagger pragmatique (`NeuronalLLMPragmatique`, grammaire JSON) et test
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"class NeuronalLLMCompose\\|# --------------------------------------------------------------------------- compositions\" tools/bloc_linguistique.py | tail -3", "description": "Locate insertion point for pragmatics class"}`
+
+  ```
+1149:class NeuronalLLMCompose:
+1182:# --------------------------------------------------------------------------- compositions
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py')\nt=p.read_text(encoding='utf-8')\nancre = \"\"\"                  \"duree_s\": round(a.cout.get(\"duree_s\", 0.0) + b.cout.get(\"duree_s\", 0.0), 6)})\n\n\n# -------------- … [6952 caractères tronqués]`
+
+  ```
+ok
+1182:ACTES = ("assertion", "question", "exclamation", "ordre")
+1193:class NeuronalLLMPragmatique:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/test_bloc_linguistique.py')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"\"\"    def test_priorite_syntagme_confiance(self):\"\"\",\n\"\"\"    def test_tagger_neuronal_pragm … [1083 caractères tronqués]`
+
+  ```
+ok
+Ran 16 tests in 0.053s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\ns=json.load(open('tools/tests/linguistique/gold_synthetique.json'))['phrases']\nps=h+s\n … [673 caractères tronqués]`

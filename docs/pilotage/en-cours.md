@@ -40,15 +40,17 @@
 - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
 - **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre native
   (R1.1/R1.2).
-- **Plan** : 1) ~~plan et réservations~~ ; 2) **200 000 pas** (en cours) ; 3) **banc R1.1/R1.2** ;
-  4) **mesure** (cinq PPL, courbe) ; 5) **fiche, JSON, état, commit**.
+- **Plan** : 1) ~~plan et réservations~~ ; 2) **200 000 pas** (fin ~19 h 35) ; 3) ~~banc
+  R1.1/R1.2~~ ; 4) **cinq PPL et courbe** ; 5) **fiche, JSON, état, commit**.
 - **Ambition** : que N réponde « plus de pas, quelle position, quelle fenêtre ».
 - **Stratégie** : recette constante (34,3 M, canal, graine 1) ; banc GPU 1.
 - **Objectif final** : trancher **< 2,5 sans perdre le français**, puis **R1.1/R1.2**.
-- **Ce qu'elle fait** : **200 k pas** sur `data/wiki_mix/propre`, GPU 0 (depuis 16 h 17).
+- **Ce qu'elle fait** : **200 k pas** sur `data/wiki_mix/propre` (GPU 0, 16 h 17 → ~19 h 35,
+  ~57 ms/pas) ; **R1.1/R1.2 mesurées** (RoPE, fenêtre 512), deux contrôles et le « depuis zéro » ;
+  [`n2-r11`](../../reports/rapport-n2-r11.md).
 - **Ce que font les autres** : **hub**, **S**, **Pensée**, **D/R/A**.
-- **Prochaine action** : la fin des 200 k pas, puis les **cinq PPL** et la **courbe**.
-- **Bloquants** : aucun ; **GPU 0** à N2, **GPU 1** aux portes.
+- **Prochaine action** : les **cinq PPL** et la **courbe** à la sortie des 200 k pas, puis la fiche.
+- **Bloquants** : aucun ; **GPU 0 et 1** à N2 jusqu'à ~19 h 40, la passe de portes attend.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
 ### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
@@ -97,6 +99,12 @@
 - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
 - **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
 - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+- **R1 — la fenêtre native** : **R1.1 mesurée** — RoPE **3,2545** à 1 000 octets (**0,97×** la PPL à
+  129, porte **1,5** tenue) contre **8,2024** pour la table absolue ; à texte et prédécesseurs
+  identiques, RoPE est **invariant** au décalage (Δ 0,0017) quand la table absolue **×4,8** ;
+  **depuis zéro**, RoPE ne suffit pas (3,54 → 6,22 à 20 k pas, 6,43 à 40 k) ; **R1.2**, à octets
+  constants, gagne **−0,244** à 1 000 (3,0107) et **utilise** le contexte (2,9654 → 2,8819) ;
+  miroir de copie **muet** — [`n2-r11`](../../reports/rapport-n2-r11.md).
 - **S — le banc de structures** : **analyseur rôles/subordonnées 38/39 types, 99/100 rôles, 45/45 compléments**, gold **39**, **40 tests** ; corpus **39** structures (SHA `973c70a4…`) ; [`fiche`](../../reports/rapport-s-analyseur-roles.md) ; **banque validée à 0**.
 - **N2** : **N2.ac** (mélange **1,02 Go**, 60 k pas) : **3,49** domaine, **6,03** littérature,
   **8,34** anglais, **9,05** wikitext2 — **le modèle de production** ; N4 **0/40** ; **session
@@ -128,7 +136,7 @@ externes** et la **prochaine action**.
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : pragmatique ; gold 200+** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N3, N4** | N2 : **N2.ac 1 Go — 3,49 domaine / 6,03 littérature** ; < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2** : 200 k pas **en cours** (session `0733c5bb`), puis **R1.1/R1.2** ; **N4** |
-| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R1/R2/R3 attendent N5/N4 | **R1.1/R1.2** (contexte natif) |
+| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R2/R3 attendent N5/N4 | **R1.1/R1.2 mesurées** ; la suite est **1 024 octets entraînés** (fenêtre), pas un autre schéma |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
 
@@ -137,7 +145,8 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **pragmatique, gold 200+** ; **S** — la **validation
+**N2** — les **200 k pas** (fin ~19 h 35) ; **R1** — **1 024 octets entraînés**, le schéma relatif
+est mesuré ; **Pensée** — **pragmatique, gold 200+** ; **S** — la **validation
 humaine** de la banque et la frontière du GN (h033) ; **N4** — la consigne ; **B10.3** — le `z` ;
 **R0.7** — le tagger complet ; **D** — l'**OCR est clos** (91 scans uniques, 1 982 p) ; les 8 scans
 `.PDF` (58 p) restent une limite nommée.
@@ -146,7 +155,8 @@ humaine** de la banque et la frontière du GN (h033) ; **N4** — la consigne ; 
 
 ## Les questions ouvertes
 
-- **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.1/R1.2** tranchent.
+- **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.2 tranche par la fenêtre entraînée**
+  (3,0107 à octets constants) ; le schéma relatif seul ne suffit pas ; reste **1 024 octets**.
 - **N2** : les **200 k pas** font-ils passer **< 2,5** sans perdre le français ? → N2 tranche.
 - **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
 - **B10.3** : chrF **> 39,6** ? → l'attention croisée tranche.

@@ -3519,3 +3519,181 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-142", "timeout_ms": 480000, "wait": true}`
+
+  ```
+18:48:49
+zero-absolu fini 18:01:07
+zero-rope fini 18:25:20
+}
+ "ppl_val": 3.492167170371048,
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/zero-rope-40k.pt --rope --longueurs 128,160,192,256,320,512,1000 --sortie work/n2ac/courbe-zero-rope-40k.json 2>&1 | tail -8; echo \"=== même texte ===\"; P … [224 caractères tronqués]`
+
+  ```
+L128 : 3.3215
+  L160 : 3.3124
+  L192 : 3.5199
+  L256 : 4.0978
+  L320 : 4.5958
+  L512 : 5.5097
+  L1000 : 6.4259
+{"fichier": "zero-rope-40k.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L128": 3.3215, "L160": 3.3124, "L192": 3.5199, "L256": 4.0978, "L320": 4.5958, "L512": 5.5097, "L1000": 6.4259}
+=== même texte ===
+  contexte  256 · PPL des 128 derniers octets 4.8859
+  contexte  512 · PPL des 128 derniers octets 7.3918
+  contexte 1000 · PPL des 128 derniers octets 7.4432
+{"fichier": "zero-rope-40k.pt", "positions": "rope", "cible": 128, "ppl": {"256": 4.8859, "512": 7.3918, "1000": 7.4432}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de la fiche : la suite à 40 k ne redresse pas la pente
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-r11.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"**Donc la porte 1,5 de R1.1 est tenue par un modèle déjà entraîné (0,97×), pas par le schéma\nseul : depuis zéro, à b … [4257 caractères tronqués]`
+
+  ```
+ok ; placeholders restants : 0
+  reports/n2-r11.json · 15 source(s)
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "offset": 106, "limit": 70}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+106:   **432 réels**, coréférence **116 liens** ; [`pensee-vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
+107:   [`pensee-anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
+108: 
+109: ## Les chiffres de l'état
+110: 
+111: > Vérifié par `tools/revue_documentation.py`.
+112: 
+113: | invariant | valeur | contrôle |
+114: |---|---|---|
+115: | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
+116: | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+117: | fichiers / JSON de résultats | **557** / **644** | `reports/*.md` / `reports/*.json` |
+118: | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
+119: | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
+120: 
+121: ## Les chantiers et leurs bloquants
+122: 
+123: **Dépendances** : [le graphe](backlog/dependances.md) ; cette table ne garde que les **bloquants
+124: externes** et la **prochaine action**.
+125: 
+126: | chantier | frontière (graphe) | bloquant (res
+… [2641 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "limit": 20, "offset": 89}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+89: 
+90: > **Session close** : `fe3c05f0` (D/R/A) — **147 scans détectés** (91 uniques, 2 053 p),
+91: > **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; les 10 notes du pilote étaient
+92: > **9 livres natifs + AQPC** (erratum) ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
+93: > fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+94: 
+95: ## Ce qui est en cours
+96: 
+97: - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
+98: - **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
+99: - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep
+… [1079 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à l'état : ligne R1, session, chantier, question
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\n\n# 1. la ligne R1 dans « Ce qui est en cours »\nvieux = \"\"\"- **S — le banc de structures** :\"\"\"\nneuf = \"\"\"- **R1 — la fe … [3349 caractères tronqués]`
+
+  ```
+en-cours : 5 blocs mis à jour
+  en-cours · 1742 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ mandat périmé (118 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+  ⚠ mandat périmé (133 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls reports/*.md | wc -l; ls reports/*.json | wc -l; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Count reports files on disk"}`
+
+  ```
+557
+644
+125:| fichiers / JSON de résultats | **557** / **644** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nq = pathlib.Path(\"work/n2ac/agrege_r11.py\")\ns = q.read_text(encoding=\"utf-8\")\ns = s.replace('''    \"courbe_zero_rope\": \"courbe-zero-rope.json\",\n}''', '''    \"courbe_zero_rope\": \"courbe-zero-rope.json\",\ … [835 caractères tronqués]`
+
+  ```
+reports/n2-r11.json · 20 source(s)
+heartbeat rafraîchi
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 600 python3 tools/revue_documentation.py 2>&1 | tail -12", "description": "Run documentation review before commit"}`
+
+  ```
+revue de documentation · 557 fiche(s) · 644 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat .gitignore | head -30; echo \"=== work suivi ? ===\"; git ls-files work/ | head -5; git ls-files work/ | wc -l; echo \"=== taille work/n2ac ===\"; du -sh work/n2ac", "description": "Check gitignore and tracked work files"}`
+
+  ```
+__pycache__/
+*.pyc
+reports/*.tmp
+models/
+data/
+qtrinet-core/target/
+
+# Traces de session : la copie brute reste sur disque (volumineuse, binaire),
+# le digest markdown est versionné.
+journal/sessions/*/session*.jsonl.zstd
+journal/sessions/archive.log
+
+# Outil de référence : la source est versionnée, le binaire se recompile
+# (commande exacte dans tools/ref_logits.md).
+tools/ref_logits
+target/
+
+# docwatch — SVG générés depuis les sources .puml/.mmd (docwatch les produit)
+docs/**/*.puml.svg
+docs/**/*.mmd.svg
+
+# Campagnes GPU : points de contrôle et journaux de run (hors dépôt, archivés à part)
+work/
+=== work suivi ? ===
+0
+=== taille work/n2ac ===
+2,0G	work/n2ac
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && mkdir -p journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code && cp work/n2ac/*.py work/n2ac/*.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ && ls journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/; echo \"=== staged pa … [122 caractères tronqués]`
+
+  ```
+agrege_r11.py
+chaine_r1.sh
+chaine_zero.sh
+entrainer_rope.py
+eval_200k.py
+eval_fenetre.py
+eval_longueurs.py
+init_figee.py
+mirroir_copie.py
+rope_model.py
+trajectoire.py
+=== staged par d'autres ? ===
+ M docs/pilotage/en-cours.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add reports/rapport-n2-r11.md reports/n2-r11.json docs/pilotage/en-cours.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code && git status --short | grep \"^[MA]\" | head -20  … [1909 caractères tronqués]`
