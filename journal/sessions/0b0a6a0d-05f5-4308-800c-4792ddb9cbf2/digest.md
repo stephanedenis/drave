@@ -16206,3 +16206,45 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-951", "timeout_ms": 600000, "wait": true}`
+
+  ```
+00:03
+work/n2j/W34-g1.pt
+OK
+{"fichier": "W34-g1.pt", "params": 34301224, "val": 3.6833, "test": 3.7248, "litterature": 6.6778, "litterature_propre": 6.7777, "anglais": 10.9465, "wikitext2": 11.657, "permute": 137.6184, "decomposition": {"complete": 3.516, "apres_2_blocs": 4.5942, "apres_4_blocs": 3.8032, "apres_6_blocs": 3.497, "sans_pensee": 39623.1827}, "longueurs": {"129": 3.6895, "192": 3.6371, "256": 3.6765, "384": 3.886, "512": 4.0949}}
+{"fichier": "W34-g2.pt", "params": 34301224, "val": 3.687, "test": 3.7276, "litterature": 6.677, "litterature_propre": 6.7767, "anglais": 10.8979, "wikitext2": 11.624, "permute": 135.194, "decomposition": {"complete": 3.5258, "apres_2_blocs": 4.6044, "apres_4_blocs": 3.809, "apres_6_blocs": 3.502, "sans_pensee": 39754.3712}, "longueurs": {"129": 3.6925, "192": 3.645, "256": 3.678, "384": 3.8934, "512": 4.106}}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-947 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W34-g*.pt 2>/dev/null; tail -1 work/n2j/W34-g1.log; tail -1 work/n2j/W34-g2.log; tail -2 /tmp/portes-nuit.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-949 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W34-g*.pt 2>/dev/null; tail -1 work/n2j/W34-g1.log; tail -1 work/n2j/W34-g2.log; tail -1 /tmp/portes-nuit.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-34m-distille.md <<'EOF'\n# N2.r — Le 34,3 M distillé : **3,69**, le meilleur modèle de la nuit, et la courbe plate\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : le modèle de **34,3 M* … [3982 caractères tronqués]`
+
+  ```
+fiche 34M distillée écrite
+contrastif_hors_echantillon.py
+generer_natif.py
+generer_par_langue.py
+porte-n3-generation.sh
+00:06
+57
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.n** : **3,94** (base 4,42) ;\", \"**N2.n** : **3,94** ;\")\ns = s.replace(\"**N2.p** : **4,00**, 512 **4,19** ;\ … [1116 caractères tronqués]`
+
+  ```
+en-cours ok
+roadmap ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 450 fichiers, le disque en a 451
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1376 caractères tronqués]`

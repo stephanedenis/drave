@@ -19755,3 +19755,58 @@ q 781 v final 0.8
 20 runs: 20 /20 pas moyen 8.0
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T51 la fiabilité qui dérive      20/20 buts, v final ≈ 0,56 (fenêtre 50)\\n\",\n\"  T51 la fiabilité qui dérive      20/20 … [1364 caractères tronqués]`
+
+  ```
+ok
+  ✅ T50 vraisemblance apprise bayes appris : 20/20 buts, v=0.899, 8.6 pas
+  ✅ T51 fiabilité qui dérive dérive : 20/20 buts, v final 0.56, 8.0 pas
+  ✅ T52 fenêtre adaptative adaptive : 20/20 buts, v final 0.8, 8.0 pas
+  55/55 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-adaptive.md <<'MD'\n# B13 — la fenêtre adaptative : v = 0,8, le régime courant\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **55/55 portes** : sur la … [6609 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 anomalie(s) :
+     · fraîcheur : en-cours.md dit 2026-11-01, le dernier commit date du 2026-11-02
+  ❌ 2 violation(s) :
+     · reports/README.md : 2811 mots > budget 2800 (T1)
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%ad' --date=format:'%Y-%m-%d'; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-01, \\d+ h \\d+ HNE\", \"**Mis à jour : 20 … [527 caractères tronqués]`
+
+  ```
+2026-11-02
+ok
+  revue de documentation · 450 fiche(s) · 546 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [300 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-adaptive.md reports/pensee-adaptive.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours. … [488 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-736]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-736", "timeout_ms": 600000, "wait": true}`

@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 31.4 h |
 | Tours | 69 |
-| Messages | 994 |
-| Appels d'outils | 907 |
+| Messages | 996 |
+| Appels d'outils | 909 |
 | Fichiers touchés | 25 |
-| Commandes | 735 |
+| Commandes | 736 |
 | Sous-agents | 2 |
-| Commits | 86 |
+| Commits | 87 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3674,13 +3674,15 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **fenêtre ad
 
 ### Tour 69 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Tester la fenêtre adaptative
 - bash — Ajouter la porte T52 (fenêtre adaptative)
 - bash — Écrire la fiche de la fenêtre adaptative
 - bash — Corriger la date, le README et le T0
 - bash — Passer toutes les portes
+- bash — Committer la fenêtre adaptative
+- job_output
 
 ## 3. Travail accompli
 
@@ -3761,7 +3763,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **fenêtre ad
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 695 autres
+- … et 696 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3995,4 +3997,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **fenêtre ad
 - B13 — LA VRAISEMBLANCE APPRISE : v = 0,899, 20/20, 8,6 PAS ; 53/53" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VRAISEMBLANCE APPRISE"; then echo "C
 - B13 — LA VRAISEMBLANCE APPRISE : v = 0,899, 20/20, 8,6 PAS ; 53/53" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VRAISEMBLANCE APPRISE"; then echo "C
 - B13 — LA FIABILITÉ QUI DÉRIVE : v FINAL 0,56, 20/20, 8,0 PAS ; 54/54" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "FIABILITÉ QUI DÉRIVE"; then echo "
+- B13 — LA FENÊTRE ADAPTATIVE : v FINAL 0,8, 20/20, 8,0 PAS ; 55/55" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "FENÊTRE ADAPTATIVE"; then echo "COMMI
 

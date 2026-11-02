@@ -1407,6 +1407,38 @@ def seule_bayes_derive(p: PolitiqueAppriseBayesDerive, max_pas: int = 200) -> tu
     return seule_observatrice(p, max_pas)
 
 
+class PolitiqueAppriseBayesAdaptive(PolitiqueAppriseBayesDerive):
+    """Le bayésien à **fenêtre adaptative** : elle se resserre quand v change, s'élargit sinon."""
+
+    nom = "bayes_adaptive"
+
+    def _pas(self, cle, action, d: int):
+        x, y, o, b = cle
+        if action == "observer":
+            vu = d if self.rng.random() >= self.p_erreur else 1 - d
+            self.historique.append(int(vu == d))
+            if len(self.historique) > self.fenetre:
+                self.historique.pop(0)
+            recent = self.historique[-10:]
+            old = self.historique[-20:-10]
+            if len(old) >= 5 and abs(sum(recent) / len(recent)
+                                    - sum(old) / len(old)) > 0.2:
+                self.v = sum(recent) / len(recent)      # la dérive : croire le récent
+            else:
+                self.v = sum(self.historique) / len(self.historique)
+            self.v = max(0.01, min(0.99, self.v))
+            p = _BAYES_P[min(b, 9)]
+            v = self.v if vu == 0 else 1.0 - self.v
+            p2 = p * v / (p * v + (1 - p) * (1 - v))
+            return (x, y, o, _bayes_bucket(p2)), -0.1, d
+        return super()._pas(cle, action, d)
+
+
+def seule_bayes_adaptive(p: PolitiqueAppriseBayesAdaptive,
+                         max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 
