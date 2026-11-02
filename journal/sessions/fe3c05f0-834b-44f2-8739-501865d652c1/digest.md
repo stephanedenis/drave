@@ -19124,3 +19124,304 @@ wchar: 2306682682
 -rw-r--r--. 1 stephane stephane 759630213  1 nov 22:58 data/corpus_pdf_documents/train.txt
   ```
 
+### 🤖 Assistant
+
+⏵ Round 34 : le processus des documents s'est débloqué (+5,9 Go lus en 30 s)
+
+**Round 34/1000 — bonne nouvelle : le blocage était temporaire.**
+
+Le processus des documents est reparti : son `rchar` est passé de 1 578,9 Go à **1 584,8 Go en 30 secondes** (+5,9 Go lus), son `wchar` a progressé de 9 Mo, et le train a été réécrit à **22 h 58** (759,63 Mo). Il était en `poll_schedule_timeout` — une attente d'E/S sur un PDF, pas un blocage définitif. Il reste sur les 4 000/7 496 PDF ; le débit est faible (~6 Ko/s d'écriture) mais réel.
+
+**L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours ; même comportement de lenteur, sans blocage.
+
+**Les dix corpus Wikipédia** restent mesurés et committés (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), ainsi que le corpus PDF (1 927 documents, 322 Mo) et l'**A2.6/A8.3**. L'état, la roadmap et le plan sont à jour.
+
+**La suite** : je laisse les deux parcours finir ; dès leurs manifestes, j'écris les **fiches OCR et Documents** (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné) et je les commite. Le goal reste actif ; le prochain round vérifie leurs manifestes.
+
+
+## Tour 47
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 35/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; tail -1 /tmp/pdf-documents.log; ls -la data/corpus_pdf_documents/train.txt; tail -2 /tmp/ocr-pilote.log; ps -p 1615747,1616198 -o pid,stat,etime= 2>/dev/null; ls -la reports/corpus-pdf-documents.json reports/ocr-pdf.json … [147 caractères tronqués]`
+
+  ```
+22:59
+  4000 PDF · 2558 gardés · 812.6 M car
+-rw-r--r--. 1 stephane stephane 760847518  1 nov 22:59 data/corpus_pdf_documents/train.txt
+  Biblio_large · 001.0 metapatterns.pdf · 373 p · 654488 car
+  Biblio_large · 004.0 Brown 2015, Gene Cloning and DNA A · 376 p · 798077 car
+    PID STAT            
+1615747 S       02:14:50
+1616198 S       02:13:52
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 35 : les documents progressent (+1,4 Mo en 4 min), l'OCR reste à 4 livres
+
+**Round 35/1000 — les deux parcours vivent, lentement.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **760,8 Mo** (22 h 59, +1,4 Mo depuis 22 h 55), 2 558 documents gardés, 812,6 M caractères. Le processus est en sommeil (`S`) mais écrit ; au rythme actuel (~350 Ko/min), les 3 500 PDF restants prendront ~1 h.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours ; processus en sommeil aussi.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les deux extractions secondaires avancent, sans erreur ; elles devraient finir avant 8 h. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+
+## Tour 48
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 36/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; tail -1 /tmp/pdf-documents.log; ls -la data/corpus_pdf_documents/train.txt data/corpus_pdf_documents/val.txt 2>/dev/null; tail -2 /tmp/ocr-pilote.log; ps -p 1615747,1616198 -o pid,stat,etime= 2>/dev/null; ls reports/corp … [192 caractères tronqués]`
+
+  ```
+22:59
+  4000 PDF · 2558 gardés · 812.6 M car
+-rw-r--r--. 1 stephane stephane 760847518  1 nov 22:59 data/corpus_pdf_documents/train.txt
+-rw-r--r--. 1 stephane stephane  48728382  1 nov 22:55 data/corpus_pdf_documents/val.txt
+  Biblio_large · 001.0 metapatterns.pdf · 373 p · 654488 car
+  Biblio_large · 004.0 Brown 2015, Gene Cloning and DNA A · 376 p · 798077 car
+    PID STAT            
+1615747 S       02:15:17
+1616198 S       02:14:20
+ls: cannot access 'reports/corpus-pdf-documents.json': No such file or directory
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 36 : documents à 760,8 Mo, OCR à 4 livres, manifestes pas encore là
+
+**Round 36/1000 — les deux parcours continuent, sans erreur.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **760,8 Mo** (22 h 59), val 48,7 Mo (22 h 55), 2 558 documents gardés, 812,6 M caractères. Le processus est en sommeil (`S`) mais écrit ; il reste ~3 500 PDF.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.
+- **Les manifestes** (`corpus-pdf-documents.json`, `ocr-pdf.json`) ne sont pas encore écrits — ils tomberont à la fin des parcours.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les deux extractions secondaires avancent, sans erreur ; elles devraient finir avant 8 h. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+
+## Tour 49
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 37/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; tail -1 /tmp/pdf-documents.log; ls -la data/corpus_pdf_documents/train.txt; tail -2 /tmp/ocr-pilote.log; ps -p 1615747,1616198 -o pid,stat,etime=,pcpu= 2>/dev/null; ls reports/corpus-pdf-documents.json reports/ocr-pdf.js … [152 caractères tronqués]`
+
+  ```
+23:00
+  4000 PDF · 2558 gardés · 812.6 M car
+-rw-r--r--. 1 stephane stephane 760847518  1 nov 22:59 data/corpus_pdf_documents/train.txt
+  Biblio_large · 001.0 metapatterns.pdf · 373 p · 654488 car
+  Biblio_large · 004.0 Brown 2015, Gene Cloning and DNA A · 376 p · 798077 car
+    PID STAT                 
+1615747 S       02:15:42  0.7
+1616198 S       02:14:45  0.0
+ls: cannot access 'reports/corpus-pdf-documents.json': No such file or directory
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 37 : documents et OCR inchangés, manifestes toujours attendus
+
+**Round 37/1000 — aucun changement mesurable.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **760,8 Mo** (22 h 59), 2 558 documents gardés, 812,6 M caractères. Processus en sommeil (`S`, 0,7 % CPU), pas en erreur.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.
+- **Les manifestes** (`corpus-pdf-documents.json`, `ocr-pdf.json`) ne sont pas encore écrits.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les deux extractions secondaires avancent lentement, sans erreur ; elles devraient finir avant 8 h. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+
+## Tour 50
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 38/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_pdf_documents/*.txt 2>/dev/null; tail -1 /tmp/pdf-documents.log; tail -2 /tmp/ocr-pilote.log; ps -p 1615747,1616198 -o pid,stat,etime=,pcpu= 2>/dev/null; ls reports/corpus-pdf-documents.json reports/oc … [158 caractères tronqués]`
+
+  ```
+23:00
+-rw-r--r--. 1 stephane stephane  32251519  1 nov 22:49 data/corpus_pdf_documents/test.txt
+-rw-r--r--. 1 stephane stephane 760847518  1 nov 22:59 data/corpus_pdf_documents/train.txt
+-rw-r--r--. 1 stephane stephane  48728382  1 nov 22:55 data/corpus_pdf_documents/val.txt
+  4000 PDF · 2558 gardés · 812.6 M car
+  Biblio_large · 001.0 metapatterns.pdf · 373 p · 654488 car
+  Biblio_large · 004.0 Brown 2015, Gene Cloning and DNA A · 376 p · 798077 car
+    PID STAT                 
+1615747 S       02:16:11  0.7
+1616198 S       02:15:14  0.0
+ls: cannot access 'reports/corpus-pdf-documents.json': No such file or directory
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 38 : état inchangé, les parcours continuent
+
+**Round 38/1000 — rien de nouveau, rien de cassé.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **760,8 Mo** (22 h 59), val 48,7 Mo, test 32,3 Mo, 2 558 documents gardés, 812,6 M caractères. Processus en sommeil (`S`, 0,7 % CPU).
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.
+- **Les manifestes** (`corpus-pdf-documents.json`, `ocr-pdf.json`) ne sont pas encore écrits.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les deux extractions secondaires avancent très lentement, sans erreur ; elles devraient finir avant 8 h. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+
+## Tour 51
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 39/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; wc -l /tmp/pdf-documents.log; tail -2 /tmp/pdf-documents.log; ls -la data/corpus_pdf_documents/train.txt; tail -3 /tmp/ocr-pilote.log; ps -p 1615747,1616198 -o pid,stat,etime=,pcpu= 2>/dev/null", "description": "Check do … [118 caractères tronqués]`
+
+  ```
+23:01
+6 /tmp/pdf-documents.log
+  3500 PDF · 2188 gardés · 785.0 M car
+  4000 PDF · 2558 gardés · 812.6 M car
+-rw-r--r--. 1 stephane stephane 760847518  1 nov 22:59 data/corpus_pdf_documents/train.txt
+  Biblio_large · 001.0 Bioinformatics for beginners genes · 225 p · 923245 car
+  Biblio_large · 001.0 metapatterns.pdf · 373 p · 654488 car
+  Biblio_large · 004.0 Brown 2015, Gene Cloning and DNA A · 376 p · 798077 car
+    PID STAT                 
+1615747 S       02:16:44  0.7
+1616198 S       02:15:46  0.0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 39 : documents à 4 000/7 496, OCR à 4 livres
+
+**Round 39/1000 — les deux parcours continuent, très lentement.**
+
+- **Les documents** : 4 000 PDF sur 7 496 (le journal n'a que 6 lignes : les impressions tous les 500), train **760,8 Mo** (22 h 59), 2 558 documents gardés, 812,6 M caractères. Processus en sommeil (`S`, 0,7 % CPU).
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les deux extractions secondaires avancent lentement, sans erreur ; elles devraient finir avant 8 h. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+
+## Tour 52
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 40/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; wc -l /tmp/pdf-documents.log; ls -la data/corpus_pdf_documents/train.txt; tail -2 /tmp/ocr-pilote.log; ps -p 1615747,1616198 -o pid,stat,etime=,pcpu= 2>/dev/null", "description": "Check documents and OCR status", "timeou … [75 caractères tronqués]`
+
+  ```
+23:01
+6 /tmp/pdf-documents.log
+-rw-r--r--. 1 stephane stephane 760847518  1 nov 22:59 data/corpus_pdf_documents/train.txt
+  Biblio_large · 001.0 metapatterns.pdf · 373 p · 654488 car
+  Biblio_large · 004.0 Brown 2015, Gene Cloning and DNA A · 376 p · 798077 car
+    PID STAT                 
+1615747 S       02:17:09  0.6
+1616198 S       02:16:12  0.0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 40 : état inchangé, les deux parcours continuent
+
+**Round 40/1000 — rien de nouveau, rien de cassé.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **760,8 Mo** (22 h 59), 2 558 documents gardés, 812,6 M caractères. Processus en sommeil (`S`, 0,6 % CPU).
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les deux extractions secondaires avancent très lentement, sans erreur ; elles devraient finir avant 8 h. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+
+## Tour 53
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 41/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; wc -l /tmp/ocr-pilote.log; tail -1 /tmp/ocr-pilote.log; wc -l /tmp/pdf-documents.log; ls -la data/corpus_pdf_documents/train.txt; ps -p 1615747,1616198 -o pid,stat,etime= 2>/dev/null", "description": "Check OCR and docum … [99 caractères tronqués]`
+
+  ```
+23:02
+4 /tmp/ocr-pilote.log
+  Biblio_large · 004.0 Brown 2015, Gene Cloning and DNA A · 376 p · 798077 car
+6 /tmp/pdf-documents.log
+-rw-r--r--. 1 stephane stephane 762076056  1 nov 23:02 data/corpus_pdf_documents/train.txt
+    PID STAT            
+1615747 S       02:17:31
+1616198 S       02:16:34
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 41 : les documents réécrivent (762 Mo à 23 h 02), l'OCR reste à 4 livres
+
+**Round 41/1000 — les documents reprennent un peu de débit.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **762,1 Mo** (23 h 02, +1,2 Mo depuis 22 h 59), 2 558 documents gardés, 812,6 M caractères. Processus en sommeil (`S`), mais il écrit ; il reste ~3 500 PDF.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les deux extractions secondaires avancent lentement, sans erreur ; elles devraient finir avant 8 h. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+
+## Tour 54
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 42/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

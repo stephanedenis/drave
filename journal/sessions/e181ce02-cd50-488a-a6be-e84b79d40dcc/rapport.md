@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 30.3 h |
-| Tours | 53 |
-| Messages | 856 |
-| Appels d'outils | 801 |
+| Durée | 30.4 h |
+| Tours | 54 |
+| Messages | 864 |
+| Appels d'outils | 807 |
 | Fichiers touchés | 25 |
-| Commandes | 645 |
+| Commandes | 650 |
 | Sous-agents | 2 |
-| Commits | 70 |
+| Commits | 71 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -137,6 +137,8 @@
 **Tour 52** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 53** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 54** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2844,6 +2846,57 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait varier la période 
 - bash — Committer la période variable
 - job_output
 
+**Synthèse produite :**
+
+⏵ Période variable : 2–5 pas, 4/4 buts, 10 pas, la même politique ; 39/39
+
+Le round 40 du goal est livré : la **période de la porte** varie de 2 à 5 pas, la même politique tient. Commit **`f9d693a6`**.
+
+\## La période variable
+
+Même labyrinthe à deux portes que T34/T35 ; la porte alterne `(3,3)`/`(1,3)` avec une période `P`. L'entraînement utilise `P = 3` ; l'évaluation change `P` sans réentraîner.
+
+| période | but | pas |
+|---:|---|---:|
+| 2 | **oui** | 10 |
+| 3 | **oui** | 10 |
+| 4 | **oui** | 10 |
+| 5 | **oui** | 10 |
+
+**Ce que ça dit** :
+
+- **4/4 buts** : la politique entraînée à 3 pas **généralise** aux périodes 2, 4, 5 ; elle n'a pas mémorisé une période, elle a appris le **rythme** (l'horloge dans l'état).
+- **Le chemin est stable** (10 pas partout) : le coût de la période est nul sur ce labyrinthe.
+- **La structure bat la taille** : une seule table (236 états) couvre quatre périodes.
+- **La négative reste** : la politique minute (T21/T28) ne connaît pas l'horloge.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-periode.md`](../../reports/rapport-pensee-periode.md) ; JSON [`pensee-periode.json`](../../reports/pensee-periode.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T36 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **39/39 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **429 fiches / 527 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le commit a aussi emporté `reports/rapport-n2-capacite-34m.md` d'une autre session (course d'index) ; leur contenu est commité, pas perdu.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Période qui change** en cours d'épisode : l'état doit suivre.
+2. **Porte aléatoire** : la position change sans période.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round fait changer la période en cours d'épisode.
+
+### Tour 54 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Ajouter la période qui change et la tester
+- bash — Ajouter la porte T37 (période qui change)
+- bash — Écrire la fiche de la période qui change
+- bash — Passer toutes les portes
+- bash — Committer la période qui change
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2923,7 +2976,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait varier la période 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 605 autres
+- … et 610 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3140,4 +3193,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait varier la période 
 - B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE QUI 
 - B13 — LA PORTE QUI BOUGE SUR 5 GRAINES : 5/5 BUTS EN 10 PAS, 230–253 ÉTATS-Q ; 38/38" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BOUGE SUR 5 GRAINE
 - B13 — LA PÉRIODE VARIABLE : 2–5 PAS, 4/4 BUTS, 10 PAS, LA MÊME POLITIQUE ; 39/39" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PÉRIODE VARIABLE"; the
+- B13 — LA PÉRIODE QUI CHANGE : 3 PUIS 2 PAS, A* 28 NŒUDS, POLITIQUE BUT/10, 376 ÉTATS-Q ; 40/40" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PÉRIODE 
 

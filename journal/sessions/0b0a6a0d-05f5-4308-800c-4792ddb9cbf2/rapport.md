@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 30.7 h |
+| Durée | 30.8 h |
 | Tours | 18 |
-| Messages | 1230 |
-| Appels d'outils | 1141 |
+| Messages | 1235 |
+| Appels d'outils | 1146 |
 | Fichiers touchés | 11 |
-| Commandes | 922 |
+| Commandes | 925 |
 | Sous-agents | 0 |
-| Commits | 40 |
+| Commits | 42 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*175 appels d'outils.* Actions notables :
+*180 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 114 autres
+- … et 117 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 882 autres
+- … et 885 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1157,7 +1157,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ## 5. Erreurs rencontrées
 
-63 sorties en erreur ou divergentes. Les premières :
+64 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5
@@ -1217,4 +1217,6 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - N2.n — LA DISTILLATION ANGLAISE : 4,42 → 3,94, LA CHAÎNE COMPLÈTE SUR 204 Mo  Le professeur 23,57 M entraîné sur les 204,6 Mo d'anglais, distillé dans la base a
 - N2.o — LA DISTILLATION MULTILINGUE : DIX LANGUES S'AMÉLIORENT, LA DILUTION RESTE  Le professeur 23,57 M entraîné sur les 237 Mo des dix langues, distillé dans l
 - JOURNAL — LA NUIT N2 : DU CORPUS PROPRE AU CORPUS RÉEL  Récit de la session N2 : le mètre honnête (3,09), les leviers (diversité, positions, capacité, canal), l
+- N2.p — LA CAPACITÉ À 34,3 M : −0,19 PAR PALIER, ET LE VERROU DE LONGUEUR S'EFFACE  Sur les 186 Mo du corpus réel, la base passe de 4,3893 (11,47 M) à 4,2013 (21
+- N2.p — LA CAPACITÉ À 34,3 M : −0,19 PAR PALIER, ET LE VERROU DE LONGUEUR S'EFFACE  Sur les 186 Mo du corpus réel, la base passe de 4,3893 (11,47 M) à 4,2013 (21
 

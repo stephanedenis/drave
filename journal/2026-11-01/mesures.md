@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (50)
+## Commits du jour (51)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -58,6 +58,7 @@
 | 21:58 | `0fb426cc` | B13 — LA MESURE CORRIGÉE : BUG DE seule_minute, 4 POLITIQUES À BUT/8, 4 FICHES CORRIGÉES ; 30/30 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+29) |
 | 22:13 | `da55b97d` | B13 — L'AUDIT DES MESURES : 15/15 COHÉRENTES, LA MINUTE NE TRANSFÈRE PAS AU BRUIT ; 31/31 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+27) |
 | 22:46 | `de32beb8` | B13 — LE BRUIT VARIABLE : 50–95 %, 6/6 BUTS, L'EFFORT S'ADAPTE (3 → 1 ESSAI) ; 36/36 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
+| 22:58 | `f9d693a6` | B13 — LA PÉRIODE VARIABLE : 2–5 PAS, 4/4 BUTS, 10 PAS, LA MÊME POLITIQUE ; 39/39 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+27) |
 
 ## Chiffres du jour
 
@@ -67,10 +68,10 @@
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 30.7 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 30.8 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `b6a672ec-3349-4a4c-9e23-4478aa823170` — Git push to origin remote (début 2026-11-01 13:28, 0.1 h) → [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 30.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 30.4 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 30.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 30.5 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -81,6 +82,7 @@
 - [reports/rapport-corpus-wiki-texte.md](../../reports/rapport-corpus-wiki-texte.md)
 - [reports/rapport-n2-anglais.md](../../reports/rapport-n2-anglais.md)
 - [reports/rapport-n2-canal.md](../../reports/rapport-n2-canal.md)
+- [reports/rapport-n2-capacite-34m.md](../../reports/rapport-n2-capacite-34m.md)
 - [reports/rapport-n2-capacite-reelle.md](../../reports/rapport-n2-capacite-reelle.md)
 - [reports/rapport-n2-capacite.md](../../reports/rapport-n2-capacite.md)
 - [reports/rapport-n2-combine.md](../../reports/rapport-n2-combine.md)
@@ -99,6 +101,7 @@
 - [reports/rapport-pensee-minute-entrainee.md](../../reports/rapport-pensee-minute-entrainee.md)
 - [reports/rapport-pensee-necessaire.md](../../reports/rapport-pensee-necessaire.md)
 - [reports/rapport-pensee-operateurs.md](../../reports/rapport-pensee-operateurs.md)
+- [reports/rapport-pensee-periode.md](../../reports/rapport-pensee-periode.md)
 - [reports/rapport-pensee-professeur.md](../../reports/rapport-pensee-professeur.md)
 - [reports/rapport-pensee-sans-none.md](../../reports/rapport-pensee-sans-none.md)
 - [reports/rapport-pensee-seule.md](../../reports/rapport-pensee-seule.md)

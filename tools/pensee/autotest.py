@@ -607,6 +607,22 @@ def t36_periode() -> tuple[bool, str]:
                                    f"buts, pas {[r[2] for r in res]}")
 
 
+def t37_phase() -> tuple[bool, str]:
+    """La période qui change : 3 pas puis 2 pas ; A* et politique seule réussissent."""
+    from .moteur import AStar
+    from .operateurs import (DRVM, LABYRINTHE_PORTE_PHASE, REGISTRE_PP,
+                             PolitiqueApprisePhase, PolitiqueManhattan, seule_phase)
+    from .store import Budget
+    d = DRVM(REGISTRE_PP, PolitiqueManhattan())
+    d.penser(LABYRINTHE_PORTE_PHASE, AStar(), Budget(200))
+    b = d.instantane()
+    p = PolitiqueApprisePhase(episodes=1000, graine=0)
+    p.apprendre()
+    ok, pas = seule_phase(p)
+    return (b["but"] and ok), (f"phase : A* {b['noeuds']} nœuds/but, "
+                               f"seule but/{pas} pas ({len(p.q)} états-Q)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -642,7 +658,8 @@ def main() -> int:
               ("T33 bruit variable", t33_bruit()),
               ("T34 porte qui bouge", t34_bouge()),
               ("T35 porte qui bouge, 5 graines", t35_bouge_graines()),
-              ("T36 période variable", t36_periode())]
+              ("T36 période variable", t36_periode()),
+              ("T37 période qui change", t37_phase())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

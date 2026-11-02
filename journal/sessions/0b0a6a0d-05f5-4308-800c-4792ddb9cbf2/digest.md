@@ -15832,3 +15832,23 @@ roadmap ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.p** (34,3 M) : **4,00** (11,47 M 4,39), 512 **4,19** ;\", \"**N2.p** : **4,00**, 512 **4,19** ;\")\np.write_text … [1107 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3999 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-923]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-923", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at f9d693a6891bb6bac809b42cdff998fe8b31c453 but expected 06462a3d5aeefcf30e5d6b55cba76e0380cd336b
+23:01
+pas 1350 · perte 2.3900 · PPL val 20.186 · 68 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git reset -q && git add reports/rapport-n2-capacite-34m.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"N2.p — LA CAPACITÉ À 34,3 M : −0,19 PAR PALIER, ET LE VERROU DE LONGUEUR S'EFFACE\n\nSur les … [602 caractères tronqués]`
