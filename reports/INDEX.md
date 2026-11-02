@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **547 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **549 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -390,6 +390,7 @@
 | [rapport-pensee-gold-discours.md](rapport-pensee-gold-discours.md) | B13 — le discours : acte 0,9, négation 1,0, modalité 0,9 |
 | [rapport-pensee-gold-gele.md](rapport-pensee-gold-gele.md) | B13 — le gold gelé : les portes ne cassent plus quand le gold grandit |
 | [rapport-pensee-gold-linguistique.md](rapport-pensee-gold-linguistique.md) | L — le gold 360 : 200 réels + 160 synthétiques, POS 0,772, tête 0,966 |
+| [rapport-pensee-gold-neuronal.md](rapport-pensee-gold-neuronal.md) | L — le gold neuronal : un tagger 7B local, la cascade POS à 0,944 |
 | [rapport-pensee-graines.md](rapport-pensee-graines.md) | B13 — la robustesse sur 5 graines : le curriculum `open` tient |
 | [rapport-pensee-hasard.md](rapport-pensee-hasard.md) | B13 — le hasard variable : 20–60 %, 20/20 à chaque taux |
 | [rapport-pensee-hasard2.md](rapport-pensee-hasard2.md) | B13 — le régime aléatoire : 1/2, 20/20 |
@@ -522,6 +523,7 @@
 | [rapport-routage-experts.md](rapport-routage-experts.md) | Rapport — le routage des experts était faux pour quatre gros modèles sur cinq |
 | [rapport-routeur-confiance.md](rapport-routeur-confiance.md) | B24 — le round-trip M1 améliore la typo, mais coûte les espaces |
 | [rapport-routeur-m1-m2.md](rapport-routeur-m1-m2.md) | B23 — routeur M1→M2 : gagne sur les espaces, perd sur les typos |
+| [rapport-s-analyseur-roles.md](rapport-s-analyseur-roles.md) | S — L'analyseur nomme les rôles : 99/100, 38/39 types, et 39 structures au corpus |
 | [rapport-s-analyseur.md](rapport-s-analyseur.md) | S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture |
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
 | [rapport-semantique.md](rapport-semantique.md) | Le protocole sémantique natif — premier passage |

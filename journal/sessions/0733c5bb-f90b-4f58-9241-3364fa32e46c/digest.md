@@ -2338,3 +2338,340 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-83", "timeout_ms": 300000, "wait": true}`
+
+  ```
+16:59:34
+--- 200k ---
+pas 37850 · perte 1.5674 · PPL val 3.608 · 2177 s
+--- g2 ---
+pas   8600 · perte 1.2407 · PPL val 3.673 · 674 s
+--- abs1152 ---
+pas 2700 · perte 1.4077 · PPL val 4.119 · 297 s
+--- chaine ---
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe de contrôle rapide avant écriture (référence de non-régression)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for t in \"tools/verifie_en_cours.py\" \"tools/verifie_journal.py\" \"tools/verifier_schemas.py\" \"tools/taille_documents.py\"; do echo \"=== $t ===\"; timeout 300 python3 $t 2>&1 | tail -4; done", "description": "Run quick documentation gates"}`
+
+  ```
+=== tools/verifie_en_cours.py ===
+  en-cours · 1731 mots · 7 sections · 5 session(s) · 6 puces · 6 questions
+  ❌ 2 anomalie(s) :
+     · 6 questions ouvertes > 5
+     · question sans ce qui la débloque (`→`) : **Pensée** : le tagger 7B tient-il les **syntagmes** et la *
+=== tools/verifie_journal.py ===
+  journal · 39 jour(s) · 117 session(s) · 1844 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+=== tools/verifier_schemas.py ===
+  schémas · 458 document(s) · 66 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+=== tools/taille_documents.py ===
+
+  ❌ 2 violation(s) :
+     · reports/README.md : 2809 mots > budget 2800 (T1)
+     · T0 : 4105 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat docs/pilotage/references-non-regression.md | head -60", "description": "Read tolerated red gates list"}`
+
+  ```
+# Références de non-régression
+
+> **Dernière passe complète — 2026-11-02 à 06 h :** **81 portes, 76 vertes, 5 rouges** (journaux
+> `/tmp/portes-…`, **effacés au reboot de 15 h 06** : ce fichier est le registre). Les 4 rouges
+> connues : `porte-indice`, `porte-melange`, `porte-homeostasie`, `porte-reparti-moteur` ; la 5e,
+> **`porte-greffe`** à 700 s, **rejouée verte à 1200 s** (un délai, pas une régression). La passe
+> du 02/11 00 h 03 : 81 portes, 77 vertes, 4 rouges. Journaux durables : `work/portes/`.
+
+> **Passe précédente — 2026-11-01 à 00 h 56 :** **80 portes, 76 vertes, 4 rouges, 1 h 46**
+> (journaux `/tmp/portes-1101-n2h`). Mêmes rouges que la passe du 31/10 : `porte-indice` (921 s),
+> `porte-melange` (112 s), `porte-homeostasie` (environnementale) et `porte-reparti-moteur`.
+> Aucune régression ; `porte-vision` et `porte-ocr-scans` sont vertes.
+
+> **Passe précédente — 2026-10-31 à 19 h 42 :** **79 portes, 75 vertes, 4 rouges, 1 h 39**
+> (journaux `/tmp/portes-1031-n2d`) : mêmes rouges ; `porte-ocr` (48 s) était verte.
+
+> **Passe précédente — 2026-10-31 à 12 h 54 :** **78 portes, 73 vertes, 5 rouges, 1 h 37**
+> (journaux `/tmp/portes-1031-11h17`). `porte-indice`, `porte-melan
+… [2913 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2ac/mix-200k.log; echo \"--- g2 ---\"; tail -2 work/n2ac/rope-20k-g2.log; echo \"--- abs1152 ---\"; tail -1 work/n2ac/absolu-pos1152.log; echo \"--- chaine ---\"; cat work/n2ac/chaine_r1.out", "description": "Check run  … [24 caractères tronqués]`
+
+  ```
+17:00:03
+pas 38400 · perte 1.3617 · PPL val 3.631 · 2207 s
+--- g2 ---
+pas   8800 · perte 1.3437 · PPL val 3.669 · 696 s
+pas   8850 · perte 1.1862 · PPL val 3.675 · 701 s
+--- abs1152 ---
+pas 2950 · perte 1.2174 · PPL val 4.058 · 324 s
+--- chaine ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du miroir de restitution (copie à distance) — contrainte de fenêtre
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"miroir_copie.py — le miroir de sortie de R1 : le modèle **restitue-t-il** un code vu ?\n\nLa PPL est une mesure d'**entrée** : elle dit que la suite est moins surprenante, pas que le\nmodèle a **lu** l'octet lointain. Ici, on plante un code de 16 octets **d … [3665 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/mirroir_copie.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"miroir_copie.py — le miroir de sortie de R1 : le modèle **restitue-t-il** un code vu ?\n\nLa PPL est une mesure d'**entrée** : elle dit que la suite est moins surprenante, pas que le\nmodèle a **lu** l'octet lointain. Ici, on plante un code de 16 octets **d … [3922 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/mirroir_copie.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/mirroir_copie.py work/n2ac/rope-20k.pt --rope --sortie work/n2ac/miroir-rope.json 2>&1 | tail -12", "description": "Run copy mirror on RoPE model"}`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2ac/mirroir_copie.py", line 99, in <module>
+    main()
+    ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2ac/mirroir_copie.py", line 76, in main
+    assert len(lot) == n * CONTEXTE, (len(lot), n * CONTEXTE)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (4352, 4096)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\np = pathlib.Path(\"work/n2ac/mirroir_copie.py\")\nt = p.read_text()\nt = t.replace(\"longueur ? \", \"longueur ? \")\nt = t.replace(\"texte[p2:p1 + CONTEXTE - 2 * len(CODE)]\", \"texte[p2:CONTEXTE - 2 * len(CODE)] … [257 caractères tronqués]`
+
+  ```
+ok
+  d=  16 · justesse 0.0078
+  d=  64 · justesse 0.0000
+  d= 128 · justesse 0.0000
+  d= 200 · justesse 0.0000
+  d= 240 · justesse 0.0000
+  d= 255 · justesse 0.0000
+  d= 300 · justesse 0.0000
+  d= 400 · justesse 0.0000
+{"fichier": "rope-20k.pt", "positions": "rope", "fenetre": 256, "contexte": 512, "code": "K7Q2M9XA4B1Z8W3C", "distances": {"16": 0.0078, "64": 0.0, "128": 0.0, "200": 0.0, "240": 0.0, "255": 0.0, "300": 0.0, "400": 0.0}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Autotest du miroir : la justesse est-elle nulle par bug ou par absence de copie ?
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python - <<'PY'\nimport pathlib, sys, torch\nsys.path.insert(0,'.')\nfrom work.n2ac.rope_model import charge_rope\nfrom tools.canal_structure import canal as canal_de\nm = charge_rope(\"work/n2ac/rope- … [888 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+RuntimeError: shape '[8, 512]' is invalid for input of size 36096
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python - <<'PY'\nimport pathlib, sys, torch\nsys.path.insert(0,'.')\nfrom work.n2ac.rope_model import charge_rope\nfrom tools.canal_structure import canal as canal_de\nm = charge_rope(\"work/n2ac/rope- … [746 caractères tronqués]`
+
+  ```
+autotest harness (texte normal, positions 200-215) : justesse 0.469 — attendu ~0,5
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle décisif : la PPL des 128 derniers octets doit être invariante en L pour RoPE
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"eval_fenetre.py — la PPL des **128 derniers octets** de chaque fenêtre, par longueur.\n\nC'est le contrôle qui sépare les deux schémas de position. Avec des positions **relatives**\n(RoPE), les 128 derniers octets d'une fenêtre de 256, 512 ou 1 000 voient e … [3095 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/eval_fenetre.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_fenetre.py work/n2ac/rope-20k.pt --rope --sortie work/n2ac/queue-rope.json 2>&1 | tail -6", "description": "Run tail-position control on RoPE model"}`
+
+  ```
+L= 256 · PPL totale 3.3217 · PPL des 128 derniers octets 3.2742
+  L= 512 · PPL totale 3.2892 · PPL des 128 derniers octets 3.3377
+  L=1000 · PPL totale 3.2545 · PPL des 128 derniers octets 3.1662
+{"fichier": "rope-20k.pt", "positions": "rope", "queue": 128, "ppl_queue": {"256": 3.2742, "512": 3.3377, "1000": 3.1662}, "ppl_totale": {"256": 3.3217, "512": 3.2892, "1000": 3.2545}}
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"eval_fenetre.py — le **même texte**, vu avec des contextes de 256, 512 et 1 000 octets.\n\nC'est le contrôle qui sépare les deux schémas de position, et il doit être mesuré sur le\n**même flux d'octets** : on prend une fenêtre de 1 000 octets, on ne garde q … [3145 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/eval_fenetre.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for m in \"work/n2ac/rope-20k.pt --rope --sortie work/n2ac/queue-rope.json\" \"work/n2j/base-34m-canal.pt --sortie work/n2ac/queue-absolu.json\"; do echo \"=== $m ===\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_fenetre.p … [108 caractères tronqués]`
+
+  ```
+=== work/n2ac/rope-20k.pt --rope --sortie work/n2ac/queue-rope.json ===
+  contexte  256 · PPL des 128 derniers octets 3.0836
+  contexte  512 · PPL des 128 derniers octets 3.1645
+  contexte 1000 · PPL des 128 derniers octets 3.1662
+{"fichier": "rope-20k.pt", "positions": "rope", "cible": 128, "ppl": {"256": 3.0836, "512": 3.1645, "1000": 3.1662}}
+=== work/n2j/base-34m-canal.pt --sortie work/n2ac/queue-absolu.json ===
+  contexte  256 · PPL des 128 derniers octets 3.2849
+  contexte  512 · PPL des 128 derniers octets 3.8468
+  contexte 1000 · PPL des 128 derniers octets 18.6055
+{"fichier": "base-34m-canal.pt", "positions": "absolues", "cible": 128, "ppl": {"256": 3.2849, "512": 3.8468, "1000": 18.6055}}
+17:03:00
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle décisif obtenu ; état des runs
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- g2 ---\"; tail -2 work/n2ac/rope-20k-g2.log; echo \"--- abs1152 ---\"; tail -1 work/n2ac/absolu-pos1152.log; echo \"--- chaine ---\"; cat work/n2ac/chaine_r1.out; echo \"--- 200k ---\"; tail -1 work/n2ac/mix-200k.log", "de … [31 caractères tronqués]`
+
+  ```
+17:03:22
+--- g2 ---
+pas  10450 · perte 1.2837 · PPL val 3.591 · 893 s
+pas  10500 · perte 1.1706 · PPL val 3.609 · 898 s
+--- abs1152 ---
+pas 4650 · perte 1.2937 · PPL val 4.103 · 525 s
+--- chaine ---
+--- 200k ---
+pas 42100 · perte 1.2449 · PPL val 3.578 · 2405 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -E \"^pas (60000|70000|80000) ·\" work/n2ac/mix-200k.log | sed 's/ · / | /g'; echo \"--- 60k run ---\"; grep -E \"^pas 60000 ·\" work/n2w/mix-60k.log", "description": "Compare val PPL at 60k between runs"}`
+
+  ```
+--- 60k run ---
+pas 60000 · perte 1.2579 · PPL val 3.480 · 3221 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"pas 59\\|pas 60\\|pas 61\" work/n2ac/mix-200k.log | head -12; echo \"--- count lines ---\"; wc -l work/n2ac/mix-200k.log; head -3 work/n2ac/mix-200k.log", "description": "Inspect log around step 60000"}`
+
+  ```
+122:pas 5900 · perte 1.7878 · PPL val 5.306 · 333 s
+123:pas 5950 · perte 1.8609 · PPL val 5.257 · 336 s
+124:pas 6000 · perte 1.7293 · PPL val 5.161 · 339 s
+125:pas 6050 · perte 1.5349 · PPL val 5.209 · 342 s
+126:pas 6100 · perte 2.0002 · PPL val 5.231 · 344 s
+127:pas 6150 · perte 1.5540 · PPL val 5.219 · 347 s
+--- count lines ---
+852 work/n2ac/mix-200k.log
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_native.py:105: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  opt.step(); pertes.append(float(perte))
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -c \"pas \" work/n2ac/mix-200k.log; grep \"pas 60000\" work/n2ac/mix-200k.log; echo \"--- autour ---\"; awk '/pas 599[0-9][0-9] / || /pas 60[0-9][0-9][0-9] /' work/n2ac/mix-200k.log | head -6; echo \"--- max ---\"; tail -1 work/n2ac/mix-200k.log" … [40 caractères tronqués]`
+
+  ```
+850
+--- autour ---
+--- max ---
+pas 42450 · perte 1.2804 · PPL val 3.559 · 2424 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de l'agrégateur R1 (JSON reproductible, pas de recopie à la main)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"agrege_r11.py — assemble `reports/n2-r11.json` depuis les sorties brutes de `work/n2ac/`.\n\nRien n'est recopié à la main : chaque valeur vient d'un fichier produit par une commande\nnommée dans la fiche. Un fichier absent est simplement omis (le banc peut  … [2630 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/agrege_r11.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- g2 ---\"; tail -2 work/n2ac/rope-20k-g2.log; echo \"--- abs1152 ---\"; tail -1 work/n2ac/absolu-pos1152.log; echo \"--- chaine ---\"; cat work/n2ac/chaine_r1.out; echo \"--- 200k ---\"; tail -1 work/n2ac/mix-200 … [51 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-97]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-97", "timeout_ms": 330000, "wait": true}`
+
+  ```
+17:08:53
+--- g2 ---
+pas  13500 · perte 1.2415 · PPL val 3.640 · 1228 s
+pas  13550 · perte 1.4422 · PPL val 3.570 · 1234 s
+--- abs1152 ---
+pas 7650 · perte 1.5581 · PPL val 3.969 · 855 s
+--- chaine ---
+--- 200k ---
+pas 48150 · perte 1.2758 · PPL val 3.524 · 2738 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 330; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- g2 ---\"; tail -1 work/n2ac/rope-20k-g2.log; echo \"--- abs1152 ---\"; tail -1 work/n2ac/absolu-pos1152.log; echo \"--- chaine ---\"; cat work/n2ac/chaine_r1.out; echo \"--- 200k ---\"; tail -1 work/n2ac/mix-200 … [57 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-98]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-98", "timeout_ms": 360000, "wait": true}`
+
+  ```
+17:14:32
+--- g2 ---
+pas  16600 · perte 1.1210 · PPL val 3.560 · 1571 s
+--- abs1152 ---
+pas 10750 · perte 1.3802 · PPL val 3.871 · 1196 s
+--- chaine ---
+--- 200k ---
+pas 54450 · perte 1.2584 · PPL val 3.557 · 3076 s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche R1.1 (valeurs mesurées, compléments marqués)
+
+- **write** `{"content": "# R1.1 — Les positions relatives : la courbe de longueur s'aplatit, la table absolue explose\n\n> **Ligne de roadmap** : R1 · **Date** : 2026-11-02 · **Verdict** : remplacer la position\n> apprise **absolue** par un **RoPE** fait passer la PPL à 1 000 octets de **8,2024** à\n> **3,2545* … [7887 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-n2-r11.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- g2 ---\"; tail -2 work/n2ac/rope-20k-g2.log; cat work/n2ac/rope-20k-g2.pt.json 2>/dev/null | head -30; echo \"--- abs1152 ---\"; tail -1 work/n2ac/absolu-pos1152.log", "description": "Check g2 completion"}`
+
+  ```
+17:14:58
+--- g2 ---
+pas  16800 · perte 1.3212 · PPL val 3.595 · 1593 s
+pas  16850 · perte 1.2683 · PPL val 3.569 · 1598 s
+--- abs1152 ---
+pas 11000 · perte 1.2017 · PPL val 3.839 · 1224 s
+  ```
+
+- **bash** `{"command": "sleep 280; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- g2 ---\"; tail -1 work/n2ac/rope-20k-g2.log; cat work/n2ac/rope-20k-g2.pt.json 2>/dev/null | grep -E \"ppl_val|duree_s\"; echo \"--- chaine ---\"; cat work/n2ac/chaine_r1.out; echo \"--- abs1152 ---\"; tail -1 w … [82 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-100]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-100", "timeout_ms": 300000, "wait": true}`

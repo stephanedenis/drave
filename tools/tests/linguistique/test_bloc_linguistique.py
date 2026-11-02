@@ -102,6 +102,32 @@ class TestBlocLinguistique(unittest.TestCase):
         self.assertEqual(a.langue, "fra")
         self.assertEqual({e.niveau for e in a.etiquettes}, {"phrase", "pragmatique"})
 
+    def test_tagger_neuronal_pos_avec_faux_transport(self):
+        appels = []
+
+        def transport(invite, grammaire, max_jetons):
+            appels.append((invite, grammaire, max_jetons))
+            return '{"pos":["DET","NOUN","VERB"]}'
+
+        n = bl.NeuronalLLMPOS("faux-modele", transport=transport)
+        a = n.analyser("Le chat dort.", "fr")
+        self.assertEqual(a.source, "neuronal")
+        self.assertEqual([(e.debut, e.fin, e.type) for e in a.etiquettes],
+                         [(0, 2, "DET"), (3, 7, "NOUN"), (8, 12, "VERB")])
+        self.assertEqual(n.appels, 1)
+        self.assertIn('"pos"', appels[0][0])
+        self.assertIn("tag", appels[0][1])
+        b = n.analyser("Le chat dort.", "fr")
+        self.assertEqual(n.appels, 1, "le cache doit éviter le second appel")
+        self.assertEqual(a.json(), b.json())
+
+    def test_tagger_neuronal_pos_refus(self):
+        n = bl.NeuronalLLMPOS("faux-modele", transport=lambda *_: "pas de json")
+        a = n.analyser("Le chat dort.", "fr")
+        self.assertTrue(a.refus)
+        self.assertEqual(a.etiquettes, [])
+        self.assertEqual(a.source, "neuronal")
+
 
 if __name__ == "__main__":
     unittest.main()

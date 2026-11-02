@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 0.7 h |
+| Durée | 1.0 h |
 | Tours | 1 |
-| Messages | 127 |
-| Appels d'outils | 187 |
+| Messages | 165 |
+| Appels d'outils | 240 |
 | Fichiers touchés | 15 |
-| Commandes | 124 |
+| Commandes | 163 |
 | Sous-agents | 0 |
-| Commits | 0 |
+| Commits | 1 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu reprends la session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`. Lis son plan, AGENTS.md  et docs/pilotage/en-cours. … [394 caractères tronqués]
 
-*187 appels d'outils.* Actions notables :
+*240 appels d'outils.* Actions notables :
 
 - bash — Show repo state and recent commits
 - bash — List root and sessions tool help
@@ -41,11 +41,11 @@
 - edit `/home/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md`
 - bash — Run strict session plan check
 - bash — Inspect the unlisted active plan
-- … et 149 autres
+- … et 200 autres
 
 **Synthèse produite :**
 
-⏵ Mise à jour du plan de session : heartbeat, prochaine action, gold neuronal fait
+⏵ Commit du fait avec `git add` explicite (le hook archive/journalise automatiquement)
 
 ## 3. Travail accompli
 
@@ -53,7 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 2 |
+| `/home/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 5 |
 | `/tmp/qualif_proto.py` | 1 | 0 |
 | `/tmp/qualif_proto_srv.py` | 1 | 0 |
 | `/tmp/qualif_proto_srv2.py` | 1 | 0 |
@@ -62,11 +62,11 @@
 | `/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py` | 0 | 3 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py` | 0 | 1 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py` | 1 | 6 |
-| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-neuronal.md` | 1 | 0 |
-| `/home/stephane/GitHub/Qtrinet/reports/README.md` | 0 | 2 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-neuronal.md` | 1 | 1 |
+| `/home/stephane/GitHub/Qtrinet/reports/README.md` | 0 | 3 |
 | `/home/stephane/GitHub/Qtrinet/docs/implantation/bloc-linguistique.md` | 0 | 2 |
 | `/home/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md` | 0 | 1 |
-| `/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 8 |
+| `/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 15 |
 | `/home/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 4 |
 
 ### Commandes exécutées (échantillon)
@@ -111,7 +111,7 @@
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 84 autres
+- … et 123 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -158,12 +158,23 @@
 - **T1** `+| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v2** : rôles **contextuels** et subordonnées typées, gold **39** phrases ; analyseur **38/39** types (`
 - **T1** `| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67`
 - **T1** `30 % sur 5 types et **249 questions**) ; **R0.4** ([tête](../theorie/glossaire/entrees/tete.md) de survol) et **R0.5** ([routeur](../theorie/glossaire/entrees/routeur.md)) sont`
+- **T1** `| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurée`
+- **T1** `| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v2** : rôles **contextuels** et subordonnées typées, gold **39** phrases ; analyseur **38/39** types (9`
+- **T1** `| **R0.2** | **[contrôleur de lecture](../theorie/glossaire/entrees/controleur-de-lecture.md)** : `survol`, `balayage`, `lecture`, `relecture`, `arrêt` ; budget en octets ; classique d'abord (TOC, tit`
+- **T1** `| **R0.3** | **[banc de lecture rapide](../theorie/glossaire/entrees/banc-de-lecture-rapide.md)** : 30 documents, 5 types, 10 questions/spans gold, modes intégral/écrémage/balayage/sélectif, contrôles`
+- **T1** `-| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 langues`
+- **T1** `+| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 langues`
 
 ## 5. Erreurs rencontrées
 
-3 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : Error: could not connect to ollama server, run 'ollama serve' to start it --- total 1656188 drwxr-xr-x. 1 stephane stephane       138 15 oct 09:02 . drwxr-xr-x. 1 stephane stephane       100 15 oct 09
 - **T1** : > Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {"langue":"fr","script":"Latn","etiquettes":[{"niveau":"phrase|pragmatique|syntagme|pos","t
 - **T1** : Error: Failed to initialize samplers: std::exception  [ Prompt: 0,0 t/s | Generation: 0,0 t/s ]   Exiting... EXIT=0
+- **T1** : docs/pilotage/en-cours.md:80:- **Fait** : B13 **140/140**, gold **432**, **116 liens** ; **gold neuronal** POS **0,8483**, docs/pilotage/en-cours.md:83:- **Ce qu'elle fait** : cycle **140/140** commit
+
+## 6. Commits
+
+- B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)" 2>&1 | tail -25; echo "EXIT=${PIPESTATUS[0]}"
 

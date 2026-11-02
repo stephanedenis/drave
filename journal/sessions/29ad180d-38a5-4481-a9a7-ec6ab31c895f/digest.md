@@ -3137,3 +3137,230 @@ compteur 552
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && git commit -m \"ÉTAT — COMPTEURS AU DISQUE (552 FICHES / 639 JSON) ; LA FICHE S EST INTÉGRÉE\" -m \"Le compteur passe à 552 fiches / 639 JSON après l'intégration de la fiche S et de la fiche Pensé … [266 caractères tronqués]`
+
+  ```
+[master dca7e7a2] ÉTAT — COMPTEURS AU DISQUE (552 FICHES / 639 JSON) ; LA FICHE S EST INTÉGRÉE
+ 14 files changed, 846 insertions(+), 41 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== log ===\"; git log --oneline -3; echo \"=== status ===\"; git status --short | head -14; echo \"=== diff reports/README ===\"; git diff -- reports/README.md | head -80", "description": "Inspect final log and reports README … [7 caractères tronqués]`
+
+  ```
+=== log ===
+dca7e7a2 ÉTAT — COMPTEURS AU DISQUE (552 FICHES / 639 JSON) ; LA FICHE S EST INTÉGRÉE
+63927a03 S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES
+9223d054 ÉTAT — COMPTEURS AU DISQUE (551 FICHES / 638 JSON) ; HEARTBEAT 16 h 40
+=== status ===
+ M docs/implantation/bloc-linguistique.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/bloc_linguistique.py
+ M tools/ocr_pdf.py
+ M tools/tests/linguistique/test_bloc_linguistique.py
+?? reports/ocr-pdf-cegep-detection.json
+?? reports/pensee-gold-neuronal.json
+?? reports/rapport-pensee-gold-neuronal.md
+?? tools/detecte_scans_pdf.py
+?? tools/tests/linguistique/qualifier_neuronal.py
+=== diff reports/README ===
+diff --git a/reports/README.md b/reports/README.md
+index 38facb39..afe6102d 100644
+--- a/reports/README.md
++++ b/reports/README.md
+@@ -15,6 +15,7 @@
+ 
+ | fichier | ce qu'il porte |
+ |---|---|
++| [`rapport-pensee-gold-neuronal.md`](rapport-pensee-gold-neuronal.md) | **B13/R0.7** — le gold neuronal : tagger 7B local, cascade POS **0,944** |
+ | [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5
+… [307 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -4; echo \"=== taille ===\"; python3 tools/taille_documents.py 2>&1 | tail -6; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -3; echo … [232 caractères tronqués]`
+
+  ```
+=== revue ===
+  revue de documentation · 552 fiche(s) · 639 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== taille ===
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 2 violation(s) :
+     · reports/README.md : 2809 mots > budget 2800 (T1)
+     · T0 : 4105 mots (AGENTS + en-cours + une tâche) > budget 4 000
+=== en-cours ===
+  ❌ 2 anomalie(s) :
+     · 6 questions ouvertes > 5
+     · question sans ce qui la débloque (`→`) : **Pensée** : le tagger 7B tient-il les **syntagmes** et la *
+=== etat ===
+  état · dernier fait 63927a03 · dernier état dca7e7a2
+  ✅ aucun fait commité après le dernier état
+=== sessions ===
+exit=0
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wi
+… [50 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff docs/pilotage/en-cours.md | head -140; echo \"=== roadmap diff ===\"; git diff docs/pilotage/roadmap.md | head -60", "description": "Inspect uncommitted pilotage changes by other session"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 5c3cc9c3..7c0dd925 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -79,10 +79,17 @@
+ - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
+ - **Fait** : B13 **140/140**, gold **432**, coréférence **116 liens** ; **R0.7** — 9 niveaux,
+   **398 langues à 0,9687** ; **R4.4** — trois limites nommées.
+-- **Ce qu'elle fait** : le cycle **140/140** est committé ; reprise à **16 h 16**.
++- **Gold neuronal** : **tagger 7B local** (Qwen2.5-7B-Instruct Q4_K_M, CPU) — POS **0,8483**
++  seul ; **cascade à 0,6 : 0,9440** (20 réelles **0,9238**, 160 synthétiques **0,9471**),
++  **0 refus**, 180 appels ; [`pensee-gold-neuronal`](../../reports/rapport-pensee-gold-neuronal.md),
++  [JSON](../../reports/pensee-gold-neuronal.json).
++- **Ce qu'elle fait** : le cycle **140/140** est committé ; le **gold neuronal POS** est mesuré
++  et qualifié ; reprise à **16 h 16**.
+ - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
+-- **Prochaine action** : **gold neuronal** (modèle local) ; **DRVM/native** bloqué.
+-- **Bloquants** : **neuronal réel bloqué** (`llama-cl
+… [20270 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== S dans HEAD ===\"; git show HEAD:docs/pilotage/en-cours.md | sed -n '54,70p'; echo \"=== fiche/manifest suivis ===\"; git ls-files reports/rapport-s-analyseur-roles.md reports/s-banque-structures.json; echo \"=== commits = … [326 caractères tronqués]`
+
+  ```
+=== S dans HEAD ===
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+
+- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+- **Plan** : 1–4) ~~plan, analyseur (gold 39), export, tests 40~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Ambition** : nommer le rôle, couper la subordonnée ; un corpus qui se rejoue.
+- **Stratégie** : une règle = une phrase du gold, trois contrôles.
+- **Objectif final** : gold **39**, corpus **39**, manifeste SHA-256.
+- **Fait** : types **38/39**, rôles **99/100**, compléments **45/45** ; contrôles **64/100**,
+  **66/100**, **0,099** ; échec nommé **h033** ; **40 tests** ;
+  [`fiche`](../../reports/rapport-s-analyseur-roles.md).
+- **Ce qu'elle fait** : sous-module **`647205a`** et pointeur **`13f4e131`** committés ; corpus
+  **39** lignes (SHA `973c70a4…`) ; mode `banque` à **0** verdict humain.
+- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+- **Prochaine action** : validation humaine de la banque, puis frontière du GN (h0
+… [507 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls -la --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md reports/README.md; git log --oneline -2", "description": "Check mtimes of concurrent pilotage edits"}`
+
+  ```
+17:01
+-rw-r--r--. 1 stephane stephane 11982 17:01:03 docs/pilotage/en-cours.md
+-rw-r--r--. 1 stephane stephane 43969 16:57:52 docs/pilotage/roadmap.md
+-rw-r--r--. 1 stephane stephane 23126 17:00:10 reports/README.md
+dca7e7a2 ÉTAT — COMPTEURS AU DISQUE (552 FICHES / 639 JSON) ; LA FICHE S EST INTÉGRÉE
+63927a03 S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES
+  ```
+
+- **todo_write** `{"todos": [{"content": "Créer le plan de session S et réserver le territoire", "status": "completed"}, {"content": "Écrire le gold 39 phrases (types, rôles, subordonnées) avant les règles", "status": "completed"}, {"content": "Améliorer generateur.py : rôles contextuels, subordonnées, passif, copule … [806 caractères tronqués]`
+
+  ```
+Updated todo list: 1 pending, 0 in progress, 9 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Pilotage S committé : fiche, manifeste, `en-cours` et roadmap à jour.
+
+**Fait**
+
+- **`63927a03`** — `reports/rapport-s-analyseur-roles.md`, `reports/s-banque-structures.json`, la section S d'`en-cours`, la ligne S de la roadmap et le plan de session.
+- **`dca7e7a2`** — compteurs au disque : **552 fiches / 639 JSON**.
+- La section S porte le fait (38/39 types, 99/100 rôles, 45/45 compléments, contrôles 64/100 · 66/100 · 0,099, échec h033, corpus 39 lignes SHA `973c70a4…`, 40 tests), le pointeur `13f4e131`, le sous-module `647205a` et la prochaine action.
+- La roadmap porte S en ✅ v2, la phrase d'état, la file « jamais en attente » et la banque validée à 0 comme ligne bloquée nommée.
+
+**Contrôles au commit** : `revue_documentation.py` ✅, T0 ✅, `en-cours` 1 626 mots ✅, `verifie_en_cours.py` ✅, `sessions.py --check` ✅, `verifie_etat_a_jour.py` ✅.
+
+**À noter** : depuis le commit, la session **Pensée** écrit son gold neuronal dans `en-cours`/`roadmap` (fichiers modifiés, non committés ; mtime 17:01). Ces lignes — une 6e question, T0 à 4 105, `reports/README.md` à 2 809 — sont **son** intégration, pas celle de S : je ne les ai ni committées ni modifiées. Le hub/Pensée doit les finir en ramenant les questions à 5 et en coupant ~105 mots. Dis-moi si tu veux que je fasse cette coupe et que je commite l'ensemble.
+
+Prochaine action S inchangée : **validation humaine de la banque**, puis frontière du GN sans auxiliaire (`h033`).
+
+
+## Tour 3
+
+### 👤 Utilisateur
+
+commit l'ensemble
+
+### 🤖 Assistant
+
+⏵ Intégration de l'ensemble : je vérifie les changements en cours, je remets les compteurs et les budgets au vert, puis je commite tout.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short; echo \"=== DIFF STAT ===\"; git diff --stat; echo \"=== UNTRACKED ===\"; git status --short | grep '^??'", "description": "Full worktree status before integration"}`
+
+  ```
+M  docs/implantation/bloc-linguistique.md
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+M  reports/INDEX.md
+M  reports/README.md
+A  reports/pensee-gold-neuronal.json
+A  reports/rapport-pensee-gold-neuronal.md
+M  tools/bloc_linguistique.py
+ M tools/ocr_pdf.py
+A  tools/tests/linguistique/qualifier_neuronal.py
+M  tools/tests/linguistique/test_bloc_linguistique.py
+?? reports/ocr-pdf-cegep-detection.json
+?? reports/rapport-n2-r11.md
+?? tools/detecte_scans_pdf.py
+=== DIFF STAT ===
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md |  337 +++++++
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md |  157 +++
+ .../536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md |  258 +++++
+ .../abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md | 1018 ++++++++++++++++++++
+ .../b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md |   19 +
+ tools/ocr_pdf.py                     
+… [194 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== diff ocr_pdf ===\"; git diff -- tools/ocr_pdf.py | head -100; echo \"=== diff bloc_linguistique (stat) ===\"; git diff --stat -- tools/bloc_linguistique.py tools/tests/linguistique/ docs/implantation/bloc-linguistique.md;  … [243 caractères tronqués]`
+
+  ```
+=== diff ocr_pdf ===
+diff --git a/tools/ocr_pdf.py b/tools/ocr_pdf.py
+index c1d01419..67d7cd3e 100644
+--- a/tools/ocr_pdf.py
++++ b/tools/ocr_pdf.py
+@@ -13,6 +13,13 @@ un échantillon, pas une WER inventée.
+ Usage :
+   python3 tools/ocr_pdf.py --max-doc 20          # pilote (les 20 premiers scannés)
+   python3 tools/ocr_pdf.py                       # tous les scannés des racines
++  python3 tools/ocr_pdf.py --liste scans.txt --ouvriers 8
++      # liste explicite de scans déjà qualifiés (détection intégrale), pages en parallèle
++
++DÉTECTION. Sans `--liste`, un PDF est « scanné » si ses **deux premières pages** portent moins de
++50 caractères natifs par page. Mesure du 02/11 sur le fonds CEGEP : 807 candidats, mais 147 vrais
++scans (seuil appliqué au texte **intégral**, comme `extrait_pdf.py`) — les couvertures sans texte
++des livres natifs font sur-classer 5,5×. La liste explicite est la voie pour un run de fond.
+ """
+ from __future__ import annotations
+ 
+@@ -26,6 +33,7 @@ import subprocess
+ import sys
+ import tempfile
+ import time
++from concurrent.futures import ThreadPoolExecutor
+ 
+ RACINE = pathlib.Path(__file__).resolve().parent.parent
+ ROOT = RACINE / "work/ocr/root"
+@@ -57,7 +65,
+… [3882 caractères tronqués]
+  ```
+

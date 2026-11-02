@@ -9,6 +9,8 @@ Un seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** 
     substitution et le parallèle sans GPU ;
   - `NeuronalLLM` : l'adaptateur réel, qui interroge un modèle local (`llama-cli`) et rend le
     même type d'annotation ;
+  - `NeuronalLLMPOS` : le **tagger** neuronal réel — un modèle local, une liste de tokens, des
+    POS alignés par grammaire GBNF ; c'est l'implémentation qualifiée sur le gold ;
   - `Parallele` et `Cascade` : les deux modes de composition. Le parallèle fusionne les
     étiquettes par confiance ; la cascade n'envoie au neuronal que le **résidu** des niveaux
     que l'heuristique ne couvre pas.
@@ -29,13 +31,16 @@ from __future__ import annotations
 
 import argparse
 import collections
+import copy
 import json
 import pathlib
 import re
 import subprocess
 import sys
+import threading
 import time
 import unicodedata
+import urllib.request
 from dataclasses import dataclass, field
 from typing import Protocol, Sequence
 
@@ -861,6 +866,126 @@ class NeuronalLLM:
                           source=self.nom, trace=[{"etape": "neuronal-llm", "modele": self.modele}],
                           cout={"octets": len(texte.encode()), "etiquettes": len(etiquettes),
                                 "duree_s": round(time.perf_counter() - t0, 6)})
+
+
+CLASSES_POS = ("DET", "NOUN", "VERB", "ADJ", "ADV", "PREP", "PRON", "AUX", "CONJ",
+               "NUM", "INTJ", "PUNCT")
+
+
+def grammaire_pos(n: int) -> str:
+    """La grammaire GBNF : exactement `n` classes, dans l'ordre — le JSON ne peut pas dériver."""
+    corps = " tag" + ' ("," tag)' * (n - 1) if n > 1 else " tag"
+    texte = 'root ::= "{\\"pos\\":["' + corps + ' "]}"\n'
+    texte += "tag ::= " + " | ".join('"\\"%s\\""' % c for c in CLASSES_POS) + "\n"
+    return texte
+
+
+class NeuronalLLMPOS:
+    """Le **tagger** neuronal réel : un modèle local, des POS alignés sur la tokenisation du bloc.
+
+    Le modèle ne rend pas une annotation complète : il rend **une classe par token**, contrainte
+    par une grammaire GBNF (`grammaire_pos`) qui interdit un JSON tronqué, un token manquant ou
+    une classe hors du jeu. Les spans sont ceux de `Heuristique._mots` (la tokenisation du bloc),
+    pas ceux que le modèle inventerait ; c'est ce qui rend la mesure POS exacte.
+
+    Le modèle est servi par `llama-server` (`/v1/chat/completions`, `grammar`) : le serveur est
+    lancé une fois, le modèle chargé une fois, et les 180 phrases coûtent une passe CPU, pas
+    180 chargements. `transport` est injectable pour tester le contrat sans modèle.
+
+    La confiance par défaut (`0.6`) est **celle du seuil ouvert de l'heuristique** (0.55) : dans
+    une `Cascade`, le tagger ne remplace donc que les tokens que l'heuristique déclare peu sûrs,
+    et laisse les classes fermées (0.92) à l'heuristique. C'est la politique mesurée.
+    """
+
+    nom = "neuronal"
+
+    def __init__(self, modele: str | pathlib.Path, endpoint: str = "http://127.0.0.1:18081",
+                 confiance: float = 0.6, timeout: int = 180, max_jetons: int = 0,
+                 transport=None, cache: bool = True):
+        self.modele = str(modele)
+        self.endpoint = endpoint.rstrip("/")
+        self.confiance = float(confiance)
+        self.timeout = timeout
+        self.max_jetons = max_jetons
+        self.transport = transport or self._post
+        self.cache = cache
+        self.appels = 0
+        self._cache: dict[tuple[str, str | None], Annotation] = {}
+        self._verrou = threading.Lock()
+
+    @staticmethod
+    def _tokens(texte: str) -> list[tuple[int, int, str]]:
+        return [(d, f, t) for d, f, t, typ in Heuristique._mots(texte)
+                if typ in ("mot", "nombre")]
+
+    @staticmethod
+    def _invite(tokens: Sequence[str]) -> str:
+        return ("Tu es un étiqueteur morphosyntaxique du français. Pour chaque token de la liste, "
+                "donne sa classe grammaticale. Réponds UNIQUEMENT par un objet JSON "
+                "{\"pos\":[...]} avec exactement un élément par token, dans l'ordre, sans texte "
+                "autour.\n"
+                "Classes : " + ", ".join(CLASSES_POS) + ".\n"
+                "Tokens : " + json.dumps(list(tokens), ensure_ascii=False) + "\nRéponse :")
+
+    def _post(self, invite: str, grammaire: str, max_jetons: int) -> str:
+        corps = {"messages": [{"role": "user", "content": invite}], "temperature": 0,
+                 "max_tokens": max_jetons, "grammar": grammaire}
+        requete = urllib.request.Request(
+            self.endpoint + "/v1/chat/completions",
+            data=json.dumps(corps).encode("utf-8"),
+            headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(requete, timeout=self.timeout) as reponse:
+            sortie = json.loads(reponse.read().decode("utf-8"))
+        return sortie["choices"][0]["message"]["content"]
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        t0 = time.perf_counter()
+        script = detecter_script(texte)
+        lg = langue or "und"
+        if not texte.strip():
+            return Annotation(texte=texte, langue=lg, script=script, refus="vide", source=self.nom)
+        cle = (texte, langue)
+        if self.cache and cle in self._cache:
+            return copy.deepcopy(self._cache[cle])
+        tokens = self._tokens(texte)
+        if not tokens:
+            return Annotation(texte=texte, langue=lg, script=script, refus="vide", source=self.nom)
+        noms = [t for _, _, t in tokens]
+        grammaire = grammaire_pos(len(noms))
+        max_jetons = self.max_jetons or max(32, 6 * len(noms))
+        try:
+            with self._verrou:
+                self.appels += 1
+            sortie = self.transport(self._invite(noms), grammaire, max_jetons)
+            debut, fin = sortie.find("{"), sortie.rfind("}")
+            if debut < 0 or fin <= debut:
+                raise ValueError(f"pas de JSON : {sortie[:120]!r}")
+            pos = json.loads(sortie[debut:fin + 1]).get("pos")
+            if not isinstance(pos, list) or len(pos) != len(tokens):
+                raise ValueError(f"longueur POS {len(pos) if isinstance(pos, list) else '?'}"
+                                 f" / {len(tokens)}")
+            etiquettes = []
+            for (d, f, mot), classe in zip(tokens, pos):
+                classe = str(classe).upper()
+                if classe not in CLASSES_POS:
+                    raise ValueError(f"classe inconnue : {classe!r}")
+                etiquettes.append(Etiquette("pos", classe, mot, d, f, self.nom, self.confiance,
+                                            langue=lg, script=script, meta={"modele": True}))
+            annotation = Annotation(texte=texte, langue=lg, script=script, etiquettes=etiquettes,
+                                    source=self.nom,
+                                    trace=[{"etape": "neuronal-pos", "modele": self.modele}],
+                                    cout={"octets": len(texte.encode()), "tokens": len(tokens),
+                                          "duree_s": round(time.perf_counter() - t0, 6)})
+        except Exception as e:
+            annotation = Annotation(texte=texte, langue=lg, script=script, source=self.nom,
+                                    refus=f"neuronal-pos: {type(e).__name__}: {str(e)[:160]}",
+                                    trace=[{"etape": "neuronal-pos", "erreur": str(e)[:160]}],
+                                    cout={"octets": len(texte.encode()),
+                                          "duree_s": round(time.perf_counter() - t0, 6)})
+        if self.cache:
+            self._cache[cle] = annotation
+        return annotation
 
 
 # --------------------------------------------------------------------------- compositions

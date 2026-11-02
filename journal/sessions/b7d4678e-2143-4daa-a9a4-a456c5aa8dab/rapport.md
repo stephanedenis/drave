@@ -7,10 +7,10 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 0.6 h |
+| Durée | 0.9 h |
 | Tours | 2 |
-| Messages | 132 |
-| Appels d'outils | 151 |
+| Messages | 134 |
+| Appels d'outils | 153 |
 | Fichiers touchés | 5 |
 | Commandes | 102 |
 | Sous-agents | 0 |
@@ -49,7 +49,7 @@
 
 ### Tour 2 — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État  … [367 caractères tronqués]
 
-*140 appels d'outils.* Actions notables :
+*142 appels d'outils.* Actions notables :
 
 - read
 - get_goal

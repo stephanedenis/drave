@@ -135,13 +135,20 @@ Deux objets, un même contrat :
 - **`NeuronalLLM`** : l'**adaptateur réel**. Il construit un prompt JSON, appelle un modèle local
   (`llama-cli`), parse la réponse et la convertit en `Annotation` ; si le modèle est absent, ne
   répond pas ou rend un JSON invalide, il lève `RefusNeuronal` — il ne simule pas.
+- **`NeuronalLLMPOS`** : le **tagger réel qualifié**. Il tokenise avec `Heuristique._mots` (mots
+  et nombres), envoie la liste des tokens à un `llama-server` local et impose par **grammaire
+  GBNF** une classe POS par token, dans l'ordre. Les spans sont ceux de la tokenisation du bloc ;
+  le modèle ne les invente pas. La confiance par défaut (0,6) le destine à la **cascade** : il ne
+  remplace que les tokens que l'heuristique déclare peu sûrs, et laisse les classes fermées à
+  l'heuristique.
 
-**Ce que le modèle local a fait ici.** L'adaptateur est **livré et testé** avec un faux
-`llama-cli` (un script qui rend le JSON attendu) : le chemin de parsing, la source, la langue et
-les étiquettes sont vérifiés. Le **vrai** `Qwen2.5-0.5B` local n'a pas fini dans le délai
-(110 s, puis 35 s en CPU pur) : sa **qualité n'est donc pas revendiquée**. C'est une limite
-d'environnement, pas un résultat ; la prochaine campagne doit qualifier un modèle (ou un
-tagger) sur un gold.
+**Ce que le modèle local a fait ici.** Le vrai Qwen2.5-0.5B (de base) ne suit pas le format : il
+recopie le schéma du prompt et ne rend pas de POS exploitables ; le 3B-Instruct est dominé sur les
+20 phrases réelles (0,667). Le **7B-Instruct Q4_K_M** est le plus petit modèle testé qui qualifie
+le contrat : POS seul **0,8483**, et en **cascade à 0,6** sur le gold de 180 phrases (**0,9440**,
+sans régression sur les réelles). Le tagger ne rend que le niveau **POS** ; les syntagmes, la
+pragmatique et l'annotation complète restent à mesurer. Les chiffres, les contrôles et les limites
+sont dans [`rapport-pensee-gold-neuronal.md`](../../reports/rapport-pensee-gold-neuronal.md).
 
 ## 6. Substituer, paralléliser, cascader
 
@@ -155,7 +162,8 @@ Le consommateur écrit :
 annotation = bloc.analyser(texte, langue="fr")
 ```
 
-et `bloc` peut être `Heuristique`, `MockNeuronal`, `NeuronalLLM`, `Parallele` ou `Cascade`. Le
+et `bloc` peut être `Heuristique`, `MockNeuronal`, `NeuronalLLM`, `NeuronalLLMPOS`, `Parallele`
+ou `Cascade`. Le
 test `test_substitution` vérifie que `Heuristique` et `MockNeuronal` rendent **le même schéma**
 (mêmes clés, mêmes spans valides) et que seules la `source` et les valeurs changent.
 

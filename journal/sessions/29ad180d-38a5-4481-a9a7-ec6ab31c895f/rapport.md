@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 0.7 h |
-| Tours | 2 |
-| Messages | 143 |
-| Appels d'outils | 158 |
+| Durée | 1.0 h |
+| Tours | 3 |
+| Messages | 152 |
+| Appels d'outils | 168 |
 | Fichiers touchés | 9 |
-| Commandes | 102 |
+| Commandes | 111 |
 | Sous-agents | 0 |
 | Commits | 6 |
 | Compactages de contexte | 0 |
@@ -22,6 +22,8 @@
 **Tour 1** — Tu es la session S (les structures, CPU). Lis AGENTS.md, docs/pilotage/en-cours.md,  docs/theorie/jeux-symboliques.md et tools/structures/ (sous-module heads/fusion). Ton id est  dans `printenv DSH_SESSION_ID` ; crée journal/sessions/<id>/plan.md avec  `python3 tools/sessions.py --modele` (État : actif, heartbeat maintenant), réserve  `tools/structures/`, ses exports et sa banque. Prochaine action … [285 caractères tronqués]
 
 **Tour 2** — mets le dossier copilotage à jour
+
+**Tour 3** — commit l'ensemble
 
 ## 2. Déroulé, étape par étape
 
@@ -77,7 +79,7 @@ Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && 
 
 ### Tour 2 — mets le dossier copilotage à jour
 
-*29 appels d'outils.* Actions notables :
+*35 appels d'outils.* Actions notables :
 
 - read
 - bash — Get current report/JSON counts before editing state
@@ -93,11 +95,37 @@ Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && 
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md`
 - bash — Run documentation and state checks after edits
 - bash — Run tables and size checks, inspect diff
-- … et 13 autres
+- … et 19 autres
 
 **Synthèse produite :**
 
-⏵ Mise à jour de `docs/pilotage/` : état S, compteurs et roadmap, puis commit avec la fiche.
+⏵ Pilotage S committé : fiche, manifeste, `en-cours` et roadmap à jour.
+
+**Fait**
+
+- **`63927a03`** — `reports/rapport-s-analyseur-roles.md`, `reports/s-banque-structures.json`, la section S d'`en-cours`, la ligne S de la roadmap et le plan de session.
+- **`dca7e7a2`** — compteurs au disque : **552 fiches / 639 JSON**.
+- La section S porte le fait (38/39 types, 99/100 rôles, 45/45 compléments, contrôles 64/100 · 66/100 · 0,099, échec h033, corpus 39 lignes SHA `973c70a4…`, 40 tests), le pointeur `13f4e131`, le sous-module `647205a` et la prochaine action.
+- La roadmap porte S en ✅ v2, la phrase d'état, la file « jamais en attente » et la banque validée à 0 comme ligne bloquée nommée.
+
+**Contrôles au commit** : `revue_documentation.py` ✅, T0 ✅, `en-cours` 1 626 mots ✅, `verifie_en_cours.py` ✅, `sessions.py --check` ✅, `verifie_etat_a_jour.py` ✅.
+
+**À noter** : depuis le commit, la session **Pensée** écrit son gold neuronal dans `en-cours`/`roadmap` (fichiers modifiés, non committés ; mtime 17:01). Ces lignes — une 6e question, T0 à 4 105, `reports/README.md` à 2 809 — sont **son** intégration, pas celle de S : je ne les ai ni committées ni modifiées. Le hub/Pensée doit les finir en ramenant les questions à 5 et en coupant ~105 mots. Dis-moi si tu veux que je fasse cette coupe et que je commite l'ensemble.
+
+Prochaine action S inchangée : **validation humaine de la banque**, puis frontière du GN sans auxiliaire (`h033`).
+
+### Tour 3 — commit l'ensemble
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Full worktree status before integration
+- bash — Inspect other sessions' diffs
+- bash — Inspect staged integration diff
+- bash — Inspect untracked N2/OCR files and indices
+
+**Synthèse produite :**
+
+⏵ Intégration de l'ensemble : je vérifie les changements en cours, je remets les compteurs et les budgets au vert, puis je commite tout.
 
 ## 3. Travail accompli
 
@@ -157,7 +185,7 @@ Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && 
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 62 autres
+- … et 71 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -167,6 +195,22 @@ Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && 
 - **T1** `129:- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (niveaux 0–4), export ; analyseur **7/7** séquences, **93,9 %** de couverture, **19 tests** ; [`analyseur``
 - **T1** `[still running after 60000ms; moved to background job bash-67]`
 - **T2** `34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v2** : rôles **contextuels** et subordonnées typées, gold **39** phrases ; analyseur **38/39** types`
+- **T2** `| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurée`
+- **T2** `| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; `
+- **T2** `| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v2** : rôles **contextuels** et subordonnées typées, gold **39** phrases ; analyseur **38/39** types (9`
+- **T2** `| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67`
+- **T2** `| **B11** | la base d'universaux typés : schéma, [parseur](../theorie/glossaire/entrees/parseur.md), codec, contexte | ✅ | **B11.10 close** (cartes, ambiguïtés refusées) ; le codec lit **100 %** |`
+- **T2** `| **C3.2** | les modules par famille de langues | ✅ | aucune — **7/9 > 30 %**, moyenne **69,5 %**, contrôle **≤ 0,5 %** |`
+- **T2** `**Ce qui compte pour R** : le **codec classique** lit **100 %** des surfaces ; c'est la preuve qu'un bloc`
+- **T2** `| **R0.2** | **[contrôleur de lecture](../theorie/glossaire/entrees/controleur-de-lecture.md)** : `survol`, `balayage`, `lecture`, `relecture`, `arrêt` ; budget en octets ; classique d'abord (TOC, tit`
+- **T2** `| **R0.3** | **[banc de lecture rapide](../theorie/glossaire/entrees/banc-de-lecture-rapide.md)** : 30 documents, 5 types, 10 questions/spans gold, modes intégral/écrémage/balayage/sélectif, contrôles`
+- **T2** `-| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 langues`
+- **T2** `+| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 langues`
+- **T3** `**20 000 pas** × 8 × 128, lr 3e-4, graine 1, canal de structure — exactement la recette de`
+- **T3** `- **Corpus** : `data/wiki_fr/propre/train.txt` (186 Mo) et son canal ; validation appariée`
+- **T3** `8 lots × 16 fenêtres. Le **témoin** est le point N2.z (`base-34m-canal.pt`), repassé dans le`
+- **T3** `| [rapport-pensee-hasard.md](rapport-pensee-hasard.md) | B13 — le hasard variable : 20–60 %, 20/20 à chaque taux |`
+- **T3** `| [rapport-s-analyseur.md](rapport-s-analyseur.md) | S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture |`
 
 ## 5. Erreurs rencontrées
 
