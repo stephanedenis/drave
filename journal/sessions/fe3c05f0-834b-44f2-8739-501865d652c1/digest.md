@@ -17594,3 +17594,4 @@ tesseract 5.5.3
 ocr job 1616198
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 55); do [ -f reports/ocr-pdf.json ] && break; sleep 15; done; echo \"attente $((i*15))s\"; tail -25 /tmp/ocr-pilote.log; echo \"=== manifest\"; python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('reports/ocr-pdf.jso … [467 caractères tronqués]`

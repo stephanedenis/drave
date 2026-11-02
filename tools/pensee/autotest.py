@@ -346,6 +346,20 @@ def t15_stochastique() -> tuple[bool, str]:
                 f"sonde {b['par_operateur'].get('sonde', 0)}")
 
 
+def t16_sto_seule() -> tuple[bool, str]:
+    """La politique seule sur le bruit : elle réessaie et atteint le but."""
+    from .courbe import seule_sto
+    from .operateurs import PolitiqueApprise
+    ok = []
+    for ep in (50, 100, 200):
+        for g in (0, 1, 2):
+            p = PolitiqueApprise(episodes=ep, graine=g)
+            p.apprendre()
+            ok.append(seule_sto(p, graine=g)[0])
+    return all(ok) and len(ok) == 9, (f"politique seule stochastique : {sum(ok)}/{len(ok)} "
+                                     f"buts (8–10 pas)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -360,7 +374,8 @@ def main() -> int:
               ("T12 porte apprise", t12_porte_apprise()),
               ("T13 courbe d'apprentissage", t13_courbe()),
               ("T14 politique seule", t14_seule()),
-              ("T15 porte stochastique", t15_stochastique())]
+              ("T15 porte stochastique", t15_stochastique()),
+              ("T16 politique seule sur le bruit", t16_sto_seule())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

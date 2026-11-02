@@ -14108,3 +14108,137 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [995 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 240 python3 -m tools.pensee.autotest EXIT=0
+[still running after 60000ms; moved to background job bash-506]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-506", "timeout_ms": 600000, "wait": true}`
+
+  ```
+27 files changed, 424 insertions(+), 53 deletions(-)
+ create mode 100644 reports/pensee-stochastique.json
+ create mode 100644 reports/rapport-pensee-stochastique.md
+COMMIT OK 1
+f9c112fd B13 — LA PORTE STOCHASTIQUE : 80 %, 30 NŒUDS/BUT, SONDE 7 ; 18/18
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte stochastique : 80 %, 30 nœuds/but, sonde 7 ; 18/18
+
+Le round 19 du goal est livré : la **porte stochastique** à 80 % ne bloque pas la politique apprise. Commit **`f9c112fd`**.
+
+## La porte stochastique
+
+Même labyrinthe que T11, mais `sonde_p_sto` ouvre la porte avec **80 %** de probabilité ; en cas d'échec, l'état **reste** (la politique doit réessayer). La politique est celle de T12 (200 épisodes, graine 0), entraînée sur la porte **déterministe**.
+
+| essai | nœuds | sonde | coût | but |
+|---|---:|---:|---:|---|
+| **apprise + A*** | **30** | **7** | **68** | **oui** |
+
+**Ce que ça dit** :
+
+- **Le bruit ne bloque pas** : l'A* explore et la sonde réessaie ; le but est atteint en 30 nœuds, comme sur la porte déterministe.
+- **La politique apprise transfère** : elle n'a pas été entraînée sur le bruit, mais elle vise toujours la porte ; le moteur gère les échecs.
+- **Le coût est identique** (68) : les 7 appels de sonde incluent les essais.
+- **Le vrai test serait la politique seule** sur le bruit : elle peut tourner si la porte résiste ; c'est la prochaine mesure.
+
+## L'état
+
+- Fiche : [`rapport-pensee-stochastique.md`](../../reports/rapport-pensee-stochastique.md) ; JSON [`pensee-stochastique.json`](../../reports/pensee-stochastique.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T15 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **18/18 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **405 fiches / 506 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+## La suite
+
+1. **La politique seule sur le bruit** : combien de fois tourne-t-elle avant d'ouvrir ?
+2. **Porte qui se referme** : après un pas, la porte se referme ; le moteur doit repasser.
+3. **Porte apprise avec le bruit** : entraîner sur la porte stochastique.
+4. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round mesure la politique seule sur le bruit.
+
+
+## Tour 33
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 20/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/courbe.py'); t=p.read_text()\nt=t.replace(\"\"\"from .moteur import AStar\"\"\", \"\"\"import random\n\nfrom .moteur import AStar\"\"\")\nt=t … [1941 caractères tronqués]`
+
+  ```
+f9c112fd B13 — LA PORTE STOCHASTIQUE : 80 %, 30 NŒUDS/BUT, SONDE 7 ; 18/18
+ok
+  50 ep g0  Q  52   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/9 (2 essais)
+  50 ep g1  Q  61   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/8 (1 essais)
+  50 ep g2  Q  74   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/10 (3 essais)
+ 100 ep g0  Q  52   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/9 (2 essais)
+ 100 ep g1  Q  61   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/8 (1 essais)
+ 100 ep g2  Q  74   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/10 (3 essais)
+ 200 ep g0  Q  67   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/9 (2 essais)
+ 200 ep g1  Q  61   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/8 (1 essais)
+ 200 ep g2  Q  74   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/10 (3 essais)
+ 400 ep g0  Q  69   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/9 (2 essais)
+ 400 ep g1  Q  62   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/8 (1 essais)
+ 400 ep g2  Q  83   30 nœuds  sonde  7  c
+… [359 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T15 la porte stochastique           la porte s'ouvre à 80 % ; la politique doit réessayer\\n\",\n\"  T15 la porte stochast … [1386 caractères tronqués]`
+
+  ```
+ok
+  ✅ T14 politique seule    politique seule : 9/9 buts, 8 pas
+  ✅ T15 porte stochastique porte stochastique : 30 nœuds/but, sonde 7
+  ✅ T16 politique seule sur le bruit politique seule stochastique : 9/9 buts (8–10 pas)
+  19/19 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-sto-seule.md <<'MD'\n# B13 — la politique seule sur le bruit : elle réessaie et atteint le but\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **19/19 p … [6060 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 507 JSON, le disque en a 506
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text().replace(\"| fichiers / JSON de résultats | **406** / **507** |\", \"| fichiers / JSON de résultats | **406** / **506** |\")\np.write_text( … [594 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 406 fiche(s) · 506 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 240 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/pensee/courbe.py tools/pensee/autotest.py reports/rapport-pensee-sto-seule.md reports/pensee-courbe.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/p … [490 caractères tronqués]`

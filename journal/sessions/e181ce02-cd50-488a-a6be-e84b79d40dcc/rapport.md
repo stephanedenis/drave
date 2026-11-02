@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 28.1 h |
-| Tours | 32 |
-| Messages | 637 |
-| Appels d'outils | 630 |
+| Durée | 28.2 h |
+| Tours | 33 |
+| Messages | 645 |
+| Appels d'outils | 636 |
 | Fichiers touchés | 25 |
-| Commandes | 506 |
+| Commandes | 511 |
 | Sous-agents | 2 |
-| Commits | 47 |
+| Commits | 48 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -95,6 +95,8 @@
 **Tour 31** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 32** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 33** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1733,6 +1735,54 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Passer les portes et committer la porte stochastique
 - job_output
 
+**Synthèse produite :**
+
+⏵ Porte stochastique : 80 %, 30 nœuds/but, sonde 7 ; 18/18
+
+Le round 19 du goal est livré : la **porte stochastique** à 80 % ne bloque pas la politique apprise. Commit **`f9c112fd`**.
+
+\## La porte stochastique
+
+Même labyrinthe que T11, mais `sonde_p_sto` ouvre la porte avec **80 %** de probabilité ; en cas d'échec, l'état **reste** (la politique doit réessayer). La politique est celle de T12 (200 épisodes, graine 0), entraînée sur la porte **déterministe**.
+
+| essai | nœuds | sonde | coût | but |
+|---|---:|---:|---:|---|
+| **apprise + A*** | **30** | **7** | **68** | **oui** |
+
+**Ce que ça dit** :
+
+- **Le bruit ne bloque pas** : l'A* explore et la sonde réessaie ; le but est atteint en 30 nœuds, comme sur la porte déterministe.
+- **La politique apprise transfère** : elle n'a pas été entraînée sur le bruit, mais elle vise toujours la porte ; le moteur gère les échecs.
+- **Le coût est identique** (68) : les 7 appels de sonde incluent les essais.
+- **Le vrai test serait la politique seule** sur le bruit : elle peut tourner si la porte résiste ; c'est la prochaine mesure.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-stochastique.md`](../../reports/rapport-pensee-stochastique.md) ; JSON [`pensee-stochastique.json`](../../reports/pensee-stochastique.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T15 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **18/18 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **405 fiches / 506 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+\## La suite
+
+1. **La politique seule sur le bruit** : combien de fois tourne-t-elle avant d'ouvrir ?
+2. **Porte qui se referme** : après un pas, la porte se referme ; le moteur doit repasser.
+3. **Porte apprise avec le bruit** : entraîner sur la porte stochastique.
+4. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round mesure la politique seule sur le bruit.
+
+### Tour 33 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Mesurer la politique seule sur la porte stochastique
+- bash — Ajouter la porte T16 et lancer l'autotest
+- bash — Écrire la fiche de la politique seule sur le bruit
+- bash — Aligner le compteur et passer les portes
+- bash — Committer la politique seule sur le bruit
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1812,7 +1862,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 466 autres
+- … et 471 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2004,4 +2054,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LA COURBE : 15/15 BUTS (50–800 ÉPISODES × 3 GRAINES), 30 NŒUDS, Q 52–83 ; 16/16" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA COURBE"; then 
 - B13 — LA POLITIQUE SEULE : 8 PAS, 15/15 BUTS SANS A* ; 17/17" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "POLITIQUE SEULE"; then echo "COMMIT OK $i"
 - B13 — LA PORTE STOCHASTIQUE : 80 %, 30 NŒUDS/BUT, SONDE 7 ; 18/18" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE STOCHASTIQUE"; then echo "COMMI
+- B13 — LA POLITIQUE SEULE SUR LE BRUIT : 8–10 PAS, 1–3 ESSAIS, 15/15 BUTS ; 19/19" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SUR LE BRUIT"; then ec
 

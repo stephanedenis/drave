@@ -15151,3 +15151,23 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-884", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E-g*.pt work/n2k/M-g*.pt 2>/dev/null; for f in E-g1 E-g2 E-g3 M-g1; do echo \"-- $f\"; tail -1 work/n2k/$f.log 2>/dev/null; done", "description": "Check the English students"}`
+
+  ```
+20:48
+-- E-g1
+pas 11500 · seq 128 · perte 20.8390 · PPL 128/4 4.5767 · 793 s
+-- E-g2
+pas 11250 · seq 128 · perte 22.0881 · PPL 128/4 4.6000 · 800 s
+-- E-g3
+-- M-g1
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 720; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E-g*.pt 2>/dev/null; ls work/n2k/route-en 2>/dev/null | head -2; for f in E-g1 E-g2 E-g3 M-g1 M-g2; do echo \"-- $f\"; tail -1 work/n2k/$f.log 2>/dev/null; done", "description": "Wait for the Eng … [25 caractères tronqués]`
