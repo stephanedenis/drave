@@ -1,0 +1,33 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "78/78",
+ "seuil": "gradué (~0,40)",
+ "lignes": [
+  {
+   "facteur": 0.36,
+   "buts": 20,
+   "runs": 25
+  },
+  {
+   "facteur": 0.38,
+   "buts": 20,
+   "runs": 25
+  },
+  {
+   "facteur": 0.4,
+   "buts": 25,
+   "runs": 25
+  },
+  {
+   "facteur": 0.41,
+   "buts": 25,
+   "runs": 25
+  }
+ ],
+ "limites": [
+  "5 graines",
+  "bord exact non localisé",
+  "toy"
+ ]
+}

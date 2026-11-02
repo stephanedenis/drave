@@ -105,6 +105,24 @@ def executer_bord(graines: int = 10) -> list[dict]:
     return lignes
 
 
+def executer_bas(graines: int = 5) -> list[dict]:
+    """Le seuil bas : facteurs 0,36 / 0,38 / 0,40 / 0,41, 5 graines, 5 exécutions."""
+    lignes = []
+    for fac in (0.36, 0.38, 0.40, 0.41):
+        buts, runs = 0, 0
+        for g in range(graines):
+            p = PolitiqueAppriseBayesOubliSeuil(episodes=4000, graine=g, facteur=fac)
+            p.apprendre()
+            for h in range(5):
+                p.rng.seed(2000 + h)
+                b, _ = seule_bayes_oubli_seuil(p)
+                buts += b
+                runs += 1
+        lignes.append({"facteur": fac, "buts": buts, "runs": runs,
+                       "taux": round(buts / runs, 3)})
+    return lignes
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--json", default="")
@@ -114,6 +132,16 @@ def main() -> int:
         print(f"graine {l['graine']}  Q {l['etats_q']:3d}  "
               f"bruit {l['sto_but']}/{l['sto_pas']} pas ({l['sto_essais']} essais)  "
               f"stable {l['stable_but']}/{l['stable_pas']} pas")
+    if args.json and "bas" in args.json:
+        lignes_b = executer_bas()
+        for l in lignes_b:
+            print(f"facteur {l['facteur']}  {l['buts']}/{l['runs']} buts")
+        p = pathlib.Path(args.json)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps({"date": "2026-11-02", "ligne": "B13",
+                                 "graines": list(range(5)), "lignes": lignes_b},
+                                ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        return 0
     if args.json and "bord" in args.json:
         lignes_b = executer_bord()
         for l in lignes_b:

@@ -1186,6 +1186,16 @@ def t74_bord() -> tuple[bool, str]:
                 f"×0,44 {lignes[1]['buts']}/{lignes[1]['runs']}")
 
 
+def t75_bas() -> tuple[bool, str]:
+    """Le seuil bas : × 0,36 (20/25) et × 0,40 (25/25) — le seuil est gradué."""
+    from .graines import executer_bas
+    lignes = executer_bas()
+    par = {l["facteur"]: l for l in lignes}
+    ok = par[0.40]["buts"] == 25 and par[0.36]["buts"] < 25
+    return ok, (f"seuil bas : ×0,36 {par[0.36]['buts']}/25, "
+                f"×0,40 {par[0.40]['buts']}/25")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1259,7 +1269,8 @@ def main() -> int:
               ("T71 seuil d'oubli", t71_seuil()),
               ("T72 seuil fin", t72_seuil_fin()),
               ("T73 seuil sur 5 graines", t73_seuil_graines()),
-              ("T74 bord du seuil", t74_bord())]
+              ("T74 bord du seuil", t74_bord()),
+              ("T75 seuil bas", t75_bas())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

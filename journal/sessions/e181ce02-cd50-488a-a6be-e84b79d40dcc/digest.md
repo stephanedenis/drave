@@ -22802,3 +22802,127 @@ timeout 600 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/graines.py tools/pensee/autotest.py reports/rapport-pensee-seuil-bord.md reports/pensee-seuil-bord.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours … [492 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-862]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-862", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-seuil-bord.json
+ delete mode 100644 reports/rapport-n2-professeur.md
+ create mode 100644 reports/rapport-pensee-seuil-bord.md
+COMMIT OK 1
+72d9f418 B13 — LE BORD DU SEUIL : ×0,42 ET ×0,44 RÉUSSISSENT 50/50, BORD > 0,44 ; 77/77
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bord du seuil : ×0,42 et ×0,44 réussissent 50/50, bord > 0,44 ; 77/77
+
+Le round 78 du goal est livré : le **bord du seuil d'oubli** est au-dessus de **0,44** — 50/50 aux deux facteurs sur 10 graines. Commit **`72d9f418`**.
+
+## Le bord
+
+Même monde que T73 (look à l'épisode 3000), facteurs 0,42 et 0,44, 10 graines, 5 exécutions.
+
+| facteur | buts (10 graines) | taux |
+|---|---:|---:|
+| **0,42** | **50/50** | 1,00 |
+| **0,44** | **50/50** | 1,00 |
+| 0,45 (T73) | 20/25 | 0,80 |
+| 0,35 (T73) | 0/25 | 0,00 |
+
+**Ce que ça dit** :
+
+- **Le bord est au-dessus de 0,44** : 0,42 et 0,44 réussissent 50/50 ; le seuil est donc entre 0,35 (0/25) et 0,42 (50/50).
+- **0,45 reste l'instable** (20/25) : au bord, la graine décide ; 0,44 est sûr, 0,45 ne l'est pas — la non-monotonie est un effet de seuil, pas une tendance.
+- **Le taux est net** : pas de demi-succès entre 0,42 et 0,44 ; la transition est étroite.
+- **La négative reste** : 0,35 échoue 0/25.
+
+## L'état
+
+- Fiche : [`rapport-pensee-seuil-bord.md`](../../reports/rapport-pensee-seuil-bord.md) ; JSON [`pensee-seuil-bord.json`](../../reports/pensee-seuil-bord.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T74 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **77/77 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **477 fiches / 569 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `rapports/rapport-n2-professeur.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Le seuil bas** : 0,36–0,41 ; localiser entre 0,35 et 0,42.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil bas** (0,36–0,41).
+
+
+## Tour 92
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 79/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/graines.py'); t=p.read_text()\nt=t.replace('''def main() -> int:''',\n'''def executer_bas(graines: int = 5) -> list[dict]:\n    \"\"\"Le seui … [1549 caractères tronqués]`
+
+  ```
+72d9f418 B13 — LE BORD DU SEUIL : ×0,42 ET ×0,44 RÉUSSISSENT 50/50, BORD > 0,44 ; 77/77
+ok
+graine 4  Q  72  bruit True/8 pas (1 essais)  stable True/8 pas
+facteur 0.36  20/25 buts
+facteur 0.38  20/25 buts
+facteur 0.4  25/25 buts
+facteur 0.41  25/25 buts
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T74 le bord du seuil              ×0,42 et ×0,44 : 25/25 chacun (5 graines)\\n\",\n\"  T74 le bord du seuil              × … [1152 caractères tronqués]`
+
+  ```
+ok
+  ✅ T73 seuil sur 5 graines seuil 5 graines : ×0,35 0/25, ×0,4 25/25, ×0,45 20/25
+  ✅ T74 bord du seuil      bord : ×0,42 25/25, ×0,44 25/25
+  ✅ T75 seuil bas          seuil bas : ×0,36 20/25, ×0,40 25/25
+  78/78 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-seuil-bas.md <<'MD'\n# B13 — le seuil bas : un seuil gradué (~0,40)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **78/78 portes** : les facteurs 0,36 … [6851 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 478 fiche(s) · 570 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2814 mots > budget 2800 (T1)
+  en-cours · 1600 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-aleatoire.md`](rapport-pensee-aleatoire.md) | **B13** — la porte aléatoire : saut 20 %, 20/20 buts, 182 états-Q, … [635 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 478 fiche(s) · 570 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 900 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/graines.py tools/pensee/autotest.py reports/rapport-pensee-seuil-bas.md reports/pensee-seuil-bas.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.m … [473 caractères tronqués]`

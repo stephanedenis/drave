@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (25)
+## Commits du jour (26)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -33,17 +33,18 @@
 | 01:39 | `4d81e21e` | B13 — LE SEUIL FIN : ×0,4 RÉUSSIT, ×0,45 ÉCHOUE (NON MONOTONE) ; 75/75 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+21) |
 | 01:45 | `a2cae633` | B13 — LE SEUIL SUR 5 GRAINES : ×0,35 0/25, ×0,4 25/25, SEUIL ~0,4 ; 76/76 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 | 01:48 | `d7417dc4` | N2.u — LE PROFESSEUR PLUS GROS NE CHANGE PRESQUE RIEN EN DOMAINE, MAIS GAGNE 0,3 HORS DOMAINE | `en-cours.md`, `README.md`, `apprentissage.md` (+17) |
+| 01:51 | `72d9f418` | B13 — LE BORD DU SEUIL : ×0,42 ET ×0,44 RÉUSSISSENT 50/50, BORD > 0,44 ; 77/77 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
 
 ## Chiffres du jour
 
-`×0,35` · `×0,4` · `×0,45` · `×0,5` · `×0,2` · `0,1 %` · `1 %` · `10 %` · `90 %` · `5 %` · `50 %`
+`×0,42` · `×0,44` · `×0,35` · `×0,4` · `×0,45` · `×0,5` · `×0,2` · `0,1 %` · `1 %` · `10 %` · `90 %` · `5 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 33.6 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 33.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 33.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 33.3 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
@@ -66,6 +67,7 @@
 - [reports/rapport-pensee-rapide.md](../../reports/rapport-pensee-rapide.md)
 - [reports/rapport-pensee-rare.md](../../reports/rapport-pensee-rare.md)
 - [reports/rapport-pensee-rupture.md](../../reports/rapport-pensee-rupture.md)
+- [reports/rapport-pensee-seuil-bord.md](../../reports/rapport-pensee-seuil-bord.md)
 - [reports/rapport-pensee-seuil-fin.md](../../reports/rapport-pensee-seuil-fin.md)
 - [reports/rapport-pensee-seuil-graines.md](../../reports/rapport-pensee-seuil-graines.md)
 - [reports/rapport-pensee-seuil.md](../../reports/rapport-pensee-seuil.md)

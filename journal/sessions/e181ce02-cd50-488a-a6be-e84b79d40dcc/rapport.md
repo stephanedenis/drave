@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 33.2 h |
-| Tours | 91 |
-| Messages | 1197 |
-| Appels d'outils | 1066 |
+| Durée | 33.3 h |
+| Tours | 92 |
+| Messages | 1205 |
+| Appels d'outils | 1072 |
 | Fichiers touchés | 25 |
-| Commandes | 862 |
+| Commandes | 867 |
 | Sous-agents | 2 |
-| Commits | 115 |
+| Commits | 116 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -213,6 +213,8 @@
 **Tour 90** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 91** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 92** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4831,6 +4833,57 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **bord** (0,42
 - bash — Passer toutes les portes
 - bash — Committer le bord du seuil
 
+**Synthèse produite :**
+
+⏵ Bord du seuil : ×0,42 et ×0,44 réussissent 50/50, bord > 0,44 ; 77/77
+
+Le round 78 du goal est livré : le **bord du seuil d'oubli** est au-dessus de **0,44** — 50/50 aux deux facteurs sur 10 graines. Commit **`72d9f418`**.
+
+\## Le bord
+
+Même monde que T73 (look à l'épisode 3000), facteurs 0,42 et 0,44, 10 graines, 5 exécutions.
+
+| facteur | buts (10 graines) | taux |
+|---|---:|---:|
+| **0,42** | **50/50** | 1,00 |
+| **0,44** | **50/50** | 1,00 |
+| 0,45 (T73) | 20/25 | 0,80 |
+| 0,35 (T73) | 0/25 | 0,00 |
+
+**Ce que ça dit** :
+
+- **Le bord est au-dessus de 0,44** : 0,42 et 0,44 réussissent 50/50 ; le seuil est donc entre 0,35 (0/25) et 0,42 (50/50).
+- **0,45 reste l'instable** (20/25) : au bord, la graine décide ; 0,44 est sûr, 0,45 ne l'est pas — la non-monotonie est un effet de seuil, pas une tendance.
+- **Le taux est net** : pas de demi-succès entre 0,42 et 0,44 ; la transition est étroite.
+- **La négative reste** : 0,35 échoue 0/25.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-seuil-bord.md`](../../reports/rapport-pensee-seuil-bord.md) ; JSON [`pensee-seuil-bord.json`](../../reports/pensee-seuil-bord.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T74 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **77/77 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **477 fiches / 569 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `rapports/rapport-n2-professeur.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Le seuil bas** : 0,36–0,41 ; localiser entre 0,35 et 0,42.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil bas** (0,36–0,41).
+
+### Tour 92 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Mesurer le seuil bas (0,36–0,41)
+- bash — Ajouter la porte T75 (seuil bas)
+- bash — Écrire la fiche du seuil bas
+- bash — Trim README et portes
+- bash — Committer le seuil bas
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4910,7 +4963,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **bord** (0,42
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 822 autres
+- … et 827 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5173,4 +5226,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **bord** (0,42
 - B13 — LE SEUIL FIN : ×0,4 RÉUSSIT, ×0,45 ÉCHOUE (NON MONOTONE) ; 75/75" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL FIN"; then echo "COMMIT OK
 - B13 — LE SEUIL SUR 5 GRAINES : ×0,35 0/25, ×0,4 25/25, SEUIL ~0,4 ; 76/76" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL SUR 5 GRAINES"; then ec
 - B13 — LE BORD DU SEUIL : ×0,42 ET ×0,44 RÉUSSISSENT 50/50, BORD > 0,44 ; 77/77" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BORD DU SEUIL"; then ech
+- B13 — LE SEUIL BAS : GRADUÉ (~0,40), ×0,36 20/25, ×0,40 25/25 ; 78/78" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL BAS"; then echo "COMMIT OK 
 
