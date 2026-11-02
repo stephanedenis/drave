@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 30.7 h |
-| Tours | 59 |
-| Messages | 905 |
-| Appels d'outils | 838 |
+| Durée | 30.8 h |
+| Tours | 60 |
+| Messages | 911 |
+| Appels d'outils | 842 |
 | Fichiers touchés | 25 |
-| Commandes | 676 |
+| Commandes | 680 |
 | Sous-agents | 2 |
 | Commits | 76 |
 | Compactages de contexte | 3 |
@@ -149,6 +149,8 @@
 **Tour 58** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 59** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 60** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3160,6 +3162,53 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **croyance** 
 - bash — Committer la croyance
 - job_output
 
+**Synthèse produite :**
+
+⏵ Croyance : 0/20 buts, la distribution seule ne suffit pas ; 45/45
+
+Le round 46 du goal est livré : la **croyance** ne suffit pas non plus — il manque l'**exploration**. Commit **`ef47fd92`**.
+
+\## La croyance
+
+L'état porte `b ∈ {0,1,2,3}` (la probabilité que la porte soit en `(3,3)` : 0,1 / 0,35 / 0,65 / 0,9). À chaque pas, la croyance est mise à jour : mélange par le saut (20 %), puis **observation** si l'agent est adjacent (la porte vue force 0 ou 1).
+
+| dispositif | buts | états-Q | pas |
+|---|---:|---:|---:|
+| **croyance** | **0/20** | 154 | 200 |
+| mémoire (T41) | 0/20 | 115 | 200 |
+| complète (T39/T40) | **20/20** | 182 | 8 |
+
+**Ce que ça dit** :
+
+- **La croyance seule ne suffit pas** : la distribution est correctement mise à jour, mais la politique reste **réactive** ; elle ne va pas **chercher** l'information.
+- **L'exploration manque** : pour réussir, il faut **aller voir** la porte, pas seulement la croire.
+- **154 états** : la croyance ajoute des états sans ajouter la compétence.
+- **La négative est explicite** : 0/20, 200 pas, 154 états-Q.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-croyance.md`](../../reports/rapport-pensee-croyance.md) ; JSON [`pensee-croyance.json`](../../reports/pensee-croyance.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T42 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **45/45 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **438 fiches / 533 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Exploration active** : récompenser la réduction d'incertitude ; la politique ira voir.
+2. **POMDP** : la valeur d'information dans la fonction de valeur.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque l'**exploration active** — la politique doit aller voir la porte.
+
+### Tour 60 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Ajouter la curiosité et tester
+- bash — Ajouter la porte T43 (curiosité)
+- bash — Écrire la fiche de la curiosité
+- bash — Aligner les compteurs, trim et portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3239,7 +3288,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **croyance** 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 636 autres
+- … et 640 autres
 
 ## 4. Mesures et résultats marquants
 

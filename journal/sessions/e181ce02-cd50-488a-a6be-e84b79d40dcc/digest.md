@@ -18479,3 +18479,78 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-676", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at e87a0a914897d5390f847a9ac7ce77d0c20b2298 but expected 84bf1b97c370653920a7c557373c8f02853998b3
+retry 1
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 1da205d7dbfc877ac2dd49f11b3e756cfcbc8dac but expected e87a0a914897d5390f847a9ac7ce77d0c20b2298
+retry 2
+ 26 files changed, 566 insertions(+), 55 deletions(-)
+ create mode 100644 reports/pensee-croyance.json
+ create mode 100644 reports/rapport-pensee-croyance.md
+COMMIT OK 3
+ef47fd92 B13 — LA CROYANCE : 0/20 BUTS, LA DISTRIBUTION SEULE NE SUFFIT PAS ; 45/45
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Croyance : 0/20 buts, la distribution seule ne suffit pas ; 45/45
+
+Le round 46 du goal est livré : la **croyance** ne suffit pas non plus — il manque l'**exploration**. Commit **`ef47fd92`**.
+
+## La croyance
+
+L'état porte `b ∈ {0,1,2,3}` (la probabilité que la porte soit en `(3,3)` : 0,1 / 0,35 / 0,65 / 0,9). À chaque pas, la croyance est mise à jour : mélange par le saut (20 %), puis **observation** si l'agent est adjacent (la porte vue force 0 ou 1).
+
+| dispositif | buts | états-Q | pas |
+|---|---:|---:|---:|
+| **croyance** | **0/20** | 154 | 200 |
+| mémoire (T41) | 0/20 | 115 | 200 |
+| complète (T39/T40) | **20/20** | 182 | 8 |
+
+**Ce que ça dit** :
+
+- **La croyance seule ne suffit pas** : la distribution est correctement mise à jour, mais la politique reste **réactive** ; elle ne va pas **chercher** l'information.
+- **L'exploration manque** : pour réussir, il faut **aller voir** la porte, pas seulement la croire.
+- **154 états** : la croyance ajoute des états sans ajouter la compétence.
+- **La négative est explicite** : 0/20, 200 pas, 154 états-Q.
+
+## L'état
+
+- Fiche : [`rapport-pensee-croyance.md`](../../reports/rapport-pensee-croyance.md) ; JSON [`pensee-croyance.json`](../../reports/pensee-croyance.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T42 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **45/45 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **438 fiches / 533 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Exploration active** : récompenser la réduction d'incertitude ; la politique ira voir.
+2. **POMDP** : la valeur d'information dans la fonction de valeur.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque l'**exploration active** — la politique doit aller voir la porte.
+
+
+## Tour 60
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 47/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1565 caractères tronqués]`
+
+  ```
+ef47fd92 B13 — LA CROYANCE : 0/20 BUTS, LA DISTRIBUTION SEULE NE SUFFIT PAS ; 45/45
+ok
+q 148
+20 runs: 0 /20 pas moyen 200.0
+  ```
+
