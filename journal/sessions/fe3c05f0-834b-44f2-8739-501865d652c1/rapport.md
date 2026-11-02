@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 37.9 h |
+| Durée | 38.0 h |
 | Tours | 381 |
-| Messages | 2273 |
-| Appels d'outils | 1504 |
+| Messages | 2277 |
+| Appels d'outils | 1508 |
 | Fichiers touchés | 26 |
-| Commandes | 1337 |
+| Commandes | 1341 |
 | Sous-agents | 0 |
-| Commits | 85 |
+| Commits | 86 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -8941,7 +8941,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 381 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Wait 5 min then check CEGEP manifest
 - bash — Read CEGEP manifest
@@ -8949,6 +8949,14 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Write CEGEP OCR fiche
 - bash — Update state, roadmap, plan, journal with CEGEP OCR
 - bash — Commit CEGEP OCR pilot
+- bash — Run fast gates after CEGEP commit
+- bash — Check counters and state line
+- bash — Trim state and fix counters
+- bash — Commit state trim and counters
+
+**Synthèse produite :**
+
+⏵ Round 369 : le pilote CEGEP est committé (`ccf8bac5`) — « livres, CEGEP, collections » bouclée
 
 ## 3. Travail accompli
 
@@ -9025,7 +9033,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1297 autres
+- … et 1301 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9258,4 +9266,5 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M)" 2>&1 | tail -8; echo "=== après"; git diff --cached --name-only | head -3
 - CHANTIERS — LA LIGNE D PORTE L'OCR DES 20 LIVRES (15,36 M CARACTÈRES, 8 Ko 0)" > /tmp/commit-chantiers.log 2>&1; code=$?; tail -3 /tmp/commit-chantiers.log; ech
 - DONNÉES — LE CEGEP ENTRE DANS L'OCR : 5 NOTES, 292 PAGES, 506 801 CARACTÈRES, 8 KO 0" > /tmp/commit-cegep.log 2>&1; code=$?; tail -3 /tmp/commit-cegep.log; echo
+- ÉTAT — COMPTEURS 509/597, T0 SOUS 4 000, LES PILOTES OCR (20 LIVRES + 5 NOTES CEGEP) SONT CLOS" > /tmp/commit-etat.log 2>&1; code=$?; tail -3 /tmp/commit-etat.l
 

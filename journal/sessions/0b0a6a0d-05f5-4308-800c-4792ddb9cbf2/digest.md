@@ -18724,3 +18724,51 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1097", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1093 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c "✅" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt 2>/dev/null | head -4; tail -1 /tmp/portes-fin.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt 2>/dev/null | head -5; tail -1 /tmp/portes-fin.out", "description": "Check the final gates"}`
+
+  ```
+06:32
+29
+porte-greffe 124 700
+porte-homeostasie 2 0
+  porte-horloge          ✅                          26 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep \"greffe\" /tmp/portes-nuit/registre.txt /tmp/portes-fin/registre.txt 2>/dev/null; grep -c \"greffe\" docs/pilotage/references-non-regression.md 2>/dev/null; grep -n \"greffe\" docs/pilotage/references-non-regression.md 2>/dev/n … [91 caractères tronqués]`
+
+  ```
+/tmp/portes-nuit/registre.txt:porte-greffe 0 671
+/tmp/portes-fin/registre.txt:porte-greffe 124 700
+2
+123:| `porte-greffe.sh` | 829 s | ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE |
+156:| divers 1 (adaptateur, audit, diff, fusion, greffe, harnais, jumeaux, m5, pannes, spéculatif, trace) | 11 | **11** | 0 |
+06:32
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nproc; JOURNAUX=/tmp/portes-greffe DELAI=1200 nohup bash tools/porte-greffe.sh > /tmp/porte-greffe.out 2>&1 & echo \"greffe $!\"; JOURNAUX=/tmp/portes-indice DELAI=1200 nohup bash tools/porte-indice.sh > /tmp/porte-indice.out 2>&1 &  … [104 caractères tronqués]`
+
+  ```
+40
+greffe 2896908
+indice 2896909
+06:32
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 /tmp/porte-greffe.out; tail -2 /tmp/porte-indice.out; grep -c \"✅\" /tmp/portes-fin.out; tail -1 /tmp/portes-fin.out", "description": "Check the re-run gates and the pass"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1101]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1101", "timeout_ms": 1200000, "wait": true}`

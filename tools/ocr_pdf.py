@@ -96,7 +96,6 @@ def troncons(t: str, taille: int):
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--max-doc", type=int, default=0)
-    ap.add_argument("--racine", default="", help="restreindre à une racine : Biblio_large, CEGEP")
     ap.add_argument("--dpi", type=int, default=300)
     ap.add_argument("--langues", default="fra+eng")
     ap.add_argument("--max-pages", type=int, default=0)
@@ -120,8 +119,6 @@ def main() -> int:
              "echantillon": "", "racines": []}
     t0 = time.time()
     for lib, racine, lic in RACINES:
-        if args.racine and lib != args.racine:
-            continue
         if not racine.exists():
             continue
         pdfs = sorted(racine.rglob("*.pdf"))

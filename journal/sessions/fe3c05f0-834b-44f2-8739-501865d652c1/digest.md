@@ -34429,3 +34429,59 @@ journa
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add reports/ocr-pdf-cegep.json reports/ocr-pdf-cegep-contamination.json reports/rapport-ocr-cegep.md tools/ocr_pdf.py docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs … [427 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md
+docs/pilotage/plan-travail.md
+docs/pilotage/roadmap.md
+journal/2026-11-02/README.md
+reports/ocr-pdf-cegep-contamination.json
+reports/ocr-pdf-cegep.json
+reports/rapport-ocr-cegep.md
+tools/ocr_pdf.py
+ create mode 100644 reports/ocr-pdf-cegep-contamination.json
+ create mode 100644 reports/ocr-pdf-cegep.json
+ create mode 100644 reports/rapport-ocr-cegep.md
+code=0
+ccf8bac5 DONNÉES — LE CEGEP ENTRE DANS L'OCR : 5 NOTES, 292 PAGES, 506 801 CARACTÈRES, 8 KO 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 369 : le pilote CEGEP est committé (`ccf8bac5`) — « livres, CEGEP, collections » bouclée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 tools/revue_documentation.py 2>&1 | tail -3; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -2", "description" … [121 caractères tronqués]`
+
+  ```
+06:33
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 508 fichiers, le disque en a 509
+     · compteurs : en-cours.md dit 596 JSON, le disque en a 597
+  ❌ 1 violation(s) :
+     · T0 : 4028 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  état · dernier fait ccf8bac5 · dernier état ccf8bac5
+  ✅ aucun fait commité après le dernier état
+  en-cours · 1654 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls reports/*.md | wc -l; ls reports/*.json | wc -l; grep -n \"fichiers / JSON\\|JSON de résultats\\|508\\|596\" docs/pilotage/en-cours.md | head -4; date '+%H:%M'", "description": "Check counters and state line", "timeoutMs": 120000, " … [60 caractères tronqués]`
+
+  ```
+509
+597
+95:| fichiers / JSON de résultats | **508** / **596** | `reports/*.md` / `reports/*.json` |
+06:33
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nold = \"**OCR** 20 livres (7 381 p, 15,36 M car. ; 1 784 fenêtres 8 Ko train + 115 val, 8 Ko 0 ; éval 0/40, 0/2 … [1394 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 509 fiche(s) · 597 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add docs/pilotage/en-cours.md; git diff --cached --name-only; git commit -m \"ÉTAT — COMPTEURS 509/597, T0 SOUS 4 000, LES PILOTES OCR (20 LIVRES + 5 NOTES CEGEP) SONT CLOS\ … [245 caractères tronqués]`
