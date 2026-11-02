@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 0.0 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 22 |
-| Appels d'outils | 32 |
-| Fichiers touchés | 1 |
-| Commandes | 25 |
+| Messages | 70 |
+| Appels d'outils | 106 |
+| Fichiers touchés | 5 |
+| Commandes | 86 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu reprends la session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`. Lis son plan, AGENTS.md  et docs/pilotage/en-cours. … [394 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*106 appels d'outils.* Actions notables :
 
 - bash — Show repo state and recent commits
 - bash — List root and sessions tool help
@@ -41,11 +41,11 @@
 - edit `/home/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md`
 - bash — Run strict session plan check
 - bash — Inspect the unlisted active plan
-- … et 14 autres
+- … et 80 autres
 
 **Synthèse produite :**
 
-⏵ Test direct de `llama-cli` avec le modèle local (hors évaluation)
+⏵ 7B minimal : 0,829 sur les 20 réelles ; test du few-shot
 
 ## 3. Travail accompli
 
@@ -54,6 +54,10 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/home/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 2 |
+| `/tmp/qualif_proto.py` | 1 | 0 |
+| `/tmp/qualif_proto_srv.py` | 1 | 0 |
+| `/tmp/qualif_proto_srv2.py` | 1 | 0 |
+| `/tmp/qualif_7b.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -82,6 +86,22 @@
 - **T1** Read neuronal refusal section
 - **T1** Read NeuronalLLM adapter code
 - **T1** Smoke-test llama-cli with local Qwen model
+- **T1** Check llama-cli version and options
+- **T1** Check GPU and CPU resources
+- **T1** Test llama-cli single-turn generation
+- **T1** List ollama and heavy model manifest
+- **T1** Check grammar/JSON options in llama-cli
+- **T1** Find local GGUF models
+- **T1** Re-check strict status and git state
+- **T1** Inspect gold JSON structure
+- **T1** Test exact prompt with JSON constraint
+- **T1** Test exact prompt single-turn without grammar
+- **T1** Smoke-test Qwen3-0.6B local model
+- **T1** Check installed NLP libraries
+- **T1** Look for installed spaCy/stanza models
+- **T1** Inspect eval entry points
+- **T1** Find B13/R0.7 backlog cards
+- … et 46 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -90,4 +110,15 @@
 - **T1** `couvre **67,1 %** du texte en unités sémantiques.`
 - **T1** `- **L'attachement par tête couvre 100 %**, mais le gold ne donne **qu'une** lecture des`
 - **T1** `ambiguïtés (le GP au verbe) ; le 40 % des réels est un **désaccord de lecture**, pas seulement`
+- **T1** `Quadro RTX 5000, 1 MiB, 0 %`
+- **T1** `[still running after 60000ms; moved to background job bash-38]`
+- **T1** `/dev/mapper/system-root   11T  9,0T  2,0T  83% /home/stephane/Data13TB`
+
+## 5. Erreurs rencontrées
+
+3 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : Error: could not connect to ollama server, run 'ollama serve' to start it --- total 1656188 drwxr-xr-x. 1 stephane stephane       138 15 oct 09:02 . drwxr-xr-x. 1 stephane stephane       100 15 oct 09
+- **T1** : > Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {"langue":"fr","script":"Latn","etiquettes":[{"niveau":"phrase|pragmatique|syntagme|pos","t
+- **T1** : Error: Failed to initialize samplers: std::exception  [ Prompt: 0,0 t/s | Generation: 0,0 t/s ]   Exiting... EXIT=0
 

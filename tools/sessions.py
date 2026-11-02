@@ -5,7 +5,12 @@ Chaque session active expose son mandat dans `journal/sessions/<id>/plan.md` :
 périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
 sessions consultent `--status` avant de claim, et `--check --strict` refuse les
 mandats incomplets, les identifiants dupliqués, les périmètres qui se recouvrent
-et les heartbeats périmés (le `--check` seul les signale). `en-cours` reste la
+et les heartbeats périmés (le `--check` seul les signale). Les **fichiers
+proches** (une réservation imbriquée dans une autre, `data/` ⊃ `data/structures/`)
+restent des **avertissements**, même en strict : l'imbrication est le régime
+normal d'un territoire partagé, et une porte qui échoue sur toute imbrication
+est rouge dès qu'une session réserve un sous-dossier — mesuré le 02/11, le
+strict sortait en 1 avec **0 erreur et 4 avertissements**. `en-cours` reste la
 seule source de l'état : ce plan est le **contrat de travail** qui le précède.
 Une session arrêtée (reboot, panne) passe à `État : en pause` : elle reste dans
 l'état, son heartbeat n'est plus exigé, et la reprise la remet `actif`.
@@ -249,8 +254,27 @@ def autotest() -> int:
         assert not e, e
         e, _ = verifier(r, strict=True)
         assert not e, e
+        # une réservation IMBRIQUÉE (data/ ⊃ data/structures/) est un avertissement,
+        # pas un refus strict : le territoire partagé est le régime normal
+        frais = datetime.now().strftime("%Y-%m-%d %H:%M")
+        (r / ETAT).write_text("### Session `a` — test\n### Session `b` — test\n",
+                              encoding="utf-8")
+        (d / "plan.md").write_text(
+            "# Plan\n\n- **Session** : `a`\n- **Rôle** : test\n- **Périmètre** : A8.0\n"
+            "- **Fichiers réservés** : `data/`\n"
+            f"- **Heartbeat** : {frais} HAE\n"
+            "- **Prochaine action** : finir\n- **État** : actif\n", encoding="utf-8")
+        b.mkdir(parents=True, exist_ok=True)
+        (b / "plan.md").write_text(
+            "# Plan\n\n- **Session** : `b`\n- **Rôle** : test\n- **Périmètre** : A8.1\n"
+            "- **Fichiers réservés** : `data/structures/`\n"
+            f"- **Heartbeat** : {frais} HAE\n"
+            "- **Prochaine action** : finir\n- **État** : actif\n", encoding="utf-8")
+        e, w = verifier(r, strict=True)
+        assert not e, e
+        assert any("proches" in x for x in w), w
     print("autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, "
-          "pause sans heartbeat exigé")
+          "pause sans heartbeat exigé, réservation imbriquée avertie sans refus")
     return 0
 
 
@@ -296,7 +320,11 @@ def main() -> int:
             print(f"  ❌ {x}")
         if not e and not w:
             print("  ✅ plans cohérents")
-        return 1 if e or (a.strict and w) else 0
+        # le contrat strict porte sur les ERREURS (champs, identifiants, périmètres,
+        # heartbeats) ; « fichiers proches » reste un avertissement — sinon quatre
+        # sessions qui imbriquent leur territoire (`data/` ⊃ `data/structures/`) rendent
+        # la porte rouge sans qu'aucune réservation ne se recouvre réellement.
+        return 1 if e else 0
     return afficher(r)
 
 

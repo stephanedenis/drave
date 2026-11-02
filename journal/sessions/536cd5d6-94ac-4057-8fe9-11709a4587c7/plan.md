@@ -14,9 +14,10 @@
   `reports/README.md`, `reports/INDEX.md`, `AGENTS.md`, `tools/sessions.py`,
   `tools/porte-sessions.sh`, `tools/index_reports.py`, `tools/surveille_sessions.py`,
   `journal/sessions/536cd5d6-…/`.
-- **Heartbeat** : 2026-11-02 16:09 EST
-- **Prochaine action** : la **passe de portes** complète (1 h 46) quand la machine est libre ;
-  suivre les sessions ouvertes (N2, S, L/B13, D/R/A) et intégrer leurs lignes d'état.
+- **Heartbeat** : 2026-11-02 16:24 EST
+- **Prochaine action** : la **passe de portes** complète, lancée sur le **GPU 1** (le GPU 0 porte
+  N2) ; suivre les quatre sessions ouvertes (N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`,
+  D/R/A `fe3c05f0`) et lire le verdict au registre.
 - **État** : actif
 - **Plan** : 1) ~~audit des 111 sessions et du pilotage~~ ; 2) ~~plan de session~~ ; 3) **commits par
   flux** ; 4) **état cohérent** (140/140, gold 432, N2.ac, reboot) ; 5) **mandats** (N2, S, clôture

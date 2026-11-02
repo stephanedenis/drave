@@ -737,3 +737,1466 @@ EXIT=1
 97d693b6 ÉTAT — T0 REVENU SOUS 4 000 (3 998) APRÈS LE RUNBOOK
   ```
 
+### 🤖 Assistant
+
+⏵ Le check reste rouge à cause de N2 ; je documente et j'examine le refus neuronal du gold
+
+- **bash** `{"command": "grep -n \"refus\\|llama\\|neuronal\\|mock\" reports/rapport-pensee-gold-linguistique.md | head -40", "description": "Find neuronal refusal details in gold report"}`
+
+  ```
+8:> neuronal est refusé** (`llama-cli` local) ; la cascade est mesurée avec le **mock de contrat**.
+33:| mock seul | 180 | 0,427 | 0,146 | 0,621 | 0,115 | 0,534 | 1,0 | 0,872 | 0,883 | 0,922 | 0,671 |
+48:- **cascade 0,671** : elle appelle le neuronal **180 fois par passe** (360 au total, 3 passes) et
+64:| mock seul | 360 | 138 | 59 | 1,000 | 0 | 0 | 0 |
+88:## 4. Le vrai neuronal : refusé, pas simulé
+90:`--reel` essaie `NeuronalLLM` avec `Qwen2.5-0.5B-Q4_0` et 10 s : **`RefusNeuronal`**. Le mock est
+92:qualification neuronale reste à faire.
+121:- **Le mock n'est pas un modèle** ; la cascade mesure le contrat, pas un gain neuronal.
+122:- **Le vrai modèle est refusé** : aucun chiffre de qualité neuronale n'est revendiqué.
+137:2. **Qualifier un vrai modèle neuronal** (tagger ou LLM) sur les 180 ; l'adaptateur est branché.
+138:3. **Mesurer la cascade avec ce modèle**, pas avec le mock ; l'AUC/le regret.
+139:4. **Opérateurs hétérogènes/DRVM** de B13 : le problème où le neuronal est **nécessaire**, pas
+  ```
+
+- **bash** `{"command": "ls tools/tests/linguistique/; echo '---'; grep -rn \"llama\\|refus\\|neuronal\" tools/tests/linguistique/*.py | head -40", "description": "Inspect linguistic test scripts"}`
+
+  ```
+anaphore.py
+evaluer_gold.py
+gold_gele.json
+gold.json
+gold.py
+gold_reel.json
+gold_reel.py
+gold_synthetique.json
+gold_synthetique.py
+juge.py
+miroir.py
+__pycache__
+test_bloc_linguistique.py
+---
+tools/tests/linguistique/evaluer_gold.py:4:lectures : heuristique, mock neuronal, parallèle, cascade. Le vrai modèle est optionnel
+tools/tests/linguistique/evaluer_gold.py:5:(`--reel`) : s'il ne répond pas, il est refusé, pas simulé.
+tools/tests/linguistique/evaluer_gold.py:185:    blocs = {"heuristique": h, "mock_neuronal": n,
+tools/tests/linguistique/evaluer_gold.py:194:    resultats["cascade"]["appels_neuronal"] = cascade.appels_neuronal
+tools/tests/linguistique/evaluer_gold.py:203:            reel = {"statut": "refus", "detail": type(e).__name__ + ": " + str(e)[:160]}
+tools/tests/linguistique/evaluer_gold.py:244:    print(json.dumps({k: v for k, v in resultats.items() if k not in ("heuristique", "mock_neuronal")},
+tools/tests/linguistique/miroir.py:114:    produire. Elle demande un modèle (le neuronal réel, toujours bloqué).
+tools/tests/linguistique/test_bloc_linguistique.py:49:        self.assertEqual(b.source, "neuronal")
+tools/tests/linguistique/test_bloc_linguistique.py:51:        self.
+… [1022 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du refus neuronal et de l'adaptateur `NeuronalLLM`
+
+- **bash** `{"command": "sed -n '84,145p' reports/rapport-pensee-gold-linguistique.md", "description": "Read neuronal refusal section"}`
+
+  ```
+bonne mesure.
+- Le bloc expose **toutes** les cibles du S (pas seulement le dernier segment ambigu) via
+  `_tokens`/`_segmente` en **lecture seule** ; c'est un couplage à l'API interne du S, déclaré.
+
+## 4. Le vrai neuronal : refusé, pas simulé
+
+`--reel` essaie `NeuronalLLM` avec `Qwen2.5-0.5B-Q4_0` et 10 s : **`RefusNeuronal`**. Le mock est
+un **double de contrat** ; la cascade est mesurée avec lui, pas avec un modèle qualifié. La
+qualification neuronale reste à faire.
+
+## 5. Les seuils (pré-enregistrés pour la porte)
+
+| contrôle | seuil | mesuré |
+|---|---:|---:|
+| POS, 20 réels | ≥ 0,85 | **0,924** |
+| POS, 160 synthétiques | ≥ 0,60 | **0,725** |
+| syntagmes exacts, réels | ≥ 0,30 | **0,356** |
+| syntagmes exacts, synthétiques | ≥ 0,15 | **0,168** |
+| syntagmes par tête, 180 | ≥ 0,40 | **0,560** |
+| acte, 180 | ≥ 0,70 | **1,0** |
+| cascade ≥ heuristique | oui | **oui** |
+| attachement top-k (span) | ≥ 0,30 | **0,338** |
+| attachement top-1 (span) > 5 × hasard | oui | **0,294 > 0,074** |
+| attachement tête couverture | ≥ 0,60 | **1,000** |
+| attachement tête top-k | ≥ 0,50 | **1,000** |
+| attachement tête top-1 > 5 × hasard | oui | **0,957 > 0,074** |
+
+Les seuils sont **postérieu
+… [2053 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"class NeuronalLLM\" -A 80 tools/bloc_linguistique.py | head -110", "description": "Read NeuronalLLM adapter code"}`
+
+  ```
+799:class NeuronalLLM:
+800-    """L'adaptateur réel : un prompt JSON, un modèle local, le même contrat.
+801-
+802-    On ne simule pas un modèle absent : si `llama-cli` ou le fichier manque, l'adaptateur lève
+803-    `RefusNeuronal`. Le `MockNeuronal` sert aux tests de contrat, pas à la qualité.
+804-    """
+805-
+806-    nom = "neuronal"
+807-
+808-    def __init__(self, modele: str | pathlib.Path, llama_cli: str = "llama-cli",
+809-                 max_jetons: int = 256, timeout: int = 120):
+810-        self.modele = str(modele)
+811-        self.llama_cli = llama_cli
+812-        self.max_jetons = max_jetons
+813-        self.timeout = timeout
+814-
+815-    def _prompt(self, texte: str, langue: str | None, contexte: str | None) -> str:
+816-        return (
+817-            "Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, "
+818-            "sans texte autour. Schéma : {\"langue\":\"fr\",\"script\":\"Latn\","
+819-            "\"etiquettes\":[{\"niveau\":\"phrase|pragmatique|syntagme|pos\","
+820-            "\"type\":\"...\",\"valeur\":\"...\",\"debut\":0,\"fin\":0,\"confiance\":0.8}]}. "
+821-            "Niveaux attendus : phrase.type, pragmatique.acte, syntagm
+… [3523 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test direct de `llama-cli` avec le modèle local (hors évaluation)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 120 llama-cli -m models/Qwen2.5-0.5B-Q4_0.gguf -p 'Réponds uniquement: {\"langue\":\"fr\"}' -n 32 --temp 0 --no-display-prompt 2>&1 | tail -20; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Smoke-test llama-cli with local Qwen model", "time … [15 caractères tronqués]`
+
+  ```
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+
+Exiting...
+EXIT=124
+  ```
+
+### 🤖 Assistant
+
+⏵ `llama-cli` semble passer en mode conversation ; je vérifie la version et les options
+
+- **bash** `{"command": "llama-cli --version 2>&1 | head -5; echo '---'; llama-cli --help 2>&1 | grep -iE \"conv|single|prompt|no-display\" | head -20", "description": "Check llama-cli version and options"}`
+
+  ```
+version: 11017 (aca5f933b)
+built with GNU 15.3.0 for Linux x86_64
+---
+-tb,   --threads-batch N                number of threads to use during batch and prompt processing (default:
+-c,    --ctx-size N                     size of the prompt context (default: 0, 0 = loaded from model)
+--keep N                                number of tokens to keep from the initial prompt (default: 0, -1 =
+-p,    --prompt PROMPT                  prompt to start generation with; for system message, use -sys
+-f,    --file FNAME                     a file containing the prompt (default: none)
+-bf,   --binary-file FNAME              binary file containing the prompt (default: none)
+                                        single value is broadcast across all devices, default: 1024
+                                        number of threads to use during batch and prompt processing (default:
+--verbose-prompt                        print a verbose prompt before generation (default: false)
+--display-prompt, --no-display-prompt   whether to print prompt at generation (default: true)
+-co,   --color [on|off|auto]            Colorize output to distinguish prompt and user input from generations
+-sys,  --system-promp
+… [721 caractères tronqués]
+  ```
+
+- **bash** `{"command": "nvidia-smi --query-gpu=name,memory.used,utilization.gpu --format=csv,noheader 2>/dev/null; echo '---'; free -g | head -3; nproc", "description": "Check GPU and CPU resources"}`
+
+  ```
+Quadro RTX 5000, 1 MiB, 0 %
+Quadro RTX 5000, 1 MiB, 0 %
+---
+               total        used        free      shared  buff/cache   available
+Mem:             125          24          86           0          15         100
+Swap:             62           0          62
+40
+  ```
+
+### 🤖 Assistant
+
+⏵ Test `--single-turn` et inventaire des modèles locaux disponibles
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && time timeout 180 llama-cli -m models/Qwen2.5-0.5B-Q4_0.gguf -p 'Réponds uniquement par ce JSON : {\"langue\":\"fr\",\"script\":\"Latn\"}' -n 40 --temp 0 --no-display-prompt -st 2>&1 | tail -12; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Test lla … [52 caractères tronqués]`
+
+  ```
+/read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+
+> Réponds uniquement par ce JSON : {"langue":"fr","script":"Latn"}
+Bonjour, je m'appelle Qwen et je suis un assistant virtuel. Je suis ici pour vous aider. Comment puis-je vous aider aujourd'hui ?
+
+[ Prompt: 1722,1 t/s | Generation: 303,7 t/s ]
+
+
+Exiting...
+EXIT=0
+[stderr]
+
+real	0m2,268s
+user	0m1,019s
+sys	0m1,076s
+  ```
+
+- **bash** `{"command": "ollama list 2>&1 | head -20; echo '---'; ls -la models/vision/ 2>/dev/null; echo '---'; python3 -c \"import json;d=json.load(open('tools/manifeste_modeles_lourds.json'));print(json.dumps(d,indent=1)[:1500])\" 2>/dev/null", "description": "List ollama and heavy model manifest"}`
+
+  ```
+Error: could not connect to ollama server, run 'ollama serve' to start it
+---
+total 1656188
+drwxr-xr-x. 1 stephane stephane       138 15 oct 09:02 .
+drwxr-xr-x. 1 stephane stephane       100 15 oct 09:02 ..
+-rw-r--r--. 1 stephane stephane 709883360 15 oct 09:03 mmproj-Qwen2-VL-2B-Instruct-Q8_0.gguf
+-rw-r--r--. 1 stephane stephane 986046944 15 oct 09:02 Qwen2-VL-2B-Instruct-Q4_K_M.gguf
+---
+[
+ {
+  "nom": "DeepSeek-V4-Flash-UD-IQ1_M",
+  "repo": "unsloth/DeepSeek-V4-Flash-GGUF",
+  "chemin": "UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00002-of-00003.gguf",
+  "octets": 49971881124
+ },
+ {
+  "nom": "DeepSeek-V4-Flash-UD-IQ1_M",
+  "repo": "unsloth/DeepSeek-V4-Flash-GGUF",
+  "chemin": "UD-IQ1_M/DeepSeek-V4-Flash-UD-IQ1_M-00001-of-00003.gguf",
+  "octets": 5256864
+ },
+ {
+  "nom": "DeepSeek-V4.1-Flash-Q2",
+  "repo": "antirez/deepseek-v4.1-flash-gguf",
+  "chemin": "DeepSeek-V4.1-Flash-Q2.gguf",
+  "octets": 365713686528
+ },
+ {
+  "nom": "Kimi-K2.7-Code-UD-IQ1_M",
+  "repo": "unsloth/Kimi-K2.7-Code-GGUF",
+  "chemin": "UD-IQ1_M/Kimi-K2.7-Code-UD-IQ1_M-00001-of-00008.gguf",
+  "octets": 6913184
+ },
+ {
+  "nom": "Kimi-K2.7-Code-UD-IQ1_M",
+  "repo": "unsloth/Kimi-K2.7-Code-GGUF",
+  "chemin": "UD-IQ1_M/Kimi-K2.7-
+… [692 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ `-st` corrige le blocage ; je cherche d'autres modèles locaux et les options JSON de `llama-cli`
+
+- **bash** `{"command": "llama-cli --help 2>&1 | grep -iE \"grammar|json|schema|format|chat-template\" | head -25", "description": "Check grammar/JSON options in llama-cli"}`
+
+  ```
+--lora-scaled FNAME:SCALE,...           path to LoRA adapter with user defined scaling (format:
+                                        note: use comma-separated values (format: FNAME:SCALE,...)
+--grammar GRAMMAR                       BNF-like grammar to constrain generations (see samples in grammars/
+--grammar-file FNAME                    file to read grammar from
+-j,    --json-schema SCHEMA             JSON schema to constrain generations (https://json-schema.org/), e.g.
+                                        `{}` for any JSON object
+                                        For schemas w/ external $refs, use --grammar +
+                                        example/json_schema_to_grammar.py instead
+-jf,   --json-schema-file FILE          File containing a JSON schema to constrain generations
+                                        (https://json-schema.org/), e.g. `{}` for any JSON object
+                                        For schemas w/ external $refs, use --grammar +
+                                        example/json_schema_to_grammar.py instead
+--show-timings, --no-show-timings       whether to show timing information after each response (default: true)
+--chat-templat
+… [549 caractères tronqués]
+  ```
+
+- **bash** `{"command": "find /home/stephane -maxdepth 4 -name \"*.gguf\" -size +100M 2>/dev/null | head -20; echo '---'; du -sh models/ 2>/dev/null", "description": "Find local GGUF models"}`
+
+  ```
+/home/stephane/FastNVMe/models/qwen3-0.6b/Qwen3-0.6B-Q8_0.gguf
+/home/stephane/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf
+/home/stephane/IA/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+/home/stephane/IA/k3-nvme/Kimi-K3-UD-Q4_K_XL-00002-of-00032.gguf
+/home/stephane/IA/k3-nvme/Kimi-K3-UD-Q4_K_XL-00004-of-00032.gguf
+/home/stephane/IA/k3-nvme/Kimi-K3-UD-Q4_K_XL-00006-of-00032.gguf
+/home/stephane/IA/k3-nvme/Kimi-K3-UD-Q4_K_XL-00003-of-00032.gguf
+/home/stephane/IA/k3-nvme/Kimi-K3-UD-Q4_K_XL-00005-of-00032.gguf
+---
+2,5G	models/
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouveau point sur le check strict et l'intégration N2
+
+- **bash** `{"command": "python3 tools/sessions.py --check --strict; echo \"EXIT=$?\"; echo '---'; git log --oneline -2; git status --short | head -15", "description": "Re-check strict status and git state"}`
+
+  ```
+⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ❌ plan actif non listé dans en-cours : 0733c5bb-f90b-4f58-9241-3364fa32e46c
+  ❌ plan actif non listé dans en-cours : 29ad180d-38a5-4481-a9a7-ec6ab31c895f
+EXIT=1
+---
+dc7f9c56 N2 — MANDAT 200 k PAS SUR LE MÉLANGE 1 Go, PUIS R1.1/R1.2 (session 0733c5bb)
+04d75114 ÉTAT — HORODATAGE RÉEL (16 h 09) APRÈS LA REPRISE ; LE FUTUR N'EST PAS UNE HEURE
+ M journal/README.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md
+?? journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de qualification : le prompt exact sur une phrase du gold, avec schéma JSON
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('tools/tests/linguistique/gold.json'))\nprint(type(d), list(d)[:5] if isinstance(d,dict) else len(d))\ns=json.dumps(d,ensure_ascii=False)[:1200]\nprint(s)\nPY", "description": "Inspect gold JSON structur … [3 caractères tronqués]`
+
+  ```
+<class 'dict'> ['version', 'phrases', 'note']
+{"version": 1, "phrases": [{"id": "g001", "langue": "fr", "texte": "Le chat dort.", "mots": [{"texte": "Le", "pos": "DET", "debut": 0, "fin": 2}, {"texte": "chat", "pos": "NOUN", "debut": 3, "fin": 7}, {"texte": "dort", "pos": "VERB", "debut": 8, "fin": 12}], "segments": [{"type": "GN", "texte": "Le chat", "role": "agent", "debut": 0, "fin": 7}, {"type": "GV", "texte": "dort", "role": "prédicat", "debut": 8, "fin": 12}], "pragma": {"acte": "assertion"}}, {"id": "g002", "langue": "fr", "texte": "Le chat de la voisine dort.", "mots": [{"texte": "Le", "pos": "DET", "debut": 0, "fin": 2}, {"texte": "chat", "pos": "NOUN", "debut": 3, "fin": 7}, {"texte": "de", "pos": "PREP", "debut": 8, "fin": 10}, {"texte": "la", "pos": "DET", "debut": 11, "fin": 13}, {"texte": "voisine", "pos": "NOUN", "debut": 14, "fin": 21}, {"texte": "dort", "pos": "VERB", "debut": 22, "fin": 26}], "segments": [{"type": "GN", "texte": "Le chat", "role": "agent", "debut": 0, "fin": 7}, {"type": "GP", "texte": "de la voisine", "role": "possession", "debut": 8, "fin": 21, "cibles": ["chat"], "cible": "chat"}, {"type": "GV", "texte": "dort", "role": "prédicat", "debut": 22,
+… [46 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 120 llama-cli -m models/Qwen2.5-0.5B-Q4_0.gguf -p 'Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {\"langue\":\"fr\",\"script\":\"Latn\",\"etiquettes\":[{\"niveau\":\"phrase|pragmatiq … [429 caractères tronqués]`
+
+  ```
+> Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {"langue":"fr","script":"Latn","etiquettes":[{"niveau":"phrase|pragmatique|syntagme|pos","type":"...","valeur":"...","debut":0,"fin":0,"confiance":0.8}]}. Niveaux attendus : phrase.type, pragmatique.acte, syntagme (GN/GV/GP/REL/SUB). Langue indiquée : fr. Contexte : aucun.
+Texte : Le chat dort sur le tapis.
+Error: Failed to initialize samplers: std::exception
+
+[ Prompt: 0,0 t/s | Generation: 0,0 t/s ]
+
+
+Exiting...
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 120 llama-cli -m models/Qwen2.5-0.5B-Q4_0.gguf -p 'Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {\"langue\":\"fr\",\"script\":\"Latn\",\"etiquettes\":[{\"niveau\":\"phrase|pragmatiq … [427 caractères tronqués]`
+
+  ```
+> Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {"langue":"fr","script":"Latn","etiquettes":[{"niveau":"phrase|pragmatique|syntagme|pos","type":"...","valeur":"...","debut":0,"fin":0,"confiance":0.8}]}. Niveaux attendus : phrase.type, pragmatique.acte, syntagme (GN/GV/GP/REL/SUB). Langue indiquée : fr. Contexte : aucun.
+Texte : Le chat dort sur le tapis.
+{"langue":"fr","script":"Latn","etiquettes":[{"niveau":"phrase|pragmatique|syntagme|pos","type":"objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet|objet
+
+[ Prompt: 49
+… [54 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 120 llama-cli -m /home/stephane/FastNVMe/models/qwen3-0.6b/Qwen3-0.6B-Q8_0.gguf -p 'Réponds uniquement par un objet JSON : {\"langue\":\"fr\"}' -n 64 --temp 0 --no-display-prompt -st 2>&1 | tail -8; echo \"EXIT=${PIPESTATUS[0]}\"", "descriptio … [61 caractères tronqués]`
+
+  ```
+[Start thinking]
+
+Okay, the user wants me to respond only as a JSON object with the key "langue" set to "fr". Let me make sure I understand the request correctly. They specified that the answer should be in JSON format, and the value for the "langue" field is French. I need to
+
+[ Prompt: 514,4 t/s | Generation: 243,9 t/s ]
+
+
+Exiting...
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Le petit LLM ne suit pas le schéma ; je cherche un vrai tagger local déjà installé
+
+- **bash** `{"command": "python3 - <<'PY'\nmods=['spacy','stanza','flair','transformers','torch','nltk','sentencepiece','onnxruntime']\nimport importlib.util\nfor m in mods:\n    s=importlib.util.find_spec(m)\n    print(m, 'OK' if s else '-')\nPY", "description": "Check installed NLP libraries"}`
+
+  ```
+spacy -
+stanza -
+flair -
+transformers -
+torch -
+nltk -
+sentencepiece -
+onnxruntime -
+  ```
+
+- **bash** `{"command": "ls ~/.local/share/spacy 2>/dev/null; python3 -m spacy info 2>&1 | head -20; echo '---'; find /home/stephane -maxdepth 6 \\( -iname \"*fr_core_news*\" -o -iname \"*stanza*\" -o -iname \"*udpipe*\" \\) 2>/dev/null | head", "description": "Look for installed spaCy/stanza models"}`
+
+  ```
+/usr/bin/python3: No module named spacy
+---
+[still running after 60000ms; moved to background job bash-38]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le tagger est absent ; je lis l'évaluateur et le contrat pour cadrer la qualification LLM
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py", "limit": 120, "offset": 120}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/evaluer_gold.py</path>
+<type>file</type>
+<content>
+120:             if e is None:
+121:                 continue
+122:             att_labels += 1
+123:             att = (e.meta or {}).get("attachement") or {}
+124:             cible = (att.get("cible") or "").strip()
+125:             if cible == cibles[0]:
+126:                 att_exact += 1
+127:             if cible and any(c in cible or cible in c for c in cibles):
+128:                 att_top1 += 1
+129:             if any(any(c in nom for c in cibles) for nom in (e.candidats or [])):
+130:                 att_topk += 1
+131:             # attachement par tête : le segment prédit qui couvre la tête du gold
+132:             att_t_n += 1
+133:             tete = [x for x in a.etiquettes if x.niveau == "syntagme"
+134:                     and x.type == s["type"] and x.debut <= s["debut"] < x.fin]
+135:             if not tete:
+136:                 continue
+137:             et = tete[0]
+138:             att_t_labels += 1
+139:             att2 = (et.meta or {}).get("attachement") or {}
+140:             cible2 = (att2.get("cible") or "").strip()
+141:             if cible2 and any(c 
+… [6269 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"reel\\|NeuronalLLM\\|mock\\|cascade\" tools/tests/linguistique/evaluer_gold.py | head -30; echo '---'; sed -n '1,40p' tools/tests/linguistique/evaluer_gold.py", "description": "Inspect eval entry points"}`
+
+  ```
+4:lectures : heuristique, mock neuronal, parallèle, cascade. Le vrai modèle est optionnel
+5:(`--reel`) : s'il ne répond pas, il est refusé, pas simulé.
+20:REEL = pathlib.Path(__file__).with_name("gold_reel.json")
+26:    reel = json.loads(REEL.read_text(encoding="utf-8"))["phrases"]
+30:    for p in reel:
+31:        p["source"] = "reel"
+32:    return hand + reel + synth
+180:    ap.add_argument("--reel", action="store_true")
+184:    cascade = bl.Cascade(h, n)
+185:    blocs = {"heuristique": h, "mock_neuronal": n,
+186:             "parallele": bl.Parallele([h, n]), "cascade": cascade}
+188:               "reel": [p for p in phrases if p["source"] in ("hand", "reel")],
+190:               "reel_new": par_source(phrases, "reel"),
+194:    resultats["cascade"]["appels_neuronal"] = cascade.appels_neuronal
+195:    reel = {"statut": "non demandé"}
+196:    if args.reel:
+198:            from bloc_linguistique import NeuronalLLM
+199:            m = NeuronalLLM(RACINE / "models/Qwen2.5-0.5B-Q4_0.gguf", timeout=10)
+201:            reel = {"statut": "ok", "etiquettes": len(a.etiquettes)}
+203:            reel = {"statut": "refus", "detail": type(e).__name__ + ": " + str(e)[:160]}
+204:    resultats["re
+… [1886 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je consulte la fiche backlog de B13/R0.7 pour la définition exacte de « gold neuronal »
+
+- **bash** `{"command": "ls docs/pilotage/backlog/ | grep -iE \"b13|r0.7|bloc|pensee|l neuron|gold\" | head -20; echo '---'; grep -rln \"gold neuronal\\|modèle local\\|modele local\" docs/pilotage docs/theorie | head -10", "description": "Find B13/R0.7 backlog cards"}`
+
+  ```
+R41-bloc-tableaux.md
+R42-bloc-code.md
+R43-bloc-maths.md
+---
+docs/pilotage/roadmap.md
+docs/pilotage/chantiers.md
+docs/pilotage/plan-travail.md
+docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "grep -rn \"gold neuronal\\|qualifier un modèle\\|Qwen\" docs/pilotage/backlog/*.md docs/pilotage/roadmap.md 2>/dev/null | head -20", "description": "Search next-action wording in pilotage"}`
+
+  ```
+docs/pilotage/backlog/A3.2-granularite.md:36:- la mesure est sur **un** modèle (Qwen2.5-0.5B) et un mode de lot ;
+docs/pilotage/backlog/N0.3b-parite-ppl.md:14:N0.1–N0.6 mesurés : manifeste, payload, lecture, `gguf2drvm`, trace/rejeu (6 144 listes, SHA identique, PPL 28,7355), refus de version. **N0.3b mesuré le 2026-10-29** : Qwen GGUF ↔ DRVM **68,1917** (15 jetons) et **92,1875** (304 jetons) ; `drave-n0` natif ↔ Python **4,6585 / 18,6394** contre **4,658519 / 18,6395**.
+docs/pilotage/backlog/N0.3b-parite-ppl.md:18:**Atteinte.** Conversion : écart **0** sur 15 et 304 jetons. Natif : écart **< 0,0001** et **0,0001** sur 59 et 1 076 octets. Limite nommée : le DRVM Qwen est un conteneur d'import, pas une exécution native ; la passe native n'existe que pour `drave-n0`.
+docs/pilotage/roadmap.md:145:**Ce qui compte pour R** : le moteur sait déjà exécuter un modèle externe (Qwen 0,5 B à 12 288 jetons), tracer,
+docs/pilotage/roadmap.md:169:| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | ✅ **state store v0** + moteur + **AC-3/alpha-bêta** + **DRVF `thought`** + **banc anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **porte** + **appr
+… [1723 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du schéma JSON contraint (le `{}` échoue) et d'un prompt few-shot
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 60 llama-cli -m models/Qwen2.5-0.5B-Q4_0.gguf -p 'Donne la langue du texte. Réponds en JSON.' -n 64 --temp 0 --no-display-prompt -st -j '{\"type\":\"object\",\"properties\":{\"langue\":{\"type\":\"string\"},\"script\":{\"type\":\"string\"}},\" … [159 caractères tronqués]`
+
+  ```
+Error: Failed to initialize samplers: std::exception
+
+[ Prompt: 0,0 t/s | Generation: 0,0 t/s ]
+
+
+Exiting...
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 180 llama-cli -m models/Qwen2.5-0.5B-Q4_0.gguf -p 'Étiquète chaque mot avec sa classe grammaticale parmi DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX. Réponds uniquement par une liste JSON de [mot, classe].\nExemple : \"Le chat dort.\" -> [[\"Le … [254 caractères tronqués]`
+
+  ```
+```
+
+[ Prompt: 3632,3 t/s | Generation: 327,9 t/s ]
+
+
+Exiting...
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Les GGUF locaux semblent être des modèles de base ; je cherche un instruct ou un tagger téléchargeable
+
+- **bash** `{"command": "find /home/stephane/IA /home/stephane/FastNVMe /home/stephane/.cache -maxdepth 5 -iname \"*instruct*\" -o -iname \"*spacy*\" -o -iname \"*tagger*\" 2>/dev/null | head -20; echo '---'; ls /home/stephane/.cache/huggingface 2>/dev/null; du -sh /home/stephane/.cache/huggingface 2>/dev/null" … [59 caractères tronqués]`
+
+  ```
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-7B-Instruct
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-14B-Instruct
+/home/stephane/IA/cache/huggingface/hub/.locks/models--Qwen--Qwen2.5-7B-Instruct
+/home/stephane/IA/cache/huggingface/hub/.locks/models--Qwen--Qwen2.5-14B-Instruct
+/home/stephane/IA/cache/huggingface/hub/.locks/models--Qwen--Qwen2.5-0.5B-Instruct
+/home/stephane/IA/cache/huggingface/hub/.locks/models--Qwen--Qwen2.5-1.5B-Instruct
+/home/stephane/IA/cache/huggingface/hub/.locks/models--Qwen--Qwen2.5-3B-Instruct
+/home/stephane/IA/cache/huggingface/hub/.locks/models--Qwen--Qwen2.5-32B-Instruct
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-1.5B-Instruct
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-3B-Instruct
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-32B-Instruct
+/home/stephane/.cache/llama.cpp/gguf-headers/bartowski_Meta-Llama-3.1-70B-Instruct-GGUF--Meta-Llama-3.1-70B-Instruct-Q4_K_M.gguf.partial
+---
+hub
+qwen2vl-ref
+xet
+4,0K	/home/stephane/.cache/huggingface
+  ```
+
+- **bash** `{"command": "timeout 15 curl -sI https://huggingface.co 2>&1 | head -3; echo \"EXIT=$?\"", "description": "Test network access to HuggingFace"}`
+
+  ```
+HTTP/2 200 
+content-type: text/html; charset=utf-8
+content-length: 179138
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte d'un cache HF avec des Qwen-Instruct ; je vérifie s'ils sont complets
+
+- **bash** `{"command": "for d in /home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-*; do echo \"== $(basename $d)\"; du -sh \"$d\" 2>/dev/null; find \"$d\" -name \"*.safetensors\" -o -name \"*.bin\" | head -3; done", "description": "Check HF cache model sizes and weights"}`
+
+  ```
+== models--Qwen--Qwen2.5-0.5B
+954M	/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B/snapshots/060db6499f32faf8b98477b0a26969ef7d8b9987/model.safetensors
+== models--Qwen--Qwen2.5-0.5B-Instruct
+954M	/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775/model.safetensors
+== models--Qwen--Qwen2.5-14B-Instruct
+12M	/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-14B-Instruct
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-14B-Instruct/.no_exist/cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8/model.safetensors
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-14B-Instruct/snapshots/cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8/model-00004-of-00008.safetensors
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-14B-Instruct/snapshots/cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8/model-00005-of-00008.safetensors
+== models--Qwen--Qwen2.5-1.5B-Instruct
+2,9G	/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-1.5B-Instruc
+… [1874 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls /home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-3B-Instruct/snapshots/*/ 2>/dev/null | head -20; echo '---'; find /home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-3B-Instruct -type f | head -15", "description": "List files of Qwen2.5-3B-Instruct cache"}`
+
+  ```
+config.json
+generation_config.json
+LICENSE
+merges.txt
+model-00001-of-00002.safetensors
+model-00002-of-00002.safetensors
+model.safetensors.index.json
+README.md
+tokenizer_config.json
+tokenizer.json
+vocab.json
+---
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-3B-Instruct/.no_exist/aa8e72537993ba99e69dfaafa59ed015b17504d1/chat_template.jinja
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-3B-Instruct/.no_exist/aa8e72537993ba99e69dfaafa59ed015b17504d1/model.safetensors
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-3B-Instruct/.no_exist/aa8e72537993ba99e69dfaafa59ed015b17504d1/added_tokens.json
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-3B-Instruct/.no_exist/aa8e72537993ba99e69dfaafa59ed015b17504d1/adapter_config.json
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-3B-Instruct/.no_exist/aa8e72537993ba99e69dfaafa59ed015b17504d1/special_tokens_map.json
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-3B-Instruct/refs/main
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-3B-Instruct/trees/aa8e72537993ba99e69dfaafa59ed015b17504d1.json
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--
+… [937 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Réseau OK et cache Instruct complet ; je cherche un GGUF Qwen 3B-Instruct officiel
+
+- **bash** `{"command": "timeout 30 curl -s https://huggingface.co/api/models/Qwen/Qwen2.5-3B-Instruct-GGUF | python3 -c \"import json,sys;d=json.load(sys.stdin);print([s['rfilename'] for s in d.get('siblings',[])][:40])\" 2>&1 | head -5", "description": "List official Qwen2.5-3B-Instruct GGUF files"}`
+
+  ```
+['.gitattributes', 'LICENSE', 'README.md', 'qwen2.5-3b-instruct-fp16-00001-of-00002.gguf', 'qwen2.5-3b-instruct-fp16-00002-of-00002.gguf', 'qwen2.5-3b-instruct-q2_k.gguf', 'qwen2.5-3b-instruct-q3_k_m.gguf', 'qwen2.5-3b-instruct-q4_0.gguf', 'qwen2.5-3b-instruct-q4_k_m.gguf', 'qwen2.5-3b-instruct-q5_0.gguf', 'qwen2.5-3b-instruct-q5_k_m.gguf', 'qwen2.5-3b-instruct-q6_k.gguf', 'qwen2.5-3b-instruct-q8_0.gguf']
+  ```
+
+- **bash** `{"command": "find /home/stephane -maxdepth 5 -name \"convert_hf_to_gguf.py\" 2>/dev/null | head; ls ~/.local/bin | grep -i llama", "description": "Look for llama.cpp converter"}`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp/convert_hf_to_gguf.py
+/home/stephane/Data13TB/stephane/GitHub/llama.cpp-k3/convert_hf_to_gguf.py
+llama-bench
+llama-cli
+llama-perplexity
+llama-quantize
+llama-serve
+llama-server
+  ```
+
+### 🤖 Assistant
+
+⏵ Téléchargement du GGUF Qwen2.5-3B-Instruct en arrière-plan (2 Go) pour la qualification
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && curl -L --fail --retry 3 -o models/qwen2.5-3b-instruct-q4_k_m.gguf.part https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf && mv models/qwen2.5-3b-instruct-q4_k_m.gguf.part models/qwen2.5-3b-instruct-q4_k … [144 caractères tronqués]`
+
+  ```
+started background job bash-50
+  ```
+
+- **bash** `{"command": "python3 tools/sessions.py --check --strict 2>&1 | tail -5; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Check strict status again"}`
+
+  ```
+⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ❌ plan actif non listé dans en-cours : 0733c5bb-f90b-4f58-9241-3364fa32e46c
+  ❌ plan actif non listé dans en-cours : 29ad180d-38a5-4481-a9a7-ec6ab31c895f
+EXIT=1
+  ```
+
+### 👤 Utilisateur
+
+background job bash-38 (bash: ls ~/.local/share/spacy 2>/dev/null; python3 -m spacy info 2>&1 | head -20; echo '---'; find /home/stephane -maxdepth 6 \( -iname "*fr_core_news*" -o -iname "*stanza*" -o -iname "*udpipe*" \) 2>/dev/null | head) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Collecte du job de recherche terminé et suivi du téléchargement
+
+- **job_output** `{"job_id": "bash-38"}`
+
+  ```
+(no new output)
+[status: completed, exit code: 0]
+  ```
+
+- **job_output** `{"job_id": "bash-50"}`
+
+  ```
+[stderr]
+  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+                                 Dload  Upload  Total   Spent   Left   Speed
+  0      0   0      0   0      0      0      0                              0100   1110 100   1110   0      0  10122      0                              0100   1110 100   1110   0      0  10116      0                              0
+  0      0   0      0   0      0      0      0                              0  4  1.95G   4 86.77M   0      0 67.76M      0   00:29   00:01   00:28 86.76M  6  1.95G   6 133.6M   0      0 58.62M      0   00:34   00:02   00:32 66.84M
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant le téléchargement, je lis le contrat `Annotation`/`Etiquette` et la cascade
+
+- **bash** `{"command": "grep -n \"^class \\|^NIVEAUX\\|def evaluer_bloc\\|def _pragma\\|def _pos\" tools/bloc_linguistique.py | head -40", "description": "List classes and key functions in bloc_linguistique"}`
+
+  ```
+43:NIVEAUX = ("graphème", "morphème", "mot", "pos", "syntagme", "phrase", "discours",
+52:class Span:
+61:class Etiquette:
+85:class Annotation:
+123:class BlocLinguistique(Protocol):
+130:class RefusNeuronal(RuntimeError):
+385:class Heuristique:
+461:    def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
+745:class MockNeuronal:
+799:class NeuronalLLM:
+925:class Parallele:
+942:class Cascade:
+972:class CoucheSemantique:
+  ```
+
+- **bash** `{"command": "sed -n '1,100p' tools/tests/linguistique/evaluer_gold.py", "description": "Read evaluator metric computation"}`
+
+  ```
+"""evaluer_gold.py — mesure le bloc linguistique sur le gold réel (20) + synthétique (160).
+
+Trois niveaux : POS (token, exact), syntagmes (exact + **par tête**), pragmatique. Quatre
+lectures : heuristique, mock neuronal, parallèle, cascade. Le vrai modèle est optionnel
+(`--reel`) : s'il ne répond pas, il est refusé, pas simulé.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import sys
+from collections import Counter, defaultdict
+
+RACINE = pathlib.Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(RACINE / "tools"))
+import bloc_linguistique as bl  # noqa: E402
+
+GOLD = pathlib.Path(__file__).with_name("gold.json")
+REEL = pathlib.Path(__file__).with_name("gold_reel.json")
+SYNTH = pathlib.Path(__file__).with_name("gold_synthetique.json")
+
+
+def charger() -> list[dict]:
+    hand = json.loads(GOLD.read_text(encoding="utf-8"))["phrases"]
+    reel = json.loads(REEL.read_text(encoding="utf-8"))["phrases"]
+    synth = json.loads(SYNTH.read_text(encoding="utf-8"))["phrases"]
+    for p in hand:
+        p["source"] = "hand"
+    for p in reel:
+        p["source"] = "reel"
+    return hand + reel + synth
+
+
+GELE = pathlib.Path(__file__).with_name("gold_ge
+… [2719 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 90, "offset": 43}`
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 80, "offset": 745}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+43: NIVEAUX = ("graphème", "morphème", "mot", "pos", "syntagme", "phrase", "discours",
+44:            "pragmatique", "document")
+45: SOURCES = ("heuristique", "neuronal", "humain")
+46: SCRIPT_NEUTRE = "Zyyy"
+47: 
+48: # --------------------------------------------------------------------------- types
+49: 
+50: 
+51: @dataclass(frozen=True)
+52: class Span:
+53:     debut: int
+54:     fin: int
+55: 
+56:     def json(self) -> dict:
+57:         return {"debut": self.debut, "fin": self.fin}
+58: 
+59: 
+60: @dataclass
+61: class Etiquette:
+62:     niveau: str
+63:     type: str
+64:     valeur: str
+65:     debut: int
+66:     fin: int
+67:     source: str = "heuristique"
+68:     confiance: float = 0.5
+69:     candidats: list[str] = field(default_factory=list)
+70:     langue: str = "und"
+71:     script: str = SCRIPT_NEUTRE
+72:     meta: dict = field(default_factory=dict)
+73: 
+74:     def json(self) -> dict:
+75:         return {
+76:             "niveau": self.niveau, "type": self.type, "valeur": self.valeur,
+77:             "debut": self.debut, "fin": self.fin, "source": self.source,
+78:             "conf
+… [2370 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+745: class MockNeuronal:
+746:     """Le neuronal **de contrat** : même sortie, source `neuronal`, déterministe, sans GPU.
+747: 
+748:     Il ne prétend pas être un modèle : il prouve que le contrat accepte une autre implémentation,
+749:     que le parallèle fusionne et que la cascade n'appelle le neuronal que sur le résidu.
+750:     """
+751: 
+752:     nom = "neuronal"
+753: 
+754:     def __init__(self, profils: dict[str, dict] | None = None):
+755:         self.profils = profils
+756: 
+757:     def analyser(self, texte: str, langue: str | None = None,
+758:                  contexte: str | None = None) -> Annotation:
+759:         t0 = time.perf_counter()
+760:         lg = detecter_langue(texte, self.profils, langue)[0]
+761:         if lg == "und" and langue:
+762:             lg = langue
+763:         script = detecter_script(texte)
+764:         etiquettes: list[Etiquette] = []
+765:         unites: list[Span] = []
+766:         h = Heuristique(segmenter_s=False)
+767:         for d, f, t, typ in h._mots(texte):
+768:             if typ == "mot":
+769:                 classe, _, _ = h._pos(lg, t)
+
+… [3706 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 80, "offset": 925}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+925: class Parallele:
+926:     """Les deux implémentations en parallèle : le contrat est le même, la fusion est explicite."""
+927: 
+928:     nom = "parallele"
+929: 
+930:     def __init__(self, blocs: Sequence[BlocLinguistique]):
+931:         if len(blocs) != 2:
+932:             raise ValueError("le parallèle attend exactement deux blocs")
+933:         self.blocs = list(blocs)
+934: 
+935:     def analyser(self, texte: str, langue: str | None = None,
+936:                  contexte: str | None = None) -> Annotation:
+937:         a = self.blocs[0].analyser(texte, langue, contexte)
+938:         b = self.blocs[1].analyser(texte, langue, contexte)
+939:         return _fusion(a, b, self.nom)
+940: 
+941: 
+942: class Cascade:
+943:     """L'heuristique d'abord ; le neuronal seulement si un niveau reste sous le seuil."""
+944: 
+945:     nom = "cascade"
+946: 
+947:     def __init__(self, heuristique: BlocLinguistique, neuronal: BlocLinguistique,
+948:                  seuil: float = 0.6, niveaux=("morphème", "pos", "syntagme", "discours", "pragmatique")):
+949:         self.h = heuristique
+950:         s
+… [2743 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -lh models/*.part models/*.gguf 2>/dev/null; echo '---'; python3 -c \"import json;d=json.load(open('tools/tests/linguistique/gold_gele.json'));print(len(d['phrases']))\"", "description": "Check download and frozen gold size"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 337M 25 sep 17:13 models/Qwen2.5-0.5B-Q4_0.gguf
+-rw-r--r--. 1 stephane stephane 507M 25 sep 16:52 models/Qwen2.5-0.5B-Q8_0.gguf
+-rw-r--r--. 1 stephane stephane 1,6G  2 nov 16:22 models/qwen2.5-3b-instruct-q4_k_m.gguf.part
+---
+602
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'état du hub et des heartbeats concurrents
+
+- **bash** `{"command": "stat -c '%y %n' docs/pilotage/en-cours.md journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md; echo '---'; grep -n \"Heartbeat\\|État\\|Prochaine\" journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md | head", "description": "Check hub status and en-cours mtime"}`
+
+  ```
+2026-11-02 16:22:50.307740173 -0500 docs/pilotage/en-cours.md
+2026-11-02 16:09:28.131253811 -0500 journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md
+---
+17:- **Heartbeat** : 2026-11-02 16:09 EST
+18:- **Prochaine action** : la **passe de portes** complète (1 h 46) quand la machine est libre ;
+20:- **État** : actif
+  ```
+
+- **bash** `{"command": "grep -n \"Session\\|État\\|Heartbeat\\|Rôle\\|Prochaine\" journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md 2>/dev/null | head -10; echo '---'; grep -n \"Session\\|État\\|Heartbeat\" journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md | head", "description": "Inspe … [22 caractères tronqués]`
+
+  ```
+10:- **Session** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f`
+11:- **Rôle** : **S — les structures** : le banc d'interprétations candidates (outil web, générateur,
+16:- **Heartbeat** : 2026-11-02 16:19 EST
+17:- **Prochaine action** : **analyseur rôles/subordonnées** — améliorer les rôles (possession vs
+21:- **État** : actif
+40:- **Prochaine action (après le cycle)** : le gold **rôles/subordonnées** étendu aux **voix**
+---
+8:- **Session** : `fe3c05f0-834b-44f2-8739-501865d652c1`
+17:- **Heartbeat** : 2026-11-02 16:21 EST
+18:- **État** : actif
+  ```
+
+### 👤 Utilisateur
+
+background job bash-50 (bash: cd /home/stephane/GitHub/Qtrinet && curl -L --fail --retry 3 -o models/qwen2.5-3b-instruct-q4_k_m.gguf.part https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf && mv models/qwen2.5-3b-instruct-q4_k_m.gguf.part models/qwen2.5-3b-instruct-q4_k_m.gguf && ls -lh models/qwen2.5-3b-instruct-q4_k_m.gguf) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ En-cours vient d'être mis à jour par le hub ; je relance le check et récupère le modèle
+
+- **job_output** `{"job_id": "bash-50"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 2,0G  2 nov 16:22 models/qwen2.5-3b-instruct-q4_k_m.gguf
+[stderr]
+ 12  1.95G  12 244.0M   0      0 74.39M      0   00:26   00:03   00:23 81.34M 17  1.95G  17 351.9M   0      0 82.21M      0   00:24   00:04   00:20 87.97M 23  1.95G  23 462.6M   0      0 87.60M      0   00:22   00:05   00:17 92.52M 26  1.95G  26 541.5M   0      0 86.22M      0   00:23   00:06   00:17 90.94M 31  1.95G  31 629.7M   0      0 86.48M      0   00:23   00:07   00:16 99.18M 35  1.95G  35 719.8M   0      0 86.91M      0   00:23   00:08   00:15 95.13M 36  1.95G  36 742.6M   0      0 80.00M      0   00:25   00:09   00:16 78.11M 37  1.95G  37 761.1M   0      0 74.02M      0   00:27   00:10   00:17 59.67M 40  1.95G  40 821.6M   0      0 72.82M      0   00:27   00:11   00:16 55.99M 43  1.95G  43 866.4M   0      0 70.53M      0   00:28   00:12   00:16 47.31M 44  1.95G  44 887.3M   0      0 66.73M      0   00:30   00:13   00:17 33.40M 47  1.95G  47 955.8M   0      0 66.85M      0   00:30   00:14   00:16 42.51M 50  1.95G  50  0.99G   0      0 66.53M      0   00:30   00:15   00:15 51.17M 54  1.95G  54  1.06G   0      0 67.15M      0   00:29   00:16   00:13 54.40M 59  1.95
+… [882 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/sessions.py --check --strict; echo \"EXIT=$?\"", "description": "Re-run strict check after en-cours update"}`
+
+  ```
+⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+EXIT=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Le check n'affiche plus d'erreur mais sort en 1 ; j'examine la logique de sortie
+
+- **bash** `{"command": "python3 tools/sessions.py --check --strict > /tmp/check.out 2>&1; echo \"EXIT=$?\"; cat -A /tmp/check.out | head -30; echo '---'; wc -l /tmp/check.out", "description": "Capture full strict check output"}`
+
+  ```
+EXIT=1
+  M-bM-^ZM-  fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)$
+  M-bM-^ZM-  fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)$
+  M-bM-^ZM-  fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)$
+  M-bM-^ZM-  fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)$
+---
+4 /tmp/check.out
+  ```
+
+- **bash** `{"command": "grep -n \"def main\\|--check\\|return 1\\|return 0\\|sys.exit\" tools/sessions.py | tail -20", "description": "Inspect check exit logic"}`
+
+  ```
+6:sessions consultent `--status` avant de claim, et `--check --strict` refuse les
+8:et les heartbeats périmés (le `--check` seul les signale). `en-cours` reste la
+147:    return 0
+213:    return 1 if erreurs else 0
+254:    return 0
+272:def main() -> int:
+276:    ap.add_argument("--check", action="store_true")
+285:        return 0
+299:        return 1 if e or (a.strict and w) else 0
+304:    sys.exit(main())
+  ```
+
+### 🤖 Assistant
+
+⏵ Check strict : zéro erreur, mais 4 avertissements « fichiers proches » ; test du modèle 3B sur une phrase
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && time timeout 180 llama-cli -m models/qwen2.5-3b-instruct-q4_k_m.gguf -p 'Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {\"langue\":\"fr\",\"script\":\"Latn\",\"etiquettes\":[{\"niveau\":\"ph … [440 caractères tronqués]`
+
+  ```
+> Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {"langue":"fr","script":"Latn","etiquettes":[{"niveau":"phrase|pragmatique|syntagme|pos","type":"...","valeur":"...","debut":0,"fin":0,"confiance":0.8}]}. Niveaux attendus : phrase.type, pragmatique.acte, syntagme (GN/GV/GP/REL/SUB). Langue indiquée : fr. Contexte : aucun.
+Texte : Le chat dort sur le tapis.
+{"langue":"fr","script":"Latn","etiquettes":[{"niveau":"phrase|pragmatique|syntagme|pos","type":"phrase","valeur":"Le chat dort sur le tapis","debut":0,"fin":12,"confiance":0.8},{"niveau":"phrase|pragmatique|syntagme|pos","type":"pragmatique|acte","valeur":"décrire","debut":0,"fin":12,"confiance":0.8},{"niveau":"phrase|pragmatique|syntagme|pos","type":"syntagme","valeur":"Le chat","debut":0,"fin":4,"confiance":0.8},{"niveau":"phrase|pragmatique|syntagme|pos","type":"GN","valeur":"nom","debut":0,"fin":2,"confiance":0.8},{"niveau":"phrase|pragmatique|syntagme|pos","type":"GN","valeur":"nom","debut":4,"fin":7,"confiance":0.8},{"niveau":"phrase|pragmatique|syntagme|pos","type":"
+
+[ Prompt: 1347,3 t/s | Generation: 46,8 t/s ]
+
+
+Exiting...
+EXIT=0
+[stderr]
+
+real	0m8,100s
+user	0m
+… [19 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Prompt POS compact (tokens fournis) sur le 3B : test de validité JSON
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 120 llama-cli -m models/qwen2.5-3b-instruct-q4_k_m.gguf -p 'Tu es un étiqueteur morphosyntaxique. Pour chaque token de la liste, donne sa classe grammaticale. Réponds UNIQUEMENT par un objet JSON de la forme {\"pos\":[\"DET\",\"NOUN\",...]} av … [375 caractères tronqués]`
+
+  ```
+{"pos":["DET","NOUN","VERB","PREP","DET","NOUN"]}
+
+[ Prompt: 1549,9 t/s | Generation: 49,6 t/s ]
+
+
+Exiting...
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,collections,re\nps=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\nc=collections.Counter(m['pos'] for p in ps for m in p['mots'])\nprint(len(ps), sum(c.values()), c.most_common(30))\n# token regex check\ … [245 caractères tronqués]`
+
+  ```
+20 105 [('VERB', 24), ('DET', 21), ('NOUN', 21), ('PREP', 9), ('AUX', 9), ('PRON', 9), ('ADV', 6), ('CONJ', 3), ('ADJ', 3)]
+phrases avec tokenisation regex != gold: 1
+  ```
+
+### 🤖 Assistant
+
+⏵ Le prompt POS compact fonctionne ; je vérifie l'état en-cours mis à jour et le nombre de phrases
+
+- **bash** `{"command": "grep -n \"0733c5bb\\|29ad180d\\|e181ce02\\|Mis à jour\\|en pause\\|actif\" docs/pilotage/en-cours.md | head -30", "description": "Check updated en-cours session sections"}`
+
+  ```
+3:**Mis à jour : 2026-11-02, 16 h 24 HNE (heure locale, EST).**
+10:> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; les GPU sont
+19:> le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+31:- **Ce que font les autres** : **N2** `0733c5bb` (200 k pas, GPU 0), **S** `29ad180d`,
+32:  **Pensée** `e181ce02`, **D/R/A** `fe3c05f0` — les quatre actives depuis 16 h 14–16 h 21.
+38:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
+40:- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+59:- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+61:### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+63:- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+82:- **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
+84:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le mo
+… [1395 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nfor f in ['gold.json','gold_reel.json','gold_synthetique.json','gold_gele.json']:\n    d=json.load(open('tools/tests/linguistique/'+f))\n    print(f, len(d['phrases']))\nPY", "description": "Count phrases per gold file"}`
+
+  ```
+gold.json 20
+gold_reel.json 432
+gold_synthetique.json 160
+gold_gele.json 602
+  ```
+
+### 🤖 Assistant
+
+⏵ Je cadre la qualification POS : lecture des tests existants et de la porte du bloc
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py", "limit": 60, "offset": 75}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py</path>
+<type>file</type>
+<content>
+75:         self.assertLess(r["fraction"], 1.0)
+76:         self.assertGreater(r["unites"], 0)
+77:         self.assertLess(r["cout"], len(TEXTE))
+78: 
+79:     def test_refus(self):
+80:         self.assertEqual(self.h.analyser("").refus, "vide")
+81:         self.assertEqual(self.h.analyser("... !!! ???").refus, "vide")
+82:         self.assertEqual(self.h.analyser("qqqqq zzzzz wwwww").langue, "und")
+83: 
+84:     def test_rejeu(self):
+85:         self.assertEqual(self.h.analyser(TEXTE, "fr").json(),
+86:                          self.h.analyser(TEXTE, "fr").json())
+87: 
+88:     def test_adaptateur_neuronal_avec_faux_modele(self):
+89:         d = pathlib.Path(tempfile.mkdtemp())
+90:         faux = d / "faux_llama.py"
+91:         faux.write_text(
+92:             "#!/usr/bin/env python3\nimport json\n"
+93:             "print(json.dumps({'langue':'fr','script':'Latn','etiquettes':["
+94:             "{'niveau':'phrase','type':'type','valeur':'déclarative','debut':0,'fin':4,'confiance':0.9},"
+95:             "{'niveau':'pragmatique','type':'acte','valeur':'assertion','deb
+… [611 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,80p' tools/porte-bloc-linguistique.sh", "description": "Read bloc linguistique gate script"}`
+
+  ```
+#!/usr/bin/env bash
+# Porte du bloc linguistique — tests de contrat + mesure UDHR (langue/script).
+set -u
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+echo "=== PORTE BLOC LINGUISTIQUE ==="
+python3 -m unittest discover -s tools/tests/linguistique -p 'test_bloc_linguistique.py' || { echo "❌ tests"; exit 1; }
+python3 tools/bloc_linguistique.py --autotest --udhr data/udhr/articles.jsonl --sortie /tmp/bloc-linguistique-porte.json || { echo "❌ autotest"; exit 1; }
+python3 tools/tests/linguistique/gold.py >/dev/null || { echo "❌ gold"; exit 1; }
+python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold-porte.json >/dev/null || { echo "❌ évaluation gold"; exit 1; }
+echo "✅ porte bloc linguistique verte"
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de la fusion heuristique/neuronal avant de brancher le modèle POS
+
+- **bash** `{"command": "grep -n \"def _fusion\" -A 60 tools/bloc_linguistique.py | head -80", "description": "Read fusion logic"}`
+
+  ```
+731:def _fusionner(spans: Sequence[Span]) -> list[Span]:
+732-    spans = sorted(set(spans), key=lambda s: (s.debut, s.fin))
+733-    sortie: list[Span] = []
+734-    for s in spans:
+735-        if not sortie or s.debut > sortie[-1].fin:
+736-            sortie.append(s)
+737-        else:
+738-            sortie[-1] = Span(sortie[-1].debut, max(sortie[-1].fin, s.fin))
+739-    return sortie
+740-
+741-
+742-# --------------------------------------------------------------------------- neuronal
+743-
+744-
+745-class MockNeuronal:
+746-    """Le neuronal **de contrat** : même sortie, source `neuronal`, déterministe, sans GPU.
+747-
+748-    Il ne prétend pas être un modèle : il prouve que le contrat accepte une autre implémentation,
+749-    que le parallèle fusionne et que la cascade n'appelle le neuronal que sur le résidu.
+750-    """
+751-
+752-    nom = "neuronal"
+753-
+754-    def __init__(self, profils: dict[str, dict] | None = None):
+755-        self.profils = profils
+756-
+757-    def analyser(self, texte: str, langue: str | None = None,
+758-                 contexte: str | None = None) -> Annotation:
+759-        t0 = time.perf_counter()
+760-        lg = detecter_langue(texte, self.profils, lang
+… [3276 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '380,500p' tools/bloc_linguistique.py", "description": "Read heuristic POS confidence"}`
+
+  ```
+# --------------------------------------------------------------------------- heuristique
+
+
+class Heuristique:
+    """L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couvre pas."""
+
+    nom = "heuristique"
+
+    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+                 seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
+                 union: bool = True):
+        self.profils = profils
+        self.segmenter_s = segmenter_s
+        self.seuil_ouvert = seuil_ouvert
+        self.seuil_langue = seuil_langue
+        self.union = union
+
+    # -- langues / script ---------------------------------------------------
+    def _langue(self, texte: str, indice: str | None) -> tuple[str, float, str]:
+        langue, conf, _ = detecter_langue(texte, self.profils, indice)
+        script = detecter_script(texte)
+        if conf < self.seuil_langue:
+            return "und", conf, script
+        return langue, conf, script
+
+    # -- tokens -------------------------------------------------------------
+    @staticmethod
+    def _mots(texte: str) -> list[tuple[int, int, str, str]]:
+        motif = re.compile(r"\w+(?:['’\-]\
+… [4184 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Prototype de qualification POS sur 10 phrases (modèle 3B, sortie JSON)
+
+- **write** `{"file_path": "/tmp/qualif_proto.py", "content": "import json, re, subprocess, sys, time, pathlib\nRACINE = pathlib.Path('/home/stephane/GitHub/Qtrinet')\nMODEL = RACINE/'models/qwen2.5-3b-instruct-q4_k_m.gguf'\n\ndef prompt(tokens):\n    return ('Tu es un étiqueteur morphosyntaxique. Pour chaque to … [1981 caractères tronqués]`
+
+  ```
+<path>/tmp/qualif_proto.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && time python3 /tmp/qualif_proto.py 2>&1 | tail -15", "description": "Run POS qualification prototype on 10 sentences", "timeoutMs": 400000}`
+
+  ```
+Classes permises : DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM, INTJ, PUNCT.
+Tokens : ["Le",
+REFUS g007 JSON Expecting value: line 1 column 22 (char 21): {"pos":["DET","NOUN",...]} avec exactement un élément par token, dans l ordre, sans texte autour.
+Classes permises : DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM, INTJ, PUNCT.
+Tokens : ["Les"
+REFUS g008 JSON Expecting value: line 1 column 22 (char 21): {"pos":["DET","NOUN",...]} avec exactement un élément par token, dans l ordre, sans texte autour.
+Classes permises : DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM, INTJ, PUNCT.
+Tokens : ["Mari
+REFUS g009 JSON Expecting value: line 1 column 22 (char 21): {"pos":["DET","NOUN",...]} avec exactement un élément par token, dans l ordre, sans texte autour.
+Classes permises : DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM, INTJ, PUNCT.
+Tokens : ["Il",
+REFUS g010 JSON Expecting value: line 1 column 22 (char 21): {"pos":["DET","NOUN",...]} avec exactement un élément par token, dans l ordre, sans texte autour.
+Classes permises : DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM, INTJ, PUNCT.
+Tokens : ["Vien
+POS 0 / 0 0.0 latence moy 3.39
+[stderr]
+
+real	0m3
+… [35 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ `llama-cli` renvoie le prompt dans stdout ; je passe par `llama-server` (chargement unique, pas d'écho)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && (llama-server -m models/qwen2.5-3b-instruct-q4_k_m.gguf --host 127.0.0.1 --port 18080 -ngl 0 -c 1024 --no-webui > /tmp/llama-server.log 2>&1 &) ; sleep 6; curl -s http://127.0.0.1:18080/health; echo; tail -3 /tmp/llama-server.log", "description": "Sta … [58 caractères tronqués]`
+
+  ```
+{"status":"ok"}
+0.01.572.782 I srv    load_model: initializing, n_slots = 4, n_ctx_slot = 1024, kv_unified = 'true'
+0.01.579.583 I srv  llama_server: model loaded
+0.01.579.592 I srv  llama_server: listening on http://127.0.0.1:18080
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,urllib.request\np='Tu es un étiqueteur morphosyntaxique. Pour chaque token de la liste, donne sa classe grammaticale. Réponds UNIQUEMENT par un objet JSON de la forme {\"pos\":[\"DET\",\"NOUN\",...]} avec exactement un él … [857 caractères tronqués]`
+
+  ```
+/v1/chat/completions {"choices": [{"finish_reason": "stop", "index": 0, "message": {"role": "assistant", "content": "{\"pos\":[\"DET\",\"NOUN\",\"VERB\",\"PREP\",\"DET\",\"NOUN\"]}"}}], "created": 1793654728, "model": "models/qwen2.5-3b-instruct-q4_k_m.gguf", "system_fingerprint": "b11017-aca5f933b-dirty", "object": "chat.completion", "usage": {"completion_tokens": 20, "prompt_tokens": 148, "total_tokens": 168, "prompt_tokens_details": {"cached_tokens": 0}, "completion_tokens_details": {"reasoning_tokens": 0, "visib
+/completion {"index": 0, "content": " {\"pos\":[\"DET\",\"NOUN\",\"VERB\",\"PREP\",\"DET\",\"NOUN\"]}", "tokens": [], "id_slot": 2, "stop": true, "model": "models/qwen2.5-3b-instruct-q4_k_m.gguf", "tokens_predicted": 20, "tokens_evaluated": 119, "generation_settings": {"seed": 4294967295, "temperature": 0.0, "dynatemp_range": 0.0, "dynatemp_exponent": 1.0, "top_k": 40, "top_p": 0.949999988079071, "min_p": 0.05000000074505806, "top_n_sigma": -1.0, "xtc_probability": 0.0, "xtc_threshold": 0.10000000149011612,
+  ```
+
+### 🤖 Assistant
+
+⏵ Qualification POS via serveur : 20 phrases, validité et exactitude
+
+- **write** `{"content": "import json, re, time, urllib.request, pathlib\nRACINE = pathlib.Path('/home/stephane/GitHub/Qtrinet')\nURL = 'http://127.0.0.1:18080/v1/chat/completions'\n\ndef prompt(tokens):\n    return ('Tu es un étiqueteur morphosyntaxique. Pour chaque token de la liste, donne sa classe grammatica … [2208 caractères tronqués]`
+
+  ```
+<path>/tmp/qualif_proto_srv.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && time python3 /tmp/qualif_proto_srv.py 2>&1 | tail -25", "description": "Run server-based POS prototype on 20 sentences", "timeoutMs": 400000}`
+
+  ```
+g001 3/3 1.20s ['DET', 'NOUN', 'VERB']
+g002 5/6 1.89s ['DET', 'NOUN', 'PREP', 'NOUN', 'NOUN', 'VERB']
+REFUS g003 longueur 9/8: {"pos":["DET","NOUN","VERB","VERB","NOUN","PREP","NOUN","PREP","NOUN"]}
+g004 5/7 2.10s ['DET', 'VERB', 'VERB', 'PREP', 'VERB', 'DET', 'NOUN']
+g005 3/6 2.09s ['PRON', 'VERB', 'VERB', 'PRON', 'VERB', 'ADJ']
+g006 6/7 2.21s ['DET', 'NOUN', 'PREP', 'NOUN', 'VERB', 'DET', 'PUNCT']
+g007 6/6 2.00s ['DET', 'NOUN', 'VERB', 'PREP', 'DET', 'NOUN']
+REFUS g008 JSON Extra data: line 1 column 18 (char 17): {"pos":["NOUN"]} {"pos":["VERB"]} {"pos":["DET"]} {"pos":["NOUN"]}
+g009 1/4 1.44s ['DET', 'NOUN', 'VERB', 'PUNCT']
+g010 0/2 0.95s ['PRON', 'NOUN']
+g011 4/7 2.36s ['DET', 'NOUN', 'PRON', 'VERB', 'VERB', 'NOUN', 'ADJ']
+g012 4/6 2.01s ['DET', 'NOUN', 'VERB', 'ADJ', 'PRON', 'VERB']
+g013 2/2 0.97s ['VERB', 'VERB']
+g014 4/6 1.98s ['DET', 'VERB', 'NOUN', 'PREP', 'DET', 'NOUN']
+g015 3/3 1.17s ['DET', 'NOUN', 'VERB']
+g016 5/8 2.61s ['DET', 'NOUN', 'VERB', 'NOUN', 'NOUN', 'PREP', 'NOUN', 'PREP']
+g017 4/7 2.44s ['PRON', 'VERB', 'ADJ', 'PRON', 'VERB', 'VERB', 'ADJ']
+g018 1/4 1.45s ['PRON', 'VERB', 'DET', 'NOUN']
+g019 1/3 1.16s ['DET', 'NOUN', 'VERB']
+g020 4/6 2.02s ['DET', 'NOUN', '
+… [128 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les erreurs viennent du format libre ; je teste une grammaire GBNF (longueur exacte) et un exemple
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nh=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\ns=json.load(open('tools/tests/linguistique/gold_synthetique.json'))['phrases']\nfor p in (h+s):\n    if p['id'] in ('g003','g004','g008'):\n        prin … [136 caractères tronqués]`
+
+  ```
+g003 La femme a vu l'homme dans le parc. | [('La', 'DET'), ('femme', 'NOUN'), ('a', 'AUX'), ('vu', 'VERB'), ("l'homme", 'DET'), ('dans', 'PREP'), ('le', 'DET'), ('parc', 'NOUN')]
+g004 Il a couru pour attraper le bus. | [('Il', 'PRON'), ('a', 'AUX'), ('couru', 'VERB'), ('pour', 'PREP'), ('attraper', 'VERB'), ('le', 'DET'), ('bus', 'NOUN')]
+g008 Marie lit un livre. | [('Marie', 'NOUN'), ('lit', 'VERB'), ('un', 'DET'), ('livre', 'NOUN')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nn=6\ntags=['DET','NOUN','VERB','ADJ','ADV','PREP','PRON','AUX','CONJ','NUM','INTJ','PUNCT']\ng='root ::= \"{\\\\\"pos\\\\\":[\" ' + ' (\",\" ' .join(['tag']*n) + ' \"]}\"\\n' + 'tag ::= ' + ' | '.join('\"\\\\\"%s\\\\\"\" … [156 caractères tronqués]`
+
+  ```
+root ::= "{\"pos\":[" tag ("," tag ("," tag ("," tag ("," tag ("," tag "]}"
+tag ::= "\"DET\"" | "\"NOUN\"" | "\"VERB\"" | "\"ADJ\"" | "\"ADV\"" | "\"PREP\"" | "\"PRON\"" | "\"AUX\"" | "\"CONJ\"" | "\"NUM\"" | "\"INTJ\"" | "\"PUNCT\""
+
+root ::= "{\"pos\":[" tag ("," tag ("," tag ("," tag ("," tag ("," tag "]}"
+tag ::= "\"DET\"" | "\"NOUN\"" | "\"VERB\"" | "\"ADJ\"" | "\"ADV\"" | "\"PREP\"" | "\"PRON\"" | "\"AUX\"" | "\"CONJ\"" | "\"NUM\"" | "\"INTJ\"" | "\"PUNCT\""
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, urllib.request\n\ndef grammaire(n):\n    tags = ['DET','NOUN','VERB','ADJ','ADV','PREP','PRON','AUX','CONJ','NUM','INTJ','PUNCT']\n    corps = ' tag' + ' (\",\" tag)' * (n - 1) if n > 1 else ' tag'\n    g = 'root ::= \"{ … [1293 caractères tronqués]`
+
+  ```
+{"finish_reason": "stop", "index": 0, "message": {"role": "assistant", "content": "{\"pos\":[\"PRON\",\"VERB\",\"VERB\",\"PREP\",\"VERB\",\"DET\",\"NOUN\"]}"}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Benchmark 20 phrases avec grammaire et exemple (validité 100 % attendue)
+
+- **write** `{"content": "import json, time, urllib.request, pathlib\nRACINE = pathlib.Path('/home/stephane/GitHub/Qtrinet')\nURL = 'http://127.0.0.1:18080/v1/chat/completions'\nTAGS = ['DET', 'NOUN', 'VERB', 'ADJ', 'ADV', 'PREP', 'PRON', 'AUX', 'CONJ', 'NUM', 'INTJ', 'PUNCT']\n\ndef grammaire(n):\n    corps = ' … [2637 caractères tronqués]`
+
+  ```
+<path>/tmp/qualif_proto_srv2.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && time python3 /tmp/qualif_proto_srv2.py 2>&1 | tail -25", "description": "Run grammar-based POS benchmark on 20 sentences", "timeoutMs": 400000}`
+
+  ```
+g001 3/3 1.26s ['DET', 'NOUN', 'VERB']
+g002 5/6 1.90s ['DET', 'NOUN', 'PREP', 'DET', 'PRON', 'VERB']
+g003 5/8 3.17s ['DET', 'NOUN', 'VERB', 'NOUN', 'NOUN', 'PREP', 'DET', 'NOUN']
+g004 6/7 2.24s ['PRON', 'VERB', 'VERB', 'PREP', 'VERB', 'DET', 'NOUN']
+g005 3/6 2.10s ['PRON', 'VERB', 'VERB', 'PRON', 'VERB', 'ADJ']
+g006 5/7 3.05s ['DET', 'NOUN', 'PREP', 'NOUN', 'VERB', 'PRON', 'VERB']
+g007 5/6 2.06s ['DET', 'NOUN', 'VERB', 'PREP', 'NOUN', 'NOUN']
+g008 4/4 1.43s ['NOUN', 'VERB', 'DET', 'NOUN']
+g009 3/4 1.54s ['PRON', 'ADV', 'VERB', 'ADJ']
+g010 0/2 0.99s ['PRON', 'ADJ']
+g011 2/7 3.10s ['DET', 'NOUN', 'PRON', 'VERB', 'NOUN', 'ADJ', 'VERB']
+g012 4/6 2.00s ['DET', 'NOUN', 'VERB', 'ADJ', 'CONJ', 'VERB']
+g013 1/2 0.97s ['VERB', 'PRON']
+g014 6/6 1.93s ['PRON', 'VERB', 'DET', 'PREP', 'DET', 'NOUN']
+g015 3/3 1.13s ['DET', 'NOUN', 'VERB']
+g016 8/8 2.36s ['DET', 'NOUN', 'VERB', 'DET', 'NOUN', 'PREP', 'DET', 'NOUN']
+g017 3/7 2.39s ['PRON', 'VERB', 'ADJ', 'PRON', 'VERB', 'NOUN', 'ADJ']
+g018 3/4 1.44s ['PRON', 'VERB', 'ADV', 'VERB']
+g019 0/3 1.26s ['ADJ', 'VERB', 'NOUN']
+g020 4/6 2.04s ['DET', 'NOUN', 'VERB', 'ADJ', 'VERB', 'VERB']
+POS 73 / 105 0.6952 latence moy 1.92 total 38.4
+confusions [(('AUX', 
+… [310 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le 3B plafonne à 0,695 (sous l'heuristique 0,751) ; je télécharge le 7B-Instruct pour comparer
+
+- **bash** `{"command": "timeout 30 curl -s https://huggingface.co/api/models/Qwen/Qwen2.5-7B-Instruct-GGUF | python3 -c \"import json,sys;d=json.load(sys.stdin);print([s['rfilename'] for s in d.get('siblings',[])])\" 2>&1 | head -3", "description": "List Qwen2.5-7B-Instruct GGUF files"}`
+
+  ```
+['.gitattributes', 'LICENSE', 'README.md', 'qwen2.5-7b-instruct-fp16-00001-of-00004.gguf', 'qwen2.5-7b-instruct-fp16-00002-of-00004.gguf', 'qwen2.5-7b-instruct-fp16-00003-of-00004.gguf', 'qwen2.5-7b-instruct-fp16-00004-of-00004.gguf', 'qwen2.5-7b-instruct-q2_k.gguf', 'qwen2.5-7b-instruct-q3_k_m.gguf', 'qwen2.5-7b-instruct-q4_0-00001-of-00002.gguf', 'qwen2.5-7b-instruct-q4_0-00002-of-00002.gguf', 'qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf', 'qwen2.5-7b-instruct-q4_k_m-00002-of-00002.gguf', 'qwen2.5-7b-instruct-q5_0-00001-of-00002.gguf', 'qwen2.5-7b-instruct-q5_0-00002-of-00002.gguf', 'qwen2.5-7b-instruct-q5_k_m-00001-of-00002.gguf', 'qwen2.5-7b-instruct-q5_k_m-00002-of-00002.gguf', 'qwen2.5-7b-instruct-q6_k-00001-of-00002.gguf', 'qwen2.5-7b-instruct-q6_k-00002-of-00002.gguf', 'qwen2.5-7b-instruct-q8_0-00001-of-00003.gguf', 'qwen2.5-7b-instruct-q8_0-00002-of-00003.gguf', 'qwen2.5-7b-instruct-q8_0-00003-of-00003.gguf']
+  ```
+
+- **bash** `{"command": "df -h /home/stephane/GitHub/Qtrinet | tail -1; free -g | head -2", "description": "Check disk and RAM"}`
+
+  ```
+/dev/mapper/system-root   11T  9,0T  2,0T  83% /home/stephane/Data13TB
+               total        used        free      shared  buff/cache   available
+Mem:             125          34          66           0          26          91
+  ```
+
+### 🤖 Assistant
+
+⏵ Téléchargement des 2 shards 7B-Instruct Q4_K_M en arrière-plan
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in 00001 00002; do curl -L --fail --retry 3 -o \"models/qwen2.5-7b-instruct-q4_k_m-$i-of-00002.gguf.part\" \"https://huggingface.co/Qwen/Qwen2.5-7B-Instruct-GGUF/resolve/main/qwen2.5-7b-instruct-q4_k_m-$i-of-00002.gguf\" && mv \"models/qwen2.5-7 … [233 caractères tronqués]`
+
+  ```
+started background job bash-78
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nh=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\ns=json.load(open('tools/tests/linguistique/gold_synthetique.json'))['phrases']\n# heuristic POS on gold tokens: map by span using heuristic.analyser\nimport sys; sys.path.insert(0,'tools') … [560 caractères tronqués]`
+
+  ```
+{'hand': (97, 105, 0.9238), 'synth': (507, 699, 0.7253)} total 604 804
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la tokenisation `_mots` vs gold et de la disponibilité du 7B
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=bl.Heuristique()\nhand=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\nsynth=json.load(open('tools/tests/linguistique/gold_synthetique.j … [459 caractères tronqués]`
+
+  ```
+phrases tokenisation != gold: 0 / 180
+  ```
+
+- **bash** `{"command": "ls -lh models/qwen2.5-7b-instruct-q4_k_m-*.gguf* 2>/dev/null; job_output_placeholder=1", "description": "Check 7B download progress"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 1,3G  2 nov 16:28 models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf.part
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du 3B avec few-shot (3 exemples hors gold) sur les 20 phrases réelles
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nh=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\ns=json.load(open('tools/tests/linguistique/gold_synthetique.json'))['phrases']\ntextes={p['texte'] for p in h+s}\nfor t in [\"Un oiseau chante.\",\"Elle … [157 caractères tronqués]`
+
+  ```
+Un oiseau chante. False
+Elle est partie avec son frère. False
+Le livre de Marie tombe. False
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > /tmp/qualif_proto_srv3.py <<'PY'\nimport json, time, urllib.request, pathlib\nRACINE = pathlib.Path('/home/stephane/GitHub/Qtrinet')\nURL = 'http://127.0.0.1:18080/v1/chat/completions'\nTAGS = ['DET','NOUN','VERB','ADJ','ADV','PREP','PRON','AUX' … [3077 caractères tronqués]`
+
+  ```
+g001 3/3 2.27s ['DET', 'NOUN', 'VERB']
+g002 4/6 1.95s ['DET', 'NOUN', 'PREP', 'NOUN', 'DET', 'VERB']
+g003 6/8 3.23s ['DET', 'NOUN', 'AUX', 'VERB', 'NOUN', 'PREP', 'PUNCT', 'NOUN']
+g004 4/7 2.14s ['DET', 'VERB', 'VERB', 'VERB', 'VERB', 'DET', 'NOUN']
+g005 4/6 2.12s ['PRON', 'AUX', 'VERB', 'PRON', 'VERB', 'ADJ']
+g006 5/7 2.98s ['DET', 'NOUN', 'PREP', 'NOUN', 'VERB', 'PUNCT', 'VERB']
+g007 6/6 1.95s ['DET', 'NOUN', 'VERB', 'PREP', 'DET', 'NOUN']
+g008 3/4 1.43s ['PRON', 'VERB', 'DET', 'NOUN']
+g009 1/4 1.45s ['DET', 'PRON', 'VERB', 'PUNCT']
+g010 1/2 0.96s ['VERB', 'ADJ']
+g011 3/7 3.05s ['DET', 'NOUN', 'PREP', 'NOUN', 'PRON', 'VERB', 'ADJ']
+g012 2/6 1.90s ['DET', 'NOUN', 'VERB', 'ADV', 'VERB', 'NOUN']
+g013 1/2 0.86s ['DET', 'VERB']
+g014 4/6 1.94s ['PRON', 'AUX', 'NOUN', 'PREP', 'DET', 'NOUN']
+g015 3/3 1.11s ['DET', 'NOUN', 'VERB']
+g016 6/8 2.44s ['DET', 'NOUN', 'VERB', 'PRON', 'NOUN', 'PREP', 'PREP', 'NOUN']
+g017 3/7 2.18s ['DET', 'NOUN', 'VERB', 'PRON', 'AUX', 'VERB', 'PUNCT']
+g018 0/4 1.39s ['DET', 'NOUN', 'AUX', 'PRON']
+g019 1/3 1.08s ['DET', 'NOUN', 'VERB']
+g020 4/6 1.85s ['DET', 'NOUN', 'AUX', 'VERB', 'ADV', 'VERB']
+POS 64 / 105 0.6095 lat moy 1.91
+conf [(('PRON', 'DET'), 5), (('DET'
+… [291 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-78 (bash: cd /home/stephane/GitHub/Qtrinet && for i in 00001 00002; do curl -L --fail --retry 3 -o "models/qwen2.5-7b-instruct-q4_k_m-$i-of-00002.gguf.part" "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct-GGUF/resolve/main/qwen2.5-7b-instruct-q4_k_m-$i-of-00002.gguf" && mv "models/qwen2.5-7b-instruct-q4_k_m-$i-of-00002.gguf.part" "models/qwen2.5-7b-instruct-q4_k_m-$i-of-00002.gguf"; done; ls -lh models/qwen2.5-7b-instruct-q4_k_m-*.gguf) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ 7B téléchargé ; j'arrête le serveur 3B et démarre le 7B sur CPU
+
+- **job_output** `{"job_id": "bash-78"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 3,8G  2 nov 16:28 models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf
+-rw-r--r--. 1 stephane stephane 658M  2 nov 16:28 models/qwen2.5-7b-instruct-q4_k_m-00002-of-00002.gguf
+[stderr]
+  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+                                 Dload  Upload  Total   Spent   Left   Speed
+  0      0   0      0   0      0      0      0                              0100   1182 100   1182   0      0  11628      0                              0100   1182 100   1182   0      0  11620      0                              0
+  0      0   0      0   0      0      0      0                              0  1  3.71G   1 46.06M   0      0 36.95M      0   01:43   00:01   01:42 46.04M  2  3.71G   2 90.38M   0      0 40.22M      0   01:34   00:02   01:32 45.17M  3  3.71G   3 119.7M   0      0 36.87M      0   01:43   00:03   01:40 39.90M  4  3.71G   4 172.4M   0      0 40.60M      0   01:33   00:04   01:29 43.10M  6  3.71G   6 233.9M   0      0 44.58M      0   01:25   00:05   01:20 46.77M  7  3.71G   7 285.0M   0      0 45.62M      0   01:23   00:06   01:17 47.78M  9  3.71G   9 354.1M   0      0 48.82M      
+… [4670 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ps -eo pid,cmd | grep \"llama-server.*18080\" | grep -v grep | awk '{print $1}' | xargs -r kill; sleep 1; cd /home/stephane/GitHub/Qtrinet && (llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 18081 -ngl 0 -c 1024 --no-webui > /tmp/llama-serve … [180 caractères tronqués]`
+
+  ```
+{"status":"ok"}
+0.01.696.460 I srv    load_model: initializing, n_slots = 4, n_ctx_slot = 1024, kv_unified = 'true'
+0.01.702.687 I srv  llama_server: model loaded
+0.01.702.695 I srv  llama_server: listening on http://127.0.0.1:18081
+  ```
+
+### 🤖 Assistant
+
+⏵ Comparaison 7B : prompt minimal vs few-shot sur les 20 phrases réelles
+
+- **write** `{"content": "import json, sys, time, urllib.request, pathlib\nRACINE = pathlib.Path('/home/stephane/GitHub/Qtrinet')\nPORT = int(sys.argv[1]) if len(sys.argv) > 1 else 18081\nVARIANTE = sys.argv[2] if len(sys.argv) > 2 else 'min'\nURL = f'http://127.0.0.1:{PORT}/v1/chat/completions'\nTAGS = ['DET',  … [3503 caractères tronqués]`
+
+  ```
+<path>/tmp/qualif_7b.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && time python3 /tmp/qualif_7b.py 18081 min 2>&1 | tail -8", "description": "Run 7B minimal prompt on 20 sentences", "timeoutMs": 500000}`
+
+  ```
+g015 3/3 2.24s ['DET', 'NOUN', 'VERB']
+g016 8/8 4.55s ['DET', 'NOUN', 'VERB', 'DET', 'NOUN', 'PREP', 'DET', 'NOUN']
+g017 6/7 4.70s ['PRON', 'VERB', 'CONJ', 'PRON', 'AUX', 'VERB', 'INTJ']
+g018 3/4 2.82s ['PRON', 'VERB', 'ADV', 'VERB']
+g019 0/3 2.39s ['AUX', 'VERB', 'INTJ']
+g020 6/6 3.86s ['DET', 'NOUN', 'AUX', 'ADJ', 'PREP', 'VERB']
+min POS 87 / 105 0.8286 lat moy 3.64
+conf [(('AUX', 'VERB'), 3), (('PRON', 'AUX'), 2), (('VERB', 'ADV'), 1), (('DET', 'NOUN'), 1), (('CONJ', 'PRON'), 1), (('ADV', 'NOUN'), 1), (('ADV', 'AUX'), 1), (('CONJ', 'PREP'), 1), (('VERB', 'AUX'), 1), (('VERB', 'PRON'), 1), (('PREP', 'NOUN'), 1), (('DET', 'PREP'), 1)]
+[stderr]
+
+real	1m12,997s
+user	0m0,192s
+sys	0m0,016s
+  ```
+

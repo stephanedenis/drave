@@ -7,19 +7,25 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 0.0 h |
-| Tours | 1 |
-| Messages | 11 |
-| Appels d'outils | 11 |
-| Fichiers touchés | 0 |
-| Commandes | 8 |
+| Durée | 0.3 h |
+| Tours | 2 |
+| Messages | 70 |
+| Appels d'outils | 83 |
+| Fichiers touchés | 4 |
+| Commandes | 48 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
 
+## Objectifs déclarés
+
+- **create** — Session D/R/A (fe3c05f0) : OCR du fonds CEGEP restant (~127 scans) en sortie séparée, fusion et contrôle du corpus (10 notes + suite), fiche + JSON, en-cours + commit explicite, puis clôture de la session.
+
 ## 1. Ce qui a été demandé
 
 **Tour 1** — Tu reprends la session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`. Lis son plan, AGENTS.md  et docs/pilotage/en-cours.md. Remets `- **État** : actif` et `- **Heartbeat** : <maintenant>`  dans son plan, puis vérifie `python3 tools/sessions.py --check --strict`. Le cycle 140/140  (gold 432, 116 liens) est committé. Prochaine action : gold neuronal (qualifier un modèle  local) ; DRVM/native est blo … [114 caractères tronqués]
+
+**Tour 2** — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État : actif` et heartbeat maintenant, puis  `sessions.py --check --strict`. Le texte intégral, le PDF, les 20 livres, les 10 notes CEGEP,  le glossaire (355 entrées) et docwatch sont committés. Prochaine action : OCR ~127 scans CEGEP  (`tools/ocr_pdf.py --racine CEGEP --deja <N>`), p … [87 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -41,12 +47,40 @@
 
 ⏵ Reprise de la session L/B13 : lecture du plan, AGENTS.md et en-cours
 
+### Tour 2 — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État  … [367 caractères tronqués]
+
+*72 appels d'outils.* Actions notables :
+
+- read
+- get_goal
+- bash — Inspect session check logic
+- bash — Show OCR tool usage
+- bash — Current time
+- bash — Read OCR tool part 1
+- bash — Read OCR tool part 2
+- bash — Find the 127 scans figure and OCR artifacts
+- bash — History of OCR tool and pending OCR files
+- bash — Read CEGEP OCR manifest
+- bash — Inspect OCR corpora and CEGEP PDF count
+- bash — Locate scan census sources
+- bash — Search 127 mentions across docs
+- bash — Read session report around next steps
+- … et 40 autres
+
+**Synthèse produite :**
+
+⏵ Correction mesurée : 807 candidats à 2 pages, mais 147 vrais scans (91 uniques, 2 053 p) — j'adapte l'outil
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md` | 0 | 2 |
+| `work/ocr/census_cegep.py` | 1 | 0 |
+| `work/ocr/detecte_cegep.py` | 1 | 0 |
+| `tools/ocr_pdf.py` | 0 | 6 |
 
 ### Commandes exécutées (échantillon)
 
@@ -58,4 +92,84 @@
 - **T1** Check git status and recent commits
 - **T1** Show current diff of the session plan
 - **T1** Peek AGENTS.md and count doc lines
+- **T2** Inspect session check logic
+- **T2** Show OCR tool usage
+- **T2** Current time
+- **T2** Read OCR tool part 1
+- **T2** Read OCR tool part 2
+- **T2** Find the 127 scans figure and OCR artifacts
+- **T2** History of OCR tool and pending OCR files
+- **T2** Read CEGEP OCR manifest
+- **T2** Inspect OCR corpora and CEGEP PDF count
+- **T2** Locate scan census sources
+- **T2** Search 127 mentions across docs
+- **T2** Read session report around next steps
+- **T2** Inspect inventory JSONs for scan counts
+- **T2** Show PDF corpus scan counts per root
+- **T2** Show CEGEP inventory source
+- **T2** Find scan count derivation in report
+- **T2** Find scan-count code and day journal mentions
+- **T2** Run strict session check
+- **T2** Inspect the two offending plans
+- **T2** Debug heartbeat parsing
+- **T2** Re-run strict check and show file mtimes
+- **T2** Check running OCR jobs and resources
+- **T2** Check working tree before OCR work
+- **T2** Inspect concurrent hub commits
+- **T2** Check work dir and gitignore
+- **T2** Census CEGEP PDFs and scans
+- **T2** Find OCR gates and contamination tool
+- **T2** Find prior journal entries for OCR
+- **T2** Check contamination tool and OCR scan gate
+- **T2** Detect true scanned PDFs via full text
+- **T2** Inspect OCR scan gate and threading settings
+- **T2** Check whether the 10 OCR notes are in the full-text scan list
+- … et 8 autres
+
+## 4. Mesures et résultats marquants
+
+- **T2** `"split": f"hash salé du chemin : {args.val:.0%} val, {args.test:.0%} test",`
+- **T2** `docs/pilotage/roadmap.md:36:| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte `
+- **T2** `"split": "hash salé du chemin : 5% val, 5% test",`
+- **T2** `**Le corpus OCR du CEGEP est passé de 7 à 10 notes** : *Algorithms Illuminated (Part 4)* 274 p, *Part 1* 217 p et *Data Structures and Algorithms in C* 366 p se sont ajoutés. Total mesuré : **10 notes`
+- **T2** `2476:- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.`
+- **T2** `2494:- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.`
+- **T2** `2512:- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre depuis plusieurs rounds.`
+- **T2** `2530:- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre.`
+- **T2** `2549:- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre.`
+- **T2** `2568:- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre.`
+- **T2** `2589:**L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours ; c'est le poste le plus lent.`
+- **T2** `2609:**L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours ; c'est le poste le plus lent.`
+- **T2** `2628:- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre.`
+- **T2** `2647:- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.`
+- **T2** `2666:- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre.`
+- **T2** `2685:- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre.`
+- **T2** `2704:- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre.`
+- **T2** `2723:- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre.`
+- **T2** `2943:| ocr (scannés) | 32,1 | 4,8 % |`
+- **T2** `2967:Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, **3 384 documents gardés**, **1 017 scannés**, **1 316 courts**, **1 742 doublons**, **871 972 648 caractères**, **10`
+- **T2** `8885:- **Le processus** (PID 2644645) : **50 s**, **65,7 Mo lus**, **19,8 Mo écrits** — la détection des scannés (`pdfinfo` + `pdftotext` des 2 premières pages) parcourt le fonds CEGEP ; l'OCR des **5`
+- **T2** `/dev/mapper/system-root   11T  9,0T  2,0T  83% /home/stephane/Data13TB`
+- **T2** `75:| 01:28 | `6eff8d8d` | DONNÉES — L'OCR DES 8 LIVRES EST FICÉ : 2 815 PAGES, 7,69 M CARACTÈRES, 8 KO 0 (VAL/TEST VIDES, LE CSS SUIT) |`
+- **T2** `78:| 01:34 | `868399c8` | DONNÉES — LA ROADMAP ET LE RÉCIT PORTENT L'OCR DES 8 LIVRES : 2 815 PAGES, 7,69 M CARACTÈRES, 951 FENÊTRES 8 KO |`
+- **T2** `91:| 02:20 | `07e87a6f` | DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40 |`
+- **T2** `117:| 05:10 | `15f2c8f6` | DONNÉES — L'OCR DES 20 LIVRES EST CLOS : 7 381 PAGES, 15,36 M CARACTÈRES, 8 KO 0 (VAL 115, ÉVAL 0/40) |`
+- **T2** `122:| 05:25 | `166896b4` | GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M) |`
+- **T2** `128:| 05:48 | `bfe57da7` | CHANTIERS — LA LIGNE D PORTE L'OCR DES 20 LIVRES (15,36 M CARACTÈRES, 8 Ko 0) |`
+- **T2** `132:| 06:30 | `ccf8bac5` | DONNÉES — LE CEGEP ENTRE DANS L'OCR : 5 NOTES, 292 PAGES, 506 801 CARACTÈRES, 8 KO 0 |`
+- **T2** `210:- **Le corpus OCR** : 20 livres, 7 381 pages, 15,36 M caractères, 8 Ko 0 (val 115 fenêtres, éval 0/40) ; le pilote `--max-doc 20` est clos (le 20e, *Life Histories of Etnos Theory*, 450 p).`
+- **T2** `211:- **Le corpus OCR du CEGEP** : 10 notes scannées, 1 596 pages, 2 519 507 caractères, 8 Ko 0 (val 11 fenêtres) — le pilote `--racine CEGEP` ferme la boucle « livres, CEGEP, collections » (4 *Algori`
+- **T2** `30:| 01:28 | `6eff8d8d` | DONNÉES — L'OCR DES 8 LIVRES EST FICÉ : 2 815 PAGES, 7,69 M CARACTÈRES, 8 KO 0 (VAL/TEST VIDES, LE CSS SUIT) | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |`
+- **T2** `48:| 05:10 | `15f2c8f6` | DONNÉES — L'OCR DES 20 LIVRES EST CLOS : 7 381 PAGES, 15,36 M CARACTÈRES, 8 KO 0 (VAL 115, ÉVAL 0/40) | `en-cours.md`, `plan-travail.md`, `roadmap.md` (+22) |`
+- **T2** `50:| 05:25 | `166896b4` | GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M) | `en-cours.md`, `README.md`, `distribue.md` (+11) |`
+- **T2** `57:| 06:30 | `ccf8bac5` | DONNÉES — LE CEGEP ENTRE DANS L'OCR : 5 NOTES, 292 PAGES, 506 801 CARACTÈRES, 8 KO 0 | `en-cours.md`, `plan-travail.md`, `roadmap.md` (+20) |`
+- **T2** `fichiers (tronçon de 8 Ko écrit par `corpus_wikipedia.py`) est hachée ; un`
+- **T2** `(`corpus_wikipedia_texte.py`), l'unité est la **fenêtre** de 8 Ko coupée au`
+- **T2** `[still running after 60000ms; moved to background job bash-37]`
+- **T2** `echo "  corpus de scans absent : fabrication (10 pages dev + 10 test × 5 familles)"`
+- **T2** `default run1: 2.04 s (141% CPU)`
+- **T2** `default run2: 1.46 s (192% CPU)`
+- **T2** `omp1 run1: 1.56 s (99% CPU)`
+- **T2** `omp1 run2: 1.51 s (100% CPU)`
+- **T2** `{'ocr': 'tesseract 5.5.3 sans root (work/ocr/root)', 'langues': 'fra+eng', 'dpi': 300, 'psm': 3, 'pretraitement': 'aucun (le R4.4 le fera)', 'detection': 'liste explicite de scans qualifiés sur le tex`
 

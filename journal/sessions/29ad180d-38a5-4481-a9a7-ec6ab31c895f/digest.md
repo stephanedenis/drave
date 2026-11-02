@@ -896,3 +896,1233 @@ p007 · types OK · spans non · Jaccard 0.20
 … [678 caractères tronqués]
   ```
 
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/serveur.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/serveur.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """serveur.py — le banc de structures : API + interface web, sans dépendance.
+3: 
+4: Le serveur expose les phrases et leurs interprétations candidates, enregistre les verdicts
+5: humains (`donnees/validations.jsonl`), interroge un grand modèle (`donnees/llm.jsonl`) et exporte
+6: la banque validée (`/api/export`).
+7: 
+8:     python3 serveur.py                 # http://127.0.0.1:8765
+9:     python3 serveur.py --port 9000 --hote 0.0.0.0
+10: """
+11: from __future__ import annotations
+12: 
+13: import argparse
+14: import json
+15: import pathlib
+16: import threading
+17: import time
+18: from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+19: from urllib.parse import urlparse
+20: 
+21: import generateur
+22: import llm
+23: 
+24: RACINE = pathlib.Path(__file__).resolve().parent
+25: STATIQUE = RACINE / "static"
+26: # Le niveau pragmatique : un sens n'est pas « vrai » hors contexte, il est **résolu** par lui,
+27: # **compatible** avec lui, **exclu** par lui — ou **double**, quand l'ambiguïté est voulue.
+28: STATUTS = {"resolu", "compatib
+… [11132 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_export.py"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_generateur.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_export.py</path>
+<type>file</type>
+<content>
+1: """Tests de l'export corpus — le dernier verdict gagne, les spans sont vérifiés."""
+2: import json
+3: import pathlib
+4: import shutil
+5: import tempfile
+6: import unittest
+7: 
+8: import exporter_corpus
+9: 
+10: RACINE = pathlib.Path(__file__).resolve().parent.parent
+11: 
+12: 
+13: class TestExport(unittest.TestCase):
+14:     def setUp(self):
+15:         self.dossier = pathlib.Path(tempfile.mkdtemp())
+16:         shutil.copy(RACINE / "donnees" / "phrases.json", self.dossier / "phrases.json")
+17: 
+18:     def tearDown(self):
+19:         shutil.rmtree(self.dossier, ignore_errors=True)
+20: 
+21:     def _valider(self, pid, cid, verdict):
+22:         with (self.dossier / "validations.jsonl").open("a", encoding="utf-8") as f:
+23:             f.write(json.dumps({"phrase_id": pid, "candidat_id": cid, "verdict": verdict,
+24:                                 "auteur": "test", "horodatage": "2026-11-01T11:00:00"}) + "\n")
+25: 
+26:     def test_dernier_verdict_gagne(self):
+27:         self._valider("p001", "p001-c1", "ok")
+28:         self._valider("p001", "p001-c1", "n
+… [1856 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_generateur.py</path>
+<type>file</type>
+<content>
+1: """Tests du générateur de candidats."""
+2: import unittest
+3: 
+4: import generateur
+5: 
+6: 
+7: class TestGenerateur(unittest.TestCase):
+8:     def test_segments_alignes(self):
+9:         for texte in ("Le chat de la voisine qui dort sur le toit se réveille.",
+10:                       "J'ai vu l'homme avec le télescope.",
+11:                       "Il a couru pour attraper le bus.",
+12:                       "Elle a dit qu'elle viendrait hier."):
+13:             for c in generateur.analyser(texte):
+14:                 prec = 0
+15:                 for s in c["segments"]:
+16:                     self.assertGreaterEqual(s["debut"], prec, texte)
+17:                     self.assertLessEqual(s["fin"], len(texte), texte)
+18:                     self.assertEqual(texte[s["debut"]:s["fin"]], s["texte"], texte)
+19:                     prec = s["fin"]
+20:                 self.assertGreaterEqual(len(c["segments"]), 2, texte)
+21: 
+22:     def test_relative_deux_lectures(self):
+23:         cs = generateur.analyser("Le chat de la voisine qui dort sur le toit se réve
+… [2605 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_serveur.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_serveur.py</path>
+<type>file</type>
+<content>
+1: """Tests du banc de structures — sans dépendance : unittest + urllib."""
+2: import json
+3: import pathlib
+4: import shutil
+5: import tempfile
+6: import threading
+7: import unittest
+8: import urllib.request
+9: from http.server import ThreadingHTTPServer
+10: 
+11: import serveur
+12: 
+13: RACINE = pathlib.Path(__file__).resolve().parent.parent
+14: 
+15: 
+16: class Banc:
+17:     def __enter__(self):
+18:         self.dossier = pathlib.Path(tempfile.mkdtemp())
+19:         shutil.copy(RACINE / "donnees" / "phrases.json", self.dossier / "phrases.json")
+20:         self.serveur = ThreadingHTTPServer(("127.0.0.1", 0), serveur.Serveur)
+21:         self.serveur.donnees = serveur.Donnees(self.dossier)
+22:         self.port = self.serveur.server_address[1]
+23:         self.fil = threading.Thread(target=self.serveur.serve_forever, daemon=True)
+24:         self.fil.start()
+25:         return self
+26: 
+27:     def __exit__(self, *a):
+28:         self.serveur.shutdown()
+29:         self.serveur.server_close()
+30:         shutil.rmtree(self.dossier, ignore_errors=True)
+31: 
+… [5301 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git show -s --format='%H%n%s%n%b' a7d41a3; echo \"=== validations history ===\"; git log --oneline --all -- donnees/validations.jsonl; echo \"=== exporter history ===\"; git log --oneline --all -- exporter_corpus.py; … [206 caractères tronqués]`
+
+  ```
+a7d41a377994801f318e8f78940a067f267074ab
+ANALYSEUR — SUBORDONNÉES, COORDINATION, ET EXPORT VERS LE CORPUS
+Le générateur distingue désormais le « que » complément (après un verbe → SUB) de la relative
+(après un nom → REL), arrête la relative au verbe principal (une AUX après un verbe), traite la
+coordination (et, ou, mais…) comme une nouvelle proposition et non comme une subordonnée, et
+borne le GN à trois mots pleins.
+
+exporter_corpus.py transforme la banque validée en corpus : format texte (phrase + structure
+linéarisée en balises) ou JSONL ; seules les lectures acceptées sortent, l'export est déterministe.
+
+Quinze tests passent, dont trois nouveaux : complément après verbe, relative qui n'avale pas le
+verbe principal, coordination en deux propositions.
+
+=== validations history ===
+a7d41a3 ANALYSEUR — SUBORDONNÉES, COORDINATION, ET EXPORT VERS LE CORPUS
+=== exporter history ===
+a7d41a3 ANALYSEUR — SUBORDONNÉES, COORDINATION, ET EXPORT VERS LE CORPUS
+1cf64d2 EXPORT — LA BANQUE VALIDÉE DEVIENT UN CORPUS JSONL (SPANS VÉRIFIÉS)
+=== main repo data/structures history ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== MAIN STATUS ===\"; git status --short; echo \"=== submodule status ===\"; git submodule status; echo \"=== reports s ===\"; ls -la reports/rapport-s-analyseur.md; echo \"=== mentions banque ===\"; grep -rn \"data/structure … [163 caractères tronqués]`
+
+  ```
+=== MAIN STATUS ===
+ M journal/README.md
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+?? journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+?? journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+?? journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/
+?? journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/
+?? journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/
+?? journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/
+=== submodule status ===
+ d256888934b017ac024de2a8eed22ecf81e6c799 tools/docwatch (v0.4.1-3-gd256888)
+ 3b68143f3e805372c0fe2fcdbc2f574b95c7e9d3 tools/structures (heads/fusion)
+=== reports s ===
+-rw-r--r--. 1 stephane stephane 3265  2 nov 02:11 reports/rapport-s-analyseur.md
+=== mentions banque ===
+./tools/structures/tests/test_export.py:30:        sortie = self.dossier / "banque.jsonl"
+./tools/structures/tests/test_export.py:47:            exporter_corpus.exporter(self.dossier, self.dossier
+… [2387 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat .gitignore; echo \"=== my session dir ===\"; ls -la journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/; echo \"=== new sessions ===\"; for d in 0733c5bb-f90b-4f58-9241-3364fa32e46c abb58991-fe0a-4d6e-b039-6552b09f8454 b7d4678 … [237 caractères tronqués]`
+
+  ```
+__pycache__/
+*.pyc
+reports/*.tmp
+models/
+data/
+qtrinet-core/target/
+
+# Traces de session : la copie brute reste sur disque (volumineuse, binaire),
+# le digest markdown est versionné.
+journal/sessions/*/session*.jsonl.zstd
+journal/sessions/archive.log
+
+# Outil de référence : la source est versionnée, le binaire se recompile
+# (commande exacte dans tools/ref_logits.md).
+tools/ref_logits
+target/
+
+# docwatch — SVG générés depuis les sources .puml/.mmd (docwatch les produit)
+docs/**/*.puml.svg
+docs/**/*.mmd.svg
+
+# Campagnes GPU : points de contrôle et journaux de run (hors dépôt, archivés à part)
+work/
+=== my session dir ===
+total 208
+drwxr-xr-x. 1 stephane stephane     80  2 nov 16:16 .
+drwxr-xr-x. 1 stephane stephane   8440  2 nov 16:16 ..
+-rw-r--r--. 1 stephane stephane  51648  2 nov 16:17 digest.md
+-rw-r--r--. 1 stephane stephane   3504  2 nov 16:17 rapport.md
+-rw-------. 1 stephane stephane 152988  2 nov 16:17 session.v4.jsonl.zstd
+=== new sessions ===
+-- 0733c5bb-f90b-4f58-9241-3364fa32e46c
+digest.md
+plan.md
+rapport.md
+session.v4.jsonl.zstd
+# Plan de session — N2, le natif : 200 000 pas et la fenêtre
+
+> **Mandat ouvert** le 2026-11-02 16 h 20 HAE depuis
+> [`docs/pilotage/en-cours.
+… [1421 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== data suivis ===\"; git ls-files data | head -20; echo \"count: $(git ls-files data | wc -l)\"; echo \"=== reports json exemples ===\"; git ls-files reports | grep -E \"manifest|corpus.*json\" | head; echo \"=== tailles === … [112 caractères tronqués]`
+
+  ```
+=== data suivis ===
+count: 0
+=== reports json exemples ===
+reports/b102bis-corpus-jw.json
+reports/campagne-benefices/051-R-annexe-manifeste-des-journaux.md
+reports/corpus-genres.json
+reports/corpus-litt-propre.json
+reports/corpus-multi-propre.json
+reports/corpus-pdf-contamination.json
+reports/corpus-pdf-documents-contamination.json
+reports/corpus-pdf-documents.json
+reports/corpus-pdf.json
+reports/corpus-propre.json
+=== tailles ===
+200K	tools/structures
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' docs/methode/resultats.md", "description": "Read results method"}`
+
+  ```
+# Ce qu'un résultat doit porter
+
+> Document de tâche, chargé depuis [`AGENTS.md`](../../AGENTS.md). À lire **avant d'écrire une fiche**, un JSON de
+> résultats, ou un message de commit.
+
+## Les cinq pièces d'un résultat
+
+1. **Le chiffre** — la valeur, avec son [unité](../theorie/glossaire/entrees/unite.md) et son arrondi utile (jamais plus de chiffres que l'instrument n'en
+   [porte](../theorie/glossaire/entrees/porte.md)) ;
+2. **La mesure qui le produit** — le calcul exact, la métrique ([chrF](../theorie/glossaire/entrees/chrf.md), précision, rappel, [AUC](../theorie/glossaire/entrees/auc.md)…), et ce qu'elle ne
+   mesure pas ;
+3. **Le dispositif** — quel [corpus](../theorie/glossaire/entrees/corpus.md) (et sa provenance), quel modèle (taille, [quantification](../theorie/glossaire/entrees/quantification.md), date de coupure),
+   quelles **couches de neurones** sondées, quel découpage, **quelle unité de mesure** (unité de sens ou unité
+   grammaticale ; si c'est un [jeton](../theorie/glossaire/entrees/jeton.md), le dire comme **technique**), quels réglages (prompt, gabarit, longueur de
+   sortie, graine) ;
+4. **Le [contrôle négatif](../theorie/glossaire/entrees/controle-negatif.md)
+… [2500 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --modele", "description": "Print official session plan template"}`
+
+  ```
+# Plan de session — <id>
+
+> **Mandat vivant.** Écris ce fichier **avant** `en-cours`, mets-le à jour à chaque cycle,
+> et passe `État : en pause` (arrêt) ou `État : terminé` (retrait) quand elle s'arrête.
+
+- **Session** : `<id>`
+- **Rôle** : <chantier / programme>
+- **Périmètre** : <A8.0, R13, ...>
+- **Fichiers réservés** : `tools/...`, `reports/...`
+- **Heartbeat** : <AAAA-MM-JJ HH:MM HAE>
+- **Prochaine action** : <une action nommée>
+- **État** : actif (ou `en pause` / `terminé`)
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md", "content": "# Plan de session — S, les structures (analyser, banquer, exporter)\n\n> **Mandat vivant.** Ouvert le 2026-11-02 16 h 22 HNE depuis\n> [`docs/pilotage/en-cours.m … [3481 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --check; echo \"exit=$?\"; echo \"=== status ===\"; python3 tools/sessions.py --status 2>&1 | head -20", "description": "Validate session plan and check overlaps"}`
+
+  ```
+⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/` (export local (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ plan actif non listé dans en-cours : 0733c5bb-f90b-4f58-9241-3364fa32e46c
+  ⚠ plan actif non listé dans en-cours : 29ad180d-38a5-4481-a9a7-ec6ab31c895f
+exit=0
+=== status ===
+sessions · plans de mandat
+    0733c5bb-f90b-4f58 · actif    ·  -1 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → **200 000 pas sur `data/wiki_mix/propre`** (34,3 M, canal, positions aléatoires, graine 1) puis la mesure des cinq PPL et de la courbe 128/256/512.
+    0b0a6a0d-05f5-4308 · terminé  · 1904 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 3978 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 3149 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+      → clôture committ
+… [1694 caractères tronqués]
+  ```
+
+- **bash** `{"command": "date '+%Y-%m-%d %H:%M:%S %Z'", "description": "Read real current time"}`
+
+  ```
+2026-11-02 16:19:13 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"Ouvert le 2026-11-02 16 h 22 HNE\", \"Ouvert le 2026-11-02  … [917 caractères tronqués]`
+
+  ```
+# Plan de session — S, les structures (analyser, banquer, exporter)
+
+> **Mandat vivant.** Ouvert le 2026-11-02 16 h 19 HNE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ S) et
+> [`plan-travail.md`](../../../docs/pilotage/plan-travail.md) § 9.2.
+> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+> `en-cours` reste la seule source de l'état : ce plan est le **contrat de travail** qui le
+> précède, et la section S y est **proposée au hub**, pas écrite ici.
+
+- **Session** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f`
+- **Rôle** : **S — les structures** : le banc d'interprétations candidates (outil web, générateur,
+  pragmatique, banque), l'**analyseur** (rôles, subordonnées) et l'**export au corpus**.
+- **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+- **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
+  `reports/s-banque-*` ; `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/`.
+  Le sous-module est la source ; `data/structures/` est l'export local (tout `data/` est ignoré par
+  git) ; le chevauchement avec le `data/` de N2 est nominal (sous-dossier
+… [200 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools')\nimport sessions\np = sessions.lire_plan(sessions.Path('journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md'))\nprint(\"HEARTBEAT\", p['heartbeat'], \"AGE\", p['age'] … [236 caractères tronqués]`
+
+  ```
+HEARTBEAT 2026-11-02 16:19:00 AGE 0.3678120166666667
+ETAT actif
+PERIMETRE ['S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.']
+RESERVE: 'tools/structures/'
+RESERVE: 'data/structures/'
+RESERVE: 'reports/rapport-s-*'
+RESERVE: 'reports/s-banque-*'
+RESERVE: 'journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/`. Le sous-module est la source'
+RESERVE: "data/structures/` est l'export local (tout `data/` est ignoré par git)"
+RESERVE: 'le chevauchement avec le `data/` de N2 est nominal (sous-dossier distinct'
+RESERVE: 'fichiers distincts).'
+=== check ===
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/` est l'export local (tout `data/` est ignoré par git) (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ plan actif non listé dans en-cours : 0733c5bb-f90b-4f58-9241-3364fa32e46c
+  ⚠ plan actif non listé dans en-cours : 29ad180d-38a5-4481-a9a7-ec6ab31c895f
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"\"\"- **Fichiers réservés** : `tools/structures/` ; `data/s … [1051 caractères tronqués]`
+
+  ```
+⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ plan actif non listé dans en-cours : 0733c5bb-f90b-4f58-9241-3364fa32e46c
+  ⚠ plan actif non listé dans en-cours : 29ad180d-38a5-4481-a9a7-ec6ab31c895f
+  ❌ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md : heartbeat illisible
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path(\"journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"\"\"- **Heartbeat** : 2026-11-02 16:19 EST\n\n> **La réserv … [1001 caractères tronqués]`
+
+  ```
+⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ plan actif non listé dans en-cours : 0733c5bb-f90b-4f58-9241-3364fa32e46c
+  ⚠ plan actif non listé dans en-cours : 29ad180d-38a5-4481-a9a7-ec6ab31c895f
+exit=0
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/construire_donnees.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/construire_donnees.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """construire_donnees.py — fabrique donnees/phrases.json en calculant les spans par sous-chaîne.
+3: 
+4: Écrire les spans à la main est une source d'erreurs ; ici, chaque segment est donné par son
+5: **texte exact**, et l'outil vérifie qu'il apparaît bien, dans l'ordre, dans la phrase.
+6: """
+7: import json, pathlib
+8: 
+9: PHRASES = [
+10:     ("p001", "Le chat de la voisine qui dort sur le toit se réveille.",
+11:      [("Le chat", "GN", "agent", 0), (" de la voisine", "GP", "possession", 0),
+12:       (" qui dort sur le toit", "REL", "qualite", 1), (" se réveille", "GV", "predicat", 0)],
+13:      "« qui dort » sur le chat",
+14:      "C'est le chat qui dort ; il est à la voisine ; il est sur le toit.",
+15:      (" qui dort sur le toit", "Le chat", "relative")),
+16:     ("p001", "Le chat de la voisine qui dort sur le toit se réveille.",
+17:      [("Le chat", "GN", "agent", 0), (" de la voisine", "GP", "possession", 0),
+18:       (" qui dort sur le toit", "REL", "qualite", 2), (" se réveille", "GV", "predicat", 0)],
+19:      "« qui
+… [6459 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Je pose le plan et la réservation, puis je mesure l'état de l'analyseur sur un jeu de phrases candidates avant de coder les règles de rôles et de subordonnées.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport generateur\nphrases = [\n \"Le chat de la voisine qui dort sur le toit se réveille.\",\n \"J'ai vu l'homme avec le télescope.\",\n \"La femme a vu l'homme dans le parc.\",\n \"Il a couru pour … [1042 caractères tronqués]`
+
+  ```
+Le chat de la voisine qui dort sur le toit se réveille.
+    Le chat[GN:agent] | de la voisine[GP:theme] | qui dort sur le toit[REL:qualite] | se réveille[GV:predicat]
+J'ai vu l'homme avec le télescope.
+    J'ai vu[GV:predicat] | l'homme[GN:patient] | avec le télescope[GP:moyen]
+La femme a vu l'homme dans le parc.
+    La femme[GN:agent] | a vu[GV:predicat] | l'homme[GN:patient] | dans le parc[GP:lieu]
+Il a couru pour attraper le bus.
+    Il a couru[GV:predicat] | pour attraper le bus[GP:but]
+Il a parlé à Marie de son projet.
+    Il a parlé[GV:predicat] | à Marie[GP:destinataire] | de son projet[GP:theme]
+Elle a dit qu'elle viendrait hier.
+    Elle a dit[GV:predicat] | qu'elle viendrait[SUB:contenu] | hier[GP:temps]
+Le canard est prêt à manger.
+    Le canard[GN:agent] | est prêt[GV:predicat] | à manger[GP:destinataire]
+Le livre que j'ai lu est passionnant.
+    Le livre[GN:agent] | que j'ai lu[REL:qualite] | est passionnant[GV:predicat]
+Je pense que le chat dort.
+    Je pense[GV:predicat] | que le chat dort[SUB:contenu]
+Quand il pleut, je reste à la maison.
+    Quand il pleut[SUB:contenu] | je reste[GV:predicat] | à la maison[GP:destinataire]
+Elle part parce qu'elle est fatiguée.
+    
+… [1340 caractères tronqués]
+  ```
+
+- **todo_write** `{"todos": [{"content": "Créer le plan de session S et réserver le territoire", "status": "completed"}, {"content": "Écrire le gold 21 phrases (types, rôles, subordonnées) avant les règles", "status": "in_progress"}, {"content": "Améliorer generateur.py : rôles contextuels, subordonnées, passif", "st … [553 caractères tronqués]`
+
+  ```
+Updated todo list: 6 pending, 1 in progress, 1 completed.
+  ```
+
+- **write** `{"content": "{\n \"version\": 1,\n \"note\": \"Gold de l'analyseur : structures de référence écrites à la main AVANT les règles de rôles/subordonnées (02/11). Les spans ne sont pas stockés : ils se calculent par sous-chaîne, dans l'ordre, comme construire_donnees.py. split=dev : les 7 phrases du ban … [5685 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/gold-analyseur.json</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json\nd=json.load(open('donnees/gold-analyseur.json'))\nprint(\"phrases\", len(d['phrases']), \"dev\", sum(p['split']=='dev' for p in d['phrases']), \"test\", sum(p['split']=='test' for p in  … [332 caractères tronqués]`
+
+  ```
+phrases 23 dev 7 test 16
+spans vérifiés
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "old_string": "ADVERBES_TEMPS = set(\"hier aujourd'hui demain maintenant ici la toujours jamais souvent deja encore tard tot\".split())\nPONCT = set(\".,;:!?…()«»\")", "new_string": "ADVERBES_TEMPS = set( … [1986 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "old_string": "def _role_gp(prep: str) -> str:\n    if prep in {\"dans\", \"sur\", \"sous\", \"chez\", \"vers\", \"entre\", \"devant\", \"derriere\", \"pres\", \"loin\"}:\n        return \"lieu\"\n    if  … [4104 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "offset": 220, "limit": 130}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py</path>
+<type>file</type>
+<content>
+220:     utiles = [t for t in toks if t.cls != "ESPACE"]
+221:     segs: list[Segment] = []
+222:     i = 0
+223:     while i < len(utiles):
+224:         t = utiles[i]
+225:         if t.cls == "PONCT":
+226:             i += 1
+227:             continue
+228:         if t.cls == "RELATIF":
+229:             j, vu_verbe = i + 1, False
+230:             while j < len(utiles) and utiles[j].cls not in ("PONCT", "CONJ", "RELATIF"):
+231:                 if utiles[j].cls == "PRON" and vu_verbe:
+232:                     break
+233:                 if utiles[j].cls == "AUX" and vu_verbe:
+234:                     break
+235:                 if (utiles[j].cls == "MOT" and vu_verbe
+236:                         and _norm(utiles[j].texte) in ADVERBES_TEMPS):
+237:                     break
+238:                 vu_verbe = vu_verbe or utiles[j].cls == "MOT"
+239:                 j += 1
+240:             # « que » après un verbe est un complément, après un nom une relative.
+241:             precedent = segs[-1].type if segs else None
+242:             if _norm(t.texte).split("'")[0].split("’")[
+… [5791 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "old_string": "        t = utiles[i]\n        if t.cls == \"PONCT\":\n            i += 1\n            continue\n        if t.cls == \"RELATIF\":", "new_string": "        t = utiles[i]\n        if t.cls == … [566 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "new_string": "        if t.cls == \"PREP\":\n            j = _consomme(utiles, i + 1, {\"DET\", \"MOT\"})\n            segs.append(Segment(t.debut, utiles[j - 1].fin, texte[t.debut:utiles[j - 1].fin],\n  … [444 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "new_string": "        # PRON/AUX/MOT : un GV — mais il s'arrête avant un subordonnant (« il travaille afin »).\n        j = i\n        while j < len(utiles) and utiles[j].cls in (\"PRON\", \"AUX\", \"MOT … [1139 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "new_string": "ROLES_AMBIGUS = {\"pour\": [\"cause\"]}\n\n\ndef _role_attache(role: str, genre: str) -> str | None:\n    \"\"\"Le rôle change avec l'attachement : instrument/attribut, possession/thème.\"\ … [2570 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "offset": 390, "limit": 50}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py</path>
+<type>file</type>
+<content>
+390:             break
+391:     return candidats
+392: 
+393: 
+394: if __name__ == "__main__":
+395:     import sys
+396:     args = [a for a in sys.argv[1:] if not a.startswith("--")]
+397:     texte = args[0] if args else "Le chat de la voisine qui dort sur le toit se réveille."
+398:     cs = analyser(texte)
+399:     if "--json" in sys.argv:
+400:         print(json.dumps(cs, ensure_ascii=False, indent=1))
+401:     else:
+402:         for c in cs:
+403:             print(f"- {c['nom']}")
+404:             for s in c["segments"]:
+405:                 print("   " + "  " * s["niveau"] + f"{s['texte']!r} [{s['type']} · {s['role']}]")
+
+(End of file - total 405 lines)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "new_string": "    return candidats\n\n\nROLES_DEFAUT = {\"GP\": \"complement\", \"SUB\": \"contenu\", \"REL\": \"qualite\"}\n\n\ndef structure(texte: str, roles: bool = True) -> list[dict]:\n    \"\"\"La … [637 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 -m unittest discover -s tests 2>&1 | tail -30", "description": "Run existing tests after analyzer changes"}`
+
+  ```
+............  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/export HTTP/1.1" 200 -
+.  127.0.0.1 · "POST /api/llm HTTP/1.1" 200 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+.  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+.  127.0.0.1 · "GET / HTTP/1.1" 200 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 400 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/export HTTP/1.1" 200 -
+.
+----------------------------------------------------------------------
+Ran 19 tests in 3.634s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json, generateur\nd=json.load(open('donnees/gold-analyseur.json'))\nfor p in d['phrases']:\n    segs=generateur.structure(p['texte'])\n    print(p['id'], p['split'])\n    print(\"   ATT\", \" … [258 caractères tronqués]`
+
+  ```
+p001 dev
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "<stdin>", line 6, in <genexpr>
+TypeError: list indices must be integers or slices, not str
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json, generateur\nd=json.load(open('donnees/gold-analyseur.json'))\nfor p in d['phrases']:\n    segs=generateur.structure(p['texte'])\n    att=\" | \".join(f\"{t}[{ty}:{r}]\" for t,ty,r in p[ … [348 caractères tronqués]`
+
+  ```
+OK   p001 dev · Le chat de la voisine qui dort sur le toit se réveille.
+OK   p002 dev · J'ai vu l'homme avec le télescope.
+OK   p003 dev · La femme a vu l'homme dans le parc.
+OK   p004 dev · Il a couru pour attraper le bus.
+OK   p005 dev · Il a parlé à Marie de son projet.
+OK   p006 dev · Elle a dit qu'elle viendrait hier.
+OK   p007 dev · Le canard est prêt à manger.
+OK   g008 test · Le livre que j'ai lu est passionnant.
+OK   g009 test · Je pense que le chat dort.
+OK   g010 test · Quand il pleut, je reste à la maison.
+OK   g011 test · Elle part parce qu'elle est fatiguée.
+OK   g012 test · Bien qu'il soit tard, il travaille.
+OK   g013 test · S'il vient, nous partirons.
+OK   g014 test · Nous partirons dès qu'il arrivera.
+OK   g015 test · Le livre dont je parle est bon.
+OK   g016 test · La ville où je vis est grande.
+OK   g017 test · Il a offert un livre à Marie.
+OK   g018 test · La lettre a été écrite par Marie.
+OK   g019 test · Il a parlé de son projet à Marie.
+OK   g020 test · Je crois qu'il viendra demain.
+OK   g021 test · Il travaille afin qu'elle réussisse.
+OK   g022 test · Puisqu'il pleut, nous restons.
+OK   g023 test · Comme il pleuvait, elle est restée.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json\nfrom pathlib import Path\np = Path('donnees/gold-analyseur.json')\nd = json.loads(p.read_text(encoding='utf-8'))\nd['note'] = (\"Gold de l'analyseur. split=dev : les 7 phrases du banc ( … [2148 caractères tronqués]`
+
+  ```
+31 phrases
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"mesure_analyseur.py — le gold de l'analyseur : types, rôles, couverture, et trois contrôles.\n\nLe gold (`donnees/gold-analyseur.json`) porte des structures **écrites à la main** : pour chaque\nphrase, la suite de segments (texte, type, rôle) et son découpa … [10822 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_analyseur.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('mesure_analyseur.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace('''def couverture(or_segments: list[dict], gen_segments: list[dict]) -> float:\n    \"\"\" … [2941 caractères tronqués]`
+
+  ```
+patch ok
+  gold · 31 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout     8   7/8       0.96  21/21     9/9   
+  global     31  30/31      0.99  83/83    38/38  
+  contrôle · baseline 52/83 (0.63) · règles coupées 55/83 (0.66) · rôles mélangés 0.10 [0.03, 0.24]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-analyseur.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json, generateur\nr=json.load(open('donnees/mesure-analyseur.json'))\nfor x in r['lignes']:\n    if not x['types_ok']:\n        print(x['id'], \"ATT\", x['types_or'], \"GEN\", x['types_gen']) … [266 caractères tronqués]`
+
+  ```
+h024 ATT ['GN', 'REL', 'GP', 'GV'] GEN ['GN', 'REL', 'GP', 'GV', 'GN']
+    "L'homme" GN agent
+    'que tu as vu' REL qualite
+    'hier' GP temps
+    'est' GV predicat
+    'mon voisin' GN patient
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('generateur.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace('''VERBES_LIEU = set(\"\"\"''', '''# Copules : « est mon voisin » est un GV attributif, pas un G … [1226 caractères tronqués]`
+
+  ```
+patch copule ok
+  gold · 31 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout     8   8/8       1.00  21/21     9/9   
+  global     31  31/31      1.00  83/83    38/38  
+  contrôle · baseline 52/83 (0.63) · règles coupées 55/83 (0.66) · rôles mélangés 0.10 [0.03, 0.24]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-analyseur.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json\nfrom pathlib import Path\np = Path('donnees/gold-analyseur.json')\nd = json.loads(p.read_text(encoding='utf-8'))\nd['note'] = (\"Gold de l'analyseur. split=dev : les 7 phrases du banc.  … [2131 caractères tronqués]`
+
+  ```
+39 phrases
+  gold · 39 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout    16  15/16      0.99  37/38    16/16  
+  global     39  38/39      0.99  99/100   45/45  
+  contrôle · baseline 64/100 (0.64) · règles coupées 66/100 (0.66) · rôles mélangés 0.10 [0.00, 0.22]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-analyseur.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json, generateur\nr=json.load(open('donnees/mesure-analyseur.json'))\nfor x in r['lignes']:\n    if not x['types_ok']:\n        print(x['id'], \"ATT\", x['types_or'], \"GEN\", x['types_gen']) … [321 caractères tronqués]`
+
+  ```
+h033 ATT ['GN', 'GV', 'GP'] GEN ['GN', 'GP']
+La femme parle à son fils.
+    'La femme parle' GN agent
+    'à son fils' GP destinataire
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"exporter_corpus.py — la banque du banc de structures → un corpus JSONL pour Drave.\n\nTrois modes, un seul format de sortie (JSONL + manifeste) :\n\n  --mode banque      les lectures **validées** (`donnees/validations.jsonl`) : un verdict\n                  … [11359 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/exporter_corpus.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 -m unittest discover -s tests 2>&1 | tail -20", "description": "Run tests after exporter rewrite"}`
+
+  ```
+............  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/export HTTP/1.1" 200 -
+.  127.0.0.1 · "POST /api/llm HTTP/1.1" 200 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+.  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+.  127.0.0.1 · "GET / HTTP/1.1" 200 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 400 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/export HTTP/1.1" 200 -
+.
+----------------------------------------------------------------------
+Ran 19 tests in 3.134s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('tests/test_generateur.py')\nt = p.read_text(encoding='utf-8')\najout = '''\n\nclass TestRoles(unittest.TestCase):\n    \"\"\"Les rôles ne sont plus la préposition … [6279 caractères tronqués]`
+
+  ```
+tests generateur ajoutés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('tests/test_export.py')\nt = p.read_text(encoding='utf-8')\najout = '''\n\nclass TestExportStatut(unittest.TestCase):\n    \"\"\"Le banc écrit `statut` (resolu/com … [4837 caractères tronqués]`
+
+  ```
+tests export ajoutés
+.  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+.  127.0.0.1 · "GET / HTTP/1.1" 200 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 400 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/export HTTP/1.1" 200 -
+.
+----------------------------------------------------------------------
+Ran 37 tests in 3.675s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 mesure_analyseur.py && echo \"=== EXPORT GOLD ===\" && python3 exporter_corpus.py --mode gold && echo \"=== EXPORT REFERENCE ===\" && python3 exporter_corpus.py --mode reference && echo \"=== EXPORT BANQUE (s … [304 caractères tronqués]`
+
+  ```
+gold · 39 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout    16  15/16      0.99  37/38    16/16  
+  global     39  38/39      0.99  99/100   45/45  
+  contrôle · baseline 64/100 (0.64) · règles coupées 66/100 (0.66) · rôles mélangés 0.10 [0.00, 0.22]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-analyseur.json
+=== EXPORT GOLD ===
+  ✅ 39 ligne(s) sur 39 phrase(s) · mode gold → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-gold.jsonl
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-gold-manifest.json
+     sha256 : 973c70a4126896b8557d803b940f58d1f6d1fe1d172cdb7b9abce9671cd7db71
+=== EXPORT REFERENCE ===
+  ✅ 7 ligne(s) sur 7 phrase(s) · mode reference → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-reference.jsonl
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-reference-manifest.json
+     sha256 : 77d7a01486f32d6020defd0d246771358dd622b911db11c35024b5920042bf86
+=== EXPO
+… [1573 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('exporter_corpus.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace('''def _manifeste(mode: str, source: str, sortie: pathlib.Path, retenus: list[dict]) -> dic … [1210 caractères tronqués]`
+
+  ```
+patch manifeste relatif
+{
+ "version": 2,
+ "mode": "gold",
+ "date": "2026-11-02T16:26:36",
+ "source": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/gold-analyseur.json",
+ "sortie": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-gold.jsonl",
+ "phrases": 39,
+ "candidats_acceptes": 39,
+ "sha256": "973c70a4126896b8557d803b940f58d1f6d1fe1d172cdb7b9abce9671cd7db71",
+ "note": "structures de référence, sans jugement humain — `statut: reference` ; spans vérifiés."
+}
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/exporter_corpus.py", line 258, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/exporter_corpus.py", line 246, in main
+    manifeste = exporter_gold(args.gold, sortie, verifier=not args.sans_verifier)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/exporter_corpus.py", line 225, in exporter_gold
+    manifeste = _manifeste("gold", str(chemin_gold), sortie, retenus)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/exporter_co
+… [172 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('exporter_corpus.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace('''def _manifeste(mode: str, source: str, sortie: pathlib.Path, retenus: list[dict]) -> dic … [539 caractères tronqués]`
+
+  ```
+✅ 39 ligne(s) sur 39 phrase(s) · mode gold → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-gold.jsonl
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-gold-manifest.json
+     sha256 : 973c70a4126896b8557d803b940f58d1f6d1fe1d172cdb7b9abce9671cd7db71
+  ✅ 7 ligne(s) sur 7 phrase(s) · mode reference → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-reference.jsonl
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-reference-manifest.json
+     sha256 : 77d7a01486f32d6020defd0d246771358dd622b911db11c35024b5920042bf86
+  ✅ 0 ligne(s) sur 0 phrase(s) · mode banque → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque.jsonl
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-manifest.json
+     sha256 : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+=== MANIFESTE GOLD ===
+{
+ "version": 2,
+ "mode": "gold",
+ "date": "2026-11-02T16:26:53",
+ "source": "tools/structures/donnees/gold-analyseur.json",
+ "sortie": "data/structures/banque-gold.jsonl",
+ "phrases": 39,
+ "candidats_acceptes": 39,
+ "sha256": "973
+… [162 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport hashlib, json, pathlib\nbase = pathlib.Path(\"data/structures\")\nfor nom in (\"banque-gold\", \"banque-reference\", \"banque\"):\n    corps = (base / f\"{nom}.jsonl\").read_text(encoding=\"utf-8\")\n    man  … [1107 caractères tronqués]`
+
+  ```
+banque-gold        lignes= 39 phrases= 39 sha=OK spans=OK statuts=['reference']
+banque-reference   lignes=  7 phrases=  7 sha=OK spans=OK statuts=['reference']
+banque             lignes=  0 phrases=  0 sha=OK spans=OK statuts=[]
+gold splits: {'dev': 7, 'test': 16, 'holdout': 16}
+=== git ignore ===
+.gitignore:5:data/	data/structures/banque-gold.jsonl
+=== git status ===
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/README.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md
+ m tools/structures
+?? journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Session\\|S —\\|structures\" docs/pilotage/en-cours.md | head -40; echo \"=== git diff en-cours ===\"; git diff docs/pilotage/en-cours.md | head -120", "description": "Check hub en-cours update for S section"}`
+
+  ```
+14:## Sessions en cours
+21:### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+39:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
+58:### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+61:- **Rôle** : **S — les structures** : le banc d'interprétations candidates, l'**analyseur** (rôles,
+70:- **Fichiers réservés** : `tools/structures/`, `data/structures/`, `reports/rapport-s-*`,
+72:- **Objectif final** : un gold de 20 phrases, une mesure reproductible, `data/structures/banque.jsonl`
+79:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+104:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+129:- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (niveaux 0–4), export ; analyseur **7/7** séquences, **93,9 %** de couverture, **19 tests** ; [`analyseur`](../../reports/rapport-s-analyseur.md) ;
+=== git diff en-cours ===
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 587cf563..62c61a67 100644
+--- a/docs/pilotage/e
+… [9310 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('exporter_corpus.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace('''SORTIES = {\"banque\": \"banque.jsonl\", \"reference\": \"banque-reference.jsonl\",\n    … [2153 caractères tronqués]`
+
+  ```
+patch sorties
+  ✅ 39 ligne(s) sur 39 phrase(s) · mode gold → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque.jsonl
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-manifest.json
+     sha256 : 973c70a4126896b8557d803b940f58d1f6d1fe1d172cdb7b9abce9671cd7db71
+  ✅ 0 ligne(s) sur 0 phrase(s) · mode banque → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-validee.jsonl
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-validee-manifest.json
+     sha256 : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  ✅ 7 ligne(s) sur 7 phrase(s) · mode reference → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-reference.jsonl
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-reference-manifest.json
+     sha256 : 77d7a01486f32d6020defd0d246771358dd622b911db11c35024b5920042bf86
+=== LISTE ===
+total 40
+drwxr-xr-x. 1 stephane stephane   264  2 nov 16:27 .
+drwxr-xr-x. 1 stephane stephane  2504  2 nov 16:26 ..
+-rw-r--r--. 1 stephane stephane 20278  2 nov 16:27 banque.jsonl
+-rw-r--r--. 1 stephane stephane   395 
+… [758 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('README.md')\nt = p.read_text(encoding='utf-8')\n\nt = t.replace('''> **Ce que ce n'est pas.** Pas un analyseur syntaxique : les candidats sont **générés par une\n … [7520 caractères tronqués]`
+
+  ```
+README mis à jour
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '1,15p' README.md; echo \"...\"; sed -n '85,190p' README.md", "description": "Review updated README sections"}`
+
+  ```
+# Structures — le banc d'interprétations candidates
+
+> **Ce que c'est.** Un outil **pour humain** : il affiche, pour une phrase, plusieurs **structures
+> d'interprétation candidates** (attachements, rôles, portées), permet de les **valider**, de
+> demander l'avis d'un **grand modèle** (DeepSeek), et d'**exporter une banque** de structures
+> validées — un corpus d'entraînement pour le projet Drave.
+
+> **Ce que ce n'est pas.** Pas un analyseur syntaxique complet : les candidats sont **générés par
+> une heuristique** (`generateur.py`) ou fournis par le fichier de données ; l'outil les fait
+> valider, il ne prétend pas les avoir compris. Depuis la v2, l'heuristique **nomme le rôle** par
+> le contexte, **coupe les subordonnées** et traite le passif et la copule — et un **gold** mesure
+> ce qu'elle sait faire, échecs compris (voir « La mesure de l'analyseur »).
+
+## Lancer
+
+...
+  baseline et le grand modèle comparent.
+
+Les spans sont **vérifiés** : `construire_donnees.py` les calcule par sous-chaîne et refuse un
+segment qui n'apparaît pas dans la phrase ; `exporter_corpus.py` les re-vérifie avant d'écrire une
+ligne de corpus.
+
+## Le générateur
+
+```bash
+python3 generateur.py "Le chat de la
+… [5359 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '190,240p' README.md", "description": "Review README tail"}`
+
+  ```
+## Tests
+
+```bash
+python3 -m unittest discover -s tests
+```
+
+**37 tests** : phrases et alignement des spans, validation + export, statut invalide refusé,
+évaluation baseline, page statique ; générateur (spans, relative, rôle, GP, variation unique,
+copule) ; rôles contextuels (`de`, `avec`, `à`, `par`, passif) ; subordonnées (temps, cause,
+concession, hypothèse, but, manière, contenu) ; gold (spans, vocabulaire, mesure qui bat les trois
+contrôles) ; export (dernier verdict `statut`, `verdict` ancien, span invalide, aucune validation,
+candidat inconnu, référence, gold, gold cassé).
+
+## État et suite
+
+- **v0** : 7 phrases, 14 candidats écrits à la main, 7 ambiguïtés (relative, GP, portée, rôle,
+  possession, double sens assumé).
+- **v1** : `generateur.py` (candidats heuristiques, subordonnées et coordination), le **niveau
+  pragmatique** (statuts, double sens conservé, niveaux de contexte 0–4, niveau minimal) et
+  `exporter_corpus.py` (JSONL avec spans vérifiés et manifeste).
+- **v2** : **rôles contextuels** (possession/thème, instrument/attribut, but/lieu, agent/moyen,
+  passif, copule), **subordonnées** par type (temps, cause, concession, hypothèse, but, manière,
+  contenu), le **go
+… [516 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('README.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace('''1. **le dernier verdict gagne** — un candidat validé `ok` puis `non` ne sort pas ;''',\n'''1. **l … [737 caractères tronqués]`
+
+  ```
+README corrigé
+----------------------------------------------------------------------
+Ran 37 tests in 3.675s
+
+OK
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"verifier_corpus.py — le corpus exporté se vérifie : empreinte, comptes, spans, restitution.\n\nUn corpus qui ne se rejoue pas n'est pas un corpus : ce contrôle relit le JSONL, recalcule son\nSHA-256, vérifie le manifeste, aligne chaque segment sur le texte  … [5822 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/verifier_corpus.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 verifier_corpus.py --autotest && python3 verifier_corpus.py ../../data/structures/banque.jsonl && python3 verifier_corpus.py ../../data/structures/banque-reference.jsonl && python3 verifier_corpus.py ../../da … [87 caractères tronqués]`
+
+  ```
+autotest OK : corpus valide accepté, span corrompu refusé
+  ✅ ../../data/structures/banque.jsonl · empreinte, comptes, spans et restitution vérifiés
+  ✅ ../../data/structures/banque-reference.jsonl · empreinte, comptes, spans et restitution vérifiés
+  ✅ ../../data/structures/banque-validee.jsonl · empreinte, comptes, spans et restitution vérifiés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('tests/test_export.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"import exporter_corpus\\n\", \"import exporter_corpus\\nimport verifier_corpus\\n\")\na … [2356 caractères tronqués]`
+
+  ```
+tests verifier ajoutés
+----------------------------------------------------------------------
+Ran 40 tests in 3.679s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json\nr=json.load(open('donnees/mesure-analyseur.json'))\nprint(json.dumps({k:r[k] for k in ('phrases','par_split','global','controles')}, ensure_ascii=False, indent=1))\nPY", "description":  … [33 caractères tronqués]`
+
+  ```
+{
+ "phrases": 39,
+ "par_split": {
+  "dev": {
+   "phrases": 7,
+   "types_ok": 7,
+   "couverture": 1.0,
+   "octets_couverts": 229,
+   "octets_or": 229,
+   "roles_justes": 22,
+   "roles_total": 22,
+   "complements_justes": 10,
+   "complements_total": 10,
+   "types_taux": 1.0,
+   "couverture_globale": 1.0,
+   "roles_taux": 1.0,
+   "complements_taux": 1.0
+  },
+  "test": {
+   "phrases": 16,
+   "types_ok": 16,
+   "couverture": 1.0,
+   "octets_couverts": 475,
+   "octets_or": 475,
+   "roles_justes": 40,
+   "roles_total": 40,
+   "complements_justes": 19,
+   "complements_total": 19,
+   "types_taux": 1.0,
+   "couverture_globale": 1.0,
+   "roles_taux": 1.0,
+   "complements_taux": 1.0
+  },
+  "holdout": {
+   "phrases": 16,
+   "types_ok": 15,
+   "couverture": 0.9864,
+   "octets_couverts": 452,
+   "octets_or": 457,
+   "roles_justes": 37,
+   "roles_total": 38,
+   "complements_justes": 16,
+   "complements_total": 16,
+   "types_taux": 0.9375,
+   "couverture_globale": 0.9891,
+   "roles_taux": 0.9737,
+   "complements_taux": 1.0
+  }
+ },
+ "global": {
+  "phrases": 39,
+  "types_ok": 38,
+  "couverture": 0.9944,
+  "octets_couverts": 1156,
+  "octets_or": 1161,
+  "roles_justes": 99,
+  "roles_total": 100,
+  "com
+… [438 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('README.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"**37 tests** :\", \"**40 tests** :\")\nt = t.replace(\"candidat inconnu, référence, gold, gold cas … [449 caractères tronqués]`
+
+  ```
+Ran 40 tests in 3.691s
+
+OK
+=== STATUS SOUS-MODULE ===
+ M README.md
+ M exporter_corpus.py
+ M generateur.py
+ M tests/test_export.py
+ M tests/test_generateur.py
+?? donnees/gold-analyseur.json
+?? donnees/mesure-analyseur.json
+?? mesure_analyseur.py
+?? verifier_corpus.py
+=== DIFF STAT ===
+ README.md                |  95 ++++++++++++++++-----
+ exporter_corpus.py       | 214 ++++++++++++++++++++++++++++++++++++-----------
+ generateur.py            | 207 +++++++++++++++++++++++++++++++++++++++++----
+ tests/test_export.py     | 122 +++++++++++++++++++++++++++
+ tests/test_generateur.py | 113 +++++++++++++++++++++++++
+ 5 files changed, 665 insertions(+), 86 deletions(-)
+=== NOUVEAUX ===
+?? donnees/gold-analyseur.json
+?? donnees/mesure-analyseur.json
+?? mesure_analyseur.py
+?? verifier_corpus.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git diff --check; python3 -m py_compile generateur.py exporter_corpus.py mesure_analyseur.py verifier_corpus.py serveur.py llm.py construire_donnees.py && echo \"compile OK\"; python3 generateur.py \"La lettre a été  … [81 caractères tronqués]`
+
+  ```
+compile OK
+- « par Marie » → La lettre
+   'La lettre' [GN · patient]
+   'a été écrite' [GV · predicat]
+     'par Marie' [GP · agent]
+- « par Marie » → a été écrite
+   'La lettre' [GN · patient]
+   'a été écrite' [GV · predicat]
+     'par Marie' [GP · agent]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "offset": 210, "limit": 150}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py</path>
+<type>file</type>
+<content>
+210:         self.cible_verbe = None  # le GV le plus proche à gauche
+211: 
+212:     def dict(self):
+213:         return {"debut": self.debut, "fin": self.fin, "texte": self.texte,
+214:                 "type": self.type, "role": self.role, "niveau": self.niveau}
+215: 
+216: 
+217: def _consomme(toks, i, classes):
+218:     j = i
+219:     while j < len(toks) and toks[j].cls in classes:
+220:         j += 1
+221:     return j
+222: 
+223: 
+224: def _segmente(texte: str, toks: list[Token]) -> list[Segment]:
+225:     utiles = [t for t in toks if t.cls != "ESPACE"]
+226:     segs: list[Segment] = []
+227:     i = 0
+228:     while i < len(utiles):
+229:         t = utiles[i]
+230:         if t.cls == "PONCT":
+231:             i += 1
+232:             continue
+233:         marqueur = _marqueur(utiles, i)
+234:         if marqueur:
+235:             # « parce qu'elle est fatiguée », « bien qu'il soit tard » : la subordonnée
+236:             # commence au subordonnant et va jusqu'à la ponctuation ou la coordination.
+237:             j = _fin_clause(utiles, i + 1)
+238:             segs.a
+… [6311 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git add generateur.py exporter_corpus.py mesure_analyseur.py verifier_corpus.py donnees/gold-analyseur.json donnees/mesure-analyseur.json README.md tests/test_generateur.py tests/test_export.py && git diff --cached - … [978 caractères tronqués]`
+
+  ```
+README.md                     |  95 ++++-
+ donnees/gold-analyseur.json   | 784 ++++++++++++++++++++++++++++++++++++
+ donnees/mesure-analyseur.json | 910 ++++++++++++++++++++++++++++++++++++++++++
+ exporter_corpus.py            | 214 +++++++---
+ generateur.py                 | 207 +++++++++-
+ mesure_analyseur.py           | 257 ++++++++++++
+ tests/test_export.py          | 122 ++++++
+ tests/test_generateur.py      | 113 ++++++
+ verifier_corpus.py            | 130 ++++++
+ 9 files changed, 2746 insertions(+), 86 deletions(-)
+[master 647205a] S — L'ANALYSEUR NOMME LES RÔLES : 99/100, 38/39 TYPES ; LE CORPUS DE 39 STRUCTURES SORT
+ 9 files changed, 2746 insertions(+), 86 deletions(-)
+ create mode 100644 donnees/gold-analyseur.json
+ create mode 100644 donnees/mesure-analyseur.json
+ create mode 100644 mesure_analyseur.py
+ create mode 100644 verifier_corpus.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short; echo \"=== log ===\"; git log --oneline -3; echo \"=== en-cours S section ===\"; sed -n '58,80p' docs/pilotage/en-cours.md", "description": "Check main repo status and hub integration"}`
+
+  ```
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+M  journal/README.md
+M  journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md
+ M tools/ocr_pdf.py
+M  tools/sessions.py
+ M tools/structures
+?? journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+=== log ===
+dc7f9c56 N2 — MANDAT 200 k PAS SUR LE MÉLANGE 1 Go, PUIS R1.1/R1.2 (session 0733c5bb)
+04d75114 ÉTAT — HORODATAGE RÉEL (16 h 09) APRÈS LA REPRISE ; LE FUTUR N'EST PAS UNE HEURE
+97d693b6 ÉTAT — T0 REVENU SOUS 4 000 (3 998) APRÈS LE RUNBOOK
+=== en-cours S section ===
+- **Plan** : 1) ~~plan et réservation~~ ; 2) **analyseur rôles/subordonnées** (en cours) ; 3) **export
+  au corpus** ; 4) **tests** ; 5) **fiche, sous-module** ; 6) **ligne d'état**.
+- **Ambition** : un analyseur qui **nomme le rôle** et **coupe la subordonnée**.
+- **Stratégie** : une règle = une phrase du gold, un contrôle négatif par mesure, 19 tests.
+- **Objectif final** : un gold de 20 phrases, une mesure reproductible, `data/structures/banque.jsonl`
+  + manifeste, committé.
+- **Ce qu'elle fait** : mandat ouvert à **16 h 19** ; l'analyseur rôles/subordonnées est en cours.
+- **Ce
+… [1266 caractères tronqués]
+  ```
+

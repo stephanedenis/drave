@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 0.0 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 21 |
-| Appels d'outils | 31 |
-| Fichiers touchés | 0 |
-| Commandes | 18 |
+| Messages | 81 |
+| Appels d'outils | 94 |
+| Fichiers touchés | 7 |
+| Commandes | 63 |
 | Sous-agents | 0 |
-| Commits | 0 |
+| Commits | 1 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu es la session S (les structures, CPU). Lis AGENTS.md, docs/pilotage/en-cours.md,  docs/theorie/jeux-symboliques.md et … [565 caractères tronqués]
 
-*31 appels d'outils.* Actions notables :
+*94 appels d'outils.* Actions notables :
 
 - bash — Get session id and git status
 - read
@@ -41,12 +41,11 @@
 - bash — Search hub coordination mechanism
 - bash — Read sessions.py second half
 - bash — Read date and plan-travail territory rules
-- … et 5 autres
+- … et 64 autres
 
 **Synthèse produite :**
 
-⏵ Lecture du contexte de session S (structures, CPU)
-Je commence par charger le contexte minimal (AGENTS.md, en-cours, théorie des jeux symboliques) et identifier la session.
+Je pose le plan et la réservation, puis je mesure l'état de l'analyseur sur un jeu de phrases candidates avant de coder les règles de rôles et de subordonnées.
 
 ## 3. Travail accompli
 
@@ -54,6 +53,13 @@ Je commence par charger le contexte minimal (AGENTS.md, en-cours, théorie des j
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/gold-analyseur.json` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py` | 0 | 7 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_analyseur.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/exporter_corpus.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/verifier_corpus.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -75,9 +81,47 @@ Je commence par charger le contexte minimal (AGENTS.md, en-cours, théorie des j
 - **T1** Check gitignore, bank files, hub plan
 - **T1** Dump phrases and reference candidates
 - **T1** Run analyzer measurement and sample output
+- **T1** Trace bank and export history
+- **T1** Main repo status and export references
+- **T1** Check gitignore and other session plans
+- **T1** Check tracked data precedent
+- **T1** Read results method
+- **T1** Print official session plan template
+- **T1** Validate session plan and check overlaps
+- **T1** Read real current time
+- **T1** Fix heartbeat and reserved files line
+- **T1** Inspect parsed plan fields
+- **T1** Clean reserved list and recheck
+- **T1** Move reservation note to separate section
+- **T1** Baseline analyzer output on candidate gold phrases
+- **T1** Validate gold spans
+- **T1** Run existing tests after analyzer changes
+- **T1** Compare analyzer output to gold
+- **T1** Compare analyzer output to gold (fixed)
+- **T1** Add 8 holdout phrases after rules
+- **T1** Patch coverage weighting and run measurement
+- **T1** Inspect holdout type failure
+- **T1** Add copula predicate rule and remeasure
+- **T1** Add second holdout and run once
+- … et 23 autres
 
 ## 4. Mesures et résultats marquants
 
 - **T1** `n2-analyse            c7232b3 ANALYSEUR — L'ADVERBE DE TEMPS ET LE « QU'ELLE » : 7/7 SÉQUENCES, 94 % DE COUVERTURE`
 - **T1** `| | * c7232b3 (n2-analyse) ANALYSEUR — L'ADVERBE DE TEMPS ET LE « QU'ELLE » : 7/7 SÉQUENCES, 94 % DE COUVERTURE`
+- **T1** `- un chiffre sans dispositif (« 73 % ») ;`
+- **T1** `129:- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (niveaux 0–4), export ; analyseur **7/7** séquences, **93,9 %** de couverture, **19 tests** ; [`analyseur``
+
+## 5. Erreurs rencontrées
+
+4 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
+- **T1** : === data suivis === count: 0 === reports json exemples === reports/b102bis-corpus-jw.json reports/campagne-benefices/051-R-annexe-manifeste-des-journaux.md reports/corpus-genres.json reports/corpus-li
+- **T1** : ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)   ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/w
+- **T1** : p001 dev [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "<stdin>", line 6, in <genexpr> TypeError: list indices must be integers or slices, not str [exit code
+
+## 6. Commits
+
+- S — L'ANALYSEUR NOMME LES RÔLES : 99/100, 38/39 TYPES ; LE CORPUS DE 39 STRUCTURES SORT" -m "Le générateur gagne des rôles contextuels (possession/thème, instru
 

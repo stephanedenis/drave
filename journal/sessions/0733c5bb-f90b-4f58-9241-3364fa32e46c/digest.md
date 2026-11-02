@@ -1273,3 +1273,570 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/sessions.py --check 2>&1 | tail -8; echo \"=== commit plan ===\"; git add journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md && git commit -q -m \"N2 — MANDAT 200 k PAS SUR LE MÉLANGE 1 Go, PUIS R1.1/R1.2 (session 0733c5bb)\"  … [76 caractères tronqués]`
+
+  ```
+⚠ plan actif non listé dans en-cours : 0733c5bb-f90b-4f58-9241-3364fa32e46c
+=== commit plan ===
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-36]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-36", "wait": true, "timeout_ms": 120000}`
+
+  ```
+dc7f9c56 N2 — MANDAT 200 k PAS SUR LE MÉLANGE 1 Go, PUIS R1.1/R1.2 (session 0733c5bb)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement des 200 000 pas sur le mélange 1 Go (GPU 0)
+
+- **bash** `{"command": "free -g | head -2; nproc; ls -la ~/gpu-env/bin/python", "description": "Check RAM, CPUs, gpu python"}`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          13         102           0          11         112
+40
+lrwxrwxrwx. 1 stephane stephane 7 31 jui 08:53 /home/stephane/gpu-env/bin/python -> python3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && mkdir -p work/n2ac && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.ca … [421 caractères tronqués]`
+
+  ```
+pid 35563
+0, 620 MiB, 0 %
+1, 710 MiB, 0 %
+  ```
+
+- **bash** `{"command": "sleep 45; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -3 work/n2ac/mix-200k.log; echo \"--- procs ---\"; nvidia-smi --query-compute-apps=pid,used_memory --format=csv; ps aux | grep entrainer_native | grep -v grep | awk '{print $2, $3, $4, $10}'", "description": "Check tra … [31 caractères tronqués]`
+
+  ```
+16:19:10
+--- procs ---
+pid, used_gpu_memory [MiB]
+34404, 616 MiB
+34404, 706 MiB
+35563 0.0 0.0 0:00
+35568 0.0 0.0 0:00
+35572 60.0 9.0 0:42
+  ```
+
+- **bash** `{"command": "ps -p 34404 -o pid,etime,cmd --no-headers | cut -c1-160; echo \"---\"; sleep 60; cd /home/stephane/GitHub/Qtrinet && tail -3 work/n2ac/mix-200k.log; date '+%H:%M:%S'", "description": "Identify GPU holder and wait for training log"}`
+
+  ```
+34404       01:57 llama-cli -m models/Qwen2.5-0.5B-Q4_0.gguf -p Réponds uniquement: {"langue":"fr"} -n 32 --temp 0 --no-display-prompt
+---
+[still running after 60000ms; moved to background job bash-40]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-40", "timeout_ms": 60000, "wait": true}`
+
+  ```
+16:20:12
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-40 (bash: ps -p 34404 -o pid,etime,cmd --no-headers | cut -c1-160; echo "---"; sleep 60; cd /home/stephane/GitHub/Qtrinet && tail -3 work/n2ac/mix-200k.log; date '+%H:%M:%S') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Chargement du corpus en cours ; lecture du banc d'évaluation
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 1,80p work/n2w/eval_ood_canal.py", "description": "Read OOD eval script"}`
+
+  ```
+#!/usr/bin/env python3
+"""eval_ood_canal.py — la PPL hors domaine avec le canal (littérature, anglais, wikitext2)."""
+import json, pathlib, sys
+import torch
+sys.path.insert(0, '.')
+sys.path.insert(0, 'work/n2j')
+from tools.eval_n2_propre import charge, charger_bytes
+from tools.canal_structure import canal as canal_de
+import evalue_canal as ec
+
+pt = sys.argv[1]
+m = charge(pt)
+jeux = [("litterature", "data/corpus_fr_litterature.txt"),
+        ("anglais", "data/corpus_en.txt"),
+        ("wikitext2", "data/wikitext2_test.txt")]
+res = {"fichier": pathlib.Path(pt).name}
+for nom, chemin in jeux:
+    texte = pathlib.Path(chemin).read_text(encoding='utf-8', errors='replace')
+    data = charger_bytes(chemin)
+    ct = torch.tensor(list(canal_de(texte)), dtype=torch.long)
+    res[nom] = ec.ppl(m, data, ct, 128, avec_canal=True)
+print(json.dumps(res), flush=True)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 1,70p tools/eval_n2_propre.py", "description": "Read propre eval tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""eval_n2_propre.py — la porte honnête : PPL sur un corpus dédupliqué, et hors domaine.
+
+Le corpus de `data/corpus_propre/` est construit par `tools/corpus_propre.py` : passages
+répétés retirés, split par chunks contigus, **zéro fenêtre de validation dans
+l'entraînement** (vérifié). Ce script évalue un point de contrôle :
+
+  val / test        : in-domain, fenêtres tirées **dans** un chunk (jamais à cheval sur le
+                      collage de deux chunks, qui est un artefact du split) ;
+  litterature       : `data/corpus_fr_litterature.txt` (Verne, public domain) — jamais vu ;
+  anglais           : `data/corpus_en.txt` (Wikipédia) — jamais vu ;
+  wikitext2         : `data/wikitext2_test.txt` — jamais vu ;
+  permute           : contrôle négatif, mêmes octets de validation, ordre détruit ;
+  decomposition     : PPL des têtes précoces (après 2, 4, 6 blocs) et sans la boucle de
+                      pensée — ce que chaque pièce porte, et ce que l'arrêt précoce coûte ;
+  longueurs         : PPL à 129, 192, 256, 384, 512 octets — le verrou de longueur, mesuré
+                      sur un texte propre.
+
+Usage :
+  PYTHONPATH=. ~/gpu-env/bin/python tools/eval_n2_pr
+… [1529 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat work/n2j/evalue_canal.py; echo \"=== canal_structure ===\"; sed -n 1,40p tools/canal_structure.py", "description": "Read canal eval and canal tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""evalue_canal.py — PPL avec et sans le canal de structure, par longueur, et au mélange."""
+import json, math, pathlib, random, sys
+import torch, torch.nn.functional as F
+sys.path.insert(0, '.')
+from tools.eval_n2_propre import charge, charger_bytes, departs_vdc
+from tools.canal_structure import canal as canal_de
+
+CHUNK = 8192
+
+
+def fenetres(data, canal, n, long, compteur):
+    n_chunks = max(1, len(data) // CHUNK)
+    xs, cs = [], []
+    for k in range(n):
+        c = departs_vdc(compteur + k, 1, n_chunks, long)[0]
+        debut = c * CHUNK
+        marge = min(CHUNK, len(data) - debut) - long - 1
+        if marge <= 0:
+            continue
+        r = departs_vdc(compteur + 10_000_003 + k, 1, marge, long)[0]
+        j = debut + r
+        xs.append(data[j:j + long])
+        cs.append(canal[j:j + long] if canal is not None else torch.zeros(long, dtype=torch.long))
+    return torch.stack(xs).cuda(), (torch.stack(cs).cuda() if canal is not None else None)
+
+
+def ppl(m, data, canal, long=128, n_lots=8, avec_canal=True):
+    m.eval(); tot, n = 0.0, 0
+    with torch.no_grad():
+        for k in range(n_lots):
+            x, c = fenetres(data, canal, 16, long + 1, k 
+… [3543 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -2 work/n2ac/mix-200k.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; free -g | sed -n 2p", "description": "Check 200k training progress"}`
+
+  ```
+16:20:28
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+Mem:             125          20          89           0          16         104
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ps aux | grep -c \"[e]ntrainer_native\"; ls -la work/n2ac/; echo \"--- log ---\"; cat work/n2ac/mix-200k.log; echo \"--- dmesg oom ---\"; dmesg 2>/dev/null | tail -5", "description": "Check if training process died"}`
+
+  ```
+3
+total 0
+drwxr-xr-x. 1 stephane stephane  24  2 nov 16:17 .
+drwxr-xr-x. 1 stephane stephane 248  2 nov 16:17 ..
+-rw-r--r--. 1 stephane stephane   0  2 nov 16:17 mix-200k.log
+--- log ---
+--- dmesg oom ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"permut\" -A12 tools/eval_n2_propre.py | head -40", "description": "Read permutation control implementation"}`
+
+  ```
+13:  permute           : contrôle négatif, mêmes octets de validation, ordre détruit ;
+14-  decomposition     : PPL des têtes précoces (après 2, 4, 6 blocs) et sans la boucle de
+15-                      pensée — ce que chaque pièce porte, et ce que l'arrêt précoce coûte ;
+16-  longueurs         : PPL à 129, 192, 256, 384, 512 octets — le verrou de longueur, mesuré
+17-                      sur un texte propre.
+18-
+19-Usage :
+20-  PYTHONPATH=. ~/gpu-env/bin/python tools/eval_n2_propre.py <point.pt> \
+21-      [--longueurs] [--decomposition] [--sortie work/n2h/eval.json]
+22-"""
+23-from __future__ import annotations
+24-
+25-import argparse
+--
+141:         "permute": round(ppl_protocole(m, perm, 128, 16, a.chunk, 900_000, device=a.device), 4)}
+142-    if a.decomposition:
+143-        r["decomposition"] = decompose(m, val, a.chunk, a.device)
+144-    if a.longueurs:
+145-        r["longueurs"] = {str(L): round(ppl_protocole(m, val, L, 16, a.chunk, device=a.device), 4)
+146-                          for L in (129, 192, 256, 384, 512)}
+147-    print(json.dumps(r, ensure_ascii=False), flush=True)
+148-    if a.sortie:
+149-        p = pathlib.Path(a.sortie)
+150-        existant = json.loads(p.read
+… [150 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 118,145p tools/eval_n2_propre.py", "description": "Read main eval and permutation construction"}`
+
+  ```
+ap.add_argument("--device", default="cuda")
+    a = ap.parse_args()
+
+    corpus = RACINE / a.corpus_dir
+    val = charger_bytes(corpus / "val.txt")
+    test = charger_bytes(corpus / "test.txt")
+    lit = charger_bytes(RACINE / "data/corpus_fr_litterature.txt")
+    litt_propre = charger_bytes(RACINE / "data/corpus_litt_propre/val.txt")
+    ang = charger_bytes(RACINE / "data/corpus_en.txt")
+    wt = charger_bytes(RACINE / "data/wikitext2_test.txt")
+    perm = val[torch.tensor(ordre_vdc(len(val)), dtype=torch.long)]
+
+    m = charge(a.point, a.device)
+    r = {"fichier": pathlib.Path(a.point).name, "params": m.nb_parametres(),
+         "val": round(ppl_protocole(m, val, 128, 16, a.chunk, device=a.device), 4),
+         "test": round(ppl_protocole(m, test, 128, 16, a.chunk, 5_000_000, device=a.device), 4),
+         "litterature": round(ppl_protocole(m, lit, 128, 16, a.chunk, 1_000_000,
+                                            device=a.device), 4),
+         "litterature_propre": round(ppl_protocole(m, litt_propre, 128, 16, a.chunk, 3_000_000,
+                                                   device=a.device), 4),
+         "anglais": round(ppl_protocole(m, ang, 128, 16, a.chunk, 5_000_
+… [465 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du banc d'évaluation du run 200k (5 PPL + longueurs + permutation)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"eval_200k.py — les cinq PPL du run long, la courbe de longueur et le contrôle par permutation.\n\nProtocole identique à N2.ac (rapport-n2-melange) : canal fourni à l'évaluation, fenêtres\ntirées par Van der Corput dans des chunks de 8192 octets, 8 lots de 1 … [2812 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/eval_200k.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -3 work/n2ac/mix-200k.log; free -g | sed -n 2p; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Check training startup again"}`
+
+  ```
+16:20:52
+Mem:             125          21          88           0          17         104
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -E '\"pas\"|\"duree_s\"|ppl_val' work/n2j/base-34m-canal.pt.json; echo \"--- 200k ---\"; date '+%H:%M:%S'; tail -2 work/n2ac/mix-200k.log; free -g|sed -n 2p", "description": "Check control run duration and 200k progress"}`
+
+  ```
+"pas": 20000,
+ "ppl_val": 3.683441230210883,
+ "duree_s": 1067.5820379257202
+--- 200k ---
+16:21:13
+Mem:             125          21          88           0          17         104
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation du schéma de position relatif (RoPE) pour R1.1
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"rope_model.py — la variante **positions relatives** du modèle natif (R1.1/R1.2).\n\nLe modèle de `tools/native_model.py` ajoute une **position apprise absolue** (`self.pos`) et\ncompte sur les positions aléatoires à l'entraînement (N2.j2) : le gain à 512 oc … [5086 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/rope_model.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. ~/gpu-env/bin/python work/n2ac/rope_model.py 2>&1 | tail -5; echo \"=== 200k ===\"; date '+%H:%M:%S'; tail -2 work/n2ac/mix-200k.log; free -g|sed -n 2p", "description": "Autotest RoPE and check training"}`
+
+  ```
+autotest rope OK : forme, pos_debut neutre, norme préservée
+=== 200k ===
+16:22:25
+Mem:             125          33          73           0          20          92
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du lanceur d'entraînement RoPE (banc R1.1/R1.2)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"entrainer_rope.py — la recette N2 avec positions **relatives** (R1.1/R1.2).\n\nIdentique à `tools/entrainer_native.py` (mêmes fenêtres Van der Corput, même mètre, même\nsupervision des têtes précoces) à trois exceptions près, toutes déclarées :\n\n  - les b … [5136 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/entrainer_rope.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"eval_longueurs.py — la courbe de longueur d'un point de contrôle (absolu ou RoPE).\n\nLe mètre est celui de N2 (`work/n2j/evalue_canal.py`) : canal fourni, fenêtres Van der Corput\ndans des chunks de 8192 octets, 8 lots × 16 fenêtres. On peut demander n'imp … [1833 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/eval_longueurs.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -3 work/n2ac/mix-200k.log; free -g|sed -n 2p; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Check training startup status"}`
+
+  ```
+16:22:42
+Mem:             125          34          71           0          21          91
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+  ```
+
+- **bash** `{"command": "ps -eo pid,stat,etime,time,rss,cmd --no-headers | grep \"[e]ntrainer_native.py\" | cut -c1-110", "description": "Check process state and CPU time"}`
+
+  ```
+35563 S          04:46 00:00:00  2124 bash -c cd /home/stephane/GitHub/Qtrinet && mkdir -p work/n2ac && nohu
+  35568 S          04:46 00:00:00  4332 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VIS
+  35572 Rl         04:46 00:03:20 22636060 /home/stephane/gpu-env/bin/python tools/entrainer_native.py --corpu
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat work/n2j/base-wiki-45m.pt.json | head -30; echo \"=== canal de base-34m-canal ===\"; python3 -c \"\nimport json;d=json.load(open('work/n2j/base-34m-canal.pt.json'));print({k:d[k] for k in ('parametres','pas','corpus','octets','ppl_val','duree_s')  … [62 caractères tronqués]`
+
+  ```
+{
+ "modele": "drave-n0",
+ "parametres": 34301224,
+ "corpus": "data/wiki_fr/propre/train.txt",
+ "octets": 186089472,
+ "pas": 20000,
+ "seq": 128,
+ "lot": 8,
+ "lr": 0.0003,
+ "graine": 1,
+ "perte_finale": 1.4665288925170898,
+ "ppl_val": 4.186314178234731,
+ "jetons_val": 8192,
+ "tetes": true,
+ "precision_main": 0.571044921875,
+ "precision_early": [
+  0.51708984375,
+  0.558349609375,
+  0.570556640625
+ ],
+ "drvm": "work/n2j/base-wiki-45m.drvm",
+ "sha256_drvm": "b0d5c0866b19f82e944c6e279dc16a840cda081d4e8582df58de26f2e234a37d",
+ "duree_s": 1075.5144882202148
+}
+=== canal de base-34m-canal ===
+{'parametres': 34301224, 'pas': 20000, 'corpus': 'data/wiki_fr/propre/train.txt', 'octets': 186089472, 'ppl_val': 3.683441230210883, 'duree_s': 1067.5820379257202}
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement de R1.1 (RoPE, 20k pas, GPU 1)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=1 PYTHONPATH=. ~/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal --pas 20000 --seq  … [458 caractères tronqués]`
+
+  ```
+pid 44707
+16:23:26
+0, 1322 MiB, 96 %
+1, 1 MiB, 0 %
+  ```
+
+- **bash** `{"command": "sleep 40; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- 200k ---\"; tail -2 work/n2ac/mix-200k.log; echo \"--- rope ---\"; tail -2 work/n2ac/rope-20k.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Check both runs  … [12 caractères tronqués]`
+
+  ```
+16:24:13
+--- 200k ---
+pas 1000 · perte 2.4110 · PPL val 10.192 · 56 s
+pas 1050 · perte 2.2704 · PPL val 10.119 · 58 s
+--- rope ---
+pas    300 · perte 1.3655 · PPL val 4.132 · 19 s
+pas    350 · perte 1.5058 · PPL val 4.125 · 21 s
+0, 1322 MiB, 96 %
+1, 1304 MiB, 85 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture du hook d'état et des portes tolérées
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 1,80p tools/verifie_etat_a_jour.py", "description": "Read state hook"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_etat_a_jour.py — aucun fait commité sans sa ligne d'état.
+
+POURQUOI CET OUTIL EXISTE. `en-cours` est la seule source de l'état, et le contrat
+disait « seul le principal écrit ». Ce n'est pas une garantie : l'identité se déduit
+d'une variable d'environnement absente — un « pair » est autodéclaré — et si la
+principale s'arrête, l'état se fige. Surtout, rien ne comparait les commits : la
+revue ne regardait que la DATE, donc deux commits du même jour passaient. Le 29/10,
+A8.0 (15 h 51) a été commité après le dernier état (15 h 34) sans aucune alerte.
+
+La garantie est au commit, pas dans la discipline d'un écrivain :
+  --index  (hook pre-commit) : un commit qui prépare un fait (reports/, roadmap,
+           backlog) sans toucher `en-cours` est REFUSÉ ;
+  --head   : si un fait a été commité après le dernier commit d'`en-cours`, l'état
+           est en retard — la session qui le voit le corrige, sans attendre.
+
+Le journal est du récit dérivé (le hook l'archive) : il n'exige pas de ligne d'état.
+
+Usage :
+  python3 tools/verifie_etat_a_jour.py             # --head
+  python3 tools/verifie_etat_a_jour.py --index     # pour le hook
+  python3 tools/verifie_eta
+… [2088 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log --oneline -3 --name-only -- reports/rapport-n2-melange.md | head -20; echo \"=== dernier commit touchant en-cours ===\"; git log -1 --format='%h %s' -- docs/pilotage/en-cours.md", "description": "Check how N2 reports were committed with state" … [1 caractères tronqués]`
+
+  ```
+2c394fbc N2.ac — LE MÉLANGE DES DEUX CORPUS : LA LARGEUR SANS PERDRE LE FRANÇAIS
+reports/rapport-n2-melange.md
+=== dernier commit touchant en-cours ===
+04d75114 ÉTAT — HORODATAGE RÉEL (16 h 09) APRÈS LA REPRISE ; LE FUTUR N'EST PAS UNE HEURE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat .git/hooks/pre-commit 2>/dev/null | head -60; echo \"=== core.hooksPath ===\"; git config core.hooksPath", "description": "Inspect pre-commit hook"}`
+
+  ```
+#!/bin/sh
+# pre-commit — l'état accompagne le fait, le journal accompagne le code.
+#
+# Versionné dans tools/hooks/ et installé par tools/installe_hooks.sh : un hook qui
+# ne vit que dans .git/hooks ne survit ni au clone ni au nettoyage.
+set -u
+cd "$(git rev-parse --show-toplevel)" || exit 0
+
+# 1. Aucun fait (reports/, roadmap, backlog) ne se commite sans sa ligne d'état.
+#    C'est la garantie de fraîcheur de docs/pilotage/en-cours.md : elle ne dépend
+#    pas de la survie d'une session « principale », elle est vérifiée au commit.
+if ! python3 tools/verifie_etat_a_jour.py --index; then
+    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+    echo "     mets docs/pilotage/en-cours.md à jour, puis :"
+    echo "     git add docs/pilotage/en-cours.md"
+    exit 1
+fi
+
+# 2. Archive les traces de session DSH avant chaque commit : le journal doit
+#    accompagner le code, pas le suivre.
+python3 tools/archive_sessions.py --quiet >/dev/null || { echo "  ⛔ archivage des sessions en échec"; exit 1; }
+python3 tools/session_report.py --quiet >/dev/null || { echo "  ⛔ rapport de session en échec"; exit 1; }
+# Le journal du jour, par thème (sources : git + journal/sessions). L'index README est
+… [272 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"no-verify\\|hook\\|en-cours\" docs/methode/continuite.md | head -30", "description": "Read continuity doc on commits and hooks"}`
+
+  ```
+4:> [`en-cours`](../pilotage/en-cours.md). Ni planning ni résultats : **qui écrit l'état, quand, et avec quoi on reprend**.
+6:> **Règle d'or.** Un cycle est fini quand le résultat est **mesuré, écrit, committé**, qu'`en-cours` porte sa
+16:| fin de cycle | résultat + fiche + commit + `en-cours` + roadmap | jamais « le temps est écoulé » |
+19:- **On ne s'arrête pas sur un compteur** : si la limite tombe avant un résultat, écrire `en-cours` +
+31:**On ne délègue pas** : une édition triviale d'une ligne, l'écriture de `en-cours`/`roadmap`/`AGENTS`,
+50:7. **interdits** : `en-cours`, `roadmap`, `AGENTS`, les fichiers d'un autre agent.
+64:8. **diff d'état** — la ligne exacte à mettre dans `en-cours` ;
+72:La session **vérifie** (porte, lien, contrôle), **met à jour `en-cours`**, **commite** et
+76:## 3. La discipline de `en-cours`
+78:`docs/pilotage/en-cours.md` est **la seule source de l'état**. Le journal est de l'histoire, les
+87:| **écriture** | toute session écrit `en-cours`, **une à la fois** ; aucun fait (`reports/`, roadmap, backlog) ne se commite sans sa ligne (hook `pre-commit`) |
+98:**Lecture** : `AGENTS.md` + `en-cours` (« Sessions en cours », « Les chantiers et leurs bloquants »,
+… [856 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 25,75p docs/methode/continuite.md", "description": "Read subagent delegation rules"}`
+
+  ```
+### Quand déléguer
+
+- **deux tâches indépendantes** : **2 à 4** en parallèle ;
+- une tâche **longue et isolée** ;
+- une **revue adverse** ou une **continuation** : `subagent_fork`.
+
+**On ne délègue pas** : une édition triviale d'une ligne, l'écriture de `en-cours`/`roadmap`/`AGENTS`,
+la décision humaine, ou deux agents sur le **même fichier**.
+
+### Comment
+
+| outil | usage |
+|---|---|
+| `subagent` | tâche autonome, sans contexte de la conversation |
+| `subagent_fork` | revue, continuation, analyse qui s'appuie sur la conversation |
+| `workflow` | **fan-out** sur beaucoup d'items indépendants (audit, migration) |
+
+**Contrat de prompt** (obligatoire) :
+
+1. **objectif** en une phrase, et le résultat attendu ;
+2. **fichiers autorisés** — rien d'autre ;
+3. **livrable** : fichier, mesure, diff, rapport ;
+4. **critères d'acceptation** et **contrôle négatif** ;
+5. **condition d'arrêt** (temps, essais, succès) ;
+6. **format de rapport** : les **10 lignes** ci-dessous ;
+7. **interdits** : `en-cours`, `roadmap`, `AGENTS`, les fichiers d'un autre agent.
+
+**Un seul écrivain par fichier** : la session qui clôt garde l'état, la roadmap et les directives ; le sous-agent
+possède son périmètre.
+
+###
+… [827 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -rn \"no-verify\" docs/ tools/ journal/2026-11-0*/README.md 2>/dev/null | head -20", "description": "Search for documented no-verify use"}`
+
+  ```
+tools/docwatch/.venv/lib/python3.13/site-packages/pip/_internal/commands/wheel.py:69:            "--no-verify",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git show --stat --oneline 2c394fbc | head -20; echo \"=== 86cfb580 ===\"; git show --stat --oneline 86cfb580 | head -20", "description": "Inspect N2.ac commit contents"}`
+
+  ```
+2c394fbc N2.ac — LE MÉLANGE DES DEUX CORPUS : LA LARGEUR SANS PERDRE LE FRANÇAIS
+ docs/pilotage/en-cours.md                          |  4 +-
+ journal/2026-11-02/README.md                       |  9 ++-
+ journal/2026-11-02/apprentissage.md                |  4 +-
+ journal/2026-11-02/attention.md                    |  4 +-
+ journal/2026-11-02/distribue.md                    |  4 +-
+ journal/2026-11-02/docs.md                         |  8 +-
+ journal/2026-11-02/memoire.md                      |  4 +-
+ journal/2026-11-02/mesures.md                      |  4 +-
+ journal/2026-11-02/modele.md                       |  4 +-
+ journal/2026-11-02/outils.md                       |  4 +-
+ journal/2026-11-02/portes.md                       |  4 +-
+ journal/README.md                                  |  4 +-
+ .../0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md | 48 ++++++++++++
+ .../rapport.md                                     | 17 +++--
+ journal/sessions/MANIFEST.md                       |  8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 85 ++++++++++++++++++++++
+ .../rapport.md                                     | 63 ++++++++++++++--
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/digest.md
+… [1421 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for c in $(git log --format=%h -40 -- reports/); do files=$(git show --name-only --format= $c); if echo \"$files\" | grep -q \"reports/\" && ! echo \"$files\" | grep -q \"docs/pilotage/en-cours.md\"; then echo \"$c | $(git log -1 --format=%s $c | cut  … [89 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+### 🤖 Assistant
+
+⏵ Question de gouvernance (en-cours) pendant que les runs tournent
+
+- **ask_user_question** `{"questions": [{"id": "en_cours", "header": "en-cours", "question": "Le hook pre-commit refuse tout fait dans reports/ sans modifier docs/pilotage/en-cours.md — or tu m'interdis d'y toucher sans le hub (qui est actif et vient d'écrire l'état à 16 h 09). Comment veux-tu que je commite la fiche N2 ?", … [767 caractères tronqués]`
