@@ -20617,3 +20617,22 @@ en-cours ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.aa** : 831 Mo à compute constant, autre domaine ; **N2.ab** : 60 k pas — fr **3,44**, le 831 Mo gagne en ang … [1614 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4001 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · compteurs : en-cours.md dit 621 JSON, le disque en a 624
+[still running after 60000ms; moved to background job bash-1202]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1202", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+2b3eeba9 N2.ab — PLUS DE PAS PAIE ; PLUS DE TEXTE PAIE EN LARGEUR, PAS EN FRANÇAIS
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.ab** : 60 k pas, fr **3,44** ;\", \"**N2.ab** : 60 k pas ;\")\ns = re.sub(r\"\\| fichiers / JSON de résultat … [1712 caractères tronqués]`

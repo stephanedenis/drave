@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**128 commits** · **3 session(s)** · **9 thème(s)**
+**129 commits** · **3 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 15 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
-| mesures | 71 | [mesures.md](mesures.md) |
+| mesures | 72 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 6 | [portes.md](portes.md) |
@@ -161,6 +161,7 @@
 | 12:00 | `f864970e` | B13 — LE JUGE DES RÉPONSES : COUVERTURE 0/19, LA RÉFÉRENCE MANQUE ; 126/126 |
 | 12:07 | `a041333c` | DONNÉES — LE RUN DE REPRISE A ÉCRASÉ LE CORPUS CEGEP : LES 2 ALGORITHMS RESTENT, LES 10 NOTES SONT À RE-OCÉRISER (LEÇON : SORTIE SÉPARÉE) |
 | 12:15 | `56b22212` | B13 — LES 19 RÉPONSES DE RÉFÉRENCE : COUVERTURE 19/19, LE JUGE EST UTILISABLE ; 127/127 |
+| 12:21 | `2b3eeba9` | N2.ab — PLUS DE PAS PAIE ; PLUS DE TEXTE PAIE EN LARGEUR, PAS EN FRANÇAIS |
 
 ## Le récit de la journée (écrit à la main)
 

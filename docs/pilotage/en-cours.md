@@ -75,7 +75,7 @@
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
 - **N2** : **N2.z** (34,3 M + canal) **3,53**, 512 **3,66** — le meilleur ; **N2.r** 3,69 ;
-  **N2.w** anglais **3,77** ; **N2.v** multilingue **4,79** ; **N2.aa** : 831 Mo, autre domaine ; **N2.ab** : 60 k pas, fr **3,44** ; N4 **0/40** ; fiches
+  **N2.w** anglais **3,77** ; **N2.v** multilingue **4,79** ; **N2.aa** : 831 Mo, autre domaine ; **N2.ab** : 60 k pas ; N4 **0/40** ; fiches
   [`n2-canaux`](../../reports/rapport-n2-canal-34m.md), [`n2-anglais`](../../reports/rapport-n2-anglais-34m.md).
 - **Pensée — B13** : state store v0, AC-3/alpha-bêta, DRVF, banc anytime, opérateurs hétérogènes, **111/111 portes** ; gold **407 réels**, coréférence **27/30** (CV 0,847).
 
@@ -88,7 +88,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges à la passe du 02/11 06 h : les 4 connues + greffe à la borne 700 s, rejouée verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **537** / **621** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **537** / **624** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

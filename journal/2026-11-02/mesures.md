@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (71)
+## Commits du jour (72)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -79,6 +79,7 @@
 | 12:00 | `f864970e` | B13 — LE JUGE DES RÉPONSES : COUVERTURE 0/19, LA RÉFÉRENCE MANQUE ; 126/126 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+22) |
 | 12:07 | `a041333c` | DONNÉES — LE RUN DE REPRISE A ÉCRASÉ LE CORPUS CEGEP : LES 2 ALGORITHMS RESTENT, LES 10 NOTES SONT À RE-OCÉRISER (LEÇON : SORTIE SÉPARÉE) | `en-cours.md`, `README.md`, `apprentissage.md` (+18) |
 | 12:15 | `56b22212` | B13 — LES 19 RÉPONSES DE RÉFÉRENCE : COUVERTURE 19/19, LE JUGE EST UTILISABLE ; 127/127 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+29) |
+| 12:21 | `2b3eeba9` | N2.ab — PLUS DE PAS PAIE ; PLUS DE TEXTE PAIE EN LARGEUR, PAS EN FRANÇAIS | `en-cours.md`, `README.md`, `apprentissage.md` (+17) |
 
 ## Chiffres du jour
 
@@ -105,6 +106,7 @@
 - [reports/rapport-n2-fenetre-r1.md](../../reports/rapport-n2-fenetre-r1.md)
 - [reports/rapport-n2-multilingue-34m-distille.md](../../reports/rapport-n2-multilingue-34m-distille.md)
 - [reports/rapport-n2-multilingue-34m.md](../../reports/rapport-n2-multilingue-34m.md)
+- [reports/rapport-n2-pas-vs-texte.md](../../reports/rapport-n2-pas-vs-texte.md)
 - [reports/rapport-n2-professeur.md](../../reports/rapport-n2-professeur.md)
 - [reports/rapport-ocr-cegep.md](../../reports/rapport-ocr-cegep.md)
 - [reports/rapport-ocr-pdf.md](../../reports/rapport-ocr-pdf.md)
