@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**115 commits** · **3 session(s)** · **8 thème(s)**
+**116 commits** · **3 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 13 | [docs.md](docs.md) |
 | memoire | 10 | [memoire.md](memoire.md) |
-| mesures | 63 | [mesures.md](mesures.md) |
+| mesures | 64 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | portes | 6 | [portes.md](portes.md) |
 
@@ -24,8 +24,8 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 42.9 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 42.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 43.0 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 42.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 42.6 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -147,6 +147,7 @@
 | 10:42 | `92d28fd7` | B13 — LA CASCADE AVEC L'UNION : F1 0,2170, TÊTE 0,4410, 587 APPELS ; 117/117 |
 | 10:51 | `72cbd359` | B13 — LA TÊTE DE LA CASCADE : LA CORRECTION DÉGRADE (0,419 CONTRE 0,441) ; 118/118 |
 | 11:03 | `518381c7` | B13 — LE MIROIR ENTRÉE/SORTIE : SURFACE 1,0, MOTS 0,2095, LA FLUIDITÉ N'EST PAS LA FIDÉLITÉ ; 119/119 |
+| 11:11 | `0e2d6a64` | B13 — LA SORTIE POS : 0,201, LA RESTITUTION SÉMANTIQUE NE RESTITUE PAS ; 120/120 |
 
 ## Le récit de la journée (écrit à la main)
 

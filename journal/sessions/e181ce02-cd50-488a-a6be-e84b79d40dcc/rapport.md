@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 42.5 h |
-| Tours | 135 |
-| Messages | 1626 |
-| Appels d'outils | 1400 |
+| Durée | 42.6 h |
+| Tours | 136 |
+| Messages | 1631 |
+| Appels d'outils | 1403 |
 | Fichiers touchés | 25 |
-| Commandes | 1139 |
+| Commandes | 1142 |
 | Sous-agents | 2 |
 | Commits | 170 |
 | Compactages de contexte | 5 |
@@ -305,6 +305,8 @@
 **Tour 134** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 135** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 136** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7173,6 +7175,51 @@ Je continue : prochain round, **la restitution depuis les POS** — reconstruire
 - bash — Committer la sortie POS
 - job_output
 
+**Synthèse produite :**
+
+⏵ Sortie POS : 0,201, la restitution sémantique ne restitue pas ; 120/120
+
+Le round 121 est livré : la **sortie sémantique** (les mots reconstruits depuis leurs étiquettes POS) ne restitue que **20 %** de la source — la règle 6 est maintenant chiffrée. Commit **`0e2d6a64`**.
+
+\## Les trois restitutions
+
+| restitution | source | **fidélité** | fluidité |
+|---|---|---:|---:|
+| graphèmes (surface) | 587 phrases | **1,0000** | 1,0 |
+| mots (tokens) | 587 phrases | 0,2095 | 1,0 |
+| **POS (sémantique)** | 587 phrases | **0,2010** | 1,0 |
+
+**Ce que ça dit** :
+
+- **La sortie POS est la plus faible** (0,201) : elle perd la ponctuation (pas de POS) **et** les espaces ; c'est la **vraie** sortie du bloc, et elle n'est pas restitutive.
+- **La surface est une tautologie** (1,0) : elle garde tout ; elle ne mesure rien.
+- **La cascade = l'heuristique** (0,201) : le mock neuronal ne change pas la sortie.
+- **La leçon de la règle 6 est chiffrée** : la **fluidité** (1,0) n'est pas la **fidélité** (0,20) ; 80 % du texte est perdu à la sortie.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-miroir-pos.md`](../../reports/rapport-pensee-miroir-pos.md) ; JSON [`pensee-miroir-pos.json`](../../reports/pensee-miroir-pos.json) ; T117 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **120/120 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **527 fiches / 616 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` dans le budget.
+- L'horloge réelle est **11 h 12 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **La restitution avec les espaces d'origine** : la perte réelle, caractère par caractère, et la réduire (conserver la ponctuation dans la sortie).
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **la restitution avec les espaces d'origine** — mesurer la perte réelle et la réduire.
+
+### Tour 136 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Mesurer la restitution POS avec les espaces d'origine
+- bash — Écrire la fiche de la restitution avec spans et la porte T118
+- bash — Trim README et passer toutes les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7252,7 +7299,7 @@ Je continue : prochain round, **la restitution depuis les POS** — reconstruire
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1099 autres
+- … et 1102 autres
 
 ## 4. Mesures et résultats marquants
 

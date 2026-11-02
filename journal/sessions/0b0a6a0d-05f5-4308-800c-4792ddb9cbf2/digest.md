@@ -20287,3 +20287,41 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1178", "timeout_ms": 900000, "wait": true}`
+
+  ```
+11:10
+work/n2w/base-big-canal.pt
+OK
+}
+CANAL_STAGE_OK 11:09
+{"fichier": "base-big-canal.pt", "L128_canal": 3.7025, "L128_sans": 4.7319, "L256_canal": 3.7045, "L256_sans": 4.7011, "L512_canal": 4.1259, "L512_sans": 5.0811, "mélange_propre": 3.6849, "mélange_milieu": 24.1918, "mélange_tout": 41.0671}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1174 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/base-big.log 2>/dev/null; ls work/n2w/base-big.pt work/n2w/base-big-canal.pt 2>/dev/null; tail -2 work/n2w/base-big-canal.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2w/eval_croise.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"eval_croise.py — un modèle sur une validation donnée (le canal est recalculé sur place).\"\"\"\nimport pathlib, sys, json\nimport torch\nsys.path.insert(0, '.')\nsys … [970 caractères tronqués]`
+
+  ```
+{"fichier": "base-34m-canal.pt", "val": "data/wiki_big/propre", "L128": 3.7107, "L256": 3.6571, "L512": 3.8709}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 900 ~/gpu-env/bin/python work/n2w/eval_croise.py work/n2w/base-big-canal.pt data/wiki_big/propre 2>&1 | grep -v Loading | tail -1", "description": "Evaluate the big model on its own validat … [5 caractères tronqués]`
+
+  ```
+{"fichier": "base-big-canal.pt", "val": "data/wiki_big/propre", "L128": 3.4604, "L256": 3.4457, "L512": 3.9022}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-corpus-1go.md <<'EOF'\n# N2.aa — Le corpus de 831 Mo à compute constant : un autre domaine, pas plus de savoir\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : à recette égale (34,3 M, d … [4475 caractères tronqués]`
+
+  ```
+fiche 1 Go écrite
+en-cours ok
+  T0 max : 4003 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · compteurs : en-cours.md dit 527 fichiers, le disque en a 528
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.aa** : 831 Mo à compute constant — un autre domaine, pas plus de savoir ;\", \"**N2.aa** : 831 Mo à compute  … [1790 caractères tronqués]`

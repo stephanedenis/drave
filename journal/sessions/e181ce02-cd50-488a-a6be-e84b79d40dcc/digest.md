@@ -29945,3 +29945,93 @@ timeout 2400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/miroir.py tools/pensee/autotest.py reports/rapport-pensee-miroir-pos.md reports/pensee-miroir-pos.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilota … [505 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1139]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1139", "timeout_ms": 600000, "wait": true}`
+
+  ```
+24 files changed, 361 insertions(+), 64 deletions(-)
+ create mode 100644 reports/pensee-miroir-pos.json
+ create mode 100644 reports/rapport-pensee-miroir-pos.md
+COMMIT OK 1
+0e2d6a64 B13 — LA SORTIE POS : 0,201, LA RESTITUTION SÉMANTIQUE NE RESTITUE PAS ; 120/120
+lun 02 nov 2026 11:12:34 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Sortie POS : 0,201, la restitution sémantique ne restitue pas ; 120/120
+
+Le round 121 est livré : la **sortie sémantique** (les mots reconstruits depuis leurs étiquettes POS) ne restitue que **20 %** de la source — la règle 6 est maintenant chiffrée. Commit **`0e2d6a64`**.
+
+## Les trois restitutions
+
+| restitution | source | **fidélité** | fluidité |
+|---|---|---:|---:|
+| graphèmes (surface) | 587 phrases | **1,0000** | 1,0 |
+| mots (tokens) | 587 phrases | 0,2095 | 1,0 |
+| **POS (sémantique)** | 587 phrases | **0,2010** | 1,0 |
+
+**Ce que ça dit** :
+
+- **La sortie POS est la plus faible** (0,201) : elle perd la ponctuation (pas de POS) **et** les espaces ; c'est la **vraie** sortie du bloc, et elle n'est pas restitutive.
+- **La surface est une tautologie** (1,0) : elle garde tout ; elle ne mesure rien.
+- **La cascade = l'heuristique** (0,201) : le mock neuronal ne change pas la sortie.
+- **La leçon de la règle 6 est chiffrée** : la **fluidité** (1,0) n'est pas la **fidélité** (0,20) ; 80 % du texte est perdu à la sortie.
+
+## L'état
+
+- Fiche : [`rapport-pensee-miroir-pos.md`](../../reports/rapport-pensee-miroir-pos.md) ; JSON [`pensee-miroir-pos.json`](../../reports/pensee-miroir-pos.json) ; T117 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **120/120 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **527 fiches / 616 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` dans le budget.
+- L'horloge réelle est **11 h 12 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+## La suite
+
+1. **La restitution avec les espaces d'origine** : la perte réelle, caractère par caractère, et la réduire (conserver la ponctuation dans la sortie).
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **la restitution avec les espaces d'origine** — mesurer la perte réelle et la réduire.
+
+
+## Tour 136
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 122/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/miroir.py'); t=p.read_text()\nt=t.replace('''def fluidite(a: bl.Annotation) -> float:''',\n'''def rendre_pos_espaces(a: bl.Annotation, texte: str) -> str:\n   … [1511 caractères tronqués]`
+
+  ```
+heuristique 587 fidélité 0.201 fluidité 1.0 échecs 5
+heuristique POS 0.201
+heuristique POS+espaces 1.0
+cascade 587 fidélité 0.201 fluidité 1.0 échecs 5
+cascade POS 0.201
+cascade POS+espaces 1.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-miroir-espaces.md <<'MD'\n# B13 — la restitution avec les intervalles : 1,0, la perte était le rendu\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6 — le miroir) · **Date** : 2026-11-02\n>  … [6443 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 529 fiche(s) · 617 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2813 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-segmenteur-defaut.md`](rapport-pensee-segmenteur-defaut.md) | **B13** — l'union par défaut : F1 0,2005, tête 0,4 … [616 caractères tronqués]`
