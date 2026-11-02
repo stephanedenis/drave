@@ -1126,3 +1126,111 @@ ERROR: Please run nvidia-bug-report.sh as root.
   ```
 
 - **bash** `{"command": "cd /tmp && timeout 240 pkexec /bin/bash /usr/bin/nvidia-bug-report.sh --output-file /tmp/nvidia-bug-report 2>&1 | tail -6; ls -lh /tmp/nvidia-bug-report*.log* 2>/dev/null | tail -3", "description": "Generate bug report as root via pkexec", "timeoutMs": 260000}`
+
+  ```
+[still running after 260000ms; moved to background job bash-45]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "sleep 20; ls -lh /tmp/nvidia-bug-report*.log* 2>/dev/null | tail -3; pgrep -a -f 'nvidia-bug-report' | head -3 || echo \"bug-report terminé\"", "description": "Check bug report progress"}`
+
+  ```
+3602359 bash -c cd /tmp && timeout 240 pkexec /bin/bash /usr/bin/nvidia-bug-report.sh --output-file /tmp/nvidia-bug-report 2>&1 | tail -6; ls -lh /tmp/nvidia-bug-report*.log* 2>/dev/null | tail -3
+3602366 timeout 240 pkexec /bin/bash /usr/bin/nvidia-bug-report.sh --output-file /tmp/nvidia-bug-report
+3602368 /bin/bash /usr/bin/nvidia-bug-report.sh --output-file /tmp/nvidia-bug-report
+  ```
+
+- **bash** `{"command": "echo \"== état condensé ==\"\necho \"nvidia_drm: $(cat /sys/module/nvidia_drm/refcnt 2>/dev/null)  |  modprobe bloqué depuis: $(ps -o etime= -p 3601929 2>/dev/null | tr -d ' ')\"\necho \"GPU visibles: $(nvidia-smi -L 2>/dev/null | wc -l)\"\necho \"usage mémoire GPU0: $(nvidia-smi --quer … [303 caractères tronqués]`
+
+  ```
+== état condensé ==
+nvidia_drm: -1  |  modprobe bloqué depuis: 11:06
+GPU visibles: 2
+usage mémoire GPU0: 1 MiB
+== charge ==
+14:41:18  up 1 day 22:25,  2 users,  load average: 4,15, 3,62, 3,62
+== services qui tournent ==
+3573290 /home/stephane/.local/share/pipx/venvs/docwatch/bin/python -E /home/stephane/.local/bin/docwatch --con…
+3605351 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p=pathli…
+3605424 timeout 2400 python3 -m tools.pensee.autotest
+3605425 python3 -m tools.pensee.autotest
+  ```
+
+### 🤖 Assistant
+
+⏵ Curiosité : les deux GPU réapparaissent dans nvidia-smi -L
+
+- **bash** `{"command": "echo \"== -L ==\"; nvidia-smi -L 2>&1\necho \"== query ==\"; nvidia-smi --query-gpu=index,name,temperature.gpu,power.draw,memory.used,memory.total,utilization.gpu --format=csv 2>&1\necho \"== reset possible ? ==\"; nvidia-smi --gpu-reset -i 1 2>&1 | head -3\necho \"== modules ==\"; lsmo … [108 caractères tronqués]`
+
+  ```
+== -L ==
+GPU 0: Quadro RTX 5000 (UUID: GPU-ff8cc368-1bb8-ccef-8a76-4d17375e212e)
+Unable to determine the device handle for gpu 0000:04:00.0: Unknown Error
+== query ==
+Unable to determine the device handle for GPU1: 0000:04:00.0: Unknown Error
+index, name, temperature.gpu, power.draw [W], memory.used [MiB], memory.total [MiB], utilization.gpu [%]
+0, Quadro RTX 5000, [GPU requires reset], [N/A], 1 MiB, 16384 MiB, [N/A]
+== reset possible ? ==
+Unable to determine the device handle for GPU1: 0000:04:00.0: Unknown Error
+No devices were found
+== modules ==
+  nvidia_uvm refs=0
+  nvidia_drm refs=-1
+  nvidia_modeset refs=3
+  nvidia refs=12
+  ```
+
+- **job_output** `{"job_id": "bash-45"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ls -lh /tmp/nvidia-bug-report*.log* 2>/dev/null || echo \"pas de rapport généré\"\npgrep -a -f 'nvidia-bug-report' | head -3 || echo \"bug-report terminé\"", "description": "Check bug report artifacts"}`
+
+  ```
+pas de rapport généré
+3602359 bash -c cd /tmp && timeout 240 pkexec /bin/bash /usr/bin/nvidia-bug-report.sh --output-file /tmp/nvidia-bug-report 2>&1 | tail -6; ls -lh /tmp/nvidia-bug-report*.log* 2>/dev/null | tail -3
+3602366 timeout 240 pkexec /bin/bash /usr/bin/nvidia-bug-report.sh --output-file /tmp/nvidia-bug-report
+3602368 /bin/bash /usr/bin/nvidia-bug-report.sh --output-file /tmp/nvidia-bug-report
+  ```
+
+- **job_kill** `{"job_id": "bash-45", "reason": "Le rapport de bug est lui aussi bloqué sur le GPU mort"}`
+
+  ```
+requested cancellation of job bash-45
+  ```
+
+- **bash** `{"command": "kill 3602366 3602359 2>/dev/null; sleep 1\npgrep -a -f 'nvidia-bug-report|gpu-reset' | head -3 || echo \"nettoyé\"\necho \"== état final ==\"\necho \"GPU0: $(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader 2>/dev/null)\"\necho \"nvidia_drm refcnt: $(cat /sys/module/nvidia_d … [152 caractères tronqués]`
+
+  ```
+1164 [kworker/R-amdgpu-reset-dev]
+3601862 bash -c cd /tmp timeout 300 pkexec /bin/bash /tmp/gpu-reset.sh 2>&1 echo "EXIT=$?"
+3601869 timeout 300 pkexec /bin/bash /tmp/gpu-reset.sh
+== état final ==
+GPU0: [GPU requires reset]
+nvidia_drm refcnt: -1
+modprobe bloqué: 11:26
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan : récupération logicielle épuisée, il faut redémarrer
+
+**Où on en est.** Le reset logiciel est impossible sur cette machine :
+
+- `nvidia-smi -r` (même en root via pkexec) → `failed to allocate group of reset devices: GPU requires reset` ;
+- le déchargement des modules est **bloqué depuis 11 min** : `nvidia_drm` est figé à `refcnt = -1`, le `modprobe -r` ne rend jamais la main — le pilote est coincé sur la carte `04:00.0` qui ne répond plus (`Unknown Error`) ;
+- `nvidia-bug-report.sh` s'est bloqué à son tour sur cette carte, aucun rapport produit.
+
+La machine reste saine pour le reste : l'écran est sur l'AMD Radeon, la charge est normale (4,1), `nvidia-smi` répond encore pour le GPU 0 — mais les deux cartes resteront inutilisables tant que le noyau n'est pas repartí de zéro.
+
+Ce que je n'ai pas touché : `docwatch` (PID 3573290) et un `python3 -m tools.pensee.autotest` (PID 3605425) tournent encore.
+
+- **ask_user_question** `{"questions": [{"header": "Redémarrage", "id": "reboot", "multi_select": false, "options": [{"description": "L'autotest pensee tourne depuis peu ; je surveille sa fin puis je redémarre proprement et je vérifie les deux GPU au retour.", "label": "Attendre la fin de l'autotest, puis redémarrer (Recomm … [345 caractères tronqués]`
+
+  ```
+Error: the user cancelled ask_user_question
+  ```
+

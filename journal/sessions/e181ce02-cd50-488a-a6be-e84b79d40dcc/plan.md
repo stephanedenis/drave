@@ -16,14 +16,16 @@
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
 - **Heartbeat** : 2026-11-02 07:50 EST
-- **Prochaine action** : le bloc linguistique v0 est livré (398 langues) et **AC-3/alpha-bêta**
-  sont mesurés (8/8), le DRVF (9/9) et le banc (10/10) ; qualifier un gold et un modèle neuronal ; puis les **opérateurs hétérogènes/DRVM**
-  (S reste à l'autre TUI).
-- **État** : actif
+- **Prochaine action** : le cycle **140/140** (T137, gold 432, 116 liens) est committé par le hub ;
+  reprendre par le **gold neuronal** (qualifier un modèle local) puis **DRVM/native** (bloqué) ;
+  la cascade mesurée reste la lecture.
+- **Arrêt** : 2026-11-02 15 h 06 (reboot) — dernière trace 14 h 40 ; **en pause** ; reprise par
+  `dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc` ; rafraîchir le heartbeat.
+- **État** : en pause
 - **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
   stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
   (BFS, greedy, A*, MCTS-lite)~~ ; 5) ~~AC-3, alpha-bêta~~ (**8/8**) ; ~~DRVF~~ (**9/9**) ; 6) **banc anytime** (AUC,
-  regret, justification, rejeu) et intégration DRVM/DRVF ; 9) **bloc linguistique** (R0.7).
+  regret, justification, rejeu) et intégration DRVM/DRVF ; 9) ~~bloc linguistique~~ (R0.7, 398 langues) ; 10) ~~coréférence et absences~~ (140/140, gold 432).
 - **Ambition** : faire de Drave un **runtime cognitif** où penser est une **recherche tracée** sur
   des **états pluriels**, avec des opérateurs hétérogènes (neuronaux, classiques, matériel) et des
   décisions justifiables et rejouables.
@@ -40,15 +42,16 @@
   script **1,0000**, profils permutés **0,0022** ; le modèle réel local n'est pas qualifié ;
   fiche [`bloc`](../../reports/rapport-bloc-linguistique.md) et porte.
 - **Moteur B13** : **AC-3, alpha-bêta (8/8)**, **DRVF `thought` (9/9)**, **banc anytime
-  (10/10)** ; A* 32 nœuds, AUC 0,528/0,624 contre 0,246/0,116 à l'aléatoire ; fiches
+  (10/10)**, **140/140** (T137 : 5 phrases sans antécédent, 0 lien ; 116 liens = 51 intra + 65 inter) ;
+  A* 32 nœuds, AUC 0,528/0,624 contre 0,246/0,116 à l'aléatoire ; fiches
   [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
   [`pensee-drvf`](../../reports/rapport-pensee-drvf.md),
   [`pensee-banc`](../../reports/rapport-pensee-banc.md) ; prochain : **opérateurs hétérogènes/DRVM**.
-- **Gold L 360** : **20 réels + 160 synthétiques** ; POS **0,751**, syntagmes exacts **0,194**/
+- **Gold L** : **432 réels + 160 synthétiques + 20** ; POS **0,765**, syntagmes exacts **0,194**/
   **tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock) **67,1 %** ;
   **attachement tête 1,0/0,966/0,932** (span 0,323/0,338 ; 29 ambiguës), hasard 0,015 ; vrai neuronal **refusé** ;
   fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :
-  **lecture du gold + modèle qualifié**.
+  **gold neuronal** (modèle local à qualifier) ; la coréférence est faite (116 liens).
 - **Objectif final** : un **moteur de pensée v0 exécutable** — state store typé, arbre d'états,
   A*/MCTS/AC-3 sur le même contrat, trace/rejeu, banc anytime avec contrôles — documenté, mesuré
   et committé.

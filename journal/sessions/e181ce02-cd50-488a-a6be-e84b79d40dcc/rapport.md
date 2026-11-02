@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 46.0 h |
-| Tours | 154 |
-| Messages | 1812 |
-| Appels d'outils | 1548 |
+| Tours | 155 |
+| Messages | 1820 |
+| Appels d'outils | 1554 |
 | Fichiers touchés | 25 |
-| Commandes | 1266 |
+| Commandes | 1272 |
 | Sous-agents | 2 |
 | Commits | 195 |
 | Compactages de contexte | 5 |
@@ -343,6 +343,8 @@
 **Tour 153** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 154** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 155** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8179,6 +8181,55 @@ Je continue : prochain round, **les 4 absents** — la frontière exacte de ce q
 - bash — Committer les absents corrigés
 - job_output
 
+**Synthèse produite :**
+
+⏵ Absents : 0, les quatre étaient des faux (tokenisation) ; 139/139
+
+Le round 140 est livré : les **4 « absents »** du round précédent sont **0** — c'était un bug de tokenisation, pas une limite de la règle. Commit **`139a8b16`**.
+
+\## Les classes corrigées
+
+| classe | avant | **après** |
+|---|---:|---:|
+| intra-phrase | 50 | **51** |
+| inter-phrase | 62 | **65** |
+| **absents** | **4** | **0** |
+| tout | 116 | 116 |
+
+**Ce que ça dit** :
+
+- **Les 4 absents étaient des faux** : `The cat sees the dog; it sleeps.` — le mot `dog;` (avec le point-virgule) n'était pas reconnu ; la tokenisation par `split()` était fautive.
+- **La correction** : `re.findall(r"[a-zà-ÿ']+", texte.lower())` — les mots sont extraits sans ponctuation ; les 4 réapparaissent comme **inter-phrase** (l'antécédent est bien dans le texte).
+- **Aucun antécédent absent** : dans ce gold, la règle résout **tous** les liens (51 + 65 = 116).
+- **La leçon** : un « absent » peut être un **bug de mesure** ; il faut le nommer avant de le compter comme une limite.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-absents.md`](../../reports/rapport-pensee-absents.md) ; JSON [`pensee-absents.json`](../../reports/pensee-absents.json) ; T136 dans [`autotest.py`](../../tools/pensee/autotest.py) ; T134/T135 mis à jour (65/116, 51/65/0).
+- **139/139 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **549 fiches / 635 JSON / 119 docs / 81 portes** — ✅ ; `en-cours` à jour (15 h 00).
+- L'horloge réelle est **14 h 38 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **Les pronoms sans antécédent** : en ajouter au gold (le vrai absent) pour tester la limite — le corpus actuel n'en a aucun, c'est un biais.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold vivant peut grandir.
+
+Je continue : prochain round, **les vrais absents** — ajouter au gold les pronoms sans antécédent pour que la limite existe.
+
+### Tour 155 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Ajouter 5 phrases sans antécédent et mesurer
+- bash — Corriger r429 et mesurer
+- bash — Lire le tuple r429
+- bash — Retirer ADJ de r429 et mesurer
+- bash — Écrire la fiche des vrais absents et la porte T137
+- bash — Trim README et passer toutes les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8258,7 +8309,7 @@ Je continue : prochain round, **les 4 absents** — la frontière exacte de ce q
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1226 autres
+- … et 1232 autres
 
 ## 4. Mesures et résultats marquants
 

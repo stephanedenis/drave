@@ -1,0 +1,27 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "44/44",
+ "p_saut": 0.2,
+ "observation": "distance 1",
+ "politique": {
+  "episodes": 2000,
+  "graine": 0,
+  "etats_q": 115,
+  "runs": 20,
+  "buts": 0,
+  "pas": 200
+ },
+ "contraste": {
+  "complete": {
+   "buts": 20,
+   "runs": 20,
+   "pas": 8
+  }
+ },
+ "limites": [
+  "mémoire d'un pas",
+  "pas d'exploration active",
+  "toy"
+ ]
+}

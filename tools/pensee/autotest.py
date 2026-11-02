@@ -2004,6 +2004,16 @@ def t136_absents() -> tuple[bool, str]:
     return len(absents) == 0, f"absents : {len(absents)} (les 4 étaient des faux)"
 
 
+def t137_vrais_absents() -> tuple[bool, str]:
+    """Les vrais absents : 5 phrases sans antécédent, 0 lien produit."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import liens_absents
+    ph = [p for p in charger() if 301 <= int(p["id"][1:]) <= 432]
+    sans = [p for p in ph if p["id"] in ("r428", "r429", "r430", "r431", "r432")]
+    return len(sans) == 5 and liens_absents(ph) == [], (
+        f"vrais absents : {len(sans)} phrases, {len(liens_absents(ph))} liens absents")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2139,7 +2149,8 @@ def main() -> int:
               ("T133 lien réparé", t133_lien_auto_fixe()),
               ("T134 lien coréf", t134_lien_coref()),
               ("T135 liens classés", t135_liens_classes()),
-              ("T136 absents", t136_absents())]
+              ("T136 absents", t136_absents()),
+              ("T137 vrais absents", t137_vrais_absents())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -242,7 +242,7 @@ Les **contrôles négatifs** : profils permutés (0,0022), texte vide, ponctuati
 inconnue (`und`), indice faux (`und`), rejeu identique.
 
 **Le gold 180** (`gold.py` 20 réels + `gold_synthetique.py` 160 synthétiques) mesure les niveaux
-profonds : POS **0,751** (fermé **0,939**, ouvert **0,621**), syntagmes exacts **0,194**,
+profonds : POS **0,765** (fermé **0,939**, ouvert **0,621**), syntagmes exacts **0,194**,
 **par tête 0,560**, acte **1,0**, négation **1,0**, modalité **0,994**, double sens **0,889** ;
 la cascade (mock de contrat) préserve ces chiffres et couvre **67,1 %** en unités sémantiques.
 Le lexique synthétique est **disjoint** des listes de l'heuristique : les classes ouvertes

@@ -15,9 +15,12 @@
   `reports/rapport-corpus-*`, `reports/r11-*`, `reports/r12-*`, `reports/a26-*`, `reports/a83-*`,
   `journal/sessions/fe3c05f0-…/`
 - **Heartbeat** : 2026-11-01 22:50
-- **État** : en cours
-- **Prochaine action** : l'**anglais** (le PDF et l'A8.3 sont faits) ; le catalogue ; l'OCR des
-  159 scans ; les collections ; R11/R12 bloqués sur N2, A2.6 sur A6.2.
+- **État** : en pause
+- **Prochaine action** : le **fonds CEGEP** (~127 scans) ; la **clôture** de la session ;
+  R1.1/R1.2 après N2, A2.6 après A6.2. Les 20 livres, les 10 notes CEGEP, le PDF, les documents,
+  le glossaire (335 + 20 entrées) et docwatch sont committés.
+- **Arrêt** : 2026-11-02 15 h 06 (reboot) — dernière trace 13 h 25 ; **en pause** ; reprise par
+  `dsh --profile dsh-tui --resume fe3c05f0-834b-44f2-8739-501865d652c1` ; rafraîchir le heartbeat.
 
 ## Objectif final
 

@@ -7,12 +7,12 @@
 | Identifiant | `b6a672ec-3349-4a4c-9e23-4478aa823170` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-01 13:28 |
-| Durée | 25.1 h |
+| Durée | 25.2 h |
 | Tours | 2 |
-| Messages | 52 |
-| Appels d'outils | 51 |
+| Messages | 59 |
+| Appels d'outils | 59 |
 | Fichiers touchés | 0 |
-| Commandes | 45 |
+| Commandes | 50 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -71,7 +71,7 @@ Deux choses restent de ton côté :
 
 ### Tour 2 — peux-tu réinitialiser les gpu
 
-*26 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Show GPU status overview
 - bash — List GPU devices and candidate processes
@@ -87,11 +87,21 @@ Deux choses restent de ton côté :
 - bash — Check session env and pkexec availability
 - ask_user_question
 - bash — Try GPU0 reset through pkexec
-- … et 12 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
-⏵ Capture du diagnostic NVIDIA avant décision
+⏵ Bilan : récupération logicielle épuisée, il faut redémarrer
+
+**Où on en est.** Le reset logiciel est impossible sur cette machine :
+
+- `nvidia-smi -r` (même en root via pkexec) → `failed to allocate group of reset devices: GPU requires reset` ;
+- le déchargement des modules est **bloqué depuis 11 min** : `nvidia_drm` est figé à `refcnt = -1`, le `modprobe -r` ne rend jamais la main — le pilote est coincé sur la carte `04:00.0` qui ne répond plus (`Unknown Error`) ;
+- `nvidia-bug-report.sh` s'est bloqué à son tour sur cette carte, aucun rapport produit.
+
+La machine reste saine pour le reste : l'écran est sur l'AMD Radeon, la charge est normale (4,1), `nvidia-smi` répond encore pour le GPU 0 — mais les deux cartes resteront inutilisables tant que le noyau n'est pas repartí de zéro.
+
+Ce que je n'ai pas touché : `docwatch` (PID 3573290) et un `python3 -m tools.pensee.autotest` (PID 3605425) tournent encore.
 
 ## 3. Travail accompli
 
@@ -142,7 +152,7 @@ Deux choses restent de ton côté :
 - **T2** Write the GPU recovery script
 - **T2** Run GPU recovery as root via pkexec
 - **T2** Check for stuck kernel processes
-- … et 5 autres
+- … et 10 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -150,6 +160,7 @@ Deux choses restent de ton côté :
 - **T1** `[still running after 60000ms; moved to background job bash-12]`
 - **T1** `Stéphane|stephane@localhost|Sun Nov 1 12:40:07 2026 -0500|N2.j — 186 Mo DE VRAI FRANÇAIS : LE BLOC LINGUISTIQUE GAGNE ×1,7 À ×2,6 HORS DOMAINE`
 - **T2** `[still running after 320000ms; moved to background job bash-39]`
+- **T2** `[still running after 260000ms; moved to background job bash-45]`
 
 ## 5. Erreurs rencontrées
 

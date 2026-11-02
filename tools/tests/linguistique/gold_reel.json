@@ -30354,6 +30354,302 @@
    "source": "reel"
   },
   {
+   "id": "r428",
+   "langue": "fr",
+   "texte": "Il pleut.",
+   "mots": [
+    {
+     "texte": "Il",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "pleut",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": ".",
+     "pos": "PONCT",
+     "debut": 8,
+     "fin": 9
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Il",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "pleut",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "PONCT",
+     "texte": ".",
+     "role": "ponctuation",
+     "debut": 8,
+     "fin": 9
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r429",
+   "langue": "fr",
+   "texte": "On dit que c'est vrai.",
+   "mots": [
+    {
+     "texte": "On",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "dit",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 6
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 7,
+     "fin": 10
+    },
+    {
+     "texte": "c'",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 13
+    },
+    {
+     "texte": "est",
+     "pos": "VERB",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "texte": "vrai",
+     "pos": "ADJ",
+     "debut": 17,
+     "fin": 21
+    },
+    {
+     "texte": ".",
+     "pos": "PONCT",
+     "debut": 21,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "On",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "dit",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 6
+    },
+    {
+     "type": "SUB",
+     "texte": "que c'est vrai",
+     "role": "complément",
+     "debut": 7,
+     "fin": 21
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r430",
+   "langue": "fr",
+   "texte": "Elle est partie.",
+   "mots": [
+    {
+     "texte": "Elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 5,
+     "fin": 8
+    },
+    {
+     "texte": "partie",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": ".",
+     "pos": "PONCT",
+     "debut": 15,
+     "fin": 16
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Elle",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "est partie",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 15
+    },
+    {
+     "type": "PONCT",
+     "texte": ".",
+     "role": "ponctuation",
+     "debut": 15,
+     "fin": 16
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r431",
+   "langue": "fr",
+   "texte": "Ils sont arrivés.",
+   "mots": [
+    {
+     "texte": "Ils",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "sont",
+     "pos": "AUX",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "arrivés",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 16
+    },
+    {
+     "texte": ".",
+     "pos": "PONCT",
+     "debut": 16,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Ils",
+     "role": "agent",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "sont arrivés",
+     "role": "prédicat",
+     "debut": 4,
+     "fin": 16
+    },
+    {
+     "type": "PONCT",
+     "texte": ".",
+     "role": "ponctuation",
+     "debut": 16,
+     "fin": 17
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r432",
+   "langue": "en",
+   "texte": "It rains.",
+   "mots": [
+    {
+     "texte": "It",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "rains",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": ".",
+     "pos": "PONCT",
+     "debut": 8,
+     "fin": 9
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "It",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "rains",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "PONCT",
+     "texte": ".",
+     "role": "ponctuation",
+     "debut": 8,
+     "fin": 9
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
    "id": "r418",
    "langue": "fr",
    "texte": "Tu ne viens pas demain ?",

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**148 commits** · **4 session(s)** · **9 thème(s)**
+**149 commits** · **5 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 12 | [distribue.md](distribue.md) |
 | docs | 18 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
-| mesures | 80 | [mesures.md](mesures.md) |
+| mesures | 81 | [mesures.md](mesures.md) |
 | modele | 7 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 7 | [portes.md](portes.md) |
@@ -26,7 +26,8 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 45.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 25.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
+| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 0.4 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
+| `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 46.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 44.8 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
@@ -182,6 +183,7 @@
 | 14:06 | `651c1fc0` | B13 — LE LIEN AUTOMATIQUE RÉPARÉ : 5/5 APRÈS RÉORDONNANCEMENT ET REPLI PRON/NOUN ; 136/136 |
 | 14:13 | `49ca52fb` | B13 — LA CORÉFÉRENCE COMME LIEN : 62/116, LA MOITIÉ DES ANTÉCÉDENTS ; 137/137 |
 | 14:20 | `004c5f64` | B13 — LES LIENS CLASSÉS : 50 INTRA, 62 INTER, 4 ABSENTS ; 138/138 |
+| 14:37 | `139a8b16` | B13 — LES ABSENTS : 0, LES QUATRE ÉTAIENT DES FAUX (TOKENISATION) ; 139/139 |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -201,4 +203,5 @@
 ## La suite
 
 L'OCR complet (les 159 scans), la préparation R1.1/R1.2 (bloquée sur N2), et la clôture de la session à 8 h.
+- **15 h 06 — reboot.** Les deux GPU étaient bloqués (`GPU requires reset`, `nvidia_drm refcnt -1`) ; le reset logiciel a échoué et le reboot a rendu les cartes (1 Mio, 0 %). Les deux sessions de travail (`e181ce02`, `fe3c05f0`) sont **en pause** ; leurs cycles sont committés par le hub. Détail : [`b6a672ec/cloture.md`](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/cloture.md).
 <!-- /notes -->

@@ -1,0 +1,14 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "140/140",
+ "phrases_reelles": 432,
+ "liens": 116,
+ "absents_mesures": 0,
+ "absents_reels": 5,
+ "limites": [
+  "le coref n'est pas annoté pour les absents",
+  "5 phrases",
+  "heuristique seule"
+ ]
+}

@@ -102,6 +102,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `4e86f5e2` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 37 | 0 | 0 | [rapport](sessions/4e86f5e2-cc8e-43d7-8be0-ba9622de2dc7/rapport.md) |
 | `4f3e8570` | Configuration RAID0 NVMe pour modèles IA | 2026-10-12 15:30 | 25.5 h | 13 | 822 | 41 | 57 | [rapport](sessions/4f3e8570-3d81-41e0-a055-1002702a6959/rapport.md) |
 | `5185ccb1` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 17:03 | 0.4 h | 1 | 123 | 9 | 0 | [rapport](sessions/5185ccb1-be24-4716-89df-62621e790444/rapport.md) |
+| `536cd5d6` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 0.4 h | 2 | 104 | 4 | 2 | [rapport](sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) |
 | `54621513` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:41 | 0.7 h | 1 | 78 | 4 | 0 | [rapport](sessions/54621513-76ae-401e-87df-a5084cacb359/rapport.md) |
 | `564fbe3a` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:07 | 0.1 h | 1 | 35 | 0 | 0 | [rapport](sessions/564fbe3a-a859-4b3b-bd17-4da73a2f4e22/rapport.md) |
 | `56879594` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 29 | 0 | 0 | [rapport](sessions/56879594-1434-4e34-83cc-de42cdf192a1/rapport.md) |
@@ -138,7 +139,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `a9e308b7` | Tu travailles dans le dépôt | 2026-10-08 09:19 | 0.1 h | 1 | 20 | 0 | 0 | [rapport](sessions/a9e308b7-5d50-4bb3-8e31-4c8e6f261a6d/rapport.md) |
 | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
 | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
-| `b6a672ec` | Git push to origin remote | 2026-11-01 13:28 | 25.1 h | 2 | 51 | 0 | 0 | [rapport](sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) |
+| `b6a672ec` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | 2 | 59 | 0 | 0 | [rapport](sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) |
 | `b80df26d` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:52 | 0.3 h | 1 | 43 | 2 | 0 | [rapport](sessions/b80df26d-3dc3-49ea-98b8-fa5a7e0c4cdf/rapport.md) |
 | `bbc0b8e2` | Avis sur le dépôt GitHub Strata | 2026-10-12 08:44 | 0.2 h | 2 | 52 | 2 | 3 | [rapport](sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/rapport.md) |
 | `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 222.5 h | 205 | 9050 | 220 | 706 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
@@ -160,7 +161,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 46.0 h | 154 | 1548 | 25 | 195 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 46.0 h | 155 | 1554 | 25 | 195 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
 | `ee19a880` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/ee19a880-cc76-4c5c-9fe0-5972bd73b533/rapport.md) |
