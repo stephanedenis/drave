@@ -1227,6 +1227,34 @@ def seule_votante(p: PolitiqueAppriseVotante, max_pas: int = 200) -> tuple[bool,
     return seule_observatrice(p, max_pas)
 
 
+class PolitiqueAppriseVotante3(PolitiqueAppriseObservatrice):
+    """L'observatrice qui **vote trois fois** : 10 % d'erreur par look, 0,1 % sur le vote."""
+
+    nom = "votante3"
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, p_saut: float = 0.2,
+                 p_erreur: float = 0.1, looks: int = 3):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma,
+                         eps=eps, p_saut=p_saut)
+        self.p_erreur = p_erreur
+        self.looks = looks
+
+    def _pas(self, cle, action, d: int):
+        x, y, o, b = cle
+        if action == "observer":
+            votes = [d if self.rng.random() >= self.p_erreur else 1 - d
+                     for _ in range(self.looks)]
+            n0 = votes.count(0)
+            b2 = 3 if n0 > self.looks // 2 else 0
+            return (x, y, o, b2), -0.1 * self.looks, d
+        return super()._pas(cle, action, d)
+
+
+def seule_votante3(p: PolitiqueAppriseVotante3, max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

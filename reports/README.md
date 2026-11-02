@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-votante3.md`](rapport-pensee-votante3.md) | **B13** — trois looks : 20/20 à 4000 épisodes, 9,2 pas, **50/50** |
 | [`rapport-pensee-votante.md`](rapport-pensee-votante.md) | **B13** — l'observation votante : 2 looks, 20/20 buts, 1 % d'erreur, **49/49** |
 | [`rapport-pensee-bruitee.md`](rapport-pensee-bruitee.md) | **B13** — l'observation bruitée : 0/20 buts, 10 % d'erreur casse la politique, **48/48** |
 | [`rapport-pensee-observatrice.md`](rapport-pensee-observatrice.md) | **B13** — l'action observer : 20/20 buts, 8,3 pas, le geste qui révèle, **47/47** |

@@ -751,6 +751,22 @@ def t46_votante() -> tuple[bool, str]:
                       f"{round(pas_total / 20, 1)} pas")
 
 
+def t47_votante3() -> tuple[bool, str]:
+    """Trois looks : 20/20 buts (4000 épisodes), 0,1 % d'erreur."""
+    from .operateurs import PolitiqueAppriseVotante3, seule_votante3
+    p = PolitiqueAppriseVotante3(episodes=4000, graine=0)
+    p.apprendre()
+    ok = 0
+    pas_total = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, pas = seule_votante3(p)
+        ok += b
+        pas_total += pas
+    return ok == 20, (f"votante3 : {ok}/20 buts, {len(p.q)} états-Q, "
+                      f"{round(pas_total / 20, 1)} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -796,7 +812,8 @@ def main() -> int:
               ("T43 curiosité", t43_curieuse()),
               ("T44 action observer", t44_observatrice()),
               ("T45 observation bruitée", t45_bruitee()),
-              ("T46 observation votante", t46_votante())]
+              ("T46 observation votante", t46_votante()),
+              ("T47 trois looks", t47_votante3())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

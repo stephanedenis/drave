@@ -19072,3 +19072,10 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-votante3.md reports/pensee-votante3.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours. … [476 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-702]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-702", "timeout_ms": 600000, "wait": true}`

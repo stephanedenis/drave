@@ -20817,3 +20817,99 @@ lignes {'val.txt': 0.046635, 'test.txt': 0.077208}
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| [^|]+ \\|\", \"| fichiers / JSON de résultats | **440** / **535** |\", s)\ns=s.replace( … [917 caractères tronqués]`
+
+  ```
+T0 max : 3999 mots (budget 4 000)
+     · compteurs : en-cours.md dit 535 JSON, le disque en a 540
+refus
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 2bd6bcc43fbbafce09929ec5d1a2d345f3f0f197 but expected 7e819b56fadf50414c00b50497f2521106f523a7
+[master 5c27a3fb] DONNÉES — LE CORPUS DOCUMENTS EST CLOS : 7 459 PDF, 3 384 DOCUMENTS, 872 M CARACTÈRES, 8 KO 2,07 % (TEST)
+ 12 files changed, 282 insertions(+), 24 deletions(-)
+ create mode 100644 reports/corpus-pdf-documents-contamination.json
+ create mode 100644 reports/corpus-pdf-documents.json
+commit OK
+5c27a3fb DONNÉES — LE CORPUS DOCUMENTS EST CLOS : 7 459 PDF, 3 384 DOCUMENTS, 872 M CARACTÈRES, 8 KO 2,07 % (TEST)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 64 : le corpus Documents est clos et committé (3 384 documents, 872 M caractères, 8 Ko 2,07 %)
+
+**Round 64/1000 — une livraison majeure : le corpus Documents est terminé.**
+
+Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, **3 384 documents gardés**, **1 017 scannés**, **1 316 courts**, **1 742 doublons**, **871 972 648 caractères**, **107 976 tronçons** (dont 372 doublons), train 803,0 Mo / val 49,6 Mo / test 34,4 Mo.
+
+**Le contrôle 8 Ko** : **2,07 % sur le test** (0 % sur le val) — c'est le premier corpus non-Wikipédia avec une petite fuite inter-splits : les 372 tronçons dupliqués (des pièces répétées : avis, formulaires, pages de manuels) se retrouvent des deux côtés du split. C'est **petit mais nommé**, pas zéro comme les dix corpus Wikipédia ; la fiche le portera.
+
+**La fiche** est mise à jour avec les chiffres définitifs, et le tout est committé (`5c27a3fb`) : manifeste, contrôle, fiche, état.
+
+**L'OCR** est toujours sur son 6e livre (3,8 M) ; ses 6 livres et les 159 scans suivront. **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3** et la **comparaison des genres** restent mesurés et committés.
+
+**La suite** : l'OCR (ses 6 livres puis les 159 scans) ; la comparaison des trigrammes ; la préparation R1.1/R1.2. Le goal reste actif.
+
+
+## Tour 77
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 65/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_ocr/*.txt 2>/dev/null; tail -2 /tmp/ocr-pilote.log; ps -p 1616198 -o pid,stat,etime= 2>/dev/null; ls reports/ocr-pdf.json 2>&1; ls data/corpus_ocr/ 2>/dev/null | head", "description": "Check OCR status … [99 caractères tronqués]`
+
+  ```
+23:43
+-rw-r--r--. 1 stephane stephane       0  1 nov 20:45 data/corpus_ocr/test.txt
+-rw-r--r--. 1 stephane stephane 4177206  1 nov 23:42 data/corpus_ocr/train.txt
+-rw-r--r--. 1 stephane stephane       0  1 nov 20:45 data/corpus_ocr/val.txt
+  Biblio_large · 004.0 Inconnu(e) 2009, Dictionnaire des  · 249 p · 1202859 car
+  Biblio_large · 004.0 Inconnu(e) 2011, La maison de A à  · 178 p · 362368 car
+    PID STAT            
+1616198 S       02:57:41
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+test.txt
+train.txt
+val.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 65 : l'OCR a écrit son 6e livre (train 4,17 Mo), le 7e en cours
+
+**Round 65/1000 — l'OCR avance, les documents sont clos.**
+
+- **L'OCR** : le train est à **4 177 206 octets** (23 h 42, +375 Ko) — le livre *La maison de A à Z* (178 p, 362 368 caractères) a été écrit, et le 7e livre (*Dictionnaire des…*, 249 p, 1 202 859 caractères) est en cours. Les val/test sont encore à **0** : le split n'est écrit qu'à la fin du parcours, comme prévu.
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3** et la **comparaison des genres** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : l'OCR enchaîne les livres (6 écrits, le 7e en cours) ; ses val/test viendront à la clôture. Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
+
+
+## Tour 78
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 66/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_ocr/train.txt; tail -1 /tmp/ocr-pilote.log; ps --ppid 1616198 -o pid,stat,etime,cmd 2>/dev/null | head -2; ls reports/ocr-pdf.json 2>&1", "description": "Check OCR progress and manifest", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+23:43
+-rw-r--r--. 1 stephane stephane 4177206  1 nov 23:42 data/corpus_ocr/train.txt
+  Biblio_large · 004.0 Inconnu(e) 2011, La maison de A à  · 178 p · 362368 car
+    PID STAT     ELAPSED CMD
+1918523 R          01:01 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/004 CS Linux/004.0 CS General/004.0 Inconnu(e) 2025, Product Manual(F7G110XED).pdf /tmp/ocr-pdf-49fepar0/p
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+

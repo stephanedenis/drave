@@ -1,0 +1,30 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "50/50",
+ "p_erreur_look": 0.1,
+ "looks": 3,
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 481,
+  "runs": 20,
+  "buts": 20,
+  "pas_moyen": 9.2
+ },
+ "contraste": {
+  "deux_looks": {
+   "episodes": 2000,
+   "buts": 20,
+   "pas": 8.0
+  },
+  "trois_looks_2000": {
+   "buts": 0
+  }
+ },
+ "limites": [
+  "toy ne sépare pas 1 % et 0,1 %",
+  "coût linéaire",
+  "toy"
+ ]
+}
