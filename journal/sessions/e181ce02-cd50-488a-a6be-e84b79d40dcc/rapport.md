@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 40.6 h |
+| Durée | 40.7 h |
 | Tours | 125 |
-| Messages | 1523 |
-| Appels d'outils | 1321 |
+| Messages | 1525 |
+| Appels d'outils | 1323 |
 | Fichiers touchés | 25 |
-| Commandes | 1071 |
+| Commandes | 1072 |
 | Sous-agents | 2 |
-| Commits | 159 |
+| Commits | 160 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -6622,7 +6622,7 @@ Au choix, un seul suffit :
 
 ### Tour 125 — mets le dossier de pilotage à jour et continue
 
-*13 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - get_goal
 - bash — Vérifier l'heure, le HEAD et les compteurs
@@ -6637,6 +6637,8 @@ Au choix, un seul suffit :
 - bash — Mesurer le POS complet au gold de 522 phrases
 - bash — Écrire la fiche du gold complet et la porte T107
 - bash — Trim README et passer toutes les portes
+- bash — Committer le pilotage et le gold complet
+- … et 1 autres
 
 **Synthèse produite :**
 
@@ -6721,7 +6723,7 @@ Au choix, un seul suffit :
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1031 autres
+- … et 1032 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7028,4 +7030,5 @@ Au choix, un seul suffit :
 - B13 — LA VALIDATION CROISÉE : 5 PLIS, 25/30, LE DERNIER NOM GÉNÉRALISE ; 107/107" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VALIDATION CROISÉE"; t
 - B13 — LA CV SUR 20 GRAINES : 0,8467 ± 0,051, LE DERNIER NOM GÉNÉRALISE ; 108/108" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CV SUR 20 GRAINES"; th
 - B13 — LE BILAN DE L'ANAPHORE : 27/30, CV 0,847, HUIT MESURES ; 109/109" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BILAN DE L'ANAPHORE"; then echo 
+- PILOTAGE — B13/L À JOUR : GOLD 342 (POS 0,7586 SUR 522), CORÉFÉRENCE 27/30 (CV 0,847), NEURONAL BLOQUÉ ; 110/110" 2>&1 | tail -3   if git log -1 --format='%s' |
 

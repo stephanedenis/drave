@@ -28050,3 +28050,54 @@ ok
  4 files changed, 38 insertions(+), 42 deletions(-)
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state`.\\n\",\"\") … [413 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  en-cours · 1612 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 516 fiche(s) · 604 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/gold-full.json >/dev/null 2>&1; python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/gold-full.json'))\ng=d['gold']; h=d['heuristique']['all']\nprint('gold', g … [507 caractères tronqués]`
+
+  ```
+gold {'phrases': 522, 'reel': 362, 'hand': 20, 'reel_new': 342, 'synthetique': 160, 'tokens': 2676}
+POS all 0.7586 ferme 0.8974 ouvert 0.6243 tokens 2676
+syntagme 0.1963 exact 0.2732 tete 0.3807
+pragma {'acte': 0.9962, 'negation': 1.0, 'modalite': 0.9866, 'double_sens': 0.9406}
+verdict ko []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T106 le bilan de l'anaphore      4/4, 10/12, 12/12, 8/8, 27/30, CV 0,847\\n\",\n\"  T106 le bilan de l'anaphore      4/4,  … [6562 caractères tronqués]`
+
+  ```
+ok
+état ok
+  revue de documentation · 517 fiche(s) · 605 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2814 mots > budget 2800 (T1)
+  en-cours · 1612 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-anaphore-pondere.md`](rapport-pensee-anaphore-pondere.md) | **B13** — le vote pondéré : poids (1,0,0,0), test 7/ … [607 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md tools/pensee/autotest.py reports/rapport-pensee-gold-342.md reports/pensee-gold-342.jso … [521 caractères tronqués]`

@@ -15,10 +15,10 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |
 | [`rapport-pensee-anaphore-bilan.md`](rapport-pensee-anaphore-bilan.md) | **B13** — le bilan de l'anaphore : 27/30, CV 0,847, huit mesures, **109/109** |
 | [`rapport-pensee-anaphore-cv-graines.md`](rapport-pensee-anaphore-cv-graines.md) | **B13** — la CV sur 20 graines : 0,8467 ± 0,051, **108/108** |
 | [`rapport-pensee-anaphore-cv.md`](rapport-pensee-anaphore-cv.md) | **B13** — la validation croisée : 5 plis, 25/30, le dernier nom généralise, **107/107** |
-| [`rapport-pensee-anaphore-pondere.md`](rapport-pensee-anaphore-pondere.md) | **B13** — le vote pondéré : poids (1,0,0,0), test 7/10, **106/106** |
 | [`rapport-pensee-anaphore-meta.md`](rapport-pensee-anaphore-meta.md) | **B13** — la méta-règle : 25/30, le vote ne bat pas le dernier nom, **105/105** |
 | [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, **87/87** |
 | [`rapport-pensee-courbe20.md`](rapport-pensee-courbe20.md) | **B13** — la courbe sur 20 graines : 20 % à 0,35, 100 % à 0,41, **86/86** |

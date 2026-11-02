@@ -1,0 +1,35 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "110/110",
+ "gold": {
+  "phrases": 522,
+  "reel": 362,
+  "hand": 20,
+  "reel_new": 342,
+  "synthetique": 160,
+  "tokens": 2676
+ },
+ "pos": {
+  "all": 0.7586,
+  "ferme": 0.8974,
+  "ouvert": 0.6243
+ },
+ "syntagme": {
+  "f1": 0.1963,
+  "precision": 0.2732,
+  "tete_f1": 0.3807
+ },
+ "pragma": {
+  "acte": 0.9962,
+  "negation": 1.0,
+  "modalite": 0.9866,
+  "double_sens": 0.9406
+ },
+ "verdict_ko": [],
+ "limites": [
+  "522 phrases",
+  "seuil tête 0,35",
+  "heuristique seule"
+ ]
+}

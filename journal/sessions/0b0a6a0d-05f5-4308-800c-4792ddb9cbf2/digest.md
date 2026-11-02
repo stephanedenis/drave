@@ -19822,3 +19822,4 @@ The command keeps running in the background. You will be notified when it finish
 The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
   ```
 
+- **job_output** `{"job_id": "bash-1152", "timeout_ms": 600000, "wait": true}`

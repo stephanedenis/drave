@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**104 commits** · **3 session(s)** · **8 thème(s)**
+**105 commits** · **3 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 6 | [attention.md](attention.md) |
 | distribue | 4 | [distribue.md](distribue.md) |
-| docs | 12 | [docs.md](docs.md) |
+| docs | 13 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 56 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
@@ -25,7 +25,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 41.0 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 40.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 40.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 40.7 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -136,6 +136,7 @@
 | 07:52 | `65708212` | DONNÉES — LE CEGEP PASSE À 7 NOTES : 739 PAGES, 1,21 M CARACTÈRES (2 ALGORITHMS ILLUMINATED AJOUTÉS) |
 | 09:09 | `4cbc84a3` | PILOTAGE — LA NUIT N2 EST CLOSE : LE MEILLEUR MODÈLE EST LE 34,3 M + CANAL (3,53) |
 | 09:14 | `62fff503` | PILOTAGE — LE DOSSIER PORTE L'OCR DES 20 LIVRES + 7 NOTES CEGEP ET LE LOT SUIVANT (21e-40e) |
+| 09:17 | `ed7e8b3d` | PILOTAGE — LE RESTE DE L'OCR EST LE FONDS CEGEP : 137 SCANS (LES 20 LIVRES SONT TOUS FAITS), LOT DE 40 LANCÉ |
 
 ## Le récit de la journée (écrit à la main)
 

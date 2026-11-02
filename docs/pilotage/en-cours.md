@@ -24,32 +24,25 @@
 - **Objectif final** : un **moteur de pensée v0 exécutable** — state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles — documenté, mesuré, committé.
 - **Reprise** : **R4.4** — note de clôture des trois limites (fax 1 bit, exposant fusionné,
   parité réelle sans questions) ; **S** est actif dans une autre TUI (export pragmatique, 11 tests).
-- **Coloration** : analyse [`pre-traitement-linguistique`](../theorie/pre-traitement-linguistique.md)
-  (5 schémas) — CPU étiquette
-  cascade
 - **Bloc** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
   (9 niveaux) ; **398 langues à 0,9687** ; fiche et porte.
 - **Moteur B13** : **AC-3/alpha-bêta**, **DRVF**, **banc**, **opérateurs 109** ; fiches
   [`pensee-bayes`](../../reports/rapport-pensee-bayes.md), [`pensee-rupture`](../../reports/rapport-pensee-rupture.md),
   [`pensee-correction`](../../reports/rapport-pensee-correction.md), [`pensee-audit`](../../reports/rapport-pensee-audit.md).
-- **Gold** : **342 réels + 160 synthétiques + 20 de `gold.py`** ; POS complet (320 phrases)
-  **0,7544** (fermé 0,897/ouvert 0,615), **réel 0,7657** ; 20 nouvelles **0,8214**, complexes
+- **Gold** : **342 réels + 160 synthétiques + 20 de `gold.py`** ; POS complet (522 phrases)
+  **0,7586** (fermé 0,897/ouvert 0,624), **réel 0,7657** ; 20 nouvelles **0,8214**, complexes
   **0,6984** ; pragmatique **0,994–1,0** ; **coréférence 27/30, CV 0,847 ± 0,051, κ 1,0** —
   [`pensee-anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md) ; neuronal **refusé** ;
   fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md).
-- **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes**  sur le jouet des cruches ; BFS, greedy, A* et
-  MCTS-lite ; puis **AC-3 et alpha-bêta** (8/8 ; 1 495/296 contre 18 730) ; fiches
-  [`pensee-v0`](../../reports/rapport-pensee-v0.md) et
-  [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md).
 - **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
   avance ; **N4** en file ; **A/B** gardent les leurs.
-- **Interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state`.
 - **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `docs/theorie/pre-traitement-linguistique.md`, `tools/bloc_linguistique.py`, `tools/tests/linguistique/`, `docs/implantation/bloc-linguistique.md`, `journal/sessions/e181ce02-…/`.
 - **Prochaine action** : **L** — POS au gold complet (522 phrases) et 100 liens de coréférence ;
   **B13** — DRVM/native **bloqué**, la cascade mesurée reste la lecture.
 - **Bloquants** : **neuronal réel bloqué** — `llama-cli` refuse/timeout, aucun tagger (`spacy`,
   `stanza`, `nltk`, `transformers`), aucun poids `drave-n0` ; le mock reste un contrat. Trois
   options : un modèle local, les poids, ou acter la cascade.
+- **Ce qu'elle fait** : B13 (DRVF, banc, opérateurs, coréférence), gold 342 ; **109/109**.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 > **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`,
@@ -95,7 +88,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges à la passe du 02/11 06 h : les 4 connues + greffe à la borne 700 s, rejouée verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **516** / **604** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **517** / **605** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

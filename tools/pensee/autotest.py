@@ -1628,6 +1628,19 @@ def t106_bilan_anaphore() -> tuple[bool, str]:
     return ok, "bilan : 4/4, 10/12, 12/12, 8/8, 27/30, méta 25/30, CV ~0,85"
 
 
+def t107_gold_complet() -> tuple[bool, str]:
+    """Le gold complet : 522 phrases, POS 0,7586."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    phrases = charger()
+    h = bl.Heuristique()
+    r = evaluer_bloc("h", h, phrases)
+    return (len(phrases) == 522
+            and abs(r["pos"]["exactitude"] - 0.7586) < 0.001), (
+        f"gold complet : {len(phrases)} phrases, POS {round(r['pos']['exactitude'], 4)}, "
+        f"tête {round(r['syntagme']['tete']['f1'], 4)}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1733,7 +1746,8 @@ def main() -> int:
               ("T103 vote pondéré", t103_pondere()),
               ("T104 validation croisée", t104_cv()),
               ("T105 CV 20 graines", t105_cv_graines()),
-              ("T106 bilan anaphore", t106_bilan_anaphore())]
+              ("T106 bilan anaphore", t106_bilan_anaphore()),
+              ("T107 gold complet", t107_gold_complet())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

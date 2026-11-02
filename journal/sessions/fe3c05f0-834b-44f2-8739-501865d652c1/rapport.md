@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 40.7 h |
 | Tours | 385 |
-| Messages | 2315 |
-| Appels d'outils | 1536 |
+| Messages | 2317 |
+| Appels d'outils | 1537 |
 | Fichiers touchés | 26 |
-| Commandes | 1366 |
+| Commandes | 1367 |
 | Sous-agents | 0 |
 | Commits | 90 |
 | Compactages de contexte | 4 |
@@ -9070,7 +9070,7 @@ La campagne D/R/A est close, et le goal est marqué **complete** à 07 h 55, à 
 
 ### Tour 385 — mets le dossier pilotage à jour et continue
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Audit pilotage folder and counters
 - bash — Read state D/R/A section and roadmap D
@@ -9078,10 +9078,32 @@ La campagne D/R/A est close, et le goal est marqué **complete** à 07 h 55, à 
 - bash — Update pilotage state, plan, chantiers, roadmap
 - bash — Commit pilotage update
 - bash — Fix pilotage next action and commit
+- bash — Start CEGEP OCR lot of 40
 
 **Synthèse produite :**
 
-⏵ Mise à jour du dossier pilotage, puis relance de l'OCR complet
+⏵ Pilotage à jour et committé, OCR du CEGEP relancé pour 40 notes
+
+Le dossier pilotage est à jour et committé, et l'OCR continue sur le fonds CEGEP.
+
+\## Ce qui a changé dans `docs/pilotage/`
+
+Deux commits :
+- **`62fff503`** — « PILOTAGE — LE DOSSIER PORTE L'OCR DES 20 LIVRES + 7 NOTES CEGEP ET LE LOT SUIVANT » : `en-cours.md`, `plan-travail.md`, `chantiers.md` et `roadmap.md` alignés sur les mesures finales de la nuit (OCR 20 livres / 7 381 p / 15,36 M car. + 7 notes CEGEP / 739 p / 1,21 M car., genres 38,5 car/ligne), la prochaine action réécrite, et le lien du journal corrigé vers le 02/11.
+- **`ed7e8b3d`** — « LE RESTE DE L'OCR EST LE FONDS CEGEP : 137 SCANS (LES 20 LIVRES SONT TOUS FAITS), LOT DE 40 LANCÉ » : correction importante — les 22 PDF scannés du fonds `Biblio_large` sont **tous** traités (20 uniques + 1 doublon + 1 court), il ne reste donc **aucun livre** à océriser ; les 137 scans restants du corpus PDF sont **côté CEGEP** (159 − 22). La prochaine action, le plan et la roadmap disent maintenant « le fonds CEGEP : 137 scans ».
+
+L'état est vert : dernier fait = dernier état (`ed7e8b3d`), revue ✅, budget de documents ✅, en-cours compact.
+
+\## Ce qui tourne maintenant
+
+**`tools/ocr_pdf.py --racine CEGEP --max-doc 40`** (PID **3445044**, journal `/tmp/ocr-cegep-lot40.log`) : les 7 notes déjà faites seront refaites (le parcours est séquentiel) puis **33 nouvelles notes** seront océrisées dans `data/corpus_ocr_cegep/`. La détection est lente sur ce fonds (~1 min par PDF, les fichiers sont gros) : compte **4 à 5 h** avant le manifeste `reports/ocr-pdf-cegep.json`, qui remplacera celui des 7 notes.
+
+Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 8192` sur le nouveau corpus, réécrire `reports/rapport-ocr-cegep.md` avec les chiffres du manifeste, mettre à jour l'état/roadmap/plan, et committer — c'est le même enchaînement que pour les 7 notes.
+
+\## À vérifier
+
+- Le fonds CEGEP complet (2 681 PDF) reste hors d'atteinte en une passe : à ~1 min de détection par PDF, le parcours entier prend ~45 h ; le lot de 40 est un pas, pas la clôture.
+- Les 137 scans CEGEP de `corpus-pdf.json` sont l'estimation du reste ; le comptage exact viendra des manifestes successifs.
 
 ## 3. Travail accompli
 
@@ -9158,7 +9180,7 @@ La campagne D/R/A est close, et le goal est marqué **complete** à 07 h 55, à 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1326 autres
+- … et 1327 autres
 
 ## 4. Mesures et résultats marquants
 
