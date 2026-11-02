@@ -33267,3 +33267,49 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf|pdftoppm\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1; ps -p 1616198 -o stat,etime= 2>/dev/null || echo \"OCR terminé\"",  … [145 caractères tronqués]`
+
+  ```
+04:55
+  Biblio_large · 006.31 sophiadialogues.pdf · 86 p · 162034 car
+  Biblio_large · David_Gamez_-_Human_and_Machine_Consciou · 236 p · 435043 car
+2425651 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af "tesseract.*ocr-pdf|pdftoppm" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1; ps -p 1616198 -o stat,etime= 2>/dev/null || echo "OCR terminé"
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 14596847  2 nov 04:44 data/corpus_ocr/train.txt
+STAT            
+S       08:10:16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract|pdftoppm\" | head -1; ls /tmp/ocr-pdf-4m6akibr/ 2>/dev/null | wc -l", "description": "Check 20th OCR progress", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+04:55
+2430176 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-4m6akibr/p-103.png stdout -l fra+eng --psm 3
+450
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 357 : 20e livre (Life Histories, 450 p) en OCR à 103 pages
+
+**Round 357/1000 — le 20e livre (le dernier) est à 23 % (103/450 pages).**
+
+- **`tesseract`** lit la page **103/450** du **Life Histories of Etnos Theory** ; la fin vers **05 h 10-05 h 15**, puis le **manifeste** écrit par l'outil.
+- **Le corpus OCR : 19 livres, 6 931 pages, 14 436 209 caractères** ; le train **14 596 847 octets**.
+- **Le finisher** (PID 2275241) verra le manifeste et s'arrêtera sans rien faire (ou le cutoff 06:45).
+- **Le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40) ; **les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le dernier livre est en OCR ; le manifeste suivra ; le goal reste actif.
+
+
+## Tour 370
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 358/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; tail -1 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1; ps -p 1616198 -o stat,etime= 2>/dev/null || echo \"OCR terminé\"", "descript … [129 caractères tronqués]`

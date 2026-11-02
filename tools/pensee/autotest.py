@@ -1407,6 +1407,20 @@ def t89_complexes50() -> tuple[bool, str]:
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
 
+def t90_complexes100() -> tuple[bool, str]:
+    """Les 100 phrases complexes : POS 0,6984, syntagme 0,2677."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.gold_reel import construire
+    from ..tests.linguistique.evaluer_gold import evaluer_bloc
+    g = construire()
+    h = bl.Heuristique()
+    ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 300]
+    r = evaluer_bloc("h", h, ps)
+    return abs(r["pos"]["exactitude"] - 0.6984) < 0.001, (
+        f"r201-300 : POS {round(r['pos']['exactitude'], 4)}, "
+        f"syntagme {round(r['syntagme']['f1'], 4)}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1495,7 +1509,8 @@ def main() -> int:
               ("T86 sous-ensembles", t86_gold_subsets()),
               ("T87 phrases complexes", t87_complexes()),
               ("T88 20 complexes", t88_complexes20()),
-              ("T89 50 complexes", t89_complexes50())]
+              ("T89 50 complexes", t89_complexes50()),
+              ("T90 100 complexes", t90_complexes100())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -15,8 +15,8 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-gold-complexes100.md`](rapport-pensee-gold-complexes100.md) | **B13** — les 100 complexes : POS 0,6984, syntagme 0,2677, **93/93** |
 | [`rapport-pensee-gold-complexes50.md`](rapport-pensee-gold-complexes50.md) | **B13** — les 50 complexes : POS 0,7013, syntagme 0,3060, **92/92** |
-| [`rapport-pensee-gold-complexes20.md`](rapport-pensee-gold-complexes20.md) | **B13** — les 20 complexes : POS 0,6829, syntagme 0,2963, **91/91** |
 | [`rapport-pensee-gold-200.md`](rapport-pensee-gold-200.md) | **B13** — le gold à 200 réels : POS 0,7738, **88/88** |
 | [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, **87/87** |
 | [`rapport-pensee-courbe20.md`](rapport-pensee-courbe20.md) | **B13** — la courbe sur 20 graines : 20 % à 0,35, 100 % à 0,41, **86/86** |

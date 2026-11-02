@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 36.2 h |
-| Tours | 106 |
-| Messages | 1355 |
-| Appels d'outils | 1190 |
+| Durée | 36.3 h |
+| Tours | 107 |
+| Messages | 1363 |
+| Appels d'outils | 1196 |
 | Fichiers touchés | 25 |
-| Commandes | 965 |
+| Commandes | 970 |
 | Sous-agents | 2 |
-| Commits | 138 |
+| Commits | 139 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -243,6 +243,8 @@
 **Tour 105** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 106** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 107** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5645,6 +5647,53 @@ Le goal `goal-7beacaeb` reste actif (la deadline 08:00 est encore devant, il est
 - bash — Committer les 50 phrases complexes (2e essai)
 - job_output
 
+**Synthèse produite :**
+
+⏵ 50 phrases complexes : POS 0,7013, syntagme 0,3060, gold 250 ; 92/92
+
+Le round 93 du goal est livré : les phrases complexes passent de **20 à 50** — les deux effets se **stabilisent** (−0,09 POS / +0,12 syntagme). Commit **`67b33af0`**.
+
+\## Les 50 complexes
+
+| sous-ensemble | phrases | POS | tokens | syntagme F1 | tête F1 |
+|---|---:|---:|---:|---:|---:|
+| r001–r200 | 200 | 0,7924 | 978 | 0,1838 | 0,3198 |
+| **r201–r250** | **50** | **0,7013** | 318 | **0,3060** | **0,3731** |
+
+**Ce que ça dit** :
+
+- **Le POS chute de 0,09** : les relatifs (`qui`, `que`, `dont`, `où`, `whose`, `where`), les auxiliaires et les conjonctions (`quand`, `si`, `parce que`, `bien que`, `although`, `while`, `as`) restent hors du lexique fermé ; le POS ouvert les absorbe. Le chiffre se **stabilise** (0,6829 à 20, 0,7013 à 50).
+- **Le syntagme gagne 0,12** : les segments REL/SUB longs sont mieux délimités que les GN courts ; l'effet se **stabilise** aussi (0,2963 à 20, 0,3060 à 50).
+- **La tête suit** (0,3731) : le rôle est porté par le nom/verbe de tête.
+- **La négative reste** : le POS du hasard (0,0147).
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-complexes50.md`](../../reports/rapport-pensee-gold-complexes50.md) ; JSON [`pensee-gold-complexes50.json`](../../reports/pensee-gold-complexes50.json) ; T89 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **250 phrases**.
+- **92/92 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **497 fiches / 584 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **100 phrases complexes** : coordination, ellipse ; l'intervalle se resserre encore.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round vise **100 phrases complexes**.
+
+### Tour 107 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Ajouter 50 phrases complexes (100 au total)
+- bash — Mesurer les 100 phrases complexes
+- bash — Écrire la fiche des 100 phrases complexes
+- bash — Trim README et passer les portes
+- bash — Committer les 100 phrases complexes
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5724,7 +5773,7 @@ Le goal `goal-7beacaeb` reste actif (la deadline 08:00 est encore devant, il est
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 925 autres
+- … et 930 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6010,4 +6059,5 @@ Le goal `goal-7beacaeb` reste actif (la deadline 08:00 est encore devant, il est
 - B13 — LES 20 PHRASES COMPLEXES : POS 0,6829, SYNTAGME 0,2963, GOLD 220 ; 91/91" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "20 PHRASES COMPLEXES"; t
 - B13 — LES 50 PHRASES COMPLEXES : POS 0,7013, SYNTAGME 0,3060, GOLD 250 ; 92/92" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "50 PHRASES COMPLEXES"; t
 - B13 — LES 50 PHRASES COMPLEXES : POS 0,7013, SYNTAGME 0,3060, GOLD 250 ; 92/92" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "50 PHRASES COMPLEXES"; t
+- B13 — LES 100 PHRASES COMPLEXES : POS 0,6984, SYNTAGME 0,2677, GOLD 300 ; 93/93" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "100 PHRASES COMPLEXES";
 

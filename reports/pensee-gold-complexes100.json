@@ -1,0 +1,26 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "93/93",
+ "r001_200": {
+  "phrases": 200,
+  "pos": 0.7924,
+  "tokens": 978,
+  "syntagme_f1": 0.1838,
+  "tete_f1": 0.3198
+ },
+ "r201_300": {
+  "phrases": 100,
+  "pos": 0.6984,
+  "tokens": 630,
+  "syntagme_f1": 0.2677,
+  "tete_f1": 0.3494
+ },
+ "delta_pos": -0.094,
+ "delta_syntagme": 0.0839,
+ "limites": [
+  "100 phrases",
+  "REL/SUB/coordination",
+  "heuristique seule"
+ ]
+}
