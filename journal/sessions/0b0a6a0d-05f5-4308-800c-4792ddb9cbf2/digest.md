@@ -16522,3 +16522,54 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-971", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/route-480 2>/dev/null | head -3; tail -3 work/n2j/teacher-480.log; ps -eo pid,etime,pcpu,cmd | grep entrainer_moteur | grep -v grep | head -2; tail -2 /tmp/portes-nuit.out", "description": "Check the bigger … [17 caractères tronqués]`
+
+  ```
+00:54
+config.json
+generation_config.json
+model.safetensors
+
+  # meilleur point : pas 20000 · val 1.6577 bits/octet
+  # écrit dans work/n2j/route-480 · 30.29 M paramètres · 2.00 M poids lus/jeton/couche
+    PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti
+Journaux complets : /tmp/portes-nuit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/portes-nuit.out | head -2; cat > work/n2j/file-t480-0.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport PYTHONPATH=. CUDA_VISIBLE_DEVICES=0\nP=\"$HOME/gpu-env/bin/python\"\nfor g … [1445 caractères tronqués]`
+
+  ```
+perplexité répartie : 8.7434 · écart de flux : 0.00e0
+    PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti
+q0 2251268
+q1 2251269
+# init work/n2j/base-wiki-pos.pt · manquants ['embed_canal.weight'] · graine 1 · décalage 0
+# init work/n2j/base-wiki-pos.pt · manquants ['embed_canal.weight'] · graine 2 · décalage 10000019
+00:54
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"vertes|rouges|TOUTES|NON TENUE\" /tmp/portes-nuit.out | head -5; grep -n \"portes\" docs/pilotage/en-cours.md | head -3", "description": "Read the gates summary and the state's gates line"}`
+
+  ```
+porte-reparti-moteur   ❌ code 1                    3 s  PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti
+--- 77 vertes, 4 rouges ---
+    PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti
+21:- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes)~~ ; 4) ~~moteur v0 (BFS, greedy, A*, MCTS-lite)~~ ; 5) ~~AC-3, alpha-bêta~~ (**8/8**) ; ~~DRVF~~ (**9/9**) ; 6) ~~banc anytime~~ (**10/10**) ; 6 bis) ~~opérateurs~~ (**15/15**) ; 7) ~~reprise R4.4~~ ; 8) ~~couche heuristique~~ ; 9) **bloc linguistique** (R0.7).
+41:- **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes**  sur le jouet des cruches ; BFS, greedy, A* et
+84:- **Pensée — state store v0** : 6/6 portes (BFS, greedy, A*, MCTS-lite), jouet des cruches ; fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine AC-3, alpha-bêta, DRVF.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"passe des portes\\|portes du\\|vertes\" docs/pilotage/en-cours.md | head -3; grep -n \"passe des portes\\|portes du\" docs/pilotage/roadmap.md | head -2", "description": "Find the state's gates-pass line"}`
+
+  ```
+93:| portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
+130:## Les questions ouvertes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"| portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |\",\n   … [1339 caractères tronqués]`

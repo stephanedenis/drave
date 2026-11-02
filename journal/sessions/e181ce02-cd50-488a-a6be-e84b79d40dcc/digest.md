@@ -21157,3 +21157,121 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-asym.md reports/pensee-asym.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/ … [499 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-796]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-796", "timeout_ms": 600000, "wait": true}`
+
+  ```
+24 files changed, 1183 insertions(+), 40 deletions(-)
+ create mode 100644 reports/pensee-asym.json
+ create mode 100644 reports/rapport-pensee-asym.md
+COMMIT OK 1
+64b4b14d B13 — LA FIABILITÉ ASYMÉTRIQUE : 0,9/0,5, v FINAL 0,44, 20/20, 8,0 PAS ; 65/65
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Fiabilité asymétrique : 0,9/0,5, v final 0,44, 20/20, 8,0 pas ; 65/65
+
+Le round 66 du goal est livré : les looks **inutiles** (0,5, une pièce de monnaie) sont neutres — les looks fiables suffisent. Commit **`64b4b14d`**.
+
+## La fiabilité asymétrique
+
+Même monde que T55, mais les régimes sont **0,9 et 0,5** (alternance toutes les 1000 épisodes) : la moitié du temps, l'observation ne dit **rien**.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| **4000** | **20/20** | **0,44** | 679 | 8,0 |
+| 8000 | 20/20 | 0,5 | 751 | 8,0 |
+| intra symétrique (T61) | 20/20 | 0,48 | 516 | 8,0 |
+
+**Ce que ça dit** :
+
+- **L'asymétrie est absorbée** : quand l'observation ne dit rien (0,5), le filtre ne bouge pas ; quand elle dit (0,9), il apprend.
+- **v ≈ 0,44** : la moyenne des deux régimes ; le filtre ne peut pas distinguer le bon du neutre sans le savoir, mais il **s'en sert** quand même.
+- **Le but est atteint** (20/20, 8,0 pas) : les looks utiles suffisent.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+## L'état
+
+- Fiche : [`rapport-pensee-asym.md`](../../reports/rapport-pensee-asym.md) ; JSON [`pensee-asym.json`](../../reports/pensee-asym.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T62 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **65/65 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **464 fiches / 556 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Utile 10 % du temps** : la limite de l'asymétrie.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste l'**observation utile 10 % du temps** — la limite de l'asymétrie.
+
+
+## Tour 80
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 67/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1852 caractères tronqués]`
+
+  ```
+64b4b14d B13 — LA FIABILITÉ ASYMÉTRIQUE : 0,9/0,5, v FINAL 0,44, 20/20, 8,0 PAS ; 65/65
+ok
+4000 q 589 v final 0.8 20 runs: 20 /20 pas moyen 8.0
+8000 q 636 v final 0.6 20 runs: 20 /20 pas moyen 8.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T62 la fiabilité asymétrique    0,9 / 0,5 : 20/20 buts, v final ≈ 0,44\\n\",\n\"  T62 la fiabilité asymétrique    0,9 / 0, … [1321 caractères tronqués]`
+
+  ```
+ok
+  ✅ T61 régime intra-épisode intra : 20/20 buts, v final 0.48, 8.0 pas
+  ✅ T62 fiabilité asymétrique asym : 20/20 buts, v final 0.44, 8.0 pas
+  ✅ T63 information rare   rare : 20/20 buts, v final 0.8, 8.0 pas
+  66/66 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-rare.md <<'MD'\n# B13 — l'information rare : utile 10 % du temps, 20/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **66/66 portes** : l'observation … [6402 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 465 fiche(s) · 557 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2811 mots > budget 2800 (T1)
+  en-cours · 1563 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-votante.md`](rapport-pensee-votante.md) | **B13** — l'observation votante : 2 looks, 20/20 buts, 1 % d'erreur, * … [612 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 465 fiche(s) · 557 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-rare.md reports/pensee-rare.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/ … [484 caractères tronqués]`
