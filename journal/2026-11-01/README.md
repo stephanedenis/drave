@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**100 commits** · **4 session(s)** · **10 thème(s)**
+**101 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 11 | [distribue.md](distribue.md) |
+| distribue | 12 | [distribue.md](distribue.md) |
 | docs | 25 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 47 | [mesures.md](mesures.md) |
@@ -135,6 +135,7 @@
 | 20:46 | `f9c112fd` | B13 — LA PORTE STOCHASTIQUE : 80 %, 30 NŒUDS/BUT, SONDE 7 ; 18/18 |
 | 20:49 | `99f8dcb2` | B13 — LA POLITIQUE SEULE SUR LE BRUIT : 8–10 PAS, 1–3 ESSAIS, 15/15 BUTS ; 19/19 |
 | 20:52 | `bcf6c281` | B13 — LA PORTE QUI SE REFERME : 27 NŒUDS/BUT, SONDE 5, COÛT 57 ; 20/20 |
+| 20:55 | `e2770e7a` | B13 — LA PORTE À UN TOUR : 27 NŒUDS/BUT, SONDE 5, COÛT 57 ; 21/21 |
 
 ## Le récit de la journée (écrit à la main)
 

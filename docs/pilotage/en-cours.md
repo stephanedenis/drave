@@ -62,9 +62,9 @@
 - **Plan** : le texte intégral, le PDF, puis R1.1/R1.2.
 - **Ambition** : le français réel pour N2.
 - **Stratégie** : le dump, débaliseur, splits.
-- **Objectif final** : 10 corpus en texte intégral, ficés.
-- **Ce qu'elle fait** : le **texte intégral** : les 9 (**12,12 M** ; **8 Ko 0**) ; **PDF** (322 Mo) ; **A2.6/A8.3** (lot : lectures non divisées) ; en ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
-- **Ce que font les autres** : Pensée, S, N2 ; le hub tient l'état.
+- **Objectif final** : 10 corpus en texte intégral.
+- **Ce qu'elle fait** : le **texte intégral** : les 9 (**12,12 M** ; **8 Ko 0**) ; **PDF** (322 Mo) ; **A2.6/A8.3** (lot) ; **Documents/OCR en cours** ; en ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
+- **Ce que font les autres** : Pensée, S, N2.
 - **Prochaine action** : l'**en**, le catalogue ; l'OCR des 159 scans ; les collections.
 - **Bloquants** : aucun.
 - **Journal** : [le 01/11](../../journal/2026-11-01/README.md).

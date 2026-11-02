@@ -17595,3 +17595,10 @@ ocr job 1616198
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 55); do [ -f reports/ocr-pdf.json ] && break; sleep 15; done; echo \"attente $((i*15))s\"; tail -25 /tmp/ocr-pilote.log; echo \"=== manifest\"; python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('reports/ocr-pdf.jso … [467 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-880]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"les 9 (**12,12 M** ; **8 Ko 0**) ; **PDF** (322 Mo) ; **A2.6/A8.3** (lot : lectures non divisées) ; en\",\n            \"l … [2263 caractères tronqués]`

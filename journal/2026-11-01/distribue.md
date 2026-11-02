@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (11)
+## Commits du jour (12)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -19,6 +19,7 @@
 | 20:38 | `039e0500` | B13 — LA COURBE : 15/15 BUTS (50–800 ÉPISODES × 3 GRAINES), 30 NŒUDS, Q 52–83 ; 16/16 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+25) |
 | 20:46 | `f9c112fd` | B13 — LA PORTE STOCHASTIQUE : 80 %, 30 NŒUDS/BUT, SONDE 7 ; 18/18 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 20:52 | `bcf6c281` | B13 — LA PORTE QUI SE REFERME : 27 NŒUDS/BUT, SONDE 5, COÛT 57 ; 20/20 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
+| 20:55 | `e2770e7a` | B13 — LA PORTE À UN TOUR : 27 NŒUDS/BUT, SONDE 5, COÛT 57 ; 21/21 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 
 ## Chiffres du jour
 
@@ -41,6 +42,7 @@
 - [reports/rapport-pensee-courbe.md](../../reports/rapport-pensee-courbe.md)
 - [reports/rapport-pensee-ferme.md](../../reports/rapport-pensee-ferme.md)
 - [reports/rapport-pensee-labyrinthe.md](../../reports/rapport-pensee-labyrinthe.md)
+- [reports/rapport-pensee-minute.md](../../reports/rapport-pensee-minute.md)
 - [reports/rapport-pensee-porte-apprise.md](../../reports/rapport-pensee-porte-apprise.md)
 - [reports/rapport-pensee-porte.md](../../reports/rapport-pensee-porte.md)
 - [reports/rapport-pensee-stochastique.md](../../reports/rapport-pensee-stochastique.md)
