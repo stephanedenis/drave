@@ -15729,3 +15729,10 @@ multi21 1690587
   ```
 
 - **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-45m.log; tail -1 work/n2k/base-multi-21m.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Check the scaling-law trainings"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-916]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-916", "timeout_ms": 400000, "wait": true}`

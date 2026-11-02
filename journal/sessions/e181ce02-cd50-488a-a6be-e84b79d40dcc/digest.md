@@ -16652,3 +16652,142 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-599", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+retry 1
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+retry 2
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at c397d2bd4d2d8f9b9e369bd9afbce4db144bb90e but expected da55b97d583bd270d7fdd411949e74e1e78b02d7
+retry 3
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 8751630611f91332ab33ebd953beef5ad037f6f8 but expected c397d2bd4d2d8f9b9e369bd9afbce4db144bb90e
+retry 4
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-599", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 7367b314] B13 — LE CURRICULUM OPEN : 74 ÉTATS-Q, BRUIT BUT/9 ET STABLE BUT/8 ; 32/32
+ 17 files changed, 94 insertions(+), 53 deletions(-)
+COMMIT OK 5
+7367b314 B13 — LE CURRICULUM OPEN : 74 ÉTATS-Q, BRUIT BUT/9 ET STABLE BUT/8 ; 32/32
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Curriculum open : 74 états-Q, bruit but/9 et stable but/8 ; 32/32
+
+Le round 33 du goal est livré : le **trou de transfert** de l'audit est comblé — la politique entraînée sur le bruit apprend les états `open`. Commit **`7367b314`**.
+
+## Le curriculum
+
+Même labyrinthe que T16-T21, mais la récompense **simule la porte stochastique** à l'entraînement (80 % d'ouverture, sinon l'état reste) : la Q-table voit les états `open=True` et `open=False`. 1000 épisodes, graine 0, **74 états-Q**. Puis exécution **seule**, sans A*.
+
+| politique | états-Q | bruit (seule) | stable (seule) |
+|---|---:|---|---|
+| **ouverte** | **74** | **but/9 (2 essais)** | **but/8** |
+| minute (T21) | 60 | échec/200 | but/8 |
+
+**Ce que ça dit** :
+
+- **Le trou de transfert est comblé** : la politique entraînée sur le bruit réussit seule sur le bruit **et** sur la porte stable ; les deux mondes partagent la structure.
+- **Le coût du bruit est faible** : +1 pas et 2 essais sur la porte stochastique, par rapport au chemin optimal (8).
+- **La robustesse s'apprend** : ce n'est pas la porte qui change, c'est la **distribution des états** visités à l'entraînement ; le curriculum `open` suffit.
+- **La négative reste** : la politique minute (T21/T28) échoue sur le bruit ; le contraste minute vs ouverte est le contrôle.
+
+## L'état
+
+- Fiche : [`rapport-pensee-ouverte.md`](../../reports/rapport-pensee-ouverte.md) ; JSON [`pensee-ouverte.json`](../../reports/pensee-ouverte.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T29 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **32/32 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **420 fiches / 518 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- Le commit a demandé **5 essais** (courses Git : `index.lock`, HEAD déplacé par 3 commits concurrents).
+
+## La suite
+
+1. **Plusieurs graines** : la robustesse tient-elle hors graine 0 ?
+2. **Porte mobile** : la porte change de case ; le curriculum doit suivre.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round vérifie la robustesse sur plusieurs graines.
+
+
+## Tour 47
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 34/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; cat > tools/pensee/graines.py <<'PY'\n\"\"\"graines.py — la robustesse du curriculum `open` sur plusieurs graines.\n\nLa `PolitiqueAppriseOuverte` est entraînée (1000 épisodes) sur 5 graines, puis exécuté … [1966 caractères tronqués]`
+
+  ```
+7367b314 B13 — LE CURRICULUM OPEN : 74 ÉTATS-Q, BRUIT BUT/9 ET STABLE BUT/8 ; 32/32
+graine 0  Q  74  bruit True/9 pas (2 essais)  stable True/8 pas
+graine 1  Q  85  bruit True/8 pas (1 essais)  stable True/8 pas
+graine 2  Q  61  bruit True/10 pas (3 essais)  stable True/8 pas
+graine 3  Q  85  bruit True/8 pas (1 essais)  stable True/9 pas
+graine 4  Q  72  bruit True/8 pas (1 essais)  stable True/8 pas
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T29 le curriculum des état open    entraînée sur le bruit, la politique seule réussit\\n\",\n\"  T29 le curriculum des éta … [1223 caractères tronqués]`
+
+  ```
+ok
+  ✅ T28 audit des mesures  audit : 15/15 mesures cohérentes
+  ✅ T29 curriculum open    ouverte : 74 états-Q, bruit but/9 pas (2 essais), stable but/8 pas
+  ✅ T30 robustesse sur 5 graines graines : 5/5 bruits, 5/5 stables
+  33/33 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-graines.md <<'MD'\n# B13 — la robustesse sur 5 graines : le curriculum `open` tient\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **33/33 portes** : l … [6486 caractères tronqués]`
+
+  ```
+état ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 421 fichiers, le disque en a 422
+     · compteurs : en-cours.md dit 518 JSON, le disque en a 519
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Voir la ligne des compteurs"}`
+
+  ```
+101:| fichiers / JSON de résultats | **421** / **518** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text().replace(\"| fichiers / JSON de résultats | **421** / **518** |\", \"| fichiers / JSON de résultats | **422** / **519** |\")\np.write_text( … [596 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 422 fiche(s) · 519 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/graines.py tools/pensee/autotest.py reports/rapport-pensee-graines.md reports/pensee-graines.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md do … [474 caractères tronqués]`

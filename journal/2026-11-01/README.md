@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**116 commits** · **4 session(s)** · **10 thème(s)**
+**117 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 3 | [apprentissage.md](apprentissage.md) |
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 13 | [distribue.md](distribue.md) |
-| docs | 31 | [docs.md](docs.md) |
+| docs | 32 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 49 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
@@ -155,6 +155,7 @@
 | 22:13 | `da55b97d` | B13 — L'AUDIT DES MESURES : 15/15 COHÉRENTES, LA MINUTE NE TRANSFÈRE PAS AU BRUIT ; 31/31 |
 | 22:27 | `c397d2bd` | N2.o — LA DISTILLATION MULTILINGUE : DIX LANGUES S'AMÉLIORENT, LA DILUTION RESTE |
 | 22:30 | `87516306` | JOURNAL — LA NUIT N2 : DU CORPUS PROPRE AU CORPUS RÉEL |
+| 22:32 | `7367b314` | B13 — LE CURRICULUM OPEN : 74 ÉTATS-Q, BRUIT BUT/9 ET STABLE BUT/8 ; 32/32 |
 
 ## Le récit de la journée (écrit à la main)
 

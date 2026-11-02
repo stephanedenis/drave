@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
 | Durée | 30.0 h |
-| Tours | 34 |
-| Messages | 1041 |
-| Appels d'outils | 988 |
+| Tours | 35 |
+| Messages | 1046 |
+| Appels d'outils | 991 |
 | Fichiers touchés | 18 |
-| Commandes | 909 |
+| Commandes | 912 |
 | Sous-agents | 0 |
 | Commits | 60 |
 | Compactages de contexte | 2 |
@@ -95,6 +95,8 @@
 **Tour 33** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 34** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 35** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1352,10 +1354,44 @@ L'anglais est à **25,4 M pages sur 25,6 M** (6,02 M articles), et son processus
 
 ### Tour 34 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*3 appels d'outils.* Actions notables :
 
 - bash — Stop blocked English process and count files
 - bash — Verify English process stopped and compute hashes
+- bash — Reconstruct English manifest and launch check
+
+**Synthèse produite :**
+
+⏵ Round 22 : l'anglais est clos à 99,2 % — manifeste reconstruit, contrôle 8 Ko lancé, mémoire rendue
+
+**Round 22/1000 — l'incident est terminé proprement.** L'anglais est **arrêté** (le SIGTERM a été suivi d'effet, la mémoire est retombée de 125 à **24 Go utilisés / 101 Go disponibles**). Les trois fichiers sont **clos** : train 20,05 Go, val 1,11 Go, test 1,11 Go (22,19 G caractères au total). Le **manifeste est reconstruit** depuis le journal et les fichiers (SHA-256 recalculés) avec une **note d'interruption** : 25,4 M pages sur 25,6 M traitées (99,2 %), ~200 000 pages (0,8 %) non traitées, l'écriture du train bloquée par la mémoire.
+
+\## Le dixième corpus
+
+| grandeur | valeur |
+|---|---:|
+| pages traitées | 25,4 M / 25,6 M (99,2 %) |
+| articles gardés | **6 023 249** |
+| caractères | 21,98 G (articles) / 22,19 G (fichiers) |
+| train / val / test | 20,05 Go / 1,11 Go / 1,11 Go |
+| SHA-256 | train `7e86b591…`, val `e47e98fc…`, test `41d437da…` |
+
+Le **contrôle 8 Ko** (les deux unités + XNLI + wikitext2) tourne sur les 22 Go ; c'est le dernier gros contrôle de la campagne. La fiche du texte intégral portera la **limite mesurée** : ~75 Go de RAM pour 6 M d'articles ; sur un dump de 25 Go, dédupliquer par tranches ou prévoir ~80 Go libres — les neuf autres corpus ne l'avaient pas révélée.
+
+\## Les autres fronts
+
+Les **documents** sont à 4 000/7 496 (train 750 Mo écrit à 22 h 27, 2 558 gardés, 812,6 M caractères) ; ils vont reprendre du débit avec la mémoire rendue. L'**OCR** a océrisé trois livres (1,7 Mo) ; la détection des scannés continue.
+
+\## La suite
+
+Le **contrôle anglais** (~20-30 min) → la **fiche et le catalogue des dix** → les fiches OCR/Documents → les **159 scans**. Le goal reste actif ; le prochain round ramasse le contrôle de l'anglais et clôt le catalogue.
+
+### Tour 35 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check English contamination progress and documents
+- bash — Wait for English contamination result
 
 ## 3. Travail accompli
 
@@ -1424,7 +1460,7 @@ L'anglais est à **25,4 M pages sur 25,6 M** (6,02 M articles), et son processus
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 869 autres
+- … et 872 autres
 
 ## 4. Mesures et résultats marquants
 

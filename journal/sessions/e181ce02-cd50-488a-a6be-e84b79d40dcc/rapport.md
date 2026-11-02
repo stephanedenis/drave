@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 29.9 h |
-| Tours | 46 |
-| Messages | 788 |
-| Appels d'outils | 747 |
+| Tours | 47 |
+| Messages | 797 |
+| Appels d'outils | 754 |
 | Fichiers touchés | 25 |
-| Commandes | 599 |
+| Commandes | 605 |
 | Sous-agents | 2 |
-| Commits | 62 |
+| Commits | 63 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -123,6 +123,8 @@
 **Tour 45** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 46** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 47** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2467,6 +2469,56 @@ Le round 32 du goal est livré : les trois mesures « seule » rendent désormai
 - bash — Passer toutes les portes
 - bash — Committer le curriculum open
 
+**Synthèse produite :**
+
+⏵ Curriculum open : 74 états-Q, bruit but/9 et stable but/8 ; 32/32
+
+Le round 33 du goal est livré : le **trou de transfert** de l'audit est comblé — la politique entraînée sur le bruit apprend les états `open`. Commit **`7367b314`**.
+
+\## Le curriculum
+
+Même labyrinthe que T16-T21, mais la récompense **simule la porte stochastique** à l'entraînement (80 % d'ouverture, sinon l'état reste) : la Q-table voit les états `open=True` et `open=False`. 1000 épisodes, graine 0, **74 états-Q**. Puis exécution **seule**, sans A*.
+
+| politique | états-Q | bruit (seule) | stable (seule) |
+|---|---:|---|---|
+| **ouverte** | **74** | **but/9 (2 essais)** | **but/8** |
+| minute (T21) | 60 | échec/200 | but/8 |
+
+**Ce que ça dit** :
+
+- **Le trou de transfert est comblé** : la politique entraînée sur le bruit réussit seule sur le bruit **et** sur la porte stable ; les deux mondes partagent la structure.
+- **Le coût du bruit est faible** : +1 pas et 2 essais sur la porte stochastique, par rapport au chemin optimal (8).
+- **La robustesse s'apprend** : ce n'est pas la porte qui change, c'est la **distribution des états** visités à l'entraînement ; le curriculum `open` suffit.
+- **La négative reste** : la politique minute (T21/T28) échoue sur le bruit ; le contraste minute vs ouverte est le contrôle.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-ouverte.md`](../../reports/rapport-pensee-ouverte.md) ; JSON [`pensee-ouverte.json`](../../reports/pensee-ouverte.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T29 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **32/32 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **420 fiches / 518 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- Le commit a demandé **5 essais** (courses Git : `index.lock`, HEAD déplacé par 3 commits concurrents).
+
+\## La suite
+
+1. **Plusieurs graines** : la robustesse tient-elle hors graine 0 ?
+2. **Porte mobile** : la porte change de case ; le curriculum doit suivre.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round vérifie la robustesse sur plusieurs graines.
+
+### Tour 47 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Mesurer la robustesse sur 5 graines
+- bash — Ajouter la porte T30 (5 graines)
+- bash — Écrire la fiche de la robustesse sur 5 graines
+- bash — Voir la ligne des compteurs
+- bash — Aligner les compteurs et passer les portes
+- bash — Committer la robustesse sur 5 graines
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2546,7 +2598,7 @@ Le round 32 du goal est livré : les trois mesures « seule » rendent désormai
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 559 autres
+- … et 565 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2755,4 +2807,5 @@ Le round 32 du goal est livré : les trois mesures « seule » rendent désormai
 - B13 — LA MESURE CORRIGÉE : BUG DE seule_minute, 4 POLITIQUES À BUT/8, 4 FICHES CORRIGÉES ; 30/30" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MESURE
 - B13 — L'AUDIT DES MESURES : 15/15 COHÉRENTES, LA MINUTE NE TRANSFÈRE PAS AU BRUIT ; 31/31" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "AUDIT DES MES
 - B13 — LE CURRICULUM OPEN : 74 ÉTATS-Q, BRUIT BUT/9 ET STABLE BUT/8 ; 32/32" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CURRICULUM OPEN"; then echo 
+- B13 — LA ROBUSTESSE SUR 5 GRAINES : 5/5 BRUITS, 5/5 STABLES ; 33/33" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "5 GRAINES"; then echo "COMMIT OK $i
 

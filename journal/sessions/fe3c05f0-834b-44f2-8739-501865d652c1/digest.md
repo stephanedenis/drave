@@ -18522,3 +18522,34 @@ Mem:             125          65          59           5           7          60
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 10; date '+%H:%M'; ps -p 1494795 -o stat,etime= 2>/dev/null || echo \"processus arrêté\"; free -g | sed -n 2p; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || echo \"manifeste absent\"; tail -2 /tmp/run-texte-en.log; echo … [339 caractères tronqués]`
+
+  ```
+22:29
+STAT            
+processus arrêté
+Mem:             125          19         105           5           8         106
+manifeste absent
+  [en] 24600000 lus · 5889611 gardés · 21.61 G caractères
+  [en] 25400000 lus · 6023249 gardés · 21.98 G caractères
+=== comptes
+train : 20053154324
+val : 1115365980
+test : 1110437204
+=== sha
+41d437da7234f1f45250fa2a249888ffed69579809a599cafe727406b5ec9538  data/corpus_wiki_en_texte/test.txt
+7e86b59151309e070fc9b33bde161e2039cfcb79829d50c42338c4ce3aa14b5d  data/corpus_wiki_en_texte/train.txt
+e47e98fcb4e2b027932610b52dfdd25c509a62ce5855a4de4c566aa1db62251f  data/corpus_wiki_en_texte/val.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 300 wc -m data/corpus_wiki_en_texte/*.txt; python3 - <<'PY'\nimport hashlib, json, pathlib\nbase = pathlib.Path('data/corpus_wiki_en_texte')\nd = {\"date\": \"2026-11-01\", \"ligne\": \"Données\", \"langue\": \"en\",\n     \"na … [2373 caractères tronqués]`
+
+  ```
+1105983956 data/corpus_wiki_en_texte/test.txt
+19973178792 data/corpus_wiki_en_texte/train.txt
+ 1110966308 data/corpus_wiki_en_texte/val.txt
+22190129056 total
+manifeste écrit reports/corpus-wiki-en-texte.json
+check en 1694437
+Mem:             125          24          75           5          32         101
+  ```
+

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (31)
+## Commits du jour (32)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -39,6 +39,7 @@
 | 21:21 | `8dff8b7f` | B13 — LE PROFESSEUR COMPLET : 56 ÉTATS-Q, IL ÉCHOUE ENCORE SEUL ; 28/28 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 | 21:24 | `d0c231ae` | B13 — LA POLITIQUE SANS NONE : 56 ÉTATS-Q, ELLE TOURNE 200 PAS ; 29/29 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 22:30 | `87516306` | JOURNAL — LA NUIT N2 : DU CORPUS PROPRE AU CORPUS RÉEL | `README.md`, `apprentissage.md`, `nuit-n2.md` (+6) |
+| 22:32 | `7367b314` | B13 — LE CURRICULUM OPEN : 74 ÉTATS-Q, BRUIT BUT/9 ET STABLE BUT/8 ; 32/32 | `README.md`, `apprentissage.md`, `attention.md` (+14) |
 
 ## Chiffres du jour
 

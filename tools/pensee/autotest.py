@@ -514,6 +514,16 @@ def t29_ouverte() -> tuple[bool, str]:
                          f"({essais} essais), stable but/{pas_s} pas")
 
 
+def t30_graines() -> tuple[bool, str]:
+    """La robustesse : 5 graines, 5/5 sur le bruit et 5/5 sur la porte stable."""
+    from .graines import executer
+    lignes = executer()
+    bruits = sum(1 for l in lignes if l["sto_but"])
+    stables = sum(1 for l in lignes if l["stable_but"])
+    return (bruits == len(lignes) and stables == len(lignes) and len(lignes) == 5,
+            f"graines : {bruits}/5 bruits, {stables}/5 stables")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -542,7 +552,8 @@ def main() -> int:
               ("T26 politique sans None", t26_sans_none()),
               ("T27 mesure corrigée", t27_correction()),
               ("T28 audit des mesures", t28_audit()),
-              ("T29 curriculum open", t29_ouverte())]
+              ("T29 curriculum open", t29_ouverte()),
+              ("T30 robustesse sur 5 graines", t30_graines())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

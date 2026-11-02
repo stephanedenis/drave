@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-graines.md`](rapport-pensee-graines.md) | **B13** — la robustesse sur 5 graines : 5/5 bruits, 5/5 stables, **33/33** |
 | [`rapport-pensee-ouverte.md`](rapport-pensee-ouverte.md) | **B13** — le curriculum `open` : 74 états-Q, bruit but/9, stable but/8, **32/32** |
 | [`rapport-pensee-audit.md`](rapport-pensee-audit.md) | **B13** — l'audit des mesures : 15/15 cohérentes, la politique minute ne transfère pas au bruit, **31/31** |
 | [`rapport-pensee-correction.md`](rapport-pensee-correction.md) | **B13** — la mesure corrigée : bug de `seule_minute`, 4 politiques à but/8, 4 fiches corrigées, **30/30** |
