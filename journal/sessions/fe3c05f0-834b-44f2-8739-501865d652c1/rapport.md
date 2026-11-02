@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 34.9 h |
-| Tours | 357 |
-| Messages | 2140 |
-| Appels d'outils | 1420 |
+| Durée | 35.0 h |
+| Tours | 358 |
+| Messages | 2144 |
+| Appels d'outils | 1422 |
 | Fichiers touchés | 26 |
-| Commandes | 1256 |
+| Commandes | 1258 |
 | Sous-agents | 0 |
 | Commits | 79 |
 | Compactages de contexte | 4 |
@@ -741,6 +741,8 @@
 **Tour 356** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 357** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 358** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8377,6 +8379,27 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 357 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
+*2 appels d'outils.* Actions notables :
+
+- bash — Wait 7 min then check OCR progress
+- bash — Check 17th book progress
+
+**Synthèse produite :**
+
+⏵ Round 345 : 16e livre (metapatterns, doublon) en OCR à 280/373 pages
+
+**Round 345/1000 — le 16e livre est à 75 % (280/373 pages).**
+
+- **`tesseract`** lit la page **280/373** du `metapatterns` (le doublon du 14e) ; la fin vers **03 h 39**, puis le rejet par la déduplication.
+- **Le corpus reste : 14 livres, 4 864 pages, 11 528 066 caractères** ; le train **11 642 918 octets**.
+- **Le coût des doublons** : ~15 min d'OCR par copie, la déduplication ne tranchant qu'après — la limite est nommée dans la fiche.
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le 16e s'achève ; le goal reste actif.
+
+### Tour 358 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
 *1 appels d'outils.* Actions notables :
 
 - bash — Wait 7 min then check OCR progress
@@ -8456,7 +8479,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1216 autres
+- … et 1218 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8584,7 +8607,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ## 5. Erreurs rencontrées
 
-109 sorties en erreur ou divergentes. Les premières :
+110 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

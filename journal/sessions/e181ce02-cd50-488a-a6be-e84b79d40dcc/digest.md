@@ -24510,3 +24510,93 @@ COMMIT OK 1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichi … [430 caractères tronqués]`
+
+  ```
+disk 489 578
+  revue de documentation · 489 fiche(s) · 578 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-924]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-924", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[master 87cb9caa] ÉTAT — COMPTEURS RÉELS (488/578)
+ 16 files changed, 83 insertions(+), 32 deletions(-)
+87cb9caa ÉTAT — COMPTEURS RÉELS (488/578)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Courbe sur 20 graines : 20 % à 0,35, 100 % à 0,41, seuil ~0,41 ; 86/86
+
+Le round 87 du goal est livré : la courbe sur **20 graines** corrige le balayage à 5 — le taux réel de 0,35 est **20 %**, pas 0 %. Commit **`64d4f399`** (+ compteurs `87cb9caa`).
+
+## La courbe sur 20 graines
+
+Même monde que T76 (look à l'épisode 3000), facteurs 0,35 → 0,50, **20 graines**, 5 exécutions.
+
+| facteur | buts | taux |
+|---|---:|---:|
+| 0,35 | 20/100 | 0,20 |
+| 0,36–0,38 | 70–75/100 | 0,70–0,75 |
+| 0,39–0,40 | 95/100 | 0,95 |
+| **0,41** | **100/100** | **1,00** |
+| 0,42–0,44 | 100/100 | 1,00 |
+| **0,45** | **95/100** | **0,95** |
+| 0,46–0,50 | 100/100 | 1,00 |
+
+**Ce que ça dit** :
+
+- **Le seuil est ~0,41** : 100 % à 0,41 ; 95 % à 0,39–0,40 ; 70–75 % à 0,36–0,38 ; 20 % à 0,35.
+- **La courbe est graduée** : pas de marche nette, une montée de 20 % à 100 % en six pas.
+- **Le 0/25 de T73 était un échantillon** : 5 graines sur 0,35 ne suffisent pas à distinguer 0 % de 20 % ; les 20 graines le font.
+- **Le creux de 0,45 est réel mais faible** (95 %) : le bord reste instable, sans casser la tendance.
+- **La négative reste** : 0,35 ne fait que 20 %.
+
+## L'état
+
+- Fiche : [`rapport-pensee-courbe20.md`](../../reports/rapport-pensee-courbe20.md) ; JSON [`pensee-courbe20.json`](../../reports/pensee-courbe20.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T83 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **86/86 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **489 fiches / 578 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `rapport-n2-anglais-34m.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- L'autotest prend **~16 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **20 exécutions par graine** : resserrer les intervalles au bord.
+2. **Le correctif structurel** : la phase dans l'état (T79) — la leçon de la série.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round resserre le bord avec **20 exécutions par graine**.
+
+
+## Tour 101
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 88/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/graines.py'); t=p.read_text()\nt=t.replace('''def main() -> int:''',\n'''def executer_bord_fin(graines: int = 20, runs: int = 20) -> list[dic … [1689 caractères tronqués]`
+
+  ```
+87cb9caa ÉTAT — COMPTEURS RÉELS (488/578)
+ok
+graine 4  Q  72  bruit True/8 pas (1 essais)  stable True/8 pas
+facteur 0.38  292/400 buts
+facteur 0.39  380/400 buts
+facteur 0.40  380/400 buts
+facteur 0.41  400/400 buts
+facteur 0.42  400/400 buts
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T83 la courbe élargie             5 graines : ×0,35 0/25, ×0,41 25/25\\n\",\n\"  T83 la courbe élargie             5 grain … [1133 caractères tronqués]`

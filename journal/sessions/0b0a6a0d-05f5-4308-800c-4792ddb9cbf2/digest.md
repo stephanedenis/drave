@@ -17566,3 +17566,84 @@ fatal: cannot lock ref 'HEAD': is at 64d4f399b62beebe0349e4252d7d93d14a12d0b4 bu
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do export GIT_INDEX_FILE=/tmp/index.n2; git read-tree HEAD 2>/dev/null && git add journal/2026-11-01/nuit-n2.md 2>/dev/null && git commit -q -m \"JOURNAL — LA FIN DE NUIT : L'ANGLAIS, LE PROFESSEUR, LA STRUCTURE\n … [523 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1045]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1045", "timeout_ms": 300000, "wait": true}`
+
+  ```
+course 1
+On branch master
+Your branch is ahead of 'origin/master' by 157 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+  (commit or discard the untracked or modified content in submodules)
+	modified:   docs/implantation/bloc-linguistique.md
+	modified:   journal/2026-11-02/README.md
+	modified:   journal/2026-11-02/apprentissage.md
+	modified:   journal/2026-11-02/attention.md
+	modified:   journal/2026-11-02/distribue.md
+	modified:   journal/2026-11-02/docs.md
+	modified:   journal/2026-11-02/memoire.md
+	modified:   journal/2026-11-02/mesures.md
+	modified:   journal/2026-11-02/portes.md
+	modified:   journal/README.md
+	modified:   journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md
+	modified:   journal/sessions/MANIFEST.md
+	modified:   journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+	modified:   journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+	modified:   reports/native-generation.json
+	modified:   reports/rapport-ocr-pdf.md
+	modified:   tools/distiller_budget.py
+	mod
+… [2873 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1042 (bash: sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/C-g1.log 2>/dev/null; tail -1 work/n2j/C-g2.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git ls-tree HEAD reports/ | grep -c \"rapport-n2\"; git ls-tree HEAD reports/ | grep \"rapport-n2\" | awk '{print $4}' | head -20; echo \"=== untracked ===\"; git status --short reports/ | head -10", "description": "Check which N2 re … [21 caractères tronqués]`
+
+  ```
+21
+reports/rapport-n2-34m-distille.md
+reports/rapport-n2-anglais-distille.md
+reports/rapport-n2-anglais.md
+reports/rapport-n2-budget.md
+reports/rapport-n2-canal.md
+reports/rapport-n2-capacite-34m.md
+reports/rapport-n2-capacite-reelle.md
+reports/rapport-n2-capacite.md
+reports/rapport-n2-combine.md
+reports/rapport-n2-corpus-elargi.md
+reports/rapport-n2-corpus-reel.md
+reports/rapport-n2-distillation-reelle.md
+reports/rapport-n2-distillation.md
+reports/rapport-n2-diversite.md
+reports/rapport-n2-hierarchie.md
+reports/rapport-n2-longueur-reelle.md
+reports/rapport-n2-longueur.md
+reports/rapport-n2-multilingue-capacite.md
+reports/rapport-n2-multilingue-distille.md
+reports/rapport-n2-multilingue.md
+=== untracked ===
+ M reports/native-generation.json
+ M reports/rapport-ocr-pdf.md
+?? reports/corpus-wiki-it-texte-contamination.json
+?? reports/corpus-wiki-it-texte.json
+?? reports/ocr-pdf-contamination.json
+?? reports/pensee-bord-fin.json
+?? reports/pensee-partielle.json
+?? reports/rapport-n2-anglais-34m.md
+?? reports/rapport-n2-echantillon.md
+?? reports/rapport-n2-fenetre-r1.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d{2} h \\d{2} HNE \\(heure locale, EST\\)\\.\\*\\*\",\n           \"**Mis à jour : … [1397 caractères tronqués]`
