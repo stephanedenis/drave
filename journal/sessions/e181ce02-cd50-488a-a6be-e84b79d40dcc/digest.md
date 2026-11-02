@@ -20604,3 +20604,49 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T57 la bascule fréquente         1/50 : 20/20 buts, v final ≈ 0,78\\n\",\n\"  T57 la bascule fréquente         1/50 : 20/2 … [1318 caractères tronqués]`
+
+  ```
+ok
+  ✅ T56 alternance aléatoire chaotique : 20/20 buts, v final 0.12, 8.0 pas
+  ✅ T57 bascule fréquente  frequent : 20/20 buts, v final 0.78, 8.0 pas
+  ✅ T58 bascule très fréquente rapide : 20/20 buts, v final 0.28, 9.4 pas
+  61/61 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-rapide.md <<'MD'\n# B13 — la bascule très fréquente : 1/10, 20/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **61/61 portes** : la fiabilité bascul … [6448 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 459 fiche(s) · 552 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2806 mots > budget 2800 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-bouge.md`](rapport-pensee-bouge.md) | **B13** — la porte qui bouge : horloge `t % 6`, A* 28 nœuds, politique but … [618 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 459 fiche(s) · 552 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-rapide.md reports/pensee-rapide.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md d … [495 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-773]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-773", "timeout_ms": 600000, "wait": true}`

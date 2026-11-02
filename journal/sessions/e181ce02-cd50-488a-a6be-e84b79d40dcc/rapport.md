@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 31.9 h |
 | Tours | 75 |
-| Messages | 1051 |
-| Appels d'outils | 952 |
+| Messages | 1053 |
+| Appels d'outils | 954 |
 | Fichiers touchés | 25 |
-| Commandes | 772 |
+| Commandes | 773 |
 | Sous-agents | 2 |
-| Commits | 94 |
+| Commits | 95 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3989,12 +3989,14 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse la bascule à **1
 
 ### Tour 75 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Tester la bascule très fréquente
 - bash — Ajouter la porte T58 (bascule très fréquente)
 - bash — Écrire la fiche de la bascule très fréquente
 - bash — Trim README et portes
+- bash — Committer la bascule très fréquente
+- job_output
 
 ## 3. Travail accompli
 
@@ -4075,7 +4077,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse la bascule à **1
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 732 autres
+- … et 733 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4317,4 +4319,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse la bascule à **1
 - B13 — LES RUPTURES RÉPÉTÉES : 0,9/0,1 ALTERNÉS, v FINAL 0,14, 20/20, 8,0 PAS ; 58/58" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RUPTURES RÉPÉTÉES"
 - B13 — L'ALTERNANCE ALÉATOIRE : BASCULE 1/500, v FINAL 0,12, 20/20, 8,0 PAS ; 59/59" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ALTERNANCE ALÉATOIRE
 - B13 — LA BASCULE FRÉQUENTE : 1/50, v FINAL 0,78, 20/20, 8,0 PAS ; 60/60" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BASCULE FRÉQUENTE"; then echo "
+- B13 — LA BASCULE TRÈS FRÉQUENTE : 1/10, v FINAL 0,28, 20/20, 9,4 PAS ; 61/61" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "TRÈS FRÉQUENTE"; then echo
 
