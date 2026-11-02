@@ -1294,6 +1294,21 @@ PHRASES = [
     ('r422', 'en', "You don't come tomorrow?",
      [('You', 'PRON'), ('do', 'VERB'), ("n't", 'ADV'), ('come', 'VERB'), ('tomorrow', 'ADV'), ('?', 'PONCT')],
      [('GN', 'You', 'agent'), ('ADV', "n't", 'négation'), ('GV', 'come', 'prédicat'), ('ADV', 'tomorrow', 'temps')], {'acte': 'question', 'reponse': 'no'}),
+    ('r423', 'fr', 'Tu viens demain.',
+     [('Tu', 'PRON'), ('viens', 'VERB'), ('demain', 'ADV'), ('.', 'PONCT')],
+     [('GN', 'Tu', 'agent'), ('GV', 'viens', 'prédicat'), ('ADV', 'demain', 'temps'), ('PONCT', '.', 'ponctuation')], {'acte': 'assertion'}),
+    ('r424', 'fr', 'Il mange.',
+     [('Il', 'PRON'), ('mange', 'VERB'), ('.', 'PONCT')],
+     [('GN', 'Il', 'agent'), ('GV', 'mange', 'prédicat'), ('PONCT', '.', 'ponctuation')], {'acte': 'assertion'}),
+    ('r425', 'fr', 'Elle dort.',
+     [('Elle', 'PRON'), ('dort', 'VERB'), ('.', 'PONCT')],
+     [('GN', 'Elle', 'agent'), ('GV', 'dort', 'prédicat'), ('PONCT', '.', 'ponctuation')], {'acte': 'assertion'}),
+    ('r426', 'fr', 'Ils partent.',
+     [('Ils', 'PRON'), ('partent', 'VERB'), ('.', 'PONCT')],
+     [('GN', 'Ils', 'agent'), ('GV', 'partent', 'prédicat'), ('PONCT', '.', 'ponctuation')], {'acte': 'assertion'}),
+    ('r427', 'en', 'You come tomorrow.',
+     [('You', 'PRON'), ('come', 'VERB'), ('tomorrow', 'ADV'), ('.', 'PONCT')],
+     [('GN', 'You', 'agent'), ('GV', 'come', 'prédicat'), ('ADV', 'tomorrow', 'temps'), ('PONCT', '.', 'ponctuation')], {'acte': 'assertion'}),
 ]
 
 

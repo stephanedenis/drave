@@ -1,0 +1,13 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "134/134",
+ "paires": 5,
+ "contextuelle": 1.0,
+ "dirigee_sans_contexte": 0.0,
+ "limites": [
+  "lien codé en dur",
+  "règle de surface",
+  "heuristique seule"
+ ]
+}

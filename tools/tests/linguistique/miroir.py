@@ -160,6 +160,46 @@ def repondre_dirigee(a: bl.Annotation) -> str | None:
     return "oui" if lg == "fr" else "yes"
 
 
+def repondre_contextuel(a: bl.Annotation, a_prec: bl.Annotation | None = None) -> str | None:
+    """La réponse **contextuelle** : la phrase précédente tranche l'accord (fait constaté → non).
+
+    Si la phrase précédente est une assertion affirmative, la question négative **constate**
+    (réponse `non`/`no`) ; si elle nie, la question **demande l'accord** (`si`/`yes`).
+    """
+    acte = next((e.valeur for e in a.etiquettes
+                 if e.niveau == "pragmatique" and e.type == "acte"), "assertion")
+    if acte != "question":
+        return None
+    lg = getattr(a, "langue", "fr")
+    if lg not in ("fr", "en"):
+        lg = "fr"
+    if a_prec is None:
+        return repondre_dirigee(a)
+    nie_prec = any(e.niveau == "phrase" and e.type == "négation" for e in a_prec.etiquettes)
+    if nie_prec:
+        return "si" if lg == "fr" else "yes"
+    return "non" if lg == "fr" else "no"
+
+
+def fidelite_contextuelle(phrases: list[dict], bloc=None) -> dict:
+    """Le taux de questions pièges où la réponse contextuelle est juste."""
+    bloc = bloc or bl.Heuristique()
+    # les paires (assertion, question) : r423..r427 précèdent r418..r422
+    paires = [(f"r{418 + k}", f"r{423 + k}") for k in range(5)]
+    par_id = {p["id"]: p for p in phrases}
+    justes = 0
+    for qid, pid in paires:
+        if qid not in par_id or pid not in par_id:
+            continue
+        q = par_id[qid]
+        a = bloc.analyser(q["texte"], q["langue"])
+        a_prec = bloc.analyser(par_id[pid]["texte"], par_id[pid]["langue"])
+        ref = (q.get("pragma") or {}).get("reponse")
+        justes += juge_egal(repondre_contextuel(a, a_prec), ref)
+    return {"paires": len(paires), "justes": justes,
+            "taux": round(justes / max(1, len(paires)), 4)}
+
+
 def fidelite_dirigee(phrases: list[dict], bloc=None) -> dict:
     """Le taux de questions fermées où la réponse dirigée est juste (juge)."""
     bloc = bloc or bl.Heuristique()
