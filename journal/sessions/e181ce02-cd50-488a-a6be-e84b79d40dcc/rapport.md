@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 31.4 h |
-| Tours | 68 |
-| Messages | 987 |
-| Appels d'outils | 902 |
+| Tours | 69 |
+| Messages | 994 |
+| Appels d'outils | 907 |
 | Fichiers touchés | 25 |
-| Commandes | 730 |
+| Commandes | 735 |
 | Sous-agents | 2 |
 | Commits | 86 |
 | Compactages de contexte | 3 |
@@ -167,6 +167,8 @@
 **Tour 67** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 68** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 69** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3632,6 +3634,54 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait **dériver la fiabi
 - bash — Committer la fiabilité qui dérive
 - job_output
 
+**Synthèse produite :**
+
+⏵ Fiabilité qui dérive : v final 0,56, 20/20, 8,0 pas ; 54/54
+
+Le round 55 du goal est livré : la **fenêtre glissante** suit la dérive de fiabilité (10 % → 40 %) — v finit à 0,56, le but reste **20/20**. Commit **`33d76946`**.
+
+\## La fiabilité qui dérive
+
+Même monde que T50, mais la fiabilité **change** : 0,9 sur les 2000 premiers épisodes, 0,6 sur les 2000 suivants. `v` est le taux de looks corrects sur les **50 derniers** ; il suit la dérive.
+
+| dispositif | buts | v final | états-Q | pas |
+|---|---:|---:|---:|---:|
+| **dérive (fenêtre 50)** | **20/20** | **0,56** | 691 | 8,0 |
+| appris (T50, v stable) | 20/20 | 0,899 | 660 | 8,6 |
+| sans mise à jour (T45) | 0/20 | — | 398 | 200 |
+
+**Ce que ça dit** :
+
+- **La fenêtre suit la dérive** : v finit à 0,56, entre les deux régimes (0,9 puis 0,6) ; la politique n'est pas restée sur l'ancienne fiabilité.
+- **Elle réussit** : 20/20 en 8,0 pas ; la dérive ne casse pas la politique.
+- **Le coût est stable** (691 états, 8,0 pas) : la fenêtre n'ajoute que 50 nombres.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-derive.md`](../../reports/rapport-pensee-derive.md) ; JSON [`pensee-derive.json`](../../reports/pensee-derive.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T51 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **54/54 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **449 fiches / 545 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Dérive continue** : v glisse lentement ; la fenêtre doit suivre.
+2. **Fenêtre adaptative** : s'élargir quand v est stable, se resserrer quand il bouge.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **fenêtre adaptative** (s'élargir ou se resserrer selon la dérive).
+
+### Tour 69 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Tester la fenêtre adaptative
+- bash — Ajouter la porte T52 (fenêtre adaptative)
+- bash — Écrire la fiche de la fenêtre adaptative
+- bash — Corriger la date, le README et le T0
+- bash — Passer toutes les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3711,7 +3761,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait **dériver la fiabi
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 690 autres
+- … et 695 autres
 
 ## 4. Mesures et résultats marquants
 
