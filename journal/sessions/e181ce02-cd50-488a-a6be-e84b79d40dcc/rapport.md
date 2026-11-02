@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 32.9 h |
 | Tours | 88 |
-| Messages | 1165 |
-| Appels d'outils | 1040 |
+| Messages | 1167 |
+| Appels d'outils | 1042 |
 | Fichiers touchés | 25 |
-| Commandes | 844 |
+| Commandes | 845 |
 | Sous-agents | 2 |
-| Commits | 110 |
+| Commits | 111 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4658,7 +4658,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil d'ou
 
 ### Tour 88 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Tester le seuil d'oubli 0,2 / 0,1 / 0,05
 - bash — Ajouter la porte T71 (seuil d'oubli)
@@ -4667,6 +4667,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil d'ou
 - bash — Committer le seuil d'oubli
 - job_output
 - bash — Committer le seuil d'oubli (2e essai)
+- bash — Aligner le compteur JSON et committer
 
 ## 3. Travail accompli
 
@@ -4747,7 +4748,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil d'ou
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 804 autres
+- … et 805 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5005,4 +5006,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil d'ou
 - B13 — L'OUBLI TOTAL : 0/20 BUTS, LA MÉMOIRE EST NÉCESSAIRE ; 73/73" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "OUBLI TOTAL"; then echo "COMMIT OK $
 - B13 — LE SEUIL D'OUBLI : ×0,5 RÉUSSIT, ×0,2 ÉCHOUE, SEUIL DANS (0,2 ; 0,5] ; 74/74" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL D'OUBLI"; then
 - B13 — LE SEUIL D'OUBLI : ×0,5 RÉUSSIT, ×0,2 ÉCHOUE, SEUIL DANS (0,2 ; 0,5] ; 74/74" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL D'OUBLI"; then
+- ÉTAT — COMPTEUR JSON ALIGNÉ (566)" 2>&1 | tail -2; git log -1 --format='%h %s'
 

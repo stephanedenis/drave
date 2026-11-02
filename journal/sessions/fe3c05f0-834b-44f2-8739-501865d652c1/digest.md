@@ -30742,3 +30742,120 @@ ls: cannot access 'reports/ocr-pdf.json': No such file or directory
 [exit code: 2]
   ```
 
+### 🤖 Assistant
+
+⏵ Round 301 : CSS en OCR à 101/718 pages
+
+**Round 301/1000 — le 9e livre avance (101/718 pages).**
+
+- **`tesseract`** lit la page **101/718** du CSS ; à ~15-20 pages/min sur ce livre dense, il finira vers **02 h 05-02 h 10**.
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le commit `6eff8d8d`** porte la fiche des 8 livres (2 815 p, 7,69 M car., 951 fenêtres 8 Ko, val/test vides) et le contrôle `ocr-pdf-contamination.json`.
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45** ; **le surveillant** (PID 2136539) fera le **contrôle 8 Ko** final.
+- **Les portes d'état** ✅ (`204b5998`, 1 563 mots) ; **la revue** ✅ ; **le budget de docs** ✅.
+- **Les documents** sont **clos** (`5c27a3fb`) ; **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le CSS avance ; la livraison OCR est committée ; le goal reste actif.
+
+
+## Tour 314
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 302/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -2 /tmp/finaliser-ocr.log", "description": "Check CSS OCR and finisher", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephan … [18 caractères tronqués]`
+
+  ```
+01:31
+2283364 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-pua534bm/p-106.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+attente du manifeste ou du cutoff 06:45…
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 302 : CSS en OCR à 106/718 pages, finisher en attente
+
+**Round 302/1000 — le 9e livre avance (106/718 pages).**
+
+- **`tesseract`** lit la page **106/718** du CSS (~5 s/page sur ce livre dense) ; il finira vers **02 h 20-02 h 30**.
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le commit `6eff8d8d`** porte la fiche des 8 livres (2 815 p, 7,69 M car., 951 fenêtres 8 Ko, val/test vides) et le contrôle `ocr-pdf-contamination.json`.
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45** ; **le surveillant** (PID 2136539) fera le **contrôle 8 Ko** final.
+- **Les portes d'état** ✅ (`204b5998`, 1 563 mots) ; **la revue** ✅ ; **le budget de docs** ✅.
+- **Les documents** sont **clos** (`5c27a3fb`) ; **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le CSS avance ; la livraison OCR est committée ; le goal reste actif.
+
+
+## Tour 315
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 303/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract.*ocr-pdf\" | head -1; grep -n \"OCR\" docs/pilotage/roadmap.md | head -5; grep -n \"OCR\" docs/pilotage/plan-travail.md | head -3", "description": "Check OCR progress and roadmap/plan lines", "timeo … [76 caractères tronqués]`
+
+  ```
+01:31
+2283669 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-pua534bm/p-117.png stdout -l fra+eng --psm 3
+36:| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/OCR, documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (7 livres, 4,2 M) ; **genres** mesurés | **l'OCR complet** (159 scans), la préparation R1.1/R1.2 |
+225:| **R4 — les blocs structurels** | tableaux ✅, code ✅, maths ✅, vision/OCR 🧱 | extraction exacte, exécution, layout | R0 |
+290:| **R4.4** | **vision/OCR** : scans, figures, layout | 🔬 **mesuré sur scans simulés ; ouvert sur les scans réels** : 5 familles (photo **55,9 → 6,7 %** de WER, test **5,7 %**), **préservation 90–97 %** (4 familles, propre 96,7), **colonnes 89,4 → 0,5 %**, **tableaux 92,6 %** de cellules, **trois vrais scans** (7,10 % ; et l'**ordre des colonnes** prouvé : 15,3 % contre 98,0 % en ordre inverse) | 10 pages **scannées réelles** avec vérité humaine — **non atteinte** ; le fax 1 bit et l'exposant fusionné restent des limites 
+… [437 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 303 : CSS en OCR à 117/718 ; la roadmap D dit encore « 7 livres, 4,2 M »
+
+**Round 303/1000 — le CSS avance, et j'ai repéré la ligne D à corriger.**
+
+- **`tesseract`** lit la page **117/718** du CSS ; il finira vers **02 h 20-02 h 30**.
+- **La roadmap**, ligne 36 : « **OCR** (**7 livres, 4,2 M**) » — c'est l'état d'avant le 8e ; la mesure du journal donne **8 livres, 2 815 pages, 7 688 789 caractères**. La correction entre dans le lot de clôture (avec la fiche, l'état, le plan et le récit).
+- **Le commit `6eff8d8d`** porte la fiche des 8 livres et le contrôle `ocr-pdf-contamination.json` (951 fenêtres, val/test vides).
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45** ; **le surveillant** (PID 2136539) fera le **contrôle 8 Ko** final.
+- **Les portes d'état** ✅ (`204b5998`, 1 563 mots) ; **la revue** ✅ ; **le budget de docs** ✅.
+- **Les documents** sont **clos** (`5c27a3fb`) ; **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : la roadmap et le récit portent encore l'avant-8e ; le lot de clôture les alignera. Le goal reste actif.
+
+
+## Tour 316
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 304/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **job_list** `{}`
+
+  ```
+bash-9 [bash] killed — for t in "python3 tools/revue_documentation.py" "python3 tools/taille_documents.py" "python3 tools/verifie_en_cours.py" "python3 tools/verifie_journal.py" "python3 tools/verifier_schemas.py"; do echo "=== $t"; timeout 240 bash tools/toutes-les-portes.sh >/dev/null 2>&1; $t 2>&1 | tail -12; echo "[exit $?]"; done
+bash-91 [bash] completed — TESSERACT_PREFIX=/tmp/ocr-test/root timeout 600 bash tools/installer_ocr.sh 2>&1 | tail -5
+bash-179 [bash] completed — rm -rf work/r44/scans && timeout 1800 python3 tools/simuler_scan.py --sortie work/r44/scans --pages 10 --test 10 --graines 1 2>&1 | tail -6
+bash-186 [bash] completed — timeout 1800 python3 tools/mesurer_scans.py --pipelines brut --sortie work/r44/mesure-brut.json > work/r44/mesure-brut.log 2>&1; echo "[code $?]"; tail -4 work/r44/mesure-brut.log
+bash-202 [bash] completed — cat >> work/r44/journal.md <<'EOF'
+
+## 22:45 — baseline + premier prétraitement (dev, 10 pages)
+- baseline brut (dev) : propre 4,46 | photocopie 6,55 | papier 13,02 | fax 27,05 | photo 55,85
+- baseline brut (test) : propre 2,84 | photocopie 4,69 | papier 53,15 | fax 23,10 | photo 80,65
+- auto : photo 55,85→7,29 ; fax 27,05→21,93 ; papier 1
+… [41564 caractères tronqués]
+  ```
+
