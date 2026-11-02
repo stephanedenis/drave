@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**82 commits** · **3 session(s)** · **8 thème(s)**
+**83 commits** · **3 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -17,7 +17,7 @@
 | docs | 11 | [docs.md](docs.md) |
 | memoire | 8 | [memoire.md](memoire.md) |
 | mesures | 42 | [mesures.md](mesures.md) |
-| modele | 2 | [modele.md](modele.md) |
+| modele | 3 | [modele.md](modele.md) |
 | portes | 4 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -25,7 +25,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 37.4 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 37.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 37.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 37.1 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -114,6 +114,7 @@
 | 05:25 | `166896b4` | GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M) |
 | 05:29 | `0b31f485` | B13 — LES PIÈGES D'ANAPHORE : 10/12, LE PP LOCATIF ÉCHOUE, GOLD 328 ; 96/96 |
 | 05:37 | `cbfcdb86` | B13 — L'ANAPHORE CORRIGÉE : 12/12 EN IGNORANT LES PP ; 97/97 |
+| 05:43 | `0a343fbb` | N2.z (suite) — LE MEILLEUR MODÈLE CONFIRMÉ SUR DEUX GRAINES : 3,5250 EN DOMAINE |
 
 ## Le récit de la journée (écrit à la main)
 

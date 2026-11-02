@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 07 h 05 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 05 h 45 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -79,7 +79,7 @@
 - **A8** : **A8.0 : 19** ; **A8.3b refusé** (lot) ; **A8.3c/d** : lot 1≠≥2, threads innocents ; fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md), [`a83d`](../../reports/rapport-a83d-lot-threads.md).
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
-- **N2** : **N2.h** 3,09 ; **N2.j** 7,42 ; **N2.n** 3,94 ; **N2.o** 5,41 ; **N2.p** 4,00 ; **N2.q** 5,89 ; **N2.t** 5,58 ; **N2.r** 3,69 ; **N2.v** multi 34 M distillé **4,79** ; **S** : 7/7 séquences, 94 % ; **N2.w** : **3,77** ; **N2.z** : canal 34,3 M **3,53** (2 graines) ; **N2.y** : canal + KD 3,53 ; N4 **0/40** ; fiches
+- **N2** : **N2.h** 3,09 ; **N2.j** 7,42 ; **N2.n** 3,94 ; **N2.o** 5,41 ; **N2.p** 4,00 ; **N2.q** 5,89 ; **N2.t** 5,58 ; **N2.r** 3,69 ; **N2.v** multi 34 M distillé **4,79** ; **S** : 7/7 séquences, 94 % ; **N2.w** : **3,77** ; **N2.z** : canal 34,3 M **3,53** ; **N2.y** : canal + KD 3,53 ; N4 **0/40** ; fiches
   [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-anglais`](../../reports/rapport-n2-anglais.md), [`n2-canal`](../../reports/rapport-n2-canal.md).
 - **Pensée — state store v0** : 6/6 portes (BFS, greedy, A*, MCTS-lite), jouet des cruches ; fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine AC-3, alpha-bêta, DRVF.
 

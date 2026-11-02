@@ -18302,3 +18302,310 @@ OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-n2-canal-34m.md'); s = p.read_text()\ns = s.replace(\"\"\"> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : le canal de structure, qui\n> valait ** … [2362 caractères tronqués]`
+
+  ```
+fiche ok
+en-cours ok
+  T0 max : 4002 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-1087]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Initial: "continue" — resume autonomous work on the Drave/Qtrinet project (N2 line), per `AGENTS.md` (French conventions, gates, état page, commits carrying numbers).
+- Then: check the state of other DSH sessions and update `docs/pilotage/en-cours.md` and `docs/pilotage/roadmap.md`.
+- Then: "fais les deux en parallèle" — run both N2 (real corpus) and Pensée (state store v0) in parallel.
+- Then: "peut-on s'éloigner du modèle octet et modèle token pour aller vers un modèle qui voit la structure du texte en surface avant" — surface-structure/perception-like models.
+- Then: "en tant que programmeur, j'apprécie la coloration du code… On pourrait imaginer un outil semblable pour la linguistique… profitable d'avoir un tel outil en entrée de notre modèle pour accélérer son apprentissage et valider la qualité en sortie."
+- Then: "allons-y, mais créons d'abord un outil pour humain dans un projet distinct (submodule git) qui permet d'afficher en web un ensemble de structures d'interprétation candidates" + submit to DeepSeek + build a corpus bank.
+- Then: "lance le serveur et continue" — launch the structures server and continue.
+- Then: "Les phrases présentées sont ambigues… on doit donc avoir un niveau pragmatique pour trancher et conserver les 2 sens."
+- Then: "ça va prendre des contextes plus larges pour trancher sur les interprétations ambigues."
+- Then: "peux-tu commencer l'entraînement avec des phrases non ambiguës et étudier les effets sur la qualité du bloc linguistique."
+- Then: "utilise reports/inventaire-donnees-entrainement.md" — use the local data inventory (132 GB Wikipedia).
+- Then: "continue avec de très gros corpus multilingues" — multilingual training.
+- Then: "lire docs/pilotage/plan-travail.md et avancer" — read the work plan and advance.
+- Current mandate: "suis le plan, continue jusqu'à 8h demain matin" — follow the plan autonomously until 08:00 on 2026-11-02.
+
+## Key Technical Concepts
+- Byte-level LM `drave-n0` (11,472,792 params; `NativeConfig(d_model=224, n_blocks=6, expert_hidden=288, n_experts=8, top_k=2, kwta=0.25, window=256, max_pos=2048, thought_steps=2, early_blocks=(1,3,5))`); local attention window 256; early heads; absolute positional embeddings; `forward(ids, pos_debut=0, canal=None)`.
+- 21.65M variant: `d_model=296, expert_hidden=416` (`--dim 296 --expert-hidden 416`).
+- Distillation: teacher `route-teacher` (23.57M, `tools/entrainer_moteur.py --famille route --dim 384 --couches 6 --tetes 4 --cache 752 --experts 8 --k 2`), KD T=2 α=0.7 + CE + early/local heads.
+- Clean corpus: `tools/corpus_propre.py` (Rabin–Karp 96-byte shingles, chunk 8192, split val/test 1/20, manifest, contamination check `--verif-max`).
+- Eval: `tools/eval_n2_propre.py --corpus-dir <dir> --decomposition --longueurs --sortie file.json` (val/test/litterature/litterature_propre/anglais/wikitext2/permute).
+- Position randomization `--positions-aleatoires N` (base trainer added; distiller had it).
+- Structure channel: `tools/canal_structure.py` (6 classes/byte: content/grammatical/space/punct/digit/frontier), `embed_canal` (6×224 = 1,344 params), `--canal` + `--canal-val` in trainer and distiller; placebo = shuffled class file.
+- Sub-project `drave-structures` (git submodule at `tools/structures`): stdlib HTTP server, 7 phrases/14 candidates, pragmatic statuses (resolu/compatible/exclu/double_sens), context levels 0–4, minimal level metric, generator, LLM (DeepSeek via `DEEPSEEK_API_KEY`, else baseline), export JSONL, 15 tests.
+- Project gates: `bash tools/toutes-les-portes.sh` (read `awk '$2 != 0' registre.txt`), `python3 tools/revue_documentation.py`, `tools/taille_documents.py` (T0 ≤ 4000 = AGENTS + en-cours + max non-T1 methode doc), `tools/verifie_en_cours.py` (≤2000 words, required bullets), `tools/sessions.py --check`, `tools/verifie_journal.py`, `tools/verifier_schemas.py`, `tools/surveille_sessions.py`.
+- Git races: commit fails with `cannot lock ref 'HEAD'` → `git reset -q`, re-add explicit p
+… [6325 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Initial: "continue" — resume autonomous work on the Drave/Qtrinet project (N2 line), per `AGENTS.md` (French conventions, gates, état page, commits carrying numbers).
+- Then: check the state of other DSH sessions and update `docs/pilotage/en-cours.md` and `docs/pilotage/roadmap.md`.
+- Then: "fais les deux en parallèle" — run both N2 (real corpus) and Pensée (state store v0) in parallel.
+- Then: "peut-on s'éloigner du modèle octet et modèle token pour aller vers un modèle qui voit la structure du texte en surface avant" — surface-structure/perception-like models.
+- Then: "en tant que programmeur, j'apprécie la coloration du code… On pourrait imaginer un outil semblable pour la linguistique… profitable d'avoir un tel outil en entrée de notre modèle pour accélérer son apprentissage et valider la qualité en sortie."
+- Then: "allons-y, mais créons d'abord un outil pour humain dans un projet distinct (submodule git) qui permet d'afficher en web un ensemble de structures d'interprétation candidates" + submit to DeepSeek + build a corpus bank.
+- Then: "lance le serveur et continue" — launch the structures server and continue.
+- Then: "Les phrases présentées sont ambigues… on doit donc avoir un niveau pragmatique pour trancher et conserver les 2 sens."
+- Then: "ça va prendre des contextes plus larges pour trancher sur les interprétations ambigues."
+- Then: "peux-tu commencer l'entraînement avec des phrases non ambiguës et étudier les effets sur la qualité du bloc linguistique."
+- Then: "utilise reports/inventaire-donnees-entrainement.md" — use the local data inventory (132 GB Wikipedia).
+- Then: "continue avec de très gros corpus multilingues" — multilingual training.
+- Then: "lire docs/pilotage/plan-travail.md et avancer" — read the work plan and advance.
+- Current mandate: "suis le plan, continue jusqu'à 8h demain matin" — follow the plan autonomously until 08:00 on 2026-11-02.
+
+## Key Technical Concepts
+- Byte-level LM `drave-n0` (11,472,792 params; `NativeConfig(d_model=224, n_blocks=6, expert_hidden=288, n_experts=8, top_k=2, kwta=0.25, window=256, max_pos=2048, thought_steps=2, early_blocks=(1,3,5))`); local attention window 256; early heads; absolute positional embeddings; `forward(ids, pos_debut=0, canal=None)`.
+- 21.65M variant: `d_model=296, expert_hidden=416` (`--dim 296 --expert-hidden 416`).
+- Distillation: teacher `route-teacher` (23.57M, `tools/entrainer_moteur.py --famille route --dim 384 --couches 6 --tetes 4 --cache 752 --experts 8 --k 2`), KD T=2 α=0.7 + CE + early/local heads.
+- Clean corpus: `tools/corpus_propre.py` (Rabin–Karp 96-byte shingles, chunk 8192, split val/test 1/20, manifest, contamination check `--verif-max`).
+- Eval: `tools/eval_n2_propre.py --corpus-dir <dir> --decomposition --longueurs --sortie file.json` (val/test/litterature/litterature_propre/anglais/wikitext2/permute).
+- Position randomization `--positions-aleatoires N` (base trainer added; distiller had it).
+- Structure channel: `tools/canal_structure.py` (6 classes/byte: content/grammatical/space/punct/digit/frontier), `embed_canal` (6×224 = 1,344 params), `--canal` + `--canal-val` in trainer and distiller; placebo = shuffled class file.
+- Sub-project `drave-structures` (git submodule at `tools/structures`): stdlib HTTP server, 7 phrases/14 candidates, pragmatic statuses (resolu/compatible/exclu/double_sens), context levels 0–4, minimal level metric, generator, LLM (DeepSeek via `DEEPSEEK_API_KEY`, else baseline), export JSONL, 15 tests.
+- Project gates: `bash tools/toutes-les-portes.sh` (read `awk '$2 != 0' registre.txt`), `python3 tools/revue_documentation.py`, `tools/taille_documents.py` (T0 ≤ 4000 = AGENTS + en-cours + max non-T1 methode doc), `tools/verifie_en_cours.py` (≤2000 words, required bullets), `tools/sessions.py --check`, `tools/verifie_journal.py`, `tools/verifier_schemas.py`, `tools/surveille_sessions.py`.
+- Git races: commit fails with `cannot lock ref 'HEAD'` → `git reset -q`, re-add explicit paths, re-commit.
+
+## Files and Code
+- `docs/pilotage/plan-travail.md` — 4 sessions (N2, L, S, D/R/A) + hub; territories, cadence; N2 territory extended with `reports/rapport-n2-*`, `corpus-wiki-propre.json`, `corpus-multi-propre.json`, `data/wiki_fr/`, `data/wiki_multi/`, `tools/entrainer_native.py`, `work/n2j/`, `work/n2k/`.
+- `docs/pilotage/en-cours.md` — T0 4000; N2 bullet: `N2.h/N2.i` 3,09/12,93/33,83; `N2.j` 186 Mo 7,42/12,41; `N2.k` fr 5,68 angl 6,30; `N2.j2` 256 9,28→4,49; `N2.j3` 21,65 M 4,20; `N2.l` 4,17 (placebo 4,52); `N2.j4` 3,88/7,18/12,30; `N2.m` 4,42 (10 langues 6,12); S bullet (generator subordonnées/coordination, pragmatique, export corpus, 15 tests, 7 phrases).
+- `docs/pilotage/roadmap.md` — N2 row updated with N2.i/j/j2/j3/j4/k/l/m; S row updated (niveaux 0–4, analyseur, rôles nominaux next).
+- `tools/entrainer_native.py` — added `--positions-aleatoires N`, `--canal`, `--canal-val`, `--init`; `lot()` returns `(x,y,c)`; `ppl()` supports canal.
+- `tools/native_model.py` — `embed_canal = nn.Embedding(6, d_model)`; `canal=None` in `forward`/`forward_jusqua`.
+- `tools/distiller_budget.py` — added `--canal`/`--canal-val`, canal through `lot_fr`/`ppl`/loop.
+- `tools/canal_structure.py` — `canal(texte)` (surrogateescape, `newline=""` to preserve `\r`), `canal_frontieres`; aligned 1:1 on 186,089,472 bytes.
+- `tools/structures/` (submodule, master `a7d41a3`) — `generateur.py` (SUB vs REL, coordination, NP≤3 MOTs), `exporter_corpus.py`, `serveur.py`, `llm.py`, `donnees/phrases.json` (7 phrases/14 candidates incl. "Le canard est prêt à manger."), tests (15).
+- Reports: `rapport-n2-propre.md`, `n2-diversite.md`, `n2-longueur.md`, `n2-combine.md`, `n2-capacite.md`, `n2-corpus-elargi.md`, `n2-corpus-reel.md`, `n2-longueur-reelle.md`, `n2-capacite-reelle.md`, `n2-multilingue.md`, `n2-canal.md`, `n2-distillation-reelle.md`, `n2-anglais.md`, `rapport-pensee-v0.md`, `rapport-typoglycemie.md`.
+- Manifests: `corpus-wiki-propre.json` (186.09 MB train), `corpus-multi-propre.json` (236.99 MB train), `corpus-wiki-en-propre.json` (204.56 MB train), `corpus-repo-propre.json`.
+- Work dirs: `work/n2j/` (wiki FR: base-wiki, base-wiki-pos, base-wiki-cap, base-canal, base-placebo, W-g1/g2/g3, route-wiki), `work/n2k/` (multi/EN: base-multi, base-en, base-fr21, route-en, route-multi, E-g*, M-g*, C-g*, eval JSONs, `extrait.py`, `extrait_en.py`, `evalue.py`, `evalue_un.py`).
+
+## Errors and Fixes
+- `ppl` unpack error (`too many values to unpack`) after adding canal → fixed all `lot(...)` call sites (train loop, ppl, precision loop).
+- Canal misaligned (94/144 bytes short) → `read_text` universal-newlines ate `\r`; fixed with `newline=""` + `surrogateescape`.
+- `--init` missing in base trainer → added.
+- Git race `cannot lock ref 'HEAD'` → `git reset -q`, re-add, retry (once swept another session's files into my commit).
+- Local submodule add blocked (`transport 'file' not allowed`) → `git -c protocol.file.allow=always submodule add`.
+- `sessions.py` heartbeat "illisible" for `HNE` → use `EST`.
+- T0 budget repeatedly exceeded → trim state bullets (~1-6 words) each time.
+
+## Pending Jobs
+- EN distillation: E-g1 and E-g2 done (~21:00); E-g3 running on GPU0 (started ~21:00, ~25 min).
+- Multi distillation: M-g1 running on GPU1 (started ~21:00); M-g2 queued on GPU1.
+- Canal distillation: C-g1 queued on GPU0 after `work/n2k/en0.termine`; C-g2 queued on GPU1 after `work/n2k/multi1.termine`.
+- Then: eval E-g3 (EN val + `data/wiki_multi/en_val.txt`), M-g1/M-g2 (multi val + EN val), C-g1/C-g2 (with `work/n2j/evalue_canal.py`); write fiches N2.n (EN distillation) and N2.o (multilingual distillation), maybe N2.p (canal distillation); update state/roadmap; commit.
+
+## Current Work
+- At 21:00: E-g1.pt, E-g2.pt written; E-g3 initialised (`# init work/n2k/base-en.pt · manquants [] · graine 3 · décalage 20000038`); M-g1 initialised (`# init work/n2k/base-multi.pt · manquants ['embed_canal.weight'] · graine 1 · décalage 0`).
+- Base references: FR base-wiki-pos 4,3893 val / 7,90 litt / 13,72 angl / 5,67 à 512; EN base-en 4,4234 (own val) / 4,6739 (multi EN val) / 5,2967 (anglais OOD); multi base 4,0284 (own val) / 6,30 (EN val) / 5,68 (FR val); FR distilled mean 3,8761 / 7,18 / 12,30 / 12,89 / 6,41 repo val.
+- Typoglycemia: base-wiki-pos 4,4229 → 24,58 (×5,6) → 44,13 (×10,0); base-canal 4,1569 → 23,46 → 42,72; W-g1 3,8943 → 26,38 (×6,8) → 45,46 (×11,7).
+- Server `tools/structures/serveur.py` running on http://127.0.0.1:8765 (7 phrases, user's validations in untracked `donnees/validations.jsonl`).
+
+## Next Step
+- Wait for E-g3 (~21:25), eval E-g3 on `data/wiki_en/propre` and `data/wiki_multi/en_val.txt`, then write `reports/rapport-n2-distillation-anglaise.md` (3-seed means vs base-en 4,4234), update en-cours/roadmap, commit.
+
+## Critical Context
+- Experiment results so far: corpus réel 186 Mo → OOD ×1,7–2,6; positions 0–384 → 256 9,28→4,49, 512 13,37→5,67 (cost +0,36); capacity 21,65 M on 186 Mo pays −0,19 (vs −0,06 at 3,24 Mo); multilingual 10 langues: fr 5,68 (+57 % vs 3,62 equal-data), en 6,30, ja 5,74, zh 9,65; English alone 4,42 vs multi 6,12 on same text (−1,7); canal 4,17 vs 4,39 (placebo 4,52, ablation 9,60, same ×5,6 scramble); distillation FR 4,39→3,88 (3 seeds ±0,004).
+- Unambiguous filter (N2.j): 29,8 % repo / 15,4 % wiki sentences, short (55 vs 153 chars); 345 KB bases nonambigu 11,81 vs témoin 10,11; curriculum 2k unamb + 18k wiki degrades all five measures → filter rejected, annotate instead.
+- User preferences: French prose, evidence-based ("sans contrôle négatif, ce n'est pas un résultat"), keep context ≤4000 words, state page short (≤2000), gated commits, don't touch other sessions' files (`tools/docwatch`, `tools/graphe_document_ocr.py`, `tools/mesurer_scans.py`, `reports/r44-*`, `tools/tests/linguistique/`).
+- Datasets (outside repo): `/home/stephane/Data13TB/stephane/data/wikipedia/db/*wiki_v14.db` (10 langues, 66 GB; `articles` table with `title, n_chars, n_words, summary, v14_json`), FR 2,755,035 articles / 7,0 GB text; extraction used `OFFSET 200000` (multi) and `OFFSET 300000` (EN) to avoid overlap.
+- GPU: 2×16 GB; both busy until ~22:15 with E/M/C queues.
+- Deadline: 08:00 on 2026-11-02; goal `goal-7e5e03db-88c5-4373-9ab3-8ed001aa777a` armed with this objective; keep committing fiches + state updates every ~30–60 min.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+background job bash-1084 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/base-34m-canal-g2.pt 2>/dev/null && echo OK; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 900 ~/gpu-env/bin/python work/n2j/evalue_canal.py work/n2j/base-34m-canal-g2.pt 2>&1 | grep -v Loading | tail -1) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des alternatives ayant des architectures différentes. e.g. Blocs neuronaux là où l'intuition est un avantage, blocs computationnels classiques pour les opérations où l'informatique classique est plus fiable et performante.
+
+Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
+les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
+**distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
+volonté** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+- **job_output** `{"job_id": "bash-1087", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+0a343fbb N2.z (suite) — LE MEILLEUR MODÈLE CONFIRMÉ SUR DEUX GRAINES : 3,5250 EN DOMAINE
+05:44
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1087 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'
+import pathlib
+p = pathlib.Path('reports/rapport-n2-canal-34m.md'); s = p.read_text()
+s = s.replace("""> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : le canal de structure, qui
+> valait **−0,22** à 11,47 M (N2.l), vaut **−0,48** à 34,3 M : la base passe de **3,9973** à
+> **3,5131** (128 octets), **3,4836** (256), **3,6558** (512) — la **meilleure PPL de la nuit**,
+> devant le 34,3 M distillé (3,6852, N2.r). Le gain du canal **croît avec la capacité**.""",
+"""> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : le canal de structure, qui
+> valait **−0,22** à 11,47 M (N2.l), vaut **−0,47** à 34,3 M : la base passe de **3,9973** à
+> **3,5250** (moyenne de **2 graines** : 3,5131 et 3,5369) à 128 octets, **3,4926** à 256,
+> **3,6632** à 512 — la **meilleure PPL de la nuit**, devant le 34,3 M distillé (3,6852, N2.r).
+> Le gain du canal **croît avec la capacité**, et il se reproduit d'une graine à l'autre (±0,012).""")
+s = s.replace("| **34,3 M avec canal** | **3,5131** | **3,4836** | **3,6558** | ×6,6 | ×11,2 |",
+              "| **34,3 M avec canal** (2 graines) | **3,5250** | **3,4926** | **3,6632** | ×6,5 | ×11,2 |")
+s = s.replace("**−0,48** à 34,3 M", "**−0,47** à 34,3 M")
+p.write_text(s); print('fiche ok')
+PY
+python3 - <<'PY'
+import pathlib
+p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()
+s = s.replace("**N2.z** : canal 34,3 M **3,51** ;", "**N2.z** : canal 34,3 M **3,53** (2 graines) ;")
+p.write_text(s); print('en-cours ok')
+PY
+python3 tools/taille_documents.py 2>&1 | grep -E "T0 max|✅|❌"; python3 tools/revue_documentation.py 2>&1 | tail -1; cat > /tmp/msg-z2.txt <<'EOF'
+N2.z (suite) — LE MEILLEUR MODÈLE CONFIRMÉ SUR DEUX GRAINES : 3,5250 EN DOMAINE
+
+La seconde graine du 34,3 M avec canal donne 3,5369 (la première : 3,5131) : moyenne 3,5250, écart
+±0,012. À 512 octets, 3,6632 (3,6558 puis 3,6705). Le meilleur modèle de la nuit est donc confirmé,
+devant le 34,3 M distillé (3,6852) et la combinaison canal + KD (3,5277).
+
+Le canal reste le levier principal à cette taille ; la distillation ne s'y ajoute pas.
+EOF
+for i in 1 2 3 4 5 6; do export GIT_INDEX_FILE=/tmp/index.n2; git read-tree HEAD 2>/dev/null; git add reports/rapport-n2-canal-34m.md docs/pilotage/en-cours.md 2>/dev/null; if git commit -q -F /tmp/msg-z2.txt 2>/dev/null; then echo "commit ok ($i)"; break; fi; echo "course $i"; sleep 5; done; unset GIT_INDEX_FILE; git log --oneline -1; date '+%H:%M') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.z** : canal 34,3 M **3,53** (2 graines) ;\", \"**N2.z** : canal 34,3 M **3,53** ;\")\ns = re.sub(r\"\\*\\*Mi … [825 caractères tronqués]`
