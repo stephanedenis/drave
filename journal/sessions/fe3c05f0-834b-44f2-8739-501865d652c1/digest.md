@@ -34199,3 +34199,45 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; tail -4 /tmp/ocr-cegep.log; ps -p 2644645 -o pid,etime= 2>/dev/null || echo \"CEGEP OCR fini\"; ls -la reports/ocr-pdf-cegep.json 2>&1; echo \"=== portes\"; ps -p 2459980 -o stat,etime= 2>/dev/null || echo \"p … [241 caractères tronqués]`
+
+  ```
+06:07
+  CEGEP · Exercices de synthèse Excel 2010 Fonctio · 43 p · 81675 car
+    PID            
+2644645       15:14
+ls: cannot access 'reports/ocr-pdf-cegep.json': No such file or directory
+=== portes
+STAT            
+S          39:56
+  porte-greffe           ✅                         868 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-harnais-invariants ✅                         113 s  ✅ porte harnais : installer une reparamétrisation laisse le modèle intact, et l'élagage
+  porte-homeostasie      ❌ code 2                    0 s    ❌ le LoRA de référence est absent : /tmp/n4/rang4-lora.pt
+29 /tmp/portes-1102-05h27/registre.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 366 : CEGEP 1er scan (15 min), portes 29/81 — 1 rouge connue (`/tmp/n4` absent)
+
+**Round 366/1000 — le CEGEP cherche ses scans ; les portes avancent.**
+
+- **Le CEGEP** : 1er scan (43 p, 81 675 car.) ; le processus tourne depuis **15 min** ; la détection continue vers les 4 autres scans (`--max-doc 5`).
+- **Les portes** : **29/81** au registre ; `porte-greffe` ✅ (868 s !), `porte-harnais-invariants` ✅ (113 s) ; **`porte-homeostasie` ❌ code 2** — « le LoRA de référence est absent : `/tmp/n4/rang4-lora.pt` » : c'est la **rouge connue** de l'environnement (le `/tmp/n4` d'une autre session), pas une régression de mes livraisons.
+- **Les commits** : `15f2c8f6` (OCR 20 livres), `166896b4` (genres 38,5), `bfe57da7` (chantiers D 20 livres).
+- **Le corpus OCR des livres** : 20 livres, 7 381 p, 15,36 M car., **8 Ko 0**, éval 0/40.
+
+**Le constat** : le CEGEP avance, les portes sont vertes hors la rouge connue ; le goal reste actif jusqu'à 8 h.
+
+
+## Tour 379
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 367/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; tail -4 /tmp/ocr-cegep.log; cat /proc/2644645/io 2>/dev/null | head -2; ps -p 2644645 -o pid,etime= 2>/dev/null || echo \"CEGEP OCR fini\"; ls -la reports/ocr-pdf-cegep.json 2>&1; echo \"=== portes\"; ps -p 24 … [315 caractères tronqués]`

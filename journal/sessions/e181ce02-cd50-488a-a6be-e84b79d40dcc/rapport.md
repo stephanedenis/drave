@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 37.4 h |
-| Tours | 113 |
-| Messages | 1426 |
-| Appels d'outils | 1247 |
+| Durée | 37.5 h |
+| Tours | 114 |
+| Messages | 1434 |
+| Appels d'outils | 1253 |
 | Fichiers touchés | 25 |
-| Commandes | 1014 |
+| Commandes | 1019 |
 | Sous-agents | 2 |
-| Commits | 147 |
+| Commits | 148 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -257,6 +257,8 @@
 **Tour 112** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 113** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 114** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6026,6 +6028,54 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste les **chaînes lon
 - bash — Committer les chaînes longues
 - job_output
 
+**Synthèse produite :**
+
+⏵ Chaînes longues : 7/10, le rôle manque, gold 342 ; 99/99
+
+Le round 100 du goal est livré : les **chaînes longues** font tomber la règle du dernier nom à **7/10** — elle prend l'objet pour le sujet. Commit **`8e9d0c1d`**.
+
+\## Les chaînes longues
+
+| sous-ensemble | liens | justes | taux | échecs |
+|---|---:|---:|---:|---|
+| r301–r336 (court) | 20 | 20 | 1,00 | — |
+| **r337–r342 (long)** | **10** | **7** | **0,70** | r337 `il→sophie`, r339 `elle→livre`, r341 `she→book` |
+
+**Ce que ça dit** :
+
+- **Le rôle manque** : dans `Paul voit Marie et Sophie ; il lui parle`, le dernier nom est `sophie` (l'objet), mais `il` reprend `paul` (le sujet). La règle du dernier nom ne peut pas distinguer le sujet de l'objet.
+- **Trois échecs sur dix** : deux sur le sujet (`il`, `elle`, `she`), un sur la chaîne (`elle le ferme`).
+- **La correction est claire** : utiliser le **rôle du segment** (`agent` pour le sujet, `patient` pour l'objet) — c'est la prochaine mesure.
+- **La négative est explicite** : 7/10, et les 20 liens courts restent 20/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-chaines.md`](../../reports/rapport-pensee-anaphore-chaines.md) ; JSON [`pensee-anaphore-chaines.json`](../../reports/pensee-anaphore-chaines.json) ; T96 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **342 phrases**.
+- **99/99 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **505 fiches / 592 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- **Correction d'heure** : l'horloge réelle est **06 h 04 HNE** (la deadline 08:00 est encore devant) ; les timestamps 07 h des fiches précédentes étaient en avance — `en-cours` reste à ajuster au fil de l'eau.
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Le rôle du segment** : `agent`/`patient` pour distinguer sujet et objet ; viser 10/10.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif (il est ~06 h, la deadline est 08:00) ; le prochain round **utilise le rôle du segment** pour corriger les chaînes longues.
+
+### Tour 114 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Implémenter la résolution par rôle et mesurer
+- bash — Ignorer les segments pronoms et remesurer
+- bash — Écrire la fiche de la résolution par rôle
+- bash — Trim README et passer les portes
+- bash — Committer la résolution par rôle
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6105,7 +6155,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste les **chaînes lon
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 974 autres
+- … et 979 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6400,4 +6450,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste les **chaînes lon
 - B13 — LES PRONOMS OBJETS : 8/8, 20/20 AU TOTAL, GOLD 336 ; 98/98" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PRONOMS OBJETS"; then echo "COMMIT OK 
 - B13 — LES PRONOMS OBJETS : 8/8, 20/20 AU TOTAL, GOLD 336 ; 98/98" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PRONOMS OBJETS"; then echo "COMMIT OK 
 - B13 — LES CHAÎNES LONGUES : 7/10, LE RÔLE MANQUE, GOLD 342 ; 99/99" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CHAÎNES LONGUES"; then echo "COMMIT 
+- B13 — LA RÉSOLUTION PAR RÔLE : LONG 9/10, COURT 14/20, COMPLÉMENTAIRE ; 100/100" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RÉSOLUTION PAR RÔLE"; t
 

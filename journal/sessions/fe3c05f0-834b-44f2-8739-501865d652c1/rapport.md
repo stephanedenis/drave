@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 37.4 h |
-| Tours | 378 |
-| Messages | 2259 |
-| Appels d'outils | 1496 |
+| Durée | 37.5 h |
+| Tours | 379 |
+| Messages | 2262 |
+| Appels d'outils | 1497 |
 | Fichiers touchés | 26 |
-| Commandes | 1329 |
+| Commandes | 1330 |
 | Sous-agents | 0 |
 | Commits | 84 |
 | Compactages de contexte | 4 |
@@ -783,6 +783,8 @@
 **Tour 377** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 378** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 379** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8881,6 +8883,25 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 - bash — Wait 7 min then check CEGEP and gates
 
+**Synthèse produite :**
+
+⏵ Round 366 : CEGEP 1er scan (15 min), portes 29/81 — 1 rouge connue (`/tmp/n4` absent)
+
+**Round 366/1000 — le CEGEP cherche ses scans ; les portes avancent.**
+
+- **Le CEGEP** : 1er scan (43 p, 81 675 car.) ; le processus tourne depuis **15 min** ; la détection continue vers les 4 autres scans (`--max-doc 5`).
+- **Les portes** : **29/81** au registre ; `porte-greffe` ✅ (868 s !), `porte-harnais-invariants` ✅ (113 s) ; **`porte-homeostasie` ❌ code 2** — « le LoRA de référence est absent : `/tmp/n4/rang4-lora.pt` » : c'est la **rouge connue** de l'environnement (le `/tmp/n4` d'une autre session), pas une régression de mes livraisons.
+- **Les commits** : `15f2c8f6` (OCR 20 livres), `166896b4` (genres 38,5), `bfe57da7` (chantiers D 20 livres).
+- **Le corpus OCR des livres** : 20 livres, 7 381 p, 15,36 M car., **8 Ko 0**, éval 0/40.
+
+**Le constat** : le CEGEP avance, les portes sont vertes hors la rouge connue ; le goal reste actif jusqu'à 8 h.
+
+### Tour 379 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait 7 min then check CEGEP and gates
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8956,7 +8977,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1289 autres
+- … et 1290 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -37,6 +37,62 @@ def resoudre(mots: list[dict], ignorer_pp: bool = False) -> dict[str, str]:
     return liens
 
 
+SUJETS = {"il", "elle", "ils", "elles", "it", "he", "she", "they"}
+OBJETS_ROLE = {"le", "la", "les", "lui", "leur", "it", "him", "her", "them"}
+ROLES_SUJET = ("agent",)
+ROLES_OBJET = ("patient", "destinataire", "attribut")
+
+
+def _dernier_mot(segment: dict) -> str | None:
+    mots = [m for m in segment["texte"].split() if any(c.isalpha() for c in m)]
+    return mots[-1].lower() if mots else None
+
+
+def resoudre_roles(mots: list[dict], segments: list[dict]) -> dict[str, str]:
+    """Résout les pronoms par le **rôle du segment** : sujet → agent, objet → patient."""
+    agent = patient = None
+    for seg in segments:
+        nom = _dernier_mot(seg)
+        if nom is None or nom in (SUJETS | OBJETS_ROLE):
+            continue
+        if seg.get("role") in ROLES_SUJET:
+            agent = nom
+        elif seg.get("role") in ROLES_OBJET:
+            patient = nom
+    liens, vus = {}, set()
+    for mot in mots:
+        if mot["pos"] != "PRON":
+            continue
+        texte = mot["texte"].lower()
+        if texte in OBJETS_ROLE and patient is not None:
+            liens[texte] = patient
+        elif texte in SUJETS and agent is not None and texte not in vus:
+            liens[texte] = agent
+            vus.add(texte)
+    return liens
+
+
+def mesurer_roles(phrases: list[dict]) -> dict:
+    """Compare `resoudre_roles` aux liens du gold."""
+    total = justes = phrases_avec = 0
+    details = []
+    for phrase in phrases:
+        attendu = (phrase.get("pragma") or {}).get("coref") or {}
+        if not attendu:
+            continue
+        phrases_avec += 1
+        obtenu = resoudre_roles(phrase["mots"], phrase["segments"])
+        for pronom, cible in attendu.items():
+            total += 1
+            if obtenu.get(pronom) == cible:
+                justes += 1
+            else:
+                details.append({"id": phrase["id"], "pronom": pronom,
+                                "attendu": cible, "obtenu": obtenu.get(pronom)})
+    return {"phrases": phrases_avec, "liens": total, "justes": justes,
+            "taux": round(justes / total, 4) if total else 0.0, "erreurs": details}
+
+
 def mesurer(phrases: list[dict], ignorer_pp: bool = False) -> dict:
     """Compare les liens résolus aux liens du gold (`coref`)."""
     total = justes = phrases_avec = 0

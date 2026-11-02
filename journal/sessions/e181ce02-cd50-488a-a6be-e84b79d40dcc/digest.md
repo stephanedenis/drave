@@ -26604,3 +26604,117 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/pensee/autotest.py reports/rapport-pensee-anaphore-chaines.md reports/pensee-anaphore-chaines.json reports/READ … [557 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1014]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1014", "timeout_ms": 600000, "wait": true}`
+
+  ```
+28 files changed, 1191 insertions(+), 71 deletions(-)
+ create mode 100644 reports/pensee-anaphore-chaines.json
+ create mode 100644 reports/rapport-pensee-anaphore-chaines.md
+COMMIT OK 1
+8e9d0c1d B13 — LES CHAÎNES LONGUES : 7/10, LE RÔLE MANQUE, GOLD 342 ; 99/99
+lun 02 nov 2026 06:04:07 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Chaînes longues : 7/10, le rôle manque, gold 342 ; 99/99
+
+Le round 100 du goal est livré : les **chaînes longues** font tomber la règle du dernier nom à **7/10** — elle prend l'objet pour le sujet. Commit **`8e9d0c1d`**.
+
+## Les chaînes longues
+
+| sous-ensemble | liens | justes | taux | échecs |
+|---|---:|---:|---:|---|
+| r301–r336 (court) | 20 | 20 | 1,00 | — |
+| **r337–r342 (long)** | **10** | **7** | **0,70** | r337 `il→sophie`, r339 `elle→livre`, r341 `she→book` |
+
+**Ce que ça dit** :
+
+- **Le rôle manque** : dans `Paul voit Marie et Sophie ; il lui parle`, le dernier nom est `sophie` (l'objet), mais `il` reprend `paul` (le sujet). La règle du dernier nom ne peut pas distinguer le sujet de l'objet.
+- **Trois échecs sur dix** : deux sur le sujet (`il`, `elle`, `she`), un sur la chaîne (`elle le ferme`).
+- **La correction est claire** : utiliser le **rôle du segment** (`agent` pour le sujet, `patient` pour l'objet) — c'est la prochaine mesure.
+- **La négative est explicite** : 7/10, et les 20 liens courts restent 20/20.
+
+## L'état
+
+- Fiche : [`rapport-pensee-anaphore-chaines.md`](../../reports/rapport-pensee-anaphore-chaines.md) ; JSON [`pensee-anaphore-chaines.json`](../../reports/pensee-anaphore-chaines.json) ; T96 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **342 phrases**.
+- **99/99 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **505 fiches / 592 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- **Correction d'heure** : l'horloge réelle est **06 h 04 HNE** (la deadline 08:00 est encore devant) ; les timestamps 07 h des fiches précédentes étaient en avance — `en-cours` reste à ajuster au fil de l'eau.
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Le rôle du segment** : `agent`/`patient` pour distinguer sujet et objet ; viser 10/10.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif (il est ~06 h, la deadline est 08:00) ; le prochain round **utilise le rôle du segment** pour corriger les chaînes longues.
+
+
+## Tour 114
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 101/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/anaphore.py'); t=p.read_text()\nt=t.replace('''def mesurer(phrases: list[dict], ignorer_pp: bool = False) -> dict:''',\n'''SUJETS = {\"il\", \"elle\", \"ils\" … [2952 caractères tronqués]`
+
+  ```
+ok
+court dernier-nom 20 / 20 | rôle 8 / 20
+long dernier-nom 7 / 10 | rôle 3 / 10
+[{'id': 'r337', 'pronom': 'il', 'attendu': 'paul', 'obtenu': 'il'}, {'id': 'r338', 'pronom': 'ils', 'attendu': 'souris', 'obtenu': 'ils'}, {'id': 'r339', 'pronom': 'elle', 'attendu': 'marie', 'obtenu': 'elle'}, {'id': 'r340', 'pronom': 'they', 'attendu': 'mouse', 'obtenu': 'they'}, {'id': 'r341', 'pronom': 'she', 'attendu': 'marie', 'obtenu': 'she'}, {'id': 'r342', 'pronom': 'her', 'attendu': 'marie', 'obtenu': 'her'}, {'id': 'r342', 'pronom': 'she', 'attendu': 'marie', 'obtenu': 'she'}]
+tout dernier-nom 27 / 30 | rôle 11 / 30
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/anaphore.py'); t=p.read_text()\nt=t.replace('''        nom = _dernier_mot(seg)\n        if nom is None:\n            continue''','''        nom = _dernier_mot … [618 caractères tronqués]`
+
+  ```
+ok
+court 14 / 20 0.7 [{'id': 'r321', 'pronom': 'il', 'attendu': 'chien', 'obtenu': 'chat'}, {'id': 'r322', 'pronom': 'il', 'attendu': 'chat', 'obtenu': 'chien'}, {'id': 'r323', 'pronom': 'elle', 'attendu': 'sophie', 'obtenu': 'marie'}]
+long 9 / 10 0.9 [{'id': 'r342', 'pronom': 'she', 'attendu': 'marie', 'obtenu': 'paul'}]
+tout 23 / 30 0.7667 [{'id': 'r321', 'pronom': 'il', 'attendu': 'chien', 'obtenu': 'chat'}, {'id': 'r322', 'pronom': 'il', 'attendu': 'chat', 'obtenu': 'chien'}, {'id': 'r323', 'pronom': 'elle', 'attendu': 'sophie', 'obtenu': 'marie'}]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T96 les chaînes longues          7/10 : le rôle sujet/objet manque\\n\",\n\"  T96 les chaînes longues          7/10 : le r … [7254 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 506 fiche(s) · 593 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2807 mots > budget 2800 (T1)
+  en-cours · 1626 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-anaphore-objets.md`](rapport-pensee-anaphore-objets.md) | **B13** — les pronoms objets : 8/8, 20/20 au total, ** … [592 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1800 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/anaphore.py tools/pensee/autotest.py reports/rapport-pensee-anaphore-roles.md reports/pensee-anaphore-roles.json reports/README.md docs/implantation/moteur-de-pensee.md d … [532 caractères tronqués]`

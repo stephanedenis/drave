@@ -1492,6 +1492,17 @@ def t96_chaines() -> tuple[bool, str]:
         f"chaînes longues : {r['justes']}/{r['liens']} liens justes")
 
 
+def t97_roles() -> tuple[bool, str]:
+    """La résolution par rôle : court 14/20, long 9/10, tout 23/30."""
+    from ..tests.linguistique.anaphore import mesurer_roles
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 342]
+    r = mesurer_roles(ps)
+    return r["liens"] == 30 and r["justes"] == 23, (
+        f"rôles : {r['justes']}/{r['liens']} liens justes")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1587,7 +1598,8 @@ def main() -> int:
               ("T93 pièges anaphore", t93_anaphore_pieges()),
               ("T94 anaphore corrigée", t94_anaphore_corrigee()),
               ("T95 pronoms objets", t95_objets()),
-              ("T96 chaînes longues", t96_chaines())]
+              ("T96 chaînes longues", t96_chaines()),
+              ("T97 résolution par rôle", t97_roles())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
