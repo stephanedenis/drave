@@ -22745,3 +22745,60 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T73 le seuil sur 5 graines       ×0,35 0/25, ×0,4 25/25, ×0,45 20/25\\n\",\n\"  T73 le seuil sur 5 graines       ×0,35 0/2 … [1141 caractères tronqués]`
+
+  ```
+ok
+[still running after 60000ms; moved to background job bash-858]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-858", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ T72 seuil fin          seuil fin : ×0,4 → 20/20 buts ; ×0,45 → 0/20 (non monotone, graine unique)
+  ✅ T73 seuil sur 5 graines seuil 5 graines : ×0,35 0/25, ×0,4 25/25, ×0,45 20/25
+  ✅ T74 bord du seuil      bord : ×0,42 25/25, ×0,44 25/25
+  77/77 portes tenues
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-seuil-bord.md <<'MD'\n# B13 — le bord du seuil : × 0,42 et × 0,44 réussissent (50/50)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **77/77 portes** : … [6940 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 476 fichiers, le disque en a 477
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2816 mots > budget 2800 (T1)
+  en-cours · 1600 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\", \"| fichiers / JSON de résultats | **477* … [466 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 477 fiche(s) · 569 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [321 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 600 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/graines.py tools/pensee/autotest.py reports/rapport-pensee-seuil-bord.md reports/pensee-seuil-bord.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours … [492 caractères tronqués]`

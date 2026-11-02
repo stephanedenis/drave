@@ -243,6 +243,7 @@ ré-exécution.
 | **T71** | où est le seuil d'oubli ? | × 0,5 réussit, × 0,2 échoue | le seuil est dans (0,2 ; 0,5] |
 | **T72** | le seuil est-il net ? | × 0,4 réussit, × 0,45 échoue | non monotone : la graine décide |
 | **T73** | où est le seuil sur 5 graines ? | × 0,35 0/25, × 0,4 25/25, × 0,45 20/25 | le seuil est ~0,4 |
+| **T74** | où est le bord du seuil ? | × 0,42 et × 0,44 réussissent 50/50 | le bord est au-dessus de 0,44 |
 
 **T5/T6 sont les portes de la modularité et du coût** : AC-3, alpha-bêta et un encodeur RSN doivent
 se brancher sur le **même** contrat, sans modifier le moteur. Si l'un demande une exception, le
@@ -259,9 +260,9 @@ contrat est faux ; si le coût n'est pas dans la trace, l'anytime est décoratif
 | **4** | `tools/pensee/` (`moteur.py`) | BFS, greedy, A*, MCTS-lite | T2 |
 | **4 bis** | `tools/pensee/` (`csp.py`, `jeux.py`) | AC-3, alpha-bêta, minimax | T5, T6 |
 | **4 ter** | `tools/pensee/` (`taquin.py`, `banc.py`) | taquin 3×3, AUC/regret, aléatoire | T7 |
-| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`, `audit.py`, `graines.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction, audit, curriculum, graines, mobile, bruit variable, porte qui bouge, période, phase, aléatoire, hasard, partielle, croyance, curiosité, observatrice, bruitée, votante, trois looks, bayésien, dérive, adaptative, glisse, rupture, alternance, chaotique, fréquent, rapide, limite, hasard2, intra, asym, rare, très rare, ultra-rare, un look, look tardif, oubli, oubli fort, oubli total, seuil, seuil fin, seuil graines | T8–T73 |
+| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`, `audit.py`, `graines.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction, audit, curriculum, graines, mobile, bruit variable, porte qui bouge, période, phase, aléatoire, hasard, partielle, croyance, curiosité, observatrice, bruitée, votante, trois looks, bayésien, dérive, adaptative, glisse, rupture, alternance, chaotique, fréquent, rapide, limite, hasard2, intra, asym, rare, très rare, ultra-rare, un look, look tardif, oubli, oubli fort, oubli total, seuil, seuil fin, seuil graines, bord | T8–T74 |
 | **5** | `tools/pensee/` (`trace.py`) | DRVF `thought`, rejeu, diff | T1, T6 |
-| **6** | `tools/pensee/autotest.py` | T0–T73, contrôles négatifs | toutes |
+| **6** | `tools/pensee/autotest.py` | T0–T74, contrôles négatifs | toutes |
 
 **Le corpus v0** : un jeu de petits graphes (morpion, taquin 3×3, un CSP jouet) et un jeu de
 RSN-visuelles déjà produit par N1. Pas de GPU ; le CPU suffit pour 10³–10⁴ nœuds.

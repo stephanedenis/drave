@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (24)
+## Commits du jour (25)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -32,6 +32,7 @@
 | 01:37 | `a9a511e8` | DONNÉES — LE CONTRÔLE OCR CONTRE LES ÉVALUATIONS EST MESURÉ : 0/40, 0/24, 0/40 | `en-cours.md`, `README.md`, `attention.md` (+10) |
 | 01:39 | `4d81e21e` | B13 — LE SEUIL FIN : ×0,4 RÉUSSIT, ×0,45 ÉCHOUE (NON MONOTONE) ; 75/75 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+21) |
 | 01:45 | `a2cae633` | B13 — LE SEUIL SUR 5 GRAINES : ×0,35 0/25, ×0,4 25/25, SEUIL ~0,4 ; 76/76 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
+| 01:48 | `d7417dc4` | N2.u — LE PROFESSEUR PLUS GROS NE CHANGE PRESQUE RIEN EN DOMAINE, MAIS GAGNE 0,3 HORS DOMAINE | `en-cours.md`, `README.md`, `apprentissage.md` (+17) |
 
 ## Chiffres du jour
 
@@ -41,15 +42,16 @@
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 33.5 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 33.6 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 33.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 33.2 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 33.3 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-n2-echantillon.md](../../reports/rapport-n2-echantillon.md)
 - [reports/rapport-n2-multilingue-34m.md](../../reports/rapport-n2-multilingue-34m.md)
+- [reports/rapport-n2-professeur.md](../../reports/rapport-n2-professeur.md)
 - [reports/rapport-ocr-pdf.md](../../reports/rapport-ocr-pdf.md)
 - [reports/rapport-pensee-alternance.md](../../reports/rapport-pensee-alternance.md)
 - [reports/rapport-pensee-asym.md](../../reports/rapport-pensee-asym.md)

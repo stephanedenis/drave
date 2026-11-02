@@ -16793,3 +16793,30 @@ AssertionError: puce N2 introuvable
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"**N2.r** 3,69 ; N4 **0/40** ; fiches\"\nb = \"**N2.r** 3,69 ; **N2.s** boucles ; **N2.u** prof. 30 M −0,3 OOD ; N4 **0/40** … [1483 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3974 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 460 fichiers, le disque en a 476
+[still running after 60000ms; moved to background job bash-990]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-990", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+d7417dc4 N2.u — LE PROFESSEUR PLUS GROS NE CHANGE PRESQUE RIEN EN DOMAINE, MAIS GAGNE 0,3 HORS DOMAINE
+01:50
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/M34-g1.pt 2>/dev/null && echo OK; tail -1 work/n2k/M34-g1.log", "description": "Wait for the multilingual 34M student"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-991]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-991", "timeout_ms": 900000, "wait": true}`

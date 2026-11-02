@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 33.2 h |
 | Tours | 91 |
-| Messages | 1193 |
-| Appels d'outils | 1062 |
+| Messages | 1197 |
+| Appels d'outils | 1066 |
 | Fichiers touchés | 25 |
-| Commandes | 859 |
+| Commandes | 862 |
 | Sous-agents | 2 |
-| Commits | 114 |
+| Commits | 115 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4821,12 +4821,15 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **bord** (0,42
 
 ### Tour 91 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Mesurer le bord du seuil (0,42/0,44, 10 graines)
 - bash — Ajouter la porte T74 (bord du seuil)
 - job_output
 - bash — Écrire la fiche du bord du seuil
+- bash — Corriger les compteurs et le README
+- bash — Passer toutes les portes
+- bash — Committer le bord du seuil
 
 ## 3. Travail accompli
 
@@ -4907,7 +4910,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **bord** (0,42
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 819 autres
+- … et 822 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5169,4 +5172,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **bord** (0,42
 - B13 — LE SEUIL FIN : ×0,4 RÉUSSIT, ×0,45 ÉCHOUE (NON MONOTONE) ; 75/75" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL FIN"; then echo "COMMIT OK
 - B13 — LE SEUIL FIN : ×0,4 RÉUSSIT, ×0,45 ÉCHOUE (NON MONOTONE) ; 75/75" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL FIN"; then echo "COMMIT OK
 - B13 — LE SEUIL SUR 5 GRAINES : ×0,35 0/25, ×0,4 25/25, SEUIL ~0,4 ; 76/76" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL SUR 5 GRAINES"; then ec
+- B13 — LE BORD DU SEUIL : ×0,42 ET ×0,44 RÉUSSISSENT 50/50, BORD > 0,44 ; 77/77" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BORD DU SEUIL"; then ech
 

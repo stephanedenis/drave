@@ -1,0 +1,33 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "77/77",
+ "bord": "> 0,44",
+ "lignes": [
+  {
+   "facteur": 0.42,
+   "buts": 50,
+   "runs": 50
+  },
+  {
+   "facteur": 0.44,
+   "buts": 50,
+   "runs": 50
+  },
+  {
+   "facteur": 0.45,
+   "buts": 20,
+   "runs": 25
+  },
+  {
+   "facteur": 0.35,
+   "buts": 0,
+   "runs": 25
+  }
+ ],
+ "limites": [
+  "seuil bas non localisé",
+  "10 graines",
+  "toy"
+ ]
+}

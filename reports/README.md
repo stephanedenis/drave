@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-pensee-seuil-graines.md`](rapport-pensee-seuil-graines.md) | **B13** — le seuil sur 5 graines : ×0,35 0/25, ×0,4 25/25, seuil ~0,4, **76/76** |
+| [`rapport-pensee-seuil-bord.md`](rapport-pensee-seuil-bord.md) | **B13** — le bord du seuil : ×0,42/×0,44 50/50, bord > 0,44, **77/77** |
 | [`rapport-pensee-seuil-fin.md`](rapport-pensee-seuil-fin.md) | **B13** — le seuil fin : ×0,4 réussit, ×0,45 échoue, non monotone, **75/75** |
 | [`rapport-pensee-seuil.md`](rapport-pensee-seuil.md) | **B13** — le seuil d'oubli : ×0,5 réussit, ×0,2 échoue, seuil dans (0,2 ; 0,5], **74/74** |
 | [`rapport-pensee-oubli-total.md`](rapport-pensee-oubli-total.md) | **B13** — l'oubli total : 0/20 buts, la mémoire est nécessaire, **73/73** |

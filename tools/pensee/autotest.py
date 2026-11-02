@@ -1177,6 +1177,15 @@ def t73_seuil_graines() -> tuple[bool, str]:
                 f"×0,4 {par[0.4]['buts']}/25, ×0,45 {par[0.45]['buts']}/25")
 
 
+def t74_bord() -> tuple[bool, str]:
+    """Le bord du seuil : × 0,42 et × 0,44 réussissent (5 graines)."""
+    from .graines import executer_bord
+    lignes = executer_bord(graines=5)
+    ok = all(l["buts"] == l["runs"] for l in lignes)
+    return ok, (f"bord : ×0,42 {lignes[0]['buts']}/{lignes[0]['runs']}, "
+                f"×0,44 {lignes[1]['buts']}/{lignes[1]['runs']}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1249,7 +1258,8 @@ def main() -> int:
               ("T70 oubli total", t70_oubli_total()),
               ("T71 seuil d'oubli", t71_seuil()),
               ("T72 seuil fin", t72_seuil_fin()),
-              ("T73 seuil sur 5 graines", t73_seuil_graines())]
+              ("T73 seuil sur 5 graines", t73_seuil_graines()),
+              ("T74 bord du seuil", t74_bord())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

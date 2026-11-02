@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**39 commits** · **3 session(s)** · **7 thème(s)**
+**40 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,16 +16,16 @@
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 3 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
-| mesures | 24 | [mesures.md](mesures.md) |
+| mesures | 25 | [mesures.md](mesures.md) |
 | portes | 3 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 33.5 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 33.6 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 33.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 33.2 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 33.3 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -70,6 +70,7 @@
 | 01:37 | `a9a511e8` | DONNÉES — LE CONTRÔLE OCR CONTRE LES ÉVALUATIONS EST MESURÉ : 0/40, 0/24, 0/40 |
 | 01:39 | `4d81e21e` | B13 — LE SEUIL FIN : ×0,4 RÉUSSIT, ×0,45 ÉCHOUE (NON MONOTONE) ; 75/75 |
 | 01:45 | `a2cae633` | B13 — LE SEUIL SUR 5 GRAINES : ×0,35 0/25, ×0,4 25/25, SEUIL ~0,4 ; 76/76 |
+| 01:48 | `d7417dc4` | N2.u — LE PROFESSEUR PLUS GROS NE CHANGE PRESQUE RIEN EN DOMAINE, MAIS GAGNE 0,3 HORS DOMAINE |
 
 ## Le récit de la journée (écrit à la main)
 
