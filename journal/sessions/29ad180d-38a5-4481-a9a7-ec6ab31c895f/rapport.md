@@ -7,19 +7,21 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 0.4 h |
-| Tours | 1 |
-| Messages | 115 |
-| Appels d'outils | 129 |
-| Fichiers touchés | 7 |
-| Commandes | 88 |
+| Durée | 0.7 h |
+| Tours | 2 |
+| Messages | 140 |
+| Appels d'outils | 154 |
+| Fichiers touchés | 9 |
+| Commandes | 98 |
 | Sous-agents | 0 |
-| Commits | 4 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
 
 **Tour 1** — Tu es la session S (les structures, CPU). Lis AGENTS.md, docs/pilotage/en-cours.md,  docs/theorie/jeux-symboliques.md et tools/structures/ (sous-module heads/fusion). Ton id est  dans `printenv DSH_SESSION_ID` ; crée journal/sessions/<id>/plan.md avec  `python3 tools/sessions.py --modele` (État : actif, heartbeat maintenant), réserve  `tools/structures/`, ses exports et sa banque. Prochaine action … [285 caractères tronqués]
+
+**Tour 2** — mets le dossier copilotage à jour
 
 ## 2. Déroulé, étape par étape
 
@@ -73,6 +75,30 @@
 
 Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && python3 mesure_analyseur.py && python3 exporter_corpus.py && python3 verifier_corpus.py ../../data/structures/banque.jsonl`.
 
+### Tour 2 — mets le dossier copilotage à jour
+
+*25 appels d'outils.* Actions notables :
+
+- read
+- bash — Get current report/JSON counts before editing state
+- bash — Get real time for state timestamps
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md`
+- bash — Run documentation and state checks after edits
+- bash — Run tables and size checks, inspect diff
+- … et 9 autres
+
+**Synthèse produite :**
+
+⏵ Mise à jour de `docs/pilotage/` : état S, compteurs et roadmap, puis commit avec la fiche.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -86,6 +112,8 @@ Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/exporter_corpus.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/verifier_corpus.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 7 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 5 |
 
 ### Commandes exécutées (échantillon)
 
@@ -129,7 +157,7 @@ Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && 
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 48 autres
+- … et 58 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -138,6 +166,7 @@ Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && 
 - **T1** `- un chiffre sans dispositif (« 73 % ») ;`
 - **T1** `129:- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (niveaux 0–4), export ; analyseur **7/7** séquences, **93,9 %** de couverture, **19 tests** ; [`analyseur``
 - **T1** `[still running after 60000ms; moved to background job bash-67]`
+- **T2** `34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v2** : rôles **contextuels** et subordonnées typées, gold **39** phrases ; analyseur **38/39** types`
 
 ## 5. Erreurs rencontrées
 
@@ -156,4 +185,5 @@ Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && 
 - S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES" -m "Le sous-module tools/structures est committé dan
 - ps -eo pid,etime,cmd | grep -E "git commit|archive_sessions|journal_auto|session_report|python3" | grep -v grep | head -20; echo "=== index lock ==="; ls -la /h
 - ps -eo pid,ppid,etime,pcpu,stat,cmd | grep -E "57032|57052|57681|job|git commit" | grep -v grep; echo "=== enfants ==="; ps --ppid 57032 -o pid,etime,pcpu,stat,
+- S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES" -m "La fiche reports/rapport-s-analyseur-roles.md, le manifeste reports/s-banqu
 

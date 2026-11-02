@@ -2521,3 +2521,196 @@ background job bash-83 (bash: sleep 90; wc -l work/ocr/run-cegep-02.log; tail -3
 … [1457 caractères tronqués]
   ```
 
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) page(s) rendue(s)\"; done", "description": "Check whether the Tesla scan is running"}`
+
+  ```
+30 work/ocr/run-cegep-02.log
+  CEGEP · Exercice2M.pdf · 2 p · 2430 car
+  CEGEP · Exercice3O.pdf · 2 p · 3209 car
+      08:17
+/tmp/ocr-pdf-19jav9ag: 13 page(s) rendue(s)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib\nd=json.load(open('reports/ocr-pdf-cegep-detection.json'))\na={m['chemin'] for m in d['detail']}\nb={l for l in pathlib.Path('work/ocr/scans-uniques.txt').read_text().splitlines() if l}\nprint('detection uniques', len(a), 'liste OCR', len(b), 'iden … [164 caractères tronqués]`
+
+  ```
+detection uniques 91 liste OCR 91 identiques True
+dans detection pas liste 0 dans liste pas detection 0
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) page(s)\"; done", "description": "Check Tesla OCR progress"}`
+
+  ```
+30 work/ocr/run-cegep-02.log
+  CEGEP · Exercice2M.pdf · 2 p · 2430 car
+  CEGEP · Exercice3O.pdf · 2 p · 3209 car
+      08:31
+/tmp/ocr-pdf-19jav9ag: 23 page(s)
+  ```
+
+- **bash** `{"command": "git status --short | head -30; echo \"---\"; git log --oneline -4", "description": "Check working tree and recent commits"}`
+
+  ```
+M  docs/pilotage/en-cours.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+ M journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md
+ M tools/ocr_pdf.py
+?? reports/ocr-pdf-cegep-detection.json
+?? reports/rapport-s-analyseur-roles.md
+?? reports/s-banque-structures.json
+?? tools/detecte_scans_pdf.py
+---
+bee2527d PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8
+13f4e131 S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES
+e420267a ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE
+dc7f9c56 N2 — MANDAT 200 k PAS SUR LE MÉLANGE 1 Go, PUIS R1.1/R1.2 (session 0733c5bb)
+  ```
+
+- **bash** `{"command": "git diff --cached --stat; echo \"---\"; git diff --cached docs/pilotage/en-cours.md | head -30", "description": "Inspect staged en-cours changes"}`
+
+  ```
+docs/pilotage/en-cours.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+---
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index c4c8f226..8ef17b2b 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-02, 16 h 37 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-02, 16 h 40 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+ > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+@@ -122,7 +122,7 @@
+ |---|---|---|
+ | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
+ | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+-| fichiers / JSON de résultats | **551** / **637** | `reports/*.md` / `reports/*.json` |
++| fichiers / JSON de résultats | **551** / **638** | `reports/*.md` / `reports/*.json` |
+ | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
+ | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) page(s)\"; done", "description": "Check OCR progress"}`
+
+  ```
+30 work/ocr/run-cegep-02.log
+  CEGEP · Exercice2M.pdf · 2 p · 2430 car
+  CEGEP · Exercice3O.pdf · 2 p · 3209 car
+      08:46
+/tmp/ocr-pdf-19jav9ag: 34 page(s)
+  ```
+
+- **bash** `{"command": "sed -n '1,60p' tools/verifie_etat_a_jour.py 2>/dev/null | head -50; echo \"--- hook ---\"; cat .git/hooks/pre-commit 2>/dev/null | head -20", "description": "Inspect pre-commit state hook"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_etat_a_jour.py — aucun fait commité sans sa ligne d'état.
+
+POURQUOI CET OUTIL EXISTE. `en-cours` est la seule source de l'état, et le contrat
+disait « seul le principal écrit ». Ce n'est pas une garantie : l'identité se déduit
+d'une variable d'environnement absente — un « pair » est autodéclaré — et si la
+principale s'arrête, l'état se fige. Surtout, rien ne comparait les commits : la
+revue ne regardait que la DATE, donc deux commits du même jour passaient. Le 29/10,
+A8.0 (15 h 51) a été commité après le dernier état (15 h 34) sans aucune alerte.
+
+La garantie est au commit, pas dans la discipline d'un écrivain :
+  --index  (hook pre-commit) : un commit qui prépare un fait (reports/, roadmap,
+           backlog) sans toucher `en-cours` est REFUSÉ ;
+  --head   : si un fait a été commité après le dernier commit d'`en-cours`, l'état
+           est en retard — la session qui le voit le corrige, sans attendre.
+
+Le journal est du récit dérivé (le hook l'archive) : il n'exige pas de ligne d'état.
+
+Usage :
+  python3 tools/verifie_etat_a_jour.py             # --head
+  python3 tools/verifie_etat_a_jour.py --index     # pour le hook
+  python3 tools/verifie_eta
+… [1872 caractères tronqués]
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) page(s)\"; done", "description": "Check Tesla progress"}`
+
+  ```
+30 work/ocr/run-cegep-02.log
+  CEGEP · Exercice2M.pdf · 2 p · 2430 car
+  CEGEP · Exercice3O.pdf · 2 p · 3209 car
+      08:57
+/tmp/ocr-pdf-19jav9ag: 42 page(s)
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) page(s)\"; done", "description": "Tesla render progress"}`
+
+  ```
+30 work/ocr/run-cegep-02.log
+  CEGEP · Exercice2M.pdf · 2 p · 2430 car
+  CEGEP · Exercice3O.pdf · 2 p · 3209 car
+      09:20
+/tmp/ocr-pdf-19jav9ag: 58 page(s)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib, collections, hashlib\nd=json.load(open('work/ocr/detection-cegep.json'))\nscans=[m for m in d['detail'] if m['scan']]\ng=collections.defaultdict(list)\nfor m in scans: g[hashlib.sha256(pathlib.Path(m['chemin']).read_bytes()).hexdigest()].append(m) … [327 caractères tronqués]`
+
+  ```
+groupes dup 47 fichiers en trop 56
+  499 p 2 x Complete Us Patents Of Nikola Tesla Free Energy Electricity Alter
+  10 p 2 x document%20de%20revision_pages_16a25_8321.pdf
+  10 p 2 x document%20de%20revision_pages_1a11_5218.pdf
+  10 p 2 x document%20de%20revision_pages_31a40_3069.pdf
+  10 p 2 x document%20de%20revision_pages_46a55_3011.pdf
+  10 p 2 x Facture Audet 2013-01-07 KMBT35020130107144520.pdf
+  9 p 2 x document%20de%20revision_pages_56a64_2256.pdf
+  8 p 2 x Article 4.pdf
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) page(s)\"; done", "description": "Tesla render progress"}`
+
+  ```
+30 work/ocr/run-cegep-02.log
+      09:34
+/tmp/ocr-pdf-19jav9ag: 67 page(s)
+  ```
+
+- **job_output** `{"job_id": "bash-49", "timeout_ms": 600000, "wait": true}`
+
+  ```
+CEGEP · Objet de la dérogation-avec marquage.pdf · 1 p · 2066 car
+  CEGEP · Objet de la dérogation.pdf · 1 p · 1959 car
+  CEGEP · Prises de vues sur la Zone De Travail.pd · 1 p · 1997 car
+  CEGEP · Facture Audet 2012-11-23 KMBT35020130107 · 2 p · 1690 car
+  CEGEP · Facture Audet 2013-01-07 KMBT35020130107 · 10 p · 16348 car
+  CEGEP · Alienation parentale.pdf · 1 p · 743 car
+  CEGEP · Raphael à Gabriel Choquette-Denis ..pdf · 1 p · 1112 car
+  CEGEP · 14004-K-A631-réfection classes élévation · 1 p · 1794 car
+  CEGEP · 14004-K-A701-réfection classes mobilier  · 1 p · 2028 car
+  CEGEP · Classe informatique - option 2.pdf · 1 p · 300 car
+  CEGEP · Scan from a McGill uPrint device001.pdf · 1 p · 2508 car
+  CEGEP · 20150223 420 AC Graph liens cours préala · 1 p · 1131 car
+  CEGEP · Plan cadre 401-TF1-HY.pdf · 3 p · 2852 car
+  CEGEP · Plan cadre 401-TF2-HY - Ancien.pdf · 2 p · 3195 car
+  CEGEP · Budget de fonctionnement 2013-2014.pdf · 1 p · 953 car
+  CEGEP · Règles de saisie-Kamaji.pdf · 4 p · 7902 car
+  CEGEP · Chap16_17.pdf · 3 p · 5894 car
+  CEGEP · Territoire de la CMM 20171001_carteGener · 1 p · 7151 car
+  CEGEP · Exercice2M.pdf · 2 p · 2430 car
+  CEGEP · Exercice3O.pdf · 2 p · 3209 
+… [21 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ps -o etime -p 56494 | tail -1; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) page(s)\"; done; ps -eo comm | grep -c tesseract", "description": "Check Tesla OCR phase"}`
+
+  ```
+19:48
+/tmp/ocr-pdf-19jav9ag: 453 page(s)
+0
+[exit code: 1]
+  ```
+
+- **job_output** `{"job_id": "bash-49", "timeout_ms": 900000, "wait": true}`

@@ -7,12 +7,12 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 0.7 h |
-| Tours | 2 |
-| Messages | 91 |
-| Appels d'outils | 124 |
+| Durée | 1.4 h |
+| Tours | 3 |
+| Messages | 97 |
+| Appels d'outils | 134 |
 | Fichiers touchés | 4 |
-| Commandes | 101 |
+| Commandes | 111 |
 | Sous-agents | 0 |
 | Commits | 8 |
 | Compactages de contexte | 0 |
@@ -22,6 +22,8 @@
 **Tour 1** — étudie l'état de toutes les sessions et le pilotage
 
 **Tour 2** — vas-y et donne moi des instructions pour que je démarre ou récupère d'autre sessions dans d'autres terminaux
+
+**Tour 3** — GPU 0 à 87 de3grés et fan à 88%. peut-on améliorer sa ventilation au dela de 88%
 
 ## 2. Déroulé, étape par étape
 
@@ -146,6 +148,25 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 | voi
 … [5623 caractères tronqués]
 
+### Tour 3 — GPU 0 à 87 de3grés et fan à 88%. peut-on améliorer sa ventilation au dela de 88%
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Query GPU temperature, fan, power and throttle reasons
+- bash — Check thermal limits, fan control, X display and hwmon
+- bash — Query nvidia-settings GPU and fan attributes
+- bash — Read thermal limits and fan section
+- bash — Check GPU slot topology and link placement
+- bash — Check driver fan info, nvidia-settings package, Coolbits
+- bash — Check OS, workstation model, package manager and power limits
+- bash — Read live throttle, clocks and case fan speeds
+- bash — Check sudo, fan tools, hwmon and BMC availability
+- bash — Check NVIDIA params, Xorg config and short thermal trend
+
+**Synthèse produite :**
+
+⏵ Je vérifie les derniers leviers disponibles (BIOS/BMC, hwmon, sudo) avant de conclure.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -199,7 +220,7 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 61 autres
+- … et 71 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -271,6 +292,17 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 - **T2** `- **A2.6/A8.3** : le lot ne divise pas les lectures denses (+27 % de calcul, PPL −0,006 %).`
 - **T2** `- **15 h 06 — reboot.** Les deux GPU étaient bloqués (`GPU requires reset`, `nvidia_drm refcnt -1`) ; le reset logiciel a échoué et le reboot a rendu les cartes (1 Mio, 0 %). Les deux sessions de trav`
 - **T2** `31:[ALM (Adaptive Logic Module)](entrees/alm.md) · [AVX2 · AVX-512 · SIMD](entrees/avx2-avx-512-simd.md) · [Bande passante (bandwidth)](entrees/bande-passante.md) · [CUDA · noyau (kernel) · sm75 · PTX`
+- **T3** `0, Quadro RTX 5000, 87, 88 %, 195.54 W, 230.00 W, 230.00 W, 230.00 W, 1800 MHz, 2100 MHz, 92 %, 1960 MiB, 16384 MiB`
+- **T3** `1, Quadro RTX 5000, 68, 41 %, 160.91 W, 230.00 W, 230.00 W, 230.00 W, 1875 MHz, 2100 MHz, 67 %, 1422 MiB, 16384 MiB`
+- **T3** `0, 87, 89 %, 206.33 W, 1800 MHz, Active, Not Active`
+- **T3** `1, 73, 47 %, 201.95 W, 1860 MHz, Not Active, Not Active`
+- **T3** `Graphics                                       : 1785 MHz`
+- **T3** `SM                                             : 1785 MHz`
+- **T3** `Graphics                                       : 1620 MHz`
+- **T3** `Graphics                                       : 2100 MHz`
+- **T3** `SM                                             : 2100 MHz`
+- **T3** `Graphics                                       : 1875 MHz`
+- **T3** `SM                                             : 1875 MHz`
 
 ## 5. Erreurs rencontrées
 

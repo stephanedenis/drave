@@ -2386,3 +2386,673 @@ une **fraction** du coût, avant même que le neuronal ait fini.
 ⏵ Vérification des classes POS du gold (compatibilité grammaire) avant le code
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,collections\nps=json.load(open('tools/tests/linguistique/gold.json'))['phrases']+json.load(open('tools/tests/linguistique/gold_synthetique.json'))['phrases']\nc=collections.Counter(m['pos'] for p in ps for m in p['mots']) … [64 caractères tronqués]`
+
+  ```
+['ADJ', 'ADV', 'AUX', 'CONJ', 'DET', 'NOUN', 'PREP', 'PRON', 'VERB']
+  ```
+
+- **bash** `{"command": "grep -n \"def detecter_langue\\|def detecter_script\" -A 12 tools/bloc_linguistique.py | head -40", "description": "Read language/script detector signatures"}`
+
+  ```
+192:def detecter_langue(texte: str, profils: dict[str, dict] | None = None,
+193-                    indice: str | None = None) -> tuple[str, float, dict[str, float]]:
+194-    """La langue par recouvrement de trigrammes ; l'indice est un **prior**, pas un verdict."""
+195-    if profils:
+196-        tri = collections.Counter(_trigrammes(texte))
+197-        scores = {langue: _score_profil(tri, p["trigrammes"]) for langue, p in profils.items()}
+198-        if indice and indice in scores:
+199-            scores[indice] = min(1.0, scores[indice] + 0.02)
+200-        if not scores:
+201-            return "und", 0.0, {}
+202-        classement = sorted(scores.items(), key=lambda kv: (-kv[1], kv[0]))
+203-        langue, meilleur = classement[0]
+204-        second = classement[1][1] if len(classement) > 1 else 0.0
+--
+249:def detecter_script(texte: str) -> str:
+250-    c = collections.Counter(_script_char(ch) for ch in texte if ch.isalpha())
+251-    c.pop("", None)
+252-    if not c:
+253-        return SCRIPT_NEUTRE
+254-    if c.get("Jpan", 0) or (c.get("Hani", 0) and (c.get("Jpan", 0) or c.get("Hang", 0))):
+255-        return "Jpan"
+256-    if c.get("Hang", 0):
+257-        return "Hang"
+258-   
+… [90 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation de `NeuronalLLMPOS` (serveur local, grammaire GBNF, cache) et des tests
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "old_string": "  - `NeuronalLLM` : l'adaptateur réel, qui interroge un modèle local (`llama-cli`) et rend le\n    même type d'annotation ;\n  - `Parallele` et `Cascade` : les deux modes de composition. Le parallèle fusionne le … [414 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "old_string": "import argparse\nimport collections\nimport json\nimport pathlib\nimport re\nimport subprocess\nimport sys\nimport time\nimport unicodedata", "new_string": "import argparse\nimport collections\nimport copy\nimpo … [141 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 18, "offset": 861}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+861:             fin_e = max(debut_e, min(int(e.get("fin", debut_e)), len(texte)))
+862:             etiquettes.append(Etiquette(e["niveau"], str(e.get("type", "")), str(e.get("valeur", "")),
+863:                                         debut_e, fin_e, self.nom, float(e.get("confiance", 0.5)),
+864:                                         langue=lg, script=script))
+865:         return Annotation(texte=texte, langue=lg, script=script, etiquettes=etiquettes,
+866:                           source=self.nom, trace=[{"etape": "neuronal-llm", "modele": self.modele}],
+867:                           cout={"octets": len(texte.encode()), "etiquettes": len(etiquettes),
+868:                                 "duree_s": round(time.perf_counter() - t0, 6)})
+869: 
+870: 
+871: # --------------------------------------------------------------------------- compositions
+872: 
+873: 
+874: def _supprimer_chevauchements(etiquettes: list[Etiquette]) -> list[Etiquette]:
+875:     """Les alternatives se suppriment **par type** quand les types sont complémentaires.
+876: 
+877:     `pos` et `syntagme` sont des alternative
+… [214 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "new_string": "        return Annotation(texte=texte, langue=lg, script=script, etiquettes=etiquettes,\n                          source=self.nom, trace=[{\"etape\": \"neuronal-llm\", \"modele\": self.modele}],\n               … [7438 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py", "limit": 30}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py</path>
+<type>file</type>
+<content>
+1: """Tests du bloc linguistique — contrat, substitution, parallèle, cascade, activation."""
+2: import json
+3: import pathlib
+4: import stat
+5: import sys
+6: import tempfile
+7: import unittest
+8: 
+9: RACINE = pathlib.Path(__file__).resolve().parents[3]
+10: sys.path.insert(0, str(RACINE / "tools"))
+11: import bloc_linguistique as bl
+12: 
+13: TEXTE = "Le chat de la voisine qui dort sur le toit se réveille. Va voir le chat !"
+14: 
+15: 
+16: class TestBlocLinguistique(unittest.TestCase):
+17:     def setUp(self):
+18:         self.h = bl.Heuristique(segmenter_s=False)
+19:         self.n = bl.MockNeuronal()
+20: 
+21:     def test_niveaux_et_spans(self):
+22:         a = self.h.analyser(TEXTE, "fr")
+23:         niveaux = {e.niveau for e in a.etiquettes}
+24:         self.assertEqual(set(bl.NIVEAUX) - niveaux, set(), f"niveaux manquants : {set(bl.NIVEAUX)-niveaux}")
+25:         for e in a.etiquettes:
+26:             self.assertGreaterEqual(e.debut, 0)
+27:             self.assertLessEqual(e.fin, len(TEXTE))
+28:             self.assertLessEqual(e.debut, e.fin)
+29: 
+30:     def
+… [97 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py", "new_string": "        n = bl.NeuronalLLM(modele, llama_cli=str(faux), timeout=10)\n        a = n.analyser(\"Le chat dort.\", \"fr\")\n        self.assertEqual(a.source, \"neuronal\")\n        self.asse … [1767 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Tests unitaires du tagger et compilation du module
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/bloc_linguistique.py tools/tests/linguistique/test_bloc_linguistique.py && python3 -m unittest discover -s tools/tests/linguistique -p 'test_bloc_linguistique.py' -v 2>&1 | tail -20", "description": "Run unit tests for the  … [33 caractères tronqués]`
+
+  ```
+test_activation_semantique (test_bloc_linguistique.TestBlocLinguistique.test_activation_semantique) ... ok
+test_adaptateur_neuronal_avec_faux_modele (test_bloc_linguistique.TestBlocLinguistique.test_adaptateur_neuronal_avec_faux_modele) ... ok
+test_cascade (test_bloc_linguistique.TestBlocLinguistique.test_cascade) ... ok
+test_langue_et_script (test_bloc_linguistique.TestBlocLinguistique.test_langue_et_script) ... ok
+test_niveaux_et_spans (test_bloc_linguistique.TestBlocLinguistique.test_niveaux_et_spans) ... ok
+test_parallele (test_bloc_linguistique.TestBlocLinguistique.test_parallele) ... ok
+test_refus (test_bloc_linguistique.TestBlocLinguistique.test_refus) ... ok
+test_rejeu (test_bloc_linguistique.TestBlocLinguistique.test_rejeu) ... ok
+test_substitution (test_bloc_linguistique.TestBlocLinguistique.test_substitution) ... ok
+test_tagger_neuronal_pos_avec_faux_transport (test_bloc_linguistique.TestBlocLinguistique.test_tagger_neuronal_pos_avec_faux_transport) ... ok
+test_tagger_neuronal_pos_refus (test_bloc_linguistique.TestBlocLinguistique.test_tagger_neuronal_pos_refus) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.049s
+
+OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Test réel du tagger via le serveur 7B sur une phrase
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nn=bl.NeuronalLLMPOS('models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf', endpoint='http://127.0.0.1:18081')\na=n.analyser('Le chat de la voisine dort.', 'fr' … [207 caractères tronqués]`
+
+  ```
+neuronal fr  {'octets': 27, 'tokens': 6, 'duree_s': 3.917767}
+[('DET', 'Le', 0, 2, 0.6), ('NOUN', 'chat', 3, 7, 0.6), ('PREP', 'de', 8, 10, 0.6), ('DET', 'la', 11, 13, 0.6), ('NOUN', 'voisine', 14, 21, 0.6), ('VERB', 'dort', 22, 26, 0.6)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du script de qualification (`qualifier_neuronal.py`) avec contrôles et seuils
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"qualifier_neuronal.py — qualifie un tagger neuronal local sur le gold (180 phrases, 804 tokens).\n\nLe tagger est `bloc_linguistique.NeuronalLLMPOS` : un modèle GGUF servi par `llama-server`, une\ngrammaire GBNF qui impose une classe par token, et les spans … [13672 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py", "new_string": "            \"controles_sous_0_40\": max(v[\"exactitude\"] for v in controles.values()\n                                        if v.get(\"exactitude\") is not None) < 0.40,", "old_string": " … [171 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/tests/linguistique/qualifier_neuronal.py && time python3 tools/tests/linguistique/qualifier_neuronal.py --demarrer --port 18082 --limite 20 --sortie /tmp/qualif-20.json 2>&1 | tail -25", "description": "Dry-run qualificatio … [50 caractères tronqués]`
+
+  ```
+serveur : llama-server -m /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 18082 -ngl 0 -c 1024 --no-webui
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py", line 289, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py", line 240, in main
+    "runtime": "llama-server " + subprocess.run(
+                                 ~~~~~~~~~~~~~~~
+        ["llama-server", "--version"], capture_output=True, text=True).stdout.strip().splitlines()[0],
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+[stderr]
+
+real	0m47,771s
+user	7m39,003s
+sys	0m2,175s
+  ```
+
+### 🤖 Assistant
+
+⏵ `llama-server --version` ne rend rien ; je corrige la détection de version
+
+- **bash** `{"command": "llama-server --version; echo \"EXIT=$?\"; echo '---'; llama-server --version 2>&1 | head -3; echo '---'; ps -eo pid,cmd | grep \"llama-server.*18082\" | grep -v grep | head", "description": "Check llama-server version output and leftover process"}`
+
+  ```
+EXIT=0
+---
+version: 11017 (aca5f933b)
+built with GNU 15.3.0 for Linux x86_64
+---
+[stderr]
+version: 11017 (aca5f933b)
+built with GNU 15.3.0 for Linux x86_64
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py", "new_string": "def _sha256(chemin: pathlib.Path) -> str:\n    h = hashlib.sha256()\n    with chemin.open(\"rb\") as f:\n        for bloc in iter(lambda: f.read(1 << 20), b\"\"):\n            h.update(bloc)\ … [694 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py", "new_string": "                \"quantisation\": \"Q4_K_M\",\n                \"runtime\": _version(),\n                \"gpu\": 0,", "old_string": "                \"quantisation\": \"Q4_K_M\",\n           … [205 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && time python3 tools/tests/linguistique/qualifier_neuronal.py --demarrer --port 18082 --limite 20 --sortie /tmp/qualif-20.json 2>&1 | tail -20", "description": "Rerun 20-phrase dry run after version fix", "timeoutMs": 400000}`
+
+  ```
+"cascade_all": true,
+  "cascade_synth": false,
+  "cascade_hand_sans_regression": false,
+  "aucun_refus": true,
+  "controles_sous_0_40": true
+ },
+ "heuristique": 0.9238,
+ "neuronal": 0.7905,
+ "cascade": 0.9143,
+ "cascade_synth": 0.0,
+ "cascade_hand": 0.9143,
+ "refus": 0,
+ "appels": 20,
+ "latence": {
+  "moyenne": 6.671,
+  "mediane": 6.826,
+  "p95": 10.399
+ }
+}
+écrit : /tmp/qualif-20.json
+[stderr]
+
+real	0m48,834s
+user	8m7,048s
+sys	0m2,082s
+  ```
+
+### 🤖 Assistant
+
+⏵ Le run parallèle introduit une variance (0,7905 vs 0,8286) ; je passe en séquentiel et j'ajoute les 2 shards au manifeste
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py", "new_string": "import argparse\nimport concurrent.futures as cf\nimport hashlib\nimport json\nimport pathlib\nimport random\nimport re\nimport statistics\nimport subprocess\nimport sys\nimport time\nimport  … [294 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py", "new_string": "def _version() -> str:\n    \"\"\"`llama-server --version` écrit sur stderr ; on lit les deux flux.\"\"\"\n    for commande in ([\"llama-server\", \"--version\"], [\"llama-cli\", \"--version\ … [1270 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py", "new_string": "            \"modele\": {\n                \"nom\": modele.name,\n                \"fichiers\": _fichiers(modele),\n                \"quantisation\": \"Q4_K_M\",\n                \"runtime\": … [447 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Qualification finale : 180 phrases, 7B, séquentiel, seuils pré-enregistrés
+
+- **bash** `{"command": "ps -eo pid,cmd | grep \"llama-server.*18081\" | grep -v grep | awk '{print $1}' | xargs -r kill; sleep 1; cd /home/stephane/GitHub/Qtrinet && time python3 tools/tests/linguistique/qualifier_neuronal.py --demarrer --port 18082 --workers 1 --confiance 0.6 --sortie reports/pensee-gold-neur … [114 caractères tronqués]`
+
+  ```
+serveur : llama-server -m /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 18082 -ngl 0 -c 1024 --no-webui
+{
+ "verdict": true,
+ "seuils": {
+  "neuronal_all": true,
+  "cascade_all": true,
+  "cascade_synth": true,
+  "cascade_hand_sans_regression": true,
+  "aucun_refus": true,
+  "controles_sous_0_40": true
+ },
+ "heuristique": 0.7512,
+ "neuronal": 0.8483,
+ "cascade": 0.944,
+ "cascade_synth": 0.9471,
+ "cascade_hand": 0.9238,
+ "refus": 0,
+ "appels": 180,
+ "latence": {
+  "moyenne": 3.043,
+  "mediane": 2.886,
+  "p95": 5.012
+ }
+}
+écrit : reports/pensee-gold-neuronal.json
+[stderr]
+
+real	9m23,103s
+user	173m16,115s
+sys	0m7,080s
+  ```
+
+### 🤖 Assistant
+
+⏵ Qualification réussie (verdict vrai) ; j'inspecte le JSON complet pour la fiche
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-gold-neuronal.json'))\nprint(json.dumps({k:d[k] for k in ('date','modele','gold','tagger','controles','seuils','verdict','duree_totale_s','limites')},ensure_ascii=False,indent=1))\nfor le … [608 caractères tronqués]`
+
+  ```
+{
+ "date": "2026-11-02 16:52 EST",
+ "modele": {
+  "nom": "qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf",
+  "fichiers": [
+   {
+    "nom": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf",
+    "octets": 3993201344,
+    "sha256": "dfce12e3862a5283ccfb88221b48480e58745165de856439950d0f22590580db"
+   },
+   {
+    "nom": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00002-of-00002.gguf",
+    "octets": 689872288,
+    "sha256": "539cf93f78e887edea1c04e2d7d8cdaca9d01dae9c9025bcb8accbe29df3d72a"
+   }
+  ],
+  "quantisation": "Q4_K_M",
+  "runtime": "version: 11017 (aca5f933b)",
+  "gpu": 0
+ },
+ "gold": {
+  "phrases": 180,
+  "tokens": 804,
+  "hand": 20,
+  "synth": 160
+ },
+ "tagger": {
+  "classe": "NeuronalLLMPOS",
+  "confiance": 0.6,
+  "tokenisation": "Heuristique._mots (mot/nombre)",
+  "contrainte": "grammaire GBNF, une classe par token"
+ },
+ "controles": {
+  "majoritaire": {
+   "description": "toujours NOUN",
+   "exactitude": 0.2289
+  },
+  "uniforme": {
+   "description": "tirage uniforme sur les 12 classes",
+   "exactitude": 0.0833
+  },
+  "permutation": {
+   "description": "les POS prédits sont permutés
+… [1969 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le fait est mesuré ; je prépare la fiche, le journal et les mises à jour d'état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -20; echo '---'; grep -n \"gguf\\|models\" .gitignore 2>/dev/null | head; echo '---'; ls reports/INDEX.md reports/README.md 2>/dev/null; tail -30 reports/INDEX.md 2>/dev/null", "description": "Check git status, ignore rules,  … [18 caractères tronqués]`
+
+  ```
+M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M tools/bloc_linguistique.py
+ M tools/ocr_pdf.py
+ M tools/tests/linguistique/test_bloc_linguistique.py
+?? reports/ocr-pdf-cegep-detection.json
+?? reports/pensee-gold-neuronal.json
+?? reports/rapport-s-analyseur-roles.md
+?? reports/s-banque-structures.json
+?? tools/detecte_scans_pdf.py
+?? tools/tests/linguistique/qualifier_neuronal.py
+---
+4:models/
+---
+reports/INDEX.md
+reports/README.md
+| [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
+| [rapport-semantique.md](rapport-semantique.md) | Le protocole sémantique natif — premier passage |
+| [rapport-session-2026-09-30.md](rapport-session-2026-09-30.md) | Session du 30/09 — index des chantiers |
+| [rapport-sessions-plans.md](rapport-sessions-plans.md) | Sessions — le plan avant l'état |
+| [rapport-seuil-reseau.md](rapport-seuil-reseau.md) | A7.5b — le flux sparse gagne même à latence nulle |
+| [rapport-sommeil-budget.md](rapport-sommeil-budget.md) | Le budget du sommeil — ce que le rejeu rapporte (÷ croissant en domaine) et ce qu'il coûte (bruité) |
+| [rapport-sommeil-deux-nu
+… [2986 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls journal/2026-11-02/ 2>/dev/null; echo '---'; sed -n '1,60p' journal/2026-11-02/README.md 2>/dev/null", "description": "Inspect today's journal entry format"}`
+
+  ```
+apprentissage.md
+attention.md
+distribue.md
+docs.md
+memoire.md
+mesures.md
+modele.md
+moteur.md
+outils.md
+portes.md
+README.md
+---
+# 2026-11-02
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-11-02/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
+
+**160 commits** · **10 session(s)** · **10 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| apprentissage | 6 | [apprentissage.md](apprentissage.md) |
+| attention | 6 | [attention.md](attention.md) |
+| distribue | 14 | [distribue.md](distribue.md) |
+| docs | 22 | [docs.md](docs.md) |
+| memoire | 11 | [memoire.md](memoire.md) |
+| mesures | 81 | [mesures.md](mesures.md) |
+| modele | 8 | [modele.md](modele.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
+| outils | 1 | [outils.md](outils.md) |
+| portes | 10 | [portes.md](portes.md) |
+
+## Sessions DSH
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 0.2 h | [r
+… [4154 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"B13\" docs/pilotage/roadmap.md | head -5; echo '---'; sed -n '160,176p' docs/pilotage/roadmap.md", "description": "Read roadmap B13 row context"}`
+
+  ```
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observatrice** + **bruitée** + 
+… [8154 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub a des modifications non committées d'en-cours/roadmap ; j'inspecte le hook et les conventions avant d'écrire
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1,120p' tools/verifie_etat_a_jour.py 2>/dev/null; echo '---HOOK---'; ls .git/hooks/ | head; sed -n '1,80p' .git/hooks/pre-commit 2>/dev/null", "description": "Read state hook and pre-commit hook"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifie_etat_a_jour.py — aucun fait commité sans sa ligne d'état.
+
+POURQUOI CET OUTIL EXISTE. `en-cours` est la seule source de l'état, et le contrat
+disait « seul le principal écrit ». Ce n'est pas une garantie : l'identité se déduit
+d'une variable d'environnement absente — un « pair » est autodéclaré — et si la
+principale s'arrête, l'état se fige. Surtout, rien ne comparait les commits : la
+revue ne regardait que la DATE, donc deux commits du même jour passaient. Le 29/10,
+A8.0 (15 h 51) a été commité après le dernier état (15 h 34) sans aucune alerte.
+
+La garantie est au commit, pas dans la discipline d'un écrivain :
+  --index  (hook pre-commit) : un commit qui prépare un fait (reports/, roadmap,
+           backlog) sans toucher `en-cours` est REFUSÉ ;
+  --head   : si un fait a été commité après le dernier commit d'`en-cours`, l'état
+           est en retard — la session qui le voit le corrige, sans attendre.
+
+Le journal est du récit dérivé (le hook l'archive) : il n'exige pas de ligne d'état.
+
+Usage :
+  python3 tools/verifie_etat_a_jour.py             # --head
+  python3 tools/verifie_etat_a_jour.py --index     # pour le hook
+  python3 tools/verifie_eta
+… [5188 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1,40p' reports/README.md; echo '---INDEX HEAD---'; sed -n '1,25p' reports/INDEX.md; echo '---'; grep -n \"INDEX\" tools/revue_documentation.py tools/*.py | head -10", "description": "Read report index conventions"}`
+
+  ```
+# Les rapports — données intermédiaires et références
+
+> **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
+> (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
+> [`docs/pilotage/en-cours.md`](../docs/pilotage/en-cours.md).
+
+> **Navigation** : [la carte des sujets](../docs/theorie/carte.md) · [l'état du moment](../docs/pilotage/en-cours.md) ·
+> [l'inventaire des docs](../docs/README.md) · [le journal](../journal/README.md).
+>
+> **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) est un **hub** de
+> **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par
+> partie**, jamais en entier ; l'index exhaustif des fiches est [`INDEX.md`](INDEX.md).
+
+## Les fiches courantes
+
+| fichier | ce qu'il porte |
+|---|---|
+| [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
+| [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
+| [`rapport-pensee-miroir.md`](rap
+… [6214 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && tail -40 journal/2026-11-02/README.md; echo '---'; grep -n \"notes\\|marqueur\\|HTML\" tools/journal_auto.py | head -15", "description": "Inspect journal notes block and generator"}`
+
+  ```
+| 13:35 | `26b8c442` | N2 — RESTAURATION (ENCORE) DES FICHES N2.aa, N2.ab ET N2.ac |
+| 13:37 | `20194fb1` | B13 — LE GOLD GELÉ : 602 PHRASES, 21 PORTES PROTÉGÉES ; 133/133 |
+| 13:46 | `297c4f17` | B13 — LA RÉPONSE CONTEXTUELLE : 5/5, LA PHRASE PRÉCÉDENTE TRANCHE ; 134/134 |
+| 13:53 | `81d74433` | B13 — LE LIEN AUTOMATIQUE : 0/5, LE SUJET NE SUFFIT PAS ; 135/135 |
+| 14:06 | `651c1fc0` | B13 — LE LIEN AUTOMATIQUE RÉPARÉ : 5/5 APRÈS RÉORDONNANCEMENT ET REPLI PRON/NOUN ; 136/136 |
+| 14:13 | `49ca52fb` | B13 — LA CORÉFÉRENCE COMME LIEN : 62/116, LA MOITIÉ DES ANTÉCÉDENTS ; 137/137 |
+| 14:20 | `004c5f64` | B13 — LES LIENS CLASSÉS : 50 INTRA, 62 INTER, 4 ABSENTS ; 138/138 |
+| 14:37 | `139a8b16` | B13 — LES ABSENTS : 0, LES QUATRE ÉTAIENT DES FAUX (TOKENISATION) ; 139/139 |
+| 15:57 | `702b368c` | B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140 |
+| 15:59 | `ca06ab0b` | D — L'OCR CEGEP, LE GLOSSAIRE AU RENDU ET LES LIENS DE LA FAMILLE 13 |
+| 16:01 | `86cfb580` | N2 — N2.ac EST LE MODÈLE DE PRODUCTION : LE MÉLANGE 1 Go, LE CANAL ET LA PÉNALITÉ |
+| 16:03 | `2dab14e4` | PILOTAGE — L'ÉTAT REPREND : 140/140, N2.ac, DEUX SESSIONS EN PAUSE, PORTE STRICTE |
+| 16:05 | `566ac478` | HUB
+… [3669 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'inspecte les modifications non committées du hub pour ne pas les emporter dans mon commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git diff --stat docs/pilotage/en-cours.md docs/pilotage/roadmap.md; echo '---EN-COURS DIFF---'; git diff docs/pilotage/en-cours.md | head -80", "description": "Inspect hub's uncommitted en-cours diff"}`
+
+  ```
+docs/pilotage/en-cours.md | 37 +++++++++++++++++++------------------
+ docs/pilotage/roadmap.md  | 12 ++++++++----
+ 2 files changed, 27 insertions(+), 22 deletions(-)
+---EN-COURS DIFF---
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 8ef17b2b..456679c9 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-02, 16 h 40 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-02, 16 h 49 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+ > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+@@ -54,18 +54,19 @@
+ ### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+ 
+ - **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+-- **Rôle** : **S — les structures** : le banc d'interprétations candidates, l'**analyseur** (rôles,
+-  subordonnées) et l'**export au corpus**.
+-- **Plan** : 1) ~~plan et réservation~~ ; 2) **analyseur rôles/subordonnées** (en cours) ; 3) **export
+-  au corpus*
+… [4804 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git diff docs/pilotage/roadmap.md | head -60; echo '---'; git log --oneline -3", "description": "Inspect roadmap diff and recent commits"}`
+
+  ```
+diff --git a/docs/pilotage/roadmap.md b/docs/pilotage/roadmap.md
+index 835752cb..d9622558 100644
+--- a/docs/pilotage/roadmap.md
++++ b/docs/pilotage/roadmap.md
+@@ -31,12 +31,14 @@
+ | **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** 
+… [7044 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub intègre S en ce moment ; je vérifie s'il est encore actif avant de committer
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -3 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '---'; python3 tools/sessions.py --status 2>&1 | head -8; echo '---'; ps -eo pid,etime,cmd | grep \"dsh --profile\" | grep -v grep | head -10", "description": "Check recent commit times, h … [29 caractères tronqués]`
+
+  ```
+9223d054 16:39:57 ÉTAT — COMPTEURS AU DISQUE (551 FICHES / 638 JSON) ; HEARTBEAT 16 h 40
+bee2527d 16:37:19 PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8
+13f4e131 16:32:47 S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES
+---
+sessions · plans de mandat
+    0733c5bb-f90b-4f58 · actif    ·  34 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → **200 000 pas sur `data/wiki_mix/propre`** (34,3 M, canal, positions aléatoires, graine 1) puis la mesure des cinq PPL et de la courbe 128/256/512.
+    0b0a6a0d-05f5-4308 · terminé  · 1939 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 4013 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 3184 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+---
+   7293    01:2
+… [476 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche : je vérifie d'abord le format et la doc d'implantation
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"NeuronalLLM\\|Cascade\\|neuronal\" docs/implantation/bloc-linguistique.md | head -20; echo '---'; sed -n '1,50p' docs/implantation/bloc-linguistique.md", "description": "Inspect implantation doc structure"}`
+
+  ```
+5:> l'**heuristique CPU** et la **version neuronale** se substituent, se **parallélisent** ou se
+13:> avec quelle confiance et quels candidats ; le neuronal (ou l'humain) tranche l'ambigu, et la
+29:avec `source`, `confiance` et `candidats`, et que l'on peut remplacer par une version neuronale
+36:| niveau | ce qu'on étiquette | heuristique CPU | neuronal | ce que le consommateur en fait |
+51:**absent**, pas implicitement faux ; le consommateur peut alors appeler le neuronal ou refuser.
+69:`source ∈ {heuristique, neuronal, humain}`, `niveau ∈` les neuf, `confiance ∈ [0,1]`.
+127:### 5.2 La version neuronale
+132:  niveaux profonds (morphème, POS ouverte, syntagme, pragmatique) avec `source = neuronal`. Il
+134:  que le parallèle fusionne et que la cascade n'appelle le neuronal que sur le résidu.
+135:- **`NeuronalLLM`** : l'**adaptateur réel**. Il construit un prompt JSON, appelle un modèle local
+158:et `bloc` peut être `Heuristique`, `MockNeuronal`, `NeuronalLLM`, `Parallele` ou `Cascade`. Le
+164:`Parallele([heuristique, neuronal])` exécute les deux et **fusionne** :
+169:  de la coloration) est prioritaire — le mock neuronal ne doit pas écraser un découpage plus
+175:`Cascade(heuristique
+… [4060 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls tools/index_reports.py && python3 tools/index_reports.py --help 2>&1 | head -15", "description": "Check report index generator usage"}`
+
+  ```
+tools/index_reports.py
+  548 fiches → reports/INDEX.md
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/docs/implantation/bloc-linguistique.md", "limit": 70, "offset": 122}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/docs/implantation/bloc-linguistique.md</path>
+<type>file</type>
+<content>
+122:   relation candidate ;
+123: - **pragmatique** : l'acte de parole (question, exclamation, ordre, assertion) à basse
+124:   confiance, le double sens possible (`ou`, guillemets, question), le contexte fourni ;
+125: - **document** : les paragraphes, les titres Markdown/numérotés, la provenance.
+126: 
+127: ### 5.2 La version neuronale
+128: 
+129: Deux objets, un même contrat :
+130: 
+131: - **`MockNeuronal`** : le **double de contrat**. Il est déterministe, sans GPU, et rend les
+132:   niveaux profonds (morphème, POS ouverte, syntagme, pragmatique) avec `source = neuronal`. Il
+133:   ne prétend pas être un modèle : il prouve que le contrat accepte une autre implémentation,
+134:   que le parallèle fusionne et que la cascade n'appelle le neuronal que sur le résidu.
+135: - **`NeuronalLLM`** : l'**adaptateur réel**. Il construit un prompt JSON, appelle un modèle local
+136:   (`llama-cli`), parse la réponse et la convertit en `Annotation` ; si le modèle est absent, ne
+137:   répond pas ou rend un JSON invalide, il lève `RefusNeuronal` — il ne simule pas.
+138: 
+139: **Ce que le mo
+… [2803 caractères tronqués]
+  ```
+

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 16 h 40 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 16 h 49 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
 > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
@@ -54,18 +54,19 @@
 ### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
 
 - **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
-- **Rôle** : **S — les structures** : le banc d'interprétations candidates, l'**analyseur** (rôles,
-  subordonnées) et l'**export au corpus**.
-- **Plan** : 1) ~~plan et réservation~~ ; 2) **analyseur rôles/subordonnées** (en cours) ; 3) **export
-  au corpus** ; 4) **tests** ; 5) **fiche, sous-module** ; 6) **ligne d'état**.
-- **Ambition** : un analyseur qui **nomme le rôle** et **coupe la subordonnée**.
-- **Stratégie** : une règle = une phrase du gold, un contrôle négatif par mesure, 19 tests.
-- **Objectif final** : un gold de 20 phrases, une mesure reproductible, `data/structures/banque.jsonl`
-  + manifeste, committé.
-- **Ce qu'elle fait** : mandat ouvert à **16 h 19** ; l'analyseur rôles/subordonnées est en cours.
-- **Ce que font les autres** : le **hub** ; **N2** tient `data/` ; **Pensée**, **D/R/A**.
-- **Prochaine action** : le **gold rôles/subordonnées**, puis l'**export**.
-- **Bloquants** : aucun ; sous-module commité **dans son dépôt** avant le pointeur.
+- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+- **Plan** : 1–4) ~~plan, analyseur (gold 39), export, tests 40~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Ambition** : nommer le rôle, couper la subordonnée ; un corpus qui se rejoue.
+- **Stratégie** : une règle = une phrase du gold, trois contrôles.
+- **Objectif final** : gold **39**, corpus **39**, manifeste SHA-256.
+- **Fait** : types **38/39**, rôles **99/100**, compléments **45/45** ; contrôles **64/100**,
+  **66/100**, **0,099** ; échec nommé **h033** ; **40 tests** ;
+  [`fiche`](../../reports/rapport-s-analyseur-roles.md).
+- **Ce qu'elle fait** : sous-module **`647205a`** et pointeur **`13f4e131`** committés ; corpus
+  **39** lignes (SHA `973c70a4…`) ; mode `banque` à **0** verdict humain.
+- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+- **Prochaine action** : validation humaine de la banque, puis frontière du GN (h033).
+- **Bloquants** : aucun pour l'analyseur et l'export ; **banque validée à 0** verdict.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
 
 ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
@@ -104,8 +105,7 @@
 - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
 - **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
 - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** 10 notes, 1 596 p ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md).
-- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (niveaux 0–4), export ; analyseur **7/7** séquences, **93,9 %** de couverture, **19 tests** ; [`analyseur`](../../reports/rapport-s-analyseur.md) ;
-  **session `29ad180d`** ouverte le 02/11 16 h 19 — analyseur rôles/subordonnées en cours.
+- **S — le banc de structures** : **analyseur rôles/subordonnées 38/39 types, 99/100 rôles, 45/45 compléments**, gold **39**, **40 tests** ; corpus **39** structures (SHA `973c70a4…`) ; [`fiche`](../../reports/rapport-s-analyseur-roles.md) ; **banque validée à 0**.
 - **N2** : **N2.ac** (mélange **1,02 Go**, 60 k pas) : **3,49** domaine, **6,03** littérature,
   **8,34** anglais, **9,05** wikitext2 — **le modèle de production** ; N4 **0/40** ; **session
   `0733c5bb`** ouverte le 02/11 16 h 17 — **200 k pas en cours** ; [`n2-canaux`](../../reports/rapport-n2-canal-34m.md),
@@ -122,7 +122,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **551** / **638** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **551** / **639** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
 
@@ -145,8 +145,9 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **DRVM/L** ; **S** — l'analyseur
-puis l'export ; **N4** — la consigne ; **B10.3** — le `z` ; **R0.7** — gold/neuronal.
+**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **DRVM/L** ; **S** — la **validation
+humaine** de la banque et la frontière du GN (h033) ; **N4** — la consigne ; **B10.3** — le `z` ;
+**R0.7** — gold/neuronal.
 
 - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
 

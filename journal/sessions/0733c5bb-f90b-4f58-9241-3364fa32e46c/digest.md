@@ -1840,3 +1840,265 @@ tools/docwatch/.venv/lib/python3.13/site-packages/pip/_internal/commands/wheel.p
 ⏵ Question de gouvernance (en-cours) pendant que les runs tournent
 
 - **ask_user_question** `{"questions": [{"id": "en_cours", "header": "en-cours", "question": "Le hook pre-commit refuse tout fait dans reports/ sans modifier docs/pilotage/en-cours.md — or tu m'interdis d'y toucher sans le hub (qui est actif et vient d'écrire l'état à 16 h 09). Comment veux-tu que je commite la fiche N2 ?", … [767 caractères tronqués]`
+
+  ```
+{"answers":[{"id":"en_cours","selected":["J'ajoute ma seule ligne N2 dans en-cours, puis commit via le hook (Recommandé)"]}]}
+  ```
+
+### 🤖 Assistant
+
+⏵ Autorisation actée ; suivi des deux runs
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- 200k ---\"; tail -1 work/n2ac/mix-200k.log; echo \"--- rope ---\"; tail -1 work/n2ac/rope-20k.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Check both training runs"}`
+
+  ```
+16:43:56
+--- 200k ---
+pas 21350 · perte 1.3747 · PPL val 3.997 · 1241 s
+--- rope ---
+pas  19750 · perte 1.2453 · PPL val 3.517 · 1203 s
+0, 1642 MiB, 99 %
+1, 1422 MiB, 95 %
+  ```
+
+- **bash** `{"command": "sleep 75; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -6 work/n2ac/rope-20k.log; ls -la work/n2ac/", "description": "Wait for RoPE run completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-65]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-65", "timeout_ms": 90000, "wait": true}`
+
+  ```
+16:45:25
+ "jetons_val": 8192,
+ "tetes": true,
+ "drvm": "work/n2ac/rope-20k.drvm",
+ "sha256_drvm": "67d81ab3fce8af14eb92b7008bd3d4a307f9e7a325e46974228fa8bbde9130f0",
+ "duree_s": 1220.1019806861877
+}
+total 268120
+drwxr-xr-x. 1 stephane stephane       268  2 nov 16:44 .
+drwxr-xr-x. 1 stephane stephane       294  2 nov 16:44 ..
+-rw-------. 1 stephane stephane      5149  2 nov 16:22 entrainer_rope.py
+-rw-------. 1 stephane stephane      2920  2 nov 16:20 eval_200k.py
+-rw-------. 1 stephane stephane      1940  2 nov 16:22 eval_longueurs.py
+-rw-r--r--. 1 stephane stephane     24079  2 nov 16:45 mix-200k.log
+drwxr-xr-x. 1 stephane stephane        52  2 nov 16:22 __pycache__
+-rw-r--r--. 1 stephane stephane 137224476  2 nov 16:44 rope-20k.drvm
+-rw-r--r--. 1 stephane stephane     22201  2 nov 16:44 rope-20k.log
+-rw-r--r--. 1 stephane stephane 137247942  2 nov 16:44 rope-20k.pt
+-rw-r--r--. 1 stephane stephane       524  2 nov 16:44 rope-20k.pt.json
+-rw-------. 1 stephane stephane      5158  2 nov 16:21 rope_model.py
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Courbes de longueur RoPE vs positions absolues (contrôle apparié)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat work/n2ac/rope-20k.pt.json; echo \"=== launch curves ===\"; nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=1; ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/rope-20k.pt --r … [445 caractères tronqués]`
+
+  ```
+{
+ "modele": "drave-n0-rope",
+ "parametres": 34301224,
+ "corpus": "data/wiki_fr/propre/train.txt",
+ "octets": 186089472,
+ "pas": 20000,
+ "seq": 128,
+ "lot": 8,
+ "lr": 0.0003,
+ "graine": 1,
+ "window": 256,
+ "positions": "rope",
+ "init": "work/n2j/base-wiki-45m.pt",
+ "perte_finale": 1.3000273704528809,
+ "ppl_val": 3.5371263065339433,
+ "jetons_val": 8192,
+ "tetes": true,
+ "drvm": "work/n2ac/rope-20k.drvm",
+ "sha256_drvm": "67d81ab3fce8af14eb92b7008bd3d4a307f9e7a325e46974228fa8bbde9130f0",
+ "duree_s": 1220.1019806861877
+}
+=== launch curves ===
+pid 78769
+[still running after 60000ms; moved to background job bash-66]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-66", "timeout_ms": 120000, "wait": true}`
+
+  ```
+L384 : 3.33
+  L512 : 3.2892
+  L1000 : 3.2545
+{"fichier": "rope-20k.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L128": 3.3696, "L192": 3.3217, "L256": 3.3217, "L384": 3.33, "L512": 3.2892, "L1000": 3.2545}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-66 (bash: cd /home/stephane/GitHub/Qtrinet && cat work/n2ac/rope-20k.pt.json; echo "=== launch curves ==="; nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=1; ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/rope-20k.pt --rope --longueurs 128,192,256,384,512,1000 --sortie work/n2ac/courbe-rope.json > work/n2ac/courbe-rope.log 2>&1; ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2j/base-34m-canal.pt --longueurs 128,192,256,384,512,1000 --sortie work/n2ac/courbe-absolu.json > work/n2ac/courbe-absolu.log 2>&1' > /dev/null 2>&1 & echo "pid $!"; sleep 60; tail -4 work/n2ac/courbe-rope.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Résultat R1.1 prometteur ; vérification du contrôle absolu
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/courbe-absolu.json 2>/dev/null || tail -4 work/n2ac/courbe-absolu.log; echo \"=== 200k ===\"; tail -1 work/n2ac/mix-200k.log", "description": "Read absolute control curve"}`
+
+  ```
+16:47:00
+{
+ "fichier": "base-34m-canal.pt",
+ "val": "data/wiki_fr/propre",
+ "positions": "absolues",
+ "L128": 3.5131,
+ "L192": 3.4619,
+ "L256": 3.4836,
+ "L384": 3.5849,
+ "L512": 3.6558,
+ "L1000": 8.2024
+}
+=== 200k ===
+pas 24500 · perte 1.3929 · PPL val 3.916 · 1426 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement de la chaîne : R1.1 graine 2, puis R1.2 (fenêtre 512, budget constant)
+
+- **write** `{"content": "#!/usr/bin/env bash\n# chaine_r1.sh — le reste du banc R1, sur le GPU que N2 ne prend pas (le 200 k est sur 0).\n#\n#   1. R1.1 graine 2 (contrôle de graine)            : 20 000 pas × 8 × 128, fenêtre 256\n#   2. R1.2 budget constant (mêmes octets vus)       :  5 000 pas × 8 × 512, fenê … [1350 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_r1.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && nohup bash work/n2ac/chaine_r1.sh > work/n2ac/chaine_r1.out 2>&1 & echo \"pid $!\"; sleep 45; date '+%H:%M:%S'; tail -2 work/n2ac/rope-20k-g2.log; tail -1 work/n2ac/mix-200k.log", "description": "Launch R1 chain in background"}`
+
+  ```
+pid 79387
+16:48:08
+pas 25600 · perte 1.4733 · PPL val 3.855 · 1493 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Évaluation du témoin 60 k avec le même banc (comparaison appariée)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_200k.py work/n2w/mix-60k.pt --sortie work/n2ac/eval-mix60.json > work/n2ac/eval-mix60.log 2>&1' > /dev/null 2> … [154 caractères tronqués]`
+
+  ```
+pid 79670
+[still running after 60000ms; moved to background job bash-69]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-69", "timeout_ms": 180000, "wait": true}`
+
+  ```
+16:49:53
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat work/n2ac/eval-mix60.json 2>/dev/null; echo \"--- log ---\"; tail -5 work/n2ac/eval-mix60.log", "description": "Read 60k reference eval results"}`
+
+  ```
+--- log ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ps aux | grep \"[e]val_200k\" | awk '{print $2,$3,$4}'; sleep 60; date '+%H:%M:%S'; cat work/n2ac/eval-mix60.log | tail -30", "description": "Check eval process and output"}`
+
+  ```
+79670 0.0 0.0
+79672 0.0 0.0
+79673 102 1.2
+[still running after 60000ms; moved to background job bash-71]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-71", "timeout_ms": 90000, "wait": true}`
+
+  ```
+16:51:04
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-71 (bash: cd /home/stephane/GitHub/Qtrinet && ps aux | grep "[e]val_200k" | awk '{print $2,$3,$4}'; sleep 60; date '+%H:%M:%S'; cat work/n2ac/eval-mix60.log | tail -30) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 120; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- mix60 ---\"; cat work/n2ac/eval-mix60.json 2>/dev/null || tail -3 work/n2ac/eval-mix60.log; echo \"--- chaine ---\"; cat work/n2ac/chaine_r1.out; tail -1 work/n2ac/rope-20k-g2.log 2>/dev/null; echo \"--- 200k -- … [88 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-72]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-72", "timeout_ms": 120000, "wait": true}`
+
+  ```
+16:53:15
+--- mix60 ---
+{
+ "fichier": "mix-60k.pt",
+ "params": 34301224,
+ "val_fr_L128": 3.4902,
+ "val_fr_L256": 3.4615,
+ "val_fr_L512": 3.5169,
+ "val_fr_permute": 215.5638,
+ "val_big_L128": 3.3565,
+ "val_big_L256": 3.2716,
+ "val_big_L512": 3.3685,
+ "val_big_permute": 226.8678,
+ "litterature": 6.0283,
+ "anglais": 8.3352,
+ "wikitext2": 9.0525
+}
+--- chaine ---
+pas   4450 · perte 1.2191 · PPL val 3.843 · 294 s
+--- 200k ---
+pas 30850 · perte 1.3787 · PPL val 3.711 · 1799 s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle mécaniste : quelles lignes de la table de positions ont été entraînées
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. ~/gpu-env/bin/python - <<'PY'\nimport torch\nfor pt in (\"work/n2j/base-wiki-45m.pt\", \"work/n2j/base-34m-canal.pt\", \"work/n2ac/rope-20k.pt\"):\n    ck = torch.load(pt, map_location=\"cpu\", weights_only=False)\n    w = ck[\"state\"][\ … [438 caractères tronqués]`
+
+  ```
+work/n2j/base-wiki-45m.pt          max_pos=2048 norme moyenne par bloc de 64 positions :
+    [18.1936, 17.9179, 17.8632, 17.9766, 17.9018, 17.8059, 17.9547, 18.0741, 18.3571, 18.4997, 18.3569, 18.3473, 18.4917, 18.453, 18.5365, 18.4917, 18.4963]
+    moyenne 0-511 : 17.9610 · 512-1023 : 18.4417 · 1024+ : 18.4588
+work/n2j/base-34m-canal.pt         max_pos=2048 norme moyenne par bloc de 64 positions :
+    [16.8655, 16.5904, 16.5271, 16.6384, 16.568, 16.4932, 16.6202, 16.8005, 17.2951, 17.4294, 17.2948, 17.2858, 17.4218, 17.3854, 17.464, 17.4218, 17.4262]
+    moyenne 0-511 : 16.6379 · 512-1023 : 17.3748 · 1024+ : 17.3908
+work/n2ac/rope-20k.pt              max_pos=2048 norme moyenne par bloc de 64 positions :
+    [18.1936, 17.9179, 17.8632, 17.9766, 17.9018, 17.8059, 17.9547, 18.0741, 18.3571, 18.4997, 18.3569, 18.3473, 18.4917, 18.453, 18.5365, 18.4917, 18.4963]
+    moyenne 0-511 : 17.9610 · 512-1023 : 18.4417 · 1024+ : 18.4588
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle causal : table absolue avec positions 0–1279 entraînées
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=1 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal --pas 20000 --seq 12 … [548 caractères tronqués]`
+
+  ```
+pid 82052
+16:54:40
+--- chaine ---
+pas   5950 · perte 1.1231 · PPL val 3.745 · 381 s
+--- absolu-1152 ---
+pas   50 · perte 2.4076 · PPL val 4.774 · 6 s
+--- 200k ---
+pas 32450 · perte 1.4397 · PPL val 3.684 · 1886 s
+  ```
+

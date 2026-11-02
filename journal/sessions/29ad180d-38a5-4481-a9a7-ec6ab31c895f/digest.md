@@ -2760,3 +2760,303 @@ journal/2026-11-02/docs.md:32:| 16:32 | `13f4e131` | S — LE SOUS-MODULE 647205
 
 Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && python3 mesure_analyseur.py && python3 exporter_corpus.py && python3 verifier_corpus.py ../../data/structures/banque.jsonl`.
 
+
+## Tour 2
+
+### 👤 Utilisateur
+
+mets le dossier copilotage à jour
+
+### 🤖 Assistant
+
+⏵ Mise à jour de `docs/pilotage/` : état S, compteurs et roadmap, puis commit avec la fiche.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 16 h 40 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+6: > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+7: > [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+8: >
+9: > **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
+10: > et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; les GPU sont
+11: > sains ; reprise par `dsh --profile dsh-tui --resume <id>` ; runbook dans
+12: > [`plan-travail.md`](plan-travail.md) § 9.
+13: 
+14: ## Sessions en cours
+15: 
+16: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+17: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+18: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+19: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`
+… [11280 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md</path>
+<type>file</type>
+<content>
+1: # La roadmap de [Drave](../theorie/glossaire/entrees/drave.md) — un seul plan, quatre chantiers
+2: 
+3: > **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+4: > L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date. Les chiffres, les séries et les
+5: > contrôles vivent dans [`reports/`](../../reports/) ; ici : l'[état](../theorie/glossaire/entrees/etat.md), la prochaine action, et ce qui bloque.
+6: >
+7: > **Détail et histoire** : l'ancien plan [A/B](../theorie/glossaire/entrees/a-b.md) est archivé dans
+8: > [`roadmap-detail-2026-10-29.md`](../archive/roadmap-detail-2026-10-29.md), le détail N dans
+9: > [`roadmap-native-2026-10-29.md`](../archive/roadmap-native-2026-10-29.md). Les **fiches de fonctionnalité** sont
+10: > dans [`backlog/index.md`](backlog/index.md) ; le **graphe des dépendances** est dans
+11: > [`backlog/dependances.md`](backlog/dependances.md). La **page vivante** est [`en-cours.md`](en-cours.md).
+12: 
+13: ## Comment lire cette roadmap
+14: 
+15: - **Les états** : ✅ m
+… [41255 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -8; echo \"=== comptes disque ===\"; ls reports/*.md | wc -l; ls reports/*.json | wc -l; echo \"=== status ===\"; git status --short | head -12", "description": "Get current report/JSO … [31 caractères tronqués]`
+
+  ```
+revue de documentation · 551 fiche(s) · 638 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== comptes disque ===
+551
+638
+=== status ===
+ M tools/bloc_linguistique.py
+ M tools/ocr_pdf.py
+ M tools/tests/linguistique/test_bloc_linguistique.py
+?? reports/ocr-pdf-cegep-detection.json
+?? reports/rapport-s-analyseur-roles.md
+?? reports/s-banque-structures.json
+?? tools/detecte_scans_pdf.py
+?? tools/tests/linguistique/qualifier_neuronal.py
+  ```
+
+- **bash** `{"command": "date '+%Y-%m-%d %H:%M:%S %Z'", "description": "Get real time for state timestamps"}`
+
+  ```
+2026-11-02 16:49:54 EST
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "old_string": "**Mis à jour : 2026-11-02, 16 h 40 HNE (heure locale, EST).**", "new_string": "**Mis à jour : 2026-11-02, 16 h 49 HNE (heure locale, EST).**"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **Plan** : 1) ~~plan et réservation~~ ; 2) ~~analyseur rôles/subordonnées~~ (gold 39) ; 3) ~~export\n  au corpus~~ (schéma `statut`, mode gold, manifeste) ; 4) ~~tests : 40~~ ; 5) ~~fiche, man … [2416 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (niveaux 0–4), **analyseur rôles/subordonnées 38/39 types, 99/100 rôles, 45/45 compléments**, gold **39* … [595 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **DRVM/L** ; **S** — la **validation\nhumaine** de la banque, puis la frontière du GN sans auxiliaire (h033) ; **N4** — la consigne ;\n* … [242 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md", "new_string": "| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v2** : rôles **contextuels** et subordonnées typées, gold **39** phrases ; analyseur **38/39** typ … [694 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md", "new_string": "**État au 02/11 16 h 49.** B13 est à **140/140** (gold 432, 116 liens) ; **N2.ac** (1 Go) est le\nmodèle de production (3,49 / 6,03) ; **S** — l'analyseur rôles/subordonnées est **mesuré**\n(38/3 … [726 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md", "new_string": "L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 16 h 49**.", "old_string": "L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour … [33 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md", "new_string": "- **non bloqué, à faire** : **N2** (200 k pas sur le mélange 1 Go, puis R1) ; **N4** (consigne courte) ;\n  **N3** (opérations natives) ; **A8.3b** (mode de lot) ; **R4.4** (les scans réels) ;\n  … [255 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md", "new_string": "| R4.4 les scans | pas de **vérité humaine** sur les scans réels : trois vrais scans (Internet Archive) donnent des **accords**, pas des vérités | 10 pages **scannées** avec vérité humaine ; le f … [460 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -10; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -6; echo \"=== sessions ===\"; python3 tools/sessions.py --check 2>&1 | tail -8",  … [64 caractères tronqués]`
+
+  ```
+=== revue ===
+  revue de documentation · 551 fiche(s) · 638 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== en-cours ===
+  en-cours · 1739 mots · 7 sections · 5 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== sessions ===
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== tableaux ===\"; bash tools/porte-tableaux.sh >/tmp/pt2.out 2>&1; echo \"exit=$?\"; tail -4 /tmp/pt2.out; echo \"=== taille ===\"; python3 tools/taille_documents.py 2>&1 | tail -4; echo \"=== diff stat ===\"; git diff --sta … [62 caractères tronqués]`
+
+  ```
+=== tableaux ===
+exit=0
+  ✅ 1557 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 2604 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+=== taille ===
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4113 mots (AGENTS + en-cours + une tâche) > budget 4 000
+=== diff stat ===
+ docs/pilotage/en-cours.md                          |  39 ++++---
+ docs/pilotage/roadmap.md                           |  12 +-
+ tools/bloc_linguistique.py                         | 125 +++++++++++++++++++++
+ tools/ocr_pdf.py                                   |  61 ++++++++--
+ tools/tests/linguistique/test_bloc_linguistique.py |  26 +++++
+ 5 files changed, 233 insertions(+), 30 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport subprocess, re\ndef words(s): return len(s.split())\nnew = open('docs/pilotage/en-cours.md').read()\nold = subprocess.check_output(['git','show','HEAD:docs/pilotage/en-cours.md'], text=True)\ndef section(t, s … [571 caractères tronqués]`
+
+  ```
+S session old 171 new 269
+S en cours old 42 new 50
+Ce qui reste old 51 new 62
+total old 1622 new 1739
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).\n- **Rôle** : **S — les structures** : le banc, l'analyseur  … [3075 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **S — le banc de structures** : **analyseur rôles/subordonnées 38/39 types, 99/100 rôles, 45/45 compléments**, gold **39**, **40 tests** ; corpus **39** structures (SHA `973c70a4…`) ; [`fiche` … [531 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **DRVM/L** ; **S** — la **validation\nhumaine** de la banque et la frontière du GN (h033) ; **N4** — la consigne ; **B10.3** — le `z` ;\ … [285 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -4; echo \"=== taille ===\"; python3 tools/taille_documents.py 2>&1 | tail -8; echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -4", "description": "Recheck word b … [23 caractères tronqués]`
+
+  ```
+en-cours · 1633 mots · 7 sections · 5 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== taille ===
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 4007 mots (budget 4 000)
+
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+=== revue ===
+  revue de documentation · 551 fiche(s) · 639 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 638 JSON, le disque en a 639
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path('docs/pilotage/en-cours.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"- **Ambition** : un analyseur qui nomme le rôle et coupe la subordonnée ; un corpus qui se rejoue.\ … [893 caractères tronqués]`
+
+  ```
+trim + compteur 639
+  en-cours · 1626 mots · 7 sections · 5 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 551 fiche(s) · 639 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md", "limit": 45}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — S, les structures (analyser, banquer, exporter)
+2: 
+3: > **Mandat vivant.** Ouvert le 2026-11-02 16 h 19 HNE depuis
+4: > [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ S) et
+5: > [`plan-travail.md`](../../../docs/pilotage/plan-travail.md) § 9.2.
+6: > Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+7: > `en-cours` reste la seule source de l'état : ce plan est le **contrat de travail** qui le
+8: > précède, et la section S y est **proposée au hub**, pas écrite ici.
+9: 
+10: - **Session** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f`
+11: - **Rôle** : **S — les structures** : le banc d'interprétations candidates (outil web, générateur,
+12:   pragmatique, banque), l'**analyseur** (rôles, subordonnées) et l'**export au corpus**.
+13: - **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+14: - **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
+15:   `reports/s-banque-*` ; `journal/sessions/29ad180d-38
+… [2632 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path('journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"\"\"> `en-cours` reste la seule source de l'état : ce plan est  … [2497 caractères tronqués]`
+
+  ```
+plan mis à jour 63 lignes
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '52,72p' docs/pilotage/en-cours.md; echo \"=== roadmap S ===\"; grep -n \"S — les structures\\|S — la banque\\|État au 02/11\\|dernière mise à jour\" docs/pilotage/roadmap.md | head -8; echo \"=== status ===\"; git status --sh … [156 caractères tronqués]`
+
+  ```
+- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+
+- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+- **Plan** : 1–4) ~~plan, analyseur (gold 39), export, tests 40~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Ambition** : nommer le rôle, couper la subordonnée ; un corpus qui se rejoue.
+- **Stratégie** : une règle = une phrase du gold, trois contrôles.
+- **Objectif final** : gold **39**, corpus **39**, manifeste SHA-256.
+- **Fait** : types **38/39**, rôles **99/100**, compléments **45/45** ; contrôles **64/100**,
+  **66/100**, **0,099** ; échec nommé **h033** ; **40 tests** ;
+  [`fiche`](../../reports/rapport-s-analyseur-roles.md).
+- **Ce qu'elle fait** : sous-module **`647205a`** et pointeur **`13f4e131`** committés ; corpus
+  **39** lignes (SHA `973c70a4…`) ; mode `banque` à **0** verdict humain.
+- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+- **Proch
+… [1666 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md reports/rapport-s-analyseur-roles.md reports/s-banque-structures.json && git diff --cached --stat && git commit  … [596 caractères tronqués]`

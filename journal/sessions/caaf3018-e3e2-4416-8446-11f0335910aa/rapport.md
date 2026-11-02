@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 0.4 h |
-| Tours | 1 |
-| Messages | 96 |
-| Appels d'outils | 125 |
+| Durée | 0.5 h |
+| Tours | 2 |
+| Messages | 110 |
+| Appels d'outils | 138 |
 | Fichiers touchés | 2 |
-| Commandes | 94 |
+| Commandes | 103 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -21,11 +21,13 @@
 
 **Tour 1** — Tu reprends le hub `536cd5d6-94ac-4057-8fe9-11709a4587c7`. Lis son plan, en-cours et  plan-travail §9. Prochaine action : la passe de portes complète  (`bash tools/toutes-les-portes.sh`, ~1 h 46, machine au repos), puis l'intégration des lignes  d'état des sessions ouvertes. Rafraîchis le heartbeat.
 
+**Tour 2** — oui
+
 ## 2. Déroulé, étape par étape
 
 ### Tour 1 — Tu reprends le hub `536cd5d6-94ac-4057-8fe9-11709a4587c7`. Lis son plan, en-cours et  plan-travail §9. Prochaine action  … [180 caractères tronqués]
 
-*125 appels d'outils.* Actions notables :
+*128 appels d'outils.* Actions notables :
 
 - bash — List working directory and check hub directory
 - bash — Find hub id references in repo
@@ -41,11 +43,70 @@
 - bash — Find heartbeat mentions
 - bash — Check current time and gates scripts
 - bash — Read gates method doc
-- … et 101 autres
+- … et 103 autres
 
 **Synthèse produite :**
 
-⏵ Committing the final counter alignment
+⏵ Bilan du cycle hub
+
+**La passe complète n'est pas lancée — la machine n'est pas au repos, et je l'ai mesuré avant de décider.**
+
+À 16 h 32 puis 16 h 41 :
+
+| ressource | mesure |
+|---|---|
+| GPU 0 | **99 %**, 2 014 MiB — N2 `entrainer_native.py` (pas 18 900/200 000, PPL val 4,102) |
+| GPU 1 | **95 %**, 1 540 MiB — `work/n2ac/entrainer_rope.py` (banc R1.1/R1.2 de N2) |
+| charge | 10–24 sur 40 cœurs ; quatre sessions actives écrivent |
+
+`portes.md` est explicite : *les portes et une mesure GPU ne cohabitent pas*. Lancer 1 h 46 de portes ici aurait mesuré la contention, pas les portes. J'ai quand même fait la **sous-passe documentaire** (8 portes, `work/portes/sous-passe-1102-16h35`) : **7/8**. La seule rouge, `porte-bloc-maths`, ne l'est que sur son critère de **coût** (×8,31 pour ×4) ; rejouée seule trois fois, elle est **verte** (×4,24 / ×2,84 / ×4,12), les 32 formules, 10 dérivées, 6 équations et 42 restitutions restant exactes. Bruit de charge, pas régression.
+
+**Ce qui est fait et committé**
+
+- `e420267a` — **intégration** : cinq sections d'état (deux nouvelles : N2 `0733c5bb`, S `29ad180d` ; Pensée et D/R/A passées de « en pause » à « reprises à 16 h 16 / 16 h 21 »), roadmap au réel, heartbeat rafraîchi — en-cours **1 622 mots**, **T0 3 996**.
+- `e420267a` — **porte sessions réparée** : le strict sortait en 1 avec **0 erreur et 4 avertissements** (`data/` ⊃ `data/structures/`). L'imbrication d'un territoire partagé est le régime normal ; le strict ne refuse plus que les quatre classes documentées. Autotest étendu (réservation imbriquée avertie, non refusée).
+- `bee2527d` — **report de la passe** avec ses mesures et la preuve du bruit.
+- `9223d054` — compteurs au disque (551 fiches / 638 JSON) et heartbeat **16 h 40**.
+
+Vérifications de clôture : revue de documentation ✅ · `en-cours` 1 622 mots ✅ · T0 3 996/4 000 ✅ · `sessions --check --strict` 0 ✅ · `verifie_journal` ✅ · `verifie_etat_a_jour --head` ✅.
+
+**Deux points à savoir**
+
+1. La passe complète est à relancer **dès que les deux runs N2 seront finis** (200 k pas à ~17 pas/s ≈ 3 h 20, soit vers **19 h 50**), avec `JOURNAUX=work/portes/<date>` pour des journaux durables — ceux de `/tmp` ont été effacés au reboot. Prévoir aussi que `porte-sessions` peut rougir en fin de passe sur des heartbeats périmés (1 h 46 de durée) : c'est structurel, pas une régression, et se rejoue seul.
+2. **S a livré** un cycle mesuré (analyseur : types 38/39, rôles 99/100, couverture 99,6 %, 39 structures exportées, contrôl
+… [360 caractères tronqués]
+
+### Tour 2 — oui
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Write and syntax-check the gate watcher
+- bash — Arm gate watcher and full pass on free window
+- job_output
+- bash — List processes matching trainer pattern
+- bash — Check current GPU compute apps
+- bash — Identify the new GPU process
+- job_kill
+- bash — Rewrite watcher with GPU-process criterion and syntax-check
+- bash — Arm improved gate watcher in background
+
+**Synthèse produite :**
+
+⏵ Passe armée — j'attends la fenêtre libre
+
+**Oui — la passe est armée, pas encore lancée.** Le veilleur tourne (`bash-103`) : à 16 h 46, il lit `calculs_gpu=1, gpu_max=85 %, charge=26 → fenêtre 0/3`, donc il attend.
+
+**Le critère de déclenchement** (toutes les 2 min, 3 relevés consécutifs = 6 min stables) :
+
+- aucun calcul GPU hors `llama-server` (le serveur garde un contexte mais ne calcule pas) ;
+- utilisation GPU ≤ 15 %, charge ≤ 16 ;
+- plafond **6 h** (jusqu'à ~22 h 45) : au-delà, il s'arrête en le nommant plutôt que de lancer une passe bruitée.
+
+Quand la fenêtre s'ouvre, il lance `bash tools/toutes-les-portes.sh` avec `JOURNAUX=work/portes/passe-1102-apres-n2` (journaux durables, le registre est là), puis écrit le relevé de déclenchement dans `FENETRE.txt`.
+
+**Ce que je ferai à la notification** : lire le registre par `awk '$2 != 0'` (jamais les marqueurs), confronter aux cinq rouges tolérées (`indice`, `melange`, `homeostasie`, `reparti-moteur`, `greffe`), rejouer seule toute autre rouge — en particulier `porte-bloc-maths` si la charge n'était pas parfaitement retombée —, puis mettre à jour `references-non-regression.md`, l'état et le journal, et committer le verdict.
+
+Deux réserves annoncées : N2 enchaîne des évaluations courtes entre ses runs, la fenêtre peut mettre du temps à se stabiliser ; et `porte-sessions` peut rougir en fin de passe sur des heartbeats périmés — c'est structurel, elle se rejoue seule. Rien d'autre ne tourne de mon côté : les budgets sont tenus (en-cours 1 622 mots, T0 3 996), la revue et le hook sont verts, et les trois commits de l'intégration sont en place.
 
 ## 3. Travail accompli
 
@@ -98,7 +159,7 @@
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 54 autres
+- … et 63 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -132,6 +193,10 @@
 - **T1** `0, 1688 MiB, 90 %`
 - **T1** `1, 1422 MiB, 95 %`
 - **T1** `[still running after 60000ms; moved to background job bash-94]`
+- **T1** `0, 2014 MiB, 99 %`
+- **T1** `1, 1540 MiB, 95 %`
+- **T2** `0, 1642 MiB, 85 %`
+- **T2** `1, 2334 MiB, 98 %`
 
 ## 5. Erreurs rencontrées
 

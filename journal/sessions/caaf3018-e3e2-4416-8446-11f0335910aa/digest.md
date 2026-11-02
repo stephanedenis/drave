@@ -2290,3 +2290,212 @@ compteurs : 551 / 638
 ⏵ Committing the final counter alignment
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"Mis à jour : 2026-11-02, 16 h 37\"\nn = \"Mis à jour : 2026-11-02, 16 h 40\"\nassert t.count(o) == 1\np … [487 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 16:39:57 EST
+[still running after 60000ms; moved to background job bash-94]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-94", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 9223d054] ÉTAT — COMPTEURS AU DISQUE (551 FICHES / 638 JSON) ; HEARTBEAT 16 h 40
+ 14 files changed, 770 insertions(+), 41 deletions(-)
+ create mode 100644 journal/2026-11-02/moteur.md
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Final state check before reporting
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/revue_documentation.py | tail -1; python3 tools/verifie_en_cours.py | tail -1; python3 tools/sessions.py --check --strict >/dev/null; echo \"sessions_strict=$?\"; python3 tools/verifie_etat_a_jour.py --head; echo \"etat_h … [195 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+sessions_strict=0
+  état · dernier fait bee2527d · dernier état 9223d054
+  ✅ aucun fait commité après le dernier état
+etat_head=0
+  T0 max : 3996 mots (budget 4 000)
+--- git ---
+9223d054 ÉTAT — COMPTEURS AU DISQUE (551 FICHES / 638 JSON) ; HEARTBEAT 16 h 40
+bee2527d PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8
+13f4e131 S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES
+ M tools/bloc_linguistique.py
+ M tools/ocr_pdf.py
+ M tools/tests/linguistique/test_bloc_linguistique.py
+?? reports/ocr-pdf-cegep-detection.json
+?? reports/rapport-s-analyseur-roles.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; tail -1 work/n2ac/mix-200k.log; uptime; date", "description": "Snapshot machine state for the report"}`
+
+  ```
+0, 2014 MiB, 99 %
+1, 1540 MiB, 95 %
+pas 18900 · perte 1.5044 · PPL val 4.102 · 1105 s
+ 16:41:41  up  1:34,  2 users,  load average: 10,55, 20,50, 18,12
+lun 02 nov 2026 16:41:41 EST
+  ```
+
+- **todo_write** `{"todos": [{"content": "Lire l'état, le plan du hub et plan-travail §9", "status": "completed"}, {"content": "Vérifier la charge machine et l'état des quatre sessions ouvertes", "status": "completed"}, {"content": "Intégrer les lignes d'état N2, S, Pensée, D/R/A dans en-cours + heartbeat", "status": … [600 caractères tronqués]`
+
+  ```
+Updated todo list: 1 pending, 0 in progress, 8 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan du cycle hub
+
+**La passe complète n'est pas lancée — la machine n'est pas au repos, et je l'ai mesuré avant de décider.**
+
+À 16 h 32 puis 16 h 41 :
+
+| ressource | mesure |
+|---|---|
+| GPU 0 | **99 %**, 2 014 MiB — N2 `entrainer_native.py` (pas 18 900/200 000, PPL val 4,102) |
+| GPU 1 | **95 %**, 1 540 MiB — `work/n2ac/entrainer_rope.py` (banc R1.1/R1.2 de N2) |
+| charge | 10–24 sur 40 cœurs ; quatre sessions actives écrivent |
+
+`portes.md` est explicite : *les portes et une mesure GPU ne cohabitent pas*. Lancer 1 h 46 de portes ici aurait mesuré la contention, pas les portes. J'ai quand même fait la **sous-passe documentaire** (8 portes, `work/portes/sous-passe-1102-16h35`) : **7/8**. La seule rouge, `porte-bloc-maths`, ne l'est que sur son critère de **coût** (×8,31 pour ×4) ; rejouée seule trois fois, elle est **verte** (×4,24 / ×2,84 / ×4,12), les 32 formules, 10 dérivées, 6 équations et 42 restitutions restant exactes. Bruit de charge, pas régression.
+
+**Ce qui est fait et committé**
+
+- `e420267a` — **intégration** : cinq sections d'état (deux nouvelles : N2 `0733c5bb`, S `29ad180d` ; Pensée et D/R/A passées de « en pause » à « reprises à 16 h 16 / 16 h 21 »), roadmap au réel, heartbeat rafraîchi — en-cours **1 622 mots**, **T0 3 996**.
+- `e420267a` — **porte sessions réparée** : le strict sortait en 1 avec **0 erreur et 4 avertissements** (`data/` ⊃ `data/structures/`). L'imbrication d'un territoire partagé est le régime normal ; le strict ne refuse plus que les quatre classes documentées. Autotest étendu (réservation imbriquée avertie, non refusée).
+- `bee2527d` — **report de la passe** avec ses mesures et la preuve du bruit.
+- `9223d054` — compteurs au disque (551 fiches / 638 JSON) et heartbeat **16 h 40**.
+
+Vérifications de clôture : revue de documentation ✅ · `en-cours` 1 622 mots ✅ · T0 3 996/4 000 ✅ · `sessions --check --strict` 0 ✅ · `verifie_journal` ✅ · `verifie_etat_a_jour --head` ✅.
+
+**Deux points à savoir**
+
+1. La passe complète est à relancer **dès que les deux runs N2 seront finis** (200 k pas à ~17 pas/s ≈ 3 h 20, soit vers **19 h 50**), avec `JOURNAUX=work/portes/<date>` pour des journaux durables — ceux de `/tmp` ont été effacés au reboot. Prévoir aussi que `porte-sessions` peut rougir en fin de passe sur des heartbeats périmés (1 h 46 de durée) : c'est structurel, pas une régression, et se rejoue seul.
+2. **S a livré** un cycle mesuré (analyseur : types 38/39, rôles 99/100, couverture 99,6 %, 39 structures exportées, contrôles négatifs 64/100 et 0,099) et committé le sous-module, mais sa **fiche et son JSON sont encore non committés** — je ne les ai pas intégrés pour ne pas figer un fait avant son commit. Les compteurs bougeront à ce moment-là ; la revue le dira.
+
+Veux-tu que je lance la passe complète dès la libération des GPU (vers 19 h 50), ou immédiatement malgré le bruit ?
+
+
+## Tour 2
+
+### 👤 Utilisateur
+
+oui
+
+### 🤖 Assistant
+
+⏵ Interprétation : « oui » = lancer dès que les deux GPU seront libres. J'arme un veilleur qui attend une fenêtre stable.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/attente_portes.sh <<'EOF'\n#!/bin/bash\n# attente_portes.sh — arme la passe complète dès que la machine est REELLEMENT libre.\n# Ne lance rien tant que : un entrainement natif tourne, un GPU est occupe, ou la\n# fenêtre n'es … [2257 caractères tronqués]`
+
+  ```
+gpu=88
+0
+entrainements=3
+charge=20
+syntaxe OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Le veilleur est prêt ; je l'arme en tâche de fond (il se déclenchera sur fenêtre stable)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; bash work/attente_portes.sh", "description": "Arm gate watcher and full pass on free window", "run_in_background": true}`
+
+  ```
+started background job bash-98
+  ```
+
+- **job_output** `{"job_id": "bash-98", "timeout_ms": 15000, "wait": true}`
+
+  ```
+16:45:26 gpu_max=85% entrainements=3 charge=23 fenetre=0/3
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pgrep -af \"entrainer_(native|rope)\" | cut -c1-170", "description": "List processes matching trainer pattern"}`
+
+  ```
+35563 bash -c cd /home/stephane/GitHub/Qtrinet && mkdir -p work/n2ac && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHON
+35568 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_
+35572 /home/stephane/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --pas 200000 --seq 128
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv; echo \"---\"; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; date; pgrep -af \"entrainer_rope\" | head -3", "description": "Che … [29 caractères tronqués]`
+
+  ```
+pid, process_name, used_gpu_memory [MiB]
+35572, /home/stephane/gpu-env/bin/python, 1318 MiB
+78108, llama-server, 320 MiB
+78108, llama-server, 118 MiB
+78864, /home/stephane/gpu-env/bin/python, 2212 MiB
+---
+0, 1642 MiB, 85 %
+1, 2334 MiB, 98 %
+lun 02 nov 2026 16:45:59 EST
+78944 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv; echo "---"; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; date; pgrep -af "entrainer_rope" | head -3
+  ```
+
+- **bash** `{"command": "ps -o etime,pcpu,args -p 78864 --no-headers 2>/dev/null | cut -c1-200; echo \"---\"; ps -eo pid,etime,args | grep -E \"gpu-env/bin/python\" | grep -v grep | cut -c1-180", "description": "Identify the new GPU process"}`
+
+  ```
+---
+  35563       28:06 bash -c cd /home/stephane/GitHub/Qtrinet && mkdir -p work/n2ac && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PY
+  35568       28:06 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/w
+  35572       28:06 /home/stephane/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --pas 200000 --seq 
+  78761       00:32 bash -c cd /home/stephane/GitHub/Qtrinet && cat work/n2ac/rope-20k.pt.json; echo "=== launch curves ==="; nohup bash -c 'cd /home/stephane/Data13TB/stephane/Git
+  ```
+
+### 🤖 Assistant
+
+⏵ Renforçant le critère de fenêtre libre (processus GPU réels, pas seulement l'utilisation instantanée)
+
+- **job_kill** `{"job_id": "bash-98", "reason": "Améliorer le critère de fenêtre libre (processus GPU et non échantillon d'utilisation)"}`
+
+  ```
+requested cancellation of job bash-98
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/attente_portes.sh <<'EOF'\n#!/bin/bash\n# attente_portes.sh — arme la passe complète dès que la machine est REELLEMENT libre.\n# « Libre » = aucun calcul GPU hors llama-server, utilisation <= 15 %, charge <= 16,\n# tenu 3 re … [2311 caractères tronqués]`
+
+  ```
+syntaxe OK
+calculs_gpu maintenant: 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; bash work/attente_portes.sh", "description": "Arm improved gate watcher in background", "run_in_background": true}`
+
+  ```
+started background job bash-103
+  ```
+
+- **job_output** `{"job_id": "bash-103", "timeout_ms": 20000, "wait": true}`
+
+  ```
+16:46:27 calculs_gpu=1 gpu_max=85% charge=26 fenetre=0/3
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe armée — j'attends la fenêtre libre
+
+**Oui — la passe est armée, pas encore lancée.** Le veilleur tourne (`bash-103`) : à 16 h 46, il lit `calculs_gpu=1, gpu_max=85 %, charge=26 → fenêtre 0/3`, donc il attend.
+
+**Le critère de déclenchement** (toutes les 2 min, 3 relevés consécutifs = 6 min stables) :
+
+- aucun calcul GPU hors `llama-server` (le serveur garde un contexte mais ne calcule pas) ;
+- utilisation GPU ≤ 15 %, charge ≤ 16 ;
+- plafond **6 h** (jusqu'à ~22 h 45) : au-delà, il s'arrête en le nommant plutôt que de lancer une passe bruitée.
+
+Quand la fenêtre s'ouvre, il lance `bash tools/toutes-les-portes.sh` avec `JOURNAUX=work/portes/passe-1102-apres-n2` (journaux durables, le registre est là), puis écrit le relevé de déclenchement dans `FENETRE.txt`.
+
+**Ce que je ferai à la notification** : lire le registre par `awk '$2 != 0'` (jamais les marqueurs), confronter aux cinq rouges tolérées (`indice`, `melange`, `homeostasie`, `reparti-moteur`, `greffe`), rejouer seule toute autre rouge — en particulier `porte-bloc-maths` si la charge n'était pas parfaitement retombée —, puis mettre à jour `references-non-regression.md`, l'état et le journal, et committer le verdict.
+
+Deux réserves annoncées : N2 enchaîne des évaluations courtes entre ses runs, la fenêtre peut mettre du temps à se stabiliser ; et `porte-sessions` peut rougir en fin de passe sur des heartbeats périmés — c'est structurel, elle se rejoue seule. Rien d'autre ne tourne de mon côté : les budgets sont tenus (en-cours 1 622 mots, T0 3 996), la revue et le hook sont verts, et les trois commits de l'intégration sont en place.
+

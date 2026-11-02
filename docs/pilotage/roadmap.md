@@ -31,12 +31,14 @@
 | **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observatrice** + **bruitée** + **votante** + **trois looks** + **bayésien** + **bayésien 2** + **vraisemblance** + **dérive** + **adaptative** + **glisse** + **rupture** + **alternance** + **chaotique** + **fréquent** + **rapide** + **limite** + **hasard 2** + **intra** + **asym** + **rare** + **très rare** + **ultra-rare** + **un look** + **look tardif** + **oubli** + **oubli fort** + **oubli total** + **seuil** + **seuil fin** + **seuil graines** + **bord** + **seuil bas** + **courbe** + **vérité** + **concurrentes** + **phase dans l'état** + **phase devinée** + **vote** + **cycle** + **courbe20** + **bord fin** + **gold 200** + **sous-ensembles** + **complexes** + **20 complexes** + **50 complexes** + **100 complexes** + **discours** + **anaphore** + **pièges anaphore** + **anaphore corrigée** + **pronoms objets** + **chaînes longues** + **rôles** + **hybride** + **sémantique** + **[plafond](../theorie/glossaire/entrees/plafond.md)** + **kappa** + **méta** + **pondéré** + **CV** + **CV graines** + **bilan anaphore**, **140/140 portes** | B10.3 attend un **encodeur qui porte** ; **B13** : **[DRVM](../theorie/glossaire/entrees/drvm.md)/native** (bloquée) ; **cascade mesurée** |
 | **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 domaine / 6,03 littérature / 8,34 anglais — production** ; N4 partiel | **N2** : 200 k pas **en cours** (session `0733c5bb`), puis **R1.1/R1.2** ; **N4** (consigne) |
 | **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ; **R0.7 — bloc linguistique** (398 langues, 0,9687) | **R4.4 close** (limites nommées) ; **R1.1/R1.2** ([contexte](../theorie/glossaire/entrees/contexte.md) natif) ; R2/R3 attendent N5/N4 |
-| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | 🔬 **v0** : 7 phrases + **générateur** + **pragmatique** (statuts, double sens conservé, **niveaux 0–4**, niveau minimal), LLM, export ; l'**analyseur** retrouve **7/7** séquences de types et **93,9 %** des structures écrites à la main (19 tests, sous-projet fusionné) | **rôles/subordonnées** (session `29ad180d`), puis brancher l'export au corpus d'entraînement |
+| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v2** : rôles **contextuels** et subordonnées typées, gold **39** phrases ; analyseur **38/39** types (97,4 %), **99/100** rôles, **45/45** compléments ; corpus **39** structures (SHA `973c70a4…`) ; **40 tests** | **validation humaine** de la banque (mode `banque` à 0), puis frontière du GN sans auxiliaire (h033) |
 | **L — le bloc langue** | surface, heuristique CPU + neuronal, [contrat](../theorie/glossaire/entrees/contrat.md), cascade, pragmatique | 🔬 **R0.7** : 9 niveaux, **398 langues à 0,9687**, script 1,0000 ; analyse heuristique (5 schémas) ; **contrat de substitution à écrire** | **le contrat de L** (heuristique/neuronal), la mesure 71 langues |
 | **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; [CEGEP](../theorie/glossaire/entrees/cegep.md) 10 notes, 1 596 p, 2,52 M car., 8 Ko 0) ; **genres** mesurés | **l'OCR complet** (le [fonds](../theorie/glossaire/entrees/fonds.md) CEGEP : ~127 scans, dont l'*Encyclopedia of Algorithms* avec `--max-pages`), la préparation R1.1/R1.2 |
 
-**État au 02/11 16 h 37.** B13 est à **140/140** (gold 432, 116 liens) ; **N2.ac** (1 Go) est le
-modèle de production (3,49 / 6,03) ; les **quatre** sessions ont rouvert après le reboot —
+**État au 02/11 16 h 49.** B13 est à **140/140** (gold 432, 116 liens) ; **N2.ac** (1 Go) est le
+modèle de production (3,49 / 6,03) ; **S** — l'analyseur rôles/subordonnées est **mesuré**
+(38/39 types, 99/100 rôles, 45/45 compléments) et le corpus de **39** structures est exporté
+(SHA `973c70a4…`) ; les **quatre** sessions ont rouvert après le reboot —
 `e181ce02` (16 h 16), `fe3c05f0` (16 h 21), **N2** `0733c5bb` (16 h 17) et **S** `29ad180d`
 (16 h 19). Le runbook de reprise est dans [`plan-travail.md`](plan-travail.md) § 9.
 
@@ -44,7 +46,7 @@ modèle de production (3,49 / 6,03) ; les **quatre** sessions ont rouvert après
 
 ## L'ordre du jour (carpe diem)
 
-L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 16 h 37**.
+L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 16 h 49**.
 
 1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
    30 % sur 5 types et **249 questions**) ; **R0.4** ([tête](../theorie/glossaire/entrees/tete.md) de survol) et **R0.5** ([routeur](../theorie/glossaire/entrees/routeur.md)) sont
@@ -327,6 +329,7 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 
 - **non bloqué, à faire** : **N2** (200 k pas sur le mélange 1 Go, puis R1) ; **N4** (consigne courte) ;
   **N3** (opérations natives) ; **A8.3b** (mode de lot) ; **R4.4** (les scans réels) ;
+  **S** (frontière du GN, gold plus large) ;
 - **gelé** : **N5** (50–100 M) — après le verdict de R11 sur le schéma ;
 - **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local),
   B10.3 (B10.2bis mesurée, fiche au backlog) ;
@@ -343,6 +346,7 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 | A6.2 MoE local | aucun MoE local ne tient dans 16 Go de VRAM | un MoE qui tient, ou une machine plus grande |
 | B10.3 raisonnement sur `z` | le décodeur est sous le plancher chrF | une attention croisée, 20–30 articles, 3 graines |
 | R4.4 les scans | pas de **vérité humaine** sur les scans réels : trois vrais scans (Internet Archive) donnent des **accords**, pas des vérités | 10 pages **scannées** avec vérité humaine ; le fax 1 bit reste une limite d'information |
+| S — la banque validée | aucun verdict humain : `donnees/validations.jsonl` n'existe pas | la validation humaine des candidats via l'outil web (mode `banque`) |
 
 ## Les questions ouvertes
 

@@ -3511,3 +3511,261 @@ d'état des sessions ouvertes. Rafraîchis le heartbeat.
 
 Le runbook durable est dans [`docs/pilotage/plan-travail.md`](../plan-travail.md) § 9 (committé). Ce message n'en est qu'une copie.
 
+
+## Tour 3
+
+### 👤 Utilisateur
+
+GPU 0 à 87 de3grés et fan à 88%. peut-on améliorer sa ventilation au dela de 88%
+
+### 🤖 Assistant
+
+⏵ Je regarde l'état thermique, la courbe ventilateur et les leviers disponibles sur cette Quadro.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== GPU ==\" && nvidia-smi --query-gpu=index,name,temperature.gpu,fan.speed,power.draw,power.limit,power.default_limit,power.max_limit,clocks.sm,clocks.max.sm,utilization.gpu,memory.used,memory.total --format=csv,noheader && ec … [355 caractères tronqués]`
+
+  ```
+== GPU ==
+0, Quadro RTX 5000, 87, 88 %, 195.54 W, 230.00 W, 230.00 W, 230.00 W, 1800 MHz, 2100 MHz, 92 %, 1960 MiB, 16384 MiB
+1, Quadro RTX 5000, 68, 41 %, 160.91 W, 230.00 W, 230.00 W, 230.00 W, 1875 MHz, 2100 MHz, 67 %, 1422 MiB, 16384 MiB
+
+== processes ==
+35572, /home/stephane/gpu-env/bin/python, 1318 MiB
+78108, llama-server, 320 MiB
+79673, /home/stephane/gpu-env/bin/python, 318 MiB
+78108, llama-server, 118 MiB
+79390, /home/stephane/gpu-env/bin/python, 1300 MiB
+
+== throttle ==
+    Clocks Event Reasons
+        Idle                                           : Not Active
+        Applications Clocks Setting                    : Not Active
+        SW Power Cap                                   : Not Active
+        HW Slowdown                                    : Not Active
+            HW Thermal Slowdown                        : Not Active
+            HW Power Brake Slowdown                    : Not Active
+        Sync Boost                                     : Not Active
+        SW Thermal Slowdown                            : Active
+        Display Clock Setting                          : Not Active
+    Clocks Event Reasons Counters
+        SW Power Capping                        
+… [1050 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"== thermal/fan details ==\" && nvidia-smi -q -d TEMPERATURE,FAN,POWER 2>/dev/null | grep -Ei 'GPU Current Temp|Max Operating|Slowdown|Shutdown|Fan Speed|Fan Control|Power Draw|Power Limit|Default Power|Min Power|Max Power|Performance State' | head -40; echo; echo \"== X / display … [398 caractères tronqués]`
+
+  ```
+== thermal/fan details ==
+
+== X / display ==
+DISPLAY=:0
+3026 /usr/bin/Xorg.bin -nolisten tcp -background none -seat seat0 vt2 -auth /run/sddm/xauth_hjtADA -noreset -displayfd 16
+X0
+
+== hwmon nvidia ==
+  ```
+
+### 🤖 Assistant
+
+⏵ GPU 0 throttle thermique (SW Thermal Slowdown actif) ; je teste si la courbe manuelle est accessible.
+
+- **bash** `{"command": "echo \"== nvidia-settings basics ==\" && timeout 20 nvidia-settings -q gpus 2>&1 | head -20; echo \"[exit ${PIPESTATUS[0]}]\"; echo; echo \"== fan attrs ==\" && timeout 20 nvidia-settings -q fans 2>&1 | head -30; echo \"[exit ${PIPESTATUS[0]}]\"", "description": "Query nvidia-settings G … [23 caractères tronqués]`
+
+  ```
+== nvidia-settings basics ==
+timeout: failed to run command ‘nvidia-settings’: No such file or directory
+[exit 127]
+
+== fan attrs ==
+timeout: failed to run command ‘nvidia-settings’: No such file or directory
+[exit 127]
+  ```
+
+- **bash** `{"command": "echo \"== temperatures ==\" && nvidia-smi -q -d TEMPERATURE 2>/dev/null | sed -n '1,30p'; echo; echo \"== fan section ==\" && nvidia-smi -q -d FAN 2>/dev/null | sed -n '1,30p'", "description": "Read thermal limits and fan section"}`
+
+  ```
+== temperatures ==
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Nov  2 16:51:48 2026
+Driver Version                                         : 580.196.07
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 2
+GPU 00000000:03:00.0
+    Temperature
+        GPU Current Temp                               : 86 C
+        GPU T.Limit Temp                               : N/A
+        GPU Shutdown Temp                              : 96 C
+        GPU Slowdown Temp                              : 93 C
+        GPU Max Operating Temp                         : 89 C
+        GPU Target Temperature                         : 83 C
+        Memory Current Temp                            : N/A
+        Memory Max Operating Temp                      : N/A
+
+GPU 00000000:04:00.0
+    Temperature
+        GPU Current Temp                               : 70 C
+        GPU T.Limit Temp                               : N/A
+        GPU Shutdown Temp                              : 96 C
+        GPU Slowdown Temp                              : 93 C
+        GPU Max Operating Temp                        
+… [246 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je regarde le placement des cartes, les RPM et ce qui manque pour piloter le ventilateur.
+
+- **bash** `{"command": "echo \"== topo ==\" && nvidia-smi topo -m 2>/dev/null; echo; echo \"== lspci ==\" && lspci -nn | grep -i nvidia; echo; echo \"== slot 03 ==\" && lspci -vv -s 03:00.0 2>/dev/null | grep -Ei 'Physical Slot|Link Width|NUMA' | head; echo \"== slot 04 ==\" && lspci -vv -s 04:00.0 2>/dev/null … [113 caractères tronqués]`
+
+  ```
+== topo ==
+	[4mGPU0	GPU1	CPU Affinity	NUMA Affinity	GPU NUMA ID[0m
+GPU0	 X 	NV1	0-9,20-29	0		N/A
+GPU1	NV1	 X 	0-9,20-29	0		N/A
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+
+== lspci ==
+03:00.0 VGA compatible controller [0300]: NVIDIA Corporation TU104GL [Quadro RTX 5000] [10de:1eb0] (rev a1)
+03:00.1 Audio device [0403]: NVIDIA Corporation TU104 HD Audio Controller [10de:10f8] (rev a1)
+03:00.2 USB controller [0c03]: NVIDIA Corporation TU104 USB 3.1 Host Controller [10de:1ad8] (rev a1)
+03:00.3 Serial bus controller [0c80]: NVIDIA Corporation TU104 USB Type-C UCSI Controller [10de:1ad9] (rev a1)
+04:00.0 VGA compatible controller [0300]: NVIDIA Corporation TU104GL [Quadro RTX 5000] [10de:1eb0] (rev a1)
+0
+… [398 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"== driver info ==\" && for f in /proc/driver/nvidia/gpus/*/information; do echo \"--- $f\"; cat \"$f\" 2>/dev/null | head -12; done; echo; echo \"== nvidia-settings ==\" && command -v nvidia-settings || echo \"absent\"; apt-cache policy nvidia-settings 2>/dev/null | head -6; echo … [300 caractères tronqués]`
+
+  ```
+== driver info ==
+--- /proc/driver/nvidia/gpus/0000:03:00.0/information
+Model: 		 Quadro RTX 5000
+IRQ:   		 152
+GPU UUID: 	 GPU-ff8cc368-1bb8-ccef-8a76-4d17375e212e
+Video BIOS: 	 90.04.4a.00.08
+Bus Type: 	 PCIe
+DMA Size: 	 47 bits
+DMA Mask: 	 0x7fffffffffff
+Bus Location: 	 0000:03:00.0
+Device Minor: 	 0
+GPU Firmware: 	 580.196.07
+GPU Excluded:	 No
+--- /proc/driver/nvidia/gpus/0000:04:00.0/information
+Model: 		 Quadro RTX 5000
+IRQ:   		 153
+GPU UUID: 	 GPU-bd161106-3e3e-c50f-161a-2550ab688ce2
+Video BIOS: 	 90.04.99.00.03
+Bus Type: 	 PCIe
+DMA Size: 	 47 bits
+DMA Mask: 	 0x7fffffffffff
+Bus Location: 	 0000:04:00.0
+Device Minor: 	 1
+GPU Firmware: 	 580.196.07
+GPU Excluded:	 No
+
+== nvidia-settings ==
+absent
+
+== coolbits ==
+(fin)
+
+== sensors ==
+ucsi_source_psy_13_00081-i2c-13-08
+Adapter: NVIDIA GPU I2C adapter
+in0:           0.00 V  (min =  +0.00 V, max =  +0.00 V)
+curr1:         0.00 A  (max =  +0.00 A)
+
+dell_smm-isa-00de
+Adapter: ISA adapter
+Processor Fan: 3597 RPM  (min =    0 RPM, max = 5755 RPM)
+Processor Fan: 3790 RPM  (min =    0 RPM, max = 5755 RPM)
+Other Fan:     2140 RPM  (min =    0 RPM, max = 5000 RPM)
+Other Fan:     2146 RPM  (min =    0 RPM, max = 5000 RPM)
+CPU:            
+… [332 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie la machine et les limites de puissance avant de proposer un levier.
+
+- **bash** `{"command": "echo \"== OS ==\" && cat /etc/os-release 2>/dev/null | head -4; echo \"== modèle ==\" && cat /sys/class/dmi/id/product_name /sys/class/dmi/id/board_name 2>/dev/null; echo; echo \"== gestionnaires ==\" && for c in apt dnf zypper pacman; do command -v $c >/dev/null && echo \"$c présent\"; … [285 caractères tronqués]`
+
+  ```
+== OS ==
+NAME="openSUSE Tumbleweed"
+# VERSION="20261028"
+ID="opensuse-tumbleweed"
+ID_LIKE="opensuse suse"
+== modèle ==
+Precision Tower 7910
+0215PR
+
+== gestionnaires ==
+zypper présent
+
+== puissance ==
+        Average Power Draw                             : N/A
+        Instantaneous Power Draw                       : 184.62 W
+        Current Power Limit                            : 230.00 W
+        Requested Power Limit                          : 230.00 W
+        Default Power Limit                            : 230.00 W
+        Min Power Limit                                : 125.00 W
+        Max Power Limit                                : 230.00 W
+        Average Power Draw                             : N/A
+        Instantaneous Power Draw                       : N/A
+        Average Power Draw                             : N/A
+        Instantaneous Power Draw                       : N/A
+        Current Power Limit                            : N/A
+        Requested Power Limit                          : N/A
+        Default Power Limit                            : N/A
+        Min Power Limit                                : N/A
+        Max Power Limit                                
+… [264 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"== throttle live ==\" && nvidia-smi --query-gpu=index,temperature.gpu,fan.speed,power.draw,clocks.sm,clocks_throttle_reasons.sw_thermal_slowdown,clocks_throttle_reasons.hw_thermal_slowdown --format=csv,noheader; echo; echo \"== horloges ==\" && nvidia-smi -q -d CLOCK 2>/dev/null  … [238 caractères tronqués]`
+
+  ```
+== throttle live ==
+0, 87, 89 %, 206.33 W, 1800 MHz, Active, Not Active
+1, 73, 47 %, 201.95 W, 1860 MHz, Not Active, Not Active
+
+== horloges ==
+==============NVSMI LOG==============
+        Graphics                                       : 1785 MHz
+        SM                                             : 1785 MHz
+        Graphics                                       : 1620 MHz
+        Graphics                                       : 1620 MHz
+    Max Clocks
+        Graphics                                       : 2100 MHz
+        SM                                             : 2100 MHz
+        Graphics                                       : N/A
+    SM Clock Samples
+        Graphics                                       : 1875 MHz
+        SM                                             : 1875 MHz
+        Graphics                                       : 1620 MHz
+        Graphics                                       : 1620 MHz
+    Max Clocks
+        Graphics                                       : 2100 MHz
+        SM                                             : 2100 MHz
+        Graphics                                       : N/A
+    SM Clock Samples
+
+== ventilateurs boîtier ==
+dell
+… [316 caractères tronqués]
+  ```
+
