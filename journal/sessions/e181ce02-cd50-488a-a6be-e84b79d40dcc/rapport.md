@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 34.8 h |
+| Durée | 34.9 h |
 | Tours | 100 |
-| Messages | 1293 |
-| Appels d'outils | 1140 |
+| Messages | 1295 |
+| Appels d'outils | 1142 |
 | Fichiers touchés | 25 |
-| Commandes | 923 |
+| Commandes | 924 |
 | Sous-agents | 2 |
-| Commits | 129 |
+| Commits | 130 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -5304,7 +5304,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round tire la **leçon** de la
 
 ### Tour 100 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Tracer la courbe sur 20 graines
 - bash — Tracer la courbe sur 20 graines (vrai)
@@ -5315,6 +5315,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round tire la **leçon** de la
 - bash — Committer la courbe 20 graines
 - bash — Committer la courbe 20 graines (2e essai)
 - job_output
+- bash — Corriger les compteurs et committer
 
 ## 3. Travail accompli
 
@@ -5395,7 +5396,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round tire la **leçon** de la
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 883 autres
+- … et 884 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5672,4 +5673,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round tire la **leçon** de la
 - B13 — LA PÉNALITÉ -1 NE CASSE PAS LE CYCLE : 0/20, (3,0) STALE ; 85/85" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PÉNALITÉ -1"; then echo "COMMIT 
 - B13 — LA COURBE SUR 20 GRAINES : 20 % À 0,35, 100 % À 0,41, SEUIL ~0,41 ; 86/86" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "COURBE SUR 20 GRAINES";
 - B13 — LA COURBE SUR 20 GRAINES : 20 % À 0,35, 100 % À 0,41, SEUIL ~0,41 ; 86/86" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "COURBE SUR 20 GRAINES";
+- ÉTAT — COMPTEURS RÉELS (488/578)" 2>&1 | tail -2; git log -1 --format='%h %s'
 

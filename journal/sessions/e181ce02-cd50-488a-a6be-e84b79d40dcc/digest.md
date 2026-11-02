@@ -24485,3 +24485,28 @@ retry 7
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-02, 06 h 35 HNE\", t)\np.write_text(t); print( … [958 caractères tronqués]`
+
+  ```
+ok
+  ✅ index : aucun fait stagé sans état
+EXIT=0
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 572 JSON, le disque en a 578
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-923]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-923", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-courbe20.json
+ delete mode 100644 reports/rapport-n2-anglais-34m.md
+ create mode 100644 reports/rapport-pensee-courbe20.md
+COMMIT OK 1
+64d4f399 B13 — LA COURBE SUR 20 GRAINES : 20 % À 0,35, 100 % À 0,41, SEUIL ~0,41 ; 86/86
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichi … [430 caractères tronqués]`
