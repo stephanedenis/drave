@@ -13697,3 +13697,42 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-491", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 2b71aa2c4efa973d0776b3658b3f7b46328dd488 but expected 5853b20645fc826febe6aadd47e1c5872a0e0d5f
+retry 1
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 0aabf77bdeac0d135becf102c6cc89c923a6db0e but expected 2b71aa2c4efa973d0776b3658b3f7b46328dd488
+retry 2
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 3
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 4
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 5
+0aabf77b ÉTAT — T0 REVIENT SOUS 4 000
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; git status --short | grep -E \"porte-apprise|operateurs|autotest|en-cours|moteur\" | head -8; git show HEAD:docs/pilotage/en-cours.md | grep -E \"pensee-porte|pensee-labyrinthe|pensee-operateurs\" | head  … [177 caractères tronqués]`
+
+  ```
+0aabf77b ÉTAT — T0 REVIENT SOUS 4 000
+M  docs/implantation/moteur-de-pensee.md
+M  journal/2026-11-01/moteur.md
+A  reports/pensee-porte-apprise.json
+A  reports/rapport-pensee-porte-apprise.md
+M  tools/pensee/autotest.py
+M  tools/pensee/operateurs.py
+  [`pensee-operateurs`](../../reports/rapport-pensee-operateurs.md), [`pensee-necessaire`](../../reports/rapport-pensee-necessaire.md).
+=== en-cours fiches ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"  [`pensee-operateurs`](../../reports/rapport-pensee-operateurs.md), [`pensee-necessaire`](../../reports/rapport-pensee-nec … [1113 caractères tronqués]`

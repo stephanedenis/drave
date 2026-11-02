@@ -18,6 +18,7 @@
   T9  le neuronal nécessaire          le seul opérateur est la sonde ; l'aveugle échoue
   T10 le labyrinthe non linéaire      plusieurs chemins, la bonne politique utilise la sonde, l'aveugle l'ignore
   T11 la porte neuronale              la porte ne s'ouvre que par la bonne politique ; l'aveugle échoue
+  T12 la porte apprise                la Q-table apprend la porte ; le modèle la trouve seul
   T8  les opérateurs hétérogènes      trois genres, coût et appels, le négatif reste inutile
 
 Usage : PYTHONPATH=. ~/gpu-env/bin/python tools/pensee/autotest.py
@@ -287,6 +288,19 @@ def t11_porte() -> tuple[bool, str]:
                 f"aveugle {bb['noeuds']} nœuds/{bb['cout']} sans but")
 
 
+def t12_porte_apprise() -> tuple[bool, str]:
+    """La Q-table apprend la porte ; le modèle la trouve seul."""
+    from .operateurs import LABYRINTHE_PORTE, REGISTRE_P, DRVM, PolitiqueApprise
+    p = PolitiqueApprise(episodes=200, graine=0)
+    p.apprendre()
+    a = DRVM(REGISTRE_P, p)
+    a.penser(LABYRINTHE_PORTE, AStar(), Budget(200))
+    ba = a.instantane()
+    ok = ba["but"] and ba["par_operateur"].get("sonde", 0) > 0 and len(p.q) > 0
+    return ok, (f"porte apprise : {len(p.q)} états-Q, {ba['noeuds']} nœuds/but, "
+                f"sonde {ba['par_operateur'].get('sonde', 0)}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -297,7 +311,8 @@ def main() -> int:
               ("T8 opérateurs hétérogènes", t8_operateurs()),
               ("T9 neuronal nécessaire", t9_necessaire()),
               ("T10 labyrinthe non linéaire", t10_labyrinthe()),
-              ("T11 porte neuronale", t11_porte())]
+              ("T11 porte neuronale", t11_porte()),
+              ("T12 porte apprise", t12_porte_apprise())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

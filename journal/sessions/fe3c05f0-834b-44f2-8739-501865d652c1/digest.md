@@ -17121,3 +17121,112 @@ commit OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"- **Ambition** : le français réel pour N2 ; D, carburant.\",\"- **Ambition** : le français réel pour N2.\")\ns=s.replace(\"-  … [950 caractères tronqués]`
+
+  ```
+T0 max : 3996 mots (budget 4 000)
+ 9 files changed, 54 insertions(+), 24 deletions(-)
+0aabf77b ÉTAT — T0 REVIENT SOUS 4 000
+=== en/pdf
+  [en] 15600000 lus · 4212724 gardés · 16.86 G caractères
+  2000 PDF · 1252 gardés · 265.4 M car
+  2500 PDF · 1702 gardés · 277.1 M car
+298M	data/corpus_pdf
+1494795 02:01:03
+1549012 39:40
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 6 : revue R1/A committée ; l'anglais à 15,6 M pages, le PDF à 2 500/2 781
+
+**Round 6/1000 — la revue R1/A est faite et committée ; l'anglais et le PDF sont au bord.** Commits `2b71aa2c` (la revue) et `0aabf77b` (T0 3 996).
+
+## La revue R1/A — ce qui est possible, ce qui est bloqué
+
+- **R11** (contexte hiérarchique) et **R12** (curriculum 129 → 1 000 octets) : **spécifiés**, mais **bloqués sur N2** — c'est N2 qui porte la hiérarchie (l'état de section, 3 graines) ; R11 ne mesure que la fenêtre qui en résulte. Rien à mesurer ici avant N2.
+- **A2.6** (ordonnanceur experts/tête) : **bloqué sur A6.2** (pas de MoE local) ; la tête 4 bits est refusée (+10 % de PPL) ; la règle de placement KV tient.
+- **A8.3** (le lot) : **le seul mesurable tout de suite** — `mesure_lot_disque.sh` répond à « le lot divise-t-il les lectures ? » avec l'éviction du cache ; c'est la prochaine mesure du mandat D/R/A.
+
+## Les deux runs
+
+- **L'anglais** : 15,6 M pages lues, **4,21 M articles**, 16,86 G caractères — le manifeste est imminent.
+- **Le PDF local** : **2 500 PDF sur 2 781**, **1 702 documents gardés**, 277 M caractères, 298 M de texte écrit ; les livres et les notes du CEGEP sont presque tous passés.
+
+## La suite
+
+Le **manifeste de l'anglais** → son **contrôle 8 Ko** (le plus lourd) → la **fiche et le catalogue des dix** ; le **manifeste du PDF** → sa fiche (licences, natif/scanné) ; puis la **mesure A8.3** (le lot). Le goal reste actif ; le prochain round ramasse les deux manifestes et lance le contrôle de l'anglais.
+
+
+## Tour 19
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 7/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; cat /tmp/poll-en.log /tmp/poll-pdf.log 2>/dev/null; ls -la reports/corpus-wiki-en-texte.json reports/corpus-pdf.json 2>/dev/null; echo \"=== en\"; ps -eo pid,etime,cmd | grep \"corpus_wikipedia_texte.py --langue en\" | g … [391 caractères tronqués]`
+
+  ```
+20:32
+=== en
+1494795 02:01:22
+  [en] 15600000 lus · 4212724 gardés · 16.86 G caractères
+=== pdf
+1549012 40:00
+  2000 PDF · 1252 gardés · 265.4 M car
+  2500 PDF · 1702 gardés · 277.1 M car
+301M	data/corpus_pdf
+16G	data/corpus_wiki_en_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/a83c-lot.json').read_text())\nprint(json.dumps(d, ensure_ascii=False)[:900])\nPY\necho \"=== porte-flux\"; ls tools/ | grep -iE \"flux|ids|lot\"; head -20 tools/ … [354 caractères tronqués]`
+
+  ```
+{"date": "2026-10-29", "ligne": "A8.3c", "dispositif": {"modele": "Qwen2.5-0.5B-Q8_0", "porte": "porte-flux (mode 3)", "regimes": ["f32", "melange_1"], "lots": [1, 2, 4]}, "mesures": {"lot_1": {"f32": 61.992, "melange_1": 58.32}, "lot_2": {"f32": 60.8135, "melange_1": 62.7357}, "lot_4": {"f32": 60.8135, "melange_1": 62.7357}}, "effets_pct": {"melange_lot_1": -5.9, "melange_lot_4": 3.2, "lot_sur_f32": -1.9}, "explication": "le préremplissage par lots n'est pas bit à bit identique (main.rs l. 799-812) : sommes réordonnées, routeur à l'égalité", "verdict": "non-monotonie expliquée : effet par chemin, pas anomalie de la règle", "prochain": "réduire la non-équivalence du lot, ou l'assumer comme références distinctes"}
+=== porte-flux
+analyse_flux.py
+diff_flux.py
+flux_codec.py
+granularite_flux.py
+mesure_lot_disque.sh
+mesure-prefill-lot.sh
+occupation_poids.py
+porte-flux.sh
+porte-poids-creux.sh
+profil_flux.py
+#!/bin/bash
+# Porte du DÉCOUPAGE : deux nœuds, un petit modèle, cinq modes de flux.
+#
+# Pourquoi elle existe : le défaut de la `pre` reçue (sprint 13) a vécu jusqu'à
+# ce qu'on compare des tenseurs à la main sur un modèle de 365 Go et quatre
+# minutes par passe. Aucune porte ne couvrai
+… [1296 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 20 ./drave-core/target/release/drave --help 2>&1 | head -30; echo \"=== porte-flux usage\"; grep -n \"ids\\|prompt\\|mode 3\\|--lot\" tools/porte-flux.sh | head -12; echo \"=== en/pdf\"; tail -1 /tmp/run-texte-en.log | cut -c1- … [307 caractères tronqués]`
+
+  ```
+thread 'main' (1596456) panicked at src/main.rs:689:35:
+ouverture du GGUF: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+timeout: the monitored command dumped core
+=== porte-flux usage
+42:IDS="$TRAVAIL/ids.txt"
+81:            "mode 3"*|"mode 4"*) ref_attendue="62.7357" ;;
+91:    # pair (lecture d'un corps qui n'arrive pas — c'est ce que faisait un mode 3
+148:tester "mode 2 — listes par blocs"   "6e-2"   "61.9920" --flux-blocs --lot 1
+149:tester "mode 3 — lot dense f32"      "0"      "60.8135" --lot "${LOT:-4}"
+150:tester "mode 4 — lot en listes"      "1e-2"   "60.8135" --lot "${LOT:-4}" --flux-blocs
+=== en/pdf
+  [en] 15600000 lus · 4212724 gardés · 16.86 G caractères
+}
+reports/corpus-pdf.json
+308M	data/corpus_pdf
+17G	data/corpus_wiki_en_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/corpus-pdf.json').read_text())\nfor k in ('pdfs','pages','documents_gardes','documents_scannes','documents_courts','documents_doublons','caracteres_gardes','mots … [656 caractères tronqués]`

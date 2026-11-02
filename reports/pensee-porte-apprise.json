@@ -1,0 +1,56 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "15/15",
+ "politique_apprise": {
+  "episodes": 200,
+  "graine": 0,
+  "alpha": 0.25,
+  "gamma": 0.95,
+  "eps": 0.25,
+  "etats_q": 67
+ },
+ "resultats": [
+  {
+   "politique": "apprise",
+   "noeuds": 30,
+   "par_operateur": {
+    "pas": 13,
+    "saut": 10,
+    "sonde": 7
+   },
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "politique": "manhattan",
+   "noeuds": 28,
+   "par_operateur": {
+    "pas": 13,
+    "saut": 10,
+    "sonde": 5
+   },
+   "cout": 58.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "politique": "aveugle",
+   "noeuds": 200,
+   "par_operateur": {
+    "pas": 100,
+    "saut": 39,
+    "sonde": 61
+   },
+   "cout": 483.0,
+   "appels": 66,
+   "but": false
+  }
+ ],
+ "limites": [
+  "Q-learning tabulaire",
+  "coût 5 déclaré",
+  "courbe d'apprentissage non tracée"
+ ]
+}

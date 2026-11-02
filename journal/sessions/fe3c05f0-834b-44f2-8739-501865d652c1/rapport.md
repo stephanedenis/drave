@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 27.9 h |
-| Tours | 18 |
-| Messages | 948 |
-| Appels d'outils | 936 |
+| Durée | 28.0 h |
+| Tours | 19 |
+| Messages | 955 |
+| Appels d'outils | 941 |
 | Fichiers touchés | 18 |
-| Commandes | 861 |
+| Commandes | 866 |
 | Sous-agents | 0 |
 | Commits | 56 |
 | Compactages de contexte | 2 |
@@ -63,6 +63,8 @@
 **Tour 17** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 **Tour 18** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
+
+**Tour 19** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -905,6 +907,37 @@ Le **manifeste de l'anglais** (le 10e corpus) → son contrôle 8 Ko → la **fi
 - bash — Commit R1/A review and check progress
 - bash — Trim budget and commit, check final progress
 
+**Synthèse produite :**
+
+⏵ Round 6 : revue R1/A committée ; l'anglais à 15,6 M pages, le PDF à 2 500/2 781
+
+**Round 6/1000 — la revue R1/A est faite et committée ; l'anglais et le PDF sont au bord.** Commits `2b71aa2c` (la revue) et `0aabf77b` (T0 3 996).
+
+\## La revue R1/A — ce qui est possible, ce qui est bloqué
+
+- **R11** (contexte hiérarchique) et **R12** (curriculum 129 → 1 000 octets) : **spécifiés**, mais **bloqués sur N2** — c'est N2 qui porte la hiérarchie (l'état de section, 3 graines) ; R11 ne mesure que la fenêtre qui en résulte. Rien à mesurer ici avant N2.
+- **A2.6** (ordonnanceur experts/tête) : **bloqué sur A6.2** (pas de MoE local) ; la tête 4 bits est refusée (+10 % de PPL) ; la règle de placement KV tient.
+- **A8.3** (le lot) : **le seul mesurable tout de suite** — `mesure_lot_disque.sh` répond à « le lot divise-t-il les lectures ? » avec l'éviction du cache ; c'est la prochaine mesure du mandat D/R/A.
+
+\## Les deux runs
+
+- **L'anglais** : 15,6 M pages lues, **4,21 M articles**, 16,86 G caractères — le manifeste est imminent.
+- **Le PDF local** : **2 500 PDF sur 2 781**, **1 702 documents gardés**, 277 M caractères, 298 M de texte écrit ; les livres et les notes du CEGEP sont presque tous passés.
+
+\## La suite
+
+Le **manifeste de l'anglais** → son **contrôle 8 Ko** (le plus lourd) → la **fiche et le catalogue des dix** ; le **manifeste du PDF** → sa fiche (licences, natif/scanné) ; puis la **mesure A8.3** (le lot). Le goal reste actif ; le prochain round ramasse les deux manifestes et lance le contrôle de l'anglais.
+
+### Tour 19 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check English and PDF manifests
+- bash — Inspect A8.3 ids and drave binary
+- bash — Inspect drave options and lot measurement inputs
+- bash — Read PDF manifest and run contamination
+- bash — Read PDF contamination and English status
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -972,7 +1005,7 @@ Le **manifeste de l'anglais** (le 10e corpus) → son contrôle 8 Ko → la **fi
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 821 autres
+- … et 826 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1100,7 +1133,7 @@ Le **manifeste de l'anglais** (le 10e corpus) → son contrôle 8 Ko → la **fi
 
 ## 5. Erreurs rencontrées
 
-38 sorties en erreur ou divergentes. Les premières :
+39 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

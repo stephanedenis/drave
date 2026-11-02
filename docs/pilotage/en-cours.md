@@ -28,11 +28,13 @@
   (5 schémas) — le CPU étiquette la surface et énumère le plausible, le réseau tranche l'ambiguïté ;
   la cascade se juge sur la couverture × la précision par unité de calcul, pas sur le débit.
 - **Bloc linguistique** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
-  (9 niveaux, heur./neuronal) ; **398 langues à 0,9687** ; fiche et porte.
+  (9 niveaux) ; **398 langues à 0,9687** ; fiche et porte.
 - **Moteur B13** : **AC-3/alpha-bêta (8/8)**, **DRVF (9/9)**, **banc (10/10)**, **opérateurs 11/11**, **nécessaire 12/12**, **labyrinthe 13/13** ; fiches
   [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
   [`pensee-drvf`](../../reports/rapport-pensee-drvf.md), [`pensee-banc`](../../reports/rapport-pensee-banc.md),
-  [`pensee-operateurs`](../../reports/rapport-pensee-operateurs.md), [`pensee-necessaire`](../../reports/rapport-pensee-necessaire.md).
+  [`pensee-operateurs`](../../reports/rapport-pensee-operateurs.md), [`pensee-necessaire`](../../reports/rapport-pensee-necessaire.md),
+  [`pensee-labyrinthe`](../../reports/rapport-pensee-labyrinthe.md), [`pensee-porte`](../../reports/rapport-pensee-porte.md),
+  [`pensee-porte-apprise`](../../reports/rapport-pensee-porte-apprise.md).
 - **Gold L 220** : **200 réels + 160 synthétiques** ; POS **0,772** (fermé 0,939/ouvert 0,621),
   syntagmes exacts **0,194**/**tête 0,560**, pragmatique **0,994–1,0** ; cascade (mock) ; **attachement tête 1,0/0,966/0,932** (59 ambiguës), hasard 0,015 ; vrai neuronal
   **refusé** ; fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :

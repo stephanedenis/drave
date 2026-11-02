@@ -15,6 +15,7 @@ de poids dans cet environnement ; la structure est prête pour un `PolitiqueDRVM
 """
 from __future__ import annotations
 
+import random
 from collections import Counter
 from dataclasses import dataclass, field
 from typing import Callable
@@ -194,6 +195,68 @@ GRILLE = Probleme(
     heuristique=heuristique,
     score=score,
 )
+
+
+class PolitiqueApprise(Politique):
+    """La porte **apprise** : une Q-table entraînée sur le labyrinthe à porte.
+
+    Le modèle ne connaît pas la direction de la porte : il l'apprend par essais
+    (Q-learning tabulaire, récompense +1 au but, -0,01 par pas, +0,1 à l'ouverture).
+    """
+
+    nom = "apprise"
+    ACTIONS = ("haut", "bas", "gauche", "droite")
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25):
+        super().__init__()
+        self.q: dict[tuple, float] = {}
+        self.episodes = episodes
+        self.rng = random.Random(graine)
+        self.alpha, self.gamma, self.eps = alpha, gamma, eps
+
+    @staticmethod
+    def _cle(e: Etat) -> tuple:
+        d = {c.id: c.corps["v"] for c in e.candidats}
+        return int(d["x"]), int(d["y"]), bool(d["open"])
+
+    def _q(self, cle, a):
+        return self.q.get((cle, a), 0.0)
+
+    def _pas(self, cle, action, ouvre: bool):
+        x, y, o = cle
+        if ouvre and (x, y) == (3, 2) and action == "bas":
+            o = True
+        dx = {"droite": 1, "gauche": -1}.get(action, 0)
+        dy = {"bas": 1, "haut": -1}.get(action, 0)
+        nx, ny = x + dx, y + dy
+        if not _libre_p(nx, ny, o):
+            return cle, 0.0
+        gain = 0.1 if (o and not cle[2]) else -0.01
+        return (nx, ny, o), gain
+
+    def apprendre(self) -> None:
+        for _ in range(self.episodes):
+            cle = (0, 0, False)
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain = self._pas(cle, a, True)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+    def propose(self, etat, but):
+        cle = self._cle(etat)
+        if cle[:2] == P_BUT:
+            return None
+        return max(self.ACTIONS, key=lambda x: self._q(cle, x))
 
 
 # --------------------------------------------------------------------------- cadenas (le neuronal nécessaire)
@@ -484,5 +547,5 @@ class DRVM:
 __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle",
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
-           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L",
+           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise",
            "LABYRINTHE_PORTE", "REGISTRE_P"]

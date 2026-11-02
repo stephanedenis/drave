@@ -181,6 +181,7 @@ ré-exécution.
 | **T9** | le neuronal est-il nécessaire ? | le seul opérateur est la sonde ; la bonne politique atteint le but, l'aveugle non | l'aveugle échoue |
 | **T10** | le non-linéaire est-il mesuré ? | plusieurs chemins ; la bonne politique utilise la sonde, l'aveugle l'ignore | l'aveugle reste inefficace |
 | **T11** | la porte est-elle nécessaire ? | la porte ne s'ouvre que par la bonne politique ; l'aveugle échoue | l'aveugle n'atteint pas le but |
+| **T12** | la porte peut-elle être apprise ? | la Q-table apprend la porte ; le modèle la trouve seul | la Q-table part de zéro |
 
 **T5/T6 sont les portes de la modularité et du coût** : AC-3, alpha-bêta et un encodeur RSN doivent
 se brancher sur le **même** contrat, sans modifier le moteur. Si l'un demande une exception, le
@@ -197,9 +198,9 @@ contrat est faux ; si le coût n'est pas dans la trace, l'anytime est décoratif
 | **4** | `tools/pensee/` (`moteur.py`) | BFS, greedy, A*, MCTS-lite | T2 |
 | **4 bis** | `tools/pensee/` (`csp.py`, `jeux.py`) | AC-3, alpha-bêta, minimax | T5, T6 |
 | **4 ter** | `tools/pensee/` (`taquin.py`, `banc.py`) | taquin 3×3, AUC/regret, aléatoire | T7 |
-| **4 quater** | `tools/pensee/` (`operateurs.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte | T8–T11 |
+| **4 quater** | `tools/pensee/` (`operateurs.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning | T8–T12 |
 | **5** | `tools/pensee/` (`trace.py`) | DRVF `thought`, rejeu, diff | T1, T6 |
-| **6** | `tools/pensee/autotest.py` | T0–T11, contrôles négatifs | toutes |
+| **6** | `tools/pensee/autotest.py` | T0–T12, contrôles négatifs | toutes |
 
 **Le corpus v0** : un jeu de petits graphes (morpion, taquin 3×3, un CSP jouet) et un jeu de
 RSN-visuelles déjà produit par N1. Pas de GPU ; le CPU suffit pour 10³–10⁴ nœuds.
