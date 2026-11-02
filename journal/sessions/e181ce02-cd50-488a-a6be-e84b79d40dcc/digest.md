@@ -22926,3 +22926,123 @@ timeout 900 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/graines.py tools/pensee/autotest.py reports/rapport-pensee-seuil-bas.md reports/pensee-seuil-bas.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.m … [473 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-867]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-867", "timeout_ms": 600000, "wait": true}`
+
+  ```
+25 files changed, 564 insertions(+), 43 deletions(-)
+ create mode 100644 reports/pensee-seuil-bas.json
+ create mode 100644 reports/rapport-pensee-seuil-bas.md
+COMMIT OK 1
+aa49abaf B13 — LE SEUIL BAS : GRADUÉ (~0,40), ×0,36 20/25, ×0,40 25/25 ; 78/78
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Seuil bas : gradué (~0,40), ×0,36 20/25, ×0,40 25/25 ; 78/78
+
+Le round 79 du goal est livré : le **seuil d'oubli** n'est pas net — il est **gradué** (~0,40). Commit **`aa49abaf`**.
+
+## Le seuil bas
+
+Même monde que T73 (look à l'épisode 3000), facteurs 0,36 à 0,41, 5 graines, 5 exécutions.
+
+| facteur | buts | taux |
+|---|---:|---:|
+| 0,36 | **20/25** | 0,80 |
+| 0,38 | **20/25** | 0,80 |
+| **0,40** | **25/25** | 1,00 |
+| **0,41** | **25/25** | 1,00 |
+
+**Ce que ça dit** :
+
+- **Le seuil est gradué** : 0,80 à 0,36–0,38, 1,00 à 0,40–0,41 ; il n'y a pas de marche nette.
+- **Le point de bascule est ~0,40** : c'est là que la réussite passe de 80 % à 100 %.
+- **La grille est cohérente** : 0,35 (T73, 0/25) < 0,36–0,38 (20/25) < 0,40+ (25/25) : la probabilité monte avec le facteur, sans être déterministe au bord.
+- **La négative reste** : 0,35 échoue 0/25.
+
+## L'état
+
+- Fiche : [`rapport-pensee-seuil-bas.md`](../../reports/rapport-pensee-seuil-bas.md) ; JSON [`pensee-seuil-bas.json`](../../reports/pensee-seuil-bas.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T75 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **78/78 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **478 fiches / 570 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : l'autotest prend désormais **~8 min** (T73–T75 : 65 entraînements) ; les portes tiennent avec `timeout 900`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Courbe complète** : 0,35 → 0,5 par pas de 0,01 ; tracer la probabilité.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round trace la **courbe complète** du seuil (0,35 → 0,5 par pas de 0,01).
+
+
+## Tour 93
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 80/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/graines.py'); t=p.read_text()\nt=t.replace('''def main() -> int:''',\n'''def executer_courbe(graines: int = 5) -> list[dict]:\n    \"\"\"La c … [1594 caractères tronqués]`
+
+  ```
+aa49abaf B13 — LE SEUIL BAS : GRADUÉ (~0,40), ×0,36 20/25, ×0,40 25/25 ; 78/78
+ok
+graine 3  Q  85  bruit True/8 pas (1 essais)  stable True/9 pas
+graine 4  Q  72  bruit True/8 pas (1 essais)  stable True/8 pas
+facteur 0.35  0/25 buts
+facteur 0.36  20/25 buts
+facteur 0.37  20/25 buts
+facteur 0.38  20/25 buts
+facteur 0.39  25/25 buts
+facteur 0.40  25/25 buts
+facteur 0.41  25/25 buts
+facteur 0.42  25/25 buts
+facteur 0.43  25/25 buts
+facteur 0.44  25/25 buts
+facteur 0.45  20/25 buts
+facteur 0.46  25/25 buts
+facteur 0.47  25/25 buts
+facteur 0.48  25/25 buts
+facteur 0.49  25/25 buts
+facteur 0.50  25/25 buts
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T75 le seuil bas                  ×0,36 20/25, ×0,40 25/25 (gradué)\\n\",\n\"  T75 le seuil bas                  ×0,36 20/ … [1172 caractères tronqués]`
+
+  ```
+ok
+  ✅ T74 bord du seuil      bord : ×0,42 25/25, ×0,44 25/25
+  ✅ T75 seuil bas          seuil bas : ×0,36 20/25, ×0,40 25/25
+  ✅ T76 courbe complète    courbe : ×0,35 0/15, ×0,40 15/15, ×0,50 15/15
+  79/79 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-courbe-seuil.md <<'MD'\n# B13 — la courbe complète du seuil : 0 → 80 % → 100 % (un creux à 0,45)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **79/79 … [6840 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 479 fiche(s) · 571 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2819 mots > budget 2800 (T1)
+  en-cours · 1600 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-bruit.md`](rapport-pensee-bruit.md) | **B13** — le bruit variable : 50–95 %, 6/6 buts, effort 3 → 1 essai, **36/ … [631 caractères tronqués]`

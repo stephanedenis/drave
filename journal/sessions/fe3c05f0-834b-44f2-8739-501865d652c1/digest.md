@@ -31929,3 +31929,87 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"pdftoppm|tesseract\" | head -1; ls -la data/corpus_ocr/train.txt", "description": "Wait 5 min then check OCR progress", "timeoutMs": 360000, "workdir": "/home/stephane/ … [34 caractères tronqués]`
+
+  ```
+02:00
+  Biblio_large · 004.65 CSS- The Missing Manual, 4th Edit · 718 p · 1549880 car
+  Biblio_large · 004.65 Pautasso 2025, Unethical Software · 97 p · 111013 car
+2304230 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af "pdftoppm|tesseract" | head -1; ls -la data/corpus_ocr/train.txt
+-rw-r--r--. 1 stephane stephane 9449324  2 nov 01:59 data/corpus_ocr/train.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 330 : 10e livre TERMINÉ — Pautasso 97 p, 111 013 car., train 9,45 Mo
+
+**Round 330/1000 — le 10e livre est clos.**
+
+- **Le Pautasso 2025, Unethical Software Engineering** : **97 pages, 111 013 caractères** ; le **train** passe à **9 449 324 octets**.
+- **Le corpus OCR : 10 livres, 3 630 pages, 9 349 682 caractères**.
+- **Le 11e livre** (Peterson 2013, 412 p) démarre ; le rendu `pdftoppm` en cours.
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** (8 livres) est committé (`a9a511e8`), **la roadmap** et le **récit** alignés (`868399c8`).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : 10 livres océrisés, 9,35 M caractères ; le goal reste actif.
+
+
+## Tour 343
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 331/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"pdftoppm|tesseract\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 5 min then check OCR progress", "timeoutMs": 360000, " … [60 caractères tronqués]`
+
+  ```
+02:05
+  Biblio_large · 004.65 CSS- The Missing Manual, 4th Edit · 718 p · 1549880 car
+  Biblio_large · 004.65 Pautasso 2025, Unethical Software · 97 p · 111013 car
+2307273 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af "pdftoppm|tesseract" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 9449324  2 nov 01:59 data/corpus_ocr/train.txt
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ps -p 1616198 -o stat,etime= 2>/dev/null; pgrep -af \"pdftoppm|tesseract\" | head -2; ls /tmp/ | grep \"ocr-pdf-\" | head -3", "description": "Check OCR 11th book start", "timeoutMs": 120000, "workdir": "/home/stephane/D … [33 caractères tronqués]`
+
+  ```
+02:05
+STAT            
+S       05:19:55
+2309063 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-qq8oda49/p-041.png stdout -l fra+eng --psm 3
+2309071 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ps -p 1616198 -o stat,etime= 2>/dev/null; pgrep -af "pdftoppm|tesseract" | head -2; ls /tmp/ | grep "ocr-pdf-" | head -3
+ocr-pdf-qq8oda49
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 331 : 11e livre (Peterson 412 p) en OCR à 41 pages
+
+**Round 331/1000 — le 11e livre entre en OCR (Peterson, 412 p).**
+
+- **`tesseract`** lit la page **41/412** du **Peterson 2013, Learning Responsive Web Design** ; à ~25 pages/min, il finira vers **02 h 20**.
+- **Le corpus OCR : 10 livres, 3 630 pages, 9 349 682 caractères** ; le train **9 449 324 octets**.
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** (8 livres) est committé (`a9a511e8`), **la roadmap** et le **récit** alignés (`868399c8`).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le 11e livre avance ; le goal reste actif.
+
+
+## Tour 344
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 332/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -1 /tmp/ocr-pilote.log; ls -la data/corpus_ocr/train.txt", "description": "Wait 5 min then check OCR progress", "timeoutMs": 3 … [68 caractères tronqués]`

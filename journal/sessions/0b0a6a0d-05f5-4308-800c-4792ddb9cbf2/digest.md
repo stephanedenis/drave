@@ -16820,3 +16820,58 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-991", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/M34-g1.pt 2>/dev/null && echo OK; tail -1 work/n2k/M34-g1.log", "description": "Check the multilingual 34M student"}`
+
+  ```
+02:01
+pas 19000 · seq 128 · perte 20.7307 · PPL 128/4 5.4877 · 2105 s
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/M34-g1.pt 2>/dev/null && echo OK; PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 900 ~/gpu-env/bin/python work/n2k/evalue.py work/n2k/M34-g1.pt 2>&1 | grep -v Loading | tee work/n2k/eval-multi34-dis … [67 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-993]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-993", "timeout_ms": 600000, "wait": true}`
+
+  ```
+02:05
+work/n2k/M34-g1.pt
+OK
+{"fichier": "M34-g1.pt", "fr": 4.7892, "en": 5.3196, "de": 5.2441, "es": 5.0915, "it": 5.2337, "pt": 5.6561, "ru": 3.1521, "ar": 3.1805, "ja": 4.8714, "zh": 8.2738}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-991 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/M34-g1.pt 2>/dev/null && echo OK; tail -1 work/n2k/M34-g1.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-multilingue-34m-distille.md <<'EOF'\n# N2.v — Le multilingue 34,3 M distillé : 5,58 → 4,79, la distillation paie avec la capacité\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : le 34,3 … [3520 caractères tronqués]`
+
+  ```
+fiche M34 écrite
+en-cours ok
+  T0 max : 3981 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 479 fichiers, le disque en a 480
+02:05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1182 caractères tronqués]`
+
+  ```
+ok
+[still running after 60000ms; moved to background job bash-995]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-995", "timeout_ms": 300000, "wait": true}`
