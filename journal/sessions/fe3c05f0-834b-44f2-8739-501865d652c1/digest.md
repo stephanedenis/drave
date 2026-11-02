@@ -16744,3 +16744,30 @@ check de job 1539458
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; which pdftotext pdfinfo 2>/dev/null; echo \"=== racines PDF\"; ls -d /home/stephane/Data13TB/stephane/Biblio_large 2>/dev/null; find /home/stephane/Data13TB/stephane/Biblio_large -maxdepth 2 -iname \"*.pdf\" 2>/dev/null | wc -l; find / … [1166 caractères tronqués]`
+
+  ```
+/usr/bin/pdftotext
+/usr/bin/pdfinfo
+=== racines PDF
+/home/stephane/Data13TB/stephane/Biblio_large
+70
+2711
+7496
+=== de check
+attente 420s
+de | lignes {'val.txt': 0.047395, 'test.txt': 0.046626} | 8 Ko {'val.txt': 0.0, 'test.txt': 0.0} | éval [('de-xnli.txt', 0, 40)]
+=== en
+1494795 01:17:43
+  [en] 8000000 lus · 2536621 gardés · 12.00 G caractères
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-corpus-wiki-texte.md'); s=p.read_text()\ns=s.replace(\"Les sept premiers autres corpus\\n> (ar, pt, zh, ja, it, ru, es) sont mesurés\",\n            \"Les huit premiers  … [2525 caractères tronqués]`
+
+  ```
+fiche : 9 langues
+  T0 max : 3990 mots (budget 4 000)
+  revue de documentation · 395 fiche(s) · 498 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| [^|]+ \\|\", \"| fichiers / JSON de résultats | **395** / **498** |\", s)\np.write_text … [1541 caractères tronqués]`

@@ -14486,3 +14486,30 @@ pas 4400 · perte 2.1525 · PPL val 7.974 · 178 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git reset -q && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.l** (canal) : **4,17**\", \"**N2.l** : **4,17**\")\ns = re.sub(r\"\\| fichiers / JSON de rés … [1527 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-845]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-845", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 7a083904] N2.l — LE CANAL DE STRUCTURE : +5 % DE PPL POUR 1 344 PARAMÈTRES, ET LE MÊME ALPHABET
+ 18 files changed, 200 insertions(+), 34 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W-g3.pt 2>/dev/null && echo G3_OK; tail -1 work/n2j/W-g3.log; tail -1 work/n2k/base-en.log", "description": "Wait for the third student"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-846]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-846", "timeout_ms": 400000, "wait": true}`

@@ -12435,3 +12435,81 @@ Round: 8/1000
 Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
 </goal_round>
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\n# DRVM : mémoriser le problème et utiliser son but/score\nt=t.replace('''        self.moteur: Moteur | None … [3736 caractères tronqués]`
+
+  ```
+c6fb94e2 L — LECTURE DOUBLE : TOP-1 TÊTE 0,957 (0,800 RÉEL/1,0 SYNTH), 29 CIBLES AMBIGUËS
+ok
+cadenas_avant {'noeuds': 3, 'but': True, 'par_operateur': {'sonde': 3}, 'genres': ['neuronal'], 'cout': 3.0, 'appels': 3, 'budget': 2, 'politique': 'cadenas_avant', 'score': 1.0}
+cadenas_arriere {'noeuds': 20, 'but': False, 'par_operateur': {'sonde': 20}, 'genres': ['neuronal'], 'cout': 20.0, 'appels': 20, 'budget': 20, 'politique': 'cadenas_arriere', 'score': 0.3333333333333333}
+grille {'noeuds': 23, 'but': True, 'par_operateur': {'pas': 10, 'saut': 9, 'sonde': 4}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 48.0, 'appels': 4, 'budget': 22, 'politique': 'manhattan', 'score': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T8  les opérateurs hétérogènes      trois genres, coût et appels, le négatif reste inutile\\n\",\n\"  T8  les opérateurs h … [1615 caractères tronqués]`
+
+  ```
+ok
+  ✅ T6 alpha-bêta          gain en 2 ; blocage en 5 ; profondeur 1 rate (1) ; alpha-bêta 1495 nœuds/296 coupes vs minimax 18730
+  ✅ T7 banc anytime        AUC A* 0.5283 vs aléatoire 0.2458 ; but A* 32, aléatoire None ; regret A* 0.0
+  ✅ T8 opérateurs hétérogènes 3 genres ; manhattan 23 nœuds/4 appels/coût 48.0 ; aveugle sonde 1 nœud/coût 33.0 ; but atteint
+  ✅ T9 neuronal nécessaire cadenas : avant 3 appels/but ; aveugle 20 appels/sans but
+  12/12 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-necessaire.md <<'MD'\n# B13 — le neuronal nécessaire : le cadenas, la sonde seule, l'aveugle échoue\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **12 … [9001 caractères tronqués]`
+
+  ```
+état ok
+2026-11-01 19:47 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-01, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-01, 19 h 50 HNE\", t)\np.write_text(t)\np=pathl … [740 caractères tronqués]`
+
+  ```
+ok
+python3 tools/revue_documentation.py         EXIT=1
+  revue de documentation · 395 fiche(s) · 497 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 394 fichiers, le disque en a 395
+     · compteurs : en-cours.md dit 496 JSON, le disque en a 497
+python3 tools/taille_documents.py            EXIT=1
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4008 mots (AGENTS + en-cours + une tâche) > budget 4 000
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" **opérateurs\\n  hétérogènes (11/11)**, **nécessaire (12/12)** ; fiches\", \" **opérateurs 11/11**,\\n  **nécessaire 12 … [1152 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 497 JSON, le disque en a 498
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text().replace(\"| fichiers / JSON de résultats | **395** / **497** |\", \"| fichiers / JSON de résultats | **395** / **498** |\")\np.write_text( … [338 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 395 fiche(s) · 498 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+}
+✅ porte bloc linguistique verte
+PORTE=0
+  ✅ T9 neuronal nécessaire cadenas : avant 3 appels/but ; aveugle 20 appels/sans but
+  12/12 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-necessaire.md reports/pensee-necessaire.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotage/roadmap.m … [392 caractères tronqués]`

@@ -1,0 +1,55 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "langue": "de",
+ "nature": "corpus Wikipédia de (texte intégral)",
+ "source": {
+  "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/de/dewiki-latest-pages-articles-multistream.xml.bz2",
+  "octets": 8129433785
+ },
+ "methode": {
+  "debaliseur": "regex : commentaires, refs, tableaux, modèles (30 itérations), fichiers/catégories, liens → libellé, titres de sections, listes",
+  "filtre": "ns 0, sans redirection, texte >= 300 caractères",
+  "deduplication": "articles (BLAKE2b) + tronçons (train), première occurrence gardée",
+  "split": "hash salé (graine 1) de page_id : 5% val, 5% test"
+ },
+ "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/de/dewiki-latest-pages-articles-multistream.xml.bz2",
+ "dump_octets": 8129433785,
+ "articles_lus": 6026063,
+ "articles_gardes": 2864934,
+ "articles_rediriges": 1969967,
+ "articles_hors_ns": 938309,
+ "articles_courts": 252792,
+ "articles_doublons": 61,
+ "caracteres_gardes": 10443172265,
+ "troncons": 3260640,
+ "troncons_doublons": 148,
+ "octets": {
+  "train": 9611515224,
+  "val": 534791621,
+  "test": 535878528
+ },
+ "articles": {
+  "train": 2578917,
+  "val": 143015,
+  "test": 143002
+ },
+ "residus": {
+  "modele": 0,
+  "lien": 15,
+  "balise": 0,
+  "lignes_echantillon": 20000
+ },
+ "echantillon": "---\nAlan Smithee\nAlan Smithee steht als Pseudonym für einen fiktiven Regisseur, der Filme verantwortet, bei denen der eigentliche Regisseur seinen Namen nicht mit dem Werk in Verbindung gebracht haben möchte. Von 1968 bis 2000 wurde es von der Directors Guild of America (DGA) für solche Situationen empfohlen.\n\nAlternative Schreibweisen sind unter anderem die Ursprungsvariante Allen Smithee sowie Alan Smythee und Adam Smithee. Auch zwei teilweise asiatisch anmutende Schreibweisen Alan Smi Thee und Sumishii Aran gehören laut IMDb dazu.\n\nGeschichte\nEntstehung\nDas Pseudonym entstand 1968 infolge der Arbeiten am We\n---\nActinium\nActinium ist ein radioaktives chemisches Element mit dem Elementsymbol Ac und der Ordnungszahl 89. Im Periodensystem der Elemente steht es in der 3. IUPAC-Gruppe, der Scandiumgruppe. Das Element ist ein Metall und gehört zur 7. Periode, d-Block. Es ist der Namensgeber der Gruppe der Actinoide, der ihm folgenden 14 Elemente.\n\nGeschichte\nmini|links|Friedrich Giesel\nFür die Entdeckung des Actiniums kommen zwei verschiedene Forscher in Betracht. Der erste ist André-Louis Debierne, ein Mitarbeiter von Pierre und Marie Curie. Er führte 1899 die von den Curies angefangene Trennung von Pechblende über\n---\nAng Lee\nmini|hochkant|Ang Lee, 2009\nAng Lee (; * 23. Oktober 1954 in Chaozhou, Landkreis Pingtung, Taiwan) ist ein taiwanischer Filmregisseur, Drehbuchautor und Produzent. Er ist als vielfach ausgezeichneter Regisseur bekannt für so unterschiedliche Filme wie Eat Drink Man Woman, die Jane-Austen-Adaption Sinn und Sinnlichkeit und den Martial-Arts-Film Tiger and Dragon. Für seine Filme Brokeback Mountain (2005) und Life of Pi: Schiffbruch mit Tiger (2012) wurde er jeweils mit dem Oscar in der Kategorie Beste Regie ausgezeichnet.\n\nLeben\nAng Lee wurde 1954 in Taiwan geboren. Seine Eltern, Emigranten aus",
+ "mots_estimes": 1684382623,
+ "note_mots": "caractères / 6,2 (estimation ; le japonais et le chinois se comptent en caractères)",
+ "sha256_train": "6cbbf4aa2ba10f470b7c1fb5cc33c4169f4273ed653ac28db13cf78d0b307abf",
+ "sha256_val": "6b453980a993b0497ca625c34b5796bdfc7324b39f7a1155efad19ce5f01070e",
+ "sha256_test": "236e8af62db2748e0f96069ea39f0069133a69385e156c7a503a2bbf6ca9720a",
+ "licence": "Wikipédia : CC-BY-SA 4.0 (et GFDL) — attribution et partage à l'identique ; corpus local",
+ "limites": [
+  "débaliseur regex : infobox/dates de modèles perdues, formules <math> retirées, tableaux perdus",
+  "les redirections et les espaces de noms autres que 0 sont exclus",
+  "déduplication exacte seulement (quasi-doublons non détectés)"
+ ]
+}

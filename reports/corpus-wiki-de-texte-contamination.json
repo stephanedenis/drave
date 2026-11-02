@@ -1,0 +1,43 @@
+{
+ "train": "data/corpus_wiki_de_texte/train.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 28058978,
+  "par_split": {
+   "val.txt": {
+    "troncons": 1558997,
+    "doublons": 73888,
+    "taux": 0.047395
+   },
+   "test.txt": {
+    "troncons": 1563285,
+    "doublons": 72889,
+    "taux": 0.046626
+   }
+  }
+ },
+ "recouvrement_eval": [
+  {
+   "fichier": "de-xnli.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  }
+ ],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 1174297,
+  "par_split": {
+   "val.txt": {
+    "troncons": 65339,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 65472,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}
