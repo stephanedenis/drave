@@ -1,0 +1,24 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "26/26",
+ "reseau": {
+  "entree": "x/4, y/4, 1",
+  "poids": 12,
+  "entrainement": "imitation perceptron, 200 époques"
+ },
+ "resultat": {
+  "seule_but": false,
+  "seule_pas": 200,
+  "a_star": {
+   "noeuds": 28,
+   "sonde": 6,
+   "but": true
+  }
+ },
+ "limites": [
+  "réseau linéaire sous-capacitaire",
+  "imitation naïve",
+  "toy"
+ ]
+}

@@ -14935,3 +14935,123 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [990 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+[still running after 60000ms; moved to background job bash-541]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-541", "timeout_ms": 600000, "wait": true}`
+
+  ```
+18 files changed, 384 insertions(+), 29 deletions(-)
+ create mode 100644 reports/pensee-shaping.json
+ create mode 100644 reports/rapport-pensee-shaping.md
+COMMIT OK 1
+28f5d388 B13 — LE REWARD SHAPING : 56 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ENCORE ; 25/25
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reward shaping : 56 états-Q, la politique seule échoue encore ; 25/25
+
+Le round 26 du goal est livré : le **reward shaping** ne suffit pas — la **négative** tient. Commit **`28f5d388`**.
+
+## Le reward shaping
+
+`PolitiqueAppriseShaping` (Q-learning + récompense **dense** : -0,01 par pas, +0,1 par case gagnée vers le but, +0,1 à l'ouverture), 200 épisodes, graine 0, 56 états-Q. Exécutée **seule**, sans A*.
+
+| politique | états-Q | buts seuls | pas | A* + sonde (T19) |
+|---|---:|---:|---:|---:|
+| **apprise shaping** | **56** | **0** | **8** | 28 nœuds |
+| apprise minute (T21) | 60 | 0 | 8 | 28 nœuds |
+
+**Ce que ça dit** :
+
+- **Le shaping ne suffit pas** : la politique seule échoue encore en 8 pas ; la Q-table apprend la **distance** mais pas la **séquence complète**.
+- **L'A* reste nécessaire** : c'est lui qui explore et atteint le but (T19) ; la politique seule ne le fait pas, même avec une récompense dense.
+- **La Q-table reste petite** (56 états) : le shaping ne change pas fondamentalement la table.
+- **La négative est explicite** : 0 but, 8 pas, 56 états-Q.
+
+## L'état
+
+- Fiche : [`rapport-pensee-shaping.md`](../../reports/rapport-pensee-shaping.md) ; JSON [`pensee-shaping.json`](../../reports/pensee-shaping.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T22 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **25/25 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **412 fiches / 511 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+## La suite
+
+1. **Réseau** : une politique paramétrique au lieu de la table, capable de **généraliser**.
+2. **Shaping potentiel** : un shaping qui préserve la politique optimale.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque le réseau.
+
+
+## Tour 40
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 27/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- cadenas (le ne … [2810 caractères tronqués]`
+
+  ```
+28f5d388 B13 — LE REWARD SHAPING : 56 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ENCORE ; 25/25
+ok
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/courbe.py", line 79, in seule_minute
+    cle, _ = p._pas((cle[0], cle[1], False), a, True)
+             ^^^^^^
+AttributeError: 'PolitiqueReseau' object has no attribute '_pas'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''    def _entree(self, e: Etat) -> tuple[float, float, float]:''',\n'''    def _pas(self, cle, action, ouvre: bool):\n     … [727 caractères tronqués]`
+
+  ```
+ok
+w [[-1.25, 2.75, -0.5, -1.0], [-0.75, 2.75, -1.0, -1.0], [1.0, -3.0, 0.0, 2.0]] seule (False, 200)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T22 le reward shaping              le shaping ne suffit pas : la politique seule échoue encore\\n\",\n\"  T22 le reward sh … [1243 caractères tronqués]`
+
+  ```
+ok
+  ✅ T21 Q-table entraînée/minute minute entraînée : 60 états-Q, seule échec/8 pas
+  ✅ T22 reward shaping     shaping : 56 états-Q, seule échec/8 pas
+  ✅ T23 réseau linéaire    réseau : 12 poids, seule échec/200 pas
+  26/26 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-reseau.md <<'MD'\n# B13 — le réseau linéaire : l'imitation échoue, il ne généralise pas seul\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **26/26 por … [5834 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 413 fiche(s) · 512 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [981 caractères tronqués]`

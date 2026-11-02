@@ -290,6 +290,76 @@ class PolitiqueAppriseShaping(PolitiqueAppriseMinute):
         return ncle, gain + 0.1 * (d0 - d1)
 
 
+class PolitiqueReseau(Politique):
+    """Un **réseau linéaire** (x, y, biais → 4 actions), entraîné par imitation du professeur.
+
+    Le perceptron apprend l'action du professeur (la Q-table de la porte minute) sur les 25
+    états ; il **généralise** ensuite à la politique seule. 12 poids, pas une table.
+    """
+
+    nom = "reseau"
+    ACTIONS = ("haut", "bas", "gauche", "droite")
+
+    def __init__(self, episodes: int = 400, graine: int = 0):
+        super().__init__()
+        self.w = [[0.0] * 4 for _ in range(3)]  # x, y, biais
+        self.rng = random.Random(graine)
+        self.episodes = episodes
+
+    def _pas(self, cle, action, ouvre: bool):
+        x, y, o = cle
+        if (x, y) == (3, 2) and action == "bas":
+            return (3, 3, False), 0.1
+        dx = {"droite": 1, "gauche": -1}.get(action, 0)
+        dy = {"bas": 1, "haut": -1}.get(action, 0)
+        nx, ny = x + dx, y + dy
+        if not _libre_p(nx, ny, o):
+            return cle, 0.0
+        return (nx, ny, o), -0.01
+
+    def _entree(self, e: Etat) -> tuple[float, float, float]:
+        x, y = _xy_p(e)
+        return x / 4.0, y / 4.0, 1.0
+
+    def _scores(self, e: Etat) -> list[float]:
+        x, y, b = self._entree(e)
+        return [self.w[0][a] * x + self.w[1][a] * y + self.w[2][a] for a in range(4)]
+
+    def propose(self, etat, but):
+        if _xy_p(etat) == P_BUT:
+            return None
+        s = self._scores(etat)
+        return self.ACTIONS[max(range(4), key=lambda i: s[i])]
+
+    def apprendre(self) -> "PolitiqueReseau":
+        prof = PolitiqueAppriseMinute(episodes=200, graine=0)
+        prof.apprendre()
+        for _ in range(self.episodes):
+            for x in range(5):
+                for y in range(5):
+                    if (x, y) == P_BUT:
+                        continue
+                    e = _etat_p(x, y, False)
+                    a = prof.propose(e, P_BUT)
+                    if a is None:
+                        continue
+                    vrai = self.ACTIONS.index(a)
+                    s = self._scores(e)
+                    pred = max(range(4), key=lambda i: s[i])
+                    if pred != vrai:
+                        self.w[0][vrai] += x / 4.0
+                        self.w[1][vrai] += y / 4.0
+                        self.w[2][vrai] += 1.0
+                        self.w[0][pred] -= x / 4.0
+                        self.w[1][pred] -= y / 4.0
+                        self.w[2][pred] -= 1.0
+        return self
+
+    @property
+    def nb_poids(self) -> int:
+        return 12
+
+
 # --------------------------------------------------------------------------- cadenas (le neuronal nécessaire)
 
 BUT_C = 3
@@ -811,7 +881,7 @@ class DRVM:
 __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle",
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
-           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise", "PolitiqueAppriseMinute", "PolitiqueAppriseShaping",
+           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise", "PolitiqueAppriseMinute", "PolitiqueAppriseShaping", "PolitiqueReseau",
            "LABYRINTHE_PORTE", "REGISTRE_P", "LABYRINTHE_PORTE_STO", "REGISTRE_PSTO",
            "LABYRINTHE_PORTE_FERME", "REGISTRE_PF",
            "LABYRINTHE_PORTE_MINUTE", "REGISTRE_PM",

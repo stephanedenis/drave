@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-reseau.md`](rapport-pensee-reseau.md) | **B13** — le réseau linéaire : 12 poids, l'imitation échoue seule, **26/26** |
 | [`rapport-pensee-shaping.md`](rapport-pensee-shaping.md) | **B13** — le reward shaping : 56 états-Q, la politique seule échoue encore, **25/25** |
 | [`rapport-pensee-minute-entrainee.md`](rapport-pensee-minute-entrainee.md) | **B13** — la Q-table entraînée/minute : 60 états-Q, politique seule échoue, **24/24** |
 | [`rapport-pensee-minute-seule.md`](rapport-pensee-minute-seule.md) | **B13** — la politique seule/minute : 9/9 échecs, l'A* nécessaire, **23/23** |

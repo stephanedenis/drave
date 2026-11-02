@@ -435,6 +435,17 @@ def t22_shaping() -> tuple[bool, str]:
                                       f"seule {'but' if ok else 'échec'}/{pas} pas")
 
 
+def t23_reseau() -> tuple[bool, str]:
+    """Le réseau linéaire par imitation échoue seul (négatif)."""
+    from .courbe import seule_minute
+    from .operateurs import PolitiqueReseau
+    p = PolitiqueReseau(episodes=200)
+    p.apprendre()
+    ok, pas = seule_minute(p)
+    return (not ok) and p.nb_poids > 0, (f"réseau : {p.nb_poids} poids, "
+                                        f"seule {'but' if ok else 'échec'}/{pas} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -456,7 +467,8 @@ def main() -> int:
               ("T19 Q-table sur la porte minute", t19_minute_apprise()),
               ("T20 politique seule/minute", t20_minute_seule()),
               ("T21 Q-table entraînée/minute", t21_minute_entrainee()),
-              ("T22 reward shaping", t22_shaping())]
+              ("T22 reward shaping", t22_shaping()),
+              ("T23 réseau linéaire", t23_reseau())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

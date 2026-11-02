@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 28.5 h |
-| Tours | 39 |
-| Messages | 693 |
-| Appels d'outils | 672 |
+| Durée | 28.6 h |
+| Tours | 40 |
+| Messages | 701 |
+| Appels d'outils | 678 |
 | Fichiers touchés | 25 |
-| Commandes | 541 |
+| Commandes | 546 |
 | Sous-agents | 2 |
-| Commits | 54 |
+| Commits | 55 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -109,6 +109,8 @@
 **Tour 38** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 39** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 40** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2090,6 +2092,55 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Passer les portes et committer le reward shaping
 - job_output
 
+**Synthèse produite :**
+
+⏵ Reward shaping : 56 états-Q, la politique seule échoue encore ; 25/25
+
+Le round 26 du goal est livré : le **reward shaping** ne suffit pas — la **négative** tient. Commit **`28f5d388`**.
+
+\## Le reward shaping
+
+`PolitiqueAppriseShaping` (Q-learning + récompense **dense** : -0,01 par pas, +0,1 par case gagnée vers le but, +0,1 à l'ouverture), 200 épisodes, graine 0, 56 états-Q. Exécutée **seule**, sans A*.
+
+| politique | états-Q | buts seuls | pas | A* + sonde (T19) |
+|---|---:|---:|---:|---:|
+| **apprise shaping** | **56** | **0** | **8** | 28 nœuds |
+| apprise minute (T21) | 60 | 0 | 8 | 28 nœuds |
+
+**Ce que ça dit** :
+
+- **Le shaping ne suffit pas** : la politique seule échoue encore en 8 pas ; la Q-table apprend la **distance** mais pas la **séquence complète**.
+- **L'A* reste nécessaire** : c'est lui qui explore et atteint le but (T19) ; la politique seule ne le fait pas, même avec une récompense dense.
+- **La Q-table reste petite** (56 états) : le shaping ne change pas fondamentalement la table.
+- **La négative est explicite** : 0 but, 8 pas, 56 états-Q.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-shaping.md`](../../reports/rapport-pensee-shaping.md) ; JSON [`pensee-shaping.json`](../../reports/pensee-shaping.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T22 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **25/25 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **412 fiches / 511 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+\## La suite
+
+1. **Réseau** : une politique paramétrique au lieu de la table, capable de **généraliser**.
+2. **Shaping potentiel** : un shaping qui préserve la politique optimale.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque le réseau.
+
+### Tour 40 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Ajouter le réseau linéaire par imitation
+- bash — Ajouter _pas au réseau et tester
+- bash — Ajouter la porte T23 (réseau linéaire)
+- bash — Écrire la fiche du réseau linéaire
+- bash — Passer les portes et committer le réseau linéaire
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2169,7 +2220,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 501 autres
+- … et 506 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2297,7 +2348,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 
 ## 5. Erreurs rencontrées
 
-12 sorties en erreur ou divergentes. Les premières :
+13 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -2311,6 +2362,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T19** : ok [stderr] Traceback (most recent call last):   File "<stdin>", line 5, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 231, in instantane     b[
 - **T21** : 35bf5588 DONNÉES — NEUF CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES, DE) : 14,51 M ARTICLES, 59,0 GO, 8 KO 0 === HEAD has ? ===  docs/pilotage/en-cours.md                          | 22 ++
 - **T29** : 5853b206 B13 — LA PORTE NEURONALE : BONNE POLITIQUE 28 NŒUDS/58 (SONDE 5), AVEUGLE 200/483 SANS BUT ; 14/14 ok [stderr] Traceback (most recent call last):   File "<stdin>", line 4, in <module>   File 
+- **T40** : 28f5d388 B13 — LE REWARD SHAPING : 56 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ENCORE ; 25/25 ok [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "/home/stephane/Data
 
 ## 6. Commits
 
@@ -2368,4 +2420,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LA POLITIQUE SEULE SUR LA PORTE MINUTE : 9/9 ÉCHECS, L'A* ÉTAIT NÉCESSAIRE ; 23/23" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MINUTE : 9/9";
 - B13 — LA Q-TABLE ENTRAÎNÉE/MINUTE : 60 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ; 24/24" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ENTRAÎNÉE/MINUTE"; th
 - B13 — LE REWARD SHAPING : 56 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ENCORE ; 25/25" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "REWARD SHAPING"; then ec
+- B13 — LE RÉSEAU LINÉAIRE : 12 POIDS, L'IMITATION ÉCHOUE SEULE ; 26/26" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RÉSEAU LINÉAIRE"; then echo "COMM
 
