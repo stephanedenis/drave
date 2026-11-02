@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 39.1 h |
+| Durée | 39.2 h |
 | Tours | 384 |
-| Messages | 2298 |
-| Appels d'outils | 1522 |
+| Messages | 2299 |
+| Appels d'outils | 1523 |
 | Fichiers touchés | 26 |
-| Commandes | 1353 |
+| Commandes | 1354 |
 | Sous-agents | 0 |
 | Commits | 87 |
 | Compactages de contexte | 4 |
@@ -9019,7 +9019,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 384 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Wait 8 min then check CEGEP 8 progress
 - bash — Wait 9 min then check CEGEP 8
@@ -9028,6 +9028,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Wait 5 min then check CEGEP 8 manifest
 - bash — Wait 4 min then check CEGEP 8 manifest
 - bash — Wait 4 min then check CEGEP 8 finish
+- bash — Check CEGEP 8 finish near window
 
 ## 3. Travail accompli
 
@@ -9104,7 +9105,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1313 autres
+- … et 1314 autres
 
 ## 4. Mesures et résultats marquants
 

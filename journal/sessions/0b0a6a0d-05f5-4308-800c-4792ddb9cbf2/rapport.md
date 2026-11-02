@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 39.4 h |
-| Tours | 18 |
-| Messages | 1539 |
-| Appels d'outils | 1415 |
+| Durée | 39.5 h |
+| Tours | 19 |
+| Messages | 1553 |
+| Appels d'outils | 1427 |
 | Fichiers touchés | 11 |
-| Commandes | 1117 |
+| Commandes | 1128 |
 | Sous-agents | 0 |
-| Commits | 79 |
+| Commits | 80 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -67,6 +67,8 @@
 **Tour 17** — lire docs/pilotage/plan-travail.md et avancer
 
 **Tour 18** — suis le plan, continue jusqu'à 8h demain matin
+
+**Tour 19** — <goal_round> Objective: "Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, session S (analyseur plus riche, export), intégration hub. Chaque étape rend … [659 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -947,7 +949,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*449 appels d'outils.* Actions notables :
+*451 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,11 +965,62 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 293 autres
+- … et 294 autres
 
 **Synthèse produite :**
 
-⏵ Session S : mesure de l'analyseur contre les structures écrites à la main
+⏵ Clôture de la nuit : bilan des 31 fiches, des lois et des portes
+
+\# La nuit N2 — de 17 h 45 à 8 h
+
+**Le mandat** : suivre le plan jusqu'à 8 h. **Fait** : 31 fiches N2, 1 fiche S, 1 note de passage R1, ~45 commits, quatre lois mesurées et deux meilleurs modèles.
+
+\## Le meilleur modèle de la nuit
+
+| usage | modèle | domaine | 512 octets |
+|---|---|---:|---:|
+| **français** | **34,3 M + canal de structure** (2 graines) | **3,5250** | **3,6632** |
+| français | 34,3 M distillé (professeur 23,57 M) | 3,6852 | 4,09 |
+| anglais | 34,3 M distillé | 3,7651 | 4,185 |
+| multilingue (10 langues) | 34,3 M distillé | 4,7892 (fr) | — |
+| dépôt (le mètre honnête) | 11,47 M distillé | 3,0904 | — |
+
+Le renversement de la nuit : le **canal de structure**, qui ne valait que −0,22 à 11,47 M (et que la distillation absorbait), vaut **−0,47 à 34,3 M** — il bat la distillation et ne s'y ajoute pas (N2.z, N2.y).
+
+\## Les quatre lois
+
+1. **La donnée d'abord.** Le corpus réel (186 Mo de Wikipédia, 0 fuite) fait passer la littérature de **12,29 → 7,42** et l'anglais de **32,90 → 12,41** (×1,7 à ×2,6 hors domaine). Le corpus du dépôt seul ne suffisait pas.
+2. **La capacité, ensuite.** −0,19 par palier sur 186 Mo (4,39 → 4,20 → 4,00), sans rendement décroissant en monolingue — et le **verrou de longueur s'aplatit** (5,67 → 4,19 à 512). En multilingue, elle **sature** (6,68 → 5,89 → 5,58).
+3. **La distillation transporte.** −0,3 à −0,5 ; son gain **sature avec l'élève** ; un professeur 29 % plus gros ne gagne **rien en domaine** et 0,3 hors domaine (N2.u) ; le multilingue ne récupère pas sa dilution (5,41 contre 3,88).
+4. **La structure se paie.** Le canal vaut −0,22 à 11 M, **−0,47 à 34 M** ; il ne compose pas avec la distillation (N2.x à 11 M : absorbé ; N2.y à 34 M : +0,12 à 512).
+
+\## Ce qui n'a pas marché (et qui est écrit)
+
+- **Le filtre des phrases non ambiguës** (N2.j) : 15–30 % des phrases, les courtes ; le transfert est **pire** qu'un témoin aléatoire de même taille ; en curriculum, tout baisse.
+- **Le canal + KD** aux deux tailles : absorbé ou nuisible.
+- **Le professeur plus gros** en domaine : rien.
+- **La porte < 2,5** : elle est à 0,59 sur le corpus propre — le chemin qui reste est le **corpus**, pas la capacité.
+- **L'échantillon** (N2.s) : du français grammatical, mais des **boucles de gabarit** en glouton et des **collages** à température ; la pénalité de répétition casse la boucle et **invente des mots**.
+
+\## L'état du dépôt
+
+- **Portes** : passe complète du 02/11 06 h
+… [956 caractères tronqués]
+
+### Tour 19 — <goal_round> Objective: "Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie j … [939 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Verify each objective item's evidence
+- bash — Diagnose the sub-project test failures
+- bash — Read the test failure details
+- bash — Verify the placebo figures and the state
+- bash — Check for uncommitted N2 work and the last commits
+- bash — Diagnose whether the commits are still in history
+- bash — Trace the deleted report files
+- bash — List the N2 reports missing from HEAD
+- bash — Inspect the deleting commit's scope
+- bash — Restore the deleted report files
 
 ## 3. Travail accompli
 
@@ -1029,7 +1082,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1077 autres
+- … et 1088 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1157,7 +1210,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ## 5. Erreurs rencontrées
 
-65 sorties en erreur ou divergentes. Les premières :
+66 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5
@@ -1256,4 +1309,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-n2-canal-34m.md'); s = p.read_text() s =
 - ÉTAT — LE BUDGET REVIENT À 4000 MOTS (N2.z SUR DEUX GRAINES)  Le canal à 34,3 M est confirmé à 3,53 en domaine sur deux graines ; l'état tient dans son budget."
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg-final.txt <<'EOF' ÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 06 h : 76 VERTES, 5 ROUGES (LES
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/generer_natif.py; python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilo
 

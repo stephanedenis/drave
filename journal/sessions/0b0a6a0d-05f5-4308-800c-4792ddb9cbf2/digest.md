@@ -19020,3 +19020,233 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg-final.txt <<'EOF'\nÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 06 h : 76 VERTES, 5 ROUGES (LES 4 CONNUES + GREFFE À LA BORNE)\n\nLes 81 portes ont tourné une à une (borne 700 s) : 76 vertes, 5 rouges — homeostasie (LoRA  … [819 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1117]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1117", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+6c7bff9b ÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 06 h : 76 VERTES, 5 ROUGES (LES 4 CONNUES + GREFFE À LA BORNE)
+07:42
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && curl -s -o /dev/null -w \"serveur %{http_code}\\n\" http://127.0.0.1:8765/ 2>/dev/null || echo \"serveur muet\"; git log --oneline --since=\"2026-11-01 17:00\" | wc -l; ls reports/rapport-n2-*.md | wc -l; git log --oneline -3; date ' … [65 caractères tronqués]`
+
+  ```
+serveur 200
+188
+30
+6c7bff9b ÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 06 h : 76 VERTES, 5 ROUGES (LES 4 CONNUES + GREFFE À LA BORNE)
+a4cd8ab0 B13 — LE BILAN DE L'ANAPHORE : 27/30, CV 0,847, HUIT MESURES ; 109/109
+69a3787d B13 — LA CV SUR 20 GRAINES : 0,8467 ± 0,051, LE DERNIER NOM GÉNÉRALISE ; 108/108
+07:42
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture de la nuit : bilan des 31 fiches, des lois et des portes
+
+# La nuit N2 — de 17 h 45 à 8 h
+
+**Le mandat** : suivre le plan jusqu'à 8 h. **Fait** : 31 fiches N2, 1 fiche S, 1 note de passage R1, ~45 commits, quatre lois mesurées et deux meilleurs modèles.
+
+## Le meilleur modèle de la nuit
+
+| usage | modèle | domaine | 512 octets |
+|---|---|---:|---:|
+| **français** | **34,3 M + canal de structure** (2 graines) | **3,5250** | **3,6632** |
+| français | 34,3 M distillé (professeur 23,57 M) | 3,6852 | 4,09 |
+| anglais | 34,3 M distillé | 3,7651 | 4,185 |
+| multilingue (10 langues) | 34,3 M distillé | 4,7892 (fr) | — |
+| dépôt (le mètre honnête) | 11,47 M distillé | 3,0904 | — |
+
+Le renversement de la nuit : le **canal de structure**, qui ne valait que −0,22 à 11,47 M (et que la distillation absorbait), vaut **−0,47 à 34,3 M** — il bat la distillation et ne s'y ajoute pas (N2.z, N2.y).
+
+## Les quatre lois
+
+1. **La donnée d'abord.** Le corpus réel (186 Mo de Wikipédia, 0 fuite) fait passer la littérature de **12,29 → 7,42** et l'anglais de **32,90 → 12,41** (×1,7 à ×2,6 hors domaine). Le corpus du dépôt seul ne suffisait pas.
+2. **La capacité, ensuite.** −0,19 par palier sur 186 Mo (4,39 → 4,20 → 4,00), sans rendement décroissant en monolingue — et le **verrou de longueur s'aplatit** (5,67 → 4,19 à 512). En multilingue, elle **sature** (6,68 → 5,89 → 5,58).
+3. **La distillation transporte.** −0,3 à −0,5 ; son gain **sature avec l'élève** ; un professeur 29 % plus gros ne gagne **rien en domaine** et 0,3 hors domaine (N2.u) ; le multilingue ne récupère pas sa dilution (5,41 contre 3,88).
+4. **La structure se paie.** Le canal vaut −0,22 à 11 M, **−0,47 à 34 M** ; il ne compose pas avec la distillation (N2.x à 11 M : absorbé ; N2.y à 34 M : +0,12 à 512).
+
+## Ce qui n'a pas marché (et qui est écrit)
+
+- **Le filtre des phrases non ambiguës** (N2.j) : 15–30 % des phrases, les courtes ; le transfert est **pire** qu'un témoin aléatoire de même taille ; en curriculum, tout baisse.
+- **Le canal + KD** aux deux tailles : absorbé ou nuisible.
+- **Le professeur plus gros** en domaine : rien.
+- **La porte < 2,5** : elle est à 0,59 sur le corpus propre — le chemin qui reste est le **corpus**, pas la capacité.
+- **L'échantillon** (N2.s) : du français grammatical, mais des **boucles de gabarit** en glouton et des **collages** à température ; la pénalité de répétition casse la boucle et **invente des mots**.
+
+## L'état du dépôt
+
+- **Portes** : passe complète du 02/11 06 h (81 portes, borne 700 s) → **76 vertes, 5 rouges** : les **4 connues** (indice, mélange, homostasie, réparti) + **greffe** qui dépasse la borne (référence 829 s) — **rejouée seule à 1200 s : verte**. Aucune régression.
+- **Revue documentaire** ✅ ; **budget** 3 965 / 4 000 ; **doc gates** 7/7 ; **état court** ✅.
+- **Sous-projet structures** fusionné (`3b68143`) : pragmatique + export + analyseur, **19 tests** ; l'analyseur retrouve **7/7** séquences de types et **93,9 %** de couverture des structures écrites à la main.
+- **Serveur** de la banque de structures toujours vivant (http://127.0.0.1:8765, 7 phrases, 14 candidats).
+
+## Ce qui reste ouvert
+
+La **fenêtre** (R1 — la note de passage est écrite : position relative, fenêtre entraînée au-delà de 256, à refaire à 21,65 et 34,3 M), la **restitution R31** (le miroir entrée/sortie, toujours pas construit), et un **corpus d'un autre ordre** — c'est lui, pas la capacité, qui tient la porte < 2,5.
+
+
+## Tour 19
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, session S (analyseur plus riche, export), intégration hub. Chaque étape rend un résultat mesuré, une fiche, un commit, et met à jour en-cours/roadmap ; les portes et la revue restent vertes."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M %d/%m'; echo \"=== 1. distillation 3 graines ===\"; ls -la work/n2j/W-g1.pt work/n2j/W-g2.pt work/n2j/W-g3.pt 2>/dev/null | awk '{print $NF, $5}'; grep -o \"3,8758\\|3,8765\\|3,8761\" reports/rapport-n2-distillation-reel … [480 caractères tronqués]`
+
+  ```
+07:43 02/11
+=== 1. distillation 3 graines ===
+work/n2j/W-g1.pt 47299186
+work/n2j/W-g2.pt 47299186
+work/n2j/W-g3.pt 47299186
+3,8761
+3,8761
+=== 2. canal ===
+4,1738 4,1738 9,60 4,1738 9,60 
+=== 3. anglais ===
+reports/corpus-wiki-en-propre.json
+reports/rapport-n2-anglais-34m.md
+reports/rapport-n2-anglais-distille.md
+reports/rapport-n2-anglais.md
+=== 4. S ===
+reports/rapport-s-analyseur.md
+3b68143 FUSION — LE BANC DE STRUCTURES : PRAGMATIQUE, EXPORT ET ANALYSEUR EN UN SEUL ARBRE
+FAILED (errors=3)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && PYTHONPATH=. python3 -m unittest discover -s tests 2>&1 | grep -A4 \"ERROR\\|Traceback\" | head -30; git status --short | head -5; git log --oneline -1", "description": "Diagnose the sub-project test failures"}`
+
+  ```
+3b68143 FUSION — LE BANC DE STRUCTURES : PRAGMATIQUE, EXPORT ET ANALYSEUR EN UN SEUL ARBRE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && PYTHONPATH=. python3 -m unittest discover -s tests 2>&1 | tail -25", "description": "Read the test failure details"}`
+
+  ```
+............  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/export HTTP/1.1" 200 -
+.  127.0.0.1 · "POST /api/llm HTTP/1.1" 200 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+.  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+.  127.0.0.1 · "GET / HTTP/1.1" 200 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 400 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/export HTTP/1.1" 200 -
+.
+----------------------------------------------------------------------
+Ran 19 tests in 3.630s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"placebo[^.]*\" reports/rapport-n2-canal.md | head -2; grep -o \"4,52[0-9]*\\|4,39[0-9]*\" reports/rapport-n2-canal.md | head -4; echo \"=== état ===\"; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅\"; python3  … [213 caractères tronqués]`
+
+  ```
+placebo** — le même
+placebo** | 4,5154 | 4,5617 | 5,8656 | ×5,4 | ×9,8 |
+=== état ===
+  T0 max : 3965 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== portes ===
+    PORTE NON TENUE : écart relatif REF 8.7434 != 9.1748 % entre entier et réparti
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -E \"n2|N2|rapport-s|structures\" | head -5; git log --oneline --since=\"2026-11-01 17:00\" | wc -l; git log --oneline -5; date '+%H:%M'", "description": "Check for uncommitted N2 work and the last commits"}`
+
+  ```
+?? reports/rapport-n2-anglais-34m.md
+?? reports/rapport-n2-canal-34m.md
+?? reports/rapport-n2-canal-distille.md
+?? reports/rapport-n2-canal-kd-34m.md
+?? reports/rapport-n2-echantillon.md
+188
+6c7bff9b ÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 06 h : 76 VERTES, 5 ROUGES (LES 4 CONNUES + GREFFE À LA BORNE)
+a4cd8ab0 B13 — LE BILAN DE L'ANAPHORE : 27/30, CV 0,847, HUIT MESURES ; 109/109
+69a3787d B13 — LA CV SUR 20 GRAINES : 0,8467 ± 0,051, LE DERNIER NOM GÉNÉRALISE ; 108/108
+0d2e86f4 B13 — LA VALIDATION CROISÉE : 5 PLIS, 25/30, LE DERNIER NOM GÉNÉRALISE ; 107/107
+9c8722d6 B13 — LE VOTE PONDÉRÉ : POIDS (1,0,0,0), TRAIN 20/20, TEST 7/10 ; 106/106
+07:44
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline | grep -c \"4bad0fab\\|0f0449f2\\|24fb271e\\|78b551fc\"; git branch --contains 0f0449f2 2>/dev/null | head -2; git ls-tree HEAD reports/ | grep -c \"canal-34m\\|canal-kd-34m\\|echantillon\"; git status --short repor … [149 caractères tronqués]`
+
+  ```
+4
+* master
+0
+19
+?? reports/corpus-wiki-it-texte-contamination.json
+?? reports/corpus-wiki-it-texte.json
+?? reports/ocr-pdf-cegep-contamination.json
+?? reports/ocr-pdf-cegep.json
+?? reports/ocr-pdf-contamination.json
+?? reports/ocr-pdf.json
+?? reports/pensee-partielle.json
+?? reports/rapport-n2-anglais-34m.md
+?? reports/rapport-n2-canal-34m.md
+?? reports/rapport-n2-canal-distille.md
+?? reports/rapport-n2-canal-kd-34m.md
+?? reports/rapport-n2-echantillon.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git merge-base --is-ancestor 4bad0fab HEAD && echo \"ancêtre\" || echo \"orphelin\"; git log --oneline --all -- reports/rapport-n2-canal-34m.md | head -3; git log --oneline -3 --diff-filter=D -- reports/rapport-n2-canal-34m.md | head … [124 caractères tronqués]`
+
+  ```
+ancêtre
+edb54a29 B13 — LES PRONOMS OBJETS : 8/8, 20/20 AU TOTAL, GOLD 336 ; 98/98
+0a343fbb N2.z (suite) — LE MEILLEUR MODÈLE CONFIRMÉ SUR DEUX GRAINES : 3,5250 EN DOMAINE
+7a6cc15a B13 — LES PHRASES COMPLEXES : POS 0,6471, SYNTAGME 0,4828, GOLD 205 ; 90/90
+edb54a29 B13 — LES PRONOMS OBJETS : 8/8, 20/20 AU TOTAL, GOLD 336 ; 98/98
+7a6cc15a B13 — LES PHRASES COMPLEXES : POS 0,6471, SYNTAGME 0,4828, GOLD 205 ; 90/90
+6c7bff9b ÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 06 h : 76 VERTES, 5 ROUGES (LES 4 CONNUES + GREFFE À LA BORNE)
+4bad0fab
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"sur disque : $(ls reports/rapport-n2-*.md | wc -l)\"; echo \"dans HEAD : $(git ls-tree HEAD reports/ | grep -c 'rapport-n2-')\"; comm -13 <(git ls-tree HEAD reports/ | awk '{print $4}' | grep 'rapport-n2-' | sort) <(ls reports … [174 caractères tronqués]`
+
+  ```
+sur disque : 30
+dans HEAD : 21
+reports/rapport-n2-anglais-34m.md
+reports/rapport-n2-canal-34m.md
+reports/rapport-n2-canal-distille.md
+reports/rapport-n2-canal-kd-34m.md
+reports/rapport-n2-echantillon.md
+reports/rapport-n2-fenetre-r1.md
+reports/rapport-n2-multilingue-34m-distille.md
+reports/rapport-n2-multilingue-34m.md
+reports/rapport-n2-professeur.md
+=== S ===
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat edb54a29 | grep -E \"delete mode|=>\" | head -15; git ls-tree HEAD tools/ | grep -c \"generer_natif\"; grep -c \"penalite\" tools/generer_natif.py", "description": "Inspect the deleting commit's scope"}`
+
+  ```
+1
+4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/generer_natif.py; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d{2} h \\d{2} HNE \\(heure locale, EST\ … [1605 caractères tronqués]`

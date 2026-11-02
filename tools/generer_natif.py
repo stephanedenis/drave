@@ -25,7 +25,8 @@ def charger(chemin: str, device: str = "cpu"):
 
 
 @torch.no_grad()
-def generer(modele, prompt: str, n: int = 128, top_k: int = 0, temperature: float = 0.0):
+def generer(modele, prompt: str, n: int = 128, top_k: int = 0, temperature: float = 0.0,
+            penalite: float = 0.0):
     ids = list(prompt.encode("utf-8"))
     if not ids:
         ids = [32]
@@ -33,6 +34,10 @@ def generer(modele, prompt: str, n: int = 128, top_k: int = 0, temperature: floa
         x = torch.tensor([ids[-modele.cfg.max_pos:]], dtype=torch.long,
                          device=next(modele.parameters()).device)
         logits = modele(x)["logits"][0, -1]
+        if penalite > 0 and len(ids) > len(prompt.encode()):
+            recents = ids[-32:]
+            for b in set(recents):
+                logits[b] -= penalite * recents.count(b)
         if temperature <= 0:
             suivant = int(logits.argmax())
         else:
@@ -54,6 +59,8 @@ def main() -> None:
     ap.add_argument("--n", type=int, default=128)
     ap.add_argument("--top-k", type=int, default=0)
     ap.add_argument("--temperature", type=float, default=0.0)
+    ap.add_argument("--penalite", type=float, default=0.0,
+                    help="pénalité de répétition (soustraction par fréquence sur 32 octets)")
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--json", default="reports/native-generation.json")
     a = ap.parse_args()

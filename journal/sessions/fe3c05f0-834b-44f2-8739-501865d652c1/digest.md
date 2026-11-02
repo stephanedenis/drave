@@ -34739,3 +34739,15 @@ manifeste ocrises 5 pages 292 car 506801 docs {'train': 3, 'val': 2, 'test': 0}
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 240; date '+%H:%M'; tail -3 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json')); print('manifeste ocrises', d['ocrises … [208 caractères tronqués]`
+
+  ```
+07:44
+  CEGEP · inscription AQPC.pdf · 2 p · 2582 car
+  CEGEP · programme_du_colloque_2016_de_laqpc.pdf · 66 p · 205021 car
+  CEGEP · Algorithms Illuminated (Part 2) Graph Al · 221 p · 342432 car
+    PID            
+3011320       51:10
+manifeste ocrises 5 pages 292 car 506801
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 180; date '+%H:%M'; tail -4 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json')); print('manifeste ocrises', d['ocrises … [244 caractères tronqués]`
