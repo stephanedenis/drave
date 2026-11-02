@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-labyrinthe.md`](rapport-pensee-labyrinthe.md) | **B13** — le labyrinthe non linéaire : bonne politique 17 nœuds/34 (sonde 2), aveugle 15/24 (sonde 0), **13/13** |
 | [`rapport-pensee-necessaire.md`](rapport-pensee-necessaire.md) | **B13** — le neuronal nécessaire : cadenas, sonde seule, avant 3 appels/but, aveugle 20/sans but, **12/12** |
 | [`rapport-pensee-operateurs.md`](rapport-pensee-operateurs.md) | **B13** — les opérateurs hétérogènes : 3 genres, A* 23 nœuds/4 appels/coût 48 vs aveugle 1/33, **11/11** |
 | [`rapport-pensee-gold-linguistique.md`](rapport-pensee-gold-linguistique.md) | **L/R0.7** — le gold 360 : POS 0,772, exact 0,190/tête 0,510, **attachement tête 1,0/0,966/0,932** (59 ambiguës), pragmatique 1,0/1,0/0,994/0,889 ; neuronal réel refusé |

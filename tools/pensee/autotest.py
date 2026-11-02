@@ -16,6 +16,7 @@
   T7  le banc anytime                 best-so-far monotone, AUC A* > AUC aléatoire, but atteint
   T8  les opérateurs hétérogènes      trois genres, coût et appels, le négatif reste inutile
   T9  le neuronal nécessaire          le seul opérateur est la sonde ; l'aveugle échoue
+  T10 le labyrinthe non linéaire      plusieurs chemins, la bonne politique utilise la sonde, l'aveugle l'ignore
   T8  les opérateurs hétérogènes      trois genres, coût et appels, le négatif reste inutile
 
 Usage : PYTHONPATH=. ~/gpu-env/bin/python tools/pensee/autotest.py
@@ -251,6 +252,24 @@ def t9_necessaire() -> tuple[bool, str]:
                 f"aveugle {bb['appels']} appels/sans but")
 
 
+def t10_labyrinthe() -> tuple[bool, str]:
+    """Le labyrinthe non linéaire : la bonne politique utilise la sonde, l'aveugle l'ignore."""
+    from .operateurs import (DRVM, LABYRINTHE, REGISTRE_L, PolitiqueAveugle,
+                             PolitiqueManhattan)
+    a = DRVM(REGISTRE_L, PolitiqueManhattan())
+    a.penser(LABYRINTHE, AStar(), Budget(160))
+    ba = a.instantane()
+    b = DRVM(REGISTRE_L, PolitiqueAveugle())
+    b.penser(LABYRINTHE, AStar(), Budget(160))
+    bb = b.instantane()
+    ok = (ba["but"] and bb["but"] and ba["appels"] > 0 and bb["appels"] > 0
+          and ba["par_operateur"].get("sonde", 0) > 0
+          and bb["par_operateur"].get("sonde", 0) == 0)
+    return ok, (f"labyrinthe : bon {ba['noeuds']} nœuds/{ba['cout']} "
+                f"(sonde {ba['par_operateur'].get('sonde', 0)}) ; mauvais {bb['noeuds']} nœuds/"
+                f"{bb['cout']} (sonde 0) ; buts {ba['but']}/{bb['but']}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -259,7 +278,8 @@ def main() -> int:
               ("T5 AC-3", t5_ac3()), ("T6 alpha-bêta", t6_alphabeta()),
               ("T7 banc anytime", t7_banc()),
               ("T8 opérateurs hétérogènes", t8_operateurs()),
-              ("T9 neuronal nécessaire", t9_necessaire())]
+              ("T9 neuronal nécessaire", t9_necessaire()),
+              ("T10 labyrinthe non linéaire", t10_labyrinthe())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

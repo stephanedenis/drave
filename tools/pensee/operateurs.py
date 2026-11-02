@@ -263,6 +263,86 @@ CADENAS = Probleme(
 )
 
 
+# --------------------------------------------------------------------------- labyrinthe (le cadenas non linéaire)
+
+MURS = {(0, 1), (1, 1), (2, 1), (4, 1), (1, 3), (2, 3), (3, 3)}
+L_BUT = (4, 4)
+
+
+def _etat_l(x: int, y: int, parent: str | None = None, profondeur: int = 0) -> Etat:
+    return Etat(f"l{x}:{y}", parent, profondeur,
+                (Candidat("x", {"v": x}), Candidat("y", {"v": y})))
+
+
+def _xy_l(e: Etat) -> tuple[int, int]:
+    d = {c.id: c.corps["v"] for c in e.candidats}
+    return int(d["x"]), int(d["y"])
+
+
+def _libre_l(x: int, y: int) -> bool:
+    return 0 <= x < 5 and 0 <= y < 5 and (x, y) not in MURS
+
+
+def _deplacer_l(e: Etat, dx: int, dy: int, profondeur: int = 1) -> list[Etat]:
+    x, y = _xy_l(e)
+    nx, ny = x + dx, y + dy
+    if not _libre_l(nx, ny):
+        return []
+    return [_etat_l(nx, ny, e.empreinte(), e.profondeur + profondeur)]
+
+
+def pas_l(e: Etat, _p: dict | None = None) -> list[Etat]:
+    return [c for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)) for c in _deplacer_l(e, dx, dy)]
+
+
+def saut_l(e: Etat, _p: dict | None = None) -> list[Etat]:
+    return [c for dx, dy in ((2, 0), (-2, 0), (0, 2), (0, -2)) for c in _deplacer_l(e, dx, dy, 2)]
+
+
+def sonde_l(e: Etat, _p: dict | None = None) -> list[Etat]:
+    p = POLITIQUE[0]
+    if p is None:
+        return []
+    direction = p.propose(e, L_BUT)
+    p.appels += 1
+    return _deplacer_l(e, {"droite": 1, "gauche": -1, "bas": 0, "haut": 0}.get(direction, 0),
+                       {"bas": 1, "haut": -1}.get(direction, 0))
+
+
+def but_l(e: Etat) -> bool:
+    return _xy_l(e) == L_BUT
+
+
+def _man_l(x: int, y: int) -> int:
+    return abs(x - L_BUT[0]) + abs(y - L_BUT[1])
+
+
+def score_l(e: Etat) -> float:
+    x, y = _xy_l(e)
+    return 1.0 / (1.0 + _man_l(x, y))
+
+
+def heuristique_l(e: Etat) -> float:
+    x, y = _xy_l(e)
+    return -float(_man_l(x, y))
+
+
+REGISTRE_L = Registre({
+    "pas": Operateur("pas", "symbolique", 1.0, pas_l, "un pas dans le labyrinthe"),
+    "saut": Operateur("saut", "numérique", 2.0, saut_l, "un saut de deux cases"),
+    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_l, "la politique propose le pas"),
+})
+
+LABYRINTHE = Probleme(
+    nom="labyrinthe",
+    initial=lambda: _etat_l(0, 0),
+    operateurs={n: o.applique for n, o in REGISTRE_L.operateurs.items()},
+    but=but_l,
+    heuristique=heuristique_l,
+    score=score_l,
+)
+
+
 class DRVM:
     """Le conteneur d'exécution : registre, politique, moteur, trace, bilan."""
 
@@ -304,4 +384,4 @@ class DRVM:
 __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle",
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
-           "PolitiqueCadenasAveugle"]
+           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L"]

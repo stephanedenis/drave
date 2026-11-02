@@ -13278,3 +13278,126 @@ verdict {'pos_hand': True, 'pos_reel': True, 'pos_synthetique': True, 'syntagme_
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [987 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+[still running after 60000ms; moved to background job bash-472]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-472", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master adaaeae9] L — GOLD 360 : 200 RÉELS + 160 SYNTHÉTIQUES, POS 0,772, TÊTE 0,966 (RÉEL 0,946)
+ 28 files changed, 4769 insertions(+), 531 deletions(-)
+COMMIT OK 1
+adaaeae9 L — GOLD 360 : 200 RÉELS + 160 SYNTHÉTIQUES, POS 0,772, TÊTE 0,966 (RÉEL 0,946)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Gold 360 : 200 réels + 160 synthétiques, POS 0,772, tête 0,966 (réel 0,946) — cible 200+ atteinte
+
+Le round 13 du goal est livré : le gold réel atteint **200 phrases**, la **cible 200+** est remplie. Commit **`adaaeae9`**.
+
+## Le gold 360
+
+**200 phrases réelles** (20 dans `gold.py` + **180** dans `gold_reel.py`, 90 françaises et 90 anglaises) + **160 synthétiques** ; **1 698 tokens**. Les 180 nouvelles couvrent les GP (lieu, temps, destinataire, manière, cible), les relatives (`que`, `où`, `that`, `where`), les adjectifs, les adverbes, les questions et les négations.
+
+| lecture | phrases | POS | exact | tête | att. tête | top-k tête |
+|---|---:|---:|---:|---:|---:|---:|
+| **heuristique — 360** | **360** | **0,772** | **0,198** | **0,435** | **0,966** | **0,932** |
+| heuristique — 200 réels | 200 | **0,804** | 0,213 | 0,345 | **0,946** | **1,000** |
+| dont 20 réels | 20 | 0,924 | 0,396 | 0,506 | 0,833 | 1,000 |
+| dont 180 nouveaux | 180 | 0,790 | 0,192 | 0,326 | **0,968** | 1,000 |
+| heuristique — 160 synth. | 160 | 0,725 | 0,175 | **0,562** | 1,000 | 0,818 |
+| mock seul — 360 | 360 | 0,416 | 0,147 | 0,538 | 0 | 0 |
+| **hasard** | — | — | — | — | **0,015** | — |
+
+**Ce que ça dit** :
+
+- **La cible 200+ est atteinte** : 200 phrases réelles, POS **0,804**, contre 0,725 sur le synthétique.
+- **L'attachement par tête** : **0,966** sur les 360, **0,946** sur le réel, **0,968** sur les 180 nouveaux ; la couverture par tête est de **100 %**.
+- **Le top-k réel est à 1,000** ; le top-k global (0,932) baisse sur les synthétiques (0,818).
+- **Le span** reste la mesure de la découpe : **0,428** top-1, 0,413 top-k ; la tête est la mesure de l'attachement.
+- **La complexité des 180 nouvelles** fait baisser la tête (0,435) et l'exact (0,198) ; le POS réel reste 0,804.
+
+## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; golds [`gold_reel.py`](../../tools/tests/linguistique/gold_reel.py) / [`gold_reel.json`](../../tools/tests/linguistique/gold_reel.json).
+- Portes : `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues), `porte-pensee` **12/12**, `revue` **397 fiches / 498 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé ; la session R4.4 doit le rafraîchir.
+
+## La suite
+
+1. **La cible 200+ est remplie** ; le gold réel peut encore grandir (relatives, portée, anglais), mais le seuil du plan est atteint.
+2. **Politique DRVM/native** et coût mesuré, si les poids natifs arrivent.
+3. **Modèle neuronal** si un tagger/runner se débloque ; sinon, garder le mock et le dire.
+4. **B13** : un cadenas **non linéaire** (plusieurs chemins, un piège) pour que la politique puisse être bonne ou mauvaise sans être triviale.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque le cadenas non linéaire ou la politique DRVM/native.
+
+
+## Tour 27
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 14/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''class DRVM:''',\n'''# ---------------------------------------------------------------------- … [3206 caractères tronqués]`
+
+  ```
+adaaeae9 L — GOLD 360 : 200 RÉELS + 160 SYNTHÉTIQUES, POS 0,772, TÊTE 0,966 (RÉEL 0,946)
+ok
+manhattan {'noeuds': 17, 'but': True, 'par_operateur': {'pas': 6, 'saut': 9, 'sonde': 2}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 34.0, 'appels': 4, 'budget': 16, 'politique': 'manhattan', 'score': 1.0}
+aveugle {'noeuds': 15, 'but': True, 'par_operateur': {'pas': 6, 'saut': 9}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 24.0, 'appels': 4, 'budget': 14, 'politique': 'aveugle', 'score': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T9  le neuronal nécessaire          le seul opérateur est la sonde ; l'aveugle échoue\\n\",\n\"  T9  le neuronal nécessair … [1793 caractères tronqués]`
+
+  ```
+ok
+  ✅ T8 opérateurs hétérogènes 3 genres ; manhattan 23 nœuds/4 appels/coût 48.0 ; aveugle sonde 1 nœud/coût 33.0 ; but atteint
+  ✅ T9 neuronal nécessaire cadenas : avant 3 appels/but ; aveugle 20 appels/sans but
+  ✅ T10 labyrinthe non linéaire labyrinthe : bon 17 nœuds/34.0 (sonde 2) ; mauvais 15 nœuds/24.0 (sonde 0) ; buts True/True
+  13/13 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-labyrinthe.md <<'MD'\n# B13 — le labyrinthe non linéaire : la bonne politique utilise la sonde, l'aveugle l'ignore\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdic … [7489 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 398 fiche(s) · 499 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · T0 : 4010 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**opérateurs 11/11**,\\n  **nécessaire 12/12**, **labyrinthe 13/13**\", \"**opérateurs/nécessaire/labyrinthe 13/13**\")\nt= … [694 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 398 fiche(s) · 499 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [1028 caractères tronqués]`
