@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**154 commits** · **5 session(s)** · **9 thème(s)**
+**155 commits** · **5 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 6 | [attention.md](attention.md) |
 | distribue | 14 | [distribue.md](distribue.md) |
-| docs | 18 | [docs.md](docs.md) |
+| docs | 19 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 81 | [mesures.md](mesures.md) |
 | modele | 8 | [modele.md](modele.md) |
@@ -189,6 +189,7 @@
 | 16:01 | `86cfb580` | N2 — N2.ac EST LE MODÈLE DE PRODUCTION : LE MÉLANGE 1 Go, LE CANAL ET LA PÉNALITÉ |
 | 16:03 | `2dab14e4` | PILOTAGE — L'ÉTAT REPREND : 140/140, N2.ac, DEUX SESSIONS EN PAUSE, PORTE STRICTE |
 | 16:05 | `566ac478` | HUB — LE RUNBOOK EST PUBLIÉ ; HEARTBEAT À JOUR, PROCHAINE ACTION LA PASSE DE PORTES |
+| 16:07 | `97d693b6` | ÉTAT — T0 REVENU SOUS 4 000 (3 998) APRÈS LE RUNBOOK |
 
 ## Le récit de la journée (écrit à la main)
 

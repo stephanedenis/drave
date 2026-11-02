@@ -2,7 +2,7 @@
 
 > **Session** : `b6a672ec-3349-4a4c-9e23-4478aa823170` · **Début** : 2026-11-01 13 h 28 ·
 > **Fin** : 2026-11-02 14 h 41 · **Tours** : 2 · **Messages** : 59 · **Plan** : aucun (session non
-> déclarée). Clôture écrite par le hub `536cd5d6` le 02/11 16 h 20.
+> déclarée). Clôture écrite par le hub `536cd5d6` le 02/11 16 h 09.
 
 ## Ce qui s'est passé
 

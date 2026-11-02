@@ -3174,3 +3174,130 @@ PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check s
 ⏵ Je repasse le T0 sous 4 000 et je commite l'ajustement.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Ce qu'elle fait** : audit des 111 sessions ; commits B13 **140/140**, D (OCR/glossaire), N2.ac ; sessions en pause ; po … [816 caractères tronqués]`
+
+  ```
+mots 1624
+  T0 max : 3998 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[exit 0]
+[exit 0]
+97d693b6 ÉTAT — T0 REVENU SOUS 4 000 (3 998) APRÈS LE RUNBOOK
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Je contrôle le glossaire (famille 12) et l'état final des commits.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/theorie/glossaire/1*.md && echo \"== table 1-13 ==\" && sed -n '108,128p' docs/theorie/glossaire.md && echo \"== README familles ==\" && grep -n '12\\|13' docs/theorie/glossaire/README.md | head", "description": "Check glossa … [37 caractères tronqués]`
+
+  ```
+docs/theorie/glossaire/10-le-pont-linguistico-semantique-le-vocabu.md
+docs/theorie/glossaire/11-sources-externes-ajoutees-par-le-10.md
+docs/theorie/glossaire/12-la-lecture-le-document-et-ses-mesures.md
+docs/theorie/glossaire/13-le-corpus-et-la-mesure-documentaire.md
+== table 1-13 ==
+Le glossaire fait **2 276 lignes** : il est découpé en **onze familles**, chacune atteignable
+directement. Les liens vers ce fichier continuent de fonctionner.
+
+| famille | fichier | lignes |
+|---|---|---:|
+| **1.** Le projet, ses noms, sa méthode | [01-le-projet-ses-noms-sa-methode.md](glossaire/01-le-projet-ses-noms-sa-methode.md) | 218 |
+| **2.** Modèles et architectures | [02-modeles-et-architectures.md](glossaire/02-modeles-et-architectures.md) | 363 |
+| **3.** Formats, quantification, encodage | [03-formats-quantification-encodage.md](glossaire/03-formats-quantification-encodage.md) | 195 |
+| **4.** Le moteur Drave : exécution, structures, outils | [04-le-moteur-drave-execution-structures-out.md](glossaire/04-le-moteur-drave-execution-structures-out.md) | 217 |
+| **5.** Flux, protocole et transport | [05-flux-protocole-et-transport.md](glossaire/05-flux-protocole-et-transport.md) | 124 |
+| **6.** 
+… [6721 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== status ==\" && git status --short && echo \"(fin)\" && echo \"== log ==\" && git log --oneline -7 && echo && echo \"== état ==\" && python3 tools/verifie_etat_a_jour.py && python3 tools/verifie_en_cours.py && bash tools/por … [169 caractères tronqués]`
+
+  ```
+== status ==
+(fin)
+== log ==
+97d693b6 ÉTAT — T0 REVENU SOUS 4 000 (3 998) APRÈS LE RUNBOOK
+566ac478 HUB — LE RUNBOOK EST PUBLIÉ ; HEARTBEAT À JOUR, PROCHAINE ACTION LA PASSE DE PORTES
+2dab14e4 PILOTAGE — L'ÉTAT REPREND : 140/140, N2.ac, DEUX SESSIONS EN PAUSE, PORTE STRICTE
+86cfb580 N2 — N2.ac EST LE MODÈLE DE PRODUCTION : LE MÉLANGE 1 Go, LE CANAL ET LA PÉNALITÉ
+ca06ab0b D — L'OCR CEGEP, LE GLOSSAIRE AU RENDU ET LES LIENS DE LA FAMILLE 13
+702b368c B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140
+139a8b16 B13 — LES ABSENTS : 0, LES QUATRE ÉTAIENT DES FAUX (TOKENISATION) ; 139/139
+
+== état ==
+  état · dernier fait 2dab14e4 · dernier état 97d693b6
+  ✅ aucun fait commité après le dernier état
+  en-cours · 1624 mots · 7 sections · 3 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ plans cohérents
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+== surveillance ==
+surveille-sessions · 1 session(s) active(s) · 0 fichier(s) en mouvement
+  536cd5d6-94ac-4057 · actif   · -41 min · 10 réservation(s)
+  536cd5d6-94ac-4057 · 0 fichier(s) : 
+  hub (partagé)      · 0 fichier(s) : 
+
+  orphelins (0) — à a
+… [80 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige l'horodatage : le heartbeat du hub est dans le futur.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M:%S %Z' && stat -c '%y' docs/pilotage/en-cours.md journal/sessions/536cd5d6-*/plan.md", "description": "Check actual clock and file mtimes"}`
+
+  ```
+2026-11-02 16:09:12 EST
+2026-11-02 16:07:20.252056477 -0500
+2026-11-02 16:05:24.221431434 -0500
+  ```
+
+### 🤖 Assistant
+
+⏵ Je remets tous les horodatages sur l'heure réelle et je commite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfichiers = [\n 'docs/pilotage/en-cours.md',\n 'docs/pilotage/roadmap.md',\n 'docs/pilotage/chantiers.md',\n 'docs/pilotage/plan-travail.md',\n 'journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/p … [615 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md modifié
+docs/pilotage/roadmap.md modifié
+docs/pilotage/chantiers.md modifié
+docs/pilotage/plan-travail.md modifié
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md modifié
+journal/sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/cloture.md modifié
+  en-cours · 1624 mots · 7 sections · 3 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3998 mots (budget 4 000)
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé
+  ❌ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md : heartbeat illisible
+surveille-sessions · 1 session(s) active(s) · 6 fichier(s) en mouvement
+  536cd5d6-94ac-4057 · actif   ·       — · 10 réservation(s)
+  536cd5d6-94ac-4057 · 4 fichier(s) : docs/pilotage/chantiers.md, docs/pilotage/en-cours.md, docs/pilotage/plan-travail.md, docs/pilotage/roadmap.md
+  hub (partagé)      · 4 fichier(s) : docs/pilotage/chantiers.md, docs/pilotage/en-cours.md, docs/pilotage/plan-travail.md, docs/pilotage/roadmap.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige le format du heartbeat (HH:MM) et je finalise.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md'); t=p.read_text()\nassert '16 h 09 EST' in t\nt=t.replace('2026-11-02 16 h 09 EST','2026-11-02 16:09 EST')\np.write_text … [220 caractères tronqués]`
+
+  ```
+heartbeat ok
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé
+  ✅ plans cohérents
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+[exit 0]
+    536cd5d6-94ac-4057 · actif    ·   0 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · en pause · 499 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+    fe3c05f0-834b-44f2 · en pause · 1039 min · D (texte intégral, PDF/OCR, licences, stubs), R1.1/R1.2 (préparation), A2.6/A8.3
+  ```
+
+### 🤖 Assistant
+
+⏵ Je commite les horodatages réels et je passe la vérification finale.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md journal/sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/c … [609 caractères tronqués]`

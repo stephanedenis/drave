@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (18)
+## Commits du jour (19)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -26,6 +26,7 @@
 | 12:23 | `2e767b1b` | ÉTAT ET ROADMAP — N2.aa/N2.ab : LE COMPUTE PAIE, LE CORPUS EST UN ÉCHANGE | `en-cours.md`, `roadmap.md`, `README.md` (+7) |
 | 12:50 | `ac8f334f` | ÉTAT — 119 DOCS, T0 SOUS 4 000, LE GLOSSAIRE (335 ENTRÉES) ET DOCWATCH SONT COMMITTÉS | `en-cours.md`, `README.md`, `mesures.md` (+6) |
 | 13:25 | `26e4df27` | B13 — LES QUESTIONS PIÈGES : 29/34, LE SI EST UNE CONVENTION ; 132/132 | `moteur-de-pensee.md`, `en-cours.md`, `index.md` (+24) |
+| 16:07 | `97d693b6` | ÉTAT — T0 REVENU SOUS 4 000 (3 998) APRÈS LE RUNBOOK | `en-cours.md`, `README.md`, `apprentissage.md` (+12) |
 
 ## Chiffres du jour
 

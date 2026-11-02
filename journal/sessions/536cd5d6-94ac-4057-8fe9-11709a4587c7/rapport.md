@@ -9,12 +9,12 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 0.6 h |
 | Tours | 2 |
-| Messages | 82 |
-| Appels d'outils | 115 |
+| Messages | 87 |
+| Appels d'outils | 121 |
 | Fichiers touchés | 4 |
-| Commandes | 93 |
+| Commandes | 99 |
 | Sous-agents | 0 |
-| Commits | 7 |
+| Commits | 8 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -88,7 +88,7 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 
 ### Tour 2 — vas-y et donne moi des instructions pour que je démarre ou récupère d'autre sessions dans d'autres terminaux
 
-*57 appels d'outils.* Actions notables :
+*63 appels d'outils.* Actions notables :
 
 - bash — Inspect DSH env vars and pre-commit hook
 - bash — Check DSH CLI usage for starting and resuming sessions
@@ -104,11 +104,11 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py`
 - bash — Locate state constants for editing
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py`
-- … et 41 autres
+- … et 47 autres
 
 **Synthèse produite :**
 
-⏵ Je repasse le T0 sous 4 000 et je commite l'ajustement.
+⏵ Je commite les horodatages réels et je passe la vérification finale.
 
 ## 3. Travail accompli
 
@@ -163,7 +163,7 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 53 autres
+- … et 59 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -234,6 +234,7 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 - **T2** `- **Les genres** : l'encyclopédie 103–147 car/ligne, les livres et documents 32–37, les lignes dupliquées 8,7–24 % (l'OCR 4,8 %).`
 - **T2** `- **A2.6/A8.3** : le lot ne divise pas les lectures denses (+27 % de calcul, PPL −0,006 %).`
 - **T2** `- **15 h 06 — reboot.** Les deux GPU étaient bloqués (`GPU requires reset`, `nvidia_drm refcnt -1`) ; le reset logiciel a échoué et le reboot a rendu les cartes (1 Mio, 0 %). Les deux sessions de trav`
+- **T2** `31:[ALM (Adaptive Logic Module)](entrees/alm.md) · [AVX2 · AVX-512 · SIMD](entrees/avx2-avx-512-simd.md) · [Bande passante (bandwidth)](entrees/bande-passante.md) · [CUDA · noyau (kernel) · sm75 · PTX`
 
 ## 5. Erreurs rencontrées
 
@@ -254,4 +255,5 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 - PILOTAGE — L'ÉTAT REPREND : 140/140, N2.ac, DEUX SESSIONS EN PAUSE, PORTE STRICTE" -m "en-cours réécrit (3 sessions, 1 625 mots, T0 3 999) : B13 140/140 (gold 4
 - HUB — LE RUNBOOK EST PUBLIÉ ; HEARTBEAT À JOUR, PROCHAINE ACTION LA PASSE DE PORTES"; echo "[exit $?]"; git log --oneline -1
 - ÉTAT — T0 REVENU SOUS 4 000 (3 998) APRÈS LE RUNBOOK"; echo "[exit $?]"; git log --oneline -1
+- ÉTAT — HORODATAGE RÉEL (16 h 09) APRÈS LA REPRISE ; LE FUTUR N'EST PAS UNE HEURE"; echo "[exit $?]"; echo "== status ==" && git status --short && echo "(fin)" &
 

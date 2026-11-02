@@ -159,7 +159,7 @@ supprimer).
 
 ## 9. Reprise après le reboot du 02/11 15 h 06 — ouvrir ou reprendre
 
-**L'état au 02/11 16 h 10.** Deux sessions sont **en pause** (`e181ce02` L/B13, `fe3c05f0` D/R/A) ;
+**L'état au 02/11 16 h 09.** Deux sessions sont **en pause** (`e181ce02` L/B13, `fe3c05f0` D/R/A) ;
 leurs cycles sont committés. Deux chantiers n'ont **pas** de session : **N2** (GPU) et **S**
 (sous-module `tools/structures`). Le hub `536cd5d6` tient l'état, la roadmap et l'index ; les GPU
 sont revenus sains.

@@ -35,7 +35,7 @@
 | **L — le bloc langue** | surface, heuristique CPU + neuronal, [contrat](../theorie/glossaire/entrees/contrat.md), cascade, pragmatique | 🔬 **R0.7** : 9 niveaux, **398 langues à 0,9687**, script 1,0000 ; analyse heuristique (5 schémas) ; **contrat de substitution à écrire** | **le contrat de L** (heuristique/neuronal), la mesure 71 langues |
 | **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; [CEGEP](../theorie/glossaire/entrees/cegep.md) 10 notes, 1 596 p, 2,52 M car., 8 Ko 0) ; **genres** mesurés | **l'OCR complet** (le [fonds](../theorie/glossaire/entrees/fonds.md) CEGEP : ~127 scans, dont l'*Encyclopedia of Algorithms* avec `--max-pages`), la préparation R1.1/R1.2 |
 
-**État au 02/11 16 h 10.** B13 est à **140/140** (gold 432, 116 liens) ; **N2.ac** (1 Go) est le
+**État au 02/11 16 h 09.** B13 est à **140/140** (gold 432, 116 liens) ; **N2.ac** (1 Go) est le
 modèle de production (3,49 / 6,03) ; `e181ce02` et `fe3c05f0` sont **en pause** après le reboot ;
 **N2** et **S** n'ont pas de session active. Le runbook de reprise est dans
 [`plan-travail.md`](plan-travail.md) § 9.
@@ -44,7 +44,7 @@ modèle de production (3,49 / 6,03) ; `e181ce02` et `fe3c05f0` sont **en pause**
 
 ## L'ordre du jour (carpe diem)
 
-L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 16 h 10**.
+L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 16 h 09**.
 
 1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
    30 % sur 5 types et **249 questions**) ; **R0.4** ([tête](../theorie/glossaire/entrees/tete.md) de survol) et **R0.5** ([routeur](../theorie/glossaire/entrees/routeur.md)) sont
