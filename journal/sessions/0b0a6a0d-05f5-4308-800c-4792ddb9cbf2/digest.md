@@ -15736,3 +15736,21 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-916", "timeout_ms": 400000, "wait": true}`
+
+  ```
+22:37
+pas 5000 · perte 1.6450 · PPL val 5.878 · 269 s
+pas 3500 · perte 2.4216 · PPL val 10.929 · 268 s
+0, 1322 MiB, 96 %
+1, 2220 MiB, 100 %
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 780; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-45m.log; tail -1 work/n2k/base-multi-21m.log; ls work/n2j/base-wiki-45m.pt work/n2k/base-multi-21m.pt 2>/dev/null", "description": "Wait for the 45M and multilingual 21.65M trainin … [4 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-917]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-917", "timeout_ms": 900000, "wait": true}`

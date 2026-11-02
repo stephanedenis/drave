@@ -1,0 +1,47 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "34/34",
+ "portes_mobile": [
+  [
+   3,
+   3
+  ],
+  [
+   1,
+   3
+  ]
+ ],
+ "a_star": {
+  "d0": {
+   "noeuds": 29,
+   "sonde": 5,
+   "cout": 60.0,
+   "but": true
+  },
+  "d1": {
+   "noeuds": 29,
+   "sonde": 5,
+   "cout": 59.0,
+   "but": true
+  }
+ },
+ "politique": {
+  "episodes": 1000,
+  "graine": 0,
+  "etats_q": 170,
+  "d0": {
+   "but": true,
+   "pas": 8
+  },
+  "d1": {
+   "but": true,
+   "pas": 8
+  }
+ },
+ "limites": [
+  "deux positions",
+  "porte connue à l'état initial",
+  "toy"
+ ]
+}

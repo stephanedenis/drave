@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 29.9 h |
-| Tours | 47 |
-| Messages | 797 |
-| Appels d'outils | 754 |
+| Durée | 30.0 h |
+| Tours | 48 |
+| Messages | 807 |
+| Appels d'outils | 762 |
 | Fichiers touchés | 25 |
-| Commandes | 605 |
+| Commandes | 612 |
 | Sous-agents | 2 |
-| Commits | 63 |
+| Commits | 64 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -125,6 +125,8 @@
 **Tour 46** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 47** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 48** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2519,6 +2521,60 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Committer la robustesse sur 5 graines
 - job_output
 
+**Synthèse produite :**
+
+⏵ Robustesse sur 5 graines : 5/5 bruits, 5/5 stables, 33/33
+
+Le round 34 du goal est livré : le **curriculum `open`** tient sur **5 graines**. Commit **`efaaa945`**.
+
+\## Les 5 graines
+
+`PolitiqueAppriseOuverte` entraînée (1000 épisodes) sur 5 graines, exécutée seule sur le bruit (même graine) et sur la porte stable.
+
+| graine | états-Q | bruit (seule) | stable (seule) |
+|---:|---:|---|---|
+| 0 | 74 | but/9 (2 essais) | but/8 |
+| 1 | 85 | but/8 (1 essai) | but/8 |
+| 2 | 61 | but/10 (3 essais) | but/8 |
+| 3 | 85 | but/8 (1 essai) | but/9 |
+| 4 | 72 | but/8 (1 essai) | but/8 |
+
+**Ce que ça dit** :
+
+- **5/5 sur le bruit** : le curriculum `open` tient hors graine 0 ; le trou de transfert (T28) est comblé de façon **robuste**.
+- **5/5 sur la porte stable** : la politique entraînée sur le bruit **généralise** au monde déterministe (8–9 pas).
+- **Le coût du bruit varie** : 1 à 3 essais, 8 à 10 pas ; la Q-table apprend l'ouverture probabiliste, pas un chemin unique.
+- **La taille varie** (61–85 états) sans changer le résultat : la structure compte plus que la taille.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-graines.md`](../../reports/rapport-pensee-graines.md) ; JSON [`pensee-graines.json`](../../reports/pensee-graines.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T30 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **33/33 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **422 fiches / 519 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+\## La suite
+
+1. **Porte mobile** : la porte change de case ; le curriculum doit suivre.
+2. **Bruit variable** : 60 %, 90 % ; mesurer la dégradation.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque la porte mobile.
+
+### Tour 48 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Relire les définitions du labyrinthe à porte
+- bash — Lire le labyrinthe à porte
+- bash — Ajouter la porte mobile et la tester
+- bash — Ajouter la porte T31 (porte mobile)
+- bash — Écrire la fiche de la porte mobile
+- bash — Trim, compteurs et portes
+- bash — Committer la porte mobile
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2598,7 +2654,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 565 autres
+- … et 572 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2808,4 +2864,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — L'AUDIT DES MESURES : 15/15 COHÉRENTES, LA MINUTE NE TRANSFÈRE PAS AU BRUIT ; 31/31" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "AUDIT DES MES
 - B13 — LE CURRICULUM OPEN : 74 ÉTATS-Q, BRUIT BUT/9 ET STABLE BUT/8 ; 32/32" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CURRICULUM OPEN"; then echo 
 - B13 — LA ROBUSTESSE SUR 5 GRAINES : 5/5 BRUITS, 5/5 STABLES ; 33/33" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "5 GRAINES"; then echo "COMMIT OK $i
+- B13 — LA PORTE MOBILE : 2 POSITIONS, A* 2/2, POLITIQUE SEULE BUT/8, 170 ÉTATS-Q ; 34/34" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE MOBILE"; 
 

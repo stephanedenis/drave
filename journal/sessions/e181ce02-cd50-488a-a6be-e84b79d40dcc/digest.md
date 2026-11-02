@@ -16791,3 +16791,214 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/graines.py tools/pensee/autotest.py reports/rapport-pensee-graines.md reports/pensee-graines.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md do … [474 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-605]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-605", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-graines.json
+ create mode 100644 reports/rapport-pensee-graines.md
+ create mode 100644 tools/pensee/graines.py
+COMMIT OK 1
+efaaa945 B13 — LA ROBUSTESSE SUR 5 GRAINES : 5/5 BRUITS, 5/5 STABLES ; 33/33
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Robustesse sur 5 graines : 5/5 bruits, 5/5 stables, 33/33
+
+Le round 34 du goal est livré : le **curriculum `open`** tient sur **5 graines**. Commit **`efaaa945`**.
+
+## Les 5 graines
+
+`PolitiqueAppriseOuverte` entraînée (1000 épisodes) sur 5 graines, exécutée seule sur le bruit (même graine) et sur la porte stable.
+
+| graine | états-Q | bruit (seule) | stable (seule) |
+|---:|---:|---|---|
+| 0 | 74 | but/9 (2 essais) | but/8 |
+| 1 | 85 | but/8 (1 essai) | but/8 |
+| 2 | 61 | but/10 (3 essais) | but/8 |
+| 3 | 85 | but/8 (1 essai) | but/9 |
+| 4 | 72 | but/8 (1 essai) | but/8 |
+
+**Ce que ça dit** :
+
+- **5/5 sur le bruit** : le curriculum `open` tient hors graine 0 ; le trou de transfert (T28) est comblé de façon **robuste**.
+- **5/5 sur la porte stable** : la politique entraînée sur le bruit **généralise** au monde déterministe (8–9 pas).
+- **Le coût du bruit varie** : 1 à 3 essais, 8 à 10 pas ; la Q-table apprend l'ouverture probabiliste, pas un chemin unique.
+- **La taille varie** (61–85 états) sans changer le résultat : la structure compte plus que la taille.
+
+## L'état
+
+- Fiche : [`rapport-pensee-graines.md`](../../reports/rapport-pensee-graines.md) ; JSON [`pensee-graines.json`](../../reports/pensee-graines.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T30 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **33/33 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **422 fiches / 519 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+## La suite
+
+1. **Porte mobile** : la porte change de case ; le curriculum doit suivre.
+2. **Bruit variable** : 60 %, 90 % ; mesurer la dégradation.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque la porte mobile.
+
+
+## Tour 48
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 35/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; grep -n \"PORTE =\\|MURS_P =\\|P_BUT =\" tools/pensee/operateurs.py | head; sed -n 150,205p tools/pensee/operateurs.py", "description": "Relire les définitions du labyrinthe à porte"}`
+
+  ```
+efaaa945 B13 — LA ROBUSTESSE SUR 5 GRAINES : 5/5 BRUITS, 5/5 STABLES ; 33/33
+635:MURS_P = {(0, 1), (1, 1), (2, 1), (4, 1), (4, 2), (1, 2), (2, 2), (1, 3), (3, 4)}
+636:PORTE = (3, 3)
+637:P_BUT = (4, 4)
+723:LABYRINTHE_PORTE = Probleme(
+    return 1.0 / (1.0 + _manhattan(x, y))
+
+
+def heuristique(e: Etat) -> float:
+    x, y = _xy(e)
+    return -float(_manhattan(x, y))
+
+
+# --------------------------------------------------------------------------- registre / DRVM
+
+
+@dataclass
+class Operateur:
+    nom: str
+    genre: str
+    cout: float
+    applique: Callable
+    description: str = ""
+
+
+@dataclass
+class Registre:
+    operateurs: dict[str, Operateur] = field(default_factory=dict)
+
+    def genres(self) -> set[str]:
+        return {o.genre for o in self.operateurs.values()}
+
+    def couts(self) -> dict[str, float]:
+        return {n: o.cout for n, o in self.operateurs.items()}
+
+    def total(self, compte: dict[str, int]) -> float:
+        return round(sum(self.operateurs[n].cout * k for n, k in compte.items()
+                         if n in self.operateurs), 1)
+
+
+REGISTRE = Registre({
+    "pas": Operateur("pas", "symbolique", 1.0, pas, "un pas orthogonal"),
+    "saut": Operateur("saut", "n
+… [624 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 635,760p tools/pensee/operateurs.py", "description": "Lire le labyrinthe à porte"}`
+
+  ```
+MURS_P = {(0, 1), (1, 1), (2, 1), (4, 1), (4, 2), (1, 2), (2, 2), (1, 3), (3, 4)}
+PORTE = (3, 3)
+P_BUT = (4, 4)
+
+
+def _etat_p(x: int, y: int, open_: bool, parent: str | None = None,
+            profondeur: int = 0) -> Etat:
+    return Etat(f"p{x}:{y}:{int(open_)}", parent, profondeur,
+                (Candidat("x", {"v": x}), Candidat("y", {"v": y}),
+                 Candidat("open", {"v": bool(open_)})))
+
+
+def _xy_p(e: Etat) -> tuple[int, int]:
+    d = {c.id: c.corps["v"] for c in e.candidats}
+    return int(d["x"]), int(d["y"])
+
+
+def _open_p(e: Etat) -> bool:
+    return bool(next(c.corps["v"] for c in e.candidats if c.id == "open"))
+
+
+def _libre_p(x: int, y: int, open_: bool) -> bool:
+    if not (0 <= x < 5 and 0 <= y < 5) or (x, y) in MURS_P:
+        return False
+    return (x, y) != PORTE or open_
+
+
+def _deplacer_p(e: Etat, dx: int, dy: int, profondeur: int = 1,
+                open_: bool | None = None) -> list[Etat]:
+    x, y = _xy_p(e)
+    o = _open_p(e) if open_ is None else open_
+    nx, ny = x + dx, y + dy
+    if not _libre_p(nx, ny, o):
+        return []
+    return [_etat_p(nx, ny, o, e.empreinte(), e.profondeur + profondeur)]
+
+
+def pas_p(e: Etat, _p: dict | None = None)
+… [2869 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pmob.py <<'PY'\n# --------------------------------------------------------------------------- porte mobile\n\n\nPORTES_MOBILE = ((3, 3), (1, 3))\n\n\ndef _etat_pmob(x: int, y: int, open_: bool, d: int, parent: str | None = … [6943 caractères tronqués]`
+
+  ```
+ok
+labyrinthe_porte_mobile_0 {'noeuds': 29, 'but': True, 'par_operateur': {'pas': 13, 'saut': 11, 'sonde': 5}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 60.0, 'appels': 7, 'budget': 27, 'politique': 'manhattan', 'score': 1.0}
+labyrinthe_porte_mobile_1 {'noeuds': 29, 'but': True, 'par_operateur': {'pas': 14, 'saut': 10, 'sonde': 5}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 59.0, 'appels': 7, 'budget': 27, 'politique': 'manhattan', 'score': 1.0}
+q 170 seule 0 (True, 8) seule 1 (True, 8)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T30 la robustesse sur 5 graines    5/5 sur le bruit, 5/5 sur la porte stable\\n\",\n\"  T30 la robustesse sur 5 graines    … [1682 caractères tronqués]`
+
+  ```
+ok
+  ✅ T29 curriculum open    ouverte : 74 états-Q, bruit but/9 pas (2 essais), stable but/8 pas
+  ✅ T30 robustesse sur 5 graines graines : 5/5 bruits, 5/5 stables
+  ✅ T31 porte mobile       mobile : A* 2/2, seule (True, 8)/(True, 8) (170 états-Q)
+  34/34 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-mobile.md <<'MD'\n# B13 — la porte mobile : deux positions, une seule politique\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **34/34 portes** : la po … [6515 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 520 JSON, le disque en a 521
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"| fichiers / JSON de résultats | **423** / **520** |\", \"| fichiers / JSON de résultats | **423** / **521** |\")\nt=t.repl … [718 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 423 fiche(s) · 521 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-mobile.md reports/pensee-mobile.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md d … [486 caractères tronqués]`

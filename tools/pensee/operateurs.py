@@ -866,6 +866,178 @@ LABYRINTHE_PORTE_MINUTE = Probleme(
 )
 
 
+# --------------------------------------------------------------------------- porte mobile
+
+
+PORTES_MOBILE = ((3, 3), (1, 3))
+
+
+def _etat_pmob(x: int, y: int, open_: bool, d: int, parent: str | None = None,
+               profondeur: int = 0) -> Etat:
+    return Etat(f"m{x}:{y}:{int(open_)}:{d}", parent, profondeur,
+                (Candidat("x", {"v": x}), Candidat("y", {"v": y}),
+                 Candidat("open", {"v": bool(open_)}), Candidat("d", {"v": int(d)})))
+
+
+def _xy_pmob(e: Etat) -> tuple[int, int]:
+    dd = {c.id: c.corps["v"] for c in e.candidats}
+    return int(dd["x"]), int(dd["y"])
+
+
+def _open_pmob(e: Etat) -> bool:
+    return bool(next(c.corps["v"] for c in e.candidats if c.id == "open"))
+
+
+def _d_pmob(e: Etat) -> int:
+    return int(next(c.corps["v"] for c in e.candidats if c.id == "d"))
+
+
+def _libre_pmob(x: int, y: int, open_: bool, d: int) -> bool:
+    if not (0 <= x < 5 and 0 <= y < 5):
+        return False
+    if (x, y) == PORTES_MOBILE[d]:
+        return open_
+    if (x, y) in PORTES_MOBILE:
+        return True            # l'autre porte est libre
+    return (x, y) not in MURS_P
+
+
+def _deplacer_pmob(e: Etat, dx: int, dy: int, profondeur: int = 1,
+                   open_: bool | None = None) -> list[Etat]:
+    x, y = _xy_pmob(e)
+    o = _open_pmob(e) if open_ is None else open_
+    d = _d_pmob(e)
+    nx, ny = x + dx, y + dy
+    if not _libre_pmob(nx, ny, o, d):
+        return []
+    return [_etat_pmob(nx, ny, o, d, e.empreinte(), e.profondeur + profondeur)]
+
+
+def pas_pmob(e: Etat, _p: dict | None = None) -> list[Etat]:
+    return [c for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)) for c in _deplacer_pmob(e, dx, dy)]
+
+
+def saut_pmob(e: Etat, _p: dict | None = None) -> list[Etat]:
+    return [c for dx, dy in ((2, 0), (-2, 0), (0, 2), (0, -2)) for c in _deplacer_pmob(e, dx, dy, 2)]
+
+
+def _vise_porte(e: Etat, direction: str) -> bool:
+    x, y = _xy_pmob(e)
+    d = _d_pmob(e)
+    dx = {"droite": 1, "gauche": -1}.get(direction, 0)
+    dy = {"bas": 1, "haut": -1}.get(direction, 0)
+    return (x + dx, y + dy) == PORTES_MOBILE[d]
+
+
+def sonde_pmob(e: Etat, _p: dict | None = None) -> list[Etat]:
+    """La politique ouvre la porte **mobile** si elle la vise, puis avance."""
+    p = POLITIQUE[0]
+    if p is None:
+        return []
+    direction = p.propose(e, P_BUT)
+    p.appels += 1
+    if not direction:
+        return []
+    open_ = _open_pmob(e) or _vise_porte(e, direction)
+    dx = {"droite": 1, "gauche": -1}.get(direction, 0)
+    dy = {"bas": 1, "haut": -1}.get(direction, 0)
+    return _deplacer_pmob(e, dx, dy, open_=open_)
+
+
+def but_pmob(e: Etat) -> bool:
+    return _xy_pmob(e) == P_BUT
+
+
+def score_pmob(e: Etat) -> float:
+    x, y = _xy_pmob(e)
+    return 1.0 / (1.0 + abs(x - P_BUT[0]) + abs(y - P_BUT[1]))
+
+
+def heuristique_pmob(e: Etat) -> float:
+    x, y = _xy_pmob(e)
+    return -float(abs(x - P_BUT[0]) + abs(y - P_BUT[1]))
+
+
+REGISTRE_PMOB = Registre({
+    "pas": Operateur("pas", "symbolique", 1.0, pas_pmob, "un pas ; la porte mobile reste fermée"),
+    "saut": Operateur("saut", "numérique", 2.0, saut_pmob, "un saut ; la porte mobile reste fermée"),
+    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_pmob, "la politique ouvre la porte mobile"),
+})
+
+
+def _labyrinthe_mobile(d: int) -> Probleme:
+    return Probleme(
+        nom=f"labyrinthe_porte_mobile_{d}",
+        initial=lambda: _etat_pmob(0, 0, False, d),
+        operateurs={n: o.applique for n, o in REGISTRE_PMOB.operateurs.items()},
+        but=but_pmob,
+        heuristique=heuristique_pmob,
+        score=score_pmob,
+    )
+
+
+LABYRINTHE_PORTE_MOBILE_0 = _labyrinthe_mobile(0)
+LABYRINTHE_PORTE_MOBILE_1 = _labyrinthe_mobile(1)
+
+
+class PolitiqueAppriseMobile(PolitiqueApprise):
+    """La Q-table de la porte **mobile** : l'état porte la position de la porte (d)."""
+
+    nom = "mobile"
+
+    def _cle(self, e: Etat) -> tuple:
+        return _xy_pmob(e)[0], _xy_pmob(e)[1], _open_pmob(e), _d_pmob(e)
+
+    def _pas(self, cle, action, ouvre: bool):
+        x, y, o, d = cle
+        if ouvre and not o and _vise_porte(_etat_pmob(x, y, o, d), action):
+            o = True
+        dx = {"droite": 1, "gauche": -1}.get(action, 0)
+        dy = {"bas": 1, "haut": -1}.get(action, 0)
+        nx, ny = x + dx, y + dy
+        if not _libre_pmob(nx, ny, o, d):
+            return cle, 0.0
+        gain = 0.1 if (o and not cle[2]) else -0.01
+        return (nx, ny, o, d), gain
+
+    def apprendre(self) -> None:
+        for i in range(self.episodes):
+            d = i % 2
+            cle = (0, 0, False, d)
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain = self._pas(cle, a, True)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+    def propose(self, etat, but):
+        cle = self._cle(etat)
+        return max(self.ACTIONS, key=lambda a: self._q(cle, a))
+
+
+def seule_mobile(p: PolitiqueAppriseMobile, d: int, max_pas: int = 200) -> tuple[bool, int]:
+    """La politique seule sur la porte mobile (d = position de la porte)."""
+    cle, pas = (0, 0, False, d), 0
+    for _ in range(max_pas):
+        if cle[:2] == P_BUT:
+            return True, pas
+        e = _etat_pmob(cle[0], cle[1], cle[2], cle[3])
+        a = p.propose(e, P_BUT)
+        if a is None:
+            return False, pas
+        cle, _ = p._pas(cle, a, True)
+        pas += 1
+    return False, pas
+
+
 # --------------------------------------------------------------------------- fenêtre temporelle
 
 def _etat_pw(x: int, y: int, t: int, parent: str | None = None,

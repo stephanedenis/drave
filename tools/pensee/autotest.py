@@ -524,6 +524,26 @@ def t30_graines() -> tuple[bool, str]:
             f"graines : {bruits}/5 bruits, {stables}/5 stables")
 
 
+def t31_mobile() -> tuple[bool, str]:
+    """La porte mobile : deux positions, A* et politique seule réussissent aux deux."""
+    from .moteur import AStar
+    from .operateurs import (DRVM, LABYRINTHE_PORTE_MOBILE_0, LABYRINTHE_PORTE_MOBILE_1,
+                             REGISTRE_PMOB, PolitiqueAppriseMobile, PolitiqueManhattan,
+                             seule_mobile)
+    from .store import Budget
+    buts = []
+    for lab in (LABYRINTHE_PORTE_MOBILE_0, LABYRINTHE_PORTE_MOBILE_1):
+        d = DRVM(REGISTRE_PMOB, PolitiqueManhattan())
+        d.penser(lab, AStar(), Budget(200))
+        buts.append(d.instantane()["but"])
+    p = PolitiqueAppriseMobile(episodes=1000, graine=0)
+    p.apprendre()
+    s0 = seule_mobile(p, 0)
+    s1 = seule_mobile(p, 1)
+    return (all(buts) and s0[0] and s1[0]), (
+        f"mobile : A* {sum(buts)}/2, seule {s0}/{s1} ({len(p.q)} états-Q)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -553,7 +573,8 @@ def main() -> int:
               ("T27 mesure corrigée", t27_correction()),
               ("T28 audit des mesures", t28_audit()),
               ("T29 curriculum open", t29_ouverte()),
-              ("T30 robustesse sur 5 graines", t30_graines())]
+              ("T30 robustesse sur 5 graines", t30_graines()),
+              ("T31 porte mobile", t31_mobile())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

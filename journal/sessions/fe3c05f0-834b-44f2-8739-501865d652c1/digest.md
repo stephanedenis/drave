@@ -18553,3 +18553,56 @@ check en 1694437
 Mem:             125          24          75           5          32         101
   ```
 
+### 🤖 Assistant
+
+⏵ Round 22 : l'anglais est clos à 99,2 % — manifeste reconstruit, contrôle 8 Ko lancé, mémoire rendue
+
+**Round 22/1000 — l'incident est terminé proprement.** L'anglais est **arrêté** (le SIGTERM a été suivi d'effet, la mémoire est retombée de 125 à **24 Go utilisés / 101 Go disponibles**). Les trois fichiers sont **clos** : train 20,05 Go, val 1,11 Go, test 1,11 Go (22,19 G caractères au total). Le **manifeste est reconstruit** depuis le journal et les fichiers (SHA-256 recalculés) avec une **note d'interruption** : 25,4 M pages sur 25,6 M traitées (99,2 %), ~200 000 pages (0,8 %) non traitées, l'écriture du train bloquée par la mémoire.
+
+## Le dixième corpus
+
+| grandeur | valeur |
+|---|---:|
+| pages traitées | 25,4 M / 25,6 M (99,2 %) |
+| articles gardés | **6 023 249** |
+| caractères | 21,98 G (articles) / 22,19 G (fichiers) |
+| train / val / test | 20,05 Go / 1,11 Go / 1,11 Go |
+| SHA-256 | train `7e86b591…`, val `e47e98fc…`, test `41d437da…` |
+
+Le **contrôle 8 Ko** (les deux unités + XNLI + wikitext2) tourne sur les 22 Go ; c'est le dernier gros contrôle de la campagne. La fiche du texte intégral portera la **limite mesurée** : ~75 Go de RAM pour 6 M d'articles ; sur un dump de 25 Go, dédupliquer par tranches ou prévoir ~80 Go libres — les neuf autres corpus ne l'avaient pas révélée.
+
+## Les autres fronts
+
+Les **documents** sont à 4 000/7 496 (train 750 Mo écrit à 22 h 27, 2 558 gardés, 812,6 M caractères) ; ils vont reprendre du débit avec la mémoire rendue. L'**OCR** a océrisé trois livres (1,7 Mo) ; la détection des scannés continue.
+
+## La suite
+
+Le **contrôle anglais** (~20-30 min) → la **fiche et le catalogue des dix** → les fiches OCR/Documents → les **159 scans**. Le goal reste actif ; le prochain round ramasse le contrôle de l'anglais et clôt le catalogue.
+
+
+## Tour 35
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 23/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la reports/corpus-wiki-en-texte-contamination.json 2>/dev/null; ps -eo pid,etime,pcpu,cmd | grep \"verifie_contamination.py --train data/corpus_wiki_en\" | grep -v grep | head -1 | cut -c1-80; tail -2 /tmp/check-en.l … [364 caractères tronqués]`
+
+  ```
+22:36
+1694437       00:42 99.9 python3 tools/verifie_contamination.py --train data/cor
+Mem:             125          27          72           5          33          98
+=== doc/ocr
+  4000 PDF · 2558 gardés · 812.6 M car
+  Biblio_large · 001.0 metapatterns.pdf · 373 p · 654488 car
+791M	data/corpus_pdf_documents
+1,7M	data/corpus_ocr
+-rw-r--r--. 1 stephane stephane 1605  1 nov 22:36 reports/corpus-wiki-en-texte.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 55); do [ -f reports/corpus-wiki-en-texte-contamination.json ] && break; sleep 15; done; echo \"attente $((i*15))s\"; ls -la reports/corpus-wiki-en-texte-contamination.json 2>/dev/null || { echo \"check en: pas encore\ … [692 caractères tronqués]`
