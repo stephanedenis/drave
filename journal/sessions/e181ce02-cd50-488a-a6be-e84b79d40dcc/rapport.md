@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 37.1 h |
 | Tours | 112 |
-| Messages | 1415 |
-| Appels d'outils | 1238 |
+| Messages | 1418 |
+| Appels d'outils | 1241 |
 | Fichiers touchés | 25 |
-| Commandes | 1008 |
+| Commandes | 1009 |
 | Sous-agents | 2 |
-| Commits | 145 |
+| Commits | 146 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -5960,13 +5960,15 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **pronoms ob
 
 ### Tour 112 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Ajouter 8 phrases à pronoms objets et mesurer
 - bash — Ajouter les pronoms objets et mesurer
 - bash — Écrire la fiche des pronoms objets
 - bash — Trim README et passer les portes
 - bash — Committer les pronoms objets
+- job_output
+- bash — Committer les pronoms objets (2e essai)
 
 ## 3. Travail accompli
 
@@ -6047,7 +6049,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **pronoms ob
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 968 autres
+- … et 969 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6339,5 +6341,6 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **pronoms ob
 - B13 — LES PIÈGES D'ANAPHORE : 10/12, LE PP LOCATIF ÉCHOUE, GOLD 328 ; 96/96" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PIÈGES D'ANAPHORE"; then ec
 - B13 — LES PIÈGES D'ANAPHORE : 10/12, LE PP LOCATIF ÉCHOUE, GOLD 328 ; 96/96" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PIÈGES D'ANAPHORE"; then ec
 - B13 — L'ANAPHORE CORRIGÉE : 12/12 EN IGNORANT LES PP ; 97/97" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ANAPHORE CORRIGÉE"; then echo "COMMIT OK $
+- B13 — LES PRONOMS OBJETS : 8/8, 20/20 AU TOTAL, GOLD 336 ; 98/98" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PRONOMS OBJETS"; then echo "COMMIT OK 
 - B13 — LES PRONOMS OBJETS : 8/8, 20/20 AU TOTAL, GOLD 336 ; 98/98" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PRONOMS OBJETS"; then echo "COMMIT OK 
 

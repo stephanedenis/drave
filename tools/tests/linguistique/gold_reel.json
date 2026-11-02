@@ -22593,6 +22593,775 @@
     }
    },
    "source": "reel"
+  },
+  {
+   "id": "r329",
+   "langue": "fr",
+   "texte": "Le chat mange la souris ; il la voit.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chat",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "mange",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 14,
+     "fin": 16
+    },
+    {
+     "texte": "souris",
+     "pos": "NOUN",
+     "debut": 17,
+     "fin": 23
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 26,
+     "fin": 28
+    },
+    {
+     "texte": "la",
+     "pos": "PRON",
+     "debut": 29,
+     "fin": 31
+    },
+    {
+     "texte": "voit",
+     "pos": "VERB",
+     "debut": 32,
+     "fin": 36
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chat",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "mange",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "la souris",
+     "role": "patient",
+     "debut": 14,
+     "fin": 23
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 26,
+     "fin": 28
+    },
+    {
+     "type": "GV",
+     "texte": "voit",
+     "role": "prédicat",
+     "debut": 32,
+     "fin": 36
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "la": "souris"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r330",
+   "langue": "fr",
+   "texte": "Marie regarde le livre ; elle le lit.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "regarde",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 13
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 14,
+     "fin": 16
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 17,
+     "fin": 22
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 25,
+     "fin": 29
+    },
+    {
+     "texte": "le",
+     "pos": "PRON",
+     "debut": 30,
+     "fin": 32
+    },
+    {
+     "texte": "lit",
+     "pos": "VERB",
+     "debut": 33,
+     "fin": 36
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "regarde",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "le livre",
+     "role": "patient",
+     "debut": 14,
+     "fin": 22
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 25,
+     "fin": 29
+    },
+    {
+     "type": "GV",
+     "texte": "lit",
+     "role": "prédicat",
+     "debut": 33,
+     "fin": 36
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "le": "livre"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r331",
+   "langue": "fr",
+   "texte": "Les enfants aiment les fleurs ; ils les cueillent.",
+   "mots": [
+    {
+     "texte": "Les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "enfants",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "aiment",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 19,
+     "fin": 22
+    },
+    {
+     "texte": "fleurs",
+     "pos": "NOUN",
+     "debut": 23,
+     "fin": 29
+    },
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 32,
+     "fin": 35
+    },
+    {
+     "texte": "les",
+     "pos": "PRON",
+     "debut": 36,
+     "fin": 39
+    },
+    {
+     "texte": "cueillent",
+     "pos": "VERB",
+     "debut": 40,
+     "fin": 49
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Les enfants",
+     "role": "agent",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "aiment",
+     "role": "prédicat",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "type": "GN",
+     "texte": "les fleurs",
+     "role": "patient",
+     "debut": 19,
+     "fin": 29
+    },
+    {
+     "type": "GN",
+     "texte": "ils",
+     "role": "agent",
+     "debut": 32,
+     "fin": 35
+    },
+    {
+     "type": "GV",
+     "texte": "cueillent",
+     "role": "prédicat",
+     "debut": 40,
+     "fin": 49
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "les": "fleurs"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r332",
+   "langue": "fr",
+   "texte": "Paul voit Marie ; il lui parle.",
+   "mots": [
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "voit",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "lui",
+     "pos": "PRON",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "parle",
+     "pos": "VERB",
+     "debut": 25,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Paul",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "voit",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "patient",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "type": "GV",
+     "texte": "parle",
+     "role": "prédicat",
+     "debut": 25,
+     "fin": 30
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "lui": "marie"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r333",
+   "langue": "en",
+   "texte": "The cat eats the mouse; it sees it.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "cat",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "eats",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "texte": "mouse",
+     "pos": "NOUN",
+     "debut": 17,
+     "fin": 22
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "texte": "sees",
+     "pos": "VERB",
+     "debut": 27,
+     "fin": 31
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 32,
+     "fin": 34
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The cat",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "eats",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "type": "GN",
+     "texte": "the mouse",
+     "role": "patient",
+     "debut": 13,
+     "fin": 22
+    },
+    {
+     "type": "GN",
+     "texte": "it",
+     "role": "agent",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "type": "GV",
+     "texte": "sees",
+     "role": "prédicat",
+     "debut": 27,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "it": "mouse"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r334",
+   "langue": "en",
+   "texte": "Marie reads the book; she reads it.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "reads",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 12,
+     "fin": 15
+    },
+    {
+     "texte": "book",
+     "pos": "NOUN",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "texte": "she",
+     "pos": "PRON",
+     "debut": 22,
+     "fin": 25
+    },
+    {
+     "texte": "reads",
+     "pos": "VERB",
+     "debut": 26,
+     "fin": 31
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 32,
+     "fin": 34
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "reads",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "type": "GN",
+     "texte": "the book",
+     "role": "patient",
+     "debut": 12,
+     "fin": 20
+    },
+    {
+     "type": "GN",
+     "texte": "she",
+     "role": "agent",
+     "debut": 22,
+     "fin": 25
+    },
+    {
+     "type": "GV",
+     "texte": "reads",
+     "role": "prédicat",
+     "debut": 26,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "it": "book"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r335",
+   "langue": "en",
+   "texte": "The children love the flowers; they pick them.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "children",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 12
+    },
+    {
+     "texte": "love",
+     "pos": "VERB",
+     "debut": 13,
+     "fin": 17
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 18,
+     "fin": 21
+    },
+    {
+     "texte": "flowers",
+     "pos": "NOUN",
+     "debut": 22,
+     "fin": 29
+    },
+    {
+     "texte": "they",
+     "pos": "PRON",
+     "debut": 31,
+     "fin": 35
+    },
+    {
+     "texte": "pick",
+     "pos": "VERB",
+     "debut": 36,
+     "fin": 40
+    },
+    {
+     "texte": "them",
+     "pos": "PRON",
+     "debut": 41,
+     "fin": 45
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The children",
+     "role": "agent",
+     "debut": 0,
+     "fin": 12
+    },
+    {
+     "type": "GV",
+     "texte": "love",
+     "role": "prédicat",
+     "debut": 13,
+     "fin": 17
+    },
+    {
+     "type": "GN",
+     "texte": "the flowers",
+     "role": "patient",
+     "debut": 18,
+     "fin": 29
+    },
+    {
+     "type": "GN",
+     "texte": "they",
+     "role": "agent",
+     "debut": 31,
+     "fin": 35
+    },
+    {
+     "type": "GV",
+     "texte": "pick",
+     "role": "prédicat",
+     "debut": 36,
+     "fin": 40
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "them": "flowers"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r336",
+   "langue": "en",
+   "texte": "Paul sees Marie; he speaks to her.",
+   "mots": [
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "sees",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "texte": "he",
+     "pos": "PRON",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "texte": "speaks",
+     "pos": "VERB",
+     "debut": 20,
+     "fin": 26
+    },
+    {
+     "texte": "to",
+     "pos": "PREP",
+     "debut": 27,
+     "fin": 29
+    },
+    {
+     "texte": "her",
+     "pos": "PRON",
+     "debut": 30,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Paul",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "sees",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "patient",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "he",
+     "role": "agent",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "type": "GV",
+     "texte": "speaks",
+     "role": "prédicat",
+     "debut": 20,
+     "fin": 26
+    },
+    {
+     "type": "GP",
+     "texte": "to her",
+     "role": "destinataire",
+     "debut": 27,
+     "fin": 33
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "her": "marie"
+    }
+   },
+   "source": "reel"
   }
  ]
 }

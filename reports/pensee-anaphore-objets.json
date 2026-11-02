@@ -1,0 +1,26 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "98/98",
+ "objets": {
+  "phrases": 8,
+  "liens": 8,
+  "justes": 8,
+  "taux": 1.0
+ },
+ "sujets": {
+  "liens": 12,
+  "justes": 12,
+  "taux": 1.0
+ },
+ "total": {
+  "liens": 20,
+  "justes": 20,
+  "taux": 1.0
+ },
+ "limites": [
+  "20 liens",
+  "chaînes longues non couvertes",
+  "heuristique seule"
+ ]
+}

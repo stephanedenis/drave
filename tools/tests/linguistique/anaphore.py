@@ -7,6 +7,7 @@ annotation `coref` à la main.
 from __future__ import annotations
 
 PRONOMS = {"il", "elle", "ils", "elles", "it", "he", "she", "they"}
+OBJETS = {"le", "la", "les", "lui", "leur", "it", "him", "her", "them", "us", "me", "te", "nous", "vous"}
 
 
 def _dans_pp(mots: list[dict], i: int) -> bool:
@@ -31,7 +32,7 @@ def resoudre(mots: list[dict], ignorer_pp: bool = False) -> dict[str, str]:
         if mot["pos"] == "NOUN":
             if not (ignorer_pp and _dans_pp(mots, i)):
                 dernier = texte
-        elif texte in PRONOMS and dernier is not None:
+        elif mot["pos"] == "PRON" and texte in (PRONOMS | OBJETS) and dernier is not None:
             liens[texte] = dernier
     return liens
 

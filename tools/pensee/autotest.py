@@ -1453,7 +1453,7 @@ def t93_anaphore_pieges() -> tuple[bool, str]:
     from ..tests.linguistique.anaphore import mesurer
     from ..tests.linguistique.gold_reel import construire
     g = construire()
-    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 340]
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 328]
     r = mesurer(ps)
     return r["liens"] == 12 and r["justes"] == 10, (
         f"anaphore : {r['justes']}/{r['liens']} liens justes")
@@ -1464,10 +1464,21 @@ def t94_anaphore_corrigee() -> tuple[bool, str]:
     from ..tests.linguistique.anaphore import mesurer
     from ..tests.linguistique.gold_reel import construire
     g = construire()
-    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 340]
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 328]
     r = mesurer(ps, ignorer_pp=True)
     return r["liens"] == 12 and r["taux"] == 1.0, (
         f"anaphore corrigée : {r['justes']}/{r['liens']} liens justes")
+
+
+def t95_objets() -> tuple[bool, str]:
+    """Les pronoms objets : 8/8 liens justes (r329–r336)."""
+    from ..tests.linguistique.anaphore import mesurer
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    ps = [p for p in g["phrases"] if 329 <= int(p["id"][1:]) <= 340]
+    r = mesurer(ps, ignorer_pp=True)
+    return r["liens"] == 8 and r["taux"] == 1.0, (
+        f"pronoms objets : {r['justes']}/{r['liens']} liens justes")
 
 
 def main() -> int:
@@ -1563,7 +1574,8 @@ def main() -> int:
               ("T91 discours", t91_discours()),
               ("T92 anaphore", t92_anaphore()),
               ("T93 pièges anaphore", t93_anaphore_pieges()),
-              ("T94 anaphore corrigée", t94_anaphore_corrigee())]
+              ("T94 anaphore corrigée", t94_anaphore_corrigee()),
+              ("T95 pronoms objets", t95_objets())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

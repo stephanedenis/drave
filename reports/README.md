@@ -15,8 +15,8 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-anaphore-objets.md`](rapport-pensee-anaphore-objets.md) | **B13** — les pronoms objets : 8/8, 20/20 au total, **98/98** |
 | [`rapport-pensee-anaphore-corrige.md`](rapport-pensee-anaphore-corrige.md) | **B13** — l'anaphore corrigée : 12/12, la correction du PP, **97/97** |
-| [`rapport-pensee-anaphore-pieges.md`](rapport-pensee-anaphore-pieges.md) | **B13** — les pièges d'anaphore : 10/12, le PP locatif échoue, **96/96** |
 | [`rapport-pensee-gold-complexes100.md`](rapport-pensee-gold-complexes100.md) | **B13** — les 100 complexes : POS 0,6984, syntagme 0,2677, **93/93** |
 | [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, **87/87** |
 | [`rapport-pensee-courbe20.md`](rapport-pensee-courbe20.md) | **B13** — la courbe sur 20 graines : 20 % à 0,35, 100 % à 0,41, **86/86** |

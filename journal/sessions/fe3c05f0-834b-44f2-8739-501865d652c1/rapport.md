@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 37.1 h |
-| Tours | 374 |
-| Messages | 2240 |
-| Appels d'outils | 1486 |
+| Durée | 37.2 h |
+| Tours | 375 |
+| Messages | 2245 |
+| Appels d'outils | 1488 |
 | Fichiers touchés | 26 |
-| Commandes | 1319 |
+| Commandes | 1321 |
 | Sous-agents | 0 |
 | Commits | 83 |
 | Compactages de contexte | 4 |
@@ -775,6 +775,8 @@
 **Tour 373** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 374** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 375** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8785,9 +8787,29 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 374 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Wait 5 min then check gates
+- bash — Read gates register directly
+
+**Synthèse produite :**
+
+⏵ Round 362 : registre des portes — 26 portes, **toutes vertes** (`awk '$2 != 0'` vide)
+
+**Round 362/1000 — la passe des portes est verte jusqu'ici.**
+
+- **Le registre** `/tmp/portes-1102-05h27/registre.txt` : `porte-document 0`, `porte-echange-experts 0`, `porte-episodique 0`, `porte-etat 0`, `porte-flux 0`, `porte-fusion 0`… — **`awk '$2 != 0'` rend zéro ligne** : aucune porte rouge à ce stade.
+- **Le verdict se lit au registre** (jamais aux marques ni à travers un tube) : le fichier est la source.
+- **Le commit `166896b4`** (genres : OCR 38,5 car/ligne, 6,8 % de doublons) et **`15f2c8f6`** (OCR 20 livres, 7 381 p, 15,36 M) tiennent ; l'état porte « OCR 20 livres, genres mesurés, l'OCR complet (159 scans) en suite ».
+- **La borne** : 30 min (fin ~05 h 57).
+
+**Le constat** : les portes tiennent ; le goal reste actif jusqu'à 8 h.
+
+### Tour 375 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check chantiers OCR mentions
 
 ## 3. Travail accompli
 
@@ -8864,7 +8886,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1279 autres
+- … et 1281 autres
 
 ## 4. Mesures et résultats marquants
 

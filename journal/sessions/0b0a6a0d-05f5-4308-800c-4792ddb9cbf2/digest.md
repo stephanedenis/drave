@@ -18609,3 +18609,41 @@ Current DSH file policy: danger-full-access. The DSH file sandbox does not restr
 Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.z** : canal 34,3 M **3,53** (2 graines) ;\", \"**N2.z** : canal 34,3 M **3,53** ;\")\ns = re.sub(r\"\\*\\*Mi … [825 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-1088]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1088", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+a880c538 ÉTAT — LE BUDGET REVIENT À 4000 MOTS (N2.z SUR DEUX GRAINES)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && JOURNAUX=/tmp/portes-fin DELAI=700 nohup bash tools/toutes-les-portes.sh > /tmp/portes-fin.out 2>&1 & echo \"portes-fin $!\"; sleep 20; tail -3 /tmp/portes-fin.out; date '+%H:%M'", "description": "Launch the final full gates pass"}`
+
+  ```
+portes-fin 2586721
+=== PASSE COMPLÈTE DES PORTES (81 portes, borne 700 s) ===
+    journaux : /tmp/portes-fin
+05:46
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; date '+%H:%M'; tail -2 /tmp/portes-fin.out", "description": "Check the counters and the gates"}`
+
+  ```
+revue de documentation · 504 fiche(s) · 591 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+05:46
+=== PASSE COMPLÈTE DES PORTES (81 portes, borne 700 s) ===
+    journaux : /tmp/portes-fin
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt 2>/dev/null | head -4; tail -2 /tmp/portes-fin.out", "description": "Monitor the final gates pass"}`
