@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 19:54 | `0e5c89be` | N2.j4 — LA DISTILLATION SUR LE CORPUS RÉEL : 4,39 → 3,88, ET TOUT LE RESTE BAISSE | `en-cours.md`, `roadmap.md`, `README.md` (+11) |
 | 21:43 | `902349b0` | N2.n — LA DISTILLATION ANGLAISE : 4,42 → 3,94, LA CHAÎNE COMPLÈTE SUR 204 Mo | `en-cours.md`, `roadmap.md`, `README.md` (+20) |
+| 22:27 | `c397d2bd` | N2.o — LA DISTILLATION MULTILINGUE : DIX LANGUES S'AMÉLIORENT, LA DILUTION RESTE | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+27) |
 
 ## Chiffres du jour
 
@@ -26,8 +27,11 @@
 
 ## Mesures et rapports touchés
 
+- [reports/README.md](../../reports/README.md)
 - [reports/rapport-n2-anglais-distille.md](../../reports/rapport-n2-anglais-distille.md)
 - [reports/rapport-n2-distillation-reelle.md](../../reports/rapport-n2-distillation-reelle.md)
+- [reports/rapport-n2-multilingue-distille.md](../../reports/rapport-n2-multilingue-distille.md)
+- [reports/rapport-pensee-ouverte.md](../../reports/rapport-pensee-ouverte.md)
 
 <!-- notes -->
 

@@ -1,0 +1,47 @@
+# La nuit N2 — du corpus propre au corpus réel
+
+> Récit de la session `0b0a6a0d` (N2) dans la nuit du 1er au 2 novembre. Les fiches portent les
+> chiffres ; ce fichier dit l'enchaînement et ce qui a été appris en chemin.
+
+**Le problème de départ.** N2 mesurait sur un jeu contaminé (32,8 % de validation dans
+l'entraînement). La première moitié de la nuit a reconstruit le mètre : corpus dédupliqué
+(`corpus_propre.py`), chaîne refaite (professeur, base, distillation × 3), porte honnête **3,09** —
+pas 2,85 — et profil hors domaine **16,70**. Puis les leviers : diversité (16,70 → 3,85), positions
+aléatoires (256 octets 14,11 → 3,25), décomposition (tête du 6e bloc avant la boucle : 3,05 contre
+3,12), capacité (−0,06, peu), combinaison des deux (3,47 / 4,10 / 3,49).
+
+**Le tournant.** Le recensement a dit : il y a **27,7 Mo** de français unique dans le dépôt, mais
+surtout **132 Go de Wikipédia** sur le disque. L'inventaire local a donné le corpus réel : 120 000
+articles, 186 Mo d'entraînement, 0 fuite. La base passe de 12,29 à **7,42** en littérature et de
+32,90 à **12,41** en anglais (×1,7 à ×2,6). Le corpus élargi du dépôt (N2.i) avait déjà montré la
+direction ; le corpus réel l'a confirmée.
+
+**Les lois qui se dégagent.**
+- **La donnée avant la capacité** : 21,65 M ne gagnait que −0,06 sur 3,24 Mo (N2.h5) et gagne
+  −0,19 sur 186 Mo (N2.j3). Un modèle plus gros a besoin de plus de texte pour amortir ses
+  paramètres.
+- **La position est un défaut d'architecture** : le verrou de longueur tombe à l'échelle (256 :
+  9,28 → 4,49 ; 512 : 13,37 → 5,67) pour +0,36 en domaine.
+- **La distillation transporte, elle ne crée pas** : −0,5 PPL sur une langue seule (3,88 en
+  français, 3,94 en anglais), mais deux fois moins en multilingue (5,41) parce que le professeur a
+  la même dilution.
+- **La structure peut s'ajouter au texte** : un canal de 6 classes par octet (1 344 paramètres)
+  donne −0,22 de PPL — modeste, mais réel, et le placebo (canal mélangé) est *pire* que l'absence
+  de canal. En revanche, le canal ne rend pas le modèle robuste au mélange des lettres : il reste un
+  lecteur de lettres.
+
+**Ce qui n'a pas marché, et qui est écrit.**
+- Filtrer les phrases **non ambiguës** : 15 à 30 % des phrases, les courtes, et un transfert moins
+  bon qu'un témoin aléatoire de même taille ; en curriculum, tout baisse légèrement.
+- La **capacité** sur le petit corpus : −0,06 seulement.
+- La **typoglycémie** ne s'améliore pas avec le canal (×5,6 partout).
+
+**Ce qui reste ouvert.** La **fenêtre locale de 256 octets** est le plafond de longueur (5,7 à 512
+sur le corpus réel, 6,35 en anglais) ; la distillation du canal (tuée par la pression mémoire) ; la
+loi d'échelle multilingue à 21,65 M ; et la restitution (R31), qui n'est toujours pas construite.
+
+**Les commits de la nuit** : `e36e8185` (N2.h), `52cf5853` (combinaison), `3a6ae9ca` (capacité),
+`d2613e8f` (fenêtre), `18f28437` (recensement), `17ececfc` (corpus élargi), `c96eb475` (corpus
+réel), `4db5aac0` (longueur réelle), `1520b875` (capacité réelle), `7a083904` (canal),
+`0e5c89be` (distillation réelle), `e0e71213` (anglais), `902349b0` (anglais distillé),
+`…` (multilingue distillé), `fa1b74a4` (structures).

@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 29.9 h |
 | Tours | 34 |
-| Messages | 1040 |
-| Appels d'outils | 987 |
+| Messages | 1041 |
+| Appels d'outils | 988 |
 | Fichiers touchés | 18 |
-| Commandes | 908 |
+| Commandes | 909 |
 | Sous-agents | 0 |
 | Commits | 60 |
 | Compactages de contexte | 2 |
@@ -1352,9 +1352,10 @@ L'anglais est à **25,4 M pages sur 25,6 M** (6,02 M articles), et son processus
 
 ### Tour 34 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*2 appels d'outils.* Actions notables :
 
 - bash — Stop blocked English process and count files
+- bash — Verify English process stopped and compute hashes
 
 ## 3. Travail accompli
 
@@ -1423,7 +1424,7 @@ L'anglais est à **25,4 M pages sur 25,6 M** (6,02 M articles), et son processus
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 868 autres
+- … et 869 autres
 
 ## 4. Mesures et résultats marquants
 

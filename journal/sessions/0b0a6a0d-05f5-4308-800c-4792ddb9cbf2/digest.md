@@ -15650,3 +15650,43 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1265 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-911]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-911", "timeout_ms": 300000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-ouverte.json
+ create mode 100644 reports/rapport-n2-multilingue-distille.md
+ create mode 100644 reports/rapport-pensee-ouverte.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/2026-11-01/ | head -12; python3 tools/sessions.py --status 2>&1 | tail -6", "description": "Inspect the day's journal and the session status"}`
+
+  ```
+apprentissage.md
+attention.md
+distribue.md
+docs.md
+memoire.md
+mesures.md
+modele.md
+moteur.md
+outils.md
+portes.md
+README.md
+      → **B10.2bis** suite (encodeur) ; **A8.3b** ; **R4.4 bloqué**.
+    e181ce02-cd50-488a · actif    · -285 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+      → le bloc linguistique v0 est livré (398 langues) et **AC-3/alpha-bêta** sont mesurés (8/8), le DRVF (9/9) et le banc (10/10) ; qualifier un gold et un modèle neuronal ; puis les **opérateurs hétérogènes/DRVM** (S reste à l'autre TUI).
+  ⏰ fe3c05f0-834b-44f2 · en cours ·  80 min · D (texte intégral, PDF/OCR, licences, stubs), R1.1/R1.2 (préparation), A2.6/A8.3
+      → l'**anglais** (le PDF et l'A8.3 sont faits) ; le catalogue ; l'OCR des 159 scans ; les collections ; R11/R12 bloqués sur N2, A2.6 sur A6.2.
+  ⚠ mandat périmé (80 min) : fe3c05f0-834b-44f2-8739-501865d652c1 — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > journal/2026-11-01/nuit-n2.md <<'EOF'\n# La nuit N2 — du corpus propre au corpus réel\n\n> Récit de la session `0b0a6a0d` (N2) dans la nuit du 1er au 2 novembre. Les fiches portent les\n> chiffres ; ce fichier dit l'enchaînemen … [3610 caractères tronqués]`

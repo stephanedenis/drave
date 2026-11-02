@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**114 commits** · **4 session(s)** · **10 thème(s)**
+**115 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 2 | [apprentissage.md](apprentissage.md) |
+| apprentissage | 3 | [apprentissage.md](apprentissage.md) |
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 13 | [distribue.md](distribue.md) |
 | docs | 30 | [docs.md](docs.md) |
@@ -21,6 +21,10 @@
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 4 | [portes.md](portes.md) |
+
+## Autres pièces du jour
+
+[nuit-n2.md](nuit-n2.md)
 
 ## Sessions DSH
 
@@ -149,6 +153,7 @@
 | 21:43 | `902349b0` | N2.n — LA DISTILLATION ANGLAISE : 4,42 → 3,94, LA CHAÎNE COMPLÈTE SUR 204 Mo |
 | 21:58 | `0fb426cc` | B13 — LA MESURE CORRIGÉE : BUG DE seule_minute, 4 POLITIQUES À BUT/8, 4 FICHES CORRIGÉES ; 30/30 |
 | 22:13 | `da55b97d` | B13 — L'AUDIT DES MESURES : 15/15 COHÉRENTES, LA MINUTE NE TRANSFÈRE PAS AU BRUIT ; 31/31 |
+| 22:27 | `c397d2bd` | N2.o — LA DISTILLATION MULTILINGUE : DIX LANGUES S'AMÉLIORENT, LA DILUTION RESTE |
 
 ## Le récit de la journée (écrit à la main)
 
