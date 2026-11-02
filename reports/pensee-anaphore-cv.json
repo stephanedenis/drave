@@ -1,0 +1,75 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "107/107",
+ "plis": [
+  {
+   "pli": 1,
+   "poids": {
+    "dernier_nom": 0,
+    "role": 0,
+    "hybride": 1,
+    "semantique": 0
+   },
+   "train": 23,
+   "test": 6,
+   "justes": 4
+  },
+  {
+   "pli": 2,
+   "poids": {
+    "dernier_nom": 1,
+    "role": 0,
+    "hybride": 0,
+    "semantique": 0
+   },
+   "train": 24,
+   "test": 6,
+   "justes": 4
+  },
+  {
+   "pli": 3,
+   "poids": {
+    "dernier_nom": 1,
+    "role": 0,
+    "hybride": 0,
+    "semantique": 0
+   },
+   "train": 23,
+   "test": 6,
+   "justes": 5
+  },
+  {
+   "pli": 4,
+   "poids": {
+    "dernier_nom": 1,
+    "role": 0,
+    "hybride": 0,
+    "semantique": 0
+   },
+   "train": 23,
+   "test": 6,
+   "justes": 6
+  },
+  {
+   "pli": 5,
+   "poids": {
+    "dernier_nom": 1,
+    "role": 0,
+    "hybride": 0,
+    "semantique": 0
+   },
+   "train": 23,
+   "test": 6,
+   "justes": 6
+  }
+ ],
+ "justes": 25,
+ "test": 30,
+ "taux": 0.8333,
+ "limites": [
+  "30 liens",
+  "grille grossière",
+  "heuristique seule"
+ ]
+}

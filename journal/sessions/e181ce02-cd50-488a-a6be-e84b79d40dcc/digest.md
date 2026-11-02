@@ -27459,3 +27459,103 @@ timeout 1800 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/anaphore.py tools/pensee/autotest.py reports/rapport-pensee-anaphore-pondere.md reports/pensee-anaphore-pondere.json reports/README.md docs/implantation/moteur-de-pensee. … [516 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1047]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1047", "timeout_ms": 600000, "wait": true}`
+
+  ```
+27 files changed, 412 insertions(+), 67 deletions(-)
+ create mode 100644 reports/pensee-anaphore-pondere.json
+ create mode 100644 reports/rapport-pensee-anaphore-pondere.md
+COMMIT OK 1
+9c8722d6 B13 — LE VOTE PONDÉRÉ : POIDS (1,0,0,0), TRAIN 20/20, TEST 7/10 ; 106/106
+lun 02 nov 2026 07:16:02 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vote pondéré : poids (1,0,0,0), train 20/20, test 7/10 ; 106/106
+
+Le round 107 du goal est livré : les **poids appris** choisissent le **dernier nom seul** (1,0,0,0) — 20/20 en apprentissage, **7/10 en test** : le partage 20/10 est un piège. Commit **`9c8722d6`**.
+
+## Le vote pondéré
+
+| poids | train (20) | test (10) |
+|---|---:|---:|
+| **(1,0,0,0)** — dernier nom | **20/20** | **7/10** |
+| les autres | ≤ 20/20 | ≤ 7/10 |
+
+**Ce que ça dit** :
+
+- **Le dernier nom gagne l'apprentissage** (20/20) : sur les cas courts, la proximité est parfaite.
+- **Le test est le long** (7/10) : la pondération apprise ne généralise pas ; elle choisit la règle qui marche sur le train, pas celle qui marcherait sur le test.
+- **Le partage 20/10 est un piège** : les 20 premiers liens sont les courts (r301–r320), les 10 derniers les longs (r337–r342) ; le « test » n'est pas un échantillon aléatoire.
+- **La négative est explicite** : 7/10 en test, malgré 20/20 en train.
+
+## L'état
+
+- Fiche : [`rapport-pensee-anaphore-pondere.md`](../../reports/rapport-pensee-anaphore-pondere.md) ; JSON [`pensee-anaphore-pondere.json`](../../reports/pensee-anaphore-pondere.json) ; T103 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **106/106 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **513 fiches / 601 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 580 mots, T0 dans le budget.
+- L'horloge réelle est **07 h 16 HNE** (la deadline 08:00 est encore devant) ; l'autotest prend **~18 min**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Un partage aléatoire** : 5 plis croisés ; les poids généralisent-ils ?
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round fait la **validation croisée** (5 plis, partage aléatoire) — la seule façon de savoir si les poids généralisent.
+
+
+## Tour 121
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 108/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/anaphore.py'); t=p.read_text()\nt=t.replace('''def resoudre_meta(mots: list[dict], segments: list[dict]) -> dict[str, str]:''',\n'''def mesurer_cv(phrases: li … [2753 caractères tronqués]`
+
+  ```
+{"plis": [{"pli": 1, "poids": {"dernier_nom": 0, "role": 0, "hybride": 1, "semantique": 0}, "train": 23, "test": 6, "justes": 4}, {"pli": 2, "poids": {"dernier_nom": 1, "role": 0, "hybride": 0, "semantique": 0}, "train": 24, "test": 6, "justes": 4}, {"pli": 3, "poids": {"dernier_nom": 1, "role": 0, "hybride": 0, "semantique": 0}, "train": 23, "test": 6, "justes": 5}, {"pli": 4, "poids": {"dernier_nom": 1, "role": 0, "hybride": 0, "semantique": 0}, "train": 23, "test": 6, "justes": 6}, {"pli": 5, "poids": {"dernier_nom": 1, "role": 0, "hybride": 0, "semantique": 0}, "train": 23, "test": 6, "justes": 6}], "justes": 25, "test": 30, "taux": 0.8333}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T103 le vote pondéré             poids (1,0,0,0) : le dernier nom seul, test 7/10\\n\",\n\"  T103 le vote pondéré          … [7793 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 514 fiche(s) · 602 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2815 mots > budget 2800 (T1)
+  en-cours · 1580 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-anaphore-kappa.md`](rapport-pensee-anaphore-kappa.md) | **B13** — l'accord entre règles : κ de −0,16 à 1,0, **10 … [592 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1800 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/anaphore.py tools/pensee/autotest.py reports/rapport-pensee-anaphore-cv.md reports/pensee-anaphore-cv.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pi … [525 caractères tronqués]`

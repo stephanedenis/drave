@@ -1579,6 +1579,17 @@ def t103_pondere() -> tuple[bool, str]:
         f"pondéré : poids {r['poids']}, test {r['justes_test']}/{r['test']}")
 
 
+def t104_cv() -> tuple[bool, str]:
+    """La validation croisée : 5 plis, 25/30."""
+    from ..tests.linguistique.anaphore import mesurer_cv
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 342]
+    r = mesurer_cv(ps)
+    return r["test"] == 30 and r["justes"] == 25, (
+        f"CV 5 plis : {r['justes']}/{r['test']} liens justes")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1681,7 +1692,8 @@ def main() -> int:
               ("T100 plafond du gold", t100_plafond()),
               ("T101 accord kappa", t101_kappa()),
               ("T102 méta-règle", t102_meta()),
-              ("T103 vote pondéré", t103_pondere())]
+              ("T103 vote pondéré", t103_pondere()),
+              ("T104 validation croisée", t104_cv())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

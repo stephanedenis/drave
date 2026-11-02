@@ -34661,3 +34661,31 @@ ocrises 5 pages 292 car 506801
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 600; date '+%H:%M'; tail -6 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json')); print('manifeste ocrises', d['ocrises … [202 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-1348]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1348", "wait": true, "timeout_ms": 120000}`
+
+  ```
+07:21
+  CEGEP · Exercices de synthèse Excel 2010 Fonctio · 43 p · 81675 car
+  CEGEP · AMF-AO-Annexes 12 à 15 (Tech).pdf · 121 p · 191523 car
+  CEGEP · AMF-AO-Annexes 16 - Gabarits.pdf · 60 p · 26000 car
+  CEGEP · inscription AQPC.pdf · 2 p · 2582 car
+    PID            
+3011320       28:01
+manifeste ocrises 5 pages 292 car 506801
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1348 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 600; date '+%H:%M'; tail -6 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo "CEGEP 8 fini"; python3 -c "
+import json
+d=json.load(open('reports/ocr-pdf-cegep.json')); print('manifeste ocrises', d['ocrises'], 'pages', d['pages_ocr'], 'car', d['caracteres'])
+" 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; tail -6 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json')); print('manifeste ocrises', d['ocrises … [210 caractères tronqués]`

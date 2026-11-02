@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 38.6 h |
-| Tours | 120 |
-| Messages | 1482 |
-| Appels d'outils | 1289 |
+| Durée | 38.7 h |
+| Tours | 121 |
+| Messages | 1489 |
+| Appels d'outils | 1294 |
 | Fichiers touchés | 25 |
-| Commandes | 1047 |
+| Commandes | 1051 |
 | Sous-agents | 2 |
-| Commits | 156 |
+| Commits | 157 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -271,6 +271,8 @@
 **Tour 119** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 120** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 121** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6381,6 +6383,52 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **vote pondér�
 - bash — Committer le vote pondéré
 - job_output
 
+**Synthèse produite :**
+
+⏵ Vote pondéré : poids (1,0,0,0), train 20/20, test 7/10 ; 106/106
+
+Le round 107 du goal est livré : les **poids appris** choisissent le **dernier nom seul** (1,0,0,0) — 20/20 en apprentissage, **7/10 en test** : le partage 20/10 est un piège. Commit **`9c8722d6`**.
+
+\## Le vote pondéré
+
+| poids | train (20) | test (10) |
+|---|---:|---:|
+| **(1,0,0,0)** — dernier nom | **20/20** | **7/10** |
+| les autres | ≤ 20/20 | ≤ 7/10 |
+
+**Ce que ça dit** :
+
+- **Le dernier nom gagne l'apprentissage** (20/20) : sur les cas courts, la proximité est parfaite.
+- **Le test est le long** (7/10) : la pondération apprise ne généralise pas ; elle choisit la règle qui marche sur le train, pas celle qui marcherait sur le test.
+- **Le partage 20/10 est un piège** : les 20 premiers liens sont les courts (r301–r320), les 10 derniers les longs (r337–r342) ; le « test » n'est pas un échantillon aléatoire.
+- **La négative est explicite** : 7/10 en test, malgré 20/20 en train.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-pondere.md`](../../reports/rapport-pensee-anaphore-pondere.md) ; JSON [`pensee-anaphore-pondere.json`](../../reports/pensee-anaphore-pondere.json) ; T103 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **106/106 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **513 fiches / 601 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 580 mots, T0 dans le budget.
+- L'horloge réelle est **07 h 16 HNE** (la deadline 08:00 est encore devant) ; l'autotest prend **~18 min**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Un partage aléatoire** : 5 plis croisés ; les poids généralisent-ils ?
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round fait la **validation croisée** (5 plis, partage aléatoire) — la seule façon de savoir si les poids généralisent.
+
+### Tour 121 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Implémenter la validation croisée 5 plis et mesurer
+- bash — Écrire la fiche de la validation croisée
+- bash — Trim README et passer les portes
+- bash — Committer la validation croisée
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6460,7 +6508,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **vote pondér�
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1007 autres
+- … et 1011 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6764,4 +6812,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **vote pondér�
 - B13 — L'ACCORD ENTRE RÈGLES : κ DE −0,16 À 1,0, LE DÉSACCORD EST UNE RÈGLE ; 104/104" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "L'ACCORD ENTRE RÈG
 - B13 — LA MÉTA-RÈGLE : 25/30, LE VOTE NE BAT PAS LE DERNIER NOM ; 105/105" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MÉTA-RÈGLE"; then echo "COMMIT
 - B13 — LE VOTE PONDÉRÉ : POIDS (1,0,0,0), TRAIN 20/20, TEST 7/10 ; 106/106" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VOTE PONDÉRÉ"; then echo "COM
+- B13 — LA VALIDATION CROISÉE : 5 PLIS, 25/30, LE DERNIER NOM GÉNÉRALISE ; 107/107" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VALIDATION CROISÉE"; t
 

@@ -18903,3 +18903,30 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1110", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt | head -6; tail -2 /tmp/portes-fin.out", "description": "Check the gates pass"}`
+
+  ```
+07:17
+64
+porte-greffe 124 700
+porte-homeostasie 2 0
+porte-indice 124 700
+porte-melange 1 161
+  porte-pont             ✅                          94 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+  porte-prechargement    ✅                         219 s    PORTE TENUE
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt; tail -3 /tmp/portes-fin.out", "description": "Read the final gates verdict"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1112]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1112", "timeout_ms": 1300000, "wait": true}`

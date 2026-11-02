@@ -158,6 +158,57 @@ def mesurer_pondere(phrases: list[dict], part_train: float = 0.67) -> dict:
             "taux_test": round(score(meilleur, test) / max(1, len(test)), 4)}
 
 
+def mesurer_cv(phrases: list[dict], plis: int = 5, graine: int = 0) -> dict:
+    """Validation croisée : poids appris sur k−1 plis, testés sur le pli restant."""
+    import random as _r
+    regles = {
+        "dernier_nom": lambda m, s: resoudre(m, ignorer_pp=True),
+        "role": resoudre_roles,
+        "hybride": resoudre_hybride,
+        "semantique": resoudre_semantique,
+    }
+    liens = []
+    for phrase in phrases:
+        attendu = (phrase.get("pragma") or {}).get("coref") or {}
+        if not attendu:
+            continue
+        verdicts = {nom: f(phrase["mots"], phrase["segments"]) for nom, f in regles.items()}
+        for pronom, cible in attendu.items():
+            liens.append(({nom: v.get(pronom) for nom, v in verdicts.items()},
+                          pronom, cible))
+    rng = _r.Random(graine)
+    rng.shuffle(liens)
+    taille = len(liens) // plis
+    grille = [(a, b, c, d) for a in (0, 1, 2) for b in (0, 1, 2)
+              for c in (0, 1, 2) for d in (0, 1, 2) if a + b + c + d > 0]
+    noms = list(regles)
+
+    def score(poids, items):
+        justes = 0
+        for cands, pronom, cible in items:
+            votes = {}
+            for nom, w in zip(noms, poids):
+                if cands[nom] is not None:
+                    votes[cands[nom]] = votes.get(cands[nom], 0) + w
+            if votes:
+                gagnant = max(votes.items(), key=lambda kv: kv[1])
+                justes += gagnant[0] == cible
+        return justes
+
+    resultats = []
+    for i in range(plis):
+        test = liens[i * taille:(i + 1) * taille] if i < plis - 1 else liens[i * taille:]
+        train = [l for j, l in enumerate(liens) if l not in test]
+        meilleur = max(grille, key=lambda p: score(p, train))
+        resultats.append({"pli": i + 1, "poids": dict(zip(noms, meilleur)),
+                          "train": len(train), "test": len(test),
+                          "justes": score(meilleur, test)})
+    total_test = sum(r["test"] for r in resultats)
+    total_justes = sum(r["justes"] for r in resultats)
+    return {"plis": resultats, "justes": total_justes, "test": total_test,
+            "taux": round(total_justes / max(1, total_test), 4)}
+
+
 def resoudre_meta(mots: list[dict], segments: list[dict]) -> dict[str, str]:
     """Méta-règle : vote majoritaire des quatre règles, égalité → dernier nom."""
     regles = [resoudre(mots, ignorer_pp=True), resoudre_roles(mots, segments),
