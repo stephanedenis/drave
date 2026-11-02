@@ -12136,3 +12136,136 @@ timeout 120 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-operateurs.md reports/pensee-operateurs.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotage/roadmap.m … [384 caractères tronqués]`
+
+  ```
+docs/implantation/moteur-de-pensee.md |   4 +-
+ docs/pilotage/chantiers.md            |   2 +-
+ docs/pilotage/en-cours.md             |  16 +--
+ docs/pilotage/plan-travail.md         |   2 +-
+ docs/pilotage/roadmap.md              |   4 +-
+ reports/README.md                     |   1 +
+ reports/pensee-operateurs.json        |  92 +++++++++++++
+ reports/rapport-pensee-operateurs.md  |  90 +++++++++++++
+ tools/pensee/autotest.py              |  23 +++-
+ tools/pensee/operateurs.py            | 237 ++++++++++++++++++++++++++++++++++
+ 10 files changed, 457 insertions(+), 14 deletions(-)
+[still running after 60000ms; moved to background job bash-426]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-426", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master f5d1256d] B13 — OPÉRATEURS HÉTÉROGÈNES : 3 GENRES, SONDE 4 APPELS/COÛT 48 VS AVEUGLE 1/33 (11/11)
+ 28 files changed, 1037 insertions(+), 65 deletions(-)
+ create mode 100644 reports/pensee-operateurs.json
+ create mode 100644 reports/rapport-pensee-operateurs.md
+ create mode 100644 tools/pensee/operateurs.py
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Opérateurs hétérogènes : 3 genres, sonde 4 appels/coût 48, aveugle 1/33 ; 11/11 portes
+
+Le round 6 du goal est livré : B13 sait faire coexister des opérateurs **symbolique**, **numérique** et **neuronal** dans le même moteur. Commit **`f5d1256d`**.
+
+## Le résultat
+
+Grille **5×5**, départ `(0,0)`, but `(4,4)` ; trois opérateurs : `pas` (symbolique, coût 1), `saut` (numérique, coût 2), `sonde` (neuronal, coût 5, un appel à la politique).
+
+| stratégie | politique | nœuds | pas | saut | sonde | coût | appels | but |
+|---|---|---:|---:|---:|---:|---:|---:|---|
+| **A*** | **manhattan** | **23** | 10 | 9 | **4** | **48** | **4** | **oui** |
+| A* | aveugle | 20 | 10 | 9 | **1** | 33 | 4 | oui |
+| BFS | manhattan | 130 | 63 | 47 | 20 | 257 | 20 | oui |
+| BFS | aveugle | 119 | 63 | 47 | 9 | 202 | 20 | oui |
+
+**Ce que ça dit** :
+
+- **Les trois genres coexistent** et sont tracés : le registre rend les genres, le bilan compte chaque opérateur, le coût est `coût × occurrences`.
+- **La sonde sert** avec la politique manhattan (**4 nœuds**, **4 appels**, coût 48) ; avec la politique **aveugle**, elle n'est presque pas utilisée (**1 nœud**) et la recherche résout par `pas`/`saut` — le contrôle négatif du **mauvais** opérateur.
+- **Le coût est un choix** : l'A* paie 48 pour 23 nœuds, le BFS 257 pour 130 ; le neuronal est cher (5) et doit être **justifié** par la politique, pas par le moteur.
+- **A* = greedy** sur ce score (`1/(1+distance)`), comme au banc ; ce n'est pas un bug des opérateurs.
+- **Le DRVM** est le **conteneur d'exécution** (registre, politique, moteur, trace, bilan) ; il ne faut pas le confondre avec le **format DRVM** de N0.
+
+## L'état
+
+- Fiche : [`rapport-pensee-operateurs.md`](../../reports/rapport-pensee-operateurs.md) ; JSON [`pensee-operateurs.json`](../../reports/pensee-operateurs.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T8 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **11/11 portes** ; `porte-bloc-linguistique` **verte** (gold 180 + attachement + 398 langues) ; `revue` : **393 fiches / 494 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Contrat `moteur-de-pensee.md` : T8 ajouté, `operateurs.py` au plan de fichiers.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, `spacy`/`stanza`/`nltk`/`transformers` absents, et **aucun poids `drave-n0`** n'est présent pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé ; la session R4.4 doit le rafraîchir.
+
+## La suite
+
+1. **Politique DRVM/native** : brancher le modèle natif N2 quand ses poids seront là ; le conteneur est prêt, le coût déclaré (5) devra devenir une **latence mesurée**.
+2. **L** : lecture double du gold (les deux lectures des GP ambigus) et **200+ phrases réelles**.
+3. **Modèle neuronal** si un tagger/runner se débloque ; sinon, garder le mock et le dire.
+4. **B13** : un problème où le neuronal est **nécessaire** (pas seulement utile), pour que le contrôle négatif échoue vraiment.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque la politique DRVM/native ou la lecture double du gold.
+
+
+## Tour 20
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 7/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib,re\n# gold.py : cibles -> listes (lecture double)\np=pathlib.Path('tools/tests/linguistique/gold.py'); t=p.read_text()\nsubs = {\n '\"chat\")': '[\"chat\"])', '\"vu\")': ' … [4866 caractères tronqués]`
+
+  ```
+f5d1256d B13 — OPÉRATEURS HÉTÉROGÈNES : 3 GENRES, SONDE 4 APPELS/COÛT 48 VS AVEUGLE 1/33 (11/11)
+ok
+20 phrases, 105 tokens → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold.json
+gold synthétique écrit → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_synthetique.json
+hand cibles 18 synth 79 ambig 29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 180 python3 tools/tests/linguistique/evaluer_gold.py --json reports/pensee-gold-linguistique.json --reel >/tmp/gold10.out 2>&1; echo \"EXIT=$?\"; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-gold-linguistiq … [482 caractères tronqués]`
+
+  ```
+EXIT=0
+heuristique all span cov 0.3382 top1 0.3235 topk 0.3382 | tête cov 1.0 top1 0.9565 topk 1.0
+heuristique hand span cov 0.3846 top1 0.3077 topk 0.3846 | tête cov 1.0 top1 0.8 topk 1.0
+heuristique synthetique span cov 0.3273 top1 0.3273 topk 0.3273 | tête cov 1.0 top1 1.0 topk 1.0
+mock_neuronal all span cov 0.3382 top1 0.0 topk 0.0 | tête cov 1.0 top1 0.0 topk 0.0
+mock_neuronal hand span cov 0.2308 top1 0.0 topk 0.0 | tête cov 1.0 top1 0.0 topk 0.0
+mock_neuronal synthetique span cov 0.3636 top1 0.0 topk 0.0 | tête cov 1.0 top1 0.0 topk 0.0
+hasard {'cibles': 68, 'top1_taux': 0.0147} verdict {'pos_hand': True, 'pos_synthetique': True, 'syntagme_hand': True, 'syntagme_synthetique': True, 'tete': True, 'acte': True, 'cascade_pos': True, 'cascade_syntagme': True, 'attachement_topk': True, 'attachement_hasard': True, 'attachement_tete_couverture': True, 'attachement_tete_topk': True, 'attachement_tete_hasard': True, 'reel_non_requis': True} ok True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib,re\n# rapport : lecture double\np=pathlib.Path('reports/rapport-pensee-gold-linguistique.md'); t=p.read_text()\nt=t.replace(\"> **1,0/1,0/0,994/0,889**, cascade **67,1 %**, **attachement par tête couv … [8142 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 393 fiche(s) · 496 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/ver … [372 caractères tronqués]`
+
+  ```
+94:| fichiers / JSON de résultats | **393** / **496** | `reports/*.md` / `reports/*.json` |
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/tests/linguistique/gold.py tools/tests/linguistique/gold.json tools/tests/linguistique/gold_synthetique.py tools/tests/linguistique/gold_synthetique.json tools/tests/linguistique/evaluer_gold.py reports/rapport-pensee-g … [540 caractères tronqués]`

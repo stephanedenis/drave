@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**72 commits** · **4 session(s)** · **9 thème(s)**
+**73 commits** · **4 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 5 | [distribue.md](distribue.md) |
 | docs | 18 | [docs.md](docs.md) |
 | memoire | 6 | [memoire.md](memoire.md) |
-| mesures | 36 | [mesures.md](mesures.md) |
+| mesures | 37 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -27,8 +27,8 @@
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 27.2 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 26.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 26.8 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 27.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 27.0 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -106,10 +106,17 @@
 | 19:11 | `1a39470d` | DONNÉES — CINQ CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA) : 6,27 M ARTICLES, 25,1 GO, 8 KO 0, UDHR CITÉE |
 | 19:16 | `c5d38030` | L — ATTACHEMENT : TOP-1 0,294 / TOP-K 0,338 SUR 68 CIBLES (COUVERTURE 0,338), HASARD 0,015 |
 | 19:21 | `bcf13fb0` | DONNÉES — SIX CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT) : 7,83 M ARTICLES, 30,4 GO |
+| 19:33 | `f5d1256d` | B13 — OPÉRATEURS HÉTÉROGÈNES : 3 GENRES, SONDE 4 APPELS/COÛT 48 VS AVEUGLE 1/33 (11/11) |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Huit corpus en texte intégral.** Le russe et l'espagnol sont mesurés : **1 943 725** articles
+(6,258 G caractères, 11,16 Go) et **1 868 078** (6,651 G, 6,83 Go). Le **8 Ko est encore à zéro** ;
+le XNLI à 0 pour les deux ; le russe a **18,0 %** de lignes répétées (dates, références, formules)
+mais 0 au tronçon. Les huit mesurés : **11,65 M articles**, **35,10 G caractères**, **48,4 Go**.
+Le démonstration : le de et l'en sont les deux derniers ; ils courent.
+
 **Six corpus en texte intégral.** L'italien est mesuré : **1 561 411 articles**, **5,211 G
 caractères**, **5,29 Go**, **0/0/0** résidu, **8 Ko 0**, UDHR **2/23** (citée). Le total des six :
 **7,83 M articles**, **22,19 G caractères**, **30,4 Go**. Les compteurs de l'état ont été réparés

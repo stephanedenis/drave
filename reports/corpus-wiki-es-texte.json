@@ -1,0 +1,55 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "langue": "es",
+ "nature": "corpus Wikipédia es (texte intégral)",
+ "source": {
+  "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/es/eswiki-latest-pages-articles-multistream.xml.bz2",
+  "octets": 5276139413
+ },
+ "methode": {
+  "debaliseur": "regex : commentaires, refs, tableaux, modèles (30 itérations), fichiers/catégories, liens → libellé, titres de sections, listes",
+  "filtre": "ns 0, sans redirection, texte >= 300 caractères",
+  "deduplication": "articles (BLAKE2b) + tronçons (train), première occurrence gardée",
+  "split": "hash salé (graine 1) de page_id : 5% val, 5% test"
+ },
+ "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/es/eswiki-latest-pages-articles-multistream.xml.bz2",
+ "dump_octets": 5276139413,
+ "articles_lus": 4865254,
+ "articles_gardes": 1868078,
+ "articles_rediriges": 2054988,
+ "articles_hors_ns": 769405,
+ "articles_courts": 172715,
+ "articles_doublons": 68,
+ "caracteres_gardes": 6650803433,
+ "troncons": 2176922,
+ "troncons_doublons": 65,
+ "octets": {
+  "train": 6155005737,
+  "val": 339642132,
+  "test": 337603366
+ },
+ "articles": {
+  "train": 1681857,
+  "val": 93300,
+  "test": 92921
+ },
+ "residus": {
+  "modele": 1,
+  "lien": 228,
+  "balise": 1,
+  "lignes_echantillon": 20000
+ },
+ "echantillon": "---\nAndorra\nAndorra, oficialmente el Principado de Andorra (), es un microestado soberano sin litoral ubicado en el suroeste de Europa, entre la comunidad autónoma de Cataluña (España) y la región de Occitania (Francia), en el límite de la península ibérica. Se constituye en Estado independiente, de derecho, democrático y social, cuya forma de gobierno es el coprincipado parlamentario, única en el mundo. Su territorio está organizado en siete parroquias, con una población total de a 31 de diciembre de 2025. Su capital y núcleo más poblado es Andorra la Vieja.\n\nCon una extensión territorial de 468 km², And\n---\nArgentina\nLa Argentina, oficialmente República Argentina, es un país soberano ubicado en el extremo sur y sudeste de América del Sur. Adopta la forma de gobierno democrática, federal, representativa y republicana. Se constituye como un país federal descentralizado, compuesto por veintitrés provincias más la Ciudad Autónoma de Buenos Aires, designada como capital federal.\n\nLa Constitución de la Nación Argentina rige los principios de adhesión entre 23 estados asociados, denominadas provincias, bajo una sola representación con Capital Federal en la Ciudad Autónoma de Buenos Aires. Dichas jurisdicciones go",
+ "mots_estimes": 1072710231,
+ "note_mots": "caractères / 6,2 (estimation ; le japonais et le chinois se comptent en caractères)",
+ "sha256_train": "6565abe0ea10c753d00a46d666c96e83eb619dccf7fb260a3a0e55bbc56854c0",
+ "sha256_val": "777fef45e7623959c76b779db7cec12f4fd389aab23d40a2d307a1326a81bcc8",
+ "sha256_test": "bfe7a2255c0ee9feeaf85400ac86f4845f645a442a9904b6475f2352e7ff2a5a",
+ "licence": "Wikipédia : CC-BY-SA 4.0 (et GFDL) — attribution et partage à l'identique ; corpus local",
+ "limites": [
+  "débaliseur regex : infobox/dates de modèles perdues, formules <math> retirées, tableaux perdus",
+  "les redirections et les espaces de noms autres que 0 sont exclus",
+  "déduplication exacte seulement (quasi-doublons non détectés)"
+ ]
+}

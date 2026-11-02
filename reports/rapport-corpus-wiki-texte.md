@@ -4,8 +4,8 @@
 > français : **2 388 219 articles**, **8,025 G caractères**, **1,294 G mots** (estimés), **8,34 Go**,
 > résidus **1 / 20 000 lignes** (`{{`), **0 / 51 250** fenêtres de 8 Ko de la validation et
 > **0 / 50 730** du test retrouvées dans l'entraînement, **0 / 40** sur le XNLI et les trois jeux
-> locaux, **2 / 24** pour l'UDHR — **citée dans Wikipédia**. Les quatre premiers autres corpus
-> (ar, pt, zh, ja) sont mesurés : **8 Ko à zéro partout**, l'UDHR portugaise (2/40) et japonaise
+> locaux, **2 / 24** pour l'UDHR — **citée dans Wikipédia**. Les sept premiers autres corpus
+> (ar, pt, zh, ja, it, ru, es) sont mesurés : **8 Ko à zéro partout**, l'UDHR portugaise (2/40) et japonaise
 > (1/23) citées. Le texte intégral vaut **2,18×** les résumés (3,68 Go) — et non les 7× du pilote :
 > le pilote n'était pas représentatif.
 >
@@ -81,9 +81,9 @@ les **tableaux** ; les liens deviennent des libellés, les titres de sections re
 
 ## 5. Les neuf autres langues
 
-Même outil, même chaîne. Les cinq premiers corpus (fr, ar, pt, zh, ja) sont mesurés ; les cinq
-autres sont en cours au 1/11 19 h 30. Les cinq mesurés : **6,27 M articles**, **16,98 G
-caractères**, **25,1 Go**.
+Même outil, même chaîne. Les huit premiers corpus (fr, ar, pt, zh, ja, it, ru, es) sont mesurés ;
+les deux autres sont en cours au 1/11 20 h. Les huit mesurés : **11,65 M articles**, **35,10 G
+caractères**, **48,4 Go**.
 
 | langue | articles | caractères | mots (car. / 6,2) | octets | fuite lignes | fuite 8 Ko | éval | résidus `{{`/`[[`/`<` |
 |---|---:|---:|---:|---:|---:|---:|---|---|
@@ -92,13 +92,17 @@ caractères**, **25,1 Go**.
 | pt | 970 793 | 3,104 G | 501 M | 3,21 Go | 4,5 % | **0** | UDHR 2/40 (citée) | 1/296/0 |
 | zh | 643 122 | 1,045 G | — (caractères) | 2,63 Go | 2,2 % | **0** | XNLI 0/40 | 14/0/0 |
 | ja | 1 271 107 | 2,809 G | 453 M | 7,33 Go | 3,7 % | **0** | UDHR 1/23 (citée) | 2/62/0 |
-| de, en, es, it, ru | en cours | | | | | | | |
+| it | 1 561 411 | 5,211 G | 840 M | 5,29 Go | 6,2 % | **0** | UDHR 2/23 (citée) | 0/0/0 |
+| ru | 1 943 725 | 6,258 G | 1 009 M | 11,16 Go | 18,0 % | **0** | XNLI 0/40 | 0/52/0 |
+| es | 1 868 078 | 6,651 G | 1 073 M | 6,83 Go | 6,3 % | **0** | XNLI 0/40 | 1/228/1 |
+| de, en | en cours | | | | | | | |
 
 **Lecture.** Le **8 Ko est à zéro partout** : aucune unité d'entraînement ne traverse les splits.
 Les **lignes** dupliquées sont un diagnostic de style : 28,9 % en arabe (les formules, les
-références et les phrases coraniques se répètent d'un article à l'autre), 4,5 % en portugais, 3,7 %
-en japonais, 2,2 % en chinois — ce ne sont pas des fuites de tronçon. L'**UDHR** est citée dans Wikipédia pour le
-français et le portugais (2 fenêtres) et le japonais (1) ; le **XNLI** est à 0 pour le français,
+références et les phrases coraniques se répètent d'un article à l'autre) et **18,0 % en russe** (les
+dates, les références, les formules soviétiques), 6,3 % en espagnol, 6,2 % en italien, 4,5 % en
+portugais, 3,7 % en japonais, 2,2 % en chinois — ce ne sont pas des fuites de tronçon. L'**UDHR** est citée dans Wikipédia pour le
+français, le portugais et l'italien (2 fenêtres) et le japonais (1) ; le **XNLI** est à 0 pour le français,
 l'arabe et le chinois.
 Le débaliseur laisse des liens `[[…]]` résiduels en arabe (161 lignes sur 20 000) et en portugais
 (296) : les légendes et notes complexes ; c'est une limite nommée, une passe finale les enlèvera.
@@ -135,5 +139,5 @@ leurs licences, puis la **préparation de R1.1/R1.2**.
 - `reports/corpus-wiki-fr-texte-contamination.json` — le contrôle du run complet.
 - `reports/corpus-wiki-fr-texte-pilote.json` — le manifeste du pilote (archivé pour comparaison).
 - `reports/corpus-wiki-fr-texte-pilote-contamination.json` — le contrôle du pilote.
-- `reports/corpus-wiki-{ar,pt,zh,ja}-texte.json` + `-contamination.json` — les quatre premiers autres corpus.
+- `reports/corpus-wiki-{ar,pt,zh,ja,it,ru,es}-texte.json` + `-contamination.json` — les sept premiers autres corpus.
 - `data/corpus_wiki_fr_texte/` — le corpus (8,34 Go, gitignoré).

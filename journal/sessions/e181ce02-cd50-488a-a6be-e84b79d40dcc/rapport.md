@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 26.9 h |
-| Tours | 19 |
-| Messages | 513 |
-| Appels d'outils | 532 |
+| Durée | 27.0 h |
+| Tours | 20 |
+| Messages | 520 |
+| Appels d'outils | 537 |
 | Fichiers touchés | 25 |
-| Commandes | 426 |
+| Commandes | 431 |
 | Sous-agents | 2 |
-| Commits | 28 |
+| Commits | 29 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -69,6 +69,8 @@
 **Tour 18** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 **Tour 19** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
+
+**Tour 20** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1062,6 +1064,50 @@ Le round 5 du goal est livré : l'**attachement par tête** mesure la cible sans
 - bash — Committer les opérateurs hétérogènes
 - job_output
 
+**Synthèse produite :**
+
+⏵ Opérateurs hétérogènes : 3 genres, sonde 4 appels/coût 48, aveugle 1/33 ; 11/11 portes
+
+Le round 6 du goal est livré : B13 sait faire coexister des opérateurs **symbolique**, **numérique** et **neuronal** dans le même moteur. Commit **`f5d1256d`**.
+
+\## Le résultat
+
+Grille **5×5**, départ `(0,0)`, but `(4,4)` ; trois opérateurs : `pas` (symbolique, coût 1), `saut` (numérique, coût 2), `sonde` (neuronal, coût 5, un appel à la politique).
+
+| stratégie | politique | nœuds | pas | saut | sonde | coût | appels | but |
+|---|---|---:|---:|---:|---:|---:|---:|---|
+| **A*** | **manhattan** | **23** | 10 | 9 | **4** | **48** | **4** | **oui** |
+| A* | aveugle | 20 | 10 | 9 | **1** | 33 | 4 | oui |
+| BFS | manhattan | 130 | 63 | 47 | 20 | 257 | 20 | oui |
+| BFS | aveugle | 119 | 63 | 47 | 9 | 202 | 20 | oui |
+
+**Ce que ça dit** :
+
+- **Les trois genres coexistent** et sont tracés : le registre rend les genres, le bilan compte chaque opérateur, le coût est `coût × occurrences`.
+- **La sonde sert** avec la politique manhattan (**4 nœuds**, **4 appels**, coût 48) ; avec la politique **aveugle**, elle n'est presque pas utilisée (**1 nœud**) et la recherche résout par `pas`/`saut` — le contrôle négatif du **mauvais** opérateur.
+- **Le coût est un choix** : l'A* paie 48 pour 23 nœuds, le BFS 257 pour 130 ; le neuronal est cher (5) et doit être **justifié** par la politique, pas par le moteur.
+- **A* = greedy** sur ce score (`1/(1+distance)`), comme au banc ; ce n'est pas un bug des opérateurs.
+- **Le DRVM** est le **conteneur d'exécution** (registre, politique, moteur, trace, bilan) ; il ne faut pas le confondre avec le **format DRVM** de N0.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-operateurs.md`](../../reports/rapport-pensee-operateurs.md) ; JSON [`pensee-operateurs.json`](../../reports/pensee-operateurs.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T8 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **11/11 portes** ; `porte-bloc-linguistique` **verte** (gold 180 + attachement + 398 langues) ; `revue` : **393 fiches / 494 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Contrat `moteur-de-pensee.md` : T8 ajouté, `operateurs.py` au plan de fichiers.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, `spacy`/`stanza`/`nltk`/`transformers` absents, et **aucun poids `drave-n0`** n'est présent pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé ; la session R4.4 doit
+… [658 caractères tronqués]
+
+### Tour 20 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Annoter les deux lectures de l'attachement
+- bash — Remesurer l'attachement avec les deux lectures
+- bash — Mettre à jour la fiche et l'état pour la lecture double
+- bash — Passer les portes après la lecture double
+- bash — Committer la lecture double du gold
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1141,7 +1187,7 @@ Le round 5 du goal est livré : l'**attachement par tête** mesure la cible sans
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 386 autres
+- … et 391 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1312,4 +1358,5 @@ Le round 5 du goal est livré : l'**attachement par tête** mesure la cible sans
 - L — ATTACHEMENT : TOP-1 0,294 / TOP-K 0,338 SUR 68 CIBLES (COUVERTURE 0,338), HASARD 0,015" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - L — ATTACHEMENT PAR TÊTE : COUVERTURE 1,0, TOP-1 0,870, TOP-K 1,0 (SPAN 0,338/0,294)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — OPÉRATEURS HÉTÉROGÈNES : 3 GENRES, SONDE 4 APPELS/COÛT 48 VS AVEUGLE 1/33 (11/11)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- L — LECTURE DOUBLE : TOP-1 TÊTE 0,957 (0,800 RÉEL/1,0 SYNTH), 29 CIBLES AMBIGUËS" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

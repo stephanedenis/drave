@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 26.8 h |
+| Durée | 27.0 h |
 | Tours | 15 |
-| Messages | 914 |
-| Appels d'outils | 908 |
+| Messages | 920 |
+| Appels d'outils | 913 |
 | Fichiers touchés | 18 |
-| Commandes | 834 |
+| Commandes | 839 |
 | Sous-agents | 0 |
-| Commits | 50 |
+| Commits | 51 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -769,7 +769,7 @@ Les cinq derniers runs courent : **it** (bientôt), **de, ru, es** (~30-60 min),
 
 ### Tour 15 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Check remaining runs and manifests
 - bash — Read Italian manifest and run final contamination
@@ -783,6 +783,9 @@ Les cinq derniers runs courent : **it** (bientôt), **de, ru, es** (~30-60 min),
 - bash — Read Russian and Spanish manifests, launch checks
 - job_output
 - bash — Wait for Russian and Spanish checks
+- bash — Check Russian check and remaining runs
+- bash — Read Russian check results and Spanish status
+- … et 3 autres
 
 ## 3. Travail accompli
 
@@ -851,7 +854,7 @@ Les cinq derniers runs courent : **it** (bientôt), **de, ru, es** (~30-60 min),
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 794 autres
+- … et 799 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1049,4 +1052,5 @@ Les cinq derniers runs courent : **it** (bientôt), **de, ru, es** (~30-60 min),
 - DONNÉES — CINQ CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA) : 6,27 M ARTICLES, 25,1 GO, 8 KO 0, UDHR CITÉE" 2>/tmp/commit.err; then echo "commit OK (essai $i)"
 - DONNÉES — SIX CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT) : 7,83 M ARTICLES, 30,4 GO, COMPTEURS RÉPARÉS" 2>/tmp/commit.err; then echo "commit OK (essai $i
 - DONNÉES — SIX CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT) : 7,83 M ARTICLES, 30,4 GO" 2>/tmp/commit.err; then echo "commit OK (essai $i)"; break; else ech
+- DONNÉES — HUIT CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES) : 11,65 M ARTICLES, 48,4 GO, 8 KO 0" 2>/tmp/commit.err; then echo "commit OK (essai $i)
 

@@ -16599,3 +16599,61 @@ Error: unknown job 1530824
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 70); do [ -f reports/corpus-wiki-es-texte-contamination.json ] && break; sleep 20; done; echo \"attente $((i*20))s\"; ls -la reports/corpus-wiki-{ru,es}-texte-contamination.json 2>/dev/null; for l in ru es; do [ -f rep … [824 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-834]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -la reports/corpus-wiki-{ru,es}-texte-contamination.json 2>/dev/null; tail -2 /tmp/check-ru.log /tmp/check-es.log 2>/dev/null; echo \"=== runs\"; ps -eo pid,etime,cmd | grep \"corpus_wikipedia_texte.py --langue\" | grep -v grep | aw … [329 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 730  1 nov 19:31 reports/corpus-wiki-ru-texte-contamination.json
+=== runs
+1494795 01:04:43 reports/corpus-wiki-en-texte.json
+1494796 01:04:43 reports/corpus-wiki-de-texte.json
+  [de] 6000000 lus · 2853724 gardés · 10.41 G caractères
+  [en] 5200000 lus · 1847002 gardés · 9.86 G caractères
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/corpus-wiki-ru-texte-contamination.json').read_text())\nprint('ru | lignes', {k:v['taux'] for k,v in d['doublons_entre_splits']['par_split'].items()},\n      '|  … [509 caractères tronqués]`
+
+  ```
+ru | lignes {'val.txt': 0.180129, 'test.txt': 0.182429} | 8 Ko {'val.txt': 0.0, 'test.txt': 0.0} | éval [('ru-xnli.txt', 0, 40)]
+es: en cours
+1530824       11:14 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/verifie_contamination.py --train data/corpus_wiki_ru_texte/train.txt --val data/corpus_wiki_ru_texte/val.txt --test data/corpus_wiki_ru_texte/test.txt --eval work/dr/eval/ru-xnli.txt --taille-troncon 8192 --sortie reports/corpus-wiki-ru-texte-contamination.json > /tmp/check-ru.log 2>&1; python3 tools/verifie_contamination.py --train data/corpus_wiki_es_texte/train.txt --val data/corpus_wiki_es_texte/val.txt --test data/corpus_wiki_es_texte/test.txt --eval work/dr/eval/es-xnli.txt --taille-troncon 8192 --sortie reports/corpus-wiki-es-texte-contamination.json > /tmp/check-es.log 2>&1
+1533202       04:46 python3 tools/verifie_contamination.py --train data/corpus_wiki_es_texte/train.txt --val data/corpus_wiki_es_texte/val.txt --test data/corpus_wiki_es_texte/test.txt --eval work/dr/eval/es-xnli.txt --taille-troncon 8192 --sortie reports/corpus-wiki-es-texte-contamination.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 40); do [ -f reports/corpus-wiki-es-texte-contamination.json ] && break; sleep 15; done; echo \"attente $((i*15))s\"; python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('reports/corpus-wiki-es-texte-contamination.js … [681 caractères tronqués]`
+
+  ```
+attente 75s
+es | lignes {'val.txt': 0.063416, 'test.txt': 0.062713} | 8 Ko {'val.txt': 0.0, 'test.txt': 0.0} | éval [('es-xnli.txt', 0, 40)]
+9
+1494795 01:06:36 reports/corpus-wiki-en-texte.json
+1494796 01:06:36 reports/corpus-wiki-de-texte.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-corpus-wiki-texte.md'); s=p.read_text()\ns=s.replace(\"Les cinq premiers autres corpus\\n> (ar, pt, zh, ja, it) sont mesurés\",\n            \"Les sept premiers autres c … [2961 caractères tronqués]`
+
+  ```
+fiche : 8 langues
+  T0 max : 3994 mots (budget 4 000)
+  revue de documentation · 393 fiche(s) · 496 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+  ```
+
+### 👤 Utilisateur
+
+background job bash-834 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 70); do [ -f reports/corpus-wiki-es-texte-contamination.json ] && break; sleep 20; done; echo "attente $((i*20))s"; ls -la reports/corpus-wiki-{ru,es}-texte-contamination.json 2>/dev/null; for l in ru es; do [ -f reports/corpus-wiki-$l-texte-contamination.json ] && python3 - "$l" <<'PY'
+import json,pathlib,sys
+l=sys.argv[1]; d=json.loads(pathlib.Path(f'reports/corpus-wiki-{l}-texte-contamination.json').read_text())
+print(l, '| lignes', {k:v['taux'] for k,v in d['doublons_entre_splits']['par_split'].items()},
+      '| 8 Ko', {k:v['taux'] for k,v in d['doublons_entre_splits_troncon']['par_split'].items()},
+      '| éval', [(e['fichier'],e['trouvees'],e['fenetres']) for e in d['recouvrement_eval']])
+PY
+done
+echo "=== runs"; ps -eo pid,etime,cmd | grep "corpus_wikipedia_texte.py --langue" | grep -v grep | awk '{print $1,$2,$NF}'; ls reports/corpus-wiki-de-texte.json 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| [^|]+ \\|\", \"| fichiers / JSON de résultats | **393** / **496** |\", s)\ns=re.sub(r\" … [1930 caractères tronqués]`

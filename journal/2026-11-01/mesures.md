@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (36)
+## Commits du jour (37)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -44,6 +44,7 @@
 | 18:54 | `550cd76d` | L — GOLD v0 : 20 PHRASES, POS 0,924, SYNTAGMES 0,356, PRAGMATIQUE 1,0/1,0/0,95/0,9 | `bloc-linguistique.md`, `chantiers.md`, `en-cours.md` (+29) |
 | 19:04 | `53dfd584` | L — GOLD 180 : POS 0,751 (0,924 RÉEL / 0,725 SYNTH), TÊTE 0,560, PRAGMATIQUE 1,0/1,0/0,99/0,89 | `bloc-linguistique.md`, `chantiers.md`, `en-cours.md` (+28) |
 | 19:16 | `c5d38030` | L — ATTACHEMENT : TOP-1 0,294 / TOP-K 0,338 SUR 68 CIBLES (COUVERTURE 0,338), HASARD 0,015 | `bloc-linguistique.md`, `chantiers.md`, `en-cours.md` (+31) |
+| 19:33 | `f5d1256d` | B13 — OPÉRATEURS HÉTÉROGÈNES : 3 GENRES, SONDE 4 APPELS/COÛT 48 VS AVEUGLE 1/33 (11/11) | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+25) |
 
 ## Chiffres du jour
 
@@ -55,8 +56,8 @@
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 27.2 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `b6a672ec-3349-4a4c-9e23-4478aa823170` — Git push to origin remote (début 2026-11-01 13:28, 0.1 h) → [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 26.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 26.8 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 27.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 27.0 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -76,6 +77,7 @@
 - [reports/rapport-n2-propre.md](../../reports/rapport-n2-propre.md)
 - [reports/rapport-pensee-drvf.md](../../reports/rapport-pensee-drvf.md)
 - [reports/rapport-pensee-gold-linguistique.md](../../reports/rapport-pensee-gold-linguistique.md)
+- [reports/rapport-pensee-operateurs.md](../../reports/rapport-pensee-operateurs.md)
 - [reports/rapport-r44-scans.md](../../reports/rapport-r44-scans.md)
 
 <!-- notes -->

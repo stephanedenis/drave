@@ -1,0 +1,55 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "langue": "ru",
+ "nature": "corpus Wikipédia ru (texte intégral)",
+ "source": {
+  "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/ru/ruwiki-latest-pages-articles-multistream.xml.bz2",
+  "octets": 6086042346
+ },
+ "methode": {
+  "debaliseur": "regex : commentaires, refs, tableaux, modèles (30 itérations), fichiers/catégories, liens → libellé, titres de sections, listes",
+  "filtre": "ns 0, sans redirection, texte >= 300 caractères",
+  "deduplication": "articles (BLAKE2b) + tronçons (train), première occurrence gardée",
+  "split": "hash salé (graine 1) de page_id : 5% val, 5% test"
+ },
+ "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/ru/ruwiki-latest-pages-articles-multistream.xml.bz2",
+ "dump_octets": 6086042346,
+ "articles_lus": 6336895,
+ "articles_gardes": 1943725,
+ "articles_rediriges": 2862268,
+ "articles_hors_ns": 1376525,
+ "articles_courts": 154356,
+ "articles_doublons": 21,
+ "caracteres_gardes": 6257535062,
+ "troncons": 2187402,
+ "troncons_doublons": 50,
+ "octets": {
+  "train": 10056093945,
+  "val": 558798185,
+  "test": 549393375
+ },
+ "articles": {
+  "train": 1750121,
+  "val": 97023,
+  "test": 96581
+ },
+ "residus": {
+  "modele": 0,
+  "lien": 52,
+  "balise": 0,
+  "lignes_echantillon": 20000
+ },
+ "echantillon": "---\nЛитва\nЛитва́ ( ), официальное название — Лито́вская Респу́блика () — государство, расположенное в Северной Европе. Площадь — км². Протяжённость с севера на юг — 280 км, а с запада на восток — 370 км. Население составляет человек (октябрь, 2024). По территории и населению является самым большим балтийским государством. Занимает 143-е место в мире по численности населения и 121-е по территории.\n\nСтрана имеет выход к Балтийскому морю и расположена на его восточном побережье. Её береговая линия составляет всего 99 км (наименьший показатель среди государств Балтии). На севере граничит с Латвией, на юго-в\n---\nРоссия\nРосси́я, или Росси́йская Федера́ция (сокр. РФ), — государство в Восточной Европе и Северной Азии. Россия — крупнейшее государство в мире, её территория в международно признанных границах составляет . Население страны вместе с аннексированным Крымом, захваченным Россией в 2014 году и международно признаваемым территорией Украины, составляет человек (; 9-е место в мире). Столица — Москва. Государственный язык на всей территории страны — русский, в ряде регионов России также установлены свои государственные и официальные языки. Денежная единица — российский рубль.\n\nРоссия — многонациональное госу",
+ "mots_estimes": 1009279848,
+ "note_mots": "caractères / 6,2 (estimation ; le japonais et le chinois se comptent en caractères)",
+ "sha256_train": "c65119b3e72eab924aa54b7d522a4cdb38f94c3d7633c528e4426d4856d3cebe",
+ "sha256_val": "171fd1bf9969047c0a4b1785de48277fd2eda8b9237717ba789abbe401c4e59a",
+ "sha256_test": "65853508613b66be3bc881238dcb1e493d9ce9c34d0e2e38a0967cdf0b083653",
+ "licence": "Wikipédia : CC-BY-SA 4.0 (et GFDL) — attribution et partage à l'identique ; corpus local",
+ "limites": [
+  "débaliseur regex : infobox/dates de modèles perdues, formules <math> retirées, tableaux perdus",
+  "les redirections et les espaces de noms autres que 0 sont exclus",
+  "déduplication exacte seulement (quasi-doublons non détectés)"
+ ]
+}
