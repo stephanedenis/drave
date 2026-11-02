@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-pensee-reponse-dirigee.md`](rapport-pensee-reponse-dirigee.md) | **B13** — la réponse dirigée : 19/19, la première réponse juste, **129/129** |
+| [`rapport-pensee-negatives.md`](rapport-pensee-negatives.md) | **B13** — les questions négatives : 19/29, la règle ne s'inverse pas, **130/130** |
 | [`rapport-pensee-miroir-resume.md`](rapport-pensee-miroir-resume.md) | **B13** — la restitution sémantique : résumé 0,7834 / 0,7472, **122/122** |
 | [`rapport-pensee-miroir.md`](rapport-pensee-miroir.md) | **B13** — le miroir entrée/sortie : surface 1,0, mots 0,2095, **119/119** |
 | [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |

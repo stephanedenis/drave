@@ -31442,3 +31442,41 @@ patch partiel
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nold='''def t126_dirigee() -> tuple[bool, str]:\n    \"\"\"La réponse dirigée : 19/19 (17/19 avant la correction de langue).\"\"\"\n    fro … [1089 caractères tronqués]`
+
+  ```
+T126 corrigé
+  ✅ T126 réponse dirigée   dirigée : 19/19 (affirmatives)
+  ✅ T127 négatives         négatives : 19/29 (19/19 en affirmatif)
+  130/130 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/pensee/autotest.py reports/rapport-pensee-negatives.md reports/pensee-negatives.json reports/README.md docs/imp … [570 caractères tronqués]`
+
+  ```
+mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 1
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 2
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 3
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 4
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 5
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 6
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 7
+ac8f334f ÉTAT — 119 DOCS, T0 SOUS 4 000, LE GLOSSAIRE (335 ENTRÉES) ET DOCWATCH SONT COMMITTÉS
+lun 02 nov 2026 12:53:15 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-02, 13 h 58 HNE\", t)\nt=t.replace(\"la **règl … [1162 caractères tronqués]`

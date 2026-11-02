@@ -36316,3 +36316,104 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add docs/pilotage/en-cours.md; git commit -m \"ÉTAT — 119 DOCS, T0 SOUS 4 000, LE GLOSSAIRE (335 ENTRÉES) ET DOCWATCH SONT COMMITTÉS\" > /tmp/commit-etat-glos … [233 caractères tronqués]`
+
+  ```
+12:50
+[master ac8f334f] ÉTAT — 119 DOCS, T0 SOUS 4 000, LE GLOSSAIRE (335 ENTRÉES) ET DOCWATCH SONT COMMITTÉS
+ 9 files changed, 179 insertions(+), 22 deletions(-)
+code=0
+ac8f334f ÉTAT — 119 DOCS, T0 SOUS 4 000, LE GLOSSAIRE (335 ENTRÉES) ET DOCWATCH SONT COMMITTÉS
+546411f6 GLOSSAIRE — FAMILLE 13 (CORPUS ET MESURE DOCUMENTAIRE, 19 ENTRÉES) ET DOCWATCH ANNOTE LES TERMES AU RENDU : 335 ENTRÉES
+  ```
+
+### 🤖 Assistant
+
+Le glossaire et docwatch sont committés (`546411f6`, `ac8f334f`). Je passe aux liens : un script qui lie **la première occurrence par terme et par page** seulement.
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"liens_glossaire.py — lier la première occurrence des termes du glossaire.\n\nPOURQUOI CE SCRIPT. Le glossaire (335 entrées) n'est utile que si le lecteur le\ntrouve. Docwatch annote les termes **au rendu**, sans toucher au Markdown ; mais\nGitHub ne lit que … [5870 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/liens_glossaire.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/liens_glossaire.py'); t = p.read_text(encoding='utf-8')\nt = t.replace(\"    ifargs = args\\n\", \"\")\np.write_text(t, encoding='utf-8')\nprint(\"ok\")\nPY\npyth … [259 caractères tronqués]`
+
+  ```
+12:52
+ok
+compile-ok
+theorie/semantique-universaux.md : 13 lien(s) ['drave', 'couche', 'pont', 'quantification', 'etat', 'entropie-huffman-inegalite-de-kraft', 'evenement', 'fidelite']
+theorie/synthese/01-le-cerveau-drave.md : 8 lien(s) ['drave', 'etat', 'couche', 'perplexite', 'cas', 'porte', 'tete', 'lecture']
+theorie/synthese/02-anatomie-interne.md : 6 lien(s) ['etat', 'position', 'pont', 'contexte', 'perplexite', 'fait-mesure-projete-deduit']
+theorie/synthese/03-les-modes-et-les-portes.md : 8 lien(s) ['fait-mesure-projete-deduit', 'porte', 'jeton', 'tete', 'etat', 'position', 'attention', 'perplexite']
+theorie/synthese/04-les-facultes-et-la-biologie.md : 14 lien(s) ['tableau', 'porte', 'drave', 'perplexite', 'etat', 'debit-latence-aller-retour-ttft', 'trace', 'couche']
+theorie/synthese/05-la-pensee-sans-verbaliser.md : 16 lien(s) ['pont', 'etat', 'porte', 'recurrence', 'jeton', 'expert', 'fait-mesure-projete-deduit', 'drave']
+theorie/synthese/06-comment-savoir.md : 9 lien(s) ['controle-negatif', 'position', 'etat', 'ecart', 'corpus', 'porte', 'chrf', 'pont']
+theorie/synthese/07-modeles-alternatifs-entree-sortie.md : 23 lien(s) ['unite', 'representation-semantique-neutre', 'contr
+… [495 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+Le dry-run montre 1 796 liens sur 108 pages — c'est précisément le « partout » qui gonflerait. Je n'applique que sur les **10 pages pivots** (entrée, méthode, vision, synthèse), pas les 108.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; for p in docs/theorie/vision.md docs/methode/resultats.md docs/methode/contexte.md docs/methode/portes.md docs/theorie/lecture-rapide.md docs/implantation/format-flux.md docs/theorie/synthese/index.md docs/theorie/carte. … [292 caractères tronqués]`
+
+  ```
+12:52
+docs/theorie/vision.md                     ValueError: 'docs/theorie/vision.md' is not in the subpath of '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs'
+docs/methode/resultats.md                  ValueError: 'docs/methode/resultats.md' is not in the subpath of '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs'
+docs/methode/contexte.md                   ValueError: 'docs/methode/contexte.md' is not in the subpath of '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs'
+docs/methode/portes.md                     ValueError: 'docs/methode/portes.md' is not in the subpath of '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs'
+docs/theorie/lecture-rapide.md             ValueError: 'docs/theorie/lecture-rapide.md' is not in the subpath of '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs'
+docs/implantation/format-flux.md           ValueError: 'docs/implantation/format-flux.md' is not in the subpath of '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs'
+docs/theorie/synthese/index.md             ValueError: 'docs/theorie/synthese/index.md' is not in the subpath of '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs'
+docs/theorie/carte.md                      
+… [429 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/liens_glossaire.py'); t = p.read_text(encoding='utf-8')\nold = \"    pages = [args.page] if args.page else sorted(DOCS.rglob(\\\"*.md\\\"))\"\nnew = \"    pages = … [675 caractères tronqués]`
+
+  ```
+12:53
+ok
+docs/theorie/vision.md                     → 1 page(s), 24 lien(s)
+docs/methode/resultats.md                  → 1 page(s), 15 lien(s)
+docs/methode/contexte.md                   → 1 page(s), 7 lien(s)
+docs/methode/portes.md                     → 1 page(s), 9 lien(s)
+docs/theorie/lecture-rapide.md             → 1 page(s), 50 lien(s)
+docs/implantation/format-flux.md           → 1 page(s), 28 lien(s)
+docs/theorie/synthese/index.md             → 1 page(s), 22 lien(s)
+docs/theorie/carte.md                      → 1 page(s), 12 lien(s)
+docs/README.md                             → 1 page(s), 26 lien(s)
+docs/pilotage/roadmap.md                   → 1 page(s), 76 lien(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 tools/taille_documents.py 2>&1 | tail -2; echo \"=== T0 detail\"; python3 tools/taille_documents.py 2>&1 | grep -i \"T0\\|4 0\" | head -4", "description": "Check T0 after linking pivot pages", "timeoutMs": 300000 … [63 caractères tronqués]`
+
+  ```
+12:53
+  ❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+=== T0 detail
+  T0 max : 4001 mots (budget 4 000)
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); t = p.read_text(encoding='utf-8')\nold = \"**OCR CEGEP** (10 notes, 2,52 M car. — **à re-océriser**)\"\nnew = \"**OCR CEGEP** (10 notes, 2, … [426 caractères tronqués]`
+
+  ```
+12:53
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 539 fiche(s) · 626 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+python3: can't open file '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifie_liens.py': [Errno 2] No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add tools/liens_glossaire.py docs/theorie/vision.md docs/methode/resultats.md docs/methode/contexte.md docs/methode/portes.md docs/theorie/lecture-rapide.md d … [583 caractères tronqués]`

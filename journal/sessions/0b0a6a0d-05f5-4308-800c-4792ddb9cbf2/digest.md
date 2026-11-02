@@ -20733,3 +20733,18 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1209", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/mix-60k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Check the mix training"}`
+
+  ```
+12:54
+pas 27600 · perte 1.5659 · PPL val 3.815 · 1479 s
+0, 1322 MiB, 96 %
+1, 1 MiB, 0 %
+  ```
+

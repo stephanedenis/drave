@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 44.4 h |
+| Durée | 44.6 h |
 | Tours | 20 |
-| Messages | 1684 |
-| Appels d'outils | 1545 |
+| Messages | 1686 |
+| Appels d'outils | 1547 |
 | Fichiers touchés | 11 |
-| Commandes | 1209 |
+| Commandes | 1211 |
 | Sous-agents | 0 |
 | Commits | 85 |
 | Compactages de contexte | 2 |
@@ -1062,7 +1062,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 
 ### Tour 20 — mets le dossier de pilotage à jour et continue
 
-*110 appels d'outils.* Actions notables :
+*112 appels d'outils.* Actions notables :
 
 - bash — Read the state's N2 section and timestamp
 - read
@@ -1144,7 +1144,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1169 autres
+- … et 1171 autres
 
 ## 4. Mesures et résultats marquants
 

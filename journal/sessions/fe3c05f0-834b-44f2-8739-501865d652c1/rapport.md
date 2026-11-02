@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 44.2 h |
+| Durée | 44.3 h |
 | Tours | 388 |
-| Messages | 2391 |
-| Appels d'outils | 1603 |
-| Fichiers touchés | 28 |
-| Commandes | 1421 |
+| Messages | 2398 |
+| Appels d'outils | 1610 |
+| Fichiers touchés | 29 |
+| Commandes | 1427 |
 | Sous-agents | 0 |
-| Commits | 97 |
+| Commits | 98 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -9201,7 +9201,7 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 
 ### Tour 388 — fais une passe dans docs pour enrichir le glossaire et une autre passe ajouter les hyperliens vers le glossaire partout  … [228 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*39 appels d'outils.* Actions notables :
 
 - bash — Inspect glossary, docwatch and existing links
 - read
@@ -9217,11 +9217,11 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 - bash — Add CSS and glossary tests, run them
 - bash — Run glossary tests with src on path
 - bash — Regenerate glossary index and verify cards
-- … et 15 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
-Tests docwatch ✅ (4/4) — le hook glossaire fonctionne. Je régénère `index.json` et je vérifie les cartes
+Le dry-run montre 1 796 liens sur 108 pages — c'est précisément le « partout » qui gonflerait. Je n'applique que sur les **10 pages pivots** (entrée, méthode, vision, synthèse), pas les 108.
 
 ## 3. Travail accompli
 
@@ -9257,6 +9257,7 @@ Tests docwatch ✅ (4/4) — le hook glossaire fonctionne. Je régénère `index
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/finaliser_ocr.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch/src/docwatch/glossaire.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/glossaire/13-le-corpus-et-la-mesure-documentaire.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/liens_glossaire.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -9300,7 +9301,7 @@ Tests docwatch ✅ (4/4) — le hook glossaire fonctionne. Je régénère `index
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1381 autres
+- … et 1387 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9545,4 +9546,5 @@ Tests docwatch ✅ (4/4) — le hook glossaire fonctionne. Je régénère `index
 - DONNÉES — LE RUN DE REPRISE A ÉCRASÉ LE CORPUS CEGEP : LES 2 ALGORITHMS RESTENT, LES 10 NOTES SONT À RE-OCÉRISER (LEÇON : SORTIE SÉPARÉE)" > /tmp/commit-lecon.l
 - GLOSSAIRE — FAMILLE 13 (CORPUS ET MESURE DOCUMENTAIRE, 19 ENTRÉES) ET DOCWATCH ANNOTE LES TERMES AU RENDU : 335 ENTRÉES" > /tmp/commit-glossaire.log 2>&1; code=
 - ÉTAT — 119 DOCS, T0 SOUS 4 000, LE GLOSSAIRE (335 ENTRÉES) ET DOCWATCH SONT COMMITTÉS" > /tmp/commit-etat-gloss.log 2>&1; code=$?; tail -2 /tmp/commit-etat-glos
+- GLOSSAIRE — LES 10 PAGES PIVOTS LIENT LA PREMIÈRE OCCURRENCE DES TERMES (269 LIENS) ; LE SCRIPT LIE PAR PAGE, PAS « PARTOUT »" > /tmp/commit-liens.log 2>&1; cod
 

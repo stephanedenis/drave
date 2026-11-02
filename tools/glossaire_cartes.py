@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """glossaire_cartes.py — une fiche par entrée de glossaire, un index, un manifeste.
 
-Le glossaire est découpé en **13 familles** (les définitions longues). Ce script en extrait
+Le glossaire est découpé en **12 familles** (les définitions longues). Ce script en extrait
 les **entrées** et génère :
 
   - `docs/glossaire/entrees/<slug>.md` : une **fiche courte** (titre, résumé, famille,
@@ -41,7 +41,6 @@ FAMILLES = [
     "07-mesure-qualite-et-methode-experimentale.md",
     "10-le-pont-linguistico-semantique-le-vocabu.md",
     "12-la-lecture-le-document-et-ses-mesures.md",
-    "13-le-corpus-et-la-mesure-documentaire.md",
 ]
 ANNEXES = [
     ("8. Points relevés", "08-points-releves-non-corriges.md"),

@@ -1635,8 +1635,8 @@ def t107_gold_complet() -> tuple[bool, str]:
     phrases = charger()
     h = bl.Heuristique()
     r = evaluer_bloc("h", h, phrases)
-    return (len(phrases) == 587
-            and abs(r["pos"]["exactitude"] - 0.7502) < 0.001), (
+    return (len(phrases) == 597
+            and abs(r["pos"]["exactitude"] - 0.7444) < 0.001), (
         f"gold complet : {len(phrases)} phrases, POS {round(r['pos']['exactitude'], 4)}, "
         f"tête {round(r['syntagme']['tete']['f1'], 4)}")
 
@@ -1681,7 +1681,7 @@ def t110_segmenteur() -> tuple[bool, str]:
     f2 = round(r2["syntagme"]["f1"], 4)
     t1 = round(r1["syntagme"]["tete"]["f1"], 4)
     t2 = round(r2["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.1722) < 0.001 and abs(f2 - 0.1425) < 0.001
+    return (abs(f1 - 0.1696) < 0.001 and abs(f2 - 0.1407) < 0.001
             and t1 < t2), (
         f"segmenteur : S F1 {f1} tête {t1} ; chunker F1 {f2} tête {t2}")
 
@@ -1707,7 +1707,7 @@ def t111_hybride_seg() -> tuple[bool, str]:
             pred.add((t, cand[0] if cand else d))
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn); f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.3732) < 0.001, (
+    return abs(f1 - 0.3678) < 0.001, (
         f"hybride : tête F1 {f1} (S 0,3552, chunker 0,4707)")
 
 
@@ -1728,7 +1728,7 @@ def t112_union() -> tuple[bool, str]:
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.2005) < 0.001, f"union : segments F1 {f1} (S 0,1722)"
+    return abs(f1 - 0.1979) < 0.001, f"union : segments F1 {f1} (S 0,1696)"
 
 
 def t113_union_defaut() -> tuple[bool, str]:
@@ -1740,7 +1740,7 @@ def t113_union_defaut() -> tuple[bool, str]:
     r = evaluer_bloc("h", h, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return abs(f1 - 0.2005) < 0.001 and abs(tete - 0.4662) < 0.001, (
+    return abs(f1 - 0.1979) < 0.001 and abs(tete - 0.4601) < 0.001, (
         f"union par défaut : F1 {f1}, tête {tete}")
 
 
@@ -1754,8 +1754,8 @@ def t114_cascade_union() -> tuple[bool, str]:
     r = evaluer_bloc("c", cascade, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.2170) < 0.001 and abs(tete - 0.4410) < 0.001
-            and cascade.appels_neuronal == 587), (
+    return (abs(f1 - 0.2139) < 0.001 and abs(tete - 0.4347) < 0.001
+            and cascade.appels_neuronal == 597), (
         f"cascade : F1 {f1}, tête {tete}, {cascade.appels_neuronal} appels")
 
 
@@ -1780,7 +1780,7 @@ def t115_tete_cascade() -> tuple[bool, str]:
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.419) < 0.001, (
+    return abs(f1 - 0.413) < 0.001, (
         f"tête cascade corrigée : {f1} (cascade 0,441 ; union 0,466)")
 
 
@@ -1791,7 +1791,7 @@ def t116_miroir() -> tuple[bool, str]:
     from ..tests.linguistique.miroir import mesurer
     ph = charger()
     r = mesurer(ph, bl.Heuristique())
-    return abs(r["fidelite"] - 0.201) < 0.001, (
+    return abs(r["fidelite"] - 0.1977) < 0.001, (
         f"miroir : surface 1,0, sortie POS {r['fidelite']} (fluidité {r['fluidite']})")
 
 
@@ -1804,7 +1804,7 @@ def t117_miroir_pos() -> tuple[bool, str]:
     h = bl.Heuristique()
     fid = sum(fidelite_pos(h.analyser(p["texte"], p["langue"]), p["texte"])
               for p in ph) / max(1, len(ph))
-    return abs(fid - 0.201) < 0.001, f"sortie POS : fidélité {round(fid, 4)}"
+    return abs(fid - 0.1977) < 0.001, f"sortie POS : fidélité {round(fid, 4)}"
 
 
 def t118_miroir_espaces() -> tuple[bool, str]:
@@ -1844,7 +1844,7 @@ def t120_miroir_reponse() -> tuple[bool, str]:
     h = bl.Heuristique()
     q = [p for p in ph if "?" in p["texte"]]
     fr = sum(fidelite_reponse(h.analyser(p["texte"], p["langue"])) for p in q) / max(1, len(q))
-    return len(q) == 19 and abs(fr - 1.0) < 1e-9, (
+    return len(q) == 29 and abs(fr - 1.0) < 1e-9, (
         f"réponse : {len(q)} questions, taux {round(fr, 4)}")
 
 
@@ -1854,7 +1854,7 @@ def t121_reponse_contenu() -> tuple[bool, str]:
     from ..tests.linguistique.miroir import fidelite_contenu
     ph = charger()
     r = fidelite_contenu(ph)
-    return r["questions"] == 19 and r["repondues"] == 0, (
+    return r["questions"] == 29 and r["repondues"] == 0, (
         f"réponse au contenu : {r['repondues']}/{r['questions']} (frontière)")
 
 
@@ -1863,7 +1863,7 @@ def t122_extraction() -> tuple[bool, str]:
     from ..tests.linguistique.evaluer_gold import charger
     from ..tests.linguistique.miroir import fidelite_extraction
     r = fidelite_extraction(charger())
-    return r["questions"] == 19 and r["trouvees"] == 19, (
+    return r["questions"] == 29 and r["trouvees"] == 29, (
         f"extraction : {r['trouvees']}/{r['questions']} (le GN, pas la réponse)")
 
 
@@ -1873,7 +1873,7 @@ def t123_juge() -> tuple[bool, str]:
     from ..tests.linguistique.juge import couverture, juge
     ph = charger()
     c = couverture(ph)
-    return (c["questions"] == 19 and c["avec_reference"] == 19
+    return (c["questions"] == 29 and c["avec_reference"] == 29
             and juge(None, None) == 0.0 and juge("oui", "oui") == 1.0
             and juge("oui", "non") == 0.0), (
         f"juge : couverture {c['avec_reference']}/{c['questions']}, le vide vaut 0.0")
@@ -1884,7 +1884,7 @@ def t124_reponses() -> tuple[bool, str]:
     from ..tests.linguistique.evaluer_gold import charger
     from ..tests.linguistique.juge import couverture
     c = couverture(charger())
-    return c["questions"] == 19 and c["avec_reference"] == 19, (
+    return c["questions"] == 29 and c["avec_reference"] == 29, (
         f"références : {c['avec_reference']}/{c['questions']} (couverture {c['taux']})")
 
 
@@ -1895,18 +1895,29 @@ def t125_juge_bloc() -> tuple[bool, str]:
     ph = charger()
     b = juge_bloc(ph)
     e = juge_extraction(ph)
-    return (b["questions"] == 19 and b["justes"] == 0
+    return (b["questions"] == 29 and b["justes"] == 0
             and e["justes"] == 0), (
         f"juge : bloc {b['justes']}/19, extraction {e['justes']}/19")
 
 
 def t126_dirigee() -> tuple[bool, str]:
-    """La réponse dirigée : 19/19 (17/19 avant la correction de langue)."""
+    """La réponse dirigée : 19/19 sur les 19 questions affirmatives."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_dirigee
+    ph = charger()
+    q = [p for p in ph if "?" in p["texte"] and int(p["id"][1:]) < 408]
+    r = fidelite_dirigee(q)
+    return r["questions"] == 19 and abs(r["taux"] - 1.0) < 1e-9, (
+        f"dirigée : {r['justes']:.0f}/{r['questions']} (affirmatives)")
+
+
+def t127_negatives() -> tuple[bool, str]:
+    """Les questions négatives : 19/29, la règle ne s'inverse pas."""
     from ..tests.linguistique.evaluer_gold import charger
     from ..tests.linguistique.miroir import fidelite_dirigee
     r = fidelite_dirigee(charger())
-    return r["questions"] == 19 and abs(r["taux"] - 1.0) < 1e-9, (
-        f"dirigée : {r['justes']:.0f}/{r['questions']} (17/19 sans la langue)")
+    return r["questions"] == 29 and r["justes"] == 19, (
+        f"négatives : {r['justes']:.0f}/{r['questions']} (19/19 en affirmatif)")
 
 
 def main() -> int:
@@ -2034,7 +2045,8 @@ def main() -> int:
               ("T123 juge", t123_juge()),
               ("T124 réponses", t124_reponses()),
               ("T125 juge contre le bloc", t125_juge_bloc()),
-              ("T126 réponse dirigée", t126_dirigee())]
+              ("T126 réponse dirigée", t126_dirigee()),
+              ("T127 négatives", t127_negatives())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

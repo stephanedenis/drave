@@ -103,7 +103,7 @@ check-list de reprise ; ils emploient le même vocabulaire que ce glossaire.
 ---
 
 
-## Les treize familles
+## Les onze familles
 
 Le glossaire fait **2 276 lignes** : il est découpé en **onze familles**, chacune atteignable
 directement. Les liens vers ce fichier continuent de fonctionner.
@@ -121,9 +121,8 @@ directement. Les liens vers ce fichier continuent de fonctionner.
 | **9.** Sources externes citées | [09-sources-externes-citees.md](glossaire/09-sources-externes-citees.md) | 79 |
 | **10.** Le pont linguistico-sémantique — le vocabulaire de l'émulation | [10-le-pont-linguistico-semantique-le-vocabu.md](glossaire/10-le-pont-linguistico-semantique-le-vocabu.md) | 514 |
 | **11.** Sources externes ajoutées par le §10 | [11-sources-externes-ajoutees-par-le-10.md](glossaire/11-sources-externes-ajoutees-par-le-10.md) | 50 |
-| **13.** Le corpus et la mesure documentaire | [13-le-corpus-et-la-mesure-documentaire.md](glossaire/13-le-corpus-et-la-mesure-documentaire.md) | 41 |
 
 > **Les fiches par entrée.** L'index complet est [`glossaire/README.md`](glossaire/README.md) :
-> **335 entrées**, une **fiche courte** par entrée dans [`glossaire/entrees/`](glossaire/entrees/), et
+> **316 entrées**, une **fiche courte** par entrée dans [`glossaire/entrees/`](glossaire/entrees/), et
 > un manifeste [`glossaire/index.json`](glossaire/index.json) pour docwatch. Les définitions complètes
 > restent dans les 12 familles ci-dessus ; une fiche est une **carte**, pas une copie.

@@ -29397,6 +29397,675 @@
     }
    },
    "source": "reel"
+  },
+  {
+   "id": "r408",
+   "langue": "fr",
+   "texte": "Ne viens-tu pas demain ?",
+   "mots": [
+    {
+     "texte": "Ne",
+     "pos": "ADV",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "viens",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "tu",
+     "pos": "PRON",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 12,
+     "fin": 15
+    },
+    {
+     "texte": "demain",
+     "pos": "ADV",
+     "debut": 16,
+     "fin": 22
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 23,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "viens",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "GN",
+     "texte": "tu",
+     "role": "agent",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 12,
+     "fin": 15
+    },
+    {
+     "type": "ADV",
+     "texte": "demain",
+     "role": "temps",
+     "debut": 16,
+     "fin": 22
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "si"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r409",
+   "langue": "fr",
+   "texte": "Ne mange-t-il pas ?",
+   "mots": [
+    {
+     "texte": "Ne",
+     "pos": "ADV",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "mange",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "t",
+     "pos": "PRON",
+     "debut": 9,
+     "fin": 10
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 13
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 18,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "mange",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 11,
+     "fin": 13
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 14,
+     "fin": 17
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "si"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r410",
+   "langue": "fr",
+   "texte": "Ne dort-elle pas ?",
+   "mots": [
+    {
+     "texte": "Ne",
+     "pos": "ADV",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "dort",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 17,
+     "fin": 18
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "dort",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 13,
+     "fin": 16
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "si"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r411",
+   "langue": "fr",
+   "texte": "Ne partent-ils pas ?",
+   "mots": [
+    {
+     "texte": "Ne",
+     "pos": "ADV",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "partent",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 15,
+     "fin": 18
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 19,
+     "fin": 20
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "partent",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "type": "GN",
+     "texte": "ils",
+     "role": "agent",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 15,
+     "fin": 18
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "si"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r412",
+   "langue": "fr",
+   "texte": "Ne lis-tu pas ?",
+   "mots": [
+    {
+     "texte": "Ne",
+     "pos": "ADV",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "lis",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 6
+    },
+    {
+     "texte": "tu",
+     "pos": "PRON",
+     "debut": 7,
+     "fin": 9
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 14,
+     "fin": 15
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "lis",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 6
+    },
+    {
+     "type": "GN",
+     "texte": "tu",
+     "role": "agent",
+     "debut": 7,
+     "fin": 9
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 10,
+     "fin": 13
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "si"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r413",
+   "langue": "fr",
+   "texte": "Ne parle-t-elle pas ?",
+   "mots": [
+    {
+     "texte": "Ne",
+     "pos": "ADV",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "parle",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 15
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 20,
+     "fin": 21
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "parle",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 11,
+     "fin": 15
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 16,
+     "fin": 19
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "si"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r414",
+   "langue": "fr",
+   "texte": "Ne jouent-ils pas ?",
+   "mots": [
+    {
+     "texte": "Ne",
+     "pos": "ADV",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "jouent",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 18,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "jouent",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "ils",
+     "role": "agent",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 14,
+     "fin": 17
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "si"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r415",
+   "langue": "fr",
+   "texte": "Ne chante-t-il pas ?",
+   "mots": [
+    {
+     "texte": "Ne",
+     "pos": "ADV",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chante",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 12,
+     "fin": 14
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 15,
+     "fin": 18
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 19,
+     "fin": 20
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "chante",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 12,
+     "fin": 14
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 15,
+     "fin": 18
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "si"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r416",
+   "langue": "fr",
+   "texte": "Ne cours-tu pas ?",
+   "mots": [
+    {
+     "texte": "Ne",
+     "pos": "ADV",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "cours",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "tu",
+     "pos": "PRON",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 12,
+     "fin": 15
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 16,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "cours",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "GN",
+     "texte": "tu",
+     "role": "agent",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 12,
+     "fin": 15
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "si"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r417",
+   "langue": "fr",
+   "texte": "Ne rit-elle pas ?",
+   "mots": [
+    {
+     "texte": "Ne",
+     "pos": "ADV",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "rit",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 6
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 7,
+     "fin": 11
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 12,
+     "fin": 15
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 16,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "rit",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 6
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 7,
+     "fin": 11
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 12,
+     "fin": 15
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "si"
+   },
+   "source": "reel"
   }
  ]
 }
