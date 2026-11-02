@@ -18292,3 +18292,13 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1086", "timeout_ms": 900000, "wait": true}`
+
+  ```
+05:41
+work/n2j/base-34m-canal-g2.pt
+OK
+{"fichier": "base-34m-canal-g2.pt", "L128_canal": 3.5369, "L128_sans": 4.4231, "L256_canal": 3.5016, "L256_sans": 4.3456, "L512_canal": 3.6705, "L512_sans": 4.4702, "mélange_propre": 3.5177, "mélange_milieu": 22.9513, "mélange_tout": 39.4441}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-n2-canal-34m.md'); s = p.read_text()\ns = s.replace(\"\"\"> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : le canal de structure, qui\n> valait ** … [2362 caractères tronqués]`

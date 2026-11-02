@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 37.0 h |
-| Tours | 111 |
-| Messages | 1408 |
-| Appels d'outils | 1233 |
+| Tours | 112 |
+| Messages | 1414 |
+| Appels d'outils | 1237 |
 | Fichiers touchés | 25 |
-| Commandes | 1003 |
+| Commandes | 1007 |
 | Sous-agents | 2 |
 | Commits | 144 |
 | Compactages de contexte | 4 |
@@ -253,6 +253,8 @@
 **Tour 110** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 111** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 112** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5918,6 +5920,53 @@ Le goal `goal-7beacaeb` reste actif ; le prochain rou
 - bash — Committer l'anaphore corrigée
 - job_output
 
+**Synthèse produite :**
+
+⏵ Anaphore corrigée : 12/12 en ignorant les PP ; 97/97
+
+Le round 98 du goal est livré : la règle « dernier nom » est corrigée — les noms des **groupes prépositionnels** sont ignorés, l'anaphore passe de **10/12 à 12/12**. Commit **`cbfcdb86`**.
+
+\## La correction
+
+`_dans_pp(mots, i)` : un nom est « dans un PP » s'il est précédé d'une `PREP` ou d'un `DET` lui-même précédé d'une `PREP`. `resoudre(..., ignorer_pp=True)` saute ces noms.
+
+| règle | liens | justes | taux | échecs |
+|---|---:|---:|---:|---|
+| naïve (T92/T93) | 12 | 10 | 0,8333 | r324, r328 |
+| **corrigée (T94)** | **12** | **12** | **1,00** | — |
+
+**Ce que ça dit** :
+
+- **La correction est nette** : les deux échecs (le PP locatif) disparaissent ; les 10 cas déjà justes le restent.
+- **La règle reste naïve** : elle ne résout pas les chaînes longues, les pronoms objets (`le`, `la`, `les`), l'ellipse ; elle ne fait que retirer le piège identifié.
+- **La marge est faible** (12 liens) : le 12/12 n'est pas une preuve, c'est un **contrôle**.
+- **La négative reste** : la règle naïve (T93) échoue 2/12 — elle est conservée comme porte.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-corrige.md`](../../reports/rapport-pensee-anaphore-corrige.md) ; JSON [`pensee-anaphore-corrige.json`](../../reports/pensee-anaphore-corrige.json) ; T94 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **97/97 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **503 fiches / 590 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Les pronoms objets** (`le`, `la`, `les`) : une autre règle.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **pronoms objets** — une autre règle d'anaphore.
+
+### Tour 112 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Ajouter 8 phrases à pronoms objets et mesurer
+- bash — Ajouter les pronoms objets et mesurer
+- bash — Écrire la fiche des pronoms objets
+- bash — Trim README et passer les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5997,7 +6046,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain rou
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 963 autres
+- … et 967 autres
 
 ## 4. Mesures et résultats marquants
 

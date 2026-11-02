@@ -33963,3 +33963,16 @@ S          09:08
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; grep -c \"✅\\|❌\" /tmp/portes-final.log 2>/dev/null; tail -4 /tmp/portes-final.log; ps -p 2459980 -o stat,etime= 2>/dev/null || echo \"portes finies\"", "description": "Wait 5 min then check gates", "timeoutMs … [72 caractères tronqués]`
+
+  ```
+05:41
+15
+  porte-c4-retard        ✅                          28 s  PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne
+  porte-cerveau          ✅                           8 s    ✅ porte tenue (quatre facultés composent, chacune reste active, le tout est déterministe)
+  porte-consolidation    ✅                          73 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+  porte-coupe            ✅                         137 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+STAT            
+S          14:17
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; grep -c \"✅\\|❌\" /tmp/portes-final.log 2>/dev/null; tail -4 /tmp/portes-final.log; ps -p 2459980 -o stat,etime= 2>/dev/null || echo \"portes finies\"", "description": "Wait 5 min then check gates", "timeoutMs … [72 caractères tronqués]`

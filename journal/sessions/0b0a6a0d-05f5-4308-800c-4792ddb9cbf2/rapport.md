@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 37.3 h |
+| Durée | 37.4 h |
 | Tours | 18 |
-| Messages | 1480 |
-| Appels d'outils | 1371 |
+| Messages | 1481 |
+| Appels d'outils | 1372 |
 | Fichiers touchés | 11 |
-| Commandes | 1086 |
+| Commandes | 1087 |
 | Sous-agents | 0 |
-| Commits | 76 |
+| Commits | 77 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*405 appels d'outils.* Actions notables :
+*406 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 270 autres
+- … et 271 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1046 autres
+- … et 1047 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1253,4 +1253,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - ROADMAP — LE CANAL REVIT À 34,3 M (N2.z) : 3,51 EN DOMAINE, 3,66 À 512  Le canal est tranché à 11,47 M (N2.x) mais il revit à 34,3 M : N2.z donne le meilleur mo
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
 - JOURNAL — LE MEILLEUR MODÈLE DE LA NUIT : LE CANAL À 34,3 M (3,51 / 3,66 À 512)  Le 34,3 M avec canal de structure est le meilleur modèle de la nuit (3,5131 en 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-n2-canal-34m.md'); s = p.read_text() s =
 
