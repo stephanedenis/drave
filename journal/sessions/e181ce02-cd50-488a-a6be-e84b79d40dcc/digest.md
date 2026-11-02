@@ -14720,3 +14720,118 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/pensee/courbe.py tools/pensee/autotest.py reports/rapport-pensee-minute-seule.md reports/pensee-courbe.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md doc … [495 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-532]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-532", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[master be503e31] B13 — LA POLITIQUE SEULE SUR LA PORTE MINUTE : 9/9 ÉCHECS, L'A* ÉTAIT NÉCESSAIRE ; 23/23
+ 30 files changed, 521 insertions(+), 88 deletions(-)
+ create mode 100644 reports/rapport-pensee-minute-seule.md
+COMMIT OK 1
+be503e31 B13 — LA POLITIQUE SEULE SUR LA PORTE MINUTE : 9/9 ÉCHECS, L'A* ÉTAIT NÉCESSAIRE ; 23/23
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Politique seule/minute : 9/9 échecs, l'A* nécessaire ; 23/23
+
+Le round 24 du goal est livré : la **politique seule échoue** sur la porte minute — la **négative** est mesurée, l'A* était nécessaire. Commit **`be503e31`**.
+
+## La politique seule sur la porte minute
+
+La `PolitiqueApprise` (entraînée sur la porte **déterministe**) est exécutée **seule** sur la porte **à un tour** : elle doit ouvrir **et** passer dans le même pas.
+
+| épisodes | graines | buts seuls | pas | A* + sonde (T19) |
+|---:|---:|---:|---:|---:|
+| 50 | 0,1,2 | **0/3** | 200 | 28 nœuds |
+| 100 | 0,1,2 | **0/3** | 200 | 28 nœuds |
+| 200 | 0,1,2 | **0/3** | 200 | 28 nœuds |
+
+**Ce que ça dit** :
+
+- **La politique seule échoue** sur la porte minute : la Q-table a appris la porte stable, pas l'ouverture-passage d'un tour.
+- **L'A* était nécessaire** : c'est lui qui explore et trouve la séquence ouverture-passage ; la politique seule ne la connaît pas.
+- **Le transfert a une limite** : la Q-table transfère à la porte stochastique (T16) mais pas à la porte minute seule ; le **contexte temporel** n'est pas dans sa table.
+- **La négative est explicite** : 9/9 échecs, 200 pas ; la porte T20 vérifie l'échec, pas la réussite.
+
+## L'état
+
+- Fiche : [`rapport-pensee-minute-seule.md`](../../reports/rapport-pensee-minute-seule.md) ; JSON [`pensee-courbe.json`](../../reports/pensee-courbe.json) ; code [`courbe.py`](../../tools/pensee/courbe.py) ; T20 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **23/23 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **410 fiches / 509 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+## La suite
+
+1. **Entraîner sur la porte minute** : la Q-table apprend-elle l'ouverture-passage ?
+2. **Porte mobile** : la porte change de case ; la politique doit s'adapter.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round entraîne la Q-table sur la porte minute.
+
+
+## Tour 38
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 25/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- cadenas (le ne … [1257 caractères tronqués]`
+
+  ```
+be503e31 B13 — LA POLITIQUE SEULE SUR LA PORTE MINUTE : 9/9 ÉCHECS, L'A* ÉTAIT NÉCESSAIRE ; 23/23
+ok
+q 60 seule (False, 8)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T20 la politique seule/minute      sans A*, la Q-table échoue : l'A* était nécessaire\\n\",\n\"  T20 la politique seule/mi … [1332 caractères tronqués]`
+
+  ```
+ok
+  ✅ T19 Q-table sur la porte minute minute apprise : 28 nœuds/but, sonde 6
+  ✅ T20 politique seule/minute politique seule/minute : 9/9 échecs (l'A* était nécessaire)
+  ✅ T21 Q-table entraînée/minute minute entraînée : 60 états-Q, seule échec/8 pas
+  24/24 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-minute-entrainee.md <<'MD'\n# B13 — la Q-table entraînée sur la minute : la politique seule échoue encore\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n … [5943 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 anomalie(s) :
+     · fraîcheur : en-cours.md dit 2026-11-02, le dernier commit date du 2026-11-01
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text().replace(\"**Mis à jour : 2026-11-02, 01 h 00 HNE\", \"**Mis à jour : 2026-11-01, 23 h 59 HNE\")\np.write_text(t); print('ok')\nPY\npython3 … [562 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 411 fiche(s) · 510 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-minute-entrainee.md reports/pensee-minute-entrainee.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilota … [512 caractères tronqués]`

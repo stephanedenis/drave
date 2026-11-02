@@ -17782,3 +17782,50 @@ ls: cannot access 'reports/corpus-wiki-en-texte-contamination.json': No such fil
 === job
   ```
 
+### 🤖 Assistant
+
+⏵ Round 11 : l'anglais à 19,4/25,6 M pages ; le « contrôle » repéré n'était que la boucle d'attente
+
+**Round 11/1000 — vérification faite : pas de contrôle prématuré.** Le processus que le `ps` montrait comme un `verifie_contamination` était en réalité **ma propre boucle d'attente** (`bash -c ... for i in $(seq 1 110)`) : son `args` contient la commande du contrôle, ce qui m'a induit en erreur. Le manifeste anglais n'existe pas encore — le run tourne toujours (2 h 33, **19,4 M pages sur 25,6 M**, 4,97 M articles, 18,91 G caractères), et la boucle d'attente expirera avant lui.
+
+## Ce qui tourne
+
+- **L'anglais** : 19,4/25,6 M pages (76 %), à ~145 k pages/min → le manifeste vers **21 h 45**. Le contrôle 8 Ko (les deux unités + XNLI + wikitext2) sera lancé **après** le manifeste — pas sur un fichier en cours d'écriture.
+- **L'OCR des scans** : la détection sur les 2 785 PDF prend le temps ; le premier livre est océrisé (134 pages, 159 776 caractères) ; les 20 documents du pilote suivent.
+- **Les documents** : 202 Mo extraits des 7 496 PDF de `Documents`.
+
+## La suite
+
+Le **manifeste anglais** → son contrôle (le dernier gros) → la **fiche et le catalogue des dix** ; les **manifestes OCR et Documents** → leurs fiches ; puis les **159 scans** complets. Le goal reste actif ; le prochain round relance l'attente de l'anglais et le contrôle au bon moment.
+
+
+## Tour 24
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 12/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la reports/corpus-wiki-en-texte.json reports/ocr-pdf.json reports/corpus-pdf-documents.json 2>/dev/null; echo \"=== en\"; ps -p 1494795 -o pid,etime= 2>/dev/null; tail -1 /tmp/run-texte-en.log; echo \"=== ocr/doc\";  … [378 caractères tronqués]`
+
+  ```
+21:04
+=== en
+    PID            
+1494795    02:33:59
+  [en] 19400000 lus · 4966408 gardés · 18.91 G caractères
+=== ocr/doc
+1615747 20:20 reports/corpus-pdf-documents.json
+1616198 19:22 20
+  Biblio_large · 001.0 3dprintingandreprap.pdf · 134 p · 159776 car
+  1000 PDF · 394 gardés · 243.1 M car
+160K	data/corpus_ocr
+295M	data/corpus_pdf_documents
+19G	data/corpus_wiki_en_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"les 9 (**12,12 M** ; **8 Ko 0**) ; **PDF** (322 Mo) ; **A2.6/A8.3** (lot) ; **Documents/OCR en cours** ; en\",\n            \ … [2297 caractères tronqués]`
