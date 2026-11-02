@@ -584,6 +584,15 @@ def t34_bouge() -> tuple[bool, str]:
                                f"seule but/{pas} pas ({len(p.q)} états-Q)")
 
 
+def t35_bouge_graines() -> tuple[bool, str]:
+    """La porte qui bouge sur 5 graines : 5/5 buts en 10 pas."""
+    from .graines import executer_bouge
+    lignes = executer_bouge()
+    buts = sum(1 for l in lignes if l["but"])
+    return buts == len(lignes) and len(lignes) == 5, (
+        f"bouge graines : {buts}/5 buts, pas {[l['pas'] for l in lignes]}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -617,7 +626,8 @@ def main() -> int:
               ("T31 porte mobile", t31_mobile()),
               ("T32 porte mobile sur 5 graines", t32_mobile_graines()),
               ("T33 bruit variable", t33_bruit()),
-              ("T34 porte qui bouge", t34_bouge())]
+              ("T34 porte qui bouge", t34_bouge()),
+              ("T35 porte qui bouge, 5 graines", t35_bouge_graines())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

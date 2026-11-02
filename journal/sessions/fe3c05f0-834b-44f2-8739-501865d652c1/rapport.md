@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 30.3 h |
-| Tours | 39 |
-| Messages | 1060 |
-| Appels d'outils | 997 |
+| Durée | 30.4 h |
+| Tours | 45 |
+| Messages | 1080 |
+| Appels d'outils | 1004 |
 | Fichiers touchés | 18 |
-| Commandes | 918 |
+| Commandes | 925 |
 | Sous-agents | 0 |
 | Commits | 61 |
 | Compactages de contexte | 2 |
@@ -105,6 +105,18 @@
 **Tour 38** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 39** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 40** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 41** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 42** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 43** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 44** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 45** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1508,6 +1520,118 @@ Les deux extractions sont **lentes mais saines** ; rien n'est bloqué. La fin de
 
 ### Tour 39 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
+*1 appels d'outils.* Actions notables :
+
+- bash — Check documents and OCR status
+
+**Synthèse produite :**
+
+⏵ Round 27 : documents et OCR toujours en cours, à faible débit
+
+**Round 27/1000 — rien de nouveau, rien de cassé.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **756,4 Mo** (dernière écriture 22 h 53, +1 Mo/min), val 46,9 Mo, test 32,3 Mo, 2 558 documents gardés, 812,6 M caractères. Les processus sont en sommeil (`S`), pas en erreur.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go) et le **corpus PDF** (1 927 documents, 322 Mo) sont mesurés et committés ; l'A2.6/A8.3 aussi.
+
+**Le constat** : les deux extractions secondaires sont lentes mais saines ; elles tomberont avant 8 h si la charge de la machine baisse. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les deux fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+### Tour 40 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check documents and OCR progress
+
+**Synthèse produite :**
+
+⏵ Round 28 : documents et OCR inchangés, toujours en cours
+
+**Round 28/1000 — aucun changement mesurable depuis le round précédent.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **756,4 Mo** (dernière écriture 22 h 53), 2 558 documents gardés, 812,6 M caractères. Le processus est en sommeil (`S`), pas en erreur ; le débit reste très faible.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés sur les 2 785 PDF toujours en cours, processus en sommeil aussi.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les deux extractions secondaires tournent au ralenti, probablement à cause de la charge des autres sessions ; elles finiront avant 8 h si la machine se libère. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+### Tour 41 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check documents and OCR progress
+
+**Synthèse produite :**
+
+⏵ Round 29 : les documents progressent lentement, l'OCR aussi
+
+**Round 29/1000 — toujours en cours, sans incident.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **756,6 Mo** (22 h 55), 2 558 documents gardés, 812,6 M caractères. Le débit est faible (~0,2 Mo/min) mais réel ; les processus sont en sommeil, pas en erreur.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés sur les 2 785 PDF toujours en cours.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les deux extractions secondaires sont lentes (charge de la machine, lectures PDF une à une) ; elles tomberont avant 8 h si la charge baisse. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+### Tour 42 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check documents and OCR progress
+
+**Synthèse produite :**
+
+⏵ Round 30 : les documents accélèrent un peu, l'OCR continue
+
+**Round 30/1000 — les deux extractions sont toujours en cours.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **758,0 Mo** (22 h 55, +1,4 Mo en une minute), 2 558 documents gardés, 812,6 M caractères. Le processus est en sommeil (`S`), pas en erreur ; il reste ~3 500 PDF.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés sur les 2 785 PDF toujours en cours.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les extractions secondaires avancent lentement, sans erreur ; elles tomberont avant 8 h si la charge baisse. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+### Tour 43 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check documents and OCR progress
+
+**Synthèse produite :**
+
+⏵ Round 31 : les documents continuent, l'OCR aussi
+
+**Round 31/1000 — toujours en cours, sans incident.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **759,4 Mo** (22 h 55, +1,4 Mo en une minute), 2 558 documents gardés, 812,6 M caractères. Le processus est en sommeil (`S`) ; il reste ~3 500 PDF.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les extractions secondaires avancent lentement, sans erreur ; elles tomberont avant 8 h si la charge baisse. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+### Tour 44 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check documents and OCR progress
+
+**Synthèse produite :**
+
+⏵ Round 32 : documents et OCR inchangés
+
+**Round 32/1000 — aucun changement mesurable.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **759,4 Mo** (22 h 55), 2 558 documents gardés, 812,6 M caractères. Le processus est en sommeil (`S`), pas en erreur.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les deux extractions secondaires tournent au ralenti, sans erreur ; elles finiront avant 8 h si la charge de la machine baisse. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+### Tour 45 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check documents and OCR progress
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1575,7 +1699,7 @@ Les deux extractions sont **lentes mais saines** ; rien n'est bloqué. La fin de
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 878 autres
+- … et 885 autres
 
 ## 4. Mesures et résultats marquants
 

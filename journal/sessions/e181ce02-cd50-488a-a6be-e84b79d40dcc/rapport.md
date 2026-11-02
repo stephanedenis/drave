@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 30.2 h |
-| Tours | 51 |
-| Messages | 840 |
-| Appels d'outils | 789 |
+| Durée | 30.3 h |
+| Tours | 52 |
+| Messages | 848 |
+| Appels d'outils | 795 |
 | Fichiers touchés | 25 |
-| Commandes | 635 |
+| Commandes | 640 |
 | Sous-agents | 2 |
-| Commits | 68 |
+| Commits | 69 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -133,6 +133,8 @@
 **Tour 50** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 51** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 52** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2740,6 +2742,55 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Faire une vraie modification d'état et vérifier le hook
 - bash — Committer la porte qui bouge (2e essai)
 
+**Synthèse produite :**
+
+⏵ Porte qui bouge : horloge t%6, A* 28 nœuds, politique but/10, 236 états-Q ; 37/37
+
+Le round 38 du goal est livré : la **porte qui bouge** toutes les 3 pas est suivie — l'horloge entre dans l'état. Commit **`75a03e15`**.
+
+\## La porte qui bouge
+
+Même labyrinthe à deux portes que T31/T32, mais la porte **change de position** toutes les 3 pas : `d(t) = (t // 3) % 2`. L'état porte l'horloge `t % 6` ; la politique doit **re-planifier** quand la porte bouge.
+
+| dispositif | résultat |
+|---|---|
+| **A* + sonde** | but, 28 nœuds, sonde 5, coût 58 |
+| **politique seule** | **but/10 pas**, 236 états-Q |
+
+**Ce que ça dit** :
+
+- **La politique apprend le temps** : l'horloge `t % 6` dans l'état suffit à re-planifier quand la porte bouge ; le but est atteint en 10 pas (contre 8 pour la porte fixe).
+- **Le coût de la mobilité est faible** : +2 pas, +1 sonde ; la porte qui bouge ne casse pas la politique.
+- **L'A* reste un cadre** : il explore les états horodatés et trouve la séquence ; la politique seule la reproduit.
+- **236 états-Q** : plus que la porte mobile (170) — l'horloge ajoute un facteur 6 aux états, mais la table reste petite.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-bouge.md`](../../reports/rapport-pensee-bouge.md) ; JSON [`pensee-bouge.json`](../../reports/pensee-bouge.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T34 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **37/37 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **426 fiches / 525 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : l'horloge réelle du dépôt est **2026-11-01 22:52** ; les timestamps du plan avaient dérivé, ils sont corrigés.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Plusieurs graines** : la porte qui bouge tient-elle hors graine 0 ?
+2. **Période variable** : 2, 4, 5 pas ; mesurer la dégradation.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round vérifie la porte qui bouge sur plusieurs graines.
+
+### Tour 52 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Mesurer la porte qui bouge sur 5 graines
+- bash — Ajouter la porte T35 (bouge 5 graines)
+- bash — Écrire la fiche de la porte qui bouge sur 5 graines
+- bash — Passer toutes les portes
+- bash — Committer la porte qui bouge sur 5 graines
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2819,7 +2870,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 595 autres
+- … et 600 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3034,4 +3085,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LE BRUIT VARIABLE : 50–95 %, 6/6 BUTS, L'EFFORT S'ADAPTE (3 → 1 ESSAI) ; 36/36" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BRUIT VARIABLE"; t
 - B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE QUI 
 - B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE QUI 
+- B13 — LA PORTE QUI BOUGE SUR 5 GRAINES : 5/5 BUTS EN 10 PAS, 230–253 ÉTATS-Q ; 38/38" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BOUGE SUR 5 GRAINE
 

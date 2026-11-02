@@ -15777,3 +15777,27 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-919", "timeout_ms": 600000, "wait": true}`
+
+  ```
+22:53
+work/n2j/base-wiki-45m.pt
+OK45
+}
+{"fichier": "base-wiki-45m.pt", "params": 34301224, "val": 3.9973, "test": 4.0629, "litterature": 7.2325, "litterature_propre": 7.3833, "anglais": 11.9761, "wikitext2": 13.4186, "permute": 205.1434, "decomposition": {"complete": 3.8723, "apres_2_blocs": 4.7655, "apres_4_blocs": 4.0935, "apres_6_blocs": 3.9114, "sans_pensee": 120014.038}, "longueurs": {"129": 4.0152, "192": 3.909, "256": 3.9457, "384": 4.0784, "512": 4.1935}}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-917 (bash: sleep 780; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-45m.log; tail -1 work/n2k/base-multi-21m.log; ls work/n2j/base-wiki-45m.pt work/n2k/base-multi-21m.pt 2>/dev/null) finished [status: completed, exit code: 2]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-capacite-34m.md <<'EOF'\n# N2.p — La capacité à 34,3 M : −0,19 par palier, et le verrou de longueur s'efface\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : sur les 186 Mo du corpus rée … [3520 caractères tronqués]`
+
+  ```
+fiche 34M écrite
+22:55
+pas 17050 · perte 1.7497 · PPL val 7.878 · 1305 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/base-multi-21m.pt 2>/dev/null && echo OK; tail -1 work/n2k/base-multi-21m.log; PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 900 ~/gpu-env/bin/python work/n2k/evalue.py work/n2k/base-multi-21m.pt 2 … [115 caractères tronqués]`

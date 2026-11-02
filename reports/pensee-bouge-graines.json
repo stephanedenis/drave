@@ -1,0 +1,44 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "38/38",
+ "graines": [
+  0,
+  1,
+  2,
+  3,
+  4
+ ],
+ "lignes": [
+  {
+   "graine": 0,
+   "etats_q": 236,
+   "but": true,
+   "pas": 10
+  },
+  {
+   "graine": 1,
+   "etats_q": 235,
+   "but": true,
+   "pas": 10
+  },
+  {
+   "graine": 2,
+   "etats_q": 238,
+   "but": true,
+   "pas": 10
+  },
+  {
+   "graine": 3,
+   "etats_q": 230,
+   "but": true,
+   "pas": 10
+  },
+  {
+   "graine": 4,
+   "etats_q": 253,
+   "but": true,
+   "pas": 10
+  }
+ ]
+}

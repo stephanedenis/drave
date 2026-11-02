@@ -17523,3 +17523,120 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-bouge.md reports/pensee-bouge.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md doc … [506 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-635]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-635", "timeout_ms": 600000, "wait": true}`
+
+  ```
+30 files changed, 755 insertions(+), 54 deletions(-)
+ create mode 100644 reports/pensee-bouge.json
+ create mode 100644 reports/rapport-pensee-bouge.md
+COMMIT OK 1
+75a03e15 B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte qui bouge : horloge t%6, A* 28 nœuds, politique but/10, 236 états-Q ; 37/37
+
+Le round 38 du goal est livré : la **porte qui bouge** toutes les 3 pas est suivie — l'horloge entre dans l'état. Commit **`75a03e15`**.
+
+## La porte qui bouge
+
+Même labyrinthe à deux portes que T31/T32, mais la porte **change de position** toutes les 3 pas : `d(t) = (t // 3) % 2`. L'état porte l'horloge `t % 6` ; la politique doit **re-planifier** quand la porte bouge.
+
+| dispositif | résultat |
+|---|---|
+| **A* + sonde** | but, 28 nœuds, sonde 5, coût 58 |
+| **politique seule** | **but/10 pas**, 236 états-Q |
+
+**Ce que ça dit** :
+
+- **La politique apprend le temps** : l'horloge `t % 6` dans l'état suffit à re-planifier quand la porte bouge ; le but est atteint en 10 pas (contre 8 pour la porte fixe).
+- **Le coût de la mobilité est faible** : +2 pas, +1 sonde ; la porte qui bouge ne casse pas la politique.
+- **L'A* reste un cadre** : il explore les états horodatés et trouve la séquence ; la politique seule la reproduit.
+- **236 états-Q** : plus que la porte mobile (170) — l'horloge ajoute un facteur 6 aux états, mais la table reste petite.
+
+## L'état
+
+- Fiche : [`rapport-pensee-bouge.md`](../../reports/rapport-pensee-bouge.md) ; JSON [`pensee-bouge.json`](../../reports/pensee-bouge.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T34 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **37/37 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **426 fiches / 525 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : l'horloge réelle du dépôt est **2026-11-01 22:52** ; les timestamps du plan avaient dérivé, ils sont corrigés.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Plusieurs graines** : la porte qui bouge tient-elle hors graine 0 ?
+2. **Période variable** : 2, 4, 5 pas ; mesurer la dégradation.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round vérifie la porte qui bouge sur plusieurs graines.
+
+
+## Tour 52
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 39/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/graines.py'); t=p.read_text()\nt=t.replace(\"from .operateurs import PolitiqueAppriseMobile, PolitiqueAppriseOuverte, seule_mobile\",\n\"from … [1518 caractères tronqués]`
+
+  ```
+75a03e15 B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37
+ok
+graine 4  Q  72  bruit True/8 pas (1 essais)  stable True/8 pas
+graine 0  Q 236  bouge True/10 pas
+graine 1  Q 235  bouge True/10 pas
+graine 2  Q 238  bouge True/10 pas
+graine 3  Q 230  bouge True/10 pas
+graine 4  Q 253  bouge True/10 pas
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T34 la porte qui bouge           la porte change toutes les 3 pas ; A* et politique réussissent\\n\",\n\"  T34 la porte qu … [1168 caractères tronqués]`
+
+  ```
+ok
+  ✅ T33 bruit variable     bruit 50–95 % : 6/6 buts (essais [3, 3, 3, 2, 1, 1])
+  ✅ T34 porte qui bouge    porte bouge : A* 28 nœuds/but, seule but/10 pas (236 états-Q)
+  ✅ T35 porte qui bouge, 5 graines bouge graines : 5/5 buts, pas [10, 10, 10, 10, 10]
+  38/38 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-bouge-graines.md <<'MD'\n# B13 — la porte qui bouge sur 5 graines : 5/5 buts en 10 pas\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **38/38 portes**  … [6328 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 427 fiche(s) · 526 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [300 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/graines.py tools/pensee/autotest.py reports/rapport-pensee-bouge-graines.md reports/pensee-bouge-graines.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en … [518 caractères tronqués]`

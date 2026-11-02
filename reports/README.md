@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-bouge-graines.md`](rapport-pensee-bouge-graines.md) | **B13** — la porte qui bouge sur 5 graines : 5/5 buts en 10 pas, 230–253 états-Q, **38/38** |
 | [`rapport-pensee-bouge.md`](rapport-pensee-bouge.md) | **B13** — la porte qui bouge : horloge `t % 6`, A* 28 nœuds, politique but/10, **37/37** |
 | [`rapport-pensee-bruit.md`](rapport-pensee-bruit.md) | **B13** — le bruit variable : 50–95 %, 6/6 buts, effort 3 → 1 essai, **36/36** |
 | [`rapport-pensee-mobile-graines.md`](rapport-pensee-mobile-graines.md) | **B13** — la porte mobile sur 5 graines : 5/5 d0, 5/5 d1, 147–184 états-Q, **35/35** |
