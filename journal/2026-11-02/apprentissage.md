@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,6 +13,7 @@
 | 02:06 | `50d1e6f7` | N2.v — LE MULTILINGUE 34,3 M DISTILLÉ : 5,58 → 4,79, LA DISTILLATION PAIE AVEC LA CAPACITÉ | `en-cours.md`, `README.md`, `apprentissage.md` (+17) |
 | 03:27 | `03e4963c` | N2.w — L'ANGLAIS À 34,3 M DISTILLÉ : 3,77, ET 4,18 À 512 OCTETS | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |
 | 04:02 | `0f0449f2` | N2.x — LA DISTILLATION DU CANAL : −0,03 EN DOMAINE, +0,24 À 512 OCTETS | `en-cours.md`, `README.md`, `apprentissage.md` (+17) |
+| 05:16 | `78b551fc` | N2.y — LE CANAL ET LA DISTILLATION NE S'ADDITIONNENT PAS, MÊME À 34,3 M | `en-cours.md`, `README.md`, `apprentissage.md` (+17) |
 
 ## Sessions actives ce jour
 
@@ -25,6 +26,7 @@
 - [reports/rapport-n2-34m-distille.md](../../reports/rapport-n2-34m-distille.md)
 - [reports/rapport-n2-anglais-34m.md](../../reports/rapport-n2-anglais-34m.md)
 - [reports/rapport-n2-canal-distille.md](../../reports/rapport-n2-canal-distille.md)
+- [reports/rapport-n2-canal-kd-34m.md](../../reports/rapport-n2-canal-kd-34m.md)
 - [reports/rapport-n2-multilingue-34m-distille.md](../../reports/rapport-n2-multilingue-34m-distille.md)
 
 <!-- notes -->

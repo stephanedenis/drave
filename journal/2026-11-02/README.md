@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**76 commits** · **3 session(s)** · **8 thème(s)**
+**77 commits** · **3 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 5 | [apprentissage.md](apprentissage.md) |
+| apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 6 | [attention.md](attention.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 11 | [docs.md](docs.md) |
@@ -108,6 +108,7 @@
 | 04:58 | `c5ab1fa3` | B13 — LES 100 PHRASES COMPLEXES : POS 0,6984, SYNTAGME 0,2677, GOLD 300 ; 93/93 |
 | 05:10 | `15f2c8f6` | DONNÉES — L'OCR DES 20 LIVRES EST CLOS : 7 381 PAGES, 15,36 M CARACTÈRES, 8 KO 0 (VAL 115, ÉVAL 0/40) |
 | 05:12 | `1030600e` | B13 — LE DISCOURS : ACTE 0,9, NÉGATION 1,0, MODALITÉ 0,9, GOLD 320 ; 94/94 |
+| 05:16 | `78b551fc` | N2.y — LE CANAL ET LA DISTILLATION NE S'ADDITIONNENT PAS, MÊME À 34,3 M |
 
 ## Le récit de la journée (écrit à la main)
 

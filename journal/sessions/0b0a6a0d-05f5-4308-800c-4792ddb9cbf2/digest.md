@@ -18159,3 +18159,22 @@ en-cours ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.y** : canal + KD 3,53 (n'ajoute rien) ;\", \"**N2.y** : canal + KD 3,53 ;\")\ns = s.replace(\"**N2.w** : ang … [1496 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3997 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 582 JSON, le disque en a 587
+[still running after 60000ms; moved to background job bash-1079]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1079", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+78b551fc N2.y — LE CANAL ET LA DISTILLATION NE S'ADDITIONNENT PAS, MÊME À 34,3 M
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> journal/2026-11-01/nuit-n2.md <<'EOF'\n\n## Le meilleur modèle de la nuit\n\nC'est le **34,3 M avec canal de structure** (N2.z) : **3,5131** en domaine, **3,4836** à 256,\n**3,6558** à 512 octets. Le canal seul bat la distilla … [2639 caractères tronqués]`

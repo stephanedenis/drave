@@ -101,3 +101,26 @@ analyseur) avec **19 tests**.
 
 **Ce qui reste ouvert** : la distillation du canal (relancée à 03 h 30), la fenêtre (R1, note de
 passage écrite), et la restitution (R31) — toujours pas construite.
+
+## Le meilleur modèle de la nuit
+
+C'est le **34,3 M avec canal de structure** (N2.z) : **3,5131** en domaine, **3,4836** à 256,
+**3,6558** à 512 octets. Le canal seul bat la distillation (3,6852) et la combinaison des deux
+(3,5277, N2.y) : à capacité égale, **donner la structure en entrée** vaut mieux que **distiller un
+professeur deux fois plus petit**. La courbe de longueur est la plus plate de la nuit (4 % de perte
+à 512 octets).
+
+Le canal était pourtant tranché à 11,47 M (N2.x : absorbé par la distillation). C'est le renversement
+de la nuit : le levier dépend de la **taille** — la structure se paie quand le modèle a la capacité
+de l'exploiter, et la distillation quand il ne l'a pas.
+
+## Ce que la nuit laisse
+
+- **Quatre lois** : les données (×1,7 à ×2,6 hors domaine), la capacité (−0,19 par palier, sature en
+  multilingue), la distillation (−0,3 à −0,5, saturée par l'élève), la structure (−0,22 à −0,48,
+  croît avec la capacité).
+- **Un mètre honnête** : le corpus propre, 0 fuite, la porte < 2,5 à 0,59.
+- **Deux meilleurs modèles** : français 3,51 (canal, 34,3 M), anglais 3,77 (distillé, 34,3 M).
+- **Ce qui n'a pas marché** : le filtre non ambigu, le canal + KD, le professeur plus gros en
+  domaine, la porte < 2,5.
+- **Ce qui reste** : la fenêtre (R1), la restitution (R31), le corpus d'un autre ordre.
