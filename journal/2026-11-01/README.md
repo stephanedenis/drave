@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**105 commits** · **4 session(s)** · **10 thème(s)**
+**106 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -17,7 +17,7 @@
 | docs | 27 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 47 | [mesures.md](mesures.md) |
-| modele | 1 | [modele.md](modele.md) |
+| modele | 2 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -140,6 +140,7 @@
 | 21:00 | `55b1523c` | B13 — LA Q-TABLE SUR LA PORTE MINUTE : 28 NŒUDS/BUT, SONDE 6, COÛT 62 ; 22/22 |
 | 21:04 | `be503e31` | B13 — LA POLITIQUE SEULE SUR LA PORTE MINUTE : 9/9 ÉCHECS, L'A* ÉTAIT NÉCESSAIRE ; 23/23 |
 | 21:07 | `bd9b78ee` | ÉTAT — DOCUMENTS 1 000/7 496 (295 MO), OCR EN COURS, ANGLAIS 19,4/25,6 M |
+| 21:09 | `e651ffcb` | B13 — LA Q-TABLE ENTRAÎNÉE/MINUTE : 60 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ; 24/24 |
 
 ## Le récit de la journée (écrit à la main)
 

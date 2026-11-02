@@ -276,6 +276,20 @@ class PolitiqueAppriseMinute(PolitiqueApprise):
         return (nx, ny, o), -0.01
 
 
+class PolitiqueAppriseShaping(PolitiqueAppriseMinute):
+    """La Q-table avec **reward shaping** : -0,01 par pas + 0,1 par case gagnée vers le but."""
+
+    nom = "apprise_shaping"
+
+    def _pas(self, cle, action, ouvre: bool):
+        ncle, gain = super()._pas(cle, action, ouvre)
+        if ncle == cle:
+            return cle, 0.0
+        d0 = abs(cle[0] - P_BUT[0]) + abs(cle[1] - P_BUT[1])
+        d1 = abs(ncle[0] - P_BUT[0]) + abs(ncle[1] - P_BUT[1])
+        return ncle, gain + 0.1 * (d0 - d1)
+
+
 # --------------------------------------------------------------------------- cadenas (le neuronal nécessaire)
 
 BUT_C = 3
@@ -797,7 +811,7 @@ class DRVM:
 __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle",
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
-           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise", "PolitiqueAppriseMinute",
+           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise", "PolitiqueAppriseMinute", "PolitiqueAppriseShaping",
            "LABYRINTHE_PORTE", "REGISTRE_P", "LABYRINTHE_PORTE_STO", "REGISTRE_PSTO",
            "LABYRINTHE_PORTE_FERME", "REGISTRE_PF",
            "LABYRINTHE_PORTE_MINUTE", "REGISTRE_PM",

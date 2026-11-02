@@ -17896,3 +17896,69 @@ Continue working toward the objective in this same session. Treat the current wo
 20G	data/corpus_wiki_en_texte
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 120; date '+%H:%M'; ps -p 1494795 -o pid,etime= 2>/dev/null; tail -1 /tmp/run-texte-en.log; du -sh data/corpus_wiki_en_texte; ls reports/corpus-wiki-en-texte.json 2>/dev/null; echo \"=== doc/ocr\"; tail -1 /tmp/pdf-documents.log; … [194 caractères tronqués]`
+
+  ```
+21:11
+    PID            
+1494795    02:40:45
+  [en] 23000000 lus · 5626015 gardés · 20.79 G caractères
+20G	data/corpus_wiki_en_texte
+=== doc/ocr
+  2000 PDF · 896 gardés · 413.9 M car
+411M	data/corpus_pdf_documents
+160K	data/corpus_ocr
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 13 : l'anglais a bondi à 23,0/25,6 M pages (90 %), les Documents à 2 000/7 496
+
+**Round 13/1000 — l'anglais est au bord, les documents accélèrent.**
+
+## L'anglais
+
+**23,0 M pages sur 25,6 M** (90 %), 5,63 M articles, 20,79 G caractères. Le run s'est **redressé** dans les dernières pages (les courtes, les redirections) : le manifeste est attendu vers **21 h 25**. La boucle d'attente (relancée au round précédent) verra le fichier et lancera **le contrôle 8 Ko** automatiquement — les deux unités, le XNLI anglais et le wikitext2.
+
+## Les documents
+
+**2 000 PDF sur 7 496**, **411 Mo** de texte, 413,9 M caractères. Le rythme est bon (~50 PDF/min) ; le parcours complet devrait finir vers **22 h 30**.
+
+## L'OCR
+
+La détection des scannés (le `pdftotext` de deux pages par document sur les 2 785 PDF) est toujours en cours ; le pilote des 20 documents suivra. C'est le poste le plus lent, et le moins prioritaire : l'anglais et les documents d'abord.
+
+## La suite
+
+Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des dix** (la table finale, les totaux) ; les **manifestes OCR et Documents** → leurs fiches ; les **159 scans** complets. Le goal reste actif ; le prochain round devrait annoncer le 10e corpus et lancer la clôture du catalogue.
+
+
+## Tour 26
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 14/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la reports/corpus-wiki-en-texte.json reports/corpus-wiki-en-texte-contamination.json 2>/dev/null; echo \"=== en\"; ps -p 1494795 -o pid,etime= 2>/dev/null; tail -1 /tmp/run-texte-en.log; echo \"=== check\"; ps -eo pi … [386 caractères tronqués]`
+
+  ```
+21:12
+=== en
+    PID            
+1494795    02:41:14
+  [en] 23000000 lus · 5626015 gardés · 20.79 G caractères
+=== check
+1632164       10:56 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 110); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 20; done; echo "attente $((i*20))s"; if [ -f reports/corpus-wiki-en-texte.json ]; then python3 - <<'PY' import json,pathlib d=json.loads(pathlib.Path('reports/corpus-wiki-en-texte.json').read_text()) for k in ('articles_lus','articles_gardes','articles_rediriges','caracteres_gardes','mots_estimes','troncons','octets','residus'): print(k, d.get(k)) PY nohup python3 tools/verifie_contamination.py --train data/corpus_wiki_en_texte/train.txt --val data/corpus_wiki_en_texte/val.txt --test data/corpus_wiki_en_texte/test.txt --eval work/dr/eval/en-xnli.txt --eval data/wikitext2_test.txt --taille-troncon 8192 --sortie reports/corpus-wiki-en-texte-contamination.json > /tmp/check-en.log 2>&1 & echo "check en job $!"; else tail -1 /tmp/run-texte-en.log | cut -c1-70; fi
+=== doc/ocr
+  2000 PDF · 896 gardés · 413.9 M car
+  Biblio_large · 001.0 3dprintingandreprap.pdf · 134 p · 159776 car
+421M	data/corpus_pdf_document
+… [22 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 55); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 20; done; echo \"attente $((i*20))s\"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo \"en: pas encore\"; tail -1 /tmp/run-texte-en.log;  … [794 caractères tronqués]`

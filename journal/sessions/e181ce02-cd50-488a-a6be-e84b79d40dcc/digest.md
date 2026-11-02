@@ -14842,3 +14842,96 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-537", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at bd9b78ee54448337aebec484913b03f8aa750303 but expected be503e31d21daa409200abed375f267fbc227491
+retry 1
+ 26 files changed, 258 insertions(+), 35 deletions(-)
+ create mode 100644 reports/pensee-minute-entrainee.json
+ create mode 100644 reports/rapport-pensee-minute-entrainee.md
+COMMIT OK 2
+e651ffcb B13 — LA Q-TABLE ENTRAÎNÉE/MINUTE : 60 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ; 24/24
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Q-table entraînée/minute : 60 états-Q, la politique seule échoue ; 24/24
+
+Le round 25 du goal est livré : même **entraînée sur la porte minute**, la politique seule échoue — la **négative** tient. Commit **`e651ffcb`**.
+
+## La Q-table entraînée sur la minute
+
+`PolitiqueAppriseMinute` (Q-learning, 200 épisodes, graine 0) apprend l'**ouverture-passage** : à `(3,2)`, l'action `bas` passe directement à `(3,3)` (récompense +0,1). Elle est ensuite exécutée **seule**, sans A*.
+
+| politique | états-Q | buts seuls | pas | A* + sonde (T19) |
+|---|---:|---:|---:|---:|
+| **apprise minute** | **60** | **0** | **8** | 28 nœuds |
+
+**Ce que ça dit** :
+
+- **Même entraînée sur la minute, la politique seule échoue** : la `seule_minute` s'arrête quand la politique ne propose plus d'action ; la Q-table n'a pas la **politique complète**.
+- **L'A* reste nécessaire** : c'est lui qui explore et atteint le but (T19) ; la politique seule ne le fait pas, même entraînée.
+- **La Q-table apprend l'ouverture-passage** (60 états, +0,1) mais pas la **séquence complète** : la récompense +1 au but est trop rare pour la table.
+- **La négative est explicite** : 0 but, 8 pas, 60 états-Q.
+
+## L'état
+
+- Fiche : [`rapport-pensee-minute-entrainee.md`](../../reports/rapport-pensee-minute-entrainee.md) ; JSON [`pensee-minute-entrainee.json`](../../reports/pensee-minute-entrainee.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T21 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **24/24 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **411 fiches / 510 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+## La suite
+
+1. **Reward shaping** : récompenser l'approche de la porte pour compléter la politique.
+2. **Réseau** : une politique paramétrique au lieu de la table.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque le reward shaping.
+
+
+## Tour 39
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 26/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- cadenas (le ne … [1245 caractères tronqués]`
+
+  ```
+e651ffcb B13 — LA Q-TABLE ENTRAÎNÉE/MINUTE : 60 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ; 24/24
+ok
+PolitiqueAppriseMinute q 60 seule (False, 8)
+PolitiqueAppriseShaping q 56 seule (False, 8)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T21 la Q-table entraînée/minute    même entraînée sur la minute, la politique seule échoue\\n\",\n\"  T21 la Q-table entra … [1324 caractères tronqués]`
+
+  ```
+ok
+  ✅ T20 politique seule/minute politique seule/minute : 9/9 échecs (l'A* était nécessaire)
+  ✅ T21 Q-table entraînée/minute minute entraînée : 60 états-Q, seule échec/8 pas
+  ✅ T22 reward shaping     shaping : 56 états-Q, seule échec/8 pas
+  25/25 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-shaping.md <<'MD'\n# B13 — le reward shaping : il ne suffit pas, la politique seule échoue encore\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **25/2 … [5903 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 412 fiche(s) · 511 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [990 caractères tronqués]`

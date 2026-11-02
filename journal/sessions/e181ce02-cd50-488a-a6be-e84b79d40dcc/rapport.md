@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 28.5 h |
-| Tours | 38 |
-| Messages | 686 |
-| Appels d'outils | 667 |
+| Tours | 39 |
+| Messages | 693 |
+| Appels d'outils | 672 |
 | Fichiers touchés | 25 |
-| Commandes | 537 |
+| Commandes | 541 |
 | Sous-agents | 2 |
-| Commits | 53 |
+| Commits | 54 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -107,6 +107,8 @@
 **Tour 37** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 38** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 39** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2041,6 +2043,53 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Committer la Q-table entraînée/minute
 - job_output
 
+**Synthèse produite :**
+
+⏵ Q-table entraînée/minute : 60 états-Q, la politique seule échoue ; 24/24
+
+Le round 25 du goal est livré : même **entraînée sur la porte minute**, la politique seule échoue — la **négative** tient. Commit **`e651ffcb`**.
+
+\## La Q-table entraînée sur la minute
+
+`PolitiqueAppriseMinute` (Q-learning, 200 épisodes, graine 0) apprend l'**ouverture-passage** : à `(3,2)`, l'action `bas` passe directement à `(3,3)` (récompense +0,1). Elle est ensuite exécutée **seule**, sans A*.
+
+| politique | états-Q | buts seuls | pas | A* + sonde (T19) |
+|---|---:|---:|---:|---:|
+| **apprise minute** | **60** | **0** | **8** | 28 nœuds |
+
+**Ce que ça dit** :
+
+- **Même entraînée sur la minute, la politique seule échoue** : la `seule_minute` s'arrête quand la politique ne propose plus d'action ; la Q-table n'a pas la **politique complète**.
+- **L'A* reste nécessaire** : c'est lui qui explore et atteint le but (T19) ; la politique seule ne le fait pas, même entraînée.
+- **La Q-table apprend l'ouverture-passage** (60 états, +0,1) mais pas la **séquence complète** : la récompense +1 au but est trop rare pour la table.
+- **La négative est explicite** : 0 but, 8 pas, 60 états-Q.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-minute-entrainee.md`](../../reports/rapport-pensee-minute-entrainee.md) ; JSON [`pensee-minute-entrainee.json`](../../reports/pensee-minute-entrainee.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T21 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **24/24 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **411 fiches / 510 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+\## La suite
+
+1. **Reward shaping** : récompenser l'approche de la porte pour compléter la politique.
+2. **Réseau** : une politique paramétrique au lieu de la table.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque le reward shaping.
+
+### Tour 39 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Ajouter le reward shaping et tester la politique seule
+- bash — Ajouter la porte T22 (reward shaping)
+- bash — Écrire la fiche du reward shaping
+- bash — Passer les portes et committer le reward shaping
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2120,7 +2169,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 497 autres
+- … et 501 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2318,4 +2367,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LA Q-TABLE SUR LA PORTE MINUTE : 28 NŒUDS/BUT, SONDE 6, COÛT 62 ; 22/22" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "Q-TABLE SUR LA PORTE"; th
 - B13 — LA POLITIQUE SEULE SUR LA PORTE MINUTE : 9/9 ÉCHECS, L'A* ÉTAIT NÉCESSAIRE ; 23/23" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MINUTE : 9/9";
 - B13 — LA Q-TABLE ENTRAÎNÉE/MINUTE : 60 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ; 24/24" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ENTRAÎNÉE/MINUTE"; th
+- B13 — LE REWARD SHAPING : 56 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ENCORE ; 25/25" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "REWARD SHAPING"; then ec
 
