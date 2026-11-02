@@ -45,3 +45,36 @@ loi d'échelle multilingue à 21,65 M ; et la restitution (R31), qui n'est toujo
 réel), `4db5aac0` (longueur réelle), `1520b875` (capacité réelle), `7a083904` (canal),
 `0e5c89be` (distillation réelle), `e0e71213` (anglais), `902349b0` (anglais distillé),
 `…` (multilingue distillé), `fa1b74a4` (structures).
+
+## La seconde moitié : les lois
+
+Après le corpus réel, la nuit a cherché les **lois** — et elles sont venues, dans l'ordre :
+
+**La capacité paie quand les données suivent.** 11,47 M → 21,65 M → 34,3 M sur 186 Mo :
+4,3893 → 4,2013 → **3,9973**, soit **−0,19 par palier**, sans rendement décroissant. Et le gain
+n'est pas que le domaine : à 512 octets, 5,67 → 5,03 → **4,19** ; la courbe de longueur s'aplatit
+avec la taille. Le « verrou » de longueur est donc aussi une affaire de capacité, pas seulement de
+positions.
+
+**La distillation se compose avec tout.** Sur 11,47 M : 3,88 ; sur 34,3 M : **3,69** — le meilleur
+modèle de la nuit (6,78 en littérature, 10,92 en anglais, 4,10 à 512). Un professeur **plus petit**
+que l'élève suffit : les étiquettes douces régularisent, l'élève a la capacité de les exploiter.
+
+**L'anglais suit la même loi.** Base 4,42 → distillé 3,94 ; la chaîne est portable d'une langue à
+l'autre, et le plafond de longueur aussi (4,19 à 512 pour le 34,3 M français).
+
+**Le multilingue paie la dilution, et la capacité l'adoucit.** À recette égale, 11,47 M → 21,65 M
+→ 34,3 M en français multilingue : 6,68 → 5,89 → **5,58** — le rendement décroît (première
+saturation de la loi). La distillation multilingue (5,41) ne récupère pas la dilution parce que le
+professeur a la même. À paramètres égaux, un modèle par langue reste devant (3,69 contre 5,58).
+
+**La structure en entrée aide un peu.** Le canal de 6 classes par octet (1 344 paramètres) donne
+−0,22 de PPL ; le placebo est *pire* que l'absence de canal ; mais la robustesse au mélange est
+identique. C'est un prior, pas une lecture de formes.
+
+**Ce que le meilleur modèle écrit.** Du français grammatical — mais en glouton il **boucle** sur
+les gabarits wiki (« la commune de Saint-Germain-de-Commune… ») et à température 0,8 il **colle**
+des fragments. Une PPL de 3,69 ne fait pas un rédacteur.
+
+**Les portes.** Passe complète du 02/11 00 h 03 : **77 vertes, 4 rouges** — les quatre connues
+(homeostasie, indice, mélange, réparti-moteur). Aucune régression.

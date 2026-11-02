@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 32.3 h |
 | Tours | 80 |
-| Messages | 1095 |
-| Appels d'outils | 986 |
+| Messages | 1097 |
+| Appels d'outils | 988 |
 | Fichiers touchés | 25 |
-| Commandes | 801 |
+| Commandes | 802 |
 | Sous-agents | 2 |
-| Commits | 100 |
+| Commits | 101 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4248,13 +4248,15 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste l'**observation ut
 
 ### Tour 80 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Tester l'information rare 10 %
 - bash — Ajouter la porte T63 (information rare)
 - bash — Écrire la fiche de l'information rare
 - bash — Trim README et portes
 - bash — Committer l'information rare
+- job_output
+- bash — Committer l'information rare (2e essai)
 
 ## 3. Travail accompli
 
@@ -4335,7 +4337,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste l'**observation ut
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 761 autres
+- … et 762 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4582,5 +4584,6 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste l'**observation ut
 - B13 — LE RÉGIME ALÉATOIRE : 1/2, v FINAL 0,42, 20/20, 8,0 PAS ; 63/63" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RÉGIME ALÉATOIRE"; then echo "COM
 - B13 — LE RÉGIME INTRA-ÉPISODE : BASCULE À CHAQUE LOOK, v FINAL 0,48, 20/20, 8,0 PAS ; 64/64" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "INTRA-ÉPISO
 - B13 — LA FIABILITÉ ASYMÉTRIQUE : 0,9/0,5, v FINAL 0,44, 20/20, 8,0 PAS ; 65/65" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "FIABILITÉ ASYMÉTRIQUE"; 
+- B13 — L'INFORMATION RARE : UTILE 10 %, v FINAL 0,8, 20/20, 8,0 PAS ; 66/66" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "INFORMATION RARE"; then echo
 - B13 — L'INFORMATION RARE : UTILE 10 %, v FINAL 0,8, 20/20, 8,0 PAS ; 66/66" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "INFORMATION RARE"; then echo
 

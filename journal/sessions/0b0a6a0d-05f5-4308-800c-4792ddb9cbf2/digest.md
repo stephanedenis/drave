@@ -16573,3 +16573,42 @@ porte-reparti-moteur   ❌ code 1                    3 s  PORTE NON TENUE : éca
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"| portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |\",\n   … [1339 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3937 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-976]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-976", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+2bf24422 ÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 00 h 03 : 77 VERTES, 4 ROUGES (LES CONNUES)
+00:56
+pas   250 · seq 128 · perte 48.3735 · PPL 128/4 4.3449 · 18 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> journal/2026-11-01/nuit-n2.md <<'EOF'\n\n## La seconde moitié : les lois\n\nAprès le corpus réel, la nuit a cherché les **lois** — et elles sont venues, dans l'ordre :\n\n**La capacité paie quand les données suivent.** 11,47 M … [2520 caractères tronqués]`
+
+  ```
+00:56
+pas   750 · seq 128 · perte 44.0292 · PPL 128/4 4.2323 · 53 s
+[stderr]
+  ❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-rare.json
+     · reports/rapport-pensee-rare.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export GIT_INDEX_FILE=/tmp/index.n2; git read-tree HEAD && git add journal/2026-11-01/nuit-n2.md && git commit -q -m \"JOURNAL — LA NUIT N2, SECONDE MOITIÉ : LES LOIS (CAPACITÉ, DISTILLATION, MULTILINGUE, CANAL)\n\nLes lois de la nui … [480 caractères tronqués]`
