@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 29.6 h |
-| Tours | 30 |
-| Messages | 1026 |
-| Appels d'outils | 982 |
+| Durée | 29.9 h |
+| Tours | 34 |
+| Messages | 1040 |
+| Appels d'outils | 987 |
 | Fichiers touchés | 18 |
-| Commandes | 903 |
+| Commandes | 908 |
 | Sous-agents | 0 |
 | Commits | 60 |
 | Compactages de contexte | 2 |
@@ -87,6 +87,14 @@
 **Tour 29** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 30** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 31** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 32** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 33** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 34** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1273,6 +1281,81 @@ Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des di
 - bash — Check English process state and IO counters
 - bash — Wait for English manifest and launch check
 
+**Synthèse produite :**
+
+⏵ Round 18 : l'anglais est sorti de l'état bloqué, il finit ses 200 000 dernières pages
+
+**Round 18/1000 — le blocage s'est dénoué.** Le processus anglais est repassé de l'état **`D`** (attente d'E/S) à l'état **`R`** (calcul, 78 % CPU) : le noyau a libéré la file d'écriture. Il est à **25,4 M pages sur 25,6 M** (6,02 M articles, 21,98 G caractères) ; il ne reste que ~200 000 pages avant le manifeste.
+
+**Ce que j'ai appris et écrit** : le run anglais porte **~75 Go de mémoire résidente** (les ensembles d'empreintes de ses 6 M d'articles et de ses tronçons). C'est une **limite de l'outil** que les neuf autres corpus n'ont pas révélée (ils sont 3 à 5 fois plus petits) : sur un dump de 25 Go, prévoir **~80 Go de RAM**, ou dédupliquer par tranches. La fiche du texte intégral le mentionnera ; c'est plus utile qu'un chiffre de plus.
+
+**Les autres fronts** : les documents sont à **4 000/7 496** (790 Mo, 812,6 M caractères) ; l'OCR a océrisé deux livres (1,1 Mo) et sa détection des scannés continue ; la machine reste à 123/125 Go — je n'ajoute aucun travail tant que l'anglais n'a pas rendu son manifeste.
+
+**La suite** : le **manifeste anglais** → le **contrôle 8 Ko** → la **fiche et le catalogue des dix** ; puis les fiches OCR/Documents et les 159 scans. Le goal reste actif ; le prochain round devrait ramasser le 10e corpus.
+
+### Tour 31 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check English completion and check launch
+- bash — Monitor English process after one minute
+
+**Synthèse produite :**
+
+⏵ Round 19 : l'anglais oscille entre calcul et attente d'E/S — la machine reste à 123/125 Go
+
+**Round 19/1000 — le run anglais est toujours vivant, mais l'étranglement est mémoire.**
+
+L'anglais est à **25,4 M pages sur 25,6 M** (6,02 M articles), et son processus alterne entre `R` (calcul, 74-78 % CPU) et `D` (attente d'E/S) : il écrit le train de 20 Go par gros blocs et le noyau le met en file. Sa mémoire résidente reste **~75 Go** sur une machine à **123/125 Go utilisés** (1-2 Go disponibles). Les documents sont **bloqués au même point** (4 000/7 496, 812,6 M caractères) et l'OCR a océrisé un troisième livre (*Metapatterns*, 373 pages, 654 488 caractères) ; les deux extractions sont en attente d'E/S, pas en calcul.
+
+**La limite est maintenant mesurée et nommée** : sur un dump de 25 Go, le jeu d'empreintes du texte intégral coûte **~75 Go de RAM** ; les neuf autres corpus (3 à 5 fois plus petits) ne l'ont pas révélée. C'est une limite de l'outil, pas du corpus — elle ira dans la fiche avec les deux remèdes (déduplication par tranches, ou ~80 Go de RAM libres). Je n'ajoute **aucun** travail tant que l'anglais n'a pas rendu son manifeste.
+
+**La suite** : le manifeste anglais → le contrôle 8 Ko → la fiche et le catalogue des dix ; puis le déblocage des documents et de l'OCR. Le goal reste actif.
+
+### Tour 32 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check English and documents file timestamps
+
+**Synthèse produite :**
+
+⏵ Round 20 : l'anglais n'a pas écrit depuis 21 h 24 — les documents, eux, avancent
+
+**Round 20/1000 — deux situations distinctes, mesurées par les fichiers.**
+
+- **L'anglais** : le train (20 Go) n'a pas été réécrit depuis **21 h 24**, il y a une heure ; le processus est en `D` (attente d'E/S) avec 74 % de CPU et ~75 Go de résidence. Il est **bloqué sur une écriture** de ses dernières ~200 000 pages. Le noyau ne lui rend pas la main parce que la mémoire est à **124/125 Go** et que la file d'écriture est pleine.
+- **Les documents** : eux **avancent** — le train a été réécrit à **22 h 27** (750 Mo), le val et le test aussi ; le log affiche 4 000 PDF mais le fichier prouve que le parcours continue (le log n'imprime que tous les 500). 2 558 documents gardés, 812,6 M caractères.
+- **L'OCR** : trois livres océrisés (1,7 Mo), la détection des scannés continue.
+
+**Ce que je fais** : je ne tue pas l'anglais (il a 25,4 M pages sur 25,6 M ; le manifeste vaut la dernière heure d'attente) ; je ne relance ni les documents ni l'OCR (ils tournent, lentement, à cause de l'I/O). J'attends que le noyau libère la file d'écriture anglaise. Si l'anglais ne rend pas la main avant **23 h**, je le termine proprement (le train est complet à 99,2 % des pages ; le manifeste peut être reconstruit depuis les fichiers et les compteurs d'E/S) et je documente la limite mémoire (75 Go pour 6 M d'articles) dans la fiche.
+
+**Le goal reste actif.** Le prochain round vérifie l'anglais et, selon son état, lance le contrôle 8 Ko ou clôt le catalogue avec les neuf corpus mesurés et le dixième en attente.
+
+### Tour 33 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check English write progress and documents
+
+**Synthèse produite :**
+
+⏵ Round 21 : la mémoire est à 125/125 Go — l'anglais est bloqué sur une écriture depuis 1 h 04
+
+**Round 21/1000 — l'étranglement est au maximum.** L'anglais n'a **pas réécrit son train depuis 21 h 24** (1 h 04), son processus est en `D` (attente d'E/S), et la machine affiche **125 Go utilisés sur 125, 0 disponible**. Il ne reste que ~200 000 pages sur 25,6 M, mais le noyau ne peut plus donner de mémoire au tampon d'écriture : le run est **gelé de fait**, pas en calcul.
+
+**La décision** : je ne peux pas attendre indéfiniment dans cet état. Je **termine l'anglais proprement** — le train est écrit à 99,2 % des pages (25,4 M/25,6 M), les fichiers sont complets pour les trois splits, et je **reconstruis le manifeste** depuis les fichiers (les comptes des articles, les caractères, les SHA-256, les résidus) plutôt que de relancer 25 Go de traitement. Le contrôle 8 Ko partira sur le corpus tel qu'il est ; la fiche **nommera la limite** : 200 000 pages non traitées sur 25,6 M (0,8 %), le run bloqué à 125/125 Go, et la règle de dimensionnement (~80 Go de RAM ou déduplication par tranches pour un dump de cette taille).
+
+**Ce qui est mesuré et stable** : les neuf corpus (11,65 M articles, 48,4 Go, 8 Ko 0), le corpus PDF (1 927 documents, 322 Mo), l'A2.6/A8.3, l'OCR (3 livres), les documents (4 000/7 496, 750 Mo de train écrit à 22 h 27) — le tout committé, état et roadmap à jour.
+
+**La suite immédiate** : la reconstruction du manifeste anglais, le contrôle 8 Ko, la fiche et le catalogue des dix (avec la mention du run interrompu). Le goal reste actif ; le prochain round exécute la clôture de l'anglais.
+
+### Tour 34 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Stop blocked English process and count files
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1340,7 +1423,7 @@ Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des di
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 863 autres
+- … et 868 autres
 
 ## 4. Mesures et résultats marquants
 

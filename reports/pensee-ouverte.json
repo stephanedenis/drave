@@ -1,0 +1,40 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "32/32",
+ "ouverte": {
+  "episodes": 1000,
+  "graine": 0,
+  "etats_q": 74,
+  "entrainement": "bruit 80 %"
+ },
+ "resultat": {
+  "bruit": {
+   "but": true,
+   "pas": 9,
+   "essais": 2
+  },
+  "stable": {
+   "but": true,
+   "pas": 8
+  }
+ },
+ "controle": {
+  "minute": {
+   "bruit": {
+    "but": false,
+    "pas": 200
+   },
+   "stable": {
+    "but": true,
+    "pas": 8
+   }
+  }
+ },
+ "limites": [
+  "Q-learning tabulaire",
+  "bruit indépendant",
+  "curriculum simulé",
+  "toy"
+ ]
+}

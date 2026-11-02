@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 29.4 h |
-| Tours | 45 |
-| Messages | 776 |
-| Appels d'outils | 737 |
+| Durée | 29.7 h |
+| Tours | 46 |
+| Messages | 787 |
+| Appels d'outils | 746 |
 | Fichiers touchés | 25 |
-| Commandes | 594 |
+| Commandes | 599 |
 | Sous-agents | 2 |
-| Commits | 61 |
+| Commits | 62 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -121,6 +121,8 @@
 **Tour 44** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 45** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 46** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2413,6 +2415,58 @@ La comparaison était **toujours fausse** : la fonction rendait « échec » mê
 - bash — Passer toutes les portes
 - bash — Committer l'audit
 
+**Synthèse produite :**
+
+⏵ Audit des mesures : 15/15 cohérentes, la politique minute ne transfère pas au bruit ; 31/31
+
+Le round 32 du goal est livré : les trois mesures « seule » rendent désormais leur **état final** et leur **chemin**, et l'audit vérifie leur cohérence. Commit **`da55b97d`**.
+
+\## L'audit
+
+`trace_seule`, `trace_seule_sto`, `trace_seule_minute` rendent `(but, pas, état final, chemin)` ; les fonctions publiques n'en gardent que `(but, pas)`. L'audit vérifie `but == (final == P_BUT)` et `pas == len(chemin)` sur **5 politiques × 3 mondes = 15/15**.
+
+| politique | stable | minute | stochastique |
+|---|---|---|---|
+| **stable** (T16) | but/8 | échec/200 | **but/9 (2 essais)** |
+| **minute** (T21) | but/8 | **but/8** | **échec/200** |
+| **complete** (T25) | but/8 | but/8 | **échec/200** |
+| **reseau** | échec/200 | échec/200 | échec/200 |
+| **mlp** | échec/200 | échec/200 | échec/200 |
+
+**Ce que ça dit** :
+
+- **La correction du round 31 est confirmée** : la politique minute atteint le but en 8 pas sur la porte minute ; la stable échoue (contrôle négatif).
+- **Le transfert a un trou** : la politique entraînée sur la porte **minute** ne sait pas gérer l'état `open=True` (la porte stochastique ouverte) ; elle tourne (final `[3,0]`). La politique entraînée sur la porte **stable** voit ces états et réussit (9 pas, 2 essais).
+- **Les réseaux échouent partout** : l'imitation des Q-tables ne conduit pas (T23/T24).
+- **15/15 cohérentes** : la mesure ne ment plus ; le bug de comparaison est mort.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-audit.md`](../../reports/rapport-pensee-audit.md) ; JSON [`pensee-audit.json`](../../reports/pensee-audit.json) ; code [`audit.py`](../../tools/pensee/audit.py) ; T28 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **31/31 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **419 fiches / 517 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+\## La suite
+
+1. **Curriculum des états `open`** : entraîner la politique minute sur la porte stochastique ; combler le trou de transfert.
+2. **Porte mobile** : la porte change de case ; mesurer la robustesse.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+… [117 caractères tronqués]
+
+### Tour 46 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Ajouter la politique entraînée sur la porte stochastique
+- bash — Ajouter la porte T29 (curriculum open)
+- job_output
+- bash — Écrire la fiche du curriculum open
+- bash — Passer toutes les portes
+- bash — Committer le curriculum open
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2492,7 +2546,7 @@ La comparaison était **toujours fausse** : la fonction rendait « échec » mê
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 554 autres
+- … et 559 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2700,4 +2754,5 @@ La comparaison était **toujours fausse** : la fonction rendait « échec » mê
 - B13 — LA MESURE CORRIGÉE : BUG DE seule_minute, 4 POLITIQUES À BUT/8, 4 FICHES CORRIGÉES ; 30/30" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MESURE
 - B13 — LA MESURE CORRIGÉE : BUG DE seule_minute, 4 POLITIQUES À BUT/8, 4 FICHES CORRIGÉES ; 30/30" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MESURE
 - B13 — L'AUDIT DES MESURES : 15/15 COHÉRENTES, LA MINUTE NE TRANSFÈRE PAS AU BRUIT ; 31/31" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "AUDIT DES MES
+- B13 — LE CURRICULUM OPEN : 74 ÉTATS-Q, BRUIT BUT/9 ET STABLE BUT/8 ; 32/32" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CURRICULUM OPEN"; then echo 
 

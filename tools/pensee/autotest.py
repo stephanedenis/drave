@@ -502,6 +502,18 @@ def t28_audit() -> tuple[bool, str]:
         f"audit : {coherents}/{len(lignes)} mesures cohérentes")
 
 
+def t29_ouverte() -> tuple[bool, str]:
+    """La politique entraînée sur la porte stochastique réussit seule (l'état open appris)."""
+    from .courbe import seule, seule_sto
+    from .operateurs import PolitiqueAppriseOuverte
+    p = PolitiqueAppriseOuverte(episodes=1000, graine=0)
+    p.apprendre()
+    ok, pas, essais = seule_sto(p, graine=0)
+    ok_s, pas_s = seule(p)
+    return ok and ok_s, (f"ouverte : {len(p.q)} états-Q, bruit but/{pas} pas "
+                         f"({essais} essais), stable but/{pas_s} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -529,7 +541,8 @@ def main() -> int:
               ("T25 professeur complet", t25_professeur()),
               ("T26 politique sans None", t26_sans_none()),
               ("T27 mesure corrigée", t27_correction()),
-              ("T28 audit des mesures", t28_audit())]
+              ("T28 audit des mesures", t28_audit()),
+              ("T29 curriculum open", t29_ouverte())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

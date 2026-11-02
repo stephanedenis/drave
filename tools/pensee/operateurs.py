@@ -378,6 +378,25 @@ class PolitiqueAppriseComplete(PolitiqueAppriseShaping):
         return max(self.ACTIONS, key=lambda a: self._q(cle, a))
 
 
+class PolitiqueAppriseOuverte(PolitiqueApprise):
+    """La Q-table **entraînée sur la porte stochastique** (80 %) : elle apprend l'état `open`."""
+
+    nom = "ouverte"
+
+    def _pas(self, cle, action, ouvre: bool):
+        x, y, o = cle
+        if (x, y) == (3, 2) and action == "bas" and not o:
+            if self.rng.random() < 0.8:
+                return (3, 3, True), 0.1
+            return cle, -0.01
+        dx = {"droite": 1, "gauche": -1}.get(action, 0)
+        dy = {"bas": 1, "haut": -1}.get(action, 0)
+        nx, ny = x + dx, y + dy
+        if not _libre_p(nx, ny, o):
+            return cle, 0.0
+        return (nx, ny, o), -0.01
+
+
 class PolitiqueMLP(Politique):
     """Un **MLP** (2 → 8 → 4, tanh), entraîné par imitation du professeur (porte minute).
 
@@ -985,7 +1004,7 @@ class DRVM:
 __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle",
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
-           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise", "PolitiqueAppriseMinute", "PolitiqueAppriseShaping", "PolitiqueReseau", "PolitiqueMLP", "PolitiqueAppriseComplete",
+           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise", "PolitiqueAppriseMinute", "PolitiqueAppriseShaping", "PolitiqueReseau", "PolitiqueMLP", "PolitiqueAppriseComplete", "PolitiqueAppriseOuverte",
            "LABYRINTHE_PORTE", "REGISTRE_P", "LABYRINTHE_PORTE_STO", "REGISTRE_PSTO",
            "LABYRINTHE_PORTE_FERME", "REGISTRE_PF",
            "LABYRINTHE_PORTE_MINUTE", "REGISTRE_PM",

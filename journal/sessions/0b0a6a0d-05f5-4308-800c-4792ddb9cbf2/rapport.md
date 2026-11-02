@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 29.9 h |
+| Durée | 30.2 h |
 | Tours | 18 |
-| Messages | 1203 |
-| Appels d'outils | 1117 |
+| Messages | 1213 |
+| Appels d'outils | 1125 |
 | Fichiers touchés | 11 |
-| Commandes | 906 |
+| Commandes | 911 |
 | Sous-agents | 0 |
-| Commits | 38 |
+| Commits | 39 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*151 appels d'outils.* Actions notables :
+*159 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 98 autres
+- … et 103 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 866 autres
+- … et 871 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1215,4 +1215,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - N2.n — LA DISTILLATION ANGLAISE : 4,42 → 3,94, LA CHAÎNE COMPLÈTE SUR 204 Mo  Le professeur 23,57 M entraîné sur les 204,6 Mo d'anglais, distillé dans la base a
 - N2.n — LA DISTILLATION ANGLAISE : 4,42 → 3,94, LA CHAÎNE COMPLÈTE SUR 204 Mo  Le professeur 23,57 M entraîné sur les 204,6 Mo d'anglais, distillé dans la base a
 - N2.n — LA DISTILLATION ANGLAISE : 4,42 → 3,94, LA CHAÎNE COMPLÈTE SUR 204 Mo  Le professeur 23,57 M entraîné sur les 204,6 Mo d'anglais, distillé dans la base a
+- N2.o — LA DISTILLATION MULTILINGUE : DIX LANGUES S'AMÉLIORENT, LA DILUTION RESTE  Le professeur 23,57 M entraîné sur les 237 Mo des dix langues, distillé dans l
 

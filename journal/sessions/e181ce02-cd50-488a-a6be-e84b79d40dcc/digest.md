@@ -16509,3 +16509,146 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-594", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+retry 1
+  ✅ index : aucun fait stagé sans état
+retry 2
+ create mode 100644 reports/pensee-audit.json
+ create mode 100644 reports/rapport-pensee-audit.md
+ create mode 100644 tools/pensee/audit.py
+COMMIT OK 3
+da55b97d B13 — L'AUDIT DES MESURES : 15/15 COHÉRENTES, LA MINUTE NE TRANSFÈRE PAS AU BRUIT ; 31/31
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit des mesures : 15/15 cohérentes, la politique minute ne transfère pas au bruit ; 31/31
+
+Le round 32 du goal est livré : les trois mesures « seule » rendent désormais leur **état final** et leur **chemin**, et l'audit vérifie leur cohérence. Commit **`da55b97d`**.
+
+## L'audit
+
+`trace_seule`, `trace_seule_sto`, `trace_seule_minute` rendent `(but, pas, état final, chemin)` ; les fonctions publiques n'en gardent que `(but, pas)`. L'audit vérifie `but == (final == P_BUT)` et `pas == len(chemin)` sur **5 politiques × 3 mondes = 15/15**.
+
+| politique | stable | minute | stochastique |
+|---|---|---|---|
+| **stable** (T16) | but/8 | échec/200 | **but/9 (2 essais)** |
+| **minute** (T21) | but/8 | **but/8** | **échec/200** |
+| **complete** (T25) | but/8 | but/8 | **échec/200** |
+| **reseau** | échec/200 | échec/200 | échec/200 |
+| **mlp** | échec/200 | échec/200 | échec/200 |
+
+**Ce que ça dit** :
+
+- **La correction du round 31 est confirmée** : la politique minute atteint le but en 8 pas sur la porte minute ; la stable échoue (contrôle négatif).
+- **Le transfert a un trou** : la politique entraînée sur la porte **minute** ne sait pas gérer l'état `open=True` (la porte stochastique ouverte) ; elle tourne (final `[3,0]`). La politique entraînée sur la porte **stable** voit ces états et réussit (9 pas, 2 essais).
+- **Les réseaux échouent partout** : l'imitation des Q-tables ne conduit pas (T23/T24).
+- **15/15 cohérentes** : la mesure ne ment plus ; le bug de comparaison est mort.
+
+## L'état
+
+- Fiche : [`rapport-pensee-audit.md`](../../reports/rapport-pensee-audit.md) ; JSON [`pensee-audit.json`](../../reports/pensee-audit.json) ; code [`audit.py`](../../tools/pensee/audit.py) ; T28 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **31/31 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **419 fiches / 517 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+## La suite
+
+1. **Curriculum des états `open`** : entraîner la politique minute sur la porte stochastique ; combler le trou de transfert.
+2. **Porte mobile** : la porte change de case ; mesurer la robustesse.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round comble le trou de transfert (`open`).
+
+
+## Tour 46
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 33/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''class PolitiqueMLP(Politique):''',\n'''class PolitiqueAppriseOuverte(PolitiqueApprise):\n    … [1232 caractères tronqués]`
+
+  ```
+da55b97d B13 — L'AUDIT DES MESURES : 15/15 COHÉRENTES, LA MINUTE NE TRANSFÈRE PAS AU BRUIT ; 31/31
+ok
+500 q 74 sto (True, 9, 2) stable (True, 8)
+1000 q 74 sto (True, 9, 2) stable (True, 8)
+2000 q 83 sto (True, 9, 2) stable (True, 8)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T28 l'audit des mesures            but == état final et pas == chemin, 15/15\\n\",\n\"  T28 l'audit des mesures            … [1300 caractères tronqués]`
+
+  ```
+ok
+[still running after 60000ms; moved to background job bash-596]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-596", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ T27 mesure corrigée    mesure corrigée : minute but/8 pas, stable échec/200 pas
+  ✅ T28 audit des mesures  audit : 15/15 mesures cohérentes
+  ✅ T29 curriculum open    ouverte : 74 états-Q, bruit but/9 pas (2 essais), stable but/8 pas
+  32/32 portes tenues
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-ouverte.md <<'MD'\n# B13 — le curriculum des états `open` : le trou de transfert est comblé\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **32/32 port … [6538 caractères tronqués]`
+
+  ```
+état ok
+[still running after 60000ms; moved to background job bash-597]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-597", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 420 fiche(s) · 518 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [300 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+[still running after 60000ms; moved to background job bash-598]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-598", "timeout_ms": 300000, "wait": true}`
+
+  ```
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-ouverte.md reports/pensee-ouverte.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md doc … [477 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-599]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-599", "timeout_ms": 600000, "wait": true}`
