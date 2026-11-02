@@ -506,6 +506,48 @@ LABYRINTHE_PORTE = Probleme(
 )
 
 
+# --------------------------------------------------------------------------- porte stochastique
+
+def sonde_p_sto(e: Etat, _p: dict | None = None) -> list[Etat]:
+    """La porte s'ouvre à 80 % ; sinon l'état reste (la politique doit réessayer)."""
+    p = POLITIQUE[0]
+    if p is None:
+        return []
+    direction = p.propose(e, P_BUT)
+    p.appels += 1
+    if not direction:
+        return []
+    x, y = _xy_p(e)
+    open_ = _open_p(e)
+    if (x, y) == (3, 2) and direction == "bas":
+        if random.random() < 0.8:
+            open_ = True
+        else:
+            return [_etat_p(x, y, open_, e.empreinte(), e.profondeur)]
+    dx = {"droite": 1, "gauche": -1}.get(direction, 0)
+    dy = {"bas": 1, "haut": -1}.get(direction, 0)
+    nx, ny = x + dx, y + dy
+    if not _libre_p(nx, ny, open_):
+        return []
+    return [_etat_p(nx, ny, open_, e.empreinte(), e.profondeur + 1)]
+
+
+REGISTRE_PSTO = Registre({
+    "pas": Operateur("pas", "symbolique", 1.0, pas_p, "un pas ; la porte reste fermée"),
+    "saut": Operateur("saut", "numérique", 2.0, saut_p, "un saut ; la porte reste fermée"),
+    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_p_sto, "la politique tente la porte (80 %)"),
+})
+
+LABYRINTHE_PORTE_STO = Probleme(
+    nom="labyrinthe_porte_sto",
+    initial=lambda: _etat_p(0, 0, False),
+    operateurs={n: o.applique for n, o in REGISTRE_PSTO.operateurs.items()},
+    but=but_p,
+    heuristique=heuristique_p,
+    score=score_p,
+)
+
+
 class DRVM:
     """Le conteneur d'exécution : registre, politique, moteur, trace, bilan."""
 
@@ -548,4 +590,4 @@ __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "Politique
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
            "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise",
-           "LABYRINTHE_PORTE", "REGISTRE_P"]
+           "LABYRINTHE_PORTE", "REGISTRE_P", "LABYRINTHE_PORTE_STO", "REGISTRE_PSTO"]

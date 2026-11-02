@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 28.0 h |
-| Tours | 31 |
-| Messages | 630 |
-| Appels d'outils | 625 |
+| Durée | 28.1 h |
+| Tours | 32 |
+| Messages | 637 |
+| Appels d'outils | 630 |
 | Fichiers touchés | 25 |
-| Commandes | 502 |
+| Commandes | 506 |
 | Sous-agents | 2 |
-| Commits | 46 |
+| Commits | 47 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -93,6 +93,8 @@
 **Tour 30** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 31** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 32** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1680,6 +1682,57 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Committer la politique seule
 - job_output
 
+**Synthèse produite :**
+
+⏵ Politique seule : 8 pas, 15/15 buts sans A* ; 17/17
+
+Le round 18 du goal est livré : la **politique seule** conduit le labyrinthe à porte **sans A***. Commit **`82580dda`**.
+
+\## La politique seule
+
+La `PolitiqueApprise` entraînée suit son **argmax Q** à chaque état `(x, y, open)` ; aucun A*, aucun budget de recherche. La porte s'ouvre si l'action la vise.
+
+| épisodes | graines | états-Q | buts seuls | pas | but avec A* |
+|---:|---:|---:|---:|---:|---:|
+| 50 | 0,1,2 | 52–74 | **3/3** | **8** | 3/3 |
+| 100 | 0,1,2 | 52–74 | **3/3** | **8** | 3/3 |
+| 200 | 0,1,2 | 61–74 | **3/3** | **8** | 3/3 |
+| 400 | 0,1,2 | 62–83 | **3/3** | **8** | 3/3 |
+| 800 | 0,1,2 | 62–83 | **3/3** | **8** | 3/3 |
+
+**Ce que ça dit** :
+
+- **La politique seule atteint le but en 8 pas** : c'est le **chemin optimal** (Manhattan 8) ; la Q-table n'a pas seulement appris la porte, elle a appris le **chemin**.
+- **15/15 runs**, y compris à **50 épisodes** : l'apprentissage est **complet** très tôt sur ce jouet ; les épisodes supplémentaires ne changent pas le chemin.
+- **L'A* n'était pas nécessaire** pour exécuter : il servait de **cadre** à la sonde ; la politique seule est le **vrai** test de ce qui est appris.
+- **La Q-table reste petite** (52–83 états) : le jouet est déterministe, mais la preuve est claire : le modèle peut être une **table** qui **conduit**.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-seule.md`](../../reports/rapport-pensee-seule.md) ; JSON [`pensee-courbe.json`](../../reports/pensee-courbe.json) ; code [`courbe.py`](../../tools/pensee/courbe.py) ; T14 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **17/17 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **404 fiches / 505 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+\## La suite
+
+1. **Porte stochastique** : 80 % d'ouverture ; la politique doit réessayer.
+2. **Labyrinthe plus long** : tester la **généralisation** de la table (ou un réseau).
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque la porte stochastique.
+
+### Tour 32 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Ajouter la porte stochastique et la tester
+- bash — Ajouter la porte T15 et lancer l'autotest
+- bash — Écrire la fiche stochastique et l'état
+- bash — Passer les portes et committer la porte stochastique
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1759,7 +1812,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 462 autres
+- … et 466 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1950,4 +2003,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LA PORTE APPRISE : Q-TABLE 67 ÉTATS, 30 NŒUDS/BUT (SONDE 7), 200 ÉPISODES ; 15/15" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA COURBE : 15/15 BUTS (50–800 ÉPISODES × 3 GRAINES), 30 NŒUDS, Q 52–83 ; 16/16" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA COURBE"; then 
 - B13 — LA POLITIQUE SEULE : 8 PAS, 15/15 BUTS SANS A* ; 17/17" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "POLITIQUE SEULE"; then echo "COMMIT OK $i"
+- B13 — LA PORTE STOCHASTIQUE : 80 %, 30 NŒUDS/BUT, SONDE 7 ; 18/18" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE STOCHASTIQUE"; then echo "COMMI
 

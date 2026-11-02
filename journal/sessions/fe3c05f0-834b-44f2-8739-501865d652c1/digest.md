@@ -17522,3 +17522,75 @@ f708b7ee A2.6/A8.3 — LE LOT SUR LE DISQUE : IL NE DIVISE PAS LES LECTURES (503
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 240 bash -c 'bzcat /home/stephane/Data13TB/stephane/data/wikipedia/dumps/en/enwiki-latest-pages-articles-multistream-index.txt.bz2 | wc -l' 2>/dev/null; echo \"=== tesseract\"; which tesseract pdftoppm; tesseract --list-langs 2 … [343 caractères tronqués]`
+
+  ```
+25587229
+=== tesseract
+/usr/bin/pdftoppm
+bash: line 1: tesseract: command not found
+=== outils r44
+graphe_document_ocr.py
+installer_ocr.sh
+mesurer_ocr.py
+mesurer_scans.py
+nettoyer_scan.py
+porte-ocr-scans.sh
+porte-ocr.sh
+simuler_scan.py
+=== en
+  [en] 16200000 lus · 4340955 gardés · 17.20 G caractères
+[stderr]
+which: no tesseract in (/home/stephane/IA/outils:/usr/local/cuda-13/bin:/home/stephane/.lmstudio/bin:/home/stephane/IA/outils:/home/stephane/.local/share/../bin:/home/stephane/.cargo/bin:/usr/local/cuda-13/bin:/home/stephane/.lmstudio/bin:/home/stephane/.local/bin:/usr/local/bin:/usr/bin:/bin:/home/stephane/.dotnet/tools:/home/stephane/.lmstudio/bin:/home/stephane/.lmstudio/bin:/home/stephane/.lmstudio/bin)
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for d in /home/stephane/Data13TB/stephane/collections /home/stephane/Data13TB/stephane/Documents /home/stephane/Documents; do [ -d \"$d\" ] && echo \"OK $d $(find \"$d\" -iname '*.pdf' 2>/dev/null | wc -l) PDF\"; done; echo \"=== insta … [187 caractères tronqués]`
+
+  ```
+OK /home/stephane/Data13TB/stephane/Documents 7496 PDF
+OK /home/stephane/Documents 0 PDF
+=== installer
+#!/bin/bash
+# installer_ocr.sh — l'OCR de R4.4, installé SANS root dans `work/ocr/` (gitignoré).
+#
+# POURQUOI CE SCRIPT. La ligne R4.4 était bloquée par « aucun OCR installé » : ni tesseract,
+# ni pytesseract, et un paquet système demanderait root. On télécharge donc les RPM openSUSE,
+# on les extrait sous `work/ocr/root`, et on ne touche à rien d'autre. Le résultat est
+# reproductible : `--verifie` dit la version installée, relancer le script ne retélécharge
+# que ce qui manque.
+#
+# CE QU'IL NE FAIT PAS. Aucun `sudo`, aucune écriture hors de `work/ocr/`, aucun modèle
+# neuronal : tesseract 5.5.3 et les données fra/eng/spa/osd. Un OCR neuronal (rapidocr,
+# easyocr) serait un autre choix, avec un autre coût — il n'est pas fait ici.
+#
+# Usage :
+#   tools/installer_ocr.sh              # installe (ou complète) et affiche la version
+#   tools/installer_ocr.sh --verifie    # ne télécharge rien : dit ce qui est là, code 1 si absent
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+PREFIXE=${TESSERACT_PREFIX:-$PWD/work/ocr/root}
+DEPOT=${DEPOT:-https://download.opensuse.org/tumbleweed/repo/oss}
+B
+… [216 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nohup python3 tools/extrait_pdf.py --racine \"/home/stephane/Data13TB/stephane/Documents:personnel — usage local, non diffusé\" --sortie data/corpus_pdf_documents --manifeste reports/corpus-pdf-documents.json > /tmp/pdf-documents.log 2 … [389 caractères tronqués]`
+
+  ```
+documents job 1615747
+3,1M	data/corpus_pdf_documents
+=== ocr
+-rwxr-xr-x. 1 stephane stephane 55672 16 oct 07:05 work/ocr/root/usr/bin/tesseract
+  ✅ tesseract 5.5.3 · langues : eng fra osd spa
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > tools/ocr_pdf.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"ocr_pdf.py — l'OCR des PDF **scannés** (R4.4 appliqué aux documents réels).\n\nPOURQUOI. `extrait_pdf.py` extrait le texte natif ; les PDF sans couche texte (les scans) sont … [9399 caractères tronqués]`
+
+  ```
+OK
+tesseract 5.5.3
+ leptonica-1.87.0
+ocr job 1616198
+  ```
+

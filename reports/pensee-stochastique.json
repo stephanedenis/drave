@@ -1,0 +1,26 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "18/18",
+ "porte_stochastique": {
+  "p_ouverture": 0.8,
+  "politique": "PolitiqueApprise(200, graine 0)",
+  "entrainement": "porte déterministe"
+ },
+ "resultat": {
+  "noeuds": 30,
+  "par_operateur": {
+   "pas": 13,
+   "saut": 10,
+   "sonde": 7
+  },
+  "cout": 68.0,
+  "appels": 7,
+  "but": true
+ },
+ "limites": [
+  "Q-learning tabulaire",
+  "A* masque encore la politique",
+  "bruit indépendant"
+ ]
+}

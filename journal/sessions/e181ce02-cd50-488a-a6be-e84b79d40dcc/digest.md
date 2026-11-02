@@ -14012,3 +14012,99 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-502", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at f708b7eefeca8a5c34814d6ae121e4c424b84d31 but expected 039e0500a79441b688707d04176bd59d74a2f2dc
+retry 1
+[master 82580dda] B13 — LA POLITIQUE SEULE : 8 PAS, 15/15 BUTS SANS A* ; 17/17
+ 18 files changed, 313 insertions(+), 51 deletions(-)
+ create mode 100644 reports/rapport-pensee-seule.md
+COMMIT OK 2
+82580dda B13 — LA POLITIQUE SEULE : 8 PAS, 15/15 BUTS SANS A* ; 17/17
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Politique seule : 8 pas, 15/15 buts sans A* ; 17/17
+
+Le round 18 du goal est livré : la **politique seule** conduit le labyrinthe à porte **sans A***. Commit **`82580dda`**.
+
+## La politique seule
+
+La `PolitiqueApprise` entraînée suit son **argmax Q** à chaque état `(x, y, open)` ; aucun A*, aucun budget de recherche. La porte s'ouvre si l'action la vise.
+
+| épisodes | graines | états-Q | buts seuls | pas | but avec A* |
+|---:|---:|---:|---:|---:|---:|
+| 50 | 0,1,2 | 52–74 | **3/3** | **8** | 3/3 |
+| 100 | 0,1,2 | 52–74 | **3/3** | **8** | 3/3 |
+| 200 | 0,1,2 | 61–74 | **3/3** | **8** | 3/3 |
+| 400 | 0,1,2 | 62–83 | **3/3** | **8** | 3/3 |
+| 800 | 0,1,2 | 62–83 | **3/3** | **8** | 3/3 |
+
+**Ce que ça dit** :
+
+- **La politique seule atteint le but en 8 pas** : c'est le **chemin optimal** (Manhattan 8) ; la Q-table n'a pas seulement appris la porte, elle a appris le **chemin**.
+- **15/15 runs**, y compris à **50 épisodes** : l'apprentissage est **complet** très tôt sur ce jouet ; les épisodes supplémentaires ne changent pas le chemin.
+- **L'A* n'était pas nécessaire** pour exécuter : il servait de **cadre** à la sonde ; la politique seule est le **vrai** test de ce qui est appris.
+- **La Q-table reste petite** (52–83 états) : le jouet est déterministe, mais la preuve est claire : le modèle peut être une **table** qui **conduit**.
+
+## L'état
+
+- Fiche : [`rapport-pensee-seule.md`](../../reports/rapport-pensee-seule.md) ; JSON [`pensee-courbe.json`](../../reports/pensee-courbe.json) ; code [`courbe.py`](../../tools/pensee/courbe.py) ; T14 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **17/17 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **404 fiches / 505 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+## La suite
+
+1. **Porte stochastique** : 80 % d'ouverture ; la politique doit réessayer.
+2. **Labyrinthe plus long** : tester la **généralisation** de la table (ou un réseau).
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque la porte stochastique.
+
+
+## Tour 32
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 19/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''class DRVM:''',\n'''# ---------------------------------------------------------------------- … [2081 caractères tronqués]`
+
+  ```
+82580dda B13 — LA POLITIQUE SEULE : 8 PAS, 15/15 BUTS SANS A* ; 17/17
+ok
+{'noeuds': 30, 'but': True, 'par_operateur': {'pas': 13, 'saut': 10, 'sonde': 7}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 68.0, 'appels': 7, 'budget': 28, 'politique': 'apprise', 'score': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T14 la politique seule              sans A*, la Q-table atteint le but en 8 pas\\n\",\n\"  T14 la politique seule          … [1413 caractères tronqués]`
+
+  ```
+ok
+  ✅ T13 courbe d'apprentissage courbe : 9/9 buts (50–200 épisodes, 3 graines)
+  ✅ T14 politique seule    politique seule : 9/9 buts, 8 pas
+  ✅ T15 porte stochastique porte stochastique : 30 nœuds/but, sonde 7
+  18/18 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-stochastique.md <<'MD'\n# B13 — la porte stochastique : 80 % d'ouverture, la politique réessaie\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **18/18  … [5866 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 405 fiche(s) · 506 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [995 caractères tronqués]`
