@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
 | Durée | 28.1 h |
-| Tours | 20 |
-| Messages | 967 |
-| Appels d'outils | 950 |
+| Tours | 21 |
+| Messages | 972 |
+| Appels d'outils | 953 |
 | Fichiers touchés | 18 |
-| Commandes | 874 |
+| Commandes | 877 |
 | Sous-agents | 0 |
 | Commits | 58 |
 | Compactages de contexte | 2 |
@@ -67,6 +67,8 @@
 **Tour 19** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 **Tour 20** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
+
+**Tour 21** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -983,6 +985,43 @@ L'**anglais** (le 10e corpus) → son contrôle 8 Ko → la **fiche et le catalo
 - bash — Write lot measurement report and update state
 - bash — Commit A2.6 lot measurement and trim budget
 
+**Synthèse produite :**
+
+⏵ Round 8 : A2.6/A8.3 mesuré — le lot accélère le calcul, il ne divise pas les lectures
+
+**Round 8/1000 — une mesure d'ordonnanceur en plus, l'anglais toujours en course.** Commit `f708b7ee`.
+
+\## A2.6/A8.3 — le lot sur le disque
+
+Mesure avec **éviction du cache** (`posix_fadvise(DONTNEED)`) sur Qwen2.5-0.5B-Q8, 192 jetons anglais, ctx 512 :
+
+| lot | PPL | lus (Mio) | mur (s) | tok/s |
+|---:|---:|---:|---:|---:|
+| **1** | 15,8452 | **503** | 12,04 | 24,0 |
+| **2** | 15,8443 | **502** | 10,38 | 30,5 |
+| **4** | 15,8443 | **502** | 10,18 | 30,0 |
+| **8** | 15,8443 | **502** | 9,96 | 30,5 |
+
+**Trois lectures.** Le lot **ne divise pas** les lectures : le modèle dense de 0,5 Go est lu une fois, quel que soit le lot (503 → 502 Mio). Le lot **accélère le calcul** : **+27 % de tok/s** dès le lot 2, le temps mural de 12,04 à 9,96 s. La **PPL** ne bouge que de **−0,006 %** (le lot 2+ est stable, le lot 1 diffère) — l'écart de 1,9 % d'A8.3c (français, f32) ne se retrouve pas ici (anglais, Q8).
+
+**Conséquence pour A2.6** : « réduire le lot » est **inutile** pour le disque ; le lot ≥ 2 s'assume pour le calcul ; les lectures partagées ne viendront que des **matrices d'experts** (le MoE, A6.2, bloqué). La fiche `rapport-a26-lot-disque.md` et le JSON sont committés ; l'état et la roadmap portent le verdict.
+
+\## L'anglais
+
+16,2 M pages lues, 4,34 M articles, 17,20 G caractères. C'est le seul run restant ; il avance plus lentement que les autres (les pages anglaises sont plus lourdes). Son contrôle 8 Ko suivra, puis la **fiche et le catalogue des dix**.
+
+\## La suite
+
+L'**anglais** → le **catalogue des dix** ; l'**OCR des 159 scannés** du PDF (le pipeline R4.4) ; les **collections et Documents** (7 496 PDF) ; la comparaison des genres. Le goal reste actif ; le prochain round ramasse l'anglais.
+
+### Tour 21 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check English progress and repository state
+- bash — Count English pages and check OCR tools
+- bash — Locate document roots and read OCR installer
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1050,7 +1089,7 @@ L'**anglais** (le 10e corpus) → son contrôle 8 Ko → la **fiche et le catalo
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 834 autres
+- … et 837 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1178,7 +1217,7 @@ L'**anglais** (le 10e corpus) → son contrôle 8 Ko → la **fiche et le catalo
 
 ## 5. Erreurs rencontrées
 
-39 sorties en erreur ou divergentes. Les premières :
+40 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

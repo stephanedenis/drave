@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-seule.md`](rapport-pensee-seule.md) | **B13** — la politique seule : 8 pas, 15/15 buts sans A*, **17/17** |
 | [`rapport-pensee-courbe.md`](rapport-pensee-courbe.md) | **B13** — la courbe : 15/15 buts (50–800 épisodes × 3 graines), 30 nœuds, Q 52–83, **16/16** |
 | [`rapport-pensee-porte-apprise.md`](rapport-pensee-porte-apprise.md) | **B13** — la porte apprise : Q-table 67 états, 30 nœuds/but, sonde 7, **15/15** |
 | [`rapport-pensee-porte.md`](rapport-pensee-porte.md) | **B13** — la porte neuronale : bonne politique 28 nœuds/58 (sonde 5), aveugle 200/483 sans but, **14/14** |

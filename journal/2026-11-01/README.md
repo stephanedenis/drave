@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**95 commits** · **4 session(s)** · **10 thème(s)**
+**96 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 9 | [distribue.md](distribue.md) |
 | docs | 25 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
-| mesures | 44 | [mesures.md](mesures.md) |
+| mesures | 45 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -130,6 +130,7 @@
 | 20:33 | `ad3da0b6` | B13 — LA PORTE APPRISE : Q-TABLE 67 ÉTATS, 30 NŒUDS/BUT (SONDE 7), 200 ÉPISODES ; 15/15 |
 | 20:35 | `2f913a1a` | DONNÉES — LE CORPUS PDF LOCAL : 2 785 PDF, 1 927 DOCUMENTS, 322 MO, 8 KO 0, LICENCES NOMMÉES |
 | 20:38 | `039e0500` | B13 — LA COURBE : 15/15 BUTS (50–800 ÉPISODES × 3 GRAINES), 30 NŒUDS, Q 52–83 ; 16/16 |
+| 20:40 | `f708b7ee` | A2.6/A8.3 — LE LOT SUR LE DISQUE : IL NE DIVISE PAS LES LECTURES (503→502 MIO), IL ACCÉLÈRE LE CALCUL (+27 %) |
 
 ## Le récit de la journée (écrit à la main)
 

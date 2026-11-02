@@ -14,11 +14,27 @@ import pathlib
 import time
 
 from .moteur import AStar
-from .operateurs import DRVM, LABYRINTHE_PORTE, REGISTRE_P, PolitiqueApprise
+from .operateurs import (DRVM, LABYRINTHE_PORTE, P_BUT, REGISTRE_P, PolitiqueApprise,
+                         _etat_p)
 from .store import Budget
 
 EPISODES = (50, 100, 200, 400, 800)
 GRAINES = (0, 1, 2)
+
+
+def seule(p: PolitiqueApprise) -> tuple[bool, int]:
+    """La politique seule, sans A* : elle suit son argmax Q jusqu'au but."""
+    cle, pas = (0, 0, False), 0
+    for _ in range(200):
+        if cle[:2] == P_BUT:
+            return True, pas
+        e = _etat_p(cle[0], cle[1], cle[2])
+        a = p.propose(e, P_BUT)
+        if a is None:
+            return False, pas
+        cle, _ = p._pas(cle, a, True)
+        pas += 1
+    return False, pas
 
 
 def executer() -> list[dict]:
@@ -31,9 +47,11 @@ def executer() -> list[dict]:
             d = DRVM(REGISTRE_P, p)
             d.penser(LABYRINTHE_PORTE, AStar(), Budget(200))
             b = d.instantane()
+            ok_seule, pas_seule = seule(p)
             lignes.append({"episodes": ep, "graine": g, "etats_q": len(p.q),
                            "noeuds": b["noeuds"], "sonde": b["par_operateur"].get("sonde", 0),
                            "cout": b["cout"], "appels": b["appels"], "but": b["but"],
+                           "seule_but": ok_seule, "seule_pas": pas_seule,
                            "duree_s": round(time.perf_counter() - t0, 3)})
     return lignes
 
@@ -46,7 +64,7 @@ def main() -> int:
     for l in lignes:
         print(f"{l['episodes']:4d} ep g{l['graine']}  Q {l['etats_q']:3d}  "
               f"{l['noeuds']:3d} nœuds  sonde {l['sonde']:2d}  coût {l['cout']:5.1f}  "
-              f"but {l['but']}")
+              f"but {l['but']}  seule {l['seule_but']}/{l['seule_pas']}")
     if args.json:
         p = pathlib.Path(args.json)
         p.parent.mkdir(parents=True, exist_ok=True)

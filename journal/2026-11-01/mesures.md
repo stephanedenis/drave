@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (44)
+## Commits du jour (45)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -52,10 +52,11 @@
 | 20:10 | `5241f1f7` | L — GOLD 260 : 100 RÉELS + 160 SYNTHÉTIQUES, POS 0,774, TÊTE 0,954 (RÉEL 0,909) | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+25) |
 | 20:13 | `bcab8bd2` | L — GOLD 300 : 140 RÉELS + 160 SYNTHÉTIQUES, POS 0,773, TÊTE 0,962 (RÉEL 0,936) | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+27) |
 | 20:17 | `adaaeae9` | L — GOLD 360 : 200 RÉELS + 160 SYNTHÉTIQUES, POS 0,772, TÊTE 0,966 (RÉEL 0,946) | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+25) |
+| 20:40 | `f708b7ee` | A2.6/A8.3 — LE LOT SUR LE DISQUE : IL NE DIVISE PAS LES LECTURES (503→502 MIO), IL ACCÉLÈRE LE CALCUL (+27 %) | `en-cours.md`, `roadmap.md`, `README.md` (+22) |
 
 ## Chiffres du jour
 
-`0,772` · `0,966` · `0,946` · `0,773` · `0,962` · `0,936` · `0,774` · `0,954` · `0,909` · `0,972` · `0,929` · `204 Mo`
+`+27 %` · `0,772` · `0,966` · `0,946` · `0,773` · `0,962` · `0,936` · `0,774` · `0,954` · `0,909` · `0,972` · `0,929`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -70,6 +71,7 @@
 
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
+- [reports/rapport-a26-lot-disque.md](../../reports/rapport-a26-lot-disque.md)
 - [reports/rapport-bloc-linguistique.md](../../reports/rapport-bloc-linguistique.md)
 - [reports/rapport-corpus-wiki-texte.md](../../reports/rapport-corpus-wiki-texte.md)
 - [reports/rapport-n2-anglais.md](../../reports/rapport-n2-anglais.md)

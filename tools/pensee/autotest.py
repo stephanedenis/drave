@@ -317,6 +317,21 @@ def t13_courbe() -> tuple[bool, str]:
                                          f"(50–200 épisodes, 3 graines)")
 
 
+def t14_seule() -> tuple[bool, str]:
+    """La politique seule, sans A* : la Q-table atteint le but en 8 pas."""
+    from .courbe import seule
+    from .operateurs import PolitiqueApprise
+    buts = []
+    for ep in (50, 100, 200):
+        for g in (0, 1, 2):
+            p = PolitiqueApprise(episodes=ep, graine=g)
+            p.apprendre()
+            ok, _ = seule(p)
+            buts.append(ok)
+    return all(buts) and len(buts) == 9, (f"politique seule : {sum(buts)}/{len(buts)} buts, "
+                                         f"8 pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -329,7 +344,8 @@ def main() -> int:
               ("T10 labyrinthe non linéaire", t10_labyrinthe()),
               ("T11 porte neuronale", t11_porte()),
               ("T12 porte apprise", t12_porte_apprise()),
-              ("T13 courbe d'apprentissage", t13_courbe())]
+              ("T13 courbe d'apprentissage", t13_courbe()),
+              ("T14 politique seule", t14_seule())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

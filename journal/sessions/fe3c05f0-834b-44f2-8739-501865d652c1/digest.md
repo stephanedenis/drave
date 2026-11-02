@@ -17454,3 +17454,71 @@ T0 max : 4008 mots (budget 4 000)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"les 9 (**12,12 M** ; **8 Ko 0**) ; **PDF** (322 Mo, 8 Ko 0) ; **A2.6/A8.3** (lot : lectures non divisées, +27 % calcul) ;  … [2022 caractères tronqués]`
+
+  ```
+T0 max : 3999 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master f708b7ee] A2.6/A8.3 — LE LOT SUR LE DISQUE : IL NE DIVISE PAS LES LECTURES (503→502 MIO), IL ACCÉLÈRE LE CALCUL (+27 %)
+ 25 files changed, 389 insertions(+), 43 deletions(-)
+ create mode 100644 reports/a26-lot-disque.json
+ create mode 100644 reports/rapport-a26-lot-disque.md
+commit OK
+f708b7ee A2.6/A8.3 — LE LOT SUR LE DISQUE : IL NE DIVISE PAS LES LECTURES (503→502 MIO), IL ACCÉLÈRE LE CALCUL (+27 %)
+=== en
+  [en] 16200000 lus · 4340955 gardés · 17.20 G caractères
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 8 : A2.6/A8.3 mesuré — le lot accélère le calcul, il ne divise pas les lectures
+
+**Round 8/1000 — une mesure d'ordonnanceur en plus, l'anglais toujours en course.** Commit `f708b7ee`.
+
+## A2.6/A8.3 — le lot sur le disque
+
+Mesure avec **éviction du cache** (`posix_fadvise(DONTNEED)`) sur Qwen2.5-0.5B-Q8, 192 jetons anglais, ctx 512 :
+
+| lot | PPL | lus (Mio) | mur (s) | tok/s |
+|---:|---:|---:|---:|---:|
+| **1** | 15,8452 | **503** | 12,04 | 24,0 |
+| **2** | 15,8443 | **502** | 10,38 | 30,5 |
+| **4** | 15,8443 | **502** | 10,18 | 30,0 |
+| **8** | 15,8443 | **502** | 9,96 | 30,5 |
+
+**Trois lectures.** Le lot **ne divise pas** les lectures : le modèle dense de 0,5 Go est lu une fois, quel que soit le lot (503 → 502 Mio). Le lot **accélère le calcul** : **+27 % de tok/s** dès le lot 2, le temps mural de 12,04 à 9,96 s. La **PPL** ne bouge que de **−0,006 %** (le lot 2+ est stable, le lot 1 diffère) — l'écart de 1,9 % d'A8.3c (français, f32) ne se retrouve pas ici (anglais, Q8).
+
+**Conséquence pour A2.6** : « réduire le lot » est **inutile** pour le disque ; le lot ≥ 2 s'assume pour le calcul ; les lectures partagées ne viendront que des **matrices d'experts** (le MoE, A6.2, bloqué). La fiche `rapport-a26-lot-disque.md` et le JSON sont committés ; l'état et la roadmap portent le verdict.
+
+## L'anglais
+
+16,2 M pages lues, 4,34 M articles, 17,20 G caractères. C'est le seul run restant ; il avance plus lentement que les autres (les pages anglaises sont plus lourdes). Son contrôle 8 Ko suivra, puis la **fiche et le catalogue des dix**.
+
+## La suite
+
+L'**anglais** → le **catalogue des dix** ; l'**OCR des 159 scannés** du PDF (le pipeline R4.4) ; les **collections et Documents** (7 496 PDF) ; la comparaison des genres. Le goal reste actif ; le prochain round ramasse l'anglais.
+
+
+## Tour 21
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 9/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null; ps -eo pid,etime,pcpu,cmd | grep \"corpus_wikipedia_texte.py --langue en\" | grep -v grep | awk '{print $1,$2,$3}'; tail -1 /tmp/run-texte-en.log | cut -c1-75; du -sh … [225 caractères tronqués]`
+
+  ```
+20:42
+1494795 02:11:28 97.9
+  [en] 16200000 lus · 4340955 gardés · 17.20 G caractères
+17G	data/corpus_wiki_en_texte
+=== journal session
+f708b7ee A2.6/A8.3 — LE LOT SUR LE DISQUE : IL NE DIVISE PAS LES LECTURES (503→502 MIO), IL ACCÉLÈRE LE CALCUL (+27 %)
+039e0500 B13 — LA COURBE : 15/15 BUTS (50–800 ÉPISODES × 3 GRAINES), 30 NŒUDS, Q 52–83 ; 16/16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 240 bash -c 'bzcat /home/stephane/Data13TB/stephane/data/wikipedia/dumps/en/enwiki-latest-pages-articles-multistream-index.txt.bz2 | wc -l' 2>/dev/null; echo \"=== tesseract\"; which tesseract pdftoppm; tesseract --list-langs 2 … [343 caractères tronqués]`
