@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 45.4 h |
-| Tours | 151 |
-| Messages | 1789 |
-| Appels d'outils | 1531 |
+| Durée | 45.6 h |
+| Tours | 152 |
+| Messages | 1796 |
+| Appels d'outils | 1536 |
 | Fichiers touchés | 25 |
-| Commandes | 1252 |
+| Commandes | 1256 |
 | Sous-agents | 2 |
-| Commits | 192 |
+| Commits | 193 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -337,6 +337,8 @@
 **Tour 150** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 151** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 152** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8025,6 +8027,57 @@ Je continue : prochain round, **le réordonnancement** — le lien automatique d
 - bash — Committer le lien automatique réparé
 - job_output
 
+**Synthèse produite :**
+
+⏵ Lien automatique réparé : 5/5 après réordonnancement et repli PRON/NOUN ; 136/136
+
+Le round 137 est livré : le **lien automatique** passe de **0/5 à 5/5** — deux corrections, dont une qui révèle une lacune du segmenteur. Commit **`651c1fc0`**.
+
+\## Les deux corrections
+
+| correction | effet |
+|---|---|
+| **réordonner** le gold (assertions avant questions) | le lien peut trouver une phrase **antérieure** |
+| **repli `PRON/NOUN`** pour le sujet | les phrases courtes n'ont pas de GN |
+
+| mesure | avant | **après** |
+|---|---:|---:|
+| lien automatique | 0/5 | **5/5** |
+| contexte (index) | 5/5 | 5/5 |
+
+**Ce que ça dit** :
+
+- **Le lien automatique fonctionne** sur ces 5 paires : la phrase qui partage le sujet (`Tu`/`You`) est retrouvée sans index codé en dur.
+- **Le repli `PRON/NOUN` est révélateur** : le générateur S ne produit pas de GN pour `Tu ne viens pas demain ?` — une lacune du segmenteur, pas du lien.
+- **Le contexte devient utilisable** : le 5/5 du round 135 était un artefact d'index ; le 5/5 d'aujourd'hui est un **lien** mesuré.
+- **La frontière tient** : le lien trouve la phrase, il ne comprend pas le sens.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-lien-auto-fixe.md`](../../reports/rapport-pensee-lien-auto-fixe.md) ; JSON [`pensee-lien-auto-fixe.json`](../../reports/pensee-lien-auto-fixe.json) ; T133 dans [`autotest.py`](../../tools/pensee/autotest.py) ; T132 mis à jour (le lien par le sujet : 5/5).
+- **136/136 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **546 fiches / 632 JSON / 119 docs / 81 portes** — ✅ ; `en-cours` à jour (14 h 40).
+- L'horloge réelle est **14 h 07 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **La coréférence comme lien** : réutiliser les 103 liens de la ligne anaphore pour trouver la phrase de l'antécédent, pas seulement le mot.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold vivant peut grandir.
+
+Je continue : prochain round, **la coréférence comme lien** — relier les deux lignes (anaphore et contexte) au lieu de les laisser côte à côte.
+
+### Tour 152 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Mesurer la coréférence comme lien
+- bash — Écrire la fiche de la coréférence comme lien et la porte T134
+- bash — Trim T0/README et passer toutes les portes
+- bash — Committer la coréférence comme lien
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8104,7 +8157,7 @@ Je continue : prochain round, **le réordonnancement** — le lien automatique d
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1212 autres
+- … et 1216 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8444,4 +8497,5 @@ Je continue : prochain round, **le réordonnancement** — le lien automatique d
 - B13 — LA RÉPONSE CONTEXTUELLE : 5/5, LA PHRASE PRÉCÉDENTE TRANCHE ; 134/134" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÉPONSE CONTEXTUELLE"; then
 - B13 — LE LIEN AUTOMATIQUE : 0/5, LE SUJET NE SUFFIT PAS ; 135/135" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LIEN AUTOMATIQUE"; then echo "COMMIT 
 - B13 — LE LIEN AUTOMATIQUE RÉPARÉ : 5/5 APRÈS RÉORDONNANCEMENT ET REPLI PRON/NOUN ; 136/136" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LIEN AUTOMAT
+- B13 — LA CORÉFÉRENCE COMME LIEN : 62/116, LA MOITIÉ DES ANTÉCÉDENTS ; 137/137" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "CORÉFÉRENCE COMME LIEN"; 
 

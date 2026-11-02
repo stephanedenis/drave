@@ -1974,6 +1974,16 @@ def t133_lien_auto_fixe() -> tuple[bool, str]:
         f"lien réparé : {r['justes']:.0f}/{r['paires']}")
 
 
+def t134_lien_coref() -> tuple[bool, str]:
+    """La coréférence comme lien : 62/116."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import mesurer_lien_coref
+    ph = [p for p in charger() if 301 <= int(p["id"][1:]) <= 427]
+    r = mesurer_lien_coref(ph)
+    return r["liens"] == 116 and r["avec_phrase"] == 62, (
+        f"coréf-lien : {r['avec_phrase']}/{r['liens']} ({r['taux']})")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2106,7 +2116,8 @@ def main() -> int:
               ("T130 gold gelé", t130_gold_gele()),
               ("T131 contexte", t131_contextuel()),
               ("T132 lien auto", t132_lien_auto()),
-              ("T133 lien réparé", t133_lien_auto_fixe())]
+              ("T133 lien réparé", t133_lien_auto_fixe()),
+              ("T134 lien coréf", t134_lien_coref())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

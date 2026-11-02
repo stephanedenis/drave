@@ -1,0 +1,13 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "137/137",
+ "liens": 116,
+ "avec_phrase": 62,
+ "taux": 0.5345,
+ "limites": [
+  "antécédents intra-phrase non comptés",
+  "116 liens",
+  "heuristique seule"
+ ]
+}

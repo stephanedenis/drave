@@ -213,6 +213,39 @@ def _normaliser_egal(a: str, b: str) -> bool:
     return n(a) == n(b)
 
 
+def lien_coref(phrase: dict, phrases: list[dict]) -> list[tuple[str, str, str]]:
+    """La **coréférence comme lien** : chaque pronom lié pointe la phrase de son antécédent.
+
+    Renvoie [(pronom, antécédent, id_phrase_antécédent)]. La phrase de l'antécédent est la
+    dernière phrase antérieure qui contient le mot de l'antécédent.
+    """
+    from tools.tests.linguistique.anaphore import resoudre_meta
+    liens = resoudre_meta(phrase["mots"], phrase["segments"])
+    idx = next((i for i, p in enumerate(phrases) if p.get("id") == phrase.get("id")), -1)
+    sortie = []
+    for pronom, nom in liens.items():
+        cible = None
+        for p in reversed(phrases[:idx] if idx > 0 else []):
+            mots = {m.lower() for m in p["texte"].replace("’", "'").split()}
+            if nom.lower() in mots:
+                cible = p.get("id")
+                break
+        sortie.append((pronom, nom, cible))
+    return sortie
+
+
+def mesurer_lien_coref(phrases: list[dict]) -> dict:
+    """Le taux de liens de coréférence dont la phrase d'antécédent est retrouvée."""
+    total = trouves = 0
+    for p in phrases:
+        for pronom, nom, cible in lien_coref(p, phrases):
+            total += 1
+            if cible is not None:
+                trouves += 1
+    return {"liens": total, "avec_phrase": trouves,
+            "taux": round(trouves / max(1, total), 4)}
+
+
 def fidelite_lien_auto(phrases: list[dict], bloc=None) -> dict:
     """Le taux de questions pièges où le lien automatique retrouve la bonne précédente."""
     bloc = bloc or bl.Heuristique()
