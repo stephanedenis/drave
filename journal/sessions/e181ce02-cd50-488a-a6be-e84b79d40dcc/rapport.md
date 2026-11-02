@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 27.4 h |
-| Tours | 23 |
-| Messages | 563 |
-| Appels d'outils | 574 |
+| Durée | 27.5 h |
+| Tours | 24 |
+| Messages | 570 |
+| Appels d'outils | 579 |
 | Fichiers touchés | 25 |
-| Commandes | 460 |
+| Commandes | 464 |
 | Sous-agents | 2 |
-| Commits | 37 |
+| Commits | 38 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -77,6 +77,8 @@
 **Tour 22** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 **Tour 23** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 24** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1268,6 +1270,56 @@ Le round 9 du goal est livré : le gold réel passe de 20 à **60 phrases**, le 
 - bash — Passer les portes et committer les cibles des 60 réels
 - job_output
 
+**Synthèse produite :**
+
+⏵ Attachement des 60 réels : tête top-1 0,972 (0,929 réel), 36 cibles ambiguës ; 12/12
+
+Le round 10 du goal est livré : les **40 nouvelles phrases réelles** ont leurs **cibles d'attachement**, et le réel est enfin mesuré sur les deux niveaux. Commit **`9396fa40`**.
+
+\## Le résultat
+
+**21 cibles** ajoutées aux 40 nouvelles (dont 4 ambiguës) ; le réel passe à **60 phrases** avec **30 cibles** ; le total à **85 cibles** (30 réelles + 55 synthétiques), dont **36 ambiguës**.
+
+| lecture | cibles | ambiguës | couv. tête | **top-1 tête** | **top-k tête** |
+|---|---:|---:|---:|---:|---:|
+| **heuristique 220** | **85** | **36** | **1,000** | **0,972** | **0,889** |
+| heuristique 60 réels | 30 | 14 | 1,000 | **0,929** | **1,000** |
+| dont 20 réels | 13 | 6 | 1,000 | 0,833 | 1,000 |
+| dont 40 nouveaux | 17 | 8 | 1,000 | **1,000** | 1,000 |
+| heuristique 160 synth. | 55 | 22 | 1,000 | 1,000 | 0,818 |
+| mock seul | 85 | 36 | 1,000 | 0 | 0 |
+| **hasard** | — | — | — | **0,015** | — |
+
+**Ce que ça dit** :
+
+- **Le réel tient** : top-1 tête **0,929** sur les 60 réels, **1,000** sur les 40 nouveaux ; la **couverture par tête est de 100 %**.
+- **Les 36 cibles ambiguës** (double lecture) expliquent l'essentiel du gain : le top-1 des 20 premiers réels reste 0,833, celui des 40 nouveaux 1,000.
+- **Le top-k** baisse à 0,889 sur les 220 (le S ne propose pas toujours la cible dans ses candidats) ; sur le réel, il est à 1,000.
+- **Le span** reste la mesure de la découpe : top-1 0,412, top-k 0,377 ; la tête est la mesure de l'attachement.
+- **Le POS** 0,765 (réel 0,861), le syntagme exact 0,210 (réel 0,294) — le gold réel est plus dur que le synthétique.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; golds [`gold_reel.py`](../../tools/tests/linguistique/gold_reel.py) / [`gold_reel.json`](../../tools/tests/linguistique/gold_reel.json).
+- Portes : `porte-bloc-linguistique` **verte** (gold 220 + attachement + 398 langues), `porte-pensee` **12/12**, `revue` **397 fiches / 498 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé ; la session R4.4 doit le rafraîchir.
+
+\## La suite
+
+1. **200+ phrases réelles** : continue
+… [480 caractères tronqués]
+
+### Tour 24 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Ajouter 40 phrases réelles supplémentaires
+- bash — Mesurer le gold avec les 100 phrases réelles
+- bash — Mettre à jour la fiche et l'état pour les 100 réels
+- bash — Passer les portes et committer le gold 260
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1347,7 +1399,7 @@ Le round 9 du goal est livré : le gold réel passe de 20 à **60 phrases**, le 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 420 autres
+- … et 424 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1528,4 +1580,5 @@ Le round 9 du goal est livré : le gold réel passe de 20 à **60 phrases**, le 
 - L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510" 2>&1 | tail -4; then :; fi   if git log -1 --format='%s' | grep -q "GOLD 220"; t
 - L — GOLD 220 : CIBLES DES 60 RÉELS, ATTACHEMENT TÊTE 0,972 (0,929 RÉEL), 36 AMBIGUËS" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CIBLES DES 60"; th
+- L — GOLD 260 : 100 RÉELS + 160 SYNTHÉTIQUES, POS 0,774, TÊTE 0,954 (RÉEL 0,909)" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "GOLD 260"; then echo "C
 

@@ -14778,3 +14778,224 @@ fa1b74a4 S — L'ANALYSEUR PLUS RICHE : SUBORDONNÉES, COORDINATION, ET L'EXPORT
 [status: completed, exit code: 0]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\ntr = pathlib.Path('data/wiki_en/propre/train.txt').read_bytes()\nC = 8192\nchunks = [tr[i:i+C] for i in range(0, len(tr), C)]\ndev = b''.join(c for i, c in enumerate(chunks) if i % 10 == 6)\npathlib. … [697 caractères tronqués]`
+
+  ```
+dev 20455424 octets
+teacher en 1567203
+20:06
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 50,115p tools/distiller_budget.py", "description": "Read the distiller data pipeline"}`
+
+  ```
+DECALAGE_GRAINE = 10_000_019
+ARTEFACTS = pathlib.Path("/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/artefacts")
+
+
+def charger(txt: str | pathlib.Path) -> torch.Tensor:
+    return torch.tensor(list(pathlib.Path(txt).read_bytes()), dtype=torch.long)
+
+
+def lot_fr(data, n, seq, device, compteur):
+    """n fenêtres de seq+1 octets : l'entrée est x[:, :-1], la cible x[:, 1:]."""
+    i = torch.tensor(departs_vdc(compteur, n, len(data) - seq - 2, seq), dtype=torch.long)
+    return torch.stack([data[j:j + seq + 1] for j in i]).to(device)
+
+
+class CorpusMulti:
+    """Fenêtres multi-sources reconstruites depuis le manifeste (offsets seuls)."""
+
+    def __init__(self, manifeste: str, quotas: str = "proportionnel", seq_max: int = 256):
+        m = json.loads(pathlib.Path(manifeste).read_text())
+        self.mode = quotas
+        self.fenetre, self.pas, self.max_fenetres = m["fenetre"], m["pas"], m["fenetres"]
+        self.fichiers = {s["source"]: pathlib.Path(s["source"]).read_bytes()
+                         for s in m["sources"]}
+        sources = m["sources"]
+        total = sum(s["fenetres"] for s in sources)
+        # `round` reproduit le manifeste (49 999 fenêtres) ; `//` en perd
+… [1848 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\ntr = pathlib.Path('data/wiki_multi/propre/train.txt').read_bytes()\nC = 8192\nchunks = [tr[i:i+C] for i in range(0, len(tr), C)]\ndev = b''.join(c for i, c in enumerate(chunks) if i % 10 == 6)\npathl … [751 caractères tronqués]`
+
+  ```
+dev 23699456 octets
+teacher multi 1567713
+0, 1124 MiB, 54 %
+1, 1124 MiB, 51 %
+20:07
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --check 2>&1 | tail -3; ls tools/surveille_sessions.py 2>/dev/null && python3 tools/surveille_sessions.py 2>&1 | tail -8; echo \"=== git ===\"; git status --short | grep -v \"^ m tools/docwatch\" | head -6;  … [65 caractères tronqués]`
+
+  ```
+✅ plans cohérents
+tools/surveille_sessions.py
+    · journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md
+    · journal/sessions/MANIFEST.md
+    · journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+    · journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+    · reports/README.md
+    · reports/rapport-pensee-gold-linguistique.md
+    · tools/extrait_pdf.py
+  conflits (0) — deux sessions les réclament :
+=== git ===
+ M docs/implantation/bloc-linguistique.md
+M  docs/pilotage/chantiers.md
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+ M journal/README.md
+20:07
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --cached --stat; echo \"=== en-cours (staged) ===\"; git diff --cached docs/pilotage/en-cours.md | head -40", "description": "Inspect the staged changes"}`
+
+  ```
+docs/pilotage/chantiers.md                  |   4 +-
+ docs/pilotage/en-cours.md                   |   4 +-
+ docs/pilotage/plan-travail.md               |   2 +-
+ docs/pilotage/roadmap.md                    |   2 +-
+ reports/README.md                           |   3 +-
+ reports/pensee-gold-linguistique.json       | 738 ++++++++++++++--------------
+ reports/rapport-pensee-gold-linguistique.md |  19 +-
+ tools/tests/linguistique/gold_reel.json     | 106 +++-
+ tools/tests/linguistique/gold_reel.py       |  45 +-
+ 9 files changed, 502 insertions(+), 421 deletions(-)
+=== en-cours (staged) ===
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 0499a76f..4823120b 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-01, 20 h 05 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-01, 20 h 15 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
+ > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
+@@ -35,7 +35,7 @@
+   [`pensee-operateurs`](../../reports/rapport-pensee-operateur
+… [727 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --cached docs/pilotage/roadmap.md docs/pilotage/chantiers.md | head -30; git commit -q -m \"ÉTAT — INTÉGRATION L : GOLD 220, 36 AMBIGUËS, ATTACHEMENT TÊTE 0,972/0,889\n\nLe hub intègre le bloc de la session L : gold 220 (60  … [313 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-868]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-868", "timeout_ms": 300000, "wait": true}`
+
+  ```
+On branch master
+Your branch is ahead of 'origin/master' by 37 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+  (commit or discard the untracked or modified content in submodules)
+	modified:   docs/implantation/bloc-linguistique.md
+	modified:   tools/docwatch (modified content)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	reports/corpus-wiki-it-texte-contamination.json
+	reports/corpus-wiki-it-texte.json
+	tools/extrait_pdf.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+20:09
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4; date '+%H:%M'; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; tail -1 work/n2k/teacher-en.log 2>/dev/null; tail -1 work/n2k/teacher-multi.log 2>/dev/null; ls work/n2k/route-en wo … [101 caractères tronqués]`
+
+  ```
+9396fa40 L — GOLD 220 : CIBLES DES 60 RÉELS, ATTACHEMENT TÊTE 0,972 (0,929 RÉEL), 36 AMBIGUËS
+fa1b74a4 S — L'ANALYSEUR PLUS RICHE : SUBORDONNÉES, COORDINATION, ET L'EXPORT VERS LE CORPUS
+46fa2c82 L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510
+e0e71213 N2.m — L'ANGLAIS SEUL : 4,42 SUR 204 Mo, ET LE MULTILINGUE COÛTE 1,6 PPL
+20:09
+0, 1228 MiB, 52 %
+1, 1228 MiB, 53 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2k/file-en0.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport PYTHONPATH=. CUDA_VISIBLE_DEVICES=0\nP=\"$HOME/gpu-env/bin/python\"\nwhile kill -0 1567203 2>/dev/null || kill -0 156 … [1878 caractères tronqués]`
+
+  ```
+q-en0 1570524
+q-multi1 1570525
+20:09
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 155,215p tools/distiller_budget.py", "description": "Read the distillation training loop"}`
+
+  ```
+ap.add_argument("--log", default=None)
+    a = ap.parse_args()
+
+    torch.manual_seed(a.graine)
+    plan = plan_depuis(a.stages)
+    decalage = (a.graine - 1) * DECALAGE_GRAINE
+    sortie = pathlib.Path(a.sortie)
+    sortie.parent.mkdir(parents=True, exist_ok=True)
+    log = open(a.log, "a") if a.log else None
+
+    def dire(txt):
+        print(txt, flush=True)
+        if log:
+            log.write(txt + "\n"); log.flush()
+
+    from transformers import AutoModelForCausalLM
+    prof = AutoModelForCausalLM.from_pretrained(a.enseignant, dtype=torch.float32).to(a.device).eval()
+    for p in prof.parameters():
+        p.requires_grad_(False)
+    ck = torch.load(a.init, map_location="cpu", weights_only=False)
+    cfg = NativeConfig(**{k: v for k, v in ck["config"].items()
+                          if k in NativeConfig.__annotations__})
+    etu = NativeModel(cfg).to(a.device)
+    manquants = etu.load_state_dict(ck["state"], strict=False)
+    dire(f"# init {a.init} · manquants {list(manquants.missing_keys)[:6]} · "
+         f"graine {a.graine} · décalage {decalage}")
+    opt = torch.optim.AdamW(etu.parameters(), lr=plan[0][2], weight_decay=0.01)
+
+    corpus = None
+    if a.corpus == "fr":
+ 
+… [1329 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 113,132p tools/distiller_budget.py", "description": "Read the distiller ppl function"}`
+
+  ```
+def ppl(modele, lots, seq, n_lots, device):
+    modele.eval(); tot = 0.0; n = 0
+    with torch.no_grad():
+        for k in range(n_lots):
+            x = lots(k)
+            y = cible(x)
+            logits = modele(x[:, :-1])["logits"]
+            tot += float(F.cross_entropy(logits.reshape(-1, 256), y.reshape(-1),
+                                         reduction="sum"))
+            n += y.numel()
+    return math.exp(tot / max(1, n))
+
+
+def plan_depuis(texte: str) -> list[tuple[int, int, float]]:
+    plan = []
+    for bloc in texte.split(","):
+        seq, pas, lr = bloc.split(":")
+        plan.append((int(seq), int(pas), float(lr)))
+    return plan
+  ```
+

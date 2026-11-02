@@ -12933,3 +12933,118 @@ verdict {'pos_hand': True, 'pos_reel': True, 'pos_synthetique': True, 'syntagme_
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [1368 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+[still running after 60000ms; moved to background job bash-460]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-460", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 9396fa40] L — GOLD 220 : CIBLES DES 60 RÉELS, ATTACHEMENT TÊTE 0,972 (0,929 RÉEL), 36 AMBIGUËS
+ 17 files changed, 564 insertions(+), 437 deletions(-)
+COMMIT OK 1
+9396fa40 L — GOLD 220 : CIBLES DES 60 RÉELS, ATTACHEMENT TÊTE 0,972 (0,929 RÉEL), 36 AMBIGUËS
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Attachement des 60 réels : tête top-1 0,972 (0,929 réel), 36 cibles ambiguës ; 12/12
+
+Le round 10 du goal est livré : les **40 nouvelles phrases réelles** ont leurs **cibles d'attachement**, et le réel est enfin mesuré sur les deux niveaux. Commit **`9396fa40`**.
+
+## Le résultat
+
+**21 cibles** ajoutées aux 40 nouvelles (dont 4 ambiguës) ; le réel passe à **60 phrases** avec **30 cibles** ; le total à **85 cibles** (30 réelles + 55 synthétiques), dont **36 ambiguës**.
+
+| lecture | cibles | ambiguës | couv. tête | **top-1 tête** | **top-k tête** |
+|---|---:|---:|---:|---:|---:|
+| **heuristique 220** | **85** | **36** | **1,000** | **0,972** | **0,889** |
+| heuristique 60 réels | 30 | 14 | 1,000 | **0,929** | **1,000** |
+| dont 20 réels | 13 | 6 | 1,000 | 0,833 | 1,000 |
+| dont 40 nouveaux | 17 | 8 | 1,000 | **1,000** | 1,000 |
+| heuristique 160 synth. | 55 | 22 | 1,000 | 1,000 | 0,818 |
+| mock seul | 85 | 36 | 1,000 | 0 | 0 |
+| **hasard** | — | — | — | **0,015** | — |
+
+**Ce que ça dit** :
+
+- **Le réel tient** : top-1 tête **0,929** sur les 60 réels, **1,000** sur les 40 nouveaux ; la **couverture par tête est de 100 %**.
+- **Les 36 cibles ambiguës** (double lecture) expliquent l'essentiel du gain : le top-1 des 20 premiers réels reste 0,833, celui des 40 nouveaux 1,000.
+- **Le top-k** baisse à 0,889 sur les 220 (le S ne propose pas toujours la cible dans ses candidats) ; sur le réel, il est à 1,000.
+- **Le span** reste la mesure de la découpe : top-1 0,412, top-k 0,377 ; la tête est la mesure de l'attachement.
+- **Le POS** 0,765 (réel 0,861), le syntagme exact 0,210 (réel 0,294) — le gold réel est plus dur que le synthétique.
+
+## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; golds [`gold_reel.py`](../../tools/tests/linguistique/gold_reel.py) / [`gold_reel.json`](../../tools/tests/linguistique/gold_reel.json).
+- Portes : `porte-bloc-linguistique` **verte** (gold 220 + attachement + 398 langues), `porte-pensee` **12/12**, `revue` **397 fiches / 498 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé ; la session R4.4 doit le rafraîchir.
+
+## La suite
+
+1. **200+ phrases réelles** : continuer le gold réel au-delà de 60 (relatives, portée, anglais).
+2. **Politique DRVM/native** et coût mesuré, si les poids natifs arrivent.
+3. **Modèle neuronal** si un tagger/runner se débloque ; sinon, garder le mock et le dire.
+4. **B13** : un cadenas **non linéaire** (plusieurs chemins, un piège) pour que la politique puisse être bonne ou mauvaise sans être triviale.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round continue le gold réel vers 200+.
+
+
+## Tour 24
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 11/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\nnew = '''\n    (\"r041\", \"fr\", \"Le garçon joue au ballon.\",\n     [(\"Le\", \"DET\"), (\"ga … [13563 caractères tronqués]`
+
+  ```
+9396fa40 L — GOLD 220 : CIBLES DES 60 RÉELS, ATTACHEMENT TÊTE 0,972 (0,929 RÉEL), 36 AMBIGUËS
+ok
+80 phrases réelles → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 180 python3 tools/tests/linguistique/evaluer_gold.py --json reports/pensee-gold-linguistique.json --reel >/tmp/gold13.out 2>&1; echo \"EXIT=$?\"; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-gold-linguistiq … [553 caractères tronqués]`
+
+  ```
+EXIT=0
+gold {'phrases': 260, 'reel': 100, 'hand': 20, 'reel_new': 80, 'synthetique': 160, 'tokens': 1199}
+all POS 0.774 SEG 0.2099 TETE 0.4859 | att 106 0.4151 0.3962 0.3774 | tete 44 1.0 0.9545 0.9091 acte 1.0
+reel POS 0.842 SEG 0.2594 TETE 0.3774 | att 51 0.4314 0.3922 0.4314 | tete 22 1.0 0.9091 1.0 acte 1.0
+hand POS 0.9238 SEG 0.3956 TETE 0.5055 | att 13 0.4615 0.3846 0.4615 | tete 6 1.0 0.8333 1.0 acte 1.0
+reel_new POS 0.8203 SEG 0.2222 TETE 0.3423 | att 38 0.4211 0.3947 0.4211 | tete 16 1.0 0.9375 1.0 acte 1.0
+synthetique POS 0.7253 SEG 0.1752 TETE 0.562 | att 55 0.4 0.4 0.3273 | tete 22 1.0 1.0 0.8182 acte 1.0
+verdict {'pos_hand': True, 'pos_reel': True, 'pos_synthetique': True, 'syntagme_hand': True, 'syntagme_reel': True, 'syntagme_synthetique': True, 'tete': True, 'acte': True, 'cascade_pos': True, 'cascade_syntagme': True, 'attachement_topk': True, 'attachement_hasard': True, 'attachement_tete_couverture': True, 'attachement_tete_topk': True, 'attachement_tete_hasard': True, 'reel_non_requis': True} ok True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('reports/rapport-pensee-gold-linguistique.md'); t=p.read_text()\nt=t.replace(\"# L — le gold 220 : 60 réels + 160 synthétiques, POS 0,765, tête 0,510\",\n\"# L — le gold 260 : 100 r … [3345 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 397 fiche(s) · 498 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [987 caractères tronqués]`

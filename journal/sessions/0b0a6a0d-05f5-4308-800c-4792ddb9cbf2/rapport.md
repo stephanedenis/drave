@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 27.8 h |
+| Durée | 27.9 h |
 | Tours | 18 |
-| Messages | 1138 |
-| Appels d'outils | 1060 |
+| Messages | 1147 |
+| Appels d'outils | 1069 |
 | Fichiers touchés | 11 |
-| Commandes | 865 |
+| Commandes | 873 |
 | Sous-agents | 0 |
-| Commits | 34 |
+| Commits | 35 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*94 appels d'outils.* Actions notables :
+*103 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 58 autres
+- … et 66 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 825 autres
+- … et 833 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1211,4 +1211,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - N2.m — L'ANGLAIS SEUL : 4,42 SUR 204 Mo, ET LE MULTILINGUE COÛTE 1,6 PPL  La base anglaise monolingue (120 000 articles, 204,6 Mo d'entraînement, positions aléa
 - N2.m — L'ANGLAIS SEUL : 4,42 SUR 204 Mo, ET LE MULTILINGUE COÛTE 1,6 PPL  La base anglaise monolingue (120 000 articles, 204,6 Mo d'entraînement, positions aléa
 - S — L'ANALYSEUR PLUS RICHE : SUBORDONNÉES, COORDINATION, ET L'EXPORT VERS LE CORPUS  Le générateur distingue le « que » complément (après un verbe → SUB) de la 
+- ÉTAT — INTÉGRATION L : GOLD 220, 36 AMBIGUËS, ATTACHEMENT TÊTE 0,972/0,889  Le hub intègre le bloc de la session L : gold 220 (60 réels + 160 synthétiques), POS
 
