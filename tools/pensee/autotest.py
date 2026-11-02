@@ -17,6 +17,7 @@
   T8  les opérateurs hétérogènes      trois genres, coût et appels, le négatif reste inutile
   T9  le neuronal nécessaire          le seul opérateur est la sonde ; l'aveugle échoue
   T10 le labyrinthe non linéaire      plusieurs chemins, la bonne politique utilise la sonde, l'aveugle l'ignore
+  T11 la porte neuronale              la porte ne s'ouvre que par la bonne politique ; l'aveugle échoue
   T8  les opérateurs hétérogènes      trois genres, coût et appels, le négatif reste inutile
 
 Usage : PYTHONPATH=. ~/gpu-env/bin/python tools/pensee/autotest.py
@@ -270,6 +271,22 @@ def t10_labyrinthe() -> tuple[bool, str]:
                 f"{bb['cout']} (sonde 0) ; buts {ba['but']}/{bb['but']}")
 
 
+def t11_porte() -> tuple[bool, str]:
+    """La porte ne s'ouvre que par la bonne politique : l'aveugle échoue."""
+    from .operateurs import (DRVM, LABYRINTHE_PORTE, REGISTRE_P, PolitiqueAveugle,
+                             PolitiqueManhattan)
+    a = DRVM(REGISTRE_P, PolitiqueManhattan())
+    a.penser(LABYRINTHE_PORTE, AStar(), Budget(200))
+    ba = a.instantane()
+    b = DRVM(REGISTRE_P, PolitiqueAveugle())
+    b.penser(LABYRINTHE_PORTE, AStar(), Budget(200))
+    bb = b.instantane()
+    ok = (ba["but"] and not bb["but"] and ba["par_operateur"].get("sonde", 0) > 0
+          and bb["appels"] > 0)
+    return ok, (f"porte : bon {ba['noeuds']} nœuds/{ba['cout']} but ; "
+                f"aveugle {bb['noeuds']} nœuds/{bb['cout']} sans but")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -279,7 +296,8 @@ def main() -> int:
               ("T7 banc anytime", t7_banc()),
               ("T8 opérateurs hétérogènes", t8_operateurs()),
               ("T9 neuronal nécessaire", t9_necessaire()),
-              ("T10 labyrinthe non linéaire", t10_labyrinthe())]
+              ("T10 labyrinthe non linéaire", t10_labyrinthe()),
+              ("T11 porte neuronale", t11_porte())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -13401,3 +13401,126 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [1028 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+[still running after 60000ms; moved to background job bash-477]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-477", "timeout_ms": 600000, "wait": true}`
+
+  ```
+27 files changed, 457 insertions(+), 43 deletions(-)
+ create mode 100644 reports/pensee-labyrinthe.json
+ create mode 100644 reports/rapport-pensee-labyrinthe.md
+COMMIT OK 1
+0e5d99fe B13 — LE LABYRINTHE NON LINÉAIRE : BONNE POLITIQUE 17 NŒUDS/34 (SONDE 2), AVEUGLE 15/24 (SONDE 0) ; 13/13
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Labyrinthe non linéaire : bonne politique 17 nœuds/34 (sonde 2), aveugle 15/24 (sonde 0) ; 13/13
+
+Le round 14 du goal est livré : le **labyrinthe non linéaire** mesure l'usage du neuronal sur plusieurs chemins. Commit **`0e5d99fe`**.
+
+## Le labyrinthe
+
+Grille **5×5**, murs `{(0,1),(1,1),(2,1),(4,1),(1,3),(2,3),(3,3)}`, départ `(0,0)`, but `(4,4)`. Trois opérateurs : `pas` (symbolique, 1), `saut` (numérique, 2), `sonde` (neuronal, 5).
+
+| politique | nœuds | pas | saut | sonde | coût | appels | but |
+|---|---:|---:|---:|---:|---:|---:|---|
+| **manhattan** | **17** | 6 | 9 | **2** | **34** | **4** | **oui** |
+| aveugle | 15 | 6 | 9 | **0** | 24 | 4 | oui |
+
+**Ce que ça dit** :
+
+- **La bonne politique utilise la sonde** (2 nœuds) ; l'**aveugle** l'ignore complètement : ses propositions tombent sur les murs ou le piège, l'A* les écarte.
+- **L'aveugle résout quand même** par `pas`/`saut` : le neuronal est **utile** ici, pas **nécessaire** — la limite est écrite.
+- **Le coût plus bas de l'aveugle** (24) vient de l'absence d'appels à la sonde (coût 5 déclaré) ; le neuronal est cher et doit être justifié.
+- **Le labyrinthe est non linéaire** (plusieurs chemins, un piège), mais le symbolique/numérique suffit ; le prochain banc devra piéger l'aveugle.
+
+## L'état
+
+- Fiche : [`rapport-pensee-labyrinthe.md`](../../reports/rapport-pensee-labyrinthe.md) ; JSON [`pensee-labyrinthe.json`](../../reports/pensee-labyrinthe.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T10 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **13/13 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **398 fiches / 499 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé ; la session R4.4 doit le rafraîchir.
+
+## La suite
+
+1. **Un labyrinthe où l'aveugle échoue** : un piège qui **bloque** le pas/saut (une porte qui ne s'ouvre que par la sonde), pour que la négative échoue vraiment.
+2. **Politique DRVM/native** et coût mesuré, si les poids natifs arrivent.
+3. **L** : 200 réels atteints ; le gold peut encore grandir (relatives, portée, anglais).
+4. **Modèle neuronal** si un tagger/runner se débloque ; sinon, garder le mock et le dire.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque le labyrinthe où l'aveugle échoue.
+
+
+## Tour 28
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 15/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''class DRVM:''',\n'''# ---------------------------------------------------------------------- … [3960 caractères tronqués]`
+
+  ```
+0e5d99fe B13 — LE LABYRINTHE NON LINÉAIRE : BONNE POLITIQUE 17 NŒUDS/34 (SONDE 2), AVEUGLE 15/24 (SONDE 0) ; 13/13
+ok
+manhattan {'noeuds': 15, 'but': True, 'par_operateur': {'pas': 6, 'saut': 7, 'sonde': 2}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 30.0, 'appels': 4, 'budget': 14, 'politique': 'manhattan', 'score': 1.0}
+aveugle {'noeuds': 13, 'but': True, 'par_operateur': {'pas': 6, 'saut': 7}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 20.0, 'appels': 4, 'budget': 12, 'politique': 'aveugle', 'score': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text().replace(\"MURS_P = {(0, 1), (1, 1), (2, 1), (4, 1), (1, 2), (2, 2), (1, 3)}\", \"MURS_P = {(0, 1), (1, 1), (2, 1), (4, 1), (4, 2), (1, 2) … [506 caractères tronqués]`
+
+  ```
+ok
+manhattan {'noeuds': 23, 'but': True, 'par_operateur': {'pas': 9, 'saut': 10, 'sonde': 4}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 49.0, 'appels': 6, 'budget': 21, 'politique': 'manhattan', 'score': 1.0}
+aveugle {'noeuds': 21, 'but': True, 'par_operateur': {'pas': 9, 'saut': 10, 'sonde': 2}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 39.0, 'appels': 6, 'budget': 20, 'politique': 'aveugle', 'score': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text().replace(\"MURS_P = {(0, 1), (1, 1), (2, 1), (4, 1), (4, 2), (1, 2), (2, 2), (1, 3)}\", \"MURS_P = {(0, 1), (1, 1), (2, 1), (4, 1), (4, 2) … [514 caractères tronqués]`
+
+  ```
+ok
+manhattan {'noeuds': 28, 'but': True, 'par_operateur': {'pas': 13, 'saut': 10, 'sonde': 5}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 58.0, 'appels': 7, 'budget': 26, 'politique': 'manhattan', 'score': 1.0}
+aveugle {'noeuds': 200, 'but': False, 'par_operateur': {'pas': 100, 'saut': 39, 'sonde': 61}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 483.0, 'appels': 66, 'budget': 200, 'politique': 'aveugle', 'score': 0.25}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T10 le labyrinthe non linéaire      plusieurs chemins, la bonne politique utilise la sonde, l'aveugle l'ignore\\n\",\n\"   … [1646 caractères tronqués]`
+
+  ```
+ok
+  ✅ T9 neuronal nécessaire cadenas : avant 3 appels/but ; aveugle 20 appels/sans but
+  ✅ T10 labyrinthe non linéaire labyrinthe : bon 17 nœuds/34.0 (sonde 2) ; mauvais 15 nœuds/24.0 (sonde 0) ; buts True/True
+  ✅ T11 porte neuronale    porte : bon 28 nœuds/58.0 but ; aveugle 200 nœuds/483.0 sans but
+  14/14 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-porte.md <<'MD'\n# B13 — la porte neuronale : la bonne politique ouvre, l'aveugle échoue\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : **2026-11-01** · **Verdict** : ✅\n> **14/14 por … [7257 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 399 fiche(s) · 500 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [1008 caractères tronqués]`

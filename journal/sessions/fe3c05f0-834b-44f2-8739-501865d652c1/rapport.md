@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 27.7 h |
+| Durée | 27.9 h |
 | Tours | 18 |
-| Messages | 946 |
-| Appels d'outils | 934 |
+| Messages | 947 |
+| Appels d'outils | 935 |
 | Fichiers touchés | 18 |
-| Commandes | 859 |
+| Commandes | 860 |
 | Sous-agents | 0 |
-| Commits | 54 |
+| Commits | 55 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -894,7 +894,7 @@ Le **manifeste de l'anglais** (le 10e corpus) → son contrôle 8 Ko → la **fi
 
 ### Tour 18 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Check English and PDF completion
 - bash — Wait for English corpus manifest
@@ -902,6 +902,7 @@ Le **manifeste de l'anglais** (le 10e corpus) → son contrôle 8 Ko → la **fi
 - bash — Read A8.3 lot measurement scripts
 - job_output
 - bash — Wait for English manifest and launch check
+- bash — Commit R1/A review and check progress
 
 ## 3. Travail accompli
 
@@ -970,7 +971,7 @@ Le **manifeste de l'anglais** (le 10e corpus) → son contrôle 8 Ko → la **fi
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 819 autres
+- … et 820 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1172,4 +1173,5 @@ Le **manifeste de l'anglais** (le 10e corpus) → son contrôle 8 Ko → la **fi
 - DONNÉES — NEUF CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES, DE) : 14,51 M ARTICLES, 59,0 GO, 8 KO 0" 2>/tmp/commit.err; then echo "commit OK (essai
 - DONNÉES — LE CATALOGUE DU TEXTE INTÉGRAL (9 LANGUES, 14,51 M ARTICLES, 59,0 GO) DEPUIS LES MANIFESTES" 2>/tmp/commit.err; then echo "commit OK (essai $i)"; brea
 - ÉTAT — T0 À 3 996 ET COMPTEURS 396/498" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /tmp/commit.err; sleep 8; fi done git
+- ÉTAT — LA REVUE R1/A : A8.3 (LOT) MESURABLE, R11/R12 ET A2.6 BLOQUÉS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /tmp/co
 

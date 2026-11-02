@@ -1,0 +1,90 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "14/14",
+ "labyrinthe_porte": {
+  "cote": 5,
+  "murs": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    2,
+    1
+   ],
+   [
+    4,
+    1
+   ],
+   [
+    4,
+    2
+   ],
+   [
+    1,
+    2
+   ],
+   [
+    2,
+    2
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    3,
+    4
+   ]
+  ],
+  "porte": [
+   3,
+   3
+  ],
+  "depart": [
+   0,
+   0
+  ],
+  "but": [
+   4,
+   4
+  ]
+ },
+ "resultats": [
+  {
+   "politique": "manhattan",
+   "noeuds": 28,
+   "par_operateur": {
+    "pas": 13,
+    "saut": 10,
+    "sonde": 5
+   },
+   "cout": 58.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "politique": "aveugle",
+   "noeuds": 200,
+   "par_operateur": {
+    "pas": 100,
+    "saut": 39,
+    "sonde": 61
+   },
+   "cout": 483.0,
+   "appels": 66,
+   "but": false
+  }
+ ],
+ "necessaire": "la porte ne s'ouvre que par la bonne politique ; l'aveugle échoue",
+ "limites": [
+  "politique = double de contrat",
+  "poids natifs absents",
+  "coût 5 déclaré"
+ ]
+}

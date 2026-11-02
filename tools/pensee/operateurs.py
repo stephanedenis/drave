@@ -343,6 +343,106 @@ LABYRINTHE = Probleme(
 )
 
 
+# --------------------------------------------------------------------------- labyrinthe à porte (le neuronal nécessaire)
+
+MURS_P = {(0, 1), (1, 1), (2, 1), (4, 1), (4, 2), (1, 2), (2, 2), (1, 3), (3, 4)}
+PORTE = (3, 3)
+P_BUT = (4, 4)
+
+
+def _etat_p(x: int, y: int, open_: bool, parent: str | None = None,
+            profondeur: int = 0) -> Etat:
+    return Etat(f"p{x}:{y}:{int(open_)}", parent, profondeur,
+                (Candidat("x", {"v": x}), Candidat("y", {"v": y}),
+                 Candidat("open", {"v": bool(open_)})))
+
+
+def _xy_p(e: Etat) -> tuple[int, int]:
+    d = {c.id: c.corps["v"] for c in e.candidats}
+    return int(d["x"]), int(d["y"])
+
+
+def _open_p(e: Etat) -> bool:
+    return bool(next(c.corps["v"] for c in e.candidats if c.id == "open"))
+
+
+def _libre_p(x: int, y: int, open_: bool) -> bool:
+    if not (0 <= x < 5 and 0 <= y < 5) or (x, y) in MURS_P:
+        return False
+    return (x, y) != PORTE or open_
+
+
+def _deplacer_p(e: Etat, dx: int, dy: int, profondeur: int = 1,
+                open_: bool | None = None) -> list[Etat]:
+    x, y = _xy_p(e)
+    o = _open_p(e) if open_ is None else open_
+    nx, ny = x + dx, y + dy
+    if not _libre_p(nx, ny, o):
+        return []
+    return [_etat_p(nx, ny, o, e.empreinte(), e.profondeur + profondeur)]
+
+
+def pas_p(e: Etat, _p: dict | None = None) -> list[Etat]:
+    return [c for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)) for c in _deplacer_p(e, dx, dy)]
+
+
+def saut_p(e: Etat, _p: dict | None = None) -> list[Etat]:
+    return [c for dx, dy in ((2, 0), (-2, 0), (0, 2), (0, -2)) for c in _deplacer_p(e, dx, dy, 2)]
+
+
+def sonde_p(e: Etat, _p: dict | None = None) -> list[Etat]:
+    p = POLITIQUE[0]
+    if p is None:
+        return []
+    direction = p.propose(e, P_BUT)
+    p.appels += 1
+    if not direction:
+        return []
+    x, y = _xy_p(e)
+    # la sonde ouvre la porte si la politique vise la porte ; elle avance ensuite.
+    open_ = _open_p(e) or ((x, y) == (3, 2) and direction == "bas")
+    dx = {"droite": 1, "gauche": -1}.get(direction, 0)
+    dy = {"bas": 1, "haut": -1}.get(direction, 0)
+    nx, ny = x + dx, y + dy
+    if not _libre_p(nx, ny, open_):
+        return [_etat_p(x, y, open_, e.empreinte(), e.profondeur)] if open_ != _open_p(e) else []
+    return [_etat_p(nx, ny, open_, e.empreinte(), e.profondeur + 1)]
+
+
+def but_p(e: Etat) -> bool:
+    return _xy_p(e) == P_BUT
+
+
+def _man_p(x: int, y: int) -> int:
+    return abs(x - P_BUT[0]) + abs(y - P_BUT[1])
+
+
+def score_p(e: Etat) -> float:
+    x, y = _xy_p(e)
+    return 1.0 / (1.0 + _man_p(x, y))
+
+
+def heuristique_p(e: Etat) -> float:
+    x, y = _xy_p(e)
+    return -float(_man_p(x, y))
+
+
+REGISTRE_P = Registre({
+    "pas": Operateur("pas", "symbolique", 1.0, pas_p, "un pas ; la porte reste fermée"),
+    "saut": Operateur("saut", "numérique", 2.0, saut_p, "un saut ; la porte reste fermée"),
+    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_p, "la politique ouvre la porte"),
+})
+
+LABYRINTHE_PORTE = Probleme(
+    nom="labyrinthe_porte",
+    initial=lambda: _etat_p(0, 0, False),
+    operateurs={n: o.applique for n, o in REGISTRE_P.operateurs.items()},
+    but=but_p,
+    heuristique=heuristique_p,
+    score=score_p,
+)
+
+
 class DRVM:
     """Le conteneur d'exécution : registre, politique, moteur, trace, bilan."""
 
@@ -384,4 +484,5 @@ class DRVM:
 __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle",
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
-           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L"]
+           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L",
+           "LABYRINTHE_PORTE", "REGISTRE_P"]

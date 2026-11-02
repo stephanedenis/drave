@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**88 commits** · **4 session(s)** · **10 thème(s)**
+**89 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 5 | [distribue.md](distribue.md) |
+| distribue | 6 | [distribue.md](distribue.md) |
 | docs | 22 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 44 | [mesures.md](mesures.md) |
@@ -26,10 +26,10 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 27.9 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 28.1 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 27.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 27.7 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 27.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 27.9 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -123,10 +123,17 @@
 | 20:10 | `5241f1f7` | L — GOLD 260 : 100 RÉELS + 160 SYNTHÉTIQUES, POS 0,774, TÊTE 0,954 (RÉEL 0,909) |
 | 20:13 | `bcab8bd2` | L — GOLD 300 : 140 RÉELS + 160 SYNTHÉTIQUES, POS 0,773, TÊTE 0,962 (RÉEL 0,936) |
 | 20:17 | `adaaeae9` | L — GOLD 360 : 200 RÉELS + 160 SYNTHÉTIQUES, POS 0,772, TÊTE 0,966 (RÉEL 0,946) |
+| 20:21 | `0e5d99fe` | B13 — LE LABYRINTHE NON LINÉAIRE : BONNE POLITIQUE 17 NŒUDS/34 (SONDE 2), AVEUGLE 15/24 (SONDE 0) ; 13/13 |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**La revue R1/A : ce qui est possible, ce qui est bloqué.** R11 (contexte hiérarchique) et R12
+(curriculum long) sont **spécifiés** mais **bloqués sur N2** (c'est N2 qui porte la hiérarchie) ;
+A2.6 (experts/tête) est bloqué sur A6.2 (pas de MoE local) ; **A8.3 (le lot)** est le seul mesurable
+tout de suite, avec `mesure_lot_disque.sh` (le lot divise-t-il les lectures ?). L'anglais est à
+12,8 M pages lues, 3,6 M gardés ; le PDF à 17 M.
+
 **Le catalogue du texte intégral.** `catalogue_corpus.py --texte` lit les manifestes `-texte` et
 rend la table : les neuf langues, **14,51 M articles**, **45,54 G caractères**, **59,0 Go**, le
 **8 Ko à zéro partout**, l'UDHR citée pour fr, it, ja et pt. L'anglais (8,0 M pages lues) et le

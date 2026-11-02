@@ -15025,3 +15025,38 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-874", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2k/teacher-en.log; tail -2 work/n2k/teacher-multi.log; ls work/n2k/route-en work/n2k/route-multi 2>/dev/null | head -4", "description": "Check the teachers"}`
+
+  ```
+20:23
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅|❌\"; python3 tools/verifie_en_cours.py | tail -1; python3 tools/verifie_journal.py 2>&1 | tail -1; git log --oneline -3; … [61 caractères tronqués]`
+
+  ```
+revue de documentation · 398 fiche(s) · 499 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3999 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+0e5d99fe B13 — LE LABYRINTHE NON LINÉAIRE : BONNE POLITIQUE 17 NŒUDS/34 (SONDE 2), AVEUGLE 15/24 (SONDE 0) ; 13/13
+adaaeae9 L — GOLD 360 : 200 RÉELS + 160 SYNTHÉTIQUES, POS 0,772, TÊTE 0,966 (RÉEL 0,946)
+bcab8bd2 L — GOLD 300 : 140 RÉELS + 160 SYNTHÉTIQUES, POS 0,773, TÊTE 0,962 (RÉEL 0,936)
+20:23
+  ```
+
+- **bash** `{"command": "sleep 780; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/route-en work/n2k/route-multi 2>/dev/null | head -4; tail -1 work/n2k/teacher-en.log; tail -1 work/n2k/teacher-multi.log; for g in 1 2; do echo \"-- E-g$g\"; tail -1 work/n2k/E-g$g.log 2>/dev/nul … [77 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-877]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-877", "timeout_ms": 900000, "wait": true}`

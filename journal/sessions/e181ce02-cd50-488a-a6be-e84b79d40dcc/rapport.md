@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 27.7 h |
-| Tours | 27 |
-| Messages | 592 |
-| Appels d'outils | 595 |
+| Durée | 27.8 h |
+| Tours | 28 |
+| Messages | 601 |
+| Appels d'outils | 602 |
 | Fichiers touchés | 25 |
-| Commandes | 477 |
+| Commandes | 483 |
 | Sous-agents | 2 |
-| Commits | 41 |
+| Commits | 42 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -85,6 +85,8 @@
 **Tour 26** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 27** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 28** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1463,6 +1465,57 @@ Le round 13 du goal est livré : le gold réel atteint **200 phrases**, la **cib
 - bash — Passer les portes et committer le labyrinthe
 - job_output
 
+**Synthèse produite :**
+
+⏵ Labyrinthe non linéaire : bonne politique 17 nœuds/34 (sonde 2), aveugle 15/24 (sonde 0) ; 13/13
+
+Le round 14 du goal est livré : le **labyrinthe non linéaire** mesure l'usage du neuronal sur plusieurs chemins. Commit **`0e5d99fe`**.
+
+\## Le labyrinthe
+
+Grille **5×5**, murs `{(0,1),(1,1),(2,1),(4,1),(1,3),(2,3),(3,3)}`, départ `(0,0)`, but `(4,4)`. Trois opérateurs : `pas` (symbolique, 1), `saut` (numérique, 2), `sonde` (neuronal, 5).
+
+| politique | nœuds | pas | saut | sonde | coût | appels | but |
+|---|---:|---:|---:|---:|---:|---:|---|
+| **manhattan** | **17** | 6 | 9 | **2** | **34** | **4** | **oui** |
+| aveugle | 15 | 6 | 9 | **0** | 24 | 4 | oui |
+
+**Ce que ça dit** :
+
+- **La bonne politique utilise la sonde** (2 nœuds) ; l'**aveugle** l'ignore complètement : ses propositions tombent sur les murs ou le piège, l'A* les écarte.
+- **L'aveugle résout quand même** par `pas`/`saut` : le neuronal est **utile** ici, pas **nécessaire** — la limite est écrite.
+- **Le coût plus bas de l'aveugle** (24) vient de l'absence d'appels à la sonde (coût 5 déclaré) ; le neuronal est cher et doit être justifié.
+- **Le labyrinthe est non linéaire** (plusieurs chemins, un piège), mais le symbolique/numérique suffit ; le prochain banc devra piéger l'aveugle.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-labyrinthe.md`](../../reports/rapport-pensee-labyrinthe.md) ; JSON [`pensee-labyrinthe.json`](../../reports/pensee-labyrinthe.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T10 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **13/13 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **398 fiches / 499 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé ; la session R4.4 doit le rafraîchir.
+
+\## La suite
+
+1. **Un labyrinthe où l'aveugle échoue** : un piège qui **bloque** le pas/saut (une porte qui ne s'ouvre que par la sonde), pour que la négative échoue vraiment.
+2. **Politique DRVM/native** et coût mesuré, si les poids natifs arrivent.
+3. **L** : 200 réels atteints ; le gold peut encore grandir (relatives, portée, anglais).
+4. **Modèle neuronal** si un tagger/runner se débloque ; sinon, garder le mock et le dire.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
+… [42 caractères tronqués]
+
+### Tour 28 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Ajouter le labyrinthe à porte et l'exécuter
+- bash — Fermer l'autre chemin et vérifier que l'aveugle échoue
+- bash — Fermer le bas et vérifier que l'aveugle échoue
+- bash — Ajouter la porte T11 et lancer l'autotest
+- bash — Écrire la fiche de la porte et l'état
+- bash — Passer les portes et committer la porte neuronale
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1542,7 +1595,7 @@ Le round 13 du goal est livré : le gold réel atteint **200 phrases**, la **cib
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 437 autres
+- … et 443 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1727,4 +1780,5 @@ Le round 13 du goal est livré : le gold réel atteint **200 phrases**, la **cib
 - L — GOLD 300 : 140 RÉELS + 160 SYNTHÉTIQUES, POS 0,773, TÊTE 0,962 (RÉEL 0,936)" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "GOLD 300"; then echo "C
 - L — GOLD 360 : 200 RÉELS + 160 SYNTHÉTIQUES, POS 0,772, TÊTE 0,966 (RÉEL 0,946)" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "GOLD 360"; then echo "C
 - B13 — LE LABYRINTHE NON LINÉAIRE : BONNE POLITIQUE 17 NŒUDS/34 (SONDE 2), AVEUGLE 15/24 (SONDE 0) ; 13/13" 2>&1 | tail -3   if git log -1 --format='%s' | grep -
+- B13 — LA PORTE NEURONALE : BONNE POLITIQUE 28 NŒUDS/58 (SONDE 5), AVEUGLE 200/483 SANS BUT ; 14/14" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORT
 
