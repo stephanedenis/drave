@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 34.3 h |
+| Durée | 34.4 h |
 | Tours | 98 |
-| Messages | 1269 |
-| Appels d'outils | 1120 |
+| Messages | 1273 |
+| Appels d'outils | 1124 |
 | Fichiers touchés | 25 |
-| Commandes | 906 |
+| Commandes | 909 |
 | Sous-agents | 2 |
-| Commits | 125 |
+| Commits | 126 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -5198,12 +5198,16 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute le **vote de sign
 
 ### Tour 98 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Tester le vote de signaux (3 looks)
 - bash — Tester le vote à 5 et 9 looks
 - bash — Tracer la politique vote 5 looks
 - bash — Ajouter la porte T81 (vote de 5 signaux)
+- bash — Écrire la fiche du vote de signaux
+- bash — Trim README et portes
+- bash — Committer le vote de signaux
+- job_output
 
 ## 3. Travail accompli
 
@@ -5284,7 +5288,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute le **vote de sign
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 866 autres
+- … et 869 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5557,4 +5561,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute le **vote de sign
 - B13 — LES ROUTES CONCURRENTES : BUT CACHÉ, 0/20 ET 20/20, LA PHASE DOIT ENTRER ; 81/81" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ROUTES CONCURREN
 - B13 — LA PHASE DANS L'ÉTAT : LE CORRECTIF, 20/20 AUX DEUX BUTS, 6,0 PAS ; 82/82" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHASE DANS L'ÉTAT"; the
 - B13 — LA PHASE DEVINÉE : SIGNAL 90 %, 0/20 AU BUT 0, BOUCLE (3,0)↔(4,0) ; 83/83" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHASE DEVINÉE"; then ec
+- B13 — LE VOTE DE SIGNAUX : 5 LOOKS, 0/20, LE CYCLE EST STRUCTUREL ; 84/84" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VOTE DE SIGNAUX"; then echo "
 

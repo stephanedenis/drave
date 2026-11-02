@@ -24083,3 +24083,69 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''    nom = \"verite5\"\n    looks = 3\n\n    def _vote''','''    nom = \"verite5\"\n    looks = 5\n\n    def _vote''')\np. … [610 caractères tronqués]`
+
+  ```
+looks 5 q 130 but 0: 0 /20 but 1: 20 /20
+looks 9 q 139 but 0: 0 /20 but 1: 19 /20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom tools.pensee.operateurs import PolitiqueAppriseVerite5, seule_verite5, _etat_p, GOALS_VERITE2\np=PolitiqueAppriseVerite5(episodes=4000, graine=0); p.apprendre()\np.phase=0; p.signal_courant=0\ncle=(0,0,False,0) … [396 caractères tronqués]`
+
+  ```
+((0, 0, False), 'droite', {'haut': 0.68, 'bas': 0.68, 'gauche': 0.68, 'droite': 0.868})
+((1, 0, False), 'droite', {'haut': 0.726, 'bas': 0.753, 'gauche': 0.67, 'droite': 1.123})
+((2, 0, False), 'droite', {'haut': 0.774, 'bas': 0.774, 'gauche': 0.716, 'droite': 1.441})
+((3, 0, False), 'droite', {'haut': 0.991, 'bas': 0.794, 'gauche': 0.763, 'droite': 1.708})
+((4, 0, False), 'gauche', {'haut': 0.73, 'bas': 0.752, 'gauche': 0.815, 'droite': 0.763})
+((3, 0, False), 'droite', {'haut': 0.991, 'bas': 0.794, 'gauche': 0.763, 'droite': 1.708})
+((4, 0, False), 'gauche', {'haut': 0.73, 'bas': 0.752, 'gauche': 0.815, 'droite': 0.763})
+((3, 0, False), 'droite', {'haut': 0.991, 'bas': 0.794, 'gauche': 0.763, 'droite': 1.708})
+((4, 0, False), 'gauche', {'haut': 0.73, 'bas': 0.752, 'gauche': 0.815, 'droite': 0.763})
+((3, 0, False), 'droite', {'haut': 0.991, 'bas': 0.794, 'gauche': 0.763, 'droite': 1.708})
+((4, 0, False), 'gauche', {'haut': 0.73, 'bas': 0.752, 'gauche': 0.815, 'droite': 0.763})
+((3, 0, False), 'droite', {'haut': 0.991, 'bas': 0.794, 'gauche': 0.763, 'droite': 1.708})
+but (4, 0, False)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T80 la phase devinée              signal 90 % : but 0 0/20, but 1 20/20 (négatif)\\n\",\n\"  T80 la phase devinée          … [1544 caractères tronqués]`
+
+  ```
+ok
+  ✅ T79 phase dans l'état  phase dans l'état : but 0 20/20, but 1 20/20, 145 Q
+  ✅ T80 phase devinée      phase devinée : but 0 0/20, but 1 20/20 (le bruit de 10 % casse)
+  ✅ T81 vote de 5 signaux  vote 5 looks : but 0 0/20, but 1 20/20 (le cycle reste)
+  84/84 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-vote.md <<'MD'\n# B13 — le vote de signaux : 5 looks, toujours 0/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **84/84 portes** : la croyance **vot … [7170 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 486 fiche(s) · 576 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2818 mots > budget 2800 (T1)
+  en-cours · 1619 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-courbe-seuil.md`](rapport-pensee-courbe-seuil.md) | **B13** — la courbe du seuil : 0,35→0,50, 0 → 80 % → 100 %,  … [650 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 486 fiche(s) · 576 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1200 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-vote.md reports/pensee-vote.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/ … [482 caractères tronqués]`

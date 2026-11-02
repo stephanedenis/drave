@@ -1280,6 +1280,26 @@ def t80_phase_devinee() -> tuple[bool, str]:
                                     f"but 1 {ok1}/20 (le bruit de 10 % casse)")
 
 
+def t81_vote() -> tuple[bool, str]:
+    """Le vote de 5 signaux : 0/20 au but 0, 20/20 au but 1 — le cycle structurel reste."""
+    from .operateurs import PolitiqueAppriseVerite5, seule_verite5
+    p = PolitiqueAppriseVerite5(episodes=4000, graine=0)
+    p.apprendre()
+    ok0 = 0
+    ok1 = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        s = 0 if p.rng.random() < 0.9 else 1
+        b, _ = seule_verite5(p, 0, s)
+        ok0 += b
+        p.rng.seed(1000 + g)
+        s = 1 if p.rng.random() < 0.9 else 0
+        b, _ = seule_verite5(p, 1, s)
+        ok1 += b
+    return ok0 == 0 and ok1 == 20, (f"vote 5 looks : but 0 {ok0}/20, "
+                                    f"but 1 {ok1}/20 (le cycle reste)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1359,7 +1379,8 @@ def main() -> int:
               ("T77 vérité qui change", t77_verite()),
               ("T78 routes concurrentes", t78_concurrentes()),
               ("T79 phase dans l'état", t79_phase_etat()),
-              ("T80 phase devinée", t80_phase_devinee())]
+              ("T80 phase devinée", t80_phase_devinee()),
+              ("T81 vote de 5 signaux", t81_vote())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

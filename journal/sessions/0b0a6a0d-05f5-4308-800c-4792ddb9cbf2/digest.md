@@ -17396,3 +17396,19 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1033", "timeout_ms": 300000, "wait": true}`
+
+  ```
+course 1
+commit ok (2)
+a58e91cb ROADMAP — LA PROCHAINE ACTION N2 CHANGE : DISTILLATION DU CANAL, ANGLAIS 34,3 M, PUIS LA FENÊTRE
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E34-g*.pt 2>/dev/null; tail -1 work/n2k/E34-g1.log 2>/dev/null; tail -1 work/n2k/E34-g2.log 2>/dev/null", "description": "Wait for the English 34M students"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1034]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1034", "timeout_ms": 1500000, "wait": true}`

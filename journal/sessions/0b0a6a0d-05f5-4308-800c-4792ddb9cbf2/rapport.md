@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 34.6 h |
+| Durée | 34.7 h |
 | Tours | 18 |
-| Messages | 1389 |
-| Appels d'outils | 1290 |
+| Messages | 1391 |
+| Appels d'outils | 1292 |
 | Fichiers touchés | 11 |
-| Commandes | 1033 |
+| Commandes | 1034 |
 | Sous-agents | 0 |
 | Commits | 61 |
 | Compactages de contexte | 1 |
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*324 appels d'outils.* Actions notables :
+*326 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 993 autres
+- … et 994 autres
 
 ## 4. Mesures et résultats marquants
 

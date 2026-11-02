@@ -2256,6 +2256,43 @@ def seule_verite4(p: PolitiqueAppriseVerite4, phase: int, signal: int,
     return False, pas
 
 
+class PolitiqueAppriseVerite5(PolitiqueAppriseVerite4):
+    """La Q-table à **vote de signaux** : trois looks, la majorité décide la phase."""
+
+    nom = "verite5"
+    looks = 5
+
+    def _vote(self, phase: int) -> int:
+        vs = [self._signal(phase) for _ in range(self.looks)]
+        return 1 if sum(vs) * 2 > self.looks else 0
+
+    def apprendre(self) -> None:
+        for i in range(self.episodes):
+            self.phase = 0 if i < self.episodes // 2 else 1
+            s = self._vote(self.phase)
+            self.signal_courant = s
+            cle = (0, 0, False, s)
+            for _ in range(120):
+                if cle[:2] == GOALS_VERITE2[self.phase]:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle3, gain = self._pas(cle[:3], a, True)
+                ncle = (ncle3[0], ncle3[1], ncle3[2], s)
+                but = 1.0 if ncle[:2] == GOALS_VERITE2[self.phase] else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+
+def seule_verite5(p: PolitiqueAppriseVerite5, phase: int, signal: int,
+                  max_pas: int = 200) -> tuple[bool, int]:
+    return seule_verite4(p, phase, signal, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 
