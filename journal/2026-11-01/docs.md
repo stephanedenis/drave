@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (29)
+## Commits du jour (30)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -37,6 +37,7 @@
 | 21:07 | `bd9b78ee` | ÉTAT — DOCUMENTS 1 000/7 496 (295 MO), OCR EN COURS, ANGLAIS 19,4/25,6 M | `en-cours.md`, `README.md`, `apprentissage.md` (+15) |
 | 21:12 | `28f5d388` | B13 — LE REWARD SHAPING : 56 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ENCORE ; 25/25 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+15) |
 | 21:21 | `8dff8b7f` | B13 — LE PROFESSEUR COMPLET : 56 ÉTATS-Q, IL ÉCHOUE ENCORE SEUL ; 28/28 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
+| 21:24 | `d0c231ae` | B13 — LA POLITIQUE SANS NONE : 56 ÉTATS-Q, ELLE TOURNE 200 PAS ; 29/29 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 
 ## Chiffres du jour
 
@@ -46,10 +47,10 @@
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 29.0 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 29.4 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `b6a672ec-3349-4a4c-9e23-4478aa823170` — Git push to origin remote (début 2026-11-01 13:28, 0.1 h) → [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 28.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 28.8 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 29.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 29.2 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -57,6 +58,7 @@
 - [reports/inventaire-donnees-entrainement.md](../../reports/inventaire-donnees-entrainement.md)
 - [reports/rapport-corpus-pdf.md](../../reports/rapport-corpus-pdf.md)
 - [reports/rapport-pensee-professeur.md](../../reports/rapport-pensee-professeur.md)
+- [reports/rapport-pensee-sans-none.md](../../reports/rapport-pensee-sans-none.md)
 - [reports/rapport-pensee-shaping.md](../../reports/rapport-pensee-shaping.md)
 
 <!-- notes -->

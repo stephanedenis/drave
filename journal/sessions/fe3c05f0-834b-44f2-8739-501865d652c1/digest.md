@@ -18017,3 +18017,31 @@ Continue working toward the objective in this same session. Treat the current wo
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; kill 1632164 1646105 1550618 2>/dev/null; sleep 2; for i in $(seq 1 28); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 20; done; echo \"attente $((i*20))s\"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo  … [846 caractères tronqués]`
+
+  ```
+attente 560s
+en: pas encore
+  [en] 25400000 lus · 6023249 gardés · 21.98 G caractères
+  ```
+
+### 👤 Utilisateur
+
+background job bash-891 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 55); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 20; done; echo "attente $((i*20))s"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo "en: pas encore"; tail -1 /tmp/run-texte-en.log; exit 0; }; python3 - <<'PY'
+import json,pathlib
+d=json.loads(pathlib.Path('reports/corpus-wiki-en-texte.json').read_text())
+for k in ('articles_lus','articles_gardes','articles_rediriges','caracteres_gardes','mots_estimes','troncons','octets','residus'): print(k, d.get(k))
+PY
+nohup python3 tools/verifie_contamination.py --train data/corpus_wiki_en_texte/train.txt --val data/corpus_wiki_en_texte/val.txt --test data/corpus_wiki_en_texte/test.txt --eval work/dr/eval/en-xnli.txt --eval data/wikitext2_test.txt --taille-troncon 8192 --sortie reports/corpus-wiki-en-texte-contamination.json > /tmp/check-en.log 2>&1 &
+echo "check en job $!") finished [status: killed, signal: SIGTERM]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-883 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 110); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 20; done; echo "attente $((i*20))s"; if [ -f reports/corpus-wiki-en-texte.json ]; then python3 - <<'PY'
+import json,pathlib
+d=json.loads(pathlib.Path('reports/corpus-wiki-en-texte.json').read_text())
+for k in ('articles_lus','articles_gardes','articles_rediriges','caracteres_gardes','mots_estimes','troncons','octets','residus'): print(k, d.get(k))
+PY
+nohup python3 tools/verifie_contamination.py --train data/corpus_wiki_en_texte/train.txt --val data/corpus_wiki_en_texte/val.txt --test data/corpus_wiki_en_texte/test.txt --eval work/dr/eval/en-xnli.txt --eval data/wikitext2_test.txt --taille-troncon 8192 --sortie reports/corpus-wiki-en-texte-contamination.json > /tmp/check-en.log 2>&1 &
+echo "check en job $!"; else tail -1 /tmp/run-texte-en.log | cut -c1-70; fi) finished [status: killed, signal: SIGTERM]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 40); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 15; done; echo \"attente $((i*15))s\"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo \"en: pas encore\"; tail -1 /tmp/run-texte-en.log;  … [806 caractères tronqués]`

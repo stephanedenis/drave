@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 28.8 h |
-| Tours | 43 |
-| Messages | 726 |
-| Appels d'outils | 694 |
+| Durée | 29.1 h |
+| Tours | 44 |
+| Messages | 756 |
+| Appels d'outils | 720 |
 | Fichiers touchés | 25 |
-| Commandes | 559 |
+| Commandes | 582 |
 | Sous-agents | 2 |
 | Commits | 58 |
 | Compactages de contexte | 3 |
@@ -117,6 +117,8 @@
 **Tour 42** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 43** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 44** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2291,6 +2293,64 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Passer les portes et committer la politique sans None
 - job_output
 
+**Synthèse produite :**
+
+⏵ Politique sans None : 56 états-Q, elle tourne 200 pas ; 29/29
+
+Le round 30 du goal est livré : la **politique sans `None`** tourne 200 pas sans atteindre le but — le `None` n'était pas la cause, la politique reste incomplète. Commit **`d0c231ae`**.
+
+\## La politique sans None
+
+Même professeur que T25 (56 états-Q), mais `propose` renvoie **toujours** une action (au but, l'argmax). La `seule_minute` ne s'arrête donc plus au `None` : elle tourne jusqu'au budget.
+
+| politique | états-Q | buts seuls | pas | A* + sonde (T19) |
+|---|---:|---:|---:|---:|
+| **sans None** | **56** | **0** | **200** | 28 nœuds |
+| avec None (T25) | 56 | 0 | 8 | 28 nœuds |
+
+**Ce que ça dit** :
+
+- **Le `None` n'était pas la cause** : sans lui, la politique **tourne** (200 pas) au lieu de s'arrêter ; elle n'atteint toujours pas le but.
+- **La politique est incomplète** : la Q-table apprend des actions locales, pas la **séquence** de la porte minute.
+- **L'A* reste nécessaire** (T19) : c'est lui qui explore et atteint le but.
+- **Note de cohérence** : le T25 (l'ancien 8 pas) passe à 200 pas avec ce changement ; sa **négative** (échec) reste vraie.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-sans-none.md`](../../reports/rapport-pensee-sans-none.md) ; JSON [`pensee-sans-none.json`](../../reports/pensee-sans-none.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T26 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **29/29 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **416 fiches / 515 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+\## La suite
+
+1. **Curriculum** : commencer par des états proches du but, puis reculer.
+2. **Critère d'arrêt** : une politique qui **s'arrête** au but, pas une rustine.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque le curriculum.
+
+### Tour 44 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*26 appels d'outils.* Actions notables :
+
+- bash — Inspecter les méthodes de PolitiqueApprise
+- bash — Lire apprendre et _q de PolitiqueApprise
+- bash — Tracer le chemin glouton de la politique
+- bash — Relire seule_minute
+- bash — Corriger la comparaison de seule_minute et re-mesurer
+- bash — Voir quelles portes changent après la correction
+- bash — Corriger les portes T21/T22/T25/T26 et ajouter T27
+- bash — Écrire la fiche de correction et corriger les fiches
+- bash — Aligner le compteur et passer toutes les portes
+- job_output
+- bash — Inspecter le diagramme inline de roadmap.md
+- bash — Voir le diff de roadmap et la fin du bloc
+- bash — Comprendre la validation des diagrammes inline
+- bash — Lire la fonction de validation inline
+- … et 10 autres
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2370,7 +2430,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 519 autres
+- … et 542 autres
 
 ## 4. Mesures et résultats marquants
 

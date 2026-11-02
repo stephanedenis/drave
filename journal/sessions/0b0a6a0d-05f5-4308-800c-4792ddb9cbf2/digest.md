@@ -15264,3 +15264,116 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-891", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E-g3.pt work/n2k/M-g1.pt 2>/dev/null; for f in E-g3 M-g1 C-g1; do echo \"-- $f\"; tail -1 work/n2k/$f.log 2>/dev/null; done", "description": "Check the students again"}`
+
+  ```
+21:26
+work/n2k/E-g3.pt
+work/n2k/M-g1.pt
+-- E-g3
+}
+-- M-g1
+}
+-- C-g1
+pas   250 · seq 128 · perte 48.2690 · PPL 128/4 4.1351 · 18 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=.; CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2k/E-g3.pt --corpus-dir data/wiki_en/propre --sortie work/n2k/eval-en-distill.json 2>&1 | grep -v Loading; CUDA_VISIBLE_DEVICES=1 ~/gpu-en … [194 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-893]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-893", "timeout_ms": 400000, "wait": true}`
+
+  ```
+{"fichier": "E-g3.pt", "params": 11816136, "val": 3.9374, "test": 4.1782, "litterature": 19.3302, "litterature_propre": 19.2157, "anglais": 4.6506, "wikitext2": 4.9445, "permute": 121.9608}
+{"fichier": "M-g1.pt", "fr": 5.4193, "en": 5.9856, "de": 6.0508, "es": 5.761, "it": 5.8603, "pt": 6.4052, "ru": 3.6061, "ar": 3.5657, "ja": 5.5718, "zh": 9.4781}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-anglais-distille.md <<'EOF'\n# N2.n — La distillation anglaise : 4,42 → 3,94, la chaîne complète sur 204 Mo\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : le professeur 23,57 M entraîn … [2931 caractères tronqués]`
+
+  ```
+fiche EN écrite
+21:28
+pas  1750 · seq 128 · perte 146.8002 · PPL 128/4 7.0614 · 123 s
+pas  2250 · seq 128 · perte 37.1028 · PPL 128/4 4.0567 · 165 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.h/N2.i — closes** : **3,09** / **12,93** / **33,83** ;\", \"**N2.h/N2.i** : **3,09** / **12,93** / **33,83** ;\" … [1295 caractères tronqués]`
+
+  ```
+en-cours ok
+roadmap ok
+  T0 max : 3994 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 418 fiche(s) · 516 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 👤 Utilisateur
+
+background job bash-889 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E-g3.pt work/n2k/M-g1.pt work/n2k/M-g2.pt work/n2k/C-g1.pt 2>/dev/null; for f in E-g3 M-g1 M-g2 C-g1; do echo "-- $f"; tail -1 work/n2k/$f.log 2>/dev/null; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-n2-anglais-distille.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"N2.n — LA DISTILLATION ANGLAISE : 4,42 → 3,94, LA CHAÎNE COMPLÈTE SUR 204 Mo\n\nLe professeur 23,57 M en … [756 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-896]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-896", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-891 (bash: sleep 960; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E-g3.pt work/n2k/M-g1.pt 2>/dev/null; for f in E-g3 M-g1 C-g1; do echo "-- $f"; tail -1 work/n2k/$f.log 2>/dev/null; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; date '+%H:%M'; tail -1 work/n2k/M-g2.log 2>/dev/null; tail -1 work/n2k/C-g1.log 2>/dev/null; ls work/n2k/M-g2.pt work/n2k/C-g1.pt 2>/dev/null", "description": "Check the commit and the running jobs"}`
+
+  ```
+d0c231ae B13 — LA POLITIQUE SANS NONE : 56 ÉTATS-Q, ELLE TOURNE 200 PAS ; 29/29
+8dff8b7f B13 — LE PROFESSEUR COMPLET : 56 ÉTATS-Q, IL ÉCHOUE ENCORE SEUL ; 28/28
+21:35
+pas  4500 · seq 128 · perte 70.7117 · PPL 128/4 7.0960 · 528 s
+pas  3250 · seq 128 · perte 33.1585 · PPL 128/4 4.0291 · 388 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -6; git log --oneline -1; git add reports/rapport-n2-anglais-distille.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md 2>/dev/null; git diff --cached --stat | tail -2; timeout 300 git commit -m \"N2.n — … [875 caractères tronqués]`
+
+  ```
+M docs/implantation/bloc-linguistique.md
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/chantiers.md
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md
+d0c231ae B13 — LA POLITIQUE SANS NONE : 56 ÉTATS-Q, ELLE TOURNE 200 PAS ; 29/29
+ reports/rapport-n2-anglais-distille.md | 57 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 63 insertions(+), 6 deletions(-)
+[still running after 60000ms; moved to background job bash-898]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-898", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+d0c231ae B13 — LA POLITIQUE SANS NONE : 56 ÉTATS-Q, ELLE TOURNE 200 PAS ; 29/29
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"N2.n — LA DISTILLATION ANGLAISE : 4,42 → 3,94, LA CHAÎNE COMPLÈTE SUR 204 Mo\n\nLe professeur 23,57 M entraîné sur les 204,6 Mo d'anglais, distillé dans la base anglaise à\npositions aléatoires, trois graines : 3,9403 … [496 caractères tronqués]`

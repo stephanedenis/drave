@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 28.8 h |
-| Tours | 27 |
-| Messages | 1003 |
-| Appels d'outils | 970 |
+| Durée | 29.2 h |
+| Tours | 28 |
+| Messages | 1009 |
+| Appels d'outils | 972 |
 | Fichiers touchés | 18 |
-| Commandes | 893 |
+| Commandes | 895 |
 | Sous-agents | 0 |
 | Commits | 60 |
 | Compactages de contexte | 2 |
@@ -81,6 +81,8 @@
 **Tour 26** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 27** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 28** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1189,10 +1191,39 @@ Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des di
 
 ### Tour 27 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*3 appels d'outils.* Actions notables :
 
 - bash — Check English manifest, check process, and documents
 - bash — Kill redundant watchers and launch English check
+- bash — Wait final English pages and launch check
+
+**Synthèse produite :**
+
+⏵ Round 15 : l'anglais à 25,4/25,6 M pages (99 %), le manifeste dans les dernières minutes
+
+**Round 15/1000 — l'anglais touche au but ; les watchers redondants sont nettoyés.**
+
+\## L'anglais
+
+**25,4 M pages sur 25,6 M** (99 %), **6,02 M articles**, 21,98 G caractères. Il ne reste que ~200 000 pages ; le manifeste tombe dans les minutes qui viennent, et le contrôle 8 Ko (les deux unités + XNLI + wikitext2) est armé pour partir dès qu'il apparaît. J'ai supprimé les **trois boucles d'attente** redondantes (deux auraient lancé le contrôle en double) : une seule attente reste, la mienne, et elle vérifie le manifeste avant de lancer le contrôle — jamais sur un fichier en cours d'écriture.
+
+\## Les documents
+
+**2 500 PDF sur 7 496**, **675 Mo**, 598,1 M caractères. Le parcours continue ; le manifeste à la fin (~1 h 30).
+
+\## L'OCR
+
+Le deuxième livre est passé (*Bioinformatics for beginners*, 225 pages, 923 245 caractères) ; la détection des scannés sur les 2 785 PDF continue. C'est le poste le plus lent — les documents et l'anglais d'abord.
+
+\## La suite
+
+Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des dix** ; les **manifestes OCR et Documents** → leurs fiches ; les **159 scans**. Le goal reste actif ; le prochain round devrait enfin annoncer le 10e corpus.
+
+### Tour 28 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check English manifest and check progress
 
 ## 3. Travail accompli
 
@@ -1261,7 +1292,7 @@ Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des di
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 853 autres
+- … et 855 autres
 
 ## 4. Mesures et résultats marquants
 
