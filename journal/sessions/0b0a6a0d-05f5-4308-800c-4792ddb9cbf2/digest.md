@@ -20913,3 +20913,60 @@ commit ok (1)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d{2} h \\d{2} HNE \\(heure locale, EST\\)\\.\\*\\*\",\n           \"**Mis à jour : … [1141 caractères tronqués]`
+
+  ```
+ts ok
+[still running after 60000ms; moved to background job bash-1221]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1221", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+33
+3
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-n2-*.md reports/rapport-s-analyseur.md 2>/dev/null; git status --short reports/ | grep -c \"rapport-n2\\|rapport-s\"; git diff --cached --stat | grep -c \"rapport-n2\"; echo \"=== HEAD ===\"; git ls-tree HEAD  … [117 caractères tronqués]`
+
+  ```
+0
+0
+=== HEAD ===
+33
+26b8c442 N2 — RESTAURATION (ENCORE) DES FICHES N2.aa, N2.ab ET N2.ac
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture : pilotage aligné, trois nouveaux résultats mesurés et committés
+
+## Le pilotage est à jour
+
+`docs/pilotage/en-cours.md`, `roadmap.md` et `plan-travail.md` portent maintenant la chaîne réelle de bout en bout : **N2.z** (34,3 M + canal, **3,53** sur 2 graines) comme meilleur modèle, **N2.r** 3,69, **N2.w** anglais 3,77, **N2.v** multilingue 4,79, puis les trois résultats de l'après-midi. La ligne **N** du tableau des chantiers ne dit plus « N2 close » mais « chaîne réelle mesurée (3,53), < 2,5 non atteinte », avec le corpus d'un autre ordre en prochaine action — et la ligne **S** porte la mesure de l'analyseur (7/7 séquences, 93,9 %, 19 tests).
+
+## Et j'ai continué
+
+**N2.aa — le corpus de 831 Mo à compute constant ne fait pas mieux.** 600 000 articles (offset 1 M, disjoints), 1 048 Mo bruts → 924 Mo dédupliqués (88,2 %), **0 fuite** sur 4 000 fenêtres. À recette égale (2 × 20 000 pas) : **3,7025** sur la validation de N2.z contre 3,5250, et 3,4604 sur la sienne. Chaque modèle est meilleur **sur son propre domaine** : à 40 Mo vus, le corpus ne fait pas apprendre plus, il fait apprendre autre chose.
+
+**N2.ab — plus de pas paie, plus de texte paie en largeur.** À 60 000 pas : le corpus de 186 Mo vaut **3,4365** sur sa validation (N2.z : 3,5250) ; le 831 Mo **gagne en largeur** (anglais **8,32** contre 9,52, wikitext2 **9,16** contre 10,71) et **perd en français** (littérature 6,14 contre 6,00).
+
+**N2.ac — le mélange prend le meilleur des deux.** 1,02 Go (les deux corpus concaténés), 60 000 pas : **3,4902** en domaine (à 0,05 du meilleur), **6,0283** en littérature (le meilleur), **8,3352** en anglais (≈ le big), **9,0525** sur wikitext2 (le meilleur). C'est le **modèle de production** pour R — la largeur sans perdre le français.
+
+## Les fichiers
+
+- Fiches : [`rapport-n2-corpus-1go.md`](reports/rapport-n2-corpus-1go.md), [`rapport-n2-pas-vs-texte.md`](reports/rapport-n2-pas-vs-texte.md), [`rapport-n2-melange.md`](reports/rapport-n2-melange.md).
+- Corpus : `data/wiki_big/propre/` (831 Mo) et `data/wiki_mix/propre/` (1,02 Go), manifeste [`corpus-wiki-big-propre.json`](reports/corpus-wiki-big-propre.json).
+- Modèles : `work/n2w/{fr-60k,big-60k,mix-60k}.pt` ; outils : `work/n2w/{deduit_leger,pipeline_big,eval_croise,eval_ood_canal}.py`.
+- Commits : `5d33e266`, `2b3eeba9`, `2c394fbc`, `6e6e9f61`, `26b8c442` (restauration).
+
+## Vérification
+
+`T0` **3 995 / 4 000**, revue documentaire ✅, `33` fiches N2 dans `HEAD`, l'index réparé. La déduplication de 1 Go a coûté **~80 Go de mémoire** (version légère) et le premier essai a été tué pour ne pas asphyxier la machine — c'est écrit dans la fiche.
+
+**À noter** : deux fois aujourd'hui, un commit parallèle (B13) est reparti d'un arbre sans mes fiches et les a effacées de `HEAD` (`edb54a29`, puis `26e4df27`) ; les restaurations sont `b788ba04` et `26b8c442`. Si vous voyez d'autres disparitions, c'est ce mécanisme.
+
+**Prochaine action** : 200 000 pas sur le mélange (les 60 k paient déjà +0,1), puis la fenêtre R1.1/R1.2.
+

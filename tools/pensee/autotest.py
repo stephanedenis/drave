@@ -1631,7 +1631,7 @@ def t106_bilan_anaphore() -> tuple[bool, str]:
 def t107_gold_complet() -> tuple[bool, str]:
     """Le gold complet : 522 phrases, POS 0,7586."""
     import tools.bloc_linguistique as bl
-    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger, evaluer_bloc
     phrases = charger()
     h = bl.Heuristique()
     r = evaluer_bloc("h", h, phrases)
@@ -1670,7 +1670,7 @@ def t109_anaphore_103() -> tuple[bool, str]:
 def t110_segmenteur() -> tuple[bool, str]:
     """Le segmenteur : S générateur F1 0,1722, chunker 0,1425 ; tête 0,3552 / 0,4707."""
     import tools.bloc_linguistique as bl
-    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger, evaluer_bloc
     ph = charger()
     h1 = bl.Heuristique(union=False)
     h2 = bl.Heuristique(union=False)
@@ -1689,7 +1689,7 @@ def t110_segmenteur() -> tuple[bool, str]:
 def t111_hybride_seg() -> tuple[bool, str]:
     """L'hybride frontières/têtes : tête F1 0,3732 (S 0,3552, chunker 0,4707)."""
     import tools.bloc_linguistique as bl
-    from ..tests.linguistique.evaluer_gold import charger, _tete
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger, _tete
     ph = charger()
     h1 = bl.Heuristique(union=False)
     h2 = bl.Heuristique(union=False)
@@ -1714,7 +1714,7 @@ def t111_hybride_seg() -> tuple[bool, str]:
 def t112_union() -> tuple[bool, str]:
     """L'union des segmenteurs : segments F1 0,2005 (S 0,1722), tête 0,4662."""
     import tools.bloc_linguistique as bl
-    from ..tests.linguistique.evaluer_gold import charger, _seg, _tete
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger, _seg, _tete
     ph = charger()
     h1 = bl.Heuristique(union=False)
     h2 = bl.Heuristique(union=False)
@@ -1734,7 +1734,7 @@ def t112_union() -> tuple[bool, str]:
 def t113_union_defaut() -> tuple[bool, str]:
     """L'union par défaut : F1 0,2005, tête 0,4662 dans l'analyseur."""
     import tools.bloc_linguistique as bl
-    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger, evaluer_bloc
     ph = charger()
     h = bl.Heuristique()
     r = evaluer_bloc("h", h, ph)
@@ -1747,7 +1747,7 @@ def t113_union_defaut() -> tuple[bool, str]:
 def t114_cascade_union() -> tuple[bool, str]:
     """La cascade avec l'union : F1 0,2170, tête 0,4410, 1 601 appels neuronaux."""
     import tools.bloc_linguistique as bl
-    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger, evaluer_bloc
     ph = charger()
     h, n = bl.Heuristique(), bl.MockNeuronal()
     cascade = bl.Cascade(h, n)
@@ -1762,7 +1762,7 @@ def t114_cascade_union() -> tuple[bool, str]:
 def t115_tete_cascade() -> tuple[bool, str]:
     """La tête de la cascade : la correction par l'union dégrade (0,419 contre 0,441)."""
     import tools.bloc_linguistique as bl
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     ph = charger()
     h, n = bl.Heuristique(), bl.MockNeuronal()
     cas = bl.Cascade(h, n)
@@ -1787,7 +1787,7 @@ def t115_tete_cascade() -> tuple[bool, str]:
 def t116_miroir() -> tuple[bool, str]:
     """Le miroir : surface 1,0, mots 0,2095."""
     import tools.bloc_linguistique as bl
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import mesurer
     ph = charger()
     r = mesurer(ph, bl.Heuristique())
@@ -1798,7 +1798,7 @@ def t116_miroir() -> tuple[bool, str]:
 def t117_miroir_pos() -> tuple[bool, str]:
     """La sortie POS : fidélité 0,201."""
     import tools.bloc_linguistique as bl
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import fidelite_pos
     ph = charger()
     h = bl.Heuristique()
@@ -1810,7 +1810,7 @@ def t117_miroir_pos() -> tuple[bool, str]:
 def t118_miroir_espaces() -> tuple[bool, str]:
     """La restitution POS avec les intervalles : 1,0."""
     import tools.bloc_linguistique as bl
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import fidelite_pos_espaces
     ph = charger()
     h = bl.Heuristique()
@@ -1822,7 +1822,7 @@ def t118_miroir_espaces() -> tuple[bool, str]:
 def t119_miroir_resume() -> tuple[bool, str]:
     """La restitution sémantique : rappel 0,7834 (heur), 0,7472 (cascade)."""
     import tools.bloc_linguistique as bl
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import rappel_resume
     ph = charger()
     h = bl.Heuristique()
@@ -1838,7 +1838,7 @@ def t119_miroir_resume() -> tuple[bool, str]:
 def t120_miroir_reponse() -> tuple[bool, str]:
     """La réponse : 19/19 sur les questions du gold."""
     import tools.bloc_linguistique as bl
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import fidelite_reponse
     ph = charger()
     h = bl.Heuristique()
@@ -1850,7 +1850,7 @@ def t120_miroir_reponse() -> tuple[bool, str]:
 
 def t121_reponse_contenu() -> tuple[bool, str]:
     """La réponse au contenu : 0/19, la frontière du modèle."""
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import fidelite_contenu
     ph = charger()
     r = fidelite_contenu(ph)
@@ -1860,7 +1860,7 @@ def t121_reponse_contenu() -> tuple[bool, str]:
 
 def t122_extraction() -> tuple[bool, str]:
     """La réponse par extraction : 19/19, une fausse victoire."""
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import fidelite_extraction
     r = fidelite_extraction(charger())
     return r["questions"] == 34 and r["trouvees"] == 34, (
@@ -1869,7 +1869,7 @@ def t122_extraction() -> tuple[bool, str]:
 
 def t123_juge() -> tuple[bool, str]:
     """Le juge : couverture 19/19, mais il ne juge pas le vide (0.0)."""
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.juge import couverture, juge
     ph = charger()
     c = couverture(ph)
@@ -1881,7 +1881,7 @@ def t123_juge() -> tuple[bool, str]:
 
 def t124_reponses() -> tuple[bool, str]:
     """Les 19 réponses de référence : couverture 19/19."""
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.juge import couverture
     c = couverture(charger())
     return c["questions"] == 34 and c["avec_reference"] == 34, (
@@ -1890,7 +1890,7 @@ def t124_reponses() -> tuple[bool, str]:
 
 def t125_juge_bloc() -> tuple[bool, str]:
     """Le juge contre le bloc : 0/19 pour le bloc et l'extraction."""
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.juge import juge_bloc, juge_extraction
     ph = charger()
     b = juge_bloc(ph)
@@ -1902,7 +1902,7 @@ def t125_juge_bloc() -> tuple[bool, str]:
 
 def t126_dirigee() -> tuple[bool, str]:
     """La réponse dirigée : 19/19 sur les 19 questions affirmatives."""
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import fidelite_dirigee
     ph = charger()
     q = [p for p in ph if "?" in p["texte"] and int(p["id"][1:]) < 408]
@@ -1913,7 +1913,7 @@ def t126_dirigee() -> tuple[bool, str]:
 
 def t127_negatives() -> tuple[bool, str]:
     """Les questions négatives : 10/10 avec la règle du si (19/29 avant)."""
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import fidelite_dirigee
     ph = charger()
     q = [p for p in ph if "?" in p["texte"] and 408 <= int(p["id"][1:]) <= 417]
@@ -1924,7 +1924,7 @@ def t127_negatives() -> tuple[bool, str]:
 
 def t128_si() -> tuple[bool, str]:
     """La règle du si : 29/29 (25/29 sans le repli und→fr)."""
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import fidelite_dirigee
     r = fidelite_dirigee(charger())
     return r["questions"] == 34 and r["justes"] == 29, (
@@ -1933,11 +1933,18 @@ def t128_si() -> tuple[bool, str]:
 
 def t129_pieges() -> tuple[bool, str]:
     """Les questions pièges : 29/34, le si est une convention."""
-    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import fidelite_dirigee
     r = fidelite_dirigee(charger())
     return r["questions"] == 34 and r["justes"] == 29, (
         f"pièges : {r['justes']:.0f}/{r['questions']} (0/5 sur les pièges)")
+
+
+def t130_gold_gele() -> tuple[bool, str]:
+    """Le gold gelé : 602 phrases, les portes ne cassent plus."""
+    from ..tests.linguistique.evaluer_gold import charger_gele
+    gele = charger_gele()
+    return len(gele) == 602, f"gold gelé : {len(gele)} phrases"
 
 
 def main() -> int:
@@ -2068,7 +2075,8 @@ def main() -> int:
               ("T126 réponse dirigée", t126_dirigee()),
               ("T127 négatives", t127_negatives()),
               ("T128 règle du si", t128_si()),
-              ("T129 pièges", t129_pieges())]
+              ("T129 pièges", t129_pieges()),
+              ("T130 gold gelé", t130_gold_gele())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

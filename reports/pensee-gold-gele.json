@@ -1,0 +1,17 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "133/133",
+ "gele": {
+  "phrases": 602,
+  "portes_basculees": 21
+ },
+ "vivant": {
+  "phrases": 602
+ },
+ "limites": [
+  "le gel doit être daté",
+  "21 portes",
+  "heuristique seule"
+ ]
+}

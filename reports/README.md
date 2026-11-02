@@ -15,8 +15,8 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-gold-gele.md`](rapport-pensee-gold-gele.md) | **B13** — le gold gelé : 602 phrases, 21 portes protégées, **133/133** |
 | [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
-| [`rapport-pensee-miroir-resume.md`](rapport-pensee-miroir-resume.md) | **B13** — la restitution sémantique : résumé 0,7834 / 0,7472, **122/122** |
 | [`rapport-pensee-miroir.md`](rapport-pensee-miroir.md) | **B13** — le miroir entrée/sortie : surface 1,0, mots 0,2095, **119/119** |
 | [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |
 | [`rapport-pensee-anaphore-bilan.md`](rapport-pensee-anaphore-bilan.md) | **B13** — le bilan de l'anaphore : 27/30, CV 0,847, huit mesures, **109/109** |

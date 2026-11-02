@@ -32,6 +32,18 @@ def charger() -> list[dict]:
     return hand + reel + synth
 
 
+GELE = pathlib.Path(__file__).with_name("gold_gele.json")
+
+
+def charger_gele() -> list[dict]:
+    """Le gold **gelé** : une copie figée pour les portes à nombre absolu.
+
+    Le gold vivant grandit (phrases, liens) ; les portes qui codent un chiffre exact
+    mesurent le gelé, pas le vivant — sinon chaque ajout casse dix-sept portes.
+    """
+    return json.loads(GELE.read_text(encoding="utf-8"))["phrases"]
+
+
 def par_source(phrases: list[dict], source: str) -> list[dict]:
     return [p for p in phrases if p.get("source") == source]
 

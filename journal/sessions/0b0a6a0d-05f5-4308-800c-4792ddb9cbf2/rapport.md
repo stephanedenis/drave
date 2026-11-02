@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 45.3 h |
 | Tours | 20 |
-| Messages | 1706 |
-| Appels d'outils | 1563 |
+| Messages | 1709 |
+| Appels d'outils | 1565 |
 | Fichiers touchés | 11 |
-| Commandes | 1221 |
+| Commandes | 1222 |
 | Sous-agents | 0 |
 | Commits | 88 |
 | Compactages de contexte | 2 |
@@ -1062,7 +1062,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 
 ### Tour 20 — mets le dossier de pilotage à jour et continue
 
-*128 appels d'outils.* Actions notables :
+*130 appels d'outils.* Actions notables :
 
 - bash — Read the state's N2 section and timestamp
 - read
@@ -1078,11 +1078,35 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - bash — Find the Wikipedia extraction tool
 - bash — Read the extraction tool's options
 - bash — Look at the earlier extraction script
-- … et 66 autres
+- … et 67 autres
 
 **Synthèse produite :**
 
-⏵ Mise à jour du pilotage : je relis l'état, la roadmap et le plan avant de les aligner sur la nuit
+⏵ Clôture : pilotage aligné, trois nouveaux résultats mesurés et committés
+
+\## Le pilotage est à jour
+
+`docs/pilotage/en-cours.md`, `roadmap.md` et `plan-travail.md` portent maintenant la chaîne réelle de bout en bout : **N2.z** (34,3 M + canal, **3,53** sur 2 graines) comme meilleur modèle, **N2.r** 3,69, **N2.w** anglais 3,77, **N2.v** multilingue 4,79, puis les trois résultats de l'après-midi. La ligne **N** du tableau des chantiers ne dit plus « N2 close » mais « chaîne réelle mesurée (3,53), < 2,5 non atteinte », avec le corpus d'un autre ordre en prochaine action — et la ligne **S** porte la mesure de l'analyseur (7/7 séquences, 93,9 %, 19 tests).
+
+\## Et j'ai continué
+
+**N2.aa — le corpus de 831 Mo à compute constant ne fait pas mieux.** 600 000 articles (offset 1 M, disjoints), 1 048 Mo bruts → 924 Mo dédupliqués (88,2 %), **0 fuite** sur 4 000 fenêtres. À recette égale (2 × 20 000 pas) : **3,7025** sur la validation de N2.z contre 3,5250, et 3,4604 sur la sienne. Chaque modèle est meilleur **sur son propre domaine** : à 40 Mo vus, le corpus ne fait pas apprendre plus, il fait apprendre autre chose.
+
+**N2.ab — plus de pas paie, plus de texte paie en largeur.** À 60 000 pas : le corpus de 186 Mo vaut **3,4365** sur sa validation (N2.z : 3,5250) ; le 831 Mo **gagne en largeur** (anglais **8,32** contre 9,52, wikitext2 **9,16** contre 10,71) et **perd en français** (littérature 6,14 contre 6,00).
+
+**N2.ac — le mélange prend le meilleur des deux.** 1,02 Go (les deux corpus concaténés), 60 000 pas : **3,4902** en domaine (à 0,05 du meilleur), **6,0283** en littérature (le meilleur), **8,3352** en anglais (≈ le big), **9,0525** sur wikitext2 (le meilleur). C'est le **modèle de production** pour R — la largeur sans perdre le français.
+
+\## Les fichiers
+
+- Fiches : [`rapport-n2-corpus-1go.md`](reports/rapport-n2-corpus-1go.md), [`rapport-n2-pas-vs-texte.md`](reports/rapport-n2-pas-vs-texte.md), [`rapport-n2-melange.md`](reports/rapport-n2-melange.md).
+- Corpus : `data/wiki_big/propre/` (831 Mo) et `data/wiki_mix/propre/` (1,02 Go), manifeste [`corpus-wiki-big-propre.json`](reports/corpus-wiki-big-propre.json).
+- Modèles : `work/n2w/{fr-60k,big-60k,mix-60k}.pt` ; outils : `work/n2w/{deduit_leger,pipeline_big,eval_croise,eval_ood_canal}.py`.
+- Commits : `5d33e266`, `2b3eeba9`, `2c394fbc`, `6e6e9f61`, `26b8c442` (restauration).
+
+\## Vérification
+
+`T0` **3 995 / 4 000**, revue documentaire ✅, `33` fiches N2 dans `HEAD`, l'index réparé. La déduplication de 1 Go a 
+… [512 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -1144,7 +1168,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1181 autres
+- … et 1182 autres
 
 ## 4. Mesures et résultats marquants
 
