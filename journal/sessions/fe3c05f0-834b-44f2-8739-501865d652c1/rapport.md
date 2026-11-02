@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 37.5 h |
-| Tours | 379 |
-| Messages | 2262 |
-| Appels d'outils | 1497 |
+| Durée | 37.8 h |
+| Tours | 381 |
+| Messages | 2268 |
+| Appels d'outils | 1499 |
 | Fichiers touchés | 26 |
-| Commandes | 1330 |
+| Commandes | 1332 |
 | Sous-agents | 0 |
 | Commits | 84 |
 | Compactages de contexte | 4 |
@@ -785,6 +785,10 @@
 **Tour 378** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 379** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 380** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 381** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8902,6 +8906,45 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 - bash — Wait 7 min then check CEGEP and gates
 
+**Synthèse produite :**
+
+⏵ Round 367 : CEGEP 2 scans faits (164 p, 273 198 car.), portes 30/81
+
+**Round 367/1000 — le CEGEP a deux scans océrisés.**
+
+- **`Exercices de synthèse Excel 2010`** : 43 p, 81 675 car. ; **`AMF-AO-Annexes 12 à 15 (Tech)`** : **121 p, 191 523 car.** — le 2e scan est fait ; la détection a lu **1,43 Go** des 2 681 PDF.
+- **Le `--max-doc 5`** : 3 scans restants, puis le manifeste `reports/ocr-pdf-cegep.json`.
+- **Les portes** : **30/81** au registre ; une seule rouge : **`porte-homeostasie 2 0`** (le LoRA `/tmp/n4` absent — l'environnement, pas une régression).
+- **Les commits** : `15f2c8f6` (OCR 20 livres), `166896b4` (genres 38,5), `bfe57da7` (chantiers D 20 livres).
+- **Le corpus OCR des livres** : 20 livres, 7 381 p, 15,36 M car., **8 Ko 0**, éval 0/40.
+
+**Le constat** : le CEGEP avance (2/5), les portes tiennent ; le goal reste actif jusqu'à 8 h.
+
+### Tour 380 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait 7 min then check CEGEP and gates
+
+**Synthèse produite :**
+
+⏵ Round 368 : CEGEP 4 scans faits (226 p, 301 780 car.), portes 30/81 closes sur la borne
+
+**Round 368/1000 — le CEGEP a quatre scans ; les portes ont clos sur la borne.**
+
+- **CEGEP** : `Exercices de synthèse Excel` 43 p ; `AMF-AO-Annexes 12 à 15` 121 p ; `AMF-AO-Annexes 16 — Gabarits` 60 p ; `inscription AQPC` 2 p — **4/5 scans**, **226 pages, 301 780 caractères** ; le 5e et le manifeste suivent.
+- **Les portes** : **30 portes** au registre, **`porte-horloge` ✅ 29 s — « borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue »** : la passe s'est arrêtée proprement sur sa borne de 30 min ; une seule rouge, `porte-homeostasie` (le LoRA `/tmp/n4` absent, l'environnement).
+- **Les commits** : `15f2c8f6` (OCR 20 livres), `166896b4` (genres 38,5), `bfe57da7` (chantiers D 20 livres).
+- **Le corpus OCR des livres** : 20 livres, 7 381 p, 15,36 M car., **8 Ko 0**, éval 0/40.
+
+**Le constat** : le CEGEP finit son pilote ; les portes sont vertes hors la rouge connue ; le goal reste actif jusqu'à 8 h.
+
+### Tour 381 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait 5 min then check CEGEP manifest
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8977,7 +9020,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1290 autres
+- … et 1292 autres
 
 ## 4. Mesures et résultats marquants
 

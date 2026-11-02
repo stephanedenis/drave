@@ -34241,3 +34241,47 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; tail -4 /tmp/ocr-cegep.log; cat /proc/2644645/io 2>/dev/null | head -2; ps -p 2644645 -o pid,etime= 2>/dev/null || echo \"CEGEP OCR fini\"; ls -la reports/ocr-pdf-cegep.json 2>&1; echo \"=== portes\"; ps -p 24 … [315 caractères tronqués]`
+
+  ```
+06:15
+  CEGEP · Exercices de synthèse Excel 2010 Fonctio · 43 p · 81675 car
+  CEGEP · AMF-AO-Annexes 12 à 15 (Tech).pdf · 121 p · 191523 car
+rchar: 1425554972
+wchar: 315056358
+    PID            
+2644645       22:59
+ls: cannot access 'reports/ocr-pdf-cegep.json': No such file or directory
+=== portes
+STAT            
+S          47:41
+30 /tmp/portes-1102-05h27/registre.txt
+porte-homeostasie 2 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 367 : CEGEP 2 scans faits (164 p, 273 198 car.), portes 30/81
+
+**Round 367/1000 — le CEGEP a deux scans océrisés.**
+
+- **`Exercices de synthèse Excel 2010`** : 43 p, 81 675 car. ; **`AMF-AO-Annexes 12 à 15 (Tech)`** : **121 p, 191 523 car.** — le 2e scan est fait ; la détection a lu **1,43 Go** des 2 681 PDF.
+- **Le `--max-doc 5`** : 3 scans restants, puis le manifeste `reports/ocr-pdf-cegep.json`.
+- **Les portes** : **30/81** au registre ; une seule rouge : **`porte-homeostasie 2 0`** (le LoRA `/tmp/n4` absent — l'environnement, pas une régression).
+- **Les commits** : `15f2c8f6` (OCR 20 livres), `166896b4` (genres 38,5), `bfe57da7` (chantiers D 20 livres).
+- **Le corpus OCR des livres** : 20 livres, 7 381 p, 15,36 M car., **8 Ko 0**, éval 0/40.
+
+**Le constat** : le CEGEP avance (2/5), les portes tiennent ; le goal reste actif jusqu'à 8 h.
+
+
+## Tour 380
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 368/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; tail -4 /tmp/ocr-cegep.log; ps -p 2644645 -o pid,etime= 2>/dev/null || echo \"CEGEP OCR fini\"; ls -la reports/ocr-pdf-cegep.json 2>&1; echo \"=== portes\"; ps -p 2459980 -o stat,etime= 2>/dev/null || echo \"p … [241 caractères tronqués]`

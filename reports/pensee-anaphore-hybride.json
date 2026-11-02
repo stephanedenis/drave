@@ -1,0 +1,27 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "101/101",
+ "regles": {
+  "dernier_nom": {
+   "tout": 27,
+   "court": 20,
+   "long": 7
+  },
+  "role": {
+   "tout": 23,
+   "court": 14,
+   "long": 9
+  },
+  "hybride": {
+   "tout": 24,
+   "court": 15,
+   "long": 9
+  }
+ },
+ "limites": [
+  "30 liens",
+  "sens du verbe absent",
+  "heuristique seule"
+ ]
+}

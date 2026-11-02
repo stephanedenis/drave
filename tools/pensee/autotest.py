@@ -1503,6 +1503,17 @@ def t97_roles() -> tuple[bool, str]:
         f"rôles : {r['justes']}/{r['liens']} liens justes")
 
 
+def t98_hybride() -> tuple[bool, str]:
+    """L'hybride : sujet par rôle, objet par proximité — 24/30."""
+    from ..tests.linguistique.anaphore import mesurer_hybride
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 342]
+    r = mesurer_hybride(ps)
+    return r["liens"] == 30 and r["justes"] == 24, (
+        f"hybride : {r['justes']}/{r['liens']} liens justes")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1599,7 +1610,8 @@ def main() -> int:
               ("T94 anaphore corrigée", t94_anaphore_corrigee()),
               ("T95 pronoms objets", t95_objets()),
               ("T96 chaînes longues", t96_chaines()),
-              ("T97 résolution par rôle", t97_roles())]
+              ("T97 résolution par rôle", t97_roles()),
+              ("T98 hybride", t98_hybride())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

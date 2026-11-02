@@ -72,6 +72,51 @@ def resoudre_roles(mots: list[dict], segments: list[dict]) -> dict[str, str]:
     return liens
 
 
+def resoudre_hybride(mots: list[dict], segments: list[dict]) -> dict[str, str]:
+    """Hybride : sujet par le rôle (`agent`), objet par le dernier nom."""
+    agent = None
+    for seg in segments:
+        nom = _dernier_mot(seg)
+        if nom is None or nom in (SUJETS | OBJETS_ROLE):
+            continue
+        if seg.get("role") in ROLES_SUJET:
+            agent = nom
+    liens, vus = {}, set()
+    for i, mot in enumerate(mots):
+        if mot["pos"] != "PRON":
+            continue
+        texte = mot["texte"].lower()
+        if texte in OBJETS_ROLE:
+            avant = [m for m in mots[:i] if m["pos"] == "NOUN" and not _dans_pp(mots, mots.index(m))]
+            if avant:
+                liens[texte] = avant[-1]["texte"].lower()
+        elif texte in SUJETS and agent is not None and texte not in vus:
+            liens[texte] = agent
+            vus.add(texte)
+    return liens
+
+
+def mesurer_hybride(phrases: list[dict]) -> dict:
+    """Compare `resoudre_hybride` aux liens du gold."""
+    total = justes = phrases_avec = 0
+    details = []
+    for phrase in phrases:
+        attendu = (phrase.get("pragma") or {}).get("coref") or {}
+        if not attendu:
+            continue
+        phrases_avec += 1
+        obtenu = resoudre_hybride(phrase["mots"], phrase["segments"])
+        for pronom, cible in attendu.items():
+            total += 1
+            if obtenu.get(pronom) == cible:
+                justes += 1
+            else:
+                details.append({"id": phrase["id"], "pronom": pronom,
+                                "attendu": cible, "obtenu": obtenu.get(pronom)})
+    return {"phrases": phrases_avec, "liens": total, "justes": justes,
+            "taux": round(justes / total, 4) if total else 0.0, "erreurs": details}
+
+
 def mesurer_roles(phrases: list[dict]) -> dict:
     """Compare `resoudre_roles` aux liens du gold."""
     total = justes = phrases_avec = 0

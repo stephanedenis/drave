@@ -15,8 +15,8 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-anaphore-hybride.md`](rapport-pensee-anaphore-hybride.md) | **B13** — l'hybride : 24/30, aucune règle simple n'atteint 30/30, **101/101** |
 | [`rapport-pensee-anaphore-roles.md`](rapport-pensee-anaphore-roles.md) | **B13** — la résolution par rôle : long 9/10, court 14/20, **100/100** |
-| [`rapport-pensee-anaphore-chaines.md`](rapport-pensee-anaphore-chaines.md) | **B13** — les chaînes longues : 7/10, le rôle manque, **99/99** |
 | [`rapport-pensee-gold-complexes100.md`](rapport-pensee-gold-complexes100.md) | **B13** — les 100 complexes : POS 0,6984, syntagme 0,2677, **93/93** |
 | [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, **87/87** |
 | [`rapport-pensee-courbe20.md`](rapport-pensee-courbe20.md) | **B13** — la courbe sur 20 graines : 20 % à 0,35, 100 % à 0,41, **86/86** |

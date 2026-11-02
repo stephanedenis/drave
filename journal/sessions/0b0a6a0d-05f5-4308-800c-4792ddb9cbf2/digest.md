@@ -18698,3 +18698,29 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1095", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1091 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c "✅" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt 2>/dev/null | head -4; tail -2 /tmp/portes-fin.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt 2>/dev/null | head -4; tail -1 /tmp/portes-fin.out", "description": "Check the final gates progress"}`
+
+  ```
+06:20
+26
+  porte-gain             ✅                         269 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt 2>/dev/null | head -4; tail -1 /tmp/portes-fin.out", "description": "Monitor the final gates"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1097]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1097", "timeout_ms": 1200000, "wait": true}`

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 37.5 h |
-| Tours | 114 |
-| Messages | 1434 |
-| Appels d'outils | 1253 |
+| Durée | 37.7 h |
+| Tours | 115 |
+| Messages | 1441 |
+| Appels d'outils | 1258 |
 | Fichiers touchés | 25 |
-| Commandes | 1019 |
+| Commandes | 1023 |
 | Sous-agents | 2 |
-| Commits | 148 |
+| Commits | 149 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -259,6 +259,8 @@
 **Tour 113** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 114** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 115** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6076,6 +6078,53 @@ Le goal `goal-7beacaeb` reste actif (il est ~06 h, la deadline est 08:00) ; le p
 - bash — Committer la résolution par rôle
 - job_output
 
+**Synthèse produite :**
+
+⏵ Résolution par rôle : long 9/10, court 14/20, complémentaire ; 100/100
+
+Le round 101 du goal est livré : la **résolution par rôle** gagne sur les chaînes longues et perd sur les cas courts — les deux règles sont **complémentaires**. Commit **`f9828ab3`**.
+
+\## Les deux règles
+
+| sous-ensemble | dernier nom | **rôle** | écart |
+|---|---:|---:|---:|
+| r301–r336 (court) | **20/20** | 14/20 | −6 |
+| r337–r342 (long) | 7/10 | **9/10** | +2 |
+| **tout** | **27/30** | 23/30 | −4 |
+
+**Ce que ça dit** :
+
+- **Le rôle gagne sur les chaînes** (`il`/`elle`/`she` reprennent le sujet, pas le dernier nom) ; il perd sur les cas courts où le pronom reprend l'**objet** le plus proche (`Le chat voit le chien ; il dort` → `chien`).
+- **Les deux règles sont complémentaires** : la bonne n'est ni l'une ni l'autre, c'est un **hybride** (rôle pour le sujet, proximité pour l'objet) — la prochaine mesure.
+- **Le total baisse** (27 → 23) : le rôle seul est **moins bon** que le dernier nom sur ce gold.
+- **La négative est explicite** : 23/30 contre 27/30.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-roles.md`](../../reports/rapport-pensee-anaphore-roles.md) ; JSON [`pensee-anaphore-roles.json`](../../reports/pensee-anaphore-roles.json) ; T97 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **100/100 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **506 fiches / 593 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'horloge réelle est **06 h 14 HNE** (la deadline 08:00 est encore devant) ; l'autotest prend **~18 min**, les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **L'hybride** : rôle pour le sujet, proximité pour l'objet ; viser 29–30/30.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round construit l'**hybride** — la règle qui combine les deux.
+
+### Tour 115 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Implémenter l'hybride et mesurer
+- bash — Écrire la fiche de l'hybride
+- bash — Trim README et passer les portes
+- bash — Committer l'hybride
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6155,7 +6204,7 @@ Le goal `goal-7beacaeb` reste actif (il est ~06 h, la deadline est 08:00) ; le p
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 979 autres
+- … et 983 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6451,4 +6500,5 @@ Le goal `goal-7beacaeb` reste actif (il est ~06 h, la deadline est 08:00) ; le p
 - B13 — LES PRONOMS OBJETS : 8/8, 20/20 AU TOTAL, GOLD 336 ; 98/98" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PRONOMS OBJETS"; then echo "COMMIT OK 
 - B13 — LES CHAÎNES LONGUES : 7/10, LE RÔLE MANQUE, GOLD 342 ; 99/99" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CHAÎNES LONGUES"; then echo "COMMIT 
 - B13 — LA RÉSOLUTION PAR RÔLE : LONG 9/10, COURT 14/20, COMPLÉMENTAIRE ; 100/100" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RÉSOLUTION PAR RÔLE"; t
+- B13 — L'HYBRIDE : 24/30, AUCUNE RÈGLE SIMPLE N'ATTEINT 30/30 ; 101/101" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "L'HYBRIDE"; then echo "COMMIT OK
 
