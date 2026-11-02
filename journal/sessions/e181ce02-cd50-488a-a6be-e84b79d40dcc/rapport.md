@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 31.6 h |
-| Tours | 71 |
-| Messages | 1016 |
-| Appels d'outils | 925 |
+| Durée | 31.7 h |
+| Tours | 72 |
+| Messages | 1025 |
+| Appels d'outils | 932 |
 | Fichiers touchés | 25 |
-| Commandes | 749 |
+| Commandes | 756 |
 | Sous-agents | 2 |
 | Commits | 90 |
 | Compactages de contexte | 3 |
@@ -173,6 +173,8 @@
 **Tour 70** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 71** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 72** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3789,6 +3791,57 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **glissement 
 - bash — Faire un vrai diff d'état
 - bash — Committer la rupture (2e essai)
 
+**Synthèse produite :**
+
+⏵ Rupture : 90 % d'erreur, v final 0,12, 20/20, 8,0 pas ; 57/57
+
+Le round 58 du goal est livré : la **rupture** (90 % d'erreur) est **absorbée** — le filtre inverse l'observation et la politique réussit **20/20**. Commit **`19da83fb`**.
+
+\## La rupture
+
+Même monde que T52/T53, mais l'erreur passe **brutalement** de 10 % à 90 % à mi-entraînement : l'observation devient **antiprédictive**. `v` est estimé sur la fenêtre adaptative.
+
+| dispositif | buts | v final | états-Q | pas |
+|---|---:|---:|---:|---:|
+| **rupture (8000 ép.)** | **20/20** | **0,12** | 780 | 8,0 |
+| rupture (4000 ép.) | 20/20 | 0,04 | 723 | 8,0 |
+| dérive continue (T53) | 20/20 | 0,5 | 738 | 8,6 |
+
+**Ce que ça dit** :
+
+- **La rupture est absorbée** : v descend à 0,12 ; le filtre bayésien **inverse** l'observation (quand elle dit « porte en 0 », il croit 1) et la politique réussit 20/20.
+- **Le coût est nul** (8,0 pas) : l'observation antiprédictive est aussi informative qu'une observation fiable, une fois le signe connu.
+- **La table reste petite** (780 états) : la rupture ne crée pas d'états, elle change le sens.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-rupture.md`](../../reports/rapport-pensee-rupture.md) ; JSON [`pensee-rupture.json`](../../reports/pensee-rupture.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T54 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **57/57 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **455 fiches / 548 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `reports/rapport-n2-echantillon.md` d'une autre session (course d'index) ; le fichier est **toujours sur le disque**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Ruptures répétées** : la fiabilité alterne ; la fenêtre doit suivre.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round enchaîne les **ruptures répétées** (la fiabilité alterne).
+
+### Tour 72 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Tester les ruptures répétées
+- bash — Ajouter la porte T55 (ruptures répétées)
+- bash — Écrire la fiche des ruptures répétées
+- bash — Trim en-cours et reports/README
+- bash — Lire la ligne du Moteur B13
+- bash — Compacter le bloc Moteur B13
+- bash — Passer toutes les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3868,7 +3921,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **glissement 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 709 autres
+- … et 716 autres
 
 ## 4. Mesures et résultats marquants
 

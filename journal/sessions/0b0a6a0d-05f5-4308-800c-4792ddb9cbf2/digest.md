@@ -16380,3 +16380,10 @@ multi34 2037536
   ```
 
 - **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/teacher-480.log; tail -1 work/n2k/base-multi-34m.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; grep -c \"✅\" /tmp/portes-nuit.out; grep -c \"❌\" /tmp/p … [84 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-962]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-962", "timeout_ms": 700000, "wait": true}`
