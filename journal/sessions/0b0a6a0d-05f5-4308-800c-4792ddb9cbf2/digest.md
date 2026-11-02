@@ -18074,3 +18074,54 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1074", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1069 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/Z-g*.pt 2>/dev/null; tail -1 work/n2j/Z-g1.log 2>/dev/null; tail -1 work/n2j/Z-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/Z-g*.pt 2>/dev/null; tail -1 work/n2j/Z-g1.log 2>/dev/null; tail -1 work/n2j/Z-g2.log 2>/dev/null", "description": "Check the Z-g distillations"}`
+
+  ```
+04:59
+pas 13500 · seq 128 · perte 14.8829 · PPL 128/4 3.5675 · 1558 s
+pas 14000 · seq 128 · perte 13.6534 · PPL 128/4 3.5770 · 1567 s
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/Z-g*.pt 2>/dev/null; export PYTHONPATH=.; for g in 1 2; do CUDA_VISIBLE_DEVICES=$((g-1)) timeout 900 ~/gpu-env/bin/python work/n2j/evalue_canal.py work/n2j/Z-g$g.pt 2>&1 | grep -v Loading; done", … [53 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1076]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1076", "timeout_ms": 900000, "wait": true}`
+
+  ```
+05:09
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2j/evalue_canal.py", line 66, in <module>
+    m = charge(pt)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_propre.py", line 45, in charge
+    ck = torch.load(chemin, map_location="cpu", weights_only=False)
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/serialization.py", line 1530, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ~~~~^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'work/n2j/Z-g1.pt'
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2j/evalue_canal.py", line 66, in <module>
+    m = charge(pt)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/eval_n2_propre.py", 
+… [747 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/Z-g*.pt 2>/dev/null; export PYTHONPATH=.; for g in 1 2; do CUDA_VISIBLE_DEVICES=$((g-1)) timeout 900 ~/gpu-env/bin/python work/n2j/evalue_canal.py work/n2j/Z-g$g.pt 2>&1 | grep -v Loading | tail  … [69 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 36.3 h |
-| Tours | 370 |
-| Messages | 2195 |
-| Appels d'outils | 1449 |
+| Durée | 36.6 h |
+| Tours | 371 |
+| Messages | 2205 |
+| Appels d'outils | 1457 |
 | Fichiers touchés | 26 |
-| Commandes | 1285 |
+| Commandes | 1293 |
 | Sous-agents | 0 |
-| Commits | 79 |
+| Commits | 80 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -767,6 +767,8 @@
 **Tour 369** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 370** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 371** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8675,9 +8677,35 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 370 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*2 appels d'outils.* Actions notables :
 
 - bash — Wait 8 min then check 20th completion
+- bash — Check 20th OCR progress
+
+**Synthèse produite :**
+
+⏵ Round 358 : 20e livre en OCR à 340/450 pages (76 %)
+
+**Round 358/1000 — le dernier livre est à 76 % (340/450 pages).**
+
+- **`tesseract`** lit la page **340/450** du **Life Histories of Etnos Theory** ; la fin vers **05 h 08**, puis le **manifeste**.
+- **Le corpus OCR : 19 livres, 6 931 pages, 14 436 209 caractères** ; le train **14 596 847 octets**.
+- **Le finisher** (PID 2275241) verra le manifeste et s'arrêtera ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le 20e livre finit dans ~4 min ; le manifeste suivra ; le goal reste actif.
+
+### Tour 371 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Wait 5 min then check manifest
+- bash — Read OCR manifest keys
+- bash — Run final OCR contamination check
+- bash — Write final OCR fiche
+- bash — Fix fiche decimal and review
+- bash — Update state, roadmap, journal, plan to final OCR
+- bash — Commit final OCR corpus 20 books
 
 ## 3. Travail accompli
 
@@ -8754,7 +8782,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1245 autres
+- … et 1253 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8981,4 +9009,5 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - DONNÉES — LE CONTRÔLE OCR CONTRE LES ÉVALUATIONS EST MESURÉ : 0/40, 0/24, 0/40" 2>&1 | tail -4; then break; fi; sleep 8; done; git log --oneline -1
 - DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40" 2>&1 | tail -4; then break; fi; sleep 8; done; git log --oneline
 - DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40" > /tmp/commit-ocr.log 2>&1; code=$?; tail -4 /tmp/commit-ocr.log
+- DONNÉES — L'OCR DES 20 LIVRES EST CLOS : 7 381 PAGES, 15,36 M CARACTÈRES, 8 KO 0 (VAL 115, ÉVAL 0/40)" > /tmp/commit-final.log 2>&1; code=$?; tail -4 /tmp/commi
 

@@ -1,0 +1,55 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données (R4.4 appliqué)",
+ "nature": "corpus OCR des PDF scannés",
+ "dispositif": {
+  "ocr": "tesseract 5.5.3 sans root (work/ocr/root)",
+  "langues": "fra+eng",
+  "dpi": 300,
+  "psm": 3,
+  "pretraitement": "aucun (le R4.4 le fera)",
+  "split": "hash salé du chemin : 5% val, 5% test",
+  "deduplication": "documents + tronçons"
+ },
+ "pdfs": 22,
+ "scannes": 22,
+ "ocrises": 20,
+ "pages_ocr": 7381,
+ "caracteres": 15356972,
+ "troncons": 1885,
+ "documents": {
+  "train": 19,
+  "val": 1,
+  "test": 0
+ },
+ "octets": {
+  "train": 14596847,
+  "val": 934044,
+  "test": 0
+ },
+ "temps_s": 30144.9,
+ "echantillon": "---\n001.0 3dprintingandreprap\nGetting Started with 3D Printing and\nReprap\n\nAn Introduction to the Skills, Knowledge and Philosophy of\nOpen-Source 3D Printing\n\nJason J. Gullickson\n\nGetting Started with 3D Printing and Reprap\n\nAn Introduction to the Skills, Knowledge and Philosophy of\nOpen-Source 3D Printing\n\nJason J. Gullickson\nThis book is for sale at http://leanpub.com/3dprintingandreprap\n\nThis version was published on 2016-09-03\n\nLA\n\nLeanpub\n\nThis is a Leanpub book. Leanpub empowers authors and pu\n---\n001.0 Bioinformatics for beginners genes\nBIOINFORMATICS\nFOR BEGINNERS\n\n\nBIOINFORMATICS\nFOR BEGINNERS\n\nGenes, Genomes, Molecular\nEvolution, Databases\nand Analytical Tools\n\nSUPRATIM CHOUDHURI\n\nWith contribution from Dr Michael Kotewicz\non the Optical Mapping of DNA\n\nCenter for Food Safety and Applied Nutrition, FDA,\nCollege Park, Maryland\n\nAMSTERDAM ¢ BOSTON ¢ HEIDELBERG + LONDON\nNEW YORK ¢ OXFORD + PARIS + SAN DIEGO\nles SAN FRANCISCO + SINGAPORE + SYDNEY + TOKYO\n\nELSEVIE Academic Press is an impr",
+ "racines": [
+  {
+   "nom": "Biblio_large",
+   "chemin": "/home/stephane/Data13TB/stephane/Biblio_large",
+   "pdfs": 104,
+   "licence": "livres — droits réservés, usage local, non diffusé"
+  },
+  {
+   "nom": "CEGEP",
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP",
+   "pdfs": 2681,
+   "licence": "notes de cours — droits réservés, usage local, non diffusé"
+  }
+ ],
+ "mots_estimes": 2476930,
+ "sha256_train": "7830dd888957ffe0651cf812bf95d554c2d3a3bda70d6dc16783239a6a7285ca",
+ "sha256_val": "30b0dbee65de4fc0a194ffdbb3f687379ca4bffd0e0862a2298d6e31b0ea84be",
+ "sha256_test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+ "limites": [
+  "OCR brut : rotation/contraste/colonnes non traités (le R4.4 les traite)",
+  "WER non mesurée (pas de vérité terrain sur les scans réels)",
+  "licences : droits réservés, corpus local non diffusé"
+ ]
+}

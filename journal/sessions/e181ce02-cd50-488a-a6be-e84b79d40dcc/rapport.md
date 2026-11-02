@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 36.3 h |
-| Tours | 107 |
-| Messages | 1363 |
-| Appels d'outils | 1196 |
+| Durée | 36.5 h |
+| Tours | 108 |
+| Messages | 1379 |
+| Appels d'outils | 1210 |
 | Fichiers touchés | 25 |
-| Commandes | 970 |
+| Commandes | 984 |
 | Sous-agents | 2 |
 | Commits | 139 |
 | Compactages de contexte | 4 |
@@ -245,6 +245,8 @@
 **Tour 106** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 107** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 108** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5694,6 +5696,61 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round vise **100 phrases compl
 - bash — Committer les 100 phrases complexes
 - job_output
 
+**Synthèse produite :**
+
+⏵ 100 phrases complexes : POS 0,6984, syntagme 0,2677, gold 300 ; 93/93
+
+Le round 94 du goal est livré : les phrases complexes passent de **50 à 100** — le POS se stabilise autour de 0,70, le gain de syntagme se réduit. Commit **`c5ab1fa3`**.
+
+\## Les 100 complexes
+
+| sous-ensemble | phrases | POS | tokens | syntagme F1 | tête F1 |
+|---|---:|---:|---:|---:|---:|
+| r001–r200 | 200 | 0,7924 | 978 | 0,1838 | 0,3198 |
+| **r201–r300** | **100** | **0,6984** | 630 | **0,2677** | **0,3494** |
+
+**Ce que ça dit** :
+
+- **Le POS est stable** (0,6984 ; 0,7013 à 50) : les relatifs, auxiliaires et conjonctions coûtent ~0,09 de POS, un point c'est tout.
+- **Le syntagme se réduit** (+0,084 contre +0,122 à 50) : les 50 nouvelles (coordination `et/and`, ellipse) ont des segments plus courts, que l'heuristique délimite moins bien.
+- **La tête suit** (0,3494) : le rôle est porté par le nom/verbe de tête.
+- **La négative reste** : le POS du hasard (0,0147).
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-complexes100.md`](../../reports/rapport-pensee-gold-complexes100.md) ; JSON [`pensee-gold-complexes100.json`](../../reports/pensee-gold-complexes100.json) ; T90 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **300 phrases**.
+- **93/93 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **498 fiches / 585 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Le discours** : anaphore, connecteurs ; le niveau pragmatique.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **discours** (anaphore, connecteurs) — le niveau pragmatique.
+
+### Tour 108 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*14 appels d'outils.* Actions notables :
+
+- bash — Ajouter 20 phrases de discours et mesurer la pragmatique
+- bash — Localiser la ligne r300
+- bash — Ajouter les 20 phrases de discours et mesurer
+- bash — Corriger et ajouter les 20 phrases de discours
+- bash — Corriger le segment et mesurer la pragmatique
+- bash — Réordonner les segments et mesurer
+- bash — Écrire la fiche du discours
+- bash — Trim README et passer les portes
+- bash — Inspecter la porte du bloc linguistique
+- bash — Voir l'erreur de l'évaluation gold
+- bash — Lire la fin de main()
+- bash — Lire le verdict et les métriques par source
+- bash — Ajuster le seuil tête et relancer la porte
+- bash — Passer toutes les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5773,7 +5830,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round vise **100 phrases compl
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 930 autres
+- … et 944 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5901,7 +5958,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round vise **100 phrases compl
 
 ## 5. Erreurs rencontrées
 
-17 sorties en erreur ou divergentes. Les premières :
+19 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]

@@ -33313,3 +33313,158 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; tail -1 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1; ps -p 1616198 -o stat,etime= 2>/dev/null || echo \"OCR terminé\"", "descript … [129 caractères tronqués]`
+
+  ```
+05:04
+  Biblio_large · David_Gamez_-_Human_and_Machine_Consciou · 236 p · 435043 car
+2430316 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; tail -1 /tmp/ocr-pilote.log; pgrep -af "tesseract.*ocr-pdf" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1; ps -p 1616198 -o stat,etime= 2>/dev/null || echo "OCR terminé"
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 14596847  2 nov 04:44 data/corpus_ocr/train.txt
+STAT            
+S       08:18:38
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract|pdftoppm\" | head -1; ls /tmp/ocr-pdf-4m6akibr/ 2>/dev/null | wc -l; tail -1 /tmp/ocr-pilote.log", "description": "Check 20th OCR progress", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/ … [25 caractères tronqués]`
+
+  ```
+05:04
+2434950 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-4m6akibr/p-340.png stdout -l fra+eng --psm 3
+450
+  Biblio_large · David_Gamez_-_Human_and_Machine_Consciou · 236 p · 435043 car
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 358 : 20e livre en OCR à 340/450 pages (76 %)
+
+**Round 358/1000 — le dernier livre est à 76 % (340/450 pages).**
+
+- **`tesseract`** lit la page **340/450** du **Life Histories of Etnos Theory** ; la fin vers **05 h 08**, puis le **manifeste**.
+- **Le corpus OCR : 19 livres, 6 931 pages, 14 436 209 caractères** ; le train **14 596 847 octets**.
+- **Le finisher** (PID 2275241) verra le manifeste et s'arrêtera ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le 20e livre finit dans ~4 min ; le manifeste suivra ; le goal reste actif.
+
+
+## Tour 371
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 359/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; ls -la reports/ocr-pdf.json 2>&1; ps -p 1616198 -o stat,etime= 2>/dev/null || echo \"OCR terminé\"; tail -3 /tmp/finaliser-ocr.log", "description": "Wait 5 min then check manifest" … [84 caractères tronqués]`
+
+  ```
+05:09
+ }
+}
+-rw-r--r--. 1 stephane stephane 2606  2 nov 05:08 reports/ocr-pdf.json
+STAT            
+OCR terminé
+attente du manifeste ou du cutoff 06:45…
+manifeste de l'outil présent — rien à faire
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf.json'))\nfor k in ('pdfs','scannes','ocrises','pages_ocr','caracteres','troncons','mots_estimes','temps_s','documents','octets','echantillon'):\n    v=d.get(k … [259 caractères tronqués]`
+
+  ```
+05:09
+pdfs : 22
+scannes : 22
+ocrises : 20
+pages_ocr : 7381
+caracteres : 15356972
+troncons : 1885
+mots_estimes : 2476930
+temps_s : 30144.9
+documents : {'train': 19, 'val': 1, 'test': 0}
+octets : {'train': 14596847, 'val': 934044, 'test': 0}
+echantillon '---\n001.0 3dprintingandreprap\nGetting Started with 3D Printing and\nReprap\n\nAn Introduction to the Skills, Knowledge and '
+residus? False
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; timeout 600 python3 tools/verifie_contamination.py --train data/corpus_ocr/train.txt --val data/corpus_ocr/val.txt --test data/corpus_ocr/test.txt --eval work/dr/eval/fr-xnli.txt --eval work/dr/eval/fr-udhr.txt --eval wo … [679 caractères tronqués]`
+
+  ```
+05:09
+[code 0]
+8 Ko train 1784 | lignes 113060
+ split val.txt {'troncons': 115, 'doublons': 0, 'taux': 0.0}
+ split test.txt {'troncons': 0, 'doublons': 0, 'taux': 0.0}
+fr-xnli.txt 0 / 40
+fr-udhr.txt 0 / 24
+en-xnli.txt 0 / 40
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport json, pathlib\nm = json.load(open(\"reports/ocr-pdf.json\"))\nc = json.load(open(\"reports/ocr-pdf-contamination.json\"))\nfen = c[\"doublons_entre_splits_troncon\"][\"train_troncons\"]\nlignes = … [4460 caractères tronqués]`
+
+  ```
+05:10
+fiche écrite 20 7381 15356972 1784 {'troncons': 115, 'doublons': 0, 'taux': 0.0}
+# Le corpus OCR — les livres scannés, 20 livres, 15,4 M caractères
+
+**Date** : 2026-11-01 (run de nuit ; 20e livre clos le 2/11 à 05 h 08) · **Ligne** : Données · **Session** : fe3c05f0
+**Statut** : **clos** — 20 livres océrisés, manifeste `reports/ocr-pdf.json` ; les 159 scans restent la suite nommée.
+
+## 1. Ce que c'est
+
+Le corpus des **livres scannés** : les PDF sans couche texte, océrisés page à page par `tesseract`. C'est le complément des documents natifs : là où `pdftotext` ne trouve rien, l'OCR lit l'image.
+
+## 2. Le chiffre
+
+| grandeur | valeur |
+|---|---:|
+| livres océrisés | **20** |
+| PDF examinés / scannés | 22 / 22 |
+| pages | **7 381** |
+| caractères | **15 356 972** |
+| mots estimés (car. / 6 2) | **2 476 930** |
+| train / val / test | **14 596 847 o** / **934 044 o** / 0 |
+| documents (train / val / test) | 19 / 1 / 0 |
+| pages / livre | 86 à 1 264 |
+| langues | fra+eng |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-ocr-pdf.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"| mots estimés (car. / 6 2) |\", \"| mots estimés (car. / 6,2) |\")\np.write_text(t, encoding=\"ut … [201 caractères tronqués]`
+
+  ```
+ok
+| livres océrisés | **20** |
+| PDF examinés / scannés | 22 / 22 |
+| pages | **7 381** |
+| caractères | **15 356 972** |
+| mots estimés (car. / 6,2) | **2 476 930** |
+| train / val / test | **14 596 847 o** / **934 044 o** / 0 |
+| documents (train / val / test) | 19 / 1 / 0 |
+| pages / livre | 86 à 1 264 |
+| langues | fra+eng |
+| tronçons 8 Ko (manifeste) | 1 885 |
+| fenêtres 8 Ko (contrôle) | **1 784** train (113 060 lignes) · **115** val · 0 test |
+| doublons entre splits (8 Ko) | **0** (val) · **0** (test) |
+| recouvrement éval | `fr-xnli.txt` **0/40**, `fr-udhr.txt` **0/24**, `en-xnli.txt` **0/40** |
+| temps mur | 8.4 h |
+| WER | **non mesurée** |
+
+## 3. Le dispositif
+
+`tools/ocr_pdf.py --max-doc 20` : `pdftoppm -r 300 -gray -png` (300 dpi, gris) puis `tesseract -l fra+eng --psm 3` par page ; tesseract 5.5.3 installé sans root (`work/ocr/root/usr/bin/tesseract`) ; sortie `data/corpus_ocr/` ; manifeste `reports/ocr-pdf.json`. **20 livres océrisés sur 22 examinés** : un `metapatterns` (373 p) était le doublon exact d'un autre — rejeté par la déduplication par empreinte (après OCR), et un PDF a été sauté faute de pages lisibles.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\n# état\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nold = \"**OCR** 11 livres (4 042 p, 10,07 M car. ; 1 244 fenêtres 8 Ko ; éval 0/40, 0/24, 0/40)\"\nnew = \" … [2066 caractères tronqués]`
+
+  ```
+ok
+docs/pilotage/en-cours.md:65:- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 1 784 fenêtres 8 Ko train + 115 val, 8 Ko 0 ; éval 0/40, 0/24, 0/40) ; **genres** mesurés ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
+docs/pilotage/en-cours.md:67:- **Prochaine action** : l'**OCR complet** (les 159 scans ; le pilote des 20 livres est clos) ; la clôture de la session à 8 h ; les collections.
+docs/pilotage/roadmap.md:36:| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/OCR, documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 1 784 fenêtres 8 Ko train + 115 val, 8 Ko 0) ; **genres** mesurés | **l'OCR complet** (159 scans), la préparation R1.1/R1.2 |
+journal/2026-11-02/README.md:119:- **Le corpus OCR** : 20 livres, 7 381 pages, 15,36 M caractères, 8 Ko 0 (val 115 fenêtres, éval 0/40) ; le pilote `--max-
+… [67 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; ok=0; for i in 1 2 3 4 5; do git read-tree HEAD; git add reports/ocr-pdf.json reports/ocr-pdf-contamination.json reports/rapport-ocr-pdf.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/p … [475 caractères tronqués]`
