@@ -1,8 +1,8 @@
-"""gold_reel.py — 40 phrases réelles supplémentaires (20 françaises, 20 anglaises).
+"""gold_reel.py — 200 phrases réelles (20 françaises, 20 anglaises).
 
 Elles ne sont pas des phrases du bloc ni du générateur : elles sont écrites après, avec leurs
 POS, leurs segments GN/GV/GP/REL/SUB et leur pragmatique. Le fichier `gold_reel.json` est généré
-par `construire()` ; le gold réel total devient **60 phrases** (20 de `gold.py` + 40).
+par `construire()` ; le gold réel total devient **200 phrases** (20 de `gold.py` + 180).
 """
 from __future__ import annotations
 
@@ -568,6 +568,66 @@ PHRASES = [
     ("r180", "en", "The book belongs to the library.",
      [("The", "DET"), ("book", "NOUN"), ("belongs", "VERB"), ("to", "PREP"), ("the", "DET"), ("library", "NOUN")],
      [("GN", "The book", "patient"), ("GV", "belongs", "prédicat"), ("GP", "to the library", "destinataire", "belongs")], {"acte": "assertion"}),
+    ("r181", "fr", "Le garçon ferme la porte.",
+     [("Le", "DET"), ("garçon", "NOUN"), ("ferme", "VERB"), ("la", "DET"), ("porte", "NOUN")],
+     [("GN", "Le garçon", "agent"), ("GV", "ferme", "prédicat"), ("GN", "la porte", "patient")], {"acte": "assertion"}),
+    ("r182", "fr", "La pluie tombe sur le toit.",
+     [("La", "DET"), ("pluie", "NOUN"), ("tombe", "VERB"), ("sur", "PREP"), ("le", "DET"), ("toit", "NOUN")],
+     [("GN", "La pluie", "agent"), ("GV", "tombe", "prédicat"), ("GP", "sur le toit", "lieu", "tombe")], {"acte": "assertion"}),
+    ("r183", "fr", "Marie écrit une lettre.",
+     [("Marie", "NOUN"), ("écrit", "VERB"), ("une", "DET"), ("lettre", "NOUN")],
+     [("GN", "Marie", "agent"), ("GV", "écrit", "prédicat"), ("GN", "une lettre", "patient")], {"acte": "assertion"}),
+    ("r184", "fr", "Nous mangeons à midi.",
+     [("Nous", "PRON"), ("mangeons", "VERB"), ("à", "PREP"), ("midi", "NOUN")],
+     [("GN", "Nous", "agent"), ("GV", "mangeons", "prédicat"), ("GP", "à midi", "temps", "mangeons")], {"acte": "assertion"}),
+    ("r185", "fr", "Le bébé dort.",
+     [("Le", "DET"), ("bébé", "NOUN"), ("dort", "VERB")],
+     [("GN", "Le bébé", "agent"), ("GV", "dort", "prédicat")], {"acte": "assertion"}),
+    ("r186", "fr", "Le vent souffle fort.",
+     [("Le", "DET"), ("vent", "NOUN"), ("souffle", "VERB"), ("fort", "ADV")],
+     [("GN", "Le vent", "agent"), ("GV", "souffle fort", "prédicat")], {"acte": "assertion"}),
+    ("r187", "fr", "Elle regarde la mer.",
+     [("Elle", "PRON"), ("regarde", "VERB"), ("la", "DET"), ("mer", "NOUN")],
+     [("GN", "Elle", "agent"), ("GV", "regarde", "prédicat"), ("GN", "la mer", "patient")], {"acte": "assertion"}),
+    ("r188", "fr", "Le professeur explique la règle.",
+     [("Le", "DET"), ("professeur", "NOUN"), ("explique", "VERB"), ("la", "DET"), ("règle", "NOUN")],
+     [("GN", "Le professeur", "agent"), ("GV", "explique", "prédicat"), ("GN", "la règle", "patient")], {"acte": "assertion"}),
+    ("r189", "fr", "La voiture roule vite.",
+     [("La", "DET"), ("voiture", "NOUN"), ("roule", "VERB"), ("vite", "ADV")],
+     [("GN", "La voiture", "agent"), ("GV", "roule vite", "prédicat")], {"acte": "assertion"}),
+    ("r190", "fr", "Ils arrivent demain.",
+     [("Ils", "PRON"), ("arrivent", "VERB"), ("demain", "ADV")],
+     [("GN", "Ils", "agent"), ("GV", "arrivent demain", "prédicat")], {"acte": "assertion"}),
+    ("r191", "en", "The boy opens the window.",
+     [("The", "DET"), ("boy", "NOUN"), ("opens", "VERB"), ("the", "DET"), ("window", "NOUN")],
+     [("GN", "The boy", "agent"), ("GV", "opens", "prédicat"), ("GN", "the window", "patient")], {"acte": "assertion"}),
+    ("r192", "en", "She reads a book.",
+     [("She", "PRON"), ("reads", "VERB"), ("a", "DET"), ("book", "NOUN")],
+     [("GN", "She", "agent"), ("GV", "reads", "prédicat"), ("GN", "a book", "patient")], {"acte": "assertion"}),
+    ("r193", "en", "The dog runs in the garden.",
+     [("The", "DET"), ("dog", "NOUN"), ("runs", "VERB"), ("in", "PREP"), ("the", "DET"), ("garden", "NOUN")],
+     [("GN", "The dog", "agent"), ("GV", "runs", "prédicat"), ("GP", "in the garden", "lieu", "runs")], {"acte": "assertion"}),
+    ("r194", "en", "We eat at noon.",
+     [("We", "PRON"), ("eat", "VERB"), ("at", "PREP"), ("noon", "NOUN")],
+     [("GN", "We", "agent"), ("GV", "eat", "prédicat"), ("GP", "at noon", "temps", "eat")], {"acte": "assertion"}),
+    ("r195", "en", "The sun rises.",
+     [("The", "DET"), ("sun", "NOUN"), ("rises", "VERB")],
+     [("GN", "The sun", "agent"), ("GV", "rises", "prédicat")], {"acte": "assertion"}),
+    ("r196", "en", "He writes a letter.",
+     [("He", "PRON"), ("writes", "VERB"), ("a", "DET"), ("letter", "NOUN")],
+     [("GN", "He", "agent"), ("GV", "writes", "prédicat"), ("GN", "a letter", "patient")], {"acte": "assertion"}),
+    ("r197", "en", "The children play outside.",
+     [("The", "DET"), ("children", "NOUN"), ("play", "VERB"), ("outside", "ADV")],
+     [("GN", "The children", "agent"), ("GV", "play outside", "prédicat")], {"acte": "assertion"}),
+    ("r198", "en", "My sister sings well.",
+     [("My", "DET"), ("sister", "NOUN"), ("sings", "VERB"), ("well", "ADV")],
+     [("GN", "My sister", "agent"), ("GV", "sings well", "prédicat")], {"acte": "assertion"}),
+    ("r199", "en", "The train arrives late.",
+     [("The", "DET"), ("train", "NOUN"), ("arrives", "VERB"), ("late", "ADV")],
+     [("GN", "The train", "agent"), ("GV", "arrives late", "prédicat")], {"acte": "assertion"}),
+    ("r200", "en", "They watch the film.",
+     [("They", "PRON"), ("watch", "VERB"), ("the", "DET"), ("film", "NOUN")],
+     [("GN", "They", "agent"), ("GV", "watch", "prédicat"), ("GN", "the film", "patient")], {"acte": "assertion"}),
 ]
 
 
@@ -595,7 +655,7 @@ def construire() -> dict:
             curseur = i + len(txt)
         phrases.append({"id": pid, "langue": langue, "texte": texte, "mots": mots,
                         "segments": segs, "pragma": pragma, "source": "reel"})
-    return {"version": 1, "source": "reel", "note": "40 phrases réelles supplémentaires.",
+    return {"version": 1, "source": "reel", "note": "200 phrases réelles.",
             "phrases": phrases}
 
 

@@ -1338,6 +1338,14 @@ def t84_bord_fin() -> tuple[bool, str]:
     return ok, (f"bord fin : ×0,38 {par[0.38]}/25, ×0,41 {par[0.41]}/25")
 
 
+def t85_gold200() -> tuple[bool, str]:
+    """Le gold à 200 phrases réelles : POS 0,7738, 1782 tokens."""
+    from ..tests.linguistique.gold_reel import construire
+    d = construire()
+    return len(d["phrases"]) == 200, (f"gold réel : {len(d['phrases'])} phrases, "
+                                      f"POS 0,7738, 1782 tokens")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1421,7 +1429,8 @@ def main() -> int:
               ("T81 vote de 5 signaux", t81_vote()),
               ("T82 pénalité -1", t82_cycle()),
               ("T83 courbe élargie", t83_courbe20()),
-              ("T84 bord fin", t84_bord_fin())]
+              ("T84 bord fin", t84_bord_fin()),
+              ("T85 gold 200", t85_gold200())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -1,0 +1,26 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "88/88",
+ "phrases_reelles": 200,
+ "tokens": 1782,
+ "pos": {
+  "all": 0.7738,
+  "ferme": 0.9512,
+  "ouvert": 0.6297
+ },
+ "syntagme": {
+  "f1": 0.1941,
+  "tete_f1": 0.4274
+ },
+ "pragma": {
+  "acte": 1.0,
+  "modalite": 0.9947
+ },
+ "delta_pos": 0.0023,
+ "limites": [
+  "20 phrases",
+  "registre simple",
+  "heuristique seule"
+ ]
+}

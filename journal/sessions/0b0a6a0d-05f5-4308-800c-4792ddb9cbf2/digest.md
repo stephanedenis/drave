@@ -17731,3 +17731,59 @@ en-cours ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.s** boucles ; \", \"\")\ns = s.replace(\"**N2.u** prof. 30 M −0,3 OOD ; \", \"\")\ns = s.replace(\"**N2.w**  … [1568 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3990 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · compteurs : en-cours.md dit 578 JSON, le disque en a 580
+[still running after 60000ms; moved to background job bash-1052]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1052", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+0f0449f2 N2.x — LA DISTILLATION DU CANAL : −0,03 EN DOMAINE, +0,24 À 512 OCTETS
+04:04
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 28,50p tools/generer_natif.py", "description": "Read the generation loop"}`
+
+  ```
+def generer(modele, prompt: str, n: int = 128, top_k: int = 0, temperature: float = 0.0):
+    ids = list(prompt.encode("utf-8"))
+    if not ids:
+        ids = [32]
+    for _ in range(n):
+        x = torch.tensor([ids[-modele.cfg.max_pos:]], dtype=torch.long,
+                         device=next(modele.parameters()).device)
+        logits = modele(x)["logits"][0, -1]
+        if temperature <= 0:
+            suivant = int(logits.argmax())
+        else:
+            logits = logits / temperature
+            if top_k > 0:
+                v, i = logits.topk(min(top_k, logits.numel()))
+                logits = torch.full_like(logits, float("-inf")); logits[i] = v
+            suivant = int(torch.multinomial(F.softmax(logits, -1), 1))
+        ids.append(suivant)
+        if suivant == 10 and len(ids) > len(prompt.encode()):
+            break
+    return bytes(ids)
+
+
+def main() -> None:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/generer_natif.py'); s = p.read_text()\ns = s.replace('''def generer(modele, prompt: str, n: int = 128, top_k: int = 0, temperature: float = 0.0):''',\n'''def generer(modele, p … [1526 caractères tronqués]`
+
+  ```
+ok
+La France est un pays à la conquête avec le Vetropolitain Rome des Nouvelles limitées, à la Solidie, par exemple de 1904) pour le jurasse
+Dans les années 1950 du réseau de Paris, Mariage Pour certaines proposes, le musée de Routeilleur fondé à des régions et le soleil. Cit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-n2-echantillon.md'); s = p.read_text()\na = \"## Lecture\"\nb = \"\"\"### La pénalité de répétition casse la boucle, pas le collage\n\nAvec une **pénalité de répétit … [2547 caractères tronqués]`
