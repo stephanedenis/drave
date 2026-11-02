@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 32.6 h |
-| Tours | 84 |
-| Messages | 1131 |
-| Appels d'outils | 1014 |
+| Tours | 85 |
+| Messages | 1139 |
+| Appels d'outils | 1020 |
 | Fichiers touchés | 25 |
-| Commandes | 823 |
+| Commandes | 828 |
 | Sous-agents | 2 |
-| Commits | 105 |
+| Commits | 106 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -199,6 +199,8 @@
 **Tour 83** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 84** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 85** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4463,6 +4465,55 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **look tardif**
 - bash — Committer le look tardif
 - job_output
 
+**Synthèse produite :**
+
+⏵ Look tardif : à l'épisode 3000, v final 0,54, 20/20, 8,0 pas ; 70/70
+
+Le round 71 du goal est livré : un look **tardif** (épisode 3000) est absorbé — le **Q** garde ce que la fenêtre oublie. Commit **`5be192d6`**.
+
+\## Le look tardif
+
+Même monde que T66, mais la fiabilité est **0,9 à l'épisode 3000** seulement ; elle est **0,5** partout ailleurs.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| **4000** | **20/20** | **0,54** | 530 | 8,0 |
+| 8000 | 20/20 | 0,54 | 596 | 8,0 |
+| look initial (T66) | 20/20 | 0,44 | 506 | 8,0 |
+
+**Ce que ça dit** :
+
+- **Le look tardif est absorbé** : la Q-table apprend la porte au moment du look (épisode 3000) et la garde ; la fenêtre de v (50) l'a peut-être oublié, mais le **Q** s'en souvient.
+- **v ≈ 0,54** : la fenêtre ne voit plus le look ; elle reste au hasard, sans conséquence sur la politique.
+- **Le coût est nul** (8,0 pas) : le look tardif ne coûte pas de pas.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-look-tardif.md`](../../reports/rapport-pensee-look-tardif.md) ; JSON [`pensee-look-tardif.json`](../../reports/pensee-look-tardif.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T67 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **70/70 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **469 fiches / 561 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Look tardif + oubli** : une politique à mémoire courte (Q avec oubli) ; le look se perdrait.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste la **mémoire courte** (le Q avec oubli) — la limite du look tardif.
+
+### Tour 85 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Tester la mémoire courte (oubli)
+- bash — Ajouter la porte T68 (mémoire courte)
+- bash — Écrire la fiche de la mémoire courte
+- bash — Trim README et portes
+- bash — Committer la mémoire courte
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4542,7 +4593,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **look tardif**
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 783 autres
+- … et 788 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4795,4 +4846,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **look tardif**
 - B13 — L'INFORMATION ULTRA-RARE : UTILE 0,1 %, 4 LOOKS, v FINAL 0,44, 20/20 ; 68/68" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ULTRA-RARE"; then ec
 - B13 — UN SEUL LOOK : 1/4000, v FINAL 0,44, 20/20, 8,0 PAS ; 69/69" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "UN SEUL LOOK"; then echo "COMMIT OK $
 - B13 — LE LOOK TARDIF : À L'ÉPISODE 3000, v FINAL 0,54, 20/20, 8,0 PAS ; 70/70" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LOOK TARDIF"; then echo "
+- B13 — LA MÉMOIRE COURTE : Q × 0,9/10, 20/20, 10,0 PAS ; 71/71" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MÉMOIRE COURTE"; then echo "COMMIT OK $i"
 

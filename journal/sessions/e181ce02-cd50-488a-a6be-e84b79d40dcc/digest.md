@@ -21808,3 +21808,121 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-look-tardif.md reports/pensee-look-tardif.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en- … [492 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-823]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-823", "timeout_ms": 600000, "wait": true}`
+
+  ```
+26 files changed, 1298 insertions(+), 56 deletions(-)
+ create mode 100644 reports/pensee-look-tardif.json
+ create mode 100644 reports/rapport-pensee-look-tardif.md
+COMMIT OK 1
+5be192d6 B13 — LE LOOK TARDIF : À L'ÉPISODE 3000, v FINAL 0,54, 20/20, 8,0 PAS ; 70/70
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Look tardif : à l'épisode 3000, v final 0,54, 20/20, 8,0 pas ; 70/70
+
+Le round 71 du goal est livré : un look **tardif** (épisode 3000) est absorbé — le **Q** garde ce que la fenêtre oublie. Commit **`5be192d6`**.
+
+## Le look tardif
+
+Même monde que T66, mais la fiabilité est **0,9 à l'épisode 3000** seulement ; elle est **0,5** partout ailleurs.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| **4000** | **20/20** | **0,54** | 530 | 8,0 |
+| 8000 | 20/20 | 0,54 | 596 | 8,0 |
+| look initial (T66) | 20/20 | 0,44 | 506 | 8,0 |
+
+**Ce que ça dit** :
+
+- **Le look tardif est absorbé** : la Q-table apprend la porte au moment du look (épisode 3000) et la garde ; la fenêtre de v (50) l'a peut-être oublié, mais le **Q** s'en souvient.
+- **v ≈ 0,54** : la fenêtre ne voit plus le look ; elle reste au hasard, sans conséquence sur la politique.
+- **Le coût est nul** (8,0 pas) : le look tardif ne coûte pas de pas.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+## L'état
+
+- Fiche : [`rapport-pensee-look-tardif.md`](../../reports/rapport-pensee-look-tardif.md) ; JSON [`pensee-look-tardif.json`](../../reports/pensee-look-tardif.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T67 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **70/70 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **469 fiches / 561 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Look tardif + oubli** : une politique à mémoire courte (Q avec oubli) ; le look se perdrait.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste la **mémoire courte** (le Q avec oubli) — la limite du look tardif.
+
+
+## Tour 85
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 72/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1967 caractères tronqués]`
+
+  ```
+5be192d6 B13 — LE LOOK TARDIF : À L'ÉPISODE 3000, v FINAL 0,54, 20/20, 8,0 PAS ; 70/70
+ok
+4000 q 463 v final 0.56 20 runs: 20 /20 pas moyen 10.0
+8000 q 515 v final 0.54 20 runs: 20 /20 pas moyen 10.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T67 le look tardif               à l'épisode 3000 : 20/20 buts, v final ≈ 0,54\\n\",\n\"  T67 le look tardif               … [1305 caractères tronqués]`
+
+  ```
+ok
+  ✅ T66 un seul look       un look : 20/20 buts, v final 0.44, 8.0 pas
+  ✅ T67 look tardif        look tardif : 20/20 buts, v final 0.54, 8.0 pas
+  ✅ T68 mémoire courte     oubli : 20/20 buts, v final 0.56, 10.0 pas
+  71/71 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-oubli.md <<'MD'\n# B13 — la mémoire courte : 20/20, 10,0 pas\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **71/71 portes** : la Q-table **s'oublie**  … [6703 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 470 fiche(s) · 562 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2816 mots > budget 2800 (T1)
+  en-cours · 1563 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-croyance.md`](rapport-pensee-croyance.md) | **B13** — la croyance : 0/20 buts, la distribution seule ne suffit p … [617 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 470 fiche(s) · 562 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-oubli.md reports/pensee-oubli.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md doc … [470 caractères tronqués]`

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**28 commits** · **3 session(s)** · **7 thème(s)**
+**29 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 18 | [mesures.md](mesures.md) |
+| mesures | 19 | [mesures.md](mesures.md) |
 | portes | 3 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -59,6 +59,7 @@
 | 01:02 | `743513f4` | B13 — L'INFORMATION TRÈS RARE : UTILE 1 %, v FINAL 0,54, 20/20, 8,0 PAS ; 67/67 |
 | 01:06 | `82b0ebe0` | B13 — L'INFORMATION ULTRA-RARE : UTILE 0,1 %, 4 LOOKS, v FINAL 0,44, 20/20 ; 68/68 |
 | 01:09 | `d113eea1` | B13 — UN SEUL LOOK : 1/4000, v FINAL 0,44, 20/20, 8,0 PAS ; 69/69 |
+| 01:13 | `5be192d6` | B13 — LE LOOK TARDIF : À L'ÉPISODE 3000, v FINAL 0,54, 20/20, 8,0 PAS ; 70/70 |
 
 ## Le récit de la journée (écrit à la main)
 

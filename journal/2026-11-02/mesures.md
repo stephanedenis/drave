@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (18)
+## Commits du jour (19)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -26,6 +26,7 @@
 | 01:02 | `743513f4` | B13 — L'INFORMATION TRÈS RARE : UTILE 1 %, v FINAL 0,54, 20/20, 8,0 PAS ; 67/67 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 01:06 | `82b0ebe0` | B13 — L'INFORMATION ULTRA-RARE : UTILE 0,1 %, 4 LOOKS, v FINAL 0,44, 20/20 ; 68/68 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+16) |
 | 01:09 | `d113eea1` | B13 — UN SEUL LOOK : 1/4000, v FINAL 0,44, 20/20, 8,0 PAS ; 69/69 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
+| 01:13 | `5be192d6` | B13 — LE LOOK TARDIF : À L'ÉPISODE 3000, v FINAL 0,54, 20/20, 8,0 PAS ; 70/70 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 
 ## Chiffres du jour
 
@@ -53,6 +54,7 @@
 - [reports/rapport-pensee-hasard2.md](../../reports/rapport-pensee-hasard2.md)
 - [reports/rapport-pensee-intra.md](../../reports/rapport-pensee-intra.md)
 - [reports/rapport-pensee-limite.md](../../reports/rapport-pensee-limite.md)
+- [reports/rapport-pensee-look-tardif.md](../../reports/rapport-pensee-look-tardif.md)
 - [reports/rapport-pensee-rapide.md](../../reports/rapport-pensee-rapide.md)
 - [reports/rapport-pensee-rare.md](../../reports/rapport-pensee-rare.md)
 - [reports/rapport-pensee-rupture.md](../../reports/rapport-pensee-rupture.md)

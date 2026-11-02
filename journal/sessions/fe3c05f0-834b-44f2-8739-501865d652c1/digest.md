@@ -29091,3 +29091,562 @@ wchar: 2542296691
 2268618 Rl         00:03 tesseract
   ```
 
+### 🤖 Assistant
+
+⏵ Round 268 : OCR à 1 199/1 264 pages (94,9 %), tesseract bien actif
+
+**Round 268/1000 — diagnostic : le tesseract tourne, il reste ~65 pages.**
+
+- **Le `tesseract`** océrise la page **1 199/1 264** ; le processus parent attend son enfant (`poll_schedule_timeout`), tout est normal ; il reste **~65 pages ≈ 5 min**.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : l'OCR finit ses 1 264 pages ; le manifeste suivra. Le goal reste actif.
+
+
+## Tour 281
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 269/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; ls -la data/corpus_ocr/train.txt", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/ste … [22 caractères tronqués]`
+
+  ```
+01:14
+2268956 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1203.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 269 : OCR à 1 203/1 264 pages (95,2 %)
+
+**Round 269/1000 — il reste 61 pages.**
+
+- **Le `tesseract`** océrise la page **1 203/1 264** ; il reste **~61 pages ≈ 4-5 min** avant la clôture du 8e livre et le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : droit vers le manifeste. Le goal reste actif.
+
+
+## Tour 282
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 270/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; ls -la data/corpus_ocr/train.txt", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/ste … [22 caractères tronqués]`
+
+  ```
+01:14
+2269184 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1207.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 270 : OCR à 1 207/1 264 pages (95,5 %)
+
+**Round 270/1000 — il reste 57 pages.**
+
+- **Le `tesseract`** océrise la page **1 207/1 264** ; ~4-5 s/page → **~57 pages ≈ 4 min** avant le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : le manifeste OCR est imminent. Le goal reste actif.
+
+
+## Tour 283
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 271/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -1 /tmp/ocr-pilote.log", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane … [17 caractères tronqués]`
+
+  ```
+01:14
+2269314 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1210.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 271 : OCR à 1 210/1 264 pages (95,7 %)
+
+**Round 271/1000 — il reste 54 pages.**
+
+- **Le `tesseract`** océrise la page **1 210/1 264** ; **~54 pages ≈ 4 min** avant la clôture du 8e livre et l'écriture de `reports/ocr-pdf.json`.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès le manifeste ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : le manifeste OCR arrive dans quelques minutes. Le goal reste actif.
+
+
+## Tour 284
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 272/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+01:14
+2269527 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1214.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 272 : OCR à 1 214/1 264 pages (96,0 %)
+
+**Round 272/1000 — il reste 50 pages.**
+
+- **Le `tesseract`** océrise la page **1 214/1 264** ; **~50 pages ≈ 3-4 min** avant le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : le manifeste OCR arrive. Le goal reste actif.
+
+
+## Tour 285
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 273/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; ls -la data/corpus_ocr/*.txt", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephan … [18 caractères tronqués]`
+
+  ```
+01:14
+2269749 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1219.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane       0  1 nov 20:45 data/corpus_ocr/test.txt
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+-rw-r--r--. 1 stephane stephane       0  1 nov 20:45 data/corpus_ocr/val.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 273 : OCR à 1 219/1 264 pages (96,4 %)
+
+**Round 273/1000 — il reste 45 pages.**
+
+- **Le `tesseract`** océrise la page **1 219/1 264** ; **~45 pages ≈ 3 min** avant la clôture du livre et le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès le manifeste ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : l'échéance approche. Le goal reste actif.
+
+
+## Tour 286
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 274/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -1 /tmp/ocr-pilote.log", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane … [17 caractères tronqués]`
+
+  ```
+01:14
+2269875 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1223.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 274 : OCR à 1 223/1 264 pages (96,8 %)
+
+**Round 274/1000 — il reste 41 pages.**
+
+- **Le `tesseract`** océrise la page **1 223/1 264** ; **~41 pages ≈ 3 min** avant le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : plus que 41 pages avant le manifeste. Le goal reste actif.
+
+
+## Tour 287
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 275/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; ls -la data/corpus_ocr/train.txt", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/ste … [22 caractères tronqués]`
+
+  ```
+01:15
+2270006 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1229.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 275 : OCR à 1 229/1 264 pages (97,2 %)
+
+**Round 275/1000 — il reste 35 pages.**
+
+- **Le `tesseract`** océrise la page **1 229/1 264** ; **~35 pages ≈ 2-3 min** avant le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : droit vers la fin. Le goal reste actif.
+
+
+## Tour 288
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 276/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -1 /tmp/ocr-pilote.log", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane … [17 caractères tronqués]`
+
+  ```
+01:15
+2270073 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1234.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 276 : OCR à 1 234/1 264 pages (97,6 %)
+
+**Round 276/1000 — il reste 30 pages.**
+
+- **Le `tesseract`** océrise la page **1 234/1 264** ; **~30 pages ≈ 2 min** avant la clôture du 8e livre et le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : le manifeste OCR est pour dans 2 minutes. Le goal reste actif.
+
+
+## Tour 289
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 277/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; ls -la data/corpus_ocr/train.txt", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/ste … [22 caractères tronqués]`
+
+  ```
+01:15
+2270153 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1239.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 277 : OCR à 1 239/1 264 pages (98,0 %)
+
+**Round 277/1000 — il reste 25 pages.**
+
+- **Le `tesseract`** océrise la page **1 239/1 264** ; **~25 pages ≈ 2 min** avant le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : plus que 25 pages. Le goal reste actif.
+
+
+## Tour 290
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 278/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -1 /tmp/ocr-pilote.log", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane … [17 caractères tronqués]`
+
+  ```
+01:15
+2270245 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1243.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 278 : OCR à 1 243/1 264 pages (98,3 %)
+
+**Round 278/1000 — il reste 21 pages.**
+
+- **Le `tesseract`** océrise la page **1 243/1 264** ; **~21 pages ≈ 1-2 min** avant le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : le manifeste tombe dans 1-2 minutes. Le goal reste actif.
+
+
+## Tour 291
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 279/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; ls -la data/corpus_ocr/*.txt", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephan … [18 caractères tronqués]`
+
+  ```
+01:15
+2270297 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1246.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane       0  1 nov 20:45 data/corpus_ocr/test.txt
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+-rw-r--r--. 1 stephane stephane       0  1 nov 20:45 data/corpus_ocr/val.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 279 : OCR à 1 246/1 264 pages (98,6 %)
+
+**Round 279/1000 — il reste 18 pages.**
+
+- **Le `tesseract`** océrise la page **1 246/1 264** ; **~18 pages ≈ 1 min** avant la clôture du livre et le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : plus qu'une minute. Le goal reste actif.
+
+
+## Tour 292
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 280/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -1 /tmp/ocr-pilote.log", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane … [17 caractères tronqués]`
+
+  ```
+01:15
+2270380 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1250.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 280 : OCR à 1 250/1 264 pages (98,9 %)
+
+**Round 280/1000 — il reste 14 pages.**
+
+- **Le `tesseract`** océrise la page **1 250/1 264** ; **~14 pages ≈ 1 min** avant le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : le manifeste est imminent. Le goal reste actif.
+
+
+## Tour 293
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 281/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -2 /tmp/ocr-pilote.log", "description": "Check OCR page and manifest", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane … [17 caractères tronqués]`
+
+  ```
+01:16
+2270451 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1254.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  Biblio_large · 004.0 Inconnu(e) 2011, La maison de A à  · 178 p · 362368 car
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 281 : OCR à 1 254/1 264 pages (99,2 %), plus que 10 pages
+
+**Round 281/1000 — plus que 10 pages.**
+
+- **Le `tesseract`** océrise la page **1 254/1 264** ; **~10 pages ≈ 40 s** avant la clôture du livre et l'écriture du manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : le 8e livre se termine à l'instant. Le goal reste actif.
+
+
+## Tour 294
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 282/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -2 /tmp/ocr-pilote.log; ls -la data/corpus_ocr/train.txt", "description": "Check OCR end and manifest", "timeoutMs": 120000, "workdir":  … [50 caractères tronqués]`
+
+  ```
+01:16
+2270517 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1258.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  Biblio_large · 004.0 Inconnu(e) 2011, La maison de A à  · 178 p · 362368 car
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 282 : OCR à 1 258/1 264 pages (99,5 %), plus que 6 pages
+
+**Round 282/1000 — plus que 6 pages avant le manifeste.**
+
+- **Le `tesseract`** océrise la page **1 258/1 264** ; **~6 pages ≈ 25 s** avant la clôture du 8e livre.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : quelques secondes. Le goal reste actif.
+
+
+## Tour 295
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 283/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -2 /tmp/ocr-pilote.log; ls -la data/corpus_ocr/train.txt", "description": "Check OCR end and manifest", "timeoutMs": 120000, "workdir":  … [50 caractères tronqués]`
+
+  ```
+01:16
+2270637 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-1263.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  Biblio_large · 004.0 Inconnu(e) 2011, La maison de A à  · 178 p · 362368 car
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 25; date '+%H:%M'; pgrep -af \"tesseract .*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -2 /tmp/ocr-pilote.log; ls -la data/corpus_ocr/*.txt", "description": "Wait for OCR manifest", "timeoutMs": 120000, "workdir": … [51 caractères tronqués]`
+
+  ```
+01:16
+2270738 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 25; date '+%H:%M'; pgrep -af "tesseract .*ocr-pdf" | head -1; ls -la reports/ocr-pdf.json 2>&1; tail -2 /tmp/ocr-pilote.log; ls -la data/corpus_ocr/*.txt
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+  Biblio_large · 004.0 Sprenger 2025, inflammationcycling · 1264 p · 3571780 car
+-rw-r--r--. 1 stephane stephane       0  1 nov 20:45 data/corpus_ocr/test.txt
+-rw-r--r--. 1 stephane stephane 7776329  2 nov 01:16 data/corpus_ocr/train.txt
+-rw-r--r--. 1 stephane stephane       0  1 nov 20:45 data/corpus_ocr/val.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ps -p 1616198 -o pid,stat,etime= 2>/dev/null || echo \"OCR terminé\"; pgrep -af \"tesseract|pdftoppm\" | head -3; ls -la reports/ocr-pdf.json 2>&1", "description": "Check OCR process after 8th book", "timeoutMs": 120000, … [62 caractères tronqués]`
+
+  ```
+01:17
+    PID STAT            
+1616198 S       04:31:28
+2270733 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/004 CS Linux/004.65 Web/004.65 CSS- The Missing Manual, 4th Edition.pdf /tmp/ocr-pdf-pua534bm/p
+2270992 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ps -p 1616198 -o pid,stat,etime= 2>/dev/null || echo "OCR terminé"; pgrep -af "tesseract|pdftoppm" | head -3; ls -la reports/ocr-pdf.json 2>&1
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+

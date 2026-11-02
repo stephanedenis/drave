@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-oubli.md`](rapport-pensee-oubli.md) | **B13** — la mémoire courte : Q × 0,9/10, 20/20, 10,0 pas, **71/71** |
 | [`rapport-pensee-look-tardif.md`](rapport-pensee-look-tardif.md) | **B13** — le look tardif : à l'épisode 3000, v final 0,54, 20/20, 8,0 pas, **70/70** |
 | [`rapport-pensee-un-look.md`](rapport-pensee-un-look.md) | **B13** — un seul look : 1/4000, v final 0,44, 20/20, 8,0 pas, **69/69** |
 | [`rapport-pensee-ultra-rare.md`](rapport-pensee-ultra-rare.md) | **B13** — l'information ultra-rare : utile 0,1 %, 4 looks, v final 0,44, 20/20, **68/68** |
@@ -32,7 +33,6 @@
 | [`rapport-pensee-adaptive.md`](rapport-pensee-adaptive.md) | **B13** — la fenêtre adaptative : v final 0,8, 20/20, 8,0 pas, **55/55** |
 | [`rapport-pensee-derive.md`](rapport-pensee-derive.md) | **B13** — la fiabilité qui dérive : v final 0,56, 20/20, 8,0 pas, **54/54** |
 | [`rapport-pensee-bayes.md`](rapport-pensee-bayes.md) | **B13** — la croyance bayésienne : un look, 20/20 dès 2000 épisodes, 9,4 pas, **51/51** |
-| [`rapport-pensee-croyance.md`](rapport-pensee-croyance.md) | **B13** — la croyance : 0/20 buts, la distribution seule ne suffit pas, **45/45** |
 | [`rapport-pensee-hasard.md`](rapport-pensee-hasard.md) | **B13** — le hasard variable : 20–60 %, 20/20 à chaque taux, 8 pas, **43/43** |
 | [`rapport-pensee-aleatoire.md`](rapport-pensee-aleatoire.md) | **B13** — la porte aléatoire : saut 20 %, 20/20 buts, 182 états-Q, **42/42** |
 | [`rapport-pensee-phase-graines.md`](rapport-pensee-phase-graines.md) | **B13** — la phase sur 5 graines : 5/5 buts, 10–14 pas, 376–422 états-Q, **41/41** |

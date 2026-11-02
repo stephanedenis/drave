@@ -1093,6 +1093,22 @@ def t67_look_tardif() -> tuple[bool, str]:
                       f"{round(pas_total / 20, 1)} pas")
 
 
+def t68_oubli() -> tuple[bool, str]:
+    """La mémoire courte : Q × 0,9/10, 20/20 buts, 10,0 pas."""
+    from .operateurs import PolitiqueAppriseBayesOubli, seule_bayes_oubli
+    p = PolitiqueAppriseBayesOubli(episodes=4000, graine=0)
+    p.apprendre()
+    ok = 0
+    pas_total = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, pas = seule_bayes_oubli(p)
+        ok += b
+        pas_total += pas
+    return ok == 20, (f"oubli : {ok}/20 buts, v final {round(p.v, 3)}, "
+                      f"{round(pas_total / 20, 1)} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1159,7 +1175,8 @@ def main() -> int:
               ("T64 information très rare", t64_tres_rare()),
               ("T65 information ultra-rare", t65_tres_tres_rare()),
               ("T66 un seul look", t66_un_look()),
-              ("T67 look tardif", t67_look_tardif())]
+              ("T67 look tardif", t67_look_tardif()),
+              ("T68 mémoire courte", t68_oubli())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
