@@ -18215,3 +18215,32 @@ portes-doc 2447402
   ```
 
 - **bash** `{"command": "sleep 90; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/portes-doc-fin.out; awk '$2 != 0' /tmp/portes-1102-05h19/registre.txt 2>/dev/null | head -3; date '+%H:%M'; tail -1 work/n2j/base-34m-canal-g2.log", "description": "Read the final documentation gates verdict"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1083]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1083", "timeout_ms": 300000, "wait": true}`
+
+  ```
+porte-registre         ✅                          15 s    ✅ région absente : refusée en la nommant (code 2), rien n'est calculé
+  porte-sessions         ✅                           0 s  PORTE TENUE : plan lisible · autotest doublon/champ manquant · check en-cours
+  porte-tableaux         ✅                           0 s    ✅ la page vivante date du dernier commit (2026-11-02)
+--- 7 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : /tmp/portes-1102-05h19
+--- 7 vertes, 0 rouges ---
+05:22
+pas 2250 · perte 1.5139 · PPL val 4.035 · 120 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/base-34m-canal-g2.pt 2>/dev/null && echo OK; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 900 ~/gpu-env/bin/python work/n2j/evalue_canal.py work/n2j/base-34m-canal-g2.pt 2>&1 | grep -v Loading |  … [73 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1084]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1084", "timeout_ms": 900000, "wait": true}`

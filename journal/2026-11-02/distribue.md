@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 00:03 | `48e35264` | JOURNAL — LE 2 NOVEMBRE : LIEN VERS L'INDEX DES SESSIONS | `README.md`, `mesures.md`, `README.md` (+5) |
 | 03:45 | `cc65ff92` | B13 — LE BORD FIN : 73 % À 0,38, 100 % À 0,41 (400 ESSAIS), SEUIL ROBUSTE 0,41 ; 87/87 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+29) |
+| 05:21 | `8c82d029` | B13 — L'ANAPHORE : 4/4 LIENS JUSTES, PREMIÈRE MESURE DE CORÉFÉRENCE ; 95/95 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+26) |
 
 ## Chiffres du jour
 
@@ -27,11 +28,13 @@
 
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-n2-anglais-34m.md](../../reports/rapport-n2-anglais-34m.md)
+- [reports/rapport-n2-canal-kd-34m.md](../../reports/rapport-n2-canal-kd-34m.md)
 - [reports/rapport-n2-echantillon.md](../../reports/rapport-n2-echantillon.md)
 - [reports/rapport-n2-fenetre-r1.md](../../reports/rapport-n2-fenetre-r1.md)
 - [reports/rapport-n2-multilingue-34m-distille.md](../../reports/rapport-n2-multilingue-34m-distille.md)
 - [reports/rapport-n2-multilingue-34m.md](../../reports/rapport-n2-multilingue-34m.md)
 - [reports/rapport-n2-professeur.md](../../reports/rapport-n2-professeur.md)
+- [reports/rapport-pensee-anaphore.md](../../reports/rapport-pensee-anaphore.md)
 - [reports/rapport-pensee-bord-fin.md](../../reports/rapport-pensee-bord-fin.md)
 - [reports/rapport-s-analyseur.md](../../reports/rapport-s-analyseur.md)
 

@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 36.8 h |
 | Tours | 372 |
-| Messages | 2224 |
-| Appels d'outils | 1474 |
+| Messages | 2228 |
+| Appels d'outils | 1478 |
 | Fichiers touchés | 26 |
-| Commandes | 1307 |
+| Commandes | 1311 |
 | Sous-agents | 0 |
-| Commits | 82 |
+| Commits | 83 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -8729,7 +8729,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 372 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - job_output
 - job_kill
@@ -8743,6 +8743,9 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Check genres line and state history
 - bash — Update state timestamp and verify index
 - bash — Commit genres refresh with retry
+- bash — Check state diff vs HEAD
+- bash — Read full pre-commit hook
+- … et 2 autres
 
 ## 3. Travail accompli
 
@@ -8819,7 +8822,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1267 autres
+- … et 1271 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9049,4 +9052,5 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - DONNÉES — L'OCR DES 20 LIVRES EST CLOS : 7 381 PAGES, 15,36 M CARACTÈRES, 8 KO 0 (VAL 115, ÉVAL 0/40)" > /tmp/commit-final.log 2>&1; code=$?; tail -4 /tmp/commi
 - GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M)" > /tmp/commit-genres.log 2>&1; code=$?; tail -3 /tmp/commit-genres.log; if [ $c
 - GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M)" > /tmp/commit-genres.log 2>&1; code=$?; tail -3 /tmp/commit-genres.log; if [ $c
+- GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M)" 2>&1 | tail -8; echo "=== après"; git diff --cached --name-only | head -3
 

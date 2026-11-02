@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 36.7 h |
-| Tours | 109 |
-| Messages | 1393 |
-| Appels d'outils | 1222 |
+| Tours | 110 |
+| Messages | 1398 |
+| Appels d'outils | 1225 |
 | Fichiers touchés | 25 |
-| Commandes | 994 |
+| Commandes | 997 |
 | Sous-agents | 2 |
 | Commits | 141 |
 | Compactages de contexte | 4 |
@@ -249,6 +249,8 @@
 **Tour 108** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 109** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 110** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5809,6 +5811,53 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round mesure la **coréférenc
 - bash — Committer l'anaphore
 - job_output
 
+**Synthèse produite :**
+
+⏵ Anaphore : 4/4 liens justes, première mesure de coréférence ; 95/95
+
+Le round 96 du goal est livré : la **coréférence** est mesurée pour la première fois — 4/4 liens justes, avec les limites dites. Commit **`8c82d029`**.
+
+\## L'anaphore
+
+| phrase | pronom | attendu | obtenu |
+|---|---|---|---|
+| r307 | `il` | `chat` | `chat` |
+| r308 | `elle` | `marie` | `marie` |
+| r317 | `it` | `cat` | `cat` |
+| r318 | `she` | `marie` | `marie` |
+
+**Ce que ça dit** :
+
+- **4/4** : le « dernier nom » suffit sur ces quatre cas (le pronom suit immédiatement son antécédent).
+- **La règle est naïve** : elle échouera sur `Le chat voit le chien ; il dort` (le dernier nom est `chien`), sur les pronoms inversés (`Viens-tu ?`) et sur les chaînes longues.
+- **Le gold est petit** (4 liens) : le taux 1,0 n'a pas d'intervalle utile.
+- **La négative manque** : il faudrait des cas pièges pour mesurer la règle.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore.md`](../../reports/rapport-pensee-anaphore.md) ; JSON [`pensee-anaphore.json`](../../reports/pensee-anaphore.json) ; code [`anaphore.py`](../../tools/tests/linguistique/anaphore.py) ; T92 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **95/95 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **501 fiches / 588 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `rapport-n2-canal-kd-34m.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Des cas pièges** : deux noms, pronoms inversés ; la règle naïve doit échouer — et être mesurée.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute les **cas pièges** de l'anaphore — la négative qui manque.
+
+### Tour 110 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Ajouter 8 cas pièges d'anaphore et mesurer
+- bash — Écrire la fiche des pièges d'anaphore
+- bash — Trim README et passer les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5888,7 +5937,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round mesure la **coréférenc
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 954 autres
+- … et 957 autres
 
 ## 4. Mesures et résultats marquants
 

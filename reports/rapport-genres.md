@@ -22,19 +22,19 @@ La comparaison des **genres** : les 10 corpus Wikipédia (l'encyclopédie), le c
 | zh (wiki) | 40,8 | 13,5 % | 0,12 |
 | pdf (livres) | 37,2 | 23,8 % | 0,01 |
 | documents | 37,5 | 22,1 % | 0,01 |
-| ocr (scannés) | 32,1 | 4,8 % | 0,07 |
+| ocr (scannés) | 38,5 | 6,8 % | 0,04 |
 
 ## 3. Le constat
 
 - **La longueur de ligne sépare les genres** : l'encyclopédie écrit des paragraphes longs (103 à 147 caractères), les livres et documents des lignes courtes (32 à 37) — c'est la mise en page, pas le contenu.
-- **Les lignes dupliquées** : le PDF et les documents ont le plus de répétitions (22 à 24 % : les en-têtes, les numéros de page, les formules), l'OCR le moins (4,8 %) ; l'encyclopédie est entre les deux (8,7 à 18,4 %).
-- **La couverture lexicale** (types/tokens sur 200 Mo) est écrasée par la taille de l'échantillon : 0,01 pour les grands corpus, 0,22 pour l'arabe (les formes fléchies), 0,07 pour l'OCR (peu de texte).
+- **Les lignes dupliquées** : le PDF et les documents ont le plus de répétitions (22 à 24 % : les en-têtes, les numéros de page, les formules), l'OCR le moins (6,8 %) ; l'encyclopédie est entre les deux (8,7 à 18,4 %).
+- **La couverture lexicale** (types/tokens sur 200 Mo) est écrasée par la taille de l'échantillon : 0,01 pour les grands corpus, 0,22 pour l'arabe (les formes fléchies), 0,04 pour l'OCR (14,4 M de texte).
 
 ## 4. Ce qui pourrait être faux
 
 - L'échantillon est **tronqué à 200 Mo** : les corpus plus grands sont sous-représentés en couverture.
 - La couverture lexicale dépend de la **langue** (l'arabe et le russe ont plus de formes fléchies que l'anglais) — elle ne mesure pas le genre.
-- Le corpus OCR est **petit** (3,7 M) : ses chiffres bougeront avec les 159 scans.
+- Le corpus OCR (**14,4 M**, 20 livres) reste **petit** : ses chiffres bougeront avec les 159 scans.
 - Le corpus Documents est **partiel** (6 000/7 496 PDF) : ses chiffres bougeront à la clôture.
 
 ## 5. La suite

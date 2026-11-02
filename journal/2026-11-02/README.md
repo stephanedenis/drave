@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**78 commits** · **3 session(s)** · **8 thème(s)**
+**79 commits** · **3 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 6 | [attention.md](attention.md) |
-| distribue | 2 | [distribue.md](distribue.md) |
+| distribue | 3 | [distribue.md](distribue.md) |
 | docs | 11 | [docs.md](docs.md) |
 | memoire | 8 | [memoire.md](memoire.md) |
 | mesures | 39 | [mesures.md](mesures.md) |
@@ -110,6 +110,7 @@
 | 05:12 | `1030600e` | B13 — LE DISCOURS : ACTE 0,9, NÉGATION 1,0, MODALITÉ 0,9, GOLD 320 ; 94/94 |
 | 05:16 | `78b551fc` | N2.y — LE CANAL ET LA DISTILLATION NE S'ADDITIONNENT PAS, MÊME À 34,3 M |
 | 05:17 | `74324954` | JOURNAL — LE MEILLEUR MODÈLE DE LA NUIT : LE CANAL À 34,3 M (3,51 / 3,66 À 512) |
+| 05:21 | `8c82d029` | B13 — L'ANAPHORE : 4/4 LIENS JUSTES, PREMIÈRE MESURE DE CORÉFÉRENCE ; 95/95 |
 
 ## Le récit de la journée (écrit à la main)
 

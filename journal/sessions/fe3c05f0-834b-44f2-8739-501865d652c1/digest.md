@@ -33751,3 +33751,77 @@ reports/rapport-genres.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; ok=0; for i in 1 2 3 4 5; do git read-tree HEAD; git add reports/corpus-genres.json reports/rapport-genres.md docs/pilotage/en-cours.md; git commit -m \"GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CA … [341 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 8c82d029fcb0ed29ebc3866ac82221c1bb1f6a70 but expected 743249547fb62aef2d8f5e67d1a45b4a3374753d
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+ok=0
+8c82d029 B13 — L'ANAPHORE : 4/4 LIENS JUSTES, PREMIÈRE MESURE DE CORÉFÉRENCE ; 95/95
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff HEAD --stat -- docs/pilotage/en-cours.md; git diff HEAD -- docs/pilotage/en-cours.md | head -8; date '+%H:%M'", "description": "Check state diff vs HEAD", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHu … [11 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index adcb31cf..67d8f595 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-02, 05 h 22 HNE (heure locale, EST).**
+05:24
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '20,50p' .git/hooks/pre-commit", "description": "Read full pre-commit hook", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+#    accompagner le code, pas le suivre.
+python3 tools/archive_sessions.py --quiet >/dev/null || { echo "  ⛔ archivage des sessions en échec"; exit 1; }
+python3 tools/session_report.py --quiet >/dev/null || { echo "  ⛔ rapport de session en échec"; exit 1; }
+# Le journal du jour, par thème (sources : git + journal/sessions). L'index README est
+# régénéré ensuite pour lister les fichiers produits.
+python3 tools/journal_auto.py --quiet >/dev/null || { echo "  ⛔ journal du jour en échec"; exit 1; }
+git add journal || { echo "  ⛔ journal non ajouté à l'index"; exit 1; }
+exit 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"index\\|fait\\|état\" tools/verifie_etat_a_jour.py | head -30", "description": "Inspect state check logic", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+2:"""verifie_etat_a_jour.py — aucun fait commité sans sa ligne d'état.
+4:POURQUOI CET OUTIL EXISTE. `en-cours` est la seule source de l'état, et le contrat
+7:principale s'arrête, l'état se fige. Surtout, rien ne comparait les commits : la
+9:A8.0 (15 h 51) a été commité après le dernier état (15 h 34) sans aucune alerte.
+12:  --index  (hook pre-commit) : un commit qui prépare un fait (reports/, roadmap,
+14:  --head   : si un fait a été commité après le dernier commit d'`en-cours`, l'état
+17:Le journal est du récit dérivé (le hook l'archive) : il n'exige pas de ligne d'état.
+21:  python3 tools/verifie_etat_a_jour.py --index     # pour le hook
+35:def est_fait(chemin: str) -> bool:
+36:    """Un fait est ce qui change l'état du projet : fiche, JSON, plan, backlog."""
+59:    """Rend (état, fait, lignes) si un fait est postérieur au dernier état, sinon None."""
+63:    fait = dernier_commit(racine, list(FAITS))
+64:    if fait is None or fait[0] == etat[0]:
+66:    if not est_ancetre(racine, etat[0], fait[0]):
+68:    r = git(racine, "log", "--format=%h %s", f"{etat[0]}..{fait[0]}", "--", *FAITS)
+70:    return (etat, fait, lignes)
+73:def faits_index(racine: pathlib.Path):
+74:    """Rend les f
+… [679 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add reports/corpus-genres.json reports/rapport-genres.md docs/pilotage/en-cours.md; git diff --cached --name-only; echo \"=== commit\"; git commit -m \"GENRES — L'OCR DES 20 … [272 caractères tronqués]`

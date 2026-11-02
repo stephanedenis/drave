@@ -156,16 +156,16 @@
   "couverture": 0.009
  },
  "ocr": {
-  "caracteres": 3739120,
-  "lignes": 116349,
-  "longueur_moyenne": 32.1,
-  "alpha": 0.758,
-  "chiffres": 0.022,
-  "espaces": 0.168,
-  "ponctuation": 0.051,
-  "lignes_dupliquees": 0.0475,
-  "types": 43606,
-  "tokens": 583164,
-  "couverture": 0.075
+  "caracteres": 14438849,
+  "lignes": 375235,
+  "longueur_moyenne": 38.5,
+  "alpha": 0.77,
+  "chiffres": 0.019,
+  "espaces": 0.165,
+  "ponctuation": 0.046,
+  "lignes_dupliquees": 0.0678,
+  "types": 86540,
+  "tokens": 2263869,
+  "couverture": 0.038
  }
 }
