@@ -39,6 +39,17 @@ def fidelite_mots(a: bl.Annotation, source: str) -> float:
     return 1.0 if rendre_mots(a) == " ".join(source.split()) else 0.0
 
 
+def rendre_pos(a: bl.Annotation) -> str:
+    """La sortie **sémantique** : les mots reconstruits depuis leurs étiquettes POS."""
+    pos = [e for e in a.etiquettes if e.niveau == "pos"]
+    return " ".join(e.valeur for e in sorted(pos, key=lambda e: (e.debut, e.fin)))
+
+
+def fidelite_pos(a: bl.Annotation, source: str) -> float:
+    """La fidélité de la sortie POS : la suite des mots étiquetés est-elle la source ?"""
+    return 1.0 if rendre_pos(a) == " ".join(source.split()) else 0.0
+
+
 def fluidite(a: bl.Annotation) -> float:
     """La part de la longueur restituée qui est du texte (pas des trous)."""
     r = rendre(a)
@@ -52,7 +63,8 @@ def mesurer(phrases: list[dict], bloc=None) -> dict:
     details = []
     for p in phrases:
         a = bloc.analyser(p["texte"], p["langue"])
-        f = min(fidelite(a, p["texte"]), fidelite_mots(a, p["texte"]))
+        f = min(fidelite(a, p["texte"]), fidelite_mots(a, p["texte"]),
+                fidelite_pos(a, p["texte"]))
         fid += f
         flu.append(fluidite(a))
         if f < 1.0:
@@ -69,6 +81,9 @@ def main() -> int:
         r = mesurer(ph, bloc)
         print(nom, r["phrases"], "fidélité", r["fidelite"], "fluidité", r["fluidite"],
               "échecs", len(r["echecs"]))
+        fid_pos = sum(fidelite_pos(bloc.analyser(p["texte"], p["langue"]), p["texte"])
+                      for p in ph) / max(1, len(ph))
+        print(nom, "POS", round(fid_pos, 4))
     return 0
 
 

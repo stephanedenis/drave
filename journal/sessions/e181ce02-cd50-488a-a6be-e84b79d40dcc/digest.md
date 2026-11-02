@@ -29842,3 +29842,106 @@ timeout 2400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/miroir.py tools/pensee/autotest.py reports/rapport-pensee-miroir.md reports/pensee-miroir.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-co … [538 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1135]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1135", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-miroir.json
+ create mode 100644 reports/rapport-pensee-miroir.md
+ create mode 100644 tools/tests/linguistique/miroir.py
+COMMIT OK 1
+518381c7 B13 — LE MIROIR ENTRÉE/SORTIE : SURFACE 1,0, MOTS 0,2095, LA FLUIDITÉ N'EST PAS LA FIDÉLITÉ ; 119/119
+lun 02 nov 2026 11:04:47 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Miroir entrée/sortie : surface 1,0, mots 0,2095, la fluidité n'est pas la fidélité ; 119/119
+
+Le round 120 est livré : la **règle 6** (le miroir entrée/sortie) est armée pour le bloc — la restitution depuis la surface est exacte, celle depuis les mots perd 0,79. Commit **`518381c7`**.
+
+## Les deux restitutions
+
+| restitution | source | **fidélité** | fluidité |
+|---|---|---:|---:|
+| graphèmes (surface) | 587 phrases | **1,0000** | 1,0 |
+| mots (tokens) | 587 phrases | **0,2095** | 1,0 |
+| cascade (mots) | 587 phrases | 0,2095 | 1,0 |
+
+**Ce que ça dit** :
+
+- **La surface est fidèle par construction** : la couche graphème recopie le texte ; ce n'est pas un résultat, c'est un **contrôle** (la restitution ne perd rien *si* on garde tout).
+- **Les mots perdent 0,79** : la ponctuation et les espaces ne sont pas restitués ; c'est la **vraie** mesure — la sortie du bloc n'est pas le texte.
+- **Cascade = heuristique** sur cette mesure : le mock neuronal ne change pas la restitution.
+- **La règle 6 est armée** : une mesure d'entrée (POS, syntagme) se double désormais d'une mesure de sortie ; **la fluidité (1,0) n'est pas la fidélité (0,21)**.
+
+## L'état
+
+- Fiche : [`rapport-pensee-miroir.md`](../../reports/rapport-pensee-miroir.md) ; JSON [`pensee-miroir.json`](../../reports/pensee-miroir.json) ; module [`miroir.py`](../../tools/tests/linguistique/miroir.py) ; T116 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **119/119 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **526 fiches / 615 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` dans le budget.
+- L'horloge réelle est **11 h 04 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+## La suite
+
+1. **La restitution depuis les POS** : la sortie *sémantique*, la vraie mesure de fidélité.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **la restitution depuis les POS** — reconstruire le texte depuis les étiquettes, pas depuis la surface.
+
+
+## Tour 135
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 121/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/miroir.py'); t=p.read_text()\nt=t.replace('''def fluidite(a: bl.Annotation) -> float:''',\n'''def rendre_pos(a: bl.Annotation) -> str:\n    \"\"\"La sortie ** … [1434 caractères tronqués]`
+
+  ```
+heuristique 587 fidélité 0.201 fluidité 1.0 échecs 5
+heuristique POS 0.201
+cascade 587 fidélité 0.201 fluidité 1.0 échecs 5
+cascade POS 0.201
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-miroir-pos.md <<'MD'\n# B13 — la sortie POS : 0,201, la restitution sémantique ne restitue pas\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6 — le miroir) · **Date** : 2026-11-02\n> · **Ve … [6691 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 527 fiche(s) · 616 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2814 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-cascade-union.md`](rapport-pensee-cascade-union.md) | **B13** — la cascade avec l'union : F1 0,2170, tête 0,4410 … [619 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/miroir.py tools/pensee/autotest.py reports/rapport-pensee-miroir-pos.md reports/pensee-miroir-pos.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilota … [505 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 42.4 h |
+| Durée | 42.6 h |
 | Tours | 386 |
-| Messages | 2333 |
-| Appels d'outils | 1550 |
+| Messages | 2335 |
+| Appels d'outils | 1552 |
 | Fichiers touchés | 26 |
-| Commandes | 1378 |
+| Commandes | 1380 |
 | Sous-agents | 0 |
 | Commits | 90 |
 | Compactages de contexte | 4 |
@@ -9111,7 +9111,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 
 ### Tour 386 — continue pendent 3h
 
-*13 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — First 5-min check of CEGEP lot 40
@@ -9123,10 +9123,12 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - bash — Check CEGEP lot 40 for 9th note
 - bash — Check CEGEP lot 40 for 10th note
 - bash — Check CEGEP lot 40 for 11th note
+- bash — Diagnose CEGEP lot stall
+- bash — Wait 15 min then check Encyclopedia render
 
 **Synthèse produite :**
 
-⏵ Lot CEGEP : 10 scans — **Data Structures and Algorithms in C** (366 p, 519 297 car.) entre
+⏵ Diagnostic : le 11e PDF est l'**Encyclopedia of Algorithms** (1 000+ pages, 870 rendues) — le stall est un gros rendu, pas un blocage
 
 ## 3. Travail accompli
 
@@ -9203,7 +9205,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1338 autres
+- … et 1340 autres
 
 ## 4. Mesures et résultats marquants
 

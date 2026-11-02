@@ -1,0 +1,22 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "120/120",
+ "surface": {
+  "fidelite": 1.0,
+  "fluidite": 1.0
+ },
+ "mots": {
+  "fidelite": 0.2095,
+  "fluidite": 1.0
+ },
+ "pos": {
+  "fidelite": 0.201,
+  "fluidite": 1.0
+ },
+ "limites": [
+  "fidélité binaire",
+  "join normalise les espaces",
+  "heuristique seule"
+ ]
+}

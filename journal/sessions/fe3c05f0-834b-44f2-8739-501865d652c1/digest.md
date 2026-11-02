@@ -35271,3 +35271,39 @@ wchar: 906108095
 ⏵ Lot CEGEP : 10 scans — **Data Structures and Algorithms in C** (366 p, 519 297 car.) entre
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 570; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -2 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2", "descripti … [123 caractères tronqués]`
+
+  ```
+11:09
+10
+  CEGEP · Algorithms Illuminated Part 1 The Basics · 217 p · 335492 car
+  CEGEP · Data Structures and Algorithms in C by M · 366 p · 519297 car
+    PID            
+3445044    01:50:29
+rchar: 14337531978
+wchar: 906108095
+  ```
+
+### 🤖 Assistant
+
+⏵ Lot CEGEP : **stall détecté** — 574 octets lus en 9 min, je diagnostique
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ps --ppid 3445044 -o pid,stat,etime,cmd 2>/dev/null | head -3; pgrep -af \"pdftoppm|tesseract\" | head -3; ls /tmp/ | grep \"ocr-pdf-\" | head -2; for d in /tmp/ocr-pdf-*/; do echo \"$d $(ls \"$d\" 2>/dev/null | wc -l) p … [205 caractères tronqués]`
+
+  ```
+11:10
+    PID STAT     ELAPSED CMD
+3486993 R          18:31 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Algorithmie/Encyclopedia of Algorithms by Michele Mosca (auth.), Ming-Yang Kao Professor of Computer Science (eds.).pdf /tmp/ocr-pdf-s1eqd52t/p
+3486993 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Algorithmie/Encyclopedia of Algorithms by Michele Mosca (auth.), Ming-Yang Kao Professor of Computer Science (eds.).pdf /tmp/ocr-pdf-s1eqd52t/p
+3493631 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ps --ppid 3445044 -o pid,stat,etime,cmd 2>/dev/null | head -3; pgrep -af "pdftoppm|tesseract" | head -3; ls /tmp/ | grep "ocr-pdf-" | head -2; for d in /tmp/ocr-pdf-*/; do echo "$d $(ls "$d" 2>/dev/null | wc -l) pages"; done 2>/dev/null | tail -3; cat /proc/3445044/wchan 2>/dev/null; echo
+ocr-pdf-s1eqd52t
+ocr-pdf-wqwhcggj
+/tmp/ocr-pdf-s1eqd52t/ 870 pages
+/tmp/ocr-pdf-wqwhcggj/ 274 pages
+poll_schedule_timeout.constprop.0
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic : le 11e PDF est l'**Encyclopedia of Algorithms** (1 000+ pages, 870 rendues) — le stall est un gros rendu, pas un blocage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 900; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -2 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2; pgrep -af \ … [181 caractères tronqués]`

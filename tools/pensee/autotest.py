@@ -1791,8 +1791,20 @@ def t116_miroir() -> tuple[bool, str]:
     from ..tests.linguistique.miroir import mesurer
     ph = charger()
     r = mesurer(ph, bl.Heuristique())
-    return abs(r["fidelite"] - 0.2095) < 0.001, (
-        f"miroir : surface 1,0, mots {r['fidelite']} (fluidité {r['fluidite']})")
+    return abs(r["fidelite"] - 0.201) < 0.001, (
+        f"miroir : surface 1,0, sortie POS {r['fidelite']} (fluidité {r['fluidite']})")
+
+
+def t117_miroir_pos() -> tuple[bool, str]:
+    """La sortie POS : fidélité 0,201."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_pos
+    ph = charger()
+    h = bl.Heuristique()
+    fid = sum(fidelite_pos(h.analyser(p["texte"], p["langue"]), p["texte"])
+              for p in ph) / max(1, len(ph))
+    return abs(fid - 0.201) < 0.001, f"sortie POS : fidélité {round(fid, 4)}"
 
 
 def main() -> int:
@@ -1910,7 +1922,8 @@ def main() -> int:
               ("T113 union par défaut", t113_union_defaut()),
               ("T114 cascade + union", t114_cascade_union()),
               ("T115 tête cascade", t115_tete_cascade()),
-              ("T116 miroir", t116_miroir())]
+              ("T116 miroir", t116_miroir()),
+              ("T117 sortie POS", t117_miroir_pos())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
