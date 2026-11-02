@@ -17289,3 +17289,36 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1024", "timeout_ms": 600000, "wait": true}`
+
+  ```
+02:37
+work/n2k/base-en-34m.pt
+OK
+}
+{"fichier": "base-en-34m.pt", "params": 34301224, "val": 4.2396, "test": 4.4269, "litterature": 19.1955, "litterature_propre": 19.6603, "anglais": 4.9327, "wikitext2": 5.281, "permute": 155.8558, "decomposition": {"complete": 4.3162, "apres_2_blocs": 5.2823, "apres_4_blocs": 4.6951, "apres_6_blocs": 4.3889, "sans_pensee": 715474.6492}, "longueurs": {"129": 4.234, "192": 4.1363, "256": 4.1584, "384": 4.3249, "512": 4.5265}}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1022 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/base-en-34m.pt 2>/dev/null && echo OK; tail -1 work/n2k/base-en-34m.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for gpu in 0 1; do g=$((gpu+1)); nohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=$gpu PYTHONPATH=. ~/gpu-env/bin/python tools/distiller_budget.py --corpus fr --train data/wiki_en/propre/trai … [436 caractères tronqués]`
+
+  ```
+E34-g1 2339001
+E34-g2 2339002
+# init work/n2k/base-en-34m.pt · manquants [] · graine 1 · décalage 0
+02:39
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 30; tail -3 work/n2k/E34-g1.log 2>/dev/null; tail -3 work/n2k/E34-g1.out 2>/dev/null; ls work/n2k/E34-g1.pt 2>/dev/null; ps -eo pid,cmd | grep \"E34-g1\" | grep -v grep | head -1", "description": "Check the English distillation … [20 caractères tronqués]`
+
+  ```
+# init work/n2k/base-en-34m.pt · manquants [] · graine 1 · décalage 0
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/wiki_en/prepro/val.txt'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for gpu in 0 1; do g=$((gpu+1)); nohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=$gpu PYTHONPATH=. ~/gpu-env/bin/python tools/distiller_budget.py --corpus fr --train data/wiki_en/propre/trai … [508 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 33.9 h |
-| Tours | 95 |
-| Messages | 1242 |
-| Appels d'outils | 1099 |
+| Durée | 34.0 h |
+| Tours | 96 |
+| Messages | 1253 |
+| Appels d'outils | 1108 |
 | Fichiers touchés | 25 |
-| Commandes | 887 |
+| Commandes | 895 |
 | Sous-agents | 2 |
-| Commits | 123 |
+| Commits | 124 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -221,6 +221,8 @@
 **Tour 94** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 95** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 96** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5049,6 +5051,58 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **routes con
 - bash — Committer les routes concurrentes
 - job_output
 
+**Synthèse produite :**
+
+⏵ Routes concurrentes : but caché, 0/20 et 20/20, la phase doit entrer ; 81/81
+
+Le round 82 du goal est livré : le **but caché** casse la politique — les routes concurrentes ne coexistent pas sans la phase. Commit **`e97e3d4d`**.
+
+\## Les routes concurrentes
+
+Même monde que T77, mais la **phase cachée change le but** : `(4,4)` (bas-droite) ou `(4,0)` (haut-droite). Les routes partagent le début et divergent à la fin.
+
+| but | buts | états-Q | pas |
+|---|---|---:|---:|
+| **0 : (4,4)** | **0/20** | 86 | 200 |
+| **1 : (4,0)** | **20/20** | 86 | 0 |
+
+**Ce que ça dit** :
+
+- **Le but caché casse la politique** : la Q-table conflate les deux buts ; l'argmax suit le **dernier** entraîné (le `(4,0)`), et le `(4,4)` échoue 0/20.
+- **Contraste avec T77** : la **porte** cachée marchait (les routes disjointes) ; le **but** caché échoue (les routes concurrentes) — c'est la **disjonction** qui compte, pas la cache.
+- **86 états** : la politique n'a pas la place de deux buts dans un état unique.
+- **La négative est explicite** : 0/20 au but 0.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-concurrentes.md`](../../reports/rapport-pensee-concurrentes.md) ; JSON [`pensee-concurrentes.json`](../../reports/pensee-concurrentes.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T78 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **81/81 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **483 fiches / 573 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~11 min** ; les portes tiennent avec `timeout 1200`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **La phase dans l'état** : `_cle` gagne la phase ; les deux buts coexistent (le correctif).
+2. **20 graines** : lisser la courbe du seuil.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round met la **phase dans l'état** — le correctif des routes concurrentes.
+
+### Tour 96 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Tester la phase dans l'état (correctif)
+- bash — Lire la définition de _cle
+- bash — Corriger et tester la phase dans l'état
+- bash — Corriger l'apprentissage avec la phase dans la clé
+- bash — Ajouter la porte T79 (phase dans l'état)
+- bash — Écrire la fiche de la phase dans l'état
+- bash — Trim README et portes
+- bash — Committer la phase dans l'état
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5128,7 +5182,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **routes con
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 847 autres
+- … et 855 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5256,7 +5310,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **routes con
 
 ## 5. Erreurs rencontrées
 
-15 sorties en erreur ou divergentes. Les premières :
+16 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -5399,4 +5453,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **routes con
 - B13 — LA VÉRITÉ QUI CHANGE : PORTE CACHÉE, 20/20 AUX DEUX PHASES ; 80/80" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VÉRITÉ QUI CHANGE"; then echo 
 - B13 — LA VÉRITÉ QUI CHANGE : PORTE CACHÉE, 20/20 AUX DEUX PHASES ; 80/80" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VÉRITÉ QUI CHANGE"; then echo 
 - B13 — LES ROUTES CONCURRENTES : BUT CACHÉ, 0/20 ET 20/20, LA PHASE DOIT ENTRER ; 81/81" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ROUTES CONCURREN
+- B13 — LA PHASE DANS L'ÉTAT : LE CORRECTIF, 20/20 AUX DEUX BUTS, 6,0 PAS ; 82/82" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHASE DANS L'ÉTAT"; the
 

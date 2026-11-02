@@ -2160,6 +2160,42 @@ def seule_verite2(p: PolitiqueAppriseVerite2, phase: int,
     return False, pas
 
 
+class PolitiqueAppriseVerite3(PolitiqueAppriseVerite2):
+    """La Q-table à **phase dans l'état** : la phase entre dans la clé, les deux buts coexistent.
+
+    C'est le correctif de T78 : les routes concurrentes deviennent deux politiques distinctes.
+    """
+
+    nom = "verite3"
+
+    def _cle(self, etat):
+        return super()._cle(etat) + (self.phase,)
+
+    def apprendre(self) -> None:
+        for i in range(self.episodes):
+            self.phase = 0 if i < self.episodes // 2 else 1
+            cle = (0, 0, False, self.phase)
+            for _ in range(120):
+                if cle[:2] == GOALS_VERITE2[self.phase]:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle3, gain = self._pas(cle[:3], a, True)
+                ncle = (ncle3[0], ncle3[1], ncle3[2], self.phase)
+                but = 1.0 if ncle[:2] == GOALS_VERITE2[self.phase] else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+
+def seule_verite3(p: PolitiqueAppriseVerite3, phase: int,
+                  max_pas: int = 200) -> tuple[bool, int]:
+    return seule_verite2(p, phase, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

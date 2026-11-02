@@ -1242,6 +1242,24 @@ def t78_concurrentes() -> tuple[bool, str]:
                                     f"but 1 {ok1}/20 (la phase doit entrer)")
 
 
+def t79_phase_etat() -> tuple[bool, str]:
+    """La phase dans l'état : le correctif des routes concurrentes, 20/20 aux deux buts."""
+    from .operateurs import PolitiqueAppriseVerite3, seule_verite3
+    p = PolitiqueAppriseVerite3(episodes=4000, graine=0)
+    p.apprendre()
+    ok0 = 0
+    ok1 = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, _ = seule_verite3(p, 0)
+        ok0 += b
+        p.rng.seed(1000 + g)
+        b, _ = seule_verite3(p, 1)
+        ok1 += b
+    return ok0 == 20 and ok1 == 20, (f"phase dans l'état : but 0 {ok0}/20, "
+                                     f"but 1 {ok1}/20, {len(p.q)} Q")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1319,7 +1337,8 @@ def main() -> int:
               ("T75 seuil bas", t75_bas()),
               ("T76 courbe complète", t76_courbe()),
               ("T77 vérité qui change", t77_verite()),
-              ("T78 routes concurrentes", t78_concurrentes())]
+              ("T78 routes concurrentes", t78_concurrentes()),
+              ("T79 phase dans l'état", t79_phase_etat())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

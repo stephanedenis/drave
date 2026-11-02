@@ -1,0 +1,34 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "82/82",
+ "phase_dans_etat": true,
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 145,
+  "but0": {
+   "buts": 20,
+   "pas": 6.0
+  },
+  "but1": {
+   "buts": 20,
+   "pas": 6.0
+  }
+ },
+ "contraste": {
+  "T78_sans_phase": {
+   "but0": 0,
+   "but1": 20
+  },
+  "T79_avec_phase": {
+   "but0": 20,
+   "but1": 20
+  }
+ },
+ "limites": [
+  "phase fournie",
+  "deux phases",
+  "toy"
+ ]
+}

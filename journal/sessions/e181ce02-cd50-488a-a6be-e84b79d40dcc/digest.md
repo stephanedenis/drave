@@ -23712,3 +23712,164 @@ Current DSH file policy: danger-full-access. The DSH file sandbox does not restr
 Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-concurrentes.md reports/pensee-concurrentes.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/e … [520 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-887]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-887", "timeout_ms": 600000, "wait": true}`
+
+  ```
+26 files changed, 808 insertions(+), 68 deletions(-)
+ create mode 100644 reports/pensee-concurrentes.json
+ create mode 100644 reports/rapport-pensee-concurrentes.md
+COMMIT OK 1
+e97e3d4d B13 — LES ROUTES CONCURRENTES : BUT CACHÉ, 0/20 ET 20/20, LA PHASE DOIT ENTRER ; 81/81
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Routes concurrentes : but caché, 0/20 et 20/20, la phase doit entrer ; 81/81
+
+Le round 82 du goal est livré : le **but caché** casse la politique — les routes concurrentes ne coexistent pas sans la phase. Commit **`e97e3d4d`**.
+
+## Les routes concurrentes
+
+Même monde que T77, mais la **phase cachée change le but** : `(4,4)` (bas-droite) ou `(4,0)` (haut-droite). Les routes partagent le début et divergent à la fin.
+
+| but | buts | états-Q | pas |
+|---|---|---:|---:|
+| **0 : (4,4)** | **0/20** | 86 | 200 |
+| **1 : (4,0)** | **20/20** | 86 | 0 |
+
+**Ce que ça dit** :
+
+- **Le but caché casse la politique** : la Q-table conflate les deux buts ; l'argmax suit le **dernier** entraîné (le `(4,0)`), et le `(4,4)` échoue 0/20.
+- **Contraste avec T77** : la **porte** cachée marchait (les routes disjointes) ; le **but** caché échoue (les routes concurrentes) — c'est la **disjonction** qui compte, pas la cache.
+- **86 états** : la politique n'a pas la place de deux buts dans un état unique.
+- **La négative est explicite** : 0/20 au but 0.
+
+## L'état
+
+- Fiche : [`rapport-pensee-concurrentes.md`](../../reports/rapport-pensee-concurrentes.md) ; JSON [`pensee-concurrentes.json`](../../reports/pensee-concurrentes.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T78 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **81/81 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **483 fiches / 573 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~11 min** ; les portes tiennent avec `timeout 1200`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **La phase dans l'état** : `_cle` gagne la phase ; les deux buts coexistent (le correctif).
+2. **20 graines** : lisser la courbe du seuil.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round met la **phase dans l'état** — le correctif des routes concurrentes.
+
+
+## Tour 96
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 83/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1280 caractères tronqués]`
+
+  ```
+e97e3d4d B13 — LES ROUTES CONCURRENTES : BUT CACHÉ, 0/20 ET 20/20, LA PHASE DOIT ENTRER ; 81/81
+ok
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 2178, in seule_verite3
+    return seule_verite2(p, phase, max_pas)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 2155, in seule_verite2
+    a = p.propose(e, None)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 2143, in propose
+    cle = self._cle(etat)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 2172, in _cle
+    x, y, o = _decode_p(etat)
+              ^^^^^^^^^
+NameError: name '_decode_p' is not defined
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _cle\" tools/pensee/operateurs.py | head -5; sed -n '/class PolitiqueApprise(/,/def _q/p' tools/pensee/operateurs.py | grep -n \"def _cle\" -A6", "description": "Lire la définition de _cle"}`
+
+  ```
+221:    def _cle(e: Etat) -> tuple:
+880:    def _cle(self, e: Etat) -> tuple:
+953:    def _cle(self, e: Etat) -> tuple:
+1025:    def _cle(self, e: Etat) -> tuple:
+2171:    def _cle(self, etat):
+21:    def _cle(e: Etat) -> tuple:
+22-        d = {c.id: c.corps["v"] for c in e.candidats}
+23-        return int(d["x"]), int(d["y"]), bool(d["open"])
+24-
+25-    def _q(self, cle, a):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''    def _cle(self, etat):\n        x, y, o = _decode_p(etat)\n        return (x, y, o, self.phase)''',\n'''    def _cle(s … [665 caractères tronqués]`
+
+  ```
+ok
+4000 q 86 but 0: 0 /20 but 1: 0 /20 pas 200.0
+8000 q 87 but 0: 0 /20 but 1: 0 /20 pas 200.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''    def _cle(self, etat):\n        return super()._cle(etat) + (self.phase,)''',\n'''    def _cle(self, etat):\n        r … [1596 caractères tronqués]`
+
+  ```
+ok
+4000 q 145 but 0: 20 /20 but 1: 20 /20 pas 6.0
+8000 q 158 but 0: 20 /20 but 1: 20 /20 pas 6.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T78 les routes concurrentes       but caché : but 0 0/20, but 1 20/20 (négatif)\\n\",\n\"  T78 les routes concurrentes     … [1457 caractères tronqués]`
+
+  ```
+ok
+  ✅ T77 vérité qui change  vérité : phase 0 20/20, phase 1 20/20
+  ✅ T78 routes concurrentes concurrentes : but 0 0/20, but 1 20/20 (la phase doit entrer)
+  ✅ T79 phase dans l'état  phase dans l'état : but 0 20/20, but 1 20/20, 145 Q
+  82/82 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-phase-etat.md <<'MD'\n# B13 — la phase dans l'état : le correctif, 20/20 aux deux buts\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **82/82 portes**  … [7216 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 484 fiche(s) · 574 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2817 mots > budget 2800 (T1)
+  en-cours · 1619 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-seuil-fin.md`](rapport-pensee-seuil-fin.md) | **B13** — le seuil fin : ×0,4 réussit, ×0,45 échoue, non monotone, … [637 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 484 fiche(s) · 574 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1200 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-phase-etat.md reports/pensee-phase-etat.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-co … [504 caractères tronqués]`
