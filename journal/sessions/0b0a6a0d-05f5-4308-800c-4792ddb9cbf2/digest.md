@@ -17963,3 +17963,46 @@ Z-g2 2412762
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [928 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-1067]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1061 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/base-34m-canal.pt 2>/dev/null && echo OK; tail -1 work/n2j/base-34m-canal.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1067", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+c58ae86c ÉTAT — COMPTEURS APRÈS N2.z (495 FICHIERS, 582 JSON) ET L'HEURE DE LA NUIT
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/rapport-n2-*.md | wc -l; ls reports/rapport-n2-*.md | sed 's#reports/rapport-##;s#.md##' | tr '\\n' ' '; echo; git log --oneline --since=\"2026-11-01 17:00\" | wc -l; git log --oneline --since=\"2026-11-01 17:00\" --author … [91 caractères tronqués]`
+
+  ```
+29
+n2-34m-distille n2-anglais-34m n2-anglais-distille n2-anglais n2-budget n2-canal-34m n2-canal-distille n2-canal n2-capacite-34m n2-capacite n2-capacite-reelle n2-combine n2-corpus-elargi n2-corpus-reel n2-distillation n2-distillation-reelle n2-diversite n2-echantillon n2-fenetre-r1 n2-hierarchie n2-longueur n2-longueur-reelle n2-multilingue-34m-distille n2-multilingue-34m n2-multilingue-capacite n2-multilingue-distille n2-multilingue n2-professeur n2-propre 
+156
+c58ae86c ÉTAT — COMPTEURS APRÈS N2.z (495 FICHIERS, 582 JSON) ET L'HEURE DE LA NUIT
+24fb271e N2.z — LE CANAL À 34,3 M : 4,00 → 3,51, LE MEILLEUR MODÈLE DE LA NUIT
+4712db13 B13 — LES SOUS-ENSEMBLES DU GOLD : POS 0,8214 SUR LES 20 NOUVELLES ; 89/89
+04:33
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/Z-g*.pt 2>/dev/null; tail -1 work/n2j/Z-g1.log 2>/dev/null; tail -1 work/n2j/Z-g2.log 2>/dev/null", "description": "Wait for the Z-g distillations"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1069]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1069", "timeout_ms": 1500000, "wait": true}`

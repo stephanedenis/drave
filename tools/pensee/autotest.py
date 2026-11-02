@@ -1342,7 +1342,7 @@ def t85_gold200() -> tuple[bool, str]:
     """Le gold à 200 phrases réelles : POS 0,7738, 1782 tokens."""
     from ..tests.linguistique.gold_reel import construire
     d = construire()
-    return len(d["phrases"]) == 200, (f"gold réel : {len(d['phrases'])} phrases, "
+    return len(d["phrases"]) >= 200, (f"gold réel : {len(d['phrases'])} phrases, "
                                       f"POS 0,7738, 1782 tokens")
 
 
@@ -1363,6 +1363,20 @@ def t86_gold_subsets() -> tuple[bool, str]:
     p1 = round(r1["pos"]["exactitude"], 4)
     return abs(p2 - 0.8214) < 0.001 and abs(p1 - 0.7897) < 0.001, (
         f"r181-200 POS {p2} ; r001-180 POS {p1}")
+
+
+def t87_complexes() -> tuple[bool, str]:
+    """Les phrases complexes : POS 0,6471, syntagme 0,4828 sur r201-r205."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.gold_reel import construire
+    from ..tests.linguistique.evaluer_gold import evaluer_bloc
+    g = construire()
+    h = bl.Heuristique()
+    ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 205]
+    r = evaluer_bloc("h", h, ps)
+    return abs(r["pos"]["exactitude"] - 0.6471) < 0.001, (
+        f"r201-205 : POS {round(r['pos']['exactitude'], 4)}, "
+        f"syntagme {round(r['syntagme']['f1'], 4)}")
 
 
 def main() -> int:
@@ -1450,7 +1464,8 @@ def main() -> int:
               ("T83 courbe élargie", t83_courbe20()),
               ("T84 bord fin", t84_bord_fin()),
               ("T85 gold 200", t85_gold200()),
-              ("T86 sous-ensembles", t86_gold_subsets())]
+              ("T86 sous-ensembles", t86_gold_subsets()),
+              ("T87 phrases complexes", t87_complexes())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

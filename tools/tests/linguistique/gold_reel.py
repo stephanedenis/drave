@@ -628,6 +628,21 @@ PHRASES = [
     ("r200", "en", "They watch the film.",
      [("They", "PRON"), ("watch", "VERB"), ("the", "DET"), ("film", "NOUN")],
      [("GN", "They", "agent"), ("GV", "watch", "prédicat"), ("GN", "the film", "patient")], {"acte": "assertion"}),
+    ("r201", "fr", "L'homme qui parle est mon père.",
+     [("L'", "DET"), ("homme", "NOUN"), ("qui", "PRON"), ("parle", "VERB"), ("est", "AUX"), ("mon", "DET"), ("père", "NOUN")],
+     [("GN", "L'homme", "agent"), ("REL", "qui parle", "sujet", "homme"), ("GV", "est", "prédicat"), ("GN", "mon père", "attribut")], {"acte": "assertion"}),
+    ("r202", "fr", "Je pense que tu as raison.",
+     [("Je", "PRON"), ("pense", "VERB"), ("que", "CONJ"), ("tu", "PRON"), ("as", "AUX"), ("raison", "NOUN")],
+     [("GN", "Je", "agent"), ("GV", "pense", "prédicat"), ("SUB", "que tu as raison", "complément", "pense")], {"acte": "assertion"}),
+    ("r203", "fr", "Le livre que j'ai lu est bon.",
+     [("Le", "DET"), ("livre", "NOUN"), ("que", "PRON"), ("j'", "PRON"), ("ai", "AUX"), ("lu", "VERB"), ("est", "AUX"), ("bon", "ADJ")],
+     [("GN", "Le livre", "patient"), ("REL", "que j'ai lu", "objet", "livre"), ("GV", "est", "prédicat"), ("ADJ", "bon", "attribut")], {"acte": "assertion"}),
+    ("r204", "en", "The man who speaks is my father.",
+     [("The", "DET"), ("man", "NOUN"), ("who", "PRON"), ("speaks", "VERB"), ("is", "AUX"), ("my", "DET"), ("father", "NOUN")],
+     [("GN", "The man", "agent"), ("REL", "who speaks", "sujet", "man"), ("GV", "is", "prédicat"), ("GN", "my father", "attribut")], {"acte": "assertion"}),
+    ("r205", "en", "I think that you are right.",
+     [("I", "PRON"), ("think", "VERB"), ("that", "CONJ"), ("you", "PRON"), ("are", "AUX"), ("right", "ADJ")],
+     [("GN", "I", "agent"), ("GV", "think", "prédicat"), ("SUB", "that you are right", "complément", "think")], {"acte": "assertion"}),
 ]
 
 

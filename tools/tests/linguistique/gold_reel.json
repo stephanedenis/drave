@@ -12743,6 +12743,421 @@
     "acte": "assertion"
    },
    "source": "reel"
+  },
+  {
+   "id": "r201",
+   "langue": "fr",
+   "texte": "L'homme qui parle est mon père.",
+   "mots": [
+    {
+     "texte": "L'",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "homme",
+     "pos": "NOUN",
+     "debut": 2,
+     "fin": 7
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 8,
+     "fin": 11
+    },
+    {
+     "texte": "parle",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 17
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 18,
+     "fin": 21
+    },
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 22,
+     "fin": 25
+    },
+    {
+     "texte": "père",
+     "pos": "NOUN",
+     "debut": 26,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "L'homme",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "REL",
+     "texte": "qui parle",
+     "role": "sujet",
+     "debut": 8,
+     "fin": 17,
+     "cibles": [
+      "homme"
+     ],
+     "cible": "homme"
+    },
+    {
+     "type": "GV",
+     "texte": "est",
+     "role": "prédicat",
+     "debut": 18,
+     "fin": 21
+    },
+    {
+     "type": "GN",
+     "texte": "mon père",
+     "role": "attribut",
+     "debut": 22,
+     "fin": 30
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r202",
+   "langue": "fr",
+   "texte": "Je pense que tu as raison.",
+   "mots": [
+    {
+     "texte": "Je",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "pense",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "texte": "tu",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 15
+    },
+    {
+     "texte": "as",
+     "pos": "AUX",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "raison",
+     "pos": "NOUN",
+     "debut": 19,
+     "fin": 25
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Je",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "pense",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "SUB",
+     "texte": "que tu as raison",
+     "role": "complément",
+     "debut": 9,
+     "fin": 25,
+     "cibles": [
+      "pense"
+     ],
+     "cible": "pense"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r203",
+   "langue": "fr",
+   "texte": "Le livre que j'ai lu est bon.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "que",
+     "pos": "PRON",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "texte": "j'",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 15
+    },
+    {
+     "texte": "ai",
+     "pos": "AUX",
+     "debut": 15,
+     "fin": 17
+    },
+    {
+     "texte": "lu",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "bon",
+     "pos": "ADJ",
+     "debut": 25,
+     "fin": 28
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le livre",
+     "role": "patient",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "REL",
+     "texte": "que j'ai lu",
+     "role": "objet",
+     "debut": 9,
+     "fin": 20,
+     "cibles": [
+      "livre"
+     ],
+     "cible": "livre"
+    },
+    {
+     "type": "GV",
+     "texte": "est",
+     "role": "prédicat",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "type": "ADJ",
+     "texte": "bon",
+     "role": "attribut",
+     "debut": 25,
+     "fin": 28
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r204",
+   "langue": "en",
+   "texte": "The man who speaks is my father.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "man",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "who",
+     "pos": "PRON",
+     "debut": 8,
+     "fin": 11
+    },
+    {
+     "texte": "speaks",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "texte": "my",
+     "pos": "DET",
+     "debut": 22,
+     "fin": 24
+    },
+    {
+     "texte": "father",
+     "pos": "NOUN",
+     "debut": 25,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The man",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "REL",
+     "texte": "who speaks",
+     "role": "sujet",
+     "debut": 8,
+     "fin": 18,
+     "cibles": [
+      "man"
+     ],
+     "cible": "man"
+    },
+    {
+     "type": "GV",
+     "texte": "is",
+     "role": "prédicat",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "type": "GN",
+     "texte": "my father",
+     "role": "attribut",
+     "debut": 22,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r205",
+   "langue": "en",
+   "texte": "I think that you are right.",
+   "mots": [
+    {
+     "texte": "I",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 1
+    },
+    {
+     "texte": "think",
+     "pos": "VERB",
+     "debut": 2,
+     "fin": 7
+    },
+    {
+     "texte": "that",
+     "pos": "CONJ",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "you",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "texte": "are",
+     "pos": "AUX",
+     "debut": 17,
+     "fin": 20
+    },
+    {
+     "texte": "right",
+     "pos": "ADJ",
+     "debut": 21,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "I",
+     "role": "agent",
+     "debut": 0,
+     "fin": 1
+    },
+    {
+     "type": "GV",
+     "texte": "think",
+     "role": "prédicat",
+     "debut": 2,
+     "fin": 7
+    },
+    {
+     "type": "SUB",
+     "texte": "that you are right",
+     "role": "complément",
+     "debut": 8,
+     "fin": 26,
+     "cibles": [
+      "think"
+     ],
+     "cible": "think"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
   }
  ]
 }
