@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 35.5 h |
-| Tours | 362 |
-| Messages | 2162 |
-| Appels d'outils | 1432 |
+| Durée | 35.7 h |
+| Tours | 364 |
+| Messages | 2171 |
+| Appels d'outils | 1437 |
 | Fichiers touchés | 26 |
-| Commandes | 1268 |
+| Commandes | 1273 |
 | Sous-agents | 0 |
 | Commits | 79 |
 | Compactages de contexte | 4 |
@@ -751,6 +751,10 @@
 **Tour 361** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 362** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 363** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 364** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8493,6 +8497,48 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 362 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
+*3 appels d'outils.* Actions notables :
+
+- bash — Wait 7 min then check OCR progress
+- bash — Check 18th book start
+- bash — Check 18th OCR start
+
+**Synthèse produite :**
+
+⏵ Round 350 : 17e livre TERMINÉ — Information Architecture 485 p, 867 184 car. ; 16 livres au corpus
+
+**Round 350/1000 — le 17e livre est clos ; 16 livres au corpus.**
+
+- **Information Architecture, 4th Edition** : **485 pages, 867 184 caractères** ; le **train** passe à **13 168 830 octets**.
+- **Le corpus OCR : 16 livres, 6 188 pages, 13 044 907 caractères**.
+- **Le 18e livre** entre en OCR (page 24 du rendu `s_nx3lvg`).
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40) ; **le doublon** du 14e est prouvé.
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : 16 livres, 13,04 M caractères ; le goal reste actif.
+
+### Tour 363 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Wait 7 min then check OCR progress
+- bash — Check 18th OCR progress
+
+**Synthèse produite :**
+
+⏵ Round 351 : 18e livre en OCR à 220/421 pages
+
+**Round 351/1000 — le 18e livre est à 52 % (220/421 pages).**
+
+- **`tesseract`** lit la page **220/421** du 18e livre ; la fin vers **04 h 27**.
+- **Le corpus OCR : 16 livres, 6 188 pages, 13 044 907 caractères** ; le train **13 168 830 octets**.
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40) ; **le doublon** du 14e est prouvé.
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le 18e livre avance ; le goal reste actif.
+
+### Tour 364 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
 *1 appels d'outils.* Actions notables :
 
 - bash — Wait 7 min then check OCR progress
@@ -8572,7 +8618,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1228 autres
+- … et 1233 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8700,7 +8746,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ## 5. Erreurs rencontrées
 
-114 sorties en erreur ou divergentes. Les premières :
+116 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

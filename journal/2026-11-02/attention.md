@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,12 +13,13 @@
 | 02:20 | `07e87a6f` | DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40 | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
 | 02:54 | `a58e91cb` | ROADMAP — LA PROCHAINE ACTION N2 CHANGE : DISTILLATION DU CANAL, ANGLAIS 34,3 M, PUIS LA FENÊTRE | `en-cours.md`, `roadmap.md`, `README.md` (+16) |
 | 03:39 | `4bad0fab` | N2 — LES FICHES DE LA FIN DE NUIT : PROFESSEUR, MULTILINGUE 34 M, ÉCHANTILLON, FENÊTRE, ANGLAIS 34 M | `en-cours.md`, `README.md`, `apprentissage.md` (+22) |
+| 04:10 | `bf94bf27` | ROADMAP — N2 EST COMPLET : LA SUITE EST LA FENÊTRE, L'ÉCHELLE MULTILINGUE ET LA RESTITUTION | `en-cours.md`, `roadmap.md`, `README.md` (+11) |
 
 ## Sessions actives ce jour
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 35.9 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 35.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 35.5 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 35.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 35.7 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 

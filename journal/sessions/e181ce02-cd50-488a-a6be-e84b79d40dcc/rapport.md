@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 35.4 h |
+| Durée | 35.7 h |
 | Tours | 103 |
-| Messages | 1319 |
-| Appels d'outils | 1160 |
+| Messages | 1329 |
+| Appels d'outils | 1170 |
 | Fichiers touchés | 25 |
-| Commandes | 940 |
+| Commandes | 949 |
 | Sous-agents | 2 |
-| Commits | 132 |
+| Commits | 133 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -5480,6 +5480,19 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **phrases co
 
 ### Tour 103 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
+*10 appels d'outils.* Actions notables :
+
+- bash — Repérer les fonctions d'évaluation et le POS
+- bash — Mesurer le POS sur les 20 nouvelles phrases
+- bash — Lire la signature d'evaluer_bloc
+- bash — Voir comment le bloc est construit
+- bash — Lire la construction du bloc dans main
+- bash — Mesurer le POS et le syntagme sur les deux sous-ensembles
+- bash — Mesurer les sous-ensembles du gold et écrire la fiche
+- bash — Trim README et passer les portes
+- bash — Committer les sous-ensembles du gold
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5559,7 +5572,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **phrases co
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 900 autres
+- … et 909 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5687,7 +5700,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **phrases co
 
 ## 5. Erreurs rencontrées
 
-16 sorties en erreur ou divergentes. Les premières :
+17 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -5839,4 +5852,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **phrases co
 - ÉTAT — COMPTEURS RÉELS (488/578)" 2>&1 | tail -2; git log -1 --format='%h %s'
 - B13 — LE BORD FIN : 73 % À 0,38, 100 % À 0,41 (400 ESSAIS), SEUIL ROBUSTE 0,41 ; 87/87" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BORD FIN"; then 
 - B13 — LE GOLD À 200 RÉELS : POS 0,7738, 1 782 TOKENS, LA CIBLE EST ATTEINTE ; 88/88" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "GOLD À 200"; then e
+- B13 — LES SOUS-ENSEMBLES DU GOLD : POS 0,8214 SUR LES 20 NOUVELLES ; 89/89" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SOUS-ENSEMBLES"; then echo "
 

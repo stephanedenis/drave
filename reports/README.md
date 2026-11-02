@@ -15,11 +15,11 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-gold-200-subsets.md`](rapport-pensee-gold-200-subsets.md) | **B13** — les sous-ensembles : POS 0,8214 sur les 20 nouvelles, **89/89** |
 | [`rapport-pensee-gold-200.md`](rapport-pensee-gold-200.md) | **B13** — le gold à 200 réels : POS 0,7738, **88/88** |
 | [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, **87/87** |
 | [`rapport-pensee-courbe20.md`](rapport-pensee-courbe20.md) | **B13** — la courbe sur 20 graines : 20 % à 0,35, 100 % à 0,41, **86/86** |
 | [`rapport-pensee-cycle.md`](rapport-pensee-cycle.md) | **B13** — la pénalité -1 ne casse pas le cycle : 0/20, (3,0) stale, **85/85** |
-| [`rapport-pensee-vote.md`](rapport-pensee-vote.md) | **B13** — le vote de signaux : 5 looks, 0/20, le cycle est structurel, **84/84** |
 | [`rapport-pensee-seuil.md`](rapport-pensee-seuil.md) | **B13** — le seuil d'oubli : ×0,5 réussit, ×0,2 échoue, seuil dans (0,2 ; 0,5], **74/74** |
 | [`rapport-pensee-oubli-total.md`](rapport-pensee-oubli-total.md) | **B13** — l'oubli total : 0/20 buts, la mémoire est nécessaire, **73/73** |
 | [`rapport-pensee-oubli-fort.md`](rapport-pensee-oubli-fort.md) | **B13** — la mémoire très courte : Q × 0,5/10, 20/20, 8,0 pas, **72/72** |

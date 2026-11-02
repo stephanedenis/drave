@@ -1346,6 +1346,25 @@ def t85_gold200() -> tuple[bool, str]:
                                       f"POS 0,7738, 1782 tokens")
 
 
+def t86_gold_subsets() -> tuple[bool, str]:
+    """Les sous-ensembles : les 20 nouvelles (POS 0,8214) contre les 180 anciennes (0,7897)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.gold_reel import construire
+    from ..tests.linguistique.evaluer_gold import evaluer_bloc
+    g = construire()
+    h = bl.Heuristique()
+
+    def sous(a: int, b: int):
+        return [p for p in g["phrases"] if a <= int(p["id"][1:]) <= b]
+
+    r1 = evaluer_bloc("h", h, sous(1, 180))
+    r2 = evaluer_bloc("h", h, sous(181, 200))
+    p2 = round(r2["pos"]["exactitude"], 4)
+    p1 = round(r1["pos"]["exactitude"], 4)
+    return abs(p2 - 0.8214) < 0.001 and abs(p1 - 0.7897) < 0.001, (
+        f"r181-200 POS {p2} ; r001-180 POS {p1}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1430,7 +1449,8 @@ def main() -> int:
               ("T82 pénalité -1", t82_cycle()),
               ("T83 courbe élargie", t83_courbe20()),
               ("T84 bord fin", t84_bord_fin()),
-              ("T85 gold 200", t85_gold200())]
+              ("T85 gold 200", t85_gold200()),
+              ("T86 sous-ensembles", t86_gold_subsets())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

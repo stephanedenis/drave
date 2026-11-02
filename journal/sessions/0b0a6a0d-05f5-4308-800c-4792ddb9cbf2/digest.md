@@ -17867,3 +17867,27 @@ pas  700 · perte 1.5627 · PPL val 4.118 · 37 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d{2} h \\d{2} HNE \\(heure locale, EST\\)\\.\\*\\*\",\n           \"**Mis à jour : … [505 caractères tronqués]`
+
+  ```
+ts ok
+[still running after 60000ms; moved to background job bash-1060]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1060", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+bf94bf27 ROADMAP — N2 EST COMPLET : LA SUITE EST LA FENÊTRE, L'ÉCHELLE MULTILINGUE ET LA RESTITUTION
+04:11
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/base-34m-canal.pt 2>/dev/null && echo OK; tail -1 work/n2j/base-34m-canal.log", "description": "Wait for the 34M channel model"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1061]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1061", "timeout_ms": 1200000, "wait": true}`

@@ -24951,3 +24951,118 @@ Round: 90/1000
 Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
 </goal_round>
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nt=pathlib.Path('tools/tests/linguistique/evaluer_gold.py').read_text()\nimport re\nfor m in re.finditer(r'^def (\\w+)', t, re.M):\n    print(m.group(1))\nPY\ngrep -n \"def _pos\\b\\|def _pos(\" tools … [96 caractères tronqués]`
+
+  ```
+charger
+par_source
+_pos_map
+_seg
+_tete
+_pragma
+_prf
+evaluer_bloc
+main
+459:    def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, pathlib\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.gold_reel import construire\nfrom tools.tests.linguistique.evaluer_gold import evaluer_bloc\ng=construire()\ndef sous(ids):\n    return {\"p … [440 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 11, in <module>
+TypeError: evaluer_bloc() missing 2 required positional arguments: 'bloc' and 'phrases'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def evaluer_bloc\" -A12 tools/tests/linguistique/evaluer_gold.py", "description": "Lire la signature d'evaluer_bloc"}`
+
+  ```
+68:def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
+69-    tp = fp = fn = ttp = tfp = tfn = 0
+70-    pos_ok = pos_n = pos_ok_ferme = pos_n_ferme = pos_ok_ouvert = pos_n_ouvert = 0
+71-    conf = defaultdict(Counter)
+72-    acte_ok = neg_ok = mod_ok = ds_ok = 0
+73-    fractions = []
+74-    att_n = att_labels = att_top1 = att_topk = att_exact = 0
+75-    att_t_n = att_t_labels = att_t_top1 = att_t_topk = 0
+76-    for phrase in phrases:
+77-        a = bloc.analyser(phrase["texte"], phrase["langue"])
+78-        fractions.append(a.fraction_semantique)
+79-        pos = _pos_map(a)
+80-        for mot in phrase["mots"]:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"BlocLinguistique\\|evaluer_bloc(\" tools/tests/linguistique/evaluer_gold.py | head -12", "description": "Voir comment le bloc est construit"}`
+
+  ```
+68:def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
+180:    resultats = {nom: {src: evaluer_bloc(nom, bloc, ps) for src, ps in sources.items()}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '150,182p' tools/tests/linguistique/evaluer_gold.py", "description": "Lire la construction du bloc dans main"}`
+
+  ```
+"fraction_semantique": round(sum(fractions) / max(1, n), 4) if fractions else 0.0,
+        "attachement": {"cibles": att_n, "labels": att_labels,
+                        "top1": att_top1, "topk": att_topk, "exact": att_exact,
+                        "top1_taux": round(att_top1 / max(1, att_n), 4),
+                        "topk_taux": round(att_topk / max(1, att_n), 4),
+                        "exact_taux": round(att_exact / max(1, att_n), 4),
+                        "couverture": round(att_labels / max(1, att_n), 4)},
+        "attachement_tete": {"cibles": att_t_n, "labels": att_t_labels,
+                             "top1": att_t_top1, "topk": att_t_topk,
+                             "top1_taux": round(att_t_top1 / max(1, att_t_n), 4),
+                             "topk_taux": round(att_t_topk / max(1, att_t_n), 4),
+                             "couverture": round(att_t_labels / max(1, att_t_n), 4)},
+    }
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--json", default="")
+    ap.add_argument("--reel", action="store_true")
+    args = ap.parse_args()
+    phrases = charger()
+    h, n = bl.Heuristique(), bl.MockNeuronal()
+    cascade =
+… [628 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.gold_reel import construire\nfrom tools.tests.linguistique.evaluer_gold import evaluer_bloc\ng=construire(); h= … [549 caractères tronqués]`
+
+  ```
+r001-r180 180 POS 0.7897 tokens 894 syntagme F1 0.1916 tete F1 0.3255
+r181-r200 20 POS 0.8214 tokens 84 syntagme F1 0.1053 tete F1 0.2632
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T85 le gold à 200 réels          POS 0,7738, 1782 tokens\\n\",\n\"  T85 le gold à 200 réels          POS 0,7738, 1782 toke … [7421 caractères tronqués]`
+
+  ```
+autotest ok
+état ok
+  revue de documentation · 493 fiche(s) · 581 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2815 mots > budget 2800 (T1)
+  en-cours · 1625 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-vote.md`](rapport-pensee-vote.md) | **B13** — le vote de signaux : 5 looks, 0/20, le cycle est structurel, **84/ … [589 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1800 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-gold-200-subsets.md reports/pensee-gold-subsets.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotag … [483 caractères tronqués]`
