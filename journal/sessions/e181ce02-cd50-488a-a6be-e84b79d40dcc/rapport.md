@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 32.4 h |
-| Tours | 82 |
-| Messages | 1114 |
-| Appels d'outils | 1001 |
+| Durée | 32.5 h |
+| Tours | 83 |
+| Messages | 1123 |
+| Appels d'outils | 1008 |
 | Fichiers touchés | 25 |
-| Commandes | 812 |
+| Commandes | 818 |
 | Sous-agents | 2 |
-| Commits | 103 |
+| Commits | 104 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -195,6 +195,8 @@
 **Tour 81** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 82** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 83** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4360,6 +4362,56 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse à **un look sur 
 - bash — Committer l'information ultra-rare
 - job_output
 
+**Synthèse produite :**
+
+⏵ Information ultra-rare : utile 0,1 %, 4 looks, v final 0,44, 20/20 ; 68/68
+
+Le round 69 du goal est livré : **4 looks utiles** sur 4000 suffisent — la rareté n'est pas la limite. Commit **`82b0ebe0`**.
+
+\## L'information ultra-rare
+
+Même monde que T64, mais la fiabilité est **0,9 un épisode sur mille** et **0,5** les autres : 4 looks utiles sur 4000.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| **4000** | **20/20** | **0,44** | 506 | 8,0 |
+| 8000 | 20/20 | 0,5 | 572 | 8,0 |
+| utile 1 % (T64) | 20/20 | 0,54 | 535 | 8,0 |
+
+**Ce que ça dit** :
+
+- **4 looks utiles suffisent** : la politique apprend la porte avec 4 observations fiables ; le reste (0,5) est neutre.
+- **v ≈ 0,44** : la fenêtre ne voit presque que des looks inutiles ; elle reste au hasard, et cela ne l'empêche pas de réussir.
+- **Le coût est nul** (8,0 pas) : la rareté ne coûte pas de pas.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-ultra-rare.md`](../../reports/rapport-pensee-ultra-rare.md) ; JSON [`pensee-ultra-rare.json`](../../reports/pensee-ultra-rare.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T65 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **68/68 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **467 fiches / 559 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Un look** (1/4000) : la limite absolue.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste **un seul look utile** — la limite absolue de la rareté.
+
+### Tour 83 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Tester un seul look utile
+- bash — Ajouter la porte T66 (un seul look)
+- bash — Écrire la fiche d'un seul look
+- bash — Trim README et portes
+- bash — Réduire le README de 2 mots
+- bash — Committer un seul look
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4439,7 +4491,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse à **un look sur 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 772 autres
+- … et 778 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4690,4 +4742,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse à **un look sur 
 - B13 — L'INFORMATION RARE : UTILE 10 %, v FINAL 0,8, 20/20, 8,0 PAS ; 66/66" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "INFORMATION RARE"; then echo
 - B13 — L'INFORMATION TRÈS RARE : UTILE 1 %, v FINAL 0,54, 20/20, 8,0 PAS ; 67/67" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "INFORMATION TRÈS RARE";
 - B13 — L'INFORMATION ULTRA-RARE : UTILE 0,1 %, 4 LOOKS, v FINAL 0,44, 20/20 ; 68/68" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ULTRA-RARE"; then ec
+- B13 — UN SEUL LOOK : 1/4000, v FINAL 0,44, 20/20, 8,0 PAS ; 69/69" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "UN SEUL LOOK"; then echo "COMMIT OK $
 

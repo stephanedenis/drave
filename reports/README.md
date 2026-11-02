@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-un-look.md`](rapport-pensee-un-look.md) | **B13** — un seul look : 1/4000, v final 0,44, 20/20, 8,0 pas, **69/69** |
 | [`rapport-pensee-ultra-rare.md`](rapport-pensee-ultra-rare.md) | **B13** — l'information ultra-rare : utile 0,1 %, 4 looks, v final 0,44, 20/20, **68/68** |
 | [`rapport-pensee-tres-rare.md`](rapport-pensee-tres-rare.md) | **B13** — l'information très rare : utile 1 %, v final 0,54, 20/20, 8,0 pas, **67/67** |
 | [`rapport-pensee-rare.md`](rapport-pensee-rare.md) | **B13** — l'information rare : utile 10 %, v final 0,8, 20/20, 8,0 pas, **66/66** |
@@ -37,7 +38,6 @@
 | [`rapport-pensee-phase-graines.md`](rapport-pensee-phase-graines.md) | **B13** — la phase sur 5 graines : 5/5 buts, 10–14 pas, 376–422 états-Q, **41/41** |
 | [`rapport-pensee-phase.md`](rapport-pensee-phase.md) | **B13** — la période qui change : 3 puis 2 pas, A* 28 nœuds, politique but/10, **40/40** |
 | [`rapport-pensee-bruit.md`](rapport-pensee-bruit.md) | **B13** — le bruit variable : 50–95 %, 6/6 buts, effort 3 → 1 essai, **36/36** |
-| [`rapport-pensee-mobile.md`](rapport-pensee-mobile.md) | **B13** — la porte mobile : 2 positions, A* 2/2, politique seule but/8, 170 états-Q, **34/34** |
 | [`rapport-pensee-graines.md`](rapport-pensee-graines.md) | **B13** — la robustesse sur 5 graines : 5/5 bruits, 5/5 stables, **33/33** |
 | [`rapport-pensee-ouverte.md`](rapport-pensee-ouverte.md) | **B13** — le curriculum `open` : 74 états-Q, bruit but/9, stable but/8, **32/32** |
 | [`rapport-pensee-audit.md`](rapport-pensee-audit.md) | **B13** — l'audit des mesures : 15/15 cohérentes, la politique minute ne transfère pas au bruit, **31/31** |

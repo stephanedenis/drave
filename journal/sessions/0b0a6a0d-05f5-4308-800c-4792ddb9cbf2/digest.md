@@ -16637,3 +16637,26 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-979", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-971 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/route-480 2>/dev/null | head -3; tail -3 work/n2j/teacher-480.log; tail -2 /tmp/portes-nuit.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/T-g*.pt 2>/dev/null; for g in 1 2 3; do echo \"-- T-g$g\"; tail -1 work/n2j/T-g$g.log 2>/dev/null; done", "description": "Check the teacher-480 students"}`
+
+  ```
+01:09
+-- T-g1
+pas 11750 · seq 128 · perte 26.2208 · PPL 128/4 3.9779 · 821 s
+-- T-g2
+pas 12250 · seq 128 · perte 22.3207 · PPL 128/4 3.9496 · 829 s
+-- T-g3
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 780; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/T-g*.pt 2>/dev/null; for g in 1 2 3; do echo \"-- T-g$g\"; tail -1 work/n2j/T-g$g.log 2>/dev/null; done", "description": "Wait for the teacher-480 students"}`

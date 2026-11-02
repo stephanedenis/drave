@@ -1,0 +1,29 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "69/69",
+ "utile": "1 look à l'épisode 0",
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 506,
+  "v_final": 0.44,
+  "runs": 20,
+  "buts": 20,
+  "pas_moyen": 8.0
+ },
+ "contraste": {
+  "quatre_looks": {
+   "v_final": 0.44,
+   "pas": 8.0
+  },
+  "sans_mise_a_jour": {
+   "buts": 0
+  }
+ },
+ "limites": [
+  "look à l'épisode 0",
+  "deux régimes",
+  "toy"
+ ]
+}

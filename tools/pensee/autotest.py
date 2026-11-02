@@ -1061,6 +1061,22 @@ def t65_tres_tres_rare() -> tuple[bool, str]:
                       f"{round(pas_total / 20, 1)} pas")
 
 
+def t66_un_look() -> tuple[bool, str]:
+    """Un seul look utile : 20/20 buts, v final ≈ 0,44."""
+    from .operateurs import PolitiqueAppriseBayesUnLook, seule_bayes_un_look
+    p = PolitiqueAppriseBayesUnLook(episodes=4000, graine=0)
+    p.apprendre()
+    ok = 0
+    pas_total = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, pas = seule_bayes_un_look(p)
+        ok += b
+        pas_total += pas
+    return ok == 20, (f"un look : {ok}/20 buts, v final {round(p.v, 3)}, "
+                      f"{round(pas_total / 20, 1)} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1125,7 +1141,8 @@ def main() -> int:
               ("T62 fiabilité asymétrique", t62_asym()),
               ("T63 information rare", t63_rare()),
               ("T64 information très rare", t64_tres_rare()),
-              ("T65 information ultra-rare", t65_tres_tres_rare())]
+              ("T65 information ultra-rare", t65_tres_tres_rare()),
+              ("T66 un seul look", t66_un_look())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

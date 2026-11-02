@@ -21562,3 +21562,131 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-ultra-rare.md reports/pensee-ultra-rare.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-co … [504 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-812]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-812", "timeout_ms": 600000, "wait": true}`
+
+  ```
+19 files changed, 1148 insertions(+), 33 deletions(-)
+ create mode 100644 reports/pensee-ultra-rare.json
+ create mode 100644 reports/rapport-pensee-ultra-rare.md
+COMMIT OK 1
+82b0ebe0 B13 — L'INFORMATION ULTRA-RARE : UTILE 0,1 %, 4 LOOKS, v FINAL 0,44, 20/20 ; 68/68
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Information ultra-rare : utile 0,1 %, 4 looks, v final 0,44, 20/20 ; 68/68
+
+Le round 69 du goal est livré : **4 looks utiles** sur 4000 suffisent — la rareté n'est pas la limite. Commit **`82b0ebe0`**.
+
+## L'information ultra-rare
+
+Même monde que T64, mais la fiabilité est **0,9 un épisode sur mille** et **0,5** les autres : 4 looks utiles sur 4000.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| **4000** | **20/20** | **0,44** | 506 | 8,0 |
+| 8000 | 20/20 | 0,5 | 572 | 8,0 |
+| utile 1 % (T64) | 20/20 | 0,54 | 535 | 8,0 |
+
+**Ce que ça dit** :
+
+- **4 looks utiles suffisent** : la politique apprend la porte avec 4 observations fiables ; le reste (0,5) est neutre.
+- **v ≈ 0,44** : la fenêtre ne voit presque que des looks inutiles ; elle reste au hasard, et cela ne l'empêche pas de réussir.
+- **Le coût est nul** (8,0 pas) : la rareté ne coûte pas de pas.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+## L'état
+
+- Fiche : [`rapport-pensee-ultra-rare.md`](../../reports/rapport-pensee-ultra-rare.md) ; JSON [`pensee-ultra-rare.json`](../../reports/pensee-ultra-rare.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T65 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **68/68 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **467 fiches / 559 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Un look** (1/4000) : la limite absolue.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste **un seul look utile** — la limite absolue de la rareté.
+
+
+## Tour 83
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 70/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1872 caractères tronqués]`
+
+  ```
+82b0ebe0 B13 — L'INFORMATION ULTRA-RARE : UTILE 0,1 %, 4 LOOKS, v FINAL 0,44, 20/20 ; 68/68
+ok
+4000 q 506 v final 0.44 20 runs: 20 /20 pas moyen 8.0
+8000 q 572 v final 0.5 20 runs: 20 /20 pas moyen 8.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T65 l'information ultra-rare     utile 0,1 % : 20/20 buts, v final ≈ 0,44\\n\",\n\"  T65 l'information ultra-rare     util … [1337 caractères tronqués]`
+
+  ```
+ok
+  ✅ T64 information très rare très rare : 20/20 buts, v final 0.54, 8.0 pas
+  ✅ T65 information ultra-rare ultra-rare : 20/20 buts, v final 0.44, 8.0 pas
+  ✅ T66 un seul look       un look : 20/20 buts, v final 0.44, 8.0 pas
+  69/69 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-un-look.md <<'MD'\n# B13 — un seul look : 20/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **69/69 portes** : l'observation n'est **fiable qu'une s … [6631 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 468 fiche(s) · 560 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2821 mots > budget 2800 (T1)
+  en-cours · 1563 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-mobile.md`](rapport-pensee-mobile.md) | **B13** — la porte mobile : 2 positions, A* 2/2, politique seule but/8,  … [626 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 468 fiche(s) · 560 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2801 mots > budget 2800 (T1)
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-un-look.md`](rapport-pensee-un-look.md) | **B13** — un seul look : 1 look sur 4000, v final 0,44, 20/20, 8,0 pas … [342 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 468 fiche(s) · 560 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-un-look.md reports/pensee-un-look.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md … [471 caractères tronqués]`
