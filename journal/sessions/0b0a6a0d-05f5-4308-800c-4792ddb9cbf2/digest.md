@@ -20437,3 +20437,26 @@ The command keeps running in the background. You will be notified when it finish
 background job bash-1186 (bash: sleep 700; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **job_output** `{"job_id": "bash-1189", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null; ls work/n2w/fr-60k.pt work/n2w/big-60k.pt 2>/dev/null", "description": "Check the 60k trainings"}`
+
+  ```
+11:41
+pas 27150 · perte 1.2797 · PPL val 3.948 · 1466 s
+pas 25750 · perte 1.3990 · PPL val 3.415 · 1337 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null; ls work/n2w/fr-60k.pt work/n2w/big-60k.pt 2>/dev/null", "description": "Wait for the 60k trainings to finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1191]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1191", "timeout_ms": 1500000, "wait": true}`

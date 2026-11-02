@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (66)
+## Commits du jour (67)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -74,6 +74,7 @@
 | 11:11 | `0e2d6a64` | B13 — LA SORTIE POS : 0,201, LA RESTITUTION SÉMANTIQUE NE RESTITUE PAS ; 120/120 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+21) |
 | 11:13 | `5d33e266` | N2.aa — LE CORPUS DE 831 Mo À COMPUTE CONSTANT : UN AUTRE DOMAINE, PAS PLUS DE SAVOIR | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |
 | 11:19 | `bfc2d1b4` | B13 — LA RESTITUTION AVEC SPANS : 1,0, LA PERTE ÉTAIT LE RENDU ; 121/121 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+23) |
+| 11:36 | `e850644f` | B13 — LA RÉPONSE : 19/19, L'ACTE COMMANDE LA SORTIE ; 123/123 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+24) |
 
 ## Chiffres du jour
 
@@ -83,8 +84,8 @@
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 43.2 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 43.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 43.4 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 43.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 43.0 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
@@ -141,6 +142,7 @@
 - [reports/rapport-pensee-look-tardif.md](../../reports/rapport-pensee-look-tardif.md)
 - [reports/rapport-pensee-miroir-espaces.md](../../reports/rapport-pensee-miroir-espaces.md)
 - [reports/rapport-pensee-miroir-pos.md](../../reports/rapport-pensee-miroir-pos.md)
+- [reports/rapport-pensee-miroir-reponse.md](../../reports/rapport-pensee-miroir-reponse.md)
 - [reports/rapport-pensee-miroir.md](../../reports/rapport-pensee-miroir.md)
 - [reports/rapport-pensee-rapide.md](../../reports/rapport-pensee-rapide.md)
 - [reports/rapport-pensee-rare.md](../../reports/rapport-pensee-rare.md)

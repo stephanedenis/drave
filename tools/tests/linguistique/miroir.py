@@ -105,6 +105,30 @@ def fidelite_reponse(a: bl.Annotation) -> float:
                    or (acte == "assertion" and rep == "assertion notée")) else 0.0
 
 
+def repondre_contenu(a: bl.Annotation) -> str | None:
+    """La réponse **au contenu** : None — le bloc n'a pas de modèle pour répondre.
+
+    C'est un résultat : la sortie la plus riche est celle que l'heuristique **ne peut pas**
+    produire. Elle demande un modèle (le neuronal réel, toujours bloqué).
+    """
+    return None
+
+
+def fidelite_contenu(phrases: list[dict], bloc=None) -> dict:
+    """Le taux de réponses au contenu : 0 tant que le bloc n'a pas de modèle."""
+    bloc = bloc or bl.Heuristique()
+    repondues = 0
+    for p in phrases:
+        if "?" not in p["texte"]:
+            continue
+        a = bloc.analyser(p["texte"], p["langue"])
+        if repondre_contenu(a) is not None:
+            repondues += 1
+    q = sum(1 for p in phrases if "?" in p["texte"])
+    return {"questions": q, "repondues": repondues,
+            "taux": round(repondues / max(1, q), 4)}
+
+
 def fluidite(a: bl.Annotation) -> float:
     """La part de la longueur restituée qui est du texte (pas des trous)."""
     r = rendre(a)
@@ -148,6 +172,7 @@ def main() -> int:
         q = [p for p in ph if "?" in p["texte"]]
         fr = sum(fidelite_reponse(bloc.analyser(p["texte"], p["langue"])) for p in q) / max(1, len(q))
         print(nom, "réponse", len(q), "questions", round(fr, 4))
+        print(nom, "réponse au contenu", fidelite_contenu(ph, bloc))
     return 0
 
 

@@ -1848,6 +1848,16 @@ def t120_miroir_reponse() -> tuple[bool, str]:
         f"réponse : {len(q)} questions, taux {round(fr, 4)}")
 
 
+def t121_reponse_contenu() -> tuple[bool, str]:
+    """La réponse au contenu : 0/19, la frontière du modèle."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_contenu
+    ph = charger()
+    r = fidelite_contenu(ph)
+    return r["questions"] == 19 and r["repondues"] == 0, (
+        f"réponse au contenu : {r['repondues']}/{r['questions']} (frontière)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1967,7 +1977,8 @@ def main() -> int:
               ("T117 sortie POS", t117_miroir_pos()),
               ("T118 restitution spans", t118_miroir_espaces()),
               ("T119 restitution sémantique", t119_miroir_resume()),
-              ("T120 réponse", t120_miroir_reponse())]
+              ("T120 réponse", t120_miroir_reponse()),
+              ("T121 réponse contenu", t121_reponse_contenu())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

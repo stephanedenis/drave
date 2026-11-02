@@ -1,0 +1,23 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "124/124",
+ "surface": 1.0,
+ "pos_spans": 1.0,
+ "resume_heur": 0.7834,
+ "resume_cascade": 0.7472,
+ "reponse_acte": {
+  "questions": 19,
+  "taux": 1.0
+ },
+ "reponse_contenu": {
+  "questions": 19,
+  "repondues": 0,
+  "taux": 0.0
+ },
+ "limites": [
+  "19 questions",
+  "le None est un choix",
+  "heuristique seule"
+ ]
+}
