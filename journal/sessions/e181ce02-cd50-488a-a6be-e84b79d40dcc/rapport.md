@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 39.0 h |
-| Tours | 123 |
-| Messages | 1504 |
-| Appels d'outils | 1305 |
+| Tours | 124 |
+| Messages | 1511 |
+| Appels d'outils | 1308 |
 | Fichiers touchés | 25 |
-| Commandes | 1060 |
+| Commandes | 1061 |
 | Sous-agents | 2 |
 | Commits | 159 |
 | Compactages de contexte | 4 |
@@ -28,6 +28,8 @@
 - **complete** — Reprendre et compléter les sessions suspendues : R4.4 (exposant fusionné, fax 1 bit, scans réels de bout en bout) et S (candidats générés par un analyseur, export branché sur le corpus). Produire les mesures, fiches, tests et mises à jour d'en-cours/plans, documenter les limites qui ne se réparent p
 … [114 caractères tronqués]
 - **create** — Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantier
+… [253 caractères tronqués]
+- **block** — Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantier
 … [253 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -277,6 +279,8 @@
 **Tour 122** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 123** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 124** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6532,6 +6536,86 @@ Le goal `goal-7beacaeb` reste actif ; il reste **~28 min** avant la deadline : l
 - bash — Committer le bilan de l'anaphore
 - job_output
 
+**Synthèse produite :**
+
+⏵ Bilan de l'anaphore : 27/30, CV 0,847, huit mesures ; 109/109
+
+Le round 110 du goal est livré : la ligne **coréférence** est consolidée en huit mesures, avec un plafond **27/30** confirmé hors échantillon (CV 0,847). Commit **`a4cd8ab0`**.
+
+\## Les huit mesures
+
+| mesure | valeur |
+|---|---:|
+| règle « dernier nom » sur tout | **27/30** |
+| rôle (segments) | 23/30 |
+| hybride (sujet rôle + objet proximité) | 24/30 |
+| sémantique (verbes) | 23/30 |
+| méta (vote) | 25/30 |
+| CV 5 plis | 0,833 |
+| CV 20 graines | **0,847 ± 0,051** |
+| accord κ (role/sémantique) | **1,00** |
+
+**Ce que ça dit** :
+
+- **Le plafond est 27/30** : aucune règle, aucun vote, aucun poids ne le dépasse ; les trois cas restants demandent une annotation sémantique que le gold ne porte pas.
+- **La CV confirme** : 0,85 hors échantillon, min 22/30, max 27/30 — le plafond revient au meilleur tirage.
+- **Le désaccord est structuré** : κ = 1,0 entre rôle et sémantique, −0,16 avec le dernier nom ; les règles sont complémentaires, pas redondantes.
+- **La limite est le modèle neuronal** : la cascade mesurée reste la seule lecture.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-bilan.md`](../../reports/rapport-pensee-anaphore-bilan.md) ; JSON [`pensee-anaphore-bilan.json`](../../reports/pensee-anaphore-bilan.json) ; T106 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **109/109 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **516 fiches / 604 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 580 mots, T0 dans le budget.
+- L'horloge réelle est **07 h 39 HNE** (la deadline 08:00 est à ~20 min) ; l'autotest prend **~18 min**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **100 liens** : la CV se resserre-t-elle ?
+2. **Deux annotateurs** : l'accord humain (kappa) sur les cas ambigus.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; il reste **~20 min** avant la deadline — le prochain round peut clôturer la ligne ou pousser le gold.
+
+### Tour 124 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Vérifier l'état final avant clôture
+- get_goal
+- update_goal
+
+**Synthèse produite :**
+
+Le goal est **bloqué** et ce run s'arrête. Voici l'état, la condition qui bloque, et ce qu'il me faut de vous.
+
+\## Ce qui est livré (commits jusqu'à `a4cd8ab0`)
+
+- **B13 — le DRVF `thought`** : encodage, rejeu, diff (`tools/pensee/trace.py`), 9/9 ; 23 597 octets, 93 événements, rejeu identique, corruption refusée.
+- **B13 — le banc anytime** : AUC et regret sur les cruches et le taquin, 10/10 (A* cruches 0,528/32, BFS 0,328/128, hasard 0,246 ; taquin A* 0,624/32, hasard 0,116).
+- **B13 — les opérateurs et la pensée** : les portes **T0–T106**, **109/109**. La série des seuils d'oubli (0,35 → 0,50 ; bord robuste **0,41**), la phase cachée/dans l'état, le cycle et sa leçon (l'état doit porter la variable cachée), puis la ligne **coréférence** : quatre règles (dernier nom **27/30**, rôle 23, hybride 24, sémantique 23), méta-vote 25, accord κ de −0,16 à 1,0, validation croisée **0,847 ± 0,051**, bilan en huit mesures.
+- **L — le gold** : le gold réel est passé de 180 à **342 phrases** (20 simples, 20 nouvelles, 120 complexes, 20 de discours, 20 d'anaphore, 8 pièges), POS mesuré sur les sous-ensembles (réel 0,7657, 20 nouvelles 0,8214, complexes 0,6984, discours 0,7609, dernier `all` complet à 320 phrases : 0,7544), syntagme, pragmatique (acte 1,0, négation 1,0, modalité 0,987).
+- **L'état** : `en-cours` (1 580 mots, T0 dans le budget), roadmap, chantiers, plan de session, journal : à jour ; **revue de documentation, taille, en-cours, schémas, sessions, porte du bloc linguistique : vertes** (dernière passe).
+- **Les territoires S / D / N2 n'ont pas été écrits** ; seules des lectures y ont eu lieu.
+
+\## Ce qui bloque, concrètement
+
+**La qualification neuronale réelle** de L. Le mock `NeuronalLLM` reste un **contrat** (la cascade est mesurée sur lui), pas un modèle. J'ai essayé, à plusieurs reprises, sans succès :
+
+- `llama-cli` avec `models/Qwen2.5-0.5B-Q4_0.gguf` : refus ou timeout ;
+- les taggers `spacy`, `stanza`, `nltk`, `transformers` : **absents** de l'environnement ;
+- des poids `drave-n0` sous `models/` ou `data/` : **aucun**.
+
+La même condition tient depuis des dizaines de rounds (elle est aussi la raison pour laquelle les lignes suivantes ont été prises, conformément à l'objectif). Je l'ai donc marquée **blocked** avec cette raison, plutôt que de la déclarer achevée.
+
+\## Ce qu'il me faut de vous pour continuer
+
+Au choix, un seul suffit :
+
+1. **Un modèle local fonctionnel** : un `llama-cli` qui répond (chemin du binaire + du GGUF), ou un tagger installabl
+… [918 caractères tronqués]
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6611,7 +6695,7 @@ Le goal `goal-7beacaeb` reste actif ; il reste **~28 min** avant la deadline : l
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1020 autres
+- … et 1021 autres
 
 ## 4. Mesures et résultats marquants
 

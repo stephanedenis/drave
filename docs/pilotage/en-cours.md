@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 07 h 50 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 07 h 41 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -90,7 +90,7 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **81** (77 vertes, 4 rouges — les connues — à la passe du 02/11 00 h 03) | `tools/porte-*.sh` |
+| portes | **81** (76 vertes, 5 rouges à la passe du 02/11 06 h : les 4 connues + greffe à la borne 700 s, rejouée verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **516** / **604** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |

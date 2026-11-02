@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (53)
+## Commits du jour (54)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -61,18 +61,19 @@
 | 07:04 | `aff1e03b` | B13 — LA MÉTA-RÈGLE : 25/30, LE VOTE NE BAT PAS LE DERNIER NOM ; 105/105 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 07:22 | `0d2e86f4` | B13 — LA VALIDATION CROISÉE : 5 PLIS, 25/30, LE DERNIER NOM GÉNÉRALISE ; 107/107 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 07:30 | `69a3787d` | B13 — LA CV SUR 20 GRAINES : 0,8467 ± 0,051, LE DERNIER NOM GÉNÉRALISE ; 108/108 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
+| 07:37 | `a4cd8ab0` | B13 — LE BILAN DE L'ANAPHORE : 27/30, CV 0,847, HUIT MESURES ; 109/109 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 
 ## Chiffres du jour
 
-`0,8467` · `0,051` · `6,8 %` · `0,6984` · `0,2677` · `0,7013` · `0,3060` · `0,6829` · `0,2963` · `0,6471` · `0,4828` · `0,8214`
+`0,847` · `0,8467` · `0,051` · `6,8 %` · `0,6984` · `0,2677` · `0,7013` · `0,3060` · `0,6829` · `0,2963` · `0,6471` · `0,4828`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 39.3 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 39.4 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 39.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 39.0 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 39.1 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -88,6 +89,7 @@
 - [reports/rapport-ocr-cegep.md](../../reports/rapport-ocr-cegep.md)
 - [reports/rapport-ocr-pdf.md](../../reports/rapport-ocr-pdf.md)
 - [reports/rapport-pensee-alternance.md](../../reports/rapport-pensee-alternance.md)
+- [reports/rapport-pensee-anaphore-bilan.md](../../reports/rapport-pensee-anaphore-bilan.md)
 - [reports/rapport-pensee-anaphore-chaines.md](../../reports/rapport-pensee-anaphore-chaines.md)
 - [reports/rapport-pensee-anaphore-corrige.md](../../reports/rapport-pensee-anaphore-corrige.md)
 - [reports/rapport-pensee-anaphore-cv-graines.md](../../reports/rapport-pensee-anaphore-cv-graines.md)

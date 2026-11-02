@@ -27772,3 +27772,151 @@ timeout 1800 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-anaphore-bilan.md reports/pensee-anaphore-bilan.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotag … [486 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1060]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1060", "timeout_ms": 600000, "wait": true}`
+
+  ```
+27 files changed, 397 insertions(+), 71 deletions(-)
+ create mode 100644 reports/pensee-anaphore-bilan.json
+ create mode 100644 reports/rapport-pensee-anaphore-bilan.md
+COMMIT OK 1
+a4cd8ab0 B13 — LE BILAN DE L'ANAPHORE : 27/30, CV 0,847, HUIT MESURES ; 109/109
+lun 02 nov 2026 07:39:16 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan de l'anaphore : 27/30, CV 0,847, huit mesures ; 109/109
+
+Le round 110 du goal est livré : la ligne **coréférence** est consolidée en huit mesures, avec un plafond **27/30** confirmé hors échantillon (CV 0,847). Commit **`a4cd8ab0`**.
+
+## Les huit mesures
+
+| mesure | valeur |
+|---|---:|
+| règle « dernier nom » sur tout | **27/30** |
+| rôle (segments) | 23/30 |
+| hybride (sujet rôle + objet proximité) | 24/30 |
+| sémantique (verbes) | 23/30 |
+| méta (vote) | 25/30 |
+| CV 5 plis | 0,833 |
+| CV 20 graines | **0,847 ± 0,051** |
+| accord κ (role/sémantique) | **1,00** |
+
+**Ce que ça dit** :
+
+- **Le plafond est 27/30** : aucune règle, aucun vote, aucun poids ne le dépasse ; les trois cas restants demandent une annotation sémantique que le gold ne porte pas.
+- **La CV confirme** : 0,85 hors échantillon, min 22/30, max 27/30 — le plafond revient au meilleur tirage.
+- **Le désaccord est structuré** : κ = 1,0 entre rôle et sémantique, −0,16 avec le dernier nom ; les règles sont complémentaires, pas redondantes.
+- **La limite est le modèle neuronal** : la cascade mesurée reste la seule lecture.
+
+## L'état
+
+- Fiche : [`rapport-pensee-anaphore-bilan.md`](../../reports/rapport-pensee-anaphore-bilan.md) ; JSON [`pensee-anaphore-bilan.json`](../../reports/pensee-anaphore-bilan.json) ; T106 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **109/109 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **516 fiches / 604 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 580 mots, T0 dans le budget.
+- L'horloge réelle est **07 h 39 HNE** (la deadline 08:00 est à ~20 min) ; l'autotest prend **~18 min**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **100 liens** : la CV se resserre-t-elle ?
+2. **Deux annotateurs** : l'accord humain (kappa) sur les cas ambigus.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; il reste **~20 min** avant la deadline — le prochain round peut clôturer la ligne ou pousser le gold.
+
+
+## Tour 124
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 111/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='%h %s'; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; git status --porcelain | wc -l", "description … [41 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 07:39:39 EST
+a4cd8ab0 B13 — LE BILAN DE L'ANAPHORE : 27/30, CV 0,847, HUIT MESURES ; 109/109
+  revue de documentation · 516 fiche(s) · 604 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+29
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d","revision":1,"objective":"Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit.","phase":"active","roundsStarted":111,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"goal_id": "goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d", "revision": 1, "action": "blocked", "blocked_reason": "Qualification neuronale réelle impossible dans cet environnement : llama-cli refuse/timeout (Qwen2.5-0.5B-Q4_0), aucun tagger installé (spacy, stanza, nltk, transformers absents), aucun po … [392 caractères tronqués]`
+
+> **Objectif** (block) : Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit.
+
+
+  ```
+{"goal":{"id":"goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d","revision":2,"objective":"Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit.","phase":"blocked","roundsStarted":111,"maxGoalRounds":1000,"blockedReason":{"code":"model-reported","message":"Qualification neuronale réelle impossible dans cet environnement : llama-cli refuse/timeout (Qwen2.5-0.5B-Q4_0), aucun tagger installé (spacy, stanza, nltk, transformers absents), aucun poids drave-n0 sous models/ ni data/. Le mock neuronal reste un contrat (cascade mesurée) et non un modèle. La même condition bloque la ligne depuis des dizaines de rounds (T0–T106) ; toutes les autres lignes de l'objectif sont livrées et committées (DRVF thought 
+… [156 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+<goal_blocked>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Blocked: "Qualification neuronale réelle impossible dans cet environnement : llama-cli refuse/timeout (Qwen2.5-0.5B-Q4_0), aucun tagger installé (spacy, stanza, nltk, transformers absents), aucun poids drave-n0 sous models/ ni data/. Le mock neuronal reste un contrat (cascade mesurée) et non un modèle. La même condition bloque la ligne depuis des dizaines de rounds (T0–T106) ; toutes les autres lignes de l'objectif sont livrées et committées (DRVF thought 9/9, banc anytime 10/10, gold POS/syntagme/pragmatique 342 phrases réelles, 109/109 portes, état/roadmap/chantiers/plan à jour)."
+The goal is marked blocked and this autonomous run is ending. Write the closing message to the user now: state what has been completed so far, describe the concrete blocking condition and what you tried, and say exactly what you need from the user to continue. Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_blocked>
+
+### 🤖 Assistant
+
+Le goal est **bloqué** et ce run s'arrête. Voici l'état, la condition qui bloque, et ce qu'il me faut de vous.
+
+## Ce qui est livré (commits jusqu'à `a4cd8ab0`)
+
+- **B13 — le DRVF `thought`** : encodage, rejeu, diff (`tools/pensee/trace.py`), 9/9 ; 23 597 octets, 93 événements, rejeu identique, corruption refusée.
+- **B13 — le banc anytime** : AUC et regret sur les cruches et le taquin, 10/10 (A* cruches 0,528/32, BFS 0,328/128, hasard 0,246 ; taquin A* 0,624/32, hasard 0,116).
+- **B13 — les opérateurs et la pensée** : les portes **T0–T106**, **109/109**. La série des seuils d'oubli (0,35 → 0,50 ; bord robuste **0,41**), la phase cachée/dans l'état, le cycle et sa leçon (l'état doit porter la variable cachée), puis la ligne **coréférence** : quatre règles (dernier nom **27/30**, rôle 23, hybride 24, sémantique 23), méta-vote 25, accord κ de −0,16 à 1,0, validation croisée **0,847 ± 0,051**, bilan en huit mesures.
+- **L — le gold** : le gold réel est passé de 180 à **342 phrases** (20 simples, 20 nouvelles, 120 complexes, 20 de discours, 20 d'anaphore, 8 pièges), POS mesuré sur les sous-ensembles (réel 0,7657, 20 nouvelles 0,8214, complexes 0,6984, discours 0,7609, dernier `all` complet à 320 phrases : 0,7544), syntagme, pragmatique (acte 1,0, négation 1,0, modalité 0,987).
+- **L'état** : `en-cours` (1 580 mots, T0 dans le budget), roadmap, chantiers, plan de session, journal : à jour ; **revue de documentation, taille, en-cours, schémas, sessions, porte du bloc linguistique : vertes** (dernière passe).
+- **Les territoires S / D / N2 n'ont pas été écrits** ; seules des lectures y ont eu lieu.
+
+## Ce qui bloque, concrètement
+
+**La qualification neuronale réelle** de L. Le mock `NeuronalLLM` reste un **contrat** (la cascade est mesurée sur lui), pas un modèle. J'ai essayé, à plusieurs reprises, sans succès :
+
+- `llama-cli` avec `models/Qwen2.5-0.5B-Q4_0.gguf` : refus ou timeout ;
+- les taggers `spacy`, `stanza`, `nltk`, `transformers` : **absents** de l'environnement ;
+- des poids `drave-n0` sous `models/` ou `data/` : **aucun**.
+
+La même condition tient depuis des dizaines de rounds (elle est aussi la raison pour laquelle les lignes suivantes ont été prises, conformément à l'objectif). Je l'ai donc marquée **blocked** avec cette raison, plutôt que de la déclarer achevée.
+
+## Ce qu'il me faut de vous pour continuer
+
+Au choix, un seul suffit :
+
+1. **Un modèle local fonctionnel** : un `llama-cli` qui répond (chemin du binaire + du GGUF), ou un tagger installable (`spacy` + un modèle français/anglais, ou `stanza`) ;
+2. **Les poids `drave-n0`** (ou l'autorisation de les produire) pour une vraie politique DRVM ;
+3. **Ou** acter que le **mock/cascade** est le livrable accepté pour la qualification neuronale — dans ce cas je clôture la ligne avec la mesure de la cascade et je continue sur le gold.
+
+## Réserves honnêtes
+
+- Les **horodatages** des fiches et de `en-cours` sont en avance sur l'horloge réelle (dernier relevé : **07 h 39 HNE**, l'état affiche 07 h 50) ; je les ai corrigés plusieurs fois, ils dérivent à nouveau.
+- Plusieurs commits de cette session ont emporté des **suppressions** d'autres sessions (courses d'index) ; les fichiers sont restés sur le disque.
+- Le POS « all » n'a pas été remesuré après l'ajout des 22 dernières phrases : le dernier chiffre complet est celui de 320 phrases.
+
+Dites-moi laquelle des trois options vous choisissez, et je reprends.
+

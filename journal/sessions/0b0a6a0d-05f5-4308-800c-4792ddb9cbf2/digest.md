@@ -18982,3 +18982,41 @@ porte-reparti-moteur 1 3
 
 background job bash-1110 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c "✅" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt | head -6; tail -2 /tmp/portes-fin.out) finished [status: completed, exit code: 0]. Read its output with job_output.
 
+- **bash** `{"command": "sleep 180; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -E \"^--- .*vertes|TOUTES LES PORTES|Journaux complets\" /tmp/portes-fin.out | tail -3; wc -l < /tmp/portes-fin/registre.txt; awk '$2 != 0' /tmp/portes-fin/registre.txt", "description": "Read the final  … [15 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1115]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1112 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c "✅" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt; tail -3 /tmp/portes-fin.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1115", "timeout_ms": 400000, "wait": true}`
+
+  ```
+07:40
+--- 76 vertes, 5 rouges ---
+Journaux complets : /tmp/portes-fin
+82
+porte-greffe 124 700
+porte-homeostasie 2 0
+porte-indice 124 700
+porte-melange 1 161
+porte-reparti-moteur 1 3
+--- 76 vertes, 5 rouges ---
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"| portes | **81** (77 vertes, 4 rouges — les connues — à la passe du 02/11 00 h 03) | `tools/porte-*.sh` |\"\nnew = \"| p … [666 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3965 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg-final.txt <<'EOF'\nÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 06 h : 76 VERTES, 5 ROUGES (LES 4 CONNUES + GREFFE À LA BORNE)\n\nLes 81 portes ont tourné une à une (borne 700 s) : 76 vertes, 5 rouges — homeostasie (LoRA  … [819 caractères tronqués]`

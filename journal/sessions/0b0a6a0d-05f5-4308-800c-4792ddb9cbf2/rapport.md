@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 39.3 h |
+| Durée | 39.4 h |
 | Tours | 18 |
-| Messages | 1535 |
-| Appels d'outils | 1412 |
+| Messages | 1539 |
+| Appels d'outils | 1415 |
 | Fichiers touchés | 11 |
-| Commandes | 1115 |
+| Commandes | 1117 |
 | Sous-agents | 0 |
-| Commits | 78 |
+| Commits | 79 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*446 appels d'outils.* Actions notables :
+*449 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 291 autres
+- … et 293 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1075 autres
+- … et 1077 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1255,4 +1255,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - JOURNAL — LE MEILLEUR MODÈLE DE LA NUIT : LE CANAL À 34,3 M (3,51 / 3,66 À 512)  Le 34,3 M avec canal de structure est le meilleur modèle de la nuit (3,5131 en 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-n2-canal-34m.md'); s = p.read_text() s =
 - ÉTAT — LE BUDGET REVIENT À 4000 MOTS (N2.z SUR DEUX GRAINES)  Le canal à 34,3 M est confirmé à 3,53 en domaine sur deux graines ; l'état tient dans son budget."
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg-final.txt <<'EOF' ÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 06 h : 76 VERTES, 5 ROUGES (LES
 
