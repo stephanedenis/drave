@@ -197,6 +197,7 @@ ré-exécution.
 | **T25** | le professeur complet réussit-il seul ? | oui : but en 8 pas (mesure corrigée) | 56 états-Q |
 | **T26** | la politique sans None réussit-elle ? | oui : but en 8 pas (mesure corrigée) | 56 états-Q |
 | **T27** | la mesure corrigée tient-elle ? | minute but/8 ; stable échec/200 | contrôle positif + négatif |
+| **T28** | les mesures sont-elles cohérentes ? | 15/15 : but == état final, pas == chemin | la politique minute ne transfère pas au bruit |
 
 **T5/T6 sont les portes de la modularité et du coût** : AC-3, alpha-bêta et un encodeur RSN doivent
 se brancher sur le **même** contrat, sans modifier le moteur. Si l'un demande une exception, le
@@ -213,9 +214,9 @@ contrat est faux ; si le coût n'est pas dans la trace, l'anytime est décoratif
 | **4** | `tools/pensee/` (`moteur.py`) | BFS, greedy, A*, MCTS-lite | T2 |
 | **4 bis** | `tools/pensee/` (`csp.py`, `jeux.py`) | AC-3, alpha-bêta, minimax | T5, T6 |
 | **4 ter** | `tools/pensee/` (`taquin.py`, `banc.py`) | taquin 3×3, AUC/regret, aléatoire | T7 |
-| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction | T8–T27 |
+| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`, `audit.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction, audit | T8–T28 |
 | **5** | `tools/pensee/` (`trace.py`) | DRVF `thought`, rejeu, diff | T1, T6 |
-| **6** | `tools/pensee/autotest.py` | T0–T27, contrôles négatifs | toutes |
+| **6** | `tools/pensee/autotest.py` | T0–T28, contrôles négatifs | toutes |
 
 **Le corpus v0** : un jeu de petits graphes (morpion, taquin 3×3, un CSP jouet) et un jeu de
 RSN-visuelles déjà produit par N1. Pas de GPU ; le CPU suffit pour 10³–10⁴ nœuds.

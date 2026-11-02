@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 29.4 h |
-| Tours | 29 |
-| Messages | 1018 |
-| Appels d'outils | 978 |
+| Durée | 29.6 h |
+| Tours | 30 |
+| Messages | 1026 |
+| Appels d'outils | 982 |
 | Fichiers touchés | 18 |
-| Commandes | 900 |
+| Commandes | 903 |
 | Sous-agents | 0 |
 | Commits | 60 |
 | Compactages de contexte | 2 |
@@ -85,6 +85,8 @@
 **Tour 28** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 29** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 30** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1245,9 +1247,30 @@ Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des di
 
 ### Tour 29 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Diagnose memory, sync caches, and check English
+- bash — Wait for English manifest and launch check
+- job_output
+- bash — Final check of English stuck process and memory
+
+**Synthèse produite :**
+
+⏵ Round 17 : l'anglais est bloqué en I/O depuis 49 min — la décision est de le laisser finir seul
+
+**Round 17/1000 — l'incident est isolé et nommé.** L'anglais est à **25,4 M pages sur 25,6 M** (6,02 M articles), mais son processus est en état **`D`** depuis ~49 min : il attend la file d'E/S, avec **75,4 Go de mémoire résidente** (le jeu des empreintes d'articles et de tronçons de ses 6 M d'articles). La machine est à **123 Go utilisés sur 125**, 2 Go disponibles, charge 22. Le train anglais (20 Go) n'a pas été réécrit depuis 21 h 24 — le processus est **bloqué sur une écriture**, pas en train de calculer.
+
+**Ce que je fais** : je **n'ajoute aucun travail** et je **n'interromps pas** l'anglais — il ne lui reste que ~200 000 pages et son manifeste. Les documents (4 000/7 496, 789 Mo) et l'OCR (2 livres) sont en I/O eux aussi ; je les laisse tourner sans les relancer. Le contrôle 8 Ko partira **dès** le manifeste, comme prévu.
+
+**Ce que l'incident dit du mandat** : la campagne a été dimensionnée pour 10 runs parallèles ; le dernier (le plus gros : 25 Go de dump, 6 M d'articles) a un **coût mémoire** que les autres n'avaient pas — les ensembles d'empreintes grandissent avec le nombre d'articles. C'est une **limite de l'outil**, à écrire dans sa fiche : sur un dump de cette taille, prévoir **~80 Go de RAM** ou découper la déduplication par tranches. Les neuf autres corpus (11,65 M articles, 48,4 Go) ne l'ont pas révélée.
+
+**Ce qui est stable** : les neuf corpus committés, le corpus PDF, l'A2.6/A8.3, l'OCR (l'outil + 2 livres), les documents 4 000/7 496, l'état et la roadmap. Le goal reste actif ; le prochain round surveille l'anglais et, s'il ne rend pas la main, documente la limite et clôt le catalogue sans lui (9 + le français, en attendant).
+
+### Tour 30 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check English process state and IO counters
 - bash — Wait for English manifest and launch check
 
 ## 3. Travail accompli
@@ -1317,7 +1340,7 @@ Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des di
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 860 autres
+- … et 863 autres
 
 ## 4. Mesures et résultats marquants
 

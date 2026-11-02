@@ -15404,3 +15404,69 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-900", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/M-g2.pt work/n2k/C-g1.pt 2>/dev/null; tail -1 work/n2k/M-g2.log 2>/dev/null; tail -1 work/n2k/C-g1.log 2>/dev/null", "description": "Check the distillation progress"}`
+
+  ```
+21:59
+pas 13250 · seq 128 · perte 41.7156 · PPL 128/4 6.6010 · 1948 s
+pas  5000 · seq 128 · perte 30.1899 · PPL 128/4 4.0275 · 1969 s
+  ```
+
+- **bash** `{"command": "free -g | head -2; nvidia-smi --query-gpu=index,memory.used,memory.total,utilization.gpu --format=csv,noheader; ps -eo pid,etime,pcpu,rss,cmd | grep distiller | grep -v grep | awk '{printf \"%s %s %s%% %sMo\\n\", $1, $2, $3, int($4/1024)}'; date '+%H:%M'", "description": "Check the memo … [18 caractères tronqués]`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125         123           0           5           8           1
+0, 1164 MiB, 16384 MiB, 6 %
+1, 1164 MiB, 16384 MiB, 57 %
+1656749 36:21 28.0% 1045Mo
+1657318 35:27 58.1% 1593Mo
+21:59
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps aux --sort=-rss | head -8 | awk '{printf \"%s %s%% %sMo %s\\n\", $2, $3, int($6/1024), substr($0, index($0,$11), 90)}'; echo \"=== kill canal ===\"; kill 1656749 2>/dev/null; pkill -f \"file-canal0.sh\" 2>/dev/null; sleep 2; free  … [106 caractères tronqués]`
+
+  ```
+PID %CPU% 0Mo COMMAND
+1494795 83.4% 74267Mo python3 tools/corpus_wikipedia_texte.py --langue en --sortie data/corpus_wiki_en_texte --m
+1657318 58.2% 1595Mo /home/stephane/gpu-env/bin/python tools/distiller_budget.py --corpus fr --train data/wiki_
+1656749 28.0% 1048Mo /home/stephane/gpu-env/bin/python tools/distiller_budget.py --corpus fr --train data/wiki_
+7237 19.9% 810Mo node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+6207 48.4% 637Mo node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+13617 33.6% 586Mo node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+5439 0.5% 394Mo /opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=4416 --enable-crash-repor
+=== kill canal ===
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; free -g | head -2; tail -1 work/n2k/M-g2.log 2>/dev/null; ls work/n2k/M-g2.pt 2>/dev/null && echo M2_OK; ps -eo pid,rss,cmd | grep corpus_wikipedia_texte | grep -v grep | awk '{printf \"%s %sMo\\n\", $1, int … [84 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-904]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-904", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; free -g | head -2; tail -1 work/n2k/M-g2.log 2>/dev/null; ls work/n2k/M-g2.pt 2>/dev/null && echo M2_OK; ps -eo pid,rss,cmd | grep corpus_wikipedia_texte | grep -v grep | awk '{printf \"%s %sMo\\n\", $1, int($2/1024)}' … [62 caractères tronqués]`
+
+  ```
+22:12
+               total        used        free      shared  buff/cache   available
+Mem:             125         124           0           5           8           1
+pas 20000 · seq 128 · perte 32.7565 · PPL 128/4 6.4152 · 2702 s
+1494795 74922Mo
+  ```
+
+- **bash** `{"command": "sleep 180; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/M-g2.pt 2>/dev/null && echo M2_OK; tail -2 work/n2k/M-g2.log 2>/dev/null; free -g | head -2", "description": "Wait for the multilingual student to save"}`

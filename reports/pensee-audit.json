@@ -1,0 +1,100 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "31/31",
+ "coherents": 15,
+ "total": 15,
+ "lignes": [
+  {
+   "politique": "stable",
+   "monde": "stable",
+   "but": true,
+   "coherent": true
+  },
+  {
+   "politique": "stable",
+   "monde": "minute",
+   "but": false,
+   "coherent": true
+  },
+  {
+   "politique": "stable",
+   "monde": "stochastique",
+   "but": true,
+   "coherent": true
+  },
+  {
+   "politique": "minute",
+   "monde": "stable",
+   "but": true,
+   "coherent": true
+  },
+  {
+   "politique": "minute",
+   "monde": "minute",
+   "but": true,
+   "coherent": true
+  },
+  {
+   "politique": "minute",
+   "monde": "stochastique",
+   "but": false,
+   "coherent": true
+  },
+  {
+   "politique": "complete",
+   "monde": "stable",
+   "but": true,
+   "coherent": true
+  },
+  {
+   "politique": "complete",
+   "monde": "minute",
+   "but": true,
+   "coherent": true
+  },
+  {
+   "politique": "complete",
+   "monde": "stochastique",
+   "but": false,
+   "coherent": true
+  },
+  {
+   "politique": "reseau",
+   "monde": "stable",
+   "but": false,
+   "coherent": true
+  },
+  {
+   "politique": "reseau",
+   "monde": "minute",
+   "but": false,
+   "coherent": true
+  },
+  {
+   "politique": "reseau",
+   "monde": "stochastique",
+   "but": false,
+   "coherent": true
+  },
+  {
+   "politique": "mlp",
+   "monde": "stable",
+   "but": false,
+   "coherent": true
+  },
+  {
+   "politique": "mlp",
+   "monde": "minute",
+   "but": false,
+   "coherent": true
+  },
+  {
+   "politique": "mlp",
+   "monde": "stochastique",
+   "but": false,
+   "coherent": true
+  }
+ ],
+ "finding": "la politique minute ne transfère pas à la porte stochastique (état open)"
+}

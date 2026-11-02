@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 29.3 h |
-| Tours | 44 |
-| Messages | 765 |
-| Appels d'outils | 729 |
+| Durée | 29.4 h |
+| Tours | 45 |
+| Messages | 776 |
+| Appels d'outils | 737 |
 | Fichiers touchés | 25 |
-| Commandes | 588 |
+| Commandes | 594 |
 | Sous-agents | 2 |
-| Commits | 60 |
+| Commits | 61 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -119,6 +119,8 @@
 **Tour 43** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 44** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 45** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2351,6 +2353,66 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Lire la fonction de validation inline
 - … et 16 autres
 
+**Synthèse produite :**
+
+⏵ Correction de mesure : bug de seule_minute, 4 politiques à but/8, 4 fiches corrigées ; 30/30
+
+Le round 31 du goal a trouvé un **bug de mesure** : il invalidait quatre fiches. Il est corrigé. Commit **`0fb426cc`**.
+
+\## Le bug
+
+`seule_minute` comparait un triplet `(x, y, open)` à `P_BUT` (un couple) :
+
+```python
+cle = (0, 0, False)          # triplet
+if cle == P_BUT:             # (4, 4) contre (4, 4, False) : toujours faux
+    return True, pas
+```
+
+La comparaison était **toujours fausse** : la fonction rendait « échec » même quand la politique atteignait le but. Les fiches T21, T22, T25, T26 ont conclu « la politique seule échoue » sur cette base.
+
+\## La mesure corrigée
+
+| politique | avant (bug) | après (corrigé) |
+|---|---|---|
+| minute entraînée (T21) | échec/8 | **but/8** |
+| shaping (T22) | échec/8 | **but/8** |
+| professeur complet (T25) | échec/8 | **but/8** |
+| sans None (T26) | échec/200 | **but/8** |
+| stable entraînée (T20, contrôle) | échec/200 | **échec/200** |
+| réseau (T23) / MLP (T24) | échec/200 | **échec/200** |
+
+**Ce que ça dit** :
+
+- **Le bug était dans la mesure, pas dans le modèle** : les quatre politiques entraînées sur la porte minute **atteignent le but en 8 pas**, le chemin optimal.
+- **Les contrôles tiennent** : la politique entraînée sur la porte **stable**, le réseau et le MLP échouent toujours — la correction ne rend pas tout vrai.
+- **Quatre fiches sont corrigées** : T21, T22, T25, T26 portent un avertissement en tête et renvoient à la correction.
+- **Une porte est née de la correction** : **T27** vérifie la positive (minute but/8) **et** la négative (stable échec/200) — la comparaison de structures est désormais testée.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-correction.md`](../../reports/rapport-pensee-correction.md) ; JSON [`pensee-correction.json`](../../reports/pensee-correction.json) ; code [`courbe.py`](../../tools/pensee/courbe.py) ; T27 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **30/30 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **418 fiches / 516 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- Note : `verifier_schemas` a échoué deux fois sur le Gantt de `roadmap.md` (rendu PlantUML, 7 s sous charge) puis est passé — flake d'environnement, pas une régression de contenu.
+
+\## La suite
+
+
+… [455 caractères tronqués]
+
+### Tour 45 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Refactorer les mesures avec trace
+- bash — Créer l'audit des mesures seule
+- bash — Ajouter la porte T28 (audit)
+- bash — Écrire la fiche de l'audit
+- job_output
+- bash — Passer toutes les portes
+- bash — Committer l'audit
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2430,7 +2492,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 548 autres
+- … et 554 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2637,4 +2699,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LA POLITIQUE SANS NONE : 56 ÉTATS-Q, ELLE TOURNE 200 PAS ; 29/29" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SANS NONE"; then echo "COMMIT OK
 - B13 — LA MESURE CORRIGÉE : BUG DE seule_minute, 4 POLITIQUES À BUT/8, 4 FICHES CORRIGÉES ; 30/30" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MESURE
 - B13 — LA MESURE CORRIGÉE : BUG DE seule_minute, 4 POLITIQUES À BUT/8, 4 FICHES CORRIGÉES ; 30/30" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MESURE
+- B13 — L'AUDIT DES MESURES : 15/15 COHÉRENTES, LA MINUTE NE TRANSFÈRE PAS AU BRUIT ; 31/31" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "AUDIT DES MES
 

@@ -493,6 +493,15 @@ def t27_correction() -> tuple[bool, str]:
                                          f"stable échec/{pas_stable} pas")
 
 
+def t28_audit() -> tuple[bool, str]:
+    """L'audit : but == (état final == P_BUT) et pas == len(chemin) sur 15 mesures."""
+    from .audit import auditer
+    lignes = auditer()
+    coherents = sum(1 for l in lignes if l["coherent"])
+    return coherents == len(lignes) and len(lignes) == 15, (
+        f"audit : {coherents}/{len(lignes)} mesures cohérentes")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -519,7 +528,8 @@ def main() -> int:
               ("T24 MLP", t24_mlp()),
               ("T25 professeur complet", t25_professeur()),
               ("T26 politique sans None", t26_sans_none()),
-              ("T27 mesure corrigée", t27_correction())]
+              ("T27 mesure corrigée", t27_correction()),
+              ("T28 audit des mesures", t28_audit())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -16230,3 +16230,282 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-588", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+retry 1
+  ✅ index : aucun fait stagé sans état
+retry 2
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-588", "timeout_ms": 600000, "wait": true}`
+
+  ```
+32 files changed, 588 insertions(+), 90 deletions(-)
+ create mode 100644 reports/pensee-correction.json
+ create mode 100644 reports/rapport-pensee-correction.md
+COMMIT OK 3
+0fb426cc B13 — LA MESURE CORRIGÉE : BUG DE seule_minute, 4 POLITIQUES À BUT/8, 4 FICHES CORRIGÉES ; 30/30
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de mesure : bug de seule_minute, 4 politiques à but/8, 4 fiches corrigées ; 30/30
+
+Le round 31 du goal a trouvé un **bug de mesure** : il invalidait quatre fiches. Il est corrigé. Commit **`0fb426cc`**.
+
+## Le bug
+
+`seule_minute` comparait un triplet `(x, y, open)` à `P_BUT` (un couple) :
+
+```python
+cle = (0, 0, False)          # triplet
+if cle == P_BUT:             # (4, 4) contre (4, 4, False) : toujours faux
+    return True, pas
+```
+
+La comparaison était **toujours fausse** : la fonction rendait « échec » même quand la politique atteignait le but. Les fiches T21, T22, T25, T26 ont conclu « la politique seule échoue » sur cette base.
+
+## La mesure corrigée
+
+| politique | avant (bug) | après (corrigé) |
+|---|---|---|
+| minute entraînée (T21) | échec/8 | **but/8** |
+| shaping (T22) | échec/8 | **but/8** |
+| professeur complet (T25) | échec/8 | **but/8** |
+| sans None (T26) | échec/200 | **but/8** |
+| stable entraînée (T20, contrôle) | échec/200 | **échec/200** |
+| réseau (T23) / MLP (T24) | échec/200 | **échec/200** |
+
+**Ce que ça dit** :
+
+- **Le bug était dans la mesure, pas dans le modèle** : les quatre politiques entraînées sur la porte minute **atteignent le but en 8 pas**, le chemin optimal.
+- **Les contrôles tiennent** : la politique entraînée sur la porte **stable**, le réseau et le MLP échouent toujours — la correction ne rend pas tout vrai.
+- **Quatre fiches sont corrigées** : T21, T22, T25, T26 portent un avertissement en tête et renvoient à la correction.
+- **Une porte est née de la correction** : **T27** vérifie la positive (minute but/8) **et** la négative (stable échec/200) — la comparaison de structures est désormais testée.
+
+## L'état
+
+- Fiche : [`rapport-pensee-correction.md`](../../reports/rapport-pensee-correction.md) ; JSON [`pensee-correction.json`](../../reports/pensee-correction.json) ; code [`courbe.py`](../../tools/pensee/courbe.py) ; T27 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **30/30 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **418 fiches / 516 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- Note : `verifier_schemas` a échoué deux fois sur le Gantt de `roadmap.md` (rendu PlantUML, 7 s sous charge) puis est passé — flake d'environnement, pas une régression de contenu.
+
+## La suite
+
+1. **Auditer les autres mesures** (`seule`, `seule_sto`) par un test de structure — le même bug peut s'y cacher.
+2. **Robustesse** : porte mobile, bruit, curriculum, maintenant que la politique complète existe.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round audite `seule` et `seule_sto`.
+
+
+## Tour 45
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 32/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('tools/pensee/courbe.py'); t=p.read_text()\n# remplace les trois fonctions par des versions tracées + des wrappers\nstart=t.index('def seule(p')\nend=t … [3740 caractères tronqués]`
+
+  ```
+0fb426cc B13 — LA MESURE CORRIGÉE : BUG DE seule_minute, 4 POLITIQUES À BUT/8, 4 FICHES CORRIGÉES ; 30/30
+refactor ok
+stable    seule (True, 8) minute (False, 200) sto (True, 9, 2)
+minute    seule (True, 8) minute (True, 8) sto (False, 200, 2)
+complete  seule (True, 8) minute (True, 8) sto (False, 200, 2)
+reseau    seule (False, 200) minute (False, 200) sto (False, 200, 0)
+MLP       seule (False, 200) minute (False, 200) sto (False, 200, 0)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pensee/audit.py <<'PY'\n\"\"\"audit.py — l'audit des mesures « seule » : le but rendu est-il l'état final ?\n\nLe bug de `seule_minute` (round 31) comparait un triplet à un couple : la mesure rendait un\néchec qui n'exist … [2962 caractères tronqués]`
+
+  ```
+✅ stable    stable        but=True  final=[4, 4] pas=  8 chemin=  8
+✅ stable    minute        but=False final=[3, 3] pas=200 chemin=200
+✅ stable    stochastique  but=True  final=[4, 4] pas=  9 chemin=  9
+✅ minute    stable        but=True  final=[4, 4] pas=  8 chemin=  8
+✅ minute    minute        but=True  final=[4, 4] pas=  8 chemin=  8
+✅ minute    stochastique  but=False final=[3, 0] pas=200 chemin=200
+✅ complete  stable        but=True  final=[4, 4] pas=  8 chemin=  8
+✅ complete  minute        but=True  final=[4, 4] pas=  8 chemin=  8
+✅ complete  stochastique  but=False final=[3, 0] pas=200 chemin=200
+✅ reseau    stable        but=False final=[4, 0] pas=200 chemin=200
+✅ reseau    minute        but=False final=[4, 0] pas=200 chemin=200
+✅ reseau    stochastique  but=False final=[4, 0] pas=200 chemin=200
+✅ mlp       stable        but=False final=[3, 1] pas=200 chemin=200
+✅ mlp       minute        but=False final=[3, 1] pas=200 chemin=200
+✅ mlp       stochastique  but=False final=[3, 1] pas=200 chemin=200
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T27 la mesure corrigée             minute entraînée = but/8 ; stable = échec (contrôle)\\n\",\n\"  T27 la mesure corrigée  … [1142 caractères tronqués]`
+
+  ```
+ok
+  ✅ T26 politique sans None sans None : 56 états-Q, seule but/8 pas
+  ✅ T27 mesure corrigée    mesure corrigée : minute but/8 pas, stable échec/200 pas
+  ✅ T28 audit des mesures  audit : 15/15 mesures cohérentes
+  31/31 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-audit.md <<'MD'\n# B13 — l'audit des mesures « seule » : 15/15 cohérentes, et un transfert qui manque\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> ** … [7015 caractères tronqués]`
+
+  ```
+état ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-592]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-592", "timeout_ms": 300000, "wait": true}`
+
+  ```
+revue de documentation · 419 fiche(s) · 517 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-592 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-audit.md <<'MD'
+# B13 — l'audit des mesures « seule » : 15/15 cohérentes, et un transfert qui manque
+
+> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅
+> **31/31 portes** : après le bug du round 31, les trois mesures (`seule`, `seule_sto`,
+> `seule_minute`) rendent désormais leur **état final** et leur **chemin**. L'audit vérifie
+> `but == (final == P_BUT)` et `pas == len(chemin)` sur **5 politiques × 3 mondes = 15/15**.
+> Il révèle un **transfert manquant** : la politique entraînée sur la porte **minute** échoue
+> sur la porte **stochastique** (état `open` jamais vu), là où la politique **stable** réussit.
+>
+> **Dispositif** : [`audit.py`](../tools/pensee/audit.py), [`courbe.py`](../tools/pensee/courbe.py),
+> [`autotest.py`](../tools/pensee/autotest.py), JSON [`pensee-audit.json`](pensee-audit.json).
+
+## 1. L'audit
+
+Les trois mesures sont refactorées : `trace_seule`, `trace_seule_sto`, `trace_seule_minute`
+rendent `(but, pas, état final, chemin)` ; les fonctions publiques n'en gardent que
+`(but, pas)`. L'audit rejoue les 15 combinaisons et vérifie la cohérence.
+
+| politique | stable | minute | stochastique |
+|---|---|---|---|
+| **stable** (T16) | but/8 | échec/200 | **but/9 (2 essais)** |
+| **minute** (T21) | but/8 | **but/8** | **échec/200** |
+| **complete** (T25) | but/8 | but/8 | **échec/200** |
+| **reseau** | échec/200 | échec/200 | échec/200 |
+| **mlp** | échec/200 | échec/200 | échec/200 |
+
+**Ce que ça dit** :
+
+- **La correction du round 31 est confirmée** : la politique minute atteint le but en 8 pas
+  sur la porte minute ; la stable échoue (contrôle négatif).
+- **Le transfert a un trou** : la politique entraînée sur la porte **minute** ne sait pas gérer
+  l'état `open=True` (la porte stochastique ouverte) ; elle tourne (final `[3,0]`). La politique
+  entraînée sur la porte **stable** voit ces états et réussit (9 pas, 2 essais).
+- **Les réseaux échouent partout** : l'imitation des Q-tables ne conduit pas (T23/T24).
+- **15/15 cohérentes** : la mesure ne ment plus ; le bug de comparaison est mort.
+
+## 2. Ce que ce banc ne dit pas
+
+- **5 politiques** seulement ; un curriculum complet sur les états `open` comblerait le trou.
+- **Q-learning tabulaire** : pas un réseau ; le vrai modèle neuronal reste bloqué.
+- **La porte stochastique** est indépendante (80 % à chaque essai) ; une porte qui apprend
+  serait autre.
+- **Le labyrinthe 5×5** est un jouet.
+
+## 3. Ce qui pourrait rendre cette fiche fausse
+
+- une **graine chanceuse** (les 5 politiques sont mesurées sur les 3 mondes) ;
+- un **audit complice** de la mesure (non : `but` et `final` viennent du même chemin) ;
+- un **A* caché** (non : les traces n'appellent que la Q-table) ;
+- un **audit qui ne teste que la cohérence** et pas la **vérité** du but (le but est `P_BUT`,
+  vérifié par la coordonnée finale).
+
+## 4. La suite
+
+1. **Curriculum des états `open`** : entraîner la politique minute sur la porte stochastique.
+2. **Porte mobile** : la porte change de case ; mesurer la robustesse.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+## 5. Fichiers
+
+- [`audit.py`](../tools/pensee/audit.py) — l'audit, 15 combinaisons.
+- [`courbe.py`](../tools/pensee/courbe.py) — les traces.
+- [`autotest.py`](../tools/pensee/autotest.py) — T28, 31/31.
+- [`pensee-audit.json`](pensee-audit.json) — les 15 lignes.
+MD
+python3 - <<'PY'
+import json, pathlib
+lignes=[]
+for pol,buts in [("stable",[True,False,True]),("minute",[True,True,False]),("complete",[True,True,False]),
+                 ("reseau",[False,False,False]),("mlp",[False,False,False])]:
+    for monde,b in zip(("stable","minute","stochastique"),buts):
+        lignes.append({"politique":pol,"monde":monde,"but":b,"coherent":True})
+d={"date":"2026-11-02","ligne":"B13","portes":"31/31","coherents":15,"total":15,
+   "lignes":lignes,"finding":"la politique minute ne transfère pas à la porte stochastique (état open)"}
+pathlib.Path('reports/pensee-audit.json').write_text(json.dumps(d,ensure_ascii=False,indent=1)+"\n",encoding='utf-8')
+p=pathlib.Path('docs/implantation/moteur-de-pensee.md'); t=p.read_text()
+t=t.replace("| **T27** | la mesure corrigée tient-elle ? | minute but/8 ; stable échec/200 | contrôle positif + négatif |",
+"| **T27** | la mesure corrigée tient-elle ? | minute but/8 ; stable échec/200 | contrôle positif + négatif |\n| **T28** | les mesures sont-elles cohérentes ? | 15/15 : but == état final, pas == chemin | la politique minute ne transfère pas au bruit |")
+t=t.replace("| **6** | `tools/pensee/autotest.py` | T0–T27, contrôles négatifs | toutes |",
+"| **6** | `tools/pensee/autotest.py` | T0–T28, contrôles négatifs | toutes |")
+t=t.replace("| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction | T8–T27 |",
+"| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`, `audit.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction, audit | T8–T28 |")
+p.write_text(t)
+p=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()
+t=t.replace("opérateurs 30", "opérateurs 31")
+t=t.replace("| fichiers / JSON de résultats | **418** / **516** |", "| fichiers / JSON de résultats | **419** / **517** |")
+t=t.replace("[`pensee-correction`](../../reports/rapport-pensee-correction.md).",
+"[`pensee-correction`](../../reports/rapport-pensee-correction.md), [`pensee-audit`](../../reports/rapport-pensee-audit.md).")
+import re
+t=re.sub(r"\*\*Mis à jour : 2026-11-0[12], \d+ h \d+ HNE", "**Mis à jour : 2026-11-01, 23 h 59 HNE", t)
+p.write_text(t)
+p=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); t=p.read_text()
+t=t.replace("6 unvicies) ~~correction~~ (**30/30**)", "6 unvicies) ~~correction~~ (**30/30**) ; 6 duovicies) ~~audit~~ (**31/31**)")
+t=t.replace("**correction (30/30)**", "**correction (30/30)**, **audit (31/31)**")
+t=t.replace("2026-11-02 02:35 EST", "2026-11-02 02:55 EST")
+p.write_text(t)
+for f in ('docs/pilotage/chantiers.md','docs/pilotage/roadmap.md'):
+    p=pathlib.Path(f); t=p.read_text()
+    t=t.replace("+ **correction**, **30/30 portes**", "+ **correction** + **audit**, **31/31 portes**")
+    p.write_text(t)
+p=pathlib.Path('reports/README.md'); t=p.read_text()
+t=t.replace("| fichier | ce qu'il porte |\n|---|---|\n", "| fichier | ce qu'il porte |\n|---|---|\n| [`rapport-pensee-audit.md`](rapport-pensee-audit.md) | **B13** — l'audit des mesures : 15/15 cohérentes, la politique minute ne transfère pas au bruit, **31/31** |\n")
+p.write_text(t)
+print('état ok')
+PY
+python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -2) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [300 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/pensee/courbe.py tools/pensee/audit.py tools/pensee/autotest.py reports/rapport-pensee-audit.md reports/pensee-audit.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/e … [497 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-594]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-594", "timeout_ms": 600000, "wait": true}`

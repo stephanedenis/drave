@@ -18171,3 +18171,128 @@ folio_wait_bit_common
 Mem:             125         124           0           5           7           0
   ```
 
+### 🤖 Assistant
+
+⏵ Round 16 : l'anglais bloque en I/O — la machine est à 124/125 Go de mémoire
+
+**Round 16/1000 — un vrai incident matériel, pas un bug du corpus.** L'anglais est à **25,4 M pages sur 25,6 M** (6,02 M articles, 21,98 G caractères), mais son processus est en état **`D`** (`rq_qos_wait` : il attend la file d'E/S du disque) depuis ~35 min, avec **36,5 Go lus et 22,3 Go écrits**. La cause est visible : **124 Go de mémoire utilisés sur 125**, 0 disponible — la machine est saturée (page cache de l'anglais + les autres sessions + les documents/OCR), et le noyau bloque les écritures du train anglais (20 Go).
+
+**Ce que je ne fais pas** : tuer l'anglais (il ne reste que ~200 000 pages ; il finira quand la mémoire se libérera) ; forcer un `drop_caches` (pas de root, et cela pénaliserait les autres sessions). Je **surveille** et je **ralentis** les autres extractions pour rendre la mémoire au run anglais : les documents (3 500/7 496, 785 M caractères) et l'OCR (2,2 M, 2 livres) sont eux aussi en I/O ; ils peuvent attendre.
+
+**Ce qui est mesuré et committé** : les neuf corpus (11,65 M articles, 48,4 Go, 8 Ko 0), le corpus PDF (1 927 documents, 322 Mo, 8 Ko 0), l'A2.6/A8.3 (le lot), l'OCR (l'outil + deux livres), les documents (3 500/7 496), l'état et la roadmap.
+
+**La suite** : dès que l'anglais rend son manifeste, le contrôle 8 Ko et le catalogue des dix ; sinon, je libère de la mémoire en arrêtant proprement les extractions non critiques (documents, OCR) et je relance l'anglais seul. Le goal reste actif.
+
+
+## Tour 29
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 17/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; free -g | sed -n 2p; ps -eo rss,pid,comm --sort=-rss | head -8; echo \"=== en\"; ps -p 1494795 -o pid,stat,etime= 2>/dev/null; tail -1 /tmp/run-texte-en.log; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null; echo \"= … [270 caractères tronqués]`
+
+  ```
+22:00
+Mem:             125         121           2           5           8           3
+  RSS     PID COMMAND
+76670724 1494795 python3
+1640068 1657318 python
+1102484 1672502 python3
+838984   7237 node-MainThread
+651380   6207 node-MainThread
+590456  13617 node-MainThread
+411884   5439 chrome
+=== en
+    PID STAT            
+1494795 D       03:29:21
+  [en] 25400000 lus · 6023249 gardés · 21.98 G caractères
+=== sync
+Mem:             125         121           2           5           8           3
+=== doc/ocr
+  3500 PDF · 2188 gardés · 785.0 M car
+  Biblio_large · 001.0 Bioinformatics for beginners genes · 225 p · 923245 car
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 40); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 15; done; echo \"attente $((i*15))s\"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo \"en: pas encore\"; tail -1 /tmp/run-texte-en.log;  … [848 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-900]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-896 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 55); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 15; done; echo "attente $((i*15))s"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo "en: pas encore"; tail -1 /tmp/run-texte-en.log; exit 0; }; python3 - <<'PY'
+import json,pathlib
+d=json.loads(pathlib.Path('reports/corpus-wiki-en-texte.json').read_text())
+for k in ('articles_lus','articles_gardes','articles_rediriges','articles_courts','articles_doublons','caracteres_gardes','mots_estimes','troncons','octets','residus'): print(k, d.get(k))
+PY
+nohup python3 tools/verifie_contamination.py --train data/corpus_wiki_en_texte/train.txt --val data/corpus_wiki_en_texte/val.txt --test data/corpus_wiki_en_texte/test.txt --eval work/dr/eval/en-xnli.txt --eval data/wikitext2_test.txt --taille-troncon 8192 --sortie reports/corpus-wiki-en-texte-contamination.json > /tmp/check-en.log 2>&1 &
+echo "check en $!") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-896", "timeout_ms": 60000}`
+
+  ```
+attente 825s
+en: pas encore
+  [en] 25400000 lus · 6023249 gardés · 21.98 G caractères
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-900 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 40); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 15; done; echo "attente $((i*15))s"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo "en: pas encore"; tail -1 /tmp/run-texte-en.log; free -g | sed -n 2p; exit 0; }; python3 - <<'PY'
+import json,pathlib
+d=json.loads(pathlib.Path('reports/corpus-wiki-en-texte.json').read_text())
+for k in ('articles_lus','articles_gardes','articles_rediriges','articles_courts','articles_doublons','caracteres_gardes','mots_estimes','troncons','octets','residus'): print(k, d.get(k))
+PY
+nohup python3 tools/verifie_contamination.py --train data/corpus_wiki_en_texte/train.txt --val data/corpus_wiki_en_texte/val.txt --test data/corpus_wiki_en_texte/test.txt --eval work/dr/eval/en-xnli.txt --eval data/wikitext2_test.txt --taille-troncon 8192 --sortie reports/corpus-wiki-en-texte-contamination.json > /tmp/check-en.log 2>&1 &
+echo "check en $!") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ps -p 1494795 -o pid,stat,etime,pcpu,rss= 2>/dev/null; tail -1 /tmp/run-texte-en.log; free -g | sed -n 2p; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || echo \"manifeste absent\"; ls -la data/corpus_wiki_en_tex … [296 caractères tronqués]`
+
+  ```
+22:13
+    PID STAT     ELAPSED %CPU      
+1494795 D       03:42:09 78.7 75401744
+  [en] 25400000 lus · 6023249 gardés · 21.98 G caractères
+Mem:             125         123           1           5           8           2
+manifeste absent
+-rw-r--r--. 1 stephane stephane 20053154324  1 nov 21:24 data/corpus_wiki_en_texte/train.txt
+=== doc/ocr
+  4000 PDF · 2558 gardés · 812.6 M car
+  Biblio_large · 001.0 Bioinformatics for beginners genes · 225 p · 923245 car
+789M	data/corpus_pdf_documents
+1,1M	data/corpus_ocr
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 17 : l'anglais est bloqué en I/O depuis 49 min — la décision est de le laisser finir seul
+
+**Round 17/1000 — l'incident est isolé et nommé.** L'anglais est à **25,4 M pages sur 25,6 M** (6,02 M articles), mais son processus est en état **`D`** depuis ~49 min : il attend la file d'E/S, avec **75,4 Go de mémoire résidente** (le jeu des empreintes d'articles et de tronçons de ses 6 M d'articles). La machine est à **123 Go utilisés sur 125**, 2 Go disponibles, charge 22. Le train anglais (20 Go) n'a pas été réécrit depuis 21 h 24 — le processus est **bloqué sur une écriture**, pas en train de calculer.
+
+**Ce que je fais** : je **n'ajoute aucun travail** et je **n'interromps pas** l'anglais — il ne lui reste que ~200 000 pages et son manifeste. Les documents (4 000/7 496, 789 Mo) et l'OCR (2 livres) sont en I/O eux aussi ; je les laisse tourner sans les relancer. Le contrôle 8 Ko partira **dès** le manifeste, comme prévu.
+
+**Ce que l'incident dit du mandat** : la campagne a été dimensionnée pour 10 runs parallèles ; le dernier (le plus gros : 25 Go de dump, 6 M d'articles) a un **coût mémoire** que les autres n'avaient pas — les ensembles d'empreintes grandissent avec le nombre d'articles. C'est une **limite de l'outil**, à écrire dans sa fiche : sur un dump de cette taille, prévoir **~80 Go de RAM** ou découper la déduplication par tranches. Les neuf autres corpus (11,65 M articles, 48,4 Go) ne l'ont pas révélée.
+
+**Ce qui est stable** : les neuf corpus committés, le corpus PDF, l'A2.6/A8.3, l'OCR (l'outil + 2 livres), les documents 4 000/7 496, l'état et la roadmap. Le goal reste actif ; le prochain round surveille l'anglais et, s'il ne rend pas la main, documente la limite et clôt le catalogue sans lui (9 + le français, en attendant).
+
+
+## Tour 30
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 18/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

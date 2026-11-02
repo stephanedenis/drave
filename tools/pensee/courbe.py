@@ -24,61 +24,82 @@ EPISODES = (50, 100, 200, 400, 800)
 GRAINES = (0, 1, 2)
 
 
-def seule(p: PolitiqueApprise) -> tuple[bool, int]:
-    """La politique seule, sans A* : elle suit son argmax Q jusqu'au but."""
-    cle, pas = (0, 0, False), 0
-    for _ in range(200):
+def trace_seule(p: PolitiqueApprise, max_pas: int = 200):
+    """La politique seule : rend (but, pas, état final, chemin) — le chemin sert à l'audit."""
+    cle, pas, chemin = (0, 0, False), 0, []
+    for _ in range(max_pas):
         if cle[:2] == P_BUT:
-            return True, pas
+            return True, pas, cle, chemin
         e = _etat_p(cle[0], cle[1], cle[2])
         a = p.propose(e, P_BUT)
         if a is None:
-            return False, pas
+            return False, pas, cle, chemin
+        chemin.append((cle, a))
         cle, _ = p._pas(cle, a, True)
         pas += 1
-    return False, pas
+    return False, pas, cle, chemin
 
 
-def seule_sto(p: PolitiqueApprise, graine: int = 0, p_ouvre: float = 0.8,
-              max_pas: int = 200) -> tuple[bool, int, int]:
-    """La politique seule sur la porte stochastique : elle réessaie si la porte résiste."""
+def seule(p: PolitiqueApprise) -> tuple[bool, int]:
+    but, pas, _, _ = trace_seule(p)
+    return but, pas
+
+
+def trace_seule_sto(p: PolitiqueApprise, graine: int = 0, p_ouvre: float = 0.8,
+                    max_pas: int = 200):
+    """La politique seule sur la porte stochastique (rend aussi le chemin)."""
     rng = random.Random(graine)
-    cle, pas, essais = (0, 0, False), 0, 0
+    cle, pas, essais, chemin = (0, 0, False), 0, 0, []
     for _ in range(max_pas):
         if cle[:2] == P_BUT:
-            return True, pas, essais
+            return True, pas, essais, cle, chemin
         if cle[0] == 3 and cle[1] == 2 and not cle[2]:
             essais += 1
             pas += 1
+            chemin.append((cle, "sonde"))
             if rng.random() < p_ouvre:
                 cle = (3, 3, True)
             continue
         e = _etat_p(cle[0], cle[1], cle[2])
         a = p.propose(e, P_BUT)
         if a is None:
-            return False, pas, essais
+            return False, pas, essais, cle, chemin
+        chemin.append((cle, a))
         cle, _ = p._pas(cle, a, True)
         pas += 1
-    return False, pas, essais
+    return False, pas, essais, cle, chemin
 
 
-def seule_minute(p: PolitiqueApprise, max_pas: int = 200) -> tuple[bool, int]:
-    """La politique seule sur la porte minute : elle ouvre et passe dans le même pas."""
-    cle, pas = (0, 0, False), 0
+def seule_sto(p: PolitiqueApprise, graine: int = 0, p_ouvre: float = 0.8,
+              max_pas: int = 200) -> tuple[bool, int, int]:
+    but, pas, essais, _, _ = trace_seule_sto(p, graine, p_ouvre, max_pas)
+    return but, pas, essais
+
+
+def trace_seule_minute(p: PolitiqueApprise, max_pas: int = 200):
+    """La politique seule sur la porte minute (rend aussi le chemin)."""
+    cle, pas, chemin = (0, 0, False), 0, []
     for _ in range(max_pas):
         if cle[:2] == P_BUT:
-            return True, pas
+            return True, pas, cle, chemin
         e = _etat_p(cle[0], cle[1], cle[2])
         a = p.propose(e, P_BUT)
         if a is None:
-            return False, pas
+            return False, pas, cle, chemin
+        chemin.append((cle, a))
         if (cle[0], cle[1]) == (3, 2) and a == "bas":
             cle = (3, 3, False)
             pas += 1
             continue
         cle, _ = p._pas(cle, a, True)
         pas += 1
-    return False, pas
+    return False, pas, cle, chemin
+
+
+def seule_minute(p: PolitiqueApprise, max_pas: int = 200) -> tuple[bool, int]:
+    """La politique seule sur la porte minute : elle ouvre et passe dans le même pas."""
+    but, pas, _, _ = trace_seule_minute(p, max_pas)
+    return but, pas
 
 
 def executer() -> list[dict]:

@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 29.7 h |
+| Durée | 29.9 h |
 | Tours | 18 |
-| Messages | 1198 |
-| Appels d'outils | 1113 |
+| Messages | 1203 |
+| Appels d'outils | 1117 |
 | Fichiers touchés | 11 |
-| Commandes | 904 |
+| Commandes | 906 |
 | Sous-agents | 0 |
 | Commits | 38 |
 | Compactages de contexte | 1 |
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*147 appels d'outils.* Actions notables :
+*151 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 96 autres
+- … et 98 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 864 autres
+- … et 866 autres
 
 ## 4. Mesures et résultats marquants
 
