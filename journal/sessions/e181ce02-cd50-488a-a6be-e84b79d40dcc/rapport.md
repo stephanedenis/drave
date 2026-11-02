@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 28.2 h |
-| Tours | 34 |
-| Messages | 653 |
-| Appels d'outils | 642 |
+| Durée | 28.3 h |
+| Tours | 35 |
+| Messages | 661 |
+| Appels d'outils | 648 |
 | Fichiers touchés | 25 |
-| Commandes | 516 |
+| Commandes | 521 |
 | Sous-agents | 2 |
-| Commits | 49 |
+| Commits | 50 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -99,6 +99,8 @@
 **Tour 33** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 34** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 35** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1837,6 +1839,54 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Committer la porte qui se referme
 - job_output
 
+**Synthèse produite :**
+
+⏵ Porte qui se referme : 27 nœuds/but, sonde 5, coût 57 ; 20/20
+
+Le round 21 du goal est livré : la **porte qui se referme** derrière le passage ne bloque pas l'A*. Commit **`bcf6c281`**.
+
+\## La porte qui se referme
+
+Même labyrinthe que T11, mais la porte `(3,3)` se **referme** dès qu'on la franchit : l'état `(x, y, open)` passe à `open = False` sur la case `(3,3)`. La politique doit l'ouvrir **avant** de passer ; une fois passée, elle ne peut plus revenir.
+
+| politique | nœuds | pas | saut | sonde | coût | but |
+|---|---:|---:|---:|---:|---:|---|
+| **manhattan** | **27** | 12 | 10 | **5** | **57** | **oui** |
+
+**Ce que ça dit** :
+
+- **Le moteur gère la fermeture** : l'A* explore la porte, la franchit, la porte se referme, et le but est atteint sans retour.
+- **La sonde reste nécessaire** (5 appels) : sans elle, la porte reste fermée.
+- **Le coût baisse** (57 contre 58 sur T11) : le chemin est un peu plus court, la porte se refermant derrière.
+- **Le vrai piège serait une porte qui se referme avant le passage** : ce banc la referme **après** — c'est la prochaine étape.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-ferme.md`](../../reports/rapport-pensee-ferme.md) ; JSON [`pensee-ferme.json`](../../reports/pensee-ferme.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T17 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **20/20 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **407 fiches / 507 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+\## La suite
+
+1. **Porte qui se referme avant le passage** : le moteur doit rouvrir et repasser.
+2. **Q-table sur la porte qui se referme** : la politique apprend le nouveau modèle.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque la porte qui se referme **avant** le passage.
+
+### Tour 35 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Ajouter la porte à un tour et la tester
+- bash — Ajouter la porte T18 et lancer l'autotest
+- bash — Écrire la fiche de la porte à un tour
+- bash — Ajuster la date et passer les portes
+- bash — Committer la porte à un tour
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1916,7 +1966,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 476 autres
+- … et 481 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2110,4 +2160,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LA PORTE STOCHASTIQUE : 80 %, 30 NŒUDS/BUT, SONDE 7 ; 18/18" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE STOCHASTIQUE"; then echo "COMMI
 - B13 — LA POLITIQUE SEULE SUR LE BRUIT : 8–10 PAS, 1–3 ESSAIS, 15/15 BUTS ; 19/19" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SUR LE BRUIT"; then ec
 - B13 — LA PORTE QUI SE REFERME : 27 NŒUDS/BUT, SONDE 5, COÛT 57 ; 20/20" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SE REFERME"; then echo "COMMIT O
+- B13 — LA PORTE À UN TOUR : 27 NŒUDS/BUT, SONDE 5, COÛT 57 ; 21/21" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "UN TOUR"; then echo "COMMIT OK $i"; b
 

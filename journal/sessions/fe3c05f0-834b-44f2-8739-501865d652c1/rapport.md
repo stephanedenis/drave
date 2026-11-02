@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 28.2 h |
+| Durée | 28.4 h |
 | Tours | 21 |
-| Messages | 975 |
-| Appels d'outils | 956 |
+| Messages | 976 |
+| Appels d'outils | 957 |
 | Fichiers touchés | 18 |
-| Commandes | 880 |
+| Commandes | 881 |
 | Sous-agents | 0 |
-| Commits | 58 |
+| Commits | 59 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1016,7 +1016,7 @@ L'**anglais** → le **catalogue des dix** ; l'**OCR des 159 scannés** du PDF (
 
 ### Tour 21 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Check English progress and repository state
 - bash — Count English pages and check OCR tools
@@ -1024,6 +1024,7 @@ L'**anglais** → le **catalogue des dix** ; l'**OCR des 159 scannés** du PDF (
 - bash — Launch documents extraction and verify OCR
 - bash — Write and launch scanned PDF OCR pilot
 - bash — Wait for OCR pilot results
+- bash — Commit OCR tool and documents launch
 
 ## 3. Travail accompli
 
@@ -1092,7 +1093,7 @@ L'**anglais** → le **catalogue des dix** ; l'**OCR des 159 scannés** du PDF (
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 840 autres
+- … et 841 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1298,4 +1299,5 @@ L'**anglais** → le **catalogue des dix** ; l'**OCR des 159 scannés** du PDF (
 - ÉTAT — T0 REVIENT SOUS 4 000" 2>&1 | tail -1; git reset -q; git log --oneline -1 echo "=== en/pdf"; ls reports/corpus-wiki-en-texte.json reports/corpus-pdf.json
 - DONNÉES — LE CORPUS PDF LOCAL : 2 785 PDF, 1 927 DOCUMENTS, 322 MO, 8 KO 0, LICENCES NOMMÉES" 2>/tmp/commit.err; then echo "commit OK (essai $i)"; break; else e
 - A2.6/A8.3 — LE LOT SUR LE DISQUE : IL NE DIVISE PAS LES LECTURES (503→502 MIO), IL ACCÉLÈRE LE CALCUL (+27 %)" 2>/tmp/commit.err; then echo "commit OK"; break; 
+- DONNÉES — L'OCR DES SCANS (tesseract 5.5.3) ET LES 7 496 DOCUMENTS LANCÉS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /t
 

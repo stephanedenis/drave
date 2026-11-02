@@ -603,6 +603,45 @@ LABYRINTHE_PORTE_FERME = Probleme(
 )
 
 
+# --------------------------------------------------------------------------- porte à un tour
+
+def sonde_pm(e: Etat, _p: dict | None = None) -> list[Etat]:
+    """La porte ne s'ouvre que le temps d'un pas : la sonde ouvre **et** passe dans le même tour."""
+    p = POLITIQUE[0]
+    if p is None:
+        return []
+    direction = p.propose(e, P_BUT)
+    p.appels += 1
+    if not direction:
+        return []
+    x, y = _xy_p(e)
+    if (x, y) == (3, 2) and direction == "bas":
+        # la porte s'ouvre et se referme dans le même pas : on passe directement.
+        return [_etat_p(3, 3, False, e.empreinte(), e.profondeur + 1)]
+    dx = {"droite": 1, "gauche": -1}.get(direction, 0)
+    dy = {"bas": 1, "haut": -1}.get(direction, 0)
+    nx, ny = x + dx, y + dy
+    if not _libre_p(nx, ny, _open_p(e)):
+        return []
+    return [_etat_p(nx, ny, _open_p(e), e.empreinte(), e.profondeur + 1)]
+
+
+REGISTRE_PM = Registre({
+    "pas": Operateur("pas", "symbolique", 1.0, pas_pf, "un pas ; la porte est fermée"),
+    "saut": Operateur("saut", "numérique", 2.0, saut_pf, "un saut ; la porte est fermée"),
+    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_pm, "la porte s'ouvre un tour, la sonde passe"),
+})
+
+LABYRINTHE_PORTE_MINUTE = Probleme(
+    nom="labyrinthe_porte_minute",
+    initial=lambda: _etat_p(0, 0, False),
+    operateurs={n: o.applique for n, o in REGISTRE_PM.operateurs.items()},
+    but=but_p,
+    heuristique=heuristique_p,
+    score=score_p,
+)
+
+
 class DRVM:
     """Le conteneur d'exécution : registre, politique, moteur, trace, bilan."""
 
@@ -646,4 +685,5 @@ __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "Politique
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
            "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise",
            "LABYRINTHE_PORTE", "REGISTRE_P", "LABYRINTHE_PORTE_STO", "REGISTRE_PSTO",
-           "LABYRINTHE_PORTE_FERME", "REGISTRE_PF"]
+           "LABYRINTHE_PORTE_FERME", "REGISTRE_PF",
+           "LABYRINTHE_PORTE_MINUTE", "REGISTRE_PM"]

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**99 commits** · **4 session(s)** · **10 thème(s)**
+**100 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 10 | [distribue.md](distribue.md) |
+| distribue | 11 | [distribue.md](distribue.md) |
 | docs | 25 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 47 | [mesures.md](mesures.md) |
@@ -28,8 +28,8 @@
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 28.6 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 28.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 28.2 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 28.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 28.4 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -134,10 +134,16 @@
 | 20:43 | `82580dda` | B13 — LA POLITIQUE SEULE : 8 PAS, 15/15 BUTS SANS A* ; 17/17 |
 | 20:46 | `f9c112fd` | B13 — LA PORTE STOCHASTIQUE : 80 %, 30 NŒUDS/BUT, SONDE 7 ; 18/18 |
 | 20:49 | `99f8dcb2` | B13 — LA POLITIQUE SEULE SUR LE BRUIT : 8–10 PAS, 1–3 ESSAIS, 15/15 BUTS ; 19/19 |
+| 20:52 | `bcf6c281` | B13 — LA PORTE QUI SE REFERME : 27 NŒUDS/BUT, SONDE 5, COÛT 57 ; 20/20 |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Les documents et l'OCR lancés.** `extrait_pdf.py` tourne sur les **7 496 PDF de
+`Documents`** (personnel, usage local) ; `ocr_pdf.py` (nouveau) océrise les **scans** avec le
+tesseract 5.5.3 installé sans root — pilote sur 20 documents. L'anglais est à 16,2 M pages sur
+**25,6 M** (63 %), le dernier corpus.
+
 **A2.6/A8.3 : le lot sur le disque.** Mesure avec éviction du cache : le lot **ne divise pas**
 les lectures (503 Mio au lot 1, 502 aux lots 2/4/8 — le modèle dense est lu une fois) ; il
 **accélère le calcul** (24,0 → 30,5 tok/s, +27 %) ; la **PPL** bouge de 0,006 % (15,8452 →

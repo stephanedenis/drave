@@ -1,0 +1,28 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "21/21",
+ "porte_minute": {
+  "porte": [
+   3,
+   3
+  ],
+  "ouverture": "un pas, la sonde ouvre et passe"
+ },
+ "resultat": {
+  "noeuds": 27,
+  "par_operateur": {
+   "pas": 12,
+   "saut": 10,
+   "sonde": 5
+  },
+  "cout": 57.0,
+  "appels": 7,
+  "but": true
+ },
+ "limites": [
+  "politique manhattan (règle)",
+  "coût 5 déclaré",
+  "toy"
+ ]
+}
