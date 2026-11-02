@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 37.9 h |
+| Durée | 38.0 h |
 | Tours | 116 |
-| Messages | 1450 |
-| Appels d'outils | 1265 |
+| Messages | 1453 |
+| Appels d'outils | 1268 |
 | Fichiers touchés | 25 |
-| Commandes | 1028 |
+| Commandes | 1030 |
 | Sous-agents | 2 |
-| Commits | 151 |
+| Commits | 152 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -6166,7 +6166,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute la **table des r�
 
 ### Tour 116 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Implémenter la sémantique des verbes et mesurer
 - bash — Écrire la fiche de la sémantique des verbes
@@ -6174,6 +6174,8 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute la **table des r�
 - bash — Committer la sémantique des verbes
 - job_output
 - bash — Committer la sémantique des verbes (2e essai)
+- bash — Trim l'en-cours et aligner les compteurs
+- bash — Committer l'état compacté
 
 ## 3. Travail accompli
 
@@ -6254,7 +6256,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute la **table des r�
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 988 autres
+- … et 990 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6553,4 +6555,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute la **table des r�
 - B13 — L'HYBRIDE : 24/30, AUCUNE RÈGLE SIMPLE N'ATTEINT 30/30 ; 101/101" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "L'HYBRIDE"; then echo "COMMIT OK
 - B13 — LA SÉMANTIQUE DES VERBES : 23/30, LE DERNIER NOM RESTE LE MEILLEUR ; 102/102" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SÉMANTIQUE DES VERBE
 - B13 — LA SÉMANTIQUE DES VERBES : 23/30, LE DERNIER NOM RESTE LE MEILLEUR ; 102/102" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SÉMANTIQUE DES VERBE
+- ÉTAT — COMPTEURS (509/597) ET EN-COURS COMPACTÉ (T0)" 2>&1 | tail -2; git log -1 --format='%h %s'; date
 

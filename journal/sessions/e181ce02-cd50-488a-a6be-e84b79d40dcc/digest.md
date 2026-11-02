@@ -26979,3 +26979,34 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1028", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-anaphore-semantique.json
+ delete mode 100644 reports/rapport-ocr-cegep.md
+ create mode 100644 reports/rapport-pensee-anaphore-semantique.md
+COMMIT OK 1
+6424bf7f B13 — LA SÉMANTIQUE DES VERBES : 23/30, LE DERNIER NOM RESTE LE MEILLEUR ; 102/102
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nstart=t.find('- **N2** :')\nend=t.find('\\n', t.find('n2-canal', start))\nif start!=-1 and end!=-1:\n    new='''- **N2** : **N2.h** 3 … [752 caractères tronqués]`
+
+  ```
+disk 509 597
+  revue de documentation · 509 fiche(s) · 597 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  en-cours · 1580 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md; git commit -m \"ÉTAT — COMPTEURS (509/597) ET EN-COURS COMPACTÉ (T0)\" 2>&1 | tail -2; git log -1 --format='%h %s'; date", "description": "Committer l'état compacté"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1030]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1030", "timeout_ms": 600000, "wait": true}`

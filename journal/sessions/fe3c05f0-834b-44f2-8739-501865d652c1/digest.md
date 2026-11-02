@@ -34485,3 +34485,13 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add docs/pilotage/en-cours.md; git diff --cached --name-only; git commit -m \"ÉTAT — COMPTEURS 509/597, T0 SOUS 4 000, LES PILOTES OCR (20 LIVRES + 5 NOTES CEGEP) SONT CLOS\ … [245 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 6424bf7f110cf9e87afb43977ba69345bead30e2 but expected ccf8bac5f7bc05b4035db69d702a986eeefd44f1
+code=128
+6424bf7f B13 — LA SÉMANTIQUE DES VERBES : 23/30, LE DERNIER NOM RESTE LE MEILLEUR ; 102/102
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff HEAD --stat -- docs/pilotage/en-cours.md; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add docs/pilotage/en-cours.md; git diff --cached --name-only; git commit -m \"ÉTAT — COMPTEURS 509/597, T0 SOUS 4 000, LES … [286 caractères tronqués]`

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (47)
+## Commits du jour (48)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -55,6 +55,7 @@
 | 06:11 | `f9828ab3` | B13 — LA RÉSOLUTION PAR RÔLE : LONG 9/10, COURT 14/20, COMPLÉMENTAIRE ; 100/100 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 06:22 | `3b7438a3` | B13 — L'HYBRIDE : 24/30, AUCUNE RÈGLE SIMPLE N'ATTEINT 30/30 ; 101/101 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 06:30 | `ccf8bac5` | DONNÉES — LE CEGEP ENTRE DANS L'OCR : 5 NOTES, 292 PAGES, 506 801 CARACTÈRES, 8 KO 0 | `en-cours.md`, `plan-travail.md`, `roadmap.md` (+20) |
+| 06:34 | `6424bf7f` | B13 — LA SÉMANTIQUE DES VERBES : 23/30, LE DERNIER NOM RESTE LE MEILLEUR ; 102/102 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+26) |
 
 ## Chiffres du jour
 
@@ -65,7 +66,7 @@
 ## Sessions actives ce jour
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 38.3 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 37.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 38.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 38.0 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
@@ -88,6 +89,7 @@
 - [reports/rapport-pensee-anaphore-objets.md](../../reports/rapport-pensee-anaphore-objets.md)
 - [reports/rapport-pensee-anaphore-pieges.md](../../reports/rapport-pensee-anaphore-pieges.md)
 - [reports/rapport-pensee-anaphore-roles.md](../../reports/rapport-pensee-anaphore-roles.md)
+- [reports/rapport-pensee-anaphore-semantique.md](../../reports/rapport-pensee-anaphore-semantique.md)
 - [reports/rapport-pensee-asym.md](../../reports/rapport-pensee-asym.md)
 - [reports/rapport-pensee-chaotique.md](../../reports/rapport-pensee-chaotique.md)
 - [reports/rapport-pensee-concurrentes.md](../../reports/rapport-pensee-concurrentes.md)
