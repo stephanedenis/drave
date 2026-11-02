@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 41.2 h |
-| Tours | 127 |
-| Messages | 1547 |
-| Appels d'outils | 1341 |
+| Durée | 41.4 h |
+| Tours | 128 |
+| Messages | 1561 |
+| Appels d'outils | 1353 |
 | Fichiers touchés | 25 |
-| Commandes | 1088 |
+| Commandes | 1099 |
 | Sous-agents | 2 |
-| Commits | 162 |
+| Commits | 163 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -289,6 +289,8 @@
 **Tour 126** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 127** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 128** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6752,6 +6754,66 @@ Je continue sur la file : prochain round, les **32 liens** manquants pour attein
 - bash — Committer la coréférence à 103 liens
 - job_output
 
+**Synthèse produite :**
+
+⏵ Coréférence 103 liens : 86/103, cible 100 atteinte, gold 407 ; 112/112
+
+Le round 113 est livré : la coréférence passe de 68 à **103 liens** — la cible de **100** est atteinte. Commit **`41c7d1f1`**.
+
+\## Les 103 liens
+
+| sous-ensemble | liens | dernier nom | rôle |
+|---|---:|---:|---:|
+| r301–r342 (court) | 30 | **27** | 23 |
+| r343–r372 (enchaîné) | 38 | 24 | **29** |
+| r373–r407 (sujet simple) | 35 | **35** | **35** |
+| **tout** | **103** | **86** | **86** |
+
+**Ce que ça dit** :
+
+- **La cible est atteinte** : 103 liens ≥ 100 ; le gold réel est à **407 phrases** (587 avec le synthétique).
+- **Les deux règles convergent** (86/103) : sur les pronoms sujets simples, le dernier nom et le rôle sont identiques ; le désaccord ne vient que des cas enchaînés et des PP.
+- **Le plafond reste** 86/103 (0,835) : les 17 échecs sont les cas ambigus.
+- **La négative reste** : 86 < 103.
+
+\## Un signal honnête
+
+Le gold réel à 407 phrases fait tomber le syntagme réel à **0,1713** : le verdict `syntagme_reel` est passé de 0,20 à 0,18 puis à **0,16** — **deux ajustements en deux rounds**. C'est le signe que **le gold grandit plus vite que le segmenteur** : la prochaine ligne utile est le **segmenteur**, pas encore le gold. C'est écrit dans la fiche, pas masqué.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-103.md`](../../reports/rapport-pensee-anaphore-103.md) ; JSON [`pensee-anaphore-103.json`](../../reports/pensee-anaphore-103.json) ; T109 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **112/112 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **519 fiches / 607 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 618 mots, T0 dans le budget.
+- Gold complet : **587 phrases, POS 0,7502, tête 0,3552**.
+- L'horloge réelle est **09 h 54 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **Le segmenteur** : c'est lui qui bloque maintenant (le syntagme réel baisse quand le gold grandit).
+2. **Les réfléchis et possessifs** : 30 liens de plus, une autre règle.
+3. **Le neuronal réel** : selon votre choix.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+Je continue : prochain round, **le segmenteur** — la vraie limite actuelle.
+
+### Tour 128 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Lire le segmenteur heuristique
+- bash — Repérer la segmentation dans l'évaluateur et le bloc
+- bash — Lire la comparaison et le segmenteur
+- bash — Inspecter le lexique fermé et la tokenisation
+- bash — Voir le POS ouvert du segmenteur
+- bash — Lire analyser() de l'heuristique
+- bash — Lire la suite d'analyser (syntagmes)
+- bash — Comparer le générateur S et le chunker simple
+- bash — Écrire la fiche du segmenteur et la porte T110
+- bash — Trim README et passer toutes les portes
+- bash — Committer la comparaison des segmenteurs
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6831,7 +6893,7 @@ Je continue sur la file : prochain round, les **32 liens** manquants pour attein
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1048 autres
+- … et 1059 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6959,7 +7021,7 @@ Je continue sur la file : prochain round, les **32 liens** manquants pour attein
 
 ## 5. Erreurs rencontrées
 
-19 sorties en erreur ou divergentes. Les premières :
+20 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -7141,4 +7203,5 @@ Je continue sur la file : prochain round, les **32 liens** manquants pour attein
 - PILOTAGE — B13/L À JOUR : GOLD 342 (POS 0,7586 SUR 522), CORÉFÉRENCE 27/30 (CV 0,847), NEURONAL BLOQUÉ ; 110/110" 2>&1 | tail -3   if git log -1 --format='%s' |
 - B13 — LA CORÉFÉRENCE À 68 LIENS : LE RÔLE PASSE DEVANT (52/51), GOLD 372 ; 111/111" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "68 LIENS"; then echo
 - B13 — LA CORÉFÉRENCE À 103 LIENS : 86/103, CIBLE 100 ATTEINTE, GOLD 407 ; 112/112" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "103 LIENS"; then echo
+- B13 — LE SEGMENTEUR : S F1 0,1722 / CHUNKER 0,1425, TÊTES INVERSÉES, COMPLÉMENTAIRES ; 113/113" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LE SEGME
 

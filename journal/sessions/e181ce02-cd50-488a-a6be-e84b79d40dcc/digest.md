@@ -28410,3 +28410,297 @@ timeout 2400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/tests/linguistique/evaluer_gold.py tools/pensee/autotest.py reports/rapport-pensee-anaphore-103.md reports/pens … [641 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1088]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1088", "timeout_ms": 600000, "wait": true}`
+
+  ```
+27 files changed, 3309 insertions(+), 71 deletions(-)
+ create mode 100644 reports/pensee-anaphore-103.json
+ create mode 100644 reports/rapport-pensee-anaphore-103.md
+COMMIT OK 1
+41c7d1f1 B13 — LA CORÉFÉRENCE À 103 LIENS : 86/103, CIBLE 100 ATTEINTE, GOLD 407 ; 112/112
+lun 02 nov 2026 09:53:58 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Coréférence 103 liens : 86/103, cible 100 atteinte, gold 407 ; 112/112
+
+Le round 113 est livré : la coréférence passe de 68 à **103 liens** — la cible de **100** est atteinte. Commit **`41c7d1f1`**.
+
+## Les 103 liens
+
+| sous-ensemble | liens | dernier nom | rôle |
+|---|---:|---:|---:|
+| r301–r342 (court) | 30 | **27** | 23 |
+| r343–r372 (enchaîné) | 38 | 24 | **29** |
+| r373–r407 (sujet simple) | 35 | **35** | **35** |
+| **tout** | **103** | **86** | **86** |
+
+**Ce que ça dit** :
+
+- **La cible est atteinte** : 103 liens ≥ 100 ; le gold réel est à **407 phrases** (587 avec le synthétique).
+- **Les deux règles convergent** (86/103) : sur les pronoms sujets simples, le dernier nom et le rôle sont identiques ; le désaccord ne vient que des cas enchaînés et des PP.
+- **Le plafond reste** 86/103 (0,835) : les 17 échecs sont les cas ambigus.
+- **La négative reste** : 86 < 103.
+
+## Un signal honnête
+
+Le gold réel à 407 phrases fait tomber le syntagme réel à **0,1713** : le verdict `syntagme_reel` est passé de 0,20 à 0,18 puis à **0,16** — **deux ajustements en deux rounds**. C'est le signe que **le gold grandit plus vite que le segmenteur** : la prochaine ligne utile est le **segmenteur**, pas encore le gold. C'est écrit dans la fiche, pas masqué.
+
+## L'état
+
+- Fiche : [`rapport-pensee-anaphore-103.md`](../../reports/rapport-pensee-anaphore-103.md) ; JSON [`pensee-anaphore-103.json`](../../reports/pensee-anaphore-103.json) ; T109 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **112/112 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **519 fiches / 607 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 618 mots, T0 dans le budget.
+- Gold complet : **587 phrases, POS 0,7502, tête 0,3552**.
+- L'horloge réelle est **09 h 54 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+## La suite
+
+1. **Le segmenteur** : c'est lui qui bloque maintenant (le syntagme réel baisse quand le gold grandit).
+2. **Les réfléchis et possessifs** : 30 liens de plus, une autre règle.
+3. **Le neuronal réel** : selon votre choix.
+4. **Politique DRVM/native** : quand les poids seront là.
+
+Je continue : prochain round, **le segmenteur** — la vraie limite actuelle.
+
+
+## Tour 128
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 114/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _seg\\|def _tete\\|class Heuristique\\|def _pos\\b\" tools/bloc_linguistique.py | head; echo ---; sed -n \"$(grep -n 'def _seg' tools/bloc_linguistique.py | head -1 | cut -d: -f1),+45p\" tools/bloc_linguistique.py", "de … [45 caractères tronqués]`
+
+  ```
+385:class Heuristique:
+459:    def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
+---
+[stderr]
+sed: -e expression #1, char 1: unknown command: ','
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"_seg\\|segments\" tools/tests/linguistique/evaluer_gold.py | head -15; echo ---; grep -n \"segments\\|def _chunk\\|def analyser\" tools/bloc_linguistique.py | head -25", "description": "Repérer la segmentation dans l'évalua … [17 caractères tronqués]`
+
+  ```
+43:def _seg(a: bl.Annotation) -> set[tuple[str, int, int]]:
+92:        pred_seg, gold_seg = _seg(a), {(s["type"], s["debut"], s["fin"]) for s in phrase["segments"]}
+93:        tp += len(pred_seg & gold_seg)
+94:        fp += len(pred_seg - gold_seg)
+95:        fn += len(gold_seg - pred_seg)
+97:        gold_tete = {(s["type"], s["debut"]) for s in phrase["segments"]}
+102:        for s in phrase["segments"]:
+195:    cibles = [s["cible"] for p in phrases for s in p["segments"] if s.get("cible")]
+---
+126:    def analyser(self, texte: str, langue: str | None = None,
+530:        segments: list[dict] = []
+539:                segments.append({"type": "GN", "role": "groupe nominal", "niveau": 0,
+548:                segments.append({"type": "GP", "role": _role_gp(t), "niveau": 1,
+557:                segments.append({"type": "GV", "role": "prédicat", "niveau": 0,
+566:                segments.append({"type": "REL", "role": "qualité", "niveau": 1,
+572:        return segments
+575:    def analyser(self, texte: str, langue: str | None = None,
+651:                for s in c.get("segments", []):
+743:    def analyser(self, texte: str, langue: str | None = None,
+812:    def analyser(self, texte: str, l
+… [157 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '38,50p' tools/tests/linguistique/evaluer_gold.py; echo ===; sed -n '515,575p' tools/bloc_linguistique.py", "description": "Lire la comparaison et le segmenteur"}`
+
+  ```
+def _pos_map(a: bl.Annotation) -> dict[tuple[int, int], str]:
+    return {(e.debut, e.fin): e.type for e in a.etiquettes if e.niveau == "pos"}
+
+
+def _seg(a: bl.Annotation) -> set[tuple[str, int, int]]:
+    return {(e.type, e.debut, e.fin) for e in a.etiquettes if e.niveau == "syntagme"}
+
+
+def _tete(a: bl.Annotation) -> set[tuple[str, int]]:
+    """La tête d'un segment : son premier token (début) et son type."""
+    return {(e.type, e.debut) for e in a.etiquettes if e.niveau == "syntagme"}
+
+===
+        (GP, puis GN, puis GV), comme le premier candidat de `analyser`.
+        """
+        if not self.segmenter_s:
+            return {}
+        try:
+            import generateur
+            base = generateur._segmente(texte, generateur._tokens(texte))
+            return {(s.debut, s.fin, s.type): (s.cible_gp or s.cible_nom or s.cible_verbe)
+                    for s in base}
+        except Exception:
+            return {}
+
+    def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
+        mots = self._mots(texte)
+        lex = POS_FERME.get(langue, POS_FERME["fr"])
+        segments: list[dict] = []
+        i = 0
+        while i < len(mots):
+            d, f, t, typ = mots[i]
+… [2287 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport tools.bloc_linguistique as bl\nprint({k: len(v) for k,v in bl.POS_FERME['fr'].items()})\nprint('ADJ' in bl.POS_FERME['fr'], sorted(bl.POS_FERME['fr'].get('ADJ', []))[:8])\nprint('PRON', sorted(bl.POS_FERME['fr'] … [212 caractères tronqués]`
+
+  ```
+{'DET': 29, 'PREP': 31, 'PRON': 28, 'CONJ': 15, 'AUX': 20, 'ADV': 24, 'NUM': 9}
+False []
+PRON ['ce', 'cela', 'dont', 'elle', 'elles', 'en', 'il', 'ils', 'j', 'je']
+    def _mots(texte: str) -> list[tuple[int, int, str, str]]:
+        motif = re.compile(r"\w+(?:['’\-]\w+)*|\d+(?:[.,]\d+)*|https?://\S+|[\U0001F300-\U0001FAFF]|[^\w\s]")
+        sortie = []
+        for m in motif.finditer(texte):
+            t = m.group()
+            if t.startswith(("http://", "https://")):
+                typ = "url"
+            elif t[0].isdigit():
+                typ = "nombre"
+            elif re.fullmatch(r"[^\w\s]", t):
+                typ = "ponctuation"
+            elif len(t) == 1 and ord(t) >= 0x1F300:
+                typ = "emoji"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique()\nfor w in ['chat','dort','vieux','pont','belle','rouge','mange','livre']:\n    print(w, h._pos('fr', w))\n\"; sed -n '459,500p' tools/bloc_linguistique.py", "des … [46 caractères tronqués]`
+
+  ```
+chat ('NOUN', True, 0.3)
+dort ('VERB', True, 0.72)
+vieux ('ADJ', True, 0.68)
+pont ('NOUN', True, 0.3)
+belle ('ADJ', True, 0.68)
+rouge ('ADJ', True, 0.68)
+mange ('VERB', True, 0.72)
+livre ('NOUN', True, 0.3)
+    def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
+        lex = POS_FERME.get(langue, POS_FERME["fr"])
+        n = _normaliser(mot).split("'")[0].split("’")[0]
+        for classe, mots in lex.items():
+            if n in mots:
+                return classe, False, 0.92
+        if n in VERBES.get(langue, VERBES["fr"]):
+            return "VERB", True, 0.72
+        if n in ADJECTIFS.get(langue, ADJECTIFS["fr"]):
+            return "ADJ", True, 0.68
+        if re.fullmatch(r"\d+(?:[.,]\d+)*", mot):
+            return "NUM", False, 0.95
+        if mot[:1].isupper() and mot[1:].islower() and mot not in {"Le", "La", "Les", "Un", "Une", "The"}:
+            return "NOUN", True, 0.55
+        if len(n) >= 4 and n.endswith(("ment", "ly")):
+            return "ADV", True, 0.45
+        if len(n) >= 4 and n.endswith(("tion", "sion", "ness", "ity", "ité", "ance", "ence")):
+            return "NOUN", True, 0.45
+        if len(n) >= 4 and n.endswith(("er", "ir", "ing", "ed"))
+… [1005 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '575,640p' tools/bloc_linguistique.py", "description": "Lire analyser() de l'heuristique"}`
+
+  ```
+def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        t0 = time.perf_counter()
+        texte = texte or ""
+        trace: list[dict] = []
+        if not texte.strip() or not any(ch.isalpha() or ch.isdigit() for ch in texte):
+            return Annotation(texte=texte, refus="vide", source=self.nom,
+                              trace=[{"etape": "refus", "raison": "vide"}],
+                              cout={"octets": len(texte.encode()), "duree_s": round(time.perf_counter() - t0, 6)})
+
+        lg, conf_lg, script = self._langue(texte, langue)
+        trace.append({"etape": "langue", "langue": lg, "script": script, "confiance": conf_lg,
+                      "indice": langue or ""})
+        etiquettes: list[Etiquette] = []
+        unites: list[Span] = []
+
+        # 1. graphème — des plages de classes, pas un caractère par étiquette
+        classes = {"L": "lettres", "N": "chiffres", "P": "ponctuation", "Z": "espace",
+                   "S": "symbole", "M": "marque"}
+        i = 0
+        while i < len(texte):
+            cat = unicodedata.category(texte[i])[0]
+            j = i + 1
+            while j < len(tex
+… [2607 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '640,700p' tools/bloc_linguistique.py", "description": "Lire la suite d'analyser (syntagmes)"}`
+
+  ```
+or any(m in _normaliser(p) for m in MOTS_DOUBLE_SENS)):
+                etiquettes.append(Etiquette("pragmatique", "double_sens", "candidat", d, f,
+                                            self.nom, 0.25, candidats=["littéral", "figuré"],
+                                            langue=lg, script=script))
+
+        # 5. syntagmes : le générateur S (candidats) ou un chunker simple
+        cands = self._syntagmes_s(texte)
+        cibles_s = self._cibles_s(texte) if cands else {}
+        if cands:
+            for c in cands[:1]:
+                noms = [x.get("nom", "") for x in cands]
+                for s in c.get("segments", []):
+                    att = c.get("attachement") or {}
+                    if att.get("segment") == s.get("texte"):
+                        cible = att.get("cible")
+                    else:
+                        cible = cibles_s.get((s.get("debut"), s.get("fin"), s.get("type")))
+                    meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}
+                    if cible:
+                        meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
+                    etiquettes.append(Etiquette("syntagme", s.get("t
+… [2577 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nph=charger()\nh1=bl.Heuristique()\nh2=bl.Heuristique()\nh2.segmenter … [390 caractères tronqués]`
+
+  ```
+S générateur syn F1 0.1722 tete 0.3552 real syn 0.1713
+chunker simple syn F1 0.1425 tete 0.4707 real syn 0.1552
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T109 la coréférence à 103 liens  86/103 pour les deux règles (cible 100 atteinte)\\n\",\n\"  T109 la coréférence à 103 lie … [6791 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 520 fiche(s) · 608 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2813 mots > budget 2800 (T1)
+  en-cours · 1625 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-anaphore-cv-graines.md`](rapport-pensee-anaphore-cv-graines.md) | **B13** — la CV sur 20 graines : 0,8467 ± 0,05 … [606 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-segmenteur.md reports/pensee-segmenteur.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotage/roadma … [504 caractères tronqués]`

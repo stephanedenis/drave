@@ -20040,3 +20040,49 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1163", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -3 work/n2w/deduit_leger.log; ps -eo pid,etime,pcpu,rss,cmd | grep deduit_leger | grep -v grep | awk '{printf \"%s %s %s%% %sMo\\n\", $1, $2, $3, int($4/1024)}'; free -g | head -2", "description": "Check the lean  … [7 caractères tronqués]`
+
+  ```
+09:53
+brut 1048 Mo
+3453309 13:06 0.0% 4Mo
+3453311 13:06 99.5% 67009Mo
+               total        used        free      shared  buff/cache   available
+Mem:             125          80          42           5           9          44
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -3 work/n2w/deduit_leger.log; ps -eo pid,etime,pcpu,rss,cmd | grep deduit_leger | grep -v grep | awk '{printf \"%s %s %s%% %sMo\\n\", $1, $2, $3, int($4/1024)}'; ls -la data/wiki_big/propre/ 2>/dev/null … [59 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1165]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1165", "timeout_ms": 600000, "wait": true}`
+
+  ```
+10:00
+brut 1048 Mo
+3453309 20:16 0.0% 4Mo
+3453311 20:16 99.6% 80516Mo
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1163 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -3 work/n2w/deduit_leger.log; ps -eo pid,etime,pcpu,rss,cmd | grep deduit_leger | grep -v grep | awk '{printf "%s %s %s%% %sMo\n", $1, $2, $3, int($4/1024)}'; ls -la data/wiki_big/propre/ 2>/dev/null | head -4; free -g | head -2) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -4 work/n2w/deduit_leger.log; ps -eo pid,etime,pcpu,rss,cmd | grep deduit_leger | grep -v grep | awk '{printf \"%s %s %s%% %sMo\\n\", $1, $2, $3, int($4/1024)}'; free -g | head -2; ls -la data/wiki_big/ … [76 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1166]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1166", "timeout_ms": 400000, "wait": true}`

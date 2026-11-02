@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,6 +13,7 @@
 | 05:21 | `8c82d029` | B13 — L'ANAPHORE : 4/4 LIENS JUSTES, PREMIÈRE MESURE DE CORÉFÉRENCE ; 95/95 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+26) |
 | 05:44 | `a880c538` | ÉTAT — LE BUDGET REVIENT À 4000 MOTS (N2.z SUR DEUX GRAINES) | `en-cours.md`, `README.md`, `apprentissage.md` (+14) |
 | 09:39 | `4d8c9905` | B13 — LA CORÉFÉRENCE À 68 LIENS : LE RÔLE PASSE DEVANT (52/51), GOLD 372 ; 111/111 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+28) |
+| 09:52 | `41c7d1f1` | B13 — LA CORÉFÉRENCE À 103 LIENS : 86/103, CIBLE 100 ATTEINTE, GOLD 407 ; 112/112 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+24) |
 
 ## Chiffres du jour
 
@@ -22,9 +23,9 @@
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 41.6 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 41.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 41.3 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 41.7 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 41.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 41.4 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -36,6 +37,7 @@
 - [reports/rapport-n2-multilingue-34m-distille.md](../../reports/rapport-n2-multilingue-34m-distille.md)
 - [reports/rapport-n2-multilingue-34m.md](../../reports/rapport-n2-multilingue-34m.md)
 - [reports/rapport-n2-professeur.md](../../reports/rapport-n2-professeur.md)
+- [reports/rapport-pensee-anaphore-103.md](../../reports/rapport-pensee-anaphore-103.md)
 - [reports/rapport-pensee-anaphore-68.md](../../reports/rapport-pensee-anaphore-68.md)
 - [reports/rapport-pensee-anaphore.md](../../reports/rapport-pensee-anaphore.md)
 - [reports/rapport-pensee-bord-fin.md](../../reports/rapport-pensee-bord-fin.md)

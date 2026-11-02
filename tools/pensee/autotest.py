@@ -1667,6 +1667,25 @@ def t109_anaphore_103() -> tuple[bool, str]:
         f"103 liens : dernier nom {dernier['justes']}/103, rôle {role['justes']}/103")
 
 
+def t110_segmenteur() -> tuple[bool, str]:
+    """Le segmenteur : S générateur F1 0,1722, chunker 0,1425 ; tête 0,3552 / 0,4707."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    ph = charger()
+    h1 = bl.Heuristique()
+    h2 = bl.Heuristique()
+    h2.segmenter_s = False
+    r1 = evaluer_bloc("h", h1, ph)
+    r2 = evaluer_bloc("h", h2, ph)
+    f1 = round(r1["syntagme"]["f1"], 4)
+    f2 = round(r2["syntagme"]["f1"], 4)
+    t1 = round(r1["syntagme"]["tete"]["f1"], 4)
+    t2 = round(r2["syntagme"]["tete"]["f1"], 4)
+    return (abs(f1 - 0.1722) < 0.001 and abs(f2 - 0.1425) < 0.001
+            and t1 < t2), (
+        f"segmenteur : S F1 {f1} tête {t1} ; chunker F1 {f2} tête {t2}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1775,7 +1794,8 @@ def main() -> int:
               ("T106 bilan anaphore", t106_bilan_anaphore()),
               ("T107 gold complet", t107_gold_complet()),
               ("T108 coréférence 68", t108_anaphore_68()),
-              ("T109 coréférence 103", t109_anaphore_103())]
+              ("T109 coréférence 103", t109_anaphore_103()),
+              ("T110 segmenteur", t110_segmenteur())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -1,0 +1,22 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "113/113",
+ "segmenteurs": {
+  "S": {
+   "f1": 0.1722,
+   "tete": 0.3552,
+   "f1_reel": 0.1713
+  },
+  "chunker": {
+   "f1": 0.1425,
+   "tete": 0.4707,
+   "f1_reel": 0.1552
+  }
+ },
+ "limites": [
+  "587 phrases",
+  "hybride non implémenté",
+  "heuristique seule"
+ ]
+}
