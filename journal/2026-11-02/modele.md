@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,10 +14,11 @@
 | 07:14 | `9c8722d6` | B13 — LE VOTE PONDÉRÉ : POIDS (1,0,0,0), TRAIN 20/20, TEST 7/10 ; 106/106 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 09:09 | `4cbc84a3` | PILOTAGE — LA NUIT N2 EST CLOSE : LE MEILLEUR MODÈLE EST LE 34,3 M + CANAL (3,53) | `en-cours.md`, `plan-travail.md`, `roadmap.md` (+15) |
 | 11:44 | `c65b68d6` | B13 — LA RÉPONSE AU CONTENU : 0/19, LA FRONTIÈRE DU MODÈLE ; 124/124 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
+| 13:33 | `6e6e9f61` | ÉTAT ET ROADMAP — LE MÉLANGE 1 Go EST LE MODÈLE DE PRODUCTION | `en-cours.md`, `roadmap.md`, `README.md` (+14) |
 
 ## Chiffres du jour
 
-`3,5250`
+`1 Go` · `3,5250`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

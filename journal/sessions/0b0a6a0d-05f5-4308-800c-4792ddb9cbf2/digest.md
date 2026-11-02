@@ -20875,3 +20875,41 @@ commit ok (1)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.ac** : le mélange 1 Go (le meilleur compromis) ;\", \"**N2.ac** : le mélange 1 Go ;\")\ns = re.sub(r\"\\| fi … [2126 caractères tronqués]`
+
+  ```
+en-cours ok
+roadmap ok
+  T0 max : 3995 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 628 JSON, le disque en a 629
+[still running after 60000ms; moved to background job bash-1219]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1219", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+6e6e9f61 ÉTAT ET ROADMAP — LE MÉLANGE 1 Go EST LE MODÈLE DE PRODUCTION
+13:34
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git ls-tree HEAD reports/ | grep -c \"rapport-n2\"; git status --short reports/ | grep \"??\" | grep \"rapport-n2\" | head -3; git log --oneline -6; python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; date '+%H:%M'", "descripti … [40 caractères tronqués]`
+
+  ```
+31
+?? reports/rapport-n2-corpus-1go.md
+?? reports/rapport-n2-melange.md
+?? reports/rapport-n2-pas-vs-texte.md
+6e6e9f61 ÉTAT ET ROADMAP — LE MÉLANGE 1 Go EST LE MODÈLE DE PRODUCTION
+2c394fbc N2.ac — LE MÉLANGE DES DEUX CORPUS : LA LARGEUR SANS PERDRE LE FRANÇAIS
+26e4df27 B13 — LES QUESTIONS PIÈGES : 29/34, LE SI EST UNE CONVENTION ; 132/132
+5b7a3e99 B13 — LA RÈGLE DU SI : 29/29, LA DERNIÈRE RÈGLE DE SURFACE ; 131/131
+80c37a25 GLOSSAIRE — LES 10 PAGES PIVOTS LIENT LA PREMIÈRE OCCURRENCE DES TERMES (269 LIENS) ; LE SCRIPT LIE PAR PAGE, PAS « PARTOUT »
+52c530ce ÉTAT — T0 DANS LE BUDGET (3996 MOTS) APRÈS LE GOLD 417
+  T0 max : 3995 mots (budget 4 000)
+13:34
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d{2} h \\d{2} HNE \\(heure locale, EST\\)\\.\\*\\*\",\n           \"**Mis à jour : … [1141 caractères tronqués]`

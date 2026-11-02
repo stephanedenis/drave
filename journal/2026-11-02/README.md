@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**140 commits** · **3 session(s)** · **9 thème(s)**
+**141 commits** · **3 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -17,7 +17,7 @@
 | docs | 18 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 78 | [mesures.md](mesures.md) |
-| modele | 6 | [modele.md](modele.md) |
+| modele | 7 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 6 | [portes.md](portes.md) |
 
@@ -173,6 +173,7 @@
 | 13:07 | `5b7a3e99` | B13 — LA RÈGLE DU SI : 29/29, LA DERNIÈRE RÈGLE DE SURFACE ; 131/131 |
 | 13:25 | `26e4df27` | B13 — LES QUESTIONS PIÈGES : 29/34, LE SI EST UNE CONVENTION ; 132/132 |
 | 13:31 | `2c394fbc` | N2.ac — LE MÉLANGE DES DEUX CORPUS : LA LARGEUR SANS PERDRE LE FRANÇAIS |
+| 13:33 | `6e6e9f61` | ÉTAT ET ROADMAP — LE MÉLANGE 1 Go EST LE MODÈLE DE PRODUCTION |
 
 ## Le récit de la journée (écrit à la main)
 

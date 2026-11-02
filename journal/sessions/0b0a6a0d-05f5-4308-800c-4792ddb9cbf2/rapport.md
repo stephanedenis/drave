@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 45.3 h |
 | Tours | 20 |
-| Messages | 1703 |
-| Appels d'outils | 1560 |
+| Messages | 1706 |
+| Appels d'outils | 1563 |
 | Fichiers touchés | 11 |
-| Commandes | 1219 |
+| Commandes | 1221 |
 | Sous-agents | 0 |
-| Commits | 87 |
+| Commits | 88 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1062,7 +1062,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 
 ### Tour 20 — mets le dossier de pilotage à jour et continue
 
-*125 appels d'outils.* Actions notables :
+*128 appels d'outils.* Actions notables :
 
 - bash — Read the state's N2 section and timestamp
 - read
@@ -1078,7 +1078,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - bash — Find the Wikipedia extraction tool
 - bash — Read the extraction tool's options
 - bash — Look at the earlier extraction script
-- … et 64 autres
+- … et 66 autres
 
 **Synthèse produite :**
 
@@ -1144,7 +1144,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1179 autres
+- … et 1181 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1379,4 +1379,5 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = r
 
