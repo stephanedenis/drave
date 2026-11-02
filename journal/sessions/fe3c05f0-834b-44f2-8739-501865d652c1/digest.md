@@ -17718,3 +17718,67 @@ Continue working toward the objective in this same session. Treat the current wo
 started background job bash-883
   ```
 
+### 🤖 Assistant
+
+⏵ Round 10 : l'anglais à 19,4/25,6 M pages, le contrôle se lance dès le manifeste
+
+**Round 10/1000 — l'anglais est le dernier run ; le contrôle 8 Ko partira automatiquement.**
+
+## L'anglais
+
+**19,4 M pages lues sur 25,6 M** (76 %), **4,97 M articles**, 18,91 G caractères. Le débit s'est redressé (~180 k pages/min) : le manifeste est attendu vers **21 h 35**. Un job de fond surveille le fichier et lance **le contrôle 8 Ko** dès qu'il apparaît (les deux unités + le XNLI anglais + le wikitext2) — c'est le dernier gros contrôle de la campagne.
+
+## L'OCR et les documents
+
+- **L'OCR** : le premier livre est passé (*3D Printing and RepRap*, 134 pages, 159 776 caractères) ; la **détection des scannés** sur les 2 785 PDF (le `pdftotext` de deux pages par document) prend l'essentiel du temps ; les 20 documents du pilote suivent.
+- **Les documents** : **184 Mo** extraits des 7 496 PDF de `Documents` ; le manifeste à la fin du parcours.
+
+## La suite
+
+Le **manifeste de l'anglais** → son contrôle → la **fiche et le catalogue des dix** (la table finale, les totaux, les fuites) ; les **manifestes OCR et Documents** → leurs fiches (les licences, le natif/scanné, l'OCR brut) ; puis les **159 scans** complets. Le goal reste actif ; le prochain round devrait ramasser l'anglais, l'OCR et les Documents.
+
+
+## Tour 23
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 11/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; echo \"=== manifestes\"; ls -la reports/corpus-wiki-en-texte.json reports/ocr-pdf.json reports/corpus-pdf-documents.json 2>/dev/null; echo \"=== check en\"; ps -eo pid,etime,cmd | grep \"verifie_contamination.*en_texte\" … [543 caractères tronqués]`
+
+  ```
+21:01
+=== manifestes
+=== check en
+1632164 00:20
+=== ocr/doc
+1615747 16:59 reports/corpus-pdf-documents.json
+1616198 16:02 20
+  Biblio_large · 001.0 3dprintingandreprap.pdf · 134 p · 159776 car
+160K	data/corpus_ocr
+202M	data/corpus_pdf_documents
+19G	data/corpus_wiki_en_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ps -p 1494795 -o pid,etime,args= 2>/dev/null | cut -c1-120; ps -p 1632164 -o pid,ppid,etime,args= 2>/dev/null | cut -c1-140; echo \"=== manifest?\"; ls -la reports/corpus-wiki-en-texte.json reports/corpus-wiki-en-texte-contamination.js … [330 caractères tronqués]`
+
+  ```
+PID     ELAPSED 
+1494795    02:33:32 python3 tools/corpus_wikipedia_texte.py --langue en --sortie data/corpus_wiki_en_texte --manifeste r
+    PID    PPID     ELAPSED 
+1632164   13617       03:13 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 110); do [ -f reports/corpus-wiki-e
+=== manifest?
+ls: cannot access 'reports/corpus-wiki-en-texte.json': No such file or directory
+ls: cannot access 'reports/corpus-wiki-en-texte-contamination.json': No such file or directory
+=== log en
+  [en] 19200000 lus · 4926151 gardés · 18.79 G caractères
+  [en] 19400000 lus · 4966408 gardés · 18.91 G caractères
+=== git
+=== job
+  ```
+

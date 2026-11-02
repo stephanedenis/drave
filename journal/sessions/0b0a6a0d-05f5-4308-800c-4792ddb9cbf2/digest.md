@@ -15207,3 +15207,33 @@ work/n2k/E-g2.pt
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; for g in 1 2; do ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2k/E-g$g.pt --decomposition --longueurs --corpus-dir data/wiki_en/propre --sortie work/n2k/eval-en-distill.json 2>&1 | gr … [79 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-888]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-886 (bash: sleep 720; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E-g*.pt 2>/dev/null; ls work/n2k/route-en 2>/dev/null | head -2; for f in E-g1 E-g2 E-g3 M-g1 M-g2; do echo "-- $f"; tail -1 work/n2k/$f.log 2>/dev/null; done) finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-888", "timeout_ms": 400000, "wait": true}`
+
+  ```
+{"fichier": "E-g1.pt", "params": 11816136, "val": 3.9487, "test": 4.1639, "litterature": 19.547, "litterature_propre": 19.4711, "anglais": 4.6388, "wikitext2": 4.9515, "permute": 124.3289, "decomposition": {"complete": 4.065, "apres_2_blocs": 5.9532, "apres_4_blocs": 4.7783, "apres_6_blocs": 4.0785, "sans_pensee": 14414010.4964}, "longueurs": {"129": 3.9431, "192": 3.9434, "256": 4.0663, "384": 5.0473, "512": 6.3215}}
+{"fichier": "E-g2.pt", "params": 11816136, "val": 3.9349, "test": 4.1686, "litterature": 19.355, "litterature_propre": 19.2461, "anglais": 4.6426, "wikitext2": 4.9675, "permute": 117.7516, "decomposition": {"complete": 4.053, "apres_2_blocs": 5.9576, "apres_4_blocs": 4.7706, "apres_6_blocs": 4.0708, "sans_pensee": 16846479.3486}, "longueurs": {"129": 3.9258, "192": 3.9434, "256": 4.094, "384": 5.0824, "512": 6.3761}}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-884 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E-g*.pt work/n2k/M-g*.pt 2>/dev/null; for f in E-g1 E-g2 E-g3 M-g1; do echo "-- $f"; tail -1 work/n2k/$f.log 2>/dev/null; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E-g3.pt work/n2k/M-g1.pt work/n2k/M-g2.pt work/n2k/C-g1.pt 2>/dev/null; for f in E-g3 M-g1 M-g2 C-g1; do echo \"-- $f\"; tail -1 work/n2k/$f.log 2>/dev/null; done", "description": "Wait for the  … [49 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-889]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-889", "timeout_ms": 1500000, "wait": true}`

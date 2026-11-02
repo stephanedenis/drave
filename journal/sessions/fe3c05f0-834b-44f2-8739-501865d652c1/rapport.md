@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 28.4 h |
-| Tours | 23 |
-| Messages | 986 |
-| Appels d'outils | 961 |
+| Durée | 28.5 h |
+| Tours | 24 |
+| Messages | 991 |
+| Appels d'outils | 964 |
 | Fichiers touchés | 18 |
-| Commandes | 884 |
+| Commandes | 887 |
 | Sous-agents | 0 |
-| Commits | 59 |
+| Commits | 60 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -73,6 +73,8 @@
 **Tour 22** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 23** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 24** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1071,9 +1073,33 @@ Le **manifeste de l'anglais** → son contrôle → la **fiche et le catalogue d
 
 ### Tour 23 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*2 appels d'outils.* Actions notables :
 
 - bash — Check English check, OCR, and documents
+- bash — Diagnose English process, check, and manifest
+
+**Synthèse produite :**
+
+⏵ Round 11 : l'anglais à 19,4/25,6 M pages ; le « contrôle » repéré n'était que la boucle d'attente
+
+**Round 11/1000 — vérification faite : pas de contrôle prématuré.** Le processus que le `ps` montrait comme un `verifie_contamination` était en réalité **ma propre boucle d'attente** (`bash -c ... for i in $(seq 1 110)`) : son `args` contient la commande du contrôle, ce qui m'a induit en erreur. Le manifeste anglais n'existe pas encore — le run tourne toujours (2 h 33, **19,4 M pages sur 25,6 M**, 4,97 M articles, 18,91 G caractères), et la boucle d'attente expirera avant lui.
+
+\## Ce qui tourne
+
+- **L'anglais** : 19,4/25,6 M pages (76 %), à ~145 k pages/min → le manifeste vers **21 h 45**. Le contrôle 8 Ko (les deux unités + XNLI + wikitext2) sera lancé **après** le manifeste — pas sur un fichier en cours d'écriture.
+- **L'OCR des scans** : la détection sur les 2 785 PDF prend le temps ; le premier livre est océrisé (134 pages, 159 776 caractères) ; les 20 documents du pilote suivent.
+- **Les documents** : 202 Mo extraits des 7 496 PDF de `Documents`.
+
+\## La suite
+
+Le **manifeste anglais** → son contrôle (le dernier gros) → la **fiche et le catalogue des dix** ; les **manifestes OCR et Documents** → leurs fiches ; puis les **159 scans** complets. Le goal reste actif ; le prochain round relance l'attente de l'anglais et le contrôle au bon moment.
+
+### Tour 24 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check English manifest, OCR, and documents
+- bash — Commit progress state for three fronts
 
 ## 3. Travail accompli
 
@@ -1142,7 +1168,7 @@ Le **manifeste de l'anglais** → son contrôle → la **fiche et le catalogue d
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 844 autres
+- … et 847 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1349,4 +1375,5 @@ Le **manifeste de l'anglais** → son contrôle → la **fiche et le catalogue d
 - DONNÉES — LE CORPUS PDF LOCAL : 2 785 PDF, 1 927 DOCUMENTS, 322 MO, 8 KO 0, LICENCES NOMMÉES" 2>/tmp/commit.err; then echo "commit OK (essai $i)"; break; else e
 - A2.6/A8.3 — LE LOT SUR LE DISQUE : IL NE DIVISE PAS LES LECTURES (503→502 MIO), IL ACCÉLÈRE LE CALCUL (+27 %)" 2>/tmp/commit.err; then echo "commit OK"; break; 
 - DONNÉES — L'OCR DES SCANS (tesseract 5.5.3) ET LES 7 496 DOCUMENTS LANCÉS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /t
+- ÉTAT — DOCUMENTS 1 000/7 496 (295 MO), OCR EN COURS, ANGLAIS 19,4/25,6 M" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /tm
 

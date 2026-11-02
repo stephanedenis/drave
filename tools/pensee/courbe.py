@@ -62,6 +62,25 @@ def seule_sto(p: PolitiqueApprise, graine: int = 0, p_ouvre: float = 0.8,
     return False, pas, essais
 
 
+def seule_minute(p: PolitiqueApprise, max_pas: int = 200) -> tuple[bool, int]:
+    """La politique seule sur la porte minute : elle ouvre et passe dans le même pas."""
+    cle, pas = (0, 0), 0
+    for _ in range(max_pas):
+        if cle == P_BUT:
+            return True, pas
+        e = _etat_p(cle[0], cle[1], False)
+        a = p.propose(e, P_BUT)
+        if a is None:
+            return False, pas
+        if (cle[0], cle[1]) == (3, 2) and a == "bas":
+            cle = (3, 3)
+            pas += 1
+            continue
+        cle, _ = p._pas((cle[0], cle[1], False), a, True)
+        pas += 1
+    return False, pas
+
+
 def executer() -> list[dict]:
     lignes = []
     for ep in EPISODES:
@@ -74,11 +93,13 @@ def executer() -> list[dict]:
             b = d.instantane()
             ok_seule, pas_seule = seule(p)
             ok_sto, pas_sto, essais = seule_sto(p, graine=g)
+            ok_min, pas_min = seule_minute(p)
             lignes.append({"episodes": ep, "graine": g, "etats_q": len(p.q),
                            "noeuds": b["noeuds"], "sonde": b["par_operateur"].get("sonde", 0),
                            "cout": b["cout"], "appels": b["appels"], "but": b["but"],
                            "seule_but": ok_seule, "seule_pas": pas_seule,
                            "sto_but": ok_sto, "sto_pas": pas_sto, "sto_essais": essais,
+                           "min_but": ok_min, "min_pas": pas_min,
                            "duree_s": round(time.perf_counter() - t0, 3)})
     return lignes
 
@@ -92,7 +113,8 @@ def main() -> int:
         print(f"{l['episodes']:4d} ep g{l['graine']}  Q {l['etats_q']:3d}  "
               f"{l['noeuds']:3d} nœuds  sonde {l['sonde']:2d}  coût {l['cout']:5.1f}  "
               f"but {l['but']}  seule {l['seule_but']}/{l['seule_pas']}  "
-              f"sto {l['sto_but']}/{l['sto_pas']} ({l['sto_essais']} essais)")
+              f"sto {l['sto_but']}/{l['sto_pas']} ({l['sto_essais']} essais)  "
+              f"min {l['min_but']}/{l['min_pas']}")
     if args.json:
         p = pathlib.Path(args.json)
         p.parent.mkdir(parents=True, exist_ok=True)

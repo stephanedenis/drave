@@ -28,7 +28,9 @@
    "sto_but": true,
    "sto_pas": 9,
    "sto_essais": 2,
-   "duree_s": 0.016
+   "min_but": false,
+   "min_pas": 200,
+   "duree_s": 0.018
   },
   {
    "episodes": 50,
@@ -44,7 +46,9 @@
    "sto_but": true,
    "sto_pas": 8,
    "sto_essais": 1,
-   "duree_s": 0.019
+   "min_but": false,
+   "min_pas": 200,
+   "duree_s": 0.021
   },
   {
    "episodes": 50,
@@ -60,7 +64,9 @@
    "sto_but": true,
    "sto_pas": 10,
    "sto_essais": 3,
-   "duree_s": 0.019
+   "min_but": false,
+   "min_pas": 200,
+   "duree_s": 0.021
   },
   {
    "episodes": 100,
@@ -76,7 +82,9 @@
    "sto_but": true,
    "sto_pas": 9,
    "sto_essais": 2,
-   "duree_s": 0.019
+   "min_but": false,
+   "min_pas": 200,
+   "duree_s": 0.02
   },
   {
    "episodes": 100,
@@ -92,7 +100,9 @@
    "sto_but": true,
    "sto_pas": 8,
    "sto_essais": 1,
-   "duree_s": 0.024
+   "min_but": false,
+   "min_pas": 200,
+   "duree_s": 0.026
   },
   {
    "episodes": 100,
@@ -108,7 +118,9 @@
    "sto_but": true,
    "sto_pas": 10,
    "sto_essais": 3,
-   "duree_s": 0.021
+   "min_but": false,
+   "min_pas": 200,
+   "duree_s": 0.022
   },
   {
    "episodes": 200,
@@ -124,7 +136,9 @@
    "sto_but": true,
    "sto_pas": 9,
    "sto_essais": 2,
-   "duree_s": 0.023
+   "min_but": false,
+   "min_pas": 200,
+   "duree_s": 0.024
   },
   {
    "episodes": 200,
@@ -140,6 +154,8 @@
    "sto_but": true,
    "sto_pas": 8,
    "sto_essais": 1,
+   "min_but": false,
+   "min_pas": 200,
    "duree_s": 0.027
   },
   {
@@ -156,6 +172,8 @@
    "sto_but": true,
    "sto_pas": 10,
    "sto_essais": 3,
+   "min_but": false,
+   "min_pas": 200,
    "duree_s": 0.027
   },
   {
@@ -172,7 +190,9 @@
    "sto_but": true,
    "sto_pas": 9,
    "sto_essais": 2,
-   "duree_s": 0.034
+   "min_but": false,
+   "min_pas": 200,
+   "duree_s": 0.035
   },
   {
    "episodes": 400,
@@ -188,6 +208,8 @@
    "sto_but": true,
    "sto_pas": 8,
    "sto_essais": 1,
+   "min_but": false,
+   "min_pas": 200,
    "duree_s": 0.037
   },
   {
@@ -204,6 +226,8 @@
    "sto_but": true,
    "sto_pas": 10,
    "sto_essais": 3,
+   "min_but": false,
+   "min_pas": 200,
    "duree_s": 0.038
   },
   {
@@ -220,6 +244,8 @@
    "sto_but": true,
    "sto_pas": 9,
    "sto_essais": 2,
+   "min_but": false,
+   "min_pas": 200,
    "duree_s": 0.056
   },
   {
@@ -236,7 +262,9 @@
    "sto_but": true,
    "sto_pas": 8,
    "sto_essais": 1,
-   "duree_s": 0.057
+   "min_but": false,
+   "min_pas": 200,
+   "duree_s": 0.058
   },
   {
    "episodes": 800,
@@ -252,9 +280,11 @@
    "sto_but": true,
    "sto_pas": 10,
    "sto_essais": 3,
-   "duree_s": 0.057
+   "min_but": false,
+   "min_pas": 200,
+   "duree_s": 0.059
   }
  ],
- "portes": "19/19",
- "sto_seule": "la politique seule sur le bruit : 15/15 buts, 8–10 pas, 1–3 essais"
+ "portes": "23/23",
+ "minute_seule": "la politique seule échoue sur la porte minute : 9/9, l'A* était nécessaire"
 }

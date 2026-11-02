@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 28.3 h |
-| Tours | 36 |
-| Messages | 670 |
-| Appels d'outils | 655 |
+| Durée | 28.4 h |
+| Tours | 37 |
+| Messages | 678 |
+| Appels d'outils | 661 |
 | Fichiers touchés | 25 |
-| Commandes | 527 |
+| Commandes | 532 |
 | Sous-agents | 2 |
-| Commits | 51 |
+| Commits | 52 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -103,6 +103,8 @@
 **Tour 35** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 36** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 37** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1938,6 +1940,55 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Committer la Q-table sur la porte minute
 - job_output
 
+**Synthèse produite :**
+
+⏵ Q-table sur la porte minute : 28 nœuds/but, sonde 6, coût 62 ; 22/22
+
+Le round 23 du goal est livré : la **Q-table transfère** à la **porte à un tour** et l'ouvre-passage. Commit **`55b1523c`**.
+
+\## La Q-table sur la porte minute
+
+Même labyrinthe que T18, mais la politique est la `PolitiqueApprise` (200 épisodes, graine 0), entraînée sur la porte **déterministe** T11, au lieu de la règle manhattan. La porte ne s'ouvre qu'un pas ; la sonde ouvre **et** passe.
+
+| politique | nœuds | pas | saut | sonde | coût | but |
+|---|---:|---:|---:|---:|---:|---|
+| **apprise** | **28** | 13 | 10 | **6** | **62** | **oui** |
+| manhattan (T18) | 27 | 12 | 10 | 5 | 57 | oui |
+
+**Ce que ça dit** :
+
+- **La Q-table transfère** à la porte minute : elle vise la porte, la sonde ouvre et passe ; le but est atteint en 28 nœuds.
+- **Elle paie +1 nœud et +1 sonde** par rapport à la règle (62 contre 57) : l'apprentissage tabulaire est proche, pas identique.
+- **La politique apprise n'a pas été entraînée sur la porte minute** : c'est un **transfert** du déterministe vers la porte à un tour.
+- **Le coût reste modeste** (62) : la porte minute ne coûte pas plus cher que la porte stable.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-minute-apprise.md`](../../reports/rapport-pensee-minute-apprise.md) ; JSON [`pensee-minute-apprise.json`](../../reports/pensee-minute-apprise.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T19 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **22/22 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **409 fiches / 509 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+\## La suite
+
+1. **La politique seule sur la porte minute** : sans A*, la Q-table ouvre et passe-t-elle ?
+2. **Porte mobile** : la porte change de case ; la politique doit s'adapter.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque la politique seule sur la porte minute.
+
+### Tour 37 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Mesurer la politique seule sur la porte minute
+- bash — Ajouter la porte T20 (politique seule/minute)
+- bash — Écrire la fiche de la politique seule/minute
+- bash — Ajuster la date, le compteur et passer les portes
+- bash — Committer la politique seule/minute
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2017,7 +2068,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 487 autres
+- … et 492 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2213,4 +2264,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LA PORTE QUI SE REFERME : 27 NŒUDS/BUT, SONDE 5, COÛT 57 ; 20/20" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SE REFERME"; then echo "COMMIT O
 - B13 — LA PORTE À UN TOUR : 27 NŒUDS/BUT, SONDE 5, COÛT 57 ; 21/21" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "UN TOUR"; then echo "COMMIT OK $i"; b
 - B13 — LA Q-TABLE SUR LA PORTE MINUTE : 28 NŒUDS/BUT, SONDE 6, COÛT 62 ; 22/22" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "Q-TABLE SUR LA PORTE"; th
+- B13 — LA POLITIQUE SEULE SUR LA PORTE MINUTE : 9/9 ÉCHECS, L'A* ÉTAIT NÉCESSAIRE ; 23/23" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MINUTE : 9/9";
 

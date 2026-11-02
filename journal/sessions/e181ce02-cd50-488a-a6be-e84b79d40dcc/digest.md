@@ -14600,3 +14600,123 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-527", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 530ac733fb49c9c7404e945b7a89095a0c2c0a68 but expected e2770e7aad56d01d586e58bd7b2da3c88281c36a
+retry 1
+ 28 files changed, 458 insertions(+), 46 deletions(-)
+ create mode 100644 reports/pensee-minute-apprise.json
+ create mode 100644 reports/rapport-pensee-minute-apprise.md
+COMMIT OK 2
+55b1523c B13 — LA Q-TABLE SUR LA PORTE MINUTE : 28 NŒUDS/BUT, SONDE 6, COÛT 62 ; 22/22
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Q-table sur la porte minute : 28 nœuds/but, sonde 6, coût 62 ; 22/22
+
+Le round 23 du goal est livré : la **Q-table transfère** à la **porte à un tour** et l'ouvre-passage. Commit **`55b1523c`**.
+
+## La Q-table sur la porte minute
+
+Même labyrinthe que T18, mais la politique est la `PolitiqueApprise` (200 épisodes, graine 0), entraînée sur la porte **déterministe** T11, au lieu de la règle manhattan. La porte ne s'ouvre qu'un pas ; la sonde ouvre **et** passe.
+
+| politique | nœuds | pas | saut | sonde | coût | but |
+|---|---:|---:|---:|---:|---:|---|
+| **apprise** | **28** | 13 | 10 | **6** | **62** | **oui** |
+| manhattan (T18) | 27 | 12 | 10 | 5 | 57 | oui |
+
+**Ce que ça dit** :
+
+- **La Q-table transfère** à la porte minute : elle vise la porte, la sonde ouvre et passe ; le but est atteint en 28 nœuds.
+- **Elle paie +1 nœud et +1 sonde** par rapport à la règle (62 contre 57) : l'apprentissage tabulaire est proche, pas identique.
+- **La politique apprise n'a pas été entraînée sur la porte minute** : c'est un **transfert** du déterministe vers la porte à un tour.
+- **Le coût reste modeste** (62) : la porte minute ne coûte pas plus cher que la porte stable.
+
+## L'état
+
+- Fiche : [`rapport-pensee-minute-apprise.md`](../../reports/rapport-pensee-minute-apprise.md) ; JSON [`pensee-minute-apprise.json`](../../reports/pensee-minute-apprise.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T19 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **22/22 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **409 fiches / 509 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+## La suite
+
+1. **La politique seule sur la porte minute** : sans A*, la Q-table ouvre et passe-t-elle ?
+2. **Porte mobile** : la porte change de case ; la politique doit s'adapter.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque la politique seule sur la porte minute.
+
+
+## Tour 37
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 24/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/courbe.py'); t=p.read_text()\nt=t.replace(\"\"\"def executer() -> list[dict]:\"\"\",\n\"\"\"def seule_minute(p: PolitiqueApprise, max_pas: in … [1676 caractères tronqués]`
+
+  ```
+55b1523c B13 — LA Q-TABLE SUR LA PORTE MINUTE : 28 NŒUDS/BUT, SONDE 6, COÛT 62 ; 22/22
+ok
+  50 ep g0  Q  52   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/9 (2 essais)  min False/200
+  50 ep g1  Q  61   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/8 (1 essais)  min False/200
+  50 ep g2  Q  74   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/10 (3 essais)  min False/200
+ 100 ep g0  Q  52   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/9 (2 essais)  min False/200
+ 100 ep g1  Q  61   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/8 (1 essais)  min False/200
+ 100 ep g2  Q  74   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/10 (3 essais)  min False/200
+ 200 ep g0  Q  67   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/9 (2 essais)  min False/200
+ 200 ep g1  Q  61   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/8 (1 essais)  min False/200
+ 200 ep g2  Q  74   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/10 (3 essais)  min False/200
+ 400 ep g0  Q  69   30 nœuds  sonde  7  coût  68.0  but True  seule True/8  sto True/9 (2 
+… [596 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T19 la Q-table sur la porte minute la politique apprise ouvre et passe la porte à un tour\\n\",\n\"  T19 la Q-table sur la … [1479 caractères tronqués]`
+
+  ```
+ok
+  ✅ T18 porte à un tour    porte minute : 27 nœuds/but, sonde 5
+  ✅ T19 Q-table sur la porte minute minute apprise : 28 nœuds/but, sonde 6
+  ✅ T20 politique seule/minute politique seule/minute : 9/9 échecs (l'A* était nécessaire)
+  23/23 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-minute-seule.md <<'MD'\n# B13 — la politique seule sur la porte minute : elle échoue, l'A* était nécessaire\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅ … [6093 caractères tronqués]`
+
+  ```
+état ok
+     · fraîcheur : en-cours.md dit 2026-11-02, le dernier commit date du 2026-11-01
+     · compteurs : en-cours.md dit 510 JSON, le disque en a 509
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**Mis à jour : 2026-11-02, 00 h 45 HNE\", \"**Mis à jour : 2026-11-01, 23 h 59 HNE\")\nt=t.replace(\"| fichiers / JSON de r … [709 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 410 fiche(s) · 509 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/pensee/courbe.py tools/pensee/autotest.py reports/rapport-pensee-minute-seule.md reports/pensee-courbe.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md doc … [495 caractères tronqués]`

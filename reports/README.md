@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-minute-seule.md`](rapport-pensee-minute-seule.md) | **B13** — la politique seule/minute : 9/9 échecs, l'A* nécessaire, **23/23** |
 | [`rapport-pensee-minute-apprise.md`](rapport-pensee-minute-apprise.md) | **B13** — la Q-table sur la porte minute : 28 nœuds/but, sonde 6, **22/22** |
 | [`rapport-pensee-minute.md`](rapport-pensee-minute.md) | **B13** — la porte à un tour : 27 nœuds/but, sonde 5, **21/21** |
 | [`rapport-pensee-ferme.md`](rapport-pensee-ferme.md) | **B13** — la porte qui se referme : 27 nœuds/but, sonde 5, coût 57, **20/20** |

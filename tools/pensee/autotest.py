@@ -398,6 +398,21 @@ def t19_minute_apprise() -> tuple[bool, str]:
                 f"sonde {b['par_operateur'].get('sonde', 0)}")
 
 
+def t20_minute_seule() -> tuple[bool, str]:
+    """Sans A*, la Q-table échoue sur la porte minute : l'A* était nécessaire."""
+    from .courbe import seule_minute
+    from .operateurs import PolitiqueApprise
+    echecs = []
+    for ep in (50, 100, 200):
+        for g in (0, 1, 2):
+            p = PolitiqueApprise(episodes=ep, graine=g)
+            p.apprendre()
+            ok, _ = seule_minute(p)
+            echecs.append(not ok)
+    return all(echecs) and len(echecs) == 9, (f"politique seule/minute : {sum(echecs)}/"
+                                             f"{len(echecs)} échecs (l'A* était nécessaire)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -416,7 +431,8 @@ def main() -> int:
               ("T16 politique seule sur le bruit", t16_sto_seule()),
               ("T17 porte qui se referme", t17_ferme()),
               ("T18 porte à un tour", t18_minute()),
-              ("T19 Q-table sur la porte minute", t19_minute_apprise())]
+              ("T19 Q-table sur la porte minute", t19_minute_apprise()),
+              ("T20 politique seule/minute", t20_minute_seule())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
