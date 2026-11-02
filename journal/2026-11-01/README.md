@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**142 commits** · **4 session(s)** · **10 thème(s)**
+**143 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 16 | [distribue.md](distribue.md) |
 | docs | 36 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
-| mesures | 59 | [mesures.md](mesures.md) |
+| mesures | 60 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -181,6 +181,7 @@
 | 23:41 | `5c27a3fb` | DONNÉES — LE CORPUS DOCUMENTS EST CLOS : 7 459 PDF, 3 384 DOCUMENTS, 872 M CARACTÈRES, 8 KO 2,07 % (TEST) |
 | 23:43 | `332cc56a` | B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50 |
 | 23:47 | `74c0a0d8` | B13 — LA CROYANCE BAYÉSIENNE : UN SEUL LOOK, 20/20 DÈS 2000 ÉPISODES, 9,4 PAS ; 51/51 |
+| 23:50 | `72f43955` | B13 — LE BAYÉSIEN À DEUX LOOKS : 20/20, 8,0 PAS, 0,99 DE CONFIANCE ; 52/52 |
 
 ## Le récit de la journée (écrit à la main)
 

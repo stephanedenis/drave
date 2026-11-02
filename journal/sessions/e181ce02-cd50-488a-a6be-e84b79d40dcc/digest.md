@@ -19323,3 +19323,149 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-bayes2.md reports/pensee-bayes2.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md d … [491 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-713]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-713", "timeout_ms": 600000, "wait": true}`
+
+  ```
+29 files changed, 639 insertions(+), 65 deletions(-)
+ create mode 100644 reports/pensee-bayes2.json
+ create mode 100644 reports/rapport-pensee-bayes2.md
+COMMIT OK 1
+72f43955 B13 — LE BAYÉSIEN À DEUX LOOKS : 20/20, 8,0 PAS, 0,99 DE CONFIANCE ; 52/52
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bayésien à deux looks : 20/20, 8,0 pas, 0,99 de confiance ; 52/52
+
+Le round 53 du goal est livré : le **second look bayésien paie** — 8,0 pas au lieu de 9,4. Commit **`72f43955`**.
+
+## Le bayésien à deux looks
+
+Même monde que T48 (10 % d'erreur par révélation), mais `observer` fait **deux looks** et applique **deux fois** la mise à jour `p' = p·v / (p·v + (1−p)(1−v))`.
+
+| dispositif | buts | états-Q | pas |
+|---|---:|---:|---:|
+| **bayes2** | **20/20** | 544 | 8,0 |
+| bayes (T48, 1 look) | 20/20 | 552 | 9,4 |
+| votante (T46, 2 looks) | 20/20 | 372 | 8,0 |
+
+**Ce que ça dit** :
+
+- **Le second look paie** : 8,0 pas au lieu de 9,4 ; la confiance 0,99 évite les détours.
+- **Le bayésien égale le vote** (8,0) mais avec une **croyance fine** (10 niveaux) au lieu d'un vote binaire ; les deux voies convergent.
+- **Le coût est payé une fois** : 0,2 pour deux looks, mais le chemin est optimal.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+## L'état
+
+- Fiche : [`rapport-pensee-bayes2.md`](../../reports/rapport-pensee-bayes2.md) ; JSON [`pensee-bayes2.json`](../../reports/pensee-bayes2.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T49 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **52/52 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **447 fiches / 543 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Trois looks bayésiens** : la confiance 0,999 ; le coût.
+2. **Vraisemblance apprise** : la politique estime la fiabilité de l'observation.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round apprend la **vraisemblance** (la fiabilité estimée au lieu de la connue).
+
+
+## Tour 67
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 54/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [2045 caractères tronqués]`
+
+  ```
+72f43955 B13 — LE BAYÉSIEN À DEUX LOOKS : 20/20, 8,0 PAS, 0,99 DE CONFIANCE ; 52/52
+ok
+2000 q 585 v appris 0.889 20 runs: 20 /20 pas moyen 10.0
+4000 q 660 v appris 0.899 20 runs: 20 /20 pas moyen 8.6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T49 le bayésien à deux looks      20/20 buts, 8,0 pas (0,99 de confiance)\\n\",\n\"  T49 le bayésien à deux looks      20/ … [1350 caractères tronqués]`
+
+  ```
+ok
+  ✅ T48 croyance bayésienne bayes : 20/20 buts, 552 états-Q, 9.4 pas
+  ✅ T49 bayésien deux looks bayes2 : 20/20 buts, 544 états-Q, 8.0 pas
+  ✅ T50 vraisemblance apprise bayes appris : 20/20 buts, v=0.899, 8.6 pas
+  53/53 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-bayes-appris.md <<'MD'\n# B13 — la vraisemblance apprise : v = 0,899, 20/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **53/53 portes** : la `Polit … [6484 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 448 fiche(s) · 544 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · reports/README.md : 2814 mots > budget 2800 (T1)
+     · T0 : 4018 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"\"\"  [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),\n  [`pensee-drvf`](../../reports/rapport-pen … [782 caractères tronqués]`
+
+  ```
+ok
+
+  ❌ 1 violation(s) :
+     · T0 : 4011 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 448 fiche(s) · 544 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"\"\"  [`pensee-courbe`](../../reports/rapport-pensee-courbe.md), [`pensee-ferme`](../../reports/rapport-pensee-ferme.md),\n … [331 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 violation(s) :
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 448 fiche(s) · 544 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"\"\"  [`pensee-minute-seule`](../../reports/rapport-pensee-minute-seule.md), [`pensee-minute-entrainee`](../../reports/rapp … [759 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 violation(s) :
+     · T0 : 4003 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 448 fiche(s) · 544 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text().replace(\"le CPU étiquette, le réseau tranche\", \"le CPU étiquette\")\np.write_text(t); print('ok')\nPY\npython3 tools/taille_documents.p … [108 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 448 fiche(s) · 544 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-bayes-appris.md reports/pensee-bayes-appris.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/e … [495 caractères tronqués]`

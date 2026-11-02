@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (59)
+## Commits du jour (60)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -67,6 +67,7 @@
 | 23:38 | `2bd6bcc4` | B13 — L'OBSERVATION VOTANTE : DEUX LOOKS, 20/20 BUTS, 1 % D'ERREUR ; 49/49 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+26) |
 | 23:43 | `332cc56a` | B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 23:47 | `74c0a0d8` | B13 — LA CROYANCE BAYÉSIENNE : UN SEUL LOOK, 20/20 DÈS 2000 ÉPISODES, 9,4 PAS ; 51/51 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+25) |
+| 23:50 | `72f43955` | B13 — LE BAYÉSIEN À DEUX LOOKS : 20/20, 8,0 PAS, 0,99 DE CONFIANCE ; 52/52 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+26) |
 
 ## Chiffres du jour
 
@@ -105,6 +106,7 @@
 - [reports/rapport-n2-propre.md](../../reports/rapport-n2-propre.md)
 - [reports/rapport-pensee-audit.md](../../reports/rapport-pensee-audit.md)
 - [reports/rapport-pensee-bayes.md](../../reports/rapport-pensee-bayes.md)
+- [reports/rapport-pensee-bayes2.md](../../reports/rapport-pensee-bayes2.md)
 - [reports/rapport-pensee-bruit.md](../../reports/rapport-pensee-bruit.md)
 - [reports/rapport-pensee-bruitee.md](../../reports/rapport-pensee-bruitee.md)
 - [reports/rapport-pensee-correction.md](../../reports/rapport-pensee-correction.md)

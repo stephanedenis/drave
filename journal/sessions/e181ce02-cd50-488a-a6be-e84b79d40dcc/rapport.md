@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 31.2 h |
-| Tours | 66 |
-| Messages | 963 |
-| Appels d'outils | 882 |
+| Tours | 67 |
+| Messages | 973 |
+| Appels d'outils | 890 |
 | Fichiers touchés | 25 |
-| Commandes | 713 |
+| Commandes | 721 |
 | Sous-agents | 2 |
-| Commits | 83 |
+| Commits | 84 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -163,6 +163,8 @@
 **Tour 65** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 66** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 67** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3523,6 +3525,57 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round combine **deux looks et 
 - bash — Committer le bayésien à deux looks
 - job_output
 
+**Synthèse produite :**
+
+⏵ Bayésien à deux looks : 20/20, 8,0 pas, 0,99 de confiance ; 52/52
+
+Le round 53 du goal est livré : le **second look bayésien paie** — 8,0 pas au lieu de 9,4. Commit **`72f43955`**.
+
+\## Le bayésien à deux looks
+
+Même monde que T48 (10 % d'erreur par révélation), mais `observer` fait **deux looks** et applique **deux fois** la mise à jour `p' = p·v / (p·v + (1−p)(1−v))`.
+
+| dispositif | buts | états-Q | pas |
+|---|---:|---:|---:|
+| **bayes2** | **20/20** | 544 | 8,0 |
+| bayes (T48, 1 look) | 20/20 | 552 | 9,4 |
+| votante (T46, 2 looks) | 20/20 | 372 | 8,0 |
+
+**Ce que ça dit** :
+
+- **Le second look paie** : 8,0 pas au lieu de 9,4 ; la confiance 0,99 évite les détours.
+- **Le bayésien égale le vote** (8,0) mais avec une **croyance fine** (10 niveaux) au lieu d'un vote binaire ; les deux voies convergent.
+- **Le coût est payé une fois** : 0,2 pour deux looks, mais le chemin est optimal.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-bayes2.md`](../../reports/rapport-pensee-bayes2.md) ; JSON [`pensee-bayes2.json`](../../reports/pensee-bayes2.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T49 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **52/52 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **447 fiches / 543 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Trois looks bayésiens** : la confiance 0,999 ; le coût.
+2. **Vraisemblance apprise** : la politique estime la fiabilité de l'observation.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round apprend la **vraisemblance** (la fiabilité estimée au lieu de la connue).
+
+### Tour 67 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Tester la vraisemblance apprise
+- bash — Ajouter la porte T50 (vraisemblance apprise)
+- bash — Écrire la fiche de la vraisemblance apprise
+- bash — Trim en-cours et reports/README
+- bash — Trim encore le en-cours
+- bash — Trim final et portes
+- bash — Trim final pour T0
+- bash — Committer la vraisemblance apprise
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3602,7 +3655,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round combine **deux looks et 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 673 autres
+- … et 681 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3833,4 +3886,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round combine **deux looks et 
 - B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "TROIS LOOKS"; then echo "COM
 - B13 — LA CROYANCE BAYÉSIENNE : UN SEUL LOOK, 20/20 DÈS 2000 ÉPISODES, 9,4 PAS ; 51/51" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CROYANCE BAYÉSIEN
 - B13 — LE BAYÉSIEN À DEUX LOOKS : 20/20, 8,0 PAS, 0,99 DE CONFIANCE ; 52/52" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BAYÉSIEN À DEUX LOOKS"; then
+- B13 — LA VRAISEMBLANCE APPRISE : v = 0,899, 20/20, 8,6 PAS ; 53/53" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VRAISEMBLANCE APPRISE"; then echo "C
 
