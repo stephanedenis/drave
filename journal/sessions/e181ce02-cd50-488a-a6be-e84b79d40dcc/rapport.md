@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 35.9 h |
-| Tours | 104 |
-| Messages | 1339 |
-| Appels d'outils | 1178 |
+| Durée | 36.1 h |
+| Tours | 105 |
+| Messages | 1347 |
+| Appels d'outils | 1184 |
 | Fichiers touchés | 25 |
-| Commandes | 955 |
+| Commandes | 960 |
 | Sous-agents | 2 |
-| Commits | 135 |
+| Commits | 136 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -239,6 +239,8 @@
 **Tour 103** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 104** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 105** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5544,6 +5546,55 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round écrit les **phrases com
 - job_output
 - bash — Committer les phrases complexes (2e essai)
 
+**Synthèse produite :**
+
+⏵ Phrases complexes : POS 0,6471, syntagme 0,4828, gold 205 ; 90/90
+
+Le round 91 du goal est livré : les **phrases complexes** (REL/SUB) font chuter le POS mais bondir le syntagme. Commit **`7a6cc15a`**.
+
+\## Les phrases complexes
+
+Cinq phrases (r201–r205 : `qui parle`, `que tu as raison`, `who speaks`, `that you are right`) sont ajoutées au gold réel.
+
+| sous-ensemble | phrases | POS | tokens | syntagme F1 | tête F1 |
+|---|---:|---:|---:|---:|---:|
+| r001–r200 | 200 | 0,7924 | 978 | 0,1838 | 0,3198 |
+| **r201–r205** | **5** | **0,6471** | 34 | **0,4828** | **0,5517** |
+
+**Ce que ça dit** :
+
+- **Le POS chute** (−0,145) : les pronoms relatifs (`qui`, `que`, `who`), les auxiliaires (`as`, `ai`, `are`) et les conjonctions (`that`) ne sont pas dans le lexique fermé ; le POS ouvert les absorbe.
+- **Le syntagme bondit** (+0,30) : les REL/SUB sont des **segments longs** (4–5 mots) que l'heuristique segmente bien ; les GN courts des phrases simples sont plus souvent coupés.
+- **La tête suit** (0,5517) : le rôle des REL/SUB est porté par le nom/verbe de tête.
+- **La négative reste** : le POS du hasard (0,0147).
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-complexes.md`](../../reports/rapport-pensee-gold-complexes.md) ; JSON [`pensee-gold-complexes.json`](../../reports/pensee-gold-complexes.json) ; T87 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **205 phrases**.
+- **90/90 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **495 fiches / 582 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `rapport-n2-canal-34m.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## Le bilan de la nuit (rounds 63 → 91)
+
+- **B13** : la DRVF (9/9), le banc (10/10), les opérateurs (11/11), les portes T0–T87, la série des seuils d'oubli (0,35 → 0,50, bord robuste **0,41**), la phase cachée/dans l'état, le cycle et sa leçon (l'état doit porter la variable cachée).
+- **L** : le gold réel passe de **180 à 205 phrases** (POS all **0,7738**, subset 20 nouvelles **0,8214**, complexes **0,6471**/syntagme **0,4828**).
+- **Neuronal** : toujours **bloqué** (le mock est un contrat, pas un modèle) ; la cascade mesurée reste la seule lecture.
+- Commit final : **`7a6
+… [186 caractères tronqués]
+
+### Tour 105 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Vérifier l'état final et l'heure
+- bash — Ajouter 15 phrases complexes et mesurer les 20
+- bash — Écrire la fiche des 20 phrases complexes
+- bash — Trim README et passer les portes
+- bash — Committer les 20 phrases complexes
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5623,7 +5674,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round écrit les **phrases com
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 915 autres
+- … et 920 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5906,4 +5957,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round écrit les **phrases com
 - B13 — LES SOUS-ENSEMBLES DU GOLD : POS 0,8214 SUR LES 20 NOUVELLES ; 89/89" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SOUS-ENSEMBLES"; then echo "
 - B13 — LES PHRASES COMPLEXES : POS 0,6471, SYNTAGME 0,4828, GOLD 205 ; 90/90" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHRASES COMPLEXES"; then ec
 - B13 — LES PHRASES COMPLEXES : POS 0,6471, SYNTAGME 0,4828, GOLD 205 ; 90/90" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHRASES COMPLEXES"; then ec
+- B13 — LES 20 PHRASES COMPLEXES : POS 0,6829, SYNTAGME 0,2963, GOLD 220 ; 91/91" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "20 PHRASES COMPLEXES"; t
 

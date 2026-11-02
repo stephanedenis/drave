@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 36.0 h |
-| Tours | 367 |
-| Messages | 2182 |
-| Appels d'outils | 1442 |
+| Durée | 36.1 h |
+| Tours | 368 |
+| Messages | 2186 |
+| Appels d'outils | 1444 |
 | Fichiers touchés | 26 |
-| Commandes | 1278 |
+| Commandes | 1280 |
 | Sous-agents | 0 |
 | Commits | 79 |
 | Compactages de contexte | 4 |
@@ -761,6 +761,8 @@
 **Tour 366** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 367** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 368** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8606,9 +8608,30 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 367 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*2 appels d'outils.* Actions notables :
 
 - bash — Wait 5 min then check OCR progress
+- bash — Check 20th book start and finisher
+
+**Synthèse produite :**
+
+⏵ Round 355 : 19e livre TERMINÉ — sophiadialogues 86 p, 162 034 car. ; 18 livres au corpus
+
+**Round 355/1000 — le 19e livre est clos ; 18 livres au corpus, 14 M caractères.**
+
+- **sophiadialogues** : **86 pages, 162 034 caractères** ; le **train** passe à **14 159 617 octets**.
+- **Le corpus OCR : 18 livres, 6 695 pages, 14 001 166 caractères**.
+- **Le 20e livre** (le dernier du `--max-doc 20`) entre en OCR (page 39) ; ensuite l'outil écrira **lui-même** son manifeste.
+- **Le finisher** (PID 2275241) attend encore le manifeste ou le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : 18 livres, 14 M caractères ; le 20e est le dernier ; le goal reste actif.
+
+### Tour 368 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait 8 min then check 20th book and manifest
 
 ## 3. Travail accompli
 
@@ -8685,7 +8708,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1238 autres
+- … et 1240 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8813,7 +8836,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ## 5. Erreurs rencontrées
 
-118 sorties en erreur ou divergentes. Les premières :
+119 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

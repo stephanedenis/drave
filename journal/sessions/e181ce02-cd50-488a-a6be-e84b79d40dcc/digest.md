@@ -25225,3 +25225,130 @@ c58ae86c ÉTAT — COMPTEURS APRÈS N2.z (495 FICHIERS, 582 JSON) ET L'HEURE DE 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-02, 08 h 10 HNE\", t)\np.write_text(t); print( … [1017 caractères tronqués]`
+
+  ```
+ok
+  ✅ index : aucun fait stagé sans état
+EXIT=0
+  revue de documentation · 495 fiche(s) · 582 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-955]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-955", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-gold-complexes.json
+ delete mode 100644 reports/rapport-n2-canal-34m.md
+ create mode 100644 reports/rapport-pensee-gold-complexes.md
+COMMIT OK 1
+7a6cc15a B13 — LES PHRASES COMPLEXES : POS 0,6471, SYNTAGME 0,4828, GOLD 205 ; 90/90
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Phrases complexes : POS 0,6471, syntagme 0,4828, gold 205 ; 90/90
+
+Le round 91 du goal est livré : les **phrases complexes** (REL/SUB) font chuter le POS mais bondir le syntagme. Commit **`7a6cc15a`**.
+
+## Les phrases complexes
+
+Cinq phrases (r201–r205 : `qui parle`, `que tu as raison`, `who speaks`, `that you are right`) sont ajoutées au gold réel.
+
+| sous-ensemble | phrases | POS | tokens | syntagme F1 | tête F1 |
+|---|---:|---:|---:|---:|---:|
+| r001–r200 | 200 | 0,7924 | 978 | 0,1838 | 0,3198 |
+| **r201–r205** | **5** | **0,6471** | 34 | **0,4828** | **0,5517** |
+
+**Ce que ça dit** :
+
+- **Le POS chute** (−0,145) : les pronoms relatifs (`qui`, `que`, `who`), les auxiliaires (`as`, `ai`, `are`) et les conjonctions (`that`) ne sont pas dans le lexique fermé ; le POS ouvert les absorbe.
+- **Le syntagme bondit** (+0,30) : les REL/SUB sont des **segments longs** (4–5 mots) que l'heuristique segmente bien ; les GN courts des phrases simples sont plus souvent coupés.
+- **La tête suit** (0,5517) : le rôle des REL/SUB est porté par le nom/verbe de tête.
+- **La négative reste** : le POS du hasard (0,0147).
+
+## L'état
+
+- Fiche : [`rapport-pensee-gold-complexes.md`](../../reports/rapport-pensee-gold-complexes.md) ; JSON [`pensee-gold-complexes.json`](../../reports/pensee-gold-complexes.json) ; T87 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **205 phrases**.
+- **90/90 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **495 fiches / 582 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `rapport-n2-canal-34m.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## Le bilan de la nuit (rounds 63 → 91)
+
+- **B13** : la DRVF (9/9), le banc (10/10), les opérateurs (11/11), les portes T0–T87, la série des seuils d'oubli (0,35 → 0,50, bord robuste **0,41**), la phase cachée/dans l'état, le cycle et sa leçon (l'état doit porter la variable cachée).
+- **L** : le gold réel passe de **180 à 205 phrases** (POS all **0,7738**, subset 20 nouvelles **0,8214**, complexes **0,6471**/syntagme **0,4828**).
+- **Neuronal** : toujours **bloqué** (le mock est un contrat, pas un modèle) ; la cascade mesurée reste la seule lecture.
+- Commit final : **`7a6cc15a`** ; le goal `goal-7beacaeb` reste actif (la qualification neuronale n'est pas atteinte), et la deadline de 08:00 est **passée de ~15 min** pour valider les portes avant le commit.
+
+
+## Tour 105
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 92/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; git status --porcelain | head -5; date; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -2", "description": "Vérifier l'état final et l'heure"}`
+
+  ```
+7a6cc15a B13 — LES PHRASES COMPLEXES : POS 0,6471, SYNTAGME 0,4828, GOLD 205 ; 90/90
+ M docs/implantation/bloc-linguistique.md
+ M reports/native-generation.json
+ M reports/rapport-ocr-pdf.md
+ M tools/distiller_budget.py
+ M tools/docwatch
+lun 02 nov 2026 04:36:56 EST
+  revue de documentation · 495 fiche(s) · 582 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nimport re\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-02, 04 h 40 HNE\", t)\np.write_text(t); … [6518 caractères tronqués]`
+
+  ```
+heure corrigée
+ok
+220 phrases réelles → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json
+r001-r200 200 POS 0.7924 tokens 978 syntagme F1 0.1838 tete F1 0.3198
+r201-r220 20 POS 0.6829 tokens 123 syntagme F1 0.2963 tete F1 0.3704
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T87 les phrases complexes        r201-205 : POS 0,6471, syntagme 0,4828\\n\",\n\"  T87 les phrases complexes        r201-2 … [7506 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 496 fiche(s) · 583 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2807 mots > budget 2800 (T1)
+  en-cours · 1622 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-gold-200-subsets.md`](rapport-pensee-gold-200-subsets.md) | **B13** — les sous-ensembles : POS 0,8214 sur les 20 … [606 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1800 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/pensee/autotest.py reports/rapport-pensee-gold-complexes20.md reports/pensee-gold-complexes20.json reports/READ … [573 caractères tronqués]`

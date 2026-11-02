@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (33)
+## Commits du jour (34)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -41,23 +41,25 @@
 | 03:29 | `64d4f399` | B13 — LA COURBE SUR 20 GRAINES : 20 % À 0,35, 100 % À 0,41, SEUIL ~0,41 ; 86/86 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 04:04 | `d9acb4a6` | B13 — LE GOLD À 200 RÉELS : POS 0,7738, 1 782 TOKENS, LA CIBLE EST ATTEINTE ; 88/88 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 | 04:20 | `4712db13` | B13 — LES SOUS-ENSEMBLES DU GOLD : POS 0,8214 SUR LES 20 NOUVELLES ; 89/89 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
+| 04:34 | `7a6cc15a` | B13 — LES PHRASES COMPLEXES : POS 0,6471, SYNTAGME 0,4828, GOLD 205 ; 90/90 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 
 ## Chiffres du jour
 
-`0,8214` · `0,7738` · `20 %` · `100 %` · `93,9 %` · `80 %` · `×0,36` · `×0,40` · `×0,42` · `×0,44` · `×0,35` · `×0,4`
+`0,6471` · `0,4828` · `0,8214` · `0,7738` · `20 %` · `100 %` · `93,9 %` · `80 %` · `×0,36` · `×0,40` · `×0,42` · `×0,44`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 36.3 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 35.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 36.0 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 36.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 36.1 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-n2-anglais-34m.md](../../reports/rapport-n2-anglais-34m.md)
+- [reports/rapport-n2-canal-34m.md](../../reports/rapport-n2-canal-34m.md)
 - [reports/rapport-n2-canal-distille.md](../../reports/rapport-n2-canal-distille.md)
 - [reports/rapport-n2-echantillon.md](../../reports/rapport-n2-echantillon.md)
 - [reports/rapport-n2-multilingue-34m-distille.md](../../reports/rapport-n2-multilingue-34m-distille.md)
@@ -75,6 +77,7 @@
 - [reports/rapport-pensee-glisse.md](../../reports/rapport-pensee-glisse.md)
 - [reports/rapport-pensee-gold-200-subsets.md](../../reports/rapport-pensee-gold-200-subsets.md)
 - [reports/rapport-pensee-gold-200.md](../../reports/rapport-pensee-gold-200.md)
+- [reports/rapport-pensee-gold-complexes.md](../../reports/rapport-pensee-gold-complexes.md)
 - [reports/rapport-pensee-hasard2.md](../../reports/rapport-pensee-hasard2.md)
 - [reports/rapport-pensee-intra.md](../../reports/rapport-pensee-intra.md)
 - [reports/rapport-pensee-limite.md](../../reports/rapport-pensee-limite.md)

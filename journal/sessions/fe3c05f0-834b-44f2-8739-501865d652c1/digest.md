@@ -33162,3 +33162,51 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf|pdftoppm\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 5 min then check OCR progress", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+04:38
+  Biblio_large · 006.31 Inconnu(e) 2025, Le Désordre Des  · 421 p · 794225 car
+  Biblio_large · 006.31 sophiadialogues.pdf · 86 p · 162034 car
+2415278 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af "tesseract.*ocr-pdf|pdftoppm" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 14159617  2 nov 04:34 data/corpus_ocr/train.txt
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"pdftoppm|tesseract\" | head -1; ps -p 1616198 -o stat,etime= 2>/dev/null; cat /tmp/finaliser-ocr.log | tail -2", "description": "Check 20th book start and finisher", "timeoutMs": 120000, "workdir": "/home/ste … [40 caractères tronqués]`
+
+  ```
+04:38
+2418899 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-jn59iboe/p-039.png stdout -l fra+eng --psm 3
+STAT            
+S       07:52:50
+attente du manifeste ou du cutoff 06:45…
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 355 : 19e livre TERMINÉ — sophiadialogues 86 p, 162 034 car. ; 18 livres au corpus
+
+**Round 355/1000 — le 19e livre est clos ; 18 livres au corpus, 14 M caractères.**
+
+- **sophiadialogues** : **86 pages, 162 034 caractères** ; le **train** passe à **14 159 617 octets**.
+- **Le corpus OCR : 18 livres, 6 695 pages, 14 001 166 caractères**.
+- **Le 20e livre** (le dernier du `--max-doc 20`) entre en OCR (page 39) ; ensuite l'outil écrira **lui-même** son manifeste.
+- **Le finisher** (PID 2275241) attend encore le manifeste ou le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : 18 livres, 14 M caractères ; le 20e est le dernier ; le goal reste actif.
+
+
+## Tour 368
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 356/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; tail -1 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1; cat /tmp/finaliser-ocr.log | tail -2", "description": "Wait 8 min then check … [108 caractères tronqués]`
