@@ -963,6 +963,22 @@ def t59_limite() -> tuple[bool, str]:
                       f"{round(pas_total / 20, 1)} pas")
 
 
+def t60_hasard2() -> tuple[bool, str]:
+    """Le régime aléatoire chaque épisode : 1/2, 20/20 buts, v final ≈ 0,42."""
+    from .operateurs import PolitiqueAppriseBayesHasard, seule_bayes_hasard
+    p = PolitiqueAppriseBayesHasard(episodes=4000, graine=0)
+    p.apprendre()
+    ok = 0
+    pas_total = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, pas = seule_bayes_hasard(p)
+        ok += b
+        pas_total += pas
+    return ok == 20, (f"hasard : {ok}/20 buts, v final {round(p.v, 3)}, "
+                      f"{round(pas_total / 20, 1)} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1021,7 +1037,8 @@ def main() -> int:
               ("T56 alternance aléatoire", t56_chaotique()),
               ("T57 bascule fréquente", t57_frequent()),
               ("T58 bascule très fréquente", t58_rapide()),
-              ("T59 bascule limite", t59_limite())]
+              ("T59 bascule limite", t59_limite()),
+              ("T60 régime aléatoire", t60_hasard2())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -16495,3 +16495,30 @@ porte-reparti-moteur 1 3
   ```
 
 - **bash** `{"command": "sleep 120; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/portes-nuit.out; awk '$2 != 0' /tmp/portes-nuit/registre.txt | wc -l; wc -l < /tmp/portes-nuit/registre.txt; date '+%H:%M'; ls work/n2j/route-480 2>/dev/null | head -2", "description": "Read the final gates ve … [7 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-970]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-970", "timeout_ms": 300000, "wait": true}`
+
+  ```
+porte-tableaux         ✅                           1 s    ✅ la page vivante date du dernier commit (2026-11-02)
+  porte-tokenizer-kimi   ✅                           9 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                         105 s    ✅ PPL épinglées : reference 17.4702 · historique 30.4363 · topologie 30.4363 · relais 2 42.547
+  porte-trace            ✅                          29 s    ✅ la trace fausse est détectée et nommée
+4
+80
+00:42
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/route-480 2>/dev/null | head -3; tail -3 work/n2j/teacher-480.log; tail -2 /tmp/portes-nuit.out", "description": "Wait for the bigger teacher"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-971]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-971", "timeout_ms": 1200000, "wait": true}`

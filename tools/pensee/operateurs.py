@@ -1660,6 +1660,39 @@ def seule_bayes_limite(p: PolitiqueAppriseBayesLimite,
     return seule_observatrice(p, max_pas)
 
 
+class PolitiqueAppriseBayesHasard(PolitiqueAppriseBayesAdaptive):
+    """Le bayésien à **régime aléatoire chaque épisode** : la fiabilité bascule (p = 1/2)."""
+
+    nom = "bayes_hasard"
+
+    def apprendre(self) -> None:
+        p_erreur = 0.1
+        for i in range(self.episodes):
+            if self.rng.random() < 0.5:
+                p_erreur = 0.9 if p_erreur == 0.1 else 0.1
+            self.p_erreur = p_erreur
+            d = self.rng.randint(0, 1)
+            cle = (0, 0, False, 2)
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain, d = self._pas(cle, a, d)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+
+def seule_bayes_hasard(p: PolitiqueAppriseBayesHasard,
+                       max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

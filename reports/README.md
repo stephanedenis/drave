@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-hasard2.md`](rapport-pensee-hasard2.md) | **B13** — le régime aléatoire : 1/2, v final 0,42, 20/20, 8,0 pas, **63/63** |
 | [`rapport-pensee-limite.md`](rapport-pensee-limite.md) | **B13** — la bascule limite : 1/5, v final 0,44, 20/20, 8,6 pas, **62/62** |
 | [`rapport-pensee-rapide.md`](rapport-pensee-rapide.md) | **B13** — la bascule très fréquente : 1/10, v final 0,28, 20/20, 9,4 pas, **61/61** |
 | [`rapport-pensee-frequent.md`](rapport-pensee-frequent.md) | **B13** — la bascule fréquente : 1/50, v final 0,78, 20/20, 8,0 pas, **60/60** |
@@ -35,7 +36,6 @@
 | [`rapport-pensee-aleatoire.md`](rapport-pensee-aleatoire.md) | **B13** — la porte aléatoire : saut 20 %, 20/20 buts, 182 états-Q, **42/42** |
 | [`rapport-pensee-phase-graines.md`](rapport-pensee-phase-graines.md) | **B13** — la phase sur 5 graines : 5/5 buts, 10–14 pas, 376–422 états-Q, **41/41** |
 | [`rapport-pensee-phase.md`](rapport-pensee-phase.md) | **B13** — la période qui change : 3 puis 2 pas, A* 28 nœuds, politique but/10, **40/40** |
-| [`rapport-pensee-periode.md`](rapport-pensee-periode.md) | **B13** — la période variable : 2–5 pas, 4/4 buts, 10 pas, **39/39** |
 | [`rapport-pensee-bruit.md`](rapport-pensee-bruit.md) | **B13** — le bruit variable : 50–95 %, 6/6 buts, effort 3 → 1 essai, **36/36** |
 | [`rapport-pensee-mobile.md`](rapport-pensee-mobile.md) | **B13** — la porte mobile : 2 positions, A* 2/2, politique seule but/8, 170 états-Q, **34/34** |
 | [`rapport-pensee-graines.md`](rapport-pensee-graines.md) | **B13** — la robustesse sur 5 graines : 5/5 bruits, 5/5 stables, **33/33** |

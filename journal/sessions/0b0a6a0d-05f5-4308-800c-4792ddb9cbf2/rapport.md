@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 32.4 h |
 | Tours | 18 |
-| Messages | 1300 |
-| Appels d'outils | 1207 |
+| Messages | 1302 |
+| Appels d'outils | 1209 |
 | Fichiers touchés | 11 |
-| Commandes | 970 |
+| Commandes | 971 |
 | Sous-agents | 0 |
 | Commits | 50 |
 | Compactages de contexte | 1 |
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*241 appels d'outils.* Actions notables :
+*243 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 161 autres
+- … et 162 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 930 autres
+- … et 931 autres
 
 ## 4. Mesures et résultats marquants
 
