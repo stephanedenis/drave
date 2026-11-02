@@ -16358,3 +16358,25 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-960", "timeout_ms": 300000, "wait": true}`
+
+  ```
+course 1
+course 2
+commit ok (3)
+2e30856f N2.s — CE QUE LE MEILLEUR MODÈLE ÉCRIT : DU FRANÇAIS GRAMMATICAL, DES BOUCLES ET DES COLLAGES
+00:16
+62
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_moteur.py --famille route --dim 480 --couches 6 --tetes 4 --cache 752 --experts 8 --k 2 --p … [858 caractères tronqués]`
+
+  ```
+teacher480 2037533
+multi34 2037536
+0, 1374 MiB, 56 %
+1, 254 MiB, 0 %
+00:17
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/teacher-480.log; tail -1 work/n2k/base-multi-34m.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; grep -c \"✅\" /tmp/portes-nuit.out; grep -c \"❌\" /tmp/p … [84 caractères tronqués]`

@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-rupture.md`](rapport-pensee-rupture.md) | **B13** — la rupture : 90 % d'erreur, v final 0,12, 20/20, 8,0 pas, **57/57** |
 | [`rapport-pensee-glisse.md`](rapport-pensee-glisse.md) | **B13** — la dérive continue : 5 % → 50 %, v final 0,5, 20/20, 8,6 pas, **56/56** |
 | [`rapport-pensee-adaptive.md`](rapport-pensee-adaptive.md) | **B13** — la fenêtre adaptative : v final 0,8, 20/20, 8,0 pas, **55/55** |
 | [`rapport-pensee-derive.md`](rapport-pensee-derive.md) | **B13** — la fiabilité qui dérive : v final 0,56, 20/20, 8,0 pas, **54/54** |

@@ -1,0 +1,32 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "57/57",
+ "regimes": [
+  0.1,
+  0.9
+ ],
+ "politique": {
+  "episodes": 8000,
+  "graine": 0,
+  "etats_q": 780,
+  "v_final": 0.12,
+  "runs": 20,
+  "buts": 20,
+  "pas_moyen": 8.0
+ },
+ "contraste": {
+  "derive_continue": {
+   "v_final": 0.5,
+   "pas": 8.6
+  },
+  "sans_mise_a_jour": {
+   "buts": 0
+  }
+ },
+ "limites": [
+  "une seule rupture",
+  "vraisemblance estimée",
+  "toy"
+ ]
+}

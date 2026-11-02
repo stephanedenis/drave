@@ -1468,6 +1468,36 @@ def seule_bayes_glisse(p: PolitiqueAppriseBayesGlisse, max_pas: int = 200) -> tu
     return seule_observatrice(p, max_pas)
 
 
+class PolitiqueAppriseBayesRupture(PolitiqueAppriseBayesAdaptive):
+    """Le bayésien à **rupture** : la fiabilité tombe de 0,9 à 0,1 à mi-entraînement."""
+
+    nom = "bayes_rupture"
+
+    def apprendre(self) -> None:
+        moitie = self.episodes // 2
+        for i in range(self.episodes):
+            self.p_erreur = 0.1 if i < moitie else 0.9
+            d = self.rng.randint(0, 1)
+            cle = (0, 0, False, 2)
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain, d = self._pas(cle, a, d)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+
+def seule_bayes_rupture(p: PolitiqueAppriseBayesRupture, max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

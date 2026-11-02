@@ -867,6 +867,22 @@ def t53_glisse() -> tuple[bool, str]:
         f"{round(pas_total / 20, 1)} pas")
 
 
+def t54_rupture() -> tuple[bool, str]:
+    """La rupture : 90 % d'erreur, v final ≈ 0,12, 20/20 buts."""
+    from .operateurs import PolitiqueAppriseBayesRupture, seule_bayes_rupture
+    p = PolitiqueAppriseBayesRupture(episodes=8000, graine=0)
+    p.apprendre()
+    ok = 0
+    pas_total = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, pas = seule_bayes_rupture(p)
+        ok += b
+        pas_total += pas
+    return ok == 20, (f"rupture : {ok}/20 buts, v final {round(p.v, 3)}, "
+                      f"{round(pas_total / 20, 1)} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -919,7 +935,8 @@ def main() -> int:
               ("T50 vraisemblance apprise", t50_bayes_appris()),
               ("T51 fiabilité qui dérive", t51_derive()),
               ("T52 fenêtre adaptative", t52_adaptive()),
-              ("T53 dérive continue", t53_glisse())]
+              ("T53 dérive continue", t53_glisse()),
+              ("T54 rupture", t54_rupture())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

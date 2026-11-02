@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
 | Durée | 31.7 h |
-| Tours | 110 |
-| Messages | 1325 |
-| Appels d'outils | 1107 |
+| Tours | 113 |
+| Messages | 1337 |
+| Appels d'outils | 1112 |
 | Fichiers touchés | 25 |
-| Commandes | 1020 |
+| Commandes | 1025 |
 | Sous-agents | 0 |
-| Commits | 70 |
+| Commits | 71 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -247,6 +247,12 @@
 **Tour 109** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 110** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 111** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 112** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 113** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3034,7 +3040,63 @@ J'ai écrit `reports/rapport-r1-preparation.md` (commit `df42425a`) : ce que R1.
 
 **Synthèse produite :**
 
-⏵ Round 98 : je vérifie les portes de l'état (en-cours, fraîcheur, T0) plutôt que l'OCR
+⏵ Round 98 : les quatre portes de l'état passent ; le 8e livre OCR est à 1 260 pages
+
+**Round 98/1000 — l'état est propre, l'OCR continue.**
+
+- **Les portes** : en-cours ✅ (court, structuré, multi-session), état à jour ✅ (aucun fait commité après le dernier état), T0 **4 000 mots** (budget), journal ✅ (un dossier par jour, liens résolus).
+- **L'OCR** : train **4 193 550 octets** ; le 8e livre (*Sprenger 2025, inflammationcycling*) a **1 260 pages** rendues (28 min 15). Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : l'état est vert et cohérent ; il reste l'OCR (le 8e livre puis ses val/test) et la clôture à 8 h. Le goal reste actif.
+
+### Tour 111 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR book 8 pages and manifest
+
+**Synthèse produite :**
+
+⏵ Round 99 : le 8e livre OCR a fini son rendu (1 264 pages) et commence l'océrisation (p-0016)
+
+**Round 99/1000 — l'OCR est passé du rendu à l'océrisation.**
+
+- **L'OCR** : `pdftoppm` a fini les **1 264 pages** du 8e livre (*Sprenger 2025, inflammationcycling*), et `tesseract` océrise maintenant la page `p-0016.png` (0:01). Le train reste à **4 193 550 octets** (écrit à la fin du livre). Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3**, la **comparaison des genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; les portes de l'état passent (en-cours, fraîcheur, T0 4 000, journal).
+
+**Le constat** : le 8e livre entre dans sa phase d'océrisation (1 264 pages) ; elle prendra du temps (≈ 1 s/page). Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
+
+### Tour 112 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR book 8 pages and manifest
+
+**Synthèse produite :**
+
+⏵ Round 100 : cap des 100 rounds — l'OCR océrise la page 27 sur 1 264
+
+**Round 100/1000 — cent rounds de campagne, et l'OCR avance.**
+
+- **L'OCR** : `tesseract` océrise la page **p-0027** du 8e livre (*Sprenger 2025, inflammationcycling*, **1 264 pages**) ; le train reste à **4 193 550 octets** (écrit à la fin du livre). Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3**, la **comparaison des genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; les portes de l'état passent (en-cours, fraîcheur, T0 4 000, journal).
+
+**Le bilan à 100 rounds** : l'objectif « dix corpus » est atteint (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le PDF et les documents sont clos, l'OCR enchaîne les livres (8e en cours), les genres sont mesurés, A2.6/A8.3 est committé, et la préparation R1.1/R1.2 est ficée. Le goal reste actif jusqu'à 8 h.
+
+### Tour 113 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check OCR book 8 pages and manifest
+- bash — Read session state lines
+- bash — Update state OCR count and commit
+
+**Synthèse produite :**
+
+⏵ Round 101 : je vérifie la ligne « ce qu'elle fait » de l'état au lieu de re-poll l'OCR
 
 ## 3. Travail accompli
 
@@ -3110,7 +3172,7 @@ J'ai écrit `reports/rapport-r1-preparation.md` (commit `df42425a`) : ce que R1.
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 980 autres
+- … et 985 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3238,7 +3300,7 @@ J'ai écrit `reports/rapport-r1-preparation.md` (commit `df42425a`) : ce que R1.
 
 ## 5. Erreurs rencontrées
 
-67 sorties en erreur ou divergentes. Les premières :
+70 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -3328,4 +3390,5 @@ J'ai écrit `reports/rapport-r1-preparation.md` (commit `df42425a`) : ce que R1.
 - JOURNAL — LE 2 NOVEMBRE : LA CLÔTURE DE LA CAMPAGNE D/R/A" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err; sleep 8;
 - JOURNAL — LE 2 NOVEMBRE : LIEN VERS L'INDEX DES SESSIONS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err; sleep 8; 
 - DONNÉES — LA PRÉPARATION R1.1/R1.2 EST FICÉE : CE QUI EST PRÊT, CE QUI ATTEND N2" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /t
+- ÉTAT — OCR 8 LIVRES, PROCHAINE ACTION : L'OCR COMPLET ET LA CLÔTURE" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err
 

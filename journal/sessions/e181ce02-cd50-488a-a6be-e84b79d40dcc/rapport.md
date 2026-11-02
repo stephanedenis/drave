@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 31.6 h |
 | Tours | 71 |
-| Messages | 1012 |
-| Appels d'outils | 921 |
+| Messages | 1016 |
+| Appels d'outils | 925 |
 | Fichiers touchés | 25 |
-| Commandes | 747 |
+| Commandes | 749 |
 | Sous-agents | 2 |
-| Commits | 89 |
+| Commits | 90 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3778,13 +3778,16 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **glissement 
 
 ### Tour 71 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Tester la rupture de fiabilité
 - bash — Ajouter la porte T54 (rupture)
 - bash — Écrire la fiche de la rupture
 - bash — Aligner le compteur et passer les portes
 - bash — Committer la rupture
+- job_output
+- bash — Faire un vrai diff d'état
+- bash — Committer la rupture (2e essai)
 
 ## 3. Travail accompli
 
@@ -3865,7 +3868,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **glissement 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 707 autres
+- … et 709 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4101,5 +4104,6 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **glissement 
 - B13 — LA FIABILITÉ QUI DÉRIVE : v FINAL 0,56, 20/20, 8,0 PAS ; 54/54" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "FIABILITÉ QUI DÉRIVE"; then echo "
 - B13 — LA FENÊTRE ADAPTATIVE : v FINAL 0,8, 20/20, 8,0 PAS ; 55/55" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "FENÊTRE ADAPTATIVE"; then echo "COMMI
 - B13 — LA DÉRIVE CONTINUE : 5 % → 50 %, v FINAL 0,5, 20/20, 8,6 PAS ; 56/56" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "DÉRIVE CONTINUE"; then echo 
+- B13 — LA RUPTURE : 90 % D'ERREUR, v FINAL 0,12, 20/20, 8,0 PAS ; 57/57" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA RUPTURE"; then echo "COMMIT O
 - B13 — LA RUPTURE : 90 % D'ERREUR, v FINAL 0,12, 20/20, 8,0 PAS ; 57/57" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA RUPTURE"; then echo "COMMIT O
 
