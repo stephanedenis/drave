@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 07 h 45 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 04 h 32 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -92,7 +92,7 @@
 |---|---|---|
 | portes | **81** (77 vertes, 4 rouges — les connues — à la passe du 02/11 00 h 03) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **495** / **580** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **495** / **582** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

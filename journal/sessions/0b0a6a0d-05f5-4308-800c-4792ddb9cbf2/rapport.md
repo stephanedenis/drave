@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 36.2 h |
+| Durée | 36.3 h |
 | Tours | 18 |
-| Messages | 1443 |
-| Appels d'outils | 1337 |
+| Messages | 1448 |
+| Appels d'outils | 1341 |
 | Fichiers touchés | 11 |
-| Commandes | 1065 |
+| Commandes | 1067 |
 | Sous-agents | 0 |
-| Commits | 71 |
+| Commits | 72 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*371 appels d'outils.* Actions notables :
+*375 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 251 autres
+- … et 253 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1025 autres
+- … et 1027 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1248,4 +1248,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text() a = "Proch
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
+- ÉTAT — COMPTEURS APRÈS N2.z (495 FICHIERS, 582 JSON) ET L'HEURE DE LA NUIT  La revue repasse ; l'état porte la dernière mesure (canal à 34,3 M : 3,51)." 2>/dev/
 

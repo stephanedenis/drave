@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 35.8 h |
+| Durée | 35.9 h |
 | Tours | 104 |
-| Messages | 1335 |
-| Appels d'outils | 1174 |
+| Messages | 1336 |
+| Appels d'outils | 1175 |
 | Fichiers touchés | 25 |
-| Commandes | 953 |
+| Commandes | 954 |
 | Sous-agents | 2 |
-| Commits | 133 |
+| Commits | 134 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -5534,12 +5534,13 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round écrit les **phrases com
 
 ### Tour 104 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Ajouter 5 phrases complexes et mesurer
 - bash — Écrire la fiche des phrases complexes
 - bash — Trim README et passer les portes
 - bash — Corriger T85 (205 phrases) et relancer les portes
+- bash — Committer les phrases complexes
 
 ## 3. Travail accompli
 
@@ -5620,7 +5621,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round écrit les **phrases com
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 913 autres
+- … et 914 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5901,4 +5902,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round écrit les **phrases com
 - B13 — LE BORD FIN : 73 % À 0,38, 100 % À 0,41 (400 ESSAIS), SEUIL ROBUSTE 0,41 ; 87/87" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BORD FIN"; then 
 - B13 — LE GOLD À 200 RÉELS : POS 0,7738, 1 782 TOKENS, LA CIBLE EST ATTEINTE ; 88/88" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "GOLD À 200"; then e
 - B13 — LES SOUS-ENSEMBLES DU GOLD : POS 0,8214 SUR LES 20 NOUVELLES ; 89/89" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SOUS-ENSEMBLES"; then echo "
+- B13 — LES PHRASES COMPLEXES : POS 0,6471, SYNTAGME 0,4828, GOLD 205 ; 90/90" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHRASES COMPLEXES"; then ec
 

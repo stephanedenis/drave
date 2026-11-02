@@ -33080,3 +33080,58 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf|pdftoppm\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 5 min then check OCR progress", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+04:32
+  Biblio_large · 005.3 Information Architecture, 4th Edit · 485 p · 867184 car
+  Biblio_large · 006.31 Inconnu(e) 2025, Le Désordre Des  · 421 p · 794225 car
+2410566 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af "tesseract.*ocr-pdf|pdftoppm" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 13996952  2 nov 04:27 data/corpus_ocr/train.txt
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"pdftoppm|tesseract\" | head -1; ps -p 1616198 -o stat,etime= 2>/dev/null", "description": "Check 19th book start", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+04:32
+2414158 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-8inae4r4/p-50.png stdout -l fra+eng --psm 3
+STAT            
+S       07:47:14
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 353 : 18e livre TERMINÉ — Le Désordre Des… 421 p, 794 225 car. ; 17 livres au corpus
+
+**Round 353/1000 — le 18e livre est clos ; 17 livres au corpus.**
+
+- **`006.31 … Le Désordre Des…`** : **421 pages, 794 225 caractères** ; le **train** passe à **13 996 952 octets**.
+- **Le corpus OCR : 17 livres, 6 609 pages, 13 839 132 caractères**.
+- **Le 19e livre** entre en OCR (page 50 du rendu `8inae4r4`).
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40) ; **le doublon** du 14e est prouvé.
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : 17 livres, 13,84 M caractères ; le goal reste actif.
+
+
+## Tour 366
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 354/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract\" | head -1; ls /tmp/ocr-pdf-8inae4r4/ 2>/dev/null | wc -l; tail -1 /tmp/ocr-pilote.log", "description": "Check 19th OCR progress", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/ … [16 caractères tronqués]`
+
+  ```
+04:33
+2414795 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-8inae4r4/p-56.png stdout -l fra+eng --psm 3
+86
+  Biblio_large · 006.31 Inconnu(e) 2025, Le Désordre Des  · 421 p · 794225 car
+  ```
+

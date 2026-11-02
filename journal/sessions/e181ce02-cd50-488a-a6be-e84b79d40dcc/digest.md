@@ -25172,3 +25172,15 @@ timeout 1800 python3 -m tools.pensee.autotest EXIT=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('return len(d[\"phrases\"]) == 200, (f\"gold réel : {len(d[\\'phrases\\'])} phrases, \"\\n                                     … [478 caractères tronqués]`
+
+  ```
+1345:    return len(d["phrases"]) >= 200, (f"gold réel : {len(d['phrases'])} phrases, "
+1346-                                      f"POS 0,7738, 1782 tokens")
+1347-
+  ✅ T86 sous-ensembles     r181-200 POS 0.8214 ; r001-180 POS 0.7897
+  ✅ T87 phrases complexes  r201-205 : POS 0.6471, syntagme 0.4828
+  90/90 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/pensee/autotest.py reports/rapport-pensee-gold-complexes.md reports/pensee-gold-complexes.json reports/README.m … [560 caractères tronqués]`

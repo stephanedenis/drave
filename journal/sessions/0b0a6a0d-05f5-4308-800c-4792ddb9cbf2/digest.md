@@ -17934,3 +17934,32 @@ en-cours ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.x** : canal −0,03 ; \", \"\")\ns = s.replace(\"**N2.z** : canal à 34,3 M **3,51**, 512 **3,66** (le meilleur … [1663 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 580 JSON, le disque en a 582
+[still running after 60000ms; moved to background job bash-1065]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1065", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+24fb271e N2.z — LE CANAL À 34,3 M : 4,00 → 3,51, LE MEILLEUR MODÈLE DE LA NUIT
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for gpu in 0 1; do g=$((gpu+1)); nohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=$gpu PYTHONPATH=. ~/gpu-env/bin/python tools/distiller_budget.py --corpus fr --train data/wiki_fr/propre/trai … [537 caractères tronqués]`
+
+  ```
+Z-g1 2412761
+Z-g2 2412762
+# init work/n2j/base-34m-canal.pt · manquants [] · graine 1 · décalage 0
+04:31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [928 caractères tronqués]`
