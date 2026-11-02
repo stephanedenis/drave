@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -23,10 +23,11 @@
 | 00:48 | `881b7a12` | B13 — LE RÉGIME INTRA-ÉPISODE : BASCULE À CHAQUE LOOK, v FINAL 0,48, 20/20, 8,0 PAS ; 64/64 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+21) |
 | 00:52 | `64b4b14d` | B13 — LA FIABILITÉ ASYMÉTRIQUE : 0,9/0,5, v FINAL 0,44, 20/20, 8,0 PAS ; 65/65 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+21) |
 | 00:59 | `013c9118` | B13 — L'INFORMATION RARE : UTILE 10 %, v FINAL 0,8, 20/20, 8,0 PAS ; 66/66 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+16) |
+| 01:02 | `743513f4` | B13 — L'INFORMATION TRÈS RARE : UTILE 1 %, v FINAL 0,54, 20/20, 8,0 PAS ; 67/67 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 
 ## Chiffres du jour
 
-`10 %` · `90 %` · `5 %` · `50 %`
+`1 %` · `10 %` · `90 %` · `5 %` · `50 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -53,6 +54,7 @@
 - [reports/rapport-pensee-rapide.md](../../reports/rapport-pensee-rapide.md)
 - [reports/rapport-pensee-rare.md](../../reports/rapport-pensee-rare.md)
 - [reports/rapport-pensee-rupture.md](../../reports/rapport-pensee-rupture.md)
+- [reports/rapport-pensee-tres-rare.md](../../reports/rapport-pensee-tres-rare.md)
 - [reports/rapport-r1-preparation.md](../../reports/rapport-r1-preparation.md)
 
 <!-- notes -->

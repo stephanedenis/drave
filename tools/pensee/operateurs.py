@@ -1799,6 +1799,36 @@ def seule_bayes_tres_rare(p: PolitiqueAppriseBayesTresRare,
     return seule_observatrice(p, max_pas)
 
 
+class PolitiqueAppriseBayesTresTresRare(PolitiqueAppriseBayesAdaptive):
+    """Le bayésien à **information ultra-rare** : utile un épisode sur 1000."""
+
+    nom = "bayes_tres_tres_rare"
+
+    def apprendre(self) -> None:
+        for i in range(self.episodes):
+            self.p_erreur = 0.1 if i % 1000 == 0 else 0.5
+            d = self.rng.randint(0, 1)
+            cle = (0, 0, False, 2)
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain, d = self._pas(cle, a, d)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+
+def seule_bayes_tres_tres_rare(p: PolitiqueAppriseBayesTresTresRare,
+                               max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 
