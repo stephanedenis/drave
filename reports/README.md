@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-periode.md`](rapport-pensee-periode.md) | **B13** — la période variable : 2–5 pas, 4/4 buts, 10 pas, **39/39** |
 | [`rapport-pensee-bouge-graines.md`](rapport-pensee-bouge-graines.md) | **B13** — la porte qui bouge sur 5 graines : 5/5 buts en 10 pas, 230–253 états-Q, **38/38** |
 | [`rapport-pensee-bouge.md`](rapport-pensee-bouge.md) | **B13** — la porte qui bouge : horloge `t % 6`, A* 28 nœuds, politique but/10, **37/37** |
 | [`rapport-pensee-bruit.md`](rapport-pensee-bruit.md) | **B13** — le bruit variable : 50–95 %, 6/6 buts, effort 3 → 1 essai, **36/36** |

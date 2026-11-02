@@ -209,9 +209,10 @@ class PolitiqueApprise(Politique):
     ACTIONS = ("haut", "bas", "gauche", "droite")
 
     def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
-                 gamma: float = 0.95, eps: float = 0.25):
+                 gamma: float = 0.95, eps: float = 0.25, periode: int = 3):
         super().__init__()
         self.q: dict[tuple, float] = {}
+        self.periode = periode
         self.episodes = episodes
         self.rng = random.Random(graine)
         self.alpha, self.gamma, self.eps = alpha, gamma, eps
@@ -869,8 +870,8 @@ LABYRINTHE_PORTE_MINUTE = Probleme(
 # --------------------------------------------------------------------------- porte qui bouge
 
 
-def _d_bouge(t: int) -> int:
-    return (t // 3) % 2
+def _d_bouge(t: int, periode: int = 3) -> int:
+    return (t // periode) % 2
 
 
 def _etat_pb(x: int, y: int, open_: bool, t: int, parent: str | None = None,
@@ -893,8 +894,8 @@ def _t_pb(e: Etat) -> int:
     return int(next(c.corps["v"] for c in e.candidats if c.id == "t"))
 
 
-def _libre_pb(x: int, y: int, open_: bool, t: int) -> bool:
-    d = _d_bouge(t)
+def _libre_pb(x: int, y: int, open_: bool, t: int, periode: int = 3) -> bool:
+    d = _d_bouge(t, periode)
     if not (0 <= x < 5 and 0 <= y < 5):
         return False
     if (x, y) == PORTES_MOBILE[d]:
@@ -973,12 +974,17 @@ class PolitiqueAppriseBouge(PolitiqueApprise):
 
     nom = "bouge"
 
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, periode: int = 3):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma,
+                         eps=eps, periode=periode)
+
     def _cle(self, e: Etat) -> tuple:
         return _xy_pb(e)[0], _xy_pb(e)[1], _open_pb(e), _t_pb(e)
 
     def _pas(self, cle, action, ouvre: bool):
         x, y, o, t = cle
-        d = _d_bouge(t)
+        d = _d_bouge(t, self.periode)
         dx = {"droite": 1, "gauche": -1}.get(action, 0)
         dy = {"bas": 1, "haut": -1}.get(action, 0)
         nx, ny = x + dx, y + dy

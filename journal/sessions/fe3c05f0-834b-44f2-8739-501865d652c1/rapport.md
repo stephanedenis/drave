@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
 | Durée | 30.4 h |
-| Tours | 45 |
-| Messages | 1080 |
-| Appels d'outils | 1004 |
+| Tours | 49 |
+| Messages | 1092 |
+| Appels d'outils | 1008 |
 | Fichiers touchés | 18 |
-| Commandes | 925 |
+| Commandes | 929 |
 | Sous-agents | 0 |
 | Commits | 61 |
 | Compactages de contexte | 2 |
@@ -117,6 +117,14 @@
 **Tour 44** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 45** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 46** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 47** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 48** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 49** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1628,9 +1636,83 @@ Les deux extractions sont **lentes mais saines** ; rien n'est bloqué. La fin de
 
 ### Tour 45 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*2 appels d'outils.* Actions notables :
 
 - bash — Check documents and OCR progress
+- bash — Measure document process IO over 30 seconds
+
+**Synthèse produite :**
+
+⏵ Round 33 : le processus des documents est bloqué (rchar figé à +61 octets en 30 s)
+
+**Round 33/1000 — le diagnostic est clair, et il change la donne.**
+
+J'ai interrogé le processus des documents (`/proc/<pid>/io`) : il a lu **1,58 To** (`rchar`), écrit 2,3 Go, fait **113 millions d'appels système** — et son `rchar` n'a **pas bougé de 30 secondes** (figé, +61 octets = la lecture de `/proc` elle-même). Le process est en sommeil (`S`, 0,7 % CPU) et le train n'a pas été réécrit depuis **22 h 55** (759,4 Mo). Ce n'est pas de la lenteur : le parcours est **bloqué** sur un PDF, probablement un fichier corrompu ou un `pdftotext` qui ne rend pas la main (le script a un délai de 120 s par PDF, mais le processus peut rester coincé sur une lecture disque).
+
+**Décision** : je laisse encore une chance au processus (s'il débloque, le parcours reprend), mais je **prépare sa clôture** : les documents déjà extraits (2 558 gardés, 812,6 M caractères, 759,4 Mo de train) constituent un **corpus partiel mesurable** — je peux le figer, reconstruire son manifeste (comme pour l'anglais) et le committer avec la mention « parcours interrompu à 4 000/7 496 PDF ». Le reste des documents (3 496 PDF) sera repris à la main ou par lots, avec le **même outil** et un délai par PDF plus court.
+
+**L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours — même situation de lenteur, pas de blocage signalé.
+
+**Les dix corpus Wikipédia** restent mesurés et committés (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), ainsi que le corpus PDF et l'A2.6/A8.3. Le goal reste actif ; le prochain round clôt les documents en corpus partiel si le processus ne repart pas, et écrit les deux fiches.
+
+### Tour 46 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Diagnose stuck document process wait channel
+
+**Synthèse produite :**
+
+⏵ Round 34 : le processus des documents s'est débloqué (+5,9 Go lus en 30 s)
+
+**Round 34/1000 — bonne nouvelle : le blocage était temporaire.**
+
+Le processus des documents est reparti : son `rchar` est passé de 1 578,9 Go à **1 584,8 Go en 30 secondes** (+5,9 Go lus), son `wchar` a progressé de 9 Mo, et le train a été réécrit à **22 h 58** (759,63 Mo). Il était en `poll_schedule_timeout` — une attente d'E/S sur un PDF, pas un blocage définitif. Il reste sur les 4 000/7 496 PDF ; le débit est faible (~6 Ko/s d'écriture) mais réel.
+
+**L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours ; même comportement de lenteur, sans blocage.
+
+**Les dix corpus Wikipédia** restent mesurés et committés (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), ainsi que le corpus PDF (1 927 documents, 322 Mo) et l'**A2.6/A8.3**. L'état, la roadmap et le plan sont à jour.
+
+**La suite** : je laisse les deux parcours finir ; dès leurs manifestes, j'écris les **fiches OCR et Documents** (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné) et je les commite. Le goal reste actif ; le prochain round vérifie leurs manifestes.
+
+### Tour 47 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check document and OCR progress
+
+**Synthèse produite :**
+
+⏵ Round 35 : les documents progressent (+1,4 Mo en 4 min), l'OCR reste à 4 livres
+
+**Round 35/1000 — les deux parcours vivent, lentement.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **760,8 Mo** (22 h 59, +1,4 Mo depuis 22 h 55), 2 558 documents gardés, 812,6 M caractères. Le processus est en sommeil (`S`) mais écrit ; au rythme actuel (~350 Ko/min), les 3 500 PDF restants prendront ~1 h.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours ; processus en sommeil aussi.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les deux extractions secondaires avancent, sans erreur ; elles devraient finir avant 8 h. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+### Tour 48 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check document and OCR progress
+
+**Synthèse produite :**
+
+⏵ Round 36 : documents à 760,8 Mo, OCR à 4 livres, manifestes pas encore là
+
+**Round 36/1000 — les deux parcours continuent, sans erreur.**
+
+- **Les documents** : 4 000 PDF sur 7 496, train **760,8 Mo** (22 h 59), val 48,7 Mo (22 h 55), 2 558 documents gardés, 812,6 M caractères. Le processus est en sommeil (`S`) mais écrit ; il reste ~3 500 PDF.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.
+- **Les manifestes** (`corpus-pdf-documents.json`, `ocr-pdf.json`) ne sont pas encore écrits — ils tomberont à la fin des parcours.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les deux extractions secondaires avancent, sans erreur ; elles devraient finir avant 8 h. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+### Tour 49 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -1699,7 +1781,7 @@ Les deux extractions sont **lentes mais saines** ; rien n'est bloqué. La fin de
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 885 autres
+- … et 889 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1827,7 +1909,7 @@ Les deux extractions sont **lentes mais saines** ; rien n'est bloqué. La fin de
 
 ## 5. Erreurs rencontrées
 
-40 sorties en erreur ou divergentes. Les premières :
+41 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

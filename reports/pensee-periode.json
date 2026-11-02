@@ -1,0 +1,33 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "39/39",
+ "entrainement": 3,
+ "lignes": [
+  {
+   "periode": 2,
+   "but": true,
+   "pas": 10
+  },
+  {
+   "periode": 3,
+   "but": true,
+   "pas": 10
+  },
+  {
+   "periode": 4,
+   "but": true,
+   "pas": 10
+  },
+  {
+   "periode": 5,
+   "but": true,
+   "pas": 10
+  }
+ ],
+ "limites": [
+  "périodes 2–5",
+  "période fixe par épisode",
+  "toy"
+ ]
+}

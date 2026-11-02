@@ -15801,3 +15801,34 @@ pas 17050 · perte 1.7497 · PPL val 7.878 · 1305 s
   ```
 
 - **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/base-multi-21m.pt 2>/dev/null && echo OK; tail -1 work/n2k/base-multi-21m.log; PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 900 ~/gpu-env/bin/python work/n2k/evalue.py work/n2k/base-multi-21m.pt 2 … [115 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-921]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-921", "timeout_ms": 900000, "wait": true}`
+
+  ```
+22:59
+work/n2k/base-multi-21m.pt
+OK
+}
+{"fichier": "base-multi-21m.pt", "fr": 5.8871, "en": 6.5663, "de": 6.7893, "es": 6.4093, "it": 6.418, "pt": 7.1318, "ru": 3.9106, "ar": 3.7429, "ja": 5.8242, "zh": 9.564}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=1 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_multi/propre/train.txt --pas 20000 --seq 128 --lot 8 --lr 3e-4 … [1232 caractères tronqués]`
+
+  ```
+multi11pos 1714962
+en-cours ok
+roadmap ok
+  T0 max : 4004 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  revue de documentation · 429 fiche(s) · 527 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+22:59
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.p** (34,3 M) : **4,00** (11,47 M 4,39), 512 **4,19** ;\", \"**N2.p** : **4,00**, 512 **4,19** ;\")\np.write_text … [1107 caractères tronqués]`

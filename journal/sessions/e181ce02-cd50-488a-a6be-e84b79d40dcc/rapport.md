@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 30.3 h |
-| Tours | 52 |
-| Messages | 848 |
-| Appels d'outils | 795 |
+| Tours | 53 |
+| Messages | 856 |
+| Appels d'outils | 801 |
 | Fichiers touchés | 25 |
-| Commandes | 640 |
+| Commandes | 645 |
 | Sous-agents | 2 |
-| Commits | 69 |
+| Commits | 70 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -135,6 +135,8 @@
 **Tour 51** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 52** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 53** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2791,6 +2793,57 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round vérifie la porte qui bo
 - bash — Committer la porte qui bouge sur 5 graines
 - job_output
 
+**Synthèse produite :**
+
+⏵ Porte qui bouge sur 5 graines : 5/5 buts en 10 pas, 230–253 états-Q ; 38/38
+
+Le round 39 du goal est livré : la **porte qui bouge** (horloge `t % 6`) tient sur **5 graines**. Commit **`06462a3d`**.
+
+\## Les 5 graines
+
+`PolitiqueAppriseBouge` entraînée (1000 épisodes) sur 5 graines, exécutée seule ; la porte change de position toutes les 3 pas.
+
+| graine | états-Q | but | pas |
+|---:|---:|---|---:|
+| 0 | 236 | **oui** | 10 |
+| 1 | 235 | **oui** | 10 |
+| 2 | 238 | **oui** | 10 |
+| 3 | 230 | **oui** | 10 |
+| 4 | 253 | **oui** | 10 |
+
+**Ce que ça dit** :
+
+- **5/5 buts en 10 pas** : la re-planification avec la porte qui bouge tient sur toutes les graines ; le pas est **stable** (10), pas seulement le but.
+- **La taille varie** (230–253 états) sans changer le chemin : l'horloge `t % 6` et la position suffisent ; le reste est du bruit d'exploration.
+- **Le coût de la mobilité est constant** : +2 pas par rapport à la porte fixe (8), sur les 5 graines.
+- **La négative reste** : la politique minute (T21/T28) ne connaît pas l'horloge ; le contraste est le contrôle.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-bouge-graines.md`](../../reports/rapport-pensee-bouge-graines.md) ; JSON [`pensee-bouge-graines.json`](../../reports/pensee-bouge-graines.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T35 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **38/38 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **427 fiches / 526 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Période variable** : 2, 4, 5 pas ; mesurer la dégradation.
+2. **Porte qui bouge aléatoirement** : la position change sans période fixe.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round fait varier la période de la porte.
+
+### Tour 53 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Paramétrer la période et tester 2–5
+- bash — Ajouter la porte T36 (période variable)
+- bash — Écrire la fiche de la période variable
+- bash — Aligner le compteur et passer les portes
+- bash — Committer la période variable
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2870,7 +2923,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round vérifie la porte qui bo
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 600 autres
+- … et 605 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3086,4 +3139,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round vérifie la porte qui bo
 - B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE QUI 
 - B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE QUI 
 - B13 — LA PORTE QUI BOUGE SUR 5 GRAINES : 5/5 BUTS EN 10 PAS, 230–253 ÉTATS-Q ; 38/38" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BOUGE SUR 5 GRAINE
+- B13 — LA PÉRIODE VARIABLE : 2–5 PAS, 4/4 BUTS, 10 PAS, LA MÊME POLITIQUE ; 39/39" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PÉRIODE VARIABLE"; the
 

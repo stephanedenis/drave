@@ -593,6 +593,20 @@ def t35_bouge_graines() -> tuple[bool, str]:
         f"bouge graines : {buts}/5 buts, pas {[l['pas'] for l in lignes]}")
 
 
+def t36_periode() -> tuple[bool, str]:
+    """La période variable : la politique entraînée à 3 pas tient de 2 à 5 pas."""
+    from .operateurs import PolitiqueAppriseBouge, seule_bouge
+    p = PolitiqueAppriseBouge(episodes=1000, graine=0)
+    p.apprendre()
+    res = []
+    for per in (2, 3, 4, 5):
+        p.periode = per
+        ok, pas = seule_bouge(p)
+        res.append((per, ok, pas))
+    return all(r[1] for r in res), (f"périodes 2–5 : {sum(1 for r in res if r[1])}/4 "
+                                   f"buts, pas {[r[2] for r in res]}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -627,7 +641,8 @@ def main() -> int:
               ("T32 porte mobile sur 5 graines", t32_mobile_graines()),
               ("T33 bruit variable", t33_bruit()),
               ("T34 porte qui bouge", t34_bouge()),
-              ("T35 porte qui bouge, 5 graines", t35_bouge_graines())]
+              ("T35 porte qui bouge, 5 graines", t35_bouge_graines()),
+              ("T36 période variable", t36_periode())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
