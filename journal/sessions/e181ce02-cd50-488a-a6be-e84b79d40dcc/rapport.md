@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 38.1 h |
-| Tours | 117 |
-| Messages | 1459 |
-| Appels d'outils | 1272 |
+| Durée | 38.3 h |
+| Tours | 118 |
+| Messages | 1466 |
+| Appels d'outils | 1277 |
 | Fichiers touchés | 25 |
-| Commandes | 1033 |
+| Commandes | 1037 |
 | Sous-agents | 2 |
-| Commits | 153 |
+| Commits | 154 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -265,6 +265,8 @@
 **Tour 116** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 117** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 118** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6226,6 +6228,54 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round **documente la limite du
 - bash — Committer le plafond du gold
 - job_output
 
+**Synthèse produite :**
+
+⏵ Plafond du gold : 27/30, quatre règles divergent ; 103/103
+
+Le round 104 du goal est livré : les **quatre règles** de coréférence butent sur un **plafond de 27/30** — c'est la limite du gold, pas d'une règle. Commit **`e858b5b0`**.
+
+\## Les quatre règles
+
+| règle | court (20) | long (10) | **tout (30)** |
+|---|---:|---:|---:|
+| **dernier nom** | **20** | 7 | **27** |
+| rôle | 14 | **9** | 23 |
+| hybride | 15 | **9** | 24 |
+| sémantique | 15 | 8 | 23 |
+
+**Ce que ça dit** :
+
+- **Le plafond est 27/30** : aucune règle simple ne fait mieux ; les trois cas manquants (r321/r322/r337) demandent le **sens du verbe** (`voir` vs `parler`) ou une décision d'annotateur.
+- **Les règles divergent sur les mêmes cas** : r321/r322 (proximité) vs r337 (rôle) — le gold n'a pas de règle unique, il a des **cas**.
+- **Le désaccord est une mesure** : 27/23/24/23 ; l'écart de 4 points est la **limite du gold**, pas celle d'une règle.
+- **La négative est explicite** : 23/30 pour le rôle et la sémantique.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-limite.md`](../../reports/rapport-pensee-anaphore-limite.md) ; JSON [`pensee-anaphore-limite.json`](../../reports/pensee-anaphore-limite.json) ; T100 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **103/103 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **510 fiches / 598 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 580 mots, T0 dans le budget.
+- L'horloge réelle est **06 h 49 HNE** (la deadline 08:00 est encore devant) ; l'autotest prend **~18 min**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Arbitrer les cas ambigus** : deux annotateurs, mesurer l'accord (kappa).
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round **arbitre les cas ambigus** (deux lecteurs, accord mesuré) — la vraie limite du gold.
+
+### Tour 118 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Mesurer l'accord (kappa) entre les quatre règles
+- bash — Écrire la fiche de l'accord kappa
+- bash — Trim README et passer les portes
+- bash — Committer l'accord kappa
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6305,7 +6355,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round **documente la limite du
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 993 autres
+- … et 997 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6606,4 +6656,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round **documente la limite du
 - B13 — LA SÉMANTIQUE DES VERBES : 23/30, LE DERNIER NOM RESTE LE MEILLEUR ; 102/102" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SÉMANTIQUE DES VERBE
 - ÉTAT — COMPTEURS (509/597) ET EN-COURS COMPACTÉ (T0)" 2>&1 | tail -2; git log -1 --format='%h %s'; date
 - B13 — LE PLAFOND DU GOLD : 27/30, QUATRE RÈGLES DIVERGENT ; 103/103" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PLAFOND DU GOLD"; then echo "COMMIT
+- B13 — L'ACCORD ENTRE RÈGLES : κ DE −0,16 À 1,0, LE DÉSACCORD EST UNE RÈGLE ; 104/104" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "L'ACCORD ENTRE RÈG
 

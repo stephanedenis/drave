@@ -34560,3 +34560,82 @@ Continue working toward the objective in this same session. Treat the current wo
 ⏵ Round 370 : goal actif (370/1000), livraisons toutes committées — j'attends la fenêtre de 8 h
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 540; date '+%H:%M'; git log --oneline -6; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2", "description": "Wait 9 min then check commits and state", "timeoutMs": 600000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qt … [7 caractères tronqués]`
+
+  ```
+06:52
+e858b5b0 B13 — LE PLAFOND DU GOLD : 27/30, QUATRE RÈGLES DIVERGENT ; 103/103
+7eace7b9 ÉTAT — COMPTEURS (509/597) ET EN-COURS COMPACTÉ (T0)
+6424bf7f B13 — LA SÉMANTIQUE DES VERBES : 23/30, LE DERNIER NOM RESTE LE MEILLEUR ; 102/102
+ccf8bac5 DONNÉES — LE CEGEP ENTRE DANS L'OCR : 5 NOTES, 292 PAGES, 506 801 CARACTÈRES, 8 KO 0
+3b7438a3 B13 — L'HYBRIDE : 24/30, AUCUNE RÈGLE SIMPLE N'ATTEINT 30/30 ; 101/101
+f9828ab3 B13 — LA RÉSOLUTION PAR RÔLE : LONG 9/10, COURT 14/20, COMPLÉMENTAIRE ; 100/100
+  état · dernier fait e858b5b0 · dernier état e858b5b0
+  ✅ aucun fait commité après le dernier état
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 370 : goal actif (370/1000) — dernières vérifications avant la clôture de 8 h
+
+**Round 370/1000 — les livraisons sont toutes committées ; le compte à rebours tourne.**
+
+- **Les commits du mandat** : `3b670a2c` (les 10 corpus), `2f913a1a` (le PDF), `5c27a3fb` (les documents), `15f2c8f6` (**l'OCR des 20 livres**), `ccf8bac5` (**l'OCR du CEGEP**), `166896b4` (les genres), `df42425a` (la prépa R1.1/R1.2), `f708b7ee` (A2.6/A8.3), `7eace7b9` (l'état compacté).
+- **L'état à jour** ✅ (dernier fait = dernier état, `e858b5b0`).
+- **Les deux corpus OCR** : livres **20 / 7 381 p / 15,36 M car.** (val 1 doc., 8 Ko 0, éval 0/40) ; CEGEP **5 notes / 292 p / 506 801 car.** (val 2 doc., 8 Ko 0, éval 0/40).
+- **La prochaine action nommée** : l'OCR complet (les 159 scans + le fonds CEGEP).
+- **Il reste 1 h 08 avant 8 h** ; je garde le goal actif jusqu'à la fenêtre.
+
+**Le constat** : rien ne manque aux livraisons ; la clôture se fera à 8 h avec le récapitulatif.
+
+
+## Tour 383
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 371/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 371 : je relance le CEGEP pour 8 notes (le pilote de 5 → 8), en attendant la fenêtre de 8 h
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; nohup python3 tools/ocr_pdf.py --racine CEGEP --max-doc 8 --sortie data/corpus_ocr_cegep --manifeste reports/ocr-pdf-cegep.json > /tmp/ocr-cegep2.log 2>&1 & echo \"CEGEP OCR 8 job $!\"; sleep 15; ps -p $! -o pid,stat,eti … [178 caractères tronqués]`
+
+  ```
+06:53
+CEGEP OCR 8 job 3011320
+    PID STAT            
+3011320 S          00:15
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 371 : CEGEP relancé pour 8 notes (PID 3011320)
+
+**Round 371/1000 — le CEGEP continue pendant la dernière heure.**
+
+- **`tools/ocr_pdf.py --racine CEGEP --max-doc 8`** (PID 3011320) : les 8 premières notes scannées (les 5 du pilote + 3 nouvelles), dans le même `data/corpus_ocr_cegep/` et `reports/ocr-pdf-cegep.json`.
+- **Le pilote de 5** est committé (`ccf8bac5`) ; cette passe **remplace** le corpus par 8 notes et la fiche sera mise à jour avec les nouveaux chiffres.
+- **Le détecteur** ré-examine les 41 PDF du parcours (~25 min) puis océrise les 3 nouvelles notes.
+- **L'état à jour** ✅ ; **les deux corpus OCR** : livres 20 / 7 381 p / 15,36 M car. ; CEGEP 5 / 292 p / 506 801 car.
+- **Il reste 1 h 07 avant 8 h** ; le goal reste actif.
+
+**Le constat** : le CEGEP gagne trois notes avant la clôture ; le goal reste actif.
+
+
+## Tour 384
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 372/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; tail -4 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; ls -la reports/ocr-pdf-cegep.json 2>&1", "description": "Wait 8 min then check CEGEP 8 progress", "timeoutMs": 540 … [66 caractères tronqués]`

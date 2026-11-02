@@ -1,0 +1,24 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "104/104",
+ "verdicts": {
+  "dernier_nom": 27,
+  "role": 23,
+  "hybride": 24,
+  "semantique": 23
+ },
+ "paires": {
+  "role/semantique": 1.0,
+  "role/hybride": 0.902,
+  "hybride/semantique": 0.902,
+  "dernier_nom/role": -0.1628,
+  "dernier_nom/hybride": -0.1538,
+  "dernier_nom/semantique": -0.1628
+ },
+ "limites": [
+  "30 liens",
+  "kappa entre règles",
+  "heuristique seule"
+ ]
+}

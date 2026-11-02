@@ -115,6 +115,54 @@ def resoudre_semantique(mots: list[dict], segments: list[dict]) -> dict[str, str
     return liens
 
 
+def _liens_attendus(phrases: list[dict]) -> list[tuple]:
+    liens = []
+    for phrase in phrases:
+        attendu = (phrase.get("pragma") or {}).get("coref") or {}
+        for pronom, cible in attendu.items():
+            liens.append((phrase["id"], pronom, cible))
+    return liens
+
+
+def _par_regle(phrases: list[dict], resolv) -> list[bool]:
+    res = []
+    for phrase in phrases:
+        attendu = (phrase.get("pragma") or {}).get("coref") or {}
+        obtenu = resolv(phrase["mots"], phrase["segments"])
+        for pronom, cible in attendu.items():
+            res.append(obtenu.get(pronom) == cible)
+    return res
+
+
+def kappa(a: list[bool], b: list[bool]) -> float:
+    """Cohen's kappa entre deux séries de verdicts binaires."""
+    n = len(a)
+    if n == 0:
+        return 0.0
+    po = sum(1 for x, y in zip(a, b) if x == y) / n
+    pa1 = sum(a) / n
+    pb1 = sum(b) / n
+    pe = pa1 * pb1 + (1 - pa1) * (1 - pb1)
+    return round((po - pe) / (1 - pe), 4) if pe != 1 else 0.0
+
+
+def accords(phrases: list[dict]) -> dict:
+    """Les kappas pairwise des quatre règles de coréférence."""
+    regles = {
+        "dernier_nom": lambda m, s: resoudre(m, ignorer_pp=True),
+        "role": resoudre_roles,
+        "hybride": resoudre_hybride,
+        "semantique": resoudre_semantique,
+    }
+    verdicts = {nom: _par_regle(phrases, f) for nom, f in regles.items()}
+    paires = {}
+    noms = list(verdicts)
+    for i in range(len(noms)):
+        for j in range(i + 1, len(noms)):
+            paires[f"{noms[i]}/{noms[j]}"] = kappa(verdicts[noms[i]], verdicts[noms[j]])
+    return {"verdicts": {k: sum(v) for k, v in verdicts.items()}, "paires": paires}
+
+
 def mesurer_semantique(phrases: list[dict]) -> dict:
     """Compare `resoudre_semantique` aux liens du gold."""
     total = justes = phrases_avec = 0

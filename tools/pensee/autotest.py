@@ -1542,6 +1542,20 @@ def t100_plafond() -> tuple[bool, str]:
         "plafond : " + ", ".join(f"{k} {v}/30" for k, v in scores.items()))
 
 
+def t101_kappa() -> tuple[bool, str]:
+    """L'accord entre règles : role/sémantique 1,0, dernier nom/role −0,16."""
+    from ..tests.linguistique.anaphore import accords
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 342]
+    a = accords(ps)
+    paires = a["paires"]
+    return (paires["role/semantique"] == 1.0
+            and paires["dernier_nom/role"] < 0), (
+        f"kappa : role/semantique {paires['role/semantique']}, "
+        f"dernier/role {paires['dernier_nom/role']}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1641,7 +1655,8 @@ def main() -> int:
               ("T97 résolution par rôle", t97_roles()),
               ("T98 hybride", t98_hybride()),
               ("T99 sémantique", t99_semantique()),
-              ("T100 plafond du gold", t100_plafond())]
+              ("T100 plafond du gold", t100_plafond()),
+              ("T101 accord kappa", t101_kappa())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

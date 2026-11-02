@@ -18809,3 +18809,59 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1103", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1101 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 /tmp/porte-greffe.out; tail -2 /tmp/porte-indice.out; grep -c "✅" /tmp/portes-fin.out; tail -1 /tmp/portes-fin.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -3 /tmp/porte-greffe.out 2>/dev/null; echo \"=== indice ===\"; tail -2 /tmp/porte-indice.out 2>/dev/null; echo \"=== passe ===\"; grep -c \"✅\" /tmp/portes-fin.out; tail -1 /tmp/portes-fin.out", "description": "Ch … [21 caractères tronqués]`
+
+  ```
+06:55
+     Ce qui reste à construire pour qu'une mémoire SERVE : l'entrée de cache KV,
+     sur laquelle le moteur n'a aujourd'hui aucune prise — un manque, écrit.
+  Fichiers conservés dans /tmp/tmp.dKk1pSV1os
+=== indice ===
+  ✅ indice interne : écho (64/64) — la mesure ne prouve RIEN, et c'est pourquoi la porte exige un indice extérieur
+  ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice TÉMOIN (même invite, question qui ne la désigne pas) à 459 : l'écart est nul ou négatif, donc rien n'est établi sur ce texte (hasard 370 / témoin 370)
+=== passe ===
+57
+  porte-occupation-moteur ✅                          65 s  ✅ porte occupation du moteur : la ligne « occupation des poids » est annoncée, elle COLLE à
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat /tmp/portes-greffe/registre.txt 2>/dev/null | tail -2; cat /tmp/portes-indice/registre.txt 2>/dev/null | tail -2; grep -c \"✅\" /tmp/porte-greffe.out; grep -c \"❌\" /tmp/porte-indice.out; date '+%H:%M'", "description": "Read the  … [24 caractères tronqués]`
+
+  ```
+5
+1
+06:55
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 /tmp/porte-greffe.out; grep -E \"PORTE|✅ la porte|franchie\" /tmp/porte-greffe.out | tail -2; date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out", "description": "Read the greffe verdict"}`
+
+  ```
+Fichiers conservés dans /tmp/tmp.dKk1pSV1os
+  ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+06:55
+57
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"homeostasie|melange|reparti|indice\" docs/pilotage/references-non-regression.md | head -8", "description": "Check the tolerated reds list"}`
+
+  ```
+4:> (journaux `/tmp/portes-1101-n2h`). Mêmes rouges que la passe du 31/10 : `porte-indice` (921 s),
+5:> `porte-melange` (112 s), `porte-homeostasie` (environnementale) et `porte-reparti-moteur`.
+12:> (journaux `/tmp/portes-1031-11h17`). `porte-indice`, `porte-melange` : les **structurelles
+13:> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé
+15:> perdait contre la case, 110/112). `porte-reparti-moteur` : PPL épinglée 9,1748 non reproduite
+28:> du programme N. Les deux rouges structurelles (`porte-indice`, `porte-melange`) et
+33:> finale du sprint 24 h. `porte-indice` **843 s** et `porte-melange` **112 s** restent les deux
+39:> `porte-indice` (861 s) et `porte-melange` (107 s). Références stables : `porte-flux` **60,8135**,
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt | head -6; tail -1 /tmp/portes-fin.out", "description": "Wait for the main gates pass to finish"}`
