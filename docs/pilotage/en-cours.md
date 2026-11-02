@@ -59,13 +59,13 @@
 
 - **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
 - **Rôle** : **D/R/A** — le texte intégral, l'extraction PDF/OCR, la prépa R1.1/R1.2, A2.6/A8.3.
-- **Plan** : le texte intégral (pilote FR), puis PDF/OCR, puis R1.1/R1.2.
+- **Plan** : le texte intégral, le PDF, puis R1.1/R1.2.
 - **Ambition** : le français réel pour N2.
-- **Stratégie** : le dump, débaliseur mesuré, splits.
-- **Objectif final** : 10 corpus en texte intégral, mesurés et ficés.
-- **Ce qu'elle fait** : le **texte intégral** : les 9 (**12,12 M** ; **8 Ko 0**) ; en/PDF en cours ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
+- **Stratégie** : le dump, débaliseur, splits.
+- **Objectif final** : 10 corpus en texte intégral, ficés.
+- **Ce qu'elle fait** : le **texte intégral** : les 9 (**12,12 M** ; **8 Ko 0**) ; **PDF** (322 Mo, 8 Ko 0) ; en ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée, S, N2 ; le hub tient l'état.
-- **Prochaine action** : en/PDF, le catalogue ; puis **A8.3 (lot)** ; R11/R12 et A2.6 bloqués (N2, A6.2).
+- **Prochaine action** : l'**en**, le catalogue ; puis **A8.3 (lot)** ; R11/R12 et A2.6 bloqués (N2, A6.2).
 - **Bloquants** : aucun.
 - **Journal** : [le 01/11](../../journal/2026-11-01/README.md).
 
@@ -92,7 +92,7 @@
 |---|---|---|
 | portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **400** / **501** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **401** / **503** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

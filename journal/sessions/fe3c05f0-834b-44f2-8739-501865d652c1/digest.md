@@ -17230,3 +17230,63 @@ reports/corpus-pdf.json
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/corpus-pdf.json').read_text())\nfor k in ('pdfs','pages','documents_gardes','documents_scannes','documents_courts','documents_doublons','caracteres_gardes','mots … [656 caractères tronqués]`
+
+  ```
+pdfs : 2785
+pages : 222570
+documents_gardes : 1927
+documents_scannes : 159
+documents_courts : 83
+documents_doublons : 616
+caracteres_gardes : 314351704
+mots_estimes : 50701887
+troncons : 39506
+troncons_doublons : 15
+octets : {'train': 295760347, 'val': 14981285, 'test': 11740569}
+documents : {'train': 1736, 'val': 101, 'test': 90}
+racines : [{'nom': 'Biblio_large', 'chemin': '/home/stephane/Data13TB/stephane/Biblio_large', 'pdfs': 104}, {'nom': 'CEGEP', 'chemin': '/home/stephane/Data13TB/stephane/archives/CEGEP', 'pdfs': 2681}]
+licences : [{'racine': 'Biblio_large', 'licence': 'livres — droits réservés, usage local, non diffusé'}, {'racine': 'CEGEP', 'licence': 'notes de cours — droits réservés, usage local, non diffusé'}]
+  }
+ }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/corpus-pdf-contamination.json').read_text())\nprint('lignes', {k:v['taux'] for k,v in d['doublons_entre_splits']['par_split'].items()})\nprint('8 Ko', {k:v['taux … [554 caractères tronqués]`
+
+  ```
+lignes {'val.txt': 0.040432, 'test.txt': 0.025754}
+8 Ko {'val.txt': 0.0, 'test.txt': 0.0}
+éval [('test.txt', 0, 40), ('test.txt', 0, 40), ('test.txt', 0, 40)]
+=== en
+  [en] 15600000 lus · 4212724 gardés · 16.86 G caractères
+1494795 02:03:18
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > reports/rapport-corpus-pdf.md <<'EOF'\n# Le corpus PDF local — les livres et les cours\n\n> **Verdict.** `tools/extrait_pdf.py` a extrait le **texte natif** des documents locaux :\n> **2 785 PDF**, **222 570 pages**, **1 927 docu … [5366 caractères tronqués]`
+
+  ```
+T0 max : 4010 mots (budget 4 000)
+  revue de documentation · 401 fiche(s) · 503 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+  ```
+
+### 👤 Utilisateur
+
+background job bash-859 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 55); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 20; done; echo "attente $((i*20))s"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo "en: pas encore"; tail -1 /tmp/run-texte-en.log | cut -c1-70; exit 0; }; python3 - <<'PY'
+import json,pathlib
+d=json.loads(pathlib.Path('reports/corpus-wiki-en-texte.json').read_text())
+for k in ('articles_lus','articles_gardes','articles_rediriges','caracteres_gardes','mots_estimes','troncons','octets','residus'): print(k, d.get(k))
+PY
+nohup python3 tools/verifie_contamination.py --train data/corpus_wiki_en_texte/train.txt --val data/corpus_wiki_en_texte/val.txt --test data/corpus_wiki_en_texte/test.txt --eval work/dr/eval/en-xnli.txt --eval data/wikitext2_test.txt --taille-troncon 8192 --sortie reports/corpus-wiki-en-texte-contamination.json > /tmp/check-en.log 2>&1 &
+echo "check en job $!") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-859", "timeout_ms": 60000}`
+
+  ```
+attente 1100s
+en: pas encore
+  [en] 16200000 lus · 4340955 gardés · 17.20 G caractères
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"- **Plan** : le texte intégral (pilote FR), puis PDF/OCR, puis R1.1/R1.2.\",\"- **Plan** : le texte intégral, le PDF, puis … [1796 caractères tronqués]`

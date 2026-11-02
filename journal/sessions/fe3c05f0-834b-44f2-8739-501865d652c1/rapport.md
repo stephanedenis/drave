@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 28.0 h |
 | Tours | 19 |
-| Messages | 955 |
-| Appels d'outils | 941 |
+| Messages | 959 |
+| Appels d'outils | 944 |
 | Fichiers touchés | 18 |
-| Commandes | 866 |
+| Commandes | 868 |
 | Sous-agents | 0 |
-| Commits | 56 |
+| Commits | 57 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -930,13 +930,16 @@ Le **manifeste de l'anglais** → son **contrôle 8 Ko** (le plus lourd) → la 
 
 ### Tour 19 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Check English and PDF manifests
 - bash — Inspect A8.3 ids and drave binary
 - bash — Inspect drave options and lot measurement inputs
 - bash — Read PDF manifest and run contamination
 - bash — Read PDF contamination and English status
+- bash — Write PDF report and update state
+- job_output
+- bash — Fix budget and commit PDF corpus
 
 ## 3. Travail accompli
 
@@ -1005,7 +1008,7 @@ Le **manifeste de l'anglais** → son **contrôle 8 Ko** (le plus lourd) → la 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 826 autres
+- … et 828 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1209,4 +1212,5 @@ Le **manifeste de l'anglais** → son **contrôle 8 Ko** (le plus lourd) → la 
 - ÉTAT — T0 À 3 996 ET COMPTEURS 396/498" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /tmp/commit.err; sleep 8; fi done git
 - ÉTAT — LA REVUE R1/A : A8.3 (LOT) MESURABLE, R11/R12 ET A2.6 BLOQUÉS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /tmp/co
 - ÉTAT — T0 REVIENT SOUS 4 000" 2>&1 | tail -1; git reset -q; git log --oneline -1 echo "=== en/pdf"; ls reports/corpus-wiki-en-texte.json reports/corpus-pdf.json
+- DONNÉES — LE CORPUS PDF LOCAL : 2 785 PDF, 1 927 DOCUMENTS, 322 MO, 8 KO 0, LICENCES NOMMÉES" 2>/tmp/commit.err; then echo "commit OK (essai $i)"; break; else e
 

@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 27.9 h |
-| Tours | 29 |
-| Messages | 615 |
-| Appels d'outils | 614 |
+| Tours | 30 |
+| Messages | 621 |
+| Appels d'outils | 618 |
 | Fichiers touchés | 25 |
-| Commandes | 493 |
+| Commandes | 497 |
 | Sous-agents | 2 |
-| Commits | 44 |
+| Commits | 45 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -89,6 +89,8 @@
 **Tour 28** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 29** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 30** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1573,6 +1575,54 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Vérifier l'état et la fiche à référencer
 - bash — Référencer la fiche, trim et committer
 
+**Synthèse produite :**
+
+⏵ Porte apprise : Q-table 67 états, 30 nœuds/but (sonde 7), 200 épisodes ; 15/15
+
+Le round 16 du goal est livré : la politique **apprise** découvre la porte seule, sans règle. Commit **`ad3da0b6`**.
+
+\## La porte apprise
+
+La `PolitiqueApprise` ne connaît **pas** la direction de la porte : elle apprend par **Q-learning tabulaire** (récompense +1 au but, -0,01 par pas, +0,1 à l'ouverture), **200 épisodes**, ε-greedy.
+
+| politique | états-Q | nœuds | sonde | coût | but |
+|---|---:|---:|---:|---:|---|
+| **apprise (200 épisodes)** | **67** | **30** | **7** | **68** | **oui** |
+| manhattan (règle) | — | 28 | 5 | 58 | oui |
+| aveugle | — | 200 | 61 | 483 | non |
+
+**Ce que ça dit** :
+
+- **Le modèle apprend la porte** : **67 états-Q** suffisent, sans la règle déclarée ; le but est atteint en 30 nœuds.
+- **Il paie un peu plus que la règle** (68 contre 58, 30 contre 28) : l'apprentissage tabulaire est **proche** de la règle, pas identique.
+- **L'aveugle reste le négatif** (200 nœuds, sans but) : la Q-table n'est pas l'aveugle.
+- **La Q-table est petite** (67 états) : le labyrinthe 5×5 est un jouet, mais il prouve que le **modèle** peut être une **table apprise**, pas seulement une règle.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-porte-apprise.md`](../../reports/rapport-pensee-porte-apprise.md) ; JSON [`pensee-porte-apprise.json`](../../reports/pensee-porte-apprise.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T12 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **15/15 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` : la dernière passe a vu **501/502 JSON** (un JSON concurrent est arrivé) — le prochain round aligne le compteur.
+- `en-cours` 2 sessions, T0 dans le budget ; `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Courbe d'apprentissage** : tracer le but/nœuds contre les épisodes (50, 100, 200, 400, 800) et sur plusieurs graines.
+2. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+3. **L** : 200 réels atteints ; le gold peut encore grandir.
+4. **B13** : une porte **stochastique** ou **cachée**, pour que l'apprentissage soit un vrai défi.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round trace la courbe d'apprentissage de la porte.
+
+### Tour 30 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Tracer la courbe d'apprentissage de la porte
+- bash — Ajouter la porte T13 et lancer l'autotest
+- bash — Écrire la fiche de la courbe et l'état
+- bash — Passer les portes et committer la courbe
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1652,7 +1702,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 453 autres
+- … et 457 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1841,4 +1891,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LA PORTE NEURONALE : BONNE POLITIQUE 28 NŒUDS/58 (SONDE 5), AVEUGLE 200/483 SANS BUT ; 14/14" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORT
 - B13 — LA PORTE APPRISE : Q-TABLE 67 ÉTATS, 30 NŒUDS/BUT (SONDE 7), 200 ÉPISODES ; 15/15" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE APPRISE";
 - B13 — LA PORTE APPRISE : Q-TABLE 67 ÉTATS, 30 NŒUDS/BUT (SONDE 7), 200 ÉPISODES ; 15/15" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA COURBE : 15/15 BUTS (50–800 ÉPISODES × 3 GRAINES), 30 NŒUDS, Q 52–83 ; 16/16" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA COURBE"; then 
 

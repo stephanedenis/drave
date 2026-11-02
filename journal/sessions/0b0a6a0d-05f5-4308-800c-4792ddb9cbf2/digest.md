@@ -15060,3 +15060,47 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-877", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-874 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2k/teacher-en.log; tail -2 work/n2k/teacher-multi.log; ls work/n2k/route-en work/n2k/route-multi 2>/dev/null | head -4) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/route-en work/n2k/route-multi 2>/dev/null | head -4; tail -1 work/n2k/teacher-en.log; tail -1 work/n2k/teacher-multi.log; for g in 1 2; do echo \"-- E-g$g\"; tail -1 work/n2k/E-g$g.log 2>/dev/null; done; ps … [151 caractères tronqués]`
+
+  ```
+20:35
+work/n2k/route-en:
+config.json
+generation_config.json
+model.safetensors
+  # écrit dans work/n2k/route-en · 23.57 M paramètres · 1.46 M poids lus/jeton/couche
+  # écrit dans work/n2k/route-multi · 23.57 M paramètres · 1.46 M poids lus/jeton/couche
+-- E-g1
+# init work/n2k/base-en.pt · manquants [] · graine 1 · décalage 0
+-- E-g2
+# init work/n2k/base-en.pt · manquants [] · graine 2 · décalage 10000019
+1597007       01:22 /home/stephane/gpu-env/bin/python tools/distiller_budget.py --corpus fr --train data/wiki_en/propre/train.txt --val data/wiki_en/propre/val.txt --enseignant work/n2k/route-en --init work/n2k/base-en.pt --stages 128:10000:1e-4,128:10000:3e-5 --lot 16 --graine 2 --positions-aleatoires 384 --sortie work/n2k/E-g2.pt --log work/n2k/E-g2.log
+1597008       01:22 /home/stephane/gpu-env/bin/python tools/distiller_budget.py --corpus fr --train data/wiki_en/propre/train.txt --val data/wiki_en/propre/val.txt --enseignant work/n2k/route-en --init work/n2k/base-en.pt --stages 128:10000:1e-4,128:10000:3e-5 --lot 16 --graine 1 --positions-aleatoires 384 --sortie work/n2k/E-g1.pt --log work/n2k/E-g1.log
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2k/file-canal0.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport PYTHONPATH=. CUDA_VISIBLE_DEVICES=0\nP=\"$HOME/gpu-env/bin/python\"\nwhile [ ! -f work/n2k/en0.termine ]; do sleep … [1583 caractères tronqués]`
+
+  ```
+q-canal0 1598887
+q-canal1 1598888
+20:35
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 300 ~/gpu-env/bin/python work/n2j/typo_sans.py work/n2j/W-g1.pt 2>&1 | grep -v Loading | tee work/n2j/typo-wg1.json; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 300 ~/gpu-env/bin/python wor … [164 caractères tronqués]`
+
+  ```
+{"fichier": "W-g1.pt", "mélange_propre": 3.8943, "mélange_milieu": 26.3832, "mélange_tout": 45.455}
+{"fichier": "A-propre-g1.pt", "mélange_propre": 15.7353, "mélange_milieu": 130.2038, "mélange_tout": 228.6313}
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for g in 1 2 3; do echo \"-- E-g$g\"; tail -1 work/n2k/E-g$g.log 2>/dev/null; done; ls work/n2k/E-g*.pt 2>/dev/null", "description": "Wait for the English distillations"}`

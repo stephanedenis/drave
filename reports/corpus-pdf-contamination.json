@@ -1,0 +1,57 @@
+{
+ "train": "data/corpus_pdf/train.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 2080695,
+  "par_split": {
+   "val.txt": {
+    "troncons": 120400,
+    "doublons": 4868,
+    "taux": 0.040432
+   },
+   "test.txt": {
+    "troncons": 86900,
+    "doublons": 2238,
+    "taux": 0.025754
+   }
+  }
+ },
+ "recouvrement_eval": [
+  {
+   "fichier": "test.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "test.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "test.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  }
+ ],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 36167,
+  "par_split": {
+   "val.txt": {
+    "troncons": 1833,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 1436,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}

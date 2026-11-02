@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**92 commits** · **4 session(s)** · **10 thème(s)**
+**93 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 7 | [distribue.md](distribue.md) |
+| distribue | 8 | [distribue.md](distribue.md) |
 | docs | 24 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 44 | [mesures.md](mesures.md) |
@@ -26,7 +26,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 28.2 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 28.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 27.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 28.0 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
@@ -127,10 +127,16 @@
 | 20:25 | `5853b206` | B13 — LA PORTE NEURONALE : BONNE POLITIQUE 28 NŒUDS/58 (SONDE 5), AVEUGLE 200/483 SANS BUT ; 14/14 |
 | 20:28 | `2b71aa2c` | ÉTAT — LA REVUE R1/A : A8.3 (LOT) MESURABLE, R11/R12 ET A2.6 BLOQUÉS |
 | 20:30 | `0aabf77b` | ÉTAT — T0 REVIENT SOUS 4 000 |
+| 20:33 | `ad3da0b6` | B13 — LA PORTE APPRISE : Q-TABLE 67 ÉTATS, 30 NŒUDS/BUT (SONDE 7), 200 ÉPISODES ; 15/15 |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Le corpus PDF local.** 2 785 PDF (104 livres + 2 681 notes de cours), 222 570 pages,
+**1 927 documents gardés** (616 doublons, 159 scannés, 83 courts), **314,4 M caractères**,
+**322,5 Mo**, **8 Ko 0**, jeux locaux **0/40**. Licences nommées : droits réservés, usage local,
+non diffusé. L'OCR des 159 scannés viendra du pipeline R4.4.
+
 **La revue R1/A : ce qui est possible, ce qui est bloqué.** R11 (contexte hiérarchique) et R12
 (curriculum long) sont **spécifiés** mais **bloqués sur N2** (c'est N2 qui porte la hiérarchie) ;
 A2.6 (experts/tête) est bloqué sur A6.2 (pas de MoE local) ; **A8.3 (le lot)** est le seul mesurable

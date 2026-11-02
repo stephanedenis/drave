@@ -13736,3 +13736,106 @@ M  tools/pensee/operateurs.py
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"  [`pensee-operateurs`](../../reports/rapport-pensee-operateurs.md), [`pensee-necessaire`](../../reports/rapport-pensee-nec … [1113 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 501 JSON, le disque en a 502
+ reports/pensee-porte-apprise.json                  | 56 +++++++++++++++++++
+ reports/rapport-pensee-porte-apprise.md            | 62 +++++++++++++++++++++
+ tools/pensee/autotest.py                           | 17 +++++-
+ tools/pensee/operateurs.py                         | 65 +++++++++++++++++++++-
+ 23 files changed, 263 insertions(+), 31 deletions(-)
+[still running after 60000ms; moved to background job bash-493]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-493", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[master ad3da0b6] B13 — LA PORTE APPRISE : Q-TABLE 67 ÉTATS, 30 NŒUDS/BUT (SONDE 7), 200 ÉPISODES ; 15/15
+ 27 files changed, 439 insertions(+), 53 deletions(-)
+ create mode 100644 reports/pensee-porte-apprise.json
+ create mode 100644 reports/rapport-pensee-porte-apprise.md
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte apprise : Q-table 67 états, 30 nœuds/but (sonde 7), 200 épisodes ; 15/15
+
+Le round 16 du goal est livré : la politique **apprise** découvre la porte seule, sans règle. Commit **`ad3da0b6`**.
+
+## La porte apprise
+
+La `PolitiqueApprise` ne connaît **pas** la direction de la porte : elle apprend par **Q-learning tabulaire** (récompense +1 au but, -0,01 par pas, +0,1 à l'ouverture), **200 épisodes**, ε-greedy.
+
+| politique | états-Q | nœuds | sonde | coût | but |
+|---|---:|---:|---:|---:|---|
+| **apprise (200 épisodes)** | **67** | **30** | **7** | **68** | **oui** |
+| manhattan (règle) | — | 28 | 5 | 58 | oui |
+| aveugle | — | 200 | 61 | 483 | non |
+
+**Ce que ça dit** :
+
+- **Le modèle apprend la porte** : **67 états-Q** suffisent, sans la règle déclarée ; le but est atteint en 30 nœuds.
+- **Il paie un peu plus que la règle** (68 contre 58, 30 contre 28) : l'apprentissage tabulaire est **proche** de la règle, pas identique.
+- **L'aveugle reste le négatif** (200 nœuds, sans but) : la Q-table n'est pas l'aveugle.
+- **La Q-table est petite** (67 états) : le labyrinthe 5×5 est un jouet, mais il prouve que le **modèle** peut être une **table apprise**, pas seulement une règle.
+
+## L'état
+
+- Fiche : [`rapport-pensee-porte-apprise.md`](../../reports/rapport-pensee-porte-apprise.md) ; JSON [`pensee-porte-apprise.json`](../../reports/pensee-porte-apprise.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T12 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **15/15 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` : la dernière passe a vu **501/502 JSON** (un JSON concurrent est arrivé) — le prochain round aligne le compteur.
+- `en-cours` 2 sessions, T0 dans le budget ; `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Courbe d'apprentissage** : tracer le but/nœuds contre les épisodes (50, 100, 200, 400, 800) et sur plusieurs graines.
+2. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+3. **L** : 200 réels atteints ; le gold peut encore grandir.
+4. **B13** : une porte **stochastique** ou **cachée**, pour que l'apprentissage soit un vrai défi.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round trace la courbe d'apprentissage de la porte.
+
+
+## Tour 30
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 17/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 tools/revue_documentation.py 2>&1 | head -2; cat > tools/pensee/courbe.py <<'PY'\n\"\"\"courbe.py — la courbe d'apprentissage de la porte : épisodes × graines.\n\nLa `PolitiqueApprise` (Q-learning … [2422 caractères tronqués]`
+
+  ```
+ad3da0b6 B13 — LA PORTE APPRISE : Q-TABLE 67 ÉTATS, 30 NŒUDS/BUT (SONDE 7), 200 ÉPISODES ; 15/15
+  revue de documentation · 401 fiche(s) · 503 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  50 ep g0  Q  52   30 nœuds  sonde  7  coût  68.0  but True
+  50 ep g1  Q  61   30 nœuds  sonde  7  coût  68.0  but True
+  50 ep g2  Q  74   30 nœuds  sonde  7  coût  68.0  but True
+ 100 ep g0  Q  52   30 nœuds  sonde  7  coût  68.0  but True
+ 100 ep g1  Q  61   30 nœuds  sonde  7  coût  68.0  but True
+ 100 ep g2  Q  74   30 nœuds  sonde  7  coût  68.0  but True
+ 200 ep g0  Q  67   30 nœuds  sonde  7  coût  68.0  but True
+ 200 ep g1  Q  61   30 nœuds  sonde  7  coût  68.0  but True
+ 200 ep g2  Q  74   30 nœuds  sonde  7  coût  68.0  but True
+ 400 ep g0  Q  69   30 nœuds  sonde  7  coût  68.0  but True
+ 400 ep g1  Q  62   30 nœuds  sonde  7  coût  68.0  but True
+ 400 ep g2  Q  83   30 nœuds  sonde  7  coût  68.0  but True
+ 800 ep g0  Q  83   30 nœuds  sonde  7  coût  68.0  but True
+ 800 ep g1  Q  62   30 nœuds  sonde  7  coût  68.0  but True
+ 800 ep g2  Q  83   30 nœuds  sonde  7  coût  
+… [21 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T12 la porte apprise                la Q-table apprend la porte ; le modèle la trouve seul\\n\",\n\"  T12 la porte apprise … [1490 caractères tronqués]`
