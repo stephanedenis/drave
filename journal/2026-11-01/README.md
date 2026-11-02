@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**118 commits** · **4 session(s)** · **10 thème(s)**
+**119 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -20,7 +20,7 @@
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
-| portes | 4 | [portes.md](portes.md) |
+| portes | 5 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -32,7 +32,7 @@
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 30.4 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 30.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 30.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 30.0 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -157,6 +157,7 @@
 | 22:30 | `87516306` | JOURNAL — LA NUIT N2 : DU CORPUS PROPRE AU CORPUS RÉEL |
 | 22:32 | `7367b314` | B13 — LE CURRICULUM OPEN : 74 ÉTATS-Q, BRUIT BUT/9 ET STABLE BUT/8 ; 32/32 |
 | 22:36 | `efaaa945` | B13 — LA ROBUSTESSE SUR 5 GRAINES : 5/5 BRUITS, 5/5 STABLES ; 33/33 |
+| 22:40 | `bd93762d` | B13 — LA PORTE MOBILE : 2 POSITIONS, A* 2/2, POLITIQUE SEULE BUT/8, 170 ÉTATS-Q ; 34/34 |
 
 ## Le récit de la journée (écrit à la main)
 

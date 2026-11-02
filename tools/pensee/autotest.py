@@ -544,6 +544,16 @@ def t31_mobile() -> tuple[bool, str]:
         f"mobile : A* {sum(buts)}/2, seule {s0}/{s1} ({len(p.q)} états-Q)")
 
 
+def t32_mobile_graines() -> tuple[bool, str]:
+    """La porte mobile sur 5 graines : 5/5 aux deux positions."""
+    from .graines import executer_mobile
+    lignes = executer_mobile()
+    d0 = sum(1 for l in lignes if l["d0_but"])
+    d1 = sum(1 for l in lignes if l["d1_but"])
+    return d0 == len(lignes) and d1 == len(lignes) and len(lignes) == 5, (
+        f"mobile graines : {d0}/5 d0, {d1}/5 d1")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -574,7 +584,8 @@ def main() -> int:
               ("T28 audit des mesures", t28_audit()),
               ("T29 curriculum open", t29_ouverte()),
               ("T30 robustesse sur 5 graines", t30_graines()),
-              ("T31 porte mobile", t31_mobile())]
+              ("T31 porte mobile", t31_mobile()),
+              ("T32 porte mobile sur 5 graines", t32_mobile_graines())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

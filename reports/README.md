@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-mobile-graines.md`](rapport-pensee-mobile-graines.md) | **B13** — la porte mobile sur 5 graines : 5/5 d0, 5/5 d1, 147–184 états-Q, **35/35** |
 | [`rapport-pensee-mobile.md`](rapport-pensee-mobile.md) | **B13** — la porte mobile : 2 positions, A* 2/2, politique seule but/8, 170 états-Q, **34/34** |
 | [`rapport-pensee-graines.md`](rapport-pensee-graines.md) | **B13** — la robustesse sur 5 graines : 5/5 bruits, 5/5 stables, **33/33** |
 | [`rapport-pensee-ouverte.md`](rapport-pensee-ouverte.md) | **B13** — le curriculum `open` : 74 états-Q, bruit but/9, stable but/8, **32/32** |

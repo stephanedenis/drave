@@ -13,7 +13,7 @@ import json
 import pathlib
 
 from .courbe import seule, seule_sto
-from .operateurs import PolitiqueAppriseOuverte
+from .operateurs import PolitiqueAppriseMobile, PolitiqueAppriseOuverte, seule_mobile
 
 GRAINES = (0, 1, 2, 3, 4)
 
@@ -31,6 +31,19 @@ def executer() -> list[dict]:
     return lignes
 
 
+def executer_mobile() -> list[dict]:
+    """La porte mobile sur les 5 graines : la même politique réussit-elle aux deux d ?"""
+    lignes = []
+    for g in GRAINES:
+        p = PolitiqueAppriseMobile(episodes=1000, graine=g)
+        p.apprendre()
+        b0, p0 = seule_mobile(p, 0)
+        b1, p1 = seule_mobile(p, 1)
+        lignes.append({"graine": g, "etats_q": len(p.q),
+                       "d0_but": b0, "d0_pas": p0, "d1_but": b1, "d1_pas": p1})
+    return lignes
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--json", default="")
@@ -40,6 +53,17 @@ def main() -> int:
         print(f"graine {l['graine']}  Q {l['etats_q']:3d}  "
               f"bruit {l['sto_but']}/{l['sto_pas']} pas ({l['sto_essais']} essais)  "
               f"stable {l['stable_but']}/{l['stable_pas']} pas")
+    if args.json and "mobile" in args.json:
+        lignes_m = executer_mobile()
+        for l in lignes_m:
+            print(f"graine {l['graine']}  Q {l['etats_q']:3d}  "
+                  f"d0 {l['d0_but']}/{l['d0_pas']} pas  d1 {l['d1_but']}/{l['d1_pas']} pas")
+        p = pathlib.Path(args.json)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps({"date": "2026-11-02", "ligne": "B13", "graines": GRAINES,
+                                 "lignes": lignes_m}, ensure_ascii=False, indent=1) + "\n",
+                    encoding="utf-8")
+        return 0
     if args.json:
         p = pathlib.Path(args.json)
         p.parent.mkdir(parents=True, exist_ok=True)

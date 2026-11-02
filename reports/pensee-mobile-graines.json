@@ -1,0 +1,54 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "35/35",
+ "graines": [
+  0,
+  1,
+  2,
+  3,
+  4
+ ],
+ "lignes": [
+  {
+   "graine": 0,
+   "etats_q": 170,
+   "d0_but": true,
+   "d0_pas": 8,
+   "d1_but": true,
+   "d1_pas": 8
+  },
+  {
+   "graine": 1,
+   "etats_q": 176,
+   "d0_but": true,
+   "d0_pas": 8,
+   "d1_but": true,
+   "d1_pas": 8
+  },
+  {
+   "graine": 2,
+   "etats_q": 184,
+   "d0_but": true,
+   "d0_pas": 8,
+   "d1_but": true,
+   "d1_pas": 8
+  },
+  {
+   "graine": 3,
+   "etats_q": 147,
+   "d0_but": true,
+   "d0_pas": 8,
+   "d1_but": true,
+   "d1_pas": 8
+  },
+  {
+   "graine": 4,
+   "etats_q": 174,
+   "d0_but": true,
+   "d0_pas": 8,
+   "d1_but": true,
+   "d1_pas": 8
+  }
+ ]
+}
