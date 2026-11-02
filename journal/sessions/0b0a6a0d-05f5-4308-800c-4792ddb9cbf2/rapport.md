@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 41.0 h |
+| Durée | 41.4 h |
 | Tours | 20 |
-| Messages | 1589 |
-| Appels d'outils | 1459 |
+| Messages | 1599 |
+| Appels d'outils | 1469 |
 | Fichiers touchés | 11 |
-| Commandes | 1152 |
+| Commandes | 1160 |
 | Sous-agents | 0 |
 | Commits | 81 |
 | Compactages de contexte | 2 |
@@ -1062,7 +1062,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 
 ### Tour 20 — mets le dossier de pilotage à jour et continue
 
-*24 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Read the state's N2 section and timestamp
 - read
@@ -1078,7 +1078,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - bash — Find the Wikipedia extraction tool
 - bash — Read the extraction tool's options
 - bash — Look at the earlier extraction script
-- … et 7 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
@@ -1144,7 +1144,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1112 autres
+- … et 1120 autres
 
 ## 4. Mesures et résultats marquants
 

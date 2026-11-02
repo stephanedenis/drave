@@ -1635,10 +1635,23 @@ def t107_gold_complet() -> tuple[bool, str]:
     phrases = charger()
     h = bl.Heuristique()
     r = evaluer_bloc("h", h, phrases)
-    return (len(phrases) == 522
-            and abs(r["pos"]["exactitude"] - 0.7586) < 0.001), (
+    return (len(phrases) == 552
+            and abs(r["pos"]["exactitude"] - 0.7574) < 0.001), (
         f"gold complet : {len(phrases)} phrases, POS {round(r['pos']['exactitude'], 4)}, "
         f"tête {round(r['syntagme']['tete']['f1'], 4)}")
+
+
+def t108_anaphore_68() -> tuple[bool, str]:
+    """La coréférence à 68 liens : 52/68 par le rôle, 51/68 par le dernier nom."""
+    from ..tests.linguistique.anaphore import mesurer, mesurer_roles
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 372]
+    dernier = mesurer(ps, ignorer_pp=True)
+    role = mesurer_roles(ps)
+    return (dernier["liens"] == 68 and dernier["justes"] == 51
+            and role["justes"] == 52), (
+        f"68 liens : rôle {role['justes']}/68, dernier nom {dernier['justes']}/68")
 
 
 def main() -> int:
@@ -1747,7 +1760,8 @@ def main() -> int:
               ("T104 validation croisée", t104_cv()),
               ("T105 CV 20 graines", t105_cv_graines()),
               ("T106 bilan anaphore", t106_bilan_anaphore()),
-              ("T107 gold complet", t107_gold_complet())]
+              ("T107 gold complet", t107_gold_complet()),
+              ("T108 coréférence 68", t108_anaphore_68())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

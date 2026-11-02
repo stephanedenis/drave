@@ -38,7 +38,7 @@ def resoudre(mots: list[dict], ignorer_pp: bool = False) -> dict[str, str]:
 
 
 SUJETS = {"il", "elle", "ils", "elles", "it", "he", "she", "they"}
-OBJETS_ROLE = {"le", "la", "les", "lui", "leur", "it", "him", "her", "them"}
+OBJETS_ROLE = {"le", "la", "les", "lui", "leur", "l'", "it", "him", "her", "them"}
 ROLES_SUJET = ("agent",)
 ROLES_OBJET = ("patient", "destinataire", "attribut")
 

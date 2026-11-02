@@ -24055,6 +24055,2711 @@
     }
    },
    "source": "reel"
+  },
+  {
+   "id": "r343",
+   "langue": "fr",
+   "texte": "Paul voit Marie ; il lui parle ; elle lui répond.",
+   "mots": [
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "voit",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "lui",
+     "pos": "PRON",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "parle",
+     "pos": "VERB",
+     "debut": 25,
+     "fin": 30
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 33,
+     "fin": 37
+    },
+    {
+     "texte": "lui",
+     "pos": "PRON",
+     "debut": 38,
+     "fin": 41
+    },
+    {
+     "texte": "répond",
+     "pos": "VERB",
+     "debut": 42,
+     "fin": 48
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Paul",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "voit",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "patient",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "type": "GV",
+     "texte": "parle",
+     "role": "prédicat",
+     "debut": 25,
+     "fin": 30
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 33,
+     "fin": 37
+    },
+    {
+     "type": "GV",
+     "texte": "répond",
+     "role": "prédicat",
+     "debut": 42,
+     "fin": 48
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "il": "paul",
+     "lui": "marie",
+     "elle": "marie"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r344",
+   "langue": "fr",
+   "texte": "Le chat mange ; il dort.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chat",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "mange",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "dort",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chat",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "mange",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "dort",
+     "role": "prédicat",
+     "debut": 19,
+     "fin": 23
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "il": "chat"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r345",
+   "langue": "fr",
+   "texte": "Marie lit un livre ; elle le ferme.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "lit",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 10,
+     "fin": 12
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 13,
+     "fin": 18
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 21,
+     "fin": 25
+    },
+    {
+     "texte": "le",
+     "pos": "PRON",
+     "debut": 26,
+     "fin": 28
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 29,
+     "fin": 34
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "lit",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "un livre",
+     "role": "patient",
+     "debut": 10,
+     "fin": 18
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 21,
+     "fin": 25
+    },
+    {
+     "type": "GV",
+     "texte": "ferme",
+     "role": "prédicat",
+     "debut": 29,
+     "fin": 34
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "elle": "marie",
+     "le": "livre"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r346",
+   "langue": "fr",
+   "texte": "Le chien poursuit le chat ; il l'attrape.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chien",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "poursuit",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 17
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "chat",
+     "pos": "NOUN",
+     "debut": 21,
+     "fin": 25
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 28,
+     "fin": 30
+    },
+    {
+     "texte": "l'",
+     "pos": "PRON",
+     "debut": 31,
+     "fin": 33
+    },
+    {
+     "texte": "attrape",
+     "pos": "VERB",
+     "debut": 33,
+     "fin": 40
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chien",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "poursuit",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 17
+    },
+    {
+     "type": "GN",
+     "texte": "le chat",
+     "role": "patient",
+     "debut": 18,
+     "fin": 25
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 28,
+     "fin": 30
+    },
+    {
+     "type": "GV",
+     "texte": "attrape",
+     "role": "prédicat",
+     "debut": 33,
+     "fin": 40
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "il": "chien"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r347",
+   "langue": "fr",
+   "texte": "Sophie regarde Paul ; elle lui sourit.",
+   "mots": [
+    {
+     "texte": "Sophie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 6
+    },
+    {
+     "texte": "regarde",
+     "pos": "VERB",
+     "debut": 7,
+     "fin": 14
+    },
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 15,
+     "fin": 19
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 22,
+     "fin": 26
+    },
+    {
+     "texte": "lui",
+     "pos": "PRON",
+     "debut": 27,
+     "fin": 30
+    },
+    {
+     "texte": "sourit",
+     "pos": "VERB",
+     "debut": 31,
+     "fin": 37
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Sophie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 6
+    },
+    {
+     "type": "GV",
+     "texte": "regarde",
+     "role": "prédicat",
+     "debut": 7,
+     "fin": 14
+    },
+    {
+     "type": "GN",
+     "texte": "Paul",
+     "role": "patient",
+     "debut": 15,
+     "fin": 19
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 22,
+     "fin": 26
+    },
+    {
+     "type": "GV",
+     "texte": "sourit",
+     "role": "prédicat",
+     "debut": 31,
+     "fin": 37
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "elle": "sophie",
+     "lui": "paul"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r348",
+   "langue": "fr",
+   "texte": "La voiture est rouge ; elle roule vite.",
+   "mots": [
+    {
+     "texte": "La",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "voiture",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "texte": "rouge",
+     "pos": "ADJ",
+     "debut": 15,
+     "fin": 20
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 23,
+     "fin": 27
+    },
+    {
+     "texte": "roule",
+     "pos": "VERB",
+     "debut": 28,
+     "fin": 33
+    },
+    {
+     "texte": "vite",
+     "pos": "ADV",
+     "debut": 34,
+     "fin": 38
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "La voiture",
+     "role": "agent",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "est",
+     "role": "prédicat",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "type": "ADJ",
+     "texte": "rouge",
+     "role": "attribut",
+     "debut": 15,
+     "fin": 20
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 23,
+     "fin": 27
+    },
+    {
+     "type": "GV",
+     "texte": "roule vite",
+     "role": "prédicat",
+     "debut": 28,
+     "fin": 38
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "elle": "voiture"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r349",
+   "langue": "fr",
+   "texte": "Le livre est sur la table ; je le lis.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "est",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "texte": "sur",
+     "pos": "PREP",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "texte": "table",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 25
+    },
+    {
+     "texte": "je",
+     "pos": "PRON",
+     "debut": 28,
+     "fin": 30
+    },
+    {
+     "texte": "le",
+     "pos": "PRON",
+     "debut": 31,
+     "fin": 33
+    },
+    {
+     "texte": "lis",
+     "pos": "VERB",
+     "debut": 34,
+     "fin": 37
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le livre",
+     "role": "patient",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "est",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "type": "GP",
+     "texte": "sur la table",
+     "role": "lieu",
+     "debut": 13,
+     "fin": 25
+    },
+    {
+     "type": "GN",
+     "texte": "je",
+     "role": "agent",
+     "debut": 28,
+     "fin": 30
+    },
+    {
+     "type": "GV",
+     "texte": "lis",
+     "role": "prédicat",
+     "debut": 34,
+     "fin": 37
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "le": "livre"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r350",
+   "langue": "fr",
+   "texte": "Les enfants jouent ; ils rient.",
+   "mots": [
+    {
+     "texte": "Les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "enfants",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "jouent",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "rient",
+     "pos": "VERB",
+     "debut": 25,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Les enfants",
+     "role": "agent",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "jouent",
+     "role": "prédicat",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "type": "GN",
+     "texte": "ils",
+     "role": "agent",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "type": "GV",
+     "texte": "rient",
+     "role": "prédicat",
+     "debut": 25,
+     "fin": 30
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "ils": "enfants"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r351",
+   "langue": "fr",
+   "texte": "Le train part ; il arrive tard.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "train",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "part",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "arrive",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 25
+    },
+    {
+     "texte": "tard",
+     "pos": "ADV",
+     "debut": 26,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le train",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "part",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "arrive tard",
+     "role": "prédicat",
+     "debut": 19,
+     "fin": 30
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "il": "train"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r352",
+   "langue": "fr",
+   "texte": "La pluie tombe ; elle mouille la terre.",
+   "mots": [
+    {
+     "texte": "La",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "pluie",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "tombe",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 17,
+     "fin": 21
+    },
+    {
+     "texte": "mouille",
+     "pos": "VERB",
+     "debut": 22,
+     "fin": 29
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 30,
+     "fin": 32
+    },
+    {
+     "texte": "terre",
+     "pos": "NOUN",
+     "debut": 33,
+     "fin": 38
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "La pluie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "tombe",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 17,
+     "fin": 21
+    },
+    {
+     "type": "GV",
+     "texte": "mouille",
+     "role": "prédicat",
+     "debut": 22,
+     "fin": 29
+    },
+    {
+     "type": "GN",
+     "texte": "la terre",
+     "role": "patient",
+     "debut": 30,
+     "fin": 38
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "elle": "pluie"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r353",
+   "langue": "fr",
+   "texte": "Le professeur parle ; les élèves l'écoutent.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "professeur",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 13
+    },
+    {
+     "texte": "parle",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 19
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 22,
+     "fin": 25
+    },
+    {
+     "texte": "élèves",
+     "pos": "NOUN",
+     "debut": 26,
+     "fin": 32
+    },
+    {
+     "texte": "l'",
+     "pos": "PRON",
+     "debut": 33,
+     "fin": 35
+    },
+    {
+     "texte": "écoutent",
+     "pos": "VERB",
+     "debut": 35,
+     "fin": 43
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le professeur",
+     "role": "agent",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "GV",
+     "texte": "parle",
+     "role": "prédicat",
+     "debut": 14,
+     "fin": 19
+    },
+    {
+     "type": "GN",
+     "texte": "les élèves",
+     "role": "agent",
+     "debut": 22,
+     "fin": 32
+    },
+    {
+     "type": "GV",
+     "texte": "écoutent",
+     "role": "prédicat",
+     "debut": 35,
+     "fin": 43
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "l'": "professeur"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r354",
+   "langue": "fr",
+   "texte": "Marie et Paul dansent ; ils s'amusent.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "et",
+     "pos": "CONJ",
+     "debut": 6,
+     "fin": 8
+    },
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "texte": "dansent",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 24,
+     "fin": 27
+    },
+    {
+     "texte": "s'amusent",
+     "pos": "VERB",
+     "debut": 28,
+     "fin": 37
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie et Paul",
+     "role": "agent",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "GV",
+     "texte": "dansent",
+     "role": "prédicat",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "type": "GN",
+     "texte": "ils",
+     "role": "agent",
+     "debut": 24,
+     "fin": 27
+    },
+    {
+     "type": "GV",
+     "texte": "s'amusent",
+     "role": "prédicat",
+     "debut": 28,
+     "fin": 37
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "ils": "paul"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r355",
+   "langue": "fr",
+   "texte": "Le chien dort ; le chat le regarde.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chien",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "dort",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "chat",
+     "pos": "NOUN",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "texte": "le",
+     "pos": "PRON",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "texte": "regarde",
+     "pos": "VERB",
+     "debut": 27,
+     "fin": 34
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chien",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "dort",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "le chat",
+     "role": "agent",
+     "debut": 16,
+     "fin": 23
+    },
+    {
+     "type": "GV",
+     "texte": "regarde",
+     "role": "prédicat",
+     "debut": 27,
+     "fin": 34
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "le": "chien"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r356",
+   "langue": "fr",
+   "texte": "La maison est vieille ; elle tient encore.",
+   "mots": [
+    {
+     "texte": "La",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "maison",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "texte": "vieille",
+     "pos": "ADJ",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 24,
+     "fin": 28
+    },
+    {
+     "texte": "tient",
+     "pos": "VERB",
+     "debut": 29,
+     "fin": 34
+    },
+    {
+     "texte": "encore",
+     "pos": "ADV",
+     "debut": 35,
+     "fin": 41
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "La maison",
+     "role": "agent",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "est",
+     "role": "prédicat",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "type": "ADJ",
+     "texte": "vieille",
+     "role": "attribut",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 24,
+     "fin": 28
+    },
+    {
+     "type": "GV",
+     "texte": "tient encore",
+     "role": "prédicat",
+     "debut": 29,
+     "fin": 41
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "elle": "maison"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r357",
+   "langue": "fr",
+   "texte": "Paul écrit une lettre ; il l'envoie.",
+   "mots": [
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "écrit",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 10
+    },
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "texte": "lettre",
+     "pos": "NOUN",
+     "debut": 15,
+     "fin": 21
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "texte": "l'",
+     "pos": "PRON",
+     "debut": 27,
+     "fin": 29
+    },
+    {
+     "texte": "envoie",
+     "pos": "VERB",
+     "debut": 29,
+     "fin": 35
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Paul",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "écrit",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 10
+    },
+    {
+     "type": "GN",
+     "texte": "une lettre",
+     "role": "patient",
+     "debut": 11,
+     "fin": 21
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "type": "GV",
+     "texte": "envoie",
+     "role": "prédicat",
+     "debut": 29,
+     "fin": 35
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "il": "paul",
+     "l'": "lettre"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r358",
+   "langue": "en",
+   "texte": "Paul sees Marie; he speaks to her.",
+   "mots": [
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "sees",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "texte": "he",
+     "pos": "PRON",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "texte": "speaks",
+     "pos": "VERB",
+     "debut": 20,
+     "fin": 26
+    },
+    {
+     "texte": "to",
+     "pos": "PREP",
+     "debut": 27,
+     "fin": 29
+    },
+    {
+     "texte": "her",
+     "pos": "PRON",
+     "debut": 30,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Paul",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "sees",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "patient",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "he",
+     "role": "agent",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "type": "GV",
+     "texte": "speaks",
+     "role": "prédicat",
+     "debut": 20,
+     "fin": 26
+    },
+    {
+     "type": "GP",
+     "texte": "to her",
+     "role": "destinataire",
+     "debut": 27,
+     "fin": 33
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "he": "paul",
+     "her": "marie"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r359",
+   "langue": "en",
+   "texte": "The cat eats; it sleeps.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "cat",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "eats",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 14,
+     "fin": 16
+    },
+    {
+     "texte": "sleeps",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The cat",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "eats",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "type": "GN",
+     "texte": "it",
+     "role": "agent",
+     "debut": 14,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "sleeps",
+     "role": "prédicat",
+     "debut": 17,
+     "fin": 23
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "it": "cat"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r360",
+   "langue": "en",
+   "texte": "Marie reads a book; she closes it.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "reads",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "texte": "a",
+     "pos": "DET",
+     "debut": 12,
+     "fin": 13
+    },
+    {
+     "texte": "book",
+     "pos": "NOUN",
+     "debut": 14,
+     "fin": 18
+    },
+    {
+     "texte": "she",
+     "pos": "PRON",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "texte": "closes",
+     "pos": "VERB",
+     "debut": 24,
+     "fin": 30
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 31,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "reads",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "type": "GN",
+     "texte": "a book",
+     "role": "patient",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "type": "GN",
+     "texte": "she",
+     "role": "agent",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "type": "GV",
+     "texte": "closes",
+     "role": "prédicat",
+     "debut": 24,
+     "fin": 30
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "she": "marie",
+     "it": "book"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r361",
+   "langue": "en",
+   "texte": "The dog chases the cat; it catches it.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "dog",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "chases",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 14
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 15,
+     "fin": 18
+    },
+    {
+     "texte": "cat",
+     "pos": "NOUN",
+     "debut": 19,
+     "fin": 22
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "texte": "catches",
+     "pos": "VERB",
+     "debut": 27,
+     "fin": 34
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 35,
+     "fin": 37
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The dog",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "chases",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 14
+    },
+    {
+     "type": "GN",
+     "texte": "the cat",
+     "role": "patient",
+     "debut": 15,
+     "fin": 22
+    },
+    {
+     "type": "GN",
+     "texte": "it",
+     "role": "agent",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "type": "GV",
+     "texte": "catches",
+     "role": "prédicat",
+     "debut": 27,
+     "fin": 34
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "it": "dog"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r362",
+   "langue": "en",
+   "texte": "The car is red; it runs fast.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "car",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 8,
+     "fin": 10
+    },
+    {
+     "texte": "red",
+     "pos": "ADJ",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "runs",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "texte": "fast",
+     "pos": "ADV",
+     "debut": 24,
+     "fin": 28
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The car",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "is",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 10
+    },
+    {
+     "type": "ADJ",
+     "texte": "red",
+     "role": "attribut",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "type": "GN",
+     "texte": "it",
+     "role": "agent",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "runs fast",
+     "role": "prédicat",
+     "debut": 19,
+     "fin": 28
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "it": "car"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r363",
+   "langue": "en",
+   "texte": "The book is on the table; I read it.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "book",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "is",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "texte": "on",
+     "pos": "PREP",
+     "debut": 12,
+     "fin": 14
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 15,
+     "fin": 18
+    },
+    {
+     "texte": "table",
+     "pos": "NOUN",
+     "debut": 19,
+     "fin": 24
+    },
+    {
+     "texte": "I",
+     "pos": "PRON",
+     "debut": 26,
+     "fin": 27
+    },
+    {
+     "texte": "read",
+     "pos": "VERB",
+     "debut": 28,
+     "fin": 32
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 33,
+     "fin": 35
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The book",
+     "role": "patient",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "is",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "type": "GP",
+     "texte": "on the table",
+     "role": "lieu",
+     "debut": 12,
+     "fin": 24
+    },
+    {
+     "type": "GN",
+     "texte": "I",
+     "role": "agent",
+     "debut": 26,
+     "fin": 27
+    },
+    {
+     "type": "GV",
+     "texte": "read",
+     "role": "prédicat",
+     "debut": 28,
+     "fin": 32
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "it": "book"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r364",
+   "langue": "en",
+   "texte": "The children play; they laugh.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "children",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 12
+    },
+    {
+     "texte": "play",
+     "pos": "VERB",
+     "debut": 13,
+     "fin": 17
+    },
+    {
+     "texte": "they",
+     "pos": "PRON",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "texte": "laugh",
+     "pos": "VERB",
+     "debut": 24,
+     "fin": 29
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The children",
+     "role": "agent",
+     "debut": 0,
+     "fin": 12
+    },
+    {
+     "type": "GV",
+     "texte": "play",
+     "role": "prédicat",
+     "debut": 13,
+     "fin": 17
+    },
+    {
+     "type": "GN",
+     "texte": "they",
+     "role": "agent",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "type": "GV",
+     "texte": "laugh",
+     "role": "prédicat",
+     "debut": 24,
+     "fin": 29
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "they": "children"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r365",
+   "langue": "en",
+   "texte": "The train leaves; it arrives late.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "train",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "leaves",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "arrives",
+     "pos": "VERB",
+     "debut": 21,
+     "fin": 28
+    },
+    {
+     "texte": "late",
+     "pos": "ADV",
+     "debut": 29,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The train",
+     "role": "agent",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "leaves",
+     "role": "prédicat",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "type": "GN",
+     "texte": "it",
+     "role": "agent",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "type": "GV",
+     "texte": "arrives late",
+     "role": "prédicat",
+     "debut": 21,
+     "fin": 33
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "it": "train"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r366",
+   "langue": "en",
+   "texte": "The rain falls; it wets the ground.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "rain",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "falls",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "wets",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 24,
+     "fin": 27
+    },
+    {
+     "texte": "ground",
+     "pos": "NOUN",
+     "debut": 28,
+     "fin": 34
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The rain",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "falls",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "type": "GN",
+     "texte": "it",
+     "role": "agent",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "wets",
+     "role": "prédicat",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "type": "GN",
+     "texte": "the ground",
+     "role": "patient",
+     "debut": 24,
+     "fin": 34
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "it": "rain"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r367",
+   "langue": "en",
+   "texte": "The teacher speaks; the students listen to him.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "teacher",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "speaks",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "texte": "students",
+     "pos": "NOUN",
+     "debut": 24,
+     "fin": 32
+    },
+    {
+     "texte": "listen",
+     "pos": "VERB",
+     "debut": 33,
+     "fin": 39
+    },
+    {
+     "texte": "to",
+     "pos": "PREP",
+     "debut": 40,
+     "fin": 42
+    },
+    {
+     "texte": "him",
+     "pos": "PRON",
+     "debut": 43,
+     "fin": 46
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The teacher",
+     "role": "agent",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "speaks",
+     "role": "prédicat",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "type": "GN",
+     "texte": "the students",
+     "role": "agent",
+     "debut": 20,
+     "fin": 32
+    },
+    {
+     "type": "GV",
+     "texte": "listen",
+     "role": "prédicat",
+     "debut": 33,
+     "fin": 39
+    },
+    {
+     "type": "GP",
+     "texte": "to him",
+     "role": "destinataire",
+     "debut": 40,
+     "fin": 46
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "him": "teacher"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r368",
+   "langue": "en",
+   "texte": "Marie and Paul dance; they have fun.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "and",
+     "pos": "CONJ",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 14
+    },
+    {
+     "texte": "dance",
+     "pos": "VERB",
+     "debut": 15,
+     "fin": 20
+    },
+    {
+     "texte": "they",
+     "pos": "PRON",
+     "debut": 22,
+     "fin": 26
+    },
+    {
+     "texte": "have",
+     "pos": "VERB",
+     "debut": 27,
+     "fin": 31
+    },
+    {
+     "texte": "fun",
+     "pos": "NOUN",
+     "debut": 32,
+     "fin": 35
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie and Paul",
+     "role": "agent",
+     "debut": 0,
+     "fin": 14
+    },
+    {
+     "type": "GV",
+     "texte": "dance",
+     "role": "prédicat",
+     "debut": 15,
+     "fin": 20
+    },
+    {
+     "type": "GN",
+     "texte": "they",
+     "role": "agent",
+     "debut": 22,
+     "fin": 26
+    },
+    {
+     "type": "GV",
+     "texte": "have fun",
+     "role": "prédicat",
+     "debut": 27,
+     "fin": 35
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "they": "paul"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r369",
+   "langue": "en",
+   "texte": "The dog sleeps; the cat watches it.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "dog",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "sleeps",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 14
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "texte": "cat",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "texte": "watches",
+     "pos": "VERB",
+     "debut": 24,
+     "fin": 31
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 32,
+     "fin": 34
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The dog",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "sleeps",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 14
+    },
+    {
+     "type": "GN",
+     "texte": "the cat",
+     "role": "agent",
+     "debut": 16,
+     "fin": 23
+    },
+    {
+     "type": "GV",
+     "texte": "watches",
+     "role": "prédicat",
+     "debut": 24,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "it": "dog"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r370",
+   "langue": "en",
+   "texte": "The house is old; it still stands.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "house",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 10,
+     "fin": 12
+    },
+    {
+     "texte": "old",
+     "pos": "ADJ",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "still",
+     "pos": "ADV",
+     "debut": 21,
+     "fin": 26
+    },
+    {
+     "texte": "stands",
+     "pos": "VERB",
+     "debut": 27,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The house",
+     "role": "agent",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "is",
+     "role": "prédicat",
+     "debut": 10,
+     "fin": 12
+    },
+    {
+     "type": "ADJ",
+     "texte": "old",
+     "role": "attribut",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "type": "GN",
+     "texte": "it",
+     "role": "agent",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "type": "GV",
+     "texte": "still stands",
+     "role": "prédicat",
+     "debut": 21,
+     "fin": 33
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "it": "house"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r371",
+   "langue": "en",
+   "texte": "Paul writes a letter; he sends it.",
+   "mots": [
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "writes",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 11
+    },
+    {
+     "texte": "a",
+     "pos": "DET",
+     "debut": 12,
+     "fin": 13
+    },
+    {
+     "texte": "letter",
+     "pos": "NOUN",
+     "debut": 14,
+     "fin": 20
+    },
+    {
+     "texte": "he",
+     "pos": "PRON",
+     "debut": 22,
+     "fin": 24
+    },
+    {
+     "texte": "sends",
+     "pos": "VERB",
+     "debut": 25,
+     "fin": 30
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 31,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Paul",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "writes",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 11
+    },
+    {
+     "type": "GN",
+     "texte": "a letter",
+     "role": "patient",
+     "debut": 12,
+     "fin": 20
+    },
+    {
+     "type": "GN",
+     "texte": "he",
+     "role": "agent",
+     "debut": 22,
+     "fin": 24
+    },
+    {
+     "type": "GV",
+     "texte": "sends",
+     "role": "prédicat",
+     "debut": 25,
+     "fin": 30
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "he": "paul",
+     "it": "letter"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r372",
+   "langue": "en",
+   "texte": "The girl sings; she smiles.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "girl",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "sings",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "texte": "she",
+     "pos": "PRON",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "texte": "smiles",
+     "pos": "VERB",
+     "debut": 20,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The girl",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "sings",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "type": "GN",
+     "texte": "she",
+     "role": "agent",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "type": "GV",
+     "texte": "smiles",
+     "role": "prédicat",
+     "debut": 20,
+     "fin": 26
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "she": "girl"
+    }
+   },
+   "source": "reel"
   }
  ]
 }

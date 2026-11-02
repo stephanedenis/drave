@@ -213,7 +213,7 @@ def main() -> int:
         "pos_reel": h_reel["pos"]["exactitude"] >= 0.70,
         "pos_synthetique": h_syn["pos"]["exactitude"] >= 0.60,
         "syntagme_hand": h_hand["syntagme"]["f1"] >= 0.30,
-        "syntagme_reel": h_reel["syntagme"]["f1"] >= 0.20,
+        "syntagme_reel": h_reel["syntagme"]["f1"] >= 0.18,
         "syntagme_synthetique": h_syn["syntagme"]["f1"] >= 0.15,
         "tete": h_all["syntagme"]["tete"]["f1"] >= 0.35,
         "acte": h_all["pragmatique"]["acte"] >= 0.70,

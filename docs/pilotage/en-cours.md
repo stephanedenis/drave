@@ -31,7 +31,7 @@
   [`pensee-correction`](../../reports/rapport-pensee-correction.md), [`pensee-audit`](../../reports/rapport-pensee-audit.md).
 - **Gold** : **342 réels + 160 synthétiques + 20 de `gold.py`** ; POS complet (522 phrases)
   **0,7586** (fermé 0,897/ouvert 0,624), **réel 0,7657** ; 20 nouvelles **0,8214**, complexes
-  **0,6984** ; pragmatique **0,994–1,0** ; **coréférence 27/30, CV 0,847 ± 0,051, κ 1,0** —
+  **0,6984** ; pragmatique **0,994–1,0** ; **coréférence 68 liens (rôle 52, dernier nom 51), CV 0,847 ± 0,051, κ 1,0** —
   [`pensee-anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md) ; neuronal **refusé** ;
   fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md).
 - **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
@@ -42,7 +42,7 @@
 - **Bloquants** : **neuronal réel bloqué** — `llama-cli` refuse/timeout, aucun tagger (`spacy`,
   `stanza`, `nltk`, `transformers`), aucun poids `drave-n0` ; le mock reste un contrat. Trois
   options : un modèle local, les poids, ou acter la cascade.
-- **Ce qu'elle fait** : B13 (DRVF, banc, opérateurs, coréférence), gold 342 ; **109/109**.
+- **Ce qu'elle fait** : B13 (DRVF, banc, opérateurs, coréférence 68), gold 372 ; **111/111**.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 > **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`,
@@ -77,7 +77,7 @@
 - **N2** : **N2.z** (34,3 M + canal) **3,53**, 512 **3,66** — le meilleur ; **N2.r** 3,69 ;
   **N2.w** anglais **3,77** ; **N2.v** multilingue **4,79** ; N4 **0/40** ; fiches
   [`n2-canaux`](../../reports/rapport-n2-canal-34m.md), [`n2-anglais`](../../reports/rapport-n2-anglais-34m.md).
-- **Pensée — B13** : state store v0, AC-3/alpha-bêta, DRVF, banc anytime, opérateurs hétérogènes, **109/109 portes** ; gold **342 réels**, coréférence **27/30** (CV 0,847).
+- **Pensée — B13** : state store v0, AC-3/alpha-bêta, DRVF, banc anytime, opérateurs hétérogènes, **111/111 portes** ; gold **342 réels**, coréférence **27/30** (CV 0,847).
 
 
 ## Les chiffres de l'état
@@ -88,7 +88,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges à la passe du 02/11 06 h : les 4 connues + greffe à la borne 700 s, rejouée verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **517** / **605** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **518** / **606** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

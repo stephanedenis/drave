@@ -1,5 +1,8 @@
 # B13 — le gold complet : 522 phrases, POS 0,7586
 
+> **Note (post-372)** : après l'ajout des 30 phrases d'anaphore, le gold complet est à
+> **552 phrases**, POS **0,7574**, tête **0,3704** ; le seuil `syntagme_reel` est passé à 0,18.
+>
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅
 > **110/110 portes** : le gold est évalué **en entier** pour la première fois depuis l'ajout des
 > 22 dernières phrases : **522 phrases** (**342 réels** + 160 synthétiques + 20 de `gold.py`),

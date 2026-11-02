@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 40.7 h |
-| Tours | 385 |
-| Messages | 2317 |
-| Appels d'outils | 1537 |
+| Durée | 40.9 h |
+| Tours | 386 |
+| Messages | 2321 |
+| Appels d'outils | 1540 |
 | Fichiers touchés | 26 |
-| Commandes | 1367 |
+| Commandes | 1369 |
 | Sous-agents | 0 |
 | Commits | 90 |
 | Compactages de contexte | 4 |
@@ -27,6 +27,8 @@
 … [279 caractères tronqués]
 - **complete** — Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locau
 … [279 caractères tronqués]
+- **create** — Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécr
+… [294 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -799,6 +801,8 @@
 **Tour 384** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 385** — mets le dossier pilotage à jour et continue
+
+**Tour 386** — continue pendent 3h
 
 ## 2. Déroulé, étape par étape
 
@@ -9105,6 +9109,18 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - Le fonds CEGEP complet (2 681 PDF) reste hors d'atteinte en une passe : à ~1 min de détection par PDF, le parcours entier prend ~45 h ; le lot de 40 est un pas, pas la clôture.
 - Les 137 scans CEGEP de `corpus-pdf.json` sont l'estimation du reste ; le comptage exact viendra des manifestes successifs.
 
+### Tour 386 — continue pendent 3h
+
+*3 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — First 5-min check of CEGEP lot 40
+- bash — 10-min check of CEGEP lot 40
+
+**Synthèse produite :**
+
+⏵ Lot CEGEP : 1er scan (redo) fait en 12 min, détection en cours
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -9180,7 +9196,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1327 autres
+- … et 1329 autres
 
 ## 4. Mesures et résultats marquants
 

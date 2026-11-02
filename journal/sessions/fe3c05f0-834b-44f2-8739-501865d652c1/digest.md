@@ -35049,3 +35049,43 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - Le fonds CEGEP complet (2 681 PDF) reste hors d'atteinte en une passe : à ~1 min de détection par PDF, le parcours entier prend ~45 h ; le lot de 40 est un pas, pas la clôture.
 - Les 137 scans CEGEP de `corpus-pdf.json` sont l'estimation du reste ; le comptage exact viendra des manifestes successifs.
 
+
+## Tour 386
+
+### 👤 Utilisateur
+
+continue pendent 3h
+
+### 🤖 Assistant
+
+⏵ Nouveau goal : 3 heures de continuations sur le fonds CEGEP
+
+- **create_goal** `{"objective": "Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-tronc … [336 caractères tronqués]`
+
+> **Objectif** (create) : Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécrire reports/rapport-ocr-cegep.md avec les chiffres, mettre docs/pilotage/ (en-cours, roadmap, plan-travail, chantiers, journal du 02/11) à jour et committer ; puis enchaîner sur le lot suivant du fonds CEGEP si le temps le permet. Sans toucher aux GPU de N2 ni aux fichiers des autres sessions.
+
+
+  ```
+{"goal":{"id":"goal-ee38a99b-965a-4611-9b49-f95cc7a9a713","revision":1,"objective":"Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécrire reports/rapport-ocr-cegep.md avec les chiffres, mettre docs/pilotage/ (en-cours, roadmap, plan-travail, chantiers, journal du 02/11) à jour et committer ; puis enchaîner sur le lot suivant du fonds CEGEP si le temps le permet. Sans toucher aux GPU de N2 ni aux fichiers des autres sessions.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Goal 3 h actif : surveillance du lot CEGEP (40 notes), cutoff à 12 h 05
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; ps -p 3445044 -o pid,etime,time= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2; tail -3 /tmp/ocr-cegep-lot40.log", "description": "First 5-min check of CEGEP lot 40", "timeoutM … [73 caractères tronqués]`
+
+  ```
+09:31
+    PID     ELAPSED         
+3445044       12:24 00:00:00
+rchar: 799868522
+wchar: 274379146
+  CEGEP · Exercices de synthèse Excel 2010 Fonctio · 43 p · 81675 car
+  ```
+
+### 🤖 Assistant
+
+⏵ Lot CEGEP : 1er scan (redo) fait en 12 min, détection en cours
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 600; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -2 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2", "descripti … [119 caractères tronqués]`

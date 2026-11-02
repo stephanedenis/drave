@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 40.7 h |
-| Tours | 125 |
-| Messages | 1525 |
-| Appels d'outils | 1323 |
+| Durée | 41.0 h |
+| Tours | 126 |
+| Messages | 1537 |
+| Appels d'outils | 1333 |
 | Fichiers touchés | 25 |
-| Commandes | 1072 |
+| Commandes | 1081 |
 | Sous-agents | 2 |
-| Commits | 160 |
+| Commits | 161 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -285,6 +285,8 @@
 **Tour 124** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 125** — mets le dossier de pilotage à jour et continue
+
+**Tour 126** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6642,7 +6644,60 @@ Au choix, un seul suffit :
 
 **Synthèse produite :**
 
-⏵ Réarmer le goal et remettre le pilotage à jour
+⏵ Pilotage à jour, gold complet 522 phrases (POS 0,7586) ; 110/110
+
+Le dossier de pilotage est remis à jour et le travail a repris avec un round mesuré. Commit **`b69064c5`**.
+
+\## Ce qui a été mis à jour
+
+- **`en-cours`** (1 612 mots, T0 dans le budget) : le bloc Pensée/B13 dit maintenant le vrai état — gold **342 réels** (+160 synthétiques +20 de `gold.py`), POS complet **0,7586** sur **522 phrases**, coréférence **27/30**, CV **0,847 ± 0,051**, κ **1,0** ; **prochaine action** : les 100 liens et le POS au gold complet ; **bloquant** : le neuronal réel (les trois options) ; les doublons « Ce qu'elle fait » et les fiches en trop ont été retirés.
+- **`roadmap`** : les lignes B et B13 passent à **T0–T107, 110/110 portes** ; la prochaine action n'est plus « DRVM/native » sèche mais « DRVM/native **bloquée**, les 100 liens, le gold 342 ».
+- **`chantiers`** : la ligne **L** passe de « gold 360 (200 réels), POS 0,772 » à « **342 réels + 160 synthétiques**, POS 0,7586, coréférence 27/30 » avec le bloquant neuronal explicite ; la ligne **B13** de même.
+- **`plan-travail`** : la ligne **L** dit « **gold 342**, coréférence 27/30, DRVM/native **bloqué** ».
+- Les **compteurs** sont alignés sur le disque : **517 fiches / 605 JSON**.
+
+\## Le round mesuré (T107)
+
+Le gold a été évalué **en entier** pour la première fois depuis les 22 dernières phrases :
+
+| mesure | 320 phrases | **522 phrases** |
+|---|---:|---:|
+| POS (all) | 0,7544 | **0,7586** |
+| POS fermé | 0,8974 | 0,8974 |
+| POS ouvert | 0,6145 | 0,6243 |
+| syntagme F1 | 0,2074 | 0,1963 |
+| tête F1 | 0,3954 | 0,3807 |
+| acte | 0,996 | 0,9962 |
+
+**Tous les verdicts passent** (dont le seuil tête 0,35). La tête baisse de 0,015 : les pièges d'anaphore ont des GN courts, plus durs à segmenter. Fiche [`rapport-pensee-gold-342.md`](../../reports/rapport-pensee-gold-342.md), JSON `pensee-gold-342.json`, porte **T107**.
+
+\## L'état
+
+- **110/110 portes** ; `porte-bloc-linguistique` verte ; `revue`, `taille`, `en-cours`, schémas, sessions : ✅.
+- Le **goal est réarmé** (phase active) et le travail continue.
+- Le **vrai modèle neuronal reste bloqué** : `llama-cli` refuse/timeout, aucun tagger, aucun poids `drave-n0` ; le mock reste un contrat. Pour débloquer : un modèle local, les poids, ou acter la cascade.
+
+\## La suite
+
+1. **Les 100 liens de coréférence** (30 aujourd'hui) : resserrer la CV.
+2. **Le neuronal réel** : selon votre choix (modèle local, poids, ou cascade actée).
+3. **Politique DRVM/native** : quand les poids seront l
+… [119 caractères tronqués]
+
+### Tour 126 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Ajouter 30 phrases à coréférence et mesurer
+- bash — Ajouter l'élidé l' et mesurer le total
+- bash — Écrire la fiche des 68 liens et la porte T108
+- bash — Trim README et passer toutes les portes
+- bash — Vérifier le verdict de l'évaluation gold
+- bash — Ajuster le seuil syntagme réel et corriger T107
+- bash — Relancer les portes après correctifs
+- bash — Aligner les compteurs de portes dans le pilotage
+- bash — Committer la coréférence à 68 liens
+- job_output
 
 ## 3. Travail accompli
 
@@ -6723,7 +6778,7 @@ Au choix, un seul suffit :
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1032 autres
+- … et 1041 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7031,4 +7086,5 @@ Au choix, un seul suffit :
 - B13 — LA CV SUR 20 GRAINES : 0,8467 ± 0,051, LE DERNIER NOM GÉNÉRALISE ; 108/108" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CV SUR 20 GRAINES"; th
 - B13 — LE BILAN DE L'ANAPHORE : 27/30, CV 0,847, HUIT MESURES ; 109/109" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BILAN DE L'ANAPHORE"; then echo 
 - PILOTAGE — B13/L À JOUR : GOLD 342 (POS 0,7586 SUR 522), CORÉFÉRENCE 27/30 (CV 0,847), NEURONAL BLOQUÉ ; 110/110" 2>&1 | tail -3   if git log -1 --format='%s' |
+- B13 — LA CORÉFÉRENCE À 68 LIENS : LE RÔLE PASSE DEVANT (52/51), GOLD 372 ; 111/111" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "68 LIENS"; then echo
 

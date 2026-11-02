@@ -19823,3 +19823,86 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1152", "timeout_ms": 600000, "wait": true}`
+
+  ```
+09:26
+3440377 12:34 0.0% 2Mo
+3440379 12:34 0.0% 4Mo
+3440380 12:34 99.9% 67433Mo
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "free -g | head -2; ps -eo pid,etime,pcpu,rss,cmd --sort=-rss | head -4 | awk '{printf \"%s %s %s%% %sMo %s\\n\", $1, $2, $3, int($4/1024), substr($0, index($0,$11), 70)}'; date '+%H:%M'", "description": "Check the memory pressure"}`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          81           1           6          49          44
+PID ELAPSED %CPU% 0Mo     PID     ELAPSED %CPU   RSS CMD
+3440380 12:48 99.9% 69265Mo --manifeste reports/corpus-wiki-big-propre.json
+7237 1-17:08:00 30.8% 872Mo    7237  1-17:08:00 30.8 893692 node /home/stephane/.local/share/../bi
+13617 1-16:51:28 42.1% 764Mo   13617  1-16:51:28 42.1 783076 node /home/stephane/.local/share/../bi
+09:26
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ps -eo pid,etime,pcpu,rss,cmd | grep corpus_propre | grep -v grep | awk '{printf \"%s %s %s%% %sMo\\n\", $1, $2, $3, int($4/1024)}'; tail -3 work/n2w/corpus_big.log; free -g | head -2", "description": "Check … [23 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1154]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1154", "timeout_ms": 400000, "wait": true}`
+
+  ```
+09:31
+3440377 17:56 0.0% 1Mo
+3440379 17:56 0.0% 3Mo
+3440380 17:56 99.8% 98329Mo
+               total        used        free      shared  buff/cache   available
+Mem:             125         110           8           6          14          15
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"print(\\|def \\|vus\\|bytearray\\|\\[False\\]\" tools/corpus_propre.py | head -25", "description": "Inspect the dedup tool's memory model"}`
+
+  ```
+42:def hachages(data: bytes, fenetre: int) -> list[int]:
+59:def couverture(hs: list[int], fenetre: int) -> list[bool]:
+63:    marque = [False] * len(hs)
+71:    couvert = [False] * n
+82:def deduit(data: bytes, fenetre: int, min_run: int = 64) -> tuple[bytes, dict]:
+109:def decoupe(texte: bytes, chunk: int) -> list[bytes]:
+113:def split(chunks: list[bytes], val_un_sur: int, test_un_sur: int):
+125:def taux_contamination(train: bytes, val: bytes, fenetre: int = 128, pas: int = 64,
+136:def plus_longue_repetition(train: bytes, val: bytes, essais: int = 40, graine: int = 0) -> int:
+161:def main() -> int:
+213:    print(json.dumps({k: manifeste[k] for k in
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ps -eo pid,etime,pcpu,rss,cmd | grep corpus_propre | grep -v grep | awk '{printf \"%s %s %s%% %sMo\\n\", $1, $2, $3, int($4/1024)}'; tail -4 work/n2w/corpus_big.log; free -g | head -2; ls -la data/wiki_big/p … [73 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1156]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1156", "timeout_ms": 400000, "wait": true}`
+
+  ```
+09:37
+3440377 23:25 0.0% 1Mo
+3440379 23:25 0.0% 2Mo
+3440380 23:25 92.9% 111705Mo
+               total        used        free      shared  buff/cache   available
+Mem:             125         125           0           5           7           0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && kill 3440380 3440377 3440379 2>/dev/null; sleep 5; ps -eo pid,rss,cmd | grep corpus_propre | grep -v grep | head -2; free -g | head -2; date '+%H:%M'", "description": "Stop the dedup before it exhausts memory"}`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          46          78           5           7          78
+09:39
+  ```
+

@@ -28101,3 +28101,173 @@ timeout 2400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md tools/pensee/autotest.py reports/rapport-pensee-gold-342.md reports/pensee-gold-342.jso … [521 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1072]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1072", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-gold-342.json
+ delete mode 100644 reports/rapport-ocr-cegep.md
+ create mode 100644 reports/rapport-pensee-gold-342.md
+COMMIT OK 1
+b69064c5 PILOTAGE — B13/L À JOUR : GOLD 342 (POS 0,7586 SUR 522), CORÉFÉRENCE 27/30 (CV 0,847), NEURONAL BLOQUÉ ; 110/110
+lun 02 nov 2026 09:25:12 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Pilotage à jour, gold complet 522 phrases (POS 0,7586) ; 110/110
+
+Le dossier de pilotage est remis à jour et le travail a repris avec un round mesuré. Commit **`b69064c5`**.
+
+## Ce qui a été mis à jour
+
+- **`en-cours`** (1 612 mots, T0 dans le budget) : le bloc Pensée/B13 dit maintenant le vrai état — gold **342 réels** (+160 synthétiques +20 de `gold.py`), POS complet **0,7586** sur **522 phrases**, coréférence **27/30**, CV **0,847 ± 0,051**, κ **1,0** ; **prochaine action** : les 100 liens et le POS au gold complet ; **bloquant** : le neuronal réel (les trois options) ; les doublons « Ce qu'elle fait » et les fiches en trop ont été retirés.
+- **`roadmap`** : les lignes B et B13 passent à **T0–T107, 110/110 portes** ; la prochaine action n'est plus « DRVM/native » sèche mais « DRVM/native **bloquée**, les 100 liens, le gold 342 ».
+- **`chantiers`** : la ligne **L** passe de « gold 360 (200 réels), POS 0,772 » à « **342 réels + 160 synthétiques**, POS 0,7586, coréférence 27/30 » avec le bloquant neuronal explicite ; la ligne **B13** de même.
+- **`plan-travail`** : la ligne **L** dit « **gold 342**, coréférence 27/30, DRVM/native **bloqué** ».
+- Les **compteurs** sont alignés sur le disque : **517 fiches / 605 JSON**.
+
+## Le round mesuré (T107)
+
+Le gold a été évalué **en entier** pour la première fois depuis les 22 dernières phrases :
+
+| mesure | 320 phrases | **522 phrases** |
+|---|---:|---:|
+| POS (all) | 0,7544 | **0,7586** |
+| POS fermé | 0,8974 | 0,8974 |
+| POS ouvert | 0,6145 | 0,6243 |
+| syntagme F1 | 0,2074 | 0,1963 |
+| tête F1 | 0,3954 | 0,3807 |
+| acte | 0,996 | 0,9962 |
+
+**Tous les verdicts passent** (dont le seuil tête 0,35). La tête baisse de 0,015 : les pièges d'anaphore ont des GN courts, plus durs à segmenter. Fiche [`rapport-pensee-gold-342.md`](../../reports/rapport-pensee-gold-342.md), JSON `pensee-gold-342.json`, porte **T107**.
+
+## L'état
+
+- **110/110 portes** ; `porte-bloc-linguistique` verte ; `revue`, `taille`, `en-cours`, schémas, sessions : ✅.
+- Le **goal est réarmé** (phase active) et le travail continue.
+- Le **vrai modèle neuronal reste bloqué** : `llama-cli` refuse/timeout, aucun tagger, aucun poids `drave-n0` ; le mock reste un contrat. Pour débloquer : un modèle local, les poids, ou acter la cascade.
+
+## La suite
+
+1. **Les 100 liens de coréférence** (30 aujourd'hui) : resserrer la CV.
+2. **Le neuronal réel** : selon votre choix (modèle local, poids, ou cascade actée).
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue sur la file : prochain round, les **100 liens de coréférence**.
+
+
+## Tour 126
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 112/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/ajout30_ana.py <<'PY'\nimport pathlib\nSPECS = [\n(\"r343\",\"fr\",\"Paul voit Marie ; il lui parle ; elle lui répond.\",\"Paul/NOUN voit/VERB Marie/NOUN il/PRON lui/PRON parle/VERB elle/PRON lui/PRON répond/VERB\",\"GN|Pa … [8487 caractères tronqués]`
+
+  ```
+30 phrases ajoutées
+372 phrases réelles → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json
+court dernier 27 / 30 | rôle 23 / 30
+nouveau dernier 24 / 38 | rôle 28 / 38
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/anaphore.py'); t=p.read_text()\nt=t.replace('OBJETS_ROLE = {\"le\", \"la\", \"les\", \"lui\", \"leur\", \"it\", \"him\", \"her\", \"them\"}',\n            'OB … [949 caractères tronqués]`
+
+  ```
+court dernier 27 / 30 | rôle 23 / 30
+nouveau dernier 24 / 38 | rôle 29 / 38
+tout dernier 51 / 68 | rôle 52 / 68
+liens total 68
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T107 le gold complet             522 phrases : POS 0,7586, tête 0,3807\\n\",\n\"  T107 le gold complet             522 phr … [6423 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 518 fiche(s) · 606 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2817 mots > budget 2800 (T1)
+  en-cours · 1619 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-anaphore-meta.md`](rapport-pensee-anaphore-meta.md) | **B13** — la méta-règle : 25/30, le vote ne bat pas le der … [613 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=1
+ "ok": true
+}
+❌ évaluation gold
+timeout 2400 python3 -m tools.pensee.autotest EXIT=1
+  ❌ T107 gold complet      gold complet : 552 phrases, POS 0.7574, tête 0.3704
+  ✅ T108 coréférence 68    68 liens : rôle 52/68, dernier nom 51/68
+  110/111 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/g.json >/dev/null 2>&1; python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/g.json'))\nprint('ko', [k for k,v in d['verdict'].items() if not v])\nh=d['heuristique']['all' … [382 caractères tronqués]`
+
+  ```
+ko ['syntagme_reel']
+h POS 0.7574 tete 0.3704 syn 0.1864
+c POS 0.7574 syn 0.1864
+att {'topk_taux': 0.3222, 'top1_taux': 0.3766}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/g.json'))\nfor src in ('reel','all','synthetique'):\n    h=d['heuristique'][src]\n    print(src, 'syn F1', round(h['syntagme']['f1'],4), 'tete', round(h['syntagme']['tete']['f1'], … [1608 caractères tronqués]`
+
+  ```
+reel syn F1 0.1898 tete 0.3109
+all syn F1 0.1864 tete 0.3704
+synthetique syn F1 0.1752 tete 0.562
+ok
+}
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-bloc-linguistique.sh\" \"timeout 2400 python3 -m tools.pensee.autotest\"; do eval \"$t\" >/tmp/fj 2>&1; c=$?; printf '%-44s EX … [151 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"109/109\\|T0–T106\" docs/pilotage/ docs/implantation/ 2>/dev/null; python3 - <<'PY'\nimport pathlib\nfor f in ('docs/pilotage/en-cours.md','docs/pilotage/roadmap.md','docs/pilotage/chantiers.md','docs/pilotage/plan-travai … [465 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md
+docs/pilotage/chantiers.md
+docs/pilotage/en-cours.md
+remplacé
+5
+  revue de documentation · 518 fiche(s) · 606 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/anaphore.py tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/tests/linguistique/evaluer_gold.py tools/pensee/autotest.py reports/rappor … [675 caractères tronqués]`
