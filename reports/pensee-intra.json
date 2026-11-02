@@ -1,0 +1,29 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "64/64",
+ "bascule": "1/2 à chaque look",
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 516,
+  "v_final": 0.48,
+  "runs": 20,
+  "buts": 20,
+  "pas_moyen": 8.0
+ },
+ "contraste": {
+  "regime_par_episode": {
+   "v_final": 0.42,
+   "pas": 8.0
+  },
+  "sans_mise_a_jour": {
+   "buts": 0
+  }
+ },
+ "limites": [
+  "régimes symétriques",
+  "signe inconnu",
+  "toy"
+ ]
+}

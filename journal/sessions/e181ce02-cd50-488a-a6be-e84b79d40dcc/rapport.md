@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 32.1 h |
-| Tours | 77 |
-| Messages | 1072 |
-| Appels d'outils | 969 |
+| Durée | 32.2 h |
+| Tours | 78 |
+| Messages | 1080 |
+| Appels d'outils | 975 |
 | Fichiers touchés | 25 |
-| Commandes | 786 |
+| Commandes | 791 |
 | Sous-agents | 2 |
-| Commits | 97 |
+| Commits | 98 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -185,6 +185,8 @@
 **Tour 76** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 77** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 78** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4104,6 +4106,55 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse à **1/2** — le
 - bash — Committer le régime aléatoire
 - job_output
 
+**Synthèse produite :**
+
+⏵ Régime aléatoire : 1/2, v final 0,42, 20/20, 8,0 pas ; 63/63
+
+Le round 64 du goal est livré : le **hasard maximal** (régime aléatoire à chaque épisode, p = 1/2) est absorbé — la limite de la fenêtre n'est pas trouvée. Commit **`40f74212`**.
+
+\## Le régime aléatoire
+
+Même monde que T59, mais p = 1/2 par épisode : à chaque épisode, le régime (0,1 ou 0,9) peut changer ; c'est le hasard maximal sur deux régimes.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| **4000** | **20/20** | **0,42** | 632 | 8,0 |
+| 8000 | 20/20 | 0,66 | 684 | 8,0 |
+| bascule 1/5 (T59) | 20/20 | 0,44 | 735 | 8,6 |
+
+**Ce que ça dit** :
+
+- **Le hasard maximal est absorbé** : 20/20, 8,0 pas ; la politique s'adapte à chaque épisode.
+- **v oscille** (0,42) : il suit le régime du moment ; il ne peut pas faire mieux.
+- **Le coût est nul** (8,0 pas) : l'observation reste informative, quel que soit le régime.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-hasard2.md`](../../reports/rapport-pensee-hasard2.md) ; JSON [`pensee-hasard2.json`](../../reports/pensee-hasard2.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T60 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **63/63 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **462 fiches / 554 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Régime intra-épisode** : la fiabilité change à chaque pas ; la limite.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **régime intra-épisode** — le vrai plafond de la fenêtre.
+
+### Tour 78 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Tester le régime intra-épisode
+- bash — Ajouter la porte T61 (régime intra-épisode)
+- bash — Écrire la fiche du régime intra-épisode
+- bash — Trim README et portes
+- bash — Committer le régime intra-épisode
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4183,7 +4234,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse à **1/2** — le
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 746 autres
+- … et 751 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4428,4 +4479,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse à **1/2** — le
 - B13 — LA BASCULE TRÈS FRÉQUENTE : 1/10, v FINAL 0,28, 20/20, 9,4 PAS ; 61/61" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "TRÈS FRÉQUENTE"; then echo
 - B13 — LA BASCULE LIMITE : 1/5, v FINAL 0,44, 20/20, 8,6 PAS ; 62/62" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BASCULE LIMITE"; then echo "COMMIT 
 - B13 — LE RÉGIME ALÉATOIRE : 1/2, v FINAL 0,42, 20/20, 8,0 PAS ; 63/63" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RÉGIME ALÉATOIRE"; then echo "COM
+- B13 — LE RÉGIME INTRA-ÉPISODE : BASCULE À CHAQUE LOOK, v FINAL 0,48, 20/20, 8,0 PAS ; 64/64" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "INTRA-ÉPISO
 

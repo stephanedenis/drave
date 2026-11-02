@@ -1693,6 +1693,22 @@ def seule_bayes_hasard(p: PolitiqueAppriseBayesHasard,
     return seule_observatrice(p, max_pas)
 
 
+class PolitiqueAppriseBayesIntra(PolitiqueAppriseBayesAdaptive):
+    """Le bayésien à **régime intra-épisode** : la fiabilité bascule à chaque observation (p = 1/2)."""
+
+    nom = "bayes_intra"
+
+    def _pas(self, cle, action, d: int):
+        if action == "observer":
+            self.p_erreur = 0.9 if self.rng.random() < 0.5 else 0.1
+        return super()._pas(cle, action, d)
+
+
+def seule_bayes_intra(p: PolitiqueAppriseBayesIntra,
+                      max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

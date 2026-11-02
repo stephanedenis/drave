@@ -20921,3 +20921,121 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-hasard2.md reports/pensee-hasard2.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md … [486 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-786]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-786", "timeout_ms": 600000, "wait": true}`
+
+  ```
+26 files changed, 1249 insertions(+), 57 deletions(-)
+ create mode 100644 reports/pensee-hasard2.json
+ create mode 100644 reports/rapport-pensee-hasard2.md
+COMMIT OK 1
+40f74212 B13 — LE RÉGIME ALÉATOIRE : 1/2, v FINAL 0,42, 20/20, 8,0 PAS ; 63/63
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Régime aléatoire : 1/2, v final 0,42, 20/20, 8,0 pas ; 63/63
+
+Le round 64 du goal est livré : le **hasard maximal** (régime aléatoire à chaque épisode, p = 1/2) est absorbé — la limite de la fenêtre n'est pas trouvée. Commit **`40f74212`**.
+
+## Le régime aléatoire
+
+Même monde que T59, mais p = 1/2 par épisode : à chaque épisode, le régime (0,1 ou 0,9) peut changer ; c'est le hasard maximal sur deux régimes.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| **4000** | **20/20** | **0,42** | 632 | 8,0 |
+| 8000 | 20/20 | 0,66 | 684 | 8,0 |
+| bascule 1/5 (T59) | 20/20 | 0,44 | 735 | 8,6 |
+
+**Ce que ça dit** :
+
+- **Le hasard maximal est absorbé** : 20/20, 8,0 pas ; la politique s'adapte à chaque épisode.
+- **v oscille** (0,42) : il suit le régime du moment ; il ne peut pas faire mieux.
+- **Le coût est nul** (8,0 pas) : l'observation reste informative, quel que soit le régime.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+## L'état
+
+- Fiche : [`rapport-pensee-hasard2.md`](../../reports/rapport-pensee-hasard2.md) ; JSON [`pensee-hasard2.json`](../../reports/pensee-hasard2.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T60 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **63/63 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **462 fiches / 554 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Régime intra-épisode** : la fiabilité change à chaque pas ; la limite.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **régime intra-épisode** — le vrai plafond de la fenêtre.
+
+
+## Tour 78
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 65/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1210 caractères tronqués]`
+
+  ```
+40f74212 B13 — LE RÉGIME ALÉATOIRE : 1/2, v FINAL 0,42, 20/20, 8,0 PAS ; 63/63
+ok
+4000 q 516 v final 0.48 20 runs: 20 /20 pas moyen 8.0
+8000 q 570 v final 0.8 20 runs: 20 /20 pas moyen 8.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T60 le régime aléatoire         1/2 : 20/20 buts, v final ≈ 0,42\\n\",\n\"  T60 le régime aléatoire         1/2 : 20/20 bu … [1330 caractères tronqués]`
+
+  ```
+ok
+  ✅ T59 bascule limite     limite : 20/20 buts, v final 0.44, 8.6 pas
+  ✅ T60 régime aléatoire   hasard : 20/20 buts, v final 0.42, 8.0 pas
+  ✅ T61 régime intra-épisode intra : 20/20 buts, v final 0.48, 8.0 pas
+  64/64 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-intra.md <<'MD'\n# B13 — le régime intra-épisode : 20/20, v = 0,48\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **64/64 portes** : la fiabilité chang … [6848 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 463 fiche(s) · 555 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2808 mots > budget 2800 (T1)
+  en-cours · 1563 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-bruitee.md`](rapport-pensee-bruitee.md) | **B13** — l'observation bruitée : 0/20 buts, 10 % d'erreur casse la po … [622 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 463 fiche(s) · 555 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-intra.md reports/pensee-intra.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md doc … [505 caractères tronqués]`

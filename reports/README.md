@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-intra.md`](rapport-pensee-intra.md) | **B13** — le régime intra-épisode : bascule à chaque look, v final 0,48, 20/20, 8,0 pas, **64/64** |
 | [`rapport-pensee-hasard2.md`](rapport-pensee-hasard2.md) | **B13** — le régime aléatoire : 1/2, v final 0,42, 20/20, 8,0 pas, **63/63** |
 | [`rapport-pensee-limite.md`](rapport-pensee-limite.md) | **B13** — la bascule limite : 1/5, v final 0,44, 20/20, 8,6 pas, **62/62** |
 | [`rapport-pensee-rapide.md`](rapport-pensee-rapide.md) | **B13** — la bascule très fréquente : 1/10, v final 0,28, 20/20, 9,4 pas, **61/61** |
@@ -29,7 +30,6 @@
 | [`rapport-pensee-bayes.md`](rapport-pensee-bayes.md) | **B13** — la croyance bayésienne : un look, 20/20 dès 2000 épisodes, 9,4 pas, **51/51** |
 | [`rapport-pensee-votante3.md`](rapport-pensee-votante3.md) | **B13** — trois looks : 20/20 à 4000 épisodes, 9,2 pas, **50/50** |
 | [`rapport-pensee-votante.md`](rapport-pensee-votante.md) | **B13** — l'observation votante : 2 looks, 20/20 buts, 1 % d'erreur, **49/49** |
-| [`rapport-pensee-bruitee.md`](rapport-pensee-bruitee.md) | **B13** — l'observation bruitée : 0/20 buts, 10 % d'erreur casse la politique, **48/48** |
 | [`rapport-pensee-observatrice.md`](rapport-pensee-observatrice.md) | **B13** — l'action observer : 20/20 buts, 8,3 pas, le geste qui révèle, **47/47** |
 | [`rapport-pensee-croyance.md`](rapport-pensee-croyance.md) | **B13** — la croyance : 0/20 buts, la distribution seule ne suffit pas, **45/45** |
 | [`rapport-pensee-hasard.md`](rapport-pensee-hasard.md) | **B13** — le hasard variable : 20–60 %, 20/20 à chaque taux, 8 pas, **43/43** |
