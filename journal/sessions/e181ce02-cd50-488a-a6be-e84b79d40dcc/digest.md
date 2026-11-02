@@ -19522,3 +19522,100 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-bayes-appris.md reports/pensee-bayes-appris.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/e … [506 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-723]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-723", "timeout_ms": 600000, "wait": true}`
+
+  ```
+25 files changed, 517 insertions(+), 51 deletions(-)
+ create mode 100644 reports/pensee-bayes-appris.json
+ create mode 100644 reports/rapport-pensee-bayes-appris.md
+COMMIT OK 1
+788a1f6f B13 — LA VRAISEMBLANCE APPRISE : v = 0,899, 20/20, 8,6 PAS ; 53/53
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vraisemblance apprise : v = 0,899, 20/20, 8,6 pas ; 53/53
+
+Le round 54 du goal est livré : le filtre **apprend sa propre fiabilité** (v = 0,899 pour un vrai 0,9) et réussit **20/20**. Commit **`788a1f6f`**.
+
+## La vraisemblance apprise
+
+Même monde que T48/T49 (10 % d'erreur par révélation), mais la politique **ne connaît pas** la fiabilité : elle part de `v = 0,5` et l'estime par le **taux de looks corrects** observés (`v = n_corrects / n_looks`).
+
+| épisodes | buts | v appris | états-Q | pas |
+|---:|---|---:|---:|---:|
+| 2000 | 20/20 | 0,889 | 585 | 10,0 |
+| **4000** | **20/20** | **0,899** | 660 | 8,6 |
+| bayes (T48, v connu) | 20/20 | 0,9 | 552 | 9,4 |
+
+**Ce que ça dit** :
+
+- **La fiabilité s'apprend** : v converge vers 0,899 (le vrai 0,9) ; la politique n'a pas besoin qu'on lui donne la qualité de l'observation.
+- **Elle réussit** : 20/20 dès 2000 épisodes, 8,6 pas à 4000 (proche du 8,0 du bayésien à deux looks).
+- **Le coût est l'apprentissage** : 4000 épisodes et 660 états, contre 2000 et 552 pour le bayésien à v connu.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+## L'état
+
+- Fiche : [`rapport-pensee-bayes-appris.md`](../../reports/rapport-pensee-bayes-appris.md) ; JSON [`pensee-bayes-appris.json`](../../reports/pensee-bayes-appris.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T50 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **53/53 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **448 fiches / 544 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget (après trim des liens anciens).
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Fiabilité qui dérive** : v change à mi-parcours ; la politique doit s'adapter.
+2. **Deux looks bayésiens appris** : v converge plus vite.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round fait **dériver la fiabilité** — la politique doit oublier l'ancien v.
+
+
+## Tour 68
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 55/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [3101 caractères tronqués]`
+
+  ```
+788a1f6f B13 — LA VRAISEMBLANCE APPRISE : v = 0,899, 20/20, 8,6 PAS ; 53/53
+ok
+q 691 v final 0.56 fenetre 50
+20 runs: 20 /20 pas moyen 8.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T50 la vraisemblance apprise     20/20 buts, v appris ≈ 0,9\\n\",\n\"  T50 la vraisemblance apprise     20/20 buts, v appr … [1345 caractères tronqués]`
+
+  ```
+ok
+  ✅ T49 bayésien deux looks bayes2 : 20/20 buts, 544 états-Q, 8.0 pas
+  ✅ T50 vraisemblance apprise bayes appris : 20/20 buts, v=0.899, 8.6 pas
+  ✅ T51 fiabilité qui dérive dérive : 20/20 buts, v final 0.56, 8.0 pas
+  54/54 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-derive.md <<'MD'\n# B13 — la fiabilité qui dérive : v = 0,56, 20/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **54/54 portes** : la fiabilité de l … [6564 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 449 fiche(s) · 545 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2813 mots > budget 2800 (T1)
+  ```
+

@@ -16177,3 +16177,25 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-949", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-945 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W34-g*.pt 2>/dev/null; tail -1 work/n2j/W34-g1.log; tail -1 work/n2j/W34-g2.log; tail -2 /tmp/portes-nuit.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W34-g*.pt 2>/dev/null; tail -1 work/n2j/W34-g1.log; tail -1 work/n2j/W34-g2.log; tail -1 /tmp/portes-nuit.out; grep -c \"✅\" /tmp/portes-nuit.out", "description": "Check the 34M students and the gates"}`
+
+  ```
+00:00
+work/n2j/W34-g2.pt
+pas 19500 · seq 128 · perte 16.1993 · PPL 128/4 3.6689 · 2302 s
+}
+  porte-n3-sparsite      ✅                           5 s  PORTE TENUE : kwta et top_k agissent séparément · A déterministe
+55
+  ```
+
+- **bash** `{"command": "sleep 180; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W34-g1.pt 2>/dev/null && echo OK; export PYTHONPATH=.; for g in 1 2; do CUDA_VISIBLE_DEVICES=$((g-1)) ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/W34-g$g.pt --decomposition --longueurs  … [150 caractères tronqués]`

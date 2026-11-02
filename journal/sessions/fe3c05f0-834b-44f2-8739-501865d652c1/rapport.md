@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
 | Durée | 31.4 h |
-| Tours | 96 |
-| Messages | 1270 |
-| Appels d'outils | 1082 |
-| Fichiers touchés | 23 |
-| Commandes | 997 |
+| Tours | 98 |
+| Messages | 1278 |
+| Appels d'outils | 1087 |
+| Fichiers touchés | 24 |
+| Commandes | 1001 |
 | Sous-agents | 0 |
-| Commits | 67 |
+| Commits | 68 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -219,6 +219,10 @@
 **Tour 95** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 96** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 97** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 98** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2749,6 +2753,37 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 
 **Le constat** : le 8e livre est un volume de 470+ pages ; le rendu avance (~6 pages/min). Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
 
+### Tour 97 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR book 8 pages
+
+**Synthèse produite :**
+
+⏵ Round 85 : le 8e livre OCR atteint 486 pages rendues (11 min 46)
+
+**Round 85/1000 — le 8e livre continue.**
+
+- **L'OCR** : train **4 193 550 octets** (23 h 48) ; `pdftoppm` rend le 8e livre (*Sprenger 2025, inflammationcycling*) depuis **11 min 46**, **486 pages** rendues. L'océrisation suivra. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3** et la **comparaison des genres** restent mesurés et committés ; la roadmap et l'état sont à jour.
+
+**Le constat** : le 8e livre est un volume de 490+ pages ; le rendu avance (~6 pages/min). Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
+
+### Tour 98 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check OCR book 8 pages and manifest
+- bash — Create journal directory for new day
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md`
+- bash — Verify journal and commit new day
+
+**Synthèse produite :**
+
+⏵ Round 86 : minuit — je crée le journal du 2 novembre
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2778,6 +2813,7 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_genres.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-genres.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -2821,7 +2857,7 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 957 autres
+- … et 961 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2949,7 +2985,7 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 
 ## 5. Erreurs rencontrées
 
-55 sorties en erreur ou divergentes. Les premières :
+56 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér
@@ -3036,4 +3072,5 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 - DONNÉES — LE CORPUS DOCUMENTS EST CLOS : 7 459 PDF, 3 384 DOCUMENTS, 872 M CARACTÈRES, 8 KO 2,07 % (TEST)" 2>/tmp/commit.err; then echo "commit OK"; break; else
 - DONNÉES — ROADMAP ET ÉTAT : LES DIX CORPUS, LE PDF, LES DOCUMENTS (8 KO 2,07 %), L'OCR ET LES GENRES" 2>/tmp/commit.err; then echo "commit OK"; break; else echo
 - ÉTAT — T0 REVENU SOUS 4 000 MOTS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err; sleep 8; fi done git reset -q; gi
+- JOURNAL — LE 2 NOVEMBRE : LA CLÔTURE DE LA CAMPAGNE D/R/A" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err; sleep 8;
 

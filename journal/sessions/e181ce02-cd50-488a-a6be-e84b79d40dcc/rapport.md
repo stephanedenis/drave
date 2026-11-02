@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 31.3 h |
-| Tours | 67 |
-| Messages | 977 |
-| Appels d'outils | 894 |
+| Durée | 31.4 h |
+| Tours | 68 |
+| Messages | 985 |
+| Appels d'outils | 900 |
 | Fichiers touchés | 25 |
-| Commandes | 723 |
+| Commandes | 729 |
 | Sous-agents | 2 |
 | Commits | 85 |
 | Compactages de contexte | 3 |
@@ -165,6 +165,8 @@
 **Tour 66** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 67** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 68** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3579,6 +3581,55 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round apprend la **vraisemblan
 - bash — Faire un vrai diff d'état et vérifier le hook
 - bash — Committer la vraisemblance apprise (2e essai)
 
+**Synthèse produite :**
+
+⏵ Vraisemblance apprise : v = 0,899, 20/20, 8,6 pas ; 53/53
+
+Le round 54 du goal est livré : le filtre **apprend sa propre fiabilité** (v = 0,899 pour un vrai 0,9) et réussit **20/20**. Commit **`788a1f6f`**.
+
+\## La vraisemblance apprise
+
+Même monde que T48/T49 (10 % d'erreur par révélation), mais la politique **ne connaît pas** la fiabilité : elle part de `v = 0,5` et l'estime par le **taux de looks corrects** observés (`v = n_corrects / n_looks`).
+
+| épisodes | buts | v appris | états-Q | pas |
+|---:|---|---:|---:|---:|
+| 2000 | 20/20 | 0,889 | 585 | 10,0 |
+| **4000** | **20/20** | **0,899** | 660 | 8,6 |
+| bayes (T48, v connu) | 20/20 | 0,9 | 552 | 9,4 |
+
+**Ce que ça dit** :
+
+- **La fiabilité s'apprend** : v converge vers 0,899 (le vrai 0,9) ; la politique n'a pas besoin qu'on lui donne la qualité de l'observation.
+- **Elle réussit** : 20/20 dès 2000 épisodes, 8,6 pas à 4000 (proche du 8,0 du bayésien à deux looks).
+- **Le coût est l'apprentissage** : 4000 épisodes et 660 états, contre 2000 et 552 pour le bayésien à v connu.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-bayes-appris.md`](../../reports/rapport-pensee-bayes-appris.md) ; JSON [`pensee-bayes-appris.json`](../../reports/pensee-bayes-appris.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T50 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **53/53 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **448 fiches / 544 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget (après trim des liens anciens).
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Fiabilité qui dérive** : v change à mi-parcours ; la politique doit s'adapter.
+2. **Deux looks bayésiens appris** : v converge plus vite.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round fait **dériver la fiabilité** — la politique doit oublier l'ancien v.
+
+### Tour 68 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Tester la fiabilité qui dérive
+- bash — Ajouter la porte T51 (fiabilité qui dérive)
+- bash — Écrire la fiche de la fiabilité qui dérive
+- bash — Trim reports/README et portes
+- bash — Inspecter et régénérer le journal du jour
+- bash — Passer toutes les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3658,7 +3709,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round apprend la **vraisemblan
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 683 autres
+- … et 689 autres
 
 ## 4. Mesures et résultats marquants
 
