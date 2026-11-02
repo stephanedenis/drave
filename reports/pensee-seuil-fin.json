@@ -1,0 +1,34 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "75/75",
+ "seuil": "non monotone (graine unique)",
+ "lignes": [
+  {
+   "facteur": 0.3,
+   "buts": 0,
+   "etats_q": 694
+  },
+  {
+   "facteur": 0.35,
+   "buts": 0,
+   "etats_q": 627
+  },
+  {
+   "facteur": 0.4,
+   "buts": 20,
+   "etats_q": 644,
+   "pas": 10.0
+  },
+  {
+   "facteur": 0.45,
+   "buts": 0,
+   "etats_q": 617
+  }
+ ],
+ "limites": [
+  "une seule graine",
+  "non monotone",
+  "toy"
+ ]
+}

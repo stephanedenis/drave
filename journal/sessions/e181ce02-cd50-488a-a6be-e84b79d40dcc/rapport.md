@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 32.9 h |
+| Durée | 33.0 h |
 | Tours | 89 |
-| Messages | 1175 |
-| Appels d'outils | 1048 |
+| Messages | 1177 |
+| Appels d'outils | 1050 |
 | Fichiers touchés | 25 |
-| Commandes | 850 |
+| Commandes | 851 |
 | Sous-agents | 2 |
-| Commits | 112 |
+| Commits | 113 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4713,7 +4713,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **seuil** (0,3
 
 ### Tour 89 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Affiner le seuil d'oubli 0,3–0,45
 - bash — Ajouter la porte T72 (seuil fin)
@@ -4721,6 +4721,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **seuil** (0,3
 - bash — Trim README et portes
 - bash — Committer le seuil fin
 - job_output
+- bash — Committer le seuil fin (2e essai)
 
 ## 3. Travail accompli
 
@@ -4801,7 +4802,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **seuil** (0,3
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 810 autres
+- … et 811 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5060,5 +5061,6 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **seuil** (0,3
 - B13 — LE SEUIL D'OUBLI : ×0,5 RÉUSSIT, ×0,2 ÉCHOUE, SEUIL DANS (0,2 ; 0,5] ; 74/74" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL D'OUBLI"; then
 - B13 — LE SEUIL D'OUBLI : ×0,5 RÉUSSIT, ×0,2 ÉCHOUE, SEUIL DANS (0,2 ; 0,5] ; 74/74" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL D'OUBLI"; then
 - ÉTAT — COMPTEUR JSON ALIGNÉ (566)" 2>&1 | tail -2; git log -1 --format='%h %s'
+- B13 — LE SEUIL FIN : ×0,4 RÉUSSIT, ×0,45 ÉCHOUE (NON MONOTONE) ; 75/75" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL FIN"; then echo "COMMIT OK
 - B13 — LE SEUIL FIN : ×0,4 RÉUSSIT, ×0,45 ÉCHOUE (NON MONOTONE) ; 75/75" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL FIN"; then echo "COMMIT OK
 

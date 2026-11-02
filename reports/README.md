@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-seuil-fin.md`](rapport-pensee-seuil-fin.md) | **B13** — le seuil fin : ×0,4 réussit, ×0,45 échoue, non monotone, **75/75** |
 | [`rapport-pensee-seuil.md`](rapport-pensee-seuil.md) | **B13** — le seuil d'oubli : ×0,5 réussit, ×0,2 échoue, seuil dans (0,2 ; 0,5], **74/74** |
 | [`rapport-pensee-oubli-total.md`](rapport-pensee-oubli-total.md) | **B13** — l'oubli total : 0/20 buts, la mémoire est nécessaire, **73/73** |
 | [`rapport-pensee-oubli-fort.md`](rapport-pensee-oubli-fort.md) | **B13** — la mémoire très courte : Q × 0,5/10, 20/20, 8,0 pas, **72/72** |
@@ -39,7 +40,6 @@
 | [`rapport-pensee-phase.md`](rapport-pensee-phase.md) | **B13** — la période qui change : 3 puis 2 pas, A* 28 nœuds, politique but/10, **40/40** |
 | [`rapport-pensee-bruit.md`](rapport-pensee-bruit.md) | **B13** — le bruit variable : 50–95 %, 6/6 buts, effort 3 → 1 essai, **36/36** |
 | [`rapport-pensee-graines.md`](rapport-pensee-graines.md) | **B13** — la robustesse sur 5 graines : 5/5 bruits, 5/5 stables, **33/33** |
-| [`rapport-pensee-ouverte.md`](rapport-pensee-ouverte.md) | **B13** — le curriculum `open` : 74 états-Q, bruit but/9, stable but/8, **32/32** |
 | [`rapport-pensee-audit.md`](rapport-pensee-audit.md) | **B13** — l'audit des mesures : 15/15 cohérentes, la politique minute ne transfère pas au bruit, **31/31** |
 | [`rapport-pensee-correction.md`](rapport-pensee-correction.md) | **B13** — la mesure corrigée : bug de `seule_minute`, 4 politiques à but/8, 4 fiches corrigées, **30/30** |
 | [`rapport-pensee-sans-none.md`](rapport-pensee-sans-none.md) | **B13** — la politique sans None : 56 états-Q, elle tourne 200 pas, **29/29** |
