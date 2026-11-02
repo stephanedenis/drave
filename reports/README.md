@@ -15,10 +15,10 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-anaphore-cv-graines.md`](rapport-pensee-anaphore-cv-graines.md) | **B13** — la CV sur 20 graines : 0,8467 ± 0,051, **108/108** |
 | [`rapport-pensee-anaphore-cv.md`](rapport-pensee-anaphore-cv.md) | **B13** — la validation croisée : 5 plis, 25/30, le dernier nom généralise, **107/107** |
 | [`rapport-pensee-anaphore-pondere.md`](rapport-pensee-anaphore-pondere.md) | **B13** — le vote pondéré : poids (1,0,0,0), test 7/10, **106/106** |
 | [`rapport-pensee-anaphore-meta.md`](rapport-pensee-anaphore-meta.md) | **B13** — la méta-règle : 25/30, le vote ne bat pas le dernier nom, **105/105** |
-| [`rapport-pensee-anaphore-limite.md`](rapport-pensee-anaphore-limite.md) | **B13** — le plafond du gold : 27/30, quatre règles divergent, **103/103** |
 | [`rapport-pensee-anaphore-semantique.md`](rapport-pensee-anaphore-semantique.md) | **B13** — la sémantique des verbes : 23/30, le dernier nom reste le meilleur, **102/102** |
 | [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, **87/87** |
 | [`rapport-pensee-courbe20.md`](rapport-pensee-courbe20.md) | **B13** — la courbe sur 20 graines : 20 % à 0,35, 100 % à 0,41, **86/86** |

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 38.7 h |
-| Tours | 121 |
-| Messages | 1489 |
-| Appels d'outils | 1294 |
+| Durée | 38.8 h |
+| Tours | 122 |
+| Messages | 1496 |
+| Appels d'outils | 1299 |
 | Fichiers touchés | 25 |
-| Commandes | 1051 |
+| Commandes | 1055 |
 | Sous-agents | 2 |
-| Commits | 157 |
+| Commits | 158 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -273,6 +273,8 @@
 **Tour 120** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 121** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 122** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6429,6 +6431,56 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait la **validation cro
 - bash — Committer la validation croisée
 - job_output
 
+**Synthèse produite :**
+
+⏵ Validation croisée : 5 plis, 25/30, le dernier nom généralise ; 107/107
+
+Le round 108 du goal est livré : la **validation croisée** à 5 plis donne **25/30** hors échantillon — le dernier nom généralise (4 plis sur 5). Commit **`0d2e86f4`**.
+
+\## Les cinq plis
+
+| pli | poids | train | test | justes |
+|---|---|---|---:|---:|
+| 1 | (0,0,1,0) — hybride | 23 | 6 | 4 |
+| 2 | (1,0,0,0) — dernier nom | 24 | 6 | 4 |
+| 3 | (1,0,0,0) | 23 | 6 | 5 |
+| 4 | (1,0,0,0) | 23 | 6 | 6 |
+| 5 | (1,0,0,0) | 23 | 6 | 6 |
+| **tout** | — | — | **30** | **25** |
+
+**Ce que ça dit** :
+
+- **Le dernier nom généralise** : 4 plis sur 5 le choisissent ; le pli 1 (le hasard) préfère l'hybride — la variance du petit échantillon.
+- **Le taux out-of-sample est 0,833** (25/30) : un peu moins que le 27/30 in-sample ; l'écart est la **variance**, pas une régression.
+- **Le vrai plafond reste 27/30** : aucun poids ne dépasse la meilleure règle seule.
+- **La négative est explicite** : 25/30 CV < 27/30 in-sample.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-cv.md`](../../reports/rapport-pensee-anaphore-cv.md) ; JSON [`pensee-anaphore-cv.json`](../../reports/pensee-anaphore-cv.json) ; T104 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **107/107 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **514 fiches / 602 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 580 mots, T0 dans le budget.
+- L'horloge réelle est **07 h 24 HNE** (la deadline 08:00 est encore devant) ; l'autotest prend **~18 min**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **50 plis / 100 liens** : la CV se stabilise-t-elle ?
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round **stabilise la CV** (50 plis, 100 liens) avant la clôture.
+
+### Tour 122 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Mesurer la CV sur 20 graines
+- bash — Écrire la fiche de la CV sur 20 graines
+- bash — Trim README et passer les portes
+- bash — Committer la CV sur 20 graines
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6508,7 +6560,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait la **validation cro
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1011 autres
+- … et 1015 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6813,4 +6865,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait la **validation cro
 - B13 — LA MÉTA-RÈGLE : 25/30, LE VOTE NE BAT PAS LE DERNIER NOM ; 105/105" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MÉTA-RÈGLE"; then echo "COMMIT
 - B13 — LE VOTE PONDÉRÉ : POIDS (1,0,0,0), TRAIN 20/20, TEST 7/10 ; 106/106" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VOTE PONDÉRÉ"; then echo "COM
 - B13 — LA VALIDATION CROISÉE : 5 PLIS, 25/30, LE DERNIER NOM GÉNÉRALISE ; 107/107" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VALIDATION CROISÉE"; t
+- B13 — LA CV SUR 20 GRAINES : 0,8467 ± 0,051, LE DERNIER NOM GÉNÉRALISE ; 108/108" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CV SUR 20 GRAINES"; th
 

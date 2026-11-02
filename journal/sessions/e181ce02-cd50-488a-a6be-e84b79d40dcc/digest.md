@@ -27559,3 +27559,108 @@ timeout 1800 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/anaphore.py tools/pensee/autotest.py reports/rapport-pensee-anaphore-cv.md reports/pensee-anaphore-cv.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pi … [525 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1051]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1051", "timeout_ms": 600000, "wait": true}`
+
+  ```
+27 files changed, 476 insertions(+), 69 deletions(-)
+ create mode 100644 reports/pensee-anaphore-cv.json
+ create mode 100644 reports/rapport-pensee-anaphore-cv.md
+COMMIT OK 1
+0d2e86f4 B13 — LA VALIDATION CROISÉE : 5 PLIS, 25/30, LE DERNIER NOM GÉNÉRALISE ; 107/107
+lun 02 nov 2026 07:24:25 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation croisée : 5 plis, 25/30, le dernier nom généralise ; 107/107
+
+Le round 108 du goal est livré : la **validation croisée** à 5 plis donne **25/30** hors échantillon — le dernier nom généralise (4 plis sur 5). Commit **`0d2e86f4`**.
+
+## Les cinq plis
+
+| pli | poids | train | test | justes |
+|---|---|---|---:|---:|
+| 1 | (0,0,1,0) — hybride | 23 | 6 | 4 |
+| 2 | (1,0,0,0) — dernier nom | 24 | 6 | 4 |
+| 3 | (1,0,0,0) | 23 | 6 | 5 |
+| 4 | (1,0,0,0) | 23 | 6 | 6 |
+| 5 | (1,0,0,0) | 23 | 6 | 6 |
+| **tout** | — | — | **30** | **25** |
+
+**Ce que ça dit** :
+
+- **Le dernier nom généralise** : 4 plis sur 5 le choisissent ; le pli 1 (le hasard) préfère l'hybride — la variance du petit échantillon.
+- **Le taux out-of-sample est 0,833** (25/30) : un peu moins que le 27/30 in-sample ; l'écart est la **variance**, pas une régression.
+- **Le vrai plafond reste 27/30** : aucun poids ne dépasse la meilleure règle seule.
+- **La négative est explicite** : 25/30 CV < 27/30 in-sample.
+
+## L'état
+
+- Fiche : [`rapport-pensee-anaphore-cv.md`](../../reports/rapport-pensee-anaphore-cv.md) ; JSON [`pensee-anaphore-cv.json`](../../reports/pensee-anaphore-cv.json) ; T104 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **107/107 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **514 fiches / 602 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 580 mots, T0 dans le budget.
+- L'horloge réelle est **07 h 24 HNE** (la deadline 08:00 est encore devant) ; l'autotest prend **~18 min**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **50 plis / 100 liens** : la CV se stabilise-t-elle ?
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round **stabilise la CV** (50 plis, 100 liens) avant la clôture.
+
+
+## Tour 122
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 109/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, statistics; sys.path.insert(0,'.')\nfrom tools.tests.linguistique.gold_reel import construire\nfrom tools.tests.linguistique.anaphore import mesurer_cv\ng=construire()\nps=[p for p in g[\"phrases\"] if 3 … [319 caractères tronqués]`
+
+  ```
+taux [0.8333, 0.9, 0.8333, 0.9, 0.7667, 0.8333, 0.8333, 0.8333, 0.8, 0.7333, 0.9, 0.9, 0.8333, 0.8333, 0.7667, 0.9, 0.9, 0.9, 0.8333, 0.9]
+moyenne 0.8467 ecart-type 0.051 min 0.7333 max 0.9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T104 la validation croisée       5 plis : 25/30, le dernier nom généralise\\n\",\n\"  T104 la validation croisée       5 p … [7361 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 515 fiche(s) · 603 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2815 mots > budget 2800 (T1)
+  en-cours · 1580 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-anaphore-limite.md`](rapport-pensee-anaphore-limite.md) | **B13** — le plafond du gold : 27/30, quatre règles di … [605 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1800 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-anaphore-cv-graines.md reports/pensee-anaphore-cv-graines.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md do … [502 caractères tronqués]`

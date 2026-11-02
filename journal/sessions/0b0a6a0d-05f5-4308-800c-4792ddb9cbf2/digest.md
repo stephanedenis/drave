@@ -18930,3 +18930,29 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1112", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1108 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c "✅" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt | head -6; tail -1 /tmp/portes-fin.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt; tail -3 /tmp/portes-fin.out", "description": "Check the final gates"}`
+
+  ```
+07:29
+75
+porte-greffe 124 700
+porte-homeostasie 2 0
+porte-indice 124 700
+porte-melange 1 161
+porte-reparti-moteur 1 3
+  porte-speculatif       ✅                          69 s    ✅ porte tenue (invariant exact · taux rendu · témoin à zéro · brouillon invalide refusé)
+  porte-tableaux         ✅                           0 s    ✅ la page vivante date du dernier commit (2026-11-02)
+  porte-tokenizer-kimi   ✅                           6 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; awk '$2 != 0' /tmp/portes-fin/registre.txt; tail -4 /tmp/portes-fin.out", "description": "Read the final gates verdict"}`

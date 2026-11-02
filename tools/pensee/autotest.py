@@ -1590,6 +1590,20 @@ def t104_cv() -> tuple[bool, str]:
         f"CV 5 plis : {r['justes']}/{r['test']} liens justes")
 
 
+def t105_cv_graines() -> tuple[bool, str]:
+    """La CV sur 20 graines : moyenne 0,8467, écart-type 0,051."""
+    import statistics
+    from ..tests.linguistique.anaphore import mesurer_cv
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 342]
+    taux = [mesurer_cv(ps, graine=k)["taux"] for k in range(20)]
+    moyenne = round(statistics.mean(taux), 4)
+    ecart = round(statistics.pstdev(taux), 4)
+    return abs(moyenne - 0.8467) < 0.01, (
+        f"CV 20 graines : {moyenne} ± {ecart} (min {min(taux)}, max {max(taux)})")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1693,7 +1707,8 @@ def main() -> int:
               ("T101 accord kappa", t101_kappa()),
               ("T102 méta-règle", t102_meta()),
               ("T103 vote pondéré", t103_pondere()),
-              ("T104 validation croisée", t104_cv())]
+              ("T104 validation croisée", t104_cv()),
+              ("T105 CV 20 graines", t105_cv_graines())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
