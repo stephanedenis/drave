@@ -17041,3 +17041,117 @@ ccb1006 HEAD@{10}: clone: from /home/stephane/Data13TB/stephane/GitHub/drave-str
 … [524 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git branch n2-analyse c7232b3 2>/dev/null; git checkout -q -b fusion 1cf64d2 && git merge --no-commit 733b1a4 2>&1 | tail -6; git status --short | head -10", "description": "Merge the pragmatic and analyzer branches" … [1 caractères tronqués]`
+
+  ```
+git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: unable to auto-detect email address (got 'stephane@Hauru.(none)')
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git config user.name \"Stéphane\" && git config user.email \"stephane@local\" && git merge --no-commit 733b1a4 2>&1 | tail -5; git status --short | head -10", "description": "Set the identity and retry the merge"}`
+
+  ```
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+Automatic merge failed; fix conflicts and then commit the result.
+UU README.md
+M  construire_donnees.py
+M  donnees/phrases.json
+M  llm.py
+M  serveur.py
+M  static/app.js
+M  static/index.html
+M  static/style.css
+M  tests/test_serveur.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"<<<<<<<\\|=======\\|>>>>>>>\" README.md | head -6; sed -n \"$(grep -n '<<<<<<<' README.md | head -1 | cut -d: -f1),+12p\" README.md", "description": "Inspect the README conflict"}`
+
+  ```
+160:<<<<<<< HEAD
+167:=======
+173:>>>>>>> 733b1a4
+<<<<<<< HEAD
+- **v0** : 6 phrases, 12 candidats écrits à la main, 6 ambiguïtés (relative, GP, portée, rôle,
+  possession).
+- **v1** : `generateur.py` (candidats heuristiques) et `exporter_corpus.py` (corpus JSONL avec
+  spans vérifiés et manifeste) ; **14 tests**.
+- **Ensuite** : ajouter des phrases par lot, versionner la banque, et brancher l'export sur le
+  corpus d'entraînement du projet principal (`data/structures/banque.jsonl`).
+=======
+- **v0** : 7 phrases, 14 candidats, 7 ambiguïtés (relative, GP, portée, rôle, possession,
+  double sens assumé).
+- **Ensuite** : générer les candidats par un analyseur (la « coloration » du projet), ajouter des
+  phrases par lot, versionner la banque, et brancher l'export sur le corpus d'entraînement du
+  projet principal.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('README.md'); s = p.read_text()\ns = re.sub(r\"<<<<<<< HEAD\\n.*?>>>>>>> 733b1a4\\n\", \"\"\"- **v0** : 7 phrases, 14 candidats écrits à la main, 7 ambiguïtés (r … [1266 caractères tronqués]`
+
+  ```
+README résolu False
+3b68143 FUSION — LE BANC DE STRUCTURES : PRAGMATIQUE, EXPORT ET ANALYSEUR EN UN SEUL ARBRE
+733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+Ran 19 tests in 3.636s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git push -q origin master 2>&1 | tail -2; git branch -f master fusion && git checkout -q master && git log --oneline -1; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git -C tools/structures status --short |  … [228 caractères tronqués]`
+
+  ```
+hint: before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+3b68143 FUSION — LE BANC DE STRUCTURES : PRAGMATIQUE, EXPORT ET ANALYSEUR EN UN SEUL ARBRE
+M  tools/structures
+733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git fetch -q origin && git log --oneline origin/master -3; git log --oneline master -2; git merge-base --is-ancestor origin/master master && echo \"ff possible\" || echo \"divergent\"; cd /home/stephane/Data13TB/step … [130 caractères tronqués]`
+
+  ```
+733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+7366191 PRAGMATIQUE — LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE
+a407095 GÉNÉRATEUR — UNE PHRASE BRUTE → DES STRUCTURES CANDIDATES (V0 HEURISTIQUE)
+3b68143 FUSION — LE BANC DE STRUCTURES : PRAGMATIQUE, EXPORT ET ANALYSEUR EN UN SEUL ARBRE
+733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+ff possible
+733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+7366191 PRAGMATIQUE — LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git push -q origin master 2>&1 | tail -2; git log --oneline origin/master -1; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/structures && git status --short tools/structures; echo \"=== tests == … [164 caractères tronqués]`
+
+  ```
+! [remote rejected] master -> master (branch is currently checked out)
+error: failed to push some refs to '/home/stephane/Data13TB/stephane/GitHub/drave-structures'
+733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+M  tools/structures
+=== tests ===
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && git status --short | head -3; git pull -q /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures master 2>&1 | tail -3; git log --oneline -2; PYTHONPATH=. python3 -m unittest discover -s tests 2>&1 | tail -1", "des … [62 caractères tronqués]`
+
+  ```
+3b68143 FUSION — LE BANC DE STRUCTURES : PRAGMATIQUE, EXPORT ET ANALYSEUR EN UN SEUL ARBRE
+733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-s-analyseur.md <<'EOF'\n# S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur les **7 phrases** … [3613 caractères tronqués]`
+
+  ```
+fiche S écrite
+en-cours ok
+  T0 max : 3991 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 479 fichiers, le disque en a 481
+     · compteurs : en-cours.md dit 572 JSON, le disque en a 571
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1402 caractères tronqués]`

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**43 commits** · **3 session(s)** · **7 thème(s)**
+**44 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 3 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
-| mesures | 27 | [mesures.md](mesures.md) |
+| mesures | 28 | [mesures.md](mesures.md) |
 | portes | 3 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -74,6 +74,7 @@
 | 01:51 | `72d9f418` | B13 — LE BORD DU SEUIL : ×0,42 ET ×0,44 RÉUSSISSENT 50/50, BORD > 0,44 ; 77/77 |
 | 01:58 | `aa49abaf` | B13 — LE SEUIL BAS : GRADUÉ (~0,40), ×0,36 20/25, ×0,40 25/25 ; 78/78 |
 | 02:06 | `50d1e6f7` | N2.v — LE MULTILINGUE 34,3 M DISTILLÉ : 5,58 → 4,79, LA DISTILLATION PAIE AVEC LA CAPACITÉ |
+| 02:09 | `a8d58b3f` | B13 — LA COURBE DU SEUIL : 0,35→0,50, 0 → 80 % → 100 %, CREUX À 0,45 ; 79/79 |
 
 ## Le récit de la journée (écrit à la main)
 

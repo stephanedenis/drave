@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (27)
+## Commits du jour (28)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -35,10 +35,11 @@
 | 01:48 | `d7417dc4` | N2.u — LE PROFESSEUR PLUS GROS NE CHANGE PRESQUE RIEN EN DOMAINE, MAIS GAGNE 0,3 HORS DOMAINE | `en-cours.md`, `README.md`, `apprentissage.md` (+17) |
 | 01:51 | `72d9f418` | B13 — LE BORD DU SEUIL : ×0,42 ET ×0,44 RÉUSSISSENT 50/50, BORD > 0,44 ; 77/77 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
 | 01:58 | `aa49abaf` | B13 — LE SEUIL BAS : GRADUÉ (~0,40), ×0,36 20/25, ×0,40 25/25 ; 78/78 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
+| 02:09 | `a8d58b3f` | B13 — LA COURBE DU SEUIL : 0,35→0,50, 0 → 80 % → 100 %, CREUX À 0,45 ; 79/79 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 
 ## Chiffres du jour
 
-`×0,36` · `×0,40` · `×0,42` · `×0,44` · `×0,35` · `×0,4` · `×0,45` · `×0,5` · `×0,2` · `0,1 %` · `1 %` · `10 %`
+`80 %` · `100 %` · `×0,36` · `×0,40` · `×0,42` · `×0,44` · `×0,35` · `×0,4` · `×0,45` · `×0,5` · `×0,2` · `0,1 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -52,12 +53,14 @@
 
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-n2-echantillon.md](../../reports/rapport-n2-echantillon.md)
+- [reports/rapport-n2-multilingue-34m-distille.md](../../reports/rapport-n2-multilingue-34m-distille.md)
 - [reports/rapport-n2-multilingue-34m.md](../../reports/rapport-n2-multilingue-34m.md)
 - [reports/rapport-n2-professeur.md](../../reports/rapport-n2-professeur.md)
 - [reports/rapport-ocr-pdf.md](../../reports/rapport-ocr-pdf.md)
 - [reports/rapport-pensee-alternance.md](../../reports/rapport-pensee-alternance.md)
 - [reports/rapport-pensee-asym.md](../../reports/rapport-pensee-asym.md)
 - [reports/rapport-pensee-chaotique.md](../../reports/rapport-pensee-chaotique.md)
+- [reports/rapport-pensee-courbe-seuil.md](../../reports/rapport-pensee-courbe-seuil.md)
 - [reports/rapport-pensee-derive.md](../../reports/rapport-pensee-derive.md)
 - [reports/rapport-pensee-frequent.md](../../reports/rapport-pensee-frequent.md)
 - [reports/rapport-pensee-glisse.md](../../reports/rapport-pensee-glisse.md)
