@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 38.4 h |
-| Tours | 119 |
-| Messages | 1474 |
-| Appels d'outils | 1283 |
+| Durée | 38.6 h |
+| Tours | 120 |
+| Messages | 1482 |
+| Appels d'outils | 1289 |
 | Fichiers touchés | 25 |
-| Commandes | 1042 |
+| Commandes | 1047 |
 | Sous-agents | 2 |
-| Commits | 155 |
+| Commits | 156 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -269,6 +269,8 @@
 **Tour 118** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 119** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 120** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6329,6 +6331,56 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round construit la **méta-rè
 - bash — Trim README et committer la méta-règle
 - job_output
 
+**Synthèse produite :**
+
+⏵ Méta-règle : 25/30, le vote ne bat pas le dernier nom ; 105/105
+
+Le round 106 du goal est livré : le **vote majoritaire** des quatre règles fait 25/30 — mieux que le rôle, moins bien que le dernier nom. Commit **`aff1e03b`**.
+
+\## Les cinq règles
+
+| règle | court (20) | long (10) | **tout (30)** |
+|---|---:|---:|---:|
+| **dernier nom** | **20** | 7 | **27** |
+| rôle | 14 | 9 | 23 |
+| hybride | 15 | 9 | 24 |
+| sémantique | 15 | 8 | 23 |
+| **méta (vote)** | 18 | 7 | **25** |
+
+**Ce que ça dit** :
+
+- **Le vote ne dépasse pas 27** : la famille `role`/`hybride`/`sémantique` vote ensemble (κ ≈ 0,9–1,0) et impose sa réponse aux cas ambigus (r321, r322, r323, r327).
+- **Il gagne sur les cas courts** (18/20 contre 14–15) mais perd le long (7/10) : le vote est un **compromis**, pas un progrès.
+- **La meilleure règle reste la plus simple** (27/30) : sur ce gold, la proximité est un **signal fort** que le vote dilue.
+- **La négative est explicite** : 25/30 < 27/30.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-meta.md`](../../reports/rapport-pensee-anaphore-meta.md) ; JSON [`pensee-anaphore-meta.json`](../../reports/pensee-anaphore-meta.json) ; T102 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **105/105 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **512 fiches / 600 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 580 mots, T0 dans le budget.
+- L'horloge réelle est **07 h 06 HNE** (la deadline 08:00 est encore devant) ; l'autotest prend **~18 min**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Un vote pondéré** : poids appris sur 20 cas, testés sur 10.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **vote pondéré** (poids appris, 20/10) — la méta-règle qui pourrait dépasser 27.
+
+### Tour 120 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Implémenter le vote pondéré (train/test) et mesurer
+- bash — Corriger la grille (poids non nuls) et mesurer
+- bash — Écrire la fiche du vote pondéré
+- bash — Passer toutes les portes
+- bash — Committer le vote pondéré
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6408,7 +6460,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round construit la **méta-rè
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1002 autres
+- … et 1007 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6711,4 +6763,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round construit la **méta-rè
 - B13 — LE PLAFOND DU GOLD : 27/30, QUATRE RÈGLES DIVERGENT ; 103/103" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PLAFOND DU GOLD"; then echo "COMMIT
 - B13 — L'ACCORD ENTRE RÈGLES : κ DE −0,16 À 1,0, LE DÉSACCORD EST UNE RÈGLE ; 104/104" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "L'ACCORD ENTRE RÈG
 - B13 — LA MÉTA-RÈGLE : 25/30, LE VOTE NE BAT PAS LE DERNIER NOM ; 105/105" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MÉTA-RÈGLE"; then echo "COMMIT
+- B13 — LE VOTE PONDÉRÉ : POIDS (1,0,0,0), TRAIN 20/20, TEST 7/10 ; 106/106" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VOTE PONDÉRÉ"; then echo "COM
 

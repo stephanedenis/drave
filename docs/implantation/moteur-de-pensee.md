@@ -272,6 +272,7 @@ ré-exécution.
 | **T100** | où est le plafond du gold ? | 27/30 pour le dernier nom | le plafond est le gold, pas la règle |
 | **T101** | les règles s'accordent-elles ? | κ : role=sémantique 1,0, dernier nom −0,16 | le désaccord est une règle |
 | **T102** | le vote des règles tient-il ? | 25/30, mieux que le rôle, moins que le dernier nom | le vote ne dépasse pas 27 |
+| **T103** | le vote pondéré généralise-t-il ? | poids (1,0,0,0), train 20/20, test 7/10 | le partage 20/10 est un piège |
 
 **T5/T6 sont les portes de la modularité et du coût** : AC-3, alpha-bêta et un encodeur RSN doivent
 se brancher sur le **même** contrat, sans modifier le moteur. Si l'un demande une exception, le
@@ -288,9 +289,9 @@ contrat est faux ; si le coût n'est pas dans la trace, l'anytime est décoratif
 | **4** | `tools/pensee/` (`moteur.py`) | BFS, greedy, A*, MCTS-lite | T2 |
 | **4 bis** | `tools/pensee/` (`csp.py`, `jeux.py`) | AC-3, alpha-bêta, minimax | T5, T6 |
 | **4 ter** | `tools/pensee/` (`taquin.py`, `banc.py`) | taquin 3×3, AUC/regret, aléatoire | T7 |
-| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`, `audit.py`, `graines.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction, audit, curriculum, graines, mobile, bruit variable, porte qui bouge, période, phase, aléatoire, hasard, partielle, croyance, curiosité, observatrice, bruitée, votante, trois looks, bayésien, dérive, adaptative, glisse, rupture, alternance, chaotique, fréquent, rapide, limite, hasard2, intra, asym, rare, très rare, ultra-rare, un look, look tardif, oubli, oubli fort, oubli total, seuil, seuil fin, seuil graines, bord, seuil bas, courbe, vérité, concurrentes, phase dans l'état, phase devinée, vote, cycle, courbe20, bord fin, gold 200, sous-ensembles, complexes, 20, 50, 100 complexes, discours, anaphore, pièges, corrigée, objets, chaînes, rôles, hybride, sémantique, plafond, kappa, méta | T8–T102 |
+| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`, `audit.py`, `graines.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction, audit, curriculum, graines, mobile, bruit variable, porte qui bouge, période, phase, aléatoire, hasard, partielle, croyance, curiosité, observatrice, bruitée, votante, trois looks, bayésien, dérive, adaptative, glisse, rupture, alternance, chaotique, fréquent, rapide, limite, hasard2, intra, asym, rare, très rare, ultra-rare, un look, look tardif, oubli, oubli fort, oubli total, seuil, seuil fin, seuil graines, bord, seuil bas, courbe, vérité, concurrentes, phase dans l'état, phase devinée, vote, cycle, courbe20, bord fin, gold 200, sous-ensembles, complexes, 20, 50, 100 complexes, discours, anaphore, pièges, corrigée, objets, chaînes, rôles, hybride, sémantique, plafond, kappa, méta, pondéré | T8–T103 |
 | **5** | `tools/pensee/` (`trace.py`) | DRVF `thought`, rejeu, diff | T1, T6 |
-| **6** | `tools/pensee/autotest.py` | T0–T102, contrôles négatifs | toutes |
+| **6** | `tools/pensee/autotest.py` | T0–T103, contrôles négatifs | toutes |
 
 **Le corpus v0** : un jeu de petits graphes (morpion, taquin 3×3, un CSP jouet) et un jeu de
 RSN-visuelles déjà produit par N1. Pas de GPU ; le CPU suffit pour 10³–10⁴ nœuds.

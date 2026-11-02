@@ -115,6 +115,49 @@ def resoudre_semantique(mots: list[dict], segments: list[dict]) -> dict[str, str
     return liens
 
 
+def mesurer_pondere(phrases: list[dict], part_train: float = 0.67) -> dict:
+    """Vote pondéré : poids appris sur une part, évalués sur l'autre."""
+    regles = {
+        "dernier_nom": lambda m, s: resoudre(m, ignorer_pp=True),
+        "role": resoudre_roles,
+        "hybride": resoudre_hybride,
+        "semantique": resoudre_semantique,
+    }
+    liens = []
+    for phrase in phrases:
+        attendu = (phrase.get("pragma") or {}).get("coref") or {}
+        if not attendu:
+            continue
+        verdicts = {nom: f(phrase["mots"], phrase["segments"]) for nom, f in regles.items()}
+        for pronom, cible in attendu.items():
+            liens.append(({nom: v.get(pronom) for nom, v in verdicts.items()},
+                          pronom, cible))
+    n_train = int(round(len(liens) * part_train))
+    train, test = liens[:n_train], liens[n_train:]
+    grille = [(a, b, c, d) for a in (0, 1, 2) for b in (0, 1, 2)
+              for c in (0, 1, 2) for d in (0, 1, 2) if a + b + c + d > 0]
+    noms = list(regles)
+
+    def score(poids, items):
+        justes = 0
+        for cands, pronom, cible in items:
+            votes = {}
+            for nom, w in zip(noms, poids):
+                if cands[nom] is not None:
+                    votes[cands[nom]] = votes.get(cands[nom], 0) + w
+            if votes:
+                gagnant = max(votes.items(), key=lambda kv: kv[1])
+                justes += gagnant[0] == cible
+        return justes
+
+    meilleur = max(grille, key=lambda p: score(p, train))
+    return {"train": len(train), "test": len(test),
+            "poids": dict(zip(noms, meilleur)),
+            "justes_train": score(meilleur, train),
+            "justes_test": score(meilleur, test),
+            "taux_test": round(score(meilleur, test) / max(1, len(test)), 4)}
+
+
 def resoudre_meta(mots: list[dict], segments: list[dict]) -> dict[str, str]:
     """Méta-règle : vote majoritaire des quatre règles, égalité → dernier nom."""
     regles = [resoudre(mots, ignorer_pp=True), resoudre_roles(mots, segments),

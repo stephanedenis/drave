@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-anaphore-pondere.md`](rapport-pensee-anaphore-pondere.md) | **B13** — le vote pondéré : poids (1,0,0,0), test 7/10, **106/106** |
 | [`rapport-pensee-anaphore-meta.md`](rapport-pensee-anaphore-meta.md) | **B13** — la méta-règle : 25/30, le vote ne bat pas le dernier nom, **105/105** |
 | [`rapport-pensee-anaphore-kappa.md`](rapport-pensee-anaphore-kappa.md) | **B13** — l'accord entre règles : κ de −0,16 à 1,0, **104/104** |
 | [`rapport-pensee-anaphore-limite.md`](rapport-pensee-anaphore-limite.md) | **B13** — le plafond du gold : 27/30, quatre règles divergent, **103/103** |

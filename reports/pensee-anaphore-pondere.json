@@ -1,0 +1,21 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "106/106",
+ "poids": {
+  "dernier_nom": 1,
+  "role": 0,
+  "hybride": 0,
+  "semantique": 0
+ },
+ "train": 20,
+ "test": 10,
+ "justes_train": 20,
+ "justes_test": 7,
+ "taux_test": 0.7,
+ "limites": [
+  "30 liens",
+  "partage 20/10 non aléatoire",
+  "grille grossière"
+ ]
+}

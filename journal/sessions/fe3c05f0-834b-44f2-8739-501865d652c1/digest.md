@@ -34649,3 +34649,15 @@ Continue working toward the objective in this same session. Treat the current wo
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 540; date '+%H:%M'; tail -5 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; ls -la reports/ocr-pdf-cegep.json 2>&1; python3 -c \"\nimport json\ntry:\n    d=json.load(open('reports/ocr-pdf-ce … [294 caractères tronqués]`
+
+  ```
+07:11
+  CEGEP · Exercices de synthèse Excel 2010 Fonctio · 43 p · 81675 car
+  CEGEP · AMF-AO-Annexes 12 à 15 (Tech).pdf · 121 p · 191523 car
+    PID            
+3011320       17:49
+-rw-r--r--. 1 stephane stephane 2416  2 nov 06:23 reports/ocr-pdf-cegep.json
+ocrises 5 pages 292 car 506801
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 600; date '+%H:%M'; tail -6 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json')); print('manifeste ocrises', d['ocrises … [202 caractères tronqués]`

@@ -18872,3 +18872,34 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1108", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1103 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -3 /tmp/porte-greffe.out 2>/dev/null; echo "=== indice ==="; tail -3 /tmp/porte-indice.out 2>/dev/null; echo "=== passe ==="; grep -c "✅" /tmp/portes-fin.out; tail -1 /tmp/portes-fin.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt | head -6; tail -2 /tmp/portes-fin.out", "description": "Check the main gates pass"}`
+
+  ```
+07:06
+62
+porte-greffe 124 700
+porte-homeostasie 2 0
+porte-indice 124 700
+porte-melange 1 161
+  porte-peripherie       ✅                          14 s  PORTE TENUE : l'entrée est injectée, la sortie est écrite, le délai est exact, les refus sont
+  porte-poids-creux      ✅                         379 s  ✅ porte poids creux : le noyau creux est EXACT et il paie la sparsité — paires divisées sur
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt | head -6; tail -2 /tmp/portes-fin.out", "description": "Wait for the gates pass to finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1110]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1110", "timeout_ms": 1500000, "wait": true}`

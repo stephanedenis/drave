@@ -1567,6 +1567,18 @@ def t102_meta() -> tuple[bool, str]:
         f"méta : {r['justes']}/{r['liens']} liens justes")
 
 
+def t103_pondere() -> tuple[bool, str]:
+    """Le vote pondéré : poids appris (1,0,0,0), test 7/10."""
+    from ..tests.linguistique.anaphore import mesurer_pondere
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 342]
+    r = mesurer_pondere(ps)
+    return (r["poids"]["dernier_nom"] == 1 and r["poids"]["role"] == 0
+            and r["justes_test"] == 7), (
+        f"pondéré : poids {r['poids']}, test {r['justes_test']}/{r['test']}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1668,7 +1680,8 @@ def main() -> int:
               ("T99 sémantique", t99_semantique()),
               ("T100 plafond du gold", t100_plafond()),
               ("T101 accord kappa", t101_kappa()),
-              ("T102 méta-règle", t102_meta())]
+              ("T102 méta-règle", t102_meta()),
+              ("T103 vote pondéré", t103_pondere())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
