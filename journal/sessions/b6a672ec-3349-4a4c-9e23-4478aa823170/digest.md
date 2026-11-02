@@ -628,3 +628,241 @@ Deux choses restent de ton côté :
 1. **Révoque la clé** sur platform.deepseek.com. Elle n'a jamais atteint GitHub (le push était bloqué), mais elle a vécu dans un fichier local et dans des objets git — considère-la compromise.
 2. L'ancien objet existe encore dans `.git` via la branche de sauvegarde. Quand tu es sûr : `git branch -D backup/pre-scrub-20261101-133055 && git reflog expire --expire=now --all && git gc --prune=now`.
 
+
+## Tour 2
+
+### 👤 Utilisateur
+
+peux-tu réinitialiser les gpu
+
+### 🤖 Assistant
+
+⏵ Inspection de l'état des GPU avant toute action
+
+- **bash** `{"command": "nvidia-smi 2>&1 | head -40; echo \"=== EXIT: $? ===\"", "description": "Show GPU status overview"}`
+
+  ```
+Unable to determine the device handle for GPU1: 0000:04:00.0: Unknown Error
+Mon Nov  2 14:19:54 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.196.07             Driver Version: 580.196.07     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Quadro RTX 5000                On  |   00000000:03:00.0 N/A |                  N/A |
+|ERR!  ERR! ERR!             N/A  /  N/A  |       1MiB /  16384MiB |     N/A      Default |
+|                                         |                        |                 ERR! |
++-----------------------------------------+------------------------+----------------------+
+
++------------------------------------------------------------------------------
+… [580 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"== devices ==\"; ls /dev/nvidia* 2>&1; echo \"== driver ==\"; cat /proc/driver/nvidia/version 2>/dev/null | head -3; echo \"== processes with nvidia/cuda in cmdline ==\"; ps -eo pid,user,%cpu,%mem,etime,cmd 2>/dev/null | grep -iE 'python|torch|cuda' | grep -v grep | head -20", "d … [56 caractères tronqués]`
+
+  ```
+== devices ==
+/dev/nvidia0
+/dev/nvidia1
+/dev/nvidiactl
+/dev/nvidia-modeset
+/dev/nvidia-uvm
+/dev/nvidia-uvm-tools
+
+/dev/nvidia-caps:
+nvidia-cap1
+nvidia-cap2
+== driver ==
+NVRM version: NVIDIA UNIX x86_64 Kernel Module  580.196.07  Wed Oct  7 19:57:28 UTC 2026
+GCC version:  gcc version 16.2.1 20260929 (SUSE Linux) 
+== processes with nvidia/cuda in cmdline ==
+   2031 root      0.0  0.0  1-22:03:46 /usr/bin/python3.13 /usr/sbin/firewalld --nofork --nopid
+   2210 root      0.0  0.0  1-22:03:44 /usr/bin/python3.13 /usr/bin/fail2ban-server -xf start
+1315924 stephane  0.0  0.0  1-02:53:22 python3 tools/structures/serveur.py --port 8765
+3573290 stephane  2.7  0.0       54:38 /home/stephane/.local/share/pipx/venvs/docwatch/bin/python -E /home/stephane/.local/bin/docwatch --config /home/stephane/.config/docwatch/config.toml --no-browser
+3596626 stephane  0.0  0.0       03:54 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p=pathlib.Path('reports/README.md'); t=p.read_text() t=t.replace("| [`rapport-pensee-lien-coref.md`](rapport-pensee-lien-coref.md) | **B13** — la coréférence comme lien : 62/116, **137/137** |\n", "") p.write_text(t); print('ok') 
+… [599 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic : les deux GPU semblent en erreur matérielle
+
+- **bash** `{"command": "echo \"== sudo sans mot de passe ? ==\"; sudo -n true 2>&1 && echo \"SUDO OK (nopasswd)\" || echo \"SUDO REFUSE\"\necho \"== id ==\"; id\necho \"== systemd / display ==\"; systemctl get-default 2>/dev/null; loginctl list-sessions --no-legend 2>/dev/null | head -5\necho \"== X/Wayland == … [114 caractères tronqués]`
+
+  ```
+== sudo sans mot de passe ? ==
+sudo: a password is required
+SUDO REFUSE
+== id ==
+uid=1000(stephane) gid=1000(stephane) groups=1000(stephane),42(trusted),108(libvirt),448(docker) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+== systemd / display ==
+graphical.target
+1 1000 stephane -     2855 manager -    no -
+4 1000 stephane seat0 3396 user    tty2 no -
+== X/Wayland ==
+2978 /usr/bin/Xorg.bin -nolisten tcp -background none -seat seat0 vt2 -auth /run/sddm/xauth_tFdEZs -noreset -displayfd 16
+3619 /usr/bin/kwin_x11 --replace
+3598410 bash -c echo "== sudo sans mot de passe ? =="; sudo -n true 2>&1 && echo "SUDO OK (nopasswd)" || echo "SUDO REFUSE" echo "== id =="; id echo "== systemd / display =="; systemctl get-default 2>/dev/null; loginctl list-sessions --no-legend 2>/dev/null | head -5 echo "== X/Wayland =="; pgrep -a -f 'Xorg|Xwayland|gnome-shell|kwin' | head -5
+  ```
+
+- **bash** `{"command": "nvidia-smi -q 2>&1 | head -60; echo \"=== ===\"; nvidia-smi --query-gpu=index,name,temperature.gpu,power.draw,memory.used,memory.total,utilization.gpu,ecc.errors.uncorrected.volatile.total --format=csv 2>&1 | head -10", "description": "Detailed GPU query"}`
+
+  ```
+Unable to determine the device handle for GPU1: 0000:04:00.0: Unknown Error
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Nov  2 14:20:03 2026
+Driver Version                                         : 580.196.07
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 2
+GPU 00000000:03:00.0
+    Product Name                                       : Quadro RTX 5000
+    Product Brand                                      : GPU requires reset
+    Product Architecture                               : Turing
+    Display Mode                                       : Requested functionality has been deprecated
+    Display Attached                                   : N/A
+    Display Active                                     : N/A
+    Persistence Mode                                   : Enabled
+    Addressing Mode                                    : None
+    MIG Mode
+        Current                                        : GPU requires reset
+        Pending                                        : GPU requires reset
+    Accounting Mode                                    : N/A
+  
+… [2501 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche de la cause (Xid) dans le journal noyau
+
+- **bash** `{"command": "echo \"== virt ==\"; systemd-detect-virt 2>&1\necho \"== dmesg access ==\"; dmesg -T 2>&1 | tail -5\necho \"== journalctl -k nvidia (might need privs) ==\"; journalctl -k --no-pager -n 200 2>&1 | grep -iE 'nvidia|nvrm|xid|fallen' | tail -20", "description": "Look for Xid and driver erro … [18 caractères tronqués]`
+
+  ```
+== virt ==
+none
+== dmesg access ==
+dmesg: read kernel buffer failed: Operation not permitted
+== journalctl -k nvidia (might need privs) ==
+  ```
+
+- **bash** `{"command": "echo \"== lspci GPUs ==\"; lspci -nn 2>/dev/null | grep -iE 'vga|3d|nvidia' \necho \"== PCI reset capability ==\"; for d in 0000:03:00.0 0000:04:00.0; do echo -n \"$d reset: \"; ls /sys/bus/pci/devices/$d/reset 2>/dev/null || echo \"absent\"; done\necho \"== nvidia modules in use ==\";  … [92 caractères tronqués]`
+
+  ```
+== lspci GPUs ==
+03:00.0 VGA compatible controller [0300]: NVIDIA Corporation TU104GL [Quadro RTX 5000] [10de:1eb0] (rev a1)
+03:00.1 Audio device [0403]: NVIDIA Corporation TU104 HD Audio Controller [10de:10f8] (rev a1)
+03:00.2 USB controller [0c03]: NVIDIA Corporation TU104 USB 3.1 Host Controller [10de:1ad8] (rev a1)
+03:00.3 Serial bus controller [0c80]: NVIDIA Corporation TU104 USB Type-C UCSI Controller [10de:1ad9] (rev a1)
+04:00.0 VGA compatible controller [0300]: NVIDIA Corporation TU104GL [Quadro RTX 5000] [10de:1eb0] (rev a1)
+04:00.1 Audio device [0403]: NVIDIA Corporation TU104 HD Audio Controller [10de:10f8] (rev a1)
+04:00.2 USB controller [0c03]: NVIDIA Corporation TU104 USB 3.1 Host Controller [10de:1ad8] (rev a1)
+04:00.3 Serial bus controller [0c80]: NVIDIA Corporation TU104 USB Type-C UCSI Controller [10de:1ad9] (rev a1)
+a1:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Cape Verde PRO [Radeon HD 7750/8740 / R7 250E] [1002:683f]
+== PCI reset capability ==
+0000:03:00.0 reset: /sys/bus/pci/devices/0000:03:00.0/reset
+0000:04:00.0 reset: /sys/bus/pci/devices/0000:04:00.0/reset
+== nvidia modules in use ==
+nvidia_uvm           3862528  2
+nvidia
+… [139 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Qui tient encore les GPU ? (uvm a 2 références)
+
+- **bash** `{"command": "echo \"== fuser sur les devices ==\"; fuser -v /dev/nvidiactl /dev/nvidia0 /dev/nvidia1 /dev/nvidia-uvm 2>&1 | head -20\necho \"== lsof ==\"; command -v lsof >/dev/null && lsof /dev/nvidia* 2>/dev/null | head -20 || echo \"lsof absent\"\necho \"== sudo -n -l ==\"; sudo -n -l 2>&1 | head … [59 caractères tronqués]`
+
+  ```
+== fuser sur les devices ==
+                     USER        PID ACCESS COMMAND
+/dev/nvidiactl:      stephane  10787 F.... hauru-top
+/dev/nvidia0:        stephane  10787 F.... hauru-top
+/dev/nvidia1:        stephane  10787 F.... hauru-top
+/dev/nvidia-uvm:     stephane  10787 F.... hauru-top
+== lsof ==
+COMMAND     PID     USER FD   TYPE  DEVICE SIZE/OFF NODE NAME
+hauru-top 10787 stephane  9u   CHR 195,255      0t0 1386 /dev/nvidiactl
+hauru-top 10787 stephane 10u   CHR   195,0      0t0 1388 /dev/nvidia0
+hauru-top 10787 stephane 11u   CHR   195,1      0t0 1390 /dev/nvidia1
+hauru-top 10787 stephane 12u   CHR   509,0      0t0 1628 /dev/nvidia-uvm
+hauru-top 10787 stephane 14u   CHR   195,0      0t0 1388 /dev/nvidia0
+hauru-top 10787 stephane 15u   CHR   195,0      0t0 1388 /dev/nvidia0
+hauru-top 10787 stephane 16u   CHR   195,1      0t0 1390 /dev/nvidia1
+hauru-top 10787 stephane 17u   CHR   195,1      0t0 1390 /dev/nvidia1
+== sudo -n -l ==
+sudo: a password is required
+  ```
+
+- **bash** `{"command": "echo \"== providers X ==\"; DISPLAY=:0 xrandr --listproviders 2>&1 | head -10\necho \"== Xorg log GPU ==\"; ls -la /var/log/Xorg.0.log 2>/dev/null; grep -iE 'nvidia|amdgpu|radeon|Chipset' /var/log/Xorg.0.log 2>/dev/null | head -10\necho \"== quel GPU pilote l'ecran ==\"; ls -la /sys/cla … [109 caractères tronqués]`
+
+  ```
+== providers X ==
+Providers: number : 1
+Provider 0: id: 0x4a; cap: 0xf (Source Output, Sink Output, Source Offload, Sink Offload); crtcs: 6; outputs: 6; associated providers: 0; name: modesetting
+    output DP-1
+    output DP-2
+    output DP-3
+    output DP-4
+    output DP-5
+    output DP-6
+== Xorg log GPU ==
+-rw-r--r--. 1 root root 3736319  2 nov 14:20 /var/log/Xorg.0.log
+[    25.471] (**) |   |-->Device "RadeonBureau"
+[    25.939] (II) modeset(0): glamor X acceleration enabled on AMD Radeon HD 7700 Series (radeonsi, verde, ACO, DRM 3.64, 7.2.6-1-default)
+[    25.989] (II) modeset(0): [DRI2]   DRI driver: radeonsi
+[    25.989] (II) modeset(0): [DRI2]   VDPAU driver: radeonsi
+[    26.005] (II) AIGLX: Loaded and initialized radeonsi
+[    26.125] (II) config/udev: Adding input device HDA NVidia HDMI/DP,pcm=3 (/dev/input/event12)
+[    26.125] (II) config/udev: Adding input device HDA NVidia HDMI/DP,pcm=7 (/dev/input/event13)
+[    26.126] (II) config/udev: Adding input device HDA NVidia HDMI/DP,pcm=8 (/dev/input/event16)
+[    26.126] (II) config/udev: Adding input device HDA NVidia HDMI/DP,pcm=9 (/dev/input/event17)
+[    26.127] (II) config/udev: Adding input device HDA NVidia HDMI/DP,
+… [395 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Identification du processus qui verrouille les devices
+
+- **bash** `{"command": "echo \"== hauru-top ==\"; ps -o pid,lstart,etime,cmd -p 10787 2>&1 | tail -2\necho \"== binaire ==\"; readlink -f /proc/10787/exe 2>&1; command -v hauru-top 2>&1\necho \"== service lie ? ==\"; systemctl list-units --type=service --all 2>/dev/null | grep -i hauru | head -3\necho \"== aut … [161 caractères tronqués]`
+
+  ```
+== hauru-top ==
+    PID                  STARTED     ELAPSED CMD
+  10787 sam oct 31 17:29:58 2026  1-21:50:35 ./GitHub/hauru-top/target/release/hauru-top
+== binaire ==
+/home/stephane/Data13TB/stephane/GitHub/hauru-top/target/release/hauru-top
+== service lie ? ==
+== autres process avec des trucs nvidia ouverts ==
+9
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du reset et lecture des erreurs noyau visibles
+
+- **bash** `{"command": "echo \"== uptime ==\"; uptime\necho \"== tentative reset GPU0 (pour capturer l'erreur exacte) ==\"; nvidia-smi --gpu-reset -i 0 2>&1 | head -5\necho \"== tentative reset GPU1 ==\"; nvidia-smi --gpu-reset -i 1 2>&1 | head -5\necho \"== erreurs nvidia recentes dans Xorg.log ==\"; tail -c  … [138 caractères tronqués]`
+
+  ```
+== uptime ==
+ 14:20:44  up 1 day 22:04,  2 users,  load average: 4,48, 3,76, 3,54
+== tentative reset GPU0 (pour capturer l'erreur exacte) ==
+GPU Reset couldn't run because it failed to allocate group of reset devices : GPU requires reset
+== tentative reset GPU1 ==
+Unable to determine the device handle for GPU1: 0000:04:00.0: Unknown Error
+No devices were found
+== erreurs nvidia recentes dans Xorg.log ==
+  ```
+
+### 🤖 Assistant
+
+⏵ Libération des handles : arrêt du moniteur hauru-top
+
+- **bash** `{"command": "kill 10787 2>&1; sleep 2; ps -p 10787 >/dev/null 2>&1 && { echo \"toujours vivant, SIGTERM insuffisant\"; kill -TERM 10787 2>&1; sleep 2; } \nps -p 10787 >/dev/null 2>&1 && echo \"STILL RUNNING\" || echo \"hauru-top arrêté\"\necho \"== refcounts modules ==\"; lsmod | grep -E '^nvidia'\n … [289 caractères tronqués]`

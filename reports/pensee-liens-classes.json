@@ -1,0 +1,14 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "138/138",
+ "liens": 116,
+ "intra": 50,
+ "inter": 62,
+ "absent": 4,
+ "limites": [
+  "4 absents",
+  "116 liens",
+  "heuristique seule"
+ ]
+}

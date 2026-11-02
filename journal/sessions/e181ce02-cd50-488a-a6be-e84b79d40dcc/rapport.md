@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 45.6 h |
-| Tours | 152 |
-| Messages | 1796 |
-| Appels d'outils | 1536 |
+| Durée | 45.7 h |
+| Tours | 153 |
+| Messages | 1803 |
+| Appels d'outils | 1541 |
 | Fichiers touchés | 25 |
-| Commandes | 1256 |
+| Commandes | 1260 |
 | Sous-agents | 2 |
-| Commits | 193 |
+| Commits | 194 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -339,6 +339,8 @@
 **Tour 151** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 152** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 153** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8078,6 +8080,53 @@ Je continue : prochain round, **la coréférence comme lien** — relier les deu
 - bash — Committer la coréférence comme lien
 - job_output
 
+**Synthèse produite :**
+
+⏵ Coréférence comme lien : 62/116, la moitié des antécédents ; 137/137
+
+Le round 138 est livré : la **coréférence devient un lien** — chaque pronom lié pointe la phrase de son antécédent, et **62/116** y arrivent. Commit **`49ca52fb`**.
+
+\## Le lien
+
+| mesure | valeur |
+|---|---:|
+| liens de coréférence (r301–r427) | **116** |
+| liens avec phrase d'antécédent trouvée | **62** |
+| taux | **0,5345** |
+
+**Ce que ça dit** :
+
+- **La moitié des antécédents sont dans une phrase antérieure** : les 62 trouvés sont ceux dont le nom de l'antécédent apparaît dans une phrase précédente ; les 54 autres sont des cas où l'antécédent est **dans la même phrase** (`il l'attrape`) ou **absent** du texte.
+- **Le lien est plus dur que le mot** : la coréférence disait 68/103 sur le mot ; le lien vers la **phrase** ne fait que 62/116 — la phrase est une unité plus exigeante.
+- **La limite est le texte, pas la règle** : les phrases anaphoriques du gold sont courtes et souvent autonomes (`il l'attrape` n'a pas de phrase précédente).
+- **La négative est explicite** : 62 < 116.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-lien-coref.md`](../../reports/rapport-pensee-lien-coref.md) ; JSON [`pensee-lien-coref.json`](../../reports/pensee-lien-coref.json) ; T134 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **137/137 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **547 fiches / 633 JSON / 119 docs / 81 portes** — ✅ ; `en-cours` à jour (14 h 45).
+- L'horloge réelle est **14 h 15 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **Les antécédents intra-phrase** : mesurer séparément les liens dont l'antécédent est dans la même phrase (attendu : une grande part des 54).
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold vivant peut grandir.
+
+Je continue : prochain round, **les antécédents intra-phrase** — la part cachée des 54 échecs.
+
+### Tour 153 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Classer les liens intra/inter/absents
+- bash — Écrire la fiche des liens classés et la porte T135
+- bash — Trim README et passer toutes les portes
+- bash — Committer les liens classés
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8157,7 +8206,7 @@ Je continue : prochain round, **la coréférence comme lien** — relier les deu
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1216 autres
+- … et 1220 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8498,4 +8547,5 @@ Je continue : prochain round, **la coréférence comme lien** — relier les deu
 - B13 — LE LIEN AUTOMATIQUE : 0/5, LE SUJET NE SUFFIT PAS ; 135/135" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LIEN AUTOMATIQUE"; then echo "COMMIT 
 - B13 — LE LIEN AUTOMATIQUE RÉPARÉ : 5/5 APRÈS RÉORDONNANCEMENT ET REPLI PRON/NOUN ; 136/136" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LIEN AUTOMAT
 - B13 — LA CORÉFÉRENCE COMME LIEN : 62/116, LA MOITIÉ DES ANTÉCÉDENTS ; 137/137" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "CORÉFÉRENCE COMME LIEN"; 
+- B13 — LES LIENS CLASSÉS : 50 INTRA, 62 INTER, 4 ABSENTS ; 138/138" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LIENS CLASSÉS"; then echo "COMMIT OK 
 

@@ -1984,6 +1984,17 @@ def t134_lien_coref() -> tuple[bool, str]:
         f"coréf-lien : {r['avec_phrase']}/{r['liens']} ({r['taux']})")
 
 
+def t135_liens_classes() -> tuple[bool, str]:
+    """Les liens classés : 50 intra, 62 inter, 4 absents."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import classer_liens_coref
+    ph = [p for p in charger() if 301 <= int(p["id"][1:]) <= 427]
+    r = classer_liens_coref(ph)
+    return (r["liens"] == 116 and r["intra"] == 50 and r["inter"] == 62
+            and r["absent"] == 4), (
+        f"liens : {r['intra']} intra, {r['inter']} inter, {r['absent']} absents")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2117,7 +2128,8 @@ def main() -> int:
               ("T131 contexte", t131_contextuel()),
               ("T132 lien auto", t132_lien_auto()),
               ("T133 lien réparé", t133_lien_auto_fixe()),
-              ("T134 lien coréf", t134_lien_coref())]
+              ("T134 lien coréf", t134_lien_coref()),
+              ("T135 liens classés", t135_liens_classes())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

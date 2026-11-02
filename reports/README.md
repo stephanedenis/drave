@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-pensee-lien-coref.md`](rapport-pensee-lien-coref.md) | **B13** — la coréférence comme lien : 62/116, **137/137** |
+| [`rapport-pensee-liens-classes.md`](rapport-pensee-liens-classes.md) | **B13** — les liens classés : 50 intra, 62 inter, 4 absents, **138/138** |
 | [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
 | [`rapport-pensee-miroir.md`](rapport-pensee-miroir.md) | **B13** — le miroir entrée/sortie : surface 1,0, mots 0,2095, **119/119** |
 | [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |

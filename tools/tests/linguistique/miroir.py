@@ -234,6 +234,25 @@ def lien_coref(phrase: dict, phrases: list[dict]) -> list[tuple[str, str, str]]:
     return sortie
 
 
+def classer_liens_coref(phrases: list[dict]) -> dict:
+    """Les liens de coréférence classés : intra-phrase, inter-phrase, absents."""
+    intra = inter = absent = 0
+    for p in phrases:
+        mots_phrase = {m.lower() for m in p["texte"].replace("’", "'").split()}
+        for pronom, nom, cible in lien_coref(p, phrases):
+            if cible is not None:
+                inter += 1
+            elif nom.lower() in mots_phrase:
+                intra += 1
+            else:
+                absent += 1
+    total = intra + inter + absent
+    return {"liens": total, "intra": intra, "inter": inter, "absent": absent,
+            "taux_intra": round(intra / max(1, total), 4),
+            "taux_inter": round(inter / max(1, total), 4),
+            "taux_absent": round(absent / max(1, total), 4)}
+
+
 def mesurer_lien_coref(phrases: list[dict]) -> dict:
     """Le taux de liens de coréférence dont la phrase d'antécédent est retrouvée."""
     total = trouves = 0
