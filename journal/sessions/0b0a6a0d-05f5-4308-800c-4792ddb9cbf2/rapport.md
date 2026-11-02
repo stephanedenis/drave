@@ -9,8 +9,8 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 32.9 h |
 | Tours | 18 |
-| Messages | 1316 |
-| Appels d'outils | 1222 |
+| Messages | 1317 |
+| Appels d'outils | 1223 |
 | Fichiers touchés | 11 |
 | Commandes | 981 |
 | Sous-agents | 0 |
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*256 appels d'outils.* Actions notables :
+*257 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal

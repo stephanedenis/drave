@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 32.6 h |
-| Tours | 273 |
-| Messages | 1831 |
-| Appels d'outils | 1279 |
+| Durée | 32.7 h |
+| Tours | 286 |
+| Messages | 1874 |
+| Appels d'outils | 1296 |
 | Fichiers touchés | 25 |
-| Commandes | 1123 |
+| Commandes | 1140 |
 | Sous-agents | 0 |
 | Commits | 74 |
 | Compactages de contexte | 4 |
@@ -573,6 +573,32 @@
 **Tour 272** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 273** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 274** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 275** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 276** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 277** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 278** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 279** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 280** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 281** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 282** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 283** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 284** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 285** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 286** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6436,9 +6462,269 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 273 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*2 appels d'outils.* Actions notables :
 
 - bash — Measure OCR process CPU time and IO
+- bash — Count OCR temp pages and last ones
+
+**Synthèse produite :**
+
+⏵ Round 261 : OCR à 1 152/1 264 pages du 8e livre (91 %)
+
+**Round 261/1000 — le dernier livre avance (91 %).**
+
+- **Le `tesseract`** océrise la page **1 152/1 264** du 8e livre (Sprenger 2025) ; les pages temporaires sont toutes rendues (1 264 PNG), le reste s'écrit à la clôture.
+- **Le processus** `tools/ocr_pdf.py` (PID 1616198, 4 h 25) est le chef d'orchestre ; le train reste à **4 193 550 octets**.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; les lignes D (roadmap, chantiers, plan) portent les livraisons ; la revue passe, le T0 est à 3 978.
+
+**Le constat** : plus qu'une centaine de pages avant le manifeste et la fiche OCR. Le goal reste actif.
+
+### Tour 274 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check current OCR page
+
+**Synthèse produite :**
+
+⏵ Round 262 : OCR à 1 157/1 264 pages (91,5 %), ~4 s/page
+
+**Round 262/1000 — le 8e livre finit dans ~8 min.**
+
+- **Le `tesseract`** océrise la page **1 157/1 264** ; au rythme mesuré (~4 s/page sur ce livre dense), il reste **~107 pages ≈ 7-8 min** avant la clôture du livre et l'écriture du manifeste.
+- **Le train** reste à **4 193 550 octets** (écrit à la fin du livre) ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; les lignes D (roadmap, chantiers, plan) portent les livraisons ; la revue passe, le T0 est à 3 978.
+
+**Le constat** : l'échéance de l'OCR est proche ; le manifeste et la fiche suivront. Le goal reste actif.
+
+### Tour 275 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR page and manifest
+
+**Synthèse produite :**
+
+⏵ Round 263 : OCR à 1 161/1 264 pages (91,8 %), ~15 s/page sur ce livre dense
+
+**Round 263/1000 — le livre dense ralentit (15 s/page).**
+
+- **Le `tesseract`** océrise la page **1 161/1 264** ; au rythme observé (~4 pages/min sur ce livre), il reste **~103 pages ≈ 25 min** avant le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0 (écrits à la clôture).
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; les lignes D (roadmap, chantiers, plan) portent les livraisons ; la revue passe, le T0 est à 3 978.
+
+**Le constat** : l'OCR finit ; j'enchaînerai sur la fiche, le contrôle 8 Ko et le commit. Le goal reste actif.
+
+### Tour 276 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Run documentation review and size gates
+
+**Synthèse produite :**
+
+⏵ Round 264 : revue ✅ (468 fiches, 560 JSON) et budget de docs ✅
+
+**Round 264/1000 — les portes de documentation sont vertes pendant que l'OCR finit.**
+
+- **La revue de documentation** passe : **468 fiches · 560 JSON · 118 docs · 81 portes · 8 chapitres**, tout ✅ (classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation).
+- **Le budget** : tous les documents chargeables sont dans leur budget et ont un résumé ✅.
+- **L'OCR** : page **1 161/1 264** du 8e livre (~15 s/page) ; le manifeste suivra ; le **surveillant** (PID 2136539) fera le **contrôle 8 Ko**.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; les lignes D (roadmap, chantiers, plan) portent les livraisons.
+
+**Le constat** : l'état est prêt pour le commit de clôture OCR ; il ne manque que le manifeste. Le goal reste actif.
+
+### Tour 277 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR page and manifest
+
+**Synthèse produite :**
+
+⏵ Round 265 : OCR accélère à 1 174/1 264 pages (92,9 %)
+
+**Round 265/1000 — le 8e livre accélère (2-3 s/page).**
+
+- **Le `tesseract`** océrise la page **1 174/1 264** ; au rythme repris (~13 pages en 30 s), il reste **~90 pages ≈ 4-5 min** avant le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : plus que ~90 pages avant le manifeste OCR. Le goal reste actif.
+
+### Tour 278 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR page and manifest
+
+**Synthèse produite :**
+
+⏵ Round 266 : OCR à 1 179/1 264 pages (93,3 %), plus que ~85 pages
+
+**Round 266/1000 — le 8e livre est à 93 %.**
+
+- **Le `tesseract`** océrise la page **1 179/1 264** ; au rythme observé (~4 s/page), il reste **~85 pages ≈ 6 min** avant la clôture du livre et le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0 (écrits à la fin).
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : l'OCR finit ; le manifeste, la fiche, le contrôle et le commit suivront. Le goal reste actif.
+
+### Tour 279 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR page and manifest
+
+**Synthèse produite :**
+
+⏵ Round 267 : OCR à 1 183/1 264 pages (93,6 %)
+
+**Round 267/1000 — le 8e livre est à 93,6 %.**
+
+- **Le `tesseract`** océrise la page **1 183/1 264** ; à ~5 s/page, il reste **~81 pages ≈ 7 min** avant la clôture du livre et l'écriture de `reports/ocr-pdf.json`.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès le manifeste ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : tout converge vers le manifeste OCR. Le goal reste actif.
+
+### Tour 280 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check OCR page and manifest
+- bash — Check OCR process end state
+- bash — Wait and re-check OCR state
+- bash — Diagnose OCR process state
+
+**Synthèse produite :**
+
+⏵ Round 268 : OCR à 1 199/1 264 pages (94,9 %), tesseract bien actif
+
+**Round 268/1000 — diagnostic : le tesseract tourne, il reste ~65 pages.**
+
+- **Le `tesseract`** océrise la page **1 199/1 264** ; le processus parent attend son enfant (`poll_schedule_timeout`), tout est normal ; il reste **~65 pages ≈ 5 min**.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : l'OCR finit ses 1 264 pages ; le manifeste suivra. Le goal reste actif.
+
+### Tour 281 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR page and manifest
+
+**Synthèse produite :**
+
+⏵ Round 269 : OCR à 1 203/1 264 pages (95,2 %)
+
+**Round 269/1000 — il reste 61 pages.**
+
+- **Le `tesseract`** océrise la page **1 203/1 264** ; il reste **~61 pages ≈ 4-5 min** avant la clôture du 8e livre et le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : droit vers le manifeste. Le goal reste actif.
+
+### Tour 282 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR page and manifest
+
+**Synthèse produite :**
+
+⏵ Round 270 : OCR à 1 207/1 264 pages (95,5 %)
+
+**Round 270/1000 — il reste 57 pages.**
+
+- **Le `tesseract`** océrise la page **1 207/1 264** ; ~4-5 s/page → **~57 pages ≈ 4 min** avant le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : le manifeste OCR est imminent. Le goal reste actif.
+
+### Tour 283 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR page and manifest
+
+**Synthèse produite :**
+
+⏵ Round 271 : OCR à 1 210/1 264 pages (95,7 %)
+
+**Round 271/1000 — il reste 54 pages.**
+
+- **Le `tesseract`** océrise la page **1 210/1 264** ; **~54 pages ≈ 4 min** avant la clôture du 8e livre et l'écriture de `reports/ocr-pdf.json`.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès le manifeste ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : le manifeste OCR arrive dans quelques minutes. Le goal reste actif.
+
+### Tour 284 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR page and manifest
+
+**Synthèse produite :**
+
+⏵ Round 272 : OCR à 1 214/1 264 pages (96,0 %)
+
+**Round 272/1000 — il reste 50 pages.**
+
+- **Le `tesseract`** océrise la page **1 214/1 264** ; **~50 pages ≈ 3-4 min** avant le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : le manifeste OCR arrive. Le goal reste actif.
+
+### Tour 285 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR page and manifest
+
+**Synthèse produite :**
+
+⏵ Round 273 : OCR à 1 219/1 264 pages (96,4 %)
+
+**Round 273/1000 — il reste 45 pages.**
+
+- **Le `tesseract`** océrise la page **1 219/1 264** ; **~45 pages ≈ 3 min** avant la clôture du livre et le manifeste.
+- **Le train** reste à **4 193 550 octets** ; val/test à 0.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès le manifeste ; **le job `bash-1053`** lira ses chiffres.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ — l'état est prêt pour le commit de clôture.
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : l'échéance approche. Le goal reste actif.
+
+### Tour 286 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR page and manifest
 
 ## 3. Travail accompli
 
@@ -6514,7 +6800,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1083 autres
+- … et 1100 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6642,7 +6928,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ## 5. Erreurs rencontrées
 
-75 sorties en erreur ou divergentes. Les premières :
+78 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

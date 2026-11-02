@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 32.5 h |
-| Tours | 83 |
-| Messages | 1123 |
-| Appels d'outils | 1008 |
+| Durée | 32.6 h |
+| Tours | 84 |
+| Messages | 1131 |
+| Appels d'outils | 1014 |
 | Fichiers touchés | 25 |
-| Commandes | 818 |
+| Commandes | 823 |
 | Sous-agents | 2 |
-| Commits | 104 |
+| Commits | 105 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -197,6 +197,8 @@
 **Tour 82** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 83** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 84** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4412,6 +4414,55 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste **un seul look uti
 - bash — Committer un seul look
 - job_output
 
+**Synthèse produite :**
+
+⏵ Un seul look : 1/4000, v final 0,44, 20/20, 8,0 pas ; 69/69
+
+Le round 70 du goal est livré : **un seul look utile** (sur 4000) suffit — la limite absolue de la rareté n'est pas trouvée. Commit **`d113eea1`**.
+
+\## Un seul look
+
+Même monde que T65, mais la fiabilité n'est **0,9 qu'à l'épisode 0** ; elle est **0,5** partout ailleurs.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| **4000** | **20/20** | **0,44** | 506 | 8,0 |
+| 8000 | 20/20 | 0,5 | 572 | 8,0 |
+| 4 looks (T65) | 20/20 | 0,44 | 506 | 8,0 |
+
+**Ce que ça dit** :
+
+- **Un look suffit** : la première observation fiable donne la porte ; la Q-table apprend la politique avec les autres pas (les looks neutres ne la gênent pas).
+- **v ≈ 0,44** : la fenêtre ne voit qu'un look utile au début ; le reste est neutre.
+- **Le coût est nul** (8,0 pas) : le look unique ne coûte pas de pas.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-un-look.md`](../../reports/rapport-pensee-un-look.md) ; JSON [`pensee-un-look.json`](../../reports/pensee-un-look.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T66 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **69/69 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **468 fiches / 560 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Look tardif** : le look arrive à l'épisode 3000 ; la fenêtre doit le garder.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **look tardif** (à l'épisode 3000) — la fenêtre de 50 doit le garder.
+
+### Tour 84 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Tester le look tardif
+- bash — Ajouter la porte T67 (look tardif)
+- bash — Écrire la fiche du look tardif
+- bash — Trim README et portes
+- bash — Committer le look tardif
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4491,7 +4542,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste **un seul look uti
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 778 autres
+- … et 783 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4743,4 +4794,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste **un seul look uti
 - B13 — L'INFORMATION TRÈS RARE : UTILE 1 %, v FINAL 0,54, 20/20, 8,0 PAS ; 67/67" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "INFORMATION TRÈS RARE";
 - B13 — L'INFORMATION ULTRA-RARE : UTILE 0,1 %, 4 LOOKS, v FINAL 0,44, 20/20 ; 68/68" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ULTRA-RARE"; then ec
 - B13 — UN SEUL LOOK : 1/4000, v FINAL 0,44, 20/20, 8,0 PAS ; 69/69" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "UN SEUL LOOK"; then echo "COMMIT OK $
+- B13 — LE LOOK TARDIF : À L'ÉPISODE 3000, v FINAL 0,54, 20/20, 8,0 PAS ; 70/70" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LOOK TARDIF"; then echo "
 
