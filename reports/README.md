@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-pensee-segmenteur.md`](rapport-pensee-segmenteur.md) | **B13** — le segmenteur : F1 0,1722 (S) contre 0,1425 (chunker), **113/113** |
+| [`rapport-pensee-segmenteur-hybride.md`](rapport-pensee-segmenteur-hybride.md) | **B13** — l'hybride frontières/têtes : 0,3732, le chunker garde les têtes, **114/114** |
 | [`rapport-pensee-anaphore-103.md`](rapport-pensee-anaphore-103.md) | **B13** — la coréférence à 103 liens : 86/103, cible 100 atteinte, **112/112** |
 | [`rapport-pensee-anaphore-68.md`](rapport-pensee-anaphore-68.md) | **B13** — la coréférence à 68 liens : rôle 52, dernier nom 51, **111/111** |
 | [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |

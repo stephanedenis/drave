@@ -28704,3 +28704,107 @@ timeout 2400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-segmenteur.md reports/pensee-segmenteur.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotage/roadma … [504 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1099]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1099", "timeout_ms": 600000, "wait": true}`
+
+  ```
+23 files changed, 587 insertions(+), 64 deletions(-)
+ create mode 100644 reports/pensee-segmenteur.json
+ create mode 100644 reports/rapport-pensee-segmenteur.md
+COMMIT OK 1
+e7977df1 B13 — LE SEGMENTEUR : S F1 0,1722 / CHUNKER 0,1425, TÊTES INVERSÉES, COMPLÉMENTAIRES ; 113/113
+lun 02 nov 2026 10:03:36 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Segmenteur : S F1 0,1722 / chunker 0,1425, têtes inversées, complémentaires ; 113/113
+
+Le round 114 est livré : les **deux segmenteurs** de l'heuristique sont comparés — l'un a les bonnes frontières, l'autre les bonnes têtes. Commit **`e7977df1`**.
+
+## Les deux segmenteurs
+
+| segmenteur | F1 (all) | tête (all) | F1 (réel) |
+|---|---:|---:|---:|
+| **générateur S** (défaut) | **0,1722** | 0,3552 | 0,1713 |
+| chunker simple | 0,1425 | **0,4707** | 0,1552 |
+
+**Ce que ça dit** :
+
+- **Le générateur S a les meilleures frontières** (F1 0,1722 > 0,1425) : ses segments correspondent mieux aux bornes du gold.
+- **Le chunker simple a les meilleures têtes** (0,4707 > 0,3552) : il place le début du segment sur le bon token, même quand la fin est fausse.
+- **Les deux sont complémentaires** : un hybride (frontières du S, têtes du chunker) est la prochaine piste — il n'est pas implémenté.
+- **La négative est explicite** : le chunker perd 0,03 de F1.
+
+## L'état
+
+- Fiche : [`rapport-pensee-segmenteur.md`](../../reports/rapport-pensee-segmenteur.md) ; JSON [`pensee-segmenteur.json`](../../reports/pensee-segmenteur.json) ; T110 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **113/113 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **520 fiches / 608 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 625 mots, T0 dans le budget.
+- L'horloge réelle est **10 h 03 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+## La suite
+
+1. **L'hybride frontières/têtes** : segments du S, début du chunker ; mesurer le F1 et la tête.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **l'hybride** — les frontières du S et les têtes du chunker.
+
+
+## Tour 129
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 115/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, _seg, _tete\nph=charger()\nh1=bl.Heuristique()            # S générateur (frontièr … [1469 caractères tronqués]`
+
+  ```
+S tete P 0.5 R 0.2754 F1 0.3552 (tp 491 fp 491 fn 1292 )
+chunker tete P 0.8588 R 0.3242 F1 0.4707 (tp 578 fp 95 fn 1205 )
+hybride tete P 0.5255 R 0.2894 F1 0.3732 (tp 516 fp 466 fn 1267 )
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T110 le segmenteur                 F1 : S 0,1722, chunker 0,1425 ; têtes inversées\\n\",\n\"  T110 le segmenteur           … [7304 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 521 fiche(s) · 609 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · reports/README.md : 2813 mots > budget 2800 (T1)
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1628 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **S** est actif dans une autre TUI (export pragmatique, 11 tests).\",\".\")\np.write_text(t)\np=pathlib.Path('reports/RE … [845 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 521 fiche(s) · 609 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-segmenteur-hybride.md reports/pensee-segmenteur-hybride.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs … [500 caractères tronqués]`

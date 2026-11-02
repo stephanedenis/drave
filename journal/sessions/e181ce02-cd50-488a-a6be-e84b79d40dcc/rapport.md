@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 41.4 h |
-| Tours | 128 |
-| Messages | 1561 |
-| Appels d'outils | 1353 |
+| Durée | 41.5 h |
+| Tours | 129 |
+| Messages | 1568 |
+| Appels d'outils | 1358 |
 | Fichiers touchés | 25 |
-| Commandes | 1099 |
+| Commandes | 1103 |
 | Sous-agents | 2 |
-| Commits | 163 |
+| Commits | 164 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -291,6 +291,8 @@
 **Tour 127** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 128** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 129** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6814,6 +6816,52 @@ Je continue : prochain round, **le segmenteur** — la vraie limite actuelle.
 - bash — Committer la comparaison des segmenteurs
 - job_output
 
+**Synthèse produite :**
+
+⏵ Segmenteur : S F1 0,1722 / chunker 0,1425, têtes inversées, complémentaires ; 113/113
+
+Le round 114 est livré : les **deux segmenteurs** de l'heuristique sont comparés — l'un a les bonnes frontières, l'autre les bonnes têtes. Commit **`e7977df1`**.
+
+\## Les deux segmenteurs
+
+| segmenteur | F1 (all) | tête (all) | F1 (réel) |
+|---|---:|---:|---:|
+| **générateur S** (défaut) | **0,1722** | 0,3552 | 0,1713 |
+| chunker simple | 0,1425 | **0,4707** | 0,1552 |
+
+**Ce que ça dit** :
+
+- **Le générateur S a les meilleures frontières** (F1 0,1722 > 0,1425) : ses segments correspondent mieux aux bornes du gold.
+- **Le chunker simple a les meilleures têtes** (0,4707 > 0,3552) : il place le début du segment sur le bon token, même quand la fin est fausse.
+- **Les deux sont complémentaires** : un hybride (frontières du S, têtes du chunker) est la prochaine piste — il n'est pas implémenté.
+- **La négative est explicite** : le chunker perd 0,03 de F1.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-segmenteur.md`](../../reports/rapport-pensee-segmenteur.md) ; JSON [`pensee-segmenteur.json`](../../reports/pensee-segmenteur.json) ; T110 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **113/113 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **520 fiches / 608 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 625 mots, T0 dans le budget.
+- L'horloge réelle est **10 h 03 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **L'hybride frontières/têtes** : segments du S, début du chunker ; mesurer le F1 et la tête.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **l'hybride** — les frontières du S et les têtes du chunker.
+
+### Tour 129 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Mesurer l'hybride frontières S / têtes chunker
+- bash — Écrire la fiche de l'hybride segmenteur et la porte T111
+- bash — Trim T0/README et passer toutes les portes
+- bash — Committer l'hybride segmenteur
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6893,7 +6941,7 @@ Je continue : prochain round, **le segmenteur** — la vraie limite actuelle.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1059 autres
+- … et 1063 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7204,4 +7252,5 @@ Je continue : prochain round, **le segmenteur** — la vraie limite actuelle.
 - B13 — LA CORÉFÉRENCE À 68 LIENS : LE RÔLE PASSE DEVANT (52/51), GOLD 372 ; 111/111" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "68 LIENS"; then echo
 - B13 — LA CORÉFÉRENCE À 103 LIENS : 86/103, CIBLE 100 ATTEINTE, GOLD 407 ; 112/112" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "103 LIENS"; then echo
 - B13 — LE SEGMENTEUR : S F1 0,1722 / CHUNKER 0,1425, TÊTES INVERSÉES, COMPLÉMENTAIRES ; 113/113" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LE SEGME
+- B13 — L'HYBRIDE FRONTIÈRES/TÊTES : 0,3732, LE CHUNKER GARDE LES TÊTES ; 114/114" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "HYBRIDE FRONTIÈRES"; th
 

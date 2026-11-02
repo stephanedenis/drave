@@ -23,7 +23,7 @@
 - **Stratégie** : théorie d'abord, puis un **v0 petit et mesuré** ; réserver les fichiers ; ne pas toucher aux GPU de N2.
 - **Objectif final** : un **moteur de pensée v0 exécutable** — state store, arbre, A*/MCTS/AC-3, trace/rejeu, banc avec contrôles — documenté, mesuré, committé.
 - **Reprise** : **R4.4** — note de clôture des trois limites (fax 1 bit, exposant fusionné,
-  parité réelle sans questions) ; **S** est actif dans une autre TUI (export pragmatique, 11 tests).
+  parité réelle sans questions).
 - **Bloc** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
   (9 niveaux) ; **398 langues à 0,9687** ; fiche et porte.
 - **Moteur B13** : **AC-3/alpha-bêta**, **DRVF**, **banc**, **opérateurs 109** ; fiches
@@ -37,7 +37,7 @@
 - **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
   avance ; **N4** en file ; **A/B** gardent les leurs.
 - **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `docs/theorie/pre-traitement-linguistique.md`, `tools/bloc_linguistique.py`, `tools/tests/linguistique/`, `docs/implantation/bloc-linguistique.md`, `journal/sessions/e181ce02-…/`.
-- **Prochaine action** : **L** — l'hybride **frontières du S / têtes du chunker** (T110 : F1 0,1722 vs 0,1425, tête 0,3552 vs 0,4707) ;
+- **Prochaine action** : **L** — le **rappel** du chunker (T111 : tête 0,4707 contre hybride 0,3732 ; la précision est à 0,8588, le rappel à 0,3242) ;
   **B13** — DRVM/native **bloqué**, la cascade mesurée reste la lecture.
 - **Bloquants** : **neuronal réel bloqué** — `llama-cli` refuse/timeout, aucun tagger (`spacy`,
   `stanza`, `nltk`, `transformers`), aucun poids `drave-n0` ; le mock reste un contrat. Trois
@@ -88,7 +88,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges à la passe du 02/11 06 h : les 4 connues + greffe à la borne 700 s, rejouée verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **520** / **608** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **521** / **609** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

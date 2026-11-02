@@ -1,0 +1,27 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "114/114",
+ "tetes": {
+  "S": {
+   "precision": 0.5,
+   "rappel": 0.2754,
+   "f1": 0.3552
+  },
+  "chunker": {
+   "precision": 0.8588,
+   "rappel": 0.3242,
+   "f1": 0.4707
+  },
+  "hybride": {
+   "precision": 0.5255,
+   "rappel": 0.2894,
+   "f1": 0.3732
+  }
+ },
+ "limites": [
+  "587 phrases",
+  "rappel non traité",
+  "heuristique seule"
+ ]
+}

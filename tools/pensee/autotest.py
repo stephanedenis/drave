@@ -1686,6 +1686,31 @@ def t110_segmenteur() -> tuple[bool, str]:
         f"segmenteur : S F1 {f1} tête {t1} ; chunker F1 {f2} tête {t2}")
 
 
+def t111_hybride_seg() -> tuple[bool, str]:
+    """L'hybride frontières/têtes : tête F1 0,3732 (S 0,3552, chunker 0,4707)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, _tete
+    ph = charger()
+    h1 = bl.Heuristique()
+    h2 = bl.Heuristique()
+    h2.segmenter_s = False
+    tp = fp = fn = 0
+    for phrase in ph:
+        a1 = h1.analyser(phrase["texte"], phrase["langue"])
+        a2 = h2.analyser(phrase["texte"], phrase["langue"])
+        gold = {(s["type"], s["debut"]) for s in phrase["segments"]}
+        seg_s = [(e.type, e.debut, e.fin) for e in a1.etiquettes if e.niveau == "syntagme"]
+        seg_c = [(e.type, e.debut, e.fin) for e in a2.etiquettes if e.niveau == "syntagme"]
+        pred = set()
+        for (t, d, f) in seg_s:
+            cand = [cd for (ct, cd, cf) in seg_c if ct == t and d <= cd < f]
+            pred.add((t, cand[0] if cand else d))
+        tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
+    p = tp / max(1, tp + fp); r = tp / max(1, tp + fn); f1 = round(2 * p * r / max(1e-9, p + r), 4)
+    return abs(f1 - 0.3732) < 0.001, (
+        f"hybride : tête F1 {f1} (S 0,3552, chunker 0,4707)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1795,7 +1820,8 @@ def main() -> int:
               ("T107 gold complet", t107_gold_complet()),
               ("T108 coréférence 68", t108_anaphore_68()),
               ("T109 coréférence 103", t109_anaphore_103()),
-              ("T110 segmenteur", t110_segmenteur())]
+              ("T110 segmenteur", t110_segmenteur()),
+              ("T111 hybride segmenteur", t111_hybride_seg())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

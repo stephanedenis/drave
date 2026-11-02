@@ -20086,3 +20086,27 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1166", "timeout_ms": 400000, "wait": true}`
+
+  ```
+10:05
+brut 1048 Mo
+propre 924 Mo (88.2 %)
+3453309 25:23 0.0% 4Mo
+3453311 25:23 99.7% 3682Mo
+               total        used        free      shared  buff/cache   available
+Mem:             125          17         105           5          10         108
+total 902120
+drwxr-xr-x. 1 stephane stephane        48  2 nov 10:03 .
+drwxr-xr-x. 1 stephane stephane        28  2 nov 10:03 ..
+-rw-r--r--. 1 stephane stephane  46186496  2 nov 10:03 test.txt
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -4 work/n2w/deduit_leger.log; ps -eo pid,etime,pcpu,cmd | grep deduit_leger | grep -v grep | head -1; ls -la data/wiki_big/propre/ 2>/dev/null; cat reports/corpus-wiki-big-propre.json 2>/dev/null | head … [46 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1167]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1167", "timeout_ms": 600000, "wait": true}`
