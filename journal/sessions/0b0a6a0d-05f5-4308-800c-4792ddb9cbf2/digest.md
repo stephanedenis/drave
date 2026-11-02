@@ -16667,3 +16667,55 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-981", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-979 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/T-g*.pt 2>/dev/null; for g in 1 2 3; do echo "-- T-g$g"; tail -1 work/n2j/T-g$g.log 2>/dev/null; done) finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/T-g*.pt 2>/dev/null; for g in 1 2 3; do echo \"-- T-g$g\"; tail -1 work/n2j/T-g$g.log 2>/dev/null; done", "description": "Check the students"}`
+
+  ```
+01:20
+work/n2j/T-g1.pt
+work/n2j/T-g2.pt
+-- T-g1
+}
+-- T-g2
+}
+-- T-g3
+# init work/n2j/base-wiki-pos.pt · manquants ['embed_canal.weight'] · graine 3 · décalage 20000038
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=.; for g in 1 2; do CUDA_VISIBLE_DEVICES=$((g-1)) ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/T-g$g.pt --decomposition --longueurs --corpus-dir data/wiki_fr/propre --sortie work/n2j/eval-t480.json 2>&1 | g … [84 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-983]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-983", "timeout_ms": 600000, "wait": true}`
+
+  ```
+{"fichier": "T-g1.pt", "params": 11816136, "val": 3.8912, "test": 3.947, "litterature": 6.9781, "litterature_propre": 7.1523, "anglais": 11.9804, "wikitext2": 12.5036, "permute": 143.3118, "decomposition": {"complete": 3.7653, "apres_2_blocs": 5.683, "apres_4_blocs": 4.317, "apres_6_blocs": 3.7596, "sans_pensee": 34907548.5133}, "longueurs": {"129": 3.8832, "192": 3.8649, "256": 3.9869, "384": 4.763, "512": 5.694}}
+{"fichier": "T-g2.pt", "params": 11816136, "val": 3.8882, "test": 3.9509, "litterature": 6.9818, "litterature_propre": 7.1172, "anglais": 12.0073, "wikitext2": 12.5136, "permute": 140.2126, "decomposition": {"complete": 3.7561, "apres_2_blocs": 5.6772, "apres_4_blocs": 4.3184, "apres_6_blocs": 3.7577, "sans_pensee": 45823709.7298}, "longueurs": {"129": 3.8828, "192": 3.866, "256": 4.0065, "384": 4.8114, "512": 5.7525}}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-981 (bash: sleep 780; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/T-g*.pt 2>/dev/null; for g in 1 2 3; do echo "-- T-g$g"; tail -1 work/n2j/T-g$g.log 2>/dev/null; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=1 PYTHONPATH=. ~/gpu-env/bin/python tools/distiller_budget.py --corpus fr --train data/wiki_multi/propre/train.txt --val data/wiki_multi/propre … [435 caractères tronqués]`
+
+  ```
+M34-g1 2276395
+01:24
+pas  2250 · seq 128 · perte 34.0654 · PPL 128/4 4.1596 · 175 s
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/T-g3.pt work/n2k/M34-g1.pt 2>/dev/null; tail -1 work/n2j/T-g3.log 2>/dev/null; tail -1 work/n2k/M34-g1.log 2>/dev/null", "description": "Wait for T-g3 and the multilingual 34M student"}`

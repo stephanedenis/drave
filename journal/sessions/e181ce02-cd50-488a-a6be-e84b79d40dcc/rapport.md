@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 32.7 h |
-| Tours | 86 |
-| Messages | 1147 |
-| Appels d'outils | 1026 |
+| Durée | 32.8 h |
+| Tours | 87 |
+| Messages | 1155 |
+| Appels d'outils | 1032 |
 | Fichiers touchés | 25 |
-| Commandes | 833 |
+| Commandes | 838 |
 | Sous-agents | 2 |
-| Commits | 107 |
+| Commits | 108 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -203,6 +203,8 @@
 **Tour 85** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 86** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 87** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4565,6 +4567,55 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse l'**oubli fort** 
 - bash — Committer la mémoire très courte
 - job_output
 
+**Synthèse produite :**
+
+⏵ Mémoire très courte : Q × 0,5/10, 20/20, 8,0 pas ; 72/72
+
+Le round 73 du goal est livré : l'**oubli fort** (× 0,5) n'empêche rien — le chemin est même plus court que l'oubli léger. Commit **`204b5998`**.
+
+\## La mémoire très courte
+
+Même monde que T68 (look à l'épisode 3000), mais la Q-table est multipliée par **0,5** tous les 10 épisodes.
+
+| oubli | buts | v final | états-Q | pas |
+|---|---|---:|---:|---:|
+| **× 0,5 (T69)** | **20/20** | **0,38** | 586 | 8,0 |
+| × 0,9 (T68) | 20/20 | 0,56 | 463 | 10,0 |
+| aucun (T67) | 20/20 | 0,54 | 530 | 8,0 |
+
+**Ce que ça dit** :
+
+- **L'oubli fort n'empêche rien** : 20/20, 8,0 pas ; le chemin est même plus court que l'oubli léger — la décroissance forte force la re-découverte, pas la perte.
+- **v ≈ 0,38** : la fenêtre ne voit pas le look ; elle reste au hasard.
+- **La Q-table grandit** (586 états) : l'oubli fort force l'exploration, donc plus d'états.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-oubli-fort.md`](../../reports/rapport-pensee-oubli-fort.md) ; JSON [`pensee-oubli-fort.json`](../../reports/pensee-oubli-fort.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T69 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **72/72 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **471 fiches / 563 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Oubli total** (× 0) : la rupture de la mémoire.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste l'**oubli total** (× 0) — la rupture de la mémoire.
+
+### Tour 87 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Tester l'oubli total
+- bash — Ajouter la porte T70 (oubli total)
+- bash — Écrire la fiche de l'oubli total
+- bash — Trim README et portes
+- bash — Committer l'oubli total
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4644,7 +4695,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse l'**oubli fort** 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 793 autres
+- … et 798 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4899,4 +4950,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse l'**oubli fort** 
 - B13 — LE LOOK TARDIF : À L'ÉPISODE 3000, v FINAL 0,54, 20/20, 8,0 PAS ; 70/70" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LOOK TARDIF"; then echo "
 - B13 — LA MÉMOIRE COURTE : Q × 0,9/10, 20/20, 10,0 PAS ; 71/71" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MÉMOIRE COURTE"; then echo "COMMIT OK $i"
 - B13 — LA MÉMOIRE TRÈS COURTE : Q × 0,5/10, 20/20, 8,0 PAS ; 72/72" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MÉMOIRE TRÈS COURTE"; then echo "COMM
+- B13 — L'OUBLI TOTAL : 0/20 BUTS, LA MÉMOIRE EST NÉCESSAIRE ; 73/73" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "OUBLI TOTAL"; then echo "COMMIT OK $
 

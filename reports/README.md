@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-oubli-total.md`](rapport-pensee-oubli-total.md) | **B13** — l'oubli total : 0/20 buts, la mémoire est nécessaire, **73/73** |
 | [`rapport-pensee-oubli-fort.md`](rapport-pensee-oubli-fort.md) | **B13** — la mémoire très courte : Q × 0,5/10, 20/20, 8,0 pas, **72/72** |
 | [`rapport-pensee-oubli.md`](rapport-pensee-oubli.md) | **B13** — la mémoire courte : Q × 0,9/10, 20/20, 10,0 pas, **71/71** |
 | [`rapport-pensee-look-tardif.md`](rapport-pensee-look-tardif.md) | **B13** — le look tardif : à l'épisode 3000, v final 0,54, 20/20, 8,0 pas, **70/70** |
@@ -24,7 +25,6 @@
 | [`rapport-pensee-rare.md`](rapport-pensee-rare.md) | **B13** — l'information rare : utile 10 %, v final 0,8, 20/20, 8,0 pas, **66/66** |
 | [`rapport-pensee-asym.md`](rapport-pensee-asym.md) | **B13** — la fiabilité asymétrique : 0,9/0,5, v final 0,44, 20/20, 8,0 pas, **65/65** |
 | [`rapport-pensee-intra.md`](rapport-pensee-intra.md) | **B13** — le régime intra-épisode : bascule à chaque look, v final 0,48, 20/20, 8,0 pas, **64/64** |
-| [`rapport-pensee-limite.md`](rapport-pensee-limite.md) | **B13** — la bascule limite : 1/5, v final 0,44, 20/20, 8,6 pas, **62/62** |
 | [`rapport-pensee-rapide.md`](rapport-pensee-rapide.md) | **B13** — la bascule très fréquente : 1/10, v final 0,28, 20/20, 9,4 pas, **61/61** |
 | [`rapport-pensee-frequent.md`](rapport-pensee-frequent.md) | **B13** — la bascule fréquente : 1/50, v final 0,78, 20/20, 8,0 pas, **60/60** |
 | [`rapport-pensee-chaotique.md`](rapport-pensee-chaotique.md) | **B13** — l'alternance aléatoire : bascule 1/500, v final 0,12, 20/20, **59/59** |

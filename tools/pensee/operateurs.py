@@ -1955,6 +1955,38 @@ def seule_bayes_oubli_fort(p: PolitiqueAppriseBayesOubliFort,
     return seule_observatrice(p, max_pas)
 
 
+class PolitiqueAppriseBayesOubliTotal(PolitiqueAppriseBayesOubliFort):
+    """Le bayésien à **oubli total** : la Q-table est vidée tous les 10 épisodes."""
+
+    nom = "bayes_oubli_total"
+
+    def apprendre(self) -> None:
+        for i in range(self.episodes):
+            if i % 10 == 0:
+                self.q.clear()
+            self.p_erreur = 0.1 if i == 3000 else 0.5
+            d = self.rng.randint(0, 1)
+            cle = (0, 0, False, 2)
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain, d = self._pas(cle, a, d)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+
+def seule_bayes_oubli_total(p: PolitiqueAppriseBayesOubliTotal,
+                            max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

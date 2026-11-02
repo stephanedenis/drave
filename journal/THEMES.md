@@ -95,7 +95,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-30](2026-10-30/memoire.md) | `3,9 %` |
 | [2026-10-31](2026-10-31/memoire.md) | — |
 | [2026-11-01](2026-11-01/memoire.md) | `99,2 %` · `8,025` · `1,082` |
-| [2026-11-02](2026-11-02/memoire.md) | `× 0,9` |
+| [2026-11-02](2026-11-02/memoire.md) | `× 0,5` · `× 0,9` |
 
 ### `apprentissage` — Règles locales, hebbien, modulateurs, distillation
 

@@ -1125,6 +1125,20 @@ def t69_oubli_fort() -> tuple[bool, str]:
                       f"{round(pas_total / 20, 1)} pas")
 
 
+def t70_oubli_total() -> tuple[bool, str]:
+    """L'oubli total : 0/20 buts, la mémoire est nécessaire (négatif)."""
+    from .operateurs import PolitiqueAppriseBayesOubliTotal, seule_bayes_oubli_total
+    p = PolitiqueAppriseBayesOubliTotal(episodes=4000, graine=0)
+    p.apprendre()
+    ok = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, _ = seule_bayes_oubli_total(p)
+        ok += b
+    return ok == 0, (f"oubli total : {ok}/20 buts ({len(p.q)} états-Q), "
+                     f"la mémoire est nécessaire")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1193,7 +1207,8 @@ def main() -> int:
               ("T66 un seul look", t66_un_look()),
               ("T67 look tardif", t67_look_tardif()),
               ("T68 mémoire courte", t68_oubli()),
-              ("T69 mémoire très courte", t69_oubli_fort())]
+              ("T69 mémoire très courte", t69_oubli_fort()),
+              ("T70 oubli total", t70_oubli_total())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
