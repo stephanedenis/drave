@@ -9,8 +9,8 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 32.9 h |
 | Tours | 89 |
-| Messages | 1174 |
-| Appels d'outils | 1047 |
+| Messages | 1175 |
+| Appels d'outils | 1048 |
 | Fichiers touchés | 25 |
 | Commandes | 850 |
 | Sous-agents | 2 |
@@ -4713,13 +4713,14 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **seuil** (0,3
 
 ### Tour 89 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Affiner le seuil d'oubli 0,3–0,45
 - bash — Ajouter la porte T72 (seuil fin)
 - bash — Écrire la fiche du seuil fin
 - bash — Trim README et portes
 - bash — Committer le seuil fin
+- job_output
 
 ## 3. Travail accompli
 

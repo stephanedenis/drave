@@ -4,11 +4,12 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 00:05 | `2881bc14` | B13 — LA FENÊTRE ADAPTATIVE : v FINAL 0,8, 20/20, 8,0 PAS ; 55/55 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+18) |
+| 01:34 | `868399c8` | DONNÉES — LA ROADMAP ET LE RÉCIT PORTENT L'OCR DES 8 LIVRES : 2 815 PAGES, 7,69 M CARACTÈRES, 951 FENÊTRES 8 KO | `en-cours.md`, `roadmap.md`, `README.md` (+16) |
 
 ## Sessions actives ce jour
 

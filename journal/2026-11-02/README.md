@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**35 commits** · **3 session(s)** · **7 thème(s)**
+**36 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | apprentissage | 2 | [apprentissage.md](apprentissage.md) |
-| attention | 1 | [attention.md](attention.md) |
+| attention | 2 | [attention.md](attention.md) |
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 3 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
@@ -66,6 +66,7 @@
 | 01:28 | `6eff8d8d` | DONNÉES — L'OCR DES 8 LIVRES EST FICÉ : 2 815 PAGES, 7,69 M CARACTÈRES, 8 KO 0 (VAL/TEST VIDES, LE CSS SUIT) |
 | 01:30 | `b82ac41e` | B13 — LE SEUIL D'OUBLI : ×0,5 RÉUSSIT, ×0,2 ÉCHOUE, SEUIL DANS (0,2 ; 0,5] ; 74/74 |
 | 01:32 | `83a85c2c` | ÉTAT — COMPTEUR JSON ALIGNÉ (566) |
+| 01:34 | `868399c8` | DONNÉES — LA ROADMAP ET LE RÉCIT PORTENT L'OCR DES 8 LIVRES : 2 815 PAGES, 7,69 M CARACTÈRES, 951 FENÊTRES 8 KO |
 
 ## Le récit de la journée (écrit à la main)
 
