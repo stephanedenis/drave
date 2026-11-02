@@ -1,0 +1,35 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "117/117",
+ "heuristique": {
+  "all": {
+   "syn": 0.2005,
+   "tete": 0.4662,
+   "pos": 0.7502
+  },
+  "reel": {
+   "syn": 0.2095,
+   "tete": 0.4432,
+   "pos": 0.7575
+  }
+ },
+ "cascade": {
+  "all": {
+   "syn": 0.217,
+   "tete": 0.441,
+   "pos": 0.7502
+  },
+  "reel": {
+   "syn": 0.2283,
+   "tete": 0.4081,
+   "pos": 0.7575
+  }
+ },
+ "appels_neuronal": 587,
+ "limites": [
+  "mock = contrat",
+  "587 phrases",
+  "neuronal réel bloqué"
+ ]
+}

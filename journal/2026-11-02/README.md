@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**111 commits** · **3 session(s)** · **8 thème(s)**
+**112 commits** · **3 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 13 | [docs.md](docs.md) |
 | memoire | 10 | [memoire.md](memoire.md) |
-| mesures | 59 | [mesures.md](mesures.md) |
+| mesures | 60 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | portes | 6 | [portes.md](portes.md) |
 
@@ -24,9 +24,9 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 42.2 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 41.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 41.9 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 42.4 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 42.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 42.1 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -143,6 +143,7 @@
 | 10:02 | `e7977df1` | B13 — LE SEGMENTEUR : S F1 0,1722 / CHUNKER 0,1425, TÊTES INVERSÉES, COMPLÉMENTAIRES ; 113/113 |
 | 10:10 | `ca7c440d` | B13 — L'HYBRIDE FRONTIÈRES/TÊTES : 0,3732, LE CHUNKER GARDE LES TÊTES ; 114/114 |
 | 10:17 | `24d48387` | B13 — L'UNION DES SEGMENTEURS : F1 0,2005, LE RAPPEL PAIE ; 115/115 |
+| 10:30 | `f03f591c` | B13 — L'UNION PAR DÉFAUT : F1 0,2005, TÊTE 0,4662 (+0,11) DANS L'ANALYSEUR ; 116/116 |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 41.9 h |
-| Tours | 131 |
-| Messages | 1585 |
-| Appels d'outils | 1371 |
+| Durée | 42.1 h |
+| Tours | 132 |
+| Messages | 1593 |
+| Appels d'outils | 1377 |
 | Fichiers touchés | 25 |
-| Commandes | 1114 |
+| Commandes | 1119 |
 | Sous-agents | 2 |
-| Commits | 166 |
+| Commits | 167 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -297,6 +297,8 @@
 **Tour 130** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 131** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 132** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6964,6 +6966,55 @@ Je continue : prochain round, **l'union par défaut** — le gain doit entrer da
 - bash — Committer l'union par défaut
 - job_output
 
+**Synthèse produite :**
+
+⏵ Union par défaut : F1 0,2005, tête 0,4662 (+0,11) dans l'analyseur ; 116/116
+
+Le round 117 est livré : l'**union des segmenteurs** entre dans l'analyseur par défaut — la tête gagne **+0,11**, le plus gros gain de la ligne syntagme. Commit **`f03f591c`**.
+
+\## L'union par défaut
+
+| mesure | S seul | **union (défaut)** | delta |
+|---|---:|---:|---:|
+| syntagme F1 | 0,1722 | **0,2005** | +0,0283 |
+| syntagme précision | 0,2424 | 0,2328 | −0,0096 |
+| syntagme rappel | 0,1335 | **0,1761** | +0,0426 |
+| **tête F1** | 0,3552 | **0,4662** | **+0,1110** |
+
+**Ce que ça dit** :
+
+- **La tête gagne +0,11** : l'union apporte les segments du chunker, dont les têtes sont bonnes ; c'est le plus gros gain de la ligne syntagme.
+- **Le F1 gagne +0,028** : la précision perd 0,01, le rappel gagne 0,04.
+- **Le défaut est changé** : `analyser` ajoute les segments du chunker absents du S (confiance 0,30, `meta.union = True`), sans toucher aux segments du S ; un drapeau `union` (défaut `True`) permet de revenir au S seul pour les mesures historiques.
+- **La négative est explicite** : le S seul reste à 0,1722.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-segmenteur-defaut.md`](../../reports/rapport-pensee-segmenteur-defaut.md) ; JSON [`pensee-segmenteur-defaut.json`](../../reports/pensee-segmenteur-defaut.json) ; T113 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **116/116 portes** ; `porte-bloc-linguistique` **verte** (les tests du bloc passent avec l'union) ; `revue` **523 fiches / 612 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` dans le budget.
+- L'horloge réelle est **10 h 32 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **La cascade** : mesurer l'union dans la cascade (heuristique + mock) et le coût.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **la cascade avec l'union** — le gain doit se voir dans le mode mesuré, pas seulement dans l'heuristique.
+
+### Tour 132 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Mesurer la cascade avec l'union
+- bash — Écrire la fiche de la cascade et la porte T114
+- bash — Trim README et passer toutes les portes
+- bash — Corriger T114 (587 appels) et relancer
+- bash — Committer la cascade avec l'union
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7043,7 +7094,7 @@ Je continue : prochain round, **l'union par défaut** — le gain doit entrer da
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1074 autres
+- … et 1079 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7357,4 +7408,5 @@ Je continue : prochain round, **l'union par défaut** — le gain doit entrer da
 - B13 — L'HYBRIDE FRONTIÈRES/TÊTES : 0,3732, LE CHUNKER GARDE LES TÊTES ; 114/114" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "HYBRIDE FRONTIÈRES"; th
 - B13 — L'UNION DES SEGMENTEURS : F1 0,2005, LE RAPPEL PAIE ; 115/115" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "UNION DES SEGMENTEURS"; then echo "
 - B13 — L'UNION PAR DÉFAUT : F1 0,2005, TÊTE 0,4662 (+0,11) DANS L'ANALYSEUR ; 116/116" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "UNION PAR DÉFAUT";
+- B13 — LA CASCADE AVEC L'UNION : F1 0,2170, TÊTE 0,4410, 587 APPELS ; 117/117" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CASCADE AVEC L'UNION"; the
 

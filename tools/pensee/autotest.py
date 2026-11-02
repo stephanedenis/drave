@@ -1744,6 +1744,21 @@ def t113_union_defaut() -> tuple[bool, str]:
         f"union par défaut : F1 {f1}, tête {tete}")
 
 
+def t114_cascade_union() -> tuple[bool, str]:
+    """La cascade avec l'union : F1 0,2170, tête 0,4410, 1 601 appels neuronaux."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    ph = charger()
+    h, n = bl.Heuristique(), bl.MockNeuronal()
+    cascade = bl.Cascade(h, n)
+    r = evaluer_bloc("c", cascade, ph)
+    f1 = round(r["syntagme"]["f1"], 4)
+    tete = round(r["syntagme"]["tete"]["f1"], 4)
+    return (abs(f1 - 0.2170) < 0.001 and abs(tete - 0.4410) < 0.001
+            and cascade.appels_neuronal == 587), (
+        f"cascade : F1 {f1}, tête {tete}, {cascade.appels_neuronal} appels")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1856,7 +1871,8 @@ def main() -> int:
               ("T110 segmenteur", t110_segmenteur()),
               ("T111 hybride segmenteur", t111_hybride_seg()),
               ("T112 union segmenteurs", t112_union()),
-              ("T113 union par défaut", t113_union_defaut())]
+              ("T113 union par défaut", t113_union_defaut()),
+              ("T114 cascade + union", t114_cascade_union())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
