@@ -33210,3 +33210,14 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; tail -1 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1; cat /tmp/finaliser-ocr.log | tail -2", "description": "Wait 8 min then check … [108 caractères tronqués]`
+
+  ```
+04:46
+  Biblio_large · David_Gamez_-_Human_and_Machine_Consciou · 236 p · 435043 car
+2419149 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; tail -1 /tmp/ocr-pilote.log; pgrep -af "tesseract.*ocr-pdf" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1; cat /tmp/finaliser-ocr.log | tail -2
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 14596847  2 nov 04:44 data/corpus_ocr/train.txt
+attente du manifeste ou du cutoff 06:45…
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 20; date '+%H:%M'; ls -la reports/ocr-pdf.json 2>&1; ps -p 1616198 -o stat,etime= 2>/dev/null || echo \"OCR terminé\"; tail -2 /tmp/ocr-pilote.log; cat /tmp/finaliser-ocr.log | tail -2", "description": "Check manifest writing", " … [81 caractères tronqués]`

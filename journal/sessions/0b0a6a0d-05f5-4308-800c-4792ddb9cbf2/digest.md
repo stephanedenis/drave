@@ -18021,3 +18021,30 @@ pas  6000 · seq 128 · perte 16.3819 · PPL 128/4 3.6017 · 672 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\na = \"Le canal est tranché (N2.x : −0,03 en domaine, +0,24 à 512) |\"\nb = (\"Le canal est tranché à 11,47 M (N2.x) mais **revit à 34, … [1287 caractères tronqués]`
+
+  ```
+ts ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+AssertionError: action N2 introuvable
+[still running after 60000ms; moved to background job bash-1071]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1071", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+28c6be5c ROADMAP — LE CANAL REVIT À 34,3 M : 3,51 EN DOMAINE, 3,66 À 512 OCTETS
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"Prochaine action : [^|]*\" docs/pilotage/roadmap.md | tail -2", "description": "Read the roadmap's current N2 next action"}`
+
+  ```
+Prochaine action : la **fenêtre** (R1.1/R1.2, note de passage écrite), la **loi d'échelle multilingue à 21,65 M**, et la **restitution R31** ; le canal est tranché (N2.x : −0,03 en domaine, +0,24 à 512)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\na = \"; le canal est tranché (N2.x : −0,03 en domaine, +0,24 à 512) |\"\nb = (\"; le canal est tranché à 11,47 M (N2.x) mais **rev … [1207 caractères tronqués]`

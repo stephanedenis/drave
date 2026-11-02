@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 36.5 h |
 | Tours | 18 |
-| Messages | 1453 |
-| Appels d'outils | 1346 |
+| Messages | 1456 |
+| Appels d'outils | 1349 |
 | Fichiers touchés | 11 |
-| Commandes | 1071 |
+| Commandes | 1073 |
 | Sous-agents | 0 |
-| Commits | 73 |
+| Commits | 74 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*380 appels d'outils.* Actions notables :
+*383 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 257 autres
+- … et 259 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1031 autres
+- … et 1033 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1250,4 +1250,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
 - ÉTAT — COMPTEURS APRÈS N2.z (495 FICHIERS, 582 JSON) ET L'HEURE DE LA NUIT  La revue repasse ; l'état porte la dernière mesure (canal à 34,3 M : 3,51)." 2>/dev/
 - ROADMAP — LE CANAL REVIT À 34,3 M : 3,51 EN DOMAINE, 3,66 À 512 OCTETS  Le canal était tranché à 11,47 M (N2.x : −0,03 après distillation, +0,24 à 512). À 34,3 
+- ROADMAP — LE CANAL REVIT À 34,3 M (N2.z) : 3,51 EN DOMAINE, 3,66 À 512  Le canal est tranché à 11,47 M (N2.x) mais il revit à 34,3 M : N2.z donne le meilleur mo
 

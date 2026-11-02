@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 36.1 h |
-| Tours | 368 |
-| Messages | 2186 |
-| Appels d'outils | 1444 |
+| Durée | 36.2 h |
+| Tours | 369 |
+| Messages | 2191 |
+| Appels d'outils | 1447 |
 | Fichiers touchés | 26 |
-| Commandes | 1280 |
+| Commandes | 1283 |
 | Sous-agents | 0 |
 | Commits | 79 |
 | Compactages de contexte | 4 |
@@ -763,6 +763,8 @@
 **Tour 367** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 368** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 369** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8629,6 +8631,28 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 368 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
+*3 appels d'outils.* Actions notables :
+
+- bash — Wait 8 min then check 20th book and manifest
+- bash — Check manifest writing
+- bash — Check 20th book start
+
+**Synthèse produite :**
+
+⏵ Round 356 : 19e livre TERMINÉ — David Gamez 236 p, 435 043 car. ; le 20e (le dernier) entre
+
+**Round 356/1000 — 19 livres au corpus ; le 20e est le dernier du `--max-doc 20`.**
+
+- **David_Gamez, Human and Machine Consciousness** : **236 pages, 435 043 caractères** ; le **train** passe à **14 596 847 octets**.
+- **Le corpus OCR : 19 livres, 6 931 pages, 14 436 209 caractères**.
+- **Le 20e livre** : `[David G. Anderson2019] Life Histories of Etnos Theory in Russia and Beyond.pdf`, en rendu ; après lui, **l'outil écrira son manifeste** (fin des 20 océrisés).
+- **Le finisher** (PID 2275241) reste en attente ; s'il voit le manifeste, il s'arrête sans rien faire ; sinon, cutoff 06:45.
+- **Le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40) ; **les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : 19 livres, 14,44 M caractères ; le 20e livre est en cours ; le goal reste actif.
+
+### Tour 369 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
 *1 appels d'outils.* Actions notables :
 
 - bash — Wait 8 min then check 20th book and manifest
@@ -8708,7 +8732,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1240 autres
+- … et 1243 autres
 
 ## 4. Mesures et résultats marquants
 
