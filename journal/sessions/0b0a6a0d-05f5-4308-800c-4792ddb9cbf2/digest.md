@@ -15104,3 +15104,43 @@ q-canal1 1598888
   ```
 
 - **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for g in 1 2 3; do echo \"-- E-g$g\"; tail -1 work/n2k/E-g$g.log 2>/dev/null; done; ls work/n2k/E-g*.pt 2>/dev/null", "description": "Wait for the English distillations"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-881]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-877 (bash: sleep 780; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/route-en work/n2k/route-multi 2>/dev/null | head -4; tail -1 work/n2k/teacher-en.log; tail -1 work/n2k/teacher-multi.log; for g in 1 2; do echo "-- E-g$g"; tail -1 work/n2k/E-g$g.log 2>/dev/null; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for g in 1 2 3; do echo \"-- E-g$g\"; tail -1 work/n2k/E-g$g.log 2>/dev/null; done; ls work/n2k/E-g*.pt work/n2k/M-g*.pt 2>/dev/null", "description": "Check the English distillation progress"}`
+
+  ```
+20:37
+-- E-g1
+pas  1500 · seq 128 · perte 34.4071 · PPL 128/4 5.2096 · 105 s
+-- E-g2
+pas  1500 · seq 128 · perte 33.3078 · PPL 128/4 5.0468 · 108 s
+-- E-g3
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/N2.h\\/N2.i/,/^\\- \\*\\*Pensée/p' docs/pilotage/en-cours.md | head -12", "description": "Read the N2 state bullet"}`
+
+  ```
+> `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close ; restes nommés : fax 1 bit,
+> exposant fusionné, parité réelle sans questions) — rapports dans [`journal/sessions/`](../../journal/sessions/).
+
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **D/R/A** — le texte intégral, l'extraction PDF/OCR, la prépa R1.1/R1.2, A2.6/A8.3.
+- **Plan** : le texte intégral, le PDF, puis R1.1/R1.2.
+- **Ambition** : le français réel pour N2.
+- **Stratégie** : le dump, débaliseur, splits.
+- **Objectif final** : 10 corpus en texte intégral, ficés.
+- **Ce qu'elle fait** : le **texte intégral** : les 9 (**12,12 M** ; **8 Ko 0**) ; **PDF** (322 Mo, 8 Ko 0) ; en ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E-g*.pt work/n2k/M-g*.pt 2>/dev/null; for f in E-g1 E-g2 E-g3 M-g1; do echo \"-- $f\"; tail -1 work/n2k/$f.log 2>/dev/null; done", "description": "Wait for the English students"}`

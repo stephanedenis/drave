@@ -17290,3 +17290,113 @@ en: pas encore
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"- **Plan** : le texte intégral (pilote FR), puis PDF/OCR, puis R1.1/R1.2.\",\"- **Plan** : le texte intégral, le PDF, puis … [1796 caractères tronqués]`
+
+  ```
+T0 max : 3998 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master 2f913a1a] DONNÉES — LE CORPUS PDF LOCAL : 2 785 PDF, 1 927 DOCUMENTS, 322 MO, 8 KO 0, LICENCES NOMMÉES
+ 25 files changed, 517 insertions(+), 48 deletions(-)
+ create mode 100644 reports/corpus-pdf-contamination.json
+ create mode 100644 reports/corpus-pdf.json
+ create mode 100644 reports/rapport-corpus-pdf.md
+commit OK (essai 1)
+2f913a1a DONNÉES — LE CORPUS PDF LOCAL : 2 785 PDF, 1 927 DOCUMENTS, 322 MO, 8 KO 0, LICENCES NOMMÉES
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 7 : le corpus PDF local est mesuré, ficé, committé (2 785 PDF, 1 927 documents, 322 Mo)
+
+**Round 7/1000 — le PDF est entré dans les données.** Commit `2f913a1a` ; le français et les neuf langues l'attendent.
+
+## Le corpus PDF local
+
+| grandeur | valeur |
+|---|---:|
+| PDF parcourus | **2 785** (104 livres + 2 681 notes de cours) |
+| pages | **222 570** |
+| documents gardés | **1 927** |
+| scannés écartés | 159 (l'OCR du R4.4 les prendra) |
+| doublons retirés | 616 |
+| caractères | **314,4 M** |
+| corpus | **322,5 Mo** (train 295,8 / val 15,0 / test 11,7) |
+| tronçons 8 Ko | 39 506 |
+
+**Contrôles** : **8 Ko à zéro** entre les splits ; **0 / 40** sur les trois jeux d'évaluation locaux. Le contrôle ligne (4,0 % / 2,6 %) ne voit que les **en-têtes et pieds de page** répétés dans un même document. Les **licences sont nommées** : livres et notes de cours sous droits réservés, usage local, non diffusé.
+
+## L'anglais
+
+16,2 M pages lues, **4,34 M articles**, 17,20 G caractères. Le plus gros dump ; il lui reste ~1-2 M pages. Son contrôle 8 Ko suivra (le plus lourd), puis la fiche et le **catalogue des dix**.
+
+## La suite
+
+L'**anglais** (le 10e corpus) → son contrôle 8 Ko → la **fiche et le catalogue des dix** ; puis la **mesure A8.3** (le lot : `mesure_lot_disque.sh`, avec l'éviction du cache — la seule mesure R1/A possible tout de suite) ; l'**OCR des 159 scannés** ; et la comparaison des genres (encyclopédie, livre, cours). Le goal reste actif ; le prochain round ramasse l'anglais.
+
+
+## Tour 20
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 8/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null; echo \"=== en\"; ps -eo pid,etime,pcpu,cmd | grep \"corpus_wikipedia_texte.py --langue en\" | grep -v grep | awk '{print $1,$2,$3}'; tail -1 /tmp/run-texte-en.log | c … [430 caractères tronqués]`
+
+  ```
+20:37
+=== en
+1494795 02:06:11 97.9
+  [en] 16200000 lus · 4340955 gardés · 17.20 G caractères
+17G	data/corpus_wiki_en_texte
+=== check en?
+=== git
+2f913a1a DONNÉES — LE CORPUS PDF LOCAL : 2 785 PDF, 1 927 DOCUMENTS, 322 MO, 8 KO 0, LICENCES NOMMÉES
+ad3da0b6 B13 — LA PORTE APPRISE : Q-TABLE 67 ÉTATS, 30 NŒUDS/BUT (SONDE 7), 200 ÉPISODES ; 15/15
+ M docs/implantation/bloc-linguistique.md
+ M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '30,60p' tools/porte-flux.sh; echo \"=== mesure rest\"; sed -n '40,110p' tools/mesure_lot_disque.sh; echo \"=== ids existants\"; ls -la /tmp/porte-flux* work/*/ids.txt 2>/dev/null | head -5; find /tmp -maxdepth 2 -name \"ids.txt … [166 caractères tronqués]`
+
+  ```
+N_IDS=${N_IDS:-24}
+COUCHES=${COUCHES:-12}
+CTX=${CTX:-64}
+THREADS=${THREADS:-8}
+PORT=${PORT:-$((48000 + RANDOM % 1000))}
+
+# Tout ce qui est écrit par cette porte vit dans SON répertoire : deux
+# exécutions concurrentes (ou une porte lancée depuis un autre dépôt) ne se
+# tronquent plus le journal — le `grep` de disponibilité pouvait lire la ligne
+# de l'autre serveur et croire que le sien écoutait.
+TRAVAIL=$(mktemp -d "${TMPDIR:-/tmp}/porte-flux-XXXXXX")
+LOG_SRV="$TRAVAIL/serveur.log"
+IDS="$TRAVAIL/ids.txt"
+
+[ -x "$D" ] || { echo "  $D absent : construire d'abord (cargo build --release)"; exit 1; }
+[ -s "$MODELE" ] || { echo "  $MODELE absent"; exit 1; }
+if [ ! -s "$IDS" ]; then
+    "$D" "$MODELE" --tokenize --fichier data/wikitext2_test.txt \
+         --sortie "$IDS" >/dev/null 2>&1
+fi
+[ -s "$IDS" ] || { echo "  jetons de test indisponibles"; exit 1; }
+
+# Le nœud moteur : sa plage de couches est IMPOSÉE par le flux reçu, il n'a donc
+# qu'à écouter. Il sert UNE connexion puis s'arrête (« arrêt : failed to fill
+# whole buffer », après le dernier flux) : on en relance donc un par mode, en
+# attendant qu'il écoute vraiment plutôt que de dormir au hasard.
+SRV=""
+demarrer_serveur() {
+    
+… [1202 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -la models/Qwen2.5-0.5B-Q8_0.gguf 2>/dev/null; nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --tokenize --fichier data/wikitext2_test.txt --sortie  … [447 caractères tronqués]`

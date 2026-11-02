@@ -1,0 +1,174 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "16/16",
+ "episodes": [
+  50,
+  100,
+  200,
+  400,
+  800
+ ],
+ "graines": [
+  0,
+  1,
+  2
+ ],
+ "lignes": [
+  {
+   "episodes": 50,
+   "graine": 0,
+   "etats_q": 52,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 50,
+   "graine": 1,
+   "etats_q": 61,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 50,
+   "graine": 2,
+   "etats_q": 74,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 100,
+   "graine": 0,
+   "etats_q": 52,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 100,
+   "graine": 1,
+   "etats_q": 61,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 100,
+   "graine": 2,
+   "etats_q": 74,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 200,
+   "graine": 0,
+   "etats_q": 67,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 200,
+   "graine": 1,
+   "etats_q": 61,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 200,
+   "graine": 2,
+   "etats_q": 74,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 400,
+   "graine": 0,
+   "etats_q": 69,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 400,
+   "graine": 1,
+   "etats_q": 62,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 400,
+   "graine": 2,
+   "etats_q": 83,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 800,
+   "graine": 0,
+   "etats_q": 83,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 800,
+   "graine": 1,
+   "etats_q": 62,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  },
+  {
+   "episodes": 800,
+   "graine": 2,
+   "etats_q": 83,
+   "noeuds": 30,
+   "sonde": 7,
+   "cout": 68.0,
+   "appels": 7,
+   "but": true
+  }
+ ],
+ "limites": [
+  "Q-learning tabulaire",
+  "politique seule non mesurée",
+  "coût 5 déclaré"
+ ]
+}

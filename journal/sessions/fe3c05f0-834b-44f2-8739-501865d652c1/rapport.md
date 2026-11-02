@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 28.0 h |
-| Tours | 19 |
-| Messages | 959 |
-| Appels d'outils | 944 |
+| Durée | 28.1 h |
+| Tours | 20 |
+| Messages | 965 |
+| Appels d'outils | 948 |
 | Fichiers touchés | 18 |
-| Commandes | 868 |
+| Commandes | 872 |
 | Sous-agents | 0 |
 | Commits | 57 |
 | Compactages de contexte | 2 |
@@ -65,6 +65,8 @@
 **Tour 18** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 **Tour 19** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
+
+**Tour 20** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -941,6 +943,44 @@ Le **manifeste de l'anglais** → son **contrôle 8 Ko** (le plus lourd) → la 
 - job_output
 - bash — Fix budget and commit PDF corpus
 
+**Synthèse produite :**
+
+⏵ Round 7 : le corpus PDF local est mesuré, ficé, committé (2 785 PDF, 1 927 documents, 322 Mo)
+
+**Round 7/1000 — le PDF est entré dans les données.** Commit `2f913a1a` ; le français et les neuf langues l'attendent.
+
+\## Le corpus PDF local
+
+| grandeur | valeur |
+|---|---:|
+| PDF parcourus | **2 785** (104 livres + 2 681 notes de cours) |
+| pages | **222 570** |
+| documents gardés | **1 927** |
+| scannés écartés | 159 (l'OCR du R4.4 les prendra) |
+| doublons retirés | 616 |
+| caractères | **314,4 M** |
+| corpus | **322,5 Mo** (train 295,8 / val 15,0 / test 11,7) |
+| tronçons 8 Ko | 39 506 |
+
+**Contrôles** : **8 Ko à zéro** entre les splits ; **0 / 40** sur les trois jeux d'évaluation locaux. Le contrôle ligne (4,0 % / 2,6 %) ne voit que les **en-têtes et pieds de page** répétés dans un même document. Les **licences sont nommées** : livres et notes de cours sous droits réservés, usage local, non diffusé.
+
+\## L'anglais
+
+16,2 M pages lues, **4,34 M articles**, 17,20 G caractères. Le plus gros dump ; il lui reste ~1-2 M pages. Son contrôle 8 Ko suivra (le plus lourd), puis la fiche et le **catalogue des dix**.
+
+\## La suite
+
+L'**anglais** (le 10e corpus) → son contrôle 8 Ko → la **fiche et le catalogue des dix** ; puis la **mesure A8.3** (le lot : `mesure_lot_disque.sh`, avec l'éviction du cache — la seule mesure R1/A possible tout de suite) ; l'**OCR des 159 scannés** ; et la comparaison des genres (encyclopédie, livre, cours). Le goal reste actif ; le prochain round ramasse l'anglais.
+
+### Tour 20 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check English manifest and running checks
+- bash — Inspect lot measurement inputs and ids
+- bash — Launch A8.3 lot measurement on disk
+- bash — Wait for lot measurement completion
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1008,7 +1048,7 @@ Le **manifeste de l'anglais** → son **contrôle 8 Ko** (le plus lourd) → la 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 828 autres
+- … et 832 autres
 
 ## 4. Mesures et résultats marquants
 

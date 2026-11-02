@@ -19,6 +19,7 @@
   T10 le labyrinthe non linéaire      plusieurs chemins, la bonne politique utilise la sonde, l'aveugle l'ignore
   T11 la porte neuronale              la porte ne s'ouvre que par la bonne politique ; l'aveugle échoue
   T12 la porte apprise                la Q-table apprend la porte ; le modèle la trouve seul
+  T13 la courbe d'apprentissage       ���pisodes × graines : le but est atteint, les nœuds stables
   T8  les opérateurs hétérogènes      trois genres, coût et appels, le négatif reste inutile
 
 Usage : PYTHONPATH=. ~/gpu-env/bin/python tools/pensee/autotest.py
@@ -301,6 +302,21 @@ def t12_porte_apprise() -> tuple[bool, str]:
                 f"sonde {ba['par_operateur'].get('sonde', 0)}")
 
 
+def t13_courbe() -> tuple[bool, str]:
+    """La courbe : plusieurs épisodes et graines atteignent toutes le but."""
+    from .operateurs import LABYRINTHE_PORTE, REGISTRE_P, DRVM, PolitiqueApprise
+    buts = []
+    for ep in (50, 100, 200):
+        for g in (0, 1, 2):
+            p = PolitiqueApprise(episodes=ep, graine=g)
+            p.apprendre()
+            d = DRVM(REGISTRE_P, p)
+            d.penser(LABYRINTHE_PORTE, AStar(), Budget(200))
+            buts.append(d.instantane()["but"])
+    return all(buts) and len(buts) == 9, (f"courbe : {sum(buts)}/{len(buts)} buts "
+                                         f"(50–200 épisodes, 3 graines)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -312,7 +328,8 @@ def main() -> int:
               ("T9 neuronal nécessaire", t9_necessaire()),
               ("T10 labyrinthe non linéaire", t10_labyrinthe()),
               ("T11 porte neuronale", t11_porte()),
-              ("T12 porte apprise", t12_porte_apprise())]
+              ("T12 porte apprise", t12_porte_apprise()),
+              ("T13 courbe d'apprentissage", t13_courbe())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

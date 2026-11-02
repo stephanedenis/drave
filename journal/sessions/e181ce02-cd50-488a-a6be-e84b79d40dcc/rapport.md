@@ -9,8 +9,8 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 27.9 h |
 | Tours | 30 |
-| Messages | 621 |
-| Appels d'outils | 618 |
+| Messages | 622 |
+| Appels d'outils | 619 |
 | Fichiers touchés | 25 |
 | Commandes | 497 |
 | Sous-agents | 2 |
@@ -1616,12 +1616,13 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 
 ### Tour 30 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Tracer la courbe d'apprentissage de la porte
 - bash — Ajouter la porte T13 et lancer l'autotest
 - bash — Écrire la fiche de la courbe et l'état
 - bash — Passer les portes et committer la courbe
+- job_output
 
 ## 3. Travail accompli
 

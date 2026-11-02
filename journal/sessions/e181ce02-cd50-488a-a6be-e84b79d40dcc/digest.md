@@ -13839,3 +13839,40 @@ ad3da0b6 B13 — LA PORTE APPRISE : Q-TABLE 67 ÉTATS, 30 NŒUDS/BUT (SONDE 7), 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T12 la porte apprise                la Q-table apprend la porte ; le modèle la trouve seul\\n\",\n\"  T12 la porte apprise … [1490 caractères tronqués]`
+
+  ```
+ok
+  ✅ T11 porte neuronale    porte : bon 28 nœuds/58.0 but ; aveugle 200 nœuds/483.0 sans but
+  ✅ T12 porte apprise      porte apprise : 67 états-Q, 30 nœuds/but, sonde 7
+  ✅ T13 courbe d'apprentissage courbe : 9/9 buts (50–200 épisodes, 3 graines)
+  16/16 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-courbe.md <<'MD'\n# B13 — la courbe d'apprentissage : la porte est apprise dès 50 épisodes\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **16/16 porte … [6110 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 402 fiche(s) · 504 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [1005 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 240 python3 -m tools.pensee.autotest EXIT=0
+[still running after 60000ms; moved to background job bash-497]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-497", "timeout_ms": 600000, "wait": true}`
