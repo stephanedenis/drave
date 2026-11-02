@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 27.3 h |
 | Tours | 17 |
-| Messages | 932 |
-| Appels d'outils | 921 |
+| Messages | 936 |
+| Appels d'outils | 926 |
 | Fichiers touchés | 18 |
-| Commandes | 847 |
+| Commandes | 852 |
 | Sous-agents | 0 |
-| Commits | 52 |
+| Commits | 53 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -860,9 +860,14 @@ L'**anglais** (8,0 M pages lues, 2,54 M articles, 12,0 G de texte) finit ; son c
 
 ### Tour 17 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Check English and PDF extraction progress
+- bash — Read catalogue tool structure
+- bash — Launch background polls for English and PDF manifests
+- bash — Add full-text mode to corpus catalogue
+- bash — Check English and PDF manifest status
+- bash — Commit catalogue tool and state
 
 ## 3. Travail accompli
 
@@ -931,7 +936,7 @@ L'**anglais** (8,0 M pages lues, 2,54 M articles, 12,0 G de texte) finit ; son c
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 807 autres
+- … et 812 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1131,4 +1136,5 @@ L'**anglais** (8,0 M pages lues, 2,54 M articles, 12,0 G de texte) finit ; son c
 - DONNÉES — SIX CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT) : 7,83 M ARTICLES, 30,4 GO" 2>/tmp/commit.err; then echo "commit OK (essai $i)"; break; else ech
 - DONNÉES — HUIT CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES) : 11,65 M ARTICLES, 48,4 GO, 8 KO 0" 2>/tmp/commit.err; then echo "commit OK (essai $i)
 - DONNÉES — NEUF CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES, DE) : 14,51 M ARTICLES, 59,0 GO, 8 KO 0" 2>/tmp/commit.err; then echo "commit OK (essai
+- DONNÉES — LE CATALOGUE DU TEXTE INTÉGRAL (9 LANGUES, 14,51 M ARTICLES, 59,0 GO) DEPUIS LES MANIFESTES" 2>/tmp/commit.err; then echo "commit OK (essai $i)"; brea
 

@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 27.6 h |
 | Tours | 18 |
-| Messages | 1115 |
-| Appels d'outils | 1037 |
+| Messages | 1118 |
+| Appels d'outils | 1040 |
 | Fichiers touchés | 11 |
-| Commandes | 847 |
+| Commandes | 850 |
 | Sous-agents | 0 |
-| Commits | 30 |
+| Commits | 31 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*71 appels d'outils.* Actions notables :
+*74 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 40 autres
+- … et 43 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 807 autres
+- … et 810 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1157,7 +1157,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ## 5. Erreurs rencontrées
 
-55 sorties en erreur ou divergentes. Les premières :
+56 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5
@@ -1207,4 +1207,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - N2.j3 — LA CAPACITÉ SUR 186 Mo : 21,65 M PAIE (4,39 → 4,20), DONNÉES × CAPACITÉ  À données et budget égaux (20 000 pas, positions 0–384), le modèle de 21,65 M v
 - N2.l — LE CANAL DE STRUCTURE : +5 % DE PPL POUR 1 344 PARAMÈTRES, ET LE MÊME ALPHABET  Donner au modèle une classe de structure par octet (mot plein, grammatica
 - N2.l — LE CANAL DE STRUCTURE : +5 % DE PPL POUR 1 344 PARAMÈTRES, ET LE MÊME ALPHABET  Donner au modèle une classe de structure par octet (mot plein, grammatica
+- N2.j4 — LA DISTILLATION SUR LE CORPUS RÉEL : 4,39 → 3,88, ET TOUT LE RESTE BAISSE  Professeur 23,57 M sur les 186 Mo de Wikipédia (1,6655 bit/octet), distillé d
 

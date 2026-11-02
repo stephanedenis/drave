@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**77 commits** · **4 session(s)** · **9 thème(s)**
+**78 commits** · **4 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 5 | [distribue.md](distribue.md) |
 | docs | 19 | [docs.md](docs.md) |
 | memoire | 8 | [memoire.md](memoire.md) |
-| mesures | 38 | [mesures.md](mesures.md) |
+| mesures | 39 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -111,10 +111,16 @@
 | 19:42 | `c6fb94e2` | L — LECTURE DOUBLE : TOP-1 TÊTE 0,957 (0,800 RÉEL/1,0 SYNTH), 29 CIBLES AMBIGUËS |
 | 19:45 | `7a083904` | N2.l — LE CANAL DE STRUCTURE : +5 % DE PPL POUR 1 344 PARAMÈTRES, ET LE MÊME ALPHABET |
 | 19:49 | `35bf5588` | DONNÉES — NEUF CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES, DE) : 14,51 M ARTICLES, 59,0 GO, 8 KO 0 |
+| 19:52 | `15c69b98` | B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12) |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Le catalogue du texte intégral.** `catalogue_corpus.py --texte` lit les manifestes `-texte` et
+rend la table : les neuf langues, **14,51 M articles**, **45,54 G caractères**, **59,0 Go**, le
+**8 Ko à zéro partout**, l'UDHR citée pour fr, it, ja et pt. L'anglais (8,0 M pages lues) et le
+PDF local (16 M de texte) avancent.
+
 **Neuf corpus en texte intégral.** L'allemand est mesuré : **2 864 934 articles**, **10,443 G
 caractères**, **10,68 Go**, **8 Ko 0**, XNLI **0/40**, 4,7 % de lignes répétées (les dates, les
 références), 15 liens résiduels. Les neuf : **14,51 M articles**, **45,54 G caractères**,

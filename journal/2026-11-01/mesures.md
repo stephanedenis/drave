@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (38)
+## Commits du jour (39)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -46,6 +46,7 @@
 | 19:16 | `c5d38030` | L — ATTACHEMENT : TOP-1 0,294 / TOP-K 0,338 SUR 68 CIBLES (COUVERTURE 0,338), HASARD 0,015 | `bloc-linguistique.md`, `chantiers.md`, `en-cours.md` (+31) |
 | 19:33 | `f5d1256d` | B13 — OPÉRATEURS HÉTÉROGÈNES : 3 GENRES, SONDE 4 APPELS/COÛT 48 VS AVEUGLE 1/33 (11/11) | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+25) |
 | 19:42 | `c6fb94e2` | L — LECTURE DOUBLE : TOP-1 TÊTE 0,957 (0,800 RÉEL/1,0 SYNTH), 29 CIBLES AMBIGUËS | `bloc-linguistique.md`, `chantiers.md`, `en-cours.md` (+32) |
+| 19:52 | `15c69b98` | B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12) | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+21) |
 
 ## Chiffres du jour
 
@@ -79,6 +80,7 @@
 - [reports/rapport-n2-propre.md](../../reports/rapport-n2-propre.md)
 - [reports/rapport-pensee-drvf.md](../../reports/rapport-pensee-drvf.md)
 - [reports/rapport-pensee-gold-linguistique.md](../../reports/rapport-pensee-gold-linguistique.md)
+- [reports/rapport-pensee-necessaire.md](../../reports/rapport-pensee-necessaire.md)
 - [reports/rapport-pensee-operateurs.md](../../reports/rapport-pensee-operateurs.md)
 - [reports/rapport-r44-scans.md](../../reports/rapport-r44-scans.md)
 

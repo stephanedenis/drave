@@ -16795,3 +16795,111 @@ ValueError: too many values to unpack (expected 2)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extrait_pdf.py'); s=p.read_text()\ns=s.replace('''    racines = [(lib, pathlib.Path(chemin)) for chemin, lib in\n               (r.split(\":\", 1) if \":\" in r else (r, \"\") for … [1284 caractères tronqués]`
+
+  ```
+OK
+pdf job 1549012
+2,2M	data/corpus_pdf
+=== en
+  [en] 8000000 lus · 2536621 gardés · 12.00 G caractères
+1494795 01:21:52
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 4 : neuf corpus en texte intégral committés, l'anglais court, le PDF lancé
+
+**Round 4/1000 — l'allemand est entré, le PDF local a démarré.** Commit `35bf5588` (neuf corpus) ; l'anglais est le dernier run Wikipédia ; l'extraction des documents a son outil et son pilote.
+
+## Les neuf corpus Wikipédia
+
+| langue | articles | caractères | octets | fuite 8 Ko | éval |
+|---|---:|---:|---:|---:|---|
+| fr / ar / pt / zh / ja | 7 273 451 | 16,98 G | 25,08 Go | **0** | XNLI 0/40, UDHR citée |
+| it / ru / es / **de** | 8 238 148 | 28,56 G | 33,94 Go | **0** | XNLI 0/40, UDHR (it) |
+| **total (9)** | **14 511 599** | **45,54 G** | **59,0 Go** | **0** | — |
+
+L'**allemand** : 2 864 934 articles, 10,443 G caractères, 10,68 Go, XNLI **0/40**, 4,7 % de lignes répétées, 15 liens résiduels. Le **8 Ko est encore à zéro**.
+
+## Le PDF local
+
+`tools/extrait_pdf.py` est écrit et **son pilote tourne** : les **70 livres** de `Biblio_large` et les **2 711 notes du CEGEP** — le **texte natif** par `pdftotext`, la détection des **scannés** (moins de 50 caractères par page, comptés et signalés), la déduplication, le split par document, le manifeste, et les **licences nommées** (droits réservés, usage local, non diffusé). L'OCR des scannés viendra avec le pipeline R4.4 ; la mise en page (en-têtes, formules, tableaux) est une limite écrite.
+
+## La suite
+
+L'**anglais** (8,0 M pages lues, 2,54 M articles, 12,0 G de texte) finit ; son contrôle 8 Ko suivra (le plus gros : ~18-20 Go). Puis le **catalogue complet des dix** (la table finale, les totaux), la **fiche du corpus PDF** et la **préparation R1.1/R1.2** avec A2.6/A8.3. Le goal reste actif ; je reprends au prochain round avec l'anglais et le PDF.
+
+
+## Tour 17
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 5/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; echo \"=== en\"; ps -eo pid,etime,pcpu,cmd | grep \"corpus_wikipedia_texte.py --langue en\" | grep -v grep | awk '{print $1,$2,$3}'; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null; tail -1 /tmp/run-texte-en.log | c … [408 caractères tronqués]`
+
+  ```
+19:53
+=== en
+1494795 01:22:16 97.1
+  [en] 8000000 lus · 2536621 gardés · 12.00 G caractères
+12G	data/corpus_wiki_en_texte
+=== pdf
+1549012 00:54 1.3
+9,6M	data/corpus_pdf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '1,60p' tools/catalogue_corpus.py; echo \"...\"; grep -n \"ORDRE\\|def \\|corpus-wiki\" tools/catalogue_corpus.py | head -20", "description": "Read catalogue tool structure", "timeoutMs": 120000, "workdir": "/home/stephane/Data1 … [29 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""catalogue_corpus.py — la table des corpus Wikipédia, depuis leurs manifestes.
+
+POURQUOI CE FICHIER. Chaque corpus de langue a son manifeste `reports/corpus-wiki-<langue>.json`.
+Ce script les lit et rend une **table markdown** et des **totaux**, pour que la fiche et les
+agents n'aient qu'une source : les manifestes. Il ne lit pas les données (elles sont gitignorées),
+seulement les chiffres et les empreintes.
+
+Usage : python3 tools/catalogue_corpus.py [--sortie table.md]
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import sys
+
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+ORDRE = ["fr", "en", "de", "es", "ru", "it", "ja", "zh", "pt", "ar"]
+
+
+def humain(octets: int) -> str:
+    for unite in ("o", "Ko", "Mo", "Go", "To"):
+        if octets < 1000:
+            return f"{octets:.0f} {unite}"
+        octets /= 1000
+    return f"{octets:.1f} Po"
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--sortie", type=pathlib.Path)
+    args = ap.parse_args()
+    manifestes = {}
+    for p in sorted((RACINE / "reports").glob("corpus-wiki-*.json")):
+        d = json.loads(p.read_tex
+… [1459 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; while [ ! -f reports/corpus-wiki-en-texte.json ]; do sleep 20; done; echo EN_OK' > /tmp/poll-en.log 2>&1 &\necho \"poll en $!\"; nohup bash -c 'cd /home/stephane/Data13 … [305 caractères tronqués]`
+
+  ```
+poll en 1550618
+poll pdf 1550619
+  ```
+

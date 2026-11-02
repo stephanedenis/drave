@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 27.2 h |
-| Tours | 21 |
-| Messages | 539 |
-| Appels d'outils | 554 |
+| Tours | 22 |
+| Messages | 542 |
+| Appels d'outils | 555 |
 | Fichiers touchés | 25 |
-| Commandes | 444 |
+| Commandes | 445 |
 | Sous-agents | 2 |
 | Commits | 33 |
 | Compactages de contexte | 2 |
@@ -73,6 +73,8 @@
 **Tour 20** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 **Tour 21** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
+
+**Tour 22** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1164,6 +1166,49 @@ Le round 7 du goal est livré : le gold annote désormais les **deux lectures** 
 - bash — Recommitter le neuronal nécessaire sur le nouveau HEAD
 - bash — Ajouter la fiche à l'état et committer
 
+**Synthèse produite :**
+
+⏵ Neuronal nécessaire : cadenas, sonde seule, avant 3 appels/but, aveugle 20/sans but ; 12/12
+
+Le round 8 du goal est livré : un problème où le neuronal n'est plus **utile** mais **nécessaire**. Commit **`15c69b98`**.
+
+\## Le cadenas
+
+État : une position `0..3`. **Un seul opérateur**, `sonde` (genre **neuronal**) : la politique propose `avant` ou `arrière`, le moteur avance d'un cran. But : `3`.
+
+| politique | nœuds | appels | coût | but |
+|---|---:|---:|---:|---|
+| **avant** | **3** | **3** | **3** | **oui** |
+| arrière (aveugle) | 20 | 20 | 20 | **non** |
+
+**Ce que ça dit** :
+
+- **Le seul chemin est la politique** : `pas` et `saut` n'existent pas dans ce registre ; le moteur ne peut avancer que par la sonde.
+- **La bonne politique atteint le but en 3 coups** ; **l'aveugle tourne** (0→1→0→…) et échoue même avec 20 nœuds : le contrôle négatif n'est plus « inutile », il est **décisif**.
+- **Le coût est le coût du modèle** : 3 appels contre 20 ; la politique est le **seul** levier.
+- Le **`DRVM`** utilise désormais le **but du problème courant** (grille ou cadenas), pas une constante.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-necessaire.md`](../../reports/rapport-pensee-necessaire.md) ; JSON [`pensee-necessaire.json`](../../reports/pensee-necessaire.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T9 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **12/12 portes** ; `porte-bloc-linguistique` **verte** (gold 180 + attachement + 398 langues) ; `revue` **395 fiches / 498 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget ; `sessions.py` : le plan R4.4 reste périmé (session R4.4).
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle. Le cadenas mesure la **nécessité structurelle**, pas la qualité d'un modèle.
+
+\## La suite
+
+1. **L — 200+ phrases réelles** (relatives, portée, anglais) : le gold synthétique ne remplace pas le réel.
+2. **Politique DRVM/native** et coût mesuré, si les poids natifs arrivent.
+3. **Cadenas non linéaire** (plusieurs chemins, un piège) pour que la politique puisse être **bonne** ou **mauvaise** sans être trivialement l'une ou l'autre.
+4. **Modèle neuronal** si un tagger/runner se débloque ; sinon, garder le mock et le dire.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque les 200+ phrases réelles du gold L.
+
+### Tour 22 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Écrire 40 phrases réelles supplémentaires
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1243,7 +1288,7 @@ Le round 7 du goal est livré : le gold annote désormais les **deux lectures** 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 404 autres
+- … et 405 autres
 
 ## 4. Mesures et résultats marquants
 

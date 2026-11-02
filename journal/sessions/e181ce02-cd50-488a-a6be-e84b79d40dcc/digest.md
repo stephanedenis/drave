@@ -12578,3 +12578,71 @@ EXIT=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"  [`pensee-drvf`](../../reports/rapport-pensee-drvf.md), [`pensee-banc`](../../reports/rapport-pensee-banc.md).\",\n\"  [`p … [714 caractères tronqués]`
+
+  ```
+ok
+[still running after 60000ms; moved to background job bash-444]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-444", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 15c69b98] B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12)
+ 24 files changed, 395 insertions(+), 57 deletions(-)
+ create mode 100644 reports/pensee-necessaire.json
+ create mode 100644 reports/rapport-pensee-necessaire.md
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Neuronal nécessaire : cadenas, sonde seule, avant 3 appels/but, aveugle 20/sans but ; 12/12
+
+Le round 8 du goal est livré : un problème où le neuronal n'est plus **utile** mais **nécessaire**. Commit **`15c69b98`**.
+
+## Le cadenas
+
+État : une position `0..3`. **Un seul opérateur**, `sonde` (genre **neuronal**) : la politique propose `avant` ou `arrière`, le moteur avance d'un cran. But : `3`.
+
+| politique | nœuds | appels | coût | but |
+|---|---:|---:|---:|---|
+| **avant** | **3** | **3** | **3** | **oui** |
+| arrière (aveugle) | 20 | 20 | 20 | **non** |
+
+**Ce que ça dit** :
+
+- **Le seul chemin est la politique** : `pas` et `saut` n'existent pas dans ce registre ; le moteur ne peut avancer que par la sonde.
+- **La bonne politique atteint le but en 3 coups** ; **l'aveugle tourne** (0→1→0→…) et échoue même avec 20 nœuds : le contrôle négatif n'est plus « inutile », il est **décisif**.
+- **Le coût est le coût du modèle** : 3 appels contre 20 ; la politique est le **seul** levier.
+- Le **`DRVM`** utilise désormais le **but du problème courant** (grille ou cadenas), pas une constante.
+
+## L'état
+
+- Fiche : [`rapport-pensee-necessaire.md`](../../reports/rapport-pensee-necessaire.md) ; JSON [`pensee-necessaire.json`](../../reports/pensee-necessaire.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T9 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **12/12 portes** ; `porte-bloc-linguistique` **verte** (gold 180 + attachement + 398 langues) ; `revue` **395 fiches / 498 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget ; `sessions.py` : le plan R4.4 reste périmé (session R4.4).
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle. Le cadenas mesure la **nécessité structurelle**, pas la qualité d'un modèle.
+
+## La suite
+
+1. **L — 200+ phrases réelles** (relatives, portée, anglais) : le gold synthétique ne remplace pas le réel.
+2. **Politique DRVM/native** et coût mesuré, si les poids natifs arrivent.
+3. **Cadenas non linéaire** (plusieurs chemins, un piège) pour que la politique puisse être **bonne** ou **mauvaise** sans être trivialement l'une ou l'autre.
+4. **Modèle neuronal** si un tagger/runner se débloque ; sinon, garder le mock et le dire.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque les 200+ phrases réelles du gold L.
+
+
+## Tour 22
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 9/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

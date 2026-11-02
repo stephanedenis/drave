@@ -14524,3 +14524,48 @@ pas 14100 · perte 1.6855 · PPL val 5.298 · 586 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/W-g3.pt --decomposition --longueurs --corpus-dir data/wiki_fr/propre --sortie work/n2j/eval-distill.json 2>&1 | grep -v Loading; ~/gpu- … [198 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-847]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-847", "timeout_ms": 400000, "wait": true}`
+
+  ```
+{"fichier": "W-g3.pt", "params": 11816136, "val": 3.8722, "test": 3.9556, "litterature": 7.1124, "litterature_propre": 7.2052, "anglais": 12.3904, "wikitext2": 12.9644, "permute": 154.732, "decomposition": {"complete": 3.7394, "apres_2_blocs": 5.6835, "apres_4_blocs": 4.3296, "apres_6_blocs": 3.7467, "sans_pensee": 29961551.2108}, "longueurs": {"129": 3.8753, "192": 3.8473, "256": 3.9785, "384": 4.7502, "512": 5.6903}}
+{"fichier": "W-g3.pt", "params": 11816136, "val": 6.4134, "test": 6.3088, "litterature": 7.1124, "litterature_propre": 7.2052, "anglais": 12.3904, "wikitext2": 12.9644, "permute": 196.02}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-distillation-reelle.md <<'EOF'\n# N2.j4 — La distillation sur le corpus réel : 4,39 → 3,88, et tout le reste baisse\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : le professeur 23,57 M … [4468 caractères tronqués]`
+
+  ```
+fiche écrite
+19:54
+pas 17950 · perte 1.5981 · PPL val 5.019 · 731 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.i**\\n  (4,84 Mo) : **12,93** littérature, **33,83** anglais — généralise ;\", \"**N2.i** : **12,93** / **33,83* … [1085 caractères tronqués]`
+
+  ```
+en-cours ok
+roadmap ok
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 395 fichiers, le disque en a 396
+19:54
+pas 18200 · perte 1.6671 · PPL val 4.991 · 741 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1186 caractères tronqués]`
+
+  ```
+ok
+     · compteurs : en-cours.md dit 496 JSON, le disque en a 498
+[still running after 60000ms; moved to background job bash-850]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-850", "timeout_ms": 300000, "wait": true}`
