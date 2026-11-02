@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 39.5 h |
-| Tours | 19 |
-| Messages | 1563 |
-| Appels d'outils | 1435 |
+| Durée | 40.9 h |
+| Tours | 20 |
+| Messages | 1572 |
+| Appels d'outils | 1443 |
 | Fichiers touchés | 11 |
-| Commandes | 1133 |
+| Commandes | 1140 |
 | Sous-agents | 0 |
-| Commits | 80 |
+| Commits | 81 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -71,6 +71,8 @@
 **Tour 18** — suis le plan, continue jusqu'à 8h demain matin
 
 **Tour 19** — <goal_round> Objective: "Suivre le plan de travail (docs/pilotage/plan-travail.md) et avancer la ligne N2 en autonomie jusqu'à 08 h 00 le 2026-11-02 : distillation sur le corpus réel (professeur 23,57 M, 3 graines, positions aléatoires), canal d'annotation de structure (avec placebo et ablation), base anglaise monolingue, session S (analyseur plus riche, export), intégration hub. Chaque étape rend … [659 caractères tronqués]
+
+**Tour 20** — mets le dossier de pilotage à jour et continue
 
 ## 2. Déroulé, étape par étape
 
@@ -1058,6 +1060,23 @@ Les cinq volets du mandat sont mesurés, écrits et committés. Le dernier obsta
 La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M, −0,47 à 34 M), la distillation **sature** avec l'élève, et un professeur 29 % plus gros ne gagne **rien en domaine**. Le filtre des phrases non am
 … [693 caractères tronqués]
 
+### Tour 20 — mets le dossier de pilotage à jour et continue
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Read the state's N2 section and timestamp
+- read
+- bash — Read the roadmap and plan rows for N2
+- bash — Update the state with the night's results
+- bash — Fix the question arrow and the budget
+- bash — Read the roadmap's S row
+- bash — Update the roadmap and plan
+- bash — Commit the pilotage update
+
+**Synthèse produite :**
+
+⏵ Mise à jour du pilotage : je relis l'état, la roadmap et le plan avant de les aligner sur la nuit
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1118,7 +1137,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1093 autres
+- … et 1100 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1346,4 +1365,5 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - ÉTAT — LE BUDGET REVIENT À 4000 MOTS (N2.z SUR DEUX GRAINES)  Le canal à 34,3 M est confirmé à 3,53 en domaine sur deux graines ; l'état tient dans son budget."
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg-final.txt <<'EOF' ÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 06 h : 76 VERTES, 5 ROUGES (LES
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/generer_natif.py; python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilo
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg-pilotage.txt <<'EOF' PILOTAGE — LA NUIT N2 EST CLOSE : LE MEILLEUR MODÈLE EST LE 34,3 M + C
 

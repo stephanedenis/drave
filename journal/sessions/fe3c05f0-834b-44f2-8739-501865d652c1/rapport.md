@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 39.3 h |
 | Tours | 384 |
-| Messages | 2304 |
-| Appels d'outils | 1528 |
+| Messages | 2308 |
+| Appels d'outils | 1530 |
 | Fichiers touchés | 26 |
-| Commandes | 1359 |
+| Commandes | 1360 |
 | Sous-agents | 0 |
 | Commits | 88 |
 | Compactages de contexte | 4 |
@@ -24,6 +24,8 @@
 - **complete** — R4.4 ambitieux : rendre l'OCR du lecteur robuste aux scans (corpus de scans simulés avec vérité terrain, prétraitement, reconstruction de layout, exposants, colonnes, tableaux), mesurer WER et parité avant/après, itérer jusqu'à parité ≥ 90 % sur les scans dégradés avec contrôles négatifs, et livrer 
 … [168 caractères tronqués]
 - **create** — Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locau
+… [279 caractères tronqués]
+- **complete** — Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locau
 … [279 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -9019,7 +9021,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 384 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Wait 8 min then check CEGEP 8 progress
 - bash — Wait 9 min then check CEGEP 8
@@ -9034,6 +9036,35 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Write manual CEGEP manifest and run check
 - bash — Update CEGEP fiche and docs to 7 notes
 - bash — Commit CEGEP 7 notes
+- bash — Final fast gates before closure
+- … et 1 autres
+
+**Synthèse produite :**
+
+La campagne D/R/A est close, et le goal est marqué **complete** à 07 h 55, à cinq minutes de la fenêtre de 8 h.
+
+\## Ce qui a été livré
+
+**Les 10 corpus Wikipédia en texte intégral** (commit `3b670a2c`) : **20,53 M articles**, **67,73 G caractères**, **81,2 Go**, **8 Ko 0 partout**. Les dix manifestes sont dans `reports/corpus-wiki-*-texte.json`, les fiches et le catalogue dans `reports/` ; l'anglais est clos à **99,2 %** des pages (le run a été interrompu à ~75 Go de résidence, manifeste reconstruit avec note et SHA-256, ~200 000 pages non traitées — limite nommée).
+
+**Le corpus PDF** (commit `2f913a1a`) : 2 785 PDF, 222 570 pages, **1 927 documents gardés**, **322,5 Mo**, 8 Ko 0, **159 scans** signalés, licences nommées.
+
+**Le corpus Documents** (commit `5c27a3fb`) : 7 459 PDF, **3 384 documents**, **871 972 648 caractères**, 8 Ko **2,07 %** sur le test (372 tronçons dupliqués), licences « personnel — usage local, non diffusé ».
+
+**Le corpus OCR, deux volets** :
+- **livres** (commit `15f2c8f6`) : **20 livres, 7 381 pages, 15 356 972 caractères** ; train 19 doc./14,6 Mo, **val 1 doc./934 ko**, test 0 ; **8 Ko : 1 784 fenêtres train + 115 val, 0 doublon** ; recouvrement éval **0/40, 0/24, 0/40** ; 8,4 h de calcul ; un doublon exact rejeté ;
+- **CEGEP** (commits `ccf8bac5` puis `65708212`) : **7 notes, 739 pages, 1 208 656 caractères** (dont deux *Algorithms Illuminated*), 8 Ko 0, éval 0/40 ; l'option `--racine` a été ajoutée à `tools/ocr_pdf.py`.
+
+**Les genres** (commit `166896b4`) : l'OCR des 20 livres passe à **38,5 car/ligne**, 6,8 % de lignes dupliquées (contre 32,1 et 4,8 % pour les 8 premiers livres).
+
+**La préparation R1.1/R1.2** (commit `df42425a`) : tous les intrants D/R/A sont prêts, la hiérarchie est à N2. **A2.6/A8.3** (commit `f708b7ee`) : le lot ≥ 2 ne divise pas les lectures denses (+27 % de calcul, PPL −0,006 %).
+
+\## Comment c'est vérifié
+
+- **Chaque livraison** a son manifeste JSON, sa fiche dans `reports/`, son chiffre, son **contrôle négatif** (8 Ko et, pour l'OCR, le recouvrement éval mesuré à zéro) et son commit.
+- **L'état** (`docs/pilotage/en-cours.md`), la **roadmap**, le **plan**, les **chantiers** et le **récit** du 2/11 portent à jour les 20 livres et les 7 notes CEGEP (commits `868399c8`, `bfe57da7`, `65708212`).
+- **Les portes** : la passe complète du 02/11 06 h (`6c7bff9b`) donne **76 vertes, 5 rouges** — les 4 connues de `references-non-regression.md` plus `porte-greffe` à la borne ; la revue passe (**516 fiches, 604 JSON, 118
+… [916 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -9110,7 +9141,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1319 autres
+- … et 1320 autres
 
 ## 4. Mesures et résultats marquants
 

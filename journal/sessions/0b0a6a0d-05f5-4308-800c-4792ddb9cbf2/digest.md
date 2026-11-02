@@ -19407,3 +19407,103 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 
 Le serveur de la banque de structures tourne toujours (http://127.0.0.1:8765, 7 phrases, 14 candidats) si vous voulez valider à la main.
 
+
+## Tour 20
+
+### 👤 Utilisateur
+
+mets le dossier de pilotage à jour et continue
+
+### 🤖 Assistant
+
+⏵ Mise à jour du pilotage : je relis l'état, la roadmap et le plan avant de les aligner sur la nuit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l docs/pilotage/en-cours.md; grep -n \"Mis à jour\" docs/pilotage/en-cours.md | head -2; sed -n '/^- \\*\\*N2\\*\\*/,+2p' docs/pilotage/en-cours.md | cut -c1-500; date '+%H:%M %d/%m'", "description": "Read the state's N2 section  … [15 caractères tronqués]`
+
+  ```
+148 docs/pilotage/en-cours.md
+3:**Mis à jour : 2026-11-02, 07 h 47 HNE (heure locale, EST).**
+- **N2** : **N2.h** 3,09 ; **N2.j** 7,42 ; **N2.p** 4,00 ; **N2.t** 5,58 ; N4 **0/40** ; fiches
+  [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-anglais`](../../reports/rapport-n2-anglais.md).
+- **Pensée — state store v0** : 6/6 portes (BFS, greedy, A*, MCTS-lite), jouet des cruches ; fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine AC-3, alpha-bêta, DRVF.
+- **N2** : la porte **< 2,5** est-elle la bonne, après N2.h (**3,09** en domaine, **12,93** en littérature) ? →
+  la **roadmap N** tranche.
+- **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
+09:07 02/11
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 07 h 47 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
+6: > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
+7: > [`reports/`](../../reports/). Histoire : [`journal/`](../../journal/). Plan : [`roadmap.md`](roadmap.md).
+8: 
+9: ## Sessions en cours
+10: 
+11: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+12: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+13: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+14: > le hook pre-commit refuse un fait sans ligne d'état ; une session qui trouve l'état en retard
+15: > le corrige.
+16: 
+17: ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+18: 
+19: - **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+20: -
+… [12278 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"| \\*\\*N2\" docs/pilotage/roadmap.md | head -2; sed -n \"$(grep -n '| \\*\\*N2' docs/pilotage/roadmap.md | head -1 | cut -d: -f1)p\" docs/pilotage/roadmap.md | cut -c1-1200; echo \"=== plan ===\"; grep -n \"N2 — le natif\" … [98 caractères tronqués]`
+
+  ```
+32:| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : corpus propre, **3,0904** en domaine, **16,70 → 3,85** hors dépôt ; N4 partiel | **N2** (plus de français unique, capacité), **N4** (consigne) |
+183:| **N2** | la distillation : corpus, professeur, curriculum | 🔬 | **N2.h** — corpus dédupliqué (**0 %** de fuite) : la chaîne propre vaut **3,0904**, pas 2,85 ; **la diversité française divise la PPL hors dépôt par 4,3** (16,70 → 3,85) pour **+0,17** en domaine ; **positions aléatoires : 14,11 → 3,25** à 256 octets ; les deux leviers **se composent** (DR : 3,47 / 4,10 / 3,49 à 256) ; la **capacité** (21,65 M) paie **−0,06** en domaine mais ne couvre pas. le **corpus élargi** (N2.i, 4,84 Mo) **généralise** (littérature −22 %, anglais −40 %) ; le **corpus réel** (N2.j, 186 Mo de Wikipédia) donne **7,42** en littérature et **12,41** en anglais (×1,7 à ×2,6) ; le **multilingue** (N2.k, 10 langues, 237 Mo) paie **+57 %** en français et gagne **−42 à −91 %** ailleurs ; les **positions aléatoires** (N2.j2) font tomber le verrou de longueur sur le corpus réel (256 octets 9,28 → 4,49, 512 13,37 → 5,67) ; la **capacité** sur 186 Mo
+… [2033 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\n\n# 1. la puce N2 : la chaîne réelle de la nuit\nold_n2 = \"\"\"- **N2** : **N2.h** 3,09 ; **N2.j** 7,42 ; **N2.p** 4,00 ; **N2.t … [2579 caractères tronqués]`
+
+  ```
+en-cours ok
+  T0 max : 4007 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · question sans ce qui la débloque (`→`) : **N2** : le corpus réel (186 Mo) donne **3,53** — la porte *
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"\"\"- **N2** : le corpus réel (186 Mo) donne **3,53** — la porte **< 2,5** demande-t-elle un corpus d'un\n  autre ord … [897 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"| \\*\\*S \" docs/pilotage/roadmap.md | head -2; sed -n \"$(grep -n '| \\*\\*S ' docs/pilotage/roadmap.md | head -1 | cut -d: -f1)p\" docs/pilotage/roadmap.md | cut -c1-700", "description": "Read the roadmap's S row"}`
+
+  ```
+34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | 🔬 **v0** : 7 phrases + **générateur** + **pragmatique** (statuts, double sens conservé, **niveaux 0–4**, niveau minimal), LLM, export | **rôles nominaux** (agent/patient par position), puis brancher l'export au corpus d'entraînement |
+| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | 🔬 **v0** : 7 phrases + **générateur** + **pragmatique** (statuts, double sens conservé, **niveaux 0–4**, niveau minimal), LLM, export | **rôles nominaux** (agent/patient par position), puis brancher l'export au corpus d'entraînement |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# --- roadmap : S (mesure de l'analyseur) et N2 (anglais 34 M, multilingue 34 M, canal+KD) ---\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\nold_s = (\"| **S — les structures** |  … [2808 caractères tronqués]`
+
+  ```
+roadmap ok
+plan ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg-pilotage.txt <<'EOF'\nPILOTAGE — LA NUIT N2 EST CLOSE : LE MEILLEUR MODÈLE EST LE 34,3 M + CANAL (3,53)\n\nL'état, la roadmap et le plan sont alignés sur les résultats de la nuit : le 34,3 M + canal de\nstructure vaut  … [905 caractères tronqués]`

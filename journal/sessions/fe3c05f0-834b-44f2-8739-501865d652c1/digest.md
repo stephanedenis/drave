@@ -34808,3 +34808,82 @@ docs/pilotage/roadmap.md:36:| **D — les données** | inventaire, corpus 10 lan
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add reports/ocr-pdf-cegep.json reports/ocr-pdf-cegep-contamination.json reports/rapport-ocr-cegep.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/2026-11-02/RE … [380 caractères tronqués]`
+
+  ```
+create mode 100644 reports/ocr-pdf-cegep-contamination.json
+ create mode 100644 reports/ocr-pdf-cegep.json
+ create mode 100644 reports/rapport-ocr-cegep.md
+code=0
+65708212 DONNÉES — LE CEGEP PASSE À 7 NOTES : 739 PAGES, 1,21 M CARACTÈRES (2 ALGORITHMS ILLUMINATED AJOUTÉS)
+07:54
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 tools/revue_documentation.py 2>&1 | tail -3; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -2; git log --onel … [141 caractères tronqués]`
+
+  ```
+07:54
+  revue de documentation · 516 fiche(s) · 604 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  état · dernier fait 65708212 · dernier état 65708212
+  ✅ aucun fait commité après le dernier état
+  en-cours · 1591 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+65708212 DONNÉES — LE CEGEP PASSE À 7 NOTES : 739 PAGES, 1,21 M CARACTÈRES (2 ALGORITHMS ILLUMINATED AJOUTÉS)
+b788ba04 N2 — RESTAURATION DES FICHES EFFACÉES PAR UNE COURSE DE COMMIT
+6c7bff9b ÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 06 h : 76 VERTES, 5 ROUGES (LES 4 CONNUES + GREFFE À LA BORNE)
+a4cd8ab0 B13 — LE BILAN DE L'ANAPHORE : 27/30, CV 0,847, HUIT MESURES ; 109/109
+  ```
+
+- **update_goal** `{"goal_id": "goal-2631cfd8-8a48-409f-b5f8-1b65c4f77b59", "revision": 1, "action": "complete"}`
+
+> **Objectif** (complete) : Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions.
+
+
+  ```
+{"goal":{"id":"goal-2631cfd8-8a48-409f-b5f8-1b65c4f77b59","revision":2,"objective":"Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions.","phase":"complete","roundsStarted":372,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+La campagne D/R/A est close, et le goal est marqué **complete** à 07 h 55, à cinq minutes de la fenêtre de 8 h.
+
+## Ce qui a été livré
+
+**Les 10 corpus Wikipédia en texte intégral** (commit `3b670a2c`) : **20,53 M articles**, **67,73 G caractères**, **81,2 Go**, **8 Ko 0 partout**. Les dix manifestes sont dans `reports/corpus-wiki-*-texte.json`, les fiches et le catalogue dans `reports/` ; l'anglais est clos à **99,2 %** des pages (le run a été interrompu à ~75 Go de résidence, manifeste reconstruit avec note et SHA-256, ~200 000 pages non traitées — limite nommée).
+
+**Le corpus PDF** (commit `2f913a1a`) : 2 785 PDF, 222 570 pages, **1 927 documents gardés**, **322,5 Mo**, 8 Ko 0, **159 scans** signalés, licences nommées.
+
+**Le corpus Documents** (commit `5c27a3fb`) : 7 459 PDF, **3 384 documents**, **871 972 648 caractères**, 8 Ko **2,07 %** sur le test (372 tronçons dupliqués), licences « personnel — usage local, non diffusé ».
+
+**Le corpus OCR, deux volets** :
+- **livres** (commit `15f2c8f6`) : **20 livres, 7 381 pages, 15 356 972 caractères** ; train 19 doc./14,6 Mo, **val 1 doc./934 ko**, test 0 ; **8 Ko : 1 784 fenêtres train + 115 val, 0 doublon** ; recouvrement éval **0/40, 0/24, 0/40** ; 8,4 h de calcul ; un doublon exact rejeté ;
+- **CEGEP** (commits `ccf8bac5` puis `65708212`) : **7 notes, 739 pages, 1 208 656 caractères** (dont deux *Algorithms Illuminated*), 8 Ko 0, éval 0/40 ; l'option `--racine` a été ajoutée à `tools/ocr_pdf.py`.
+
+**Les genres** (commit `166896b4`) : l'OCR des 20 livres passe à **38,5 car/ligne**, 6,8 % de lignes dupliquées (contre 32,1 et 4,8 % pour les 8 premiers livres).
+
+**La préparation R1.1/R1.2** (commit `df42425a`) : tous les intrants D/R/A sont prêts, la hiérarchie est à N2. **A2.6/A8.3** (commit `f708b7ee`) : le lot ≥ 2 ne divise pas les lectures denses (+27 % de calcul, PPL −0,006 %).
+
+## Comment c'est vérifié
+
+- **Chaque livraison** a son manifeste JSON, sa fiche dans `reports/`, son chiffre, son **contrôle négatif** (8 Ko et, pour l'OCR, le recouvrement éval mesuré à zéro) et son commit.
+- **L'état** (`docs/pilotage/en-cours.md`), la **roadmap**, le **plan**, les **chantiers** et le **récit** du 2/11 portent à jour les 20 livres et les 7 notes CEGEP (commits `868399c8`, `bfe57da7`, `65708212`).
+- **Les portes** : la passe complète du 02/11 06 h (`6c7bff9b`) donne **76 vertes, 5 rouges** — les 4 connues de `references-non-regression.md` plus `porte-greffe` à la borne ; la revue passe (**516 fiches, 604 JSON, 118 docs**), le budget de documents passe, l'état est court (1 591 mots) et reprenable, et `verifie_etat_a_jour` confirme le dernier fait = le dernier état (`65708212`).
+
+## Ce qu'il te reste à regarder
+
+1. **L'OCR complet** : le pilote s'est arrêté à 20 livres et 7 notes ; les 159 scans et le fonds CEGEP complet (2 681 PDF) sont la prochaine action nommée. Le `--max-doc` et le `--racine` sont prêts.
+2. **La fiche OCR du CEGEP** est partiellement reconstruite : son manifeste a été écrit après arrêt à 7 notes (fenêtre de 8 h), le champ `documents` par split n'est pas recompté — c'est dit dans la fiche et dans `limites`.
+3. **R1.1/R1.2** attend la hiérarchie de N2 ; **A6.2** reste le bloquant d'un lot partagé.
+4. Les 5 rouges des portes : vérifier qu'elles restent dans la liste tolérée avant d'en conclure quoi que ce soit.
+
+Le prochain round repart de `docs/pilotage/en-cours.md` et de la ligne D/R/A du plan.
+

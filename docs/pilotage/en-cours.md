@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 07 h 47 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 09 h 12 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -73,14 +73,15 @@
 - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte ; fiches [`r04`](../../reports/rapport-r04-tete-survol.md), [`r07`](../../reports/rapport-r07-routeur.md), [`r06`](../../reports/rapport-r06-publication.md).
 - **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 au mélange intérieur, ×62,7 tout ; fiches [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
 - **Données** : inventaire local (Wikipédia **132 Go**, documents **~228 Go**, DRM et vidéos exclus) ; **corpus par langue** (10) : **21,6 M articles**, **31,4 G caractères**, **38,8 Go**, **0 fuite** — fiches [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md).
-- **S — le banc de structures** : outil web (`tools/structures`), générateur (**subordonnées**, **coordination**), pragmatique (double sens, niveaux 0–4), **export corpus** (15 tests) ; 7 phrases ; [`README`](../../tools/structures/README.md).
+- **S — le banc de structures** : outil web (`tools/structures`), générateur (**subordonnées**, **coordination**), pragmatique (double sens, niveaux 0–4), **export corpus** ; l'analyseur : **7/7** séquences, **93,9 %** de couverture ; **19 tests** ; 7 phrases ; [`analyseur`](../../reports/rapport-s-analyseur.md).
 - **R13 — la tokenisation** : **close**, décision **octets** — BPE 512 +0,39 %, 1024 +4,09 % ; fiche [`r13`](../../reports/rapport-r13-decision.md).
 - **B10.2bis — décodeur** : 3×3 **11,1** ; capacité 11,8 ; **mots 32,5** ; **JW 26,7** ; `z` 1,5–2,6 ; fiches [`b102bis`](../../reports/rapport-b102bis-decodeur.md), [`mots`](../../reports/rapport-b10-decodeur-mots.md), [`mots-jw`](../../reports/rapport-b10-mots-jw.md).
 - **A8** : **A8.0 : 19** ; **A8.3b refusé** (lot) ; **A8.3c/d** : lot 1≠≥2, threads innocents ; fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md), [`a83d`](../../reports/rapport-a83d-lot-threads.md).
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
-- **N2** : **N2.h** 3,09 ; **N2.j** 7,42 ; **N2.p** 4,00 ; **N2.t** 5,58 ; N4 **0/40** ; fiches
-  [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-anglais`](../../reports/rapport-n2-anglais.md).
+- **N2** : **N2.z** (34,3 M + canal) **3,53**, 512 **3,66** — le meilleur ; **N2.r** 3,69 ;
+  **N2.w** anglais **3,77** ; **N2.v** multilingue **4,79** ; N4 **0/40** ; fiches
+  [`n2-canaux`](../../reports/rapport-n2-canal-34m.md), [`n2-anglais`](../../reports/rapport-n2-anglais-34m.md).
 - **Pensée — state store v0** : 6/6 portes (BFS, greedy, A*, MCTS-lite), jouet des cruches ; fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine AC-3, alpha-bêta, DRVF.
 
 
@@ -108,7 +109,7 @@ action** — pas les statuts, qui dérivent. Vue d'ensemble :
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : AC-3/alpha-bêta 8/8, DRVF 9/9, banc 10/10, opérateurs 109** | **B11.10 close** ; **B13 : DRVM/native** ; B10.3 bloquée |
-| **N — le natif** | **N3, N4** | N2.h close ; N2 < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2 close** ; **N4** (consigne) |
+| **N — le natif** | **N3, N4** | N2 : chaîne réelle mesurée (**3,53**) ; < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2** (corpus d'un autre ordre) ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R1/R2/R3 attendent N5/N4 | **R1.1/R1.2** (contexte natif) |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 4 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
@@ -121,7 +122,7 @@ styles · **C5** domaines · **C6** documentation · **C7** pensée — hors gra
 
 ## Ce qui reste
 
-**N2.h** — **close** (N2.i : 12,93 littérature, 33,83 anglais ; porte < 2,5 non atteinte) ;
+**N2** — la chaîne réelle est mesurée (**3,53**) ; reste le **corpus d'un autre ordre** et la fenêtre ;
 **Pensée** — **DRVM/L** (AC-3/alpha-bêta/DRVF/banc/opérateurs/gold 180/attachement faits ; session `e181ce02`) ; **N4** — la consigne
 courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — close, limites nommées ; **R0.7** — gold/neuronal ; **R1.1/R1.2** — le contexte natif ; **S** — l'export au corpus.
 
@@ -131,8 +132,7 @@ courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — close, limites nommé
 
 - **R1** : **1 000 octets** sans refaire 130–256 ? → **R1.1** (état de section) puis **R1.2**
   (curriculum) tranchent ; la hiérarchie de N2 est écartée.
-- **N2** : la porte **< 2,5** est-elle la bonne, après N2.h (**3,09** en domaine, **12,93** en littérature) ? →
-  la **roadmap N** tranche.
+- **N2** : le corpus réel (186 Mo) donne **3,53** — la porte **< 2,5** demande-t-elle un corpus d'un autre ordre (les **132 Go** de wiki) ? → N2 tranche.
 - **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
 - **B10.3** : chrF **> 39,6** ? → **B10.3** (attention croisée) tranche.
 - **Pensée** : l'A* = greedy sur ces scores ; un score 0/1 et un opérateur hétérogène les séparent-ils ? →
