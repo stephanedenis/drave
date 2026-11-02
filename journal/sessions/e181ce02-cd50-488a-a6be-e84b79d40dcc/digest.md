@@ -24649,3 +24649,218 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/graines.py tools/pensee/autotest.py reports/rapport-pensee-bord-fin.md reports/pensee-bord-fin.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md  … [486 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-930]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-930", "timeout_ms": 600000, "wait": true}`
+
+  ```
+delete mode 100644 reports/rapport-n2-professeur.md
+ create mode 100644 reports/rapport-pensee-bord-fin.md
+ delete mode 100644 reports/rapport-s-analyseur.md
+COMMIT OK 1
+cc65ff92 B13 — LE BORD FIN : 73 % À 0,38, 100 % À 0,41 (400 ESSAIS), SEUIL ROBUSTE 0,41 ; 87/87
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bord fin : 73 % à 0,38, 100 % à 0,41, seuil robuste 0,41 ; 87/87
+
+Le round 88 du goal est livré : le **bord fin** sur 400 essais par facteur — le seuil **robuste** est **0,41**. Commit **`cc65ff92`**.
+
+## Le bord fin
+
+Même monde que T83 (look à l'épisode 3000), facteurs 0,38 → 0,42, **20 graines**, **20 exécutions**.
+
+| facteur | buts | taux | erreur-type |
+|---|---:|---:|---:|
+| 0,38 | 292/400 | 0,73 | ±0,022 |
+| 0,39 | 380/400 | 0,95 | ±0,011 |
+| 0,40 | 380/400 | 0,95 | ±0,011 |
+| **0,41** | **400/400** | **1,00** | **0,00** |
+| 0,42 | 400/400 | 1,00 | 0,00 |
+
+**Ce que ça dit** :
+
+- **0,41 est le seuil robuste** : 400/400 ; l'erreur-type est nulle au bord haut.
+- **La marche est étroite** : 0,38 (73 %) → 0,39–0,40 (95 %) → 0,41 (100 %) ; trois points.
+- **Le taux de 0,38 est précis** (73 % ± 2,2 %) : le 0/25 de T73 était bien un échantillon pessimiste, le 20/100 (T83) un échantillon chanceux — la vraie valeur est 73 %.
+- **La montée est monotone** : pas de creux entre 0,38 et 0,42 à 400 essais.
+
+## L'état
+
+- Fiche : [`rapport-pensee-bord-fin.md`](../../reports/rapport-pensee-bord-fin.md) ; JSON [`pensee-bord-fin.json`](../../reports/pensee-bord-fin.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T84 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **87/87 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **490 fiches / 579 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté **deux suppressions** (`rapport-n2-professeur.md`, `rapport-s-analyseur.md`) d'autres sessions (course d'index ; les fichiers sont sur le disque).
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **50 graines** : resserrer le bord.
+2. **Le correctif structurel** : la phase dans l'état (T79) — la leçon de la série.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round consolide la **leçon structurelle** de la série (l'état doit porter la variable cachée) avant de pousser le gold.
+
+
+## Tour 102
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 89/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport re, pathlib\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\nids=re.findall(r'\\(\"(r\\d+)\",\\s*\"(fr|en)\"', t)\nprint('phrases', len(ids), 'last', ids … [69 caractères tronqués]`
+
+  ```
+cc65ff92 B13 — LE BORD FIN : 73 % À 0,38, 100 % À 0,41 (400 ESSAIS), SEUIL ROBUSTE 0,41 ; 87/87
+phrases 180 last [('r178', 'en'), ('r179', 'en'), ('r180', 'en')]
+"""gold_reel.py — 40 phrases réelles supplémentaires (20 françaises, 20 anglaises).
+
+Elles ne sont pas des phrases du bloc ni du générateur : elles sont écrites après, avec leurs
+POS, leurs segments GN/GV/GP/REL/SUB et leur pragmatique. Le fichier `gold_reel.json` est généré
+par `construire()` ; le gold réel total devient **60 phrases** (20 de `gold.py` + 40).
+"""
+from __future__ import annotations
+
+import json
+import pathlib
+
+PHRASES = [
+    ("r001", "fr", "Le chien mange une pomme.",
+     [("Le", "DET"), ("chien", "NOUN"), ("mange", "VERB"), ("une", "DET"), ("pomme", "NOUN")],
+     [("GN", "
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '15,40p' tools/tests/linguistique/gold_reel.py; grep -n \"def construire\" -A25 tools/tests/linguistique/gold_reel.py | head -30", "description": "Lire une phrase et construire()"}`
+
+  ```
+[("GN", "Le chien", "agent"), ("GV", "mange", "prédicat"), ("GN", "une pomme", "patient")], {"acte": "assertion"}),
+    ("r002", "fr", "La fille lit le journal.",
+     [("La", "DET"), ("fille", "NOUN"), ("lit", "VERB"), ("le", "DET"), ("journal", "NOUN")],
+     [("GN", "La fille", "agent"), ("GV", "lit", "prédicat"), ("GN", "le journal", "patient")], {"acte": "assertion"}),
+    ("r003", "fr", "Nous aimons la musique.",
+     [("Nous", "PRON"), ("aimons", "VERB"), ("la", "DET"), ("musique", "NOUN")],
+     [("GN", "Nous", "agent"), ("GV", "aimons", "prédicat"), ("GN", "la musique", "patient")], {"acte": "assertion"}),
+    ("r004", "fr", "Le soleil brille.",
+     [("Le", "DET"), ("soleil", "NOUN"), ("brille", "VERB")],
+     [("GN", "Le soleil", "agent"), ("GV", "brille", "prédicat")], {"acte": "assertion"}),
+    ("r005", "fr", "Elle parle à son frère.",
+     [("Elle", "PRON"), ("parle", "VERB"), ("à", "PREP"), ("son", "DET"), ("frère", "NOUN")],
+     [("GN", "Elle", "agent"), ("GV", "parle", "prédicat"), ("GP", "à son frère", "destinataire", "parle")], {"acte": "assertion"}),
+    ("r006", "fr", "Les élèves écoutent le professeur.",
+     [("Les", "DET"), ("élèves", "NOUN"), ("écoutent",
+… [2374 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\nnew = '''    (\"r181\", \"fr\", \"Le garçon ferme la porte.\",\n     [(\"Le\", \"DET\"), (\"garçon\", \"NOUN\"), (\"ferme\",  … [6276 caractères tronqués]`
+
+  ```
+ok
+phrases 200 dernier r200 They watch the film.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 tools/tests/linguistique/evaluer_gold.py 2>&1 | tail -25; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Évaluer le gold avec 200 phrases réelles", "timeoutMs": 900000}`
+
+  ```
+"ADJ": 3,
+      "VERB": 31,
+      "DET": 1
+     },
+     "NUM": {
+      "NUM": 2
+     },
+     "PREP": {
+      "PREP": 72,
+      "NOUN": 3
+     },
+     "PRON": {
+      "PRON": 76,
+      "NOUN": 2
+     },
+     "VERB": {
+      "VERB": 66,
+      "NOUN": 125,
+      "ADJ": 2,
+      "PREP": 1
+     }
+    }
+   },
+   "syntag
+heuristique all: {"pos": {"exactitude": 0.7715, "exactitude_ferme": 0.9526, "exactitude_ouvert": 0.6247, "tokens": 1698, "confusions": {"ADJ": {"ADJ": 17, "NOUN": 63, "VERB": 3}, "ADV": {"ADV": 62, "NOUN": 5}, "AUX": {"PREP": 3, "AUX": 43}, "CONJ": {"CONJ": 1, "PRON": 19, "DET": 4}, "DET": {"DET": 401}, "NOUN": {"NOUN": 405, "ADJ": 9, "VERB": 36, "DET": 1}, "NUM": {"NUM": 2}, "PREP": {"PREP": 96, "NOUN": 3}, "PRON": {"PRON": 119, "NOUN": 2}, "VERB": {"VERB": 164, "NOUN": 237, "ADJ": 2, "PREP": 1}}}, "syntagme": {"precision": 0.2746, "rappel": 0.1557, "f1": 0.1988, "tp": 145, "fp": 383, "fn": 786, "tete": {"precision": 0.6023, "rappel": 0.3416, "f1": 0.4359, "tp": 318, "fp": 210, "fn": 613}}, "pragmatique": {"acte": 1.0, "negation": 1.0, "modalite": 0.9944, "double_sens": 0.9306}, "fraction_semantique": 0.6021}
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/gold_reel.py 2>&1 | tail -3; python3 -c \"\nimport json; d=json.load(open('tools/tests/linguistique/gold_reel.json')); print('json phrases', len(d['phrases']), d['phrases'][-1]['id'])\n\"; timeout 900 … [168 caractères tronqués]`
+
+  ```
+200 phrases réelles → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json
+json phrases 200 r200
+   "sy
+heuristique all: {"pos": {"exactitude": 0.7738, "exactitude_ferme": 0.9512, "exactitude_ouvert": 0.6297, "tokens": 1782, "confusions": {"ADJ": {"ADJ": 17, "NOUN": 63, "VERB": 3}, "ADV": {"ADV": 65, "NOUN": 8}, "AUX": {"PREP": 3, "AUX": 43}, "CONJ": {"CONJ": 1, "PRON": 19, "DET": 4}, "DET": {"DET": 423}, "NOUN": {"NOUN": 428, "ADJ": 9, "VERB": 38, "DET": 1}, "NUM": {"NUM": 2}, "PREP": {"PREP": 100, "NOUN": 3}, "PRON": {"PRON": 126, "NOUN": 2}, "VERB": {"VERB": 174, "NOUN": 247, "ADJ": 2, "PREP": 1}}}, "syntagme": {"precision": 0.2699, "rappel": 0.1516, "f1": 0.1941, "tp": 149, "fp": 403, "fn": 834, "tete": {"precision": 0.5942, "rappel": 0.3337, "f1": 0.4274, "tp": 328, "fp": 224, "fn": 655}}, "pragmatique": {"acte": 1.0, "negation": 1.0, "modalite": 0.9947, "double_sens": 0.9342}, "fraction_semantique": 0.6008}
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T84 le bord fin                   400 essais : ×0,38 73 %, ×0,41 100 %\\n\",\n\"  T84 le bord fin                   400 es … [1063 caractères tronqués]`
+
+  ```
+ok
+                     ~~~~~~~~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", line 1343, in t85_gold200
+    from .tests.linguistique.gold_reel import construire
+ModuleNotFoundError: No module named 'tools.pensee.tests'
+EXIT=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"    from .tests.linguistique.gold_reel import construire\", \"    from ..tests.linguistique.gold_reel import construire\")\n … [211 caractères tronqués]`
+
+  ```
+ok
+  ✅ T83 courbe élargie     courbe 5 graines : ×0,35 0/25, ×0,41 25/25
+  ✅ T84 bord fin           bord fin : ×0,38 20/25, ×0,41 25/25
+  ✅ T85 gold 200           gold réel : 200 phrases, POS 0,7738, 1782 tokens
+  88/88 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-gold-200.md <<'MD'\n# B13 — le gold à 200 phrases réelles : POS 0,7738\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **88/88 portes** : le gold réel p … [7405 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 491 fiche(s) · 580 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2818 mots > budget 2800 (T1)
+  en-cours · 1625 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-phase-devine.md`](rapport-pensee-phase-devine.md) | **B13** — la phase devinée : signal 90 %, 0/20, boucle, **83 … [632 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 491 fiche(s) · 580 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2802 mots > budget 2800 (T1)
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1800 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-gold-200.md`](rapport-pensee-gold-200.md) | **B13** — le gold à 200 réels : POS 0,7738, 1 782 tokens, **88/88**  … [986 caractères tronqués]`

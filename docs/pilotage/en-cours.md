@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 06 h 45 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 07 h 05 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -29,7 +29,7 @@
   cascade
 - **Bloc** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
   (9 niveaux) ; **398 langues à 0,9687** ; fiche et porte.
-- **Moteur B13** : **AC-3/alpha-bêta**, **DRVF**, **banc**, **opérateurs 87** ; fiches
+- **Moteur B13** : **AC-3/alpha-bêta**, **DRVF**, **banc**, **opérateurs 88** ; fiches
   [`pensee-croyance`](../../reports/rapport-pensee-croyance.md), [`pensee-observatrice`](../../reports/rapport-pensee-observatrice.md),
   [`pensee-bayes`](../../reports/rapport-pensee-bayes.md), [`pensee-derive`](../../reports/rapport-pensee-derive.md),
   [`pensee-rupture`](../../reports/rapport-pensee-rupture.md), [`pensee-alternance`](../../reports/rapport-pensee-alternance.md),
@@ -79,7 +79,7 @@
 - **A8** : **A8.0 : 19** ; **A8.3b refusé** (lot) ; **A8.3c/d** : lot 1≠≥2, threads innocents ; fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md), [`a83d`](../../reports/rapport-a83d-lot-threads.md).
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
-- **N2** : **N2.h** 3,09 ; **N2.j** 7,42 ; **N2.n** 3,94 ; **N2.o** 5,41 ; **N2.p** 4,00 ; **N2.q** 5,89 ; **N2.t** 5,58 ; **N2.r** 3,69 ; **N2.s** boucles ; **N2.u** prof. 30 M −0,3 OOD ; **N2.v** multi 34 M distillé **4,79** ; **S** : 7/7 séquences, 94 % ; **N2.w** : anglais 34,3 M **3,77**, 512 **4,18** ; N4 **0/40** ; fiches
+- **N2** : **N2.h** 3,09 ; **N2.j** 7,42 ; **N2.n** 3,94 ; **N2.o** 5,41 ; **N2.p** 4,00 ; **N2.q** 5,89 ; **N2.t** 5,58 ; **N2.r** 3,69 ; **N2.v** multi 34 M distillé **4,79** ; **S** : 7/7 séquences, 94 % ; **N2.w** : anglais **3,77** ; **N2.x** : canal −0,03 ; N4 **0/40** ; fiches
   [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-anglais`](../../reports/rapport-n2-anglais.md), [`n2-canal`](../../reports/rapport-n2-canal.md).
 - **Pensée — state store v0** : 6/6 portes (BFS, greedy, A*, MCTS-lite), jouet des cruches ; fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine AC-3, alpha-bêta, DRVF.
 
@@ -92,7 +92,7 @@
 |---|---|---|
 | portes | **81** (77 vertes, 4 rouges — les connues — à la passe du 02/11 00 h 03) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **490** / **579** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **492** / **578** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
@@ -107,7 +107,7 @@ action** — pas les statuts, qui dérivent. Vue d'ensemble :
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : AC-3/alpha-bêta 8/8, DRVF 9/9, banc 10/10, opérateurs 87** | **B11.10 close** ; **B13 : DRVM/native** ; B10.3 bloquée |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : AC-3/alpha-bêta 8/8, DRVF 9/9, banc 10/10, opérateurs 88** | **B11.10 close** ; **B13 : DRVM/native** ; B10.3 bloquée |
 | **N — le natif** | **N3, N4** | N2.h close ; N2 < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2 close** ; **N4** (consigne) |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R1/R2/R3 attendent N5/N4 | **R1.1/R1.2** (contexte natif) |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |

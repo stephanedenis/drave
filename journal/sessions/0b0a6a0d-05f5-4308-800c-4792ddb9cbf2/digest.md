@@ -17682,3 +17682,52 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1048", "timeout_ms": 1100000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/C-g*.pt 2>/dev/null; tail -1 work/n2j/C-g1.log 2>/dev/null; tail -1 work/n2j/C-g2.log 2>/dev/null", "description": "Check the channel distillations"}`
+
+  ```
+03:52
+pas 18500 · seq 128 · perte 21.7108 · PPL 128/4 3.8285 · 1274 s
+pas 18250 · seq 128 · perte 21.6853 · PPL 128/4 3.8638 · 1277 s
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/C-g*.pt 2>/dev/null; export PYTHONPATH=.; for g in 1 2; do CUDA_VISIBLE_DEVICES=$((g-1)) timeout 600 ~/gpu-env/bin/python work/n2j/evalue_canal.py work/n2j/C-g$g.pt 2>&1 | grep -v Loading; done", … [61 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1050]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1050", "timeout_ms": 900000, "wait": true}`
+
+  ```
+04:00
+work/n2j/C-g1.pt
+work/n2j/C-g2.pt
+{"fichier": "C-g1.pt", "L128_canal": 3.8521, "L128_sans": 7.8235, "L256_canal": 3.9515, "L256_sans": 7.9882, "L512_canal": 5.9995, "L512_sans": 8.4899, "mélange_propre": 3.8575, "mélange_milieu": 26.2965, "mélange_tout": 46.9404}
+{"fichier": "C-g2.pt", "L128_canal": 3.8496, "L128_sans": 7.8583, "L256_canal": 3.9617, "L256_sans": 8.0546, "L512_canal": 6.0259, "L512_sans": 8.5438, "mélange_propre": 3.8604, "mélange_milieu": 26.389, "mélange_tout": 47.0334}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1048 (bash: sleep 1080; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/C-g*.pt 2>/dev/null; tail -1 work/n2j/C-g1.log 2>/dev/null; tail -1 work/n2j/C-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-canal-distille.md <<'EOF'\n# N2.x — La distillation du canal : −0,03 en domaine, +0,24 à 512 octets\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : le canal de structure survit à\n> la  … [3386 caractères tronqués]`
+
+  ```
+fiche canal distillée écrite
+en-cours ok
+  T0 max : 4008 mots (budget 4 000)
+  ❌ 2 violation(s) :
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 491 fichiers, le disque en a 492
+04:02
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.s** boucles ; \", \"\")\ns = s.replace(\"**N2.u** prof. 30 M −0,3 OOD ; \", \"\")\ns = s.replace(\"**N2.w**  … [1568 caractères tronqués]`

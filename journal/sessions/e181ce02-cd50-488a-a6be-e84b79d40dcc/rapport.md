@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 35.1 h |
-| Tours | 101 |
-| Messages | 1304 |
-| Appels d'outils | 1149 |
+| Durée | 35.4 h |
+| Tours | 102 |
+| Messages | 1316 |
+| Appels d'outils | 1159 |
 | Fichiers touchés | 25 |
-| Commandes | 930 |
+| Commandes | 940 |
 | Sous-agents | 2 |
-| Commits | 131 |
+| Commits | 132 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -233,6 +233,8 @@
 **Tour 100** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 101** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 102** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5376,6 +5378,63 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round resserre le bord avec **
 - bash — Committer le bord fin
 - job_output
 
+**Synthèse produite :**
+
+⏵ Bord fin : 73 % à 0,38, 100 % à 0,41, seuil robuste 0,41 ; 87/87
+
+Le round 88 du goal est livré : le **bord fin** sur 400 essais par facteur — le seuil **robuste** est **0,41**. Commit **`cc65ff92`**.
+
+\## Le bord fin
+
+Même monde que T83 (look à l'épisode 3000), facteurs 0,38 → 0,42, **20 graines**, **20 exécutions**.
+
+| facteur | buts | taux | erreur-type |
+|---|---:|---:|---:|
+| 0,38 | 292/400 | 0,73 | ±0,022 |
+| 0,39 | 380/400 | 0,95 | ±0,011 |
+| 0,40 | 380/400 | 0,95 | ±0,011 |
+| **0,41** | **400/400** | **1,00** | **0,00** |
+| 0,42 | 400/400 | 1,00 | 0,00 |
+
+**Ce que ça dit** :
+
+- **0,41 est le seuil robuste** : 400/400 ; l'erreur-type est nulle au bord haut.
+- **La marche est étroite** : 0,38 (73 %) → 0,39–0,40 (95 %) → 0,41 (100 %) ; trois points.
+- **Le taux de 0,38 est précis** (73 % ± 2,2 %) : le 0/25 de T73 était bien un échantillon pessimiste, le 20/100 (T83) un échantillon chanceux — la vraie valeur est 73 %.
+- **La montée est monotone** : pas de creux entre 0,38 et 0,42 à 400 essais.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-bord-fin.md`](../../reports/rapport-pensee-bord-fin.md) ; JSON [`pensee-bord-fin.json`](../../reports/pensee-bord-fin.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T84 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **87/87 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **490 fiches / 579 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté **deux suppressions** (`rapport-n2-professeur.md`, `rapport-s-analyseur.md`) d'autres sessions (course d'index ; les fichiers sont sur le disque).
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **50 graines** : resserrer le bord.
+2. **Le correctif structurel** : la phase dans l'état (T79) — la leçon de la série.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round consolide la **leçon structurelle** de la série (l'état doit porter la variable cachée) avant de pousser le gold.
+
+### Tour 102 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Inspecter le gold réel
+- bash — Lire une phrase et construire()
+- bash — Ajouter 20 phrases réelles au gold
+- bash — Évaluer le gold avec 200 phrases réelles
+- bash — Regénérer le JSON et réévaluer
+- bash — Ajouter la porte T85 (gold 200)
+- bash — Corriger l'import et relancer la porte T85
+- bash — Écrire la fiche du gold 200
+- bash — Trim README et portes
+- bash — Committer le gold 200
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5455,7 +5514,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round resserre le bord avec **
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 890 autres
+- … et 900 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5734,4 +5793,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round resserre le bord avec **
 - B13 — LA COURBE SUR 20 GRAINES : 20 % À 0,35, 100 % À 0,41, SEUIL ~0,41 ; 86/86" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "COURBE SUR 20 GRAINES";
 - ÉTAT — COMPTEURS RÉELS (488/578)" 2>&1 | tail -2; git log -1 --format='%h %s'
 - B13 — LE BORD FIN : 73 % À 0,38, 100 % À 0,41 (400 ESSAIS), SEUIL ROBUSTE 0,41 ; 87/87" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BORD FIN"; then 
+- B13 — LE GOLD À 200 RÉELS : POS 0,7738, 1 782 TOKENS, LA CIBLE EST ATTEINTE ; 88/88" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "GOLD À 200"; then e
 
