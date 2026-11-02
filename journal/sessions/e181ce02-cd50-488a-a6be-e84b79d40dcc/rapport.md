@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 44.5 h |
-| Tours | 146 |
-| Messages | 1739 |
-| Appels d'outils | 1491 |
+| Durée | 44.8 h |
+| Tours | 147 |
+| Messages | 1753 |
+| Appels d'outils | 1503 |
 | Fichiers touchés | 25 |
-| Commandes | 1217 |
+| Commandes | 1228 |
 | Sous-agents | 2 |
-| Commits | 186 |
+| Commits | 187 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -327,6 +327,8 @@
 **Tour 145** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 146** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 147** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7759,6 +7761,60 @@ Je continue : prochain round, **la règle du `si`** — la dernière règle de s
 - bash — Committer la règle du si
 - job_output
 
+**Synthèse produite :**
+
+⏵ Règle du si : 29/29, la dernière règle de surface ; 131/131
+
+Le round 132 est livré : la règle du **`si`** + le repli `und → fr` amènent la réponse dirigée à **29/29**. Commit **`5b7a3e99`**.
+
+\## Le chemin
+
+| étape | justes | taux |
+|---|---:|---:|
+| négation seule (`non` si négation) | 19/29 | 0,6552 |
+| + `si` pour les négatives françaises | 25/29 | 0,8621 |
+| **+ repli `und` → `fr`** | **29/29** | **1,0000** |
+
+**Ce que ça dit** :
+
+- **Le `si` est une règle de langue** : une question négative française attend `si` (accord), l'anglaise `yes` ; la règle de surface doit porter la langue.
+- **Le repli `und` → `fr` est un choix** : les 4 questions synthétiques (`Hugo écoute?`) ne sont pas reconnues comme françaises par le détecteur ; le repli sur le français du gold les sauve.
+- **29/29 est un plafond de forme** : il ne prouve pas la compréhension — une question piège (`Ne viens-tu pas ?` avec la réponse `non` attendue) le ferait tomber.
+- **La règle est nommée** : c'est la **dernière règle de surface** de la ligne ; au-delà, il faut un modèle.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-si.md`](../../reports/rapport-pensee-si.md) ; JSON [`pensee-si.json`](../../reports/pensee-si.json) ; T128 dans [`autotest.py`](../../tools/pensee/autotest.py) ; T127 mis à jour (les négatives : 10/10).
+- **131/131 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **540 fiches / 627 JSON / 119 docs / 81 portes** — ✅ ; `en-cours` à jour (13 h 25).
+- L'horloge réelle est **13 h 08 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **Les questions pièges** : nier la réponse (le `non` attendu) pour casser la règle — le vrai test.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **les questions pièges** — casser la règle de surface pour nommer ce qu'elle ne sait pas.
+
+### Tour 147 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Ajouter 5 questions pièges
+- bash — Ajouter les questions pièges et mesurer
+- bash — Corriger l'ordre des segments de r422
+- bash — Lire le tuple r422
+- bash — Corriger r422 et mesurer les pièges
+- bash — Écrire la fiche des pièges et la porte T129
+- bash — Corriger la date de l'index de synthèse
+- bash — Trim README et passer toutes les portes
+- bash — Lister les portes rouges avec leurs valeurs
+- bash — Mettre à jour les 17 portes et relancer
+- bash — Committer les questions pièges
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7838,7 +7894,7 @@ Je continue : prochain round, **la règle du `si`** — la dernière règle de s
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1177 autres
+- … et 1188 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8172,4 +8228,5 @@ Je continue : prochain round, **la règle du `si`** — la dernière règle de s
 - B13 — LES QUESTIONS NÉGATIVES : 19/29, LA RÈGLE DE SURFACE NE S'INVERSE PAS ; 130/130" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "QUESTIONS NÉGATIV
 - ÉTAT — T0 DANS LE BUDGET (3996 MOTS) APRÈS LE GOLD 417" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COMMIT OK $i"; br
 - B13 — LA RÈGLE DU SI : 29/29, LA DERNIÈRE RÈGLE DE SURFACE ; 131/131" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÈGLE DU SI"; then echo "COMMIT OK
+- B13 — LES QUESTIONS PIÈGES : 29/34, LE SI EST UNE CONVENTION ; 132/132" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "QUESTIONS PIÈGES"; then echo "CO
 

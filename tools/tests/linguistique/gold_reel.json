@@ -30066,6 +30066,357 @@
     "reponse": "si"
    },
    "source": "reel"
+  },
+  {
+   "id": "r418",
+   "langue": "fr",
+   "texte": "Tu ne viens pas demain ?",
+   "mots": [
+    {
+     "texte": "Tu",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 3,
+     "fin": 5
+    },
+    {
+     "texte": "viens",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 12,
+     "fin": 15
+    },
+    {
+     "texte": "demain",
+     "pos": "ADV",
+     "debut": 16,
+     "fin": 22
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 23,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Tu",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "viens",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 12,
+     "fin": 15
+    },
+    {
+     "type": "ADV",
+     "texte": "demain",
+     "role": "temps",
+     "debut": 16,
+     "fin": 22
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "non"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r419",
+   "langue": "fr",
+   "texte": "Il ne mange pas ?",
+   "mots": [
+    {
+     "texte": "Il",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 3,
+     "fin": 5
+    },
+    {
+     "texte": "mange",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 12,
+     "fin": 15
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 16,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Il",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "mange",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 12,
+     "fin": 15
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "non"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r420",
+   "langue": "fr",
+   "texte": "Elle ne dort pas ?",
+   "mots": [
+    {
+     "texte": "Elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 5,
+     "fin": 7
+    },
+    {
+     "texte": "dort",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 17,
+     "fin": 18
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Elle",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "dort",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 13,
+     "fin": 16
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "non"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r421",
+   "langue": "fr",
+   "texte": "Ils ne partent pas ?",
+   "mots": [
+    {
+     "texte": "Ils",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 4,
+     "fin": 6
+    },
+    {
+     "texte": "partent",
+     "pos": "VERB",
+     "debut": 7,
+     "fin": 14
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 15,
+     "fin": 18
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 19,
+     "fin": 20
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Ils",
+     "role": "agent",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "partent",
+     "role": "prédicat",
+     "debut": 7,
+     "fin": 14
+    },
+    {
+     "type": "ADV",
+     "texte": "pas",
+     "role": "négation",
+     "debut": 15,
+     "fin": 18
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "non"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r422",
+   "langue": "en",
+   "texte": "You don't come tomorrow?",
+   "mots": [
+    {
+     "texte": "You",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "do",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 6
+    },
+    {
+     "texte": "n't",
+     "pos": "ADV",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "texte": "come",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 14
+    },
+    {
+     "texte": "tomorrow",
+     "pos": "ADV",
+     "debut": 15,
+     "fin": 23
+    },
+    {
+     "texte": "?",
+     "pos": "PONCT",
+     "debut": 23,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "You",
+     "role": "agent",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "ADV",
+     "texte": "n't",
+     "role": "négation",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "come",
+     "role": "prédicat",
+     "debut": 10,
+     "fin": 14
+    },
+    {
+     "type": "ADV",
+     "texte": "tomorrow",
+     "role": "temps",
+     "debut": 15,
+     "fin": 23
+    }
+   ],
+   "pragma": {
+    "acte": "question",
+    "reponse": "no"
+   },
+   "source": "reel"
   }
  ]
 }

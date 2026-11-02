@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 44.6 h |
-| Tours | 389 |
-| Messages | 2403 |
-| Appels d'outils | 1613 |
+| Durée | 44.8 h |
+| Tours | 390 |
+| Messages | 2426 |
+| Appels d'outils | 1633 |
 | Fichiers touchés | 29 |
-| Commandes | 1429 |
+| Commandes | 1448 |
 | Sous-agents | 0 |
 | Commits | 99 |
 | Compactages de contexte | 4 |
@@ -815,6 +815,8 @@
 **Tour 388** — fais une passe dans docs pour enrichir le glossaire et une autre passe ajouter les hyperliens vers le glossaire partout ou les termes aparaissent. Serait-il préférable de modifier docwatch pour intégrer une fonctionnalité glossaire à même l'affichage et éviter de grossir inutilement le gontenu avec des liens qui ne devraient être qu'en pointillé?
 
 **Tour 389** — as-tu redémarré le sserveur? je ne vois pas l'effet
+
+**Tour 390** — je ne vois pas de changement, même après un refresh. http://127.0.0.1:8771/drave/docs/pilotage/plan-travail.md en playwright devrait te permettre de vois si ça marche
 
 ## 2. Déroulé, étape par étape
 
@@ -9250,13 +9252,95 @@ Le `docs/theorie/glossaire/index.json` est décrit dans son propre README comme 
 
 ### Tour 389 — as-tu redémarré le sserveur? je ne vois pas l'effet
 
-*1 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Find running docwatch server
+- bash — Reinstall docwatch 0.6.0 with pipx
+- bash — Inspect docwatch config and listening ports
+- bash — Reinstall docwatch editable as 0.6.0
+- bash — Restart docwatch server on 8771
+- bash — Stop old docwatch and start 0.6.0
+- bash — Verify docwatch serves glossary annotations
+- bash — Inspect render response and server log
+- bash — Count glossary annotations in served page
 
 **Synthèse produite :**
 
-⏵ Je vérifie si un serveur docwatch tourne et je le redémarre
+Oui — et je viens de trouver pourquoi tu ne voyais rien : **le serveur qui tournait était l'installation pipx 0.5.0, pas le 0.6.0 du dépôt.**
+
+\## Ce qui s'est passé
+
+- Le port **8771** était tenu par le docwatch installé via pipx (`/home/stephane/.local/share/pipx/venvs/docwatch`, version **0.5.0**) depuis près de deux jours. Mes modifications étaient dans `tools/docwatch/src/…` : le serveur ne les chargeait pas.
+- `pipx uninstall` ne tue pas le processus en cours : l'ancien serveur a continué de répondre, et ma première relance a échoué (« Address already in use »).
+
+\## Ce que j'ai fait
+
+1. **`pipx uninstall docwatch` puis `pipx install --editable …/tools/docwatch`** : le dépôt est maintenant la source du paquet installé — toute modification future sera prise en compte, sans réinstallation.
+2. **`__version__` passée à 0.6.0** (le CHANGELOG était déjà en 0.6.0).
+3. **Ancien serveur arrêté** (PID 3193) et **nouveau lancé** (PID 3566656) sur le port 8771.
+
+\## Preuve que ça sert maintenant
+
+`GET /render?path=docs/theorie/vision.md` renvoie :
+
+- **8 `<span class="glossaire">`** — les termes annotés (pointillé + fiche en survol), par exemple `data-slug="drave"` avec le résumé du glossaire dans `title` ;
+- **24 liens vers `glossaire/entrees/`** — ceux ajoutés par la passe sur les pages pivots.
+
+\## Ce qu'il te reste à faire
+
+**Recharge la page en forçant le cache** : `Ctrl+Shift+R` (ou `Cmd+Shift+R`). Le navigateur garde l'ancien HTML et l'ancien CSS ; sans ça, même le bon serveur affiche l'ancienne version. Les termes devraient ensuite apparaître soulignés en pointillé, avec la fiche au survol.
+
+Si après un rechargement forcé tu ne vois toujours rien, dis-le : je vérifierai que le CSS `style.css` est bien servi (il est dans le paquet installé, et l'installation editable le lit depuis le dépôt), et je regarderai la console du navigateur.
+
+### Tour 390 — je ne vois pas de changement, même après un refresh. http://127.0.0.1:8771/drave/docs/pilotage/plan-travail.md en playwr … [46 caractères tronqués]
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Check served page and render for plan-travail
+- bash — Check CSS asset served with glossary rule
+- bash — Locate glossary CSS in shell and asset route
+- bash — Check CSS in shell and Playwright availability
+- bash — Locate Playwright and Chromium installs
+- bash — Screenshot docwatch page with Playwright
+- bash — Screenshot with system Chrome channel
+- bash — Locate Chrome binary
+- bash — Headless Chrome DOM and screenshot
+- read_image
+- bash — Make dotted underline visible and commit
+- bash — Restart docwatch with visible CSS
+
+**Synthèse produite :**
+
+Cette fois c'est corrigé, et je te donne les preuves.
+
+\## Pourquoi tu ne voyais rien
+
+Trois causes empilées :
+
+1. **Le serveur qui tournait était l'installation pipx en 0.5.0**, pas le code du dépôt. `pipx uninstall` ne tue pas le processus : il a continué de répondre pendant que je croyais avoir redémarré.
+2. **Le pointillé était trop discret** : 1 px, gris à 85 % — à l'écran, sur du texte noir, ça se confond avec une ligne de base.
+3. Le navigateur gardait l'ancien HTML/CSS en cache.
+
+\## Ce qui a été fait
+
+- `pipx install --editable …/tools/docwatch` : le serveur tourne désormais **depuis le dépôt**, version **0.6.0** (plus de réinstallation à chaque modification).
+- CSS durci : `text-decoration: underline dotted **currentColor**`, **`text-decoration-thickness: 1.5px`**, offset 2,5 px. Survol : fond jaune pâle et trait plein.
+- Serveur arrêté puis relancé : PID **3573290**, port **8771**, `HTTP 200`.
+
+\## Les preuves
+
+- `GET /render?mount=drave&path=docs/pilotage/plan-travail.md` → **23 spans `class="glossaire"`**.
+- **Chrome headless, DOM réel de ta page** (`/drave/docs/pilotage/plan-travail.md`) → **19 spans `class="glossaire"`** rendus par le JS, donc la page elle-même les affiche.
+- La page shell sert bien le CSS : `grep "1.5px"` → **3 occurrences** (la règle glossaire est dans le `<style>` inline).
+- Capture écrite : `/tmp/docwatch-plan.png` (223 Ko). Je ne peux pas la lire moi-même (le modèle courant n'accepte pas les images) — **ouvre-la**, ou recharge ton onglet avec `Ctrl+Shift+R`.
+
+\## Si ce n'est toujours pas visible chez toi
+
+Deux choses à vérifier de ton côté :
+- que l'onglet pointe bien sur **`/drave/...`** (le montage `drave`), et pas sur une page ouverte avant le redémarrage ;
+- que le rechargement est **forcé** (`Ctrl+Shift+R`).
+
+Note aussi : la passe de liens markdown a couvert 10 pages pivots, et `plan-travail.md` n'en fait pas partie — sur cette page tu dois voir **les pointillés** (19 spans), mais pas les liens vers les fiches (0 lien). Si tu veux que `plan-travail.md` en fasse partie, je l'ajoute en une commande.
 
 ## 3. Travail accompli
 
@@ -9336,7 +9420,7 @@ Le `docs/theorie/glossaire/index.json` est décrit dans son propre README comme 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1389 autres
+- … et 1408 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9464,7 +9548,7 @@ Le `docs/theorie/glossaire/index.json` est décrit dans son propre README comme 
 
 ## 5. Erreurs rencontrées
 
-119 sorties en erreur ou divergentes. Les premières :
+122 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

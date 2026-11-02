@@ -1,0 +1,18 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "132/132",
+ "questions": 34,
+ "affirmatives": 19,
+ "negatives": 10,
+ "pieges": {
+  "n": 5,
+  "justes": 0
+ },
+ "dirigee": 0.8529,
+ "limites": [
+  "le si est une convention",
+  "5 pièges",
+  "heuristique seule"
+ ]
+}
