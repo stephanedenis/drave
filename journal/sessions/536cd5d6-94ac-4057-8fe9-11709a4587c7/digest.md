@@ -3093,3 +3093,84 @@ ca06ab0b D — L'OCR CEGEP, LE GLOSSAIRE AU RENDU ET LES LIENS DE LA FAMILLE 13
 ⏵ Je rafraîchis le heartbeat du hub, puis je vérifie la commande de reprise DSH.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md'); t=p.read_text()\nt=t.replace('- **Heartbeat** : 2026-11-02 15:50 EST','- **Heartbeat** : 2026-11-02 16:50 EST')\nt=t.r … [1367 caractères tronqués]`
+
+  ```
+hub heartbeat et état ok
+[exit 0]
+566ac478 HUB — LE RUNBOOK EST PUBLIÉ ; HEARTBEAT À JOUR, PROCHAINE ACTION LA PASSE DE PORTES
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "grep -rn -- \"'--resume'\\|\\\"--resume\\\"\\|--resume\" ~/.local/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/ 2>/dev/null | grep -v '\\.map' | head -8", "description": "Confirm DSH resume flag in installed app"}`
+
+  ```
+/home/stephane/.local/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-cmdline/lib/types/index.d.ts:22: * verbatim and in argv order. `dsh --profile tui --resume abc` yields
+/home/stephane/.local/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-cmdline/lib/types/index.d.ts:23: * `['--resume', 'abc']`.
+/home/stephane/.local/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-cmdline/README.md:34:- `ctx.cmdlineArgs` — the inner arguments of your invocation. Reading them returns an immutable snapshot and never consumes or changes them: `dsh --profile tui --resume abc` gives your app `['--resume', 'abc']`.
+/home/stephane/.local/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-cmdline/README.zh.md:34:- `ctx.cmdlineArgs`——本次调用的内层参数。读取它返回一份不可变快照，且绝不会消费或修改它们：`dsh --profile tui --resume abc` 给你的应用 `['--resume', 'abc']`。
+  ```
+
+### 🤖 Assistant
+
+⏵ Je passe la vérification finale de l'arbre et des portes légères.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== status ==\" && git status --short && echo \"(fin)\" && echo && echo \"== HEAD/état ==\" && python3 tools/verifie_etat_a_jour.py; echo \"[exit $?]\" && echo && echo \"== porte sessions ==\" && bash tools/porte-sessions.sh; e … [163 caractères tronqués]`
+
+  ```
+== status ==
+(fin)
+
+== HEAD/état ==
+  état · dernier fait 2dab14e4 · dernier état 566ac478
+  ✅ aucun fait commité après le dernier état
+[exit 0]
+
+== porte sessions ==
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé
+  ✅ plans cohérents
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+[exit 0]
+
+== en-cours ==
+  en-cours · 1633 mots · 7 sections · 3 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[exit 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in tools/revue_documentation.py tools/taille_documents.py tools/verifie_journal.py tools/verifie_backlog.py; do echo \"===== $t\"; timeout 300 python3 \"$t\" 2>&1 | tail -4; echo \"[exit ${PIPESTATUS[0]}]\"; done; echo \"=====  … [205 caractères tronqués]`
+
+  ```
+===== tools/revue_documentation.py
+  revue de documentation · 550 fiche(s) · 636 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[exit 0]
+===== tools/taille_documents.py
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+[exit 1]
+===== tools/verifie_journal.py
+  journal · 39 jour(s) · 112 session(s) · 1809 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[exit 0]
+===== tools/verifie_backlog.py
+  profondeur 5 : R01 → R02 → R03 → R31 → R32 → R51
+  frontière (4) : A2.6, N2, N3, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+[exit 0]
+===== schemas
+  schémas · 458 document(s) · 66 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+[ex
+… [5 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je repasse le T0 sous 4 000 et je commite l'ajustement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Ce qu'elle fait** : audit des 111 sessions ; commits B13 **140/140**, D (OCR/glossaire), N2.ac ; sessions en pause ; po … [816 caractères tronqués]`

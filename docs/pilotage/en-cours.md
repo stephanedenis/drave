@@ -25,9 +25,9 @@
 - **Ambition** : un état reprenable, des mandats qui disent la vérité.
 - **Stratégie** : committer par flux avec `git add` explicite, nommer ce qui reste.
 - **Objectif final** : sédimentation à zéro, mandats explicites (N2, S, L/B13, D/R/A), runbook.
-- **Ce qu'elle fait** : audit des 111 sessions ; commits B13 **140/140**, D (OCR/glossaire), N2.ac ; sessions en pause ; porte stricte ; INDEX.
+- **Ce qu'elle fait** : commits B13 **140/140**, D (OCR/glossaire), N2.ac ; sessions en pause ; porte stricte ; INDEX.
 - **Ce que font les autres** : `e181ce02` et `fe3c05f0` en pause ; N2 et S sans session.
-- **Prochaine action** : la **passe de portes** (1 h 46) quand la machine est libre ; suivre les sessions ouvertes.
+- **Prochaine action** : la **passe de portes** (1 h 46) et le suivi des sessions ouvertes.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
 
