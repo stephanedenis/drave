@@ -14633,3 +14633,20 @@ fatal: cannot lock ref 'HEAD': is at a72567e1bf1f88035bdb1c75d7ac43be0817aae6 bu
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git reset -q && git add reports/rapport-n2-anglais.md reports/corpus-wiki-en-propre.json docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"N2.m — L'ANGLAIS SEUL : 4,42 SUR 204 Mo, ET LE MULTILINGUE COÛ … [728 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-855]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-855", "timeout_ms": 300000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-n2-anglais.md
+ create mode 100644 tools/tests/linguistique/gold_reel.json
+ create mode 100644 tools/tests/linguistique/gold_reel.py
+e0e71213 N2.m — L'ANGLAIS SEUL : 4,42 SUR 204 Mo, ET LE MULTILINGUE COÛTE 1,6 PPL
+a72567e1 ÉTAT — T0 À 3 996 ET COMPTEURS 396/498
+[status: completed, exit code: 0]
+  ```
+

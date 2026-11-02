@@ -12825,3 +12825,10 @@ a72567e1 ÉTAT — T0 À 3 996 ET COMPTEURS 396/498
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/tests/linguistique/evaluer_gold.py reports/pensee-gold-linguistique.json reports/rapport-pensee-gold-linguistique.m … [394 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-456]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-456", "timeout_ms": 600000, "wait": true}`

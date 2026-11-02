@@ -17022,3 +17022,4 @@ Continue working toward the objective in this same session. Treat the current wo
 13G	data/corpus_wiki_en_texte
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 28); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 30; done; echo \"attente $((i*30))s\"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || echo \"en: pas encore\"; ps -eo pid,etime,cmd | grep \"cor … [253 caractères tronqués]`
