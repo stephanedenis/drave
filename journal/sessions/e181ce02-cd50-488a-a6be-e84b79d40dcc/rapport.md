@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 42.8 h |
+| Durée | 43.0 h |
 | Tours | 138 |
-| Messages | 1647 |
-| Appels d'outils | 1415 |
+| Messages | 1655 |
+| Appels d'outils | 1423 |
 | Fichiers touchés | 25 |
-| Commandes | 1152 |
+| Commandes | 1159 |
 | Sous-agents | 2 |
-| Commits | 173 |
+| Commits | 174 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -7316,11 +7316,19 @@ Je continue : prochain round, **la réponse** — la seule sortie que le miroir 
 
 ### Tour 138 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Ajouter la réponse et mesurer sur les questions
 - bash — Écrire la fiche de la réponse et la porte T120
 - bash — Trim T0/README et passer toutes les portes
+- bash — Retirer la ligne Journal pour le budget T0
+- bash — Restaurer les lignes Journal des deux sessions
+- bash — Lire le bloc de la session D/R/A
+- bash — Ajouter le Journal du bloc D/R/A
+- bash — Lire la ligne Ce qu'elle fait de la session Pensée
+- bash — Mettre la ligne de la session Pensée à jour
+- bash — Committer la réponse
+- job_output
 
 ## 3. Travail accompli
 
@@ -7401,7 +7409,7 @@ Je continue : prochain round, **la réponse** — la seule sortie que le miroir 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1112 autres
+- … et 1119 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7722,4 +7730,5 @@ Je continue : prochain round, **la réponse** — la seule sortie que le miroir 
 - B13 — LA RESTITUTION AVEC SPANS : 1,0, LA PERTE ÉTAIT LE RENDU ; 121/121" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RESTITUTION AVEC SPANS"; then 
 - B13 — LA RESTITUTION AVEC SPANS : 1,0, LA PERTE ÉTAIT LE RENDU ; 121/121" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RESTITUTION AVEC SPANS"; then 
 - B13 — LA RESTITUTION SÉMANTIQUE : LE RÉSUMÉ RAPPELLE 78 % (0,7834 HEUR / 0,7472 CASCADE) ; 122/122" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "REST
+- B13 — LA RÉPONSE : 19/19, L'ACTE COMMANDE LA SORTIE ; 123/123" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LA RÉPONSE"; then echo "COMMIT OK $i"; br
 

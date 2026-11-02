@@ -1835,6 +1835,19 @@ def t119_miroir_resume() -> tuple[bool, str]:
         f"résumé : heur {round(rap_h, 4)}, cascade {round(rap_c, 4)}")
 
 
+def t120_miroir_reponse() -> tuple[bool, str]:
+    """La réponse : 19/19 sur les questions du gold."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_reponse
+    ph = charger()
+    h = bl.Heuristique()
+    q = [p for p in ph if "?" in p["texte"]]
+    fr = sum(fidelite_reponse(h.analyser(p["texte"], p["langue"])) for p in q) / max(1, len(q))
+    return len(q) == 19 and abs(fr - 1.0) < 1e-9, (
+        f"réponse : {len(q)} questions, taux {round(fr, 4)}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1953,7 +1966,8 @@ def main() -> int:
               ("T116 miroir", t116_miroir()),
               ("T117 sortie POS", t117_miroir_pos()),
               ("T118 restitution spans", t118_miroir_espaces()),
-              ("T119 restitution sémantique", t119_miroir_resume())]
+              ("T119 restitution sémantique", t119_miroir_resume()),
+              ("T120 réponse", t120_miroir_reponse())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

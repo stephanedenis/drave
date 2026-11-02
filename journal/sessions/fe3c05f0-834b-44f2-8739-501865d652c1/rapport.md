@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
 | Durée | 43.0 h |
-| Tours | 386 |
-| Messages | 2344 |
-| Appels d'outils | 1561 |
+| Tours | 387 |
+| Messages | 2348 |
+| Appels d'outils | 1563 |
 | Fichiers touchés | 26 |
-| Commandes | 1387 |
+| Commandes | 1389 |
 | Sous-agents | 0 |
 | Commits | 94 |
 | Compactages de contexte | 4 |
@@ -803,6 +803,8 @@
 **Tour 385** — mets le dossier pilotage à jour et continue
 
 **Tour 386** — continue pendent 3h
+
+**Tour 387** — <goal_round> Objective: "Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécrire reports/rapport-ocr-cegep.md avec les chiffres, mettre docs/pilotage/ ( … [764 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9131,7 +9133,34 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 
 **Synthèse produite :**
 
-⏵ Lot CEGEP interrompu : `pdftoppm` a dépassé 30 min sur l'Encyclopedia of Algorithms — 10 scans faits, je fige le corpus
+⏵ CEGEP à 10 notes committé (`4f7631aa`), outil corrigé, T0 revenu sous 4 000 (`8e467fa7`)
+
+Le lot de 40 s'est arrêté sur un mur, mais le corpus a gagné 3 notes neuves et l'outil en sort plus robuste.
+
+\## Ce qui a été mesuré et committé
+
+- **Commit `4f7631aa`** : le corpus OCR du CEGEP passe à **10 notes scannées, 1 596 pages, 2 519 507 caractères** — les 7 de la nuit plus **Algorithms Illuminated (Part 4)** 274 p, **Part 1** 217 p et **Data Structures and Algorithms in C** 366 p. Train 2,46 Mo, val 87 ko ; **8 Ko : 302 fenêtres train + 11 val, 0 doublon** ; éval **0/40, 0/24, 0/40**.
+- **Le 11e PDF — l'*Encyclopedia of Algorithms* (Ming-Yang Kao, plus de 1 000 pages) — a fait tomber le run** : `pdftoppm` a dépassé son timeout de 1 800 s et l'exception `subprocess.TimeoutExpired` n'était pas rattrapée. C'est une **limite de l'outil**, pas du corpus ; la fiche la nomme.
+- **L'outil est corrigé** : `tools/ocr_pdf.py` attrape désormais le timeout, journalise `! timeout pdftoppm : <pdf> (ignoré)` et passe au PDF suivant au lieu de mourir.
+- **Commit `8e467fa7`** : l'état est revenu sous le budget T0 (4 007 → moins de 4 000 mots).
+- La revue passe (**531 fiches, 619 JSON**), le budget de documents passe, et le dernier fait = le dernier état (`8e467fa7`).
+
+\## Ce qui reste dans la fenêtre
+
+Il reste **47 minutes** (fin à 12 h 20). Le relancer tel quel serait contre-productif : le parcours repart de zéro et referait les 10 notes déjà faites (~1 h 50) avant de retomber sur l'Encyclopedia. La bonne suite est un run dédié avec **`--max-pages 1000`** sur les PDF monstrueux, ou une option de reprise (`--deja`) qui n'existe pas encore — je ne l'ai pas ajoutée, c'est un choix à faire.
+
+Je laisse donc le goal actif jusqu'à 12 h 20 en surveillance légère, et je marquerai la fenêtre close avec le récapitulatif. Si tu veux que j'enchaîne tout de suite sur le run `--max-pages`, dis-le et je le lance.
+
+### Tour 387 — <goal_round> Objective: "Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot  … [1044 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Add deja option and relaunch at 42nd PDF
+- bash — Check Encyclopedia 500-page run
+
+**Synthèse produite :**
+
+⏵ Round 1 : j'ajoute l'option `--deja` (reprise) et je relance le CEGEP avec `--max-pages 500`
 
 ## 3. Travail accompli
 
@@ -9208,7 +9237,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1347 autres
+- … et 1349 autres
 
 ## 4. Mesures et résultats marquants
 

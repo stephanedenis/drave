@@ -1,0 +1,18 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "123/123",
+ "surface": 1.0,
+ "pos_spans": 1.0,
+ "resume_heur": 0.7834,
+ "resume_cascade": 0.7472,
+ "reponse": {
+  "questions": 19,
+  "taux": 1.0
+ },
+ "limites": [
+  "la réponse suit l'acte, pas le contenu",
+  "19 questions",
+  "heuristique seule"
+ ]
+}

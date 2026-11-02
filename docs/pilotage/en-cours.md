@@ -42,8 +42,8 @@
 - **Bloquants** : **neuronal réel bloqué** — `llama-cli` refuse/timeout, aucun tagger (`spacy`,
   `stanza`, `nltk`, `transformers`), aucun poids `drave-n0` ; le mock reste un contrat. Trois
   options : un modèle local, les poids, ou acter la cascade.
-- **Ce qu'elle fait** : B13 (DRVF, banc, opérateurs, coréférence 68), gold 407 ; **111/111**.
-- **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+- **Ce qu'elle fait** : B13 (DRVF, banc, opérateurs, coréférence 103, miroir), gold 407 ; **123/123**.
+- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 > **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`,
 > `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close ; restes nommés : fax 1 bit,
@@ -59,9 +59,9 @@
 - **Objectif final** : 10 corpus, ficés.
 - **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 8 Ko 0 ; éval 0/40) ; **OCR CEGEP** (10 notes, 1 596 p, 2,52 M car. ; 8 Ko 0) ; **genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée, S, N2.
+- **Journal** : [le 02/11](../../journal/2026-11-02/README.md) (la nuit D/R/A).
 - **Prochaine action** : l'**OCR complet** — le **fonds CEGEP** (~127 scans ; le 11e PDF exige `--max-pages`) ; la clôture.
 - **Bloquants** : aucun.
-- **Journal** : [le 02/11](../../journal/2026-11-02/README.md) (la nuit D/R/A).
 
 ## Ce qui est en cours
 

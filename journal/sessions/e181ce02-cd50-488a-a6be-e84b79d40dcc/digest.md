@@ -30303,3 +30303,91 @@ cascade réponse 19 questions 1.0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Ce qu'elle fait** : B13 (DRVF, banc, opérateurs, coréférence), gold 342 ; **109/109**.\",\n            \"- **Ce qu'elle … [1065 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 violation(s) :
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 531 fiche(s) · 619 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Journal\" docs/pilotage/en-cours.md | head -3; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nlignes=[l for l in t.splitlines(keepends=True) if not l.startswith('- **Journal* … [278 caractères tronqués]`
+
+  ```
+46:- **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+64:- **Journal** : [le 02/11](../../journal/2026-11-02/README.md) (la nuit D/R/A).
+journal retiré 19 mots
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · session « Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur » ne dit pas « **Journal** »
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\n# restaurer le Journal de la session Pensée (après \"Ce qu'elle fait\")\nt=t.replace(\"- **Ce qu'elle fait** : B13 (DRVF, banc, opérateur … [760 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · session « Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur » ne dit pas « **Journal** »
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fe3c05f0\" docs/pilotage/en-cours.md; sed -n \"$(grep -n 'fe3c05f0' docs/pilotage/en-cours.md | head -1 | cut -d: -f1),+16p\" docs/pilotage/en-cours.md | cut -c1-120", "description": "Lire le bloc de la session D/R/A"}`
+
+  ```
+48:> `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close ; restes nommés : fax 1 bit,
+51:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+53:- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+> `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close ; restes nommés : fax 1 bit,
+> exposant fusionné, parité réelle sans questions) — rapports dans [`journal/sessions/`](../../journal/sessions/).
+
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d65
+- **Rôle** : **D/R/A** — le texte intégral, l'extraction PDF/OCR, la prépa R1.1/R1.2, A2.6/A8.3.
+- **Plan** : le texte intégral, le PDF, l'OCR.
+- **Ambition** : le français réel.
+- **Stratégie** : le dump, débaliseur.
+- **Objectif final** : 10 corpus, ficés.
+- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Doc
+- **Ce que font les autres** : Pensée, S, N2.
+- **Prochaine action** : 
+… [144 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\ni=t.find('- **Ce que font les autres** : Pensée, S, N2.')\nassert i>=0\nj=t.find('\\n', i)+1\nt=t[:j]+'- **Journal** : [le 02/11](../../j … [268 caractères tronqués]`
+
+  ```
+journal ajouté au bloc D/R/A
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · session « Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 » ne dit pas « **Journal** »
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Ce qu'elle fait\" docs/pilotage/en-cours.md | head -2; sed -n \"$(grep -n 'Ce qu.elle fait' docs/pilotage/en-cours.md | head -1 | cut -d: -f1),+2p\" docs/pilotage/en-cours.md | cut -c1-140", "description": "Lire la ligne Ce … [36 caractères tronqués]`
+
+  ```
+45:- **Ce qu'elle fait** : B13 (DRVF, banc, opérateurs, coréférence 68), gold 407 ; **111/111**.
+59:- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 8 Ko 0 ; éval 0/40) ; **OCR CEGEP** (10 notes, 1 596 p, 2,52 M car. ; 8 Ko 0) ; **genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
+- **Ce qu'elle fait** : B13 (DRVF, banc, opérateurs, coréférence 68), gold 407 ; **111/111**.
+
+> **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"- **Ce qu'elle fait** : B13 (DRVF, banc, opérateurs, coréférence 68), gold 407 ; **111/111**.\"\nnew=\"- **Ce qu'elle fait** : B13  … [460 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 531 fiche(s) · 619 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/miroir.py tools/pensee/autotest.py reports/rapport-pensee-miroir-reponse.md reports/pensee-miroir-reponse.json reports/README.md docs/implantation/moteur-de-pensee.md doc … [491 caractères tronqués]`

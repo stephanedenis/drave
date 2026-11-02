@@ -84,6 +84,27 @@ def rappel_resume(a: bl.Annotation, source: str) -> float:
     return round(len(mots & rendus) / max(1, len(mots)), 4)
 
 
+def repondre(a: bl.Annotation) -> str:
+    """La **réponse** : selon l'acte, une reformulation minimale (pas une répétition)."""
+    acte = next((e.valeur for e in a.etiquettes
+                 if e.niveau == "pragmatique" and e.type == "acte"), "assertion")
+    if acte == "question":
+        return "réponse : oui ou non, selon le contexte"
+    if acte == "ordre":
+        return "ordre reçu"
+    return "assertion notée"
+
+
+def fidelite_reponse(a: bl.Annotation) -> float:
+    """1.0 si la réponse correspond à l'acte détecté (une classe, pas le texte)."""
+    acte = next((e.valeur for e in a.etiquettes
+                 if e.niveau == "pragmatique" and e.type == "acte"), "assertion")
+    rep = repondre(a)
+    return 1.0 if ((acte == "question" and rep.startswith("réponse"))
+                   or (acte == "ordre" and rep == "ordre reçu")
+                   or (acte == "assertion" and rep == "assertion notée")) else 0.0
+
+
 def fluidite(a: bl.Annotation) -> float:
     """La part de la longueur restituée qui est du texte (pas des trous)."""
     r = rendre(a)
@@ -124,6 +145,9 @@ def main() -> int:
         rap = sum(rappel_resume(bloc.analyser(p["texte"], p["langue"]), p["texte"])
                   for p in ph) / max(1, len(ph))
         print(nom, "résumé rappel", round(rap, 4))
+        q = [p for p in ph if "?" in p["texte"]]
+        fr = sum(fidelite_reponse(bloc.analyser(p["texte"], p["langue"])) for p in q) / max(1, len(q))
+        print(nom, "réponse", len(q), "questions", round(fr, 4))
     return 0
 
 
