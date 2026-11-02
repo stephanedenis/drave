@@ -1,0 +1,25 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "24/24",
+ "politique_minute": {
+  "episodes": 200,
+  "graine": 0,
+  "etats_q": 60,
+  "reward_ouverture": 0.1
+ },
+ "resultat": {
+  "seule_but": false,
+  "seule_pas": 8,
+  "a_star": {
+   "noeuds": 28,
+   "sonde": 6,
+   "but": true
+  }
+ },
+ "limites": [
+  "Q-learning tabulaire",
+  "politique incomplète (propose None)",
+  "toy"
+ ]
+}

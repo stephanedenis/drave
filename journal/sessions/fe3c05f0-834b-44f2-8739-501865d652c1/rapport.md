@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 28.5 h |
-| Tours | 24 |
-| Messages | 991 |
-| Appels d'outils | 964 |
+| Durée | 28.6 h |
+| Tours | 25 |
+| Messages | 995 |
+| Appels d'outils | 966 |
 | Fichiers touchés | 18 |
-| Commandes | 887 |
+| Commandes | 889 |
 | Sous-agents | 0 |
 | Commits | 60 |
 | Compactages de contexte | 2 |
@@ -75,6 +75,8 @@
 **Tour 23** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 24** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 25** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1101,6 +1103,35 @@ Le **manifeste anglais** → son contrôle (le dernier gros) → la **fiche et l
 - bash — Check English manifest, OCR, and documents
 - bash — Commit progress state for three fronts
 
+**Synthèse produite :**
+
+⏵ Round 12 : l'état des trois fronts est committé (anglais 76 %, documents 1 000/7 496, OCR en cours)
+
+**Round 12/1000 — trois fronts en parallèle, état synchronisé.** Commit `bd9b78ee`.
+
+\## L'anglais
+
+**19,4 M pages sur 25,6 M** (76 %), 4,97 M articles, 18,91 G caractères. Le run est le dernier ; il reste ~6 M pages. Son contrôle 8 Ko (les deux unités + XNLI + wikitext2) sera lancé **au manifeste**, pas avant — la leçon du round 11 (le « contrôle » n'était que la boucle d'attente) est retenue.
+
+\## Les documents
+
+**1 000 PDF sur 7 496**, **295 Mo** de texte, 243,1 M caractères. Au rythme constaté (~50 PDF/min), le parcours complet prendra **~2 h 30** ; le manifeste et la fiche (licences, natif/scanné, dédoublonnage) suivront.
+
+\## L'OCR
+
+La **détection des scannés** sur les 2 785 PDF est longue — le `pdftotext` de deux pages par document pour distinguer le natif du scan. Le premier livre est océrisé (*3D Printing and RepRap*, 134 pages, 159 776 caractères) ; les 20 documents du pilote suivent, puis les 159 scans complets.
+
+\## La suite
+
+L'**anglais** → son contrôle → la **fiche et le catalogue des dix** ; les **manifestes OCR et Documents** → leurs fiches ; les **159 scans**. Le goal reste actif ; le prochain round relance l'attente de l'anglais et ramasse les manifestes dès qu'ils tombent.
+
+### Tour 25 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check English, OCR, and documents progress
+- bash — Measure English progress over two minutes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1168,7 +1199,7 @@ Le **manifeste anglais** → son contrôle (le dernier gros) → la **fiche et l
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 847 autres
+- … et 849 autres
 
 ## 4. Mesures et résultats marquants
 

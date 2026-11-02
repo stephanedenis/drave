@@ -413,6 +413,17 @@ def t20_minute_seule() -> tuple[bool, str]:
                                              f"{len(echecs)} échecs (l'A* était nécessaire)")
 
 
+def t21_minute_entrainee() -> tuple[bool, str]:
+    """Même entraînée sur la minute, la politique seule échoue (négatif)."""
+    from .courbe import seule_minute
+    from .operateurs import PolitiqueAppriseMinute
+    p = PolitiqueAppriseMinute(episodes=200, graine=0)
+    p.apprendre()
+    ok, pas = seule_minute(p)
+    return (not ok) and len(p.q) > 0, (f"minute entraînée : {len(p.q)} états-Q, "
+                                      f"seule {'but' if ok else 'échec'}/{pas} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -432,7 +443,8 @@ def main() -> int:
               ("T17 porte qui se referme", t17_ferme()),
               ("T18 porte à un tour", t18_minute()),
               ("T19 Q-table sur la porte minute", t19_minute_apprise()),
-              ("T20 politique seule/minute", t20_minute_seule())]
+              ("T20 politique seule/minute", t20_minute_seule()),
+              ("T21 Q-table entraînée/minute", t21_minute_entrainee())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -17829,3 +17829,70 @@ Continue working toward the objective in this same session. Treat the current wo
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"les 9 (**12,12 M** ; **8 Ko 0**) ; **PDF** (322 Mo) ; **A2.6/A8.3** (lot) ; **Documents/OCR en cours** ; en\",\n            \ … [2297 caractères tronqués]`
+
+  ```
+T0 max : 3993 mots (budget 4 000)
+  revue de documentation · 410 fiche(s) · 509 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+refus/course
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at be503e31d21daa409200abed375f267fbc227491 but expected 55b1523c7c7a27ff57c8378613862f12226755e2
+[master bd9b78ee] ÉTAT — DOCUMENTS 1 000/7 496 (295 MO), OCR EN COURS, ANGLAIS 19,4/25,6 M
+ 18 files changed, 252 insertions(+), 35 deletions(-)
+commit OK
+bd9b78ee ÉTAT — DOCUMENTS 1 000/7 496 (295 MO), OCR EN COURS, ANGLAIS 19,4/25,6 M
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 12 : l'état des trois fronts est committé (anglais 76 %, documents 1 000/7 496, OCR en cours)
+
+**Round 12/1000 — trois fronts en parallèle, état synchronisé.** Commit `bd9b78ee`.
+
+## L'anglais
+
+**19,4 M pages sur 25,6 M** (76 %), 4,97 M articles, 18,91 G caractères. Le run est le dernier ; il reste ~6 M pages. Son contrôle 8 Ko (les deux unités + XNLI + wikitext2) sera lancé **au manifeste**, pas avant — la leçon du round 11 (le « contrôle » n'était que la boucle d'attente) est retenue.
+
+## Les documents
+
+**1 000 PDF sur 7 496**, **295 Mo** de texte, 243,1 M caractères. Au rythme constaté (~50 PDF/min), le parcours complet prendra **~2 h 30** ; le manifeste et la fiche (licences, natif/scanné, dédoublonnage) suivront.
+
+## L'OCR
+
+La **détection des scannés** sur les 2 785 PDF est longue — le `pdftotext` de deux pages par document pour distinguer le natif du scan. Le premier livre est océrisé (*3D Printing and RepRap*, 134 pages, 159 776 caractères) ; les 20 documents du pilote suivent, puis les 159 scans complets.
+
+## La suite
+
+L'**anglais** → son contrôle → la **fiche et le catalogue des dix** ; les **manifestes OCR et Documents** → leurs fiches ; les **159 scans**. Le goal reste actif ; le prochain round relance l'attente de l'anglais et ramasse les manifestes dès qu'ils tombent.
+
+
+## Tour 25
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 13/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la reports/corpus-wiki-en-texte.json reports/ocr-pdf.json reports/corpus-pdf-documents.json 2>/dev/null; echo \"=== en\"; ps -p 1494795 -o pid,etime= 2>/dev/null; tail -2 /tmp/run-texte-en.log; echo \"=== ocr/doc\";  … [378 caractères tronqués]`
+
+  ```
+21:08
+=== en
+    PID            
+1494795    02:37:58
+  [en] 19200000 lus · 4926151 gardés · 18.79 G caractères
+  [en] 19400000 lus · 4966408 gardés · 18.91 G caractères
+=== ocr/doc
+1615747 24:19 reports/corpus-pdf-documents.json
+1616198 23:21 20
+  Biblio_large · 001.0 3dprintingandreprap.pdf · 134 p · 159776 car
+  1000 PDF · 394 gardés · 243.1 M car
+160K	data/corpus_ocr
+343M	data/corpus_pdf_documents
+20G	data/corpus_wiki_en_texte
+  ```
+

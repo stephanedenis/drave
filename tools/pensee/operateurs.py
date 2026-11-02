@@ -259,6 +259,23 @@ class PolitiqueApprise(Politique):
         return max(self.ACTIONS, key=lambda x: self._q(cle, x))
 
 
+class PolitiqueAppriseMinute(PolitiqueApprise):
+    """La Q-table **entraînée sur la porte minute** : elle apprend l'ouverture-passage."""
+
+    nom = "apprise_minute"
+
+    def _pas(self, cle, action, ouvre: bool):
+        x, y, o = cle
+        if (x, y) == (3, 2) and action == "bas":
+            return (3, 3, False), 0.1
+        dx = {"droite": 1, "gauche": -1}.get(action, 0)
+        dy = {"bas": 1, "haut": -1}.get(action, 0)
+        nx, ny = x + dx, y + dy
+        if not _libre_p(nx, ny, o):
+            return cle, 0.0
+        return (nx, ny, o), -0.01
+
+
 # --------------------------------------------------------------------------- cadenas (le neuronal nécessaire)
 
 BUT_C = 3
@@ -780,7 +797,7 @@ class DRVM:
 __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle",
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
-           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise",
+           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise", "PolitiqueAppriseMinute",
            "LABYRINTHE_PORTE", "REGISTRE_P", "LABYRINTHE_PORTE_STO", "REGISTRE_PSTO",
            "LABYRINTHE_PORTE_FERME", "REGISTRE_PF",
            "LABYRINTHE_PORTE_MINUTE", "REGISTRE_PM",

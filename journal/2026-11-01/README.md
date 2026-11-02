@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**104 commits** · **4 session(s)** · **10 thème(s)**
+**105 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 13 | [distribue.md](distribue.md) |
-| docs | 26 | [docs.md](docs.md) |
+| docs | 27 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 47 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -29,7 +29,7 @@
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 28.8 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 28.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 28.5 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 28.6 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -139,6 +139,7 @@
 | 20:58 | `530ac733` | DONNÉES — L'OCR DES SCANS (tesseract 5.5.3) ET LES 7 496 DOCUMENTS LANCÉS |
 | 21:00 | `55b1523c` | B13 — LA Q-TABLE SUR LA PORTE MINUTE : 28 NŒUDS/BUT, SONDE 6, COÛT 62 ; 22/22 |
 | 21:04 | `be503e31` | B13 — LA POLITIQUE SEULE SUR LA PORTE MINUTE : 9/9 ÉCHECS, L'A* ÉTAIT NÉCESSAIRE ; 23/23 |
+| 21:07 | `bd9b78ee` | ÉTAT — DOCUMENTS 1 000/7 496 (295 MO), OCR EN COURS, ANGLAIS 19,4/25,6 M |
 
 ## Le récit de la journée (écrit à la main)
 
