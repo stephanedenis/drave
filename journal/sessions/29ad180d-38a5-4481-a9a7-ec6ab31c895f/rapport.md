@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 81 |
-| Appels d'outils | 94 |
+| Messages | 91 |
+| Appels d'outils | 105 |
 | Fichiers touchés | 7 |
-| Commandes | 63 |
+| Commandes | 69 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu es la session S (les structures, CPU). Lis AGENTS.md, docs/pilotage/en-cours.md,  docs/theorie/jeux-symboliques.md et … [565 caractères tronqués]
 
-*94 appels d'outils.* Actions notables :
+*105 appels d'outils.* Actions notables :
 
 - bash — Get session id and git status
 - read
@@ -41,7 +41,7 @@
 - bash — Search hub coordination mechanism
 - bash — Read sessions.py second half
 - bash — Read date and plan-travail territory rules
-- … et 64 autres
+- … et 73 autres
 
 **Synthèse produite :**
 
@@ -53,7 +53,7 @@ Je pose le plan et la réservation, puis je mesure l'état de l'analyseur sur un
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 3 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/gold-analyseur.json` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py` | 0 | 7 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_analyseur.py` | 1 | 0 |
@@ -103,7 +103,7 @@ Je pose le plan et la réservation, puis je mesure l'état de l'analyseur sur un
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 23 autres
+- … et 29 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -111,6 +111,7 @@ Je pose le plan et la réservation, puis je mesure l'état de l'analyseur sur un
 - **T1** `| | * c7232b3 (n2-analyse) ANALYSEUR — L'ADVERBE DE TEMPS ET LE « QU'ELLE » : 7/7 SÉQUENCES, 94 % DE COUVERTURE`
 - **T1** `- un chiffre sans dispositif (« 73 % ») ;`
 - **T1** `129:- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (niveaux 0–4), export ; analyseur **7/7** séquences, **93,9 %** de couverture, **19 tests** ; [`analyseur``
+- **T1** `[still running after 60000ms; moved to background job bash-67]`
 
 ## 5. Erreurs rencontrées
 
@@ -124,4 +125,7 @@ Je pose le plan et la réservation, puis je mesure l'état de l'analyseur sur un
 ## 6. Commits
 
 - S — L'ANALYSEUR NOMME LES RÔLES : 99/100, 38/39 TYPES ; LE CORPUS DE 39 STRUCTURES SORT" -m "Le générateur gagne des rôles contextuels (possession/thème, instru
+- S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES" -m "Le sous-module tools/structures est committé dan
+- ps -eo pid,etime,cmd | grep -E "git commit|archive_sessions|journal_auto|session_report|python3" | grep -v grep | head -20; echo "=== index lock ==="; ls -la /h
+- ps -eo pid,ppid,etime,pcpu,stat,cmd | grep -E "57032|57052|57681|job|git commit" | grep -v grep; echo "=== enfants ==="; ps --ppid 57032 -o pid,etime,pcpu,stat,
 

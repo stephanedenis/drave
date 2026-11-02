@@ -1917,3 +1917,74 @@ M  tools/sessions.py
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/verifie_etat_a_jour.py --index; echo \"HOOK=$?\"; git commit -m \"ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE\n\nLe hub intègre les quatre mandats rouverts après le r … [750 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+HOOK=0
+[still running after 60000ms; moved to background job bash-72]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Waiting for the commit hook to finish
+
+- **job_output** `{"job_id": "bash-72", "wait": true, "timeout_ms": 120000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master e420267a] ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE
+ 29 files changed, 7145 insertions(+), 183 deletions(-)
+ create mode 100644 journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+COMMIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Auditing what the commit hook actually included
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git show --stat --oneline e420267a | head -40; echo \"=== status now ===\"; git status --short | head -20", "description": "Inspect commit contents and tree state"}`
+
+  ```
+e420267a ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE
+ docs/pilotage/en-cours.md                          |  156 +-
+ docs/pilotage/roadmap.md                           |   14 +-
+ journal/2026-11-02/README.md                       |   15 +-
+ journal/2026-11-02/apprentissage.md                |   10 +-
+ journal/2026-11-02/attention.md                    |   10 +-
+ journal/2026-11-02/distribue.md                    |   10 +-
+ journal/2026-11-02/docs.md                         |   15 +-
+ journal/2026-11-02/memoire.md                      |   10 +-
+ journal/2026-11-02/mesures.md                      |   10 +-
+ journal/2026-11-02/modele.md                       |   10 +-
+ journal/2026-11-02/outils.md                       |   10 +-
+ journal/2026-11-02/portes.md                       |   10 +-
+ journal/README.md                                  |   10 +-
+ journal/THEMES.md                                  |    2 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md |  567 ++++++
+ .../rapport.md                                     |  Bin 9084 -> 10023 bytes
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md | 1230 +++++++++++++
+ .../2
+… [971 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Pre-flight for the gate pass: checking hardcoded devices and N2's GPU state
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -rln \"cuda:1\" tools/*.py 2>/dev/null | head; echo \"---\"; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; ps -o etime,pcpu,rss,stat -p 35572 --no-headers 2>/dev/null; wc -c work/n2ac/mix-200k.log … [132 caractères tronqués]`
+
+  ```
+---
+0, 1650 MiB, 92 %
+1, 1422 MiB, 84 %
+      14:41 89.6 17106288 Sl
+10034 work/n2ac/mix-200k.log
+pas 9400 · perte 1.6683 · PPL val 4.714 · 561 s
+pas 9450 · perte 1.7165 · PPL val 4.752 · 564 s
+--- load ---
+ 16:32:40  up  1:25,  2 users,  load average: 23,74, 21,08, 13,34
+lun 02 nov 2026 16:32:40 EST
+  ```
+

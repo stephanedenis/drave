@@ -1675,3 +1675,112 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ocr_pdf.py has be
   ```
 
 - **bash** `{"command": "python3 -m py_compile tools/ocr_pdf.py && echo \"compile OK\"; head -3 work/ocr/scans-uniques.txt > /tmp/test-liste.txt; rm -rf /tmp/test-ocr /tmp/test-ocr.json; time python3 tools/ocr_pdf.py --liste /tmp/test-liste.txt --racine CEGEP --sortie /tmp/test-ocr --manifeste /tmp/test-ocr.jso … [286 caractères tronqués]`
+
+  ```
+compile OK
+  CEGEP · inscription AQPC.pdf · 2 p · 2582 car
+  CEGEP · document%20de%20revision_pages_12a15_542 · 4 p · 4092 car
+  CEGEP · document%20de%20revision_pages_16a25_832 · 10 p · 15306 car
+{
+ "scannes": 3,
+ "ocrises": 3,
+ "pages_ocr": 16,
+ "caracteres": 21980,
+ "temps_s": 51.8,
+ "octets": {
+  "train": 20177,
+  "val": 2667,
+  "test": 0
+ }
+}
+{'pdfs': 3, 'scannes': 3, 'ocrises': 3, 'pages_ocr': 16, 'caracteres': 21980, 'temps_s': 51.8, 'octets': {'train': 20177, 'val': 2667, 'test': 0}, 'documents': {'train': 2, 'val': 1, 'test': 0}}
+{'ocr': 'tesseract 5.5.3 sans root (work/ocr/root)', 'langues': 'fra+eng', 'dpi': 300, 'psm': 3, 'pretraitement': 'aucun (le R4.4 le fera)', 'detection': 'liste explicite de scans qualifiés sur le texte intégral', 'liste': '/tmp/test-liste.txt', 'ouvriers': 4, 'split': 'hash salé du chemin : 5% val, 5% test', 'deduplication': 'documents + tronçons'}
+[stderr]
+
+real	0m52,009s
+user	1m31,107s
+sys	0m2,608s
+  ```
+
+- **bash** `{"command": "uptime; ps -eo pid,etime,pcpu,comm,args --sort=-pcpu | head -6; echo \"--- gate ---\"; ps -ef | grep -E \"porte-ocr-scans|mesurer_ocr|simuler_scan\" | grep -v grep | head -5", "description": "Check load and gate processes"}`
+
+  ```
+16:31:09  up  1:24,  2 users,  load average: 26,03, 20,20, 12,29
+    PID     ELAPSED %CPU COMMAND         COMMAND
+  54178       02:13 1503 llama-server    llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 18081 -ngl 0 -c 1024 --no-webui
+  55955       00:00  300 ps              ps -eo pid,etime,pcpu,comm,args --sort=-pcpu
+  44710       08:12 99.0 python          /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal --pas 20000 --seq 128 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --window 256 --positions-aleatoires 384 --init work/n2j/base-wiki-45m.pt --sortie work/n2ac/rope-20k.pt --drvm work/n2ac/rope-20k.drvm
+  31786       16:20 93.5 node-MainThread node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+  35572       13:10 88.4 python          /home/stephane/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --pas 200000 --seq 128 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --positions-aleatoires 384 --sortie work/n2ac/mix-200k.pt --drvm wor
+… [33 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-37"}`
+
+  ```
+✅ propre : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photocopie : cellules exactes ≥ 65% (mesuré 69.1%)
+  ✅ photocopie : grilles de bonne forme ≥ 100% (mesuré 10/10)
+  ✅ photo : cellules exactes ≥ 45% (mesuré 62.4%)
+  ✅ photo : grilles de bonne forme ≥ 50% (mesuré 8/10)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables.json
+✅ porte OCR-scans verte : familles, colonnes et tableaux tiennent leurs planchers
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-37 (bash: python3 tools/verifie_contamination.py --help 2>&1 | head -30; echo "---"; bash tools/porte-ocr-scans.sh 2>&1 | tail -8) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "mv data/corpus_ocr_cegep data/corpus_ocr_cegep_pilote-2pages && ls -d data/corpus_ocr_cegep_pilote-2pages && echo \"pilote archivé\"", "description": "Archive the 2-page pilot corpus"}`
+
+  ```
+data/corpus_ocr_cegep_pilote-2pages
+pilote archivé
+  ```
+
+- **bash** `{"command": "python3 tools/ocr_pdf.py --liste work/ocr/scans-uniques.txt --racine CEGEP --sortie data/corpus_ocr_cegep --manifeste reports/ocr-pdf-cegep.json --ouvriers 8 2>&1 | tee work/ocr/run-cegep-02.log", "description": "Run OCR on the 91 true scans", "run_in_background": true}`
+
+  ```
+started background job bash-49
+  ```
+
+- **job_output** `{"job_id": "bash-49"}`
+
+  ```
+CEGEP · inscription AQPC.pdf · 2 p · 2582 car
+  CEGEP · document%20de%20revision_pages_12a15_542 · 4 p · 4092 car
+[status: running]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"detecte_scans_pdf.py — quels PDF sont *vraiment* des scans, et lesquels restent.\n\nPOURQUOI. `tools/ocr_pdf.py` classe un PDF « scanné » sur le texte natif de ses **deux premières\npages**. Sur le fonds CEGEP, cela donne 807 candidats ; le texte **intégral … [5360 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/detecte_scans_pdf.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **job_output** `{"job_id": "bash-49"}`
+
+  ```
+CEGEP · document%20de%20revision_pages_16a25_832 · 10 p · 15306 car
+[status: running]
+  ```
+
+- **bash** `{"command": "nl -ba work/ocr/scans-uniques.txt | head -8; echo \"--- temp ---\"; ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -2; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do ls \"$d\" | wc -l; du -sh \"$d\"; done; echo \"--- procs ---\"; ps -eo pid,etime,pcpu,comm,args --sort=-pcpu | gre … [123 caractères tronqués]`
+
+  ```
+1	/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/AQPC 2016/inscription AQPC.pdf
+     2	/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_12a15_5421.pdf
+     3	/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_16a25_8321.pdf
+     4	/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_1a11_5218.pdf
+     5	/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_26a30_8536.pdf
+     6	/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_31a40_3069.pdf
+     7	/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison
+… [1019 caractères tronqués]
+  ```
+

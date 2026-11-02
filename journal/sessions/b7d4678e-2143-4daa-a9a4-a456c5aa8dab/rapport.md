@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 0.3 h |
 | Tours | 2 |
-| Messages | 70 |
-| Appels d'outils | 83 |
-| Fichiers touchés | 4 |
-| Commandes | 48 |
+| Messages | 85 |
+| Appels d'outils | 101 |
+| Fichiers touchés | 5 |
+| Commandes | 61 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -49,7 +49,7 @@
 
 ### Tour 2 — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État  … [367 caractères tronqués]
 
-*72 appels d'outils.* Actions notables :
+*90 appels d'outils.* Actions notables :
 
 - read
 - get_goal
@@ -65,7 +65,7 @@
 - bash — Locate scan census sources
 - bash — Search 127 mentions across docs
 - bash — Read session report around next steps
-- … et 40 autres
+- … et 54 autres
 
 **Synthèse produite :**
 
@@ -81,6 +81,7 @@
 | `work/ocr/census_cegep.py` | 1 | 0 |
 | `work/ocr/detecte_cegep.py` | 1 | 0 |
 | `tools/ocr_pdf.py` | 0 | 6 |
+| `tools/detecte_scans_pdf.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -124,7 +125,7 @@
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 8 autres
+- … et 21 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -172,4 +173,17 @@
 - **T2** `omp1 run1: 1.56 s (99% CPU)`
 - **T2** `omp1 run2: 1.51 s (100% CPU)`
 - **T2** `{'ocr': 'tesseract 5.5.3 sans root (work/ocr/root)', 'langues': 'fra+eng', 'dpi': 300, 'psm': 3, 'pretraitement': 'aucun (le R4.4 le fera)', 'detection': 'liste explicite de scans qualifiés sur le tex`
+- **T2** `- **Objectif final** : un **mètre honnête** pour N2 — corpus dédupliqué (0 % de fenêtres de`
+- **T2** `- **Résultat** : corpus 4,63 → 3,61 Mo (−22,2 %), **0 / 2 814** fenêtres de validation dans`
+- **T2** `l'entraînement (contre 32,8 %) ; chaîne propre **3,09** en domaine, **16,70** sur la littérature`
+- **T2** `**−5,9 % à +19,5 %**. Fiche [`rapport-a83-defaut.md`](../../../reports/rapport-a83-defaut.md),`
+- **T2** `budget 10 %. Fiche [`rapport-a83b-regimes.md`](../../../reports/rapport-a83b-regimes.md).`
+- **T2** `**11,1** (plancher **38,5**), 3 bras × 3 graines ; à **1800 pas** la traduction reste entre`
+- **T2** `0 = lignes ; 8192 = fenêtres de 8 Ko (texte intégral)`
+- **T2** `reports/rapport-ocr-cegep.md:36:`verifie_contamination.py --taille-troncon 8192` : **54 fenêtres de 8 Ko** en train, **11** en val, **0 duplication** entre splits. Recouvrement avec les évaluations **`
+- **T2** `reports/rapport-ocr-pdf.md:36:`verifie_contamination.py --taille-troncon 8192` : **1784 fenêtres de 8 Ko** en train, **115** en val, **0 duplication** entre splits (le val porte un livre, le test aucu`
+- **T2** `| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurée`
+- **T2** `| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; `
+- **T2** `| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | 🔬 **v0** : 7 phrases + **générateur** + **pragmatique** (statuts, double sens conservé, **niveaux 0–4**, ni`
+- **T2** `| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67`
 

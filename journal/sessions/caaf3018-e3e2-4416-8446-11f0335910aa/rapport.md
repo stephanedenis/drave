@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 75 |
-| Appels d'outils | 101 |
+| Messages | 80 |
+| Appels d'outils | 107 |
 | Fichiers touchés | 2 |
-| Commandes | 72 |
+| Commandes | 78 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu reprends le hub `536cd5d6-94ac-4057-8fe9-11709a4587c7`. Lis son plan, en-cours et  plan-travail §9. Prochaine action  … [180 caractères tronqués]
 
-*101 appels d'outils.* Actions notables :
+*107 appels d'outils.* Actions notables :
 
 - bash — List working directory and check hub directory
 - bash — Find hub id references in repo
@@ -41,11 +41,11 @@
 - bash — Find heartbeat mentions
 - bash — Check current time and gates scripts
 - bash — Read gates method doc
-- … et 79 autres
+- … et 85 autres
 
 **Synthèse produite :**
 
-⏵ Waiting for the commit hook to finish
+⏵ Both GPUs are busy with N2's runs — so the full pass must wait; running the light documentary subset now
 
 ## 3. Travail accompli
 
@@ -98,7 +98,7 @@
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 32 autres
+- … et 38 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -113,6 +113,8 @@
 - **T1** `- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 au mélange intérieur, ×62,7 tout ; fiches [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../repor`
 - **T1** `- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (niveaux 0–4), export ; analyseur **7/7** séquences, **93,9 %** de couverture, **19 tests** ; [`analyseur`](..`
 - **T1** `[still running after 60000ms; moved to background job bash-72]`
+- **T1** `0, 1650 MiB, 92 %`
+- **T1** `1, 1422 MiB, 84 %`
 
 ## 5. Erreurs rencontrées
 

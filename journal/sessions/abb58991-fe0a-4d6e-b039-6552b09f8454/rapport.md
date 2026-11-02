@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 70 |
-| Appels d'outils | 106 |
-| Fichiers touchés | 5 |
-| Commandes | 86 |
+| Messages | 72 |
+| Appels d'outils | 108 |
+| Fichiers touchés | 6 |
+| Commandes | 87 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu reprends la session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`. Lis son plan, AGENTS.md  et docs/pilotage/en-cours. … [394 caractères tronqués]
 
-*106 appels d'outils.* Actions notables :
+*108 appels d'outils.* Actions notables :
 
 - bash — Show repo state and recent commits
 - bash — List root and sessions tool help
@@ -41,11 +41,11 @@
 - edit `/home/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md`
 - bash — Run strict session plan check
 - bash — Inspect the unlisted active plan
-- … et 80 autres
+- … et 82 autres
 
 **Synthèse produite :**
 
-⏵ 7B minimal : 0,829 sur les 20 réelles ; test du few-shot
+⏵ 7B minimal sur les 180 phrases (4 requêtes parallèles) pour le chiffre complet
 
 ## 3. Travail accompli
 
@@ -58,6 +58,7 @@
 | `/tmp/qualif_proto_srv.py` | 1 | 0 |
 | `/tmp/qualif_proto_srv2.py` | 1 | 0 |
 | `/tmp/qualif_7b.py` | 1 | 0 |
+| `/tmp/qualif_7b_180.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -101,7 +102,7 @@
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 46 autres
+- … et 47 autres
 
 ## 4. Mesures et résultats marquants
 

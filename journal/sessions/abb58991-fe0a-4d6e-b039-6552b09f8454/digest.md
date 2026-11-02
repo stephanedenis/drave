@@ -2200,3 +2200,40 @@ user	0m0,192s
 sys	0m0,016s
   ```
 
+### 🤖 Assistant
+
+⏵ 7B minimal : 0,829 sur les 20 réelles ; test du few-shot
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && time python3 /tmp/qualif_7b.py 18081 few 2>&1 | tail -8", "description": "Run 7B few-shot prompt on 20 sentences", "timeoutMs": 500000}`
+
+  ```
+g015 3/3 2.25s ['DET', 'NOUN', 'VERB']
+g016 8/8 4.65s ['DET', 'NOUN', 'VERB', 'DET', 'NOUN', 'PREP', 'DET', 'NOUN']
+g017 5/7 4.62s ['INTJ', 'VERB', 'CONJ', 'PRON', 'AUX', 'VERB', 'INTJ']
+g018 3/4 2.79s ['PRON', 'VERB', 'ADV', 'VERB']
+g019 2/3 2.40s ['INTJ', 'AUX', 'VERB']
+g020 6/6 3.90s ['DET', 'NOUN', 'AUX', 'ADJ', 'PREP', 'VERB']
+few POS 89 / 105 0.8476 lat moy 3.66
+conf [(('PREP', 'NOUN'), 2), (('DET', 'PREP'), 2), (('NOUN', 'DET'), 2), (('ADV', 'INTJ'), 2), (('PRON', 'AUX'), 2), (('PRON', 'INTJ'), 2), (('CONJ', 'PRON'), 1), (('ADV', 'AUX'), 1), (('VERB', 'AUX'), 1), (('AUX', 'VERB'), 1)]
+[stderr]
+
+real	1m13,334s
+user	0m0,190s
+sys	0m0,022s
+  ```
+
+### 🤖 Assistant
+
+⏵ 7B minimal sur les 180 phrases (4 requêtes parallèles) pour le chiffre complet
+
+- **write** `{"content": "import json, time, urllib.request, pathlib, concurrent.futures as cf\nRACINE = pathlib.Path('/home/stephane/GitHub/Qtrinet')\nURL = 'http://127.0.0.1:18081/v1/chat/completions'\nTAGS = ['DET', 'NOUN', 'VERB', 'ADJ', 'ADV', 'PREP', 'PRON', 'AUX', 'CONJ', 'NUM', 'INTJ', 'PUNCT']\n\ndef gr … [2701 caractères tronqués]`
+
+  ```
+<path>/tmp/qualif_7b_180.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && time python3 /tmp/qualif_7b_180.py 2>&1 | tail -12", "description": "Run 7B minimal prompt on all 180 sentences", "timeoutMs": 900000}`

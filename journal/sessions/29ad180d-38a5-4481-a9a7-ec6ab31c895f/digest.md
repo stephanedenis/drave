@@ -2126,3 +2126,126 @@ dc7f9c56 N2 — MANDAT 200 k PAS SUR LE MÉLANGE 1 Go, PUIS R1.1/R1.2 (session 0
 … [1266 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git rev-parse HEAD; git log -1 --format='%h %s'; echo \"=== main repo index lock ===\"; ls -la /home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock 2>/dev/null || echo \"pas de verrou\"", "description": "G … [42 caractères tronqués]`
+
+  ```
+647205a3da710217b63b5d20d492275a75e7dff8
+647205a S — L'ANALYSEUR NOMME LES RÔLES : 99/100, 38/39 TYPES ; LE CORPUS DE 39 STRUCTURES SORT
+=== main repo index lock ===
+pas de verrou
+  ```
+
+- **write** `{"content": "# S — L'analyseur nomme les rôles : 99/100, 38/39 types, et 39 structures au corpus\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur un gold de **39 phrases**\n> (7 `dev`, 16 `test`, 16 `holdout`), la structure de base retrouve la **séquence de types\n> 38/39**  … [8486 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp data/structures/banque-manifest.json reports/s-banque-structures.json && python3 -m json.tool reports/s-banque-structures.json | head -20; echo \"=== check links ===\"; ls -la reports/rapport-s-analyseur-roles.md reports/s-banque- … [67 caractères tronqués]`
+
+  ```
+{
+    "version": 2,
+    "mode": "gold",
+    "date": "2026-11-02T16:27:28",
+    "source": "tools/structures/donnees/gold-analyseur.json",
+    "sortie": "data/structures/banque.jsonl",
+    "phrases": 39,
+    "candidats_acceptes": 39,
+    "sha256": "973c70a4126896b8557d803b940f58d1f6d1fe1d172cdb7b9abce9671cd7db71",
+    "note": "structures de r\u00e9f\u00e9rence, sans jugement humain \u2014 `statut: reference` ; spans v\u00e9rifi\u00e9s."
+}
+=== check links ===
+-rw-------. 1 stephane stephane 8798  2 nov 16:31 reports/rapport-s-analyseur-roles.md
+-rw-r--r--. 1 stephane stephane  395  2 nov 16:31 reports/s-banque-structures.json
+  ```
+
+- **bash** `{"command": "chmod 644 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md; ls -l /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md", "description": "Fix fiche permissions"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 8798  2 nov 16:31 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md
+  ```
+
+- **write** `{"content": "# Plan de session — S, les structures (analyser, banquer, exporter)\n\n> **Mandat vivant.** Ouvert le 2026-11-02 16 h 19 HNE depuis\n> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ S) et\n> [`plan-travail.md`](../../../docs/pilotage/plan-travail.md) § 9.2.\n> Le h … [6954 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — S, les structures (analyser, banquer, exporter)
+2: 
+3: > **Mandat vivant.** Ouvert le 2026-11-02 16 h 19 HNE depuis
+4: > [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ S) et
+5: > [`plan-travail.md`](../../../docs/pilotage/plan-travail.md) § 9.2.
+6: > Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+7: > `en-cours` reste la seule source de l'état : ce plan est le **contrat de travail** qui le
+8: > précède, et la section S y est **proposée au hub**, pas écrite ici.
+9: 
+10: - **Session** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f`
+11: - **Rôle** : **S — les structures** : le banc d'interprétations candidates (outil web, générateur,
+12:   pragmatique, banque), l'**analyseur** (rôles, subordonnées) et l'**export au corpus**.
+13: - **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+14: - **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
+15:   `reports/s-banque-*` ; `journal/sessions/29ad180d-38
+… [3203 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Plan de session — S, les structures (analyser, banquer, exporter)\n\n> **Mandat vivant.** Ouvert le 2026-11-02 16 h 19 HNE depuis\n> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ S) et\n> [`plan-travail.md`](../../../docs/pilotage/plan-travail.md) § 9.2.\n> Le h … [6954 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --check 2>&1 | head -8; echo \"=== HEAD ===\"; git rev-parse --short HEAD; echo \"=== commit pointeur (index alterné) ===\"; H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read- … [247 caractères tronqués]`
+
+  ```
+⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+=== HEAD ===
+e420267a
+=== commit pointeur (index alterné) ===
+ tools/structures | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4; echo \"=== show hub commit ===\"; git show --stat --oneline e420267a | head -40; echo \"=== status ===\"; git status --short; echo \"=== plan suivi ? ===\"; git ls-files journal/sessions/29ad180d-38a5-4481-a9a7- … [164 caractères tronqués]`
+
+  ```
+e420267a ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE
+dc7f9c56 N2 — MANDAT 200 k PAS SUR LE MÉLANGE 1 Go, PUIS R1.1/R1.2 (session 0733c5bb)
+04d75114 ÉTAT — HORODATAGE RÉEL (16 h 09) APRÈS LA REPRISE ; LE FUTUR N'EST PAS UNE HEURE
+97d693b6 ÉTAT — T0 REVENU SOUS 4 000 (3 998) APRÈS LE RUNBOOK
+=== show hub commit ===
+e420267a ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE
+ docs/pilotage/en-cours.md                          |  156 +-
+ docs/pilotage/roadmap.md                           |   14 +-
+ journal/2026-11-02/README.md                       |   15 +-
+ journal/2026-11-02/apprentissage.md                |   10 +-
+ journal/2026-11-02/attention.md                    |   10 +-
+ journal/2026-11-02/distribue.md                    |   10 +-
+ journal/2026-11-02/docs.md                         |   15 +-
+ journal/2026-11-02/memoire.md                      |   10 +-
+ journal/2026-11-02/mesures.md                      |   10 +-
+ journal/2026-11-02/modele.md                       |   10 +-
+ journal/2026-11-02/outils.md                       |   10 +-
+ journal/2026-11-02/portes.md           
+… [1558 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree \"$H\" && GIT_INDEX_FILE=/tmp/index.s git add tools/structures && GIT_INDEX_FILE=/tmp/index.s git commit -m \"S — LE SOUS-MODULE 647205a : L'ANALY … [845 caractères tronqués]`
