@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (9)
+## Commits du jour (10)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -17,6 +17,7 @@
 | 00:28 | `0fbb8692` | B13 — L'ALTERNANCE ALÉATOIRE : BASCULE 1/500, v FINAL 0,12, 20/20, 8,0 PAS ; 59/59 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 | 00:32 | `fa2d7fad` | B13 — LA BASCULE FRÉQUENTE : 1/50, v FINAL 0,78, 20/20, 8,0 PAS ; 60/60 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
 | 00:37 | `2ff4baf9` | B13 — LA BASCULE TRÈS FRÉQUENTE : 1/10, v FINAL 0,28, 20/20, 9,4 PAS ; 61/61 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+21) |
+| 00:39 | `e75ed447` | N2.t — LE MULTILINGUE À 34,3 M : 6,68 → 5,89 → 5,58, LE RENDEMENT DÉCROÎT | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
 
 ## Chiffres du jour
 
@@ -34,6 +35,7 @@
 
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-n2-echantillon.md](../../reports/rapport-n2-echantillon.md)
+- [reports/rapport-n2-multilingue-34m.md](../../reports/rapport-n2-multilingue-34m.md)
 - [reports/rapport-pensee-alternance.md](../../reports/rapport-pensee-alternance.md)
 - [reports/rapport-pensee-chaotique.md](../../reports/rapport-pensee-chaotique.md)
 - [reports/rapport-pensee-derive.md](../../reports/rapport-pensee-derive.md)

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**17 commits** · **3 session(s)** · **7 thème(s)**
+**18 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 9 | [mesures.md](mesures.md) |
+| mesures | 10 | [mesures.md](mesures.md) |
 | portes | 2 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -48,6 +48,7 @@
 | 00:32 | `fa2d7fad` | B13 — LA BASCULE FRÉQUENTE : 1/50, v FINAL 0,78, 20/20, 8,0 PAS ; 60/60 |
 | 00:34 | `93be0a1d` | CHANTIERS — LA LIGNE D PORTE LES DIX CORPUS, LE PDF, LES DOCUMENTS ET L'OCR |
 | 00:37 | `2ff4baf9` | B13 — LA BASCULE TRÈS FRÉQUENTE : 1/10, v FINAL 0,28, 20/20, 9,4 PAS ; 61/61 |
+| 00:39 | `e75ed447` | N2.t — LE MULTILINGUE À 34,3 M : 6,68 → 5,89 → 5,58, LE RENDEMENT DÉCROÎT |
 
 ## Le récit de la journée (écrit à la main)
 

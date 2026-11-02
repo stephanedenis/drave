@@ -20722,3 +20722,83 @@ ok
 8000 q 778 v final 0.7 20 runs: 20 /20 pas moyen 8.0
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T58 la bascule très fréquente    1/10 : 20/20 buts, v final ≈ 0,28\\n\",\n\"  T58 la bascule très fréquente    1/10 : 20/2 … [1297 caractères tronqués]`
+
+  ```
+ok
+  ✅ T57 bascule fréquente  frequent : 20/20 buts, v final 0.78, 8.0 pas
+  ✅ T58 bascule très fréquente rapide : 20/20 buts, v final 0.28, 9.4 pas
+  ✅ T59 bascule limite     limite : 20/20 buts, v final 0.44, 8.6 pas
+  62/62 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-limite.md <<'MD'\n# B13 — la bascule limite : 1/5, 20/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **62/62 portes** : la fiabilité bascule **toute … [6414 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 460 fichiers, le disque en a 461
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2803 mots > budget 2800 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\", \"| fichiers / JSON de résultats | **461* … [844 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 461 fiche(s) · 553 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=1
+  en-cours · 1612 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ❌ 1 anomalie(s) :
+     · puce > 80 mots : **N2.h** : **3,09** ; **N2.j** : **7,42** ; **N2.k** : **5,6
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -3; grep -n \"N2.h\" docs/pilotage/en-cours.md | head -3", "description": "Trouver la puce trop longue"}`
+
+  ```
+en-cours · 1612 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ❌ 1 anomalie(s) :
+     · puce > 80 mots : **N2.h** : **3,09** ; **N2.j** : **7,42** ; **N2.k** : **5,6
+45:- **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
+54:> `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close ; restes nommés : fax 1 bit,
+82:- **N2.h** : **3,09** ; **N2.j** : **7,42** ; **N2.k** : **5,68** ;  **N2.j3** : **4,20** ; **N2.n** : **3,94** ; **N2.o** : **5,41** ; **N2.p** : **4,00** ; **N2.q** : multi **5,89** ; **N2.t** : multi 34,3 M **5,58** (saturation) ; **N2 → R1** : note de passage ; **N2.r** : **3,69**, 512 **4,09** ; **N2.s** : échantillon, boucles de gabarit ; **N2.j4** : **3,88** ; **N2.m** : **4,42** ; **N2.l** : **4,17** ; N4 **0/40**. Fiches [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md), [`n2-capacite-reelle`](../../reports/rapport-n2-capacite-reelle.md), [`n2-canal`](../../reports/rapport-n2-canal.md), [`n2-anglais`](../../reports/rapport-n2-anglais.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nstart=t.index('- **N2.h** :')\nend=t.index('\\n', t.index('rapport-n2-anglais.md', start))\nnew='''- **N2** : **N2.h** 3,09 ; **N2.j** 7, … [533 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1563 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 461 fiche(s) · 553 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [300 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-limite.md reports/pensee-limite.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md d … [478 caractères tronqués]`

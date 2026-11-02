@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 32.0 h |
 | Tours | 76 |
-| Messages | 1059 |
-| Appels d'outils | 958 |
+| Messages | 1064 |
+| Appels d'outils | 963 |
 | Fichiers touchés | 25 |
-| Commandes | 777 |
+| Commandes | 781 |
 | Sous-agents | 2 |
-| Commits | 95 |
+| Commits | 96 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4040,12 +4040,17 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse à **1/5** pour t
 
 ### Tour 76 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Tester la bascule limite 1/5
 - bash — Ajouter la porte T59 (bascule limite)
 - bash — Écrire la fiche de la bascule limite
 - bash — Corriger le compteur et le README
+- bash — Trouver la puce trop longue
+- bash — Compacter la puce N2
+- bash — Passer toutes les portes
+- bash — Committer la bascule limite
+- job_output
 
 ## 3. Travail accompli
 
@@ -4126,7 +4131,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse à **1/5** pour t
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 737 autres
+- … et 741 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4369,4 +4374,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round pousse à **1/5** pour t
 - B13 — L'ALTERNANCE ALÉATOIRE : BASCULE 1/500, v FINAL 0,12, 20/20, 8,0 PAS ; 59/59" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ALTERNANCE ALÉATOIRE
 - B13 — LA BASCULE FRÉQUENTE : 1/50, v FINAL 0,78, 20/20, 8,0 PAS ; 60/60" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BASCULE FRÉQUENTE"; then echo "
 - B13 — LA BASCULE TRÈS FRÉQUENTE : 1/10, v FINAL 0,28, 20/20, 9,4 PAS ; 61/61" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "TRÈS FRÉQUENTE"; then echo
+- B13 — LA BASCULE LIMITE : 1/5, v FINAL 0,44, 20/20, 8,6 PAS ; 62/62" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BASCULE LIMITE"; then echo "COMMIT 
 

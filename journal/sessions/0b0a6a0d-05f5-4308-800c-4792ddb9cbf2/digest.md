@@ -16460,3 +16460,38 @@ roadmap ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1389 caractères tronqués]`
+
+  ```
+ok
+     · compteurs : en-cours.md dit 547 JSON, le disque en a 552
+[still running after 60000ms; moved to background job bash-968]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-968", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+e75ed447 N2.t — LE MULTILINGUE À 34,3 M : 6,68 → 5,89 → 5,58, LE RENDEMENT DÉCROÎT
+00:40
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -5 /tmp/portes-nuit.out; echo \"=== registre ===\"; awk '$2 != 0' /tmp/portes-nuit/registre.txt 2>/dev/null | head -6; wc -l /tmp/portes-nuit/registre.txt 2>/dev/null; date '+%H:%M'", "description": "Check the gates verdict"}`
+
+  ```
+porte-speculatif       ✅                          71 s    ✅ porte tenue (invariant exact · taux rendu · témoin à zéro · brouillon invalide refusé)
+  porte-tableaux         ✅                           1 s    ✅ la page vivante date du dernier commit (2026-11-02)
+  porte-tokenizer-kimi   ✅                           9 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                         105 s    ✅ PPL épinglées : reference 17.4702 · historique 30.4363 · topologie 30.4363 · relais 2 42.547
+  porte-trace            ✅                          29 s    ✅ la trace fausse est détectée et nommée
+=== registre ===
+porte-homeostasie 2 0
+porte-indice 124 700
+porte-melange 1 117
+porte-reparti-moteur 1 3
+80 /tmp/portes-nuit/registre.txt
+00:40
+  ```
+
+- **bash** `{"command": "sleep 120; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/portes-nuit.out; awk '$2 != 0' /tmp/portes-nuit/registre.txt | wc -l; wc -l < /tmp/portes-nuit/registre.txt; date '+%H:%M'; ls work/n2j/route-480 2>/dev/null | head -2", "description": "Read the final gates ve … [7 caractères tronqués]`

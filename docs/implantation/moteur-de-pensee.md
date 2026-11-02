@@ -228,6 +228,7 @@ ré-exécution.
 | **T56** | l'alternance aléatoire est-elle absorbée ? | bascule 1/500 : v final 0,12, 20/20, 8,0 pas | la fenêtre suit le hasard |
 | **T57** | la bascule fréquente est-elle absorbée ? | 1/50 : v final 0,78, 20/20, 8,0 pas | la fenêtre 50 est à l'échelle |
 | **T58** | la bascule très fréquente tient-elle ? | 1/10 : v final 0,28, 20/20, 9,4 pas | le coût de l'adaptation est visible |
+| **T59** | la bascule limite tient-elle ? | 1/5 : v final 0,44, 20/20, 8,6 pas | la limite n'est pas trouvée |
 
 **T5/T6 sont les portes de la modularité et du coût** : AC-3, alpha-bêta et un encodeur RSN doivent
 se brancher sur le **même** contrat, sans modifier le moteur. Si l'un demande une exception, le
@@ -244,9 +245,9 @@ contrat est faux ; si le coût n'est pas dans la trace, l'anytime est décoratif
 | **4** | `tools/pensee/` (`moteur.py`) | BFS, greedy, A*, MCTS-lite | T2 |
 | **4 bis** | `tools/pensee/` (`csp.py`, `jeux.py`) | AC-3, alpha-bêta, minimax | T5, T6 |
 | **4 ter** | `tools/pensee/` (`taquin.py`, `banc.py`) | taquin 3×3, AUC/regret, aléatoire | T7 |
-| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`, `audit.py`, `graines.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction, audit, curriculum, graines, mobile, bruit variable, porte qui bouge, période, phase, aléatoire, hasard, partielle, croyance, curiosité, observatrice, bruitée, votante, trois looks, bayésien, dérive, adaptative, glisse, rupture, alternance, chaotique, fréquent, rapide | T8–T58 |
+| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`, `audit.py`, `graines.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction, audit, curriculum, graines, mobile, bruit variable, porte qui bouge, période, phase, aléatoire, hasard, partielle, croyance, curiosité, observatrice, bruitée, votante, trois looks, bayésien, dérive, adaptative, glisse, rupture, alternance, chaotique, fréquent, rapide, limite | T8–T59 |
 | **5** | `tools/pensee/` (`trace.py`) | DRVF `thought`, rejeu, diff | T1, T6 |
-| **6** | `tools/pensee/autotest.py` | T0–T58, contrôles négatifs | toutes |
+| **6** | `tools/pensee/autotest.py` | T0–T59, contrôles négatifs | toutes |
 
 **Le corpus v0** : un jeu de petits graphes (morpion, taquin 3×3, un CSP jouet) et un jeu de
 RSN-visuelles déjà produit par N1. Pas de GPU ; le CPU suffit pour 10³–10⁴ nœuds.

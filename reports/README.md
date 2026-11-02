@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-limite.md`](rapport-pensee-limite.md) | **B13** — la bascule limite : 1/5, v final 0,44, 20/20, 8,6 pas, **62/62** |
 | [`rapport-pensee-rapide.md`](rapport-pensee-rapide.md) | **B13** — la bascule très fréquente : 1/10, v final 0,28, 20/20, 9,4 pas, **61/61** |
 | [`rapport-pensee-frequent.md`](rapport-pensee-frequent.md) | **B13** — la bascule fréquente : 1/50, v final 0,78, 20/20, 8,0 pas, **60/60** |
 | [`rapport-pensee-chaotique.md`](rapport-pensee-chaotique.md) | **B13** — l'alternance aléatoire : bascule 1/500, v final 0,12, 20/20, **59/59** |
@@ -47,7 +48,6 @@
 | [`rapport-pensee-reseau.md`](rapport-pensee-reseau.md) | **B13** — le réseau linéaire : 12 poids, l'imitation échoue seule, **26/26** |
 | [`rapport-pensee-shaping.md`](rapport-pensee-shaping.md) | **B13** — le reward shaping : 56 états-Q, la politique seule échoue encore, **25/25** |
 | [`rapport-pensee-minute-entrainee.md`](rapport-pensee-minute-entrainee.md) | **B13** — la Q-table entraînée/minute : 60 états-Q, politique seule échoue, **24/24** |
-| [`rapport-pensee-minute.md`](rapport-pensee-minute.md) | **B13** — la porte à un tour : 27 nœuds/but, sonde 5, **21/21** |
 | [`rapport-pensee-sto-seule.md`](rapport-pensee-sto-seule.md) | **B13** — la politique seule sur le bruit : 8–10 pas, 1–3 essais, 15/15 buts, **19/19** |
 | [`rapport-pensee-stochastique.md`](rapport-pensee-stochastique.md) | **B13** — la porte stochastique : 80 %, 30 nœuds/but, sonde 7, **18/18** |
 | [`rapport-pensee-seule.md`](rapport-pensee-seule.md) | **B13** — la politique seule : 8 pas, 15/15 buts sans A*, **17/17** |
