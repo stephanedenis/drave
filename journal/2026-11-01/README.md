@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**140 commits** · **4 session(s)** · **10 thème(s)**
+**141 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 16 | [distribue.md](distribue.md) |
 | docs | 36 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
-| mesures | 57 | [mesures.md](mesures.md) |
+| mesures | 58 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -32,7 +32,7 @@
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 31.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 31.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 31.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 31.2 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -179,6 +179,7 @@
 | 23:36 | `7e819b56` | DONNÉES — LE GENRE SE MESURE : ENCYCLOPÉDIE 103-147 CAR/LIGNE, LIVRES 32-37 ; LIGNES DUPLIQUÉES 8,7-24 %, OCR 4,8 % |
 | 23:38 | `2bd6bcc4` | B13 — L'OBSERVATION VOTANTE : DEUX LOOKS, 20/20 BUTS, 1 % D'ERREUR ; 49/49 |
 | 23:41 | `5c27a3fb` | DONNÉES — LE CORPUS DOCUMENTS EST CLOS : 7 459 PDF, 3 384 DOCUMENTS, 872 M CARACTÈRES, 8 KO 2,07 % (TEST) |
+| 23:43 | `332cc56a` | B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50 |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 31.0 h |
-| Tours | 64 |
-| Messages | 946 |
-| Appels d'outils | 869 |
+| Durée | 31.1 h |
+| Tours | 65 |
+| Messages | 955 |
+| Appels d'outils | 876 |
 | Fichiers touchés | 25 |
-| Commandes | 702 |
+| Commandes | 708 |
 | Sous-agents | 2 |
-| Commits | 81 |
+| Commits | 82 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -159,6 +159,8 @@
 **Tour 63** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 64** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 65** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3419,6 +3421,56 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round essaie **trois looks** e
 - bash — Committer les trois looks
 - job_output
 
+**Synthèse produite :**
+
+⏵ Trois looks : 20/20 à 4000 épisodes, 9,2 pas, 0,1 % d'erreur ; 50/50
+
+Le round 51 du goal est livré : **trois looks** votent à 0,1 % d'erreur, mais il faut **4000 épisodes** pour que la politique accepte de les payer. Commit **`332cc56a`**.
+
+\## Les trois looks
+
+Même monde que T46 (10 % d'erreur par révélation), mais `observer` fait **trois looks** et prend la majorité : l'erreur effective tombe à **0,1 %**.
+
+| épisodes | buts | états-Q | pas |
+|---:|---|---:|---:|
+| 2000 | **0/20** | 457 | 200 |
+| **4000** | **20/20** | 481 | 9,2 |
+| 2 looks (T46, 2000) | 20/20 | 372 | 8,0 |
+
+**Ce que ça dit** :
+
+- **Le vote à trois exige plus d'entraînement** : à 2000 épisodes, la politique n'a pas encore appris à payer 0,3 pour observer ; à 4000, elle le fait et réussit 20/20.
+- **Le coût est visible** : 9,2 pas contre 8,0 (deux looks) ; l'observation plus fiable se paie.
+- **Le bruit devient négligeable** (0,1 %), mais le **toy** ne distingue pas 1 % de 0,1 % : les deux font 20/20.
+- **La négative reste** : à 2000 épisodes, 0/20 ; l'apprentissage est le facteur.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-votante3.md`](../../reports/rapport-pensee-votante3.md) ; JSON [`pensee-votante3.json`](../../reports/pensee-votante3.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T47 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **50/50 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **445 fiches / 541 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **1000 exécutions** : séparer 1 % et 0,1 %.
+2. **Croyance bayésienne** : pondérer chaque look par sa fiabilité.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round passe à la **croyance bayésienne** (le filtre qui pèse chaque look).
+
+### Tour 65 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Tester la croyance bayésienne
+- bash — Corriger l'indice et retester le bayésien
+- bash — Ajouter la porte T48 (bayésien)
+- bash — Écrire la fiche du bayésien
+- bash — Trim et portes
+- bash — Committer la croyance bayésienne
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3498,7 +3550,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round essaie **trois looks** e
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 662 autres
+- … et 668 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3626,7 +3678,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round essaie **trois looks** e
 
 ## 5. Erreurs rencontrées
 
-14 sorties en erreur ou divergentes. Les premières :
+15 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -3642,6 +3694,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round essaie **trois looks** e
 - **T29** : 5853b206 B13 — LA PORTE NEURONALE : BONNE POLITIQUE 28 NŒUDS/58 (SONDE 5), AVEUGLE 200/483 SANS BUT ; 14/14 ok [stderr] Traceback (most recent call last):   File "<stdin>", line 4, in <module>   File 
 - **T40** : 28f5d388 B13 — LE REWARD SHAPING : 56 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ENCORE ; 25/25 ok [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "/home/stephane/Data
 - **T41** : de6dbe0e B13 — LE RÉSEAU LINÉAIRE : 12 POIDS, L'IMITATION ÉCHOUE SEULE ; 26/26 ok [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "/home/stephane/Data13TB/step
+- **T65** : 332cc56a B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50 ok [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "/home/stephane/Data13TB
 
 ## 6. Commits
 
@@ -3726,4 +3779,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round essaie **trois looks** e
 - B13 — L'OBSERVATION BRUITÉE : 10 % D'ERREUR CASSE LA POLITIQUE (0/20) ; 48/48" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "OBSERVATION BRUITÉE"; the
 - B13 — L'OBSERVATION VOTANTE : DEUX LOOKS, 20/20 BUTS, 1 % D'ERREUR ; 49/49" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "OBSERVATION VOTANTE"; then e
 - B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "TROIS LOOKS"; then echo "COM
+- B13 — LA CROYANCE BAYÉSIENNE : UN SEUL LOOK, 20/20 DÈS 2000 ÉPISODES, 9,4 PAS ; 51/51" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CROYANCE BAYÉSIEN
 

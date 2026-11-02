@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-bayes.md`](rapport-pensee-bayes.md) | **B13** — la croyance bayésienne : un look, 20/20 dès 2000 épisodes, 9,4 pas, **51/51** |
 | [`rapport-pensee-votante3.md`](rapport-pensee-votante3.md) | **B13** — trois looks : 20/20 à 4000 épisodes, 9,2 pas, **50/50** |
 | [`rapport-pensee-votante.md`](rapport-pensee-votante.md) | **B13** — l'observation votante : 2 looks, 20/20 buts, 1 % d'erreur, **49/49** |
 | [`rapport-pensee-bruitee.md`](rapport-pensee-bruitee.md) | **B13** — l'observation bruitée : 0/20 buts, 10 % d'erreur casse la politique, **48/48** |

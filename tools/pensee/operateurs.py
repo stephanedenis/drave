@@ -1129,8 +1129,8 @@ class PolitiqueAppriseObservatrice(PolitiqueAppriseCroyance):
         if vu >= 0:
             b2 = 3 if vu == 0 else 0
         else:
-            b2 = _belief_bucket(_BELIEF_P[b] * (1 - self.p_saut)
-                                + (1 - _BELIEF_P[b]) * self.p_saut)
+            b2 = _belief_bucket(_BELIEF_P[min(b, 3)] * (1 - self.p_saut)
+                                + (1 - _BELIEF_P[min(b, 3)]) * self.p_saut)
         gain = 0.1 if (o2 and not o) else -0.01
         return (nx, ny, o2, b2), gain, monde
 
@@ -1252,6 +1252,41 @@ class PolitiqueAppriseVotante3(PolitiqueAppriseObservatrice):
 
 
 def seule_votante3(p: PolitiqueAppriseVotante3, max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
+_BAYES_P = tuple(0.05 + 0.1 * i for i in range(10))   # p(d=0) sur 10 niveaux
+
+
+def _bayes_bucket(p: float) -> int:
+    i = int(round((p - 0.05) / 0.1))
+    return max(0, min(9, i))
+
+
+class PolitiqueAppriseBayes(PolitiqueAppriseObservatrice):
+    """L'observatrice **bayésienne** : chaque look met à jour p(d=0) par la vraisemblance."""
+
+    nom = "bayes"
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, p_saut: float = 0.2,
+                 p_erreur: float = 0.1):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma,
+                         eps=eps, p_saut=p_saut)
+        self.p_erreur = p_erreur
+
+    def _pas(self, cle, action, d: int):
+        x, y, o, b = cle
+        if action == "observer":
+            vu = d if self.rng.random() >= self.p_erreur else 1 - d
+            p = _BAYES_P[min(b, 9)]
+            v = 1.0 - self.p_erreur if vu == 0 else self.p_erreur
+            p2 = p * v / (p * v + (1 - p) * (1 - v))
+            return (x, y, o, _bayes_bucket(p2)), -0.1, d
+        return super()._pas(cle, action, d)
+
+
+def seule_bayes(p: PolitiqueAppriseBayes, max_pas: int = 200) -> tuple[bool, int]:
     return seule_observatrice(p, max_pas)
 
 

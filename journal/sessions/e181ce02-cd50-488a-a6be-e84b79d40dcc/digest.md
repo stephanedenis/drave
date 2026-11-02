@@ -19079,3 +19079,134 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-702", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 5c27a3fb495c4b2b356b73417edcd8b274d6b2ba but expected 2bd6bcc43fbbafce09929ec5d1a2d345f3f0f197
+retry 1
+ 27 files changed, 373 insertions(+), 45 deletions(-)
+ create mode 100644 reports/pensee-votante3.json
+ create mode 100644 reports/rapport-pensee-votante3.md
+COMMIT OK 2
+332cc56a B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois looks : 20/20 à 4000 épisodes, 9,2 pas, 0,1 % d'erreur ; 50/50
+
+Le round 51 du goal est livré : **trois looks** votent à 0,1 % d'erreur, mais il faut **4000 épisodes** pour que la politique accepte de les payer. Commit **`332cc56a`**.
+
+## Les trois looks
+
+Même monde que T46 (10 % d'erreur par révélation), mais `observer` fait **trois looks** et prend la majorité : l'erreur effective tombe à **0,1 %**.
+
+| épisodes | buts | états-Q | pas |
+|---:|---|---:|---:|
+| 2000 | **0/20** | 457 | 200 |
+| **4000** | **20/20** | 481 | 9,2 |
+| 2 looks (T46, 2000) | 20/20 | 372 | 8,0 |
+
+**Ce que ça dit** :
+
+- **Le vote à trois exige plus d'entraînement** : à 2000 épisodes, la politique n'a pas encore appris à payer 0,3 pour observer ; à 4000, elle le fait et réussit 20/20.
+- **Le coût est visible** : 9,2 pas contre 8,0 (deux looks) ; l'observation plus fiable se paie.
+- **Le bruit devient négligeable** (0,1 %), mais le **toy** ne distingue pas 1 % de 0,1 % : les deux font 20/20.
+- **La négative reste** : à 2000 épisodes, 0/20 ; l'apprentissage est le facteur.
+
+## L'état
+
+- Fiche : [`rapport-pensee-votante3.md`](../../reports/rapport-pensee-votante3.md) ; JSON [`pensee-votante3.json`](../../reports/pensee-votante3.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T47 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **50/50 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **445 fiches / 541 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **1000 exécutions** : séparer 1 % et 0,1 %.
+2. **Croyance bayésienne** : pondérer chaque look par sa fiabilité.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round passe à la **croyance bayésienne** (le filtre qui pèse chaque look).
+
+
+## Tour 65
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 52/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1916 caractères tronqués]`
+
+  ```
+332cc56a B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50
+ok
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 1148, in apprendre
+    ncle, gain, d = self._pas(cle, a, d)
+                    ~~~~~~~~~^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 1286, in _pas
+    return super()._pas(cle, action, d)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 1132, in _pas
+    b2 = _belief_bucket(_BELIEF_P[b] * (1 - self.p_saut)
+                        ~~~~~~~~~^^^
+IndexError: tuple index out of range
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''            b2 = _belief_bucket(_BELIEF_P[b] * (1 - self.p_saut)\n                                + (1 - _BELIEF_P[b]) *  … [666 caractères tronqués]`
+
+  ```
+ok
+2000 q 552 20 runs: 20 /20 pas moyen 9.4
+4000 q 647 20 runs: 20 /20 pas moyen 9.2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T47 l'observation à trois looks   20/20 buts (4000 épisodes), 0,1 % d'erreur\\n\",\n\"  T47 l'observation à trois looks    … [1310 caractères tronqués]`
+
+  ```
+ok
+  ✅ T46 observation votante votante : 20/20 buts, 372 états-Q, 8.0 pas
+  ✅ T47 trois looks        votante3 : 20/20 buts, 481 états-Q, 9.2 pas
+  ✅ T48 croyance bayésienne bayes : 20/20 buts, 552 états-Q, 9.4 pas
+  51/51 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-bayes.md <<'MD'\n# B13 — la croyance bayésienne : un seul look, 20/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **51/51 portes** : la `PolitiqueAp … [6497 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 446 fiche(s) · 542 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text().replace(\"la cascade : couverture × précision\", \"la cascade : couverture\")\np.write_text(t); print('ok')\nPY\npython3 tools/taille_docu … [522 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 446 fiche(s) · 542 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-bayes.md reports/pensee-bayes.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md doc … [496 caractères tronqués]`
