@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 1.0 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 165 |
-| Appels d'outils | 240 |
+| Messages | 169 |
+| Appels d'outils | 244 |
 | Fichiers touchés | 15 |
-| Commandes | 163 |
+| Commandes | 167 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu reprends la session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`. Lis son plan, AGENTS.md  et docs/pilotage/en-cours. … [394 caractères tronqués]
 
-*240 appels d'outils.* Actions notables :
+*244 appels d'outils.* Actions notables :
 
 - bash — Show repo state and recent commits
 - bash — List root and sessions tool help
@@ -41,11 +41,34 @@
 - edit `/home/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md`
 - bash — Run strict session plan check
 - bash — Inspect the unlisted active plan
-- … et 200 autres
+- … et 204 autres
 
 **Synthèse produite :**
 
-⏵ Commit du fait avec `git add` explicite (le hook archive/journalise automatiquement)
+⏵ Bilan de la reprise L/B13 et du fait « gold neuronal »
+
+**Reprise.** Plan, AGENTS.md et `en-cours` lus. Le plan porte bien `État : actif` et `Heartbeat : 2026-11-02 16:57 EST` ; le hub l'a auto-committé dans `dca7e7a2` via le hook journal.
+
+**Porte stricte.** Elle est passée **verte à 16 h 30** après l'intégration des quatre sessions, mais à **17 h 18** elle est rouge pour **deux autres mandats** :
+- N2 `0733c5bb` : heartbeat périmé (59 min) ;
+- D/R/A `fe3c05f0` : heartbeat périmé (58 min) ;
+- `e181ce02` (nous) : 22 min, **valide**.
+
+S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 recouvre S et D). Je n'ai pas touché aux mandats des autres sessions : au hub de les rafraîchir ou de les passer en pause.
+
+**Fait — le gold neuronal** (commit **`7ef0199c`**) :
+- **Tagger `NeuronalLLMPOS`** : Qwen2.5-7B-Instruct Q4_K_M local, `llama-server` **CPU** (`-ngl 0`), grammaire GBNF imposant une classe par token ; 180 phrases / 804 tokens, **0 refus**.
+- **POS seul** : **0,8483** contre **0,7512** pour l'heuristique.
+- **Cascade à 0,6** : **0,9440** — 20 réelles **0,9238** (aucune perte), 160 synthétiques **0,9471**, 180 appels, ~3,0 s/appel CPU.
+- **Complémentarité** : fermé **0,9392** (gardé par l'heuristique), ouvert **0,9474** (apporté par le modèle).
+- **Contrôles** : majoritaire 0,2289 ; uniforme 0,0833 ; permutation 0,1729 ; pas de régression sur les réelles.
+- **Modèles** : 0,5B base refusé ; 3B dev 0,6667 ; 7B retenu.
+- Fiche [`rapport-pensee-gold-neuronal.md`](reports/rapport-pensee-gold-neuronal.md), JSON [`pensee-gold-neuronal.json`](reports/pensee-gold-neuronal.json), banc `tools/tests/linguistique/qualifier_neuronal.py`, deux tests de contrat. Modèle 4,68 Go dans `models/` (ignoré), SHA-256 dans le JSON.
+- Budgets : **T0 3997/4000**, revue documentation verte, porte du bloc verte, journal et schémas verts.
+
+**Nommé, hors tagger.** La porte B13 `tools/pensee/autotest.py` rend **134/140** (T111, T113–T115, T132–T133) ; les six rouges corrèlent avec la mise à jour du sous-module S `647205a` (`13f4e131`), qui change l'analyseur. Le tagger n'y touche pas ; le dernier cycle committé était **140/140**. Détail dans la fiche § 7.1.
+
+**Suite.** Les **syntagmes/pragmatique** du tagger, puis la cascade complète ; côté DRVM/native, les poids GGUF et le tagger existent désormais — la **parité native** reste à mesurer.
 
 ## 3. Travail accompli
 
@@ -111,7 +134,7 @@
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 123 autres
+- … et 127 autres
 
 ## 4. Mesures et résultats marquants
 

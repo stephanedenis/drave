@@ -3364,3 +3364,208 @@ index c1d01419..67d7cd3e 100644
 … [3882 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== STAGED STAT ===\"; git diff --cached --stat; echo \"=== STAGED en-cours (résumé) ===\"; git diff --cached -- docs/pilotage/en-cours.md | head -120", "description": "Inspect staged integration diff"}`
+
+  ```
+=== STAGED STAT ===
+ docs/implantation/bloc-linguistique.md             |  24 +-
+ docs/pilotage/en-cours.md                          |  19 +-
+ docs/pilotage/roadmap.md                           |   9 +-
+ reports/INDEX.md                                   |   4 +-
+ reports/README.md                                  |   1 +
+ reports/pensee-gold-neuronal.json                  | 946 +++++++++++++++++++++
+ reports/rapport-pensee-gold-neuronal.md            | 162 ++++
+ tools/bloc_linguistique.py                         | 125 +++
+ tools/tests/linguistique/qualifier_neuronal.py     | 309 +++++++
+ tools/tests/linguistique/test_bloc_linguistique.py |  26 +
+ 10 files changed, 1603 insertions(+), 22 deletions(-)
+=== STAGED en-cours (résumé) ===
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 5c3cc9c3..ad15c8d9 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -77,12 +77,13 @@
+ - **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels.
+ - **Stratégie** : v0 petit et mesuré, GPU de N2 intacts.
+ - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
+-- **Fait** : B13 **140
+… [3426 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== rapport-n2-r11 (head) ===\"; head -40 reports/rapport-n2-r11.md 2>/dev/null; echo \"...\"; ls -la --time-style=+%H:%M:%S reports/rapport-n2-r11.md reports/ocr-pdf-cegep-detection.json tools/detecte_scans_pdf.py; echo \"=== … [319 caractères tronqués]`
+
+  ```
+=== rapport-n2-r11 (head) ===
+# R1.1 — Les positions relatives : la courbe de longueur s'aplatit, la table absolue explose
+
+> **Ligne de roadmap** : R1 · **Date** : 2026-11-02 · **Verdict** : remplacer la position
+> apprise **absolue** par un **RoPE** fait passer la PPL à 1 000 octets de **8,2024** à
+> **3,2545** sur la même recette (34,3 M, canal, 20 000 pas, même initialisation, même graine).
+> La **porte R1.1** — « PPL à 1 000 octets dans un facteur **1,5** de celle à 129 » — est tenue :
+> **0,97×** (RoPE) contre **2,33×** (absolues) ; et la PPL à 128 ne se dégrade pas, elle
+> **s'améliore de 0,14** (3,5131 → 3,3696). Le mécanisme est contrôlé : à **texte et
+> prédécesseurs identiques**, changer le décalage absolu ne change rien pour RoPE (3,1645 →
+> 3,1662) et multiplie la PPL absolue par **4,8** (3,8468 → 18,6055), parce que les lignes 512+
+> de la table de positions n'ont **jamais été entraînées**.
+
+## La question
+
+La note de passage [`rapport-n2-fenetre-r1`](rapport-n2-fenetre-r1.md) laisse R1.1 avec une
+prédiction : le gain des **positions aléatoires** (N2.j2, N2.h3) est une astuce d'entraînement ;
+un schéma **relatif** doit le reproduire **par construction**, sans le coût 
+… [5324 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -8; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -6; echo \"=== taille ===\"; python3 tools/taille_documents.py 2>&1 | tail -6; echo … [142 caractères tronqués]`
+
+  ```
+=== revue ===
+  revue de documentation · 553 fiche(s) · 639 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== en-cours ===
+  en-cours · 1623 mots · 7 sections · 5 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== taille ===
+  T0 max : 3997 mots (budget 4 000)
+
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+=== comptes disque ===
+553
+639
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n2-r11.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n2-r11.md</path>
+<type>file</type>
+<content>
+1: # R1.1 — Les positions relatives : la courbe de longueur s'aplatit, la table absolue explose
+2: 
+3: > **Ligne de roadmap** : R1 · **Date** : 2026-11-02 · **Verdict** : remplacer la position
+4: > apprise **absolue** par un **RoPE** fait passer la PPL à 1 000 octets de **8,2024** à
+5: > **3,2545** sur la même recette (34,3 M, canal, 20 000 pas, même initialisation, même graine).
+6: > La **porte R1.1** — « PPL à 1 000 octets dans un facteur **1,5** de celle à 129 » — est tenue :
+7: > **0,97×** (RoPE) contre **2,33×** (absolues) ; et la PPL à 128 ne se dégrade pas, elle
+8: > **s'améliore de 0,14** (3,5131 → 3,3696). Le mécanisme est contrôlé : à **texte et
+9: > prédécesseurs identiques**, changer le décalage absolu ne change rien pour RoPE (3,1645 →
+10: > 3,1662) et multiplie la PPL absolue par **4,8** (3,8468 → 18,6055), parce que les lignes 512+
+11: > de la table de positions n'ont **jamais été entraînées**.
+12: 
+13: ## La question
+14: 
+15: La note de passage [`rapport-n2-fenetre-r1`](rapport-n2-fenetre-r1.md) laisse R1.1 avec une
+16: prédiction : le gain des **positi
+… [7506 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,8p' docs/pilotage/en-cours.md; echo \"=== D/R/A ===\"; sed -n '86,105p' docs/pilotage/en-cours.md; echo \"=== compteurs ===\"; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; echo \"=== taille D/R/A ===\"; python3 -  … [360 caractères tronqués]`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-02, 16 h 56 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+> [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+> [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+>
+=== D/R/A ===
+- **Bloquants** : aucun pour le POS ; le **complet** (syntagmes) reste à mesurer.
+- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **D/R/A** — texte intégral, PDF/OCR, prépa R1.1/R1.2, A2.6/A8.3.
+- **Plan** : texte intégral, PDF, OCR, glossaire.
+- **Ambition** : le français réel.
+- **Stratégie** : dump, débaliseur, OCR page à page, glossaire au rendu.
+- **Objectif final** : 10 corpus, ficés.
+- **Ce qu'elle fait** : 10 corpus (**20,53 M**) ; PDF 1 927 ; OCR 20 livres + 10 notes
+  CEGEP ; glossaire 355 ; [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+- **Ce que font les 
+… [421 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path('docs/pilotage/en-cours.md')\nt = p.read_text(encoding='utf-8')\n# 1. date\nt = t.replace(\"**Mis à jour : 2026-11-02, 16 h 56 HNE (heure locale, EST).**\",\n              \"**Mis  … [2895 caractères tronqués]`
+
+  ```
+en-cours mis à jour
+  en-cours · 1612 mots · 7 sections · 5 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 553 fiche(s) · 639 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md tools/ocr_pdf.py tools/detecte_scans_pdf.py reports/ocr-pdf-cegep-detection.json && git diff --cached --stat | tail -25; echo \"=== non stagé restant ===\"; git status --short | grep -v '^[MAD]  ' |  … [75 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md            |  27 +-
+ reports/ocr-pdf-cegep-detection.json | 747 +++++++++++++++++++++++++++++++++++
+ tools/detecte_scans_pdf.py           | 118 ++++++
+ tools/ocr_pdf.py                     |  61 ++-
+ 4 files changed, 929 insertions(+), 24 deletions(-)
+=== non stagé restant ===
+?? reports/rapport-n2-r11.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4; echo \"=== status ===\"; git status --short; echo \"=== cached stat ===\"; git diff --cached --stat", "description": "Check whether Pensée set was committed concurrently"}`
+
+  ```
+7ef0199c B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)
+dca7e7a2 ÉTAT — COMPTEURS AU DISQUE (552 FICHES / 639 JSON) ; LA FICHE S EST INTÉGRÉE
+63927a03 S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES
+9223d054 ÉTAT — COMPTEURS AU DISQUE (551 FICHES / 638 JSON) ; HEARTBEAT 16 h 40
+=== status ===
+M  docs/pilotage/en-cours.md
+A  reports/ocr-pdf-cegep-detection.json
+A  tools/detecte_scans_pdf.py
+M  tools/ocr_pdf.py
+?? reports/rapport-n2-r11.md
+=== cached stat ===
+ docs/pilotage/en-cours.md            |  27 +-
+ reports/ocr-pdf-cegep-detection.json | 747 +++++++++++++++++++++++++++++++++++
+ tools/detecte_scans_pdf.py           | 118 ++++++
+ tools/ocr_pdf.py                     |  61 ++-
+ 4 files changed, 929 insertions(+), 24 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --cached -- docs/pilotage/en-cours.md | head -80; echo \"=== verif rapides ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -3; python3 tools/taille_documents.py 2>&1 | tail -3; python3 tools/revue_documentation.py 2>&1  … [73 caractères tronqués]`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index ad15c8d9..878c814a 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-02, 16 h 56 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-02, 17 h 20 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+ > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+@@ -22,16 +22,15 @@
+ 
+ - **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
+ - **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
+-- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8) **intégration** ;
+-  9) **passe de portes** (GPU 1).
++- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration,
++  portes** (GPU 1).
+ - **Ambition** : un état reprenable, des mandats qui disent la vérité.
+ - **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
+ - **Objectif final** : sédimentat
+… [4026 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE\" -m \"La détection sur le texte intégral (pdftotext + pdfinfo, seuil 50 car/page, SHA-256) trouve 147 scans sur 2 681 PDF, 9 … [511 caractères tronqués]`

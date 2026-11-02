@@ -1,0 +1,747 @@
+{
+ "date": "2026-11-02",
+ "ligne": "Données (R4.4 appliqué)",
+ "nature": "détection des PDF scannés sur le texte intégral",
+ "methode": {
+  "outil": "pdftotext complet + pdfinfo",
+  "seuil_car_par_page": 50,
+  "deduplication": "SHA-256 des fichiers",
+  "racine": "/home/stephane/Data13TB/stephane/archives/CEGEP"
+ },
+ "pdfs": 2681,
+ "scans": 147,
+ "pages_scans": 2701,
+ "uniques": 91,
+ "pages_uniques": 2053,
+ "doublons": 56,
+ "detail": [
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/AQPC 2016/inscription AQPC.pdf",
+   "pages": 2,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "404cd0257b38d51659375a66af19e9788fc03b74ec1905fafbb1ba552f4a0ed2",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_12a15_5421.pdf",
+   "pages": 4,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "b6a2285770dcb65344d41ca79878be1583551c81b28a32e493fb503f37f51d87",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_16a25_8321.pdf",
+   "pages": 10,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "0d6774627b25e550eef8e279b3741b425d3f1602065976c1f37baae39a2c50b8",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_1a11_5218.pdf",
+   "pages": 10,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "c281b3da83179a77f17edfd2b219bd64aae8e0a8c22eb8ee770c4b0b96e1cfa4",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_26a30_8536.pdf",
+   "pages": 5,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "2449a852960617087074560eaa4b45ea38fd538a5f27228b8d0c4fbb476ab3b0",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_31a40_3069.pdf",
+   "pages": 10,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "40eaf8c0c71f440ec9f9da44dd93ca6f7e4d237b04b2c0cb091cef0f5f5ef77c",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_41a45_8364.pdf",
+   "pages": 5,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "3d0b6d70233625e30ba8287257a2f06524e53d74afabad495fe1f2f221919930",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_46a55_3011.pdf",
+   "pages": 10,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "2fe4fe7cebe9ce1297770b6c56fb76591c5ee7838c2429e4228826d86921180a",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Document de révison/document%20de%20revision_pages_56a64_2256.pdf",
+   "pages": 9,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "24b5263b7afce5068711f0cbba751ac1c0c5310b411d8e2dcd5661cb42b72017",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Déménagement du D-2227/Classe informatique - option 1.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "f968f356cd4f13d337e1c3c293179e3e33796330976e8f568e684da7920da38a",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Déplacement D-2227/14004-K-A111-réfection classes 3 nouveau a111k.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "587a2471d4f6cd7515ab724b724dec91be29ab9fd1618ce7fda62cd23762737c",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Dérogation/Objet de la dérogation-avec marquage.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "60361d53493fc58b6d1977e32c77a8f4d4075b6242ecff20ab242a8b4ff9fb74",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Dérogation/Objet de la dérogation.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "f3d1ef00d6b24c7b4f92579296537ef30f5d0c448e271d405f7665b9d6d9d0e8",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Dérogation/Photo 1 de la Zone De Travail.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "dce87dadd3f1925de71173e90b89a32724a4340572f9d1be9dc600951157a036",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Dérogation/Photo 2 de la Zone De Travail.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "3509f7048b8079dbaa9941f587a053565da09b1ad7793a0c9cec3c0700908e14",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Dérogation/Photo des 2 stationnements.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "38936396cf71fd594b86c6b59dd1d0671f8b800b3b479e90f9a5d22034825278",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Dérogation/Prises de vues sur la Zone De Travail.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "7120dcc8f65ad0bbd9be8a58c6c9fa8fc607e1a1c328783339c0d7240181b961",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Honoraires avocats/Facture Audet 2012-11-23 KMBT35020130107104123.pdf",
+   "pages": 2,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "16caaabe7d363082af2141fbfdb3f5c1ad69436b4b79344d2cfd1f01dd5e9a92",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Honoraires avocats/Facture Audet 2013-01-07 KMBT35020130107144520.pdf",
+   "pages": 10,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "a8f7c8c2784b7990c67c0b3920536e9abd42f84b3dd290b0082466c5178df274",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Inquiétudes/Alienation parentale.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "10e93ce110c857e21fb0cc10683961c7867428f95bbc33ab75f42813c3cf37cd",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Inquiétudes/Raphael à Gabriel Choquette-Denis ..pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "5ad306d816a2dd680b823aa6d555c6410c75019a2aef99e2ed1cb1cb13f37338",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Locaux/14004-K-A631-réfection classes élévation int. Layout1 a631k.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "800264bc12bc955351b4f824e9718ffce9d268ec46865e0603004f183622260d",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Locaux/14004-K-A701-réfection classes mobilier Layout1 a701k.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "28a7f40fc61040ae2dd65496b42280bed5787df26ef66a3f1c6a1aaa87928c2d",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Locaux/Classe informatique - option 2.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "aef2df3f3f434601970c406b1feb96d804c86fb9cd077a5573f516b5f9ba7589",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Locaux/Classe informatique - option 3.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "dbed7e4a403437e7a663a8d376e53aaa43146c9c919fb7d4a68d22de393c7280",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Locaux/Classe informatique - option 4.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "144b69bcf782215e27ee95ee7e8645821afa236c9579eb195d08f2d453c3c1db",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/McGill/Scan from a McGill uPrint device001.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "58b3af9a4cd21b898ae8002fa80e08ac4e649dbcce27bc20d3b9b47ea4855176",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Nouvelle grille de cours/20150223 420 AC Graph liens cours préalables.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "1667df34025b658e0beecd8f1743850c898d33d768f419fdafccdb23e10e687b",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Plans de cours disciplines contributives/Plan cadre 401-TF1-HY.pdf",
+   "pages": 3,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "2b908937466a28a781e3826ab489d64e88b6f3495154f82fd928f3f425348032",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Plans de cours disciplines contributives/Plan cadre 401-TF2-HY - Ancien.pdf",
+   "pages": 2,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "05deba7e8488df590920fc731929504904e19d0302a910ed981369b93825cfe4",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Réquisitions/Budget de fonctionnement 2013-2014.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "6d3e683b4ff2cb461b14ff4ef6c05f3cf0a90c4b73dd6a13466402937e40a68e",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/S1 Word - Base/Règles de saisie-Kamaji.pdf",
+   "pages": 4,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "90c9c1192c39c1a3ea0bea374ccc6f6531c210bda958539beebeba978da7022e",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/S10 Access - Rapports/Chap16_17.pdf",
+   "pages": 3,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "0cfd7f30bd80629508348beacd49ebc2257125260563c1fb54d45f38777cb261",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Salle des serveurs/B2346.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "879ac72f01f28b0f6de7b678d091a66a59de228a79956d3c06f9482d7d6ca5c7",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Salle des serveurs/Élévation B2346 .pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "9f9056fd57198b4d777d3194b1d7196fbdf35cef530a0276a53398f0cbdd8e41",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/ServicesRegion/Territoire de la CMM 20171001_carteGenerale_24x36.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "71afa78d3029b6a25a39195e9489c31f7de2424b4b805d494230a864751ac05e",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Session 2/Prélab partie 2 calcul incertitude.pdf",
+   "pages": 2,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "1530aa8a8d511500674e1d43137918cc2aceab8d385c5bc2e1d1a16f76914551",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/semaine 3/Exercice2M.pdf",
+   "pages": 2,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "0bbc0cbba3f848224252e8a49c0ea482f1882d80d582520072c1aa35b2bebeba",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/semaine 3/Exercice3O.pdf",
+   "pages": 2,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "9930e7f173e993ecafb9cc92a6dae9e33207d28db2107bded0d9c8ee9aae5c61",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Classes/1CE/ExamFinal.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "71583e31082172be91b7b336ec4ccee6e86c7ca9adbf1612654be4854f317bd6",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Classes/3TB-Seagate/Complete Us Patents Of Nikola Tesla Free Energy Electricity Alternative () (z-lib.org).pdf",
+   "pages": 499,
+   "caracteres": 144,
+   "scan": true,
+   "sha256": "85e3601be6d282120814cc43a2a9617a070759027d7c55e387d82952478f7b3b",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Classes/3TB-Seagate/Stationnement_Travaux_centre-ville_carte_2021.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "e0aca5b4ed2fc75b8e8de498303e25957ed66130d0e3ea2a8ae37a6ac682b2a5",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Classes/APQ/CarteMembre.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "6ef3a682685eb7bb346a32805d93a6f49a65ae32a2ca96bbded27436866830b1",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Classes/APQ/Formulaire Hydro-Québec.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "298bde685482b73b4d227286ed0a9af467befe91043868503eaa04181abb633e",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Classes/APQ/Formules de gestion.pdf",
+   "pages": 3,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "86a37723a85e2db862698a40ff417d2f32e474cf514a760bf1e59e8c8d47bd02",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/ENU/AdobeID.pdf",
+   "pages": 1,
+   "caracteres": 22,
+   "scan": true,
+   "sha256": "c62852d449a71693a2396be4c0d6d2b542905941077d26644db72936f894f012",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/ENU/DefaultID.pdf",
+   "pages": 1,
+   "caracteres": 22,
+   "scan": true,
+   "sha256": "5e865a8e3a822cac9fde5392eba02d03b4573bac64554fa6a19b46de5706a5d8",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/ENU/Dynamic.pdf",
+   "pages": 6,
+   "caracteres": 142,
+   "scan": true,
+   "sha256": "50b1020e1ebf02f297d99b3a9a33ec2721d96b0fd85fa33ce5d05ceb2a6d16e5",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/ENU/SignHere.pdf",
+   "pages": 5,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "41c5a6a80d4bbb9f856baa1713dc071b41c0ae8f884b1b487b68013ef684d9ad",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/ENU/StandardBusiness.pdf",
+   "pages": 12,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "8de147fc952fe0e22810254d7c42c2365acff8f064b2068fc05ab254d1569c40",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/FRA/AdobeID.pdf",
+   "pages": 1,
+   "caracteres": 24,
+   "scan": true,
+   "sha256": "82ad899ec8178e9c49923ee2d19843c6cb25ebd69722112bf8514c8e996a8445",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/FRA/DefaultID.pdf",
+   "pages": 1,
+   "caracteres": 24,
+   "scan": true,
+   "sha256": "ce9c1c9a5aa4c395728e6fa426e6d07023b6c6ea1645646846c8f0c7ee77762a",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/FRA/Dynamic.pdf",
+   "pages": 5,
+   "caracteres": 72,
+   "scan": true,
+   "sha256": "44360a30a62c13074ab6ae2b844fe4a406400a96b2b36f2d3093f8dfe2f83121",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/FRA/SignHere.pdf",
+   "pages": 5,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "73728c991d0f118007bb852fe57d12d5bb3508f057158c7c9dd325ca6b54553c",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/FRA/StandardBusiness.pdf",
+   "pages": 12,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "595bf719953f16cbbf7cb65e3bf33b8eca0c6765239036d1065718cbef467799",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/ITIL/ITIL service design by Vernon Lloyd Sharon Taylor Stationery Office. London. Great Britain. Office of Government Commerce.pdf",
+   "pages": 352,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "b2034abec978cfdbae8786c027e83816bf2de1a1c381dedcbe2801078e674e21",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/TP6/Exercices 8Q et 8R.pdf",
+   "pages": 5,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "dc205b5097d68b69dccf5f18a958541465633a994bd7867d378c0a9bb876484f",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Guides/Article 4.pdf",
+   "pages": 8,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "5b1555c3e31ccbca5655d55103d43798c3dda769bd07797b261d3446a02514f7",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Logo 1 ligne/CegepSTH_1ligne_blanc.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "5a0e32d3ace12bf645a78500be0fd732544894e8a2276ae9c89ba9a16cdf5416",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Logo 1 ligne/CegepSTH_1ligne_coul.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "7f5e03252daf67927f69f62a8322ec0ffc9ac24acfb543a81381886b1b47a08e",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Logo 1 ligne/CegepSTH_1ligne_inverse.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "f94d4d35eba36afc5ea83308056fce922545598bdebf12fc1fab339e220f317c",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Logo 1 ligne/CegepSTH_1ligne_inverse_coul.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "048540ab0d08ee42be90c82d2b3eb2e05d62786c60658267b37b07e226f61764",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Logo 1 ligne/CegepSTH_1ligne_noir.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "04a8933d0d236445bfe616028c81cba2a0cfee854d353002fc018a2ccba1d237",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Logo 2 lignes/CegepSTH_2lignes_blanc.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "405094dc92338bfeeed2c4162f51ee36fab3061a72e572b018cf35fd8164b3d4",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Logo 2 lignes/CegepSTH_2lignes_coul.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "02edd61e8b74455f2202fa97d91abf4847922c8fac0579ec1cdfebac314d8537",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Logo 2 lignes/CegepSTH_2lignes_inverse.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "5c277c5b97243e0f548ff283ab0582b478b412acc1f6a097439cb1889021490e",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Logo 2 lignes/CegepSTH_2lignes_inverse_coul.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "a148a0840c28c42195351b5df5e29974e2d8fff801e7f4961d55b3842c4200dd",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Logo 2 lignes/CegepSTH_2lignes_noir.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "4a581b5d9d8b44fd588cc78227564af89baac8263afde0a71a06794a1c9d0c02",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Rust/Rust in Action (MEAP) by T.S. McNamara (z-lib.org).pdf",
+   "pages": 331,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "c2c4a9f12267afdcb1d6f795d1ff2fc0b99f44acf1a9e685b14ac7a9f4b3da0b",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/SW Engineering/Information and self-organization (Hermann Haken) (z-lib.org).pdf",
+   "pages": 116,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "3c80a1f56d4015af6f4ab6c26d2c48692b1f5eafa62a4ad4a2df67ab1f046c20",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/plan cours/6GD.pdf",
+   "pages": 4,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "d6af453d5533327340de5199c0a04580e913e5090210412e317b62c1ae631c98",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/3，液晶资料/4.3寸电容触摸屏裸屏尺寸图.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "22470c2a54854f35f69c9759c7cc3eb1d8a5feca1b7ad98770d7511c87bf4eb0",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/ESP32-CAM/ov2640_ds_1.8_.pdf",
+   "pages": 45,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "3cbacb10d5fdcb3b32465a03275c83aefcb748fb6074d78015b5e62673822492",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/Hardware/MicroPython Programming with ESP32 and ESP8266 by Rui Santos, Sara Santos (z-lib.org).pdf",
+   "pages": 359,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "7f6a843787dad6b188d3dd609769a936b50a7baeec6941e35b82c98ef82dc11f",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/ILI9341(ID9341)/2.8寸ILI9341 TFTLCD尺寸图（钢化玻璃TP）.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "a3b55dfb59ca2ca547a01859e44f7e4127f3062ff9c40eb90745fa5c4550a13a",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/Manuals Hardware/Broadway-QSG_DE.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "db5c6585fff0f2fa74ace0f5a60bde1c431bd53a844b25b5aba3c19b11b77977",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/Manuals Hardware/Broadway-QSG_EN.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "42aa1a9a25aa79fa8f98fcdec4ca39ebe3b74c264abdca1bedacc306d6b32814",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/Manuals Hardware/Broadway-QSG_ES.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "d9f217a91cdd213a8b8352eb8a18397e7c5b923758eb6118723935d129f1c4c1",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/Manuals Hardware/Broadway-QSG_FR.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "63e12a5887d11e3e12ce8e9cf1445b93f5a54ba9b666063026f448e641beb590",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/Manuals Hardware/Broadway-QSG_IT.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "0a92d975cd513e125bdb83bb24f869eaf2a676ed86be3cd51005ed7a353e4710",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/Manuals Hardware/Broadway-QSG_NL.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "64952c66a812486edb89e54fca26ea046cc5047b26517037cb938830ce6571a6",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/NT35310(ID5310)/3.5寸液晶屏规格.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "46b5a19ac19a302d16b813401add6442cf0e9a76e50a80599169d67887e7aee6",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/RM68042(ID6804)/3.5寸LCD尺寸图（钢化玻璃TP）.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "9834f156e819989f1bbd4c1c9de63e2d8a49e9525196b252447e84b58b176a10",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/STM32参考资料/ST MCU 最新选型手册_201603.pdf",
+   "pages": 60,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "9249a6b61857f28dbf280f9fbbc7970fa1a4b09e181035e86bb2b1ed74e1edb2",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Semestres/2014A/420 allocation Hiver.pdf",
+   "pages": 6,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "af9360973471c3fce7eb81a95ff85551be5c18ea29d54d09584212d950172359",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Semestres/2014A/MergedDocument1.pdf",
+   "pages": 42,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "de1b709498859a2030d1477a395cf2eed9428f7f5467638151a4c67cb78833f2",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Semestres/2015-2016/Décision - Révision de note JML.pdf",
+   "pages": 2,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "f0c5619b1403618ba86373fab8339c0ac4c1cbd09b8dd59018d869e4b16598f8",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Semestres/2015-2016/scenario 4 - tâche A2016.pdf",
+   "pages": 18,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "97b78cc69646cedef32cddf2bd06a956bf9a7ea7141b0f8fc73d8f21116bcb22",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Semestres/2015H/Greg.pdf",
+   "pages": 7,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "0adb6aa05ae2923cae557fd465f08949a12f444737d3a8a38b7ad8ddff9cda7a",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Semestres/Automne 2015/420.pdf",
+   "pages": 6,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "ae286b3ff7c247e8977384f56e1852bbaf4e2a1eb4a5a3558f569b1f331045ac",
+   "doublon": false
+  },
+  {
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Semestres/H2016/Certificat Assurance Stagiaires en entreprise 2016.pdf",
+   "pages": 1,
+   "caracteres": 0,
+   "scan": true,
+   "sha256": "ea3b55a9fcc7a4bc59147bba48621aa14a0327c929b5a292d2167f49641d7adb",
+   "doublon": false
+  }
+ ]
+}

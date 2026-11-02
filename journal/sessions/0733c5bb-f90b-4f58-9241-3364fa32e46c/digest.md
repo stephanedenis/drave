@@ -2675,3 +2675,22 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-100", "timeout_ms": 300000, "wait": true}`
+
+  ```
+17:19:44
+--- g2 ---
+pas  19400 · perte 1.2185 · PPL val 3.508 · 1880 s
+--- chaine ---
+--- abs1152 ---
+pas 13550 · perte 1.5057 · PPL val 3.825 · 1504 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 150; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; grep -E \"ppl_val|duree_s\" work/n2ac/rope-20k-g2.pt.json 2>/dev/null; echo \"--- chaine ---\"; cat work/n2ac/chaine_r1.out; echo \"--- rope512-5k ---\"; tail -1 work/n2ac/rope512-5k.log 2>/dev/null", "description": "Check … [36 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-101]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-101", "timeout_ms": 180000, "wait": true}`

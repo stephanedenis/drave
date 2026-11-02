@@ -4377,3 +4377,131 @@ SESSIONS=1
 ⏵ Commit du fait avec `git add` explicite (le hook archive/journalise automatiquement)
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -m \"B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)\" 2>&1 | tail -25; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Commit the gold neuronal fact", "timeoutMs": 300000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 7ef0199c] B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)
+ 33 files changed, 3795 insertions(+), 124 deletions(-)
+ create mode 100644 reports/pensee-gold-neuronal.json
+ create mode 100644 reports/rapport-pensee-gold-neuronal.md
+ create mode 100644 tools/tests/linguistique/qualifier_neuronal.py
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit `7ef0199c` ; je vérifie son contenu et l'état du dépôt après le hook
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -2 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '=== STAT (tête) ==='; git show --stat --oneline HEAD | head -20; echo '=== STATUS ==='; git status --short | head -20", "description": "Verify commit contents and remaining working tree"}`
+
+  ```
+7ef0199c 17:17:29 B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)
+dca7e7a2 16:56:59 ÉTAT — COMPTEURS AU DISQUE (552 FICHES / 639 JSON) ; LA FICHE S EST INTÉGRÉE
+=== STAT (tête) ===
+7ef0199c B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)
+ docs/implantation/bloc-linguistique.md             |   24 +-
+ docs/pilotage/en-cours.md                          |   19 +-
+ docs/pilotage/roadmap.md                           |    9 +-
+ journal/2026-11-02/README.md                       |   15 +-
+ journal/2026-11-02/apprentissage.md                |   10 +-
+ journal/2026-11-02/attention.md                    |   10 +-
+ journal/2026-11-02/distribue.md                    |   10 +-
+ journal/2026-11-02/docs.md                         |   13 +-
+ journal/2026-11-02/memoire.md                      |   10 +-
+ journal/2026-11-02/mesures.md                      |   10 +-
+ journal/2026-11-02/modele.md                       |   10 +-
+ journal/2026-11-02/moteur.md                       |   10 +-
+ journal/2026-11-02/outils.md                       |   10 +-
+ journal/2026-11-02/portes.md             
+… [489 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/verifie_etat_a_jour.py --head; echo \"HEAD=$?\"; python3 tools/verifie_en_cours.py 2>&1 | tail -3; python3 tools/revue_documentation.py 2>&1 | tail -3; python3 tools/verifie_journal.py 2>&1 | tail -3", "description": "Post-commit state,  … [53 caractères tronqués]`
+
+  ```
+état · dernier fait 7ef0199c · dernier état 7ef0199c
+  ✅ aucun fait commité après le dernier état
+HEAD=0
+  en-cours · 1623 mots · 7 sections · 5 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 553 fiche(s) · 639 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  journal · 39 jour(s) · 117 session(s) · 1844 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale de `sessions --check --strict` après le commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/sessions.py --check --strict; echo \"EXIT=$?\"; echo '---'; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|en pause|périm\" | head -10", "description": "Final strict session check and status"}`
+
+  ```
+⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ❌ mandat périmé (59 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — heartbeat à rafraîchir
+  ❌ mandat périmé (58 min) : fe3c05f0-834b-44f2-8739-501865d652c1 — heartbeat à rafraîchir
+EXIT=1
+---
+  ⏰ 0733c5bb-f90b-4f58 · actif    ·  59 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    29ad180d-38a5-4481 · actif    ·  27 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·  42 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, repo
+… [448 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière vérification du contenu de HEAD (plan, en-cours, roadmap, fiche)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && echo '=== PLAN ==='; git show HEAD:journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | grep -E \"Heartbeat|État|Prochaine\" | head -4; echo '=== EN-COURS ==='; git show HEAD:docs/pilotage/en-cours.md | grep -n \"gold neuronal\\|Gold neuron … [275 caractères tronqués]`
+
+  ```
+=== PLAN ===
+- **Heartbeat** : 2026-11-02 16:57 EST
+- **Prochaine action** : le **gold neuronal POS** est mesuré (tagger 7B local, cascade **0,9440**) ;
+- **État** : actif
+=== EN-COURS ===
+80:- **Fait** : B13 **140/140**, gold **432**, **116 liens** ; **gold neuronal** POS **0,8483**,
+83:- **Ce qu'elle fait** : cycle **140/140** committé ; **gold neuronal** mesuré ; reprise **16 h 16**.
+85:- **Prochaine action** : **syntagmes/pragmatique** ; **DRVM/native** (parité).
+86:- **Bloquants** : aucun pour le POS ; le **complet** (syntagmes) reste à mesurer.
+=== ROADMAP ===
+3
+=== FICHE ===
+# L — le gold neuronal : un tagger 7B local, la cascade POS à 0,944
+
+> **Ligne de roadmap** : **B13** (moteur de pensée) / **R0.7** (bloc linguistique) · **Date** : 2026-11-02 ·
+> **Verdict** : ✅ **le tagger 7B-Instruct local est qualifié** — POS seul **0,8483** (heuristique
+> **0,7512**), **cascade à 0,6 : 0,9440** (20 réelles **0,9238**, 160 synthétiques **0,9471**),
+> **0 refus**, **180 appels**. La cascade **garde** les classes fermées de l'heuristique (**0,9392**)
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan de la reprise L/B13 et du fait « gold neuronal »
+
+**Reprise.** Plan, AGENTS.md et `en-cours` lus. Le plan porte bien `État : actif` et `Heartbeat : 2026-11-02 16:57 EST` ; le hub l'a auto-committé dans `dca7e7a2` via le hook journal.
+
+**Porte stricte.** Elle est passée **verte à 16 h 30** après l'intégration des quatre sessions, mais à **17 h 18** elle est rouge pour **deux autres mandats** :
+- N2 `0733c5bb` : heartbeat périmé (59 min) ;
+- D/R/A `fe3c05f0` : heartbeat périmé (58 min) ;
+- `e181ce02` (nous) : 22 min, **valide**.
+
+S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 recouvre S et D). Je n'ai pas touché aux mandats des autres sessions : au hub de les rafraîchir ou de les passer en pause.
+
+**Fait — le gold neuronal** (commit **`7ef0199c`**) :
+- **Tagger `NeuronalLLMPOS`** : Qwen2.5-7B-Instruct Q4_K_M local, `llama-server` **CPU** (`-ngl 0`), grammaire GBNF imposant une classe par token ; 180 phrases / 804 tokens, **0 refus**.
+- **POS seul** : **0,8483** contre **0,7512** pour l'heuristique.
+- **Cascade à 0,6** : **0,9440** — 20 réelles **0,9238** (aucune perte), 160 synthétiques **0,9471**, 180 appels, ~3,0 s/appel CPU.
+- **Complémentarité** : fermé **0,9392** (gardé par l'heuristique), ouvert **0,9474** (apporté par le modèle).
+- **Contrôles** : majoritaire 0,2289 ; uniforme 0,0833 ; permutation 0,1729 ; pas de régression sur les réelles.
+- **Modèles** : 0,5B base refusé ; 3B dev 0,6667 ; 7B retenu.
+- Fiche [`rapport-pensee-gold-neuronal.md`](reports/rapport-pensee-gold-neuronal.md), JSON [`pensee-gold-neuronal.json`](reports/pensee-gold-neuronal.json), banc `tools/tests/linguistique/qualifier_neuronal.py`, deux tests de contrat. Modèle 4,68 Go dans `models/` (ignoré), SHA-256 dans le JSON.
+- Budgets : **T0 3997/4000**, revue documentation verte, porte du bloc verte, journal et schémas verts.
+
+**Nommé, hors tagger.** La porte B13 `tools/pensee/autotest.py` rend **134/140** (T111, T113–T115, T132–T133) ; les six rouges corrèlent avec la mise à jour du sous-module S `647205a` (`13f4e131`), qui change l'analyseur. Le tagger n'y touche pas ; le dernier cycle committé était **140/140**. Détail dans la fiche § 7.1.
+
+**Suite.** Les **syntagmes/pragmatique** du tagger, puis la cascade complète ; côté DRVM/native, les poids GGUF et le tagger existent désormais — la **parité native** reste à mesurer.
+

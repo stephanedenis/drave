@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 0.9 h |
+| Durée | 1.1 h |
 | Tours | 2 |
-| Messages | 134 |
-| Appels d'outils | 153 |
+| Messages | 139 |
+| Appels d'outils | 157 |
 | Fichiers touchés | 5 |
-| Commandes | 102 |
+| Commandes | 106 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -49,7 +49,7 @@
 
 ### Tour 2 — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État  … [367 caractères tronqués]
 
-*142 appels d'outils.* Actions notables :
+*146 appels d'outils.* Actions notables :
 
 - read
 - get_goal
@@ -65,7 +65,7 @@
 - bash — Locate scan census sources
 - bash — Search 127 mentions across docs
 - bash — Read session report around next steps
-- … et 92 autres
+- … et 96 autres
 
 **Synthèse produite :**
 
@@ -125,7 +125,7 @@
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 62 autres
+- … et 66 autres
 
 ## 4. Mesures et résultats marquants
 

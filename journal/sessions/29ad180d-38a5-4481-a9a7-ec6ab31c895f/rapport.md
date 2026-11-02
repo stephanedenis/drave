@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 1.0 h |
+| Durée | 1.1 h |
 | Tours | 3 |
-| Messages | 152 |
-| Appels d'outils | 168 |
+| Messages | 160 |
+| Appels d'outils | 176 |
 | Fichiers touchés | 9 |
-| Commandes | 111 |
+| Commandes | 118 |
 | Sous-agents | 0 |
-| Commits | 6 |
+| Commits | 7 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -116,12 +116,20 @@ Prochaine action S inchangée : **validation humaine de la banque**, puis fronti
 
 ### Tour 3 — commit l'ensemble
 
-*4 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Full worktree status before integration
 - bash — Inspect other sessions' diffs
 - bash — Inspect staged integration diff
 - bash — Inspect untracked N2/OCR files and indices
+- bash — Current gate state with staged integration
+- read
+- bash — Inspect en-cours D/R/A and header before editing
+- bash — Add D/R/A detection, trim to budget, recheck
+- bash — Stage D/R/A detection and state, inspect index
+- bash — Check whether Pensée set was committed concurrently
+- bash — Review staged en-cours delta and run checks
+- bash — Commit D/R/A detection integration
 
 **Synthèse produite :**
 
@@ -185,7 +193,7 @@ Prochaine action S inchangée : **validation humaine de la banque**, puis fronti
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 71 autres
+- … et 78 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -231,4 +239,5 @@ Prochaine action S inchangée : **validation humaine de la banque**, puis fronti
 - ps -eo pid,ppid,etime,pcpu,stat,cmd | grep -E "57032|57052|57681|job|git commit" | grep -v grep; echo "=== enfants ==="; ps --ppid 57032 -o pid,etime,pcpu,stat,
 - S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES" -m "La fiche reports/rapport-s-analyseur-roles.md, le manifeste reports/s-banqu
 - ÉTAT — COMPTEURS AU DISQUE (552 FICHES / 639 JSON) ; LA FICHE S EST INTÉGRÉE" -m "Le compteur passe à 552 fiches / 639 JSON après l'intégration de la fiche S et
+- D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE" -m "La détection sur le texte intégral (pdftotext + pdfinfo, seuil 
 

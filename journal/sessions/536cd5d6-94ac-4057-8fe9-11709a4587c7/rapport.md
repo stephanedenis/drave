@@ -9,10 +9,10 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 1.8 h |
 | Tours | 5 |
-| Messages | 110 |
-| Appels d'outils | 145 |
+| Messages | 115 |
+| Appels d'outils | 152 |
 | Fichiers touchés | 4 |
-| Commandes | 122 |
+| Commandes | 129 |
 | Sous-agents | 0 |
 | Commits | 8 |
 | Compactages de contexte | 0 |
@@ -295,6 +295,20 @@ Le script `/tmp/fan_set.py` disparaîtra au reboot. Le plafond 180 W **n'est pas
 
 ### Tour 5 — peut-on controller les fan de dell sans avoir à modifier le bios
 
+*7 appels d'outils.* Actions notables :
+
+- bash — Inspect dell_smm hwmon PWM and fan attributes
+- bash — Check module parameters, firmware attributes, BMC and tools
+- bash — Read fan labels, limits, targets and pwm enable states
+- bash — Check whether dell_smm is a module and its parameters
+- bash — Set Dell Other Fans to max via dell_smm PWM
+- bash — Measure GPU0 with Dell case fans at max
+- bash — Restore Dell fan auto and take final snapshot
+
+**Synthèse produite :**
+
+⏵ Les ventilateurs boîtier au max ne font pas baisser le GPU ; je remets l'automatique et je fais le bilan.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -348,7 +362,7 @@ Le script `/tmp/fan_set.py` disparaîtra au reboot. Le plafond 180 W **n'est pas
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 82 autres
+- … et 89 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -451,6 +465,12 @@ Le script `/tmp/fan_set.py` disparaîtra au reboot. Le plafond 180 W **n'est pas
 - **T4** `t+60s  0, 84, 85 %, 175.82 W, 1725 MHz, Not Active`
 - **T4** `0, 85, 83 %, 175.43 W, 180.00 W, 1710 MHz, Not Active`
 - **T4** `1, 73, 49 %, 208.37 W, 230.00 W, 1860 MHz, Not Active`
+- **T5** `t+15s  0, 85, 81 %, 173.80 W, 1710 MHz, Not Active`
+- **T5** `t+30s  0, 85, 80 %, 169.12 W, 1665 MHz, Not Active`
+- **T5** `t+45s  0, 84, 80 %, 176.28 W, 1725 MHz, Not Active`
+- **T5** `t+60s  0, 84, 80 %, 173.73 W, 1695 MHz, Not Active`
+- **T5** `0, 85, 80 %, 177.27 W, 180.00 W, 1680 MHz, Not Active`
+- **T5** `1, 75, 50 %, 214.11 W, 230.00 W, 1860 MHz, Not Active`
 
 ## 5. Erreurs rencontrées
 

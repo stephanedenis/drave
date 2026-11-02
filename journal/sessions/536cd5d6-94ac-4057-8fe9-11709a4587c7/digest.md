@@ -4231,3 +4231,225 @@ t+60s  0, 84, 85 %, 175.82 W, 1725 MHz, Not Active
         Current Power Limit                            : N/A
   ```
 
+### 🤖 Assistant
+
+⏵ Résultat : 100 % possible mais inutile ; le plafond 180 W refroidit et supprime le throttle.
+
+# Test terminé : le 100 % fonctionne, mais ne refroidit pas
+
+## Ce que j'ai mesuré
+
+**1. Ventilateur forcé à 100 %** (NVML, via le popup PolicyKit) :
+
+| | avant | à 100 % |
+|---|---:|---:|
+| ventilateur | 91 % · 3 281 tr/min | **99–100 % · 3 617 tr/min** |
+| température GPU 0 | 86–87 °C | **86–87 °C** |
+| throttle thermique | actif | **toujours actif** |
+
+Donc **oui, on peut dépasser 88 %** : la carte accepte 100 %, le ventilateur monte à 3 617 tr/min. Mais **la température ne bouge pas** et le throttle reste actif. Le ventilateur n'était pas le goulet : l'air qui entre dans la carte est trop chaud, ou le radiateur est encrassé. J'ai remis le ventilateur en **automatique** (le 100 % ne faisait que du bruit).
+
+**2. Plafond de puissance à 180 W** (le levier efficace) :
+
+| | avant | à 180 W |
+|---|---:|---:|
+| température | 86–87 °C | **83–85 °C** |
+| puissance | 187–208 W | **175–180 W** |
+| cœur | 1 725–1 785 MHz | **1 680–1 725 MHz** |
+| ventilateur | 91 % · 3 281 tr/min | **83–89 % · 2 972–3 051 tr/min** |
+| **throttle thermique** | **actif** | **inactif** |
+
+Le plafond est **appliqué maintenant** sur le GPU 0. Le GPU 1 reste à 230 W (73 °C, 49 %, aucun throttle).
+
+## Le compromis
+
+- **Température** : −2 à −3 °C, et surtout **plus de throttle** : les horloges sont stables au lieu de osciller.
+- **Performance** : environ **2 à 4 %** de moins (1 710 MHz contre 1 725–1 785).
+- **Bruit** : le ventilateur tourne **8 à 10 points plus bas** (2 972 tr/min au lieu de 3 281).
+- La carte est à **85 °C** au lieu de 87, avec une marge avant les 89 °C de exploitation et les 93 °C de ralentissement matériel.
+
+## Commandes
+
+```bash
+# revenir à la puissance d'origine
+pkexec /usr/bin/nvidia-smi -i 0 -pl 230
+
+# remettre le plafond 180 W
+pkexec /usr/bin/nvidia-smi -i 0 -pl 180
+
+# ventilateur automatique (déjà en place)
+pkexec /usr/bin/python3 /tmp/fan_set.py 0 0 0
+
+# forcer 100 % (test, non recommandé)
+pkexec /usr/bin/python3 /tmp/fan_set.py 0 100 1
+```
+
+Le script `/tmp/fan_set.py` disparaîtra au reboot. Le plafond 180 W **n'est pas persistant** non plus : après un redémarrage, la carte repart à 230 W. Je peux créer un service systemd pour le réappliquer au boot (et te donner la commande pour le désactiver si tu veux un run à pleine vitesse).
+
+## Ce qui reste à faire pour refroidir vraiment
+
+1. **BIOS Dell → Thermal Management → Maximum** (ou Performance) : les ventilateurs « Other Fan » du 7910 tournent à **2 150 / 5 000 tr/min**, soit 43 %. C'est le levier le plus rentable, et il est gratuit. À faire au prochain reboot.
+2. **Vérifier le carénage GPU** du Precision 7910 et souffler le radiateur du GPU 0 : à puissance presque égale, le GPU 0 était 14 °C plus chaud que le GPU 1 ; le 100 % qui n'aide pas confirme que l'air ou le radiateur est le problème.
+3. **Déplacer la charge lourde sur le GPU 1** (73 °C, 49 %) si le job le permet : `CUDA_VISIBLE_DEVICES=1`.
+4. Un **ventilateur de slot PCIe** entre les deux cartes, ou déplacer le GPU 1 d'un emplacement, peut gagner plusieurs degrés.
+
+## En résumé
+
+- **Au-delà de 88 % : oui, techniquement** (99–100 %, 3 617 tr/min), **mais aucun gain thermique**.
+- **Le bon levier est le plafond de puissance** : 180 W → 83–85 °C, throttle supprimé, ventilateur plus silencieux, ~3 % de performance en moins.
+- **Le vrai fond** : l'air du boîtier (ventilateurs à 43 %) et le radiateur du GPU 0. Le BIOS et le nettoyage feront plus que n'importe quelle consigne de ventilateur.
+
+Dis-moi si tu veux que je rende le 180 W persistant (service systemd), ou que je le retire pour laisser la carte à 230 W.
+
+
+## Tour 5
+
+### 👤 Utilisateur
+
+peut-on controller les fan de dell sans avoir à modifier le bios
+
+### 🤖 Assistant
+
+⏵ Je regarde ce que le pilote `dell_smm` expose réellement (PWM, fan control) et les interfaces Dell disponibles.
+
+- **bash** `{"command": "echo \"== hwmon dell_smm ==\" && ls -l /sys/class/hwmon/hwmon6/ 2>/dev/null; echo; echo \"== valeurs ==\" && for f in /sys/class/hwmon/hwmon6/{name,pwm1,pwm1_enable,pwm2,pwm2_enable,fan1_input,fan2_input,fan3_input,fan4_input,temp1_input,temp2_input}; do [ -e \"$f\" ] && echo \"$f = $(c … [89 caractères tronqués]`
+
+  ```
+== hwmon dell_smm ==
+total 0
+lrwxrwxrwx. 1 root root    0  2 nov 15:31 device -> ../../../dell_smm_hwmon
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan1_input
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan1_label
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan1_max
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan1_min
+-r--r--r--. 1 root root 4096  2 nov 17:18 fan1_target
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan2_input
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan2_label
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan2_max
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan2_min
+-r--r--r--. 1 root root 4096  2 nov 17:18 fan2_target
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan3_input
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan3_label
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan3_max
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan3_min
+-r--r--r--. 1 root root 4096  2 nov 17:18 fan3_target
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan4_input
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan4_label
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan4_max
+-r--r--r--. 1 root root 4096  2 nov 15:31 fan4_min
+-r--r--r--. 1 root root 4096  2 nov 17:18 fan4_target
+-r--r--r--. 1 root root 4096  2 nov 15:31 name
+
+… [1789 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"== module ==\" && modinfo dell_smm_hwmon 2>/dev/null | grep -E 'filename|parm|fan_control|force|ignore_dmi|restricted'; echo; echo \"== params chargés ==\" && for f in /sys/module/dell_smm_hwmon/parameters/*; do echo \"$(basename $f) = $(cat $f 2>&1)\"; done; echo; echo \"== firm … [468 caractères tronqués]`
+
+  ```
+== module ==
+
+== params chargés ==
+power_status = cat: /sys/module/dell_smm_hwmon/parameters/power_status: Permission denied
+
+== firmware-attributes ==
+
+== ipmi/bmc ==
+pas de /dev/ipmi
+00:05.0 System peripheral: Intel Corporation Xeon E7 v3/Xeon E5 v3/Core i7 Address Map, VTd_Misc, System Management (rev 02)
+a0:05.0 System peripheral: Intel Corporation Xeon E7 v3/Xeon E5 v3/Core i7 Address Map, VTd_Misc, System Management (rev 02)
+
+== outils ==
+pwmconfig    absent
+fancontrol   absent
+dellfan      absent
+i8kfan       absent
+ipmitool     absent
+  ```
+
+### 🤖 Assistant
+
+⏵ Le pilote expose bien quatre canaux PWM ; je vérifie les paramètres du module et les étiquettes avant d'écrire.
+
+- **bash** `{"command": "echo \"== params (ls) ==\" && ls -la /sys/module/dell_smm_hwmon/parameters/ 2>&1; echo; echo \"== labels/cibles ==\" && for i in 1 2 3 4; do echo \"fan$i label=$(cat /sys/class/hwmon/hwmon6/fan${i}_label 2>&1) input=$(cat /sys/class/hwmon/hwmon6/fan${i}_input 2>&1) min=$(cat /sys/class/ … [359 caractères tronqués]`
+
+  ```
+== params (ls) ==
+total 0
+drwxr-xr-x. 2 root root    0  2 nov 17:19 .
+drwxr-xr-x. 7 root root    0  2 nov 15:06 ..
+-rw-------. 1 root root 4096  2 nov 17:18 power_status
+
+== labels/cibles ==
+fan1 label=Processor Fan input=2703 min=0 max=5755 target=5755
+fan2 label=Processor Fan input=2698 min=0 max=5755 target=5755
+fan3 label=Other Fan input=2153 min=0 max=5000 target=5000
+fan4 label=Other Fan input=2157 min=0 max=5000 target=5000
+
+== pwm enable ==
+pwm=2
+pwm=2
+pwm=2
+pwm=2
+  ```
+
+- **bash** `{"command": "echo \"== module chargé ==\" && (lsmod 2>/dev/null | grep -i dell || echo \"lsmod: rien\"); grep -i dell /proc/modules 2>/dev/null || true; echo; echo \"== fichier module ==\" && find /lib/modules/$(uname -r) -iname '*dell*smm*' 2>/dev/null | head; echo; echo \"== modinfo ==\" && (comma … [318 caractères tronqués]`
+
+  ```
+== module chargé ==
+dell_wmi               28672  0
+sparse_keymap          16384  1 dell_wmi
+dell_smbios            36864  1 dell_wmi
+dcdbas                 24576  1 dell_smbios
+dell_smm_hwmon         28672  0
+dell_wmi_descriptor    20480  2 dell_wmi,dell_smbios
+video                  81920  4 dell_wmi,amdgpu,radeon,nvidia_modeset
+wmi                    45056  8 video,intel_wmi_thunderbolt,dell_wmi,wmi_bmof,dell_smm_hwmon,dell_smbios,dell_wmi_descriptor,mxm_wmi
+dell_wmi 28672 0 - Live 0x0000000000000000
+sparse_keymap 16384 1 dell_wmi, Live 0x0000000000000000
+dell_smbios 36864 1 dell_wmi, Live 0x0000000000000000
+dcdbas 24576 1 dell_smbios, Live 0x0000000000000000
+dell_smm_hwmon 28672 0 - Live 0x0000000000000000
+dell_wmi_descriptor 20480 2 dell_wmi,dell_smbios, Live 0x0000000000000000
+video 81920 4 nvidia_modeset,dell_wmi,amdgpu,radeon, Live 0x0000000000000000
+wmi 45056 8 dell_wmi,dell_smbios,dell_smm_hwmon,dell_wmi_descriptor,intel_wmi_thunderbolt,wmi_bmof,video,mxm_wmi, Live 0x0000000000000000
+
+== fichier module ==
+/lib/modules/7.2.6-1-default/kernel/drivers/hwmon/dell-smm-hwmon.ko.zst
+
+== modinfo ==
+modinfo absent
+
+== noyau/dmesg ==
+7.2.6-1-default
+  ```
+
+### 🤖 Assistant
+
+⏵ Le pilote expose `pwm3`/`pwm4` pour les « Other Fan » ; je tente de les passer au maximum via sysfs.
+
+- **bash** `{"command": "cat > /tmp/dell_fan.sh <<'SH'\n#!/bin/bash\nH=/sys/class/hwmon/hwmon6\ncase \"${1:-}\" in\n  max)\n    echo 255 > \"$H/pwm3\" 2>/dev/null || echo \"pwm3 write: FAIL\"\n    echo 255 > \"$H/pwm4\" 2>/dev/null || echo \"pwm4 write: FAIL\"\n    echo 1 > \"$H/pwm3_enable\" 2>/dev/null || ech … [862 caractères tronqués]`
+
+  ```
+== avant ==
+fan3=2167 pwm3=cat: /sys/class/hwmon/hwmon6/pwm3: No data available pwm3_enable=2
+fan4=2143 pwm4=cat: /sys/class/hwmon/hwmon6/pwm4: No data available pwm4_enable=2
+
+== max via pkexec ==
+fan3=2157 pwm3=128 pwm3_enable=1
+fan4=2145 pwm4=128 pwm4_enable=1
+[exit 0]
+
+== après 8 s ==
+fan3=5155 pwm3=255 pwm3_enable=1
+fan4=4736 pwm4=255 pwm4_enable=1
+Processor Fan: 2703 RPM  (min =    0 RPM, max = 5755 RPM)
+Processor Fan: 2721 RPM  (min =    0 RPM, max = 5755 RPM)
+Other Fan:     5150 RPM  (min =    0 RPM, max = 5000 RPM)
+Other Fan:     4739 RPM  (min =    0 RPM, max = 5000 RPM)
+  ```
+
+### 🤖 Assistant
+
+⏵ Les « Other Fan » montent à 5 150 / 4 739 tr/min via sysfs. Je mesure l'effet sur le GPU.
+
+- **bash** `{"command": "for i in 1 2 3 4; do sleep 15; echo -n \"t+$((i*15))s  \"; nvidia-smi --query-gpu=index,temperature.gpu,fan.speed,power.draw,clocks.sm,clocks_throttle_reasons.sw_thermal_slowdown --format=csv,noheader | head -1; done; echo; echo \"== boîtier ==\"; sensors 2>/dev/null | grep -E 'Processo … [167 caractères tronqués]`

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 16 h 56 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 17 h 20 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
 > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
@@ -22,16 +22,15 @@
 
 - **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
 - **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
-- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8) **intégration** ;
-  9) **passe de portes** (GPU 1).
+- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration,
+  portes** (GPU 1).
 - **Ambition** : un état reprenable, des mandats qui disent la vérité.
 - **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
 - **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
-- **Ce qu'elle fait** : intégration ; **porte stricte réparée** (imbrication = avertissement) ;
-  sous-passe documentaire **7/8** (bloc-maths : bruit de charge).
-- **Ce que font les autres** : **N2**, **S**, **Pensée**, **D/R/A** (sessions ouvertes).
-- **Prochaine action** : **passe complète reportée** — les **deux GPU** sont à N2, charge **24** ;
-  la tenir machine libre.
+- **Ce qu'elle fait** : intégration ; **porte stricte réparée** ; sous-passe doc. **7/8**.
+- **Ce que font les autres** : **N2**, **S**, **Pensée**, **D/R/A**.
+- **Prochaine action** : **passe reportée** — deux GPU à N2, charge **24** ; la tenir
+  machine libre.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
 
@@ -43,9 +42,9 @@
 - **Plan** : 1) ~~plan et réservations~~ ; 2) **200 000 pas** (en cours) ; 3) **banc R1.1/R1.2** ;
   4) **mesure** (cinq PPL, courbe) ; 5) **fiche, JSON, état, commit**.
 - **Ambition** : que N réponde « plus de pas, quelle position, quelle fenêtre ».
-- **Stratégie** : recette constante (34,3 M, canal, positions aléatoires, graine 1) ; banc sur le GPU 1.
+- **Stratégie** : recette constante (34,3 M, canal, graine 1) ; banc GPU 1.
 - **Objectif final** : trancher **< 2,5 sans perdre le français**, puis **R1.1/R1.2**.
-- **Ce qu'elle fait** : mandat ouvert à **16 h 17** ; **200 k pas** sur `data/wiki_mix/propre`, GPU 0.
+- **Ce qu'elle fait** : **200 k pas** sur `data/wiki_mix/propre`, GPU 0 (depuis 16 h 17).
 - **Ce que font les autres** : **hub**, **S**, **Pensée**, **D/R/A**.
 - **Prochaine action** : la fin des 200 k pas, puis les **cinq PPL** et la **courbe**.
 - **Bloquants** : aucun ; **GPU 0** à N2, **GPU 1** aux portes.
@@ -75,7 +74,7 @@
 - **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; R4.4 ; heuristique ; bloc linguistique.
 - **Plan** : 1–6) ~~moteur B13~~ ; 7) ~~R4.4~~ ; 8) ~~heuristique~~ ; 9) ~~bloc~~ ; 10) ~~coréférence~~.
 - **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels.
-- **Stratégie** : v0 petit et mesuré, GPU de N2 intacts.
+- **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
 - **Fait** : B13 **140/140**, gold **432**, **116 liens** ; **gold neuronal** POS **0,8483**,
   cascade **0,9440** ; **R4.4** — trois limites nommées ;
@@ -95,9 +94,11 @@
 - **Stratégie** : dump, débaliseur, OCR page à page, glossaire au rendu.
 - **Objectif final** : 10 corpus, ficés.
 - **Ce qu'elle fait** : 10 corpus (**20,53 M**) ; PDF 1 927 ; OCR 20 livres + 10 notes
-  CEGEP ; glossaire 355 ; [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+  CEGEP ; **détection CEGEP** 2 681 PDF → **147 scans** (91 uniques, 2 053 p) ;
+  glossaire 355 ; [`ocr-cegep`](../../reports/rapport-ocr-cegep.md),
+  [`détection`](../../reports/ocr-pdf-cegep-detection.json).
 - **Ce que font les autres** : **N2**, **S**, **Pensée**, **hub**.
-- **Prochaine action** : **OCR ~127 scans CEGEP** (cens en cours) ; clôture.
+- **Prochaine action** : **OCR des 147 scans** (91 uniques) via `--liste --ouvriers` ; clôture.
 - **Bloquants** : aucun ; reprise à **16 h 21**.
 - **Journal** : [le 02/11](../../journal/2026-11-02/README.md).
 
