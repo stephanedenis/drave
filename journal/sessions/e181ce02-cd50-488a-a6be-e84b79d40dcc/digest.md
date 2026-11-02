@@ -12646,3 +12646,93 @@ Round: 9/1000
 Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
 </goal_round>
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; cat > tools/tests/linguistique/gold_reel.py <<'PY'\n\"\"\"gold_reel.py — 40 phrases réelles supplémentaires (20 françaises, 20 anglaises).\n\nElles ne sont pas des phrases du bloc ni du générateur : elles … [13909 caractères tronqués]`
+
+  ```
+15c69b98 B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12)
+EXIT=1
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.py", line 165, in <module>
+    sortie.write_text(json.dumps(construire(), ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+                                 ~~~~~~~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.py", line 154, in construire
+    assert i >= 0, f"{pid}: segment introuvable {txt!r}"
+           ^^^^^^
+AssertionError: r030: segment introuvable 'Do come'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\nt=t.replace('''    (\"r030\", \"en\", \"Do you come tomorrow?\",\n     [(\"Do\", \"AUX\"), (\"you\", \"PRON\"), (\"come\", \" … [537 caractères tronqués]`
+
+  ```
+ok
+40 phrases réelles → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/evaluer_gold.py'); t=p.read_text()\nt=t.replace('''GOLD = pathlib.Path(__file__).with_name(\"gold.json\")\nSYNTH = pathlib.Path(__file__).with_name(\"gold_syn … [3935 caractères tronqués]`
+
+  ```
+ok
+EXIT=0
+gold {'phrases': 220, 'reel': 60, 'hand': 20, 'reel_new': 40, 'synthetique': 160, 'tokens': 993}
+heuristique all POS 0.7654 SEG 0.1901 TETE 0.5102 | att 0.3235 0.3382 tete 0.9565 1.0 acte 1.0
+heuristique reel POS 0.8605 SEG 0.241 TETE 0.3695 | att 0.3077 0.3846 tete 0.8 1.0 acte 1.0
+heuristique hand POS 0.9238 SEG 0.3556 TETE 0.4889 | att 0.3077 0.3846 tete 0.8 1.0 acte 1.0
+heuristique reel_new POS 0.8254 SEG 0.1761 TETE 0.3019 | att 0.0 0.0 tete 0.0 0.0 acte 1.0
+heuristique synthetique POS 0.7253 SEG 0.1684 TETE 0.5704 | att 0.3273 0.3273 tete 1.0 1.0 acte 1.0
+mock_neuronal all POS 0.4159 SEG 0.1473 TETE 0.5382 | att 0.0 0.0 tete 0.0 0.0 acte 1.0
+mock_neuronal reel POS 0.4116 SEG 0.2616 TETE 0.5232 | att 0.0 0.0 tete 0.0 0.0 acte 1.0
+mock_neuronal hand POS 0.4857 SEG 0.2439 TETE 0.4634 | att 0.0 0.0 tete 0.0 0.0 acte 1.0
+mock_neuronal reel_new POS 0.3704 SEG 0.271 TETE 0.5548 | att 0.0 0.0 tete 0.0 0.0 acte 1.0
+mock_neuronal synthetique POS 0.4177 SEG 0.0941 TETE 0.5451 | att 0.0 0.0 tete 0.0 0.0 acte 1.0
+verdict {'pos_hand': True, 'pos_reel': True, 'pos_synthetique': True, 'syntagme_hand': True, 'syntagme_reel': True, 'syntagme_synthetique': True, 'tete': True, 'acte': 
+… [240 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib,re\n# rapport : gold 220\np=pathlib.Path('reports/rapport-pensee-gold-linguistique.md'); t=p.read_text()\nt=t.replace(\"# L — le gold 180 : 20 réels + 160 synthétiques, POS 0,751, tête 0,560\",\n\"# L … [4044 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 496 JSON, le disque en a 498
+  ❌ 1 violation(s) :
+     · T0 : 4009 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**opérateurs 11/11**,\\n  **nécessaire 12/12**\", \"**opérateurs/nécessaire 12/12**\")\nt=t.replace(\"attachement tête 1,0/ … [799 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 496 JSON, le disque en a 498
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; sed -i 's/| fichiers \\/ JSON de résultats | \\*\\*395\\*\\* \\/ \\*\\*496\\*\\* |/| fichiers \\/ JSON de résultats | **395** \\/ **498** |/' docs/pilotage/en-cours.md; grep -n \ … [170 caractères tronqués]`
+
+  ```
+94:| fichiers / JSON de résultats | **396** / **496** | `reports/*.md` / `reports/*.json` |
+94:| fichiers / JSON de résultats | **396** / **496** | `reports/*.md` / `reports/*.json` |
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 496 JSON, le disque en a 498
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/| fichiers \\/ JSON de résultats | \\*\\*396\\*\\* \\/ \\*\\*496\\*\\* |/| fichiers \\/ JSON de résultats | **396** \\/ **498** |/' docs/pilotage/en-cours.md && python3 tools/revue_documentation.py 2>&1 | tail -2; python3 t … [513 caractères tronqués]`
+
+  ```
+revue de documentation · 396 fiche(s) · 498 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/tests/linguistique/evaluer_gold.py reports/pensee-gold-linguistique.json reports/rapport-pensee-gold-linguistique.md reports/README.md docs/i … [466 caractères tronqués]`

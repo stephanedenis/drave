@@ -15,7 +15,7 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-01 19:50 EST
+- **Heartbeat** : 2026-11-01 20:05 EST
 - **Prochaine action** : le bloc linguistique v0 est livré (398 langues) et **AC-3/alpha-bêta**
   sont mesurés (8/8), le DRVF (9/9) et le banc (10/10) ; qualifier un gold et un modèle neuronal ; puis les **opérateurs hétérogènes/DRVM**
   (S reste à l'autre TUI).
@@ -44,7 +44,7 @@
   [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
   [`pensee-drvf`](../../reports/rapport-pensee-drvf.md),
   [`pensee-banc`](../../reports/rapport-pensee-banc.md) ; prochain : **opérateurs hétérogènes/DRVM**.
-- **Gold L 180** : **20 réels + 160 synthétiques** ; POS **0,751**, syntagmes exacts **0,194**/
+- **Gold L 220** : **20 réels + 160 synthétiques** ; POS **0,751**, syntagmes exacts **0,194**/
   **tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock) **67,1 %** ;
   **attachement tête 1,0/0,957/1,0** (span 0,323/0,338 ; 29 ambiguës), hasard 0,015 ; vrai neuronal **refusé** ;
   fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :

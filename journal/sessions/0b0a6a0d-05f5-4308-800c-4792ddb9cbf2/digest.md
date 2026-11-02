@@ -14569,3 +14569,21 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-850", "timeout_ms": 300000, "wait": true}`
+
+  ```
+[master 0e5c89be] N2.j4 — LA DISTILLATION SUR LE CORPUS RÉEL : 4,39 → 3,88, ET TOUT LE RESTE BAISSE
+ 14 files changed, 395 insertions(+), 35 deletions(-)
+ create mode 100644 reports/rapport-n2-distillation-reelle.md
+work/n2k/base-en.pt
+EN_OK
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=.; CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2k/base-en.pt --decomposition --longueurs --corpus-dir data/wiki_en/propre --sortie work/n2k/eval-en.json 2>&1 | grep -v Loading; CUDA_VIS … [278 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-851]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-851", "timeout_ms": 400000, "wait": true}`

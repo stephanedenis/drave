@@ -83,6 +83,7 @@ les **tableaux** ; les liens deviennent des libellés, les titres de sections re
 
 Même outil, même chaîne. Les neuf premiers corpus (fr, ar, pt, zh, ja, it, ru, es, de) sont mesurés ; le dernier (en) est
 en cours au 1/11 20 h. Les neuf mesurés : **14,51 M articles**, **45,54 G caractères**, **59,0 Go**.
+La table se régénère depuis les manifestes : `python3 tools/catalogue_corpus.py --texte`.
 
 | langue | articles | caractères | mots (car. / 6,2) | octets | fuite lignes | fuite 8 Ko | éval | résidus `{{`/`[[`/`<` |
 |---|---:|---:|---:|---:|---:|---:|---|---|
@@ -135,6 +136,7 @@ leurs licences, puis la **préparation de R1.1/R1.2**.
 
 - `tools/corpus_wikipedia_texte.py` — l'outil (dump → texte intégral).
 - `tools/extraire_evals_langues.py` — les jeux d'évaluation par langue.
+- `tools/catalogue_corpus.py --texte` — la table du texte intégral, depuis les manifestes.
 - `reports/corpus-wiki-fr-texte.json` — le manifeste du run complet (SHA-256 des trois fichiers).
 - `reports/corpus-wiki-fr-texte-contamination.json` — le contrôle du run complet.
 - `reports/corpus-wiki-fr-texte-pilote.json` — le manifeste du pilote (archivé pour comparaison).

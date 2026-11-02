@@ -16903,3 +16903,33 @@ poll en 1550618
 poll pdf 1550619
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/catalogue_corpus.py'); s=p.read_text()\ns=s.replace('Usage : python3 tools/catalogue_corpus.py [--sortie table.md]',\n            'Usage : python3 tools/catalogue_corpus.py [--sor … [3784 caractères tronqués]`
+
+  ```
+catalogue --texte
+| langue | articles | caractères | mots (est.) | octets | fuite 8 Ko | éval (trouvées) | manifeste |
+|---|---:|---:|---:|---:|---:|---|---|
+| **fr** | 2 388 219 | 8.03 G | 1294 M | 8.34 Go | 0.0 % | udhr 2/24 | [`corpus-wiki-fr-texte.json`](corpus-wiki-fr-texte.json) |
+| **de** | 2 864 934 | 10.44 G | 1684 M | 10.68 Go | 0.0 % | 0 | [`corpus-wiki-de-texte.json`](corpus-wiki-de-texte.json) |
+| **es** | 1 868 078 | 6.65 G | 1073 M | 6.83 Go | 0.0 % | 0 | [`corpus-wiki-es-texte.json`](corpus-wiki-es-texte.json) |
+| **ru** | 1 943 725 | 6.26 G | 1009 M | 11.16 Go | 0.0 % | 0 | [`corpus-wiki-ru-texte.json`](corpus-wiki-ru-texte.json) |
+| **it** | 1 561 411 | 5.21 G | 840 M | 5.29 Go | 0.0 % | udhr 2/23 | [`corpus-wiki-it-texte.json`](corpus-wiki-it-texte.json) |
+| **ja** | 1 271 107 | 2.81 G | — (caractères) | 7.33 Go | 0.0 % | udhr 1/23 | [`corpus-wiki-ja-texte.json`](corpus-wiki-ja-texte.json) |
+| **zh** | 643 122 | 1.05 G | — (caractères) | 2.63 Go | 0.0 % | 0 | [`corpus-wiki-zh-texte.json`](corpus-wiki-zh-texte.json) |
+| **pt** | 970 793 | 3.10 G | 501 M | 3.21 Go | 0.0 % | udhr 2/40 | [`corpus-wiki-pt-texte.json`](corpus-wiki-pt-texte.json) |
+| **ar** | 1 000 310 
+… [227 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat /tmp/poll-en.log /tmp/poll-pdf.log 2>/dev/null; ls -la reports/corpus-wiki-en-texte.json reports/corpus-pdf.json 2>/dev/null; echo \"=== en\"; ps -eo pid,etime,pcpu,cmd | grep \"corpus_wikipedia_texte.py --langue en\" | grep -v gre … [375 caractères tronqués]`
+
+  ```
+=== en
+1494795 01:24:09 97.1
+  [en] 8000000 lus · 2536621 gardés · 12.00 G caractères
+=== pdf
+1549012 02:47 0.6
+16M	data/corpus_pdf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-corpus-wiki-texte.md'); s=p.read_text()\ns=s.replace(\"Même outil, même chaîne. Les neuf premiers corpus (fr, ar, pt, zh, ja, it, ru, es, de) sont mesurés ; le dernier ( … [3017 caractères tronqués]`

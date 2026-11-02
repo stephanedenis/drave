@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 27.2 h |
+| Durée | 27.3 h |
 | Tours | 22 |
-| Messages | 542 |
-| Appels d'outils | 555 |
+| Messages | 549 |
+| Appels d'outils | 562 |
 | Fichiers touchés | 25 |
-| Commandes | 445 |
+| Commandes | 452 |
 | Sous-agents | 2 |
-| Commits | 33 |
+| Commits | 34 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1205,9 +1205,16 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 
 ### Tour 22 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Écrire 40 phrases réelles supplémentaires
+- bash — Corriger la phrase r030 et générer le gold réel
+- bash — Mesurer le gold avec les 60 phrases réelles
+- bash — Mettre à jour la fiche et l'état pour le gold 220
+- bash — Rentrer dans T0 et aligner les compteurs
+- bash — Corriger la ligne des compteurs et relancer la revue
+- bash — Aligner les compteurs et passer les portes
+- bash — Committer le gold 220 avec 40 phrases réelles
 
 ## 3. Travail accompli
 
@@ -1288,7 +1295,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 405 autres
+- … et 412 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1465,4 +1472,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12)" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12)" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12)" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
+- L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 

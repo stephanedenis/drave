@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-01, 19 h 50 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-01, 20 h 05 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -28,13 +28,12 @@
   (5 schémas) — le CPU étiquette la surface et énumère le plausible, le réseau tranche l'ambiguïté ;
   la cascade se juge sur la couverture × la précision par unité de calcul, pas sur le débit.
 - **Bloc linguistique** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
-  (9 niveaux, heuristique/neuronal, parallèle/cascade) ; **398 langues à 0,9687** ; fiche et porte.
-- **Moteur B13** : **AC-3/alpha-bêta (8/8)**, **DRVF (9/9)**, **banc (10/10)**, **opérateurs 11/11**,
-  **nécessaire 12/12** ; fiches
+  (9 niveaux, heuristique/neuronal, cascade) ; **398 langues à 0,9687** ; fiche et porte.
+- **Moteur B13** : **AC-3/alpha-bêta (8/8)**, **DRVF (9/9)**, **banc (10/10)**, **opérateurs/nécessaire 12/12** ; fiches
   [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
   [`pensee-drvf`](../../reports/rapport-pensee-drvf.md), [`pensee-banc`](../../reports/rapport-pensee-banc.md),
   [`pensee-operateurs`](../../reports/rapport-pensee-operateurs.md), [`pensee-necessaire`](../../reports/rapport-pensee-necessaire.md).
-- **Gold L 180** : **20 réels + 160 synthétiques** ; POS **0,751** (fermé 0,939/ouvert 0,621),
+- **Gold L 220** : **60 réels + 160 synthétiques** ; POS **0,765** (fermé 0,939/ouvert 0,621),
   syntagmes exacts **0,194**/**tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock)
   **67,1 %** ; **attachement tête 1,0/0,957/1,0** (29 ambiguës), hasard 0,015 ; vrai neuronal
   **refusé** ; fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :
@@ -47,7 +46,7 @@
   avance ; **N4** en file ; **A/B** gardent les leurs.
 - **Interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state`.
 - **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `reports/r44-*`, `docs/theorie/pre-traitement-linguistique.md`, `docs/schemas/heuristique-*.svg`, `tools/bloc_linguistique.py`, `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`, `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`, `reports/bloc-*`, `journal/sessions/e181ce02-…/`.
-- **Prochaine action** : **L** — 200+ réelles et lecture double ; **B13** — DRVM/native et coût mesuré.
+- **Prochaine action** : **L** — 200+ réelles ; **B13** — DRVM/native.
 - **Bloquants** : aucun ; corpus de test à choisir ; pas de GPU.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
@@ -63,9 +62,9 @@
 - **Ambition** : le français réel pour N2 ; D, carburant.
 - **Stratégie** : le dump, débaliseur mesuré, dédup, splits.
 - **Objectif final** : 10 corpus en texte intégral, mesurés et ficés.
-- **Ce qu'elle fait** : le **texte intégral** : fr/ar/pt/zh/ja/it/ru/es/de (**12,12 M** ; **8 Ko 0**) ; en en cours ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
+- **Ce qu'elle fait** : le **texte intégral** : fr/ar/pt/zh/ja/it/ru/es/de (**12,12 M** ; **8 Ko 0**) ; en, le PDF local en cours ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée, S, N2 ; le hub tient l'état.
-- **Prochaine action** : en, le catalogue des dix, puis PDF/OCR.
+- **Prochaine action** : en et le PDF, le catalogue des dix, puis R1.1/R1.2 et A2.6/A8.3.
 - **Bloquants** : aucun.
 - **Journal** : [le 01/11](../../journal/2026-11-01/README.md).
 
@@ -122,7 +121,7 @@ styles · **C5** domaines · **C6** documentation · **C7** pensée — hors gra
 ## Ce qui reste
 
 **N2.h** — **close** (N2.i : 12,93 littérature, 33,83 anglais ; porte < 2,5 non atteinte) ;
-**Pensée** — **DRVM/native + lecture L** (AC-3/alpha-bêta/DRVF/banc/opérateurs/gold 180/attachement faits ; session `e181ce02`) ; **N4** — la consigne
+**Pensée** — **DRVM + lecture L** (AC-3/alpha-bêta/DRVF/banc/opérateurs/gold 180/attachement faits ; session `e181ce02`) ; **N4** — la consigne
 courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — close, limites nommées ; **R0.7** — gold/neuronal ; **R1.1/R1.2** — le contexte natif ; **S** — l'export au corpus.
 
 - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
