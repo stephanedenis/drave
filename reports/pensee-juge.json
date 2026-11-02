@@ -1,0 +1,15 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "126/126",
+ "juge": {
+  "questions": 19,
+  "avec_reference": 0,
+  "couverture": 0.0
+ },
+ "limites": [
+  "référence absente du gold",
+  "19 questions",
+  "heuristique seule"
+ ]
+}

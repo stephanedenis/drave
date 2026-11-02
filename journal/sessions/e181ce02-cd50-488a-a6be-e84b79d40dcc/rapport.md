@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 43.2 h |
-| Tours | 140 |
-| Messages | 1669 |
-| Appels d'outils | 1433 |
+| Durée | 43.4 h |
+| Tours | 141 |
+| Messages | 1678 |
+| Appels d'outils | 1440 |
 | Fichiers touchés | 25 |
-| Commandes | 1167 |
+| Commandes | 1173 |
 | Sous-agents | 2 |
-| Commits | 176 |
+| Commits | 177 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -315,6 +315,8 @@
 **Tour 139** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 140** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 141** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7431,6 +7433,58 @@ Je continue : prochain round, **la réponse par extraction** — mesurer ce que 
 - bash — Committer l'extraction
 - job_output
 
+**Synthèse produite :**
+
+⏵ Extraction : 19/19, une fausse victoire ; 125/125
+
+Le round 126 est livré : l'**extraction** trouve un GN pour **19/19** questions — mais c'est une **fausse victoire**, et la fiche le dit. Commit **`9bb25eef`**.
+
+\## Les sorties
+
+| sortie | source | **mesure** | nature |
+|---|---|---:|---|
+| surface | 587 phrases | 1,0000 | contrôle |
+| POS + spans | 587 phrases | 1,0000 | restitution |
+| résumé | 587 phrases | 0,7834 / 0,7472 | sémantique |
+| réponse (acte) | 19 questions | 1,0000 | contrat |
+| réponse au contenu | 19 questions | 0,0000 | modèle |
+| **extraction (GN)** | **19 questions** | **1,0000** | **fausse victoire** |
+
+**Ce que ça dit** :
+
+- **L'extraction trouve toujours un GN** (19/19) : il y a toujours un syntagme nominal dans une question ; ce n'est pas la réponse, c'est le **sujet**.
+- **La mesure est trompeuse** : 19/19 dirait « parfait » ; la fiche dit « le 19/19 mesure la présence d'un GN, pas la correction ». C'est le **contrôle négatif** du round.
+- **La frontière du modèle tient** : l'extraction ne remplace pas la réponse au contenu (0/19).
+- **Deux 1,0 qui ne veulent pas dire la même chose** : celui de l'acte est un contrat, celui de l'extraction est un artefact.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-reponse-extraction.md`](../../reports/rapport-pensee-reponse-extraction.md) ; JSON [`pensee-reponse-extraction.json`](../../reports/pensee-reponse-extraction.json) ; T122 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **125/125 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **533 fiches / 621 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` à jour.
+- L'horloge réelle est **11 h 53 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **Le juge des réponses** : un juge (humain ou modèle) pour mesurer la correction — la seule mesure qui compte.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **le juge des réponses** — distinguer un 1,0 de contrat d'un 1,0 de contenu.
+
+### Tour 141 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Vérifier si le gold porte des réponses
+- bash — Créer le juge et mesurer sa couverture
+- bash — Lister les 19 questions du gold
+- bash — Écrire la fiche du juge et la porte T123
+- bash — Trim README et passer toutes les portes
+- bash — Committer le juge
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7510,7 +7564,7 @@ Je continue : prochain round, **la réponse par extraction** — mesurer ce que 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1127 autres
+- … et 1133 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7834,4 +7888,5 @@ Je continue : prochain round, **la réponse par extraction** — mesurer ce que 
 - B13 — LA RÉPONSE : 19/19, L'ACTE COMMANDE LA SORTIE ; 123/123" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LA RÉPONSE"; then echo "COMMIT OK $i"; br
 - B13 — LA RÉPONSE AU CONTENU : 0/19, LA FRONTIÈRE DU MODÈLE ; 124/124" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÉPONSE AU CONTENU"; then echo "CO
 - B13 — LA RÉPONSE PAR EXTRACTION : 19/19, UNE FAUSSE VICTOIRE ; 125/125" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÉPONSE PAR EXTRACTION"; then ec
+- B13 — LE JUGE DES RÉPONSES : COUVERTURE 0/19, LA RÉFÉRENCE MANQUE ; 126/126" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "JUGE DES RÉPONSES"; then ec
 

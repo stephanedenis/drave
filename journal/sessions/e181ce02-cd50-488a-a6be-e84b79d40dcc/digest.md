@@ -30597,3 +30597,142 @@ timeout 2400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/miroir.py tools/pensee/autotest.py reports/rapport-pensee-reponse-extraction.md reports/pensee-reponse-extraction.json reports/README.md docs/implantation/moteur-de-pense … [522 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1167]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1167", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-reponse-extraction.json
+ create mode 100644 reports/rapport-pensee-reponse-extraction.md
+COMMIT OK 1
+9bb25eef B13 — LA RÉPONSE PAR EXTRACTION : 19/19, UNE FAUSSE VICTOIRE ; 125/125
+lun 02 nov 2026 11:53:48 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction : 19/19, une fausse victoire ; 125/125
+
+Le round 126 est livré : l'**extraction** trouve un GN pour **19/19** questions — mais c'est une **fausse victoire**, et la fiche le dit. Commit **`9bb25eef`**.
+
+## Les sorties
+
+| sortie | source | **mesure** | nature |
+|---|---|---:|---|
+| surface | 587 phrases | 1,0000 | contrôle |
+| POS + spans | 587 phrases | 1,0000 | restitution |
+| résumé | 587 phrases | 0,7834 / 0,7472 | sémantique |
+| réponse (acte) | 19 questions | 1,0000 | contrat |
+| réponse au contenu | 19 questions | 0,0000 | modèle |
+| **extraction (GN)** | **19 questions** | **1,0000** | **fausse victoire** |
+
+**Ce que ça dit** :
+
+- **L'extraction trouve toujours un GN** (19/19) : il y a toujours un syntagme nominal dans une question ; ce n'est pas la réponse, c'est le **sujet**.
+- **La mesure est trompeuse** : 19/19 dirait « parfait » ; la fiche dit « le 19/19 mesure la présence d'un GN, pas la correction ». C'est le **contrôle négatif** du round.
+- **La frontière du modèle tient** : l'extraction ne remplace pas la réponse au contenu (0/19).
+- **Deux 1,0 qui ne veulent pas dire la même chose** : celui de l'acte est un contrat, celui de l'extraction est un artefact.
+
+## L'état
+
+- Fiche : [`rapport-pensee-reponse-extraction.md`](../../reports/rapport-pensee-reponse-extraction.md) ; JSON [`pensee-reponse-extraction.json`](../../reports/pensee-reponse-extraction.json) ; T122 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **125/125 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **533 fiches / 621 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` à jour.
+- L'horloge réelle est **11 h 53 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+## La suite
+
+1. **Le juge des réponses** : un juge (humain ou modèle) pour mesurer la correction — la seule mesure qui compte.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **le juge des réponses** — distinguer un 1,0 de contrat d'un 1,0 de contenu.
+
+
+## Tour 141
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 127/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\nq=[p for p in ph if \"?\" in p[\"texte\"]]\nprint('questions', len(q))\nprint('avec reponse', sum(1 for p  … [202 caractères tronqués]`
+
+  ```
+questions 19
+avec reponse 0
+g013 Peux-tu venir ? | pragma {'acte': 'question'}
+r010 Tu viens demain ? | pragma {'acte': 'question'}
+r030 You come tomorrow? | pragma {'acte': 'question'}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/tests/linguistique/juge.py <<'PY'\n\"\"\"Le juge des réponses : la mesure qui manque — la correction, pas la présence.\n\nLe bloc ne répond pas au contenu (0/19) ; mais mesure-t-on seulement la *présence* d'une\nréponse ? … [1697 caractères tronqués]`
+
+  ```
+couverture du juge : {'questions': 19, 'avec_reference': 0, 'taux': 0.0}
+g013 | référence None | juge(None, ref) 0.0
+r010 | référence None | juge(None, ref) 0.0
+r030 | référence None | juge(None, ref) 0.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nph=charger()\nfor p in [p for p in ph if \"?\" in p[\"texte\"]]:\n    print(p['id'], '|', p['langue'], '|', p['texte'])\ … [55 caractères tronqués]`
+
+  ```
+g013 | fr | Peux-tu venir ?
+r010 | fr | Tu viens demain ?
+r030 | en | You come tomorrow?
+r304 | fr | Viens-tu demain ?
+r314 | en | Do you come tomorrow?
+s009 | fr | le lent village cherche?
+s043 | fr | Hugo écoute?
+s046 | fr | le canard observe?
+s062 | fr | Emma écoute?
+s074 | fr | le doux livre trouve?
+s079 | fr | ce rapide renard prépare?
+s083 | fr | la chanson marche?
+s096 | fr | ma douce forêt nage?
+s098 | fr | Hugo compte?
+s099 | fr | ce jardin cherche?
+s104 | fr | Paul observe?
+s129 | fr | une lettre finit?
+s130 | fr | un nuage commence?
+s154 | fr | les calme cheval observe?
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-juge.md <<'MD'\n# B13 — le juge des réponses : sa couverture est 0/19\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **126/126 portes** : le * … [6029 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 534 fiche(s) · 622 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2806 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-reponse-extraction.md`](rapport-pensee-reponse-extraction.md) | **B13** — l'extraction : 19/19, une fausse victo … [608 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/juge.py tools/pensee/autotest.py reports/rapport-pensee-juge.md reports/pensee-juge.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md … [487 caractères tronqués]`

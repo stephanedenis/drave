@@ -35504,3 +35504,20 @@ CEGEP encyclopedia job 3510124
 ⏵ Encyclopedia of Algorithms : rendu 221/500 pages (option `--deja 41` et `--max-pages 500` actives)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-ency.log 2>/dev/null; tail -3 /tmp/ocr-cegep-ency.log; ps -p 3510124 -o pid,etime= 2>/dev/null || echo \"job fini\"; ls -la reports/ocr-pdf-cegep.json; cat /proc/3510124/io 2>/ … [155 caractères tronqués]`
+
+  ```
+11:54
+1
+  CEGEP · Algorithms Illuminated (Part 2) Graph Al · 221 p · 342432 car
+    PID            
+3510124       18:21
+-rw-r--r--. 1 stephane stephane 1580  2 nov 11:26 reports/ocr-pdf-cegep.json
+rchar: 4608894008
+wchar: 180405303
+  ```
+
+### 🤖 Assistant
+
+⏵ Le run a repris au 42e PDF (Part 2 re-océrisé) et rend l'Encyclopedia en 221/500 ; cutoff à 12 h 05
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-ency.log 2>/dev/null; tail -4 /tmp/ocr-cegep-ency.log; ps -p 3510124 -o pid,etime= 2>/dev/null || echo \"job fini\"; for d in /tmp/ocr-pdf-*/; do echo \"$d $(ls \"$d\" 2>/dev/n … [180 caractères tronqués]`
