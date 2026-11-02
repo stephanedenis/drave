@@ -17164,3 +17164,40 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1014", "timeout_ms": 300000, "wait": true}`
+
+  ```
+course 1
+course 2
+course 3
+course 4
+course 5
+d59b090b ÉTAT — COMPTEURS RÉELS (480/571)
+3b68143 FUSION — LE BANC DE STRUCTURES : PRAGMATIQUE, EXPORT ET ANALYSEUR EN UN SEUL ARBRE
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; git log --oneline -2 -- reports/rapport-s-analyseur.md; git ls-tree HEAD tools/structures; git status --short | grep -E \"rapport-s-analyseur|tools/structures|en-cours\" | head -4; date '+%H:%M'", "description": … [37 caractères tronqués]`
+
+  ```
+d59b090b ÉTAT — COMPTEURS RÉELS (480/571)
+3013f583 ÉTAT — COMPTEURS ALIGNÉS (572 JSON)
+a8d58b3f B13 — LA COURBE DU SEUIL : 0,35→0,50, 0 → 80 % → 100 %, CREUX À 0,45 ; 79/79
+160000 commit 3b68143f3e805372c0fe2fcdbc2f574b95c7e9d3	tools/structures
+?? reports/rapport-s-analyseur.md
+02:15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"analyseur 7/7\" docs/pilotage/en-cours.md; export GIT_INDEX_FILE=/tmp/index.n2; git read-tree HEAD && git add reports/rapport-s-analyseur.md && git commit -q -m \"S — L'ANALYSEUR CONTRE LES STRUCTURES ÉCRITES À LA MAIN : 7/ … [569 caractères tronqués]`
+
+  ```
+1
+[stderr]
+  ❌ commit refusé : 1 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/rapport-s-analyseur.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\*\\*Mis à jour : 2026-11-0\\d, \\d{2} h \\d{2} HNE \\(heure locale, EST\\)\\.\\*\\*\",\n           \"**Mis à jour … [900 caractères tronqués]`

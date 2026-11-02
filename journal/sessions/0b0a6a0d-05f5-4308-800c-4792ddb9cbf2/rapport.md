@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 33.9 h |
+| Durée | 34.0 h |
 | Tours | 18 |
-| Messages | 1363 |
-| Appels d'outils | 1265 |
+| Messages | 1366 |
+| Appels d'outils | 1268 |
 | Fichiers touchés | 11 |
-| Commandes | 1014 |
+| Commandes | 1017 |
 | Sous-agents | 0 |
-| Commits | 57 |
+| Commits | 59 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*299 appels d'outils.* Actions notables :
+*302 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 203 autres
+- … et 206 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 974 autres
+- … et 977 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1234,4 +1234,6 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = r
 - FUSION — LE BANC DE STRUCTURES : PRAGMATIQUE, EXPORT ET ANALYSEUR EN UN SEUL ARBRE  Réunit les trois lignes du sous-projet : le niveau pragmatique (statuts, dou
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = r
+- S — L'ANALYSEUR CONTRE LES STRUCTURES ÉCRITES À LA MAIN : 7/7 SÉQUENCES, 93,9 % DE COUVERTURE  Sur les 7 phrases du banc, l'analyseur retrouve la séquence de ty
+- S — L'ANALYSEUR CONTRE LES STRUCTURES ÉCRITES À LA MAIN : 7/7 SÉQUENCES, 93,9 % DE COUVERTURE  Sur les 7 phrases du banc, l'analyseur retrouve la séquence de ty
 

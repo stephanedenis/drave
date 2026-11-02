@@ -23150,3 +23150,85 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichi … [430 caractères tronqués]`
+
+  ```
+disk 481 571
+  revue de documentation · 481 fiche(s) · 571 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-875]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-875", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[master d59b090b] ÉTAT — COMPTEURS RÉELS (480/571)
+ 15 files changed, 61 insertions(+), 27 deletions(-)
+d59b090b ÉTAT — COMPTEURS RÉELS (480/571)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Courbe du seuil : 0,35→0,50, 0 → 80 % → 100 %, creux à 0,45 ; 79/79
+
+Le round 80 du goal est livré : la **courbe complète** du seuil d'oubli est tracée — un **plateau gradué** avec un creux local à 0,45. Commit **`a8d58b3f`** (et les compteurs dans `d59b090b`).
+
+## La courbe
+
+Même monde que T73 (look à l'épisode 3000), facteurs 0,35 → 0,50 par pas de 0,01, 5 graines, 5 exécutions.
+
+| facteur | buts | taux |
+|---|---:|---:|
+| 0,35 | 0/25 | 0,00 |
+| 0,36–0,38 | 20/25 | 0,80 |
+| 0,39–0,44 | 25/25 | 1,00 |
+| **0,45** | **20/25** | **0,80** |
+| 0,46–0,50 | 25/25 | 1,00 |
+
+**Ce que ça dit** :
+
+- **La courbe est graduée** : 0,80 puis 1,00 ; le seuil est un **plateau**, pas une marche.
+- **Un creux à 0,45** (20/25) : au bord, une graine perd la porte ; le creux est **local** et n'inverse pas la tendance.
+- **Le plateau 100 %** couvre 0,39–0,44 et 0,46–0,50 : la politique est robuste au-delà de 0,39.
+- **La négative reste** : 0,35 → 0/25.
+
+## L'état
+
+- Fiche : [`rapport-pensee-courbe-seuil.md`](../../reports/rapport-pensee-courbe-seuil.md) ; JSON [`pensee-seuil-courbe.json`](../../reports/pensee-seuil-courbe.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T76 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **79/79 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **481 fiches / 571 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `rapport-n2-multilingue-34m-distille.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- L'autotest prend **~11 min** (T73–T76 : 113 entraînements) ; les portes tiennent avec `timeout 1200`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **20 graines** : lisser le creux et le seuil.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round lisse la courbe avec **20 graines**.
+
+
+## Tour 94
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 81/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [3177 caractères tronqués]`
+
+  ```
+d59b090b ÉTAT — COMPTEURS RÉELS (480/571)
+ok
+4000 q 116 phase 0: 20 /20 phase 1: 20 /20 pas 8.0
+8000 q 107 phase 0: 20 /20 phase 1: 20 /20 pas 8.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T76 la courbe complète            0,35 → 0,50 : 0 puis 80 % puis 100 % (un creux)\\n\",\n\"  T76 la courbe complète        … [1417 caractères tronqués]`

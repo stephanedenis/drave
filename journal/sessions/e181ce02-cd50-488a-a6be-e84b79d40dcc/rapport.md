@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 33.6 h |
-| Tours | 93 |
-| Messages | 1219 |
-| Appels d'outils | 1084 |
+| Tours | 94 |
+| Messages | 1223 |
+| Appels d'outils | 1086 |
 | Fichiers touchés | 25 |
-| Commandes | 875 |
+| Commandes | 877 |
 | Sous-agents | 2 |
 | Commits | 120 |
 | Compactages de contexte | 3 |
@@ -217,6 +217,8 @@
 **Tour 92** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 93** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 94** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4940,6 +4942,55 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round trace la **courbe compl�
 - bash — Aligner les compteurs et committer
 - bash — Poser les compteurs réels du disque
 
+**Synthèse produite :**
+
+⏵ Courbe du seuil : 0,35→0,50, 0 → 80 % → 100 %, creux à 0,45 ; 79/79
+
+Le round 80 du goal est livré : la **courbe complète** du seuil d'oubli est tracée — un **plateau gradué** avec un creux local à 0,45. Commit **`a8d58b3f`** (et les compteurs dans `d59b090b`).
+
+\## La courbe
+
+Même monde que T73 (look à l'épisode 3000), facteurs 0,35 → 0,50 par pas de 0,01, 5 graines, 5 exécutions.
+
+| facteur | buts | taux |
+|---|---:|---:|
+| 0,35 | 0/25 | 0,00 |
+| 0,36–0,38 | 20/25 | 0,80 |
+| 0,39–0,44 | 25/25 | 1,00 |
+| **0,45** | **20/25** | **0,80** |
+| 0,46–0,50 | 25/25 | 1,00 |
+
+**Ce que ça dit** :
+
+- **La courbe est graduée** : 0,80 puis 1,00 ; le seuil est un **plateau**, pas une marche.
+- **Un creux à 0,45** (20/25) : au bord, une graine perd la porte ; le creux est **local** et n'inverse pas la tendance.
+- **Le plateau 100 %** couvre 0,39–0,44 et 0,46–0,50 : la politique est robuste au-delà de 0,39.
+- **La négative reste** : 0,35 → 0/25.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-courbe-seuil.md`](../../reports/rapport-pensee-courbe-seuil.md) ; JSON [`pensee-seuil-courbe.json`](../../reports/pensee-seuil-courbe.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T76 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **79/79 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **481 fiches / 571 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `rapport-n2-multilingue-34m-distille.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- L'autotest prend **~11 min** (T73–T76 : 113 entraînements) ; les portes tiennent avec `timeout 1200`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **20 graines** : lisser le creux et le seuil.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round lisse la courbe avec **20 graines**.
+
+### Tour 94 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Tester la vérité qui change (porte cachée)
+- bash — Ajouter la porte T77 (vérité qui change)
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5019,7 +5070,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round trace la **courbe compl�
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 835 autres
+- … et 837 autres
 
 ## 4. Mesures et résultats marquants
 
