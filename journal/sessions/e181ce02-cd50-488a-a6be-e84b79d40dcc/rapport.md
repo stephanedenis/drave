@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 31.9 h |
-| Tours | 74 |
-| Messages | 1045 |
-| Appels d'outils | 948 |
+| Tours | 75 |
+| Messages | 1051 |
+| Appels d'outils | 952 |
 | Fichiers touchés | 25 |
-| Commandes | 768 |
+| Commandes | 772 |
 | Sous-agents | 2 |
 | Commits | 94 |
 | Compactages de contexte | 3 |
@@ -179,6 +179,8 @@
 **Tour 73** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 74** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 75** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3947,6 +3949,53 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round rend la bascule **fréqu
 - bash — Committer la bascule fréquente
 - job_output
 
+**Synthèse produite :**
+
+⏵ Bascule fréquente : 1/50, v final 0,78, 20/20, 8,0 pas ; 60/60
+
+Le round 61 du goal est livré : même une bascule **toutes les 50 épisodes** est absorbée. Commit **`fa2d7fad`**.
+
+\## La bascule fréquente
+
+Même monde que T56, mais p = 1/50 par épisode (au lieu de 1/500) : le régime change ~16 fois plus souvent, la fenêtre de 50 ne voit qu'un régime à la fois.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| 4000 | 20/20 | 0,32 | 783 | 8,0 |
+| **8000** | **20/20** | **0,78** | 826 | 8,0 |
+| bascule rare (T56) | 20/20 | 0,12 | 820 | 8,0 |
+
+**Ce que ça dit** :
+
+- **Même la bascule fréquente est absorbée** : 20/20, 8,0 pas ; la fenêtre de 50 est à l'échelle du régime (50 épisodes).
+- **v oscille** (0,32 puis 0,78) : il suit le dernier régime, pas une moyenne — c'est le comportement voulu.
+- **Le coût est nul** (8,0 pas) : la politique ne perd pas de temps à douter.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-frequent.md`](../../reports/rapport-pensee-frequent.md) ; JSON [`pensee-frequent.json`](../../reports/pensee-frequent.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T57 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **60/60 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **458 fiches / 551 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Bascule 1/10** : la fenêtre 50 devient trop lente ; mesurer la limite.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round pousse la bascule à **1/10** — la limite de la fenêtre.
+
+### Tour 75 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Tester la bascule très fréquente
+- bash — Ajouter la porte T58 (bascule très fréquente)
+- bash — Écrire la fiche de la bascule très fréquente
+- bash — Trim README et portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4026,7 +4075,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round rend la bascule **fréqu
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 728 autres
+- … et 732 autres
 
 ## 4. Mesures et résultats marquants
 

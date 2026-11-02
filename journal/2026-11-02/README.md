@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**14 commits** · **3 session(s)** · **7 thème(s)**
+**15 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 7 | [mesures.md](mesures.md) |
+| mesures | 8 | [mesures.md](mesures.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -45,6 +45,7 @@
 | 00:24 | `896a3df0` | B13 — LES RUPTURES RÉPÉTÉES : 0,9/0,1 ALTERNÉS, v FINAL 0,14, 20/20, 8,0 PAS ; 58/58 |
 | 00:26 | `9b4f0208` | PLAN — LA LIGNE D/R/A PORTE SES LIVRAISONS : DIX CORPUS FAITS, PDF/OCR, PRÉPA R1 |
 | 00:28 | `0fbb8692` | B13 — L'ALTERNANCE ALÉATOIRE : BASCULE 1/500, v FINAL 0,12, 20/20, 8,0 PAS ; 59/59 |
+| 00:32 | `fa2d7fad` | B13 — LA BASCULE FRÉQUENTE : 1/50, v FINAL 0,78, 20/20, 8,0 PAS ; 60/60 |
 
 ## Le récit de la journée (écrit à la main)
 

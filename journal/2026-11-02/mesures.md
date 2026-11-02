@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,6 +15,7 @@
 | 00:17 | `19da83fb` | B13 — LA RUPTURE : 90 % D'ERREUR, v FINAL 0,12, 20/20, 8,0 PAS ; 57/57 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
 | 00:24 | `896a3df0` | B13 — LES RUPTURES RÉPÉTÉES : 0,9/0,1 ALTERNÉS, v FINAL 0,14, 20/20, 8,0 PAS ; 58/58 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+19) |
 | 00:28 | `0fbb8692` | B13 — L'ALTERNANCE ALÉATOIRE : BASCULE 1/500, v FINAL 0,12, 20/20, 8,0 PAS ; 59/59 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
+| 00:32 | `fa2d7fad` | B13 — LA BASCULE FRÉQUENTE : 1/50, v FINAL 0,78, 20/20, 8,0 PAS ; 60/60 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
 
 ## Chiffres du jour
 
@@ -35,6 +36,7 @@
 - [reports/rapport-pensee-alternance.md](../../reports/rapport-pensee-alternance.md)
 - [reports/rapport-pensee-chaotique.md](../../reports/rapport-pensee-chaotique.md)
 - [reports/rapport-pensee-derive.md](../../reports/rapport-pensee-derive.md)
+- [reports/rapport-pensee-frequent.md](../../reports/rapport-pensee-frequent.md)
 - [reports/rapport-pensee-glisse.md](../../reports/rapport-pensee-glisse.md)
 - [reports/rapport-pensee-rupture.md](../../reports/rapport-pensee-rupture.md)
 - [reports/rapport-r1-preparation.md](../../reports/rapport-r1-preparation.md)
