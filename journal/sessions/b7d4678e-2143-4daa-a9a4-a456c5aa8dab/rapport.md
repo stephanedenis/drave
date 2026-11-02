@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 2 |
-| Messages | 85 |
-| Appels d'outils | 101 |
+| Messages | 110 |
+| Appels d'outils | 130 |
 | Fichiers touchés | 5 |
-| Commandes | 61 |
+| Commandes | 83 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -49,7 +49,7 @@
 
 ### Tour 2 — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État  … [367 caractères tronqués]
 
-*90 appels d'outils.* Actions notables :
+*119 appels d'outils.* Actions notables :
 
 - read
 - get_goal
@@ -65,7 +65,7 @@
 - bash — Locate scan census sources
 - bash — Search 127 mentions across docs
 - bash — Read session report around next steps
-- … et 54 autres
+- … et 76 autres
 
 **Synthèse produite :**
 
@@ -125,7 +125,7 @@
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 21 autres
+- … et 43 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -186,4 +186,6 @@
 - **T2** `| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; `
 - **T2** `| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | 🔬 **v0** : 7 phrases + **générateur** + **pragmatique** (statuts, double sens conservé, **niveaux 0–4**, ni`
 - **T2** `| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67`
+- **T2** `- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typogly`
+- **T2** `- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (niveaux 0–4), export ; analyseur **7/7** séquences, **93,9 %** de couverture, **19 tests** ; [`analyseur`](..`
 

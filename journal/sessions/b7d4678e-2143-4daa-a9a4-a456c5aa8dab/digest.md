@@ -1784,3 +1784,549 @@ CEGEP · document%20de%20revision_pages_16a25_832 · 10 p · 15306 car
 … [1019 caractères tronqués]
   ```
 
+- **bash** `{"command": "sed -n '1,80p' journal/sessions/README.md", "description": "Read session lifecycle documentation"}`
+
+  ```
+# Sessions — plans vivants et archives
+
+Deux choses différentes vivent ici :
+
+- **`<id>/plan.md`** — le **mandat vivant** d'une session active : périmètre, fichiers réservés,
+  heartbeat, prochaine action, état. Il s'écrit **avant** de modifier `docs/pilotage/en-cours.md`
+  et se consulte avec `python3 tools/sessions.py --status`.
+- **`<id>/rapport.md`** et **`<id>/digest.md`** — l'**archive** d'une session terminée, générée
+  par `tools/session_report.py` / `tools/archive_sessions.py` ; les deux outils lisent
+  `session.jsonl.zstd` **et** `session.v4.jsonl.zstd` (les traces récentes).
+- **`<id>/cloture.md`** — la **clôture écrite à la main** quand le rapport automatique ne dit pas
+  ce qui est livré et ce qui reste (`c3d0f0bd`, `f0969e87`) ; `N2-GPU` n'a pas de trace DSH et son
+  rapport est écrit à la main.
+
+Un plan n'est pas un état : `en-cours` reste la seule source de l'état. Un plan périmé (heartbeat
+> 45 min) est signalé ; une session qui reprend un périmètre périmé le rafraîchit d'abord.
+
+Modèle : [`_modele/plan.md`](_modele/plan.md). Vérification : `python3 tools/sessions.py --check`.
+
+Migration douce : `python3 tools/sessions.py --depuis-en-cours` crée, pour chaque sessio
+… [222 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/journal_auto.py --help 2>&1 | head -40; echo \"---\"; head -20 journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md 2>/dev/null; echo \"--- rapport head ---\"; head -15 journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md 2>/dev/null", "description": " … [43 caractères tronqués]`
+
+  ```
+usage: journal_auto.py [-h] [--jour JOUR] [--depuis DEPUIS] [--lister]
+                       [--dry-run] [--quiet]
+
+options:
+  -h, --help       show this help message and exit
+  --jour JOUR      AAAA-MM-JJ (défaut : aujourd'hui)
+  --depuis DEPUIS  générer chaque jour depuis cette date
+  --lister         montrer les thèmes et leurs mots-clés
+  --dry-run
+  --quiet
+---
+# Plan de session — N2.h, le mètre propre
+
+> **Mandat ouvert** le 2026-10-31 22 h 30 HAE depuis [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md)
+> — mandat libre de 10 h (nuit du 31/10 au 1/11). Le heartbeat est celui de l'état.
+
+- **Session** : `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2`
+- **Rôle** : calcul : distillation ; corpus ; évaluation
+- **Périmètre** : N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+- **Fichiers réservés** : `data/`, `tools/corpus*`, `tools/eval_n2_propre.py`,
+  `tools/distiller_budget.py`, `reports/n2-*`, `work/n2h/`,
+  `journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/`
+- **Heartbeat** : 2026-11-01 08:35 EST
+- **Objectif final** : un **mètre honnête** pour N2 — corpus dédupliqué (0 % de fenêtres de
+  validation dans l'entraînement), chaîne refaite dessus
+… [1047 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/session_report.py --help 2>&1 | head -30; echo \"---\"; python3 tools/archive_sessions.py --help 2>&1 | head -30", "description": "Inspect session report and archive tools"}`
+
+  ```
+usage: session_report.py [-h] [--repo REPO] [--session SESSION] [--quiet]
+
+options:
+  -h, --help         show this help message and exit
+  --repo REPO
+  --session SESSION
+  --quiet
+---
+usage: archive_sessions.py [-h] [--repo REPO] [--quiet]
+
+options:
+  -h, --help   show this help message and exit
+  --repo REPO
+  --quiet
+  ```
+
+- **bash** `{"command": "grep -n \"État\" journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/plan.md; ls journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/; echo \"--- c3d0 cloture ---\"; head -30 journal/sessions/c3d0f0bd-e344-4600-a023-0ed50d25b48b/cloture.md 2>/dev/null", "description": "See closure a … [27 caractères tronqués]`
+
+  ```
+24:- **État** : terminé
+digest.md
+plan.md
+rapport.md
+session.v4.jsonl.zstd
+--- c3d0 cloture ---
+# Session `c3d0f0bd` — fermée le 2026-10-29 à 18 h 35
+
+> **Id DSH** : `c3d0f0bd-e344-4600-a023-0ed50d25b48b`.
+> **Rôle** : session **pair** (état écrit sur accord de l'humain) — les trois blocs structurels
+> de R4, le miroir entrée/sortie, deux chantiers A/B mesurés, le graphe du backlog.
+> **Clôture** : cycle autonome de plus de trois heures demandé par l'humain.
+
+## Ce qui a été fait
+
+- **R4.1 — le bloc tableaux** : 35 tableaux, **996 cellules**, **802** exactes à leur tranche de
+  source, `filtre`/`jointure`/`agrégat`, texte plat **0/3**. Fiche
+  [`rapport-r41-bloc-tableaux.md`](../../../reports/rapport-r41-bloc-tableaux.md), commit `7fb1c8a6`.
+- **R4.2 — le bloc code** : **294/294** fichiers de `tools/` (453 038 nœuds), **24/24** extraits
+  exécutés, **7/7** refus nommés, texte seul **0/3**. Fiche
+  [`rapport-r42-bloc-code.md`](../../../reports/rapport-r42-bloc-code.md), commit `4ccf641f`.
+- **R4.3 — le bloc maths** : **32/32** formules exactes et confirmées par **sympy**, **10/10**
+  dérivées, **6/6** équations, surface **0/3**. Fiche
+  [`rapport-r43-bloc-maths.md`](../../../reports
+… [1065 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-49"}`
+
+  ```
+CEGEP · document%20de%20revision_pages_1a11_5218 · 10 p · 11449 car
+  CEGEP · document%20de%20revision_pages_26a30_853 · 5 p · 6002 car
+[status: running]
+  ```
+
+- **bash** `{"command": "cat reports/ocr-pdf-cegep-contamination.json", "description": "Read pilot contamination control JSON"}`
+
+  ```
+{
+ "train": "data/corpus_ocr_cegep/train.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 20441,
+  "par_split": {
+   "val.txt": {
+    "troncons": 603,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 0,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ },
+ "recouvrement_eval": [
+  {
+   "fichier": "fr-xnli.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "fr-udhr.txt",
+   "fenetre": 128,
+   "fenetres": 24,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "en-xnli.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  }
+ ],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 302,
+  "par_split": {
+   "val.txt": {
+    "troncons": 11,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 0,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}
+  ```
+
+- **bash** `{"command": "find data -name \"fr-xnli.txt\" -o -name \"fr-udhr.txt\" -o -name \"en-xnli.txt\" 2>/dev/null | head; echo \"---\"; python3 tools/verifie_contamination.py --train data/corpus_ocr_cegep/train.txt --val data/corpus_ocr_cegep/val.txt --test data/corpus_ocr_cegep/test.txt --taille-troncon 8 … [98 caractères tronqués]`
+
+  ```
+---
+  --pas PAS
+  --echantillon ECHANTILLON
+  --taille-troncon TAILLE_TRONCON
+                        0 = lignes ; 8192 = fenêtres de 8 Ko (texte intégral)
+  --sortie SORTIE
+  ```
+
+- **bash** `{"command": "find . -name \"fr-xnli.txt\" -o -name \"fr-udhr.txt\" -o -name \"en-xnli.txt\" 2>/dev/null | head; echo \"---\"; grep -rn \"fr-xnli\" reports/rapport-ocr-cegep.md reports/rapport-ocr-pdf.md | head", "description": "Find eval file paths"}`
+
+  ```
+./work/dr/eval/en-xnli.txt
+./work/dr/eval/fr-xnli.txt
+./work/dr/eval/fr-udhr.txt
+---
+reports/rapport-ocr-cegep.md:26:| recouvrement éval | `fr-xnli.txt` **0/40**, `fr-udhr.txt` **0/24**, `en-xnli.txt` **0/40** |
+reports/rapport-ocr-cegep.md:36:`verifie_contamination.py --taille-troncon 8192` : **54 fenêtres de 8 Ko** en train, **11** en val, **0 duplication** entre splits. Recouvrement avec les évaluations **mesuré** : `fr-xnli.txt` **0/40**, `fr-udhr.txt` **0/24**, `en-xnli.txt` **0/40** — aucune fenêtre trouvée.
+reports/rapport-ocr-pdf.md:26:| recouvrement éval | `fr-xnli.txt` **0/40**, `fr-udhr.txt` **0/24**, `en-xnli.txt` **0/40** |
+reports/rapport-ocr-pdf.md:36:`verifie_contamination.py --taille-troncon 8192` : **1784 fenêtres de 8 Ko** en train, **115** en val, **0 duplication** entre splits (le val porte un livre, le test aucun). Recouvrement avec les évaluations **mesuré** : `fr-xnli.txt` **0/40**, `fr-udhr.txt` **0/24**, `en-xnli.txt` **0/40** — aucune fenêtre trouvée.
+  ```
+
+- **job_output** `{"job_id": "bash-49"}`
+
+  ```
+CEGEP · document%20de%20revision_pages_31a40_306 · 10 p · 12958 car
+  CEGEP · document%20de%20revision_pages_41a45_836 · 5 p · 8380 car
+[status: running]
+  ```
+
+- **bash** `{"command": "grep -n \"Complete Us Patents\\|MicroPython Programming\\|ITIL service\\|Rust in Action\\|Information and self\" work/ocr/scans-uniques.txt; echo \"--- total lines ---\"; wc -l work/ocr/scans-uniques.txt", "description": "Locate large scans in worklist order"}`
+
+  ```
+41:/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Classes/3TB-Seagate/Complete Us Patents Of Nikola Tesla Free Energy Electricity Alternative () (z-lib.org).pdf
+56:/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Classes/ITIL/ITIL service design by Vernon Lloyd Sharon Taylor Stationery Office. London. Great Britain. Office of Government Commerce.pdf
+69:/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/Rust/Rust in Action (MEAP) by T.S. McNamara (z-lib.org).pdf
+70:/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/SW Engineering/Information and self-organization (Hermann Haken) (z-lib.org).pdf
+74:/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/Hardware/MicroPython Programming with ESP32 and ESP8266 by Rui Santos, Sara Santos (z-lib.org).pdf
+--- total lines ---
+91 work/ocr/scans-uniques.txt
+  ```
+
+- **bash** `{"command": "python3 tools/detecte_scans_pdf.py --racine CEGEP --sortie reports/ocr-pdf-cegep-detection.json --liste work/ocr/scans-uniques2.txt --ouvriers 8", "description": "Measure true scans and write detection JSON", "run_in_background": true}`
+
+  ```
+started background job bash-59
+  ```
+
+- **bash** `{"command": "sed -n '28,48p' docs/pilotage/roadmap.md", "description": "Read roadmap around D line"}`
+
+  ```
+| chantier | ce qu'il couvre | état | prochaine action |
+|---|---|---|---|
+| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** ; **A2.6/A8.3 : le [lot](../theorie/glossaire/entrees/lot.md) ne divise pas les lectures denses (+27 % calcul, PPL −0,006 %)** | **A2.6** (experts : A6.2 bloqué) ; le lot ≥ 2 assumé |
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + 
+… [4908 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '35,45p' docs/pilotage/plan-travail.md; echo \"--- 190-200 ---\"; sed -n '190,200p' docs/pilotage/plan-travail.md", "description": "Read plan-travail D/R-A lines"}`
+
+  ```
+| session | mandat | chantiers | charge | prochaine action |
+|---|---|---|---|---|
+| **N2 — le natif (à ouvrir)** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | **N2.ac** (1,02 Go, 60 k pas) : **3,49** domaine / **6,03** littérature — le modèle de production ; prochaine action : **200 k pas**, puis R1.1/R1.2. **Aucune session active.** |
+| **L/B13 — en pause** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | **140/140**, gold **432**, coréférence **116 liens** ; le cycle est committé. Reprise : `e181ce02` (`--resume`), puis **gold neuronal** / **DRVM/native** (bloqué). |
+| **S — les structures (à ouvrir)** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | l'analyseur plus riche (rôles, subordonnées), l'export vers le corpus. **Aucune session DSH ; sous-module `tools/structures`.** |
+| **D/R/A — en pause** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | 
+… [1354 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md; echo \"--- N2/S sections? ---\"; grep -n \"0733c5bb\\|29ad180d\" docs/pilotage/en-cours.md || echo \"absent\"; echo \"--- sessions ---\"; python3 tools/sessions.py --status 2>&1 | head -12", "description":  … [39 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 11879 16:30:02 docs/pilotage/en-cours.md
+-rw-r--r--. 1 stephane stephane 43292 16:23:48 docs/pilotage/roadmap.md
+--- N2/S sections? ---
+10:> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; les GPU sont
+37:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
+39:- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+51:- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+53:### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+55:- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+68:- **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
+107:  **session `29ad180d`** ouverte le 02/11 16 h 19 — analyseur rôles/subordonnées en cours.
+110:  `0733c5bb`** ouverte le 02/11 16 h 17 — **200 k pas en cours** ; [`n2-canaux`](../../reports/rapport-n2-canal-34m.md),
+137:| **N — le natif** | **N2, N3, N4** | N2 : **N2.a
+… [1640 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/sessions.py --check --strict; echo \"[exit $?]\"", "description": "Re-run strict session check"}`
+
+  ```
+⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+[exit 0]
+  ```
+
+- **job_output** `{"job_id": "bash-49"}`
+
+  ```
+CEGEP · document%20de%20revision_pages_46a55_301 · 10 p · 11325 car
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-59"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "sed -n '1,75p' docs/pilotage/en-cours.md", "description": "Read updated en-cours session sections"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-02, 16 h 24 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+> [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+> [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+>
+> **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
+> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; les GPU sont
+> sains ; reprise par `dsh --profile dsh-tui --resume <id>` ; runbook dans
+> [`plan-travail.md`](plan-travail.md) § 9.
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+
+### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+
+- **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/53
+… [4034 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '75,155p' docs/pilotage/en-cours.md", "description": "Read en-cours D/R/A section and counters"}`
+
+  ```
+- **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels.
+- **Stratégie** : v0 petit et mesuré, GPU de N2 intacts.
+- **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
+- **Fait** : B13 **140/140**, gold **432**, coréférence **116 liens** ; **R0.7** — 9 niveaux,
+  **398 langues à 0,9687** ; **R4.4** — trois limites nommées.
+- **Ce qu'elle fait** : le cycle **140/140** est committé ; reprise à **16 h 16**.
+- **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
+- **Prochaine action** : **gold neuronal** (modèle local) ; **DRVM/native** bloqué.
+- **Bloquants** : **neuronal réel bloqué** (`llama-cli`, taggers, poids) ; le mock reste un contrat.
+- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **D/R/A** — texte intégral, PDF/OCR, prépa R1.1/R1.2, A2.6/A8.3.
+- **Plan** : texte intégral, PDF, OCR, glossaire.
+- **Ambit
+… [4629 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-49"}`
+
+  ```
+CEGEP · document%20de%20revision_pages_56a64_225 · 9 p · 14663 car
+  CEGEP · 14004-K-A111-réfection classes 3 nouveau · 1 p · 3239 car
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-59"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,pcpu,rss,args -p 56494 2>/dev/null | tail -2; echo \"--- log lines ---\"; wc -l work/ocr/run-cegep-02.log; tail -3 work/ocr/run-cegep-02.log; echo \"--- temp ---\"; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) pages, $(du -sh $d … [75 caractères tronqués]`
+
+  ```
+PID     ELAPSED %CPU   RSS COMMAND
+  56494       03:27  0.0 22828 python3 tools/ocr_pdf.py --liste work/ocr/scans-uniques.txt --racine CEGEP --sortie data/corpus_ocr_cegep --manifeste reports/ocr-pdf-cegep.json --ouvriers 8
+--- log lines ---
+10 work/ocr/run-cegep-02.log
+  CEGEP · document%20de%20revision_pages_46a55_301 · 10 p · 11325 car
+  CEGEP · document%20de%20revision_pages_56a64_225 · 9 p · 14663 car
+  CEGEP · 14004-K-A111-réfection classes 3 nouveau · 1 p · 3239 car
+--- temp ---
+/tmp/ocr-pdf-w_64l6bc: 1 pages, 3,2M
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py --help 2>&1 | head -25; echo \"---\"; python3 tools/verifie_en_cours.py --help 2>&1 | head -20", "description": "Inspect documentation review and state checks"}`
+
+  ```
+revue de documentation · 551 fiche(s) · 637 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 550 fichiers, le disque en a 551
+     · compteurs : en-cours.md dit 636 JSON, le disque en a 637
+---
+  en-cours · 1625 mots · 7 sections · 5 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "ls -lt reports/*.json | head -4; echo \"--- md ---\"; ls -lt reports/*.md | head -4; echo \"--- job ---\"; jobs 2>/dev/null | head", "description": "Check newest result files"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane     395  2 nov 16:31 reports/s-banque-structures.json
+-rw-r--r--. 1 stephane stephane     253  2 nov 14:40 reports/pensee-vrais-absents.json
+-rw-r--r--. 1 stephane stephane     258  2 nov 14:23 reports/pensee-absents.json
+-rw-r--r--. 1 stephane stephane     192  2 nov 14:15 reports/pensee-liens-classes.json
+--- md ---
+-rw-r--r--. 1 stephane stephane  8798  2 nov 16:31 reports/rapport-s-analyseur-roles.md
+-rw-r--r--. 1 stephane stephane 73245  2 nov 15:55 reports/INDEX.md
+-rw-r--r--. 1 stephane stephane 23030  2 nov 14:40 reports/README.md
+-rw-r--r--. 1 stephane stephane  3166  2 nov 14:40 reports/rapport-pensee-vrais-absents.md
+--- job ---
+[stderr]
+ls: write error: Broken pipe
+ls: write error: Broken pipe
+  ```
+
+- **job_output** `{"job_id": "bash-59"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime,pcpu -p 56494 | tail -1", "description": "Check OCR progress count"}`
+
+  ```
+12 work/ocr/run-cegep-02.log
+  CEGEP · Objet de la dérogation-avec marquage.pdf · 1 p · 2066 car
+  CEGEP · Objet de la dérogation.pdf · 1 p · 1959 car
+      04:04  0.0
+  ```
+
+- **bash** `{"command": "grep -n \"add_argument\\|eval\" tools/verifie_contamination.py | head -20", "description": "Check contamination CLI options"}`
+
+  ```
+22:      --eval data/corpus_propre/test.txt --eval data/wikitext2_test.txt
+91:def recouvrement(train: pathlib.Path, eval_: pathlib.Path, fenetre: int,
+93:    with eval_.open("rb") as f:
+96:        return {"fichier": eval_.name, "fenetres": 0, "trouvees": 0, "taux": 0.0}
+106:    return {"fichier": eval_.name, "fenetre": fenetre, "fenetres": len(positions),
+112:    ap.add_argument("--train", type=pathlib.Path, required=True)
+113:    ap.add_argument("--val", type=pathlib.Path)
+114:    ap.add_argument("--test", type=pathlib.Path)
+115:    ap.add_argument("--eval", type=pathlib.Path, action="append", default=[])
+116:    ap.add_argument("--fenetre", type=int, default=128)
+117:    ap.add_argument("--pas", type=int, default=512)
+118:    ap.add_argument("--echantillon", type=int, default=40)
+119:    ap.add_argument("--taille-troncon", type=int, default=0,
+121:    ap.add_argument("--sortie", type=pathlib.Path)
+126:                "recouvrement_eval": [recouvrement(args.train, p, args.fenetre, args.pas,
+128:                                      for p in args.eval if p.exists()]}
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; echo \"--- detection ---\"; ps -o pid,etime,pcpu,args -C python3 | grep detecte_scans || true", "description": "Check OCR and detection progress"}`
+
+  ```
+12 work/ocr/run-cegep-02.log
+  CEGEP · Objet de la dérogation-avec marquage.pdf · 1 p · 2066 car
+  CEGEP · Objet de la dérogation.pdf · 1 p · 1959 car
+      04:15
+--- detection ---
+  59873       02:04  6.0 python3 tools/detecte_scans_pdf.py --racine CEGEP --sortie reports/ocr-pdf-cegep-detection.json --liste work/ocr/scans-uniques2.txt --ouvriers 8
+  ```
+
+- **bash** `{"command": "nl -ba work/ocr/scans-uniques.txt | sed -n '13,16p'; echo \"--- temp ---\"; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) pages\"; done; ps -eo pid,etime,pcpu,args | grep -E \"pdftoppm|tesseract\" | grep -v grep | head -5", "description": "Ident … [26 caractères tronqués]`
+
+  ```
+13	/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Dérogation/Objet de la dérogation.pdf
+    14	/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Dérogation/Photo 1 de la Zone De Travail.pdf
+    15	/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Dérogation/Photo 2 de la Zone De Travail.pdf
+    16	/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Dérogation/Photo des 2 stationnements.pdf
+--- temp ---
+/tmp/ocr-pdf-zzt5osxy: 1 pages
+  70182       00:05  100 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Dérogation/Photo des 2 stationnements.pdf /tmp/ocr-pdf-zzt5osxy/p
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1", "description": "OCR progress"}`
+
+  ```
+12 work/ocr/run-cegep-02.log
+  CEGEP · Objet de la dérogation-avec marquage.pdf · 1 p · 2066 car
+  CEGEP · Objet de la dérogation.pdf · 1 p · 1959 car
+      04:36
+  ```
+
+- **bash** `{"command": "head -30 data/corpus_ocr_cegep/train.txt; echo \"...\"; wc -c data/corpus_ocr_cegep/*.txt", "description": "Sample the OCR corpus output"}`
+
+  ```
+document%20de%20revision_pages_12a15_5421
+@
+®
+©
+@
+©
+©
+
+© © © © 6 © ©
+
+®
+
+Indique dans la colonne de droite le type de chacune des phrases suivantes.
+
+Le cirque est parti depuis longtemps.
+Le facteur est passé dans l'après-midi.
+Surtout ne crie pas! =. _
+Quand le printemps reviendra-t-il?
+
+Comme je voudrais avoir ce vélo!
+
+Quand est-ce que ce groupe viendra à Hull ?
+
+Ila manqué l’autobus ce matin.
+
+L'école est fermée à cause de la tempête de neige.
+Est-ce que tu connais la réponse à cette question ?
+N’achéte pas de choses inutiles.
+
+Combien as-tu de cours ce matin?
+...
+    0 data/corpus_ocr_cegep/test.txt
+96761 data/corpus_ocr_cegep/train.txt
+    0 data/corpus_ocr_cegep/val.txt
+96761 total
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; wc -c data/corpus_ocr_cegep/*.txt", "description": "OCR progress and corpus size"}`
+
+  ```
+14 work/ocr/run-cegep-02.log
+  CEGEP · Prises de vues sur la Zone De Travail.pd · 1 p · 1997 car
+  CEGEP · Facture Audet 2012-11-23 KMBT35020130107 · 2 p · 1690 car
+      04:59
+    0 data/corpus_ocr_cegep/test.txt
+96761 data/corpus_ocr_cegep/train.txt
+    0 data/corpus_ocr_cegep/val.txt
+96761 total
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -25", "description": "Run full documentation review"}`
+
+  ```
+revue de documentation · 551 fiche(s) · 637 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **job_output** `{"job_id": "bash-59"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ls -l --time-style=+%H:%M:%S reports/ocr-pdf-cegep-detection.json 2>/dev/null; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md; grep -n \"fichiers / JSON\" -A1 docs/pilotage/en-cours.md", "description": "Check detection JSON and en-cours counters"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 11890 16:36:57 docs/pilotage/en-cours.md
+125:| fichiers / JSON de résultats | **551** / **637** | `reports/*.md` / `reports/*.json` |
+126-| documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
+  ```
+

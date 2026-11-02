@@ -14,10 +14,13 @@
   `reports/README.md`, `reports/INDEX.md`, `AGENTS.md`, `tools/sessions.py`,
   `tools/porte-sessions.sh`, `tools/index_reports.py`, `tools/surveille_sessions.py`,
   `journal/sessions/536cd5d6-…/`.
-- **Heartbeat** : 2026-11-02 16:24 EST
-- **Prochaine action** : la **passe de portes** complète, lancée sur le **GPU 1** (le GPU 0 porte
-  N2) ; suivre les quatre sessions ouvertes (N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`,
-  D/R/A `fe3c05f0`) et lire le verdict au registre.
+- **Heartbeat** : 2026-11-02 16:37 EST
+- **Prochaine action** : la **passe de portes** complète, **reportée** — mesuré à 16 h 32 :
+  GPU 0 à **92 %** (N2, 1 650 MiB) et GPU 1 à **84 %** (`entrainer_rope.py`, 1 300 MiB), charge
+  **24** ; le doc `portes.md` interdit la passe sous mesure GPU. La sous-passe documentaire (8
+  portes) rend **7/8** : `porte-bloc-maths` rouge sur le seul critère de **coût** (×8,31 pour ×4),
+  **vert seul** trois fois (×4,24 / ×2,84 / ×4,12) — bruit de charge, pas régression. Relancer la
+  passe complète quand les deux runs N2 seront finis (200 k pas ≈ 3,3 h à 16,7 pas/s).
 - **État** : actif
 - **Plan** : 1) ~~audit des 111 sessions et du pilotage~~ ; 2) ~~plan de session~~ ; 3) **commits par
   flux** ; 4) **état cohérent** (140/140, gold 432, N2.ac, reboot) ; 5) **mandats** (N2, S, clôture

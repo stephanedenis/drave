@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 72 |
-| Appels d'outils | 108 |
+| Messages | 75 |
+| Appels d'outils | 112 |
 | Fichiers touchés | 6 |
-| Commandes | 87 |
+| Commandes | 91 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu reprends la session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`. Lis son plan, AGENTS.md  et docs/pilotage/en-cours. … [394 caractères tronqués]
 
-*108 appels d'outils.* Actions notables :
+*112 appels d'outils.* Actions notables :
 
 - bash — Show repo state and recent commits
 - bash — List root and sessions tool help
@@ -41,11 +41,11 @@
 - edit `/home/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md`
 - bash — Run strict session plan check
 - bash — Inspect the unlisted active plan
-- … et 82 autres
+- … et 86 autres
 
 **Synthèse produite :**
 
-⏵ 7B minimal sur les 180 phrases (4 requêtes parallèles) pour le chiffre complet
+⏵ Test de la vraie `Cascade` avec un tagger cached à confiance 0,6 (POS résiduel)
 
 ## 3. Travail accompli
 
@@ -102,7 +102,7 @@
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 47 autres
+- … et 51 autres
 
 ## 4. Mesures et résultats marquants
 

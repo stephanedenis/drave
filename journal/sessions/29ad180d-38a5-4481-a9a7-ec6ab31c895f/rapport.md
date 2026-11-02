@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 91 |
-| Appels d'outils | 105 |
+| Messages | 110 |
+| Appels d'outils | 125 |
 | Fichiers touchés | 7 |
-| Commandes | 69 |
+| Commandes | 85 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu es la session S (les structures, CPU). Lis AGENTS.md, docs/pilotage/en-cours.md,  docs/theorie/jeux-symboliques.md et … [565 caractères tronqués]
 
-*105 appels d'outils.* Actions notables :
+*125 appels d'outils.* Actions notables :
 
 - bash — Get session id and git status
 - read
@@ -41,7 +41,7 @@
 - bash — Search hub coordination mechanism
 - bash — Read sessions.py second half
 - bash — Read date and plan-travail territory rules
-- … et 73 autres
+- … et 89 autres
 
 **Synthèse produite :**
 
@@ -103,7 +103,7 @@ Je pose le plan et la réservation, puis je mesure l'état de l'analyseur sur un
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 29 autres
+- … et 45 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -115,12 +115,14 @@ Je pose le plan et la réservation, puis je mesure l'état de l'analyseur sur un
 
 ## 5. Erreurs rencontrées
 
-4 sorties en erreur ou divergentes. Les premières :
+6 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : === data suivis === count: 0 === reports json exemples === reports/b102bis-corpus-jw.json reports/campagne-benefices/051-R-annexe-manifeste-des-journaux.md reports/corpus-genres.json reports/corpus-li
 - **T1** : ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)   ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/w
 - **T1** : p001 dev [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "<stdin>", line 6, in <genexpr> TypeError: list indices must be integers or slices, not str [exit code
+- **T1** : 57048   57032       02:18 00:00:00  0.0 S    /bin/sh .git/hooks/pre-commit   59838   57048       01:05 00:00:47 73.3 R    python3 tools/session_report.py --quiet === io === PID 59838     ELAPSED     T
+- **T1** : #!/usr/bin/env python3 """Produit, pour chaque session DSH, un rapport qui reconstitue son essence et démontre le travail accompli, étape par étape.  Sortie, à côté du digest brut :    journal/session
 
 ## 6. Commits
 

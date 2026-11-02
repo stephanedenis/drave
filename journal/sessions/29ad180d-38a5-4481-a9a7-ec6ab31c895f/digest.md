@@ -2249,3 +2249,331 @@ e420267a ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree \"$H\" && GIT_INDEX_FILE=/tmp/index.s git add tools/structures && GIT_INDEX_FILE=/tmp/index.s git commit -m \"S — LE SOUS-MODULE 647205a : L'ANALY … [845 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-67]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-67", "timeout_ms": 60000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,cmd | grep -E \"git commit|archive_sessions|journal_auto|session_report|python3\" | grep -v grep | head -20; echo \"=== index lock ===\"; ls -la /home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock 2>/dev/null || echo \"pas de verrou\"", "description": "Inspe … [29 caractères tronqués]`
+
+  ```
+2061    01:26:50 /usr/bin/python3.13 /usr/sbin/firewalld --nofork --nopid
+   2238    01:26:48 /usr/bin/python3.13 /usr/bin/fail2ban-server -xf start
+  56487       02:02 bash -c python3 tools/ocr_pdf.py --liste work/ocr/scans-uniques.txt --racine CEGEP --sortie data/corpus_ocr_cegep --manifeste reports/ocr-pdf-cegep.json --ouvriers 8 2>&1 | tee work/ocr/run-cegep-02.log
+  56494       02:02 python3 tools/ocr_pdf.py --liste work/ocr/scans-uniques.txt --racine CEGEP --sortie data/corpus_ocr_cegep --manifeste reports/ocr-pdf-cegep.json --ouvriers 8
+  56548       01:55 bash -c cd /home/stephane/GitHub/Qtrinet && time python3 /tmp/qualif_7b_180.py 2>&1 | tail -12
+  56557       01:55 python3 /tmp/qualif_7b_180.py
+  57015       01:07 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree "$H" && GIT_INDEX_FILE=/tmp/index.s git add tools/structures && GIT_INDEX_FILE=/tmp/index.s git commit -m "S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES" -m "Le sous-module tools/structures est committé dans son dépôt : rôles contextuels (possession/thème
+… [1708 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-67", "timeout_ms": 120000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -eo pid,ppid,etime,pcpu,stat,cmd | grep -E \"57032|57052|57681|job|git commit\" | grep -v grep; echo \"=== enfants ===\"; ps --ppid 57032 -o pid,etime,pcpu,stat,cmd 2>/dev/null; echo \"=== taille journal session ===\"; ls -la /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/se … [116 caractères tronqués]`
+
+  ```
+57015   31786       01:16  0.1 Ss   bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree "$H" && GIT_INDEX_FILE=/tmp/index.s git add tools/structures && GIT_INDEX_FILE=/tmp/index.s git commit -m "S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES" -m "Le sous-module tools/structures est committé dans son dépôt : rôles contextuels (possession/thème, instrument/attribut, but/lieu, agent/moyen, passif, copule), subordonnées typées, gold de 39 phrases (38/39 types, 99/100 rôles, 45/45 compléments, couverture 1156/1161), contrôles 64/100, 66/100, 0,099, export gold/référence/banque et verifier_corpus ; 40 tests. Échec nommé : h033, « La femme parle » avale le verbe." -m "Le pointeur est mis à jour ; le corpus local data/structures/banque.jsonl fait 39 lignes (SHA 973c70a4…). La fiche reports/rapport-s-analyseur-roles.md et le manifeste reports/s-banque-structures.json sont prêts pour l'intégration du hub ; la session S n'écrit pas en-cours."
+  57032   57015       01:16  0.6 S    git commit -m S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMM
+… [1347 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ps -eo pid,ppid,etime,pcpu,stat,wchan:24,cmd | awk '$2==57048 || $1==57048'; echo \"=== tout python ===\"; ps -eo pid,ppid,etime,pcpu,stat,cmd | grep -E \"python3|journal_auto|session_report|archive\" | grep -v grep | head -15", "description": "List hook children and states"}`
+
+  ```
+57048   57032       01:25  0.0 S    do_wait                  /bin/sh .git/hooks/pre-commit
+  59838   57048       00:12 65.6 R    -                        python3 tools/session_report.py --quiet
+=== tout python ===
+   2061       1    01:27:09  0.0 Ssl  /usr/bin/python3.13 /usr/sbin/firewalld --nofork --nopid
+   2238       1    01:27:07  0.0 Ssl  /usr/bin/python3.13 /usr/bin/fail2ban-server -xf start
+  56487   32694       02:21  0.0 Ss   bash -c python3 tools/ocr_pdf.py --liste work/ocr/scans-uniques.txt --racine CEGEP --sortie data/corpus_ocr_cegep --manifeste reports/ocr-pdf-cegep.json --ouvriers 8 2>&1 | tee work/ocr/run-cegep-02.log
+  56494   56487       02:21  0.1 Sl   python3 tools/ocr_pdf.py --liste work/ocr/scans-uniques.txt --racine CEGEP --sortie data/corpus_ocr_cegep --manifeste reports/ocr-pdf-cegep.json --ouvriers 8
+  56548   32123       02:13  0.0 Ss   bash -c cd /home/stephane/GitHub/Qtrinet && time python3 /tmp/qualif_7b_180.py 2>&1 | tail -12
+  56557   56548       02:13  0.4 Sl   python3 /tmp/qualif_7b_180.py
+  59838   57048       00:12 65.5 R    python3 tools/session_report.py --quiet
+  59873   32694       00:11  9.3 Ssl  python3 tools/detecte_scans_pdf.py --racine 
+… [1896 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-67", "timeout_ms": 180000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -eo pid,ppid,etime,pcpu,stat,cmd | grep -E \"57032|57048|session_report|journal_auto|archive_sessions\" | grep -v grep; echo \"=== git status (normal index) ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head; echo \"=== log ===\"; git log --oneline … [58 caractères tronqués]`
+
+  ```
+57032   57015       01:39  0.4 S    git commit -m S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES -m Le sous-module tools/structures est committé dans son dépôt : rôles contextuels (possession/thème, instrument/attribut, but/lieu, agent/moyen, passif, copule), subordonnées typées, gold de 39 phrases (38/39 types, 99/100 rôles, 45/45 compléments, couverture 1156/1161), contrôles 64/100, 66/100, 0,099, export gold/référence/banque et verifier_corpus ; 40 tests. Échec nommé : h033, « La femme parle » avale le verbe. -m Le pointeur est mis à jour ; le corpus local data/structures/banque.jsonl fait 39 lignes (SHA 973c70a4…). La fiche reports/rapport-s-analyseur-roles.md et le manifeste reports/s-banque-structures.json sont prêts pour l'intégration du hub ; la session S n'écrit pas en-cours.
+  57048   57032       01:39  0.0 S    /bin/sh .git/hooks/pre-commit
+  59838   57048       00:26 66.4 R    python3 tools/session_report.py --quiet
+=== git status (normal index) ===
+ M journal/README.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+ M journ
+… [634 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-67", "timeout_ms": 180000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,time,pcpu,stat,cmd -p 59838; echo \"=== io ===\"; cat /proc/59838/io 2>/dev/null | head; echo \"=== fichier ouvert ===\"; ls -l /proc/59838/fd 2>/dev/null | tail -5; echo \"=== sessions ===\"; ls /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions | wc -l",  … [59 caractères tronqués]`
+
+  ```
+PID     ELAPSED     TIME %CPU STAT CMD
+  59838       00:48 00:00:33 69.5 R    python3 tools/session_report.py --quiet
+=== io ===
+rchar: 816219071
+wchar: 620552086
+syscr: 76895
+syscw: 91098
+read_bytes: 0
+write_bytes: 4456448
+cancelled_write_bytes: 0
+=== fichier ouvert ===
+total 0
+lrwx------. 1 stephane stephane 64  2 nov 16:34 0 -> /dev/null
+l-wx------. 1 stephane stephane 64  2 nov 16:34 1 -> /dev/null
+lrwx------. 1 stephane stephane 64  2 nov 16:34 2 -> socket:[216757]
+=== sessions ===
+121
+  ```
+
+- **job_output** `{"job_id": "bash-67", "timeout_ms": 240000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -eo pid,ppid,etime,time,pcpu,stat,cmd | awk '$2==57048 || $1==57048 || $2==57032'; echo \"=== io ===\"; for p in $(pgrep -f \"session_report.py --quiet\"); do echo \"PID $p\"; ps -o etime,time,pcpu -p $p; cat /proc/$p/io 2>/dev/null | grep -E \"rchar|wchar\"; done; echo \"=== journal … [121 caractères tronqués]`
+
+  ```
+57048   57032       02:18 00:00:00  0.0 S    /bin/sh .git/hooks/pre-commit
+  59838   57048       01:05 00:00:47 73.3 R    python3 tools/session_report.py --quiet
+=== io ===
+PID 59838
+    ELAPSED     TIME %CPU
+      01:05 00:00:48 73.3
+rchar: 1097096696
+wchar: 842992586
+PID 65742
+    ELAPSED     TIME %CPU
+      00:00 00:00:00 30.0
+rchar: 3376405
+wchar: 82602
+=== journal auto ? ===
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,160p' tools/session_report.py", "description": "Read session_report script"}`
+
+  ```
+#!/usr/bin/env python3
+"""Produit, pour chaque session DSH, un rapport qui reconstitue son essence et
+démontre le travail accompli, étape par étape.
+
+Sortie, à côté du digest brut :
+
+  journal/sessions/<id>/rapport.md   la synthèse structurée de la session
+  journal/README.md                  l'index des sessions
+
+Ce que le rapport contient, et pourquoi :
+
+  1. fiche      — identité, durée, volumes : de quoi situer la session
+  2. demandes   — ce qui a été demandé, tour par tour, verbatim
+  3. déroulé    — pour chaque tour : les actions (fichiers, commandes, délégations)
+                  puis la synthèse produite. C'est la démonstration du travail.
+  4. travail    — tables des fichiers créés/modifiés, des commandes, des sous-agents
+  5. mesures    — les lignes de résultat qui portent un chiffre mesuré
+  6. erreurs    — ce qui a échoué, et où
+  7. commits    — ce qui a été inscrit dans l'histoire du dépôt
+
+Usage :
+  python3 tools/session_report.py [--repo DIR] [--session ID] [--quiet]
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import subprocess
+import sys
+import time
+from collections import Counter, OrderedDict
+from pathlib import Path
+
+… [5150 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-67 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree "$H" && GIT_INDEX_FILE=/tmp/index.s git add tools/structures && GIT_INDEX_FILE=/tmp/index.s git commit -m "S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES" -m "Le sous-module tools/structures est committé dans son dépôt : rôles contextuels (possession/thème, instrument/attribut, but/lieu, agent/moyen, passif, copule), subordonnées typées, gold de 39 phrases (38/39 types, 99/100 rôles, 45/45 compléments, couverture 1156/1161), contrôles 64/100, 66/100, 0,099, export gold/référence/banque et verifier_corpus ; 40 tests. Échec nommé : h033, « La femme parle » avale le verbe." -m "Le pointeur est mis à jour ; le corpus local data/structures/banque.jsonl fait 39 lignes (SHA 973c70a4…). La fiche reports/rapport-s-analyseur-roles.md et le manifeste reports/s-banque-structures.json sont prêts pour l'intégration du hub ; la session S n'écrit pas en-cours.") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-67"}`
+
+  ```
+[master 13f4e131] S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES
+ 21 files changed, 417 insertions(+), 54 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; echo \"=== status ===\"; git status --short; echo \"=== sous-module ===\"; git diff HEAD -- tools/structures; git submodule status tools/structures; echo \"=== portes structures ===\"; ls tools/porte-* | grep -i … [132 caractères tronqués]`
+
+  ```
+13f4e131 S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES
+e420267a ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE
+dc7f9c56 N2 — MANDAT 200 k PAS SUR LE MÉLANGE 1 Go, PUIS R1.1/R1.2 (session 0733c5bb)
+=== status ===
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+MM journal/2026-11-02/modele.md
+MM journal/2026-11-02/outils.md
+MM journal/2026-11-02/portes.md
+MM journal/README.md
+MM journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+MM journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+MM journal/sessions/MANIFEST.md
+MM journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+MM journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md
+MM journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+MM journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md
+MM journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md
+MM journal/sessio
+… [316 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== verifie_en_cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -8; echo \"=== revue_documentation ===\"; python3 tools/revue_documentation.py 2>&1 | tail -25", "description": "Run state and documentation checks"}`
+
+  ```
+=== verifie_en_cours ===
+  en-cours · 1625 mots · 7 sections · 5 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== revue_documentation ===
+  revue de documentation · 551 fiche(s) · 637 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 550 fichiers, le disque en a 551
+     · compteurs : en-cours.md dit 636 JSON, le disque en a 637
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git read-tree HEAD && echo \"index réconcilié\" && git status --short | head -20; echo \"=== pointer HEAD ===\"; git ls-tree HEAD tools/structures; git -C tools/structures rev-parse HEAD", "description": "Reconcile normal index with  … [6 caractères tronqués]`
+
+  ```
+index réconcilié
+ M tools/ocr_pdf.py
+?? reports/rapport-s-analyseur-roles.md
+?? reports/s-banque-structures.json
+?? tools/detecte_scans_pdf.py
+=== pointer HEAD ===
+160000 commit 647205a3da710217b63b5d20d492275a75e7dff8	tools/structures
+647205a3da710217b63b5d20d492275a75e7dff8
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== verifie_journal ===\"; python3 tools/verifie_journal.py 2>&1 | tail -8; echo \"=== verifie_etat --head ===\"; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -8; echo \"=== taille_documents ===\"; python3 tools/taille_doc … [81 caractères tronqués]`
+
+  ```
+=== verifie_journal ===
+  journal · 39 jour(s) · 117 session(s) · 1839 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+=== verifie_etat --head ===
+  état · dernier fait e420267a · dernier état e420267a
+  ✅ aucun fait commité après le dernier état
+=== taille_documents ===
+    1942    172   T1   2000  REPRISE.md
+    1932    108   T1   2500  docs/pilotage/manques.md
+    1931    185   T1   2500  docs/implantation/format-flux.md
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 3999 mots (budget 4 000)
+
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== sessions strict ===\"; python3 tools/sessions.py --check --strict 2>&1 | tail -10; echo \"exit=$?\"; echo \"=== mtime hub ===\"; ls -la --time-style=+%H:%M:%S journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/ docs/pil … [197 caractères tronqués]`
+
+  ```
+=== sessions strict ===
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+exit=0
+=== mtime hub ===
+-rw-r--r--. 1 stephane stephane 11879 16:30:02 docs/pilotage/en-cours.md
+
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/:
+total 1156
+drwxr-xr-x. 1 stephane stephane     94 15:58:28 .
+drwxr-xr-x. 1 stephane stephane   8440 16:16:59 ..
+-rw-r--r--. 1 stephane stephane 190323 16:32:52 digest.md
+-rw-------. 1 stephane stephane   2397 16:23:48 plan.md
+-rw-r--r--. 1 stephane stephane  20174 16:34:13 rapport.md
+-rw-------. 1 stephane stephane 963761 16:12:41 session.v4.jsonl.zstd
+=== processus portes ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat tools/porte-sessions.sh; echo \"=== strict sans pipe ===\"; python3 tools/sessions.py --check --strict >/tmp/sessions.out 2>&1; echo \"exit=$?\"; tail -8 /tmp/sessions.out; echo \"=== porte-sessions ===\"; bash tools/porte-sessio … [151 caractères tronqués]`
+
+  ```
+#!/bin/bash
+# porte-sessions.sh — les plans de session sont lisibles et le linter refuse un doublon.
+set -u
+cd "$(dirname "$0")/.."
+python3 tools/sessions.py --autotest || exit 1
+python3 tools/sessions.py --check --strict || exit 1
+echo "PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict"
+=== strict sans pipe ===
+exit=0
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+=== porte-sessions ===
+exit=0
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, réservation imbriquée avertie sans refus
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichi
+… [482 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== journal du jour (S) ===\"; grep -rn \"SOUS-MODULE 647205a\\|analyseur rôles\\|rapport-s-analyseur-roles\" journal/2026-11-02/ journal/sessions/MANIFEST.md 2>/dev/null | head -10; echo \"=== liens fiche ===\"; python3 - <<' … [328 caractères tronqués]`
+
+  ```
+=== journal du jour (S) ===
+journal/2026-11-02/README.md:30:| `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 0.3 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
+journal/2026-11-02/mesures.md:103:- `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 0.3 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
+journal/2026-11-02/distribue.md:36:- `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 0.3 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
+journal/2026-11-02/attention.md:22:- `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 0.3 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
+journal
+… [2061 caractères tronqués]
+  ```
+

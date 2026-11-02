@@ -1988,3 +1988,172 @@ pas 9450 · perte 1.7165 · PPL val 4.752 · 564 s
 lun 02 nov 2026 16:32:40 EST
   ```
 
+### 🤖 Assistant
+
+⏵ Identifying what occupies GPU 1 and the light-gate subset
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv; echo \"---\"; for p in $(nvidia-smi --query-compute-apps=pid --format=csv,noheader | tr -d ' '); do echo \"PID $p: $(ps -o etime=,args= -p $p --no-headers | cut … [68 caractères tronqués]`
+
+  ```
+pid, process_name, used_gpu_memory [MiB]
+35572, /home/stephane/gpu-env/bin/python, 1318 MiB
+54178, llama-server, 328 MiB
+44710, /home/stephane/gpu-env/bin/python, 1300 MiB
+54178, llama-server, 118 MiB
+---
+PID 35572:       15:05 /home/stephane/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --pas 2
+PID 54178:       04:08 llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 18081 -ngl 0 -c 1024 --no-webui
+PID 44710:       10:08 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal --pas 2
+PID 54178:       04:08 llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 18081 -ngl 0 -c 1024 --no-webui
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -l \"cuda\\|nvidia\\|torch\" tools/porte-*.sh | sed 's#tools/porte-##;s#\\.sh##' | tr '\\n' ' '; echo; echo \"--- total ---\"; ls tools/porte-*.sh | wc -l", "description": "List GPU-touching gates"}`
+
+  ```
+adaptateur-sortie audit-drapeaux consolidation harnais-invariants homeostasie mistral n3-cache n3-composition n3-deux-processus n3-deux-regions n3-generation n3-placement n3-pont n3-positions n3-profondeur n3-refus n3-reseau n3-routes n3-service-briques n3-service n3-seuil n3-sparsite-compte n3-sparsite occupation-elagage profondeur-routee r13-bpe reflexe reparti-moteur sauvegarde-modele 
+--- total ---
+81
+  ```
+
+### 🤖 Assistant
+
+⏵ Both GPUs are busy with N2's runs — so the full pass must wait; running the light documentary subset now
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls tools/porte-*.sh | sed 's#tools/porte-##;s#\\.sh##' | sort | tr '\\n' ' '; echo", "description": "List all 81 gate names"}`
+
+  ```
+adaptateur-sortie audit-drapeaux b1110-hybride balayage bloc-code bloc-linguistique bloc-maths bloc-tableaux budget bus bus-socket c4-retard cerveau consolidation coupe cycle-c2 deepseek delais diff-couche document echange-experts episodique etat flux fusion gain greffe harnais-invariants homeostasie horloge indice jeux jumeaux lecteur lecture m5-brouillon melange memoire miroir-blocs mistral n3-cache n3-composition n3-deux-processus n3-deux-regions n3-generation n3-placement n3-pont n3-positions n3-profondeur n3-refus n3-reseau n3-routes n3-service n3-service-briques n3-seuil n3-sparsite n3-sparsite-compte occupation-elagage occupation-moteur ocr ocr-scans pannes peripherie poids-creux pont prechargement profondeur-routee push-paresseux r13-bpe recurrence reflexe registre reparti-moteur sauvegarde-modele sessions speculatif tableaux tokenizer-kimi topologie trace vision
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; PORTES=\"budget etat registre sessions tableaux bloc-code bloc-tableaux bloc-maths\" DELAI=600 JOURNAUX=work/portes/sous-passe-1102-16h35 bash tools/toutes-les-portes.sh 2>&1 | tail -25", "description": "Run light documentary gate subs … [25 caractères tronqués]`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (8 portes, borne 600 s) ===
+    journaux : work/portes/sous-passe-1102-16h35
+  porte-bloc-code        ✅                          16 s  ✅ porte bloc code verte
+  porte-bloc-maths       ❌ code 1                    2 s  ❌ porte bloc maths ROUGE (code 1)
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          97 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-registre         ✅                          30 s    ✅ région absente : refusée en la nommant (code 2), rien n'est calculé
+  porte-sessions         ✅                           1 s  PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+  porte-tableaux         ✅                           1 s    ✅ la page vivante date du dernier commit (2026-11-02)
+--- 7 vertes, 1 rouges ---
+À RELIRE (les six dernières lignes de chaque rouge) :
+  --- porte-bloc-maths ---
+    6. coût        : ×8.31 de temps pour ×4 termes (0.42 ms / 50 addition
+… [279 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Investigating the bloc-maths red (timing under load or real regression?)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat work/portes/sous-passe-1102-16h35/porte-bloc-maths.log; echo \"=== script ===\"; sed -n 1,60p tools/porte-bloc-maths.sh", "description": "Read bloc-maths gate log and source"}`
+
+  ```
+=== PORTE R4.3 — LE BLOC MATHS ===
+=== PORTE R4.3 — LE BLOC MATHS ===
+1. formules    : 32/32 exactes, 32/32 confirmées par sympy
+2. dérivées    : 10/10 justes (5 points, oracle sympy)
+3. équations   : 6/6 justes (1 refus attendu(s))
+4. contrôle    : surface fausse 3/3, calcul juste 3/3
+     \frac{1}{3}+\frac{1}{6}    calcule    1/2 · surface    1
+     2^{10}                     calcule   1024 · surface    2
+     \sqrt{144}+1               calcule     13 · surface  144
+5. refus       : 8/8 nommés (macro_inconnue, accolade_ouverte, caractere_inconnu, syntaxe, division_zero, racine_negative, non_lineaire, variable_absente)
+6. coût        : ×8.31 de temps pour ×4 termes (0.42 ms / 50 additions)
+7. miroir      : 42/42 restitutions exactes ; contrôle sans parenthèses perdu
+8. rejeu       : identique
+❌ porte bloc maths ROUGE
+   - coût non linéaire : ×8.31 pour ×4
+❌ porte bloc maths ROUGE (code 1)
+=== script ===
+#!/bin/bash
+# porte-bloc-maths.sh — R4.3 : une formule est un AST évalué, et l'AST se vérifie.
+#
+# POURQUOI CETTE PORTE EXISTE. `\frac{1}{3}+\frac{1}{6}` vaut `1/2`, et cette valeur n'est
+# écrite nulle part : un lecteur de surface retrouve les chiffres, jamais le résultat. R0.1
+# 
+… [855 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in 1 2 3; do python3 tools/bloc_maths.py --porte 2>&1 | grep -E \"coût|ROUGE|verte\"; done", "description": "Repeat bloc-maths cost measurement"}`
+
+  ```
+5. refus       : 8/8 nommés (macro_inconnue, accolade_ouverte, caractere_inconnu, syntaxe, division_zero, racine_negative, non_lineaire, variable_absente)
+6. coût        : ×4.24 de temps pour ×4 termes (0.67 ms / 50 additions)
+✅ porte bloc maths verte
+5. refus       : 8/8 nommés (macro_inconnue, accolade_ouverte, caractere_inconnu, syntaxe, division_zero, racine_negative, non_lineaire, variable_absente)
+6. coût        : ×2.84 de temps pour ×4 termes (0.81 ms / 50 additions)
+✅ porte bloc maths verte
+5. refus       : 8/8 nommés (macro_inconnue, accolade_ouverte, caractere_inconnu, syntaxe, division_zero, racine_negative, non_lineaire, variable_absente)
+6. coût        : ×4.12 de temps pour ×4 termes (0.86 ms / 50 additions)
+✅ porte bloc maths verte
+  ```
+
+### 🤖 Assistant
+
+⏵ Recording the deferral in the state and plan, then committing
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"- **Prochaine action** : lire le **verdict de la passe au registre** ; suivre les quatre lignes  … [1034 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 16:36:33 EST
+mots : 1637
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4011 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"- **Prochaine action** : **passe complète reportée** — les **deux GPU** sont à N2 (92 %/84 %), charge\ … [983 caractères tronqués]`
+
+  ```
+mots : 1622
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3996 mots (budget 4 000)
+     · compteurs : en-cours.md dit 636 JSON, le disque en a 637
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"| fichiers / JSON de résultats | **550** / **636** |\"\nn = \"| fichiers / JSON de résultats | **550** / **63 … [1546 caractères tronqués]`
+
+  ```
+compteur JSON : 637
+     · compteurs : en-cours.md dit 550 fichiers, le disque en a 551
+plan hub : heartbeat 16:37, report mesuré
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"| fichiers / JSON de résultats | **550** / **637** |\"\nn = \"| fichiers / JSON de résultats | **551** / **63 … [327 caractères tronqués]`
+
+  ```
+compteurs : 551 / 637
+  revue de documentation · 551 fiche(s) · 637 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3996 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Final heartbeat stamp and commit of the deferred-pass state
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; python3 - <<'PY'\nimport pathlib\nfor f, o, n in [\n (\"docs/pilotage/en-cours.md\", \"Mis à jour : 2026-11-02, 16 h 24\", \"Mis à jour : 2026-11-02, 16 h 38\"),\n (\"docs/pilotage/roadmap.md\", \"État au 02/11 16 h 24\", \"État  … [406 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 16:37:09 EST
+docs/pilotage/en-cours.md → Mis à jour : 2026-11-02, 16 h 38
+docs/pilotage/roadmap.md → État au 02/11 16 h 38
+docs/pilotage/roadmap.md → le **2026-11-02 16 h 38**
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\nfor f, o, n in [\n (\"docs/pilotage/en-cours.md\", \"16 h 38\", \"16 h 37\"),\n (\"docs/pilotage/roadmap.md\", \"16 h 38\", \"16 h 37\"),\n]:\n    p = pathlib.Path(f); t = p.read_text(encoding=\"utf-8\ … [314 caractères tronqués]`
+
+  ```
+horodatage ramené à 16 h 37 (réel)
+docs/pilotage/en-cours.md:3:**Mis à jour : 2026-11-02, 16 h 37 HNE (heure locale, EST).**
+docs/pilotage/roadmap.md:38:**État au 02/11 16 h 37.** B13 est à **140/140** (gold 432, 116 liens) ; **N2.ac** (1 Go) est le
+docs/pilotage/roadmap.md:47:L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 16 h 37**.
+lun 02 nov 2026 16:37:14 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md && git diff --cached --stat && python3 tools/verifie_etat_a_jour.py --index && git commit -m \"PASSE — REPORTÉE SU … [941 caractères tronqués]`

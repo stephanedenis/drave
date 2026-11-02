@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 80 |
-| Appels d'outils | 107 |
+| Messages | 90 |
+| Appels d'outils | 117 |
 | Fichiers touchés | 2 |
-| Commandes | 78 |
+| Commandes | 87 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu reprends le hub `536cd5d6-94ac-4057-8fe9-11709a4587c7`. Lis son plan, en-cours et  plan-travail §9. Prochaine action  … [180 caractères tronqués]
 
-*107 appels d'outils.* Actions notables :
+*117 appels d'outils.* Actions notables :
 
 - bash — List working directory and check hub directory
 - bash — Find hub id references in repo
@@ -41,11 +41,11 @@
 - bash — Find heartbeat mentions
 - bash — Check current time and gates scripts
 - bash — Read gates method doc
-- … et 85 autres
+- … et 94 autres
 
 **Synthèse produite :**
 
-⏵ Both GPUs are busy with N2's runs — so the full pass must wait; running the light documentary subset now
+⏵ Final heartbeat stamp and commit of the deferred-pass state
 
 ## 3. Travail accompli
 
@@ -98,7 +98,7 @@
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 38 autres
+- … et 47 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -115,6 +115,12 @@
 - **T1** `[still running after 60000ms; moved to background job bash-72]`
 - **T1** `0, 1650 MiB, 92 %`
 - **T1** `1, 1422 MiB, 84 %`
+- **T1** `6. coût        : ×8.31 de temps pour ×4 termes (0.42 ms / 50 additions)`
+- **T1** `- coût non linéaire : ×8.31 pour ×4`
+- **T1** `6. coût        : ×4.24 de temps pour ×4 termes (0.67 ms / 50 additions)`
+- **T1** `6. coût        : ×2.84 de temps pour ×4 termes (0.81 ms / 50 additions)`
+- **T1** `6. coût        : ×4.12 de temps pour ×4 termes (0.86 ms / 50 additions)`
+- **T1** `[still running after 60000ms; moved to background job bash-87]`
 
 ## 5. Erreurs rencontrées
 
@@ -125,4 +131,5 @@
 ## 6. Commits
 
 - ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE  Le hub intègre les quatre mandats rouverts après le reboot d
+- PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8  La passe complète n'est pas lancée : à 16 h 32, GPU 0 à 92 % (N2 200 k pas
 

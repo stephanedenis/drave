@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 16 h 24 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 16 h 37 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
 > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
@@ -28,9 +28,10 @@
 - **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
 - **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
 - **Ce qu'elle fait** : intégration ; **porte stricte réparée** (imbrication = avertissement) ;
-  passe de portes sur le **GPU 1**.
+  sous-passe documentaire **7/8** (bloc-maths : bruit de charge).
 - **Ce que font les autres** : **N2**, **S**, **Pensée**, **D/R/A** (sessions ouvertes).
-- **Prochaine action** : lire le **verdict de la passe au registre** ; suivre les quatre lignes d'état.
+- **Prochaine action** : **passe complète reportée** — les **deux GPU** sont à N2, charge **24** ;
+  la tenir machine libre.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
 
@@ -38,7 +39,7 @@
 
 - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
 - **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre native
-  (R1.1/R1.2), les fiches et les contrôles négatifs.
+  (R1.1/R1.2).
 - **Plan** : 1) ~~plan et réservations~~ ; 2) **200 000 pas** (en cours) ; 3) **banc R1.1/R1.2** ;
   4) **mesure** (cinq PPL, courbe) ; 5) **fiche, JSON, état, commit**.
 - **Ambition** : que N réponde « plus de pas, quelle position, quelle fenêtre ».
@@ -121,7 +122,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **550** / **636** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **551** / **637** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
 
@@ -144,7 +145,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — les **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **DRVM/L** ; **S** — l'analyseur
+**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **DRVM/L** ; **S** — l'analyseur
 puis l'export ; **N4** — la consigne ; **B10.3** — le `z` ; **R0.7** — gold/neuronal.
 
 - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
