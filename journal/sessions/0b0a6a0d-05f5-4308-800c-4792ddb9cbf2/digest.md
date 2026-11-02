@@ -20667,3 +20667,47 @@ drwxr-xr-x. 1 stephane stephane         12  2 nov 12:25 ..
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal  … [427 caractères tronqués]`
+
+  ```
+mix60 3538208
+[still running after 60000ms; moved to background job bash-1205]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1205", "timeout_ms": 300000, "wait": true}`
+
+  ```
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+12:26
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/mix-60k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; free -g | head -2", "description": "Check the mix training start"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1206]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1206", "timeout_ms": 400000, "wait": true}`
+
+  ```
+12:31
+pas 2450 · perte 2.1685 · PPL val 7.262 · 130 s
+pas 2500 · perte 1.9435 · PPL val 7.313 · 132 s
+0, 1322 MiB, 96 %
+1, 1 MiB, 0 %
+               total        used        free      shared  buff/cache   available
+Mem:             125          29          85           6          18          96
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/mix-60k.log 2>/dev/null", "description": "Wait for the mix training"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1207]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1207", "timeout_ms": 1800000, "wait": true}`

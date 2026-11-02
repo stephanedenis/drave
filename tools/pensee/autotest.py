@@ -1900,6 +1900,15 @@ def t125_juge_bloc() -> tuple[bool, str]:
         f"juge : bloc {b['justes']}/19, extraction {e['justes']}/19")
 
 
+def t126_dirigee() -> tuple[bool, str]:
+    """La réponse dirigée : 19/19 (17/19 avant la correction de langue)."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_dirigee
+    r = fidelite_dirigee(charger())
+    return r["questions"] == 19 and abs(r["taux"] - 1.0) < 1e-9, (
+        f"dirigée : {r['justes']:.0f}/{r['questions']} (17/19 sans la langue)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2024,7 +2033,8 @@ def main() -> int:
               ("T122 extraction", t122_extraction()),
               ("T123 juge", t123_juge()),
               ("T124 réponses", t124_reponses()),
-              ("T125 juge contre le bloc", t125_juge_bloc())]
+              ("T125 juge contre le bloc", t125_juge_bloc()),
+              ("T126 réponse dirigée", t126_dirigee())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

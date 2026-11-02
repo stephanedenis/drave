@@ -1,0 +1,14 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "129/129",
+ "bloc": 0.0,
+ "extraction": 0.0,
+ "dirigee": 1.0,
+ "dirigee_avant_langue": 0.8947,
+ "limites": [
+  "questions fermées",
+  "la négation est la seule règle",
+  "heuristique seule"
+ ]
+}

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 43.8 h |
-| Tours | 143 |
-| Messages | 1703 |
-| Appels d'outils | 1461 |
+| Durée | 43.9 h |
+| Tours | 144 |
+| Messages | 1712 |
+| Appels d'outils | 1468 |
 | Fichiers touchés | 25 |
-| Commandes | 1191 |
+| Commandes | 1197 |
 | Sous-agents | 2 |
-| Commits | 181 |
+| Commits | 182 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -321,6 +321,8 @@
 **Tour 142** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 143** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 144** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7595,6 +7597,56 @@ Je continue : prochain round, **le juge contre le bloc** — la première mesure
 - job_output
 - bash — Mettre l'état à jour et recommitter
 
+**Synthèse produite :**
+
+⏵ Juge contre le bloc : 0/19 et 0/19, la première mesure de correction ; 128/128
+
+Le round 129 est livré : le juge, muni des 19 références, mesure enfin la **correction** — le bloc et l'extraction font **0/19**. Commit **`9105c184`**.
+
+\## Le juge contre le bloc
+
+| candidat | questions | justes | **taux** |
+|---|---:|---:|---:|
+| bloc (réponse au contenu) | 19 | 0 | **0,0000** |
+| extraction (GN) | 19 | 0 | **0,0000** |
+| référence (le juge lui-même) | 19 | 19 | 1,0000 |
+
+**Ce que ça dit** :
+
+- **La correction est mesurée** : 0/19 n'est plus « pas de référence » (T123), c'est « le bloc et l'extraction ne répondent pas juste ». La différence est le **juge**.
+- **Deux zéros, deux raisons** : le bloc rend `None` (il ne répond pas) ; l'extraction rend le sujet (« le chat »), qui ne peut pas être « oui ».
+- **Le juge est calibré** : la référence fait 19/19 ; le bloc 0/19 — l'écart est la marge de progression, et elle est **totale**.
+- **La négative est explicite** : un candidat qui rend la référence ferait 19/19 ; aucun ne le fait.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-juge-bloc.md`](../../reports/rapport-pensee-juge-bloc.md) ; JSON [`pensee-juge-bloc.json`](../../reports/pensee-juge-bloc.json) ; T125 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **128/128 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **536 fiches / 624 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` à jour (13 h 00).
+- Deux courses d'index : le ref lock et le hook d'état (l'autre session avait commité `en-cours`) — corrigées, commit passé.
+- L'horloge réelle est **12 h 27 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **La réponse par extraction dirigée** : chercher le GN qui suit le verbe, pas le premier GN — puis re-juger.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **l'extraction dirigée** — la seule façon pour l'heuristique de répondre juste à une question fermée.
+
+### Tour 144 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Mesurer la réponse dirigée (négation)
+- bash — Identifier les deux échecs de la réponse dirigée
+- bash — Corriger la langue de la réponse dirigée
+- bash — Écrire la fiche de la réponse dirigée et la porte T126
+- bash — Trim README et passer toutes les portes
+- bash — Committer la réponse dirigée
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7674,7 +7726,7 @@ Je continue : prochain round, **le juge contre le bloc** — la première mesure
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1151 autres
+- … et 1157 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8003,4 +8055,5 @@ Je continue : prochain round, **le juge contre le bloc** — la première mesure
 - B13 — LES 19 RÉPONSES DE RÉFÉRENCE : COUVERTURE 19/19, LE JUGE EST UTILISABLE ; 127/127" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÉPONSES DE RÉF
 - B13 — LE JUGE CONTRE LE BLOC : 0/19 ET 0/19, LA PREMIÈRE MESURE DE CORRECTION ; 128/128" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "JUGE CONTRE LE 
 - B13 — LE JUGE CONTRE LE BLOC : 0/19 ET 0/19, LA PREMIÈRE MESURE DE CORRECTION ; 128/128" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "JUGE CONTRE LE 
+- B13 — LA RÉPONSE DIRIGÉE : 19/19, LA PREMIÈRE RÉPONSE JUSTE (17/19 AVANT LA LANGUE) ; 129/129" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÉPONSE D
 

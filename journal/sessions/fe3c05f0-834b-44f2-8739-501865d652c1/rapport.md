@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 43.8 h |
-| Tours | 387 |
-| Messages | 2358 |
-| Appels d'outils | 1571 |
+| Durée | 44.0 h |
+| Tours | 388 |
+| Messages | 2362 |
+| Appels d'outils | 1574 |
 | Fichiers touchés | 26 |
-| Commandes | 1396 |
+| Commandes | 1398 |
 | Sous-agents | 0 |
 | Commits | 95 |
 | Compactages de contexte | 4 |
@@ -807,6 +807,8 @@
 **Tour 386** — continue pendent 3h
 
 **Tour 387** — <goal_round> Objective: "Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécrire reports/rapport-ocr-cegep.md avec les chiffres, mettre docs/pilotage/ ( … [764 caractères tronqués]
+
+**Tour 388** — fais une passe dans docs pour enrichir le glossaire et une autre passe ajouter les hyperliens vers le glossaire partout ou les termes aparaissent. Serait-il préférable de modifier docwatch pour intégrer une fonctionnalité glossaire à même l'affichage et éviter de grossir inutilement le gontenu avec des liens qui ne devraient être qu'en pointillé?
 
 ## 2. Déroulé, étape par étape
 
@@ -9195,6 +9197,18 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 3. **L'Encyclopedia of Algorithms** exige `--max-pages 500` (ou plus) et un timeout plus grand ; c'est la prochaine cible du fonds CEGEP (~127 sc
 … [81 caractères tronqués]
 
+### Tour 388 — fais une passe dans docs pour enrichir le glossaire et une autre passe ajouter les hyperliens vers le glossaire partout  … [228 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Inspect glossary, docwatch and existing links
+- read
+- bash — Inspect docwatch and glossary index
+
+**Synthèse produite :**
+
+⏵ Inspection du glossaire, de docwatch et des liens existants avant de trancher
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -9270,7 +9284,7 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1356 autres
+- … et 1358 autres
 
 ## 4. Mesures et résultats marquants
 

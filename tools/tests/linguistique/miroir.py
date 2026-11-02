@@ -140,6 +140,43 @@ def fidelite_extraction(phrases: list[dict], bloc=None) -> dict:
             "taux": round(trouvees / max(1, len(q)), 4)}
 
 
+def repondre_dirigee(a: bl.Annotation) -> str | None:
+    """La réponse **dirigée** : pour une question fermée, `non` si la phrase nie, sinon `oui`.
+
+    C'est une heuristique de surface (la négation), pas une compréhension : si la question
+    porte sa négation, la réponse s'inverse — c'est le piège que la fiche mesure.
+    """
+    acte = next((e.valeur for e in a.etiquettes
+                 if e.niveau == "pragmatique" and e.type == "acte"), "assertion")
+    if acte != "question":
+        return None
+    nie = any(e.niveau == "phrase" and e.type == "négation" for e in a.etiquettes)
+    lg = getattr(a, "langue", "fr")
+    oui, non = ("yes", "no") if lg == "en" else ("oui", "non")
+    return non if nie else oui
+
+
+def fidelite_dirigee(phrases: list[dict], bloc=None) -> dict:
+    """Le taux de questions fermées où la réponse dirigée est juste (juge)."""
+    bloc = bloc or bl.Heuristique()
+    q = [p for p in phrases if "?" in p["texte"]]
+    justes = 0
+    for p in q:
+        a = bloc.analyser(p["texte"], p["langue"])
+        ref = (p.get("pragma") or {}).get("reponse")
+        justes += juge_egal(repondre_dirigee(a), ref)
+    return {"questions": len(q), "justes": justes,
+            "taux": round(justes / max(1, len(q)), 4)}
+
+
+def juge_egal(candidat, reference) -> float:
+    """La comparaison normalisée du juge, localisée pour éviter un import circulaire."""
+    if candidat is None or reference is None:
+        return 0.0
+    norm = lambda s: " ".join(str(s).lower().split())
+    return 1.0 if norm(candidat) == norm(reference) else 0.0
+
+
 def fidelite_contenu(phrases: list[dict], bloc=None) -> dict:
     """Le taux de réponses au contenu : 0 tant que le bloc n'a pas de modèle."""
     bloc = bloc or bl.Heuristique()
@@ -200,6 +237,7 @@ def main() -> int:
         print(nom, "réponse", len(q), "questions", round(fr, 4))
         print(nom, "réponse au contenu", fidelite_contenu(ph, bloc))
         print(nom, "extraction", fidelite_extraction(ph, bloc))
+        print(nom, "dirigée", fidelite_dirigee(ph, bloc))
     return 0
 
 
