@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 17 h 50 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 18 h 25 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
 > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
@@ -77,12 +77,13 @@
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
 - **Fait** : B13 **140/140**, gold **432** ; **gold neuronal** POS **0,8483**, cascade **0,9440** ;
-  **syntagmes** BIO **0,6173**, tête **0,7606**, cascade confiance **0,7592** ;
-  [fiche](../../reports/rapport-pensee-gold-syntagmes.md).
+  **syntagmes** BIO **0,6173**, tête **0,7606**, cascade confiance **0,7592** ; **cascade
+  complète** POS **0,9415**, syntagmes **0,7539**, acte **1,0** ;
+  [fiche](../../reports/rapport-pensee-gold-cascade.md).
 - **Ce qu'elle fait** : **gold neuronal POS et syntagmes** mesurés ; reprise **16 h 16**.
 - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
-- **Prochaine action** : **pragmatique** ; **DRVM/native** (parité).
-- **Bloquants** : aucun pour POS/syntagmes ; la **pragmatique** reste à mesurer.
+- **Prochaine action** : **DRVM/native** (politique LLM) ; **pragmatique**.
+- **Bloquants** : aucun pour POS/syntagmes/cascade ; restent **pragmatique** et **DRVM/native**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 ### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
@@ -124,7 +125,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **554** / **640** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **555** / **642** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
 
@@ -147,7 +148,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **pragmatique** ; **S** — la **validation
+**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **DRVM, pragmatique** ; **S** — la **validation
 humaine** de la banque et la frontière du GN (h033) ; **N4** — la consigne ; **B10.3** — le `z` ;
 **R0.7** — le tagger complet.
 

@@ -158,6 +158,19 @@ class TestBlocLinguistique(unittest.TestCase):
                           if e.niveau == "syntagme" and e.source == "neuronal")
         self.assertGreater(n_confiance, n_defaut)
 
+    def test_compose_pos_et_syntagmes(self):
+        pos = bl.NeuronalLLMPOS("faux-modele",
+                                transport=lambda *_: '{"pos":["DET","NOUN","VERB"]}')
+        chunks = bl.NeuronalLLMChunks("faux-modele",
+                                      transport=lambda *_: '{"bio":["B-GN","I-GN","B-GV"]}')
+        compose = bl.NeuronalLLMCompose(pos, chunks)
+        a = compose.analyser("Le chat dort.", "fr")
+        self.assertEqual({e.niveau for e in a.etiquettes}, {"pos", "syntagme"})
+        self.assertEqual({e.source for e in a.etiquettes}, {"neuronal"})
+        self.assertEqual(a.refus, "")
+        self.assertEqual(pos.appels, 1)
+        self.assertEqual(chunks.appels, 1)
+
 
 if __name__ == "__main__":
     unittest.main()

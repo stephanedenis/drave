@@ -3205,3 +3205,290 @@ pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/impor
   ```
 
 - **job_output** `{"job_id": "bash-49", "timeout_ms": 540000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$(ls $d | wc -l) page(s)\"; done; ps -eo pid,etime,pcpu,args | grep -E \"pdftoppm|tesseract|ocr_pdf\" | grep -v grep | head -4 | cut -c1-140; ps -o etime -p 56494 | tail -1", "description": "Diagnose stalled OCR run"}`
+
+  ```
+1 page(s)
+  56487    01:27:55  0.0 bash -c python3 tools/ocr_pdf.py --liste work/ocr/scans-uniques.txt --racine CEGEP --sortie data/corpus_ocr_cegep -
+  56494    01:27:55  0.0 python3 tools/ocr_pdf.py --liste work/ocr/scans-uniques.txt --racine CEGEP --sortie data/corpus_ocr_cegep --manifes
+ 123458       00:02  101 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-xe4qseaa/p-1.png stdou
+   01:27:55
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -5 work/ocr/run-cegep-02.log", "description": "Read OCR log tail"}`
+
+  ```
+44 work/ocr/run-cegep-02.log
+  CEGEP · 6GD.pdf · 4 p · 6365 car
+  CEGEP · 4.3寸电容触摸屏裸屏尺寸图.pdf · 1 p · 1148 car
+  CEGEP · ov2640_ds_1.8_.pdf · 45 p · 59387 car
+  ! timeout pdftoppm : MicroPython Programming with ESP32 and ESP8266 by Rui Santos, Sara Santos (z-lib.org).pdf (ignoré)
+  CEGEP · 2.8寸ILI9341 TFTLCD尺寸图（钢化玻璃TP）.pdf · 1 p · 1752 car
+  ```
+
+- **bash** `{"command": "df -h /dev/shm /tmp | tail -3; ps -o etime -p 56494 | tail -1; wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log", "description": "Check tmpfs space and OCR progress"}`
+
+  ```
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs            63G     0   63G   0% /dev/shm
+tmpfs            63G   59M   63G   1% /tmp
+   01:28:52
+46 work/ocr/run-cegep-02.log
+  CEGEP · Broadway-QSG_DE.pdf · 1 p · 7318 car
+  CEGEP · Broadway-QSG_EN.pdf · 1 p · 6926 car
+  ```
+
+- **bash** `{"command": "ps -p 56494 >/dev/null && echo \"encore en cours\" || echo \"terminé\"; wc -l work/ocr/run-cegep-02.log; tail -3 work/ocr/run-cegep-02.log", "description": "Check main OCR completion"}`
+
+  ```
+encore en cours
+48 work/ocr/run-cegep-02.log
+  CEGEP · Broadway-QSG_EN.pdf · 1 p · 6926 car
+  CEGEP · Broadway-QSG_ES.pdf · 1 p · 7749 car
+  CEGEP · Broadway-QSG_FR.pdf · 1 p · 7667 car
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Ajoute la passe MicroPython (timeout du run principal) au corpus et au manifeste.\n\nLe run principal a dépassé le timeout `pdftoppm` de 1 800 s sur le PDF de 359 pages ; la passe\nde reprise l'ocrise à 200 dpi (rendu plus rapide), puis ce script concatène  … [2442 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/ajoute_micro.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "ps -p 56494 >/dev/null && echo \"en cours\" || echo \"terminé\"; wc -l work/ocr/run-cegep-02.log; tail -3 work/ocr/run-cegep-02.log; ls -l reports/ocr-pdf-cegep.json", "description": "Check main run completion"}`
+
+  ```
+en cours
+51 work/ocr/run-cegep-02.log
+  CEGEP · Broadway-QSG_IT.pdf · 1 p · 8259 car
+  CEGEP · Broadway-QSG_NL.pdf · 1 p · 7134 car
+  CEGEP · 3.5寸液晶屏规格.pdf · 1 p · 1615 car
+-rw-r--r--. 1 stephane stephane 2423  2 nov 13:37 reports/ocr-pdf-cegep.json
+  ```
+
+- **bash** `{"command": "ps -eo args | grep pdftoppm | grep -v grep | head -1 | cut -c1-200; echo \"---\"; python3 - <<'PY'\nimport pathlib\npaths=[l for l in pathlib.Path('work/ocr/scans-uniques.txt').read_text().splitlines() if l]\nfor i,p in enumerate(paths,1):\n    if 'STM32' in p or 'MicroPython' in p or ' … [111 caractères tronqués]`
+
+  ```
+pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/STM32参考资料/ST MCU 最新选型手册_201603.pdf /tmp/ocr-pdf-n4gfc3um
+---
+72 4.3寸电容触摸屏裸屏尺寸图.pdf
+73 ov2640_ds_1.8_.pdf
+74 MicroPython Programming with ESP32 and ESP8266 by Rui Santos, Sara San
+75 2.8寸ILI9341 TFTLCD尺寸图（钢化玻璃TP）.pdf
+76 Broadway-QSG_DE.pdf
+77 Broadway-QSG_EN.pdf
+78 Broadway-QSG_ES.pdf
+79 Broadway-QSG_FR.pdf
+80 Broadway-QSG_IT.pdf
+81 Broadway-QSG_NL.pdf
+82 3.5寸液晶屏规格.pdf
+83 3.5寸LCD尺寸图（钢化玻璃TP）.pdf
+84 ST MCU 最新选型手册_201603.pdf
+  ```
+
+- **bash** `{"command": "grep -i \"MicroPython Programming\" work/ocr/scans-uniques.txt | tee work/ocr/micro.txt; wc -l work/ocr/micro.txt", "description": "Create MicroPython worklist"}`
+
+  ```
+/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/Hardware/MicroPython Programming with ESP32 and ESP8266 by Rui Santos, Sara Santos (z-lib.org).pdf
+1 work/ocr/micro.txt
+  ```
+
+- **job_output** `{"job_id": "bash-49", "timeout_ms": 240000, "wait": true}`
+
+  ```
+! timeout pdftoppm : MicroPython Programming with ESP32 and ESP8266 by Rui Santos, Sara Santos (z-lib.org).pdf (ignoré)
+  CEGEP · 2.8寸ILI9341 TFTLCD尺寸图（钢化玻璃TP）.pdf · 1 p · 1752 car
+  CEGEP · Broadway-QSG_DE.pdf · 1 p · 7318 car
+  CEGEP · Broadway-QSG_EN.pdf · 1 p · 6926 car
+  CEGEP · Broadway-QSG_ES.pdf · 1 p · 7749 car
+  CEGEP · Broadway-QSG_FR.pdf · 1 p · 7667 car
+  CEGEP · Broadway-QSG_IT.pdf · 1 p · 8259 car
+  CEGEP · Broadway-QSG_NL.pdf · 1 p · 7134 car
+  CEGEP · 3.5寸液晶屏规格.pdf · 1 p · 1615 car
+  CEGEP · 3.5寸LCD尺寸图（钢化玻璃TP）.pdf · 1 p · 1455 car
+  CEGEP · ST MCU 最新选型手册_201603.pdf · 60 p · 142339 car
+  CEGEP · 420 allocation Hiver.pdf · 6 p · 8545 car
+  CEGEP · MergedDocument1.pdf · 42 p · 44574 car
+  CEGEP · Décision - Révision de note JML.pdf · 2 p · 325 car
+[status: running]
+  ```
+
+- **bash** `{"command": "for i in $(seq 1 20); do kill -0 56494 2>/dev/null || break; sleep 2; done; ps -p 56494 >/dev/null && echo \"en cours\" || echo \"terminé\"; ls -l reports/ocr-pdf-cegep.json; tail -5 work/ocr/run-cegep-02.log", "description": "Wait for main OCR to finish"}`
+
+  ```
+terminé
+-rw-r--r--. 1 stephane stephane 2606  2 nov 18:06 reports/ocr-pdf-cegep.json
+  "train": 4078388,
+  "val": 12536,
+  "test": 10524
+ }
+}
+  ```
+
+### 👤 Utilisateur
+
+background job bash-49 (bash: python3 tools/ocr_pdf.py --liste work/ocr/scans-uniques.txt --racine CEGEP --sortie data/corpus_ocr_cegep --manifeste reports/ocr-pdf-cegep.json --ouvriers 8 2>&1 | tee work/ocr/run-cegep-02.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nm=json.load(open('reports/ocr-pdf-cegep.json'))\nfor k in ('date','pdfs','scannes','ocrises','pages_ocr','caracteres','mots_estimes','troncons','documents','octets','temps_s'):\n    print(k, '=', m[k])\nprint('sha train', m['sha256_train'][:16])\nprint('di … [148 caractères tronqués]`
+
+  ```
+date = 2026-11-02
+pdfs = 91
+scannes = 91
+ocrises = 59
+pages_ocr = 1623
+caracteres = 4058501
+mots_estimes = 654596
+troncons = 530
+documents = {'train': 52, 'val': 4, 'test': 3}
+octets = {'train': 4078388, 'val': 12536, 'test': 10524}
+temps_s = 5701.0
+sha train b39be40d9342a16a
+dispositif {'ocr': 'tesseract 5.5.3 sans root (work/ocr/root)', 'langues': 'fra+eng', 'dpi': 300, 'psm': 3, 'pretraitement': 'aucun (le R4.4 le fera)', 'detection': 'liste explicite de scans qualifiés sur le texte intégral', 'ouvriers': 8, 'split': 'hash salé du chemin : 5% val, 5% test', 'deduplication': 'documents + tronçons'}
+-rw-r--r--. 1 stephane stephane   10524  2 nov 18:06 data/corpus_ocr_cegep/test.txt
+-rw-r--r--. 1 stephane stephane 4078388  2 nov 18:06 data/corpus_ocr_cegep/train.txt
+-rw-r--r--. 1 stephane stephane   12536  2 nov 17:27 data/corpus_ocr_cegep/val.txt
+  ```
+
+- **bash** `{"command": "TMPDIR=/dev/shm python3 tools/ocr_pdf.py --liste work/ocr/micro.txt --racine CEGEP --sortie data/corpus_ocr_cegep_micro --manifeste work/ocr/micro-manifest.json --dpi 200 --ouvriers 8 2>&1 | tee work/ocr/run-micro.log", "description": "OCR MicroPython at 200 dpi", "run_in_background": t … [4 caractères tronqués]`
+
+  ```
+started background job bash-142
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport hashlib, pathlib\np=pathlib.Path('work/ocr/micro.txt').read_text().splitlines()[0]\nh=int(hashlib.blake2b(f'1:{p}'.encode(),digest_size=8).hexdigest(),16)%1000\nprint('hash', h, 'split', 'val' if h<50 else ('test' if h<100 else 'train'))\nPY", "description": "Co … [25 caractères tronqués]`
+
+  ```
+hash 227 split train
+  ```
+
+- **bash** `{"command": "git log --oneline -3; echo \"--- status ---\"; git status --short | head -10; echo \"--- en-cours mtime ---\"; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md; sed -n '88,108p' docs/pilotage/en-cours.md", "description": "Check current state and en-cours D/R/A section"}`
+
+  ```
+df899b90 B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592
+d2fc26c6 D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE
+7ef0199c B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)
+--- status ---
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+ M reports/ocr-pdf-cegep.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/operateurs.py
+ M tools/tests/linguistique/test_bloc_linguistique.py
+?? reports/n2-r11.json
+?? reports/rapport-n2-r11.md
+?? tools/tests/linguistique/qualifier_cascade.py
+?? tools/tests/qualifier_politique_drvm.py
+?? tools/tests/test_pensee_politique.py
+--- en-cours mtime ---
+-rw-r--r--. 1 stephane stephane 11944 17:52:48 docs/pilotage/en-cours.md
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **D/R/A** — texte intégral, PDF/OCR, prépa R1.1/R1.2, A2.6/A8.3.
+- **Plan** : texte intégral, PDF, OCR, glossaire.
+- **Ambition** : le 
+… [1065 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ps -eo args | grep -E \"pdftoppm|ocr_pdf\" | grep -v grep | head -2 | cut -c1-150; for d in $(ls -dt /dev/shm/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) page(s)\"; done; ls -l work/ocr/run-micro.log 2>/dev/null; cat work/ocr/run-micro.log 2>/dev/null | tail -2", "d … [47 caractères tronqués]`
+
+  ```
+bash -c TMPDIR=/dev/shm python3 tools/ocr_pdf.py --liste work/ocr/micro.txt --racine CEGEP --sortie data/corpus_ocr_cegep_micro --manifeste work/ocr/m
+python3 tools/ocr_pdf.py --liste work/ocr/micro.txt --racine CEGEP --sortie data/corpus_ocr_cegep_micro --manifeste work/ocr/micro-manifest.json --dpi
+/dev/shm/ocr-pdf-qijkbxmt: 9 page(s)
+-rw-r--r--. 1 stephane stephane 0  2 nov 18:07 work/ocr/run-micro.log
+  ```
+
+- **bash** `{"command": "P=$(pgrep -f \"ocr_pdf.py --liste work/ocr/micro.txt\" | head -1); ps -o etime -p $P | tail -1; for d in $(ls -dt /dev/shm/ocr-pdf-* 2>/dev/null | head -1); do echo \"avant: $(ls $d | wc -l)\"; sleep 20; echo \"après 20s: $(ls $d | wc -l)\"; done", "description": "Measure MicroPython re … [11 caractères tronqués]`
+
+  ```
+01:00
+avant: 10
+après 20s: 13
+  ```
+
+- **job_kill** `{"job_id": "bash-142", "reason": "Rendu 200 dpi trop lent (0,15 p/s) : test à 150 dpi avant de relancer"}`
+
+  ```
+requested cancellation of job bash-142
+  ```
+
+- **bash** `{"command": "pkill -f \"ocr_pdf.py --liste work/ocr/micro.txt\" 2>/dev/null; pkill -f \"pdftoppm.*MicroPython\" 2>/dev/null; sleep 1; P=$(head -1 work/ocr/micro.txt); rm -rf /dev/shm/microtest; mkdir -p /dev/shm/microtest; time pdftoppm -r 150 -gray -png -f 1 -l 10 \"$P\" /dev/shm/microtest/p; ls /d … [70 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"ocr_pdf.py --liste work/ocr/micro|pdftoppm.*MicroPython\" | grep -v grep | head -3; ls /dev/shm/ | grep ocr-pdf | head; ls data/corpus_ocr_cegep_micro 2>/dev/null", "description": "Check micro job stopped"}`
+
+  ```
+ocr-pdf-qijkbxmt
+test.txt
+train.txt
+val.txt
+  ```
+
+- **bash** `{"command": "rm -rf /dev/shm/microtest /dev/shm/ocr-pdf-*; mkdir -p /dev/shm/microtest; P=$(head -1 work/ocr/micro.txt); /usr/bin/time -f \"%e s\" pdftoppm -r 150 -gray -png -f 1 -l 10 \"$P\" /dev/shm/microtest/p; ls /dev/shm/microtest | wc -l; du -sh /dev/shm/microtest", "description": "Time 150 dp … [22 caractères tronqués]`
+
+  ```
+10
+17M	/dev/shm/microtest
+[stderr]
+36.07 s
+  ```
+
+- **bash** `{"command": "TMPDIR=/dev/shm python3 tools/ocr_pdf.py --liste work/ocr/micro.txt --racine CEGEP --sortie data/corpus_ocr_cegep_micro --manifeste work/ocr/micro-manifest.json --dpi 150 --ouvriers 8 2>&1 | tee work/ocr/run-micro.log", "description": "OCR MicroPython at 150 dpi", "run_in_background": t … [4 caractères tronqués]`
+
+  ```
+started background job bash-150
+  ```
+
+- **job_output** `{"job_id": "bash-150", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "for d in $(ls -dt /dev/shm/ocr-pdf-* 2>/dev/null | head -1); do echo \"$(ls $d | wc -l) page(s)\"; done; P=$(pgrep -f \"ocr_pdf.py --liste work/ocr/micro\" | head -1); ps -o etime -p $P | tail -1", "description": "Check micro render count"}`
+
+  ```
+173 page(s)
+      10:39
+  ```
+
+- **bash** `{"command": "date \"+%Y-%m-%d %H:%M %Z\"", "description": "Current time"}`
+
+  ```
+2026-11-02 18:20 EST
+  ```
+
+- **edit** `{"file_path": "journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md", "new_string": "- **Heartbeat** : 2026-11-02 18:20 EST", "old_string": "- **Heartbeat** : 2026-11-02 16:21 EST"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/sessions.py --check --strict; echo \"[exit $?]\"", "description": "Strict check with refreshed heartbeat"}`
+
+  ```
+⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/wikipedia/` (lecture) (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/corpus_wiki_* (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ⚠ fichiers proches : tools/corpus* (0733c5bb-f90b-4f58-9241-3364fa32e46c) / tools/corpus_wikipedia*.py (fe3c05f0-834b-44f2-8739-501865d652c1)
+  ❌ mandat périmé (89 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+  ❌ mandat périmé (104 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — heartbeat à rafraîchir
+[exit 1]
+  ```
+
+- **job_output** `{"job_id": "bash-150", "timeout_ms": 500000, "wait": true}`

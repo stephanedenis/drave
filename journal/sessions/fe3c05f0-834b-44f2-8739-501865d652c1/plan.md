@@ -14,7 +14,7 @@
   `reports/corpus-wiki-*`, `reports/corpus-wikipedia-*`, `reports/inventaire-*`,
   `reports/rapport-corpus-*`, `reports/r11-*`, `reports/r12-*`, `reports/a26-*`, `reports/a83-*`,
   `journal/sessions/fe3c05f0-…/`
-- **Heartbeat** : 2026-11-02 16:21 EST
+- **Heartbeat** : 2026-11-02 18:20 EST
 - **État** : actif
 - **Prochaine action** : le **fonds CEGEP** (~127 scans) ; la **clôture** de la session ;
   R1.1/R1.2 après N2, A2.6 après A6.2. Les 20 livres, les 10 notes CEGEP, le PDF, les documents,

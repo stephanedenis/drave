@@ -126,7 +126,7 @@ modèle. C'est ce qui rend la **substitution** possible.
 
 ### 5.2 La version neuronale
 
-Quatre objets, un même contrat :
+Cinq objets, un même contrat :
 
 - **`MockNeuronal`** : le **double de contrat**. Il est déterministe, sans GPU, et rend les
   niveaux profonds (morphème, POS ouverte, syntagme, pragmatique) avec `source = neuronal`. Il
@@ -146,6 +146,10 @@ Quatre objets, un même contrat :
   grammaire GBNF, puis **reconstruit** les spans sur la tokenisation du bloc. Le prompt est
   **few-shot** (cinq exemples hors gold) : sans eux, les frontières (déterminant hors GN,
   auxiliaire hors GV) se perdent. Il ne rend que le niveau `syntagme`.
+- **`NeuronalLLMCompose`** : le **bloc complet** — POS + syntagmes dans une seule annotation.
+  Il appelle les deux taggers (chacun avec son cache), réunit leurs étiquettes et laisse la
+  pragmatique à l'heuristique. C'est le bloc de la cascade complète ; un refus d'un des deux
+  n'efface pas l'autre.
 
 **Ce que le modèle local a fait ici.** Le vrai Qwen2.5-0.5B (de base) ne suit pas le format : il
 recopie le schéma du prompt et ne rend pas de POS exploitables ; le 3B-Instruct est dominé sur les
@@ -154,10 +158,15 @@ le contrat : POS seul **0,8483**, et en **cascade à 0,6** sur le gold de 180 ph
 sans régression sur les réelles). Le **tagger de syntagmes** est qualifié sur le même gold :
 exact **0,6173**, tête **0,7606** (heuristique 0,1992 / 0,5614) ; la cascade `confiance` rend
 **0,6168 / 0,7592**, la cascade par défaut (priorité heuristique) reste à 0,2137 / 0,5670. Le
-tagger de syntagmes ne rend que ce niveau ; la pragmatique et l'annotation complète restent à
-mesurer. Les chiffres, les contrôles et les limites sont dans
-[`rapport-pensee-gold-neuronal.md`](../../reports/rapport-pensee-gold-neuronal.md) et
-[`rapport-pensee-gold-syntagmes.md`](../../reports/rapport-pensee-gold-syntagmes.md).
+tagger de syntagmes ne rend que ce niveau. La **cascade complète** (composite + politique
+`confiance` + pragmatique heuristique) rend, sur les 180 : POS **0,9415**, syntagmes exacts
+**0,6088** / tête **0,7539**, acte **1,0**, fraction **0,6381** ; les **ablations** (POS seule,
+syntagmes seuls) sont exactement égales à la complète, et la politique par défaut retombe à
+0,2137 / 0,5670. La pragmatique reste à l'heuristique ; un tagger neuronal de pragmatique reste
+à mesurer. Les chiffres, les contrôles et les limites sont dans
+[`rapport-pensee-gold-neuronal.md`](../../reports/rapport-pensee-gold-neuronal.md),
+[`rapport-pensee-gold-syntagmes.md`](../../reports/rapport-pensee-gold-syntagmes.md) et
+[`rapport-pensee-gold-cascade.md`](../../reports/rapport-pensee-gold-cascade.md).
 
 ## 6. Substituer, paralléliser, cascader
 
@@ -172,7 +181,7 @@ annotation = bloc.analyser(texte, langue="fr")
 ```
 
 et `bloc` peut être `Heuristique`, `MockNeuronal`, `NeuronalLLM`, `NeuronalLLMPOS`,
-`NeuronalLLMChunks`, `Parallele` ou `Cascade`. Le
+`NeuronalLLMChunks`, `NeuronalLLMCompose`, `Parallele` ou `Cascade`. Le
 test `test_substitution` vérifie que `Heuristique` et `MockNeuronal` rendent **le même schéma**
 (mêmes clés, mêmes spans valides) et que seules la `source` et les valeurs changent.
 

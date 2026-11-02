@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **551 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **552 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -384,6 +384,7 @@
 | [rapport-pensee-gold-200-subsets.md](rapport-pensee-gold-200-subsets.md) | B13 — les sous-ensembles du gold : POS 0,8214 sur les 20 nouvelles |
 | [rapport-pensee-gold-200.md](rapport-pensee-gold-200.md) | B13 — le gold à 200 phrases réelles : POS 0,7738 |
 | [rapport-pensee-gold-342.md](rapport-pensee-gold-342.md) | B13 — le gold complet : 522 phrases, POS 0,7586 |
+| [rapport-pensee-gold-cascade.md](rapport-pensee-gold-cascade.md) | B13 — la cascade complète : POS 0,9415, syntagmes 0,7539, acte 1,0 |
 | [rapport-pensee-gold-complexes.md](rapport-pensee-gold-complexes.md) | B13 — les phrases complexes : POS 0,6471, syntagme 0,4828 |
 | [rapport-pensee-gold-complexes100.md](rapport-pensee-gold-complexes100.md) | B13 — les 100 phrases complexes : POS 0,6984, syntagme 0,2677 |
 | [rapport-pensee-gold-complexes20.md](rapport-pensee-gold-complexes20.md) | B13 — les 20 phrases complexes : POS 0,6829, syntagme 0,2963 |

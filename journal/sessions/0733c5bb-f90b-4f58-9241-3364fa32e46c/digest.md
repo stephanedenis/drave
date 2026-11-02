@@ -3109,3 +3109,213 @@ ok
 ['courbe_rope_graine1', 'courbe_absolu', 'courbe_absolu_pos1152', 'courbe_rope512_5k', 'meme_texte_rope', 'meme_texte_absolu', 'meme_texte_rope512', 'miroir_copie_rope', 'entrainement_graine1', 'entrainement_graine2', 'entrainement_rope512_5k', 'dispositif']
   ```
 
+### 🤖 Assistant
+
+⏵ Revue de documentation : état avant l'état (compteurs attendus)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 600 python3 tools/revue_documentation.py 2>&1 | tail -25", "description": "Run documentation review"}`
+
+  ```
+revue de documentation · 554 fiche(s) · 641 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 640 JSON, le disque en a 641
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -20; echo \"=== compteurs ===\"; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; echo \"=== log ===\"; git log --oneline -3", "description": "Check working tree and counters"}`
+
+  ```
+M  docs/implantation/bloc-linguistique.md
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+M  journal/2026-11-02/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+M  journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+M  reports/INDEX.md
+M  reports/README.md
+A  reports/pensee-gold-syntagmes.json
+A  reports/rapport-pensee-gold-syntagmes.md
+M  tools/bloc_linguistique.py
+A  tools/tests/linguistique/qualifier_syntagmes.py
+M  tools/tests/linguistique/test_bloc_linguistique.py
+?? reports/n2-r11.json
+?? reports/rapport-n2-r11.md
+=== compteurs ===
+127:| fichiers / JSON de résultats | **554** / **640** | `reports/*.md` / `reports/*.json` |
+=== log ===
+d2fc26c6 D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE
+7ef0199c B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)
+dca7e7a2 ÉTAT — COMPT
+… [64 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Concurrence détectée : une autre session a des fichiers indexés ; je vérifie qui écrit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/sessions.py --status 2>&1 | head -12; echo \"=== date ===\"; date '+%H:%M:%S'; echo \"=== en-cours modifié à ===\"; stat -c '%y' docs/pilotage/en-cours.md", "description": "Check active sessions and en-cours mtime"}`
+
+  ```
+sessions · plans de mandat
+  ⏰ 0733c5bb-f90b-4f58 · actif    ·  94 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → **200 000 pas sur `data/wiki_mix/propre`** (34,3 M, canal, positions aléatoires, graine 1) puis la mesure des cinq PPL et de la courbe 128/256/512.
+    0b0a6a0d-05f5-4308 · terminé  · 1999 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 4073 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 3244 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+      → clôture committée (`eff8d8e4`) — session close ; la suite est **N2** (la hiérarchie), portée par la session à ouvrir
+  ⏰ 29ad180d-38a5-4481 · actif    ·  62 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+      → **validation humaine de la banque** (le mode `banque` est à 0 verdict) ; puis la
+… [389 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rafraîchissement de mon mandat (heartbeat + avancement) pendant que les autres écrivent
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"- **Heartbeat** : 2026-11-02 16:20 HAE\", \"- **Heartbeat** : 2026-11-02 17:55  … [1027 caractères tronqués]`
+
+  ```
+plan à jour
+15:- **Heartbeat** : 2026-11-02 17:55 HAE
+17:54:31
+pas 12600 · perte 1.4156 · PPL val 4.488 · 1278 s
+pas 96050 · perte 1.2517 · PPL val 3.340 · 5475 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls -la data/corpus_propre/; head -c 300 data/corpus_propre/val.txt; echo; echo \"=== corpus_repo_propre ===\"; head -c 200 data/corpus_repo_propre/val.txt", "description": "Identify clean corpus content"}`
+
+  ```
+total 3840
+drwxr-xr-x. 1 stephane stephane      62 31 oct 22:21 .
+drwxr-xr-x. 1 stephane stephane    2564  2 nov 16:31 ..
+-rw-r--r--. 1 stephane stephane  320314 31 oct 22:21 dev.txt
+-rw-r--r--. 1 stephane stephane  180224 31 oct 22:20 test.txt
+-rw-r--r--. 1 stephane stephane 3244858 31 oct 22:20 train.txt
+-rw-r--r--. 1 stephane stephane  180224 31 oct 22:20 val.txt
+, la lecture n'en transfère que 0,638, et l'écart ne se réduit ni par plus
+de langues, ni par normalisation.
+3. L'attrition ne généralise pas : elle réduit la taille à coût faible et
+monotone. Le critère de validation est trop indulgent pour l'arrêter au bon
+13. RECTIFICATION — l'oracle 
+=== corpus_repo_propre ===
+atible avec les outils existants ; une variante bitmap est une **optimisation mesurée**, pas un prérequis.
+
+## 13. Ce qui rendrait l'implémentation fausse
+
+- **La surface entre en N2** : si `φ` li
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"work/n2ac/eval_200k.py\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"    # 3. Hors domaine, canal recalculé sur le texte.\"\"\"\nneuf = \"\"\"    # 3. Le corpus propre du dépôt (3,6 Mo) : l … [873 caractères tronqués]`
+
+  ```
+ok
+17:54:52
+pas 96450 · perte 1.1873 · PPL val 3.334 · 5497 s
+pas 13000 · perte 1.5375 · PPL val 4.359 · 1298 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des chiffres de la fiche contre les JSON bruts
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nfor f in (\"courbe-rope\",\"courbe-absolu\",\"courbe-absolu-pos1152\",\"courbe-rope512-5k\",\n          \"queue-rope\",\"queue-absolu\",\"queue-rope512\",\"queue-absolu-pos1152\"):\n    p = pathlib.Path(\"work/n … [288 caractères tronqués]`
+
+  ```
+courbe-rope              {'L128': 3.3696, 'L192': 3.3217, 'L256': 3.3217, 'L384': 3.33, 'L512': 3.2892, 'L1000': 3.2545}
+courbe-absolu            {'L128': 3.5131, 'L192': 3.4619, 'L256': 3.4836, 'L384': 3.5849, 'L512': 3.6558, 'L1000': 8.2024}
+courbe-absolu-pos1152    {'L128': 3.5745, 'L256': 3.5389, 'L512': 3.7449, 'L1000': 4.0956}
+courbe-rope512-5k        {'L128': 3.3399, 'L192': 3.2747, 'L256': 3.2271, 'L384': 3.17, 'L512': 3.099, 'L1000': 3.0107}
+queue-rope               {'ppl': {'256': 3.0836, '512': 3.1645, '1000': 3.1662}}
+queue-absolu             {'ppl': {'256': 3.2849, '512': 3.8468, '1000': 18.6055}}
+queue-rope512            {'ppl': {'256': 2.9654, '512': 2.8819, '1000': 2.8638}}
+queue-absolu-pos1152     {'ppl': {'256': 3.3485, '512': 4.0368, '1000': 4.5486}}
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- zero ---\"; cat work/n2ac/chaine_zero.out; tail -1 work/n2ac/zero-absolu.log; tail -1 work/n2ac/zero-rope.log 2>/dev/null; echo \"--- 200k ---\"; tail -1 work/n2ac/mix-200k.log; echo \"--- git ---\"; git log --o … [65 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-131]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-131", "timeout_ms": 560000, "wait": true}`
+
+  ```
+18:04:04
+--- zero ---
+zero-absolu fini 18:01:07
+}
+pas   1800 · perte 1.5516 · PPL val 5.160 · 126 s
+--- 200k ---
+pas 105800 · perte 1.4090 · PPL val 3.323 · 6047 s
+--- git ---
+df899b90 B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592
+d2fc26c6 D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -12; echo \"=== courbe zero-absolu ===\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/zero-absolu.pt --longueurs 128,256,512,1000 --sortie work/n2ac/courbe-zero-absolu.json 2 … [75 caractères tronqués]`
+
+  ```
+M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+ M tools/bloc_linguistique.py
+ M tools/pensee/operateurs.py
+ M tools/tests/linguistique/test_bloc_linguistique.py
+?? reports/n2-r11.json
+?? reports/rapport-n2-r11.md
+?? tools/tests/linguistique/qualifier_cascade.py
+?? tools/tests/test_pensee_politique.py
+=== courbe zero-absolu ===
+  L128 : 3.8333
+  L256 : 3.7754
+  L512 : 3.9664
+  L1000 : 7.6726
+{"fichier": "zero-absolu.pt", "val": "data/wiki_fr/propre", "positions": "absolues", "L128": 3.8333, "L256": 3.7754, "L512": 3.9664, "L1000": 7.6726}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 work/n2ac/trajectoire.py work/n2ac/mix-200k.log --depuis 40000 --cible 2.5 2>&1 | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nprint('dernier', d['dernier_pas'], d['ppl_finale'], 'loi', d['ajustement'])\nprint('pas pour 2,5 :', d.ge … [122 caractères tronqués]`
+
+  ```
+dernier 106600 3.295 loi {'depuis': 40000, 'a': 9.606506, 'b': 0.092992}
+pas pour 2,5 : 1935629
+trajectoire 10k : [[10000, 4.646], [20000, 3.993], [30000, 3.781], [40000, 3.626], [50000, 3.525], [60000, 3.39], [70000, 3.428], [80000, 3.339], [90000, 3.331], [100000, 3.292]]
+  ```
+
+- **bash** `{"command": "sleep 720; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_zero.out; tail -1 work/n2ac/zero-rope.log; echo \"--- 200k ---\"; tail -1 work/n2ac/mix-200k.log", "description": "Wait for zero-rope"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-134]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-134", "timeout_ms": 700000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-134", "timeout_ms": 300000, "wait": true}`
+
+  ```
+18:17:01
+zero-absolu fini 18:01:07
+pas  12000 · perte 1.2805 · PPL val 4.051 · 904 s
+--- 200k ---
+pas 118400 · perte 1.1586 · PPL val 3.253 · 6825 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_zero.out; tail -1 work/n2ac/zero-rope.log; grep -E \"ppl_val\" work/n2ac/zero-absolu.pt.json work/n2ac/zero-rope.pt.json 2>/dev/null", "description": "Wait for zero-rope completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-135]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-135", "timeout_ms": 600000, "wait": true}`

@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 1.6 h |
-| Tours | 2 |
-| Messages | 220 |
-| Appels d'outils | 311 |
-| Fichiers touchés | 19 |
-| Commandes | 207 |
+| Durée | 2.1 h |
+| Tours | 3 |
+| Messages | 259 |
+| Appels d'outils | 358 |
+| Fichiers touchés | 23 |
+| Commandes | 241 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -27,6 +27,8 @@
 **Tour 1** — Tu reprends la session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`. Lis son plan, AGENTS.md  et docs/pilotage/en-cours.md. Remets `- **État** : actif` et `- **Heartbeat** : <maintenant>`  dans son plan, puis vérifie `python3 tools/sessions.py --check --strict`. Le cycle 140/140  (gold 432, 116 liens) est committé. Prochaine action : gold neuronal (qualifier un modèle  local) ; DRVM/native est blo … [114 caractères tronqués]
 
 **Tour 2** — continue toute la nuit
+
+**Tour 3** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -79,7 +81,7 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 
 ### Tour 2 — continue toute la nuit
 
-*67 appels d'outils.* Actions notables :
+*70 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Inspect gold segment types and nesting
@@ -95,11 +97,49 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - bash — Evaluate BIO chunker on 20 synthetic sentences
 - bash — Check languages and example leakage
 - bash — Locate insertion point for chunks class
-- … et 48 autres
+- … et 51 autres
 
 **Synthèse produite :**
 
-⏵ Commit du fait syntagmes (la porte du bloc est verte ; les 4 mandats périmés sont hors session)
+⏵ Bilan de la nuit : gold neuronal POS et syntagmes committés
+
+**Deux faits committés cette nuit** (session `e181ce02`, plan actif, heartbeat 17:53) :
+
+| fait | commit | chiffre clé |
+|---|---|---|
+| **Gold neuronal POS** | `7ef0199c` | POS **0,8483** seul ; cascade **0,9440** (0 refus) |
+| **Syntagmes neuronaux** | `df899b90` | exact **0,6173**, tête **0,7606** ; cascade confiance **0,7592** |
+
+- **Le tagger de syntagmes** (`NeuronalLLMChunks`, BIO + grammaire GBNF, 5 exemples hors gold) bat l'heuristique partout : **+0,4181** exact / **+0,1992** tête sur 180 ; **0,5138/0,6606** sur les 20 réelles, **0,6331/0,7759** sur les 160 synthétiques.
+- **Le résultat de structure** : la cascade par défaut (priorité heuristique) reste à **0,2137/0,5670** — elle muselle le tagger. La politique `confiance` rend **0,6168/0,7592**. C'est la **politique de fusion**, pas le modèle, qui était le goulot.
+- Contrôles : vide 0 ; BIO aléatoire **0,0419/0,1240** ; 180 appels, 0 refus, ~4,0 s/appel CPU.
+- Portes : 14 tests du bloc verts, `porte-bloc-linguistique.sh` verte, revue documentation/tableaux/T0 verts **au commit** ; `sessions --check --strict` reste rouge sur **quatre autres mandats** (N2 94 min, S 62, hub 77, D/R/A 93). Après le commit, N2 a ajouté `reports/n2-r11.json` : la revue post-commit signale 641 JSON contre 640 dans l'état — fichier d'une autre session, non committé par moi.
+
+**Suite de la nuit** : la **cascade complète** (POS `NeuronalLLMPOS` + syntagmes `NeuronalLLMChunks` + politique `confiance`, pragmatique de l'heuristique), puis la **pragmatique** et la **parité DRVM/native**. Le goal est armé (`max_goal_rounds` 1 000) ; je continue.
+
+### Tour 3 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
+
+*44 appels d'outils.* Actions notables :
+
+- bash — Inspect repo, plan, and 7B server state
+- bash — Check sessions status and en-cours
+- bash — Locate helper before compositions
+- edit `/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py`
+- read
+- edit `/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py`
+- edit `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py`
+- write `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_cascade.py`
+- bash — Compile and run unit tests for composite
+- bash — Dry-run complete cascade on 5 phrases
+- bash — Run full complete cascade qualification
+- bash — Refresh plan heartbeat during cascade run
+- bash — Find DRVM/native references
+- bash — Read heterogeneous operators
+- … et 27 autres
+
+**Synthèse produite :**
+
+⏵ Commit de la cascade complète (les fichiers DRVM restent pour le fait suivant)
 
 ## 3. Travail accompli
 
@@ -113,8 +153,8 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 | `/tmp/qualif_proto_srv2.py` | 1 | 0 |
 | `/tmp/qualif_7b.py` | 1 | 0 |
 | `/tmp/qualif_7b_180.py` | 1 | 0 |
-| `/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py` | 0 | 5 |
-| `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py` | 0 | 2 |
+| `/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py` | 0 | 7 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py` | 0 | 3 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py` | 1 | 6 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-neuronal.md` | 1 | 1 |
 | `/home/stephane/GitHub/Qtrinet/reports/README.md` | 0 | 4 |
@@ -126,6 +166,10 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 | `/tmp/bio_eval.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_syntagmes.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-syntagmes.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_cascade.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/test_pensee_politique.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_politique_drvm.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-cascade.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -169,7 +213,7 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 167 autres
+- … et 201 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -227,6 +271,8 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - **T2** `248:| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 lang`
 - **T2** `CPU + neuronal de contrat, parallèle/cascade, activation 51–76 %) ; **398 langues à 0,9687**,`
 - **T2** `**tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock) **67,1 %** ;`
+- **T3** `48.44.592.457 I slot print_timing: id  1 | task 12021 |       total time =    2698.68 ms /    33 tokens`
+- **T3** `docs/pilotage/roadmap.md:249:| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantiq`
 
 ## 5. Erreurs rencontrées
 
@@ -241,4 +287,5 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 
 - B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)" 2>&1 | tail -25; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592" 2>&1 | tail -15; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
 

@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 1.6 h |
+| Durée | 2.1 h |
 | Tours | 2 |
-| Messages | 173 |
-| Appels d'outils | 191 |
-| Fichiers touchés | 7 |
-| Commandes | 132 |
+| Messages | 201 |
+| Appels d'outils | 218 |
+| Fichiers touchés | 8 |
+| Commandes | 153 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -49,7 +49,7 @@
 
 ### Tour 2 — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État  … [367 caractères tronqués]
 
-*180 appels d'outils.* Actions notables :
+*207 appels d'outils.* Actions notables :
 
 - read
 - get_goal
@@ -65,7 +65,7 @@
 - bash — Locate scan census sources
 - bash — Search 127 mentions across docs
 - bash — Read session report around next steps
-- … et 122 autres
+- … et 145 autres
 
 **Synthèse produite :**
 
@@ -77,13 +77,14 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md` | 0 | 2 |
+| `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md` | 0 | 3 |
 | `work/ocr/census_cegep.py` | 1 | 0 |
 | `work/ocr/detecte_cegep.py` | 1 | 0 |
 | `tools/ocr_pdf.py` | 0 | 6 |
 | `tools/detecte_scans_pdf.py` | 1 | 0 |
 | `work/ocr/fiche-cegep.md` | 1 | 0 |
 | `work/ocr/fait_fiche.py` | 1 | 1 |
+| `work/ocr/ajoute_micro.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -127,7 +128,7 @@
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 92 autres
+- … et 113 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -201,6 +202,9 @@
 - **T2** `- **Les genres** : l'encyclopédie 103–147 car/ligne, les livres et documents 32–37, les lignes dupliquées 8,7–24 % (l'OCR 4,8 %).`
 - **T2** `- **A2.6/A8.3** : le lot ne divise pas les lectures denses (+27 % de calcul, PPL −0,006 %).`
 - **T2** `- **15 h 06 — reboot.** Les deux GPU étaient bloqués (`GPU requires reset`, `nvidia_drm refcnt -1`) ; le reset logiciel a échoué et le reboot a rendu les cartes (1 Mio, 0 %). Les deux sessions de trav`
+- **T2** `tmpfs            63G     0   63G   0% /dev/shm`
+- **T2** `tmpfs            63G   59M   63G   1% /tmp`
+- **T2** `dispositif {'ocr': 'tesseract 5.5.3 sans root (work/ocr/root)', 'langues': 'fra+eng', 'dpi': 300, 'psm': 3, 'pretraitement': 'aucun (le R4.4 le fera)', 'detection': 'liste explicite de scans qualifiés`
 
 ## 5. Erreurs rencontrées
 

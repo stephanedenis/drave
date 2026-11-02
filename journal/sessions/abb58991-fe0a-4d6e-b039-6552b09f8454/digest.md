@@ -5562,3 +5562,928 @@ EXIT=1
 ⏵ Commit du fait syntagmes (la porte du bloc est verte ; les 4 mandats périmés sont hors session)
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -m \"B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592\" 2>&1 | tail -15; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Commit the syntagmes fact", "timeoutMs": 300000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master df899b90] B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592
+ 35 files changed, 4668 insertions(+), 164 deletions(-)
+ create mode 100644 reports/pensee-gold-syntagmes.json
+ create mode 100644 reports/rapport-pensee-gold-syntagmes.md
+ create mode 100644 tools/tests/linguistique/qualifier_syntagmes.py
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification post-commit et état de la nuit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -2 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '=== STAT ==='; git show --stat --oneline HEAD | head -12; echo '=== STATUS ==='; git status --short | head -10", "description": "Verify syntagmes commit and working tree"}`
+
+  ```
+df899b90 17:53:59 B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592
+d2fc26c6 17:21:20 D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE
+=== STAT ===
+df899b90 B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592
+ docs/implantation/bloc-linguistique.md             |   40 +-
+ docs/pilotage/en-cours.md                          |   20 +-
+ docs/pilotage/roadmap.md                           |   11 +-
+ journal/2026-11-02/README.md                       |   26 +-
+ journal/2026-11-02/apprentissage.md                |   10 +-
+ journal/2026-11-02/attention.md                    |   10 +-
+ journal/2026-11-02/distribue.md                    |   10 +-
+ journal/2026-11-02/docs.md                         |   10 +-
+ journal/2026-11-02/memoire.md                      |   10 +-
+ journal/2026-11-02/mesures.md                      |   13 +-
+ journal/2026-11-02/modele.md                       |   10 +-
+=== STATUS ===
+?? reports/n2-r11.json
+?? reports/rapport-n2-r11.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/verifie_etat_a_jour.py --head; echo \"ETAT=$?\"; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | grep -E \"T0|violation\" | head -3; python3 tools/verifie_en_cours.py 2>&1 | tail -2", "descri … [67 caractères tronqués]`
+
+  ```
+état · dernier fait df899b90 · dernier état df899b90
+  ✅ aucun fait commité après le dernier état
+ETAT=0
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 640 JSON, le disque en a 641
+  T0 max : 3984 mots (budget 4 000)
+  en-cours · 1610 mots · 7 sections · 5 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-38 [bash] completed — ls ~/.local/share/spacy 2>/dev/null; python3 -m spacy info 2>&1 | head -20; echo '---'; find /home/stephane -maxdepth 6 \( -iname "*fr_core_news*" -o -iname "*stanza*" -o -iname "*udpipe*" \) 2>/dev/null | head
+bash-50 [bash] completed — cd /home/stephane/GitHub/Qtrinet && curl -L --fail --retry 3 -o models/qwen2.5-3b-instruct-q4_k_m.gguf.part https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf && mv models/qwen2.5-3b-instruct-q4_k_m.gguf.part models/qwen2.5-3b-instruct-q4_k_m.gguf && ls -lh models/qwen2.5-3b-instruct-q4_k_m.gguf
+bash-78 [bash] completed — cd /home/stephane/GitHub/Qtrinet && for i in 00001 00002; do curl -L --fail --retry 3 -o "models/qwen2.5-7b-instruct-q4_k_m-$i-of-00002.gguf.part" "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct-GGUF/resolve/main/qwen2.5-7b-instruct-q4_k_m-$i-of-00002.gguf" && mv "models/qwen2.5-7b-instruct-q4_k_m-$i-of-00002.gguf.part" "models/qwen2.5-7b-instruct-q4_k_m-$i-of-00002.gguf"; done; ls -lh models/qwen2.5-7b-instruct-q4_k_m-*.gguf
+bash-145 [bash] completed — cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. ~/gpu-env/bin/python -m tools.pensee.autotest > /tmp/por
+… [754 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan de la nuit : gold neuronal POS et syntagmes committés
+
+**Deux faits committés cette nuit** (session `e181ce02`, plan actif, heartbeat 17:53) :
+
+| fait | commit | chiffre clé |
+|---|---|---|
+| **Gold neuronal POS** | `7ef0199c` | POS **0,8483** seul ; cascade **0,9440** (0 refus) |
+| **Syntagmes neuronaux** | `df899b90` | exact **0,6173**, tête **0,7606** ; cascade confiance **0,7592** |
+
+- **Le tagger de syntagmes** (`NeuronalLLMChunks`, BIO + grammaire GBNF, 5 exemples hors gold) bat l'heuristique partout : **+0,4181** exact / **+0,1992** tête sur 180 ; **0,5138/0,6606** sur les 20 réelles, **0,6331/0,7759** sur les 160 synthétiques.
+- **Le résultat de structure** : la cascade par défaut (priorité heuristique) reste à **0,2137/0,5670** — elle muselle le tagger. La politique `confiance` rend **0,6168/0,7592**. C'est la **politique de fusion**, pas le modèle, qui était le goulot.
+- Contrôles : vide 0 ; BIO aléatoire **0,0419/0,1240** ; 180 appels, 0 refus, ~4,0 s/appel CPU.
+- Portes : 14 tests du bloc verts, `porte-bloc-linguistique.sh` verte, revue documentation/tableaux/T0 verts **au commit** ; `sessions --check --strict` reste rouge sur **quatre autres mandats** (N2 94 min, S 62, hub 77, D/R/A 93). Après le commit, N2 a ajouté `reports/n2-r11.json` : la revue post-commit signale 641 JSON contre 640 dans l'état — fichier d'une autre session, non committé par moi.
+
+**Suite de la nuit** : la **cascade complète** (POS `NeuronalLLMPOS` + syntagmes `NeuronalLLMChunks` + politique `confiance`, pragmatique de l'heuristique), puis la **pragmatique** et la **parité DRVM/native**. Le goal est armé (`max_goal_rounds` 1 000) ; je continue.
+
+
+## Tour 3
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Reprise du goal : état du dépôt, heartbeat et serveur 7B avant la cascade complète
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -3 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '=== STATUS ==='; git status --short | head -15; echo '=== PLAN ==='; grep -E \"Heartbeat|État|Prochaine\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | head -4; echo '== … [151 caractères tronqués]`
+
+  ```
+df899b90 17:53:59 B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592
+d2fc26c6 17:21:20 D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE
+7ef0199c 17:17:29 B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)
+=== STATUS ===
+?? reports/n2-r11.json
+?? reports/rapport-n2-r11.md
+=== PLAN ===
+- **Heartbeat** : 2026-11-02 17:53 EST
+- **Prochaine action** : les **syntagmes** sont mesurés (BIO 7B, tête **0,7606** ; cascade
+- **État** : actif
+=== SERVEUR ===
+{"status":"ok"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/sessions.py --status 2>&1 | head -12; echo '=== EN-COURS ==='; sed -n '78,88p' docs/pilotage/en-cours.md; echo '=== COUNTERS ==='; grep -n \"fichiers / JSON\\|Mis à jour\" docs/pilotage/en-cours.md", "description": "Check sessions status … [15 caractères tronqués]`
+
+  ```
+sessions · plans de mandat
+    0733c5bb-f90b-4f58 · actif    ·   1 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → la mesure des cinq PPL du run de 200 k à sa sortie, puis fiche + état + commit ; le contrôle depuis zéro ; la clôture.
+    0b0a6a0d-05f5-4308 · terminé  · 2001 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 4075 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    22e518ee-81b8-4081 · terminé  · 3246 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+      → clôture committée (`eff8d8e4`) — session close ; la suite est **N2** (la hiérarchie), portée par la session à ouvrir
+  ⏰ 29ad180d-38a5-4481 · actif    ·  64 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+      → **validation humaine de la banque** (le mode `banque` est à 0 verdict) ; puis la **frontière du GN sans auxil
+… [1291 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La cascade complète : j'ajoute le bloc composite POS + syntagmes et son test
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"def _syntagme_bio\" -A 6 tools/bloc_linguistique.py | head -12", "description": "Locate helper before compositions"}`
+
+  ```
+1142:def _syntagme_bio(courant: list, texte: str, nom: str, confiance: float,
+1143-                  langue: str, script: str) -> Etiquette:
+1144-    typ, debut, fin = courant
+1145-    return Etiquette("syntagme", typ, texte[debut:fin], debut, fin, nom, confiance,
+1146-                     langue=langue, script=script, meta={"bio": True})
+1147-
+1148-
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "new_string": "def _syntagme_bio(courant: list, texte: str, nom: str, confiance: float,\n                  langue: str, script: str) -> Etiquette:\n    typ, debut, fin = courant\n    return Etiquette(\"syntagme\", typ, texte[d … [2338 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 12, "offset": 1140}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+1140: 
+1141: 
+1142: def _syntagme_bio(courant: list, texte: str, nom: str, confiance: float,
+1143:                   langue: str, script: str) -> Etiquette:
+1144:     typ, debut, fin = courant
+1145:     return Etiquette("syntagme", typ, texte[debut:fin], debut, fin, nom, confiance,
+1146:                      langue=langue, script=script, meta={"bio": True})
+1147: 
+1148: 
+1149: # --------------------------------------------------------------------------- compositions
+1150: 
+1151: 
+
+(Showing lines 1140-1151 of 1467. Use offset=1152 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "new_string": "def _syntagme_bio(courant: list, texte: str, nom: str, confiance: float,\n                  langue: str, script: str) -> Etiquette:\n    typ, debut, fin = courant\n    return Etiquette(\"syntagme\", typ, texte[d … [2338 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py", "limit": 22, "offset": 145}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py</path>
+<type>file</type>
+<content>
+145:     def test_tagger_neuronal_chunks_refus(self):
+146:         n = bl.NeuronalLLMChunks("faux-modele", transport=lambda *_: '{"bio":["B-GN"]}')
+147:         a = n.analyser("Le chat dort.", "fr")
+148:         self.assertTrue(a.refus)
+149:         self.assertEqual(a.etiquettes, [])
+150: 
+151:     def test_priorite_syntagme_confiance(self):
+152:         defaut = bl.Parallele([bl.Heuristique(), bl.MockNeuronal()]).analyser(TEXTE, "fr")
+153:         confiance = bl.Parallele([bl.Heuristique(), bl.MockNeuronal()],
+154:                                  priorite_syntagme="confiance").analyser(TEXTE, "fr")
+155:         n_defaut = sum(1 for e in defaut.etiquettes
+156:                        if e.niveau == "syntagme" and e.source == "neuronal")
+157:         n_confiance = sum(1 for e in confiance.etiquettes
+158:                           if e.niveau == "syntagme" and e.source == "neuronal")
+159:         self.assertGreater(n_confiance, n_defaut)
+160: 
+161: 
+162: if __name__ == "__main__":
+163:     unittest.main()
+
+(End of file - total 163 lines)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py", "new_string": "    def test_priorite_syntagme_confiance(self):\n        defaut = bl.Parallele([bl.Heuristique(), bl.MockNeuronal()]).analyser(TEXTE, \"fr\")\n        confiance = bl.Parallele([bl.Heurist … [1962 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du banc de la cascade complète (composite, ablations, politique, contrôles)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"qualifier_cascade.py — la cascade **complète** avec le vrai modèle (POS + syntagmes).\n\nLe bloc neuronal est `NeuronalLLMCompose` : `NeuronalLLMPOS` + `NeuronalLLMChunks`, appelés\nune fois par phrase, réunis en une annotation. La cascade garde l'heuristiq … [9364 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_cascade.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Test du composite et dry-run de la cascade sur 5 phrases
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/bloc_linguistique.py tools/tests/linguistique/qualifier_cascade.py tools/tests/linguistique/test_bloc_linguistique.py && python3 -m unittest discover -s tools/tests/linguistique -p 'test_bloc_linguistique.py' 2>&1 | tail -3 … [82 caractères tronqués]`
+
+  ```
+Ran 15 tests in 0.065s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && time python3 tools/tests/linguistique/qualifier_cascade.py --endpoint http://127.0.0.1:18082 --limite 5 --sortie /tmp/qualif-cascade-5.json 2>&1 | tail -25", "description": "Dry-run complete cascade on 5 phrases", "timeoutMs": 300000}`
+
+  ```
+1.0
+  ],
+  "synth": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "defaut": {
+  "all": 0.6667,
+  "hand": 0.6667,
+  "synth": 0.0
+ },
+ "refus": 0,
+ "appels": {
+  "pos": 5,
+  "syntagmes": 5
+ },
+ "latence": {
+  "moyenne": 9.36,
+  "mediane": 9.285
+ }
+}
+écrit : /tmp/qualif-cascade-5.json
+[stderr]
+
+real	0m59,343s
+user	0m11,710s
+sys	0m0,846s
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement de la cascade complète sur 180 phrases (≈28 min) en arrière-plan
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && curl -s http://127.0.0.1:18082/health && python3 tools/tests/linguistique/qualifier_cascade.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-gold-cascade.json 2>&1 | tail -50", "description": "Run full complete cascade qualification", "run … [22 caractères tronqués]`
+
+  ```
+started background job bash-215
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant le run, je rafraîchis le plan (heartbeat, cascade en cours)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M %Z'; python3 - <<'PY'\nimport pathlib, time\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md')\nt=p.read_text(encoding='utf-8')\nmaintenant=time.strftime('%Y-%m-%d %H:%M %Z')\nimport re\nt=re.sub(r\" … [775 caractères tronqués]`
+
+  ```
+2026-11-02 17:59 EST
+heartbeat 2026-11-02 17:59 EST
+- **Heartbeat** : 2026-11-02 17:59 EST
+- **Prochaine action** : la **cascade complète** (POS + syntagmes + politique confiance)
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la mesure, je reconnais la ligne DRVM/native (opérateur B13 vs parité N0.3b)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -rn \"DRVM/native\\|DRVM natif\\|opérateur natif\\|opérateurs hétérogènes\" docs reports tools/pensee 2>/dev/null | head -20", "description": "Find DRVM/native references"}`
+
+  ```
+docs/pilotage/chantiers.md:62:   canonique : arbre d'états, opérateurs hétérogènes, stratégies classiques (BFS, A*, MCTS, AC-3,
+docs/pilotage/chantiers.md:90:| **B13 — le moteur de pensée** | penser est-il une recherche tracée sur des états pluriels ? | ✅ state store v0 + AC-3/alpha-bêta + **DRVF `thought`** + **banc anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **porte** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **professeur** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observatrice** + **bruitée** + **votante** + **trois looks** + **bayésien** + **bayésien 2** + **vraisemblance** + **dérive** + **adaptative** + **glisse** + **rupture** + **alternance** + **chaotique** + **fréquent** + **rapide** + **limite** + **hasard 2** + **intra** + **asym** + **rare** + **très r
+… [7500 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1,80p' tools/pensee/operateurs.py; echo '---'; grep -n \"class \\|def \" tools/pensee/operateurs.py | head -40", "description": "Read heterogeneous operators"}`
+
+  ```
+"""operateurs.py — les opérateurs **hétérogènes** de B13 et le conteneur DRVM.
+
+Un problème peut mélanger trois genres d'opérateurs :
+
+  - **symbolique** : une règle discrète (`pas`, les quatre voisins) ;
+  - **numérique** : un calcul de coût (`saut`, deux cases, coût 2) ;
+  - **neuronal** : une **politique** qui propose le pas (`sonde`, coût 5, un appel).
+
+Le `DRVM` est le **conteneur d'exécution** : il tient le registre, la politique, le moteur et
+la trace, et rend un **bilan** (nœuds, coût par opérateur, appels au modèle, but). Le nom est
+celui du runtime du moteur ; il ne faut pas le confondre avec le **format DRVM** du programme N.
+
+La politique est un **double de contrat** (`PolitiqueManhattan`) : le vrai modèle natif n'a pas
+de poids dans cet environnement ; la structure est prête pour un `PolitiqueDRVM`.
+"""
+from __future__ import annotations
+
+import math
+import random
+from collections import Counter
+from dataclasses import dataclass, field
+from typing import Callable
+
+from .coeur import Candidat, Decision, Etat
+from .moteur import AStar, BFS, Greedy, Moteur, Probleme
+from .store import Budget
+
+COTE = 5
+BUT = (COTE - 1, COTE - 1)
+
+
+# ----------------------------------------
+… [3148 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1,60p' docs/pilotage/backlog/N0.3b-parite-ppl.md", "description": "Read N0.3b parity card"}`
+
+  ```
+# N0.3b — Parité de perplexité DRVM ↔ GGUF
+
+> **Statut** : mesurée · **Priorité** : P1 · **Programme** : N · **Dépend de** : N0
+> **Ligne de roadmap** : N0.3b · **Fiche de résultat** : [rapport-drvm-ppl.md](../../../reports/rapport-drvm-ppl.md) — conversion **68,1917 / 92,1875**, natif **4,6585 / 18,6394**
+> **Résumé** : La seule porte N0 encore ouverte : le même modèle, le même corpus, la même PPL en DRVM et en GGUF.
+> **Glossaire** : [DRVM](../../theorie/glossaire/entrees/drvm.md) · [GGUF](../../theorie/glossaire/entrees/gguf.md) · [perplexité](../../theorie/glossaire/entrees/perplexite.md) · [rejeu](../../theorie/glossaire/entrees/rejeu.md).
+
+## Le besoin
+
+Le format DRVM est écrit, lu, exécuté et rejoué ; la parité de perplexité avec le GGUF d'origine reste à prouver. Sans elle, tout entraînement natif reste un banc hors moteur.
+
+## L'état
+
+N0.1–N0.6 mesurés : manifeste, payload, lecture, `gguf2drvm`, trace/rejeu (6 144 listes, SHA identique, PPL 28,7355), refus de version. **N0.3b mesuré le 2026-10-29** : Qwen GGUF ↔ DRVM **68,1917** (15 jetons) et **92,1875** (304 jetons) ; `drave-n0` natif ↔ Python **4,6585 / 18,6394** contre **4,658519 / 18,6395**.
+
+## La porte
+
+**Atteinte.*
+… [682 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"DRVM\\|PolitiqueDRVM\\|poids\\|modele\" tools/pensee/operateurs.py | head -30; echo '---'; sed -n '500,620p' tools/pensee/operateurs.py", "description": "Find DRVM policy placeholder in operators"}`
+
+  ```
+1:"""operateurs.py — les opérateurs **hétérogènes** de B13 et le conteneur DRVM.
+9:Le `DRVM` est le **conteneur d'exécution** : il tient le registre, la politique, le moteur et
+11:celui du runtime du moteur ; il ne faut pas le confondre avec le **format DRVM** du programme N.
+14:de poids dans cet environnement ; la structure est prête pour un `PolitiqueDRVM`.
+158:# --------------------------------------------------------------------------- registre / DRVM
+299:    états ; il **généralise** ensuite à la politique seule. 12 poids, pas une table.
+361:    def nb_poids(self) -> int:
+483:    def nb_poids(self) -> int:
+2908:class DRVM:
+2946:__all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle",
+---
+class PolitiqueCadenas(Politique):
+    nom = "cadenas_avant"
+
+    def propose(self, etat, but):
+        return "avant" if _pos_c(etat) < but else None
+
+
+class PolitiqueCadenasAveugle(Politique):
+    nom = "cadenas_arriere"
+
+    def propose(self, etat, but):
+        pos = _pos_c(etat)
+        return "arriere" if pos > 0 else "avant"
+
+
+def sonde_c(e: Etat, _p: dict | None = None) -> list[Etat]:
+    p = POLITIQUE[0]
+    if p is None:
+        return []
+    directio
+… [2828 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '45,65p' reports/rapport-pensee-necessaire.md; echo '---'; sed -n '45,65p' reports/rapport-pensee-porte.md", "description": "Read DRVM/native next steps in B13 reports"}`
+
+  ```
+- une politique **chanceuse** qui atteindrait le but par hasard (le cadenas est linéaire : non) ;
+- un opérateur **caché** qui contournerait la sonde (le registre n'en a qu'un) ;
+- un budget **trop grand** qui laisserait l'aveugle atteindre le but (20 nœuds, but à 3 : non) ;
+- une confusion **politique / opérateur** : c'est la politique qui est neuronale, l'opérateur
+  n'est que le **point d'appel**.
+
+## 4. La suite
+
+1. **Politique DRVM/native** : brancher un vrai modèle quand ses poids seront là ; le cadenas
+   mesurera alors la **qualité** de la politique, pas seulement sa nécessité.
+2. **Coût mesuré** : remplacer le coût 1 par la latence réelle des appels.
+3. **L** : 200+ phrases réelles et lecture double ; le neuronal réel reste bloqué.
+4. **B13** : un cadenas **non linéaire** (plusieurs chemins, un piège) pour que la politique
+   puisse être **bonne** ou **mauvaise** sans être trivialement l'une ou l'autre.
+
+## 5. Fichiers
+
+- [`operateurs.py`](../tools/pensee/operateurs.py) — `CADENAS`, `REGISTRE_CADENAS`,
+  `PolitiqueCadenas`, `PolitiqueCadenasAveugle`.
+- [`autotest.py`](../tools/pensee/autotest.py) — T9, 12/12.
+- [`pensee-necessaire.json`](pensee-necessaire.json) — les bilan
+… [974 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la cascade, je prépare la politique DRVM/native : lecture du conteneur et des bancs B13
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '2900,2960p' tools/pensee/operateurs.py; echo '=== T9/T10 ==='; grep -n \"def t9_\\|def t10_\\|def t11_\\|def t12_\" -A 30 tools/pensee/autotest.py | head -100", "description": "Read DRVM container and B13 policy benches"}`
+
+  ```
+initial=lambda: _etat_pw(0, 0, 0),
+    operateurs={n: o.applique for n, o in REGISTRE_PW.operateurs.items()},
+    but=but_pw,
+    heuristique=heuristique_pw,
+    score=score_pw,
+)
+
+
+class DRVM:
+    """Le conteneur d'exécution : registre, politique, moteur, trace, bilan."""
+
+    def __init__(self, registre: Registre, politique: Politique):
+        self.registre = registre
+        self.politique = politique
+        self.moteur: Moteur | None = None
+        self.resultat: Decision | None = None
+        self.probleme: Probleme | None = None
+
+    def penser(self, probleme: Probleme, strategie, budget: Budget,
+               arret_sur_but: bool = True) -> Decision:
+        POLITIQUE[0] = self.politique
+        self.politique.remise_a_zero()
+        self.probleme = probleme
+        self.moteur = Moteur()
+        self.resultat = self.moteur.boucle(probleme, strategie, budget,
+                                           arret_sur_but=arret_sur_but)
+        return self.resultat
+
+    def bilan(self) -> dict:
+        assert self.moteur is not None and self.resultat is not None
+        compte = Counter(e.operateur for e in self.moteur.trace.evenements)
+        return {"noeuds": len(self.moteur.t
+… [5516 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"POLITIQUE\\|class DRVM\\|def bilan\\|def jouer\\|def executer\" tools/pensee/operateurs.py | head -20", "description": "Find policy global and DRVM methods"}`
+
+  ```
+126:POLITIQUE: list[Politique | None] = [None]
+131:    p = POLITIQUE[0]
+516:    p = POLITIQUE[0]
+591:    p = POLITIQUE[0]
+682:    p = POLITIQUE[0]
+738:    p = POLITIQUE[0]
+797:    p = POLITIQUE[0]
+835:    p = POLITIQUE[0]
+2373:    p = POLITIQUE[0]
+2532:    p = POLITIQUE[0]
+2704:    p = POLITIQUE[0]
+2861:    p = POLITIQUE[0]
+2908:class DRVM:
+2920:        POLITIQUE[0] = self.politique
+2928:    def bilan(self) -> dict:
+  ```
+
+### 🤖 Assistant
+
+⏵ La cascade tourne ; je prépare la politique DRVM/native (`PolitiqueLLM`) sans toucher au serveur
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '18,32p' tools/pensee/operateurs.py", "description": "Read operators imports"}`
+
+  ```
+import math
+import random
+from collections import Counter
+from dataclasses import dataclass, field
+from typing import Callable
+
+from .coeur import Candidat, Decision, Etat
+from .moteur import AStar, BFS, Greedy, Moteur, Probleme
+from .store import Budget
+
+COTE = 5
+BUT = (COTE - 1, COTE - 1)
+
+
+# --------------------------------------------------------------------------- politiques
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"import math\\nimport random\\nfrom collections import Counter\",\n\"import json\\nimport math\\nimport random\\nimport re\\n … [4618 caractères tronqués]`
+
+  ```
+ok
+84:class PolitiqueLLM(Politique):
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de contrat de `PolitiqueLLM` (cadenas, labyrinthe, refus, serveur absent)
+
+- **write** `{"content": "\"\"\"Tests de la politique DRVM/native — le contrat sans modèle, puis le refus.\"\"\"\nimport pathlib\nimport sys\nimport unittest\n\nRACINE = pathlib.Path(__file__).resolve().parents[2]\nsys.path.insert(0, str(RACINE))\nfrom tools.pensee.operateurs import (BUT_C, CADENAS, LABYRINTHE,  … [1284 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/test_pensee_politique.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/pensee/operateurs.py tools/tests/test_pensee_politique.py && python3 -m unittest tools/tests/test_pensee_politique.py -v 2>&1 | tail -8", "description": "Run PolitiqueLLM contract tests", "timeoutMs": 120000}`
+
+  ```
+test_labyrinthe (tools.tests.test_pensee_politique.TestPolitiqueLLM.test_labyrinthe) ... ok
+test_refus (tools.tests.test_pensee_politique.TestPolitiqueLLM.test_refus) ... ok
+test_serveur_absent (tools.tests.test_pensee_politique.TestPolitiqueLLM.test_serveur_absent) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+OK
+  ```
+
+- **job_output** `{"job_id": "bash-215"}`
+
+  ```
+{"status":"ok"}
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute un contrôle aléatoire et le banc de la politique DRVM/native
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py')\nt=p.read_text(encoding='utf-8')\nancre = '''\n\n# --------------------------------------------------------------------------- état'''\najout = '''\n\n\nclass PolitiqueHasa … [920 caractères tronqués]`
+
+  ```
+ok
+84:class PolitiqueLLM(Politique):
+157:class PolitiqueHasard(Politique):
+3038:__all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle", "PolitiqueHasard", "PolitiqueLLM",
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du banc DRVM/native (cadenas, labyrinthe, porte ; oracle, aveugle, hasard, LLM)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"qualifier_politique_drvm.py — la politique **DRVM/native** : un vrai modèle dans le DRVM.\n\nLe conteneur `DRVM` exécute les problèmes de B13 (cadenas linéaire, labyrinthe 5×5, porte) avec\nquatre politiques : l'**oracle** (Manhattan/Cadenas), le **contrôle … [7087 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_politique_drvm.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du double comptage des appels (le sonde compte déjà) et des tests
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"        t0 = time.perf_counter()\\n        self.appels += 1\\n        try:\\n            sortie = self.transport\",\n        … [1417 caractères tronqués]`
+
+  ```
+ok
+Ran 4 tests in 0.002s
+
+OK
+  ```
+
+### 🤖 Assistant
+
+⏵ La cascade complète devrait finir ; j'attends son JSON avant la fiche
+
+- **job_output** `{"job_id": "bash-215", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le run dure plus que prévu ; je vérifie le processus et le journal serveur
+
+- **bash** `{"command": "ps -eo pid,etime,cmd | grep -E \"qualifier_cascade|llama-server\" | grep -v grep | head -5; echo '---'; tail -5 /tmp/llama-server-7b-chunks.log 2>/dev/null; echo '---'; ls -l reports/pensee-gold-cascade.json 2>/dev/null; date '+%H:%M:%S'", "description": "Check cascade process and serve … [12 caractères tronqués]`
+
+  ```
+110066       48:44 llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 18082 -ngl 0 -c 1024 --no-webui
+ 123209       17:39 bash -c cd /home/stephane/GitHub/Qtrinet && curl -s http://127.0.0.1:18082/health && python3 tools/tests/linguistique/qualifier_cascade.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-gold-cascade.json 2>&1 | tail -50
+ 123217       17:39 python3 tools/tests/linguistique/qualifier_cascade.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-gold-cascade.json
+---
+48.44.592.457 I slot print_timing: id  1 | task 12021 |       total time =    2698.68 ms /    33 tokens
+48.44.592.458 I slot print_timing: id  1 | task 12021 |    graphs reused =      10360
+48.44.592.512 I slot      release: id  1 | task 12021 | stop processing: n_tokens = 452, truncated = 0
+48.44.601.797 I slot get_availabl: id  1 | task -1 | selected slot by LCP similarity, sim_best = 0.193 (> 0.100 thold), f_keep = 0.060
+48.44.611.297 I slot launch_slot_: id  1 | task 12037 | processing task, is_child = 0
+---
+18:16:45
+  ```
+
+### 🤖 Assistant
+
+⏵ La cascade est à ~18 min de calcul ; nouvelle attente bornée
+
+- **job_output** `{"job_id": "bash-215", "timeout_ms": 600000, "wait": true}`
+
+  ```
+"neuronal": {
+  "all": [
+   0.8495,
+   0.7552
+  ],
+  "hand": [
+   0.8286,
+   0.6545
+  ],
+  "synth": [
+   0.8526,
+   0.7707
+  ]
+ },
+ "cascade_complete": {
+  "all": [
+   0.9415,
+   0.6088,
+   0.7539,
+   1.0
+  ],
+  "hand": [
+   0.9238,
+   0.5,
+   0.6607,
+   1.0
+  ],
+  "synth": [
+   0.9442,
+   0.6255,
+   0.7682,
+   1.0
+  ]
+ },
+ "defaut": {
+  "all": 0.567,
+  "hand": 0.5979,
+  "synth": 0.562
+ },
+ "refus": 0,
+ "appels": {
+  "pos": 180,
+  "syntagmes": 180
+ },
+ "latence": {
+  "moyenne": 7.122,
+  "mediane": 6.761
+ }
+}
+écrit : reports/pensee-gold-cascade.json
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cascade complète terminée ; j'extrais les six lectures et le verdict
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-gold-cascade.json'))\nprint('date',d['date'],'verdict',d['verdict'],'refus',d['refus'],'appels',d['appels'],'lat',d['latence_s'],'dur',d['duree_totale_s'])\nprint('seuils',json.dumps(d['s … [745 caractères tronqués]`
+
+  ```
+date 2026-11-02 18:20 EST verdict True refus 0 appels {'pos': 180, 'syntagmes': 180} lat {'moyenne': 7.122, 'mediane': 6.761} dur 1295.3
+seuils {
+ "pos_all": true,
+ "syntagme_exact_all": true,
+ "syntagme_tete_all": true,
+ "acte": true,
+ "fraction": true,
+ "ablation_pos": true,
+ "ablation_syntagmes": true,
+ "policy": true,
+ "aucun_refus": true
+}
+
+== heuristique
+  all   POS 0.7512 (F 0.9392 O 0.6211)  synt exact 0.1992 tete 0.5614  acte 1.0000 neg 1.0000 mod 0.9944 ds 0.8889  fraction 0.6381
+  hand  POS 0.9238 (F 0.9123 O 0.9375)  synt exact 0.4038 tete 0.5800  acte 1.0000 neg 1.0000 mod 0.9500 ds 0.9000  fraction 0.469
+  synth POS 0.7253 (F 0.9449 O 0.5855)  synt exact 0.1669 tete 0.5583  acte 1.0000 neg 1.0000 mod 1.0000 ds 0.8875  fraction 0.6592
+
+== neuronal
+  all   POS 0.8495 (F 0.7751 O 0.9011)  synt exact 0.6090 tete 0.7552  acte 0.0000 neg 0.8722 mod 0.8833 ds 0.9222  fraction 0.0
+  hand  POS 0.8286 (F 0.7719 O 0.8958)  synt exact 0.5091 tete 0.6545  acte 0.0000 neg 0.9000 mod 0.9000 ds 0.9000  fraction 0.0
+  synth POS 0.8526 (F 0.7757 O 0.9016)  synt exact 0.6245 tete 0.7707  acte 0.0000 neg 0.8688 mod 0.8812 ds 0.9250  fraction 0.0
+
+== cascade_pos
+  all   POS 0.9415 (F 0.93
+… [1941 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche « cascade complète » avec les six lectures et les ablations
+
+- **write** `{"content": "# B13 — la cascade complète : POS 0,9415, syntagmes 0,7539, acte 1,0\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) / **R0.7** (bloc linguistique) · **Date** : 2026-11-02 ·\n> **Verdict** : ✅ **la cascade complète est mesurée** — POS **0,9415**, syntagmes exacts **0,6088**,\n> * … [8277 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-cascade.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ README, index et doc d'implantation pour la cascade complète
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-pensee-gold-syntagmes.md`](rapport-pensee-gold-syntagmes.md) | **B13** 7B **0,760** |\",\n            \"| [`rapport-pense … [261 caractères tronqués]`
+
+  ```
+ok
+  552 fiches → reports/INDEX.md
+2800 reports/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '127,160p' docs/implantation/bloc-linguistique.md", "description": "Read doc section for composite update"}`
+
+  ```
+### 5.2 La version neuronale
+
+Quatre objets, un même contrat :
+
+- **`MockNeuronal`** : le **double de contrat**. Il est déterministe, sans GPU, et rend les
+  niveaux profonds (morphème, POS ouverte, syntagme, pragmatique) avec `source = neuronal`. Il
+  ne prétend pas être un modèle : il prouve que le contrat accepte une autre implémentation,
+  que le parallèle fusionne et que la cascade n'appelle le neuronal que sur le résidu.
+- **`NeuronalLLM`** : l'**adaptateur réel**. Il construit un prompt JSON, appelle un modèle local
+  (`llama-cli`), parse la réponse et la convertit en `Annotation` ; si le modèle est absent, ne
+  répond pas ou rend un JSON invalide, il lève `RefusNeuronal` — il ne simule pas.
+- **`NeuronalLLMPOS`** : le **tagger réel qualifié**. Il tokenise avec `Heuristique._mots` (mots
+  et nombres), envoie la liste des tokens à un `llama-server` local et impose par **grammaire
+  GBNF** une classe POS par token, dans l'ordre. Les spans sont ceux de la tokenisation du bloc ;
+  le modèle ne les invente pas. La confiance par défaut (0,6) le destine à la **cascade** : il ne
+  remplace que les tokens que l'heuristique déclare peu sûrs, et laisse les classes fermées à
+  l'heurist
+… [1451 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/implantation/bloc-linguistique.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"Quatre objets, un même contrat :\", \"Cinq objets, un même contrat :\")\nt=t.replace(\"\"\"  **few-shot** (cinq  … [2263 caractères tronqués]`
+
+  ```
+ok
+129:Cinq objets, un même contrat :
+149:- **`NeuronalLLMCompose`** : le **bloc complet** — POS + syntagmes dans une seule annotation.
+151:  pragmatique à l'heuristique. C'est le bloc de la cascade complète ; un refus d'un des deux
+161:tagger de syntagmes ne rend que ce niveau. La **cascade complète** (composite + politique
+184:`NeuronalLLMChunks`, `NeuronalLLMCompose`, `Parallele` ou `Cascade`. Le
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour d'en-cours pour la cascade, avec les compteurs disque et le budget T0
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && echo \"MD=$(ls reports/*.md | wc -l) JSON=$(ls reports/*.json | wc -l)\"; grep -n \"Mis à jour\\|fichiers / JSON\" docs/pilotage/en-cours.md; sed -n '79,86p' docs/pilotage/en-cours.md; echo '---'; grep -n \"B — l'intelligence\\|Pensée\\*\\* —\" docs/p … [72 caractères tronqués]`
+
+  ```
+MD=555 JSON=642
+3:**Mis à jour : 2026-11-02, 17 h 50 HNE (heure locale, EST).**
+127:| fichiers / JSON de résultats | **554** / **640** | `reports/*.md` / `reports/*.json` |
+- **Fait** : B13 **140/140**, gold **432** ; **gold neuronal** POS **0,8483**, cascade **0,9440** ;
+  **syntagmes** BIO **0,6173**, tête **0,7606**, cascade confiance **0,7592** ;
+  [fiche](../../reports/rapport-pensee-gold-syntagmes.md).
+- **Ce qu'elle fait** : **gold neuronal POS et syntagmes** mesurés ; reprise **16 h 16**.
+- **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
+- **Prochaine action** : **pragmatique** ; **DRVM/native** (parité).
+- **Bloquants** : aucun pour POS/syntagmes ; la **pragmatique** reste à mesurer.
+- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+---
+74:- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; R4.4 ; heuristique ; bloc linguistique.
+139:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : pragmatique** ; **B10.3 bloquée** |
+150:**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **pragmatique** ; **S** — la **validation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace('**Mis à jour : 2026-11-02, 17 h 50 HNE (heure locale, EST).**','**Mis à jour : 2026-11-02, 18 h 25 HNE (heure locale, EST).**' … [1731 caractères tronqués]`
+
+  ```
+ok
+EN-COURS: 1620
+  T0 max : 3994 mots (budget 4 000)
+  en-cours · 1620 mots · 7 sections · 5 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 555 fiche(s) · 642 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Roadmap et plan : cascade complète, politique DRVM/native en prochaine action
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/roadmap.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"**B13** : **gold neuronal** (POS **0,944** ; **syntagmes tête 0,7606**) ; **pragmatique** ; **[DRVM](../theorie/glossaire/entr … [3804 caractères tronqués]`
+
+  ```
+ok 2026-11-02 18:22 EST
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + 
+… [5177 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Note de journal pour la cascade complète, puis contrôles et commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-02/README.md')\nt=p.read_text(encoding='utf-8')\nnote = \"\"\"\n**18 h 20 — la cascade complète : POS 0,9415, syntagmes 0,7539, acte 1,0.**\n\nLe composite `NeuronalLLMCompose` (POS + s … [965 caractères tronqués]`
+
+  ```
+ok
+Ran 15 tests in 0.053s
+
+OK
+ "ok": true
+}
+✅ porte bloc linguistique verte
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture de la cascade (revue, tableaux, budgets) puis index explicite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh 2>&1 | tail -3; python3 tools/revue_documentation.py 2>&1 | tail -3; python3 tools/taille_documents.py 2>&1 | grep -E \"T0|violation\" | head -3; python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/verifie_jour … [108 caractères tronqués]`
+
+  ```
+✅ 1561 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 2640 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+  revue de documentation · 555 fiche(s) · 642 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3994 mots (budget 4 000)
+  en-cours · 1620 mots · 7 sections · 5 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  journal · 39 jour(s) · 117 session(s) · 1848 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -25", "description": "Check working tree before staging"}`
+
+  ```
+M docs/implantation/bloc-linguistique.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/2026-11-02/README.md
+ M journal/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md
+ M reports/INDEX.md
+ M reports/README.md
+ M reports/ocr-pdf-cegep.json
+ M tools/bloc_linguistique.py
+ M tools/pensee/operateurs.py
+ M tools/tests/linguistique/test_bloc_linguistique.py
+?? reports/n2-r11.json
+?? reports/pensee-gold-cascade.json
+?? reports/rapport-n2-r11.md
+?? reports/rapport-pensee-gold-cascade.md
+?? tools/tests/linguistique/qualifier_cascade.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit de la cascade complète (les fichiers DRVM restent pour le fait suivant)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add docs/implantation/bloc-linguistique.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/2026-11-02/README.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md reports/INDEX.md reports/README.md reports/pensee-gold-cascade … [371 caractères tronqués]`
+
+  ```
+reports/INDEX.md                                   |    3 +-
+ reports/README.md                                  |    2 +-
+ reports/pensee-gold-cascade.json                   | 1459 ++++++++++++++++++++
+ reports/rapport-pensee-gold-cascade.md             |  134 ++
+ tools/bloc_linguistique.py                         |   33 +
+ tools/tests/linguistique/qualifier_cascade.py      |  177 +++
+ tools/tests/linguistique/test_bloc_linguistique.py |   13 +
+ 12 files changed, 1868 insertions(+), 28 deletions(-)
+  ✅ index : aucun fait stagé sans état
+HOOK=0
+CHECK=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -m \"B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES\" 2>&1 | tail -12; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Commit the complete cascade fact", "timeoutMs": 300000}`
