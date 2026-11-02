@@ -20264,3 +20264,26 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1176", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/base-big-canal.log 2>/dev/null; ls work/n2w/base-big-canal.pt 2>/dev/null && echo OK; grep -o \"val [0-9.]*\" work/n2w/base-big.log | tail -1", "description": "Check the canal stage"}`
+
+  ```
+11:00
+pas 10050 · perte 1.3824 · PPL val 3.315 · 539 s
+pas 10100 · perte 1.4742 · PPL val 3.315 · 541 s
+val 3.543
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2w/base-big-canal.pt 2>/dev/null && echo OK; tail -2 work/n2w/base-big-canal.log; export PYTHONPATH=.; CUDA_VISIBLE_DEVICES=0 timeout 900 ~/gpu-env/bin/python work/n2j/evalue_canal.py work/n2w/base- … [123 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1178]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1178", "timeout_ms": 900000, "wait": true}`

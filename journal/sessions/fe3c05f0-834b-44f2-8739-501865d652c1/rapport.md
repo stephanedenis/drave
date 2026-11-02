@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 42.3 h |
+| Durée | 42.4 h |
 | Tours | 386 |
-| Messages | 2332 |
-| Appels d'outils | 1549 |
+| Messages | 2333 |
+| Appels d'outils | 1550 |
 | Fichiers touchés | 26 |
-| Commandes | 1377 |
+| Commandes | 1378 |
 | Sous-agents | 0 |
 | Commits | 90 |
 | Compactages de contexte | 4 |
@@ -9111,7 +9111,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 
 ### Tour 386 — continue pendent 3h
 
-*12 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — First 5-min check of CEGEP lot 40
@@ -9122,10 +9122,11 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - bash — Check CEGEP lot 40 for 8th note
 - bash — Check CEGEP lot 40 for 9th note
 - bash — Check CEGEP lot 40 for 10th note
+- bash — Check CEGEP lot 40 for 11th note
 
 **Synthèse produite :**
 
-⏵ Lot CEGEP : 9 scans, la détection du 10e tourne (14,1 Go lus)
+⏵ Lot CEGEP : 10 scans — **Data Structures and Algorithms in C** (366 p, 519 297 car.) entre
 
 ## 3. Travail accompli
 
@@ -9202,7 +9203,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1337 autres
+- … et 1338 autres
 
 ## 4. Mesures et résultats marquants
 

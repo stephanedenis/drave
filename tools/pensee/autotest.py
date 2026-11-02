@@ -1784,6 +1784,17 @@ def t115_tete_cascade() -> tuple[bool, str]:
         f"tête cascade corrigée : {f1} (cascade 0,441 ; union 0,466)")
 
 
+def t116_miroir() -> tuple[bool, str]:
+    """Le miroir : surface 1,0, mots 0,2095."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import mesurer
+    ph = charger()
+    r = mesurer(ph, bl.Heuristique())
+    return abs(r["fidelite"] - 0.2095) < 0.001, (
+        f"miroir : surface 1,0, mots {r['fidelite']} (fluidité {r['fluidite']})")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1898,7 +1909,8 @@ def main() -> int:
               ("T112 union segmenteurs", t112_union()),
               ("T113 union par défaut", t113_union_defaut()),
               ("T114 cascade + union", t114_cascade_union()),
-              ("T115 tête cascade", t115_tete_cascade())]
+              ("T115 tête cascade", t115_tete_cascade()),
+              ("T116 miroir", t116_miroir())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

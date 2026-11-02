@@ -35254,3 +35254,20 @@ wchar: 905538102
 ⏵ Lot CEGEP : 9 scans, la détection du 10e tourne (14,1 Go lus)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 570; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -2 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2", "descripti … [123 caractères tronqués]`
+
+  ```
+11:00
+10
+  CEGEP · Algorithms Illuminated Part 1 The Basics · 217 p · 335492 car
+  CEGEP · Data Structures and Algorithms in C by M · 366 p · 519297 car
+    PID            
+3445044    01:40:49
+rchar: 14337531404
+wchar: 906108095
+  ```
+
+### 🤖 Assistant
+
+⏵ Lot CEGEP : 10 scans — **Data Structures and Algorithms in C** (366 p, 519 297 car.) entre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 570; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -2 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2", "descripti … [123 caractères tronqués]`

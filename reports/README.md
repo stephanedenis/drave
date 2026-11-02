@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-pensee-cascade-tete.md`](rapport-pensee-cascade-tete.md) | **B13** — la tête de la cascade : 0,419, la correction dégrade, **118/118** |
+| [`rapport-pensee-miroir.md`](rapport-pensee-miroir.md) | **B13** — le miroir entrée/sortie : surface 1,0, mots 0,2095, **119/119** |
 | [`rapport-pensee-cascade-union.md`](rapport-pensee-cascade-union.md) | **B13** — la cascade avec l'union : F1 0,2170, tête 0,4410, 1 601 appels, **117/117** |
 | [`rapport-pensee-segmenteur-defaut.md`](rapport-pensee-segmenteur-defaut.md) | **B13** — l'union par défaut : F1 0,2005, tête 0,4662 (+0,11), **116/116** |
 | [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |

@@ -7,15 +7,15 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 42.2 h |
-| Tours | 133 |
-| Messages | 1602 |
-| Appels d'outils | 1384 |
+| Durée | 42.4 h |
+| Tours | 134 |
+| Messages | 1619 |
+| Appels d'outils | 1395 |
 | Fichiers touchés | 25 |
-| Commandes | 1125 |
+| Commandes | 1135 |
 | Sous-agents | 2 |
-| Commits | 168 |
-| Compactages de contexte | 4 |
+| Commits | 169 |
+| Compactages de contexte | 5 |
 
 ## Objectifs déclarés
 
@@ -301,6 +301,8 @@
 **Tour 132** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 133** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 134** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7069,6 +7071,63 @@ Je continue : prochain round, **la tête de la cascade** — récupérer les +0,
 - bash — Committer la tête de la cascade
 - job_output
 
+**Synthèse produite :**
+
+⏵ Tête de la cascade : la correction dégrade (0,419 contre 0,441) ; 118/118
+
+Le round 119 est livré : « garder la tête de l'union quand le mock ajoute un segment » **dégrade** la tête — la cascade a déjà les meilleures têtes du chunker dans le mock. Commit **`72cbd359`**.
+
+\## La tête de la cascade
+
+| variante | précision | rappel | **tête F1** |
+|---|---:|---:|---:|
+| **heuristique (union)** | 0,5646 | **0,3971** | **0,4662** |
+| cascade | 0,5960 | 0,3500 | 0,4410 |
+| cascade + tête de l'union | 0,5676 | 0,3320 | 0,4190 |
+
+**Ce que ça dit** :
+
+- **La correction dégrade** (−0,022) : les têtes du chunker (dans le mock) sont meilleures que celles de l'union **sur les segments que le mock ajoute**.
+- **L'heuristique seule reste la meilleure pour les têtes** (0,4662) : la cascade gagne en F1 (0,2170) mais perd en tête.
+- **Le compromis n'existe pas** : il faut choisir le F1 (cascade) ou la tête (union), pas les deux — à moins d'un modèle neuronal réel qui aurait les deux.
+- **La négative est explicite** : 0,419 < 0,441.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-cascade-tete.md`](../../reports/rapport-pensee-cascade-tete.md) ; JSON [`pensee-cascade-tete.json`](../../reports/pensee-cascade-tete.json) ; T115 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **118/118 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **525 fiches / 614 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` dans le budget.
+- L'horloge réelle est **10 h 52 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée) : c'est la seule voie pour avoir F1 et tête ensemble.
+
+\## La suite
+
+1. **La cascade par défaut** : F1 0,2170, tête 0,4410 — la garder comme mode « rappel ».
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **la cascade par défaut** — le mode rappel entre dans le bloc, pas seulement dans la mesure.
+
+### Tour 134 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Repérer le miroir entrée/sortie dans le bloc
+- bash — Écrire et mesurer le miroir entrée/sortie
+- bash — Lire les attributs de l'étiquette
+- bash — Corriger rendre et mesurer le miroir
+- bash — Corriger les clés et mesurer le miroir
+- bash — Corriger la dernière clé et mesurer
+- bash — Ajouter la restitution par les mots et mesurer
+- bash — Écrire la fiche du miroir et la porte T116
+- bash — Trim README et passer toutes les portes
+- bash — Committer le miroir entrée/sortie
+- job_output
+
+**Synthèse produite :**
+
+⏵ Corriger l'attribut de l'étiquette et mesurer
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7148,7 +7207,7 @@ Je continue : prochain round, **la tête de la cascade** — récupérer les +0,
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1085 autres
+- … et 1095 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7276,7 +7335,7 @@ Je continue : prochain round, **la tête de la cascade** — récupérer les +0,
 
 ## 5. Erreurs rencontrées
 
-20 sorties en erreur ou divergentes. Les premières :
+23 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -7464,4 +7523,5 @@ Je continue : prochain round, **la tête de la cascade** — récupérer les +0,
 - B13 — L'UNION PAR DÉFAUT : F1 0,2005, TÊTE 0,4662 (+0,11) DANS L'ANALYSEUR ; 116/116" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "UNION PAR DÉFAUT";
 - B13 — LA CASCADE AVEC L'UNION : F1 0,2170, TÊTE 0,4410, 587 APPELS ; 117/117" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CASCADE AVEC L'UNION"; the
 - B13 — LA TÊTE DE LA CASCADE : LA CORRECTION DÉGRADE (0,419 CONTRE 0,441) ; 118/118" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "TÊTE DE LA CASCADE";
+- B13 — LE MIROIR ENTRÉE/SORTIE : SURFACE 1,0, MOTS 0,2095, LA FLUIDITÉ N'EST PAS LA FIDÉLITÉ ; 119/119" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "M
 
