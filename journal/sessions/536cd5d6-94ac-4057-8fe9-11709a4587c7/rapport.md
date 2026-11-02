@@ -7,14 +7,14 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 0.4 h |
+| Durée | 0.5 h |
 | Tours | 2 |
-| Messages | 75 |
-| Appels d'outils | 106 |
+| Messages | 76 |
+| Appels d'outils | 107 |
 | Fichiers touchés | 4 |
-| Commandes | 84 |
+| Commandes | 85 |
 | Sous-agents | 0 |
-| Commits | 3 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -88,7 +88,7 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 
 ### Tour 2 — vas-y et donne moi des instructions pour que je démarre ou récupère d'autre sessions dans d'autres terminaux
 
-*48 appels d'outils.* Actions notables :
+*49 appels d'outils.* Actions notables :
 
 - bash — Inspect DSH env vars and pre-commit hook
 - bash — Check DSH CLI usage for starting and resuming sessions
@@ -104,11 +104,11 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py`
 - bash — Locate state constants for editing
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py`
-- … et 32 autres
+- … et 33 autres
 
 **Synthèse produite :**
 
-⏵ Je commite le flux données : OCR CEGEP, glossaire, docwatch et liens.
+⏵ Je commite le flux N2 (mélange 1 Go, canal et pénalité).
 
 ## 3. Travail accompli
 
@@ -163,7 +163,7 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 44 autres
+- … et 45 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -250,4 +250,5 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 - GLOSSAIRE — LES TESTS DE L'ANNOTATION AU RENDU ; SERVEUR, SPA ET RENDU VERTS" && git log --oneline -3; echo "[exit $?]"
 - B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140" -m "Le cycle en attente est committé par le hub : T137 mesure 5 phrases à pronom sans antécéden
 - D — L'OCR CEGEP, LE GLOSSAIRE AU RENDU ET LES LIENS DE LA FAMILLE 13" -m "OCR CEGEP : 10 notes, 1 596 pages, 2 519 507 caractères, 8 Ko 0 ; 20 livres (7 381 p, 
+- N2 — N2.ac EST LE MODÈLE DE PRODUCTION : LE MÉLANGE 1 Go, LE CANAL ET LA PÉNALITÉ" -m "N2.ac (mélange des deux corpus, 1,02 Go, 60 000 pas) : 3,4902 en domaine,
 

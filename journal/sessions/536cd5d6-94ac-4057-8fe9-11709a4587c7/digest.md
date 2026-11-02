@@ -2945,3 +2945,31 @@ d256888 GLOSSAIRE — LES TESTS DE L'ANNOTATION AU RENDU ; SERVEUR, SPA ET RENDU
 ⏵ Je commite le flux données : OCR CEGEP, glossaire, docwatch et liens.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"**Mis à jour : 2026-11-02, 16 h 10 HNE (heure locale, EST).**\"\nnew=\"**Mis à jour : 2026-11-02, 16 h 25 HNE (heure locale, EST).* … [1650 caractères tronqués]`
+
+  ```
+horodatage ok
+== staged ==
+ reports/ocr-pdf-cegep.json                         |  49 ++++++
+ reports/ocr-pdf-contamination.json                 |  57 +++++++
+ reports/ocr-pdf.json                               |  55 ++++++
+ reports/rapport-genres.md                          |   8 +-
+ reports/rapport-ocr-cegep.md                       |  58 +++++++
+ reports/rapport-ocr-pdf.md                         |  40 +++--
+ tools/docwatch                                     |   2 +-
+ tools/extrait_pdf.py                               | 187 +++++++++++++++++++++
+ tools/glossaire_cartes.py                          |   3 +-
+ tools/liens_glossaire.py                           | 155 +++++++++++++++++
+ tools/ocr_pdf.py                                   |  12 +-
+ 45 files changed, 1259 insertions(+), 172 deletions(-)
+
+[exit 0]
+ca06ab0b D — L'OCR CEGEP, LE GLOSSAIRE AU RENDU ET LES LIENS DE LA FAMILLE 13
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Je commite le flux N2 (mélange 1 Go, canal et pénalité).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"**Mis à jour : 2026-11-02, 16 h 25 HNE (heure locale, EST).**\"\nnew=\"**Mis à jour : 2026-11-02, 16 h 35 HNE (heure locale, EST).* … [1187 caractères tronqués]`

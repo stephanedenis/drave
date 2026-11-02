@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**150 commits** · **5 session(s)** · **9 thème(s)**
+**151 commits** · **5 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 6 | [attention.md](attention.md) |
-| distribue | 13 | [distribue.md](distribue.md) |
+| distribue | 14 | [distribue.md](distribue.md) |
 | docs | 18 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 81 | [mesures.md](mesures.md) |
@@ -26,7 +26,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 45.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 0.4 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
+| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 0.5 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 46.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 44.8 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
@@ -185,6 +185,7 @@
 | 14:20 | `004c5f64` | B13 — LES LIENS CLASSÉS : 50 INTRA, 62 INTER, 4 ABSENTS ; 138/138 |
 | 14:37 | `139a8b16` | B13 — LES ABSENTS : 0, LES QUATRE ÉTAIENT DES FAUX (TOKENISATION) ; 139/139 |
 | 15:57 | `702b368c` | B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140 |
+| 15:59 | `ca06ab0b` | D — L'OCR CEGEP, LE GLOSSAIRE AU RENDU ET LES LIENS DE LA FAMILLE 13 |
 
 ## Le récit de la journée (écrit à la main)
 

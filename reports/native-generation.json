@@ -1,10 +1,10 @@
 {
- "modele": "/tmp/drave-n0-distille.pt",
- "parametres": 11469192,
- "prompt": "La France est un pays",
- "n": 160,
- "top_k": 0,
- "temperature": 0.0,
- "octets": 181,
- "texte": "La France est un pays de la couche 1 (le plafond de la porte de la couche 0 et le plus grand (le plus grand que le contexte de latinesplaronsesexinuiteuxin-cloraratesenouxitetrnsons"
+ "modele": "work/n2j/W34-g1.pt",
+ "parametres": 34301224,
+ "prompt": "Dans les années 1950",
+ "n": 120,
+ "top_k": 40,
+ "temperature": 0.8,
+ "octets": 141,
+ "texte": "Dans les années 1950 du réseau de Paris, Mariage Pour certaines proposes, le musée de Routeilleur fondé à des régions et le soleil. Cit"
 }

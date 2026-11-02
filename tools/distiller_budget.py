@@ -55,10 +55,14 @@ def charger(txt: str | pathlib.Path) -> torch.Tensor:
     return torch.tensor(list(pathlib.Path(txt).read_bytes()), dtype=torch.long)
 
 
-def lot_fr(data, n, seq, device, compteur):
+def lot_fr(data, n, seq, device, compteur, canal=None):
     """n fenêtres de seq+1 octets : l'entrée est x[:, :-1], la cible x[:, 1:]."""
     i = torch.tensor(departs_vdc(compteur, n, len(data) - seq - 2, seq), dtype=torch.long)
-    return torch.stack([data[j:j + seq + 1] for j in i]).to(device)
+    x = torch.stack([data[j:j + seq + 1] for j in i]).to(device)
+    if canal is None:
+        return x
+    c = torch.stack([canal[j:j + seq + 1] for j in i]).to(device)
+    return x, c
 
 
 class CorpusMulti:
@@ -115,9 +119,10 @@ def ppl(modele, lots, seq, n_lots, device):
     modele.eval(); tot = 0.0; n = 0
     with torch.no_grad():
         for k in range(n_lots):
-            x = lots(k)
+            r = lots(k)
+            x, c = r if isinstance(r, tuple) else (r, None)
             y = cible(x)
-            logits = modele(x[:, :-1])["logits"]
+            logits = modele(x[:, :-1], canal=(c[:, :-1] if c is not None else None))["logits"]
             tot += float(F.cross_entropy(logits.reshape(-1, 256), y.reshape(-1),
                                          reduction="sum"))
             n += y.numel()
@@ -152,6 +157,8 @@ def main() -> None:
                     help="décalage maximal des positions à chaque pas (0 = positions fixes)")
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--sortie", required=True)
+    ap.add_argument("--canal", default=None, help="canal de structure pour l'entraînement")
+    ap.add_argument("--canal-val", default=None, help="canal de structure pour la validation")
     ap.add_argument("--log", default=None)
     a = ap.parse_args()
 
@@ -181,9 +188,11 @@ def main() -> None:
     opt = torch.optim.AdamW(etu.parameters(), lr=plan[0][2], weight_decay=0.01)
 
     corpus = None
+    canal_train = charger(a.canal) if a.canal else None
+    canal_val = charger(a.canal_val) if a.canal_val else None
     if a.corpus == "fr":
         train = charger(a.train)
-        lots = lambda compteur, n, seq: lot_fr(train, n, seq, a.device, compteur)
+        lots = lambda compteur, n, seq: lot_fr(train, n, seq, a.device, compteur, canal_train)
     else:
         corpus = CorpusMulti(a.manifeste, a.quotas)
         dire(f"# manifeste reproduit : {len(corpus.train)} train / {len(corpus.val)} val")
@@ -193,8 +202,8 @@ def main() -> None:
     val_perm = val[torch.tensor(ordre_vdc(len(val)), dtype=torch.long)]
 
     def eval_hist(seq, lot, n_lots=8, source=val):
-        return ppl(etu, lambda k: lot_fr(source, lot, seq, a.device, k * lot), seq, n_lots,
-                   a.device)
+        return ppl(etu, lambda k: lot_fr(source, lot, seq, a.device, k * lot, canal_val), seq,
+                   n_lots, a.device)
 
     t0 = time.time(); pas_global = 0; pertes = []; courbe = []
     for seq, n_pas, lr in plan:
@@ -204,13 +213,15 @@ def main() -> None:
         for _ in range(n_pas):
             pas_global += 1
             etu.train()
-            x = lots(decalage + pas_global * a.lot, a.lot, seq)
+            r = lots(decalage + pas_global * a.lot, a.lot, seq)
+            x, c = r if isinstance(r, tuple) else (r, None)
             x, y = x[:, :-1], cible(x)
+            c = c[:, :-1] if c is not None else None
             with torch.no_grad():
                 lp = prof(x).logits
             offset = (int(torch.randint(0, a.positions_aleatoires + 1, (1,)))
                       if a.positions_aleatoires > 0 else 0)
-            sortie_m = etu(x, offset)
+            sortie_m = etu(x, offset, canal=c)
             ls = sortie_m["logits"]
             T = a.temperature
             kd = F.kl_div(F.log_softmax(ls / T, -1), F.softmax(lp / T, -1),
