@@ -101,6 +101,9 @@
      "role": "possession",
      "debut": 8,
      "fin": 21,
+     "cibles": [
+      "chat"
+     ],
      "cible": "chat"
     },
     {
@@ -197,6 +200,10 @@
      "role": "lieu",
      "debut": 22,
      "fin": 34,
+     "cibles": [
+      "vu",
+      "l'homme"
+     ],
      "cible": "vu"
     }
    ],
@@ -273,6 +280,9 @@
      "role": "but",
      "debut": 11,
      "fin": 31,
+     "cibles": [
+      "couru"
+     ],
      "cible": "couru"
     }
    ],
@@ -343,6 +353,9 @@
      "role": "contenu",
      "debut": 11,
      "fin": 28,
+     "cibles": [
+      "dit"
+     ],
      "cible": "dit"
     }
    ],
@@ -412,6 +425,9 @@
      "role": "possession",
      "debut": 9,
      "fin": 18,
+     "cibles": [
+      "chien"
+     ],
      "cible": "chien"
     },
     {
@@ -496,6 +512,10 @@
      "role": "lieu",
      "debut": 19,
      "fin": 33,
+     "cibles": [
+      "jouent",
+      "enfants"
+     ],
      "cible": "jouent"
     }
    ],
@@ -643,6 +663,9 @@
      "role": "lieu",
      "debut": 6,
      "fin": 9,
+     "cibles": [
+      "Viens"
+     ],
      "cible": "Viens"
     }
    ],
@@ -712,6 +735,9 @@
      "role": "qualité",
      "debut": 9,
      "fin": 20,
+     "cibles": [
+      "livre"
+     ],
      "cible": "livre"
     },
     {
@@ -789,6 +815,10 @@
      "role": "but",
      "debut": 19,
      "fin": 27,
+     "cibles": [
+      "prêt",
+      "canard"
+     ],
      "cible": "prêt"
     }
    ],
@@ -898,6 +928,9 @@
      "role": "moyen",
      "debut": 16,
      "fin": 33,
+     "cibles": [
+      "vu"
+     ],
      "cible": "vu"
     }
    ],
@@ -1031,6 +1064,10 @@
      "role": "lieu",
      "debut": 22,
      "fin": 33,
+     "cibles": [
+      "saw",
+      "man"
+     ],
      "cible": "saw"
     }
    ],
@@ -1107,6 +1144,9 @@
      "role": "contenu",
      "debut": 9,
      "fin": 28,
+     "cibles": [
+      "said"
+     ],
      "cible": "said"
     }
    ],
@@ -1274,6 +1314,10 @@
      "role": "but",
      "debut": 18,
      "fin": 24,
+     "cibles": [
+      "ready",
+      "duck"
+     ],
      "cible": "ready"
     }
    ],

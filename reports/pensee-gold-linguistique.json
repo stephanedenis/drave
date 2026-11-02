@@ -72,10 +72,10 @@
    "attachement": {
     "cibles": 68,
     "labels": 23,
-    "top1": 20,
+    "top1": 22,
     "topk": 23,
     "exact": 0,
-    "top1_taux": 0.2941,
+    "top1_taux": 0.3235,
     "topk_taux": 0.3382,
     "exact_taux": 0.0,
     "couverture": 0.3382
@@ -83,9 +83,9 @@
    "attachement_tete": {
     "cibles": 23,
     "labels": 23,
-    "top1": 20,
+    "top1": 22,
     "topk": 23,
-    "top1_taux": 0.8696,
+    "top1_taux": 0.9565,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -158,10 +158,10 @@
    "attachement": {
     "cibles": 13,
     "labels": 5,
-    "top1": 2,
+    "top1": 4,
     "topk": 5,
     "exact": 0,
-    "top1_taux": 0.1538,
+    "top1_taux": 0.3077,
     "topk_taux": 0.3846,
     "exact_taux": 0.0,
     "couverture": 0.3846
@@ -169,9 +169,9 @@
    "attachement_tete": {
     "cibles": 5,
     "labels": 5,
-    "top1": 2,
+    "top1": 4,
     "topk": 5,
-    "top1_taux": 0.4,
+    "top1_taux": 0.8,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -590,10 +590,10 @@
    "attachement": {
     "cibles": 68,
     "labels": 23,
-    "top1": 20,
+    "top1": 22,
     "topk": 23,
     "exact": 0,
-    "top1_taux": 0.2941,
+    "top1_taux": 0.3235,
     "topk_taux": 0.3382,
     "exact_taux": 0.0,
     "couverture": 0.3382
@@ -601,9 +601,9 @@
    "attachement_tete": {
     "cibles": 23,
     "labels": 23,
-    "top1": 20,
+    "top1": 22,
     "topk": 23,
-    "top1_taux": 0.8696,
+    "top1_taux": 0.9565,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -676,10 +676,10 @@
    "attachement": {
     "cibles": 13,
     "labels": 5,
-    "top1": 2,
+    "top1": 4,
     "topk": 5,
     "exact": 0,
-    "top1_taux": 0.1538,
+    "top1_taux": 0.3077,
     "topk_taux": 0.3846,
     "exact_taux": 0.0,
     "couverture": 0.3846
@@ -687,9 +687,9 @@
    "attachement_tete": {
     "cibles": 5,
     "labels": 5,
-    "top1": 2,
+    "top1": 4,
     "topk": 5,
-    "top1_taux": 0.4,
+    "top1_taux": 0.8,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -852,10 +852,10 @@
    "attachement": {
     "cibles": 68,
     "labels": 23,
-    "top1": 20,
+    "top1": 22,
     "topk": 23,
     "exact": 0,
-    "top1_taux": 0.2941,
+    "top1_taux": 0.3235,
     "topk_taux": 0.3382,
     "exact_taux": 0.0,
     "couverture": 0.3382
@@ -863,9 +863,9 @@
    "attachement_tete": {
     "cibles": 23,
     "labels": 23,
-    "top1": 20,
+    "top1": 22,
     "topk": 23,
-    "top1_taux": 0.8696,
+    "top1_taux": 0.9565,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -938,10 +938,10 @@
    "attachement": {
     "cibles": 13,
     "labels": 5,
-    "top1": 2,
+    "top1": 4,
     "topk": 5,
     "exact": 0,
-    "top1_taux": 0.1538,
+    "top1_taux": 0.3077,
     "topk_taux": 0.3846,
     "exact_taux": 0.0,
     "couverture": 0.3846
@@ -949,9 +949,9 @@
    "attachement_tete": {
     "cibles": 5,
     "labels": 5,
-    "top1": 2,
+    "top1": 4,
     "topk": 5,
-    "top1_taux": 0.4,
+    "top1_taux": 0.8,
     "topk_taux": 1.0,
     "couverture": 1.0
    }

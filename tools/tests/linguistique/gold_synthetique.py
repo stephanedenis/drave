@@ -96,24 +96,24 @@ class P:
             v_txt = next((t for t, p in gv if p == "VERB"), gv[-1][0])
             for prep, g in gps:
                 i = v + [t[0] for t in gv].index(prep) + 1
-                segs.append(("GP", i, i + len(g), v_txt))
+                segs.append(("GP", i, i + len(g), [v_txt, gn[-1][0]]))
         elif mode == "sv_gp":
             gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
             v = self.verbe(); tokens.append((v, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))
             prep = self.rng.choice(PREP); gn2, _ = self.gn(); tokens.append((prep, "PREP"))
-            i = len(tokens); tokens += gn2; segs.append(("GP", i - 1, len(tokens), v))
+            i = len(tokens); tokens += gn2; segs.append(("GP", i - 1, len(tokens), [v, gn[-1][0]]))
         elif mode == "rel":
             gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
             i = len(tokens); nom = gn[-1][0]; tokens.append(("qui", "PRON"))
             v = self.verbe(); tokens.append((v, "VERB"))
-            segs.append(("REL", i, len(tokens), nom))
+            segs.append(("REL", i, len(tokens), [nom]))
             v2 = self.verbe(); tokens.append((v2, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))
         elif mode == "sub":
             gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
             v = self.verbe(); tokens.append((v, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))
             i = len(tokens); tokens.append(("que", "CONJ"))
             gn2, _ = self.gn(); tokens += gn2; v2 = self.verbe(); tokens.append((v2, "VERB"))
-            segs.append(("SUB", i, len(tokens), v))
+            segs.append(("SUB", i, len(tokens), [v]))
         elif mode == "question":
             gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
             v = self.verbe(); tokens.append((v, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))
@@ -181,12 +181,14 @@ def construire(n=160, graine=42) -> dict:
         for item in d.pop("segments_idx"):
             typ, a, b = item[:3]
             cible = item[3] if len(item) > 3 else None
+            cibles = cible if isinstance(cible, list) else ([cible] if cible else [])
             debut = mots[a]["debut"]
             fin = mots[b - 1]["fin"]
             seg = {"type": typ, "texte": d["texte"][debut:fin], "role": typ.lower(),
                    "debut": debut, "fin": fin}
-            if cible:
-                seg["cible"] = cible
+            if cibles:
+                seg["cibles"] = cibles
+                seg["cible"] = cibles[0]
             segments.append(seg)
         d["mots"] = mots
         d["segments"] = segments

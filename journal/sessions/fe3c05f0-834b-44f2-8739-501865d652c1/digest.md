@@ -16657,3 +16657,90 @@ done
 echo "=== runs"; ps -eo pid,etime,cmd | grep "corpus_wikipedia_texte.py --langue" | grep -v grep | awk '{print $1,$2,$NF}'; ls reports/corpus-wiki-de-texte.json 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| [^|]+ \\|\", \"| fichiers / JSON de résultats | **393** / **496** |\", s)\ns=re.sub(r\" … [1930 caractères tronqués]`
+
+  ```
+compteurs + journal 8 langues
+  T0 max : 3994 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master 2a15441d] DONNÉES — HUIT CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES) : 11,65 M ARTICLES, 48,4 GO, 8 KO 0
+ 24 files changed, 509 insertions(+), 58 deletions(-)
+ create mode 100644 reports/corpus-wiki-es-texte-contamination.json
+ create mode 100644 reports/corpus-wiki-es-texte.json
+ create mode 100644 reports/corpus-wiki-ru-texte-contamination.json
+ create mode 100644 reports/corpus-wiki-ru-texte.json
+commit OK (essai 1)
+2a15441d DONNÉES — HUIT CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES) : 11,65 M ARTICLES, 48,4 GO, 8 KO 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 3 : huit corpus en texte intégral mesurés et committés (11,65 M articles, 48,4 Go)
+
+**Round 3/1000 — l'italien, le russe et l'espagnol sont entrés dans le corpus.** Commit `2a15441d`, compteurs synchronisés (393 fiches, 496 JSON, 118 docs, 81 portes), revue verte.
+
+## Les huit corpus mesurés
+
+| langue | articles | caractères | octets | fuite 8 Ko | éval |
+|---|---:|---:|---:|---:|---|
+| fr | 2 388 219 | 8,025 G | 8,34 Go | **0** | XNLI 0/40, UDHR 2/24 |
+| ar | 1 000 310 | 1,994 G | 3,57 Go | **0** | XNLI 0/40 |
+| pt | 970 793 | 3,104 G | 3,21 Go | **0** | UDHR 2/40 |
+| zh | 643 122 | 1,045 G | 2,63 Go | **0** | XNLI 0/40 |
+| ja | 1 271 107 | 2,809 G | 7,33 Go | **0** | UDHR 1/23 |
+| it | 1 561 411 | 5,211 G | 5,29 Go | **0** | UDHR 2/23 |
+| ru | 1 943 725 | 6,258 G | 11,16 Go | **0** | XNLI 0/40 |
+| es | 1 868 078 | 6,651 G | 6,83 Go | **0** | XNLI 0/40 |
+
+**Total : 11,65 M articles, 35,10 G caractères, 48,4 Go.** Le **8 Ko est à zéro partout** — aucune unité d'entraînement ne traverse les splits.
+
+## Ce que les mesures disent
+
+- **Le russe** a **18,0 % de lignes répétées** (dates, références, formules) et l'**arabe 28,9 %** (formules, références, phrases coraniques) — mais **0 au tronçon de 8 Ko**. L'unité d'entraînement est propre ; le contrôle ligne mesure le style formulaire, pas une fuite.
+- **L'UDHR est citée** dans Wikipédia pour le français, le portugais, l'italien et le japonais (2/24, 2/40, 2/23, 1/23) ; le **XNLI** est à 0 pour le français, l'arabe, le chinois, le russe et l'espagnol.
+- **Les résidus** : 0 dans l'italien, 1-3 dans le français et le chinois, 52-228 liens dans le russe, l'espagnol, le portugais, le japonais et l'arabe — les légendes et notes complexes ; limite nommée.
+
+## La suite
+
+Le **de** (10,41 G de texte, 2,85 M articles) et l'**en** (9,86 G, 1,85 M) sont les deux derniers runs. Puis le **catalogue complet des dix** (la table finale, les totaux), l'**extraction PDF/OCR** (les 104 livres, les 2 711 PDF du CEGEP, les collections) avec les licences, et la **préparation R1.1/R1.2** avec A2.6/A8.3. Le goal reste actif ; je reprends au prochain round avec le de et l'en.
+
+
+## Tour 16
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 4/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ps -eo pid,etime,pcpu,cmd | grep \"corpus_wikipedia_texte.py --langue\" | grep -v grep | awk '{print $1,$2,$3,$NF}'; ls -la reports/corpus-wiki-{de,en}-texte.json 2>/dev/null; tail -1 /tmp/run-texte-de.log | cut -c1-80;  … [214 caractères tronqués]`
+
+  ```
+19:40
+1494795 01:09:31 96.9 reports/corpus-wiki-en-texte.json
+1494796 01:09:31 89.1 reports/corpus-wiki-de-texte.json
+-rw-r--r--. 1 stephane stephane 3959  1 nov 19:36 reports/corpus-wiki-de-texte.json
+  [de] 6000000 lus · 2853724 gardés · 10.41 G caractères
+  [en] 5200000 lus · 1847002 gardés · 9.86 G caractères
+10G	data/corpus_wiki_de_texte
+11G	data/corpus_wiki_en_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/corpus-wiki-de-texte.json').read_text())\nfor k in ('articles_lus','articles_gardes','articles_rediriges','caracteres_gardes','mots_estimes','troncons','octets', … [626 caractères tronqués]`
+
+  ```
+articles_lus 6026063
+articles_gardes 2864934
+articles_rediriges 1969967
+caracteres_gardes 10443172265
+mots_estimes 1684382623
+troncons 3260640
+octets {'train': 9611515224, 'val': 534791621, 'test': 535878528}
+residus {'modele': 0, 'lien': 15, 'balise': 0, 'lignes_echantillon': 20000}
+check de job 1539458
+1539458 00:05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; which pdftotext pdfinfo 2>/dev/null; echo \"=== racines PDF\"; ls -d /home/stephane/Data13TB/stephane/Biblio_large 2>/dev/null; find /home/stephane/Data13TB/stephane/Biblio_large -maxdepth 2 -iname \"*.pdf\" 2>/dev/null | wc -l; find / … [1166 caractères tronqués]`

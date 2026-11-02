@@ -96,7 +96,8 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
         tfn += len(gold_tete - pred_tete)
         labels = {(e.type, e.debut, e.fin): e for e in a.etiquettes if e.niveau == "syntagme"}
         for s in phrase["segments"]:
-            if not s.get("cible"):
+            cibles = s.get("cibles") or ([s["cible"]] if s.get("cible") else [])
+            if not cibles:
                 continue
             att_n += 1
             e = labels.get((s["type"], s["debut"], s["fin"]))
@@ -105,11 +106,11 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
             att_labels += 1
             att = (e.meta or {}).get("attachement") or {}
             cible = (att.get("cible") or "").strip()
-            if cible == s["cible"]:
+            if cible == cibles[0]:
                 att_exact += 1
-            if cible and (s["cible"] in cible or cible in s["cible"]):
+            if cible and any(c in cible or cible in c for c in cibles):
                 att_top1 += 1
-            if any(s["cible"] in nom for nom in (e.candidats or [])):
+            if any(any(c in nom for c in cibles) for nom in (e.candidats or [])):
                 att_topk += 1
             # attachement par tête : le segment prédit qui couvre la tête du gold
             att_t_n += 1
@@ -121,9 +122,9 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
             att_t_labels += 1
             att2 = (et.meta or {}).get("attachement") or {}
             cible2 = (att2.get("cible") or "").strip()
-            if cible2 and (s["cible"] in cible2 or cible2 in s["cible"]):
+            if cible2 and any(c in cible2 or cible2 in c for c in cibles):
                 att_t_top1 += 1
-            if any(s["cible"] in nom for nom in (et.candidats or [])):
+            if any(any(c in nom for c in cibles) for nom in (et.candidats or [])):
                 att_t_topk += 1
         pr, g = _pragma(a), phrase["pragma"]
         acte_ok += int(pr["acte"] == g.get("acte", "assertion"))

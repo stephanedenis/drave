@@ -12269,3 +12269,87 @@ timeout 120 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/tests/linguistique/gold.py tools/tests/linguistique/gold.json tools/tests/linguistique/gold_synthetique.py tools/tests/linguistique/gold_synthetique.json tools/tests/linguistique/evaluer_gold.py reports/rapport-pensee-g … [540 caractères tronqués]`
+
+  ```
+docs/pilotage/plan-travail.md                      |   2 +-
+ docs/pilotage/roadmap.md                           |   2 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |   4 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-gold-linguistique.json              |  48 +++---
+ reports/rapport-pensee-gold-linguistique.md        |  40 +++--
+ tools/tests/linguistique/evaluer_gold.py           |  13 +-
+ tools/tests/linguistique/gold.json                 |  44 +++++
+ tools/tests/linguistique/gold.py                   |  30 ++--
+ tools/tests/linguistique/gold_synthetique.json     | 189 +++++++++++++++++++++
+ tools/tests/linguistique/gold_synthetique.py       |  14 +-
+ 14 files changed, 328 insertions(+), 83 deletions(-)
+[still running after 60000ms; moved to background job bash-431]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-431", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 2a15441d3400402ad826b101fa0f3a49c16bb5ae but expected f5d1256d7119a0ff3c25826f2c5b125008a96851
+EXIT=128
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; echo '=== HEAD has our files? ==='; git show --stat HEAD | grep -E \"gold|lecture|evaluer|en-cours|pensee\" | head -10; echo '=== status ==='; git status --short | grep -E \"gold|evaluer|pensee|en-cours|p … [282 caractères tronqués]`
+
+  ```
+2a15441d DONNÉES — HUIT CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES) : 11,65 M ARTICLES, 48,4 GO, 8 KO 0
+=== HEAD has our files? ===
+ docs/pilotage/en-cours.md                          |   6 +-
+=== status ===
+ M docs/pilotage/en-cours.md
+ M reports/pensee-gold-linguistique.json
+ M reports/rapport-pensee-gold-linguistique.md
+ M tools/tests/linguistique/evaluer_gold.py
+ M tools/tests/linguistique/gold.json
+ M tools/tests/linguistique/gold.py
+ M tools/tests/linguistique/gold_synthetique.json
+ M tools/tests/linguistique/gold_synthetique.py
+=== cached ===
+ journal/2026-11-01/outils.md                       |  2 +-
+ journal/2026-11-01/portes.md                       |  2 +-
+ journal/README.md                                  |  4 +-
+ .../rapport.md                                     |  7 +--
+ .../rapport.md                                     | 52 +++++++++++++++++++---
+ 13 files changed, 67 insertions(+), 24 deletions(-)
+=== HEAD content ===
+"cibles"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff HEAD --stat | tail -14; echo '=== en-cours diff ==='; git diff HEAD -- docs/pilotage/en-cours.md | head -20; echo '=== json diff ==='; git diff HEAD -- reports/pensee-gold-linguistique.json | head -12", "description": "Voir  … [42 caractères tronqués]`
+
+  ```
+.../rapport.md                                     |   7 +-
+ .../rapport.md                                     |  52 +++++-
+ reports/README.md                                  |   2 +-
+ reports/pensee-gold-linguistique.json              |  48 +++---
+ reports/rapport-pensee-gold-linguistique.md        |  40 +++--
+ tools/docwatch                                     |   0
+ tools/entrainer_native.py                          |  31 ++--
+ tools/native_model.py                              |  11 +-
+ tools/tests/linguistique/evaluer_gold.py           |  13 +-
+ tools/tests/linguistique/gold.json                 |  44 +++++
+ tools/tests/linguistique/gold.py                   |  30 ++--
+ tools/tests/linguistique/gold_synthetique.json     | 189 +++++++++++++++++++++
+ tools/tests/linguistique/gold_synthetique.py       |  14 +-
+ 29 files changed, 419 insertions(+), 115 deletions(-)
+=== en-cours diff ===
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 959c1d42..5712e114 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-01, 19 h 35 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-01, 20 h 00 H
+… [1295 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/tests/linguistique/gold.py tools/tests/linguistique/gold.json tools/tests/linguistique/gold_synthetique.py tools/tests/linguistique/gold_synthetique.json tools/tests/linguistique/evaluer_gold.py reports/rapport-pensee-g … [554 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 27.2 h |
+| Durée | 27.4 h |
 | Tours | 18 |
-| Messages | 1100 |
-| Appels d'outils | 1023 |
+| Messages | 1107 |
+| Appels d'outils | 1029 |
 | Fichiers touchés | 11 |
-| Commandes | 838 |
+| Commandes | 843 |
 | Sous-agents | 0 |
-| Commits | 28 |
+| Commits | 29 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*57 appels d'outils.* Actions notables :
+*63 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 31 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 798 autres
+- … et 803 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1205,4 +1205,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - ÉTAT — COMPTEUR JSON 471 (DIX LANGUES)  Les corpus et les évaluations multilingues de l'autre session font passer le compteur à 471 ; la revue repasse." && git 
 - N2.j2 — POSITIONS ALÉATOIRES SUR 186 Mo : LE VERROU DE LONGUEUR TOMBE ENCORE (÷2,4 À 512)  La base du corpus réel (186 Mo de Wikipédia, N2.j) entraînée avec des
 - N2.j3 — LA CAPACITÉ SUR 186 Mo : 21,65 M PAIE (4,39 → 4,20), DONNÉES × CAPACITÉ  À données et budget égaux (20 000 pas, positions 0–384), le modèle de 21,65 M v
+- N2.l — LE CANAL DE STRUCTURE : +5 % DE PPL POUR 1 344 PARAMÈTRES, ET LE MÊME ALPHABET  Donner au modèle une classe de structure par octet (mot plein, grammatica
 

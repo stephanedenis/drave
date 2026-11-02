@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 27.0 h |
+| Durée | 27.1 h |
 | Tours | 20 |
-| Messages | 520 |
-| Appels d'outils | 537 |
+| Messages | 525 |
+| Appels d'outils | 542 |
 | Fichiers touchés | 25 |
-| Commandes | 431 |
+| Commandes | 434 |
 | Sous-agents | 2 |
-| Commits | 29 |
+| Commits | 30 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1100,13 +1100,17 @@ Grille **5×5**, départ `(0,0)`, but `(4,4)` ; trois opérateurs : `pas` (symbo
 
 ### Tour 20 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Annoter les deux lectures de l'attachement
 - bash — Remesurer l'attachement avec les deux lectures
 - bash — Mettre à jour la fiche et l'état pour la lecture double
 - bash — Passer les portes après la lecture double
 - bash — Committer la lecture double du gold
+- job_output
+- bash — Voir si le commit concurrent a emporté la lecture double
+- bash — Voir ce qui reste à committer après la course
+- bash — Recommitter la lecture double sur le nouveau HEAD
 
 ## 3. Travail accompli
 
@@ -1187,7 +1191,7 @@ Grille **5×5**, départ `(0,0)`, but `(4,4)` ; trois opérateurs : `pas` (symbo
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 391 autres
+- … et 394 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1358,5 +1362,6 @@ Grille **5×5**, départ `(0,0)`, but `(4,4)` ; trois opérateurs : `pas` (symbo
 - L — ATTACHEMENT : TOP-1 0,294 / TOP-K 0,338 SUR 68 CIBLES (COUVERTURE 0,338), HASARD 0,015" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - L — ATTACHEMENT PAR TÊTE : COUVERTURE 1,0, TOP-1 0,870, TOP-K 1,0 (SPAN 0,338/0,294)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — OPÉRATEURS HÉTÉROGÈNES : 3 GENRES, SONDE 4 APPELS/COÛT 48 VS AVEUGLE 1/33 (11/11)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- L — LECTURE DOUBLE : TOP-1 TÊTE 0,957 (0,800 RÉEL/1,0 SYNTH), 29 CIBLES AMBIGUËS" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - L — LECTURE DOUBLE : TOP-1 TÊTE 0,957 (0,800 RÉEL/1,0 SYNTH), 29 CIBLES AMBIGUËS" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

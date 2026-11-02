@@ -111,11 +111,16 @@ class NativeModel(nn.Module):
         self.thought = nn.Linear(self.cfg.d_model, self.cfg.d_model)
         self.thought_in = nn.Linear(self.cfg.d_model, self.cfg.d_model)
         self.head_byte = nn.Linear(self.cfg.d_model, self.cfg.vocab)
+        # Canal de structure : une classe par octet (mot plein, grammatical, espace,
+        # ponctuation, chiffre, frontière). Il ne coûte que 6 × d_model paramètres.
+        self.embed_canal = nn.Embedding(6, self.cfg.d_model)
         self.head_rsn = nn.Linear(self.cfg.d_model, self.cfg.rsn_dim)
 
-    def forward(self, ids, pos_debut: int = 0):
+    def forward(self, ids, pos_debut: int = 0, canal=None):
         b, s = ids.shape
         x = self.embed(ids) + self.pos(torch.arange(s, device=ids.device) + pos_debut)[None]
+        if canal is not None:
+            x = x + self.embed_canal(canal)
         early = []; local = []
         for i, bloc in enumerate(self.blocks):
             x = bloc(x)
@@ -134,10 +139,12 @@ class NativeModel(nn.Module):
         return {"logits": self.head_byte(x), "early": early, "local": local,
                 "thought": x, "rsn": self.head_rsn(x)}
 
-    def forward_jusqua(self, ids, n_blocs: int, pos_debut: int = 0):
+    def forward_jusqua(self, ids, n_blocs: int, pos_debut: int = 0, canal=None):
         """Passe avant arrêtée après `n_blocs` blocs (réflexe)."""
         b, s = ids.shape
         x = self.embed(ids) + self.pos(torch.arange(s, device=ids.device) + pos_debut)[None]
+        if canal is not None:
+            x = x + self.embed_canal(canal)
         early = None
         for i, bloc in enumerate(self.blocks[:n_blocs]):
             x = bloc(x)

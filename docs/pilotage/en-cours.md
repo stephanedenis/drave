@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-01, 19 h 35 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-01, 20 h 00 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -35,7 +35,7 @@
   [`pensee-drvf`](../../reports/rapport-pensee-drvf.md), [`pensee-banc`](../../reports/rapport-pensee-banc.md).
 - **Gold L 180** : **20 réels + 160 synthétiques** ; POS **0,751** (fermé 0,939/ouvert 0,621),
   syntagmes exacts **0,194**/**tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock)
-  **67,1 %** ; **attachement tête 1,0/0,870/1,0** (span 0,338/0,294), hasard 0,015 ; vrai neuronal
+  **67,1 %** ; **attachement tête 1,0/0,957/1,0** (span 0,323/0,338 ; 29 cibles ambiguës), hasard 0,015 ; vrai neuronal
   **refusé** ; fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :
   **lecture du gold + modèle qualifié**.
 - **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes**  sur le jouet des cruches ; BFS, greedy, A* et
@@ -79,7 +79,7 @@
 - **A8** : **A8.0 : 19** ; **A8.3b refusé** (lot) ; **A8.3c/d** : lot 1≠≥2, threads innocents ; fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md), [`a83d`](../../reports/rapport-a83d-lot-threads.md).
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
-- **N2.h/N2.i — closes** : corpus dédupliqué, **3,09** en domaine, **12,93** littérature, **33,83** anglais ; **N2.j** (186 Mo) **7,42/12,41** ; **N2.k** (10 langues) fr **5,68**, anglais **6,30** ; **N2.j2** : 256 **9,28 → 4,49**, 512 **13,37 → 5,67** ; **N2.j3** : 21,65 M **4,20** (11,47 M 4,39) ; N4 **0/40**. Fiches [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md), [`n2-capacite-reelle`](../../reports/rapport-n2-capacite-reelle.md).
+- **N2.h/N2.i — closes** : **3,09** / **12,93** / **33,83** ; **N2.j** (186 Mo) **7,42/12,41** ; **N2.k** (10 langues) fr **5,68**, anglais **6,30** ; **N2.j2** : 256 **9,28 → 4,49**, 512 **13,37 → 5,67** ; **N2.j3** : 21,65 M **4,20** ; **N2.l** (canal) : **4,17** contre **4,39** (placebo **4,52**) ; N4 **0/40**. Fiches [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md), [`n2-capacite-reelle`](../../reports/rapport-n2-capacite-reelle.md), [`n2-canal`](../../reports/rapport-n2-canal.md).
 - **Pensée — state store v0** : 6/6 portes (BFS, greedy, A*, MCTS-lite), jouet des cruches ; fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine AC-3, alpha-bêta, DRVF.
 
 
@@ -91,7 +91,7 @@
 |---|---|---|
 | portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **393** / **496** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **394** / **474** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

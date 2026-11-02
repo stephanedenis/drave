@@ -28,20 +28,25 @@ def charger(chemin: str) -> torch.Tensor:
     return torch.tensor(list(b), dtype=torch.long)
 
 
-def lot(data: torch.Tensor, n: int, seq: int, device: str, compteur: int):
+def lot(data: torch.Tensor, n: int, seq: int, device: str, compteur: int, canal=None):
     # Van der Corput : même compteur = mêmes fenêtres, sans état aléatoire.
     i = torch.tensor(departs_vdc(compteur, n, len(data) - seq - 1, seq), dtype=torch.long)
     x = torch.stack([data[j:j + seq] for j in i]).to(device)
     y = torch.stack([data[j + 1:j + seq + 1] for j in i]).to(device)
-    return x, y
+    c = torch.stack([canal[j:j + seq] for j in i]).to(device) if canal is not None else None
+    return x, y, c
 
 
-def ppl(modele, data, seq, lot_n, device, n_lots=8, compteur=0):
+def charger_canal(chemin: str) -> torch.Tensor:
+    return torch.tensor(list(pathlib.Path(chemin).read_bytes()), dtype=torch.long)
+
+
+def ppl(modele, data, seq, lot_n, device, n_lots=8, compteur=0, canal=None):
     modele.eval(); total = 0.0; n = 0
     with torch.no_grad():
         for _ in range(n_lots):
-            x, y = lot(data, lot_n, seq, device, compteur + _ * lot_n)
-            logits = modele(x)["logits"]
+            x, y, c = lot(data, lot_n, seq, device, compteur + _ * lot_n, canal)
+            logits = modele(x, canal=c)["logits"]
             total += float(F.cross_entropy(logits.reshape(-1, 256), y.reshape(-1),
                                            reduction="sum"))
             n += y.numel()
@@ -64,6 +69,7 @@ def main() -> None:
                     help="largeur d'un expert (288 ; 416 pour 21,65 M)")
     ap.add_argument("--positions-aleatoires", type=int, default=0,
                     help="décalage de position tiré dans [0, N] à chaque pas (0 = positions fixes)")
+    ap.add_argument("--canal", default=None, help="fichier de classes de structure (1 par octet)")
     ap.add_argument("--init", default=None,
                     help="checkpoint de départ (poids seuls, pour un curriculum)")
     ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True,
@@ -71,8 +77,11 @@ def main() -> None:
     a = ap.parse_args()
     torch.manual_seed(a.graine)
     data = charger(a.corpus)
+    canal_data = charger_canal(a.canal) if a.canal else None
     n_val = max(10_000, len(data) // 20)
     train, val = data[:-n_val], data[-n_val:]
+    canal_train = canal_data[:-n_val] if canal_data is not None else None
+    canal_val = canal_data[-n_val:] if canal_data is not None else None
     cfg = NativeConfig(d_model=a.dim, expert_hidden=a.expert_hidden)
     modele = NativeModel(cfg).to(a.device)
     if a.init:
@@ -83,9 +92,9 @@ def main() -> None:
     t0 = time.time(); pertes = []
     for pas in range(1, a.pas + 1):
         modele.train()
-        x, y = lot(train, a.lot, a.seq, a.device, pas * a.lot)
+        x, y, c = lot(train, a.lot, a.seq, a.device, pas * a.lot, canal_train)
         pos = random.randint(0, a.positions_aleatoires) if a.positions_aleatoires else 0
-        sortie = modele(x, pos_debut=pos)
+        sortie = modele(x, pos_debut=pos, canal=c)
         pertes = [F.cross_entropy(sortie["logits"].reshape(-1, 256), y.reshape(-1))]
         if a.tetes:
             for e in sortie["early"]:
@@ -95,15 +104,15 @@ def main() -> None:
         torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
         opt.step(); pertes.append(float(perte))
         if pas % 50 == 0 or pas == 1:
-            p, n = ppl(modele, val, a.seq, a.lot, a.device, n_lots=2)
+            p, n = ppl(modele, val, a.seq, a.lot, a.device, n_lots=2, canal=canal_val)
             print(f"pas {pas:4d} · perte {float(perte):.4f} · PPL val {p:.3f} · {time.time()-t0:.0f} s", flush=True)
-    p_val, n_tok = ppl(modele, val, a.seq, a.lot, a.device, n_lots=8)
+    p_val, n_tok = ppl(modele, val, a.seq, a.lot, a.device, n_lots=8, canal=canal_val)
     # Précision top-1 : tête principale et têtes précoces.
     modele.eval(); bons_main = 0; bons_early = [0] * len(modele.cfg.early_blocks); n_eval = 0
     with torch.no_grad():
         for _ in range(4):
-            x, y = lot(val, a.lot, a.seq, a.device, 10_000_000 + _ * a.lot)
-            s = modele(x)
+            x, y, c = lot(val, a.lot, a.seq, a.device, 10_000_000 + _ * a.lot, canal_val)
+            s = modele(x, canal=c)
             bons_main += int((s["logits"].argmax(-1) == y).sum())
             for j, e in enumerate(s["early"]):
                 bons_early[j] += int((e.argmax(-1) == y).sum())

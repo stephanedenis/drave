@@ -247,9 +247,10 @@ profonds : POS **0,751** (fermé **0,939**, ouvert **0,621**), syntagmes exacts 
 la cascade (mock de contrat) préserve ces chiffres et couvre **67,1 %** en unités sémantiques.
 Le lexique synthétique est **disjoint** des listes de l'heuristique : les classes ouvertes
 chutent à **0,586** sur les mots inconnus. **L'attachement** des GP/REL/SUB est mesuré :
-**68 cibles**, couverture par **span** **0,338** (top-1 0,294, top-k 0,338) et surtout par
-**tête** **1,000** (top-1 **0,870**, top-k **1,000**), hasard 0,015 ; les GP au verbe sont lus
-comme le GN le plus proche (les réels tombent à 40 % en tête). Le **vrai** modèle neuronal est **refusé**
+**97 cibles** (dont **29 ambiguës** annotées en double lecture), couverture par **span** **0,338**
+(top-1 0,323) et surtout par **tête** **1,000** (top-1 **0,957** avec les deux lectures, 0,870 avec
+une seule ; top-k **1,000**), hasard 0,015 ; les GP au verbe sont lus comme le GN le plus proche
+(les réels passent de 40 % à 80 % en tête avec les deux lectures). Le **vrai** modèle neuronal est **refusé**
 (`llama-cli` expire) : la qualification neuronale reste à faire.
 
 ## 10. Les limites
@@ -259,8 +260,8 @@ comme le GN le plus proche (les réels tombent à 40 % en tête). Le **vrai** mo
 - **Les niveaux profonds sont mesurés sur 180 phrases** : POS 0,751, syntagmes exacts 0,194,
   par tête 0,560, pragmatique 0,889–1,0 ; l'ouvert chute à 0,621 sur le lexique disjoint ; le
   syntagme exact mesure surtout un désaccord de segmentation.
-- **L'attachement par tête couvre 100 %**, mais le gold ne donne qu'une lecture des ambiguïtés ;
-  les 3 cibles anglaises n'ont pas de cible S (le générateur est français).
+- **L'attachement par tête couvre 100 %** ; le gold annote 29 cibles ambiguës en double lecture,
+  mais ces lectures sont celles de l'auteur ; les 3 cibles anglaises n'ont pas de cible S.
 - **Le neuronal réel n'est pas qualifié** : le modèle local a expiré ; le mock est un contrat,
   pas une qualité.
 - **Le corpus UDHR est parallèle et propre** : 0,9687 en langue ne se transporte pas tel quel

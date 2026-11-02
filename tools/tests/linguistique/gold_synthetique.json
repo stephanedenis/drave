@@ -62,6 +62,10 @@
      "role": "gp",
      "debut": 12,
      "fin": 19,
+     "cibles": [
+      "compte",
+      "nous"
+     ],
      "cible": "compte"
     }
    ]
@@ -172,6 +176,10 @@
      "role": "gp",
      "debut": 11,
      "fin": 20,
+     "cibles": [
+      "saute",
+      "Emma"
+     ],
      "cible": "saute"
     }
    ]
@@ -538,6 +546,9 @@
      "role": "rel",
      "debut": 10,
      "fin": 18,
+     "cibles": [
+      "chemin"
+     ],
      "cible": "chemin"
     },
     {
@@ -685,6 +696,9 @@
      "role": "sub",
      "debut": 26,
      "fin": 42,
+     "cibles": [
+      "écoute"
+     ],
      "cible": "écoute"
     }
    ]
@@ -873,6 +887,9 @@
      "role": "sub",
      "debut": 18,
      "fin": 39,
+     "cibles": [
+      "marche"
+     ],
      "cible": "marche"
     }
    ]
@@ -1103,6 +1120,10 @@
      "role": "gp",
      "debut": 28,
      "fin": 42,
+     "cibles": [
+      "finit",
+      "cuisine"
+     ],
      "cible": "finit"
     }
    ]
@@ -1279,6 +1300,9 @@
      "role": "sub",
      "debut": 9,
      "fin": 22,
+     "cibles": [
+      "nage"
+     ],
      "cible": "nage"
     }
    ]
@@ -1556,6 +1580,10 @@
      "role": "gp",
      "debut": 31,
      "fin": 33,
+     "cibles": [
+      "marche",
+      "village"
+     ],
      "cible": "marche"
     }
    ]
@@ -1738,6 +1766,9 @@
      "role": "sub",
      "debut": 26,
      "fin": 44,
+     "cibles": [
+      "cherche"
+     ],
      "cible": "cherche"
     }
    ]
@@ -1859,6 +1890,9 @@
      "role": "rel",
      "debut": 11,
      "fin": 19,
+     "cibles": [
+      "village"
+     ],
      "cible": "village"
     },
     {
@@ -2016,6 +2050,9 @@
      "role": "rel",
      "debut": 10,
      "fin": 19,
+     "cibles": [
+      "papier"
+     ],
      "cible": "papier"
     },
     {
@@ -2107,6 +2144,9 @@
      "role": "rel",
      "debut": 5,
      "fin": 15,
+     "cibles": [
+      "Paul"
+     ],
      "cible": "Paul"
     },
     {
@@ -2332,6 +2372,10 @@
      "role": "gp",
      "debut": 18,
      "fin": 30,
+     "cibles": [
+      "marche",
+      "avocat"
+     ],
      "cible": "marche"
     }
    ]
@@ -2496,6 +2540,9 @@
      "role": "sub",
      "debut": 17,
      "fin": 29,
+     "cibles": [
+      "nage"
+     ],
      "cible": "nage"
     }
    ]
@@ -2576,6 +2623,10 @@
      "role": "gp",
      "debut": 22,
      "fin": 40,
+     "cibles": [
+      "nage",
+      "canard"
+     ],
      "cible": "nage"
     }
    ]
@@ -2710,6 +2761,10 @@
      "role": "gp",
      "debut": 24,
      "fin": 45,
+     "cibles": [
+      "rêve",
+      "fenêtre"
+     ],
      "cible": "rêve"
     }
    ]
@@ -2891,6 +2946,9 @@
      "role": "rel",
      "debut": 11,
      "fin": 20,
+     "cibles": [
+      "jardin"
+     ],
      "cible": "jardin"
     },
     {
@@ -3056,6 +3114,9 @@
      "role": "sub",
      "debut": 29,
      "fin": 57,
+     "cibles": [
+      "ouvre"
+     ],
      "cible": "ouvre"
     }
    ]
@@ -3190,6 +3251,9 @@
      "role": "sub",
      "debut": 12,
      "fin": 41,
+     "cibles": [
+      "trouve"
+     ],
      "cible": "trouve"
     }
    ]
@@ -3389,6 +3453,10 @@
      "role": "gp",
      "debut": 24,
      "fin": 45,
+     "cibles": [
+      "saute",
+      "avocat"
+     ],
      "cible": "saute"
     }
    ]
@@ -3552,6 +3620,9 @@
      "role": "rel",
      "debut": 9,
      "fin": 18,
+     "cibles": [
+      "nuage"
+     ],
      "cible": "nuage"
     },
     {
@@ -3729,6 +3800,10 @@
      "role": "gp",
      "debut": 17,
      "fin": 26,
+     "cibles": [
+      "compte",
+      "étoile"
+     ],
      "cible": "compte"
     }
    ]
@@ -3784,6 +3859,9 @@
      "role": "rel",
      "debut": 5,
      "fin": 17,
+     "cibles": [
+      "elle"
+     ],
      "cible": "elle"
     },
     {
@@ -4007,6 +4085,9 @@
      "role": "rel",
      "debut": 15,
      "fin": 23,
+     "cibles": [
+      "canard"
+     ],
      "cible": "canard"
     },
     {
@@ -4075,6 +4156,9 @@
      "role": "rel",
      "debut": 11,
      "fin": 20,
+     "cibles": [
+      "canard"
+     ],
      "cible": "canard"
     },
     {
@@ -4178,6 +4262,9 @@
      "role": "rel",
      "debut": 20,
      "fin": 31,
+     "cibles": [
+      "chanson"
+     ],
      "cible": "chanson"
     },
     {
@@ -4366,6 +4453,9 @@
      "role": "rel",
      "debut": 14,
      "fin": 23,
+     "cibles": [
+      "rivière"
+     ],
      "cible": "rivière"
     },
     {
@@ -4692,6 +4782,10 @@
      "role": "gp",
      "debut": 29,
      "fin": 37,
+     "cibles": [
+      "trouve",
+      "fenêtre"
+     ],
      "cible": "trouve"
     }
    ]
@@ -4952,6 +5046,10 @@
      "role": "gp",
      "debut": 18,
      "fin": 33,
+     "cibles": [
+      "cherche",
+      "chemin"
+     ],
      "cible": "cherche"
     }
    ]
@@ -5026,6 +5124,10 @@
      "role": "gp",
      "debut": 17,
      "fin": 28,
+     "cibles": [
+      "trouve",
+      "nuage"
+     ],
      "cible": "trouve"
     }
    ]
@@ -5106,6 +5208,9 @@
      "role": "sub",
      "debut": 10,
      "fin": 38,
+     "cibles": [
+      "crie"
+     ],
      "cible": "crie"
     }
    ]
@@ -5180,6 +5285,10 @@
      "role": "gp",
      "debut": 19,
      "fin": 32,
+     "cibles": [
+      "commence",
+      "étoile"
+     ],
      "cible": "commence"
     }
    ]
@@ -5594,6 +5703,9 @@
      "role": "sub",
      "debut": 20,
      "fin": 42,
+     "cibles": [
+      "commence"
+     ],
      "cible": "commence"
     }
    ]
@@ -5889,6 +6001,9 @@
      "role": "sub",
      "debut": 14,
      "fin": 41,
+     "cibles": [
+      "dessine"
+     ],
      "cible": "dessine"
     }
    ]
@@ -6185,6 +6300,10 @@
      "role": "gp",
      "debut": 21,
      "fin": 34,
+     "cibles": [
+      "rêve",
+      "papier"
+     ],
      "cible": "rêve"
     }
    ]
@@ -6259,6 +6378,10 @@
      "role": "gp",
      "debut": 17,
      "fin": 31,
+     "cibles": [
+      "compte",
+      "lettre"
+     ],
      "cible": "compte"
     }
    ]
@@ -6416,6 +6539,9 @@
      "role": "sub",
      "debut": 24,
      "fin": 39,
+     "cibles": [
+      "nage"
+     ],
      "cible": "nage"
     }
    ]
@@ -6550,6 +6676,9 @@
      "role": "sub",
      "debut": 22,
      "fin": 43,
+     "cibles": [
+      "dessine"
+     ],
      "cible": "dessine"
     }
    ]
@@ -6617,6 +6746,9 @@
      "role": "rel",
      "debut": 19,
      "fin": 30,
+     "cibles": [
+      "fenêtre"
+     ],
      "cible": "fenêtre"
     },
     {
@@ -6704,6 +6836,10 @@
      "role": "gp",
      "debut": 15,
      "fin": 37,
+     "cibles": [
+      "finit",
+      "nuage"
+     ],
      "cible": "finit"
     }
    ]
@@ -6940,6 +7076,10 @@
      "role": "gp",
      "debut": 26,
      "fin": 40,
+     "cibles": [
+      "prépare",
+      "lettre"
+     ],
      "cible": "prépare"
     }
    ]
@@ -7068,6 +7208,10 @@
      "role": "gp",
      "debut": 17,
      "fin": 34,
+     "cibles": [
+      "saute",
+      "papier"
+     ],
      "cible": "saute"
     }
    ]
@@ -7190,6 +7334,9 @@
      "role": "sub",
      "debut": 21,
      "fin": 37,
+     "cibles": [
+      "commence"
+     ],
      "cible": "commence"
     }
    ]
@@ -7251,6 +7398,9 @@
      "role": "rel",
      "debut": 11,
      "fin": 21,
+     "cibles": [
+      "renard"
+     ],
      "cible": "renard"
     },
     {
@@ -7583,6 +7733,9 @@
      "role": "rel",
      "debut": 19,
      "fin": 28,
+     "cibles": [
+      "chanson"
+     ],
      "cible": "chanson"
     },
     {
@@ -7682,6 +7835,9 @@
      "role": "sub",
      "debut": 26,
      "fin": 62,
+     "cibles": [
+      "marche"
+     ],
      "cible": "marche"
     }
    ]
@@ -7839,6 +7995,9 @@
      "role": "rel",
      "debut": 11,
      "fin": 22,
+     "cibles": [
+      "fenêtre"
+     ],
      "cible": "fenêtre"
     },
     {
@@ -8076,6 +8235,9 @@
      "role": "sub",
      "debut": 15,
      "fin": 41,
+     "cibles": [
+      "crie"
+     ],
      "cible": "crie"
     }
    ]
@@ -8179,6 +8341,9 @@
      "role": "rel",
      "debut": 5,
      "fin": 15,
+     "cibles": [
+      "Emma"
+     ],
      "cible": "Emma"
     },
     {
@@ -8386,6 +8551,10 @@
      "role": "gp",
      "debut": 26,
      "fin": 40,
+     "cibles": [
+      "dessine",
+      "jardin"
+     ],
      "cible": "dessine"
     }
    ]
@@ -8454,6 +8623,10 @@
      "role": "gp",
      "debut": 13,
      "fin": 28,
+     "cibles": [
+      "cherche",
+      "Emma"
+     ],
      "cible": "cherche"
     }
    ]
@@ -8528,6 +8701,10 @@
      "role": "gp",
      "debut": 25,
      "fin": 35,
+     "cibles": [
+      "observe",
+      "montagne"
+     ],
      "cible": "observe"
     }
    ]
@@ -8656,6 +8833,10 @@
      "role": "gp",
      "debut": 20,
      "fin": 39,
+     "cibles": [
+      "nage",
+      "voyage"
+     ],
      "cible": "nage"
     }
    ]
@@ -8796,6 +8977,10 @@
      "role": "gp",
      "debut": 19,
      "fin": 36,
+     "cibles": [
+      "compte",
+      "rivière"
+     ],
      "cible": "compte"
     }
    ]
@@ -9343,6 +9528,10 @@
      "role": "gp",
      "debut": 20,
      "fin": 29,
+     "cibles": [
+      "nage",
+      "chemin"
+     ],
      "cible": "nage"
     }
    ]

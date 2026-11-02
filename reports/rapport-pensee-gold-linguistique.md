@@ -4,7 +4,7 @@
 > **Verdict** : ✅ **le gold étendu et l'attachement sont mesurés** — **180 phrases** (20 réelles écrites à la main,
 > 160 synthétiques d'une grammaire indépendante), **804 tokens** ; POS **0,751** (fermé
 > **0,939**, ouvert **0,621**), syntagmes exacts **0,194**, **par tête 0,560**, pragmatique
-> **1,0/1,0/0,994/0,889**, cascade **67,1 %**, **attachement par tête couverture 1,0 / top-1 0,870 / top-k 1,0** (span 0,338/0,294), hasard 0,015. ⚠️ **le vrai modèle
+> **1,0/1,0/0,994/0,889**, cascade **67,1 %**, **attachement par tête couverture 1,0 / top-1 0,957 / top-k 1,0** (span 0,323/0,338), hasard 0,015 ; **29 cibles ambiguës annotées en double lecture**. ⚠️ **le vrai modèle
 > neuronal est refusé** (`llama-cli` local) ; la cascade est mesurée avec le **mock de contrat**.
 >
 > **Dispositif** : [`gold.py`](../tools/tests/linguistique/gold.py) (20 réels),
@@ -53,24 +53,28 @@ Les deux golds annotent la **cible** des GP/REL/SUB (le nom ou le verbe auquel i
 Le générateur S propose l'attachement ; la couverture est limitée par l'accord de **span exact**
 entre le S et le gold.
 
-| lecture | source | cibles | couv. span | top-1 span | couv. tête | **top-1 tête** | **top-k tête** |
+| lecture | source | cibles | ambiguës | couv. tête | **top-1 tête** (1 lecture) | **top-1 tête** (2 lectures) | **top-k tête** |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **heuristique** | **180** | **68** | **0,338** | **0,294** | **1,000** | **0,870** | **1,000** |
-| heuristique | 20 réels | 13 | 0,385 | 0,154 | 1,000 | 0,400 | 1,000 |
-| heuristique | 160 synth. | 55 | 0,327 | 0,327 | 1,000 | **1,000** | 1,000 |
-| mock seul | 180 | 68 | 0,338 | 0 | 1,000 | 0 | 0 |
-| **hasard** | 180 | 68 | — | 0,015 | — | — | — |
+| **heuristique** | **180** | **97** | **29** | **1,000** | 0,870 | **0,957** | **1,000** |
+| heuristique | 20 réels | 18 | 5 | 1,000 | 0,400 | **0,800** | 1,000 |
+| heuristique | 160 synth. | 79 | 24 | 1,000 | **1,000** | **1,000** | 1,000 |
+| mock seul | 180 | 97 | 29 | 1,000 | 0 | 0 | 0 |
+| **hasard** | 180 | 97 | — | — | **0,015** | — | — |
 
 - **La couverture par tête est de 100 %** : le segment prédit qui couvre la **tête** du gold
   (même type) existe toujours ; la couverture de 34 % par **span** était un désaccord de
   **segmentation**, pas d'attachement.
-- **Top-1 tête 87 %, top-k tête 100 %** : quand on regarde la tête, la bonne cible est dans les
-  candidats du S **toujours**, et en premier **87 %** du temps.
+- **Top-1 tête 87 % (une lecture), 96 % (deux lectures)** : quand on regarde la tête, la bonne
+  cible est dans les candidats du S **toujours**, et en premier **87 %** du temps quand le gold
+  n'a qu'une lecture, **96 %** quand on lui donne les **deux** lectures de l'ambiguïté.
+- **La lecture double** : **29 cibles** sur 97 ont deux lectures (`dans le parc` → `vu` **ou**
+  `l'homme`, `avec le télescope` → `vu` **ou** `l'homme`, `à manger` → `prêt` **ou** `canard`).
+  Le top-1 des réels passe de **40 %** à **80 %** ; les synthétiques restent à 100 %.
 - **Le span** (34 %, top-1 29 %) reste la mesure de la **découpe** ; la tête est la mesure de
   l'**attachement**.
-- **Réels 40 %** en tête : les GP au verbe (`dans le parc` → `vu`) sont lus par le S comme le GN
-  le plus proche (`l'homme`) ; le gold préfère le verbe ; c'est le désaccord classique
-  d'attachement, et le top-1 le paie.
+- **Réels 80 %** avec les deux lectures : les GP au verbe (`dans le parc` → `vu`) sont lus par
+  le S comme le GN le plus proche (`l'homme`) ; les deux sont maintenant acceptés. Le désaccord
+  restant (20 %) est un cas où le S ne propose **aucune** des deux lectures.
 - **Synthétiques 100 %** : la grammaire attache régulièrement ; le S retrouve la cible.
 - **Hasard 1,5 %** : le contrôle négatif. **`exact` 0** : le S rend la cible en **phrase**
   (`a vu`), le gold en **tête** (`vu`) ; l'égalité stricte est trop dure, la containment est la
@@ -99,7 +103,7 @@ qualification neuronale reste à faire.
 | attachement top-1 (span) > 5 × hasard | oui | **0,294 > 0,074** |
 | attachement tête couverture | ≥ 0,60 | **1,000** |
 | attachement tête top-k | ≥ 0,50 | **1,000** |
-| attachement tête top-1 > 5 × hasard | oui | **0,870 > 0,074** |
+| attachement tête top-1 > 5 × hasard | oui | **0,957 > 0,074** |
 
 Les seuils sont **postérieurs** à la première mesure : bornes de non-régression, pas prédictions.
 
@@ -118,6 +122,8 @@ Les seuils sont **postérieurs** à la première mesure : bornes de non-régress
   de découpe.
 - **Les 3 cibles anglaises** n'ont pas d'attachement S (le générateur est français) ; leurs têtes
   sont couvertes par le chunker simple, mais sans cible : le top-1/top-k ne les compte pas.
+- **Les deux lectures sont celles de l'auteur** : elles ne couvrent pas toutes les ambiguïtés
+  possibles (`avec` peut attacher au GN, au GV ou à un instrument) ; le gold les **déclare**.
 - **Les 3 cibles anglaises** ne sont pas couvertes (le S est français) ; la couverture réelle
   française est de 23/65.
 
@@ -127,10 +133,10 @@ Les seuils sont **postérieurs** à la première mesure : bornes de non-régress
    seulement le type et la tête.
 2. **Qualifier un vrai modèle neuronal** (tagger ou LLM) sur les 180 ; l'adaptateur est branché.
 3. **Mesurer la cascade avec ce modèle**, pas avec le mock ; l'AUC/le regret.
-4. **La lecture du gold** : annoter les **deux** lectures des GP ambigus (`dans le parc` → `vu`
-   ou `l'homme`) pour mesurer le top-1 sans trancher.
-5. **Opérateurs hétérogènes/DRVM** de B13 si le neuronal reste bloqué.
-6. Étendre à **200+** phrases réelles, avec des relatives et des portées.
+4. **Opérateurs hétérogènes/DRVM** de B13 : le problème où le neuronal est **nécessaire**, pas
+   seulement utile (la ligne B13 suivante).
+5. **200+ phrases réelles**, avec des relatives et des portées.
+6. **Politique DRVM/native** et coût mesuré, si les poids natifs arrivent.
 
 ## 8. Fichiers
 

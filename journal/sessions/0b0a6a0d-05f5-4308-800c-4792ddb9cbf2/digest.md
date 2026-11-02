@@ -14384,3 +14384,67 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-838", "timeout_ms": 800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W-g3.pt work/n2j/base-placebo.pt 2>/dev/null; tail -1 work/n2j/W-g3.log 2>/dev/null; tail -1 work/n2j/base-placebo.log 2>/dev/null", "description": "Check the third student and the placebo"}`
+
+  ```
+19:41
+work/n2j/base-placebo.pt
+pas 11750 · seq 128 · perte 21.5914 · PPL 128/4 3.8863 · 822 s
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=1 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_en/propre/train.txt --pas 20000 --seq 128 --lot 8 --lr 3e-4 -- … [415 caractères tronqués]`
+
+  ```
+en base 1539718
+[still running after 60000ms; moved to background job bash-840]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-840", "timeout_ms": 600000, "wait": true}`
+
+  ```
+{"fichier": "base-placebo.pt", "L128_canal": 4.5154, "L128_sans": 5.5926, "L256_canal": 4.5617, "L256_sans": 6.0346, "L512_canal": 5.8656, "L512_sans": 7.0491, "mélange_propre": 4.5226, "mélange_milieu": 24.6027, "mélange_tout": 44.3682}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n2j/fiche-canal.md'); s = p.read_text()\ns = s.replace(\"{{PLACEBO}}\", \"4,5154\").replace(\"{{PLACEBO256}}\", \"4,5617\").replace(\"{{PLACEBO512}}\", \"5,8656\")\ns = s.repla … [1992 caractères tronqués]`
+
+  ```
+fiche canal prête
+restes: 0
+# N2.l — Le canal de structure : +5 % de PPL, et le même alphabet
+
+> **Ligne de roadmap** : N2 (et le canal d'annotation de S) · **Date** : 2026-11-01 ·
+> **Verdict** : donner au modèle une **classe de structure par octet** (mot plein, mot
+> grammatical, espace, ponctuation, chiffre, frontière) baisse la PPL de **4,3893 à 4,1738** à
+> 128 octets, **4,4905 à 4,2143** à 256 et **5,6691 à 5,4460** à 512 — pour **1 344 paramètres**.
+> Mais le modèle ne devient pas plus **robuste au mélange des lettres** (×5,6 comme la référence) :
+> le canal est un **prior utile**, pas une lecture de formes.
+19:42
+pas 13250 · seq 128 · perte 21.5459 · PPL 128/4 3.8746 · 925 s
+pas 1200 · perte 2.4880 · PPL val 15.004 · 53 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"**N2.h/N2.i — closes** : corpus dédupliqué, **3,09** en domaine, **12,93** littérature, **33,83** anglais ;\"\nb = \"**N2.h/N2. … [1360 caractères tronqués]`
+
+  ```
+en-cours ok
+roadmap ok
+  T0 max : 4006 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · compteurs : en-cours.md dit 393 fichiers, le disque en a 394
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 👤 Utilisateur
+
+background job bash-838 (bash: sleep 780; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W-g3.pt work/n2j/base-placebo.pt 2>/dev/null; tail -1 work/n2j/W-g3.log 2>/dev/null; tail -1 work/n2j/base-placebo.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.l** (canal de structure) : **4,17** contre **4,39**\\n  (placebo **4,52**) ;\", \"**N2.l** (canal) : **4,17* … [1818 caractères tronqués]`

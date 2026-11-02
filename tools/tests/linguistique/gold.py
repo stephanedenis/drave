@@ -16,27 +16,27 @@ PHRASES = [
      [("GN", "Le chat", "agent"), ("GV", "dort", "prédicat")], {"acte": "assertion"}),
     ("g002", "fr", "Le chat de la voisine dort.",
      [("Le", "DET"), ("chat", "NOUN"), ("de", "PREP"), ("la", "DET"), ("voisine", "NOUN"), ("dort", "VERB")],
-     [("GN", "Le chat", "agent"), ("GP", "de la voisine", "possession", "chat"), ("GV", "dort", "prédicat")], {"acte": "assertion"}),
+     [("GN", "Le chat", "agent"), ("GP", "de la voisine", "possession", ["chat"]), ("GV", "dort", "prédicat")], {"acte": "assertion"}),
     ("g003", "fr", "La femme a vu l'homme dans le parc.",
      [("La", "DET"), ("femme", "NOUN"), ("a", "AUX"), ("vu", "VERB"), ("l'homme", "DET"),
       ("dans", "PREP"), ("le", "DET"), ("parc", "NOUN")],
      [("GN", "La femme", "agent"), ("GV", "a vu", "prédicat"), ("GN", "l'homme", "patient"),
-      ("GP", "dans le parc", "lieu", "vu")], {"acte": "assertion"}),
+      ("GP", "dans le parc", "lieu", ["vu", "l'homme"])], {"acte": "assertion"}),
     ("g004", "fr", "Il a couru pour attraper le bus.",
      [("Il", "PRON"), ("a", "AUX"), ("couru", "VERB"), ("pour", "PREP"), ("attraper", "VERB"),
       ("le", "DET"), ("bus", "NOUN")],
-     [("GN", "Il", "agent"), ("GV", "a couru", "prédicat"), ("GP", "pour attraper le bus", "but", "couru")], {"acte": "assertion"}),
+     [("GN", "Il", "agent"), ("GV", "a couru", "prédicat"), ("GP", "pour attraper le bus", "but", ["couru"])], {"acte": "assertion"}),
     ("g005", "fr", "Elle a dit qu'elle viendrait hier.",
      [("Elle", "PRON"), ("a", "AUX"), ("dit", "VERB"), ("qu'elle", "CONJ"), ("viendrait", "VERB"), ("hier", "ADV")],
-     [("GN", "Elle", "agent"), ("GV", "a dit", "prédicat"), ("SUB", "qu'elle viendrait", "contenu", "dit")], {"acte": "assertion"}),
+     [("GN", "Elle", "agent"), ("GV", "a dit", "prédicat"), ("SUB", "qu'elle viendrait", "contenu", ["dit"])], {"acte": "assertion"}),
     ("g006", "fr", "Le chien du voisin aboie la nuit.",
      [("Le", "DET"), ("chien", "NOUN"), ("du", "PREP"), ("voisin", "NOUN"), ("aboie", "VERB"),
       ("la", "DET"), ("nuit", "NOUN")],
-     [("GN", "Le chien", "agent"), ("GP", "du voisin", "possession", "chien"), ("GV", "aboie", "prédicat"),
+     [("GN", "Le chien", "agent"), ("GP", "du voisin", "possession", ["chien"]), ("GV", "aboie", "prédicat"),
       ("GN", "la nuit", "temps")], {"acte": "assertion"}),
     ("g007", "fr", "Les enfants jouent dans le jardin.",
      [("Les", "DET"), ("enfants", "NOUN"), ("jouent", "VERB"), ("dans", "PREP"), ("le", "DET"), ("jardin", "NOUN")],
-     [("GN", "Les enfants", "agent"), ("GV", "jouent", "prédicat"), ("GP", "dans le jardin", "lieu", "jouent")], {"acte": "assertion"}),
+     [("GN", "Les enfants", "agent"), ("GV", "jouent", "prédicat"), ("GP", "dans le jardin", "lieu", ["jouent", "enfants"])], {"acte": "assertion"}),
     ("g008", "fr", "Marie lit un livre.",
      [("Marie", "NOUN"), ("lit", "VERB"), ("un", "DET"), ("livre", "NOUN")],
      [("GN", "Marie", "agent"), ("GV", "lit", "prédicat"), ("GN", "un livre", "patient")], {"acte": "assertion"}),
@@ -45,14 +45,14 @@ PHRASES = [
      [("GN", "Il", "agent"), ("GV", "ne dort pas", "prédicat")], {"acte": "assertion", "negation": True}),
     ("g010", "fr", "Viens ici !",
      [("Viens", "VERB"), ("ici", "ADV")],
-     [("GV", "Viens", "prédicat"), ("GP", "ici", "lieu", "Viens")], {"acte": "exclamation"}),
+     [("GV", "Viens", "prédicat"), ("GP", "ici", "lieu", ["Viens"])], {"acte": "exclamation"}),
     ("g011", "fr", "Le livre que j'ai lu est intéressant.",
      [("Le", "DET"), ("livre", "NOUN"), ("que", "CONJ"), ("j'ai", "PRON"), ("lu", "VERB"),
       ("est", "AUX"), ("intéressant", "ADJ")],
-     [("GN", "Le livre", "patient"), ("REL", "que j'ai lu", "qualité", "livre"), ("GV", "est intéressant", "prédicat")], {"acte": "assertion"}),
+     [("GN", "Le livre", "patient"), ("REL", "que j'ai lu", "qualité", ["livre"]), ("GV", "est intéressant", "prédicat")], {"acte": "assertion"}),
     ("g012", "fr", "Le canard est prêt à manger.",
      [("Le", "DET"), ("canard", "NOUN"), ("est", "AUX"), ("prêt", "ADJ"), ("à", "PREP"), ("manger", "VERB")],
-     [("GN", "Le canard", "agent"), ("GV", "est prêt", "prédicat"), ("GP", "à manger", "but", "prêt")], {"acte": "assertion", "double_sens": True}),
+     [("GN", "Le canard", "agent"), ("GV", "est prêt", "prédicat"), ("GP", "à manger", "but", ["prêt", "canard"])], {"acte": "assertion", "double_sens": True}),
     ("g013", "fr", "Peux-tu venir ?",
      [("Peux-tu", "VERB"), ("venir", "VERB")],
      [("GV", "Peux-tu venir", "prédicat")], {"acte": "question"}),
@@ -67,11 +67,11 @@ PHRASES = [
      [("The", "DET"), ("woman", "NOUN"), ("saw", "VERB"), ("the", "DET"), ("man", "NOUN"),
       ("in", "PREP"), ("the", "DET"), ("park", "NOUN")],
      [("GN", "The woman", "agent"), ("GV", "saw", "prédicat"), ("GN", "the man", "patient"),
-      ("GP", "in the park", "lieu", "saw")], {"acte": "assertion"}),
+      ("GP", "in the park", "lieu", ["saw", "man"])], {"acte": "assertion"}),
     ("g017", "en", "She said that she would come yesterday.",
      [("She", "PRON"), ("said", "VERB"), ("that", "CONJ"), ("she", "PRON"), ("would", "AUX"),
       ("come", "VERB"), ("yesterday", "ADV")],
-     [("GN", "She", "agent"), ("GV", "said", "prédicat"), ("SUB", "that she would come", "contenu", "said")],
+     [("GN", "She", "agent"), ("GV", "said", "prédicat"), ("SUB", "that she would come", "contenu", ["said"])],
      {"acte": "assertion", "modalite": True}),
     ("g018", "en", "He does not sleep.",
      [("He", "PRON"), ("does", "AUX"), ("not", "ADV"), ("sleep", "VERB")],
@@ -81,7 +81,7 @@ PHRASES = [
      [("GN", "It", "agent"), ("GV", "might rain", "prédicat")], {"acte": "assertion", "modalite": True}),
     ("g020", "en", "The duck is ready to eat.",
      [("The", "DET"), ("duck", "NOUN"), ("is", "AUX"), ("ready", "ADJ"), ("to", "PREP"), ("eat", "VERB")],
-     [("GN", "The duck", "agent"), ("GV", "is ready", "prédicat"), ("GP", "to eat", "but", "ready")],
+     [("GN", "The duck", "agent"), ("GV", "is ready", "prédicat"), ("GP", "to eat", "but", ["ready", "duck"])],
      {"acte": "assertion", "double_sens": True}),
 ]
 
@@ -99,11 +99,13 @@ def construire() -> dict:
         for item in segments:
             typ, txt, role = item[:3]
             cible = item[3] if len(item) > 3 else None
+            cibles = cible if isinstance(cible, list) else ([cible] if cible else [])
             i = texte.find(txt, curseur)
             assert i >= 0, f"{pid}: segment introuvable {txt!r} après {curseur}"
             seg = {"type": typ, "texte": txt, "role": role, "debut": i, "fin": i + len(txt)}
-            if cible:
-                seg["cible"] = cible
+            if cibles:
+                seg["cibles"] = cibles
+                seg["cible"] = cibles[0]
             segs.append(seg)
             curseur = i + len(txt)
         phrases.append({"id": pid, "langue": langue, "texte": texte, "mots": mots,
