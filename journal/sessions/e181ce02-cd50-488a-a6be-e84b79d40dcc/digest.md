@@ -18433,3 +18433,49 @@ ok
 EXIT=0
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-croyance.md <<'MD'\n# B13 — la croyance : 0/20, la distribution seule ne suffit pas\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **45/45 portes** : à … [6405 caractères tronqués]`
+
+  ```
+état ok
+     · compteurs : en-cours.md dit 436 fichiers, le disque en a 438
+     · compteurs : en-cours.md dit 524 JSON, le disque en a 533
+  ❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nimport re\nt=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\* … [420 caractères tronqués]`
+
+  ```
+101:| fichiers / JSON de résultats | **436** / **524** | `reports/*.md` / `reports/*.json` |
+ok
+  ❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 438 fiche(s) · 533 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**Gold L 220** : **200 réels + 160 synthétiques**\", \"**Gold 360** : **200 + 160 synthétiques**\")\nt=t.replace(\"- **Bloc … [649 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 438 fiche(s) · 533 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-croyance.md reports/pensee-croyance.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours. … [472 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-676]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-676", "timeout_ms": 600000, "wait": true}`

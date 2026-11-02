@@ -7,10 +7,10 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 30.6 h |
+| Durée | 30.7 h |
 | Tours | 59 |
-| Messages | 904 |
-| Appels d'outils | 837 |
+| Messages | 905 |
+| Appels d'outils | 838 |
 | Fichiers touchés | 25 |
 | Commandes | 676 |
 | Sous-agents | 2 |
@@ -3150,7 +3150,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **croyance** 
 
 ### Tour 59 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Ajouter la politique à croyance et la tester
 - bash — Ajouter la porte T42 (croyance)
@@ -3158,6 +3158,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **croyance** 
 - bash — Réparer les compteurs et le budget T0
 - bash — Trim final et portes
 - bash — Committer la croyance
+- job_output
 
 ## 3. Travail accompli
 

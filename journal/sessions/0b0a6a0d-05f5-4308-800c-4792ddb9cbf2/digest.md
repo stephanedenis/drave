@@ -16005,3 +16005,55 @@ The command keeps running in the background. You will be notified when it finish
 background job bash-929 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/base-multi-11m-pos.pt 2>/dev/null && echo OK; tail -1 work/n2k/base-multi-11m-pos.log; tail -3 /tmp/portes-nuit.out) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **job_output** `{"job_id": "bash-936", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+e87a0a91 N2.q — LA CAPACITÉ MULTILINGUE : À RECETTE ÉGALE, 21,65 M GAGNE 0,79
+ M docs/implantation/bloc-linguistique.md
+M  docs/implantation/moteur-de-pensee.md
+M  docs/pilotage/chantiers.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for gpu in 0 1; do g=$((gpu+1)); nohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=$gpu PYTHONPATH=. ~/gpu-env/bin/python tools/distiller_budget.py --corpus fr --train data/wiki_fr/propre/trai … [497 caractères tronqués]`
+
+  ```
+W34-g1 1841573
+W34-g2 1841574
+# init work/n2j/base-wiki-45m.pt · manquants [] · graine 1 · décalage 0
+# init work/n2j/base-wiki-45m.pt · manquants [] · graine 2 · décalage 10000019
+23:20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/portes-nuit.out; grep -c \"✅\\|❌\" /tmp/portes-nuit.out; date '+%H:%M'; tail -1 work/n2j/W34-g1.log", "description": "Check the gates and the distillation progress"}`
+
+  ```
+porte-diff-couche      ✅                          19 s    ✅ le contrat est tenu : la divergence commence à la couche 1, premier jeton tracé
+  porte-document         ✅                           6 s  ✅ porte document verte
+  porte-echange-experts  ✅                          57 s    PORTE TENUE
+21
+23:20
+# init work/n2j/base-wiki-45m.pt · manquants [] · graine 1 · décalage 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-fenetre-r1.md <<'EOF'\n# N2 → R1 — Ce que la nuit dit à la ligne « fenêtre »\n\n> **Objet.** Une note de **passage** : ce que N2 a mesuré sur la longueur, la position et la\n> fenêtre, et ce que R1.1/R1.2 dev … [2761 caractères tronqués]`
+
+  ```
+note R1 écrite
+# init work/n2j/base-wiki-45m.pt · manquants [] · graine 1 · décalage 0
+# init work/n2j/base-wiki-45m.pt · manquants [] · graine 2 · décalage 10000019
+23:20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.h/N2.i** : **3,09** / **12,93** / **33,83** ;\", \"**N2.h/N2.i** : **3,09** ;\")\ns = s.replace(\"**N2.j** (186  … [909 caractères tronqués]`
+
+  ```
+en-cours ok
+roadmap ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 438 fichiers, le disque en a 439
+     · annotation : docs/pilotage/roadmap.md → rapport-n2-fenetre-r1.md (cassé)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nq = pathlib.Path('docs/pilotage/roadmap.md'); t = q.read_text()\nt = t.replace(\"La note de passage [N2 → R1](rapport-n2-fenetre-r1.md)\", \"La note de passage [N2 → R1](../../reports/rapport-n2- … [1309 caractères tronqués]`
