@@ -12353,3 +12353,85 @@ index 959c1d42..5712e114 100644
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/tests/linguistique/gold.py tools/tests/linguistique/gold.json tools/tests/linguistique/gold_synthetique.py tools/tests/linguistique/gold_synthetique.json tools/tests/linguistique/evaluer_gold.py reports/rapport-pensee-g … [554 caractères tronqués]`
+
+  ```
+.../rapport.md                                     |  52 +++++-
+ reports/README.md                                  |   2 +-
+ reports/pensee-gold-linguistique.json              |  48 +++---
+ reports/rapport-pensee-gold-linguistique.md        |  40 +++--
+ tools/tests/linguistique/evaluer_gold.py           |  13 +-
+ tools/tests/linguistique/gold.json                 |  44 +++++
+ tools/tests/linguistique/gold.py                   |  30 ++--
+ tools/tests/linguistique/gold_synthetique.json     | 189 +++++++++++++++++++++
+ tools/tests/linguistique/gold_synthetique.py       |  14 +-
+ 26 files changed, 390 insertions(+), 102 deletions(-)
+[still running after 60000ms; moved to background job bash-434]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-434", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master c6fb94e2] L — LECTURE DOUBLE : TOP-1 TÊTE 0,957 (0,800 RÉEL/1,0 SYNTH), 29 CIBLES AMBIGUËS
+ 35 files changed, 861 insertions(+), 155 deletions(-)
+ create mode 100644 reports/rapport-n2-canal.md
+ create mode 100644 tools/canal_structure.py
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture double : top-1 tête 0,957, 0,800 réel/1,0 synth, 29 cibles ambiguës
+
+Le round 7 du goal est livré : le gold annote désormais les **deux lectures** des attachements ambigus. Commit **`c6fb94e2`**.
+
+## Le résultat
+
+**97 cibles** d'attachement (18 réelles, 79 synthétiques), dont **29 ambiguës** annotées en double lecture (`dans le parc` → `vu` **ou** `l'homme`, `avec le télescope` → `vu` **ou** `l'homme`, `à manger` → `prêt` **ou** `canard`).
+
+| lecture | cibles | ambiguës | couv. tête | top-1 tête (1 lecture) | **top-1 tête (2 lectures)** | top-k |
+|---|---:|---:|---:|---:|---:|---:|
+| **heuristique 180** | **97** | **29** | 1,000 | 0,870 | **0,957** | **1,000** |
+| heuristique 20 réels | 18 | 5 | 1,000 | 0,400 | **0,800** | 1,000 |
+| heuristique 160 synth. | 79 | 24 | 1,000 | 1,000 | **1,000** | 1,000 |
+| mock seul | 97 | 29 | 1,000 | 0 | 0 | 0 |
+| **hasard** | 97 | — | — | **0,015** | — | — |
+
+**Ce que ça dit** :
+
+- **Le top-1 tête passe de 0,870 à 0,957** quand on accepte les deux lectures ; les **réels** passent de **40 % à 80 %**, les synthétiques restent à 100 %.
+- **Le span** reste la mesure de la découpe : 0,323 de top-1 (contre 0,294 avec une seule lecture), 0,338 de couverture.
+- **Le désaccord restant (20 %) des réels** est un cas où le S ne propose **aucune** des deux lectures ; le gold les déclare.
+- **Le hasard** 1,5 % ; le mock 0 ; la tête est la bonne mesure de l'attachement, le span celle de la segmentation.
+
+## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; golds [`gold.py`](../../tools/tests/linguistique/gold.py) / [`gold_synthetique.py`](../../tools/tests/linguistique/gold_synthetique.py) ; évaluateur [`evaluer_gold.py`](../../tools/tests/linguistique/evaluer_gold.py).
+- Portes : `porte-bloc-linguistique` **verte** (gold 180 + attachement + 398 langues), `porte-pensee` **11/11** (opérateurs hétérogènes), `revue` **393 fiches / 496 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- **Le commit `c6fb94e2`** porte aussi deux fichiers N2 arrivés dans l'index (`rapport-n2-canal.md`, `canal_structure.py`) : les sessions concurrentes partagent l'index ; le contenu de la lecture double est bien dans HEAD.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé ; la session R4.4 doit le rafraîchir.
+
+## La suite
+
+1. **B13 — le neuronal nécessaire** : un problème où la sonde est **indispensable** (pas seulement utile), pour que le contrôle négatif échoue vraiment.
+2. **200+ phrases réelles** (relatives, portée, anglais) ; le gold synthétique ne remplace pas le réel.
+3. **Politique DRVM/native** et coût mesuré, si les poids natifs arrivent.
+4. **Modèle neuronal** si un tagger/runner se débloque ; sinon, garder le mock et le dire.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque le problème où le neuronal est nécessaire.
+
+
+## Tour 21
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 8/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

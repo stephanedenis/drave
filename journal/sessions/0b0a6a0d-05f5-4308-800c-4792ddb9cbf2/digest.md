@@ -14448,3 +14448,41 @@ roadmap ok
 background job bash-838 (bash: sleep 780; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W-g3.pt work/n2j/base-placebo.pt 2>/dev/null; tail -1 work/n2j/W-g3.log 2>/dev/null; tail -1 work/n2j/base-placebo.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.l** (canal de structure) : **4,17** contre **4,39**\\n  (placebo **4,52**) ;\", \"**N2.l** (canal) : **4,17* … [1818 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4001 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · compteurs : en-cours.md dit 474 JSON, le disque en a 496
+[still running after 60000ms; moved to background job bash-843]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-843", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at c6fb94e22cff43751569ee9f04ee0bc86fb82bd5 but expected 2a15441d3400402ad826b101fa0f3a49c16bb5ae
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; git status --short | head -8; date '+%H:%M'; tail -1 work/n2j/W-g3.log; tail -1 work/n2k/base-en.log", "description": "Check the git race and the runs"}`
+
+  ```
+c6fb94e2 L — LECTURE DOUBLE : TOP-1 TÊTE 0,957 (0,800 RÉEL/1,0 SYNTH), 29 CIBLES AMBIGUËS
+2a15441d DONNÉES — HUIT CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES) : 11,65 M ARTICLES, 48,4 GO, 8 KO 0
+f5d1256d B13 — OPÉRATEURS HÉTÉROGÈNES : 3 GENRES, SONDE 4 APPELS/COÛT 48 VS AVEUGLE 1/33 (11/11)
+M  journal/2026-11-01/README.md
+M  journal/2026-11-01/mesures.md
+M  journal/README.md
+M  journal/THEMES.md
+M  journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ m tools/docwatch
+ ? tools/structures
+?? reports/corpus-wiki-de-texte.json
+19:44
+pas 15000 · seq 128 · perte 21.1134 · PPL 128/4 3.8518 · 1044 s
+pas 4400 · perte 2.1525 · PPL val 7.974 · 178 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git reset -q && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.l** (canal) : **4,17**\", \"**N2.l** : **4,17**\")\ns = re.sub(r\"\\| fichiers / JSON de rés … [1527 caractères tronqués]`

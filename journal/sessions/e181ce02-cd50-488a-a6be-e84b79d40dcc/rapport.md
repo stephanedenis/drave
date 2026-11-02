@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 27.1 h |
-| Tours | 20 |
-| Messages | 525 |
-| Appels d'outils | 542 |
+| Tours | 21 |
+| Messages | 528 |
+| Appels d'outils | 543 |
 | Fichiers touchés | 25 |
-| Commandes | 434 |
+| Commandes | 435 |
 | Sous-agents | 2 |
 | Commits | 30 |
 | Compactages de contexte | 2 |
@@ -71,6 +71,8 @@
 **Tour 19** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 **Tour 20** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
+
+**Tour 21** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1112,6 +1114,46 @@ Grille **5×5**, départ `(0,0)`, but `(4,4)` ; trois opérateurs : `pas` (symbo
 - bash — Voir ce qui reste à committer après la course
 - bash — Recommitter la lecture double sur le nouveau HEAD
 
+**Synthèse produite :**
+
+⏵ Lecture double : top-1 tête 0,957, 0,800 réel/1,0 synth, 29 cibles ambiguës
+
+Le round 7 du goal est livré : le gold annote désormais les **deux lectures** des attachements ambigus. Commit **`c6fb94e2`**.
+
+\## Le résultat
+
+**97 cibles** d'attachement (18 réelles, 79 synthétiques), dont **29 ambiguës** annotées en double lecture (`dans le parc` → `vu` **ou** `l'homme`, `avec le télescope` → `vu` **ou** `l'homme`, `à manger` → `prêt` **ou** `canard`).
+
+| lecture | cibles | ambiguës | couv. tête | top-1 tête (1 lecture) | **top-1 tête (2 lectures)** | top-k |
+|---|---:|---:|---:|---:|---:|---:|
+| **heuristique 180** | **97** | **29** | 1,000 | 0,870 | **0,957** | **1,000** |
+| heuristique 20 réels | 18 | 5 | 1,000 | 0,400 | **0,800** | 1,000 |
+| heuristique 160 synth. | 79 | 24 | 1,000 | 1,000 | **1,000** | 1,000 |
+| mock seul | 97 | 29 | 1,000 | 0 | 0 | 0 |
+| **hasard** | 97 | — | — | **0,015** | — | — |
+
+**Ce que ça dit** :
+
+- **Le top-1 tête passe de 0,870 à 0,957** quand on accepte les deux lectures ; les **réels** passent de **40 % à 80 %**, les synthétiques restent à 100 %.
+- **Le span** reste la mesure de la découpe : 0,323 de top-1 (contre 0,294 avec une seule lecture), 0,338 de couverture.
+- **Le désaccord restant (20 %) des réels** est un cas où le S ne propose **aucune** des deux lectures ; le gold les déclare.
+- **Le hasard** 1,5 % ; le mock 0 ; la tête est la bonne mesure de l'attachement, le span celle de la segmentation.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; golds [`gold.py`](../../tools/tests/linguistique/gold.py) / [`gold_synthetique.py`](../../tools/tests/linguistique/gold_synthetique.py) ; évaluateur [`evaluer_gold.py`](../../tools/tests/linguistique/evaluer_gold.py).
+- Portes : `porte-bloc-linguistique` **verte** (gold 180 + attachement + 398 langues), `porte-pensee` **11/11** (opérateurs hétérogènes), `revue` **393 fiches / 496 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- **Le commit `c6fb94e2`** porte aussi deux fichiers N2 arrivés dans l'index (`rapport-n2-canal.md`, `canal_structure.py`) : les sessions concurrentes partagent l'index ; le contenu de la lecture double est bien dans HEAD.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.p
+… [647 caractères tronqués]
+
+### Tour 21 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ajouter le cadenas où la sonde est nécessaire
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1191,7 +1233,7 @@ Grille **5×5**, départ `(0,0)`, but `(4,4)` ; trois opérateurs : `pas` (symbo
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 394 autres
+- … et 395 autres
 
 ## 4. Mesures et résultats marquants
 
