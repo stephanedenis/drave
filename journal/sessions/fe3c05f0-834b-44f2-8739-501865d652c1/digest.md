@@ -20432,3 +20432,46 @@ You are repeating the exact same tool call with identical arguments. Carefully a
 -rw-r--r--. 1 stephane stephane 789904874  1 nov 23:12 data/corpus_pdf_documents/train.txt
   ```
 
+### 🤖 Assistant
+
+⏵ Round 60 : je rédige la fiche du corpus Documents pendant que l'extraction tourne
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-documents.md", "content": "# Le corpus Documents — 7 496 PDF locaux, 2 992 documents, 845,7 M caractères\n\n**Date** : 2026-11-01 · **Ligne** : Données · **Session** : fe3c05f0\n**Statut** : en cours (6 000 PDF sur … [2210 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-documents.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "# Le corpus OCR — les livres scannés, 6 livres, 3,8 M caractères\n\n**Date** : 2026-11-01 · **Ligne** : Données · **Session** : fe3c05f0\n**Statut** : en cours (6 livres océrisés au 1/11 23 h 12) ; les chiffres finaux seront ajoutés à la clôture.\n\n## 1. Ce que c'est\n\nLe corpus des * … [1711 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-pdf.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/revue_documentation.py 2>&1 | tail -1\npython3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\" | head -1\nfor i in 1 2 3; do\n  rm -f /tmp/index.dra; GIT_INDEX_FILE=/tmp/index.dra git read-tree HEAD\n  GIT_INDEX_FILE= … [542 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 434 fichiers, le disque en a 436
+  T0 max : 4000 mots (budget 4 000)
+refus/course
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+refus/course
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+refus/course
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+d1fde4db B13 — LE HASARD VARIABLE : 20–60 %, 20/20 À CHAQUE TAUX, 8 PAS ; 43/43
+23:16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngrep -n \"fichiers / JSON\" docs/pilotage/en-cours.md\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| [^|]+ \\|\", \"| fichiers / JSON … [907 caractères tronqués]`

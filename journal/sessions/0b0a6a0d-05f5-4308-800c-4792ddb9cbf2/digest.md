@@ -15919,3 +15919,57 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-929", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/base-multi-11m-pos.pt 2>/dev/null && echo OK; tail -1 work/n2k/base-multi-11m-pos.log; tail -2 /tmp/portes-nuit.out", "description": "Check the control and the gates"}`
+
+  ```
+23:15
+work/n2k/base-multi-11m-pos.pt
+OK
+}
+  porte-cerveau          ✅                          10 s    ✅ porte tenue (quatre facultés composent, chacune reste active, le tout est déterministe)
+  porte-consolidation    ✅                          71 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 600 ~/gpu-env/bin/python work/n2k/evalue.py work/n2k/base-multi-11m-pos.pt 2>&1 | grep -v Loading | tee work/n2k/eval-multi-11m-pos.json", "description": "Evaluate the multilingual 11.47M c … [23 caractères tronqués]`
+
+  ```
+{"fichier": "base-multi-11m-pos.pt", "fr": 6.6781, "en": 7.4888, "de": 7.8737, "es": 7.1575, "it": 7.1267, "pt": 7.9627, "ru": 4.1871, "ar": 4.0108, "ja": 6.4343, "zh": 10.3512}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-multilingue-capacite.md <<'EOF'\n# N2.q — La capacité multilingue : à recette égale, 21,65 M gagne 0,79\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : à recette égale (20 000 pas,\n> p … [3954 caractères tronqués]`
+
+  ```
+fiche multi-capacité écrite
+23:15
+  porte-cerveau          ✅                          10 s    ✅ porte tenue (quatre facultés composent, chacune reste active, le tout est déterministe)
+  porte-consolidation    ✅                          71 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.k** (10 langues) fr **5,68**, anglais **6,30** ;\", \"**N2.k** : fr **5,68** ;\")\ns = s.replace(\"**N2.j3** : 2 … [970 caractères tronqués]`
+
+  ```
+en-cours ok
+roadmap ok
+  T0 max : 4002 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 434 fichiers, le disque en a 437
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.q** : multi 21,65 M **5,89** (11,47 M 6,68) ;\", \"**N2.q** : multi **5,89** (11,47 M 6,68) ;\")\ns = re.sub … [354 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 527 JSON, le disque en a 532
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1038 caractères tronqués]`

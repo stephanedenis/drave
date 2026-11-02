@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 30.6 h |
+| Durée | 30.7 h |
 | Tours | 72 |
-| Messages | 1172 |
-| Appels d'outils | 1035 |
-| Fichiers touchés | 18 |
-| Commandes | 956 |
+| Messages | 1176 |
+| Appels d'outils | 1039 |
+| Fichiers touchés | 20 |
+| Commandes | 958 |
 | Sous-agents | 0 |
-| Commits | 61 |
+| Commits | 63 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2198,10 +2198,18 @@ Côté documents, le train est à **776,7 Mo** (23 h 08, +6,5 Mo) et `pdftotext`
 
 ### Tour 72 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Check documents and OCR status
 - bash — List corpus reports and check logs
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-documents.md`
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-pdf.md`
+- bash — Commit documents and OCR fiches
+- bash — Update counters and commit fiches
+
+**Synthèse produite :**
+
+⏵ Round 60 : je rédige la fiche du corpus Documents pendant que l'extraction tourne
 
 ## 3. Travail accompli
 
@@ -2227,6 +2235,8 @@ Côté documents, le train est à **776,7 Mo** (23 h 08, +6,5 Mo) et `pdftotext`
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_tables.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/mesurer_reel.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-r44-scans.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-documents.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-pdf.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -2270,7 +2280,7 @@ Côté documents, le train est à **776,7 Mo** (23 h 08, +6,5 Mo) et `pdftotext`
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 916 autres
+- … et 918 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2479,4 +2489,6 @@ Côté documents, le train est à **776,7 Mo** (23 h 08, +6,5 Mo) et `pdftotext`
 - DONNÉES — L'OCR DES SCANS (tesseract 5.5.3) ET LES 7 496 DOCUMENTS LANCÉS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /t
 - ÉTAT — DOCUMENTS 1 000/7 496 (295 MO), OCR EN COURS, ANGLAIS 19,4/25,6 M" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /tm
 - DONNÉES — LES DIX CORPUS EN TEXTE INTÉGRAL : 20,53 M ARTICLES, 67,73 G CARACTÈRES, 81,2 GO (ANGLAIS CLOS À 99,2 %, LIMITE MÉMOIRE NOMMÉE)" 2>/tmp/commit.err; th
+- DONNÉES — FICHES DU CORPUS DOCUMENTS ET DU CORPUS OCR (EN COURS, CHIFFRES FIXÉS À LA CLÔTURE)" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus
+- DONNÉES — FICHES DU CORPUS DOCUMENTS ET DU CORPUS OCR (EN COURS, CHIFFRES FIXÉS À LA CLÔTURE)" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus
 

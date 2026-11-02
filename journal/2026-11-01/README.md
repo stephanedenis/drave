@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**128 commits** · **4 session(s)** · **10 thème(s)**
+**129 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 16 | [distribue.md](distribue.md) |
 | docs | 33 | [docs.md](docs.md) |
 | memoire | 10 | [memoire.md](memoire.md) |
-| mesures | 51 | [mesures.md](mesures.md) |
+| mesures | 52 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -30,10 +30,10 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 30.8 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 31.0 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 30.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 30.6 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 30.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 30.7 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -167,6 +167,7 @@
 | 23:02 | `c7f4b8d7` | B13 — LA PÉRIODE QUI CHANGE : 3 PUIS 2 PAS, A* 28 NŒUDS, POLITIQUE BUT/10, 376 ÉTATS-Q ; 40/40 |
 | 23:05 | `f9cc2718` | B13 — LA PHASE SUR 5 GRAINES : 5/5 BUTS (10–14 PAS), 376–422 ÉTATS-Q ; 41/41 |
 | 23:08 | `f0681eb9` | B13 — LA PORTE ALÉATOIRE : SAUT À 20 % PAR PAS, 20/20 BUTS, 182 ÉTATS-Q ; 42/42 |
+| 23:12 | `d1fde4db` | B13 — LE HASARD VARIABLE : 20–60 %, 20/20 À CHAQUE TAUX, 8 PAS ; 43/43 |
 
 ## Le récit de la journée (écrit à la main)
 

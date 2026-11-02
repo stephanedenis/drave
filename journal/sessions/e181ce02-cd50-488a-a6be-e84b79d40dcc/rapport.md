@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 30.5 h |
-| Tours | 57 |
-| Messages | 888 |
-| Appels d'outils | 825 |
+| Durée | 30.6 h |
+| Tours | 58 |
+| Messages | 896 |
+| Appels d'outils | 831 |
 | Fichiers touchés | 25 |
-| Commandes | 665 |
+| Commandes | 670 |
 | Sous-agents | 2 |
-| Commits | 74 |
+| Commits | 75 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -145,6 +145,8 @@
 **Tour 56** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 57** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 58** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3057,6 +3059,55 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round augmente le hasard à 40
 - bash — Committer le hasard variable
 - job_output
 
+**Synthèse produite :**
+
+⏵ Hasard variable : 20–60 %, 20/20 à chaque taux, 8 pas ; 43/43
+
+Le round 44 du goal est livré : quand l'état voit la porte, le **hasard ne coûte rien** — 20/20 à 20 %, 40 % et 60 %. Commit **`d1fde4db`**.
+
+\## Le hasard variable
+
+Même labyrinthe à deux portes que T39 ; la porte saute avec `p_saut` après chaque pas. L'entraînement utilise `p_saut = 0,2` ; l'évaluation balaie 0,2 / 0,4 / 0,6, 20 exécutions chacune.
+
+| p(saut) | buts | pas moyen |
+|---:|---:|---:|
+| 0,2 | **20/20** | 8,0 |
+| 0,4 | **20/20** | 8,0 |
+| 0,6 | **20/20** | 8,0 |
+
+**Ce que ça dit** :
+
+- **Le hasard ne coûte rien** : 20/20 aux trois taux, 8 pas (le chemin optimal) ; la politique voit `d` à chaque pas et vise la porte du moment.
+- **La réaction remplace la prédiction** : inutile de modéliser le hasard ; l'état suffit.
+- **La table est la même** (182 états) : le taux de saut ne change pas la politique.
+- **La négative reste** : la politique minute (T21/T28) ne voit pas `d` ; elle échoue.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-hasard.md`](../../reports/rapport-pensee-hasard.md) ; JSON [`pensee-hasard.json`](../../reports/pensee-hasard.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T40 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **43/43 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **433 fiches / 531 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Porte qui saute avant le pas** : la politique doit anticiper ou attendre.
+2. **Observation partielle** : la porte n'est vue qu'à distance 1 ; le hasard redevient un problème.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque l'**observation partielle** — le vrai test du hasard.
+
+### Tour 58 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Ajouter la politique à observation partielle
+- bash — Ajouter la porte T41 (observation partielle)
+- bash — Écrire la fiche de l'observation partielle
+- bash — Ajuster la date et passer les portes
+- bash — Committer l'observation partielle
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3136,7 +3187,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round augmente le hasard à 40
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 625 autres
+- … et 630 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3357,4 +3408,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round augmente le hasard à 40
 - B13 — LA PHASE SUR 5 GRAINES : 5/5 BUTS (10–14 PAS), 376–422 ÉTATS-Q ; 41/41" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHASE SUR 5 GRAINES"; then
 - B13 — LA PORTE ALÉATOIRE : SAUT À 20 % PAR PAS, 20/20 BUTS, 182 ÉTATS-Q ; 42/42" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE ALÉATOIRE"; then 
 - B13 — LE HASARD VARIABLE : 20–60 %, 20/20 À CHAQUE TAUX, 8 PAS ; 43/43" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "HASARD VARIABLE"; then echo "COM
+- B13 — L'OBSERVATION PARTIELLE : 0/20 BUTS, LA MÉMOIRE D'UN PAS NE SUFFIT PAS ; 44/44" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "OBSERVATION PARTIE
 
