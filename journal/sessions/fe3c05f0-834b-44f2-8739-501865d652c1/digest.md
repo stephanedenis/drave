@@ -35655,3 +35655,549 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 3. **L'Encyclopedia of Algorithms** exige `--max-pages 500` (ou plus) et un timeout plus grand ; c'est la prochaine cible du fonds CEGEP (~127 scans restants).
 4. Les commits de la fenêtre : `4f7631aa`, `8e467fa7`, `a041333c`.
 
+
+## Tour 388
+
+### 👤 Utilisateur
+
+fais une passe dans docs pour enrichir le glossaire et une autre passe ajouter les hyperliens vers le glossaire partout ou les termes aparaissent. Serait-il préférable de modifier docwatch pour intégrer une fonctionnalité glossaire à même l'affichage et éviter de grossir inutilement le gontenu avec des liens qui ne devraient être qu'en pointillé?
+
+### 🤖 Assistant
+
+⏵ Inspection du glossaire, de docwatch et des liens existants avant de trancher
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls tools/ | grep -i watch; echo \"=== glossaire\"; wc -l docs/theorie/glossaire.md; grep -c \"^## \\|^### \" docs/theorie/glossaire.md; echo \"=== liens vers le glossaire\"; grep -rl \"glossaire.md\" docs/ | wc -l; grep  … [185 caractères tronqués]`
+
+  ```
+12:35
+docwatch
+=== glossaire
+128 docs/theorie/glossaire.md
+3
+=== liens vers le glossaire
+22
+docs/archive/etat-modules-2026-10-10.md:22:| **Conventions et mémoire du dépôt** | `docs/methode/organisation-du-depot.md`, `docs/pilotage/references-non-regression.md`, `docs/theorie/glossaire.md`, `docs/theorie/histoire.md`, `docs/methode/relations-humaines.md` | ce fichier, plus `README.md` (entrée) et `REPRISE.md` (check-list de démarrage) | tenir `journal/AAAA-MM-JJ.md` à chaque round |
+docs/methode/rangement.md:42:   **unités de sens**, le jeton est l'unité technique du tokeniseur (voir le [glossaire](../theorie/glossaire.md)) ✓✓.
+docs/methode/mission.md:9:> d'**unités de sens**. Voir le [glossaire](../theorie/glossaire.md).
+docs/methode/contexte.md:51:| `docs/theorie/glossaire.md` | 1 500 | **T1** — l'index des familles |
+docs/methode/organisation-du-depot.md:39:| **`docs/theorie/`** | **ce qui reste vrai** : vision, carte, histoire, protocole, universaux, modules, jeux, généalogie, synthèse, glossaire | `vision.md`, `glossaire.md`, `synthese/` |
+docs/theorie/vision.md:116:  [`glossaire.md`](glossaire.md) · [`synthese/index.md`](synthese/index.md).
+docs/theorie/glossaire/01-le-projet-
+… [250 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/glossaire.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/glossaire.md</path>
+<type>file</type>
+<content>
+1: # Glossaire raisonné de Drave
+2: 
+3: Ce document explique **tout le vocabulaire** employé dans `docs/` et `reports/`, pour quelqu'un qui ne
+4: connaît ni les grands modèles de langage, ni le matériel, ni le vocabulaire de la
+5: mesure de performance. Il se lit seul : chaque notion est définie sur place, et
+6: chaque définition renvoie au fichier du dépôt qui l'emploie.
+7: 
+8: ---
+9: 
+10: ## Mode d'emploi
+11: 
+12: **Ce que contient une entrée.** Chaque entrée suit le même patron :
+13: 
+14: > **Terme** *(forme développée française ; forme anglaise)* — définition en une à
+15: > trois phrases, sans prérequis. La définition dit **où** le moteur s'en sert
+16: > (fichier, outil ou drapeau du dépôt, avec un numéro de ligne quand il aide) et,
+17: > quand une source externe stable existe, la référence **Réf.** (article,
+18: > spécification, documentation officielle).
+19: 
+20: **Conventions de lecture.**
+21: 
+22: - `chemin:ligne` renvoie à un fichier **du dépôt**, à la ligne indiquée. Exemple :
+23:   `docs/theorie/vision.md:34`.
+24: - Les liens externes pointent vers des artic
+… [7593 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la tools/docwatch/ 2>/dev/null | head -12; echo \"=== README glossaire\"; head -40 docs/theorie/glossaire/README.md; echo \"=== index.json\"; python3 -c \"\nimport json\nd=json.load(open('docs/theorie/glossaire/index … [262 caractères tronqués]`
+
+  ```
+12:35
+total 52
+drwxr-xr-x. 1 stephane stephane   268 30 oct 09:54 .
+drwxr-xr-x. 1 stephane stephane 16974  1 nov 23:23 ..
+-rw-r--r--. 1 stephane stephane  6420 30 oct 09:54 CHANGELOG.md
+-rw-r--r--. 1 stephane stephane   994 27 oct 12:51 CONTRIBUTING.md
+-rw-r--r--. 1 stephane stephane    42 27 oct 12:51 .git
+drwxr-xr-x. 1 stephane stephane    18 27 oct 12:51 .github
+-rw-r--r--. 1 stephane stephane   216 27 oct 12:51 .gitignore
+-rw-r--r--. 1 stephane stephane  1072 27 oct 12:51 LICENSE
+-rw-r--r--. 1 stephane stephane   206 27 oct 12:51 Makefile
+-rw-r--r--. 1 stephane stephane  1941 27 oct 16:21 pyproject.toml
+drwxr-xr-x. 1 stephane stephane    64 27 oct 14:00 .pytest_cache
+=== README glossaire
+# L'index des entrées du glossaire
+
+> **Ce que ce fichier est.** L'index **généré** des entrées du glossaire : une ligne par
+> entrée, groupée par famille, avec un lien direct vers sa **fiche** courte. Les définitions
+> complètes restent dans les 9 familles ; le manifeste [`index.json`](index.json) sert à
+> docwatch pour afficher une fiche en contexte.
+> **Chargement :** T1 — ouvrir la fiche du terme, pas les 9 familles.
+> **Pour docwatch.** Charger `index.json`, résoudre un terme par `slug`, p
+… [18997 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls tools/docwatch/; echo \"=== .git\"; cat tools/docwatch/.git; echo \"=== pyproject\"; head -40 tools/docwatch/pyproject.toml; echo \"=== CHANGELOG\"; head -25 tools/docwatch/CHANGELOG.md", "description": "Inspect docwa … [106 caractères tronqués]`
+
+  ```
+12:36
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE
+Makefile
+pyproject.toml
+README.md
+SECURITY.md
+src
+tests
+=== .git
+gitdir: ../../.git/modules/tools/docwatch
+=== pyproject
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "docwatch"
+dynamic = ["version"]
+description = "Service local d'affichage vivant pour collections de documents Markdown éditées par d'autres processus."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{ name = "Stéphane Denis" }]
+keywords = ["markdown", "documentation", "viewer", "live", "watch", "reload", "local"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Documentation",
+    "Top
+… [1353 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls tools/docwatch/src/docwatch/ 2>/dev/null; echo \"=== README docwatch (extraits)\"; grep -n \"glossaire\\|sommaire\\|survol\\|tooltip\\|abbr\" tools/docwatch/README.md | head -10; echo \"=== src grep glossaire\"; grep  … [310 caractères tronqués]`
+
+  ```
+12:36
+cli.py
+config.py
+diagrams.py
+docopen.py
+__init__.py
+__main__.py
+paths.py
+pins.py
+__pycache__
+render.py
+server.py
+static
+tree.py
+ui.py
+=== README docwatch (extraits)
+=== src grep glossaire
+=== cartes
+  ❌ 1 fichier(s) périmé(s) : index.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit fait : 316 entrées, `index.json` périmé, docwatch sans fonction glossaire
+
+- **create_goal** `{"max_goal_rounds": 400, "objective": "Enrichir le glossaire de docs (316 entrées + les termes manquants du corpus récent : corpus, WARC, dump, BLAKE2b, OCR, CEGEP, contamination, split, etc.), ajouter les hyperliens vers le glossaire à la première occurrence par page seulement (pas « partout » : pa … [467 caractères tronqués]`
+
+> **Objectif** (create) : Enrichir le glossaire de docs (316 entrées + les termes manquants du corpus récent : corpus, WARC, dump, BLAKE2b, OCR, CEGEP, contamination, split, etc.), ajouter les hyperliens vers le glossaire à la première occurrence par page seulement (pas « partout » : pas de gonflement), et intégrer la fonction glossaire à docwatch (sous-module tools/docwatch) : un endpoint /glossaire lisant docs/theorie/glossaire/index.json, un rendu des termes en pointillé avec la fiche en survol, sans modifier le markdown source. Régénérer index.json (glossaire_cartes.py), vérifier les cartes, la revue de documentation, le budget T0, les portes, et committer avec l'état à jour. Sans toucher aux GPU de N2 ni aux fichiers des autres sessions.
+
+
+  ```
+{"goal":{"id":"goal-3b29d4e7-32fe-424c-84c1-a8f86d9d60f6","revision":1,"objective":"Enrichir le glossaire de docs (316 entrées + les termes manquants du corpus récent : corpus, WARC, dump, BLAKE2b, OCR, CEGEP, contamination, split, etc.), ajouter les hyperliens vers le glossaire à la première occurrence par page seulement (pas « partout » : pas de gonflement), et intégrer la fonction glossaire à docwatch (sous-module tools/docwatch) : un endpoint /glossaire lisant docs/theorie/glossaire/index.json, un rendu des termes en pointillé avec la fiche en survol, sans modifier le markdown source. Régénérer index.json (glossaire_cartes.py), vérifier les cartes, la revue de documentation, le budget T0, les portes, et committer avec l'état à jour. Sans toucher aux GPU de N2 ni aux fichiers des autres sessions.","phase":"active","roundsStarted":0,"maxGoalRounds":400},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe 1 : audit des termes les plus employés dans docs contre les 316 entrées du glossaire
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib, re, json, collections\ng = json.load(open('docs/theorie/glossaire/index.json'))\ntermes = {}\nfor e in g['entrees']:\n    for t in re.split(r'[·;,(]', e['terme']):\n        t = t.strip() … [859 caractères tronqués]`
+
+  ```
+12:37
+  63  coût                                   docs/archive/note-cycle-c2.md
+  50  pa                                     docs/archive/README.md
+  45  et                                     docs/archive/architecture-kimi-k3.md
+  45  sortie                                 docs/archive/etat-cerveau.md
+  43  feuille de route courante              docs/archive/architecture-cerveau-et-drave.md
+  42  entrée                                 docs/archive/etat-cerveau.md
+  42  statut                                 docs/archive/modele-pour-drave.md
+  42  ligne de roadmap                       docs/methode/resultats.md
+  41  résumé                                 docs/methode/contexte.md
+  41  dépend de                              docs/implantation/pipeline-lecture.md
+  39  priorité                               docs/pilotage/roadmap.md
+  39  programme                              docs/pilotage/programme-r.md
+  36  document daté.                         docs/archive/architecture-cerveau-et-drave.md
+  35  négatif                                docs/archive/cerveau-facultes.md
+  31  glossaire                              docs/pilotage/backlog/R03-banc-lecture-rapide.md
+  29  prochaine acti
+… [1981 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+La réponse courte avant d'exécuter : **oui pour docwatch, non pour le « partout »**.
+
+- **Le `docs/theorie/glossaire/index.json` existe déjà « pour docwatch »** (README du glossaire) et n'est lu par personne côté outil : c'est le bon endroit pour l'auto-liaison à l'affichage. Le markdown reste propre, le survol donne la fiche, le pointillé signale le terme.
+- **« Partout » noierait les pages** : 316 entrées, des milliers d'occurrences ; sur GitHub, où le tooltip n'existe pas, ça ferait des liens bruyants et un entretien lourd. Le compromis utile : **la première occurrence par page**, dans les documents pivots.
+
+Je commence par docwatch, puis j'enrichis le glossaire, puis les liens ciblés.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; wc -l tools/docwatch/src/docwatch/render.py tools/docwatch/src/docwatch/server.py; grep -n \"mistune\\|create_markdown\\|def render\\|def page\\|@route\\|app.route\\|add_url_rule\" tools/docwatch/src/docwatch/render.py tools/docwatch/s … [175 caractères tronqués]`
+
+  ```
+386 tools/docwatch/src/docwatch/render.py
+  562 tools/docwatch/src/docwatch/server.py
+  948 total
+tools/docwatch/src/docwatch/render.py:247:        import mistune
+tools/docwatch/src/docwatch/render.py:249:        rendu = mistune.create_markdown(
+tools/docwatch/src/docwatch/render.py:279:            "Installez <code>mistune</code>.</p><pre>" + html.escape(texte) + "</pre>"
+tools/docwatch/src/docwatch/render.py:286:def render_markdown(text: str) -> str:
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch/src/docwatch/render.py", "limit": 70, "offset": 230}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch/src/docwatch/render.py</path>
+<type>file</type>
+<content>
+230:                 "size": st.st_size,
+231:                 "mtime": int(st.st_mtime),
+232:                 "token": str(st.st_mtime_ns),
+233:             }
+234:         )
+235:     return infos
+236: 
+237: 
+238: _RENDERER: Optional[Callable[[str], str]] = None
+239: 
+240: 
+241: def _charger_moteur() -> Callable[[str], str]:
+242:     """Choisit le premier moteur Markdown disponible, une seule fois."""
+243:     global _RENDERER
+244:     if _RENDERER is not None:
+245:         return _RENDERER
+246:     try:
+247:         import mistune
+248: 
+249:         rendu = mistune.create_markdown(
+250:             plugins=["table", "strikethrough", "url", "footnotes"],
+251:             escape=False,
+252:         )
+253:         _RENDERER = rendu
+254:         return _RENDERER
+255:     except ImportError:
+256:         pass
+257:     try:
+258:         from markdown_it import MarkdownIt
+259: 
+260:         moteur = MarkdownIt("commonmark", {"html": True}).enable(["table", "strikethrough"])
+261:         _RENDERER = moteur.render
+262:         return _RENDERER
+263:     except Import
+… [1285 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; head -50 tools/docwatch/src/docwatch/paths.py; echo \"=== config\"; grep -n \"racine\\|root\\|docs\" tools/docwatch/src/docwatch/config.py | head -10; echo \"=== render calls\"; grep -n \"render_markdown\\|cached_render\ … [181 caractères tronqués]`
+
+  ```
+12:39
+"""Validation des chemins reçus du client.
+
+Le serveur ne lit que sous une racine choisie au lancement. Toute route qui
+accepte un chemin passe par :func:`safe_path` (racine courante) ou
+:func:`safe_bounded` (racine de départ). Les deux résolvent les liens
+symboliques avant de comparer : un lien qui pointe hors de l'arbre est refusé.
+"""
+
+from __future__ import annotations
+
+import os
+from typing import Optional
+from urllib.parse import unquote
+
+
+def in_root(chemin: str, root: str) -> bool:
+    """Le chemin réel est-il dans l'arbre ``root`` (racine comprise) ?"""
+    try:
+        r = os.path.realpath(root)
+        p = os.path.realpath(chemin)
+    except (OSError, ValueError):
+        return False
+    return p == r or p.startswith(r + os.sep)
+
+
+def safe_path(raw: str, root: str) -> Optional[str]:
+    """Résout ``raw`` et vérifie qu'il reste sous ``root``.
+
+    Retourne ``None`` si la cible sort de l'arbre. Le chemin vide désigne la
+    racine elle-même, ce qui simplifie les appels ``/tree?path=``.
+    """
+    if raw is None:
+        return None
+    try:
+        texte = unquote(str(raw))
+    except (UnicodeDecodeError, ValueError):
+        return None
+    if "\x00" in texte:
+   
+… [1360 caractères tronqués]
+  ```
+
+- **write** `{"content": "\"\"\"glossaire.py — les termes du glossaire du dépôt, rendus à l'affichage.\n\nPOURQUOI CE MODULE. Le glossaire (`docs/theorie/glossaire/`) existe pour dire ce\nque le vocabulaire veut dire ; son manifeste `index.json` est décrit comme « pour\ndocwatch » depuis sa création, mais aucun  … [6320 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch/src/docwatch/glossaire.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch/src/docwatch/render.py", "limit": 55, "offset": 286}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch/src/docwatch/render.py</path>
+<type>file</type>
+<content>
+286: def render_markdown(text: str) -> str:
+287:     """Rend le Markdown en HTML, avec repli en cascade."""
+288:     return _charger_moteur()(text)
+289: 
+290: 
+291: def cached_render(
+292:     path: str,
+293:     cache_dir: str,
+294:     force: bool = False,
+295:     diagrammes: Optional[DiagramSettings] = None,
+296: ) -> Tuple[str, bool]:
+297:     """Rend le fichier en HTML, avec cache disque clé sur (chemin, mtime, taille).
+298: 
+299:     ``force=True`` ignore le cache : utile quand le fichier vient de changer et
+300:     qu'on veut être certain de rendre la dernière version. Si ``diagrammes`` est
+301:     fourni et actif, les blocs PlantUML/Mermaid sont convertis en SVG.
+302:     """
+303:     st = os.stat(path)
+304:     actif = bool(diagrammes and diagrammes.enabled)
+305:     cle = "%s|%s|%s|d%d" % (path, st.st_mtime_ns, st.st_size, 1 if actif else 0)
+306:     key = hashlib.sha256(cle.encode()).hexdigest()[:32]
+307:     cache_file = os.path.join(cache_dir, key + ".html")
+308:     if not force and os.path.exists(cache_file):
+309:         try:
+310:        
+… [1378 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib\n# 1. glossaire.py : la clé de cache\np = pathlib.Path('tools/docwatch/src/docwatch/glossaire.py'); t = p.read_text(encoding='utf-8')\nold = 'def charger(racine: Optional[pathlib.Path] =  … [2420 caractères tronqués]`
+
+  ```
+12:41
+ok
+compile-ok
+style.css
+tree.js
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; cat >> tools/docwatch/src/docwatch/static/style.css <<'EOF'\n\n/* Glossaire — le pointillé signale un terme défini, sans lien dans le texte.\n   La fiche vient au survol (attribut title) ; le clic n'est pas nécessaire. * … [1571 caractères tronqués]`
+
+  ```
+12:41
+ImportError while loading conftest '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch/tests/conftest.py'.
+tests/conftest.py:17: in <module>
+    from docwatch.config import State, make_settings
+E   ModuleNotFoundError: No module named 'docwatch'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch; date '+%H:%M'; PYTHONPATH=src python3 -m pytest tests/test_glossaire.py -q 2>&1 | tail -12", "description": "Run glossary tests with src on path", "timeoutMs": 300000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/ … [24 caractères tronqués]`
+
+  ```
+12:41
+....                                                                     [100%]
+  ```
+
+### 🤖 Assistant
+
+Tests docwatch ✅ (4/4) — le hook glossaire fonctionne. Je régénère `index.json` et je vérifie les cartes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 tools/glossaire_cartes.py 2>&1 | tail -3; echo \"=== verifier\"; python3 tools/glossaire_cartes.py --verifier 2>&1 | tail -3; echo \"=== git status glossaire\"; git status --short docs/theorie/glossaire/ tools/do … [163 caractères tronqués]`
+
+  ```
+12:41
+  316 entrées · 316 fiche(s) écrite(s) · index et manifeste à jour
+=== verifier
+  ✅ 316 entrées · fiches, index et manifeste à jour
+=== git status glossaire
+ M docs/theorie/glossaire/index.json
+ m tools/docwatch
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; wc -l tools/glossaire_cartes.py; grep -n \"FAMILLES\\|familles\\|glob\\|01-\\|12-\\|entrees\\|README\" tools/glossaire_cartes.py | head -20", "description": "Inspect glossary cards generator structure", "timeoutMs": 1800 … [65 caractères tronqués]`
+
+  ```
+12:42
+297 tools/glossaire_cartes.py
+4:Le glossaire est découpé en **12 familles** (les définitions longues). Ce script en extrait
+7:  - `docs/glossaire/entrees/<slug>.md` : une **fiche courte** (titre, résumé, famille,
+9:  - `docs/glossaire/README.md` : l'**index** groupé par famille, avec un lien direct par entrée ;
+13:Les familles restent la source des définitions : une fiche est une **carte**, pas une copie.
+33:ENTREES = GLOSS / "entrees"
+34:FAMILLES = [
+35:    "01-le-projet-ses-noms-sa-methode.md",
+43:    "12-la-lecture-le-document-et-ses-mesures.md",
+105:    entrees = []
+112:                    entrees.append(courante)
+123:                    entrees.append(courante)
+126:                    entrees.append(courante)
+129:                    entrees.append(courante)
+135:                entrees.append(courante)
+140:                entrees.append(courante)
+145:        entrees.append(courante)
+146:    for e in entrees:
+149:    return [e for e in entrees if e["terme"] and e["body"]]
+155:    for nom in FAMILLES:
+182:> **Famille :** [{e['famille']}](../{e['fichier']}) · **Index :** [toutes les entrées](../README.md)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/glossaire_cartes.py", "limit": 60, "offset": 95}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/glossaire_cartes.py</path>
+<type>file</type>
+<content>
+95:     if len(mots) > 60:
+96:         court = " ".join(mots[:60]) + "…"
+97:     return court or par[:240] or "Voir la définition dans la famille."
+98: 
+99: 
+100: def parser_famille(chemin: pathlib.Path):
+101:     texte = chemin.read_text(encoding="utf-8", errors="ignore")
+102:     famille = titre_famille(texte)
+103:     lignes = texte.splitlines()
+104:     est_10 = chemin.name.startswith("10-")
+105:     entrees = []
+106:     courante = None
+107:     for ligne in lignes:
+108:         if est_10:
+109:             m = re.match(r"^> \*\*([^*]+)\*\*.*[—–-]", ligne)
+110:             if m:
+111:                 if courante:
+112:                     entrees.append(courante)
+113:                 reste = re.split(r"[—–]", ligne[2:], maxsplit=1)
+114:                 corps = [reste[1].strip()] if len(reste) > 1 else [ligne[2:].strip()]
+115:                 courante = {"terme": nettoyer(m.group(1)), "body": corps}
+116:                 continue
+117:             if courante:
+118:                 if ligne.startswith("> "):
+119:                     courante["body"].append(ligne[2:].stri
+… [1440 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; echo \"=== WARC/crawl\"; grep -ril \"warc\\|wget\\|crawl\" docs/ tools/ reports/ 2>/dev/null | head -5; echo \"=== BLAKE2b\"; grep -ril \"blake2b\" tools/ docs/ reports/ 2>/dev/null | head -4; echo \"=== corpus def\"; gr … [274 caractères tronqués]`
+
+  ```
+12:43
+=== WARC/crawl
+tools/jeux/lexique_multilingue.json
+tools/docwatch/.venv/lib/python3.13/site-packages/pip/_internal/cli/__pycache__/progress_bars.cpython-313.pyc
+tools/docwatch/.venv/lib/python3.13/site-packages/pip/_vendor/pygments/lexers/_mapping.py
+tools/docwatch/.venv/lib/python3.13/site-packages/pip/_vendor/pygments/lexers/__pycache__/_mapping.cpython-313.pyc
+tools/docwatch/.venv/lib/python3.13/site-packages/pip/_vendor/requests/utils.py
+=== BLAKE2b
+tools/corpus_wikipedia.py
+tools/__pycache__/corpus_wikipedia.cpython-313.pyc
+tools/__pycache__/corpus_wikipedia_texte.cpython-313.pyc
+tools/__pycache__/verifie_contamination.cpython-313.pyc
+=== corpus def
+316
+  ```
+
+- **write** `{"content": "# 13. Le corpus et la mesure documentaire\n\n> **Famille 13 du glossaire** (13 familles). Index : [le glossaire](../glossaire.md).\n\n**Corpus** *(corpus ; corpus)* — un **ensemble de textes** réuni pour une mesure, avec son mode d'emploi : d'où il vient, ce qu'on a retiré, comment il e … [7323 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/glossaire/13-le-corpus-et-la-mesure-documentaire.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; wc -l docs/theorie/glossaire/13-le-corpus-et-la-mesure-documentaire.md; python3 - <<'PY'\nimport pathlib, re\n# 1. FAMILLES du générateur\np = pathlib.Path('tools/glossaire_cartes.py'); t = p.read_text(encoding='utf-8')\ … [1333 caractères tronqués]`
+
+  ```
+12:44
+41 docs/theorie/glossaire/13-le-corpus-et-la-mesure-documentaire.md
+ok
+  335 entrées · 335 fiche(s) écrite(s) · index et manifeste à jour
+  ✅ 335 entrées · fiches, index et manifeste à jour
+10
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch; date '+%H:%M'; PYTHONPATH=src python3 -m pytest tests/test_glossaire.py -q 2>&1 | tail -5; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 -c \"\nimport sys; sys.path.insert(0,'tools/docwatch/src')\nfrom docw … [345 caractères tronqués]`
+
+  ```
+12:44
+....                                                                     [100%]
+471 termes ; cle 1793641467571689113-177121
+<p>Le <span class="glossaire" data-slug="jeton" title="Unité de **tokenisation** d&#x27;un modèle : le découpage technique (octets, caractères, morceaux de mots) que le modèle calcule. C&#x27;est une unité **propre au tokeniseur**, variable d&#x27;un modèle et d&#x27;une écriture à l&#x27;autre, et"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib\n# resume propre (sans markdown) pour l'attribut title\np = pathlib.Path('tools/docwatch/src/docwatch/glossaire.py'); t = p.read_text(encoding='utf-8')\nold = '            resume = entree … [1663 caractères tronqués]`
+
+  ```
+12:45
+ok
+....                                                                     [100%]
+fatal: cannot change to 'tools/docwatch': No such file or directory
+[stderr]
+fatal: cannot change to 'tools/docwatch': No such file or directory
+fatal: cannot change to 'tools/docwatch': No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; D=/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch; git -C \"$D\" add src/docwatch/glossaire.py src/docwatch/render.py src/docwatch/static/style.css tests/test_glossaire.py CHANGELOG.md; git -C \"$D\" statu … [303 caractères tronqués]`
+
+  ```
+12:45
+M  CHANGELOG.md
+ M README.md
+ M src/docwatch/__init__.py
+A  src/docwatch/glossaire.py
+M  src/docwatch/render.py
+ M src/docwatch/server.py
+M  src/docwatch/static/style.css
+ M src/docwatch/static/tree.js
+ M src/docwatch/ui.py
+ M tests/test_cli.py
+A  tests/test_glossaire.py
+ M tests/test_render.py
+ M tests/test_server.py
+ M tests/test_spa.py
+ 5 files changed, 385 insertions(+), 10 deletions(-)
+ create mode 100644 src/docwatch/glossaire.py
+ create mode 100644 tests/test_glossaire.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); t = p.read_text(encoding='utf-8')\nold = \"**genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wi … [1309 caractères tronqués]`

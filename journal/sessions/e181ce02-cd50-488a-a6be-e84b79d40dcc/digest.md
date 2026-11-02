@@ -31251,3 +31251,157 @@ timeout 2400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/miroir.py tools/pensee/autotest.py reports/rapport-pensee-reponse-dirigee.md reports/pensee-reponse-dirigee.json reports/README.md docs/implantation/moteur-de-pensee.md d … [538 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1197]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1197", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-reponse-dirigee.json
+ create mode 100644 reports/rapport-pensee-reponse-dirigee.md
+COMMIT OK 1
+646c04c5 B13 — LA RÉPONSE DIRIGÉE : 19/19, LA PREMIÈRE RÉPONSE JUSTE (17/19 AVANT LA LANGUE) ; 129/129
+lun 02 nov 2026 12:35:20 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse dirigée : 19/19, la première réponse juste (17/19 avant la langue) ; 129/129
+
+Le round 130 est livré : la **réponse dirigée** (la négation + la langue) fait **19/19** — la première réponse **juste** mesurée par le juge. Commit **`646c04c5`**.
+
+## Le chemin
+
+| étape | justes | taux |
+|---|---:|---:|
+| bloc (réponse au contenu) | 0/19 | 0,0000 |
+| extraction (GN) | 0/19 | 0,0000 |
+| **dirigée (négation, langue de la question)** | **19/19** | **1,0000** |
+| — avant la correction de langue | 17/19 | 0,8947 |
+
+**Ce que ça dit** :
+
+- **La négation suffit** pour ces 19 questions fermées : la réponse est `oui`/`yes` sauf si la phrase porte une négation — 19/19.
+- **Le bug de langue était réel** : les deux questions anglaises répondaient « oui » ; la correction (la langue de l'annotation) donne 19/19. C'est le **contrôle négatif** du round : sans la langue, 17/19.
+- **Ce n'est pas de la compréhension** : la réponse ne dépend que de la **surface** (la négation) ; une question ouverte, une question piège ou un contenu inversé la feraient échouer.
+- **Le juge est enfin utilisé** : la référence (T124) sert, le bloc est mesuré, la réponse dirigée passe — la chaîne **miroir → juge → mesure** est complète.
+
+## L'état
+
+- Fiche : [`rapport-pensee-reponse-dirigee.md`](../../reports/rapport-pensee-reponse-dirigee.md) ; JSON [`pensee-reponse-dirigee.json`](../../reports/pensee-reponse-dirigee.json) ; T126 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **129/129 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **538 fiches / 625 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` à jour (13 h 05).
+- L'horloge réelle est **12 h 35 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+## La suite
+
+1. **Les questions négatives** : ajouter des questions qui nient (`Ne viens-tu pas ?`) et voir si la réponse dirigée s'inverse correctement — le vrai test.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **les questions négatives** — le piège qui sépare la règle de la compréhension.
+
+
+## Tour 145
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 131/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nSPECS = [\n(\"r408\",\"fr\",\"Ne viens-tu pas demain ?\",\"Ne/ADV viens/VERB tu/PRON pas/ADV demain/ADV ?/PONCT\",\"GN|tu|agent;GV|viens|prédicat;ADV|pas|négation;ADV|demain|temps\",{\"acte\":\"quest … [2726 caractères tronqués]`
+
+  ```
+10 questions négatives ajoutées
+AssertionError: r408: segment introuvable 'viens'
+couverture {'questions': 19, 'avec_reference': 19, 'taux': 1.0}
+dirigée {'questions': 19, 'justes': 19.0, 'taux': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\n# les segments de r408-r417 : GV d'abord (le verbe), puis le GN du pronom sujet\npaires={\n \"GN|tu|agent;GV|viens|prédicat;A … [1346 caractères tronqués]`
+
+  ```
+segments corrigés 0
+AssertionError: r408: segment introuvable 'viens'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n \"r408\" tools/tests/linguistique/gold_reel.py | head -1 | cut -d: -f1),+8p\" tools/tests/linguistique/gold_reel.py; echo ===; grep -n \"segment introuvable\" -B 8 tools/tests/linguistique/gold_reel.py | head -20", … [65 caractères tronqués]`
+
+  ```
+('r408', 'fr', 'Ne viens-tu pas demain ?',
+     [('Ne', 'ADV'), ('viens', 'VERB'), ('tu', 'PRON'), ('pas', 'ADV'), ('demain', 'ADV'), ('?', 'PONCT')],
+     [('GN', 'tu', 'agent'), ('GV', 'viens', 'prédicat'), ('ADV', 'pas', 'négation'), ('ADV', 'demain', 'temps')], {'acte': 'question', 'reponse': 'si'}),
+    ('r409', 'fr', 'Ne mange-t-il pas ?',
+     [('Ne', 'ADV'), ('mange', 'VERB'), ("t'", 'PRON'), ('il', 'PRON'), ('pas', 'ADV'), ('?', 'PONCT')],
+     [('GN', 'il', 'agent'), ('GV', 'mange', 'prédicat'), ('ADV', 'pas', 'négation')], {'acte': 'question', 'reponse': 'si'}),
+    ('r410', 'fr', 'Ne dort-elle pas ?',
+     [('Ne', 'ADV'), ('dort', 'VERB'), ('elle', 'PRON'), ('pas', 'ADV'), ('?', 'PONCT')],
+     [('GN', 'elle', 'agent'), ('GV', 'dort', 'prédicat'), ('ADV', 'pas', 'négation')], {'acte': 'question', 'reponse': 'si'}),
+===
+1292-            mots.append({"texte": mot, "pos": classe, "debut": i, "fin": i + len(mot)})
+1293-            curseur = i + len(mot)
+1294-        segs, curseur = [], 0
+1295-        for item in segments:
+1296-            typ, txt, role = item[:3]
+1297-            cible = item[3] if len(item) > 3 else None
+1298-            cibles = cible if isinstance(cible
+… [155 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\npaires=[\n (\"[('GN', 'tu', 'agent'), ('GV', 'viens', 'prédicat'), ('ADV', 'pas', 'négation'), ('ADV', 'demain', 'temps')]\", … [2309 caractères tronqués]`
+
+  ```
+corrigés 10
+AssertionError: r409: token introuvable "t'"
+couverture {'questions': 19, 'avec_reference': 19, 'taux': 1.0}
+dirigée {'questions': 19, 'justes': 19.0, 'taux': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\na='''    ('r409', 'fr', 'Ne mange-t-il pas ?',\n     [('Ne', 'ADV'), ('mange', 'VERB'), (\"t'\", 'PRON'), ('il', 'PRON'), ('p … [703 caractères tronqués]`
+
+  ```
+r409 corrigé
+417 phrases réelles → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json
+couverture {'questions': 29, 'avec_reference': 29, 'taux': 1.0}
+dirigée {'questions': 29, 'justes': 19.0, 'taux': 0.6552}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-negatives.md <<'MD'\n# B13 — les questions négatives : 19/29, la règle ne s'inverse pas\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **130/1 … [6671 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 539 fiche(s) · 626 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2809 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-reponse-dirigee.md`](rapport-pensee-reponse-dirigee.md) | **B13** — la réponse dirigée : 19/19, la première répo … [614 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=1
+  ❌ T126 réponse dirigée   dirigée : 19/29 (17/19 sans la langue)
+  ✅ T127 négatives         négatives : 19/29 (19/19 en affirmatif)
+  114/130 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 2400 python3 -m tools.pensee.autotest 2>&1 | grep \"❌\"; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Lister les portes rouges après l'ajout du gold", "timeoutMs": 2400000}`

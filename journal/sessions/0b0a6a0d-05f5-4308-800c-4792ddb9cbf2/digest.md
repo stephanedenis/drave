@@ -20711,3 +20711,25 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1207", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/mix-60k.log 2>/dev/null; ls work/n2w/mix-60k.pt 2>/dev/null && echo OK", "description": "Check the mix training"}`
+
+  ```
+12:42
+pas 15100 · perte 1.5884 · PPL val 4.344 · 809 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/mix-60k.log 2>/dev/null", "description": "Wait for the mix training"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1209]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1209", "timeout_ms": 1500000, "wait": true}`

@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 44.0 h |
+| Durée | 44.2 h |
 | Tours | 388 |
-| Messages | 2362 |
-| Appels d'outils | 1574 |
-| Fichiers touchés | 26 |
-| Commandes | 1398 |
+| Messages | 2384 |
+| Appels d'outils | 1596 |
+| Fichiers touchés | 28 |
+| Commandes | 1414 |
 | Sous-agents | 0 |
-| Commits | 95 |
+| Commits | 96 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -31,6 +31,8 @@
 … [294 caractères tronqués]
 - **complete** — Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécr
 … [294 caractères tronqués]
+- **create** — Enrichir le glossaire de docs (316 entrées + les termes manquants du corpus récent : corpus, WARC, dump, BLAKE2b, OCR, CEGEP, contamination, split, etc.), ajouter les hyperliens vers le glossaire à la première occurrence par page seulement (pas « partout » : pas de gonflement), et intégrer la foncti
+… [426 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -9199,15 +9201,27 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 
 ### Tour 388 — fais une passe dans docs pour enrichir le glossaire et une autre passe ajouter les hyperliens vers le glossaire partout  … [228 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - bash — Inspect glossary, docwatch and existing links
 - read
 - bash — Inspect docwatch and glossary index
+- bash — Inspect docwatch package structure
+- bash — Inspect docwatch source and glossary cards generator
+- create_goal
+- bash — Audit bold terms missing from glossary
+- bash — Inspect docwatch rendering entry points
+- bash — Inspect docwatch paths and config
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch/src/docwatch/glossaire.py`
+- bash — Hook glossary into docwatch rendering
+- bash — Add CSS and glossary tests, run them
+- bash — Run glossary tests with src on path
+- bash — Regenerate glossary index and verify cards
+- … et 8 autres
 
 **Synthèse produite :**
 
-⏵ Inspection du glossaire, de docwatch et des liens existants avant de trancher
+Tests docwatch ✅ (4/4) — le hook glossaire fonctionne. Je régénère `index.json` et je vérifie les cartes
 
 ## 3. Travail accompli
 
@@ -9241,6 +9255,8 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-r1-preparation.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/finaliser_ocr.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/docwatch/src/docwatch/glossaire.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/glossaire/13-le-corpus-et-la-mesure-documentaire.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -9284,7 +9300,7 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1358 autres
+- … et 1374 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9527,4 +9543,5 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 - DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE" > /tmp/commit-cegep10c.log 2>&1;
 - ÉTAT — T0 SOUS 4 000 APRÈS LE CEGEP 10 NOTES" > /tmp/commit-t0.log 2>&1; code=$?; tail -2 /tmp/commit-t0.log; echo "code=$code"; git log --oneline -1
 - DONNÉES — LE RUN DE REPRISE A ÉCRASÉ LE CORPUS CEGEP : LES 2 ALGORITHMS RESTENT, LES 10 NOTES SONT À RE-OCÉRISER (LEÇON : SORTIE SÉPARÉE)" > /tmp/commit-lecon.l
+- GLOSSAIRE — FAMILLE 13 (CORPUS ET MESURE DOCUMENTAIRE, 19 ENTRÉES) ET DOCWATCH ANNOTE LES TERMES AU RENDU : 335 ENTRÉES" > /tmp/commit-glossaire.log 2>&1; code=
 

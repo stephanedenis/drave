@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 43.9 h |
-| Tours | 144 |
-| Messages | 1712 |
-| Appels d'outils | 1468 |
+| Durée | 44.1 h |
+| Tours | 145 |
+| Messages | 1722 |
+| Appels d'outils | 1476 |
 | Fichiers touchés | 25 |
-| Commandes | 1197 |
+| Commandes | 1205 |
 | Sous-agents | 2 |
 | Commits | 182 |
 | Compactages de contexte | 5 |
@@ -323,6 +323,8 @@
 **Tour 143** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 144** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 145** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7647,6 +7649,57 @@ Je continue : prochain round, **l'extraction dirigée** — la seule façon pour
 - bash — Committer la réponse dirigée
 - job_output
 
+**Synthèse produite :**
+
+⏵ Réponse dirigée : 19/19, la première réponse juste (17/19 avant la langue) ; 129/129
+
+Le round 130 est livré : la **réponse dirigée** (la négation + la langue) fait **19/19** — la première réponse **juste** mesurée par le juge. Commit **`646c04c5`**.
+
+\## Le chemin
+
+| étape | justes | taux |
+|---|---:|---:|
+| bloc (réponse au contenu) | 0/19 | 0,0000 |
+| extraction (GN) | 0/19 | 0,0000 |
+| **dirigée (négation, langue de la question)** | **19/19** | **1,0000** |
+| — avant la correction de langue | 17/19 | 0,8947 |
+
+**Ce que ça dit** :
+
+- **La négation suffit** pour ces 19 questions fermées : la réponse est `oui`/`yes` sauf si la phrase porte une négation — 19/19.
+- **Le bug de langue était réel** : les deux questions anglaises répondaient « oui » ; la correction (la langue de l'annotation) donne 19/19. C'est le **contrôle négatif** du round : sans la langue, 17/19.
+- **Ce n'est pas de la compréhension** : la réponse ne dépend que de la **surface** (la négation) ; une question ouverte, une question piège ou un contenu inversé la feraient échouer.
+- **Le juge est enfin utilisé** : la référence (T124) sert, le bloc est mesuré, la réponse dirigée passe — la chaîne **miroir → juge → mesure** est complète.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-reponse-dirigee.md`](../../reports/rapport-pensee-reponse-dirigee.md) ; JSON [`pensee-reponse-dirigee.json`](../../reports/pensee-reponse-dirigee.json) ; T126 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **129/129 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **538 fiches / 625 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` à jour (13 h 05).
+- L'horloge réelle est **12 h 35 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **Les questions négatives** : ajouter des questions qui nient (`Ne viens-tu pas ?`) et voir si la réponse dirigée s'inverse correctement — le vrai test.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **les questions négatives** — le piège qui sépare la règle de la compréhension.
+
+### Tour 145 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Ajouter 10 questions négatives et mesurer
+- bash — Corriger l'ordre des segments des questions négatives
+- bash — Lire le tuple r408 et le contrôle des segments
+- bash — Corriger l'ordre des segments et mesurer
+- bash — Corriger le token t' et mesurer
+- bash — Écrire la fiche des questions négatives et la porte T127
+- bash — Trim README et passer toutes les portes
+- bash — Lister les portes rouges après l'ajout du gold
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7726,7 +7779,7 @@ Je continue : prochain round, **l'extraction dirigée** — la seule façon pour
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1157 autres
+- … et 1165 autres
 
 ## 4. Mesures et résultats marquants
 

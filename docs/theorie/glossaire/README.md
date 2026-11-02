@@ -2,15 +2,15 @@
 
 > **Ce que ce fichier est.** L'index **généré** des entrées du glossaire : une ligne par
 > entrée, groupée par famille, avec un lien direct vers sa **fiche** courte. Les définitions
-> complètes restent dans les 9 familles ; le manifeste [`index.json`](index.json) sert à
+> complètes restent dans les 10 familles ; le manifeste [`index.json`](index.json) sert à
 > docwatch pour afficher une fiche en contexte.
-> **Chargement :** T1 — ouvrir la fiche du terme, pas les 9 familles.
+> **Chargement :** T1 — ouvrir la fiche du terme, pas les 10 familles.
 > **Pour docwatch.** Charger `index.json`, résoudre un terme par `slug`, puis rendre la fiche
 > **Vérifier.** `python3 tools/glossaire_cartes.py --verifier` compare les fiches,
 > l'index et le manifeste ; après une modification d'une famille, relancer le générateur.
 > `entrees/<slug>.md` en carte ; `resume` permet le survol sans lire le fichier.
 
-**316 entrées.** Index général : [le glossaire](../glossaire.md).
+**335 entrées.** Index général : [le glossaire](../glossaire.md).
 
 ### 1. Le projet, ses noms, sa méthode · [la famille](01-le-projet-ses-noms-sa-methode.md)
 [A/B (écart A/B)](entrees/a-b.md) · [Banc (bench)](entrees/banc.md) · [Banc externe](entrees/banc-externe.md) · [Boxing](entrees/boxing.md) · [CDC](entrees/cdc.md) · [Couche / Étage](entrees/couche-etage.md) · [Créneau long](entrees/creneau-long.md) · [Definition of done (engagement de fin de sprint)](entrees/definition-of-done.md) · [Drave](entrees/drave.md) · [Fait · mesuré · projeté · déduit](entrees/fait-mesure-projete-deduit.md) · [Harnais (harness)](entrees/harnais.md) · [Jeton](entrees/jeton.md) · [Journal de session](entrees/journal-de-session.md) · [Lexique multilingue](entrees/lexique-multilingue.md) · [Mesure entrelacée · machine au calme](entrees/mesure-entrelacee-machine-au-calme.md) · [Non-régression (porte de non-régression)](entrees/non-regression.md) · [Porte (de décision)](entrees/porte.md) · [Porte de correction](entrees/porte-de-correction.md) · [Porte Drave](entrees/porte-drave.md) · [Principe de maître](entrees/principe-de-maitre.md) · [Professeur / élève](entrees/professeur-eleve.md) · [Qtrinet](entrees/qtrinet.md) · [Rapport](entrees/rapport.md) · [Rejeu](entrees/rejeu.md) · [Relire · relecture adverse · relecture déléguée](entrees/relire-relecture-adverse-relecture-deleguee.md) · [Représentation sémantique neutre (RSN)](entrees/representation-semantique-neutre.md) · [RSN-jeu](entrees/rsn-jeu.md) · [Rétrospective](entrees/retrospective.md) · [Session · sprint](entrees/session-sprint.md) · [Trace (de flux)](entrees/trace.md) · [Verdict négatif](entrees/verdict-negatif.md) · [Écart (0,00e0)](entrees/ecart.md)
@@ -38,6 +38,9 @@
 
 ### 12. La lecture, le document et leurs mesures · [la famille](12-la-lecture-le-document-et-ses-mesures.md)
 [AST](entrees/ast.md) · [AUC](entrees/auc.md) · [Banc de lecture rapide](entrees/banc-de-lecture-rapide.md) · [CAS](entrees/cas.md) · [chrF](entrees/chrf.md) · [Closed-book](entrees/closed-book.md) · [Contrat](entrees/contrat.md) · [Contrôle négatif](entrees/controle-negatif.md) · [Contrôleur de lecture](entrees/controleur-de-lecture.md) · [Curriculum](entrees/curriculum.md) · [Distillation](entrees/distillation.md) · [DRVM](entrees/drvm.md) · [F1](entrees/f1.md) · [Gist](entrees/gist.md) · [Graphe de document](entrees/graphe-de-document.md) · [Graphe de dépendances](entrees/graphe-de-dependances.md) · [Layout](entrees/layout.md) · [Lecture rapide (survol, balayage, écrémage, lecture sélective)](entrees/lecture-rapide.md) · [OCR](entrees/ocr.md) · [Parseur](entrees/parseur.md) · [Relecture](entrees/relecture.md) · [Retrieval](entrees/retrieval.md) · [SFT](entrees/sft.md) · [Span](entrees/span.md) · [Tableau](entrees/tableau.md) · [Tenu à l'écart](entrees/tenu-a-l-ecart.md) · [WER](entrees/wer.md)
+
+### 13. Le corpus et la mesure documentaire · [la famille](13-le-corpus-et-la-mesure-documentaire.md)
+[BLAKE2b](entrees/blake2b.md) · [Catalogue](entrees/catalogue.md) · [CEGEP](entrees/cegep.md) · [Contamination](entrees/contamination.md) · [Corpus](entrees/corpus.md) · [Dump](entrees/dump.md) · [Fiche de résultat](entrees/fiche-de-resultat.md) · [Fonds](entrees/fonds.md) · [Genre](entrees/genre.md) · [Licence](entrees/licence.md) · [Manifeste](entrees/manifeste.md) · [Pipeline](entrees/pipeline.md) · [Poppler (pdftotext, pdftoppm, pdfinfo)](entrees/poppler.md) · [SHA-256](entrees/sha-256-2.md) · [Sous-corpus](entrees/sous-corpus.md) · [Split](entrees/split.md) · [Tesseract](entrees/tesseract.md) · [Tronçon](entrees/troncon.md) · [WARC](entrees/warc.md)
 
 ## Les annexes
 - [8. Points relevés](08-points-releves-non-corriges.md) — pas d'entrée de terme, une annexe.
