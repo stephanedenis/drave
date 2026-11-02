@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 45.7 h |
-| Tours | 153 |
-| Messages | 1803 |
-| Appels d'outils | 1541 |
+| Durée | 46.0 h |
+| Tours | 154 |
+| Messages | 1812 |
+| Appels d'outils | 1548 |
 | Fichiers touchés | 25 |
-| Commandes | 1260 |
+| Commandes | 1266 |
 | Sous-agents | 2 |
-| Commits | 194 |
+| Commits | 195 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -341,6 +341,8 @@
 **Tour 152** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 153** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 154** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8127,6 +8129,56 @@ Je continue : prochain round, **les antécédents intra-phrase** — la part cac
 - bash — Committer les liens classés
 - job_output
 
+**Synthèse produite :**
+
+⏵ Liens classés : 50 intra, 62 inter, 4 absents ; 138/138
+
+Le round 139 est livré : les **116 liens** de coréférence sont classés — la coréférence est **locale** (43 % intra-phrase). Commit **`004c5f64`**.
+
+\## Les trois classes
+
+| classe | liens | part |
+|---|---:|---:|
+| **intra-phrase** | **50** | 0,4310 |
+| **inter-phrase** | **62** | 0,5345 |
+| **absents** | **4** | 0,0345 |
+| **tout** | **116** | 1,0000 |
+
+**Ce que ça dit** :
+
+- **La coréférence est locale** : 43 % des liens ont leur antécédent dans la **même phrase** — le lien de phrase (62) n'en couvre que la moitié.
+- **4 absents** : le texte ne contient pas l'antécédent (les pronoms sans nom, les sujets implicites) — la règle ne peut rien faire.
+- **Le lien de phrase est une sous-mesure** : il ne faut pas lire 62/116 comme un taux d'échec ; c'est 62 inter + 50 intra = **112 liens résolus par la règle**, 4 sans ancre.
+- **La négative est explicite** : 4 absents restent hors de portée.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-liens-classes.md`](../../reports/rapport-pensee-liens-classes.md) ; JSON [`pensee-liens-classes.json`](../../reports/pensee-liens-classes.json) ; T135 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **138/138 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **548 fiches / 634 JSON / 119 docs / 81 portes** — ✅ ; `en-cours` à jour (14 h 55).
+- L'horloge réelle est **14 h 22 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **Les 4 absents** : les nommer (les pronoms sans antécédent) — la frontière de la règle.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold vivant peut grandir.
+
+Je continue : prochain round, **les 4 absents** — la frontière exacte de ce que l'heuristique ne peut pas résoudre.
+
+### Tour 154 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Nommer les 4 liens absents
+- bash — Corriger la tokenisation et remesurer les absents
+- bash — Écrire la fiche des absents et la porte T136
+- bash — Trim T0/README et passer toutes les portes
+- bash — Corriger T134 et relancer
+- bash — Committer les absents corrigés
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8206,7 +8258,7 @@ Je continue : prochain round, **les antécédents intra-phrase** — la part cac
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1220 autres
+- … et 1226 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8548,4 +8600,5 @@ Je continue : prochain round, **les antécédents intra-phrase** — la part cac
 - B13 — LE LIEN AUTOMATIQUE RÉPARÉ : 5/5 APRÈS RÉORDONNANCEMENT ET REPLI PRON/NOUN ; 136/136" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LIEN AUTOMAT
 - B13 — LA CORÉFÉRENCE COMME LIEN : 62/116, LA MOITIÉ DES ANTÉCÉDENTS ; 137/137" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "CORÉFÉRENCE COMME LIEN"; 
 - B13 — LES LIENS CLASSÉS : 50 INTRA, 62 INTER, 4 ABSENTS ; 138/138" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LIENS CLASSÉS"; then echo "COMMIT OK 
+- B13 — LES ABSENTS : 0, LES QUATRE ÉTAIENT DES FAUX (TOKENISATION) ; 139/139" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LES ABSENTS"; then echo "CO
 

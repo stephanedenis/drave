@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (11)
+## Commits du jour (12)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -19,6 +19,7 @@
 | 13:53 | `81d74433` | B13 — LE LIEN AUTOMATIQUE : 0/5, LE SUJET NE SUFFIT PAS ; 135/135 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+18) |
 | 14:06 | `651c1fc0` | B13 — LE LIEN AUTOMATIQUE RÉPARÉ : 5/5 APRÈS RÉORDONNANCEMENT ET REPLI PRON/NOUN ; 136/136 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
 | 14:13 | `49ca52fb` | B13 — LA CORÉFÉRENCE COMME LIEN : 62/116, LA MOITIÉ DES ANTÉCÉDENTS ; 137/137 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+18) |
+| 14:20 | `004c5f64` | B13 — LES LIENS CLASSÉS : 50 INTRA, 62 INTER, 4 ABSENTS ; 138/138 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
 
 ## Chiffres du jour
 
@@ -29,8 +30,8 @@
 ## Sessions actives ce jour
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 45.3 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `b6a672ec-3349-4a4c-9e23-4478aa823170` — Git push to origin remote (début 2026-11-01 13:28, 24.9 h) → [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 45.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `b6a672ec-3349-4a4c-9e23-4478aa823170` — Git push to origin remote (début 2026-11-01 13:28, 25.1 h) → [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 46.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 44.8 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
@@ -51,6 +52,7 @@
 - [reports/rapport-pensee-lien-auto-fixe.md](../../reports/rapport-pensee-lien-auto-fixe.md)
 - [reports/rapport-pensee-lien-auto.md](../../reports/rapport-pensee-lien-auto.md)
 - [reports/rapport-pensee-lien-coref.md](../../reports/rapport-pensee-lien-coref.md)
+- [reports/rapport-pensee-liens-classes.md](../../reports/rapport-pensee-liens-classes.md)
 - [reports/rapport-s-analyseur.md](../../reports/rapport-s-analyseur.md)
 
 <!-- notes -->

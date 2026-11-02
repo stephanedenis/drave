@@ -7,6 +7,8 @@ restitution peut être fluide et infidèle, ou fidèle et hachée.
 """
 from __future__ import annotations
 
+import re
+
 import pathlib
 import sys
 
@@ -226,7 +228,7 @@ def lien_coref(phrase: dict, phrases: list[dict]) -> list[tuple[str, str, str]]:
     for pronom, nom in liens.items():
         cible = None
         for p in reversed(phrases[:idx] if idx > 0 else []):
-            mots = {m.lower() for m in p["texte"].replace("’", "'").split()}
+            mots = set(re.findall(r"[a-zà-ÿ']+", p["texte"].lower().replace("’", "'")))
             if nom.lower() in mots:
                 cible = p.get("id")
                 break
@@ -234,11 +236,22 @@ def lien_coref(phrase: dict, phrases: list[dict]) -> list[tuple[str, str, str]]:
     return sortie
 
 
+def liens_absents(phrases: list[dict]) -> list[dict]:
+    """Les liens dont l'antécédent est **absent** du texte (ni avant, ni dans la phrase)."""
+    out = []
+    for p in phrases:
+        mots = set(re.findall(r"[a-zà-ÿ']+", p["texte"].lower().replace("’", "'")))
+        for pronom, nom, cible in lien_coref(p, phrases):
+            if cible is None and nom.lower() not in mots:
+                out.append({"id": p["id"], "pronom": pronom, "nom": nom, "texte": p["texte"]})
+    return out
+
+
 def classer_liens_coref(phrases: list[dict]) -> dict:
     """Les liens de coréférence classés : intra-phrase, inter-phrase, absents."""
     intra = inter = absent = 0
     for p in phrases:
-        mots_phrase = {m.lower() for m in p["texte"].replace("’", "'").split()}
+        mots_phrase = set(re.findall(r"[a-zà-ÿ']+", p["texte"].lower().replace("’", "'")))
         for pronom, nom, cible in lien_coref(p, phrases):
             if cible is not None:
                 inter += 1

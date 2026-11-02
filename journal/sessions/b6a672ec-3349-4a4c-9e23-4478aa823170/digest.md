@@ -866,3 +866,263 @@ No devices were found
 ⏵ Libération des handles : arrêt du moniteur hauru-top
 
 - **bash** `{"command": "kill 10787 2>&1; sleep 2; ps -p 10787 >/dev/null 2>&1 && { echo \"toujours vivant, SIGTERM insuffisant\"; kill -TERM 10787 2>&1; sleep 2; } \nps -p 10787 >/dev/null 2>&1 && echo \"STILL RUNNING\" || echo \"hauru-top arrêté\"\necho \"== refcounts modules ==\"; lsmod | grep -E '^nvidia'\n … [289 caractères tronqués]`
+
+  ```
+hauru-top arrêté
+== refcounts modules ==
+nvidia_uvm           3862528  0
+nvidia_drm            151552  0
+nvidia_modeset       1937408  3 nvidia_drm
+nvidia              111697920  12 nvidia_uvm,nvidia_drm,nvidia_modeset
+== devices libres ? ==
+== état GPU après libération ==
+Unable to determine the device handle for GPU1: 0000:04:00.0: Unknown Error
+index, name, memory.used [MiB]
+0, Quadro RTX 5000, 1 MiB
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation de la séquence de récupération (droit root requis)
+
+- **bash** `{"command": "echo \"DISPLAY=${DISPLAY:-<unset>}  WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-<unset>}  XDG_SESSION_ID=${XDG_SESSION_ID:-<unset>}  XDG_SESSION_TYPE=${XDG_SESSION_TYPE:-<unset>}\"\necho \"pkexec: $(command -v pkexec || echo absent)\"\necho \"== polkit agent actif ? ==\"; pgrep -a -f 'polkit-kde … [404 caractères tronqués]`
+
+  ```
+DISPLAY=:0  WAYLAND_DISPLAY=<unset>  XDG_SESSION_ID=4  XDG_SESSION_TYPE=x11
+pkexec: /usr/bin/pkexec
+== polkit agent actif ? ==
+3914 /usr/libexec/polkit-kde-authentication-agent-1
+3599062 bash -c echo "DISPLAY=${DISPLAY:-<unset>}  WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-<unset>}  XDG_SESSION_ID=${XDG_SESSION_ID:-<unset>}  XDG_SESSION_TYPE=${XDG_SESSION_TYPE:-<unset>}" echo "pkexec: $(command -v pkexec || echo absent)" echo "== polkit agent actif ? =="; pgrep -a -f 'polkit-kde|polkit-gnome|xfce-polkit' | head -3 || echo "aucun agent polkit visible" echo "== job en cours (ne pas tuer) =="; ps -o pid,etime,cmd -p 3596739 2>/dev/null | tail -1 echo "== DRM card2 state =="; cat /sys/class/drm/card2/device/power/runtime_status 2>/dev/null; cat /sys/bus/pci/devices/0000:04:00.0/power/runtime_status 2>/dev/null
+== job en cours (ne pas tuer) ==
+    PID     ELAPSED CMD
+== DRM card2 state ==
+active
+active
+  ```
+
+### 🤖 Assistant
+
+⏵ GPU bloqués au niveau pilote — il me faut ton accord pour le root
+
+Diagnostic posé avant d'agir :
+
+- **GPU 0** (`03:00.0`, Quadro RTX 5000) : `GPU requires reset` sur tous les champs (temp, conso, MIG, PDI…), 1 MiB utilisés.
+- **GPU 1** (`04:00.0`) : `Unable to determine the device handle — Unknown Error` : la carte ne répond plus du tout.
+- Le reset logiciel est refusé : `failed to allocate group of reset devices: GPU requires reset` — c'est un état **pilote/noyau**, pas un processus bloquant.
+- J'ai libéré les devices : `hauru-top` (PID 10787, ouvert depuis le 31 oct) tenait les 4 nœuds `/dev/nvidia*` ; il est arrêté, `nvidia_uvm` est retombé à **0** référence. Ça n'a pas suffi.
+- L'écran est sur l'**AMD Radeon** (`modesetting`, radeonsi) : toucher à NVIDIA ne coupe pas ta session.
+
+Il reste le noyau : `rmmod`/`modprobe` des modules NVIDIA (ou reset PCI), puis redémarrage en dernier recours. Ça demande **root**, et je n'ai pas de sudo sans mot de passe.
+
+- **ask_user_question** `{"questions": [{"header": "Réinitialisation GPU", "id": "gpu_reset", "question": "Comment veux-tu que je procède ? (les deux cartes sont en état « requires reset », le rechargement des modules NVIDIA est la seule voie sans reboot)", "multi_select": false, "options": [{"label": "Via pkexec — une fenê … [556 caractères tronqués]`
+
+  ```
+{"answers":[{"id":"gpu_reset","selected":["Via pkexec — une fenêtre KDE va demander ton mot de passe (Recommandé)"]}]}
+  ```
+
+### 🤖 Assistant
+
+⏵ Tentative de reset GPU0 via pkexec (valide la fenêtre KDE)
+
+- **bash** `{"command": "cd /tmp\ntimeout 180 pkexec nvidia-smi -r -i 0 2>&1 | head -10\necho \"EXIT=${PIPESTATUS[0]}\"\necho \"== état après ==\"\nnvidia-smi --query-gpu=index,name,memory.used --format=csv 2>&1 | head -5", "description": "Try GPU0 reset through pkexec", "timeoutMs": 200000}`
+
+  ```
+GPU Reset couldn't run because it failed to allocate group of reset devices : GPU requires reset
+EXIT=255
+== état après ==
+Unable to determine the device handle for GPU1: 0000:04:00.0: Unknown Error
+index, name, memory.used [MiB]
+0, Quadro RTX 5000, 1 MiB
+  ```
+
+### 🤖 Assistant
+
+⏵ nvidia-smi -r refuse : je passe au rechargement des modules
+
+- **bash** `{"command": "command -v modprobe; ls -l /usr/sbin/modprobe /sbin/modprobe 2>/dev/null | head -3\necho \"== qui retient encore les modules ==\"\nfor m in nvidia nvidia_modeset nvidia_drm nvidia_uvm; do\n  d=/sys/module/$m/holders\n  [ -d \"$d\" ] && echo \"$m <- $(ls -A \"$d\" 2>/dev/null | tr '\\n'  … [124 caractères tronqués]`
+
+  ```
+lrwxrwxrwx. 1 root root 11 15 jun 09:33 /sbin/modprobe -> ../bin/kmod
+lrwxrwxrwx. 1 root root 11 15 jun 09:33 /usr/sbin/modprobe -> ../bin/kmod
+== qui retient encore les modules ==
+nvidia <- nvidia_drm nvidia_modeset nvidia_uvm 
+nvidia_modeset <- nvidia_drm 
+nvidia_drm <- 
+nvidia_uvm <- 
+== refcounts ==
+nvidia_uvm           3862528  2
+nvidia_drm            151552  0
+nvidia_modeset       1937408  3 nvidia_drm
+nvidia              111697920  19 nvidia_uvm,nvidia_drm,nvidia_modeset
+  ```
+
+- **bash** `{"command": "echo \"== qui tient /dev/nvidia* ==\"; fuser -v /dev/nvidiactl /dev/nvidia0 /dev/nvidia1 /dev/nvidia-uvm 2>&1 | head -10\necho \"== hauru-top relancé ? ==\"; pgrep -a -f hauru-top | head -5\necho \"== unités utilisateur ==\"; systemctl --user list-units --all 2>/dev/null | grep -i hauru … [171 caractères tronqués]`
+
+  ```
+== qui tient /dev/nvidia* ==
+                     USER        PID ACCESS COMMAND
+/dev/nvidiactl:      stephane  3600384 F.... hauru-top
+/dev/nvidia0:        stephane  3600384 F.... hauru-top
+/dev/nvidia1:        stephane  3600384 F.... hauru-top
+/dev/nvidia-uvm:     stephane  3600384 F.... hauru-top
+== hauru-top relancé ? ==
+3600384 ./GitHub/hauru-top/target/release/hauru-top
+3601725 bash -c echo "== qui tient /dev/nvidia* =="; fuser -v /dev/nvidiactl /dev/nvidia0 /dev/nvidia1 /dev/nvidia-uvm 2>&1 | head -10 echo "== hauru-top relancé ? =="; pgrep -a -f hauru-top | head -5 echo "== unités utilisateur =="; systemctl --user list-units --all 2>/dev/null | grep -i hauru | head -5 echo "== cron/autostart =="; grep -rl hauru ~/.config/autostart ~/.config/systemd 2>/dev/null | head -5
+== unités utilisateur ==
+  dev-disk-by\x2ddiskseq-1.device                                                                                                                   loaded    active   plugged   Patriot M.2 P320 256GB Hauru:IA
+  dev-disk-by\x2ddiskseq-2.device                                                                                                                   loaded    active   plugged   
+… [720 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"== arbre du processus ==\"; ps -o pid,ppid,user,etime,cmd -p 3600384 2>/dev/null\necho \"== parent ==\"; PPP=$(ps -o ppid= -p 3600384 2>/dev/null | tr -d ' '); echo \"PPID=$PPP\"; [ -n \"$PPP\" ] && ps -o pid,ppid,user,etime,cmd -p \"$PPP\" 2>/dev/null | tail -2\necho \"== grand- … [220 caractères tronqués]`
+
+  ```
+== arbre du processus ==
+    PID    PPID USER         ELAPSED CMD
+3600384    4399 stephane       04:04 ./GitHub/hauru-top/target/release/hauru-top
+== parent ==
+PPID=4399
+    PID    PPID USER         ELAPSED CMD
+   4399    4278 stephane  1-22:12:26 /bin/bash
+== grand-parent ==
+GPID=4278
+    PID    PPID USER         ELAPSED CMD
+   4278    2855 stephane  1-22:12:27 /usr/bin/konsole -session 10bd617572000179346854600001015070006_1793481209_55918
+  ```
+
+### 🤖 Assistant
+
+⏵ Séquence root : arrêt du moniteur, déchargement, rechargement
+
+- **bash** `{"command": "cat > /tmp/gpu-reset.sh <<'SH'\n#!/bin/bash\nexport PATH=/usr/sbin:/usr/bin:/sbin:/bin\necho \"=== 1. arrêt des consommateurs ===\"\npkill -f 'hauru-top/target/release/hauru-top' 2>/dev/null && echo \"hauru-top arrêté\" || echo \"hauru-top déjà absent\"\nsleep 1\nfuser /dev/nvidiactl /d … [1239 caractères tronqués]`
+
+  ```
+script prêt
+#!/bin/bash
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+echo "=== 1. arrêt des consommateurs ==="
+pkill -f 'hauru-top/target/release/hauru-top' 2>/dev/null && echo "hauru-top arrêté" || echo "hauru-top déjà absent"
+sleep 1
+  ```
+
+- **bash** `{"command": "cd /tmp\ntimeout 300 pkexec /bin/bash /tmp/gpu-reset.sh 2>&1\necho \"EXIT=$?\"", "description": "Run GPU recovery as root via pkexec", "timeoutMs": 320000}`
+
+  ```
+=== 1. arrêt des consommateurs ===
+hauru-top arrêté
+  encore ouvert par: /dev/nvidiactl:       1958
+  encore ouvert par: /dev/nvidia0:         1958
+  encore ouvert par: /dev/nvidia1:         1958
+=== 2. refcounts avant ===
+  nvidia_uvm 0
+  nvidia_drm 0
+  nvidia_modeset 3
+  nvidia 12
+=== 3. déchargement ===
+[still running after 320000ms; moved to background job bash-39]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Le déchargement se bloque — je vérifie l'état du noyau
+
+- **bash** `{"command": "echo \"== processus en D (bloqués noyau) ==\"; ps -eo pid,stat,wchan:30,cmd 2>/dev/null | awk '$2 ~ /D/' | head -10\necho \"== modprobe en cours ==\"; pgrep -a -f 'modprobe|gpu-reset' | head -5\necho \"== PID 1958 ==\"; ps -o pid,ppid,user,etime,cmd -p 1958 2>/dev/null | tail -2\necho \ … [177 caractères tronqués]`
+
+  ```
+== processus en D (bloqués noyau) ==
+== modprobe en cours ==
+1164 [kworker/R-amdgpu-reset-dev]
+3601862 bash -c cd /tmp timeout 300 pkexec /bin/bash /tmp/gpu-reset.sh 2>&1 echo "EXIT=$?"
+3601869 timeout 300 pkexec /bin/bash /tmp/gpu-reset.sh
+3601870 /bin/bash /tmp/gpu-reset.sh
+3601928 timeout 90 /sbin/modprobe -r nvidia_drm nvidia_modeset nvidia_uvm nvidia
+== PID 1958 ==
+    PID    PPID USER         ELAPSED CMD
+   1958       1 nvidia-+  1-22:19:20 /usr/bin/nvidia-persistenced --verbose
+== modules encore là ? ==
+  nvidia_uvm refs=0
+  nvidia_drm refs=-1
+  nvidia_modeset refs=3
+  nvidia refs=12
+== réactivité ==
+ 14:35:29  up 1 day 22:19,  2 users,  load average: 3,25, 3,52, 3,62
+  ```
+
+- **job_output** `{"job_id": "bash-39"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "echo \"== état du modprobe bloqué ==\"; ps -o pid,stat,wchan:40,etime,cmd -p 3601928 2>/dev/null | tail -2\necho \"== pile noyau de modprobe (si lisible) ==\"; cat /proc/3601928/stack 2>&1 | head -8\necho \"== threads noyau nvidia ==\"; ps -eo pid,stat,cmd 2>/dev/null | grep -iE 'nvidia … [235 caractères tronqués]`
+
+  ```
+== état du modprobe bloqué ==
+    PID STAT WCHAN                                        ELAPSED CMD
+3601928 S    -                                              05:24 timeout 90 /sbin/modprobe -r nvidia_drm nvidia_modeset nvidia_uvm nvidia
+== pile noyau de modprobe (si lisible) ==
+cat: /proc/3601928/stack: Permission denied
+== threads noyau nvidia ==
+   1821 S    [nv_queue]
+   1822 S    [nv_queue]
+   1823 S    [nv_open_q]
+   1826 S    [nv_open_q]
+   1838 S    [nvidia-modeset/kthread_q]
+   1839 S    [nvidia-modeset/deferred_close_kthread_q]
+   1862 S    [irq/152-nvidia]
+   1863 S    [nvidia]
+   1864 S    [nv_queue]
+   1870 S    [irq/153-nvidia]
+== nvidia-persistenced ==
+active
+● nvidia-persistenced.service - NVIDIA Persistence Daemon
+     Loaded: loaded (/usr/lib/systemd/system/nvidia-persistenced.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2026-10-31 17:16:08 EDT; 1 day 22h ago
+ Invocation: 1666cee6bcef4b37863224c47a758a6f
+    Process: 1890 ExecStart=/usr/bin/nvidia-persistenced --verbose (code=exited, status=0/SUCCESS)
+  ```
+
+- **bash** `{"command": "sleep 30\necho \"== la décharge a-t-elle abouti ? ==\"\npgrep -a -f 'modprobe -r' | head -3 || echo \"modprobe terminé\"\necho \"== modules ==\"; lsmod | grep '^nvidia' | awk '{print \"  \"$1\" refs=\"$3}'\necho \"== devices présents ==\"; ls /dev/nvidia* 2>&1 | tr '\\n' ' '\necho \"==  … [236 caractères tronqués]`
+
+  ```
+== la décharge a-t-elle abouti ? ==
+3601928 timeout 90 /sbin/modprobe -r nvidia_drm nvidia_modeset nvidia_uvm nvidia
+3601929 /sbin/modprobe -r nvidia_drm nvidia_modeset nvidia_uvm nvidia
+3602263 bash -c sleep 30 echo "== la décharge a-t-elle abouti ? ==" pgrep -a -f 'modprobe -r' | head -3 || echo "modprobe terminé" echo "== modules =="; lsmod | grep '^nvidia' | awk '{print "  "$1" refs="$3}' echo "== devices présents =="; ls /dev/nvidia* 2>&1 | tr '\n' ' ' echo "== travail en cours qui serait perdu au reboot ==" ps -eo pid,user,etime,cmd --sort=-%cpu 2>/dev/null | grep -vE 'grep|ps -eo' | awk 'NR==1 || $3 ~ /^[0-9]+:/' | head -8
+== modules ==
+  nvidia_uvm refs=0
+  nvidia_drm refs=-1
+  nvidia_modeset refs=3
+  nvidia refs=12
+== devices présents ==
+/dev/nvidia0 /dev/nvidia1 /dev/nvidiactl /dev/nvidia-modeset /dev/nvidia-uvm /dev/nvidia-uvm-tools  /dev/nvidia-caps: nvidia-cap1 nvidia-cap2 == travail en cours qui serait perdu au reboot ==
+    PID USER         ELAPSED CMD
+3601929 root           06:02 /sbin/modprobe -r nvidia_drm nvidia_modeset nvidia_uvm nvidia
+3602115 stephane       03:28 python3 -m tools.pensee.autotest
+3573290 stephane    01:10:56 /home/stephane/.local/share/pipx/ven
+… [336 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Capture du diagnostic NVIDIA avant décision
+
+- **bash** `{"command": "ls -l /usr/bin/nvidia-bug-report.sh 2>/dev/null || echo \"absent\"\ntimeout 120 nvidia-bug-report.sh --verbose /tmp 2>&1 | tail -5\nls -lh /tmp/nvidia-bug-report*.log* 2>/dev/null | tail -3", "description": "Generate NVIDIA bug report for post-mortem", "timeoutMs": 140000}`
+
+  ```
+-rwxr-xr-x. 1 root root 80754 22 oct 10:25 /usr/bin/nvidia-bug-report.sh
+     Skips queries known to cause hangs on certain systems.
+
+  3) sudo ./nvidia-bug-report.sh --extra-system-data --output-file custom_report
+     Gathers extended kernel info into 'custom_report.log.gz' (compressed if possible).
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 180 nvidia-bug-report.sh --output-file /tmp/nvidia-bug-report 2>&1 | tail -6; ls -lh /tmp/nvidia-bug-report*.log* 2>/dev/null | tail -3", "description": "Run bug report with correct output flag", "timeoutMs": 200000}`
+
+  ```
+ERROR: Please run nvidia-bug-report.sh as root.
+  ```
+
+- **bash** `{"command": "cd /tmp && timeout 240 pkexec /bin/bash /usr/bin/nvidia-bug-report.sh --output-file /tmp/nvidia-bug-report 2>&1 | tail -6; ls -lh /tmp/nvidia-bug-report*.log* 2>/dev/null | tail -3", "description": "Generate bug report as root via pkexec", "timeoutMs": 260000}`

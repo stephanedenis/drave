@@ -1980,7 +1980,7 @@ def t134_lien_coref() -> tuple[bool, str]:
     from ..tests.linguistique.miroir import mesurer_lien_coref
     ph = [p for p in charger() if 301 <= int(p["id"][1:]) <= 427]
     r = mesurer_lien_coref(ph)
-    return r["liens"] == 116 and r["avec_phrase"] == 62, (
+    return r["liens"] == 116 and r["avec_phrase"] == 65, (
         f"coréf-lien : {r['avec_phrase']}/{r['liens']} ({r['taux']})")
 
 
@@ -1990,9 +1990,18 @@ def t135_liens_classes() -> tuple[bool, str]:
     from ..tests.linguistique.miroir import classer_liens_coref
     ph = [p for p in charger() if 301 <= int(p["id"][1:]) <= 427]
     r = classer_liens_coref(ph)
-    return (r["liens"] == 116 and r["intra"] == 50 and r["inter"] == 62
-            and r["absent"] == 4), (
+    return (r["liens"] == 116 and r["intra"] == 51 and r["inter"] == 65
+            and r["absent"] == 0), (
         f"liens : {r['intra']} intra, {r['inter']} inter, {r['absent']} absents")
+
+
+def t136_absents() -> tuple[bool, str]:
+    """Les absents : 0, les quatre étaient des faux."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import liens_absents
+    ph = [p for p in charger() if 301 <= int(p["id"][1:]) <= 427]
+    absents = liens_absents(ph)
+    return len(absents) == 0, f"absents : {len(absents)} (les 4 étaient des faux)"
 
 
 def main() -> int:
@@ -2129,7 +2138,8 @@ def main() -> int:
               ("T132 lien auto", t132_lien_auto()),
               ("T133 lien réparé", t133_lien_auto_fixe()),
               ("T134 lien coréf", t134_lien_coref()),
-              ("T135 liens classés", t135_liens_classes())]
+              ("T135 liens classés", t135_liens_classes()),
+              ("T136 absents", t136_absents())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
