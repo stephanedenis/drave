@@ -7,10 +7,10 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 42.6 h |
+| Durée | 42.8 h |
 | Tours | 386 |
-| Messages | 2335 |
-| Appels d'outils | 1552 |
+| Messages | 2336 |
+| Appels d'outils | 1553 |
 | Fichiers touchés | 26 |
 | Commandes | 1380 |
 | Sous-agents | 0 |
@@ -9111,7 +9111,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 
 ### Tour 386 — continue pendent 3h
 
-*15 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — First 5-min check of CEGEP lot 40
@@ -9128,7 +9128,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 
 **Synthèse produite :**
 
-⏵ Diagnostic : le 11e PDF est l'**Encyclopedia of Algorithms** (1 000+ pages, 870 rendues) — le stall est un gros rendu, pas un blocage
+⏵ Lot CEGEP : le rendu de l'Encyclopedia of Algorithms continue (job de vérification `bash-1380`)
 
 ## 3. Travail accompli
 

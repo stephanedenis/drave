@@ -50,6 +50,27 @@ def fidelite_pos(a: bl.Annotation, source: str) -> float:
     return 1.0 if rendre_pos(a) == " ".join(source.split()) else 0.0
 
 
+def rendre_pos_espaces(a: bl.Annotation, texte: str) -> str:
+    """La sortie POS **avec les intervalles d'origine** : les trous (ponctuation, espaces)
+    sont repris de la source, pas perdus."""
+    pos = sorted([e for e in a.etiquettes if e.niveau == "pos"],
+                 key=lambda e: (e.debut, e.fin))
+    out = []
+    last = 0
+    for e in pos:
+        if e.debut > last:
+            out.append(texte[last:e.debut])
+        out.append(texte[e.debut:e.fin])
+        last = max(last, e.fin)
+    if last < len(texte):
+        out.append(texte[last:])
+    return "".join(out)
+
+
+def fidelite_pos_espaces(a: bl.Annotation, source: str) -> float:
+    return 1.0 if rendre_pos_espaces(a, source) == source else 0.0
+
+
 def fluidite(a: bl.Annotation) -> float:
     """La part de la longueur restituée qui est du texte (pas des trous)."""
     r = rendre(a)
@@ -84,6 +105,9 @@ def main() -> int:
         fid_pos = sum(fidelite_pos(bloc.analyser(p["texte"], p["langue"]), p["texte"])
                       for p in ph) / max(1, len(ph))
         print(nom, "POS", round(fid_pos, 4))
+        fid_esp = sum(fidelite_pos_espaces(bloc.analyser(p["texte"], p["langue"]), p["texte"])
+                      for p in ph) / max(1, len(ph))
+        print(nom, "POS+espaces", round(fid_esp, 4))
     return 0
 
 

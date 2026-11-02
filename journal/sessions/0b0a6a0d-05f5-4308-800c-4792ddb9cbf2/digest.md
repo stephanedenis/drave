@@ -20359,3 +20359,37 @@ big60 3497464
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\na = \"canal + KD **ne s'additionnent pas** (N2.y : +0,12 à 512) |\"\nb = (\"canal + KD **ne s'additionnent pas** (N2.y : +0,12 à 512)  … [2020 caractères tronqués]`
+
+  ```
+roadmap ok
+en-cours ok
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 616 JSON, le disque en a 617
+[still running after 60000ms; moved to background job bash-1184]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1184", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+fff4825f ROADMAP — LA LEÇON DU CORPUS DE 831 Mo : LA DONNÉE DEMANDE PLUS DE PAS, PAS PLUS DE TEXTE
+pas 1950 · perte 1.8852 · PPL val 7.397 · 104 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n2w/big-60k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; ps -eo pid,etime,pcpu,rss,cmd | grep -E \"fr-60k|big-60k\" | grep -v grep | awk '{printf \"%s %s %s%% %sMo\\n\" … [88 caractères tronqués]`
+
+  ```
+0, 1322 MiB, 96 %
+1, 1 MiB, 0 %
+3497463 02:38 0.0% 2Mo
+3497464 02:38 0.0% 4Mo
+3497466 02:38 0.0% 4Mo
+3497467 02:38 100% 18250Mo
+3497468 02:38 97.5% 4018Mo
+11:18
+  ```
+
+- **bash** `{"command": "sleep 700; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Check the 60k trainings"}`

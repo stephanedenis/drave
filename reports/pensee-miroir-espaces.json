@@ -1,0 +1,14 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "121/121",
+ "surface": 1.0,
+ "mots": 0.2095,
+ "pos_join": 0.201,
+ "pos_espaces": 1.0,
+ "limites": [
+  "fidélité binaire",
+  "les spans sont copiés de la source",
+  "heuristique seule"
+ ]
+}

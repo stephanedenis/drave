@@ -1807,6 +1807,18 @@ def t117_miroir_pos() -> tuple[bool, str]:
     return abs(fid - 0.201) < 0.001, f"sortie POS : fidélité {round(fid, 4)}"
 
 
+def t118_miroir_espaces() -> tuple[bool, str]:
+    """La restitution POS avec les intervalles : 1,0."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_pos_espaces
+    ph = charger()
+    h = bl.Heuristique()
+    fid = sum(fidelite_pos_espaces(h.analyser(p["texte"], p["langue"]), p["texte"])
+              for p in ph) / max(1, len(ph))
+    return abs(fid - 1.0) < 1e-9, f"restitution POS + spans : {round(fid, 4)}"
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1923,7 +1935,8 @@ def main() -> int:
               ("T114 cascade + union", t114_cascade_union()),
               ("T115 tête cascade", t115_tete_cascade()),
               ("T116 miroir", t116_miroir()),
-              ("T117 sortie POS", t117_miroir_pos())]
+              ("T117 sortie POS", t117_miroir_pos()),
+              ("T118 restitution spans", t118_miroir_espaces())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

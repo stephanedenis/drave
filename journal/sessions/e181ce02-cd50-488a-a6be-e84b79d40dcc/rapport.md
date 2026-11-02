@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 42.6 h |
+| Durée | 42.7 h |
 | Tours | 136 |
-| Messages | 1631 |
-| Appels d'outils | 1403 |
+| Messages | 1635 |
+| Appels d'outils | 1407 |
 | Fichiers touchés | 25 |
-| Commandes | 1142 |
+| Commandes | 1145 |
 | Sous-agents | 2 |
-| Commits | 170 |
+| Commits | 172 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -7214,11 +7214,19 @@ Je continue : prochain round, **la restitution avec les espaces d'origine** — 
 
 ### Tour 136 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Mesurer la restitution POS avec les espaces d'origine
 - bash — Écrire la fiche de la restitution avec spans et la porte T118
 - bash — Trim README et passer toutes les portes
+- bash — Committer la restitution avec spans
+- bash — Mettre l'état à jour (horodatage et compteurs)
+- bash — Recommitter avec l'état à jour
+- job_output
+
+**Synthèse produite :**
+
+⏵ Contourner le refus de commit : mettre l'état à jour réellement
 
 ## 3. Travail accompli
 
@@ -7299,7 +7307,7 @@ Je continue : prochain round, **la restitution avec les espaces d'origine** — 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1102 autres
+- … et 1105 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7617,4 +7625,6 @@ Je continue : prochain round, **la restitution avec les espaces d'origine** — 
 - B13 — LA TÊTE DE LA CASCADE : LA CORRECTION DÉGRADE (0,419 CONTRE 0,441) ; 118/118" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "TÊTE DE LA CASCADE";
 - B13 — LE MIROIR ENTRÉE/SORTIE : SURFACE 1,0, MOTS 0,2095, LA FLUIDITÉ N'EST PAS LA FIDÉLITÉ ; 119/119" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "M
 - B13 — LA SORTIE POS : 0,201, LA RESTITUTION SÉMANTIQUE NE RESTITUE PAS ; 120/120" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SORTIE POS"; then echo
+- B13 — LA RESTITUTION AVEC SPANS : 1,0, LA PERTE ÉTAIT LE RENDU ; 121/121" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RESTITUTION AVEC SPANS"; then 
+- B13 — LA RESTITUTION AVEC SPANS : 1,0, LA PERTE ÉTAIT LE RENDU ; 121/121" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RESTITUTION AVEC SPANS"; then 
 
