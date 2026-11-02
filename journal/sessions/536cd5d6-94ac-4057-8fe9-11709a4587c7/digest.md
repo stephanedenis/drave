@@ -3301,3 +3301,213 @@ PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check s
 ⏵ Je commite les horodatages réels et je passe la vérification finale.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md journal/sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/c … [609 caractères tronqués]`
+
+  ```
+[exit 0]
+== status ==
+(fin)
+== log ==
+04d75114 ÉTAT — HORODATAGE RÉEL (16 h 09) APRÈS LA REPRISE ; LE FUTUR N'EST PAS UNE HEURE
+97d693b6 ÉTAT — T0 REVENU SOUS 4 000 (3 998) APRÈS LE RUNBOOK
+566ac478 HUB — LE RUNBOOK EST PUBLIÉ ; HEARTBEAT À JOUR, PROCHAINE ACTION LA PASSE DE PORTES
+== état ==
+  état · dernier fait 04d75114 · dernier état 04d75114
+  ✅ aucun fait commité après le dernier état
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3998 mots (budget 4 000)
+surveille-sessions · 1 session(s) active(s) · 0 fichier(s) en mouvement
+  536cd5d6-94ac-4057 · actif   ·   2 min · 10 réservation(s)
+  536cd5d6-94ac-4057 · 0 fichier(s) : 
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière passe des contrôles, puis je te donne le mode d'emploi des terminaux.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2 && python3 tools/verifie_journal.py 2>&1 | tail -2 && python3 tools/verifie_backlog.py 2>&1 | tail -2 && python3 tools/verifier_schemas.py 2>&1 | tail -2 && echo \"== commits ==\" & … [114 caractères tronqués]`
+
+  ```
+revue de documentation · 550 fiche(s) · 636 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  journal · 39 jour(s) · 112 session(s) · 1809 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+== commits ==
+04d75114 ÉTAT — HORODATAGE RÉEL (16 h 09) APRÈS LA REPRISE ; LE FUTUR N'EST PAS UNE HEURE
+97d693b6 ÉTAT — T0 REVENU SOUS 4 000 (3 998) APRÈS LE RUNBOOK
+566ac478 HUB — LE RUNBOOK EST PUBLIÉ ; HEARTBEAT À JOUR, PROCHAINE ACTION LA PASSE DE PORTES
+2dab14e4 PILOTAGE — L'ÉTAT REPREND : 140/140, N2.ac, DEUX SESSIONS EN PAUSE, PORTE STRICTE
+86cfb580 N2 — N2.ac EST LE MODÈLE DE PRODUCTION : LE MÉLANGE 1 Go, LE CANAL ET LA PÉNALITÉ
+ca06ab0b D — L'OCR CEGEP, LE GLOSSAIRE AU RENDU ET LES LIENS DE LA FAMILLE 13
+702b368c B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140
+  ```
+
+- **todo_write** `{"todos": [{"content": "Auditer sessions, état et pilotage", "status": "completed"}, {"content": "Créer le plan de la session hub 536cd5d6", "status": "completed"}, {"content": "Trier les 67 fichiers en flux B13 / D / N2 / hub", "status": "completed"}, {"content": "Réécrire en-cours avec les vrais c … [485 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 9 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie le nom du registre de portes pour que les instructions soient exactes.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'registre\\|REGISTRE' tools/toutes-les-portes.sh | head -10 && echo \"---\" && tail -20 tools/toutes-les-portes.sh", "description": "Check gate runner registry output"}`
+
+  ```
+69:    # ⚠️ LE REGISTRE, ET POURQUOI IL EXISTE. La synthèse ci-dessous part sur la SORTIE STANDARD ✗ — et
+75:    printf '%s %s %s\n' "$nom" "$code" "$dt" >> "$JOURNAUX/registre.txt"
+78:echo "--- $vertes vertes, $rouges rouges ---" | tee -a "$JOURNAUX/registre.txt"
+---
+    # une passe lancée avec `| tail` (ou dont on ne garde que la fin ✓) la perd ✗✓ : il ne reste alors
+    # que les journaux par porte, où le verdict ne se lit qu'au MARQUEUR (❌ ✓) — or l'audit du 16/10 a
+    # montré que le marqueur n'est PAS le critère ✓ (une porte peut échouer sans ❌ dans son source ✓,
+    # et le marqueur peut venir de l'outil qu'elle appelle ✓). Écrire le CODE DE SORTIE dans le dossier
+    # des journaux rend le verdict **relisible** ✓, quelle que soit la façon dont la passe a été lancée ✓.
+    printf '%s %s %s\n' "$nom" "$code" "$dt" >> "$JOURNAUX/registre.txt"
+done
+
+echo "--- $vertes vertes, $rouges rouges ---" | tee -a "$JOURNAUX/registre.txt"
+if [ "$rouges" != 0 ]; then
+    echo "À RELIRE (les six dernières lignes de chaque rouge) :"
+    for nom in $liste_rouges; do
+        echo "  --- $nom ---"
+        tail -6 "$JOURNAUX/$nom.log" | sed 's/^/    /'
+    done
+    echo "Journaux complets : $JO
+… [151 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reprise terminée : 7 commits, arbre propre, voici le mode d'emploi des terminaux.
+
+# Reprise faite — et comment ouvrir les autres sessions
+
+## 1. Ce qui est committé
+
+| commit | flux | contenu |
+|---|---|---|
+| `702b368c` | **B13** | T137 : 5 phrases sans antécédent, 0 lien ; gold **432**, 116 liens (51 intra, 65 inter), **140/140** |
+| `ca06ab0b` | **D** | OCR CEGEP 10 notes / 1 596 p / 2,52 M car. ; 20 entrées de glossaire, famille 13 ; docwatch **d256888** |
+| `86cfb580` | **N2** | N2.ac (1,02 Go, 60 k pas) : **3,49** domaine / **6,03** littérature — modèle de production ; canal + pénalité |
+| `2dab14e4` | **Pilotage** | état réécrit, roadmap/chantiers au 02/11, runbook §9, porte sessions stricte, INDEX 547 fiches |
+| `566ac478` · `97d693b6` · `04d75114` | **État** | heartbeat, T0 3 998/4 000, horodatage réel |
+
+**Arbre propre, 0 fichier en mouvement, 0 orphelin.** Verts : `revue_documentation`, `verifie_backlog`, `verifie_journal` (112 sessions, 1 809 liens), `taille_documents` (T0 **3 998**), `verifie_en_cours` (1 624 mots), `porte-sessions --strict`, `verifier_schemas`.
+
+**Pas encore lancé** : la passe complète des portes (`toutes-les-portes.sh`, ~1 h 46, à faire seule). La dernière est celle du **02/11 06 h** : 81 portes, 76 vertes, 5 rouges — les 4 connues + `porte-greffe` à 700 s, **rejouée verte à 1200 s**. C'est dans `references-non-regression.md`, et les journaux vont désormais dans `work/portes-*` (ils ne disparaissent plus au reboot).
+
+## 2. L'état des sessions maintenant
+
+| session | état | dernière trace | reprise | prochaine action |
+|---|---|---|---:|---|---|
+| **hub** `536cd5d6` | **actif** (16:09) | 16:01 | `--resume 536cd5d6-94ac-4057-8fe9-11709a4587c7` | passe complète + intégration |
+| **L/B13** `e181ce02` | **en pause** | 14:40 | `--resume e181ce02-cd50-488a-a6be-e84b79d40dcc` | gold neuronal ; DRVM bloqué |
+| **D/R/A** `fe3c05f0` | **en pause** | 13:25 | `--resume fe3c05f0-834b-44f2-8739-501865d652c1` | OCR ~127 scans CEGEP, clôture |
+| **N2** | **pas de session** | 13:37 (`0b0a6a0d`) | nouvelle session | 200 k pas sur le mélange 1 Go |
+| **S** | **pas de session** | — | nouvelle session | rôles/subordonnées, export |
+| `b6a672ec` | **close** | 14:41 | — | incident GPU, [clôture](../../journal/sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/cloture.md) |
+
+## 3. Les commandes
+
+| besoin | commande |
+|---|---|
+| **nouvelle** session | `dsh --profile dsh-tui` |
+| **reprendre** une session | `dsh --profile dsh-tui --resume <id>` |
+| voir les mandats | `python3 tools/sessions.py --status` |
+| vérifier les mandats | `python3 tools/sessions.py --check --strict` |
+| fichiers en mouvement | `python3 tools/surveille_sessions.py` |
+| avant un commit | `python3 tools/verifie_en_cours.py` · `python3 tools/revue_documentation.py` |
+| passe complète | `bash tools/toutes-les-portes.sh` puis `awk '$2 != 0' work/portes-*/registre.txt` |
+| index des fiches | `python3 tools/index_reports.py` |
+| sous-module docwatch | commit dans `tools/docwatch`, puis `git add tools/docwatch` |
+
+**Un terminal = une session.** Le heartbeat est dans le `plan.md` de chaque session ; une session active doit le rafraîchir (< 45 min), une session `en pause` n'en a plus besoin.
+
+## 4. Les quatre mandats — prompts à coller
+
+### N2 — le natif (GPU)
+
+```text
+Tu es la session N2 (le natif, GPU). Lis AGENTS.md, docs/pilotage/en-cours.md et
+docs/pilotage/backlog/N2-distillation.md. Ton id est dans `printenv DSH_SESSION_ID` ; crée
+journal/sessions/<id>/plan.md avec `python3 tools/sessions.py --modele` (les onze champs,
+État : actif, heartbeat maintenant), puis réserve `data/`, `tools/corpus*`, `reports/n2-*`,
+`work/n2*`. Prochaine action : 200 000 pas sur le mélange 1 Go (N2.ac : 3,49 domaine /
+6,03 littérature), puis R1.1/R1.2. Un fait = mesure + contrôle négatif + fiche + en-cours +
+commit (`git add` explicite). Ne touche pas à en-cours, roadmap, chantiers, AGENTS sans le hub.
+À la fin du cycle, rends ta ligne d'état et le hash du commit.
+```
+
+### S — les structures (CPU)
+
+```text
+Tu es la session S (les structures, CPU). Lis AGENTS.md, docs/pilotage/en-cours.md,
+docs/theorie/jeux-symboliques.md et tools/structures/ (sous-module heads/fusion). Ton id est
+dans `printenv DSH_SESSION_ID` ; crée journal/sessions/<id>/plan.md avec
+`python3 tools/sessions.py --modele` (État : actif, heartbeat maintenant), réserve
+`tools/structures/`, ses exports et sa banque. Prochaine action : analyseur rôles/subordonnées,
+puis export au corpus ; 19 tests à garder verts. Le sous-module se commit dans son dépôt avant
+de bouger le pointeur. Un fait = mesure + contrôle + fiche + en-cours + commit (`git add`
+explicite). Ne touche pas à en-cours/roadmap/AGENTS sans le hub.
+```
+
+### L/B13 — reprendre `e181ce02`
+
+```text
+Tu reprends la session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`. Lis son plan, AGENTS.md
+et docs/pilotage/en-cours.md. Remets `- **État** : actif` et `- **Heartbeat** : <maintenant>`
+dans son plan, puis vérifie `python3 tools/sessions.py --check --strict`. Le cycle 140/140
+(gold 432, 116 liens) est committé. Prochaine action : gold neuronal (qualifier un modèle
+local) ; DRVM/native est bloqué par l'absence de poids/tagger. Un fait = mesure + contrôle +
+fiche + en-cours + commit (`git add` explicite).
+```
+
+### D/R/A — reprendre `fe3c05f0`
+
+```text
+Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md
+et en-cours. Remets `État : actif` et heartbeat maintenant, puis
+`sessions.py --check --strict`. Le texte intégral, le PDF, les 20 livres, les 10 notes CEGEP,
+le glossaire (355 entrées) et docwatch sont committés. Prochaine action : OCR ~127 scans CEGEP
+(`tools/ocr_pdf.py --racine CEGEP --deja <N>`), puis la clôture de la session. Un fait =
+mesure + contrôle + fiche + en-cours + commit.
+```
+
+### Hub — reprendre `536cd5d6`
+
+```text
+Tu reprends le hub `536cd5d6-94ac-4057-8fe9-11709a4587c7`. Lis son plan, en-cours et
+plan-travail §9. Prochaine action : la passe de portes complète
+(`bash tools/toutes-les-portes.sh`, ~1 h 46, machine au repos), puis l'intégration des lignes
+d'état des sessions ouvertes. Rafraîchis le heartbeat.
+```
+
+**Ordre conseillé** : **N2 d'abord** (la valeur), puis **S** ou **L/B13**, puis **D/R/A**. Deux ou trois sessions suffisent ; la quatrième coûte plus en coordination qu'elle ne rapporte. Ne lance pas la passe complète pendant que N2 entraîne (GPU).
+
+## 5. Le protocole d'état
+
+- **Une seule session écrit `en-cours` à la fois.** Les autres préparent leur bloc et le remettent au hub ; si elles écrivent, c'est hors de la fenêtre d'intégration et le hub relit.
+- **`git add` explicite**, jamais `-A` ; en cas de course, relire HEAD et refaire l'index (index alterné `GIT_INDEX_FILE=/tmp/index.<session>`), jamais de `git reset` sur le travail d'une autre.
+- **Committer avant de rebooter** : le reboot du 02/11 a laissé 67 fichiers non committés.
+- **Le hook** archive le journal et exige la ligne d'état pour tout fait ; s'il refuse, mettre `en-cours` à jour, `git add docs/pilotage/en-cours.md`, recommiter.
+- **docwatch** : commit dans le sous-module, puis le pointeur dans le superprojet.
+
+## 6. Les marges — attention
+
+- `en-cours` est à **1 624 mots** et le T0 à **3 998/4 000** : ajouter une section de session exige de **couper ailleurs**. Les nouvelles sessions doivent proposer un bloc court ; le hub élague.
+- `references-non-regression.md` : **2 499/2 500 mots** ; `reports/README.md` : **2 793/2 800**. Toute addition demande une coupe.
+- Les **cellules géantes** B13/N2 de la roadmap (2 363 et 3 163 caractères) restent à dégraisser : c'est le prochain nettoyage, pas fait.
+- La **5ᵉ rouge** `porte-greffe` est un délai, pas une mesure : si elle revient à 700 s, relancer à 1200 s.
+- Le **heartbeat du hub** sera périmé dans 45 min : si tu fermes ce terminal, passe-le `en pause` ou reprends-le ; la porte stricte le signalera.
+- Vérifie `nvidia-smi` avant N2 : les deux cartes sont saines (1 Mio, 0 %), mais l'incident est récent.
+
+Le runbook durable est dans [`docs/pilotage/plan-travail.md`](../plan-travail.md) § 9 (committé). Ce message n'en est qu'une copie.
+

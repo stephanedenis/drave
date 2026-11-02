@@ -7,12 +7,12 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 0.6 h |
+| Durée | 0.7 h |
 | Tours | 2 |
-| Messages | 87 |
-| Appels d'outils | 121 |
+| Messages | 91 |
+| Appels d'outils | 124 |
 | Fichiers touchés | 4 |
-| Commandes | 99 |
+| Commandes | 101 |
 | Sous-agents | 0 |
 | Commits | 8 |
 | Compactages de contexte | 0 |
@@ -88,7 +88,7 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 
 ### Tour 2 — vas-y et donne moi des instructions pour que je démarre ou récupère d'autre sessions dans d'autres terminaux
 
-*63 appels d'outils.* Actions notables :
+*66 appels d'outils.* Actions notables :
 
 - bash — Inspect DSH env vars and pre-commit hook
 - bash — Check DSH CLI usage for starting and resuming sessions
@@ -104,11 +104,47 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py`
 - bash — Locate state constants for editing
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py`
-- … et 47 autres
+- … et 49 autres
 
 **Synthèse produite :**
 
-⏵ Je commite les horodatages réels et je passe la vérification finale.
+⏵ Reprise terminée : 7 commits, arbre propre, voici le mode d'emploi des terminaux.
+
+\# Reprise faite — et comment ouvrir les autres sessions
+
+\## 1. Ce qui est committé
+
+| commit | flux | contenu |
+|---|---|---|
+| `702b368c` | **B13** | T137 : 5 phrases sans antécédent, 0 lien ; gold **432**, 116 liens (51 intra, 65 inter), **140/140** |
+| `ca06ab0b` | **D** | OCR CEGEP 10 notes / 1 596 p / 2,52 M car. ; 20 entrées de glossaire, famille 13 ; docwatch **d256888** |
+| `86cfb580` | **N2** | N2.ac (1,02 Go, 60 k pas) : **3,49** domaine / **6,03** littérature — modèle de production ; canal + pénalité |
+| `2dab14e4` | **Pilotage** | état réécrit, roadmap/chantiers au 02/11, runbook §9, porte sessions stricte, INDEX 547 fiches |
+| `566ac478` · `97d693b6` · `04d75114` | **État** | heartbeat, T0 3 998/4 000, horodatage réel |
+
+**Arbre propre, 0 fichier en mouvement, 0 orphelin.** Verts : `revue_documentation`, `verifie_backlog`, `verifie_journal` (112 sessions, 1 809 liens), `taille_documents` (T0 **3 998**), `verifie_en_cours` (1 624 mots), `porte-sessions --strict`, `verifier_schemas`.
+
+**Pas encore lancé** : la passe complète des portes (`toutes-les-portes.sh`, ~1 h 46, à faire seule). La dernière est celle du **02/11 06 h** : 81 portes, 76 vertes, 5 rouges — les 4 connues + `porte-greffe` à 700 s, **rejouée verte à 1200 s**. C'est dans `references-non-regression.md`, et les journaux vont désormais dans `work/portes-*` (ils ne disparaissent plus au reboot).
+
+\## 2. L'état des sessions maintenant
+
+| session | état | dernière trace | reprise | prochaine action |
+|---|---|---|---:|---|---|
+| **hub** `536cd5d6` | **actif** (16:09) | 16:01 | `--resume 536cd5d6-94ac-4057-8fe9-11709a4587c7` | passe complète + intégration |
+| **L/B13** `e181ce02` | **en pause** | 14:40 | `--resume e181ce02-cd50-488a-a6be-e84b79d40dcc` | gold neuronal ; DRVM bloqué |
+| **D/R/A** `fe3c05f0` | **en pause** | 13:25 | `--resume fe3c05f0-834b-44f2-8739-501865d652c1` | OCR ~127 scans CEGEP, clôture |
+| **N2** | **pas de session** | 13:37 (`0b0a6a0d`) | nouvelle session | 200 k pas sur le mélange 1 Go |
+| **S** | **pas de session** | — | nouvelle session | rôles/subordonnées, export |
+| `b6a672ec` | **close** | 14:41 | — | incident GPU, [clôture](../../journal/sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/cloture.md) |
+
+\## 3. Les commandes
+
+| besoin | commande |
+|---|---|
+| **nouvelle** session | `dsh --profile dsh-tui` |
+| **reprendre** une session | `dsh --profile dsh-tui --resume <id>` |
+| voi
+… [5623 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -163,7 +199,7 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 59 autres
+- … et 61 autres
 
 ## 4. Mesures et résultats marquants
 

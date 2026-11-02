@@ -15,13 +15,13 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-02 07:50 EST
+- **Heartbeat** : 2026-11-02 16:16 EST
 - **Prochaine action** : le cycle **140/140** (T137, gold 432, 116 liens) est committé par le hub ;
   reprendre par le **gold neuronal** (qualifier un modèle local) puis **DRVM/native** (bloqué) ;
   la cascade mesurée reste la lecture.
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — dernière trace 14 h 40 ; **en pause** ; reprise par
   `dsh --profile dsh-tui --resume e181ce02-cd50-488a-a6be-e84b79d40dcc` ; rafraîchir le heartbeat.
-- **État** : en pause
+- **État** : actif
 - **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
   stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
   (BFS, greedy, A*, MCTS-lite)~~ ; 5) ~~AC-3, alpha-bêta~~ (**8/8**) ; ~~DRVF~~ (**9/9**) ; 6) **banc anytime** (AUC,
