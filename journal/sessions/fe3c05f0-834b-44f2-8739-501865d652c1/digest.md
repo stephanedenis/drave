@@ -34639,3 +34639,13 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; tail -4 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; ls -la reports/ocr-pdf-cegep.json 2>&1", "description": "Wait 8 min then check CEGEP 8 progress", "timeoutMs": 540 … [66 caractères tronqués]`
+
+  ```
+07:01
+  CEGEP · Exercices de synthèse Excel 2010 Fonctio · 43 p · 81675 car
+    PID            
+3011320       08:33
+-rw-r--r--. 1 stephane stephane 2416  2 nov 06:23 reports/ocr-pdf-cegep.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 540; date '+%H:%M'; tail -5 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; ls -la reports/ocr-pdf-cegep.json 2>&1; python3 -c \"\nimport json\ntry:\n    d=json.load(open('reports/ocr-pdf-ce … [294 caractères tronqués]`

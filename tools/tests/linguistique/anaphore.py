@@ -115,6 +115,48 @@ def resoudre_semantique(mots: list[dict], segments: list[dict]) -> dict[str, str
     return liens
 
 
+def resoudre_meta(mots: list[dict], segments: list[dict]) -> dict[str, str]:
+    """Méta-règle : vote majoritaire des quatre règles, égalité → dernier nom."""
+    regles = [resoudre(mots, ignorer_pp=True), resoudre_roles(mots, segments),
+              resoudre_hybride(mots, segments), resoudre_semantique(mots, segments)]
+    pronoms = set()
+    for r in regles:
+        pronoms.update(r)
+    liens = {}
+    for p in pronoms:
+        votes = {}
+        for r in regles:
+            if p in r:
+                votes[r[p]] = votes.get(r[p], 0) + 1
+        if votes:
+            meilleur = max(votes.values())
+            cands = [c for c, n in votes.items() if n == meilleur]
+            liens[p] = (regles[0].get(p) if p in regles[0] and regles[0][p] in cands
+                        else cands[0])
+    return liens
+
+
+def mesurer_meta(phrases: list[dict]) -> dict:
+    """Compare `resoudre_meta` aux liens du gold."""
+    total = justes = phrases_avec = 0
+    details = []
+    for phrase in phrases:
+        attendu = (phrase.get("pragma") or {}).get("coref") or {}
+        if not attendu:
+            continue
+        phrases_avec += 1
+        obtenu = resoudre_meta(phrase["mots"], phrase["segments"])
+        for pronom, cible in attendu.items():
+            total += 1
+            if obtenu.get(pronom) == cible:
+                justes += 1
+            else:
+                details.append({"id": phrase["id"], "pronom": pronom,
+                                "attendu": cible, "obtenu": obtenu.get(pronom)})
+    return {"phrases": phrases_avec, "liens": total, "justes": justes,
+            "taux": round(justes / total, 4) if total else 0.0, "erreurs": details}
+
+
 def _liens_attendus(phrases: list[dict]) -> list[tuple]:
     liens = []
     for phrase in phrases:

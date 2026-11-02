@@ -15,14 +15,13 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-anaphore-meta.md`](rapport-pensee-anaphore-meta.md) | **B13** — la méta-règle : 25/30, le vote ne bat pas le dernier nom, **105/105** |
 | [`rapport-pensee-anaphore-kappa.md`](rapport-pensee-anaphore-kappa.md) | **B13** — l'accord entre règles : κ de −0,16 à 1,0, **104/104** |
 | [`rapport-pensee-anaphore-limite.md`](rapport-pensee-anaphore-limite.md) | **B13** — le plafond du gold : 27/30, quatre règles divergent, **103/103** |
 | [`rapport-pensee-anaphore-semantique.md`](rapport-pensee-anaphore-semantique.md) | **B13** — la sémantique des verbes : 23/30, le dernier nom reste le meilleur, **102/102** |
 | [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, **87/87** |
 | [`rapport-pensee-courbe20.md`](rapport-pensee-courbe20.md) | **B13** — la courbe sur 20 graines : 20 % à 0,35, 100 % à 0,41, **86/86** |
 | [`rapport-pensee-seuil.md`](rapport-pensee-seuil.md) | **B13** — le seuil d'oubli : ×0,5 réussit, ×0,2 échoue, seuil dans (0,2 ; 0,5], **74/74** |
-| [`rapport-pensee-oubli-total.md`](rapport-pensee-oubli-total.md) | **B13** — l'oubli total : 0/20 buts, la mémoire est nécessaire, **73/73** |
-| [`rapport-pensee-oubli-fort.md`](rapport-pensee-oubli-fort.md) | **B13** — la mémoire très courte : Q × 0,5/10, 20/20, 8,0 pas, **72/72** |
 | [`rapport-pensee-oubli.md`](rapport-pensee-oubli.md) | **B13** — la mémoire courte : Q × 0,9/10, 20/20, 10,0 pas, **71/71** |
 | [`rapport-pensee-look-tardif.md`](rapport-pensee-look-tardif.md) | **B13** — le look tardif : à l'épisode 3000, v final 0,54, 20/20, 8,0 pas, **70/70** |
 | [`rapport-pensee-un-look.md`](rapport-pensee-un-look.md) | **B13** — un seul look : 1/4000, v final 0,44, 20/20, 8,0 pas, **69/69** |

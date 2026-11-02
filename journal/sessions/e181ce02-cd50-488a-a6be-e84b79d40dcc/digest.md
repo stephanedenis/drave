@@ -27199,3 +27199,152 @@ timeout 1800 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/anaphore.py tools/pensee/autotest.py reports/rapport-pensee-anaphore-kappa.md reports/pensee-anaphore-kappa.json reports/README.md docs/implantation/moteur-de-pensee.md d … [531 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1037]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1037", "timeout_ms": 600000, "wait": true}`
+
+  ```
+27 files changed, 548 insertions(+), 70 deletions(-)
+ create mode 100644 reports/pensee-anaphore-kappa.json
+ create mode 100644 reports/rapport-pensee-anaphore-kappa.md
+COMMIT OK 1
+0993b2eb B13 — L'ACCORD ENTRE RÈGLES : κ DE −0,16 À 1,0, LE DÉSACCORD EST UNE RÈGLE ; 104/104
+lun 02 nov 2026 06:57:13 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Accord entre règles : κ de −0,16 à 1,0, le désaccord est une règle ; 104/104
+
+Le round 105 du goal est livré : les **kappas** montrent que `role` = `sémantique` (κ = 1,0) et que le dernier nom est **anti-corrélé** aux autres (κ ≈ −0,16) — le désaccord est une règle, pas du bruit. Commit **`0993b2eb`**.
+
+## Les kappas
+
+| paire | κ |
+|---|---:|
+| role / sémantique | **1,00** |
+| role / hybride | 0,90 |
+| hybride / sémantique | 0,90 |
+| dernier nom / role | **−0,16** |
+| dernier nom / hybride | −0,15 |
+| dernier nom / sémantique | **−0,16** |
+
+**Ce que ça dit** :
+
+- **`role` et `sémantique` sont la même règle** sur ce gold (κ = 1,0) : la table sémantique n'ajoute rien aux rôles des segments.
+- **`hybride` est presque `role`** (0,90) : il n'emprunte à la proximité que pour l'objet.
+- **Le dernier nom est une autre règle** (κ négatif) : il se trompe **là où les autres réussissent** et vice-versa — c'est la définition d'une règle complémentaire.
+- **La négative est explicite** : κ = −0,16, pas 0.
+
+## L'état
+
+- Fiche : [`rapport-pensee-anaphore-kappa.md`](../../reports/rapport-pensee-anaphore-kappa.md) ; JSON [`pensee-anaphore-kappa.json`](../../reports/pensee-anaphore-kappa.json) ; T101 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **104/104 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **511 fiches / 599 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 580 mots, T0 dans le budget.
+- L'horloge réelle est **06 h 57 HNE** (la deadline 08:00 est encore devant) ; l'autotest prend **~18 min**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Un vote pondéré** : les règles en désaccord, une méta-règle (forêt) ; mesurer.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round construit la **méta-règle** (le vote pondéré des quatre) — la seule façon de dépasser 27/30.
+
+
+## Tour 119
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 106/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/anaphore.py'); t=p.read_text()\nt=t.replace('''def _liens_attendus(phrases: list[dict]) -> list[tuple]:''',\n'''def resoudre_meta(mots: list[dict], segments:  … [2175 caractères tronqués]`
+
+  ```
+25 / 30 [{'id': 'r321', 'pronom': 'il', 'attendu': 'chien', 'obtenu': 'chat'}, {'id': 'r322', 'pronom': 'il', 'attendu': 'chat', 'obtenu': 'chien'}, {'id': 'r323', 'pronom': 'elle', 'attendu': 'sophie', 'obtenu': 'marie'}, {'id': 'r327', 'pronom': 'she', 'attendu': 'sophie', 'obtenu': 'marie'}, {'id': 'r342', 'pronom': 'she', 'attendu': 'marie', 'obtenu': 'paul'}]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T101 l'accord (kappa)            role/sémantique 1,0 ; dernier/role -0,16\\n\",\n\"  T101 l'accord (kappa)            role … [7228 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 512 fiche(s) · 600 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2816 mots > budget 2800 (T1)
+  en-cours · 1580 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-courbe-seuil.md`](rapport-pensee-courbe-seuil.md) | **B13** — la courbe du seuil : 0,35→0,50, 0 → 80 % → 100 %,  … [779 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 violation(s) :
+     · reports/README.md : 2816 mots > budget 2800 (T1)
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1800 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o 'rapport-pensee-[a-z0-9-]*\\.md' reports/README.md | sort -u | head -40", "description": "Lister les fiches présentes dans le README"}`
+
+  ```
+rapport-pensee-ac3-alphabeta.md
+rapport-pensee-alternance.md
+rapport-pensee-anaphore-kappa.md
+rapport-pensee-anaphore-limite.md
+rapport-pensee-anaphore-meta.md
+rapport-pensee-anaphore-semantique.md
+rapport-pensee-asym.md
+rapport-pensee-audit.md
+rapport-pensee-banc.md
+rapport-pensee-bord-fin.md
+rapport-pensee-chaotique.md
+rapport-pensee-correction.md
+rapport-pensee-courbe20.md
+rapport-pensee-courbe.md
+rapport-pensee-derive.md
+rapport-pensee-drvf.md
+rapport-pensee-frequent.md
+rapport-pensee-gold-linguistique.md
+rapport-pensee-graines.md
+rapport-pensee-intra.md
+rapport-pensee-labyrinthe.md
+rapport-pensee-look-tardif.md
+rapport-pensee-minute-entrainee.md
+rapport-pensee-mlp.md
+rapport-pensee-necessaire.md
+rapport-pensee-operateurs.md
+rapport-pensee-oubli-fort.md
+rapport-pensee-oubli.md
+rapport-pensee-oubli-total.md
+rapport-pensee-phase-graines.md
+rapport-pensee-phase.md
+rapport-pensee-porte-apprise.md
+rapport-pensee-porte.md
+rapport-pensee-professeur.md
+rapport-pensee-rapide.md
+rapport-pensee-rare.md
+rapport-pensee-reseau.md
+rapport-pensee-rupture.md
+rapport-pensee-sans-none.md
+rapport-pensee-seuil.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-oubli-fort.md`](rapport-pensee-oubli-fort.md) | **B13** — la mémoire très courte : Q × 0,5/10, 20/20, 8,0 pas, * … [1086 caractères tronqués]`

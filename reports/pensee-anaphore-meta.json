@@ -1,0 +1,18 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "105/105",
+ "regles": {
+  "dernier_nom": 27,
+  "role": 23,
+  "hybride": 24,
+  "semantique": 23,
+  "meta": 25
+ },
+ "meilleure": "dernier_nom",
+ "limites": [
+  "30 liens",
+  "vote non pondéré",
+  "heuristique seule"
+ ]
+}

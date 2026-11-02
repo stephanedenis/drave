@@ -18865,3 +18865,10 @@ Fichiers conservés dans /tmp/tmp.dKk1pSV1os
   ```
 
 - **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt | head -6; tail -1 /tmp/portes-fin.out", "description": "Wait for the main gates pass to finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1108]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1108", "timeout_ms": 1500000, "wait": true}`

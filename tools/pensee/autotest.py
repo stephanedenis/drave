@@ -1556,6 +1556,17 @@ def t101_kappa() -> tuple[bool, str]:
         f"dernier/role {paires['dernier_nom/role']}")
 
 
+def t102_meta() -> tuple[bool, str]:
+    """La méta-règle : vote majoritaire des quatre, 25/30."""
+    from ..tests.linguistique.anaphore import mesurer_meta
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 342]
+    r = mesurer_meta(ps)
+    return r["liens"] == 30 and r["justes"] == 25, (
+        f"méta : {r['justes']}/{r['liens']} liens justes")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1656,7 +1667,8 @@ def main() -> int:
               ("T98 hybride", t98_hybride()),
               ("T99 sémantique", t99_semantique()),
               ("T100 plafond du gold", t100_plafond()),
-              ("T101 accord kappa", t101_kappa())]
+              ("T101 accord kappa", t101_kappa()),
+              ("T102 méta-règle", t102_meta())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

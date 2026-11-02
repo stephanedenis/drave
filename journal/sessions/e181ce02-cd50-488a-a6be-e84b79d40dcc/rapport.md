@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 38.3 h |
-| Tours | 118 |
-| Messages | 1466 |
-| Appels d'outils | 1277 |
+| Durée | 38.4 h |
+| Tours | 119 |
+| Messages | 1474 |
+| Appels d'outils | 1283 |
 | Fichiers touchés | 25 |
-| Commandes | 1037 |
+| Commandes | 1042 |
 | Sous-agents | 2 |
-| Commits | 154 |
+| Commits | 155 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -267,6 +267,8 @@
 **Tour 117** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 118** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 119** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6276,6 +6278,57 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round **arbitre les cas ambigu
 - bash — Committer l'accord kappa
 - job_output
 
+**Synthèse produite :**
+
+⏵ Accord entre règles : κ de −0,16 à 1,0, le désaccord est une règle ; 104/104
+
+Le round 105 du goal est livré : les **kappas** montrent que `role` = `sémantique` (κ = 1,0) et que le dernier nom est **anti-corrélé** aux autres (κ ≈ −0,16) — le désaccord est une règle, pas du bruit. Commit **`0993b2eb`**.
+
+\## Les kappas
+
+| paire | κ |
+|---|---:|
+| role / sémantique | **1,00** |
+| role / hybride | 0,90 |
+| hybride / sémantique | 0,90 |
+| dernier nom / role | **−0,16** |
+| dernier nom / hybride | −0,15 |
+| dernier nom / sémantique | **−0,16** |
+
+**Ce que ça dit** :
+
+- **`role` et `sémantique` sont la même règle** sur ce gold (κ = 1,0) : la table sémantique n'ajoute rien aux rôles des segments.
+- **`hybride` est presque `role`** (0,90) : il n'emprunte à la proximité que pour l'objet.
+- **Le dernier nom est une autre règle** (κ négatif) : il se trompe **là où les autres réussissent** et vice-versa — c'est la définition d'une règle complémentaire.
+- **La négative est explicite** : κ = −0,16, pas 0.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-kappa.md`](../../reports/rapport-pensee-anaphore-kappa.md) ; JSON [`pensee-anaphore-kappa.json`](../../reports/pensee-anaphore-kappa.json) ; T101 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **104/104 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **511 fiches / 599 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 580 mots, T0 dans le budget.
+- L'horloge réelle est **06 h 57 HNE** (la deadline 08:00 est encore devant) ; l'autotest prend **~18 min**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Un vote pondéré** : les règles en désaccord, une méta-règle (forêt) ; mesurer.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round construit la **méta-règle** (le vote pondéré des quatre) — la seule façon de dépasser 27/30.
+
+### Tour 119 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Implémenter la méta-règle et mesurer
+- bash — Écrire la fiche de la méta-règle
+- bash — Trim README et passer les portes
+- bash — Lister les fiches présentes dans le README
+- bash — Trim README et committer la méta-règle
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6355,7 +6408,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round **arbitre les cas ambigu
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 997 autres
+- … et 1002 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6657,4 +6710,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round **arbitre les cas ambigu
 - ÉTAT — COMPTEURS (509/597) ET EN-COURS COMPACTÉ (T0)" 2>&1 | tail -2; git log -1 --format='%h %s'; date
 - B13 — LE PLAFOND DU GOLD : 27/30, QUATRE RÈGLES DIVERGENT ; 103/103" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PLAFOND DU GOLD"; then echo "COMMIT
 - B13 — L'ACCORD ENTRE RÈGLES : κ DE −0,16 À 1,0, LE DÉSACCORD EST UNE RÈGLE ; 104/104" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "L'ACCORD ENTRE RÈG
+- B13 — LA MÉTA-RÈGLE : 25/30, LE VOTE NE BAT PAS LE DERNIER NOM ; 105/105" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MÉTA-RÈGLE"; then echo "COMMIT
 
