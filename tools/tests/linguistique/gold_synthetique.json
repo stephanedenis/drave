@@ -1,0 +1,9296 @@
+{
+ "version": 1,
+ "source": "synthetique",
+ "graine": 42,
+ "note": "160 phrases d'une grammaire indépendante ; lexique disjoint de l'heuristique.",
+ "phrases": [
+  {
+   "id": "s001",
+   "langue": "fr",
+   "texte": "nous compte avec il",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "nous",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 11
+    },
+    {
+     "texte": "avec",
+     "pos": "PREP",
+     "debut": 12,
+     "fin": 16
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 17,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "nous",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "compte",
+     "role": "gv",
+     "debut": 5,
+     "fin": 11
+    },
+    {
+     "type": "GP",
+     "texte": "avec il",
+     "role": "gp",
+     "debut": 12,
+     "fin": 19
+    }
+   ]
+  },
+  {
+   "id": "s002",
+   "langue": "fr",
+   "texte": "vous peut saute",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "vous",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "peut",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "texte": "saute",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 15
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "vous",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "peut saute",
+     "role": "gv",
+     "debut": 5,
+     "fin": 15
+    }
+   ]
+  },
+  {
+   "id": "s003",
+   "langue": "fr",
+   "texte": "Emma saute vers Hugo",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Emma",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "saute",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 10
+    },
+    {
+     "texte": "vers",
+     "pos": "PREP",
+     "debut": 11,
+     "fin": 15
+    },
+    {
+     "texte": "Hugo",
+     "pos": "NOUN",
+     "debut": 16,
+     "fin": 20
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Emma",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "saute",
+     "role": "gv",
+     "debut": 5,
+     "fin": 10
+    },
+    {
+     "type": "GP",
+     "texte": "vers Hugo",
+     "role": "gp",
+     "debut": 11,
+     "fin": 20
+    }
+   ]
+  },
+  {
+   "id": "s004",
+   "langue": "fr",
+   "texte": "mon calme voyage doit ouvre",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "calme",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "voyage",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "texte": "doit",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 21
+    },
+    {
+     "texte": "ouvre",
+     "pos": "VERB",
+     "debut": 22,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon calme voyage",
+     "role": "gn",
+     "debut": 0,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "doit ouvre",
+     "role": "gv",
+     "debut": 17,
+     "fin": 27
+    }
+   ]
+  },
+  {
+   "id": "s005",
+   "langue": "fr",
+   "texte": "un rapide chemin crie!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "rapide",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "chemin",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 21
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "un rapide chemin",
+     "role": "gn",
+     "debut": 0,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "crie",
+     "role": "gv",
+     "debut": 17,
+     "fin": 21
+    }
+   ]
+  },
+  {
+   "id": "s006",
+   "langue": "fr",
+   "texte": "la forêt crie!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "forêt",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 13
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "la forêt",
+     "role": "gn",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "crie",
+     "role": "gv",
+     "debut": 9,
+     "fin": 13
+    }
+   ]
+  },
+  {
+   "id": "s007",
+   "langue": "fr",
+   "texte": "Nage!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Nage",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 4
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Nage",
+     "role": "gv",
+     "debut": 0,
+     "fin": 4
+    }
+   ]
+  },
+  {
+   "id": "s008",
+   "langue": "fr",
+   "texte": "mon sombre jardin peut compte",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "sombre",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "jardin",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 17
+    },
+    {
+     "texte": "peut",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 22
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 23,
+     "fin": 29
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon sombre jardin",
+     "role": "gn",
+     "debut": 0,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "peut compte",
+     "role": "gv",
+     "debut": 18,
+     "fin": 29
+    }
+   ]
+  },
+  {
+   "id": "s009",
+   "langue": "fr",
+   "texte": "le lent village cherche?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "lent",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "village",
+     "pos": "NOUN",
+     "debut": 8,
+     "fin": 15
+    },
+    {
+     "texte": "cherche",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le lent village",
+     "role": "gn",
+     "debut": 0,
+     "fin": 15
+    },
+    {
+     "type": "GV",
+     "texte": "cherche",
+     "role": "gv",
+     "debut": 16,
+     "fin": 23
+    }
+   ]
+  },
+  {
+   "id": "s010",
+   "langue": "fr",
+   "texte": "un chemin qui nage prépare",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chemin",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 18
+    },
+    {
+     "texte": "prépare",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "un chemin",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "REL",
+     "texte": "qui nage",
+     "role": "rel",
+     "debut": 10,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "prépare",
+     "role": "gv",
+     "debut": 19,
+     "fin": 26
+    }
+   ]
+  },
+  {
+   "id": "s011",
+   "langue": "fr",
+   "texte": "cette douce cuisine pourrait marche",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "douce",
+     "pos": "ADJ",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "texte": "cuisine",
+     "pos": "NOUN",
+     "debut": 12,
+     "fin": 19
+    },
+    {
+     "texte": "pourrait",
+     "pos": "VERB",
+     "debut": 20,
+     "fin": 28
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 29,
+     "fin": 35
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "cette douce cuisine",
+     "role": "gn",
+     "debut": 0,
+     "fin": 19
+    },
+    {
+     "type": "GV",
+     "texte": "pourrait marche",
+     "role": "gv",
+     "debut": 20,
+     "fin": 35
+    }
+   ]
+  },
+  {
+   "id": "s012",
+   "langue": "fr",
+   "texte": "cette douce étoile écoute que Lucas trouve",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "douce",
+     "pos": "ADJ",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "texte": "étoile",
+     "pos": "NOUN",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 25
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 26,
+     "fin": 29
+    },
+    {
+     "texte": "Lucas",
+     "pos": "NOUN",
+     "debut": 30,
+     "fin": 35
+    },
+    {
+     "texte": "trouve",
+     "pos": "VERB",
+     "debut": 36,
+     "fin": 42
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "cette douce étoile",
+     "role": "gn",
+     "debut": 0,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "écoute",
+     "role": "gv",
+     "debut": 19,
+     "fin": 25
+    },
+    {
+     "type": "SUB",
+     "texte": "que Lucas trouve",
+     "role": "sub",
+     "debut": 26,
+     "fin": 42
+    }
+   ]
+  },
+  {
+   "id": "s013",
+   "langue": "fr",
+   "texte": "elle ne compte pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 5,
+     "fin": 7
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 14
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 15,
+     "fin": 18
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "ne compte pas",
+     "role": "gv",
+     "debut": 5,
+     "fin": 18
+    }
+   ]
+  },
+  {
+   "id": "s014",
+   "langue": "fr",
+   "texte": "ce avocat devrait cherche",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "avocat",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "devrait",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "texte": "cherche",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 25
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce avocat",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "devrait cherche",
+     "role": "gv",
+     "debut": 10,
+     "fin": 25
+    }
+   ]
+  },
+  {
+   "id": "s015",
+   "langue": "fr",
+   "texte": "ma fenêtre marche que les fenêtre ouvre",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ma",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 17
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 18,
+     "fin": 21
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 22,
+     "fin": 25
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 26,
+     "fin": 33
+    },
+    {
+     "texte": "ouvre",
+     "pos": "VERB",
+     "debut": 34,
+     "fin": 39
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ma fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "marche",
+     "role": "gv",
+     "debut": 11,
+     "fin": 17
+    },
+    {
+     "type": "SUB",
+     "texte": "que les fenêtre ouvre",
+     "role": "sub",
+     "debut": 18,
+     "fin": 39
+    }
+   ]
+  },
+  {
+   "id": "s016",
+   "langue": "fr",
+   "texte": "ce canard trouve",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": true
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "canard",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "trouve",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 16
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce canard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "trouve",
+     "role": "gv",
+     "debut": 10,
+     "fin": 16
+    }
+   ]
+  },
+  {
+   "id": "s017",
+   "langue": "fr",
+   "texte": "mon livre dessine",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": true
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "dessine",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon livre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "dessine",
+     "role": "gv",
+     "debut": 10,
+     "fin": 17
+    }
+   ]
+  },
+  {
+   "id": "s018",
+   "langue": "fr",
+   "texte": "le renard pourrait écoute",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "renard",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "pourrait",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 18
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 25
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le renard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "pourrait écoute",
+     "role": "gv",
+     "debut": 10,
+     "fin": 25
+    }
+   ]
+  },
+  {
+   "id": "s019",
+   "langue": "fr",
+   "texte": "cette secrète cuisine finit sous un cheval",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "secrète",
+     "pos": "ADJ",
+     "debut": 6,
+     "fin": 13
+    },
+    {
+     "texte": "cuisine",
+     "pos": "NOUN",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "texte": "finit",
+     "pos": "VERB",
+     "debut": 22,
+     "fin": 27
+    },
+    {
+     "texte": "sous",
+     "pos": "PREP",
+     "debut": 28,
+     "fin": 32
+    },
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 33,
+     "fin": 35
+    },
+    {
+     "texte": "cheval",
+     "pos": "NOUN",
+     "debut": 36,
+     "fin": 42
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "cette secrète cuisine",
+     "role": "gn",
+     "debut": 0,
+     "fin": 21
+    },
+    {
+     "type": "GV",
+     "texte": "finit",
+     "role": "gv",
+     "debut": 22,
+     "fin": 27
+    },
+    {
+     "type": "GP",
+     "texte": "sous un cheval",
+     "role": "gp",
+     "debut": 28,
+     "fin": 42
+    }
+   ]
+  },
+  {
+   "id": "s020",
+   "langue": "fr",
+   "texte": "une fenêtre peut écoute",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "peut",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 16
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "peut écoute",
+     "role": "gv",
+     "debut": 12,
+     "fin": 23
+    }
+   ]
+  },
+  {
+   "id": "s021",
+   "langue": "fr",
+   "texte": "nous ne observe pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "nous",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 5,
+     "fin": 7
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 15
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 16,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "nous",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "ne observe pas",
+     "role": "gv",
+     "debut": 5,
+     "fin": 19
+    }
+   ]
+  },
+  {
+   "id": "s022",
+   "langue": "fr",
+   "texte": "ils nage que vous nage",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "texte": "vous",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 17
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ils",
+     "role": "gn",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "nage",
+     "role": "gv",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "type": "SUB",
+     "texte": "que vous nage",
+     "role": "sub",
+     "debut": 9,
+     "fin": 22
+    }
+   ]
+  },
+  {
+   "id": "s023",
+   "langue": "fr",
+   "texte": "cette fenêtre doit dessine",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 6,
+     "fin": 13
+    },
+    {
+     "texte": "doit",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 18
+    },
+    {
+     "texte": "dessine",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "cette fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "GV",
+     "texte": "doit dessine",
+     "role": "gv",
+     "debut": 14,
+     "fin": 26
+    }
+   ]
+  },
+  {
+   "id": "s024",
+   "langue": "fr",
+   "texte": "les lettre doit observe",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "lettre",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "doit",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 15
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les lettre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "doit observe",
+     "role": "gv",
+     "debut": 11,
+     "fin": 23
+    }
+   ]
+  },
+  {
+   "id": "s025",
+   "langue": "fr",
+   "texte": "Cherche!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Cherche",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 7
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Cherche",
+     "role": "gv",
+     "debut": 0,
+     "fin": 7
+    }
+   ]
+  },
+  {
+   "id": "s026",
+   "langue": "fr",
+   "texte": "le sombre voyage ne écoute pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "sombre",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "voyage",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 20,
+     "fin": 26
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 27,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le sombre voyage",
+     "role": "gn",
+     "debut": 0,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "ne écoute pas",
+     "role": "gv",
+     "debut": 17,
+     "fin": 30
+    }
+   ]
+  },
+  {
+   "id": "s027",
+   "langue": "fr",
+   "texte": "mon sombre village marche avec il",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "sombre",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "village",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 18
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 25
+    },
+    {
+     "texte": "avec",
+     "pos": "PREP",
+     "debut": 26,
+     "fin": 30
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 31,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon sombre village",
+     "role": "gn",
+     "debut": 0,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "marche avec il",
+     "role": "gv",
+     "debut": 19,
+     "fin": 33
+    },
+    {
+     "type": "GP",
+     "texte": "il",
+     "role": "gp",
+     "debut": 31,
+     "fin": 33
+    }
+   ]
+  },
+  {
+   "id": "s028",
+   "langue": "fr",
+   "texte": "elle dessine!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "dessine",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 12
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "dessine",
+     "role": "gv",
+     "debut": 5,
+     "fin": 12
+    }
+   ]
+  },
+  {
+   "id": "s029",
+   "langue": "fr",
+   "texte": "Paul ne commence pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 5,
+     "fin": 7
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 16
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 17,
+     "fin": 20
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Paul",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "ne commence pas",
+     "role": "gv",
+     "debut": 5,
+     "fin": 20
+    }
+   ]
+  },
+  {
+   "id": "s030",
+   "langue": "fr",
+   "texte": "les rapide lettre cherche que le voyage crie",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "rapide",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "lettre",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 17
+    },
+    {
+     "texte": "cherche",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 25
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 26,
+     "fin": 29
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 30,
+     "fin": 32
+    },
+    {
+     "texte": "voyage",
+     "pos": "NOUN",
+     "debut": 33,
+     "fin": 39
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 40,
+     "fin": 44
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les rapide lettre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "cherche",
+     "role": "gv",
+     "debut": 18,
+     "fin": 25
+    },
+    {
+     "type": "SUB",
+     "texte": "que le voyage crie",
+     "role": "sub",
+     "debut": 26,
+     "fin": 44
+    }
+   ]
+  },
+  {
+   "id": "s031",
+   "langue": "fr",
+   "texte": "la douce étoile sont rêve",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "douce",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "étoile",
+     "pos": "NOUN",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "sont",
+     "pos": "AUX",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "texte": "rêve",
+     "pos": "VERB",
+     "debut": 21,
+     "fin": 25
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "la douce étoile",
+     "role": "gn",
+     "debut": 0,
+     "fin": 15
+    },
+    {
+     "type": "GV",
+     "texte": "sont rêve",
+     "role": "gv",
+     "debut": 16,
+     "fin": 25
+    }
+   ]
+  },
+  {
+   "id": "s032",
+   "langue": "fr",
+   "texte": "le village qui crie marche",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "village",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 15,
+     "fin": 19
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 20,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le village",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "REL",
+     "texte": "qui crie",
+     "role": "rel",
+     "debut": 11,
+     "fin": 19
+    },
+    {
+     "type": "GV",
+     "texte": "marche",
+     "role": "gv",
+     "debut": 20,
+     "fin": 26
+    }
+   ]
+  },
+  {
+   "id": "s033",
+   "langue": "fr",
+   "texte": "les lente rivière devrait range",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "lente",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "rivière",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "texte": "devrait",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 25
+    },
+    {
+     "texte": "range",
+     "pos": "VERB",
+     "debut": 26,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les lente rivière",
+     "role": "gn",
+     "debut": 0,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "devrait range",
+     "role": "gv",
+     "debut": 18,
+     "fin": 31
+    }
+   ]
+  },
+  {
+   "id": "s034",
+   "langue": "fr",
+   "texte": "Marche!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Marche",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 6
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Marche",
+     "role": "gv",
+     "debut": 0,
+     "fin": 6
+    }
+   ]
+  },
+  {
+   "id": "s035",
+   "langue": "fr",
+   "texte": "un papier qui ferme observe",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "papier",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 19
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 20,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "un papier",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "REL",
+     "texte": "qui ferme",
+     "role": "rel",
+     "debut": 10,
+     "fin": 19
+    },
+    {
+     "type": "GV",
+     "texte": "observe",
+     "role": "gv",
+     "debut": 20,
+     "fin": 27
+    }
+   ]
+  },
+  {
+   "id": "s036",
+   "langue": "fr",
+   "texte": "Commence!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Commence",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 8
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Commence",
+     "role": "gv",
+     "debut": 0,
+     "fin": 8
+    }
+   ]
+  },
+  {
+   "id": "s037",
+   "langue": "fr",
+   "texte": "Paul qui marche marche",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 5,
+     "fin": 8
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Paul",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "REL",
+     "texte": "qui marche",
+     "role": "rel",
+     "debut": 5,
+     "fin": 15
+    },
+    {
+     "type": "GV",
+     "texte": "marche",
+     "role": "gv",
+     "debut": 16,
+     "fin": 22
+    }
+   ]
+  },
+  {
+   "id": "s038",
+   "langue": "fr",
+   "texte": "ils commence!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 12
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ils",
+     "role": "gn",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "commence",
+     "role": "gv",
+     "debut": 4,
+     "fin": 12
+    }
+   ]
+  },
+  {
+   "id": "s039",
+   "langue": "fr",
+   "texte": "les sombre canard doit nage",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "sombre",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "canard",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 17
+    },
+    {
+     "texte": "doit",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 22
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 23,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les sombre canard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "doit nage",
+     "role": "gv",
+     "debut": 18,
+     "fin": 27
+    }
+   ]
+  },
+  {
+   "id": "s040",
+   "langue": "fr",
+   "texte": "les canard trouve",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": true
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "canard",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "trouve",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les canard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "trouve",
+     "role": "gv",
+     "debut": 11,
+     "fin": 17
+    }
+   ]
+  },
+  {
+   "id": "s041",
+   "langue": "fr",
+   "texte": "les avocat marche devant elles",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "avocat",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 17
+    },
+    {
+     "texte": "devant",
+     "pos": "PREP",
+     "debut": 18,
+     "fin": 24
+    },
+    {
+     "texte": "elles",
+     "pos": "PRON",
+     "debut": 25,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les avocat",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "marche",
+     "role": "gv",
+     "debut": 11,
+     "fin": 17
+    },
+    {
+     "type": "GP",
+     "texte": "devant elles",
+     "role": "gp",
+     "debut": 18,
+     "fin": 30
+    }
+   ]
+  },
+  {
+   "id": "s042",
+   "langue": "fr",
+   "texte": "mon avocat écoute",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": true
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "avocat",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon avocat",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "écoute",
+     "role": "gv",
+     "debut": 11,
+     "fin": 17
+    }
+   ]
+  },
+  {
+   "id": "s043",
+   "langue": "fr",
+   "texte": "Hugo écoute?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Hugo",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 11
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Hugo",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "écoute",
+     "role": "gv",
+     "debut": 5,
+     "fin": 11
+    }
+   ]
+  },
+  {
+   "id": "s044",
+   "langue": "fr",
+   "texte": "une fenêtre nage que ils crie",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 16
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 17,
+     "fin": 20
+    },
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 25,
+     "fin": 29
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "nage",
+     "role": "gv",
+     "debut": 12,
+     "fin": 16
+    },
+    {
+     "type": "SUB",
+     "texte": "que ils crie",
+     "role": "sub",
+     "debut": 17,
+     "fin": 29
+    }
+   ]
+  },
+  {
+   "id": "s045",
+   "langue": "fr",
+   "texte": "un ancien canard nage avec cette cuisine",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "ancien",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "canard",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 21
+    },
+    {
+     "texte": "avec",
+     "pos": "PREP",
+     "debut": 22,
+     "fin": 26
+    },
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 27,
+     "fin": 32
+    },
+    {
+     "texte": "cuisine",
+     "pos": "NOUN",
+     "debut": 33,
+     "fin": 40
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "un ancien canard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "nage",
+     "role": "gv",
+     "debut": 17,
+     "fin": 21
+    },
+    {
+     "type": "GP",
+     "texte": "avec cette cuisine",
+     "role": "gp",
+     "debut": 22,
+     "fin": 40
+    }
+   ]
+  },
+  {
+   "id": "s046",
+   "langue": "fr",
+   "texte": "le canard observe?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "canard",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le canard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "observe",
+     "role": "gv",
+     "debut": 10,
+     "fin": 17
+    }
+   ]
+  },
+  {
+   "id": "s047",
+   "langue": "fr",
+   "texte": "une sombre fenêtre rêve pour un secret chemin",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "sombre",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 18
+    },
+    {
+     "texte": "rêve",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "texte": "pour",
+     "pos": "PREP",
+     "debut": 24,
+     "fin": 28
+    },
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 29,
+     "fin": 31
+    },
+    {
+     "texte": "secret",
+     "pos": "ADJ",
+     "debut": 32,
+     "fin": 38
+    },
+    {
+     "texte": "chemin",
+     "pos": "NOUN",
+     "debut": 39,
+     "fin": 45
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une sombre fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "rêve",
+     "role": "gv",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "type": "GP",
+     "texte": "pour un secret chemin",
+     "role": "gp",
+     "debut": 24,
+     "fin": 45
+    }
+   ]
+  },
+  {
+   "id": "s048",
+   "langue": "fr",
+   "texte": "la montagne pourrait marche",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "montagne",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 11
+    },
+    {
+     "texte": "pourrait",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 20
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 21,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "la montagne",
+     "role": "gn",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "pourrait marche",
+     "role": "gv",
+     "debut": 12,
+     "fin": 27
+    }
+   ]
+  },
+  {
+   "id": "s049",
+   "langue": "fr",
+   "texte": "une lente fenêtre ouvre le cheval",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "lente",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "texte": "ouvre",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 23
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "texte": "cheval",
+     "pos": "NOUN",
+     "debut": 27,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une lente fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "ouvre le cheval",
+     "role": "gv",
+     "debut": 18,
+     "fin": 33
+    }
+   ]
+  },
+  {
+   "id": "s050",
+   "langue": "fr",
+   "texte": "mon jardin qui ouvre rêve",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "jardin",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "texte": "ouvre",
+     "pos": "VERB",
+     "debut": 15,
+     "fin": 20
+    },
+    {
+     "texte": "rêve",
+     "pos": "VERB",
+     "debut": 21,
+     "fin": 25
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon jardin",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "REL",
+     "texte": "qui ouvre",
+     "role": "rel",
+     "debut": 11,
+     "fin": 20
+    },
+    {
+     "type": "GV",
+     "texte": "rêve",
+     "role": "gv",
+     "debut": 21,
+     "fin": 25
+    }
+   ]
+  },
+  {
+   "id": "s051",
+   "langue": "fr",
+   "texte": "une douce montagne cherche ma lettre",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "douce",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "montagne",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 18
+    },
+    {
+     "texte": "cherche",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 26
+    },
+    {
+     "texte": "ma",
+     "pos": "DET",
+     "debut": 27,
+     "fin": 29
+    },
+    {
+     "texte": "lettre",
+     "pos": "NOUN",
+     "debut": 30,
+     "fin": 36
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une douce montagne",
+     "role": "gn",
+     "debut": 0,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "cherche ma lettre",
+     "role": "gv",
+     "debut": 19,
+     "fin": 36
+    }
+   ]
+  },
+  {
+   "id": "s052",
+   "langue": "fr",
+   "texte": "cette ancienne cuisine ouvre que un sombre village trouve",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "ancienne",
+     "pos": "ADJ",
+     "debut": 6,
+     "fin": 14
+    },
+    {
+     "texte": "cuisine",
+     "pos": "NOUN",
+     "debut": 15,
+     "fin": 22
+    },
+    {
+     "texte": "ouvre",
+     "pos": "VERB",
+     "debut": 23,
+     "fin": 28
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 29,
+     "fin": 32
+    },
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 33,
+     "fin": 35
+    },
+    {
+     "texte": "sombre",
+     "pos": "ADJ",
+     "debut": 36,
+     "fin": 42
+    },
+    {
+     "texte": "village",
+     "pos": "NOUN",
+     "debut": 43,
+     "fin": 50
+    },
+    {
+     "texte": "trouve",
+     "pos": "VERB",
+     "debut": 51,
+     "fin": 57
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "cette ancienne cuisine",
+     "role": "gn",
+     "debut": 0,
+     "fin": 22
+    },
+    {
+     "type": "GV",
+     "texte": "ouvre",
+     "role": "gv",
+     "debut": 23,
+     "fin": 28
+    },
+    {
+     "type": "SUB",
+     "texte": "que un sombre village trouve",
+     "role": "sub",
+     "debut": 29,
+     "fin": 57
+    }
+   ]
+  },
+  {
+   "id": "s053",
+   "langue": "fr",
+   "texte": "les village est observe",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "village",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 12,
+     "fin": 15
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les village",
+     "role": "gn",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "est observe",
+     "role": "gv",
+     "debut": 12,
+     "fin": 23
+    }
+   ]
+  },
+  {
+   "id": "s054",
+   "langue": "fr",
+   "texte": "elle trouve que une rapide rivière écoute",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "trouve",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 11
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 12,
+     "fin": 15
+    },
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "texte": "rapide",
+     "pos": "ADJ",
+     "debut": 20,
+     "fin": 26
+    },
+    {
+     "texte": "rivière",
+     "pos": "NOUN",
+     "debut": 27,
+     "fin": 34
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 35,
+     "fin": 41
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "trouve",
+     "role": "gv",
+     "debut": 5,
+     "fin": 11
+    },
+    {
+     "type": "SUB",
+     "texte": "que une rapide rivière écoute",
+     "role": "sub",
+     "debut": 12,
+     "fin": 41
+    }
+   ]
+  },
+  {
+   "id": "s055",
+   "langue": "fr",
+   "texte": "nous dessine",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "nous",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "dessine",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 12
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "nous",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "dessine",
+     "role": "gv",
+     "debut": 5,
+     "fin": 12
+    }
+   ]
+  },
+  {
+   "id": "s056",
+   "langue": "fr",
+   "texte": "vous écoute",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "vous",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 11
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "vous",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "écoute",
+     "role": "gv",
+     "debut": 5,
+     "fin": 11
+    }
+   ]
+  },
+  {
+   "id": "s057",
+   "langue": "fr",
+   "texte": "Finit!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Finit",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 5
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Finit",
+     "role": "gv",
+     "debut": 0,
+     "fin": 5
+    }
+   ]
+  },
+  {
+   "id": "s058",
+   "langue": "fr",
+   "texte": "les rapide avocat saute vers les sombre livre",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "rapide",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "avocat",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 17
+    },
+    {
+     "texte": "saute",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 23
+    },
+    {
+     "texte": "vers",
+     "pos": "PREP",
+     "debut": 24,
+     "fin": 28
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 29,
+     "fin": 32
+    },
+    {
+     "texte": "sombre",
+     "pos": "ADJ",
+     "debut": 33,
+     "fin": 39
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 40,
+     "fin": 45
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les rapide avocat",
+     "role": "gn",
+     "debut": 0,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "saute",
+     "role": "gv",
+     "debut": 18,
+     "fin": 23
+    },
+    {
+     "type": "GP",
+     "texte": "vers les sombre livre",
+     "role": "gp",
+     "debut": 24,
+     "fin": 45
+    }
+   ]
+  },
+  {
+   "id": "s059",
+   "langue": "fr",
+   "texte": "un cheval ouvre!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "cheval",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "ouvre",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 15
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "un cheval",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "ouvre",
+     "role": "gv",
+     "debut": 10,
+     "fin": 15
+    }
+   ]
+  },
+  {
+   "id": "s060",
+   "langue": "fr",
+   "texte": "mon rapide nuage trouve!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "rapide",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "nuage",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 16
+    },
+    {
+     "texte": "trouve",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon rapide nuage",
+     "role": "gn",
+     "debut": 0,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "trouve",
+     "role": "gv",
+     "debut": 17,
+     "fin": 23
+    }
+   ]
+  },
+  {
+   "id": "s061",
+   "langue": "fr",
+   "texte": "ce nuage qui saute observe",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "nuage",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "texte": "saute",
+     "pos": "VERB",
+     "debut": 13,
+     "fin": 18
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce nuage",
+     "role": "gn",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "REL",
+     "texte": "qui saute",
+     "role": "rel",
+     "debut": 9,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "observe",
+     "role": "gv",
+     "debut": 19,
+     "fin": 26
+    }
+   ]
+  },
+  {
+   "id": "s062",
+   "langue": "fr",
+   "texte": "Emma écoute?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Emma",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 11
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Emma",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "écoute",
+     "role": "gv",
+     "debut": 5,
+     "fin": 11
+    }
+   ]
+  },
+  {
+   "id": "s063",
+   "langue": "fr",
+   "texte": "mon chemin ne prépare pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "chemin",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 11,
+     "fin": 13
+    },
+    {
+     "texte": "prépare",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 22,
+     "fin": 25
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon chemin",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "ne prépare pas",
+     "role": "gv",
+     "debut": 11,
+     "fin": 25
+    }
+   ]
+  },
+  {
+   "id": "s064",
+   "langue": "fr",
+   "texte": "la étoile compte pour Paul",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "étoile",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "texte": "pour",
+     "pos": "PREP",
+     "debut": 17,
+     "fin": 21
+    },
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 22,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "la étoile",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "compte",
+     "role": "gv",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "type": "GP",
+     "texte": "pour Paul",
+     "role": "gp",
+     "debut": 17,
+     "fin": 26
+    }
+   ]
+  },
+  {
+   "id": "s065",
+   "langue": "fr",
+   "texte": "elle qui commence nage",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 5,
+     "fin": 8
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 17
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "REL",
+     "texte": "qui commence",
+     "role": "rel",
+     "debut": 5,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "nage",
+     "role": "gv",
+     "debut": 18,
+     "fin": 22
+    }
+   ]
+  },
+  {
+   "id": "s066",
+   "langue": "fr",
+   "texte": "les avocat ne trouve pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "avocat",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 11,
+     "fin": 13
+    },
+    {
+     "texte": "trouve",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 20
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 21,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les avocat",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "ne trouve pas",
+     "role": "gv",
+     "debut": 11,
+     "fin": 24
+    }
+   ]
+  },
+  {
+   "id": "s067",
+   "langue": "fr",
+   "texte": "la fenêtre ne crie pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 11,
+     "fin": 13
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 18
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 19,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "la fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "ne crie pas",
+     "role": "gv",
+     "debut": 11,
+     "fin": 22
+    }
+   ]
+  },
+  {
+   "id": "s068",
+   "langue": "fr",
+   "texte": "Compte!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Compte",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 6
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Compte",
+     "role": "gv",
+     "debut": 0,
+     "fin": 6
+    }
+   ]
+  },
+  {
+   "id": "s069",
+   "langue": "fr",
+   "texte": "ce doux canard qui crie ferme",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "doux",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "canard",
+     "pos": "NOUN",
+     "debut": 8,
+     "fin": 14
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 15,
+     "fin": 18
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 24,
+     "fin": 29
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce doux canard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 14
+    },
+    {
+     "type": "REL",
+     "texte": "qui crie",
+     "role": "rel",
+     "debut": 15,
+     "fin": 23
+    },
+    {
+     "type": "GV",
+     "texte": "ferme",
+     "role": "gv",
+     "debut": 24,
+     "fin": 29
+    }
+   ]
+  },
+  {
+   "id": "s070",
+   "langue": "fr",
+   "texte": "mon canard qui ferme finit",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "canard",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 15,
+     "fin": 20
+    },
+    {
+     "texte": "finit",
+     "pos": "VERB",
+     "debut": 21,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon canard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "REL",
+     "texte": "qui ferme",
+     "role": "rel",
+     "debut": 11,
+     "fin": 20
+    },
+    {
+     "type": "GV",
+     "texte": "finit",
+     "role": "gv",
+     "debut": 21,
+     "fin": 26
+    }
+   ]
+  },
+  {
+   "id": "s071",
+   "langue": "fr",
+   "texte": "Ferme!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Ferme",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 5
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Ferme",
+     "role": "gv",
+     "debut": 0,
+     "fin": 5
+    }
+   ]
+  },
+  {
+   "id": "s072",
+   "langue": "fr",
+   "texte": "cette douce chanson qui dessine finit",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "douce",
+     "pos": "ADJ",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "texte": "chanson",
+     "pos": "NOUN",
+     "debut": 12,
+     "fin": 19
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "texte": "dessine",
+     "pos": "VERB",
+     "debut": 24,
+     "fin": 31
+    },
+    {
+     "texte": "finit",
+     "pos": "VERB",
+     "debut": 32,
+     "fin": 37
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "cette douce chanson",
+     "role": "gn",
+     "debut": 0,
+     "fin": 19
+    },
+    {
+     "type": "REL",
+     "texte": "qui dessine",
+     "role": "rel",
+     "debut": 20,
+     "fin": 31
+    },
+    {
+     "type": "GV",
+     "texte": "finit",
+     "role": "gv",
+     "debut": 32,
+     "fin": 37
+    }
+   ]
+  },
+  {
+   "id": "s073",
+   "langue": "fr",
+   "texte": "cette secrète forêt ne compte pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "secrète",
+     "pos": "ADJ",
+     "debut": 6,
+     "fin": 13
+    },
+    {
+     "texte": "forêt",
+     "pos": "NOUN",
+     "debut": 14,
+     "fin": 19
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 20,
+     "fin": 22
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 23,
+     "fin": 29
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 30,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "cette secrète forêt",
+     "role": "gn",
+     "debut": 0,
+     "fin": 19
+    },
+    {
+     "type": "GV",
+     "texte": "ne compte pas",
+     "role": "gv",
+     "debut": 20,
+     "fin": 33
+    }
+   ]
+  },
+  {
+   "id": "s074",
+   "langue": "fr",
+   "texte": "le doux livre trouve?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "doux",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "texte": "trouve",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 20
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le doux livre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "GV",
+     "texte": "trouve",
+     "role": "gv",
+     "debut": 14,
+     "fin": 20
+    }
+   ]
+  },
+  {
+   "id": "s075",
+   "langue": "fr",
+   "texte": "cette rivière qui ferme ouvre",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "rivière",
+     "pos": "NOUN",
+     "debut": 6,
+     "fin": 13
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 23
+    },
+    {
+     "texte": "ouvre",
+     "pos": "VERB",
+     "debut": 24,
+     "fin": 29
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "cette rivière",
+     "role": "gn",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "REL",
+     "texte": "qui ferme",
+     "role": "rel",
+     "debut": 14,
+     "fin": 23
+    },
+    {
+     "type": "GV",
+     "texte": "ouvre",
+     "role": "gv",
+     "debut": 24,
+     "fin": 29
+    }
+   ]
+  },
+  {
+   "id": "s076",
+   "langue": "fr",
+   "texte": "Lucas sont saute",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Lucas",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "sont",
+     "pos": "AUX",
+     "debut": 6,
+     "fin": 10
+    },
+    {
+     "texte": "saute",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 16
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Lucas",
+     "role": "gn",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "sont saute",
+     "role": "gv",
+     "debut": 6,
+     "fin": 16
+    }
+   ]
+  },
+  {
+   "id": "s077",
+   "langue": "fr",
+   "texte": "Ouvre!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Ouvre",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 5
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Ouvre",
+     "role": "gv",
+     "debut": 0,
+     "fin": 5
+    }
+   ]
+  },
+  {
+   "id": "s078",
+   "langue": "fr",
+   "texte": "mon livre devrait compte",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "devrait",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon livre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "devrait compte",
+     "role": "gv",
+     "debut": 10,
+     "fin": 24
+    }
+   ]
+  },
+  {
+   "id": "s079",
+   "langue": "fr",
+   "texte": "ce rapide renard prépare?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "rapide",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "renard",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "texte": "prépare",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce rapide renard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "prépare",
+     "role": "gv",
+     "debut": 17,
+     "fin": 24
+    }
+   ]
+  },
+  {
+   "id": "s080",
+   "langue": "fr",
+   "texte": "le livre ne saute pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "texte": "saute",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 17
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 18,
+     "fin": 21
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le livre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "ne saute pas",
+     "role": "gv",
+     "debut": 9,
+     "fin": 21
+    }
+   ]
+  },
+  {
+   "id": "s081",
+   "langue": "fr",
+   "texte": "cette secrète fenêtre trouve de Alice",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "secrète",
+     "pos": "ADJ",
+     "debut": 6,
+     "fin": 13
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "texte": "trouve",
+     "pos": "VERB",
+     "debut": 22,
+     "fin": 28
+    },
+    {
+     "texte": "de",
+     "pos": "PREP",
+     "debut": 29,
+     "fin": 31
+    },
+    {
+     "texte": "Alice",
+     "pos": "NOUN",
+     "debut": 32,
+     "fin": 37
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "cette secrète fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 21
+    },
+    {
+     "type": "GV",
+     "texte": "trouve",
+     "role": "gv",
+     "debut": 22,
+     "fin": 28
+    },
+    {
+     "type": "GP",
+     "texte": "de Alice",
+     "role": "gp",
+     "debut": 29,
+     "fin": 37
+    }
+   ]
+  },
+  {
+   "id": "s082",
+   "langue": "fr",
+   "texte": "un papier ouvre!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "papier",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "ouvre",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 15
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "un papier",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "ouvre",
+     "role": "gv",
+     "debut": 10,
+     "fin": 15
+    }
+   ]
+  },
+  {
+   "id": "s083",
+   "langue": "fr",
+   "texte": "la chanson marche?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chanson",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "la chanson",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "marche",
+     "role": "gv",
+     "debut": 11,
+     "fin": 17
+    }
+   ]
+  },
+  {
+   "id": "s084",
+   "langue": "fr",
+   "texte": "Marie marche!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 12
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "gn",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "marche",
+     "role": "gv",
+     "debut": 6,
+     "fin": 12
+    }
+   ]
+  },
+  {
+   "id": "s085",
+   "langue": "fr",
+   "texte": "le chemin commence",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chemin",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 18
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le chemin",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "commence",
+     "role": "gv",
+     "debut": 10,
+     "fin": 18
+    }
+   ]
+  },
+  {
+   "id": "s086",
+   "langue": "fr",
+   "texte": "ce chemin cherche sous les cheval",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chemin",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "cherche",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "texte": "sous",
+     "pos": "PREP",
+     "debut": 18,
+     "fin": 22
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 23,
+     "fin": 26
+    },
+    {
+     "texte": "cheval",
+     "pos": "NOUN",
+     "debut": 27,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce chemin",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "cherche",
+     "role": "gv",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "type": "GP",
+     "texte": "sous les cheval",
+     "role": "gp",
+     "debut": 18,
+     "fin": 33
+    }
+   ]
+  },
+  {
+   "id": "s087",
+   "langue": "fr",
+   "texte": "mon nuage trouve à le chemin",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "nuage",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "trouve",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "texte": "à",
+     "pos": "PREP",
+     "debut": 17,
+     "fin": 18
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "texte": "chemin",
+     "pos": "NOUN",
+     "debut": 22,
+     "fin": 28
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon nuage",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "trouve",
+     "role": "gv",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "type": "GP",
+     "texte": "à le chemin",
+     "role": "gp",
+     "debut": 17,
+     "fin": 28
+    }
+   ]
+  },
+  {
+   "id": "s088",
+   "langue": "fr",
+   "texte": "nous crie que le rapide avocat cherche",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "nous",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 14,
+     "fin": 16
+    },
+    {
+     "texte": "rapide",
+     "pos": "ADJ",
+     "debut": 17,
+     "fin": 23
+    },
+    {
+     "texte": "avocat",
+     "pos": "NOUN",
+     "debut": 24,
+     "fin": 30
+    },
+    {
+     "texte": "cherche",
+     "pos": "VERB",
+     "debut": 31,
+     "fin": 38
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "nous",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "crie",
+     "role": "gv",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "type": "SUB",
+     "texte": "que le rapide avocat cherche",
+     "role": "sub",
+     "debut": 10,
+     "fin": 38
+    }
+   ]
+  },
+  {
+   "id": "s089",
+   "langue": "fr",
+   "texte": "la étoile commence sur ce jardin",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "étoile",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 18
+    },
+    {
+     "texte": "sur",
+     "pos": "PREP",
+     "debut": 19,
+     "fin": 22
+    },
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 23,
+     "fin": 25
+    },
+    {
+     "texte": "jardin",
+     "pos": "NOUN",
+     "debut": 26,
+     "fin": 32
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "la étoile",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "commence",
+     "role": "gv",
+     "debut": 10,
+     "fin": 18
+    },
+    {
+     "type": "GP",
+     "texte": "sur ce jardin",
+     "role": "gp",
+     "debut": 19,
+     "fin": 32
+    }
+   ]
+  },
+  {
+   "id": "s090",
+   "langue": "fr",
+   "texte": "Prépare!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Prépare",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 7
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Prépare",
+     "role": "gv",
+     "debut": 0,
+     "fin": 7
+    }
+   ]
+  },
+  {
+   "id": "s091",
+   "langue": "fr",
+   "texte": "ma forêt devrait ferme",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ma",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "forêt",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "devrait",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 16
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ma forêt",
+     "role": "gn",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "devrait ferme",
+     "role": "gv",
+     "debut": 9,
+     "fin": 22
+    }
+   ]
+  },
+  {
+   "id": "s092",
+   "langue": "fr",
+   "texte": "Dessine!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Dessine",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 7
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Dessine",
+     "role": "gv",
+     "debut": 0,
+     "fin": 7
+    }
+   ]
+  },
+  {
+   "id": "s093",
+   "langue": "fr",
+   "texte": "une rivière compte!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "rivière",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 18
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une rivière",
+     "role": "gn",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "compte",
+     "role": "gv",
+     "debut": 12,
+     "fin": 18
+    }
+   ]
+  },
+  {
+   "id": "s094",
+   "langue": "fr",
+   "texte": "un ancien papier ne prépare pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "ancien",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "papier",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "texte": "prépare",
+     "pos": "VERB",
+     "debut": 20,
+     "fin": 27
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 28,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "un ancien papier",
+     "role": "gn",
+     "debut": 0,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "ne prépare pas",
+     "role": "gv",
+     "debut": 17,
+     "fin": 31
+    }
+   ]
+  },
+  {
+   "id": "s095",
+   "langue": "fr",
+   "texte": "Alice ne écoute pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Alice",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 6,
+     "fin": 8
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 16,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Alice",
+     "role": "gn",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "ne écoute pas",
+     "role": "gv",
+     "debut": 6,
+     "fin": 19
+    }
+   ]
+  },
+  {
+   "id": "s096",
+   "langue": "fr",
+   "texte": "ma douce forêt nage?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ma",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "douce",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "forêt",
+     "pos": "NOUN",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 15,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ma douce forêt",
+     "role": "gn",
+     "debut": 0,
+     "fin": 14
+    },
+    {
+     "type": "GV",
+     "texte": "nage",
+     "role": "gv",
+     "debut": 15,
+     "fin": 19
+    }
+   ]
+  },
+  {
+   "id": "s097",
+   "langue": "fr",
+   "texte": "ma chanson commence que cette chanson nage",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ma",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chanson",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 19
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 24,
+     "fin": 29
+    },
+    {
+     "texte": "chanson",
+     "pos": "NOUN",
+     "debut": 30,
+     "fin": 37
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 38,
+     "fin": 42
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ma chanson",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "commence",
+     "role": "gv",
+     "debut": 11,
+     "fin": 19
+    },
+    {
+     "type": "SUB",
+     "texte": "que cette chanson nage",
+     "role": "sub",
+     "debut": 20,
+     "fin": 42
+    }
+   ]
+  },
+  {
+   "id": "s098",
+   "langue": "fr",
+   "texte": "Hugo compte?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Hugo",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 11
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Hugo",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "compte",
+     "role": "gv",
+     "debut": 5,
+     "fin": 11
+    }
+   ]
+  },
+  {
+   "id": "s099",
+   "langue": "fr",
+   "texte": "ce jardin cherche?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "jardin",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "cherche",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce jardin",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "cherche",
+     "role": "gv",
+     "debut": 10,
+     "fin": 17
+    }
+   ]
+  },
+  {
+   "id": "s100",
+   "langue": "fr",
+   "texte": "Écoute!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Écoute",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 6
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Écoute",
+     "role": "gv",
+     "debut": 0,
+     "fin": 6
+    }
+   ]
+  },
+  {
+   "id": "s101",
+   "langue": "fr",
+   "texte": "une sombre forêt range!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "sombre",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "forêt",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 16
+    },
+    {
+     "texte": "range",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une sombre forêt",
+     "role": "gn",
+     "debut": 0,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "range",
+     "role": "gv",
+     "debut": 17,
+     "fin": 22
+    }
+   ]
+  },
+  {
+   "id": "s102",
+   "langue": "fr",
+   "texte": "ils prépare!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "prépare",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 11
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ils",
+     "role": "gn",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "prépare",
+     "role": "gv",
+     "debut": 4,
+     "fin": 11
+    }
+   ]
+  },
+  {
+   "id": "s103",
+   "langue": "fr",
+   "texte": "Lucas dessine que mon sombre canard range",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Lucas",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "dessine",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 13
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 18,
+     "fin": 21
+    },
+    {
+     "texte": "sombre",
+     "pos": "ADJ",
+     "debut": 22,
+     "fin": 28
+    },
+    {
+     "texte": "canard",
+     "pos": "NOUN",
+     "debut": 29,
+     "fin": 35
+    },
+    {
+     "texte": "range",
+     "pos": "VERB",
+     "debut": 36,
+     "fin": 41
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Lucas",
+     "role": "gn",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "dessine",
+     "role": "gv",
+     "debut": 6,
+     "fin": 13
+    },
+    {
+     "type": "SUB",
+     "texte": "que mon sombre canard range",
+     "role": "sub",
+     "debut": 14,
+     "fin": 41
+    }
+   ]
+  },
+  {
+   "id": "s104",
+   "langue": "fr",
+   "texte": "Paul observe?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 12
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Paul",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "observe",
+     "role": "gv",
+     "debut": 5,
+     "fin": 12
+    }
+   ]
+  },
+  {
+   "id": "s105",
+   "langue": "fr",
+   "texte": "une calme fenêtre rêve la chanson",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "calme",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "texte": "rêve",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 22
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 23,
+     "fin": 25
+    },
+    {
+     "texte": "chanson",
+     "pos": "NOUN",
+     "debut": 26,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une calme fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "rêve la chanson",
+     "role": "gv",
+     "debut": 18,
+     "fin": 33
+    }
+   ]
+  },
+  {
+   "id": "s106",
+   "langue": "fr",
+   "texte": "ce livre commence",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": true
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce livre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "commence",
+     "role": "gv",
+     "debut": 9,
+     "fin": 17
+    }
+   ]
+  },
+  {
+   "id": "s107",
+   "langue": "fr",
+   "texte": "une montagne ne commence pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "montagne",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 12
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 13,
+     "fin": 15
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 24
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 25,
+     "fin": 28
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une montagne",
+     "role": "gn",
+     "debut": 0,
+     "fin": 12
+    },
+    {
+     "type": "GV",
+     "texte": "ne commence pas",
+     "role": "gv",
+     "debut": 13,
+     "fin": 28
+    }
+   ]
+  },
+  {
+   "id": "s108",
+   "langue": "fr",
+   "texte": "ce calme papier rêve sous le nuage",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "calme",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "papier",
+     "pos": "NOUN",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "rêve",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "texte": "sous",
+     "pos": "PREP",
+     "debut": 21,
+     "fin": 25
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 26,
+     "fin": 28
+    },
+    {
+     "texte": "nuage",
+     "pos": "NOUN",
+     "debut": 29,
+     "fin": 34
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce calme papier",
+     "role": "gn",
+     "debut": 0,
+     "fin": 15
+    },
+    {
+     "type": "GV",
+     "texte": "rêve",
+     "role": "gv",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "type": "GP",
+     "texte": "sous le nuage",
+     "role": "gp",
+     "debut": 21,
+     "fin": 34
+    }
+   ]
+  },
+  {
+   "id": "s109",
+   "langue": "fr",
+   "texte": "ma lettre compte vers un voyage",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ma",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "lettre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "texte": "vers",
+     "pos": "PREP",
+     "debut": 17,
+     "fin": 21
+    },
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 22,
+     "fin": 24
+    },
+    {
+     "texte": "voyage",
+     "pos": "NOUN",
+     "debut": 25,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ma lettre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "compte",
+     "role": "gv",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "type": "GP",
+     "texte": "vers un voyage",
+     "role": "gp",
+     "debut": 17,
+     "fin": 31
+    }
+   ]
+  },
+  {
+   "id": "s110",
+   "langue": "fr",
+   "texte": "Observe!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Observe",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 7
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Observe",
+     "role": "gv",
+     "debut": 0,
+     "fin": 7
+    }
+   ]
+  },
+  {
+   "id": "s111",
+   "langue": "fr",
+   "texte": "le avocat crie",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": true
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "avocat",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 14
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le avocat",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "crie",
+     "role": "gv",
+     "debut": 10,
+     "fin": 14
+    }
+   ]
+  },
+  {
+   "id": "s112",
+   "langue": "fr",
+   "texte": "la brillante forêt nage que Lucas ferme",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "brillante",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 12
+    },
+    {
+     "texte": "forêt",
+     "pos": "NOUN",
+     "debut": 13,
+     "fin": 18
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 24,
+     "fin": 27
+    },
+    {
+     "texte": "Lucas",
+     "pos": "NOUN",
+     "debut": 28,
+     "fin": 33
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 34,
+     "fin": 39
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "la brillante forêt",
+     "role": "gn",
+     "debut": 0,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "nage",
+     "role": "gv",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "type": "SUB",
+     "texte": "que Lucas ferme",
+     "role": "sub",
+     "debut": 24,
+     "fin": 39
+    }
+   ]
+  },
+  {
+   "id": "s113",
+   "langue": "fr",
+   "texte": "un livre marche",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": true
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "un livre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "marche",
+     "role": "gv",
+     "debut": 9,
+     "fin": 15
+    }
+   ]
+  },
+  {
+   "id": "s114",
+   "langue": "fr",
+   "texte": "ce doux nuage dessine que les avocat compte",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "doux",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "nuage",
+     "pos": "NOUN",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "texte": "dessine",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 22,
+     "fin": 25
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 26,
+     "fin": 29
+    },
+    {
+     "texte": "avocat",
+     "pos": "NOUN",
+     "debut": 30,
+     "fin": 36
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 37,
+     "fin": 43
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce doux nuage",
+     "role": "gn",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "GV",
+     "texte": "dessine",
+     "role": "gv",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "type": "SUB",
+     "texte": "que les avocat compte",
+     "role": "sub",
+     "debut": 22,
+     "fin": 43
+    }
+   ]
+  },
+  {
+   "id": "s115",
+   "langue": "fr",
+   "texte": "la secrète fenêtre qui observe ferme",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "secrète",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 18
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 19,
+     "fin": 22
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 23,
+     "fin": 30
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 31,
+     "fin": 36
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "la secrète fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 18
+    },
+    {
+     "type": "REL",
+     "texte": "qui observe",
+     "role": "rel",
+     "debut": 19,
+     "fin": 30
+    },
+    {
+     "type": "GV",
+     "texte": "ferme",
+     "role": "gv",
+     "debut": 31,
+     "fin": 36
+    }
+   ]
+  },
+  {
+   "id": "s116",
+   "langue": "fr",
+   "texte": "ce nuage finit vers ma rapide rivière",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "nuage",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "finit",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "texte": "vers",
+     "pos": "PREP",
+     "debut": 15,
+     "fin": 19
+    },
+    {
+     "texte": "ma",
+     "pos": "DET",
+     "debut": 20,
+     "fin": 22
+    },
+    {
+     "texte": "rapide",
+     "pos": "ADJ",
+     "debut": 23,
+     "fin": 29
+    },
+    {
+     "texte": "rivière",
+     "pos": "NOUN",
+     "debut": 30,
+     "fin": 37
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce nuage",
+     "role": "gn",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "finit",
+     "role": "gv",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "type": "GP",
+     "texte": "vers ma rapide rivière",
+     "role": "gp",
+     "debut": 15,
+     "fin": 37
+    }
+   ]
+  },
+  {
+   "id": "s117",
+   "langue": "fr",
+   "texte": "le calme renard dessine!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "calme",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "renard",
+     "pos": "NOUN",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "dessine",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le calme renard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 15
+    },
+    {
+     "type": "GV",
+     "texte": "dessine",
+     "role": "gv",
+     "debut": 16,
+     "fin": 23
+    }
+   ]
+  },
+  {
+   "id": "s118",
+   "langue": "fr",
+   "texte": "les canard commence",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": true
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "canard",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les canard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "commence",
+     "role": "gv",
+     "debut": 11,
+     "fin": 19
+    }
+   ]
+  },
+  {
+   "id": "s119",
+   "langue": "fr",
+   "texte": "les forêt devrait commence",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "forêt",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "devrait",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les forêt",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "devrait commence",
+     "role": "gv",
+     "debut": 10,
+     "fin": 26
+    }
+   ]
+  },
+  {
+   "id": "s120",
+   "langue": "fr",
+   "texte": "une sombre lettre prépare de une chanson",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "sombre",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "lettre",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 17
+    },
+    {
+     "texte": "prépare",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 25
+    },
+    {
+     "texte": "de",
+     "pos": "PREP",
+     "debut": 26,
+     "fin": 28
+    },
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 29,
+     "fin": 32
+    },
+    {
+     "texte": "chanson",
+     "pos": "NOUN",
+     "debut": 33,
+     "fin": 40
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une sombre lettre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "prépare",
+     "role": "gv",
+     "debut": 18,
+     "fin": 25
+    },
+    {
+     "type": "GP",
+     "texte": "de une chanson",
+     "role": "gp",
+     "debut": 26,
+     "fin": 40
+    }
+   ]
+  },
+  {
+   "id": "s121",
+   "langue": "fr",
+   "texte": "nous ne écoute pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "nous",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 5,
+     "fin": 7
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 14
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 15,
+     "fin": 18
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "nous",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "ne écoute pas",
+     "role": "gv",
+     "debut": 5,
+     "fin": 18
+    }
+   ]
+  },
+  {
+   "id": "s122",
+   "langue": "fr",
+   "texte": "mon papier saute vers les montagne",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "papier",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "saute",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 16
+    },
+    {
+     "texte": "vers",
+     "pos": "PREP",
+     "debut": 17,
+     "fin": 21
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 22,
+     "fin": 25
+    },
+    {
+     "texte": "montagne",
+     "pos": "NOUN",
+     "debut": 26,
+     "fin": 34
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon papier",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "saute",
+     "role": "gv",
+     "debut": 11,
+     "fin": 16
+    },
+    {
+     "type": "GP",
+     "texte": "vers les montagne",
+     "role": "gp",
+     "debut": 17,
+     "fin": 34
+    }
+   ]
+  },
+  {
+   "id": "s123",
+   "langue": "fr",
+   "texte": "ce livre marche",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": true
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce livre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "marche",
+     "role": "gv",
+     "debut": 9,
+     "fin": 15
+    }
+   ]
+  },
+  {
+   "id": "s124",
+   "langue": "fr",
+   "texte": "une fenêtre commence que elles compte",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 20
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "elles",
+     "pos": "PRON",
+     "debut": 25,
+     "fin": 30
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 31,
+     "fin": 37
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "commence",
+     "role": "gv",
+     "debut": 12,
+     "fin": 20
+    },
+    {
+     "type": "SUB",
+     "texte": "que elles compte",
+     "role": "sub",
+     "debut": 21,
+     "fin": 37
+    }
+   ]
+  },
+  {
+   "id": "s125",
+   "langue": "fr",
+   "texte": "mon renard qui compte crie",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "renard",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 15,
+     "fin": 21
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 22,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon renard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "REL",
+     "texte": "qui compte",
+     "role": "rel",
+     "debut": 11,
+     "fin": 21
+    },
+    {
+     "type": "GV",
+     "texte": "crie",
+     "role": "gv",
+     "debut": 22,
+     "fin": 26
+    }
+   ]
+  },
+  {
+   "id": "s126",
+   "langue": "fr",
+   "texte": "cette fenêtre ne observe pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 6,
+     "fin": 13
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 14,
+     "fin": 16
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 24
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 25,
+     "fin": 28
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "cette fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "GV",
+     "texte": "ne observe pas",
+     "role": "gv",
+     "debut": 14,
+     "fin": 28
+    }
+   ]
+  },
+  {
+   "id": "s127",
+   "langue": "fr",
+   "texte": "cette lettre doit ferme",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "lettre",
+     "pos": "NOUN",
+     "debut": 6,
+     "fin": 12
+    },
+    {
+     "texte": "doit",
+     "pos": "VERB",
+     "debut": 13,
+     "fin": 17
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "cette lettre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 12
+    },
+    {
+     "type": "GV",
+     "texte": "doit ferme",
+     "role": "gv",
+     "debut": 13,
+     "fin": 23
+    }
+   ]
+  },
+  {
+   "id": "s128",
+   "langue": "fr",
+   "texte": "elle doit nage",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "doit",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 14
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "doit nage",
+     "role": "gv",
+     "debut": 5,
+     "fin": 14
+    }
+   ]
+  },
+  {
+   "id": "s129",
+   "langue": "fr",
+   "texte": "une lettre finit?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "lettre",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "finit",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 16
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une lettre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "finit",
+     "role": "gv",
+     "debut": 11,
+     "fin": 16
+    }
+   ]
+  },
+  {
+   "id": "s130",
+   "langue": "fr",
+   "texte": "un nuage commence?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "nuage",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "un nuage",
+     "role": "gn",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "commence",
+     "role": "gv",
+     "debut": 9,
+     "fin": 17
+    }
+   ]
+  },
+  {
+   "id": "s131",
+   "langue": "fr",
+   "texte": "une rapide chanson qui ferme écoute",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "une",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "rapide",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "chanson",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 18
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 19,
+     "fin": 22
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 23,
+     "fin": 28
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 29,
+     "fin": 35
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "une rapide chanson",
+     "role": "gn",
+     "debut": 0,
+     "fin": 18
+    },
+    {
+     "type": "REL",
+     "texte": "qui ferme",
+     "role": "rel",
+     "debut": 19,
+     "fin": 28
+    },
+    {
+     "type": "GV",
+     "texte": "écoute",
+     "role": "gv",
+     "debut": 29,
+     "fin": 35
+    }
+   ]
+  },
+  {
+   "id": "s132",
+   "langue": "fr",
+   "texte": "mon rapide village marche que cette brillante chanson commence",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "rapide",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "village",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 18
+    },
+    {
+     "texte": "marche",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 25
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 26,
+     "fin": 29
+    },
+    {
+     "texte": "cette",
+     "pos": "DET",
+     "debut": 30,
+     "fin": 35
+    },
+    {
+     "texte": "brillante",
+     "pos": "ADJ",
+     "debut": 36,
+     "fin": 45
+    },
+    {
+     "texte": "chanson",
+     "pos": "NOUN",
+     "debut": 46,
+     "fin": 53
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 54,
+     "fin": 62
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon rapide village",
+     "role": "gn",
+     "debut": 0,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "marche",
+     "role": "gv",
+     "debut": 19,
+     "fin": 25
+    },
+    {
+     "type": "SUB",
+     "texte": "que cette brillante chanson commence",
+     "role": "sub",
+     "debut": 26,
+     "fin": 62
+    }
+   ]
+  },
+  {
+   "id": "s133",
+   "langue": "fr",
+   "texte": "ils crie",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 8
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ils",
+     "role": "gn",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "crie",
+     "role": "gv",
+     "debut": 4,
+     "fin": 8
+    }
+   ]
+  },
+  {
+   "id": "s134",
+   "langue": "fr",
+   "texte": "vous ne saute pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "vous",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 5,
+     "fin": 7
+    },
+    {
+     "texte": "saute",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 14,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "vous",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "ne saute pas",
+     "role": "gv",
+     "debut": 5,
+     "fin": 17
+    }
+   ]
+  },
+  {
+   "id": "s135",
+   "langue": "fr",
+   "texte": "la fenêtre qui dessine écoute",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "texte": "dessine",
+     "pos": "VERB",
+     "debut": 15,
+     "fin": 22
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 23,
+     "fin": 29
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "la fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "REL",
+     "texte": "qui dessine",
+     "role": "rel",
+     "debut": 11,
+     "fin": 22
+    },
+    {
+     "type": "GV",
+     "texte": "écoute",
+     "role": "gv",
+     "debut": 23,
+     "fin": 29
+    }
+   ]
+  },
+  {
+   "id": "s136",
+   "langue": "fr",
+   "texte": "ce avocat nage",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": true
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "avocat",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 14
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce avocat",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "nage",
+     "role": "gv",
+     "debut": 10,
+     "fin": 14
+    }
+   ]
+  },
+  {
+   "id": "s137",
+   "langue": "fr",
+   "texte": "ce livre commence!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "commence",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce livre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "commence",
+     "role": "gv",
+     "debut": 9,
+     "fin": 17
+    }
+   ]
+  },
+  {
+   "id": "s138",
+   "langue": "fr",
+   "texte": "il doit observe",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "doit",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 15
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "gn",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "doit observe",
+     "role": "gv",
+     "debut": 3,
+     "fin": 15
+    }
+   ]
+  },
+  {
+   "id": "s139",
+   "langue": "fr",
+   "texte": "la lettre crie que le calme nuage observe",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "lettre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 14
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 15,
+     "fin": 18
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "texte": "calme",
+     "pos": "ADJ",
+     "debut": 22,
+     "fin": 27
+    },
+    {
+     "texte": "nuage",
+     "pos": "NOUN",
+     "debut": 28,
+     "fin": 33
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 34,
+     "fin": 41
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "la lettre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "crie",
+     "role": "gv",
+     "debut": 10,
+     "fin": 14
+    },
+    {
+     "type": "SUB",
+     "texte": "que le calme nuage observe",
+     "role": "sub",
+     "debut": 15,
+     "fin": 41
+    }
+   ]
+  },
+  {
+   "id": "s140",
+   "langue": "fr",
+   "texte": "les fenêtre prépare!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "prépare",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "prépare",
+     "role": "gv",
+     "debut": 12,
+     "fin": 19
+    }
+   ]
+  },
+  {
+   "id": "s141",
+   "langue": "fr",
+   "texte": "Emma qui trouve compte",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Emma",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 5,
+     "fin": 8
+    },
+    {
+     "texte": "trouve",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Emma",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "REL",
+     "texte": "qui trouve",
+     "role": "rel",
+     "debut": 5,
+     "fin": 15
+    },
+    {
+     "type": "GV",
+     "texte": "compte",
+     "role": "gv",
+     "debut": 16,
+     "fin": 22
+    }
+   ]
+  },
+  {
+   "id": "s142",
+   "langue": "fr",
+   "texte": "les fenêtre ne dessine pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "fenêtre",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 12,
+     "fin": 14
+    },
+    {
+     "texte": "dessine",
+     "pos": "VERB",
+     "debut": 15,
+     "fin": 22
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 23,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les fenêtre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "ne dessine pas",
+     "role": "gv",
+     "debut": 12,
+     "fin": 26
+    }
+   ]
+  },
+  {
+   "id": "s143",
+   "langue": "fr",
+   "texte": "ce renard ne prépare pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "renard",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 10,
+     "fin": 12
+    },
+    {
+     "texte": "prépare",
+     "pos": "VERB",
+     "debut": 13,
+     "fin": 20
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 21,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce renard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "ne prépare pas",
+     "role": "gv",
+     "debut": 10,
+     "fin": 24
+    }
+   ]
+  },
+  {
+   "id": "s144",
+   "langue": "fr",
+   "texte": "mon rapide jardin dessine chez ce chemin",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "mon",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "rapide",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "jardin",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 17
+    },
+    {
+     "texte": "dessine",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 25
+    },
+    {
+     "texte": "chez",
+     "pos": "PREP",
+     "debut": 26,
+     "fin": 30
+    },
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 31,
+     "fin": 33
+    },
+    {
+     "texte": "chemin",
+     "pos": "NOUN",
+     "debut": 34,
+     "fin": 40
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "mon rapide jardin",
+     "role": "gn",
+     "debut": 0,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "dessine",
+     "role": "gv",
+     "debut": 18,
+     "fin": 25
+    },
+    {
+     "type": "GP",
+     "texte": "chez ce chemin",
+     "role": "gp",
+     "debut": 26,
+     "fin": 40
+    }
+   ]
+  },
+  {
+   "id": "s145",
+   "langue": "fr",
+   "texte": "Emma cherche devant le nuage",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Emma",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "cherche",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 12
+    },
+    {
+     "texte": "devant",
+     "pos": "PREP",
+     "debut": 13,
+     "fin": 19
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 20,
+     "fin": 22
+    },
+    {
+     "texte": "nuage",
+     "pos": "NOUN",
+     "debut": 23,
+     "fin": 28
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Emma",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "cherche",
+     "role": "gv",
+     "debut": 5,
+     "fin": 12
+    },
+    {
+     "type": "GP",
+     "texte": "devant le nuage",
+     "role": "gp",
+     "debut": 13,
+     "fin": 28
+    }
+   ]
+  },
+  {
+   "id": "s146",
+   "langue": "fr",
+   "texte": "ma montagne observe avec les jardin",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ma",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "montagne",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 11
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 19
+    },
+    {
+     "texte": "avec",
+     "pos": "PREP",
+     "debut": 20,
+     "fin": 24
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 25,
+     "fin": 28
+    },
+    {
+     "texte": "jardin",
+     "pos": "NOUN",
+     "debut": 29,
+     "fin": 35
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ma montagne",
+     "role": "gn",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "observe avec les jardin",
+     "role": "gv",
+     "debut": 12,
+     "fin": 35
+    },
+    {
+     "type": "GP",
+     "texte": "les jardin",
+     "role": "gp",
+     "debut": 25,
+     "fin": 35
+    }
+   ]
+  },
+  {
+   "id": "s147",
+   "langue": "fr",
+   "texte": "les livre crie",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": true
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "crie",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 14
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les livre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "crie",
+     "role": "gv",
+     "debut": 10,
+     "fin": 14
+    }
+   ]
+  },
+  {
+   "id": "s148",
+   "langue": "fr",
+   "texte": "le voyage nage pour les ancienne lettre",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "voyage",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 14
+    },
+    {
+     "texte": "pour",
+     "pos": "PREP",
+     "debut": 15,
+     "fin": 19
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "texte": "ancienne",
+     "pos": "ADJ",
+     "debut": 24,
+     "fin": 32
+    },
+    {
+     "texte": "lettre",
+     "pos": "NOUN",
+     "debut": 33,
+     "fin": 39
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le voyage",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "nage pour les ancienne lettre",
+     "role": "gv",
+     "debut": 10,
+     "fin": 39
+    },
+    {
+     "type": "GP",
+     "texte": "les ancienne lettre",
+     "role": "gp",
+     "debut": 20,
+     "fin": 39
+    }
+   ]
+  },
+  {
+   "id": "s149",
+   "langue": "fr",
+   "texte": "les lente forêt pourrait écoute",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": true,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "lente",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "forêt",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "texte": "pourrait",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 24
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 25,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les lente forêt",
+     "role": "gn",
+     "debut": 0,
+     "fin": 15
+    },
+    {
+     "type": "GV",
+     "texte": "pourrait écoute",
+     "role": "gv",
+     "debut": 16,
+     "fin": 31
+    }
+   ]
+  },
+  {
+   "id": "s150",
+   "langue": "fr",
+   "texte": "les rivière compte à un rapide livre",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "rivière",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "compte",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "texte": "à",
+     "pos": "PREP",
+     "debut": 19,
+     "fin": 20
+    },
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 21,
+     "fin": 23
+    },
+    {
+     "texte": "rapide",
+     "pos": "ADJ",
+     "debut": 24,
+     "fin": 30
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 31,
+     "fin": 36
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les rivière",
+     "role": "gn",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "compte",
+     "role": "gv",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "type": "GP",
+     "texte": "à un rapide livre",
+     "role": "gp",
+     "debut": 19,
+     "fin": 36
+    }
+   ]
+  },
+  {
+   "id": "s151",
+   "langue": "fr",
+   "texte": "ce secret cheval cherche elle",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "secret",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "cheval",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "texte": "cherche",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 24
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 25,
+     "fin": 29
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce secret cheval",
+     "role": "gn",
+     "debut": 0,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "cherche elle",
+     "role": "gv",
+     "debut": 17,
+     "fin": 29
+    }
+   ]
+  },
+  {
+   "id": "s152",
+   "langue": "fr",
+   "texte": "ils ne écoute pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 4,
+     "fin": 6
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 7,
+     "fin": 13
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 14,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ils",
+     "role": "gn",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "ne écoute pas",
+     "role": "gv",
+     "debut": 4,
+     "fin": 17
+    }
+   ]
+  },
+  {
+   "id": "s153",
+   "langue": "fr",
+   "texte": "le canard ferme",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": true
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "canard",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 15
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le canard",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "ferme",
+     "role": "gv",
+     "debut": 10,
+     "fin": 15
+    }
+   ]
+  },
+  {
+   "id": "s154",
+   "langue": "fr",
+   "texte": "les calme cheval observe?",
+   "pragma": {
+    "acte": "question",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "calme",
+     "pos": "ADJ",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "cheval",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 16
+    },
+    {
+     "texte": "observe",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "les calme cheval",
+     "role": "gn",
+     "debut": 0,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "observe",
+     "role": "gv",
+     "debut": 17,
+     "fin": 24
+    }
+   ]
+  },
+  {
+   "id": "s155",
+   "langue": "fr",
+   "texte": "elle ne rêve pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 5,
+     "fin": 7
+    },
+    {
+     "texte": "rêve",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 13,
+     "fin": 16
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "gn",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "ne rêve pas",
+     "role": "gv",
+     "debut": 5,
+     "fin": 16
+    }
+   ]
+  },
+  {
+   "id": "s156",
+   "langue": "fr",
+   "texte": "ce livre rêve!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "ce",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "rêve",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 13
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "ce livre",
+     "role": "gn",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "rêve",
+     "role": "gv",
+     "debut": 9,
+     "fin": 13
+    }
+   ]
+  },
+  {
+   "id": "s157",
+   "langue": "fr",
+   "texte": "Crie!",
+   "pragma": {
+    "acte": "exclamation",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "Crie",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 4
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Crie",
+     "role": "gv",
+     "debut": 0,
+     "fin": 4
+    }
+   ]
+  },
+  {
+   "id": "s158",
+   "langue": "fr",
+   "texte": "la forêt ne range pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "forêt",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "texte": "range",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 17
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 18,
+     "fin": 21
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "la forêt",
+     "role": "gn",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "ne range pas",
+     "role": "gv",
+     "debut": 9,
+     "fin": 21
+    }
+   ]
+  },
+  {
+   "id": "s159",
+   "langue": "fr",
+   "texte": "un ancien village ne cherche pas",
+   "pragma": {
+    "acte": "assertion",
+    "negation": true,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "ancien",
+     "pos": "ADJ",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "village",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "cherche",
+     "pos": "VERB",
+     "debut": 21,
+     "fin": 28
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 29,
+     "fin": 32
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "un ancien village",
+     "role": "gn",
+     "debut": 0,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "ne cherche pas",
+     "role": "gv",
+     "debut": 18,
+     "fin": 32
+    }
+   ]
+  },
+  {
+   "id": "s160",
+   "langue": "fr",
+   "texte": "le chemin nage avec le renard",
+   "pragma": {
+    "acte": "assertion",
+    "negation": false,
+    "modalite": false,
+    "double_sens": false
+   },
+   "source": "synthetique",
+   "mots": [
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chemin",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 14
+    },
+    {
+     "texte": "avec",
+     "pos": "PREP",
+     "debut": 15,
+     "fin": 19
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 20,
+     "fin": 22
+    },
+    {
+     "texte": "renard",
+     "pos": "NOUN",
+     "debut": 23,
+     "fin": 29
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "le chemin",
+     "role": "gn",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "nage avec le renard",
+     "role": "gv",
+     "debut": 10,
+     "fin": 29
+    },
+    {
+     "type": "GP",
+     "texte": "le renard",
+     "role": "gp",
+     "debut": 20,
+     "fin": 29
+    }
+   ]
+  }
+ ]
+}

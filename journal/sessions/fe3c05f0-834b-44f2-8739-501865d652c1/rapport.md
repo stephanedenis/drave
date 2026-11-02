@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 26.4 h |
-| Tours | 13 |
-| Messages | 889 |
-| Appels d'outils | 887 |
+| Durée | 26.5 h |
+| Tours | 14 |
+| Messages | 896 |
+| Appels d'outils | 892 |
 | Fichiers touchés | 18 |
-| Commandes | 814 |
+| Commandes | 819 |
 | Sous-agents | 0 |
 | Commits | 47 |
 | Compactages de contexte | 2 |
@@ -53,6 +53,8 @@
 **Tour 12** — suis le plan, continue jusqu'à 8h demain matin
 
 **Tour 13** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
+
+**Tour 14** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -702,6 +704,34 @@ La suite se fait sans toi : le goal reste actif jusqu'à 8 h, les runs finissent
 - bash — Fix counters and journal for round one
 - bash — Retry commit with current HEAD and counters
 
+**Synthèse produite :**
+
+⏵ Round 1 : contrôle 8 Ko reproductible, UDHR française citée, neuf runs en cours
+
+**Round 1/1000 — progrès concrets, tout committé.** Le mandat continue ; le goal reste actif jusqu'à 8 h.
+
+\## Fait dans ce round
+
+- **Le contrôle 8 Ko est enfin reproductible** : `verifie_contamination.py` accepte `--taille-troncon 8192` et calcule **les deux unités** dans un seul passage. Le français : **0 / 51 250** (validation) et **0 / 50 730** (test) fenêtres de 8 Ko dans l'entraînement ; le contrôle ligne reste à 5,53 % / 5,47 % — les titres de sections répétés, pas de la prose. La limite « contrôle ad hoc » de la fiche est levée.
+- **Les jeux d'évaluation par langue** : `tools/extraire_evals_langues.py` extrait le XNLI (ar/de/en/es/fr/ru/zh) et l'UDHR (fr/it/ja/pt) ; les 11 fichiers sont dans `work/dr/eval/`. Le contrôle ne mélange plus quinze langues dans quarante fenêtres.
+- **Un vrai résultat négatif** : l'**UDHR française donne 2 / 24** — elle est **citée dans Wikipédia**, comme pour l'italien, le japonais et le portugais. La fiche et le journal le disent : l'UDHR n'est pas un jeu tenu à l'écart pour le français ; le XNLI et les trois jeux locaux restent à **0 / 40**.
+- **La fiche** est à jour (les deux unités, l'UDHR, le contrôle 8 Ko dans l'outil) ; **commits** `d6c422a0` et `d8d384c5` (compteurs synchronisés : 389 fiches, 480 JSON).
+- **Les neuf runs avancent** : ar 3,4 Go, zh 2,5, pt 2,9, it 3,2, es 3,9, de 4,6, ru 5,5, ja 5,6, **en 4,0 Go** (le plus long, ~25 Go de dump) ; 9 cœurs sur 40, ~13 Mo/s cumulés, le disque tient. La session L a committé son **gold v0** (POS 0,924, pragmatique 1,0/1,0/0,95/0,9) en parallèle — l'arbre partagé est sain.
+
+\## La suite
+
+Au fil des fins de run : **manifeste → contamination (les deux unités + les jeux ciblés) → fiche par langue → catalogue des dix corpus**, puis l'**extraction PDF/OCR** (livres, CEGEP, collections) et la **préparation R1.1/R1.2** avec les mesures A2.6/A8.3. Le goal reste actif ; je reprends au prochain round avec les premiers manifestes.
+
+### Tour 14 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check language runs and manifests
+- bash — Read finished manifests stats
+- bash — Run contamination checks for Arabic, Portuguese, Chinese
+- bash — Update report and state for four measured languages
+- bash — Read Italian manifest and run its contamination
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -769,7 +799,7 @@ La suite se fait sans toi : le goal reste actif jusqu'à 8 h, les runs finissent
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 774 autres
+- … et 779 autres
 
 ## 4. Mesures et résultats marquants
 

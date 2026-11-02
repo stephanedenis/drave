@@ -14085,3 +14085,157 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-823", "timeout_ms": 400000, "wait": true}`
+
+  ```
+18:59
+config.json
+generation_config.json
+  # meilleur point : pas 19000 · val 1.6655 bits/octet
+  # écrit dans work/n2j/route-wiki · 23.57 M paramètres · 1.46 M poids lus/jeton/couche
+work/n2j/base-canal.pt
+CANAL_OK
+}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-821 (bash: sleep 840; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/route-wiki 2>/dev/null | head -3; tail -2 work/n2j/teacher-wiki.log; tail -1 work/n2j/base-canal.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"log\" tools/distiller_budget.py | head -4; cat > work/n2j/file-gpu0.sh <<'EOF'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport PYTHONPATH=. CUDA_VISIBLE_DEVICES=0\nP=\"$HOME/gpu-env/bin/pyth … [1756 caractères tronqués]`
+
+  ```
+120:            logits = modele(x[:, :-1])["logits"]
+121:            tot += float(F.cross_entropy(logits.reshape(-1, 256), y.reshape(-1),
+155:    ap.add_argument("--log", default=None)
+163:    log = open(a.log, "a") if a.log else None
+q0 1514548
+q1 1514549
+19:00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2j/evalue_canal.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"evalue_canal.py — PPL avec et sans le canal de structure, par longueur, et au mélange.\"\"\"\nimport json, math, pathlib, random, sys\nimport torch, torch.nn.functi … [3327 caractères tronqués]`
+
+  ```
+ok
+[still running after 60000ms; moved to background job bash-825]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-825", "timeout_ms": 200000, "wait": true}`
+
+  ```
+# init work/n2j/base-wiki-pos.pt · manquants ['embed_canal.weight'] · graine 1 · décalage 0
+# init work/n2j/base-wiki-pos.pt · manquants ['embed_canal.weight'] · graine 2 · décalage 10000019
+19:01
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-825 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2j/evalue_canal.py <<'PY'
+#!/usr/bin/env python3
+"""evalue_canal.py — PPL avec et sans le canal de structure, par longueur, et au mélange."""
+import json, math, pathlib, random, sys
+import torch, torch.nn.functional as F
+sys.path.insert(0, '.')
+from tools.eval_n2_propre import charge, charger_bytes, departs_vdc
+from tools.canal_structure import canal as canal_de
+
+CHUNK = 8192
+
+
+def fenetres(data, canal, n, long, compteur):
+    n_chunks = max(1, len(data) // CHUNK)
+    xs, cs = [], []
+    for k in range(n):
+        c = departs_vdc(compteur + k, 1, n_chunks, long)[0]
+        debut = c * CHUNK
+        marge = min(CHUNK, len(data) - debut) - long - 1
+        if marge <= 0:
+            continue
+        r = departs_vdc(compteur + 10_000_003 + k, 1, marge, long)[0]
+        j = debut + r
+        xs.append(data[j:j + long])
+        cs.append(canal[j:j + long] if canal is not None else torch.zeros(long, dtype=torch.long))
+    return torch.stack(xs).cuda(), (torch.stack(cs).cuda() if canal is not None else None)
+
+
+def ppl(m, data, canal, long=128, n_lots=8, avec_canal=True):
+    m.eval(); tot, n = 0.0, 0
+    with torch.no_grad():
+        for k in range(n_lots):
+            x, c = fenetres(data, canal, 16, long + 1, k * 16)
+            logits = m(x[:, :-1], canal=(c[:, :-1] if (avec_canal and c is not None) else None))["logits"]
+            tot += float(F.cross_entropy(logits.reshape(-1, 256), x[:, 1:].reshape(-1), reduction="sum"))
+            n += x[:, 1:].numel()
+    return round(math.exp(tot / n), 4)
+
+
+def melange_texte(texte, graine, tout):
+    rng = random.Random(graine)
+    sortie, mot = [], []
+    for ch in texte:
+        if ch.isalpha() or ch in "'’":
+            mot.append(ch)
+        else:
+            if mot:
+                sortie.append(_mot(''.join(mot), rng, tout)); mot = []
+            sortie.append(ch)
+    if mot:
+        sortie.append(_mot(''.join(mot), rng, tout))
+    return ''.join(sortie)
+
+
+def _mot(m, rng, tout):
+    l = list(m)
+    if len(l) <= 3:
+        return m
+    if tout:
+        rng.shuffle(l); return ''.join(l)
+    mid = l[1:-1]; rng.shuffle(mid)
+    return l[0] + ''.join(mid) + l[-1]
+
+
+if __name__ == "__main__":
+    pt = sys.argv[1]
+    m = charge(pt)
+    val = charger_bytes('data/wiki_fr/propre/val.txt')
+    canal_val = torch.tensor(list(pathlib.Path('data/wiki_fr/propre/val.canal').read_bytes()), dtype=torch.long)
+    res = {"fichier": pathlib.Path(pt).name}
+    for L in (128, 256, 512):
+        res[f"L{L}_canal"] = ppl(m, val, canal_val, L, avec_canal=True)
+        res[f"L{L}_sans"] = ppl(m, val, canal_val, L, avec_canal=False)
+    # typoglycémie : le canal est recalculé sur le texte mélangé
+    texte = pathlib.Path('data/wiki_fr/propre/val.txt').read_text(encoding='utf-8', errors='replace')
+    for nom, texte_v in (("propre", texte), ("milieu", melange_texte(texte, 0, False)),
+                         ("tout", melange_texte(texte, 0, True))):
+        data = torch.tensor(list(texte_v.encode('utf-8')), dtype=torch.long)
+        c = torch.tensor(list(canal_de(texte_v)), dtype=torch.long)
+        res[f"mélange_{nom}"] = ppl(m, data, c, 128, avec_canal=True)
+    print(json.dumps(res, ensure_ascii=False), flush=True)
+PY
+echo ok; sleep 60; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n2j/W-g1.log 2>/dev/null; tail -1 work/n2j/W-g2.log 2>/dev/null; date '+%H:%M') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python work/n2j/evalue_canal.py work/n2j/base-canal.pt 2>&1 | grep -v Loading | tee work/n2j/eval-canal.json", "description": "Evaluate the channel model with and without  … [13 caractères tronqués]`
+
+  ```
+{"fichier": "base-canal.pt", "L128_canal": 4.1738, "L128_sans": 9.6025, "L256_canal": 4.2143, "L256_sans": 9.6982, "L512_canal": 5.446, "L512_sans": 10.361, "mélange_propre": 4.1569, "mélange_milieu": 23.4607, "mélange_tout": 42.7209}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2j/typo_sans.py <<'PY'\nimport json, math, pathlib, random, sys\nimport torch, torch.nn.functional as F\nsys.path.insert(0, '.')\nfrom tools.eval_n2_propre import charge, charger_bytes\nfrom work.n2j.evalue_canal import m … [1112 caractères tronqués]`
+
+  ```
+{"fichier": "base-wiki-pos.pt", "mélange_propre": 4.4229, "mélange_milieu": 24.5837, "mélange_tout": 44.1275}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2j/fiche-canal.md <<'EOF'\n# N2.l — Le canal de structure : +5 % de PPL, et le même alphabet\n\n> **Ligne de roadmap** : N2 (et le canal d'annotation de S) · **Date** : 2026-11-01 ·\n> **Verdict** : donner au modèle une * … [3655 caractères tronqués]`
+
+  ```
+fiche canal prête
+19:03
+pas  1500 · seq 128 · perte 33.5691 · PPL 128/4 4.1108 · 107 s
+pas  1500 · seq 128 · perte 32.6027 · PPL 128/4 4.1100 · 105 s
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for g in 1 2 3; do echo \"-- W-g$g\"; tail -1 work/n2j/W-g$g.log 2>/dev/null; done; ls work/n2j/W-g*.pt 2>/dev/null", "description": "Wait for the first two distillations"}`

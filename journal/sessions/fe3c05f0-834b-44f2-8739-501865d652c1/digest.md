@@ -16131,3 +16131,101 @@ fatal: cannot lock ref 'HEAD': is at 550cd76d593708a83fae0c4cf17b5ded90b9e250 bu
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor i in 1 2 3 4; do\n  head_now=$(git rev-parse HEAD)\n  revue=$(python3 tools/revue_documentation.py 2>&1 | grep -o \"[0-9]* fiche(s) · [0-9]* JSON · [0-9]* doc(s) · [0-9]* porte(s)\")\n  fic=$(echo \"$revue\" | awk '{print $1}'); js … [1444 caractères tronqués]`
+
+  ```
+[master d8d384c5] ÉTAT — COMPTEURS SYNCHRONISÉS, JOURNAL DU CONTRÔLE 8 KO ET DE L'UDHR 2/24
+ 20 files changed, 220 insertions(+), 49 deletions(-)
+commit OK (essai 1)
+d8d384c5 ÉTAT — COMPTEURS SYNCHRONISÉS, JOURNAL DU CONTRÔLE 8 KO ET DE L'UDHR 2/24
+550cd76d L — GOLD v0 : 20 PHRASES, POS 0,924, SYNTAGMES 0,356, PRAGMATIQUE 1,0/1,0/0,95/0,9
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 1 : contrôle 8 Ko reproductible, UDHR française citée, neuf runs en cours
+
+**Round 1/1000 — progrès concrets, tout committé.** Le mandat continue ; le goal reste actif jusqu'à 8 h.
+
+## Fait dans ce round
+
+- **Le contrôle 8 Ko est enfin reproductible** : `verifie_contamination.py` accepte `--taille-troncon 8192` et calcule **les deux unités** dans un seul passage. Le français : **0 / 51 250** (validation) et **0 / 50 730** (test) fenêtres de 8 Ko dans l'entraînement ; le contrôle ligne reste à 5,53 % / 5,47 % — les titres de sections répétés, pas de la prose. La limite « contrôle ad hoc » de la fiche est levée.
+- **Les jeux d'évaluation par langue** : `tools/extraire_evals_langues.py` extrait le XNLI (ar/de/en/es/fr/ru/zh) et l'UDHR (fr/it/ja/pt) ; les 11 fichiers sont dans `work/dr/eval/`. Le contrôle ne mélange plus quinze langues dans quarante fenêtres.
+- **Un vrai résultat négatif** : l'**UDHR française donne 2 / 24** — elle est **citée dans Wikipédia**, comme pour l'italien, le japonais et le portugais. La fiche et le journal le disent : l'UDHR n'est pas un jeu tenu à l'écart pour le français ; le XNLI et les trois jeux locaux restent à **0 / 40**.
+- **La fiche** est à jour (les deux unités, l'UDHR, le contrôle 8 Ko dans l'outil) ; **commits** `d6c422a0` et `d8d384c5` (compteurs synchronisés : 389 fiches, 480 JSON).
+- **Les neuf runs avancent** : ar 3,4 Go, zh 2,5, pt 2,9, it 3,2, es 3,9, de 4,6, ru 5,5, ja 5,6, **en 4,0 Go** (le plus long, ~25 Go de dump) ; 9 cœurs sur 40, ~13 Mo/s cumulés, le disque tient. La session L a committé son **gold v0** (POS 0,924, pragmatique 1,0/1,0/0,95/0,9) en parallèle — l'arbre partagé est sain.
+
+## La suite
+
+Au fil des fins de run : **manifeste → contamination (les deux unités + les jeux ciblés) → fiche par langue → catalogue des dix corpus**, puis l'**extraction PDF/OCR** (livres, CEGEP, collections) et la **préparation R1.1/R1.2** avec les mesures A2.6/A8.3. Le goal reste actif ; je reprends au prochain round avec les premiers manifestes.
+
+
+## Tour 14
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; echo \"=== processus\"; ps -eo pid,etime,pcpu,cmd | grep \"corpus_wikipedia_texte.py --langue\" | grep -v grep | awk '{print $1,$2,$3,$NF}'; echo \"=== manifestes\"; ls -la reports/corpus-wiki-*-texte.json 2>/dev/null; e … [279 caractères tronqués]`
+
+  ```
+18:59
+=== processus
+1494795 28:13 98.1 reports/corpus-wiki-en-texte.json
+1494796 28:13 98.5 reports/corpus-wiki-de-texte.json
+1494797 28:13 98.2 reports/corpus-wiki-ru-texte.json
+1494798 28:13 98.3 reports/corpus-wiki-es-texte.json
+1494799 28:13 98.2 reports/corpus-wiki-ja-texte.json
+1497608 25:28 99.0 reports/corpus-wiki-it-texte.json
+=== manifestes
+-rw-r--r--. 1 stephane stephane 3173  1 nov 18:55 reports/corpus-wiki-ar-texte.json
+-rw-r--r--. 1 stephane stephane 4060  1 nov 17:27 reports/corpus-wiki-fr-texte.json
+-rw-r--r--. 1 stephane stephane 4019  1 nov 18:56 reports/corpus-wiki-pt-texte.json
+-rw-r--r--. 1 stephane stephane 3871  1 nov 18:55 reports/corpus-wiki-zh-texte.json
+=== logs
+ar: }
+
+it:   [it] 2000000 lus · 854211 gardés · 3.24 G caractères
+
+pt: }
+
+zh: }
+
+de:   [de] 1800000 lus · 965350 gardés · 4.77 G caractères
+
+ru:   [ru] 2600000 lus · 981984 gardés · 3.52 G caractères
+
+es:   [es] 3400000 lus · 1176062 gardés · 4.62 G caractères
+
+ja:   [ja] 2400000 lus · 1035907 gardés · 2.41 G caractères
+
+en:   [en] 600000 lus · 317134 gardés · 3.27 G caractères
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for l in ar pt zh; do python3 - \"$l\" <<'PY'\nimport json,pathlib,sys\nl=sys.argv[1]; d=json.loads(pathlib.Path(f'reports/corpus-wiki-{l}-texte.json').read_text())\nprint(l, '|', d['articles_lus'], 'lus |', d['articles_gardes'], 'gard … [267 caractères tronqués]`
+
+  ```
+ar | 3874780 lus | 1000310 gardés | 1103236 redir | 1.993855565 G car | {'train': 3215542806, 'val': 175315288, 'test': 176039939} | res {'modele': 1, 'lien': 161, 'balise': 0, 'lignes_echantillon': 20000}
+pt | 2765460 lus | 970793 gardés | 817549 redir | 3.104155526 G car | {'train': 2884175219, 'val': 163812835, 'test': 161585634} | res {'modele': 1, 'lien': 296, 'balise': 0, 'lignes_echantillon': 20000}
+zh | 4895259 lus | 643122 gardés | 1438628 redir | 1.045092865 G car | {'train': 2369534393, 'val': 133073496, 'test': 131285401} | res {'modele': 14, 'lien': 0, 'balise': 0, 'lignes_echantillon': 20000}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nfor l in ar pt zh; do\n  case $l in ar) ev=work/dr/eval/ar-xnli.txt;; pt) ev=work/dr/eval/pt-udhr.txt;; zh) ev=work/dr/eval/zh-xnli.txt;; esac\n  echo \"=== $l ($ev)\"\n  timeout 420 python3 tools/verifie_contamination.py --train data/ … [864 caractères tronqués]`
+
+  ```
+=== ar (work/dr/eval/ar-xnli.txt)
+}
+=== pt (work/dr/eval/pt-udhr.txt)
+}
+=== zh (work/dr/eval/zh-xnli.txt)
+}
+ar | lignes: {'val.txt': 0.289205, 'test.txt': 0.285143} | 8 Ko: {'val.txt': 0.0, 'test.txt': 0.0} | éval: [('ar-xnli.txt', 0, 40)]
+pt | lignes: {'val.txt': 0.045318, 'test.txt': 0.047127} | 8 Ko: {'val.txt': 0.0, 'test.txt': 0.0} | éval: [('pt-udhr.txt', 2, 40)]
+zh | lignes: {'val.txt': 0.021622, 'test.txt': 0.021707} | 8 Ko: {'val.txt': 0.0, 'test.txt': 0.0} | éval: [('zh-xnli.txt', 0, 40)]
+  ```
+

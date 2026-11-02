@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-01, 18 h 55 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-01, 19 h 05 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -32,9 +32,10 @@
 - **Moteur B13** : **AC-3/alpha-bêta (8/8)**, **DRVF (9/9)**, **banc (10/10)** ; fiches
   [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
   [`pensee-drvf`](../../reports/rapport-pensee-drvf.md), [`pensee-banc`](../../reports/rapport-pensee-banc.md).
-- **Gold L v0** : **20 phrases** ; POS **0,924**, syntagmes **0,356**, pragmatique
-  **1,0/1,0/0,95/0,9** ; cascade (mock) **52,5 %** ; vrai neuronal **refusé** ; fiche
-  [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain : **gold 100–200 + modèle qualifié**.
+- **Gold L 180** : **20 réels + 160 synthétiques** ; POS **0,751** (fermé 0,939/ouvert 0,621),
+  syntagmes exacts **0,194**/**tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock)
+  **67,1 %** ; vrai neuronal **refusé** ; fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ;
+  prochain : **attachement + modèle qualifié**.
 - **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes** (T0 canonique, T1 rejeu,
   T2 stratégies, T3 anytime, T4 justification) sur le jouet des cruches ; BFS, greedy, A* et
   MCTS-lite ; puis **AC-3 et alpha-bêta** (8/8 ; 1 495/296 contre 18 730) ; fiches
@@ -87,10 +88,10 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **118** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
+| portes | **81** (76 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **392** / **·** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **JSON** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **392** / **485** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
@@ -119,7 +120,7 @@ styles · **C5** domaines · **C6** documentation · **C7** pensée — hors gra
 ## Ce qui reste
 
 **N2.h** — **close** (N2.i : 12,93 littérature, 33,83 anglais ; porte < 2,5 non atteinte) ;
-**Pensée** — **gold 100/neural L, opérateurs B13** (AC-3/alpha-bêta/DRVF/banc/gold v0 faits ; session `e181ce02`) ; **N4** — la consigne
+**Pensée** — **attachement/neural L, opérateurs B13** (AC-3/alpha-bêta/DRVF/banc/gold 180 faits ; session `e181ce02`) ; **N4** — la consigne
 courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — close, limites nommées ; **R0.7** — gold/neuronal ; **R1.1/R1.2** — le contexte natif ; **S** — l'export au corpus.
 
 - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).

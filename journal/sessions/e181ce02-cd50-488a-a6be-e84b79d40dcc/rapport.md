@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 26.3 h |
+| Durée | 26.4 h |
 | Tours | 16 |
-| Messages | 457 |
-| Appels d'outils | 486 |
+| Messages | 468 |
+| Appels d'outils | 497 |
 | Fichiers touchés | 25 |
-| Commandes | 384 |
+| Commandes | 394 |
 | Sous-agents | 2 |
-| Commits | 24 |
+| Commits | 25 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -890,9 +890,24 @@ Le round 2 du goal est livré : le **gold v0** du bloc linguistique, mesuré. Co
 
 ### Tour 16 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Inspecter l'état courant et les compteurs du round 3
+- bash — Générer 160 phrases synthétiques annotées
+- bash — Étendre l'évaluateur au gold 180 et au syntagme par tête
+- bash — Ajuster les seuils par source et relancer le gold 180
+- bash — Lire les métriques détaillées du gold 180
+- bash — Mettre à jour la fiche, le contrat et l'état pour le gold 180
+- bash — Passer toutes les portes après le gold 180
+- bash — Lire le tableau des compteurs corrompu
+- bash — Réparer le tableau des compteurs partagé
+- bash — Aligner le compteur JSON et vérifier les portes
+- bash — Committer le gold 180 et la mesure par tête
+- job_output
+
+**Synthèse produite :**
+
+⏵ Round 3 : j'étends le gold à 180 phrases par une grammaire indépendante et je mesure par tête
 
 ## 3. Travail accompli
 
@@ -973,7 +988,7 @@ Le round 2 du goal est livré : le **gold v0** du bloc linguistique, mesuré. Co
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 344 autres
+- … et 354 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1137,4 +1152,5 @@ Le round 2 du goal est livré : le **gold v0** du bloc linguistique, mesuré. Co
 - B13 — DRVF THOUGHT : 23 597 OCTETS, 93 ÉVÉNEMENTS, REJEU IDENTIQUE, CORRUPTION REFUSÉE" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LE BANC ANYTIME : A* BUT EN 32 NŒUDS, AUC 0,528/0,624 CONTRE 0,246/0,116 À L'ALÉATOIRE" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - L — GOLD v0 : 20 PHRASES, POS 0,924, SYNTAGMES 0,356, PRAGMATIQUE 1,0/1,0/0,95/0,9" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- L — GOLD 180 : POS 0,751 (0,924 RÉEL / 0,725 SYNTH), TÊTE 0,560, PRAGMATIQUE 1,0/1,0/0,99/0,89" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

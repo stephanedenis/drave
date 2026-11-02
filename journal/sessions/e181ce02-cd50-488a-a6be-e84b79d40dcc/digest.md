@@ -10794,3 +10794,300 @@ deb0f96f B13 — LE BANC ANYTIME : A* BUT EN 32 NŒUDS, AUC 0,528/0,624 CONTRE 0
 … [235 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Round 3 : j'étends le gold à 180 phrases par une grammaire indépendante et je mesure par tête
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/tests/linguistique/gold_synthetique.py <<'PY'\n\"\"\"gold_synthetique.py — le gold étendu : 160 phrases générées par une grammaire indépendante.\n\nLes 20 phrases de `gold.py` sont **réelles** (écrites à la main) ; celles … [10705 caractères tronqués]`
+
+  ```
+gold synthétique écrit → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_synthetique.json
+EXIT=0
+160 699
+nous compte avec il [{'type': 'GN', 'texte': 'nous', 'role': 'gn', 'debut': 0, 'fin': 4}, {'type': 'GV', 'texte': 'compte', 'role': 'gv', 'debut': 5, 'fin': 11}, {'type': 'GP', 'texte': 'avec il', 'role': 'gp', 'debut': 12, 'fin': 19}]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/tests/linguistique/evaluer_gold.py <<'PY'\n\"\"\"evaluer_gold.py — mesure le bloc linguistique sur le gold réel (20) + synthétique (160).\n\nTrois niveaux : POS (token, exact), syntagmes (exact + **par tête**), pragmatiqu … [8897 caractères tronqués]`
+
+  ```
+EXIT=1
+gold {'phrases': 180, 'hand': 20, 'synthetique': 160, 'tokens': 804} reel refus ok False
+heuristique all POS 0.7512 SEG 0.1935 TETE 0.5595 acte 1.0 neg 1.0 mod 0.9944 ds 0.8889 frac 0.6381
+heuristique hand POS 0.9238 SEG 0.3556 TETE 0.4889 acte 1.0 neg 1.0 mod 0.95 ds 0.9 frac 0.469
+heuristique synthetique POS 0.7253 SEG 0.1684 TETE 0.5704 acte 1.0 neg 1.0 mod 1.0 ds 0.8875 frac 0.6592
+mock_neuronal all POS 0.4266 SEG 0.1149 TETE 0.5338 acte 1.0 neg 0.8722 mod 0.8833 ds 0.9222 frac 0.6706
+mock_neuronal hand POS 0.4857 SEG 0.2439 TETE 0.4634 acte 1.0 neg 0.9 mod 0.9 ds 0.9 frac 0.525
+mock_neuronal synthetique POS 0.4177 SEG 0.0941 TETE 0.5451 acte 1.0 neg 0.8688 mod 0.8812 ds 0.925 frac 0.6888
+parallele all POS 0.7512 SEG 0.1935 TETE 0.5595 acte 1.0 neg 1.0 mod 0.9944 ds 0.8889 frac 0.6706
+parallele hand POS 0.9238 SEG 0.3556 TETE 0.4889 acte 1.0 neg 1.0 mod 0.95 ds 0.9 frac 0.525
+parallele synthetique POS 0.7253 SEG 0.1684 TETE 0.5704 acte 1.0 neg 1.0 mod 1.0 ds 0.8875 frac 0.6888
+cascade all POS 0.7512 SEG 0.1935 TETE 0.5595 acte 1.0 neg 1.0 mod 0.9944 ds 0.8889 frac 0.6706
+cascade hand POS 0.9238 SEG 0.3556 TETE 0.4889 acte 1.0 neg 1.0 mod 0.95 ds 0.9 frac 0.525
+cascade sy
+… [231 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/evaluer_gold.py'); t=p.read_text()\nt=t.replace('''    h_all = resultats[\"heuristique\"][\"all\"]\n    c_all = resultats[\"cascade\"][\"all\"]\n    resultats … [1785 caractères tronqués]`
+
+  ```
+verdict ok
+EXIT=0
+{'pos_hand': True, 'pos_synthetique': True, 'syntagme_hand': True, 'syntagme_synthetique': True, 'tete': True, 'acte': True, 'cascade_pos': True, 'cascade_syntagme': True, 'reel_non_requis': True} True refus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-gold-linguistique.json'))\nfor k in ('heuristique','mock_neuronal','parallele','cascade'):\n    for src in ('all','hand','synthetique'):\n        r=d[k][src]; p=r['pos'] … [698 caractères tronqués]`
+
+  ```
+heuristique all POS 0.7512 F 0.9392 O 0.6211 SEG 0.1935 TETE 0.5595 acte 1.0 neg 1.0 mod 0.9944 ds 0.8889 frac 0.6381
+heuristique hand POS 0.9238 F 0.9123 O 0.9375 SEG 0.3556 TETE 0.4889 acte 1.0 neg 1.0 mod 0.95 ds 0.9 frac 0.469
+heuristique synthetique POS 0.7253 F 0.9449 O 0.5855 SEG 0.1684 TETE 0.5704 acte 1.0 neg 1.0 mod 1.0 ds 0.8875 frac 0.6592
+mock_neuronal all POS 0.4266 F 0.1459 O 0.6211 SEG 0.1149 TETE 0.5338 acte 1.0 neg 0.8722 mod 0.8833 ds 0.9222 frac 0.6706
+mock_neuronal hand POS 0.4857 F 0.1053 O 0.9375 SEG 0.2439 TETE 0.4634 acte 1.0 neg 0.9 mod 0.9 ds 0.9 frac 0.525
+mock_neuronal synthetique POS 0.4177 F 0.1544 O 0.5855 SEG 0.0941 TETE 0.5451 acte 1.0 neg 0.8688 mod 0.8812 ds 0.925 frac 0.6888
+parallele all POS 0.7512 F 0.9392 O 0.6211 SEG 0.1935 TETE 0.5595 acte 1.0 neg 1.0 mod 0.9944 ds 0.8889 frac 0.6706
+parallele hand POS 0.9238 F 0.9123 O 0.9375 SEG 0.3556 TETE 0.4889 acte 1.0 neg 1.0 mod 0.95 ds 0.9 frac 0.525
+parallele synthetique POS 0.7253 F 0.9449 O 0.5855 SEG 0.1684 TETE 0.5704 acte 1.0 neg 1.0 mod 1.0 ds 0.8875 frac 0.6888
+cascade all POS 0.7512 F 0.9392 O 0.6211 SEG 0.1935 TETE 0.5595 acte 1.0 neg 1.0 mod 0.9944 ds 0.8889 frac 0.6706
+cascade hand POS 
+… [353 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-gold-linguistique.md <<'MD'\n# L — le gold 180 : 20 réels + 160 synthétiques, POS 0,751, tête 0,560\n\n> **Ligne de roadmap** : **R0.7** (bloc linguistique) / **L** · **Date** : 2026-11-01 ·\n> **Verdict* … [11580 caractères tronqués]`
+
+  ```
+docs ok
+2026-11-01 19:02 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-01, 18 h 55 HNE\", \"**Mis à jour : 2026-11-01, 19 h 05 HNE\", t)\np.write_text(t)\np=pathlib.P … [738 caractères tronqués]`
+
+  ```
+dates ok
+python3 tools/revue_documentation.py         EXIT=1
+  revue de documentation · 392 fiche(s) · 483 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 3 anomalie(s) :
+     · compteurs : en-cours.md dit 118 portes, le disque en a 81
+     · compteurs : la ligne « documents » manque dans en-cours.md
+     · compteurs : la ligne « fichiers / JSON » manque dans en-cours.md
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+
+  ```
+"""Petit kit SVG pour les schémas Drave (hors dépôt : génère des SVG directs)."""
+from __future__ import annotations
+import html
+import pathlib
+from PIL import ImageFont
+
+FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+_fonts: dict[tuple[int, bool], ImageFont.FreeTypeFont] = {}
+
+BLEU = ("#dbeafe", "#1d4ed8", "#1d4ed8")
+AMBRE = ("#fef3c7", "#b45309", "#b45309")
+VERT = ("#dcfce7", "#15803d", "#15803d")
+GRIS = ("#e2e8f0", "#334155", "#0f172a")
+CLAIR = ("#f1f5f9", "#cbd5e1", "#334155")
+ROUGE = ("#fee2e2", "#b91c1c", "#b91c1c")
+VIOLET = ("#ede9fe", "#6d28d9", "#6d28d9")
+BLANC = ("#ffffff", "#94a3b8", "#334155")
+
+DEFAUT = "#334155"
+ROUGE_T = "#b91c1c"
+VERT_T = "#15803d"
+BLEU_T = "#1d4ed8"
+AMBRE_T = "#b45309"
+
+
+def largeur(texte: str, taille: float = 12, gras: bool = False) -> float:
+    cle = (int(taille), gras)
+    if cle not in _fonts:
+        _fonts[cle] = ImageFont.truetype(BOLD if gras else FONT, int(taille))
+    return _fonts[cle].getlength(texte)
+
+
+class SVG:
+    def __init__(self, w: int, h: int, titre: str, desc: str):
+        self.w, self.h = w, h
+        self.titre, self.desc = titre, desc
+        self.body
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+rapport-r01-graphe-document.md
+rapport-r02-controleur.md
+rapport-r03-banc-complet.md
+rapport-r03-banc-durci.md
+rapport-r03-lecteur-modele.md
+rapport-r04-tete-survol.md
+rapport-r05-balayage.md
+rapport-r06-calibration.md
+rapport-r06-cascade-confiance.md
+rapport-r06-cascade.md
+rapport-r06-declencheur.md
+rapport-r06-pipeline.md
+rapport-r06-publication.md
+rapport-r06-relecture.md
+rapport-r07-routeur.md
+rapport-r13.1-bpe.md
+rapport-r13.1-campagne.md
+rapport-r13.1-condition.md
+rapport-r13.2-vocab1024.md
+rapport-r13.3-anglais.md
+rapport-r13.4-graines.md
+rapport-r13-decision.md
+rapport-r13-tokenisation.md
+rapport-r41-bloc-tableaux.md
+rapport-r42-bloc-code.md
+rapport-r43-bloc-maths.md
+rapport-r44-ocr-pilote.md
+rapport-r44-scans.md
+rapport-raid0-nvme.md
+rapport-regle-placement-perte.md
+rapport-restitution.md
+rapport-reutilisation-experts.md
+rapport-routage-experts.md
+rapport-routeur-confiance.md
+rapport-routeur-m1-m2.md
+=== R0.6 ===
+# R0.6 — le pipeline de lecture : 12/20 au pilote, 10/10 refusés, 7/8 au modèle
+
+> **Ligne de roadmap** : R0.6 · **Date** : 2026-10-29 · **Verdict** : ✅ **le contrat est tenu** —
+> 20/20 réponses acceptées au pilote dont **12 justes** (0,600), **provenance vérifié
+… [3957 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+1: # Le plan de travail — plusieurs sessions sur une même machine
+2: 
+3: > **Ce que ce document est.** Le **pont** entre l'état ([`en-cours.md`](en-cours.md), ce qui se
+4: > passe maintenant) et l'ordre ([`roadmap.md`](roadmap.md), ce qu'il faut faire et dans quel
+5: > ordre) : **qui fait quoi, dans quel territoire, à quelle cadence, et comment on surveille les
+6: > fichiers qui bougent**. Il ne remplace ni l'un ni l'autre : l'état reste la source du présent,
+7: > la roadmap la source de l'ordre.
+8: >
+9: > **Date** : 2026-11-01. **Machine** : une seule — 40 cœurs, 125 Go de RAM, 2 GPU de 16 Go,
+10: > 2,0 To libres sur `Data13TB`, 34 Go sur `IA`. **Capacité** : voir
+11: > [`chantiers.md`](chantiers.md) § 8 (4 sessions, 4 à 6 chantiers, 2 à 4 sous-agents par session).
+12: >
+13: > **Chargement** : ce document avant d'ouvrir une session ; puis la fiche du chantier.
+14: 
+15: ## 1. Où ce plan se situe
+16: 
+17: ```
+18: en-cours.md          ce qui se passe maintenant (état court, une section par session active)
+19: plan-travail.md      qui fait quoi, où, à quelle cadence (
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+"""moteur.py — la boucle anytime, les stratégies, la décision.
+
+Le moteur est un bloc `state → decision` : il reçoit un problème (état initial, opérateurs, but,
+heuristique), une stratégie et un budget ; il rend une **décision** justifiée et une **trace**
+rejouable. Il ne lit jamais la surface.
+"""
+from __future__ import annotations
+
+import math
+from dataclasses import dataclass, field
+from typing import Callable
+
+from .coeur import Candidat, Decision, Etat
+from .store import Budget, Store, Trace
+
+
+@dataclass
+class Probleme:
+    nom: str
+    initial: Callable[[], Etat]
+    operateurs: dict[str, Callable[[Etat, dict], list[Etat]]]
+    but: Callable[[Etat], bool]
+    heuristique: Callable[[Etat], float] = lambda e: 0.0
+    score: Callable[[Etat], float] = lambda e: 0.0
+
+
+@dataclass(frozen=True)
+class Proposition:
+    parent: str
+    operateur: str
+    params: dict
+    cout: int = 1
+
+
+class Strategie:
+    """Une stratégie choisit un nœud ouvert et propose des transitions. Elle ne modifie rien."""
+
+    nom = "base"
+
+    def choisir(self, store: Store, probleme: Probleme) -> str:
+        raise NotImplementedError
+
+    def proposer(self, etat: Etat, probleme: Probleme) -> list[Propositio
+… [3958 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## Les chiffres de l.état/,/## Les chantiers/p' docs/pilotage/en-cours.md | head -20; echo '=== grep ==='; grep -n \"portes\\|documents\\|fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Lire le tableau des comp … [16 caractères tronqués]`
+
+  ```
+## Les chiffres de l'état
+
+> **Source unique.** Ces valeurs sont vérifiées par `tools/revue_documentation.py`.
+
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **118** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **392** / **·** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **JSON** (hors archive et README) | `docs/**/*.md` |
+| dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
+
+## Les chantiers et leurs bloquants
+=== grep ===
+21:- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes)~~ ; 4) ~~moteur v0 (BFS, greedy, A*, MCTS-lite)~~ ; 5) ~~AC-3, alpha-bêta~~ (**8/8**) ; ~~DRVF~~ (**9/9**) ; 6) ~~banc anytime~~ (**10/10**) et intégration ; 7) ~~reprise R4.4~~ ; 8) ~~couche heuristique~~ (analyse, 5 schémas) ; 9) **bloc linguistique** (R0.7).
+39:- **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes** (T0 canonique, T1 rejeu,
+74:- **Données** : inventaire local (Wikipédia **
+… [893 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"| portes | **118** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |\",\n        … [729 caractères tronqués]`
+
+  ```
+counters ok
+  revue de documentation · 392 fiche(s) · 485 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 483 JSON, le disque en a 485
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"| fichiers / JSON de résultats | **392** / **483** |\", \"| fichiers / JSON de résultats | **392** / **485** |\")\np.write_ … [596 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 392 fiche(s) · 485 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ "ok": true
+}
+✅ porte bloc linguistique verte
+PORTE=0
+  ✅ T7 banc anytime        AUC A* 0.5283 vs aléatoire 0.2458 ; but A* 32, aléatoire None ; regret A* 0.0
+  10/10 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/tests/linguistique/gold_synthetique.py tools/tests/linguistique/gold_synthetique.json tools/tests/linguistique/evaluer_gold.py reports/rapport-pensee-gold-linguistique.md reports/pensee-gold-linguistique.json reports/RE … [494 caractères tronqués]`

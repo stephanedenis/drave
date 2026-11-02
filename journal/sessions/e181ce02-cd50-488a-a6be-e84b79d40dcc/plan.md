@@ -15,7 +15,7 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-01 18:55 EST
+- **Heartbeat** : 2026-11-01 19:05 EST
 - **Prochaine action** : le bloc linguistique v0 est livré (398 langues) et **AC-3/alpha-bêta**
   sont mesurés (8/8), le DRVF (9/9) et le banc (10/10) ; qualifier un gold et un modèle neuronal ; puis les **opérateurs hétérogènes/DRVM**
   (S reste à l'autre TUI).
@@ -44,10 +44,11 @@
   [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
   [`pensee-drvf`](../../reports/rapport-pensee-drvf.md),
   [`pensee-banc`](../../reports/rapport-pensee-banc.md) ; prochain : **opérateurs hétérogènes/DRVM**.
-- **Gold L v0** : **20 phrases / 105 tokens** ; POS **0,924**, syntagmes F1 **0,356**,
-  pragmatique **1,0/1,0/0,95/0,9** ; cascade (mock) **52,5 %** ; vrai neuronal **refusé** ;
-  fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :
-  **gold 100–200 + modèle qualifié**.
+- **Gold L 180** : **20 réels + 160 synthétiques** ; POS **0,751** (fermé 0,939/ouvert 0,621),
+  syntagmes exacts **0,194**/**tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade
+  (mock) **67,1 %** ; vrai neuronal **refusé** ; fiche
+  [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :
+  **attachement + modèle qualifié**.
 - **Objectif final** : un **moteur de pensée v0 exécutable** — state store typé, arbre d'états,
   A*/MCTS/AC-3 sur le même contrat, trace/rejeu, banc anytime avec contrôles — documenté, mesuré
   et committé.

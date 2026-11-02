@@ -241,19 +241,21 @@ La porte [`porte-bloc-linguistique.sh`](../../tools/porte-bloc-linguistique.sh) 
 Les **contrôles négatifs** : profils permutés (0,0022), texte vide, ponctuation seule, langue
 inconnue (`und`), indice faux (`und`), rejeu identique.
 
-**Le gold v0** (`tools/tests/linguistique/gold.py`, 20 phrases, 105 tokens) mesure les niveaux
-profonds : POS **0,924**, syntagmes F1 **0,356**, acte **1,0**, négation **1,0**, modalité
-**0,95**, double sens **0,9** ; la cascade (mock de contrat) préserve ces chiffres et couvre
-**52,5 %** en unités sémantiques. Le **vrai** modèle neuronal est **refusé** (`llama-cli`
-expire) : la qualification neuronale reste à faire, et le gold à étendre à 100–200 phrases.
+**Le gold 180** (`gold.py` 20 réels + `gold_synthetique.py` 160 synthétiques) mesure les niveaux
+profonds : POS **0,751** (fermé **0,939**, ouvert **0,621**), syntagmes exacts **0,194**,
+**par tête 0,560**, acte **1,0**, négation **1,0**, modalité **0,994**, double sens **0,889** ;
+la cascade (mock de contrat) préserve ces chiffres et couvre **67,1 %** en unités sémantiques.
+Le lexique synthétique est **disjoint** des listes de l'heuristique : les classes ouvertes
+chutent à **0,586** sur les mots inconnus. Le **vrai** modèle neuronal est **refusé**
+(`llama-cli` expire) : la qualification neuronale reste à faire.
 
 ## 10. Les limites
 
 - **La langue n'est pas la traduction** : 398 langues identifiées ne veulent pas dire 398
   langues analysées ; les classes fermées et les affixes sont français/anglais.
-- **Les niveaux profonds sont mesurés sur 20 phrases** : POS 0,924, syntagmes 0,356,
-  pragmatique 0,9–1,0 ; c'est un v0, pas une précision stable ; le syntagme F1 mesure surtout un
-  désaccord de segmentation.
+- **Les niveaux profonds sont mesurés sur 180 phrases** : POS 0,751, syntagmes exacts 0,194,
+  par tête 0,560, pragmatique 0,889–1,0 ; l'ouvert chute à 0,621 sur le lexique disjoint ; le
+  syntagme exact mesure surtout un désaccord de segmentation.
 - **Le neuronal réel n'est pas qualifié** : le modèle local a expiré ; le mock est un contrat,
   pas une qualité.
 - **Le corpus UDHR est parallèle et propre** : 0,9687 en langue ne se transporte pas tel quel
