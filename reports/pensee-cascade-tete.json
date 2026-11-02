@@ -1,0 +1,25 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "118/118",
+ "heur": {
+  "p": 0.5646,
+  "r": 0.3971,
+  "tete_f1": 0.4662
+ },
+ "cascade": {
+  "p": 0.596,
+  "r": 0.35,
+  "tete_f1": 0.441
+ },
+ "cascade_tete_union": {
+  "p": 0.5676,
+  "r": 0.332,
+  "tete_f1": 0.419
+ },
+ "limites": [
+  "mock = contrat",
+  "587 phrases",
+  "neuronal réel bloqué"
+ ]
+}

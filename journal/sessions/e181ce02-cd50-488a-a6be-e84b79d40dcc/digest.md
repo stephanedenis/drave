@@ -29193,3 +29193,211 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-cascade-union.md reports/pensee-cascade-union.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotage/ … [492 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1119]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1119", "timeout_ms": 600000, "wait": true}`
+
+  ```
+24 files changed, 425 insertions(+), 66 deletions(-)
+ create mode 100644 reports/pensee-cascade-union.json
+ create mode 100644 reports/rapport-pensee-cascade-union.md
+COMMIT OK 1
+92d28fd7 B13 — LA CASCADE AVEC L'UNION : F1 0,2170, TÊTE 0,4410, 587 APPELS ; 117/117
+lun 02 nov 2026 10:44:30 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cascade avec l'union : F1 0,2170, tête 0,4410, 587 appels ; 117/117
+
+Le round 118 est livré : la **cascade** gagne en F1 (+0,0165) mais perd en tête (−0,025) ; son coût est mesuré. Commit **`92d28fd7`**.
+
+## La cascade
+
+| bloc | POS (all) | syntagme F1 | tête F1 | pragma (acte) |
+|---|---:|---:|---:|---:|
+| heuristique (union) | 0,7502 | 0,2005 | **0,4662** | 0,9966 |
+| **cascade** | 0,7502 | **0,2170** | 0,4410 | 0,9966 |
+
+| bloc | POS (réel) | syntagme F1 (réel) | tête F1 (réel) |
+|---|---:|---:|---:|
+| heuristique (union) | 0,7575 | 0,2095 | **0,4432** |
+| **cascade** | 0,7575 | **0,2283** | 0,4081 |
+
+**Ce que ça dit** :
+
+- **La cascade gagne en F1** (+0,0165) : le mock neuronal ajoute des segments que l'heuristique rate ; le rappel monte.
+- **Elle perd en tête** (−0,025) : ses segments supplémentaires ont de moins bonnes têtes que l'union.
+- **Le coût est réel** : **587 appels neuronaux** pour une évaluation du gold complet (**1 601** pour les 5 sources de l'évaluateur) — la cascade n'est pas gratuite, et le mock est un **contrat**, pas un modèle.
+- **Aucun verdict ne casse** : tous les seuils passent.
+
+## L'état
+
+- Fiche : [`rapport-pensee-cascade-union.md`](../../reports/rapport-pensee-cascade-union.md) ; JSON [`pensee-cascade-union.json`](../../reports/pensee-cascade-union.json) ; T114 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **117/117 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **524 fiches / 613 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` dans le budget.
+- L'horloge réelle est **10 h 44 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée) : c'est la limite de la cascade.
+
+## La suite
+
+1. **La tête de la cascade** : garder la tête de l'union quand le mock ajoute un segment.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **la tête de la cascade** — récupérer les +0,025 perdus sans perdre le gain de F1.
+
+
+## Tour 133
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 119/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '743,812p' tools/bloc_linguistique.py", "description": "Lire la classe Cascade"}`
+
+  ```
+class MockNeuronal:
+    """Le neuronal **de contrat** : même sortie, source `neuronal`, déterministe, sans GPU.
+
+    Il ne prétend pas être un modèle : il prouve que le contrat accepte une autre implémentation,
+    que le parallèle fusionne et que la cascade n'appelle le neuronal que sur le résidu.
+    """
+
+    nom = "neuronal"
+
+    def __init__(self, profils: dict[str, dict] | None = None):
+        self.profils = profils
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        t0 = time.perf_counter()
+        lg = detecter_langue(texte, self.profils, langue)[0]
+        if lg == "und" and langue:
+            lg = langue
+        script = detecter_script(texte)
+        etiquettes: list[Etiquette] = []
+        unites: list[Span] = []
+        h = Heuristique(segmenter_s=False)
+        for d, f, t, typ in h._mots(texte):
+            if typ == "mot":
+                classe, _, _ = h._pos(lg, t)
+                if classe in {"NOUN", "VERB", "ADJ", "ADV", "MOT"}:
+                    etiquettes.append(Etiquette("pos", classe, t, d, f, self.nom, 0.82,
+                                                langue=lg, script=s
+… [2424 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Cascade\" tools/bloc_linguistique.py; sed -n \"$(grep -n 'class Cascade' tools/bloc_linguistique.py | cut -d: -f1),+45p\" tools/bloc_linguistique.py", "description": "Lire la classe Cascade"}`
+
+  ```
+942:class Cascade:
+class Cascade:
+    """L'heuristique d'abord ; le neuronal seulement si un niveau reste sous le seuil."""
+
+    nom = "cascade"
+
+    def __init__(self, heuristique: BlocLinguistique, neuronal: BlocLinguistique,
+                 seuil: float = 0.6, niveaux=("morphème", "pos", "syntagme", "discours", "pragmatique")):
+        self.h = heuristique
+        self.n = neuronal
+        self.seuil = seuil
+        self.niveaux = niveaux
+        self.appels_neuronal = 0
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        a = self.h.analyser(texte, langue, contexte)
+        couv = a.couverture()
+        residuel = [n for n in self.niveaux if couv.get(n, 0.0) < self.seuil]
+        if not residuel:
+            a.source = self.nom
+            a.trace.append({"etape": "cascade", "residuel": [], "appel_neuronal": False})
+            return a
+        self.appels_neuronal += 1
+        b = self.n.analyser(texte, langue, contexte)
+        fusion = _fusion(a, b, self.nom)
+        fusion.trace.append({"etape": "cascade", "residuel": residuel, "appel_neuronal": True,
+                             "seuil": self.s
+… [682 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, _seg, _tete\nph=charger()\nh=bl.Heuristique(); n=bl.MockNeuronal(); cas=bl.Cascade … [1153 caractères tronqués]`
+
+  ```
+cascade P 0.596 R 0.35 F1 0.441
+cascade_tete_union P 0.5676 R 0.332 F1 0.419
+heur P 0.5646 R 0.3971 F1 0.4662
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T114 la cascade avec l'union       F1 0,2170 (heur 0,2005), tête 0,4410 ; 587 appels\\n\",\n\"  T114 la cascade avec l'uni … [7257 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 525 fiche(s) · 614 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2814 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+
+  ```
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **DRVF `thought`** + **banc anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **porte** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **professeur** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observatrice** + **bruitée** + **votante** + **trois looks** + **bayésien** + **bayésien 2** + **vraisemblance** + **dérive** + **adaptative** + **glisse** + **rupture** + **alternance** + **chaotique** + **fréquent** + **rapide** + **limite** + **hasard 2** + **intra** + **asym** + **ra
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 09 h 15 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
+6: > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
+7: > [`reports/`](../../reports/). Histoire : [`journal/`](../../journal/). Plan : [`roadmap.md`](roadmap.md).
+8: 
+9: ## Sessions en cours
+10: 
+11: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+12: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+13: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+14: > le hook pre-commit refuse un fait sans ligne d'état ; une session qui trouve l'état en retard
+15: > le corrige.
+16: 
+17: ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+18: 
+19: - **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+20: -
+… [3959 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-segmenteur-union.md`](rapport-pensee-segmenteur-union.md) | **B13** — l'union des segmenteurs : F1 0,2005, le ra … [614 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-cascade-tete.md reports/pensee-cascade-tete.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotage/ro … [492 caractères tronqués]`

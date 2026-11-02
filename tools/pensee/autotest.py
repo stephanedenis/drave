@@ -1759,6 +1759,31 @@ def t114_cascade_union() -> tuple[bool, str]:
         f"cascade : F1 {f1}, tête {tete}, {cascade.appels_neuronal} appels")
 
 
+def t115_tete_cascade() -> tuple[bool, str]:
+    """La tête de la cascade : la correction par l'union dégrade (0,419 contre 0,441)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger
+    ph = charger()
+    h, n = bl.Heuristique(), bl.MockNeuronal()
+    cas = bl.Cascade(h, n)
+    tp = fp = fn = 0
+    for phrase in ph:
+        ah = h.analyser(phrase["texte"], phrase["langue"])
+        ac = cas.analyser(phrase["texte"], phrase["langue"])
+        gold = {(s["type"], s["debut"]) for s in phrase["segments"]}
+        seg_h = [(e.type, e.debut, e.fin) for e in ah.etiquettes if e.niveau == "syntagme"]
+        seg_c = [(e.type, e.debut, e.fin) for e in ac.etiquettes if e.niveau == "syntagme"]
+        pred = set()
+        for (t, d, f) in seg_c:
+            cand = [hd for (ht, hd, hf) in seg_h if ht == t and hd <= d < hf]
+            pred.add((t, cand[0] if cand else d))
+        tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
+    p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
+    f1 = round(2 * p * r / max(1e-9, p + r), 4)
+    return abs(f1 - 0.419) < 0.001, (
+        f"tête cascade corrigée : {f1} (cascade 0,441 ; union 0,466)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1872,7 +1897,8 @@ def main() -> int:
               ("T111 hybride segmenteur", t111_hybride_seg()),
               ("T112 union segmenteurs", t112_union()),
               ("T113 union par défaut", t113_union_defaut()),
-              ("T114 cascade + union", t114_cascade_union())]
+              ("T114 cascade + union", t114_cascade_union()),
+              ("T115 tête cascade", t115_tete_cascade())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

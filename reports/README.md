@@ -15,9 +15,9 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-cascade-tete.md`](rapport-pensee-cascade-tete.md) | **B13** — la tête de la cascade : 0,419, la correction dégrade, **118/118** |
 | [`rapport-pensee-cascade-union.md`](rapport-pensee-cascade-union.md) | **B13** — la cascade avec l'union : F1 0,2170, tête 0,4410, 1 601 appels, **117/117** |
 | [`rapport-pensee-segmenteur-defaut.md`](rapport-pensee-segmenteur-defaut.md) | **B13** — l'union par défaut : F1 0,2005, tête 0,4662 (+0,11), **116/116** |
-| [`rapport-pensee-segmenteur-union.md`](rapport-pensee-segmenteur-union.md) | **B13** — l'union des segmenteurs : F1 0,2005, le rappel paie, **115/115** |
 | [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |
 | [`rapport-pensee-anaphore-bilan.md`](rapport-pensee-anaphore-bilan.md) | **B13** — le bilan de l'anaphore : 27/30, CV 0,847, huit mesures, **109/109** |
 | [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, **87/87** |

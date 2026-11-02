@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 42.1 h |
+| Durée | 42.3 h |
 | Tours | 386 |
-| Messages | 2331 |
-| Appels d'outils | 1548 |
+| Messages | 2332 |
+| Appels d'outils | 1549 |
 | Fichiers touchés | 26 |
-| Commandes | 1376 |
+| Commandes | 1377 |
 | Sous-agents | 0 |
 | Commits | 90 |
 | Compactages de contexte | 4 |
@@ -9111,7 +9111,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 
 ### Tour 386 — continue pendent 3h
 
-*11 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — First 5-min check of CEGEP lot 40
@@ -9125,7 +9125,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 
 **Synthèse produite :**
 
-⏵ Lot CEGEP : 9 scans — **Algorithms Illuminated Part 1** (217 p, 335 492 car.) s'ajoute
+⏵ Lot CEGEP : 9 scans, la détection du 10e tourne (14,1 Go lus)
 
 ## 3. Travail accompli
 
@@ -9202,7 +9202,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1336 autres
+- … et 1337 autres
 
 ## 4. Mesures et résultats marquants
 

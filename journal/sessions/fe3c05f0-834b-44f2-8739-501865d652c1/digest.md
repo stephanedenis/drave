@@ -35236,3 +35236,21 @@ wchar: 905111789
 ⏵ Lot CEGEP : 9 scans — **Algorithms Illuminated Part 1** (217 p, 335 492 car.) s'ajoute
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 570; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -3 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2", "descripti … [123 caractères tronqués]`
+
+  ```
+10:50
+9
+  CEGEP · Algorithms Illuminated (Part 3) Greedy A · 226 p · 359423 car
+  CEGEP · Algorithms Illuminated (Part 4) Algorith · 274 p · 456062 car
+  CEGEP · Algorithms Illuminated Part 1 The Basics · 217 p · 335492 car
+    PID            
+3445044    01:31:10
+rchar: 14128727728
+wchar: 905538102
+  ```
+
+### 🤖 Assistant
+
+⏵ Lot CEGEP : 9 scans, la détection du 10e tourne (14,1 Go lus)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 570; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -2 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2", "descripti … [123 caractères tronqués]`

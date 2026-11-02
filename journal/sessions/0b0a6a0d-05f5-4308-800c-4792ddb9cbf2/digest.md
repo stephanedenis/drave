@@ -20236,3 +20236,31 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1174", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1172 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -3 work/n2w/canal_big.log 2>/dev/null; ls -la data/wiki_big/propre/*.canal 2>/dev/null; tail -2 work/n2w/base-big.log 2>/dev/null; ps -eo pid,etime,pcpu,rss,cmd | grep -E "canal_structure|entrainer_native" | grep -v grep | awk '{printf "%s %s %s%% %sMo\n", $1, $2, $3, int($4/1024)}') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/base-big.log 2>/dev/null; ls work/n2w/base-big.pt work/n2w/base-big-canal.pt 2>/dev/null; tail -2 work/n2w/base-big-canal.log 2>/dev/null; ps -eo pid,etime,pcpu,cmd | grep entrainer_native | grep -v gr … [62 caractères tronqués]`
+
+  ```
+10:49
+}
+BASE_OK 10:48
+work/n2w/base-big.pt
+3485460       00:50  106 /home/stephane/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_big/propre/train.txt --canal data/wiki_big/propre/train.canal --pas 20000 --seq 128 --lot 8 --lr 3e-4 --graine 1 --dim 384 --expert-hidden 512 --positions-aleatoires 384 --init work/n2w/base-big.pt --sortie work/n2w/base-big-canal.pt --drvm work/n2w/base-big-canal.drvm
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/base-big-canal.log 2>/dev/null; ls work/n2w/base-big-canal.pt 2>/dev/null && echo OK; tail -4 work/n2w/base-big.log | head -3", "description": "Wait for the canal stage"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1176]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1176", "timeout_ms": 1500000, "wait": true}`
