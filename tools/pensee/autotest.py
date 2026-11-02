@@ -15,6 +15,7 @@
                                       visite plus de nœuds ; la profondeur 1 sans évaluation rate
   T7  le banc anytime                 best-so-far monotone, AUC A* > AUC aléatoire, but atteint
   T8  les opérateurs hétérogènes      trois genres, coût et appels, le négatif reste inutile
+  T9  le neuronal nécessaire          le seul opérateur est la sonde ; l'aveugle échoue
   T8  les opérateurs hétérogènes      trois genres, coût et appels, le négatif reste inutile
 
 Usage : PYTHONPATH=. ~/gpu-env/bin/python tools/pensee/autotest.py
@@ -234,6 +235,22 @@ def t8_operateurs() -> tuple[bool, str]:
                 f"aveugle sonde {bb['par_operateur'].get('sonde', 0)} nœud/coût {bb['cout']} ; but atteint")
 
 
+def t9_necessaire() -> tuple[bool, str]:
+    """Le neuronal est le seul opérateur ; la bonne politique atteint le but, l'aveugle non."""
+    from .operateurs import (CADENAS, DRVM, REGISTRE_CADENAS, PolitiqueCadenas,
+                             PolitiqueCadenasAveugle)
+    a = DRVM(REGISTRE_CADENAS, PolitiqueCadenas())
+    a.penser(CADENAS, AStar(), Budget(20))
+    ba = a.instantane()
+    b = DRVM(REGISTRE_CADENAS, PolitiqueCadenasAveugle())
+    b.penser(CADENAS, AStar(), Budget(20))
+    bb = b.instantane()
+    ok = (ba["but"] and ba["appels"] > 0 and ba["par_operateur"].get("sonde", 0) > 0
+          and not bb["but"] and bb["appels"] > 0)
+    return ok, (f"cadenas : avant {ba['appels']} appels/but ; "
+                f"aveugle {bb['appels']} appels/sans but")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -241,7 +258,8 @@ def main() -> int:
               ("T3 anytime", t3_anytime()), ("T4 justification", t4_justification()),
               ("T5 AC-3", t5_ac3()), ("T6 alpha-bêta", t6_alphabeta()),
               ("T7 banc anytime", t7_banc()),
-              ("T8 opérateurs hétérogènes", t8_operateurs())]
+              ("T8 opérateurs hétérogènes", t8_operateurs()),
+              ("T9 neuronal nécessaire", t9_necessaire())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

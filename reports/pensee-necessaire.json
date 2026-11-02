@@ -1,0 +1,39 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "12/12",
+ "cadenas": {
+  "but": 3,
+  "operateurs": {
+   "sonde": "neuronal (seul)"
+  }
+ },
+ "resultats": [
+  {
+   "politique": "cadenas_avant",
+   "noeuds": 3,
+   "par_operateur": {
+    "sonde": 3
+   },
+   "cout": 3.0,
+   "appels": 3,
+   "but": true
+  },
+  {
+   "politique": "cadenas_arriere",
+   "noeuds": 20,
+   "par_operateur": {
+    "sonde": 20
+   },
+   "cout": 20.0,
+   "appels": 20,
+   "but": false
+  }
+ ],
+ "necessaire": "la sonde est le seul opérateur ; sans la bonne politique, le but n'est pas atteint",
+ "limites": [
+  "politique = double de contrat, pas un modèle",
+  "poids natifs absents",
+  "coût 1 déclaré, pas mesuré"
+ ]
+}

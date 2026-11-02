@@ -196,6 +196,73 @@ GRILLE = Probleme(
 )
 
 
+# --------------------------------------------------------------------------- cadenas (le neuronal nécessaire)
+
+BUT_C = 3
+
+
+def _etat_c(pos: int, parent: str | None = None, profondeur: int = 0) -> Etat:
+    return Etat(f"c{pos}", parent, profondeur, (Candidat("pos", {"v": pos}),))
+
+
+def _pos_c(e: Etat) -> int:
+    return int(next(c for c in e.candidats if c.id == "pos").corps["v"])
+
+
+class PolitiqueCadenas(Politique):
+    nom = "cadenas_avant"
+
+    def propose(self, etat, but):
+        return "avant" if _pos_c(etat) < but else None
+
+
+class PolitiqueCadenasAveugle(Politique):
+    nom = "cadenas_arriere"
+
+    def propose(self, etat, but):
+        pos = _pos_c(etat)
+        return "arriere" if pos > 0 else "avant"
+
+
+def sonde_c(e: Etat, _p: dict | None = None) -> list[Etat]:
+    p = POLITIQUE[0]
+    if p is None:
+        return []
+    direction = p.propose(e, BUT_C)
+    p.appels += 1
+    if direction is None:
+        return []
+    pos = _pos_c(e)
+    npos = pos + 1 if direction == "avant" else pos - 1
+    return [_etat_c(npos, e.empreinte(), e.profondeur + 1)] if 0 <= npos <= BUT_C else []
+
+
+def but_c(e: Etat) -> bool:
+    return _pos_c(e) == BUT_C
+
+
+def score_c(e: Etat) -> float:
+    return 1.0 / (1.0 + max(0, BUT_C - _pos_c(e)))
+
+
+def heuristique_c(e: Etat) -> float:
+    return -float(max(0, BUT_C - _pos_c(e)))
+
+
+REGISTRE_CADENAS = Registre({
+    "sonde": Operateur("sonde", "neuronal", 1.0, sonde_c, "la politique propose le pas suivant"),
+})
+
+CADENAS = Probleme(
+    nom="cadenas",
+    initial=lambda: _etat_c(0),
+    operateurs={"sonde": sonde_c},
+    but=but_c,
+    heuristique=heuristique_c,
+    score=score_c,
+)
+
+
 class DRVM:
     """Le conteneur d'exécution : registre, politique, moteur, trace, bilan."""
 
@@ -204,11 +271,13 @@ class DRVM:
         self.politique = politique
         self.moteur: Moteur | None = None
         self.resultat: Decision | None = None
+        self.probleme: Probleme | None = None
 
     def penser(self, probleme: Probleme, strategie, budget: Budget,
                arret_sur_but: bool = True) -> Decision:
         POLITIQUE[0] = self.politique
         self.politique.remise_a_zero()
+        self.probleme = probleme
         self.moteur = Moteur()
         self.resultat = self.moteur.boucle(probleme, strategie, budget,
                                            arret_sur_but=arret_sur_but)
@@ -218,7 +287,7 @@ class DRVM:
         assert self.moteur is not None and self.resultat is not None
         compte = Counter(e.operateur for e in self.moteur.trace.evenements)
         return {"noeuds": len(self.moteur.trace.evenements),
-                "but": bool(self.resultat.etat) and GRILLE.but(self.resultat.etat),
+                "but": bool(self.resultat.etat) and self.probleme.but(self.resultat.etat),
                 "par_operateur": dict(compte),
                 "genres": sorted(self.registre.genres()),
                 "cout": self.registre.total(dict(compte)),
@@ -228,10 +297,11 @@ class DRVM:
     def instantane(self) -> dict:
         b = self.bilan()
         b["politique"] = self.politique.nom
-        b["score"] = GRILLE.score(self.resultat.etat) if self.resultat else 0.0
+        b["score"] = self.probleme.score(self.resultat.etat) if self.resultat else 0.0
         return b
 
 
 __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle",
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
-           "score", "sonde"]
+           "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
+           "PolitiqueCadenasAveugle"]

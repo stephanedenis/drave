@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 27.2 h |
 | Tours | 21 |
-| Messages | 534 |
-| Appels d'outils | 549 |
+| Messages | 539 |
+| Appels d'outils | 554 |
 | Fichiers touchés | 25 |
-| Commandes | 441 |
+| Commandes | 444 |
 | Sous-agents | 2 |
-| Commits | 31 |
+| Commits | 33 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1150,7 +1150,7 @@ Le round 7 du goal est livré : le gold annote désormais les **deux lectures** 
 
 ### Tour 21 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Ajouter le cadenas où la sonde est nécessaire
 - bash — Ajouter la porte T9 et lancer l'autotest
@@ -1159,6 +1159,10 @@ Le round 7 du goal est livré : le gold annote désormais les **deux lectures** 
 - bash — Rentrer dans T0 et aligner les compteurs
 - bash — Aligner le compteur JSON et vérifier les portes
 - bash — Committer le neuronal nécessaire
+- job_output
+- bash — Voir si le commit concurrent a emporté le neuronal nécessaire
+- bash — Recommitter le neuronal nécessaire sur le nouveau HEAD
+- bash — Ajouter la fiche à l'état et committer
 
 ## 3. Travail accompli
 
@@ -1239,7 +1243,7 @@ Le round 7 du goal est livré : le gold annote désormais les **deux lectures** 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 401 autres
+- … et 404 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1367,7 +1371,7 @@ Le round 7 du goal est livré : le gold annote désormais les **deux lectures** 
 
 ## 5. Erreurs rencontrées
 
-10 sorties en erreur ou divergentes. Les premières :
+11 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -1379,6 +1383,7 @@ Le round 7 du goal est livré : le gold annote désormais les **deux lectures** 
 - **T17** : gold cibles ok 20 phrases, 105 tokens → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold.json [stderr] Traceback (most recent call last):   File "/home/stephane/Data13TB/s
 - **T19** : COMPILE=0 [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 213, in penser    
 - **T19** : ok [stderr] Traceback (most recent call last):   File "<stdin>", line 5, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 231, in instantane     b[
+- **T21** : 35bf5588 DONNÉES — NEUF CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES, DE) : 14,51 M ARTICLES, 59,0 GO, 8 KO 0 === HEAD has ? ===  docs/pilotage/en-cours.md                          | 22 ++
 
 ## 6. Commits
 
@@ -1412,5 +1417,7 @@ Le round 7 du goal est livré : le gold annote désormais les **deux lectures** 
 - B13 — OPÉRATEURS HÉTÉROGÈNES : 3 GENRES, SONDE 4 APPELS/COÛT 48 VS AVEUGLE 1/33 (11/11)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - L — LECTURE DOUBLE : TOP-1 TÊTE 0,957 (0,800 RÉEL/1,0 SYNTH), 29 CIBLES AMBIGUËS" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - L — LECTURE DOUBLE : TOP-1 TÊTE 0,957 (0,800 RÉEL/1,0 SYNTH), 29 CIBLES AMBIGUËS" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12)" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12)" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12)" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 

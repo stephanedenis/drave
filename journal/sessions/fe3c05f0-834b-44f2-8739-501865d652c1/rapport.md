@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 27.2 h |
-| Tours | 16 |
-| Messages | 927 |
-| Appels d'outils | 918 |
+| Durée | 27.3 h |
+| Tours | 17 |
+| Messages | 932 |
+| Appels d'outils | 921 |
 | Fichiers touchés | 18 |
-| Commandes | 844 |
+| Commandes | 847 |
 | Sous-agents | 0 |
 | Commits | 52 |
 | Compactages de contexte | 2 |
@@ -59,6 +59,8 @@
 **Tour 15** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 **Tour 16** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
+
+**Tour 17** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -822,13 +824,45 @@ Le **de** (10,41 G de texte, 2,85 M articles) et l'**en** (9,86 G, 1,85 M) sont 
 
 ### Tour 16 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Check German and English runs
 - bash — Read German manifest and launch contamination check
 - bash — Poll German check and count PDF sources
 - bash — Add German to report and state
 - bash — Commit nine language corpora
+- bash — Write PDF extractor and launch pilot
+- bash — Fix and relaunch PDF extraction pilot
+
+**Synthèse produite :**
+
+⏵ Round 4 : neuf corpus en texte intégral committés, l'anglais court, le PDF lancé
+
+**Round 4/1000 — l'allemand est entré, le PDF local a démarré.** Commit `35bf5588` (neuf corpus) ; l'anglais est le dernier run Wikipédia ; l'extraction des documents a son outil et son pilote.
+
+\## Les neuf corpus Wikipédia
+
+| langue | articles | caractères | octets | fuite 8 Ko | éval |
+|---|---:|---:|---:|---:|---|
+| fr / ar / pt / zh / ja | 7 273 451 | 16,98 G | 25,08 Go | **0** | XNLI 0/40, UDHR citée |
+| it / ru / es / **de** | 8 238 148 | 28,56 G | 33,94 Go | **0** | XNLI 0/40, UDHR (it) |
+| **total (9)** | **14 511 599** | **45,54 G** | **59,0 Go** | **0** | — |
+
+L'**allemand** : 2 864 934 articles, 10,443 G caractères, 10,68 Go, XNLI **0/40**, 4,7 % de lignes répétées, 15 liens résiduels. Le **8 Ko est encore à zéro**.
+
+\## Le PDF local
+
+`tools/extrait_pdf.py` est écrit et **son pilote tourne** : les **70 livres** de `Biblio_large` et les **2 711 notes du CEGEP** — le **texte natif** par `pdftotext`, la détection des **scannés** (moins de 50 caractères par page, comptés et signalés), la déduplication, le split par document, le manifeste, et les **licences nommées** (droits réservés, usage local, non diffusé). L'OCR des scannés viendra avec le pipeline R4.4 ; la mise en page (en-têtes, formules, tableaux) est une limite écrite.
+
+\## La suite
+
+L'**anglais** (8,0 M pages lues, 2,54 M articles, 12,0 G de texte) finit ; son contrôle 8 Ko suivra (le plus gros : ~18-20 Go). Puis le **catalogue complet des dix** (la table finale, les totaux), la **fiche du corpus PDF** et la **préparation R1.1/R1.2** avec A2.6/A8.3. Le goal reste actif ; je reprends au prochain round avec l'anglais et le PDF.
+
+### Tour 17 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check English and PDF extraction progress
 
 ## 3. Travail accompli
 
@@ -897,7 +931,7 @@ Le **de** (10,41 G de texte, 2,85 M articles) et l'**en** (9,86 G, 1,85 M) sont 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 804 autres
+- … et 807 autres
 
 ## 4. Mesures et résultats marquants
 

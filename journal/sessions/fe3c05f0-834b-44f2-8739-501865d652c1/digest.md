@@ -16771,3 +16771,27 @@ fiche : 9 langues
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| [^|]+ \\|\", \"| fichiers / JSON de résultats | **395** / **498** |\", s)\np.write_text … [1541 caractères tronqués]`
+
+  ```
+T0 max : 3990 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master 35bf5588] DONNÉES — NEUF CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES, DE) : 14,51 M ARTICLES, 59,0 GO, 8 KO 0
+ 25 files changed, 320 insertions(+), 73 deletions(-)
+ create mode 100644 reports/corpus-wiki-de-texte-contamination.json
+ create mode 100644 reports/corpus-wiki-de-texte.json
+commit OK (essai 1)
+35bf5588 DONNÉES — NEUF CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES, DE) : 14,51 M ARTICLES, 59,0 GO, 8 KO 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > tools/extrait_pdf.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"extrait_pdf.py — le texte natif des PDF locaux (les livres, les cours, les documents).\n\nPOURQUOI. Les corpus Wikipédia sont de la prose encyclopédique ; les documents  … [9079 caractères tronqués]`
+
+  ```
+OK
+pdf job 1548614
+    for lib, racine in racines:
+        ^^^^^^^^^^^
+ValueError: too many values to unpack (expected 2)
+0	data/corpus_pdf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/extrait_pdf.py'); s=p.read_text()\ns=s.replace('''    racines = [(lib, pathlib.Path(chemin)) for chemin, lib in\n               (r.split(\":\", 1) if \":\" in r else (r, \"\") for … [1284 caractères tronqués]`

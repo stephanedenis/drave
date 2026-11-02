@@ -12513,3 +12513,68 @@ PORTE=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-necessaire.md reports/pensee-necessaire.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotage/roadmap.m … [392 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md                           |  4 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |  2 +-
+ reports/README.md                                  |  1 +
+ reports/pensee-necessaire.json                     | 39 +++++++++++
+ reports/rapport-pensee-necessaire.md               | 66 +++++++++++++++++++
+ tools/pensee/autotest.py                           | 20 +++++-
+ tools/pensee/operateurs.py                         | 76 +++++++++++++++++++++-
+ 11 files changed, 217 insertions(+), 22 deletions(-)
+[still running after 60000ms; moved to background job bash-441]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-441", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 35bf558852ba183dcb5deadb2fd235f589f713c3 but expected 7a08390450dc00cee882809bda7e67cf6b1ec30f
+EXIT=128
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; echo '=== HEAD has ? ==='; git show --stat HEAD | grep -E \"necessaire|operateurs|autotest|en-cours|moteur-de-pensee\" | head -8; echo '=== status ==='; git status --short | grep -E \"necessaire|operateur … [307 caractères tronqués]`
+
+  ```
+35bf5588 DONNÉES — NEUF CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES, DE) : 14,51 M ARTICLES, 59,0 GO, 8 KO 0
+=== HEAD has ? ===
+ docs/pilotage/en-cours.md                          | 22 +++---
+=== status ===
+ M docs/implantation/moteur-de-pensee.md
+ M tools/pensee/autotest.py
+ M tools/pensee/operateurs.py
+?? reports/pensee-necessaire.json
+?? reports/rapport-pensee-necessaire.md
+=== cached ===
+ journal/README.md                                                | 4 ++--
+ journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md | 7 ++++---
+ journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md | 2 +-
+ 13 files changed, 22 insertions(+), 19 deletions(-)
+=== HEAD content ===
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/operateurs.py tools/pensee/autotest.py docs/implantation/moteur-de-pensee.md reports/pensee-necessaire.json reports/rapport-pensee-necessaire.md && git diff --cached --stat | tail -8 && timeout 240 git commit -m  … [226 caractères tronqués]`
+
+  ```
+journal/README.md                                  |  4 +-
+ .../rapport.md                                     |  7 +-
+ .../rapport.md                                     |  2 +-
+ reports/pensee-necessaire.json                     | 39 +++++++++++
+ reports/rapport-pensee-necessaire.md               | 66 +++++++++++++++++++
+ tools/pensee/autotest.py                           | 20 +++++-
+ tools/pensee/operateurs.py                         | 76 +++++++++++++++++++++-
+ 18 files changed, 222 insertions(+), 25 deletions(-)
+     · reports/rapport-pensee-necessaire.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"  [`pensee-drvf`](../../reports/rapport-pensee-drvf.md), [`pensee-banc`](../../reports/rapport-pensee-banc.md).\",\n\"  [`p … [714 caractères tronqués]`

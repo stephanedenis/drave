@@ -14513,3 +14513,14 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-846", "timeout_ms": 400000, "wait": true}`
+
+  ```
+19:51
+work/n2j/W-g3.pt
+G3_OK
+}
+pas 14100 · perte 1.6855 · PPL val 5.298 · 586 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/W-g3.pt --decomposition --longueurs --corpus-dir data/wiki_fr/propre --sortie work/n2j/eval-distill.json 2>&1 | grep -v Loading; ~/gpu- … [198 caractères tronqués]`

@@ -32,7 +32,8 @@
 - **Moteur B13** : **AC-3/alpha-bêta (8/8)**, **DRVF (9/9)**, **banc (10/10)**, **opérateurs 11/11**,
   **nécessaire 12/12** ; fiches
   [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
-  [`pensee-drvf`](../../reports/rapport-pensee-drvf.md), [`pensee-banc`](../../reports/rapport-pensee-banc.md).
+  [`pensee-drvf`](../../reports/rapport-pensee-drvf.md), [`pensee-banc`](../../reports/rapport-pensee-banc.md),
+  [`pensee-operateurs`](../../reports/rapport-pensee-operateurs.md), [`pensee-necessaire`](../../reports/rapport-pensee-necessaire.md).
 - **Gold L 180** : **20 réels + 160 synthétiques** ; POS **0,751** (fermé 0,939/ouvert 0,621),
   syntagmes exacts **0,194**/**tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock)
   **67,1 %** ; **attachement tête 1,0/0,957/1,0** (29 ambiguës), hasard 0,015 ; vrai neuronal
