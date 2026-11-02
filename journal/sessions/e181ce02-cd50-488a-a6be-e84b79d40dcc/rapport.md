@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 31.5 h |
-| Tours | 70 |
-| Messages | 1005 |
-| Appels d'outils | 916 |
+| Durée | 31.6 h |
+| Tours | 71 |
+| Messages | 1012 |
+| Appels d'outils | 921 |
 | Fichiers touchés | 25 |
-| Commandes | 742 |
+| Commandes | 747 |
 | Sous-agents | 2 |
-| Commits | 88 |
+| Commits | 89 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -171,6 +171,8 @@
 **Tour 69** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 70** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 71** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3736,6 +3738,54 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **dérive con
 - bash — Committer la dérive continue
 - job_output
 
+**Synthèse produite :**
+
+⏵ Dérive continue : 5 % → 50 %, v final 0,5, 20/20, 8,6 pas ; 56/56
+
+Le round 57 du goal est livré : la fiabilité **glisse** de 5 % à 50 % et la fenêtre adaptative la **suit** (v = 0,5). Commit **`713c0bbc`**.
+
+\## La dérive continue
+
+Même monde que T51/T52, mais l'erreur **glisse** : `p_erreur = 0,05 + 0,45·i/N` à chaque épisode (de 5 % à 50 %). La fenêtre adaptative (10 récents vs 10 précédents) suit le glissement.
+
+| dispositif | buts | v final | états-Q | pas |
+|---|---:|---:|---:|---:|
+| **glisse** | **20/20** | **0,5** | 738 | 8,6 |
+| dérive en deux régimes (T51) | 20/20 | 0,56 | 691 | 8,0 |
+| adaptative (T52) | 20/20 | 0,8 | 781 | 8,0 |
+
+**Ce que ça dit** :
+
+- **La fenêtre suit le glissement** : v finit à 0,5 (le dernier régime, 50 % d'erreur) ; la politique ne reste pas accrochée aux anciennes fiabilités.
+- **Elle réussit** : 20/20 en 8,6 pas ; la dérive continue ne casse pas la politique.
+- **Le coût est faible** (738 états, +0,6 pas) : le glissement se paie en pas, pas en table.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-glisse.md`](../../reports/rapport-pensee-glisse.md) ; JSON [`pensee-glisse.json`](../../reports/pensee-glisse.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T53 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **56/56 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **453 fiches / 547 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Glissement brutal** : la fiabilité tombe d'un coup ; la fenêtre doit réagir vite.
+2. **Seuil appris** : la politique estime quand la fiabilité a changé.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **glissement brutal** (la rupture soudaine).
+
+### Tour 71 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Tester la rupture de fiabilité
+- bash — Ajouter la porte T54 (rupture)
+- bash — Écrire la fiche de la rupture
+- bash — Aligner le compteur et passer les portes
+- bash — Committer la rupture
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3815,7 +3865,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **dérive con
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 702 autres
+- … et 707 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4051,4 +4101,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **dérive con
 - B13 — LA FIABILITÉ QUI DÉRIVE : v FINAL 0,56, 20/20, 8,0 PAS ; 54/54" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "FIABILITÉ QUI DÉRIVE"; then echo "
 - B13 — LA FENÊTRE ADAPTATIVE : v FINAL 0,8, 20/20, 8,0 PAS ; 55/55" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "FENÊTRE ADAPTATIVE"; then echo "COMMI
 - B13 — LA DÉRIVE CONTINUE : 5 % → 50 %, v FINAL 0,5, 20/20, 8,6 PAS ; 56/56" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "DÉRIVE CONTINUE"; then echo 
+- B13 — LA RUPTURE : 90 % D'ERREUR, v FINAL 0,12, 20/20, 8,0 PAS ; 57/57" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA RUPTURE"; then echo "COMMIT O
 

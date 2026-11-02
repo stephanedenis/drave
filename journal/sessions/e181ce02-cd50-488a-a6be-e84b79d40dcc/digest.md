@@ -19933,3 +19933,118 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-742", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 1a94456fbe1c1b057257bdd710ce55eb3962e433 but expected 2881bc144b6f49fe74a97bc02333fc85c6823ec8
+retry 1
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at df42425ad4fd7126525d915d1106ca55d303d36f but expected 1a94456fbe1c1b057257bdd710ce55eb3962e433
+retry 2
+ 19 files changed, 354 insertions(+), 36 deletions(-)
+ create mode 100644 reports/pensee-glisse.json
+ create mode 100644 reports/rapport-pensee-glisse.md
+COMMIT OK 3
+713c0bbc B13 — LA DÉRIVE CONTINUE : 5 % → 50 %, v FINAL 0,5, 20/20, 8,6 PAS ; 56/56
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dérive continue : 5 % → 50 %, v final 0,5, 20/20, 8,6 pas ; 56/56
+
+Le round 57 du goal est livré : la fiabilité **glisse** de 5 % à 50 % et la fenêtre adaptative la **suit** (v = 0,5). Commit **`713c0bbc`**.
+
+## La dérive continue
+
+Même monde que T51/T52, mais l'erreur **glisse** : `p_erreur = 0,05 + 0,45·i/N` à chaque épisode (de 5 % à 50 %). La fenêtre adaptative (10 récents vs 10 précédents) suit le glissement.
+
+| dispositif | buts | v final | états-Q | pas |
+|---|---:|---:|---:|---:|
+| **glisse** | **20/20** | **0,5** | 738 | 8,6 |
+| dérive en deux régimes (T51) | 20/20 | 0,56 | 691 | 8,0 |
+| adaptative (T52) | 20/20 | 0,8 | 781 | 8,0 |
+
+**Ce que ça dit** :
+
+- **La fenêtre suit le glissement** : v finit à 0,5 (le dernier régime, 50 % d'erreur) ; la politique ne reste pas accrochée aux anciennes fiabilités.
+- **Elle réussit** : 20/20 en 8,6 pas ; la dérive continue ne casse pas la politique.
+- **Le coût est faible** (738 états, +0,6 pas) : le glissement se paie en pas, pas en table.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+## L'état
+
+- Fiche : [`rapport-pensee-glisse.md`](../../reports/rapport-pensee-glisse.md) ; JSON [`pensee-glisse.json`](../../reports/pensee-glisse.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T53 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **56/56 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **453 fiches / 547 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Glissement brutal** : la fiabilité tombe d'un coup ; la fenêtre doit réagir vite.
+2. **Seuil appris** : la politique estime quand la fiabilité a changé.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **glissement brutal** (la rupture soudaine).
+
+
+## Tour 71
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 58/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1887 caractères tronqués]`
+
+  ```
+713c0bbc B13 — LA DÉRIVE CONTINUE : 5 % → 50 %, v FINAL 0,5, 20/20, 8,6 PAS ; 56/56
+ok
+4000 q 723 v final 0.04 20 runs: 20 /20 pas moyen 8.0
+8000 q 780 v final 0.12 20 runs: 20 /20 pas moyen 8.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T53 la dérive continue           5 % → 50 %, 20/20 buts, v final ≈ 0,5\\n\",\n\"  T53 la dérive continue           5 % → 5 … [1298 caractères tronqués]`
+
+  ```
+ok
+  ✅ T52 fenêtre adaptative adaptive : 20/20 buts, v final 0.8, 8.0 pas
+  ✅ T53 dérive continue    glisse : 20/20 buts, v final 0.5, 8.6 pas
+  ✅ T54 rupture            rupture : 20/20 buts, v final 0.12, 8.0 pas
+  57/57 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-rupture.md <<'MD'\n# B13 — la rupture : 90 % d'erreur, v = 0,12, 20/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **57/57 portes** : la fiabilité d … [6679 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 454 fichiers, le disque en a 455
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\", \"| fichiers / JSON de résultats | **455* … [628 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 455 fiche(s) · 548 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-rupture.md reports/pensee-rupture.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md … [472 caractères tronqués]`
