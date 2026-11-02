@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**166 commits** · **10 session(s)** · **10 thème(s)**
+**167 commits** · **10 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 14 | [distribue.md](distribue.md) |
 | docs | 25 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
-| mesures | 83 | [mesures.md](mesures.md) |
+| mesures | 84 | [mesures.md](mesures.md) |
 | modele | 8 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -26,13 +26,13 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 2.1 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
+| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 2.3 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 45.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 1.4 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
 | `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 2.2 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
-| `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 2.1 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
+| `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 2.4 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
-| `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 2.1 h | [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md) |
+| `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 2.4 h | [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md) |
 | `caaf3018-e3e2-4416-8446-11f0335910aa` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 0.5 h | [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 46.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 44.8 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
@@ -207,6 +207,7 @@
 | 17:17 | `7ef0199c` | B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S) |
 | 17:21 | `d2fc26c6` | D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE |
 | 17:53 | `df899b90` | B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592 |
+| 18:23 | `01838589` | B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -219,7 +220,7 @@
 - **Le corpus PDF** : 2 785 PDF, 1 927 documents, 322 Mo, 8 Ko 0, licences nommées.
 - **Le corpus Documents** : 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (les 372 tronçons dupliqués).
 - **Le corpus OCR** : 20 livres, 7 381 pages, 15,36 M caractères, 8 Ko 0 (val 115 fenêtres, éval 0/40) ; le pilote `--max-doc 20` est clos (le 20e, *Life Histories of Etnos Theory*, 450 p).
-- **Le corpus OCR du CEGEP** : 10 notes scannées, 1 596 pages, 2 519 507 caractères, 8 Ko 0 (val 11 fenêtres) — le pilote `--racine CEGEP` ferme la boucle « livres, CEGEP, collections » (4 *Algorithms Illuminated* + *Data Structures in C* ajoutés). **Le lot de 40 s'est arrêté sur l'*Encyclopedia of Algorithms* (1 000+ pages) : `pdftoppm` a dépassé son timeout de 1 800 s et le run est tombé — limite de l'outil, à traiter par `--max-pages`.**
+- **Le corpus OCR du CEGEP** : le pilote du matin (10 « notes », 1 596 pages, 2 519 507 caractères) était **neuf faux positifs** — neuf livres natifs dont seules les couvertures manquaient de texte ; seul *inscription AQPC* (2 p) était un scan. Le fonds réel, mesuré sur le texte intégral, est **147 scans, 91 uniques, 2 053 p** ; l'OCR en retient **60 documents, 1 982 p, 4 408 811 car.** (note du soir).
 - **Les genres** : l'encyclopédie 103–147 car/ligne, les livres et documents 32–37, les lignes dupliquées 8,7–24 % (l'OCR 4,8 %).
 - **A2.6/A8.3** : le lot ne divise pas les lectures denses (+27 % de calcul, PPL −0,006 %).
 
@@ -259,4 +260,17 @@ syntagmes (0,6088 / 0,7539) ; la politique `confiance` vaut **+0,1869** de tête
 (0,5670). La pragmatique reste à l'heuristique (1,0). **360 appels**, **0 refus**, ~**21,6 min**
 CPU. Fiche [`pensee-gold-cascade`](../../reports/rapport-pensee-gold-cascade.md), JSON
 [`pensee-gold-cascade.json`](../../reports/pensee-gold-cascade.json).
+
+**18 h 45 — le fonds CEGEP est océrisé : 147 scans détectés, 91 uniques, 60 documents, 1 982 p.**
+
+La détection sur le texte **intégral** (`pdftotext` complet, seuil 50 car/p, SHA-256) trouve
+**147 scans** dans les 2 681 PDF du fonds, **91 uniques** (2 053 p) après **56 doublons exacts**
+(dont une seconde copie du *Tesla* de 499 p). L'OCR des 91 scans donne **60 documents,
+1 982 p, 4 408 811 caractères**, 8 Ko 0, éval **0/40 · 0/24 · 0/40** ; le PDF de 359 p
+(*MicroPython*) dépasse le timeout de rendu à 300 dpi et est repris à **150 dpi**. La règle à
+deux pages — celle du pilote — sur-classait **5,5×** (**807** candidats) : les **10 « notes »**
+du pilote étaient **neuf livres natifs** (463–1 706 car/p) et un seul scan (*AQPC*, 2 p).
+Erratum dans la fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md) ; clôture de la session
+[`fe3c05f0`](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md). Les **8 scans en
+`.PDF`** (58 p) restent une limite nommée : `rglob("*.pdf")` ne les voit pas.
 <!-- /notes -->

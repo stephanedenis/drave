@@ -3492,3 +3492,790 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05
   ```
 
 - **job_output** `{"job_id": "bash-150", "timeout_ms": 500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "for d in $(ls -dt /dev/shm/ocr-pdf-* 2>/dev/null | head -1); do echo \"$(ls $d | wc -l) page(s)\"; done; P=$(pgrep -f \"ocr_pdf.py --liste work/ocr/micro\" | head -1); ps -o etime -p $P | tail -1; date \"+%H:%M\"", "description": "Check micro render progress"}`
+
+  ```
+336 page(s)
+      19:21
+18:29
+  ```
+
+- **job_output** `{"job_id": "bash-150", "timeout_ms": 240000, "wait": true}`
+
+  ```
+CEGEP · MicroPython Programming with ESP32 and E · 359 p · 350310 car
+{
+ "scannes": 1,
+ "ocrises": 1,
+ "pages_ocr": 359,
+ "caracteres": 350310,
+ "temps_s": 1369.5,
+ "octets": {
+  "train": 352571,
+  "val": 0,
+  "test": 0
+ }
+}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cp -r data/corpus_ocr_cegep data/corpus_ocr_cegep_avant_micro && python3 work/ocr/ajoute_micro.py", "description": "Merge MicroPython into corpus and manifest"}`
+
+  ```
+passe ajoutée : 1 doc, 359 p, 350310 car
+corpus : 60 docs, 1982 p, 4408811 car, {'train': 53, 'val': 4, 'test': 3}
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nm=json.load(open('reports/ocr-pdf-cegep.json'))\nfor k in ('ocrises','pages_ocr','caracteres','mots_estimes','troncons','documents','octets','temps_s'):\n    print(k,'=',m[k])\nprint('reprise', m['dispositif']['reprise_micropython'])\nPY\nwc -c data/corpus … [70 caractères tronqués]`
+
+  ```
+ocrises = 60
+pages_ocr = 1982
+caracteres = 4408811
+mots_estimes = 711098
+troncons = 573
+documents = {'train': 53, 'val': 4, 'test': 3}
+octets = {'train': 4430959, 'val': 12536, 'test': 10524}
+temps_s = 7070.5
+reprise {'raison': 'timeout pdftoppm (1 800 s) sur 359 pages au run principal', 'dpi': 150, 'pages': 359, 'documents': 1, 'temps_s': 1369.5}
+  10524 data/corpus_ocr_cegep/test.txt
+4430959 data/corpus_ocr_cegep/train.txt
+  12536 data/corpus_ocr_cegep/val.txt
+4454019 total
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_contamination.py --train data/corpus_ocr_cegep/train.txt --val data/corpus_ocr_cegep/val.txt --test data/corpus_ocr_cegep/test.txt --taille-troncon 8192 --eval work/dr/eval/fr-xnli.txt --eval work/dr/eval/fr-udhr.txt --eval work/dr/eval/en-xnli.txt --sortie reports … [96 caractères tronqués]`
+
+  ```
+{
+ "train": "data/corpus_ocr_cegep/train.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 13970,
+  "par_split": {
+   "val.txt": {
+    "troncons": 77,
+    "doublons": 5,
+    "taux": 0.064935
+   },
+   "test.txt": {
+    "troncons": 56,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ },
+ "recouvrement_eval": [
+  {
+   "fichier": "fr-xnli.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "fr-udhr.txt",
+   "fenetre": 128,
+   "fenetres": 24,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "en-xnli.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  }
+ ],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 542,
+  "par_split": {
+   "val.txt": {
+    "troncons": 2,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 2,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}
+  ```
+
+- **bash** `{"command": "grep -n \"Statut\\|8 Ko\\|min-chars\\|3\\. \\*\\*Splits\\|Splits\\|MicroPython\\|WER\" work/ocr/fiche-cegep.md | head -20", "description": "Locate fiche lines to update"}`
+
+  ```
+4:**Statut** : **fonds `.pdf` clos** — 91 scans uniques océrisés, manifeste `reports/ocr-pdf-cegep.json` ; le fonds CEGEP compte 2 681 PDF, dont 147 sans couche texte (2 701 p), 91 uniques (2 053 p). **Limite nommée** : 30 PDF en `.PDF` (dont 8 scans, 58 p) ne sont pas parcourus par `rglob("*.pdf")`.
+24:| tronçons 8 Ko | **{{troncons}}** |
+26:| WER | **non mesurée** |
+32:3. **Splits** : hash salé du chemin (`graine=1`) — 5 % val, 5 % test ; les mêmes règles que les autres corpus.
+38:- **8 Ko** : `verifie_contamination.py --taille-troncon 8192` — **{{w_train}}** fenêtres en train, **{{w_val}}** en val, **{{w_dup}}** duplication entre splits.
+43:- **La WER n'est pas mesurée** : pas de vérité terrain sur ces scans ; le chiffre est un volume, pas une fidélité.
+45:- **`--min-chars 300`** : les photos et formulaires courts sont détectés mais **non retenus** ({{skipped}} documents sur 91) ; le corpus privilégie le texte, pas l'exhaustivité des images.
+59:- `reports/ocr-pdf-cegep-contamination.json` — le contrôle 8 Ko et évaluations.
+64:L'OCR des **8 scans `.PDF`** (58 p, parcours insensible à la casse) ; le **pipeline R4.4** (nettoyage) ; la **WER** quand une vérité terrain existera ; la 
+… [45 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "work/ocr/fiche-cegep.md", "new_string": "**Statut** : **fonds `.pdf` parcouru** — 91 scans uniques, **60 documents retenus** (1 982 p), 31 écartés (texte OCR < 300 car. ou doublon) ; 8 scans en `.PDF` hors parcours (limite nommée) ; manifeste `reports/ocr-pdf-cegep.json` ; le fonds CE … [402 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/fiche-cegep.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "work/ocr/fiche-cegep.md", "new_string": "3. **La reprise MicroPython** — le PDF de 359 p dépasse le timeout `pdftoppm` de 1 800 s à 300 dpi ; il est repris à **150 dpi** avec la même liste (`--dpi 150`, 359 p, 350 310 car., 23 min) et ajouté au corpus ; le manifeste porte `dispositif. … [263 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/fiche-cegep.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "work/ocr/fiche-cegep.md", "new_string": "- **8 Ko** : `verifie_contamination.py --taille-troncon 8192` — **{{w_train}}** fenêtres en train, **{{w_val}}** en val, **2** en test, **{{w_dup}}** duplication entre splits. Le contrôle des **lignes exactes** trouve **5 lignes courtes** du va … [270 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/fiche-cegep.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "work/ocr/fiche-cegep.md", "new_string": "- L'OCR est **brut** : rotation, contraste, colonnes et césures ne sont pas traités (le pipeline R4.4 les traite).\n- **MicroPython à 150 dpi** : le rendu à 300 dpi dépasse le timeout ; la reprise est moins fine (WER non mesurée).\n- **`--min-c … [506 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/fiche-cegep.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 work/ocr/fait_fiche.py", "description": "Generate final CEGEP OCR fiche"}`
+
+  ```
+fiche écrite · 60 docs · 4408811 car · 7070 s · fin 18:28
+détection : 147 scans, 91 uniques, 2053 p
+éval : `fr-xnli.txt` **0/40** · `fr-udhr.txt` **0/24** · `en-xnli.txt` **0/40** · 8 Ko : 542 / 2 / 0
+  ```
+
+- **read** `{"file_path": "reports/rapport-ocr-cegep.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-cegep.md</path>
+<type>file</type>
+<content>
+1: # Le corpus OCR du CEGEP — 147 scans détectés, 91 uniques, 1 982 pages océrisées
+2: 
+3: **Date** : 2026-11-02 (détection 16 h 35–16 h 46, OCR 16 h 31–18 h 28) · **Ligne** : Données · **Session** : `fe3c05f0`
+4: **Statut** : **fonds `.pdf` parcouru** — 91 scans uniques, **60 documents retenus** (1 982 p), 31 écartés (texte OCR < 300 car. ou doublon) ; 8 scans en `.PDF` hors parcours (limite nommée) ; manifeste `reports/ocr-pdf-cegep.json` ; le fonds CEGEP compte 2 681 PDF, dont 147 sans couche texte (2 701 p), 91 uniques (2 053 p).
+5: 
+6: ## 1. Ce que c'est
+7: 
+8: Le corpus OCR des **documents sans couche texte** du fonds CEGEP (`archives/CEGEP`), océrisés page à page par `tesseract` (300 dpi, `fra+eng`). Il complète le corpus des 20 livres scannés (`rapport-ocr-pdf.md`) et le corpus PDF natif (`corpus-pdf`). Les notes de cours sont des documents à droits réservés : usage local, non diffusé.
+9: 
+10: ## 2. Le chiffre
+11: 
+12: | grandeur | valeur |
+13: |---|---:|
+14: | scans détectés (texte intégral) | **147** |
+15: | dont doublons exacts (SHA-256) | **56** |
+16: | 
+… [5252 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "reports/rapport-ocr-cegep.md", "new_string": "Le corpus OCR des **documents sans couche texte** du fonds CEGEP (`archives/CEGEP`), océrisés page à page par `tesseract` (300 dpi, `fra+eng` ; reprise MicroPython à 150 dpi). Il complète le corpus des 20 livres scannés (`rapport-ocr-pdf.m … [479 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-cegep.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-ocr-cegep.md", "new_string": "3. **La reprise MicroPython** — le PDF de 359 p dépasse le timeout `pdftoppm` de 1 800 s à 300 dpi ; il est repris à **150 dpi** (`python3 tools/ocr_pdf.py --liste work/ocr/micro.txt --racine CEGEP --sortie data/corpus_ocr_cegep_micro --ma … [555 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-cegep.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md; date \"+%H:%M:%S\"", "description": "Check state file mtimes"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 23900 16:09:21 docs/pilotage/chantiers.md
+-rw-r--r--. 1 stephane stephane 12046 18:22:25 docs/pilotage/en-cours.md
+-rw-r--r--. 1 stephane stephane 16740 16:09:21 docs/pilotage/plan-travail.md
+-rw-r--r--. 1 stephane stephane 44209 18:22:46 docs/pilotage/roadmap.md
+18:34:16
+  ```
+
+- **bash** `{"command": "sed -n '1,15p' docs/pilotage/en-cours.md; echo \"=== D/R/A ===\"; sed -n '85,112p' docs/pilotage/en-cours.md; echo \"=== tail ===\"; sed -n '120,165p' docs/pilotage/en-cours.md", "description": "Read current en-cours state"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-02, 18 h 25 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+> [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+> [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+>
+> **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
+> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; les GPU sont
+> sains ; reprise par `dsh --profile dsh-tui --resume <id>` ; runbook dans
+> [`plan-travail.md`](plan-travail.md) § 9.
+
+## Sessions en cours
+
+=== D/R/A ===
+- **Prochaine action** : **DRVM/native** (politique LLM) ; **pragmatique**.
+- **Bloquants** : aucun pour POS/syntagmes/cascade ; restent **pragmatique** et **DRVM/native**.
+- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **D/R/A** — texte int
+… [4559 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "**Mis à jour : 2026-11-02, 18 h 45 HNE (heure locale, EST).**", "old_string": "**Mis à jour : 2026-11-02, 18 h 25 HNE (heure locale, EST).**"}`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/roadmap.md; date \"+%H:%M:%S\"; git log --oneline -1", "description": "Check en-cours mtime and latest commit"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 12046 18:22:25 docs/pilotage/en-cours.md
+-rw-r--r--. 1 stephane stephane 44209 18:22:46 docs/pilotage/roadmap.md
+18:34:37
+01838589 B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES
+  ```
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 18 h 25 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+6: > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+7: > [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+8: >
+9: > **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
+10: > et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; les GPU sont
+11: > sains ; reprise par `dsh --profile dsh-tui --resume <id>` ; runbook dans
+12: > [`plan-travail.md`](plan-travail.md) § 9.
+13: 
+14: ## Sessions en cours
+15: 
+16: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+17: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+18: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+19: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`
+… [11463 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls reports/*.md | wc -l; ls reports/*.json | wc -l; ls reports/*.md reports/*.json | grep -i \"ocr\\|cegep\"", "description": "Count result files"}`
+
+  ```
+556
+643
+reports/ocr-pdf-cegep-contamination.json
+reports/ocr-pdf-cegep-detection.json
+reports/ocr-pdf-cegep.json
+reports/ocr-pdf-contamination.json
+reports/ocr-pdf.json
+reports/r44-ocr-pilote.json
+reports/rapport-ocr-cegep.md
+reports/rapport-ocr-pdf.md
+reports/rapport-r44-ocr-pilote.md
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "**Mis à jour : 2026-11-02, 18 h 45 HNE (heure locale, EST).**", "old_string": "**Mis à jour : 2026-11-02, 18 h 25 HNE (heure locale, EST).**"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "> **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14\n> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; **D/R/A est\n> close à 18 h 45** (OCR du fonds CEGEP) ; les  … [464 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "> **Session close** : `fe3c05f0` (D/R/A) — **147 scans détectés** (91 uniques, 2 053 p),\n> **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; les 10 notes du pilote étaient\n> **9 livres natifs + AQPC** (erratum) ; [clôture](../../journal/s … [1284 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees … [439 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **DRVM, pragmatique** ; **S** — la **validation\nhumaine** de la banque et la frontière du GN (h033) ; **N4** — la consigne ; **B10.3** — le `z` ;\n**R0.7** — le tagger complet ; **D** … [360 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "| fichiers / JSON de résultats | **556** / **643** | `reports/*.md` / `reports/*.json` |", "old_string": "| fichiers / JSON de résultats | **555** / **642** | `reports/*.md` / `reports/*.json` |"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "docs/pilotage/roadmap.md", "limit": 18, "offset": 34}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md</path>
+<type>file</type>
+<content>
+34: | **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v2** : rôles **contextuels** et subordonnées typées, gold **39** phrases ; analyseur **38/39** types (97,4 %), **99/100** rôles, **45/45** compléments ; corpus **39** structures (SHA `973c70a4…`) ; **40 tests** | **validation humaine** de la banque (mode `banque` à 0), puis frontière du GN sans auxiliaire (h033) |
+35: | **L — le bloc langue** | surface, heuristique CPU + neuronal, [contrat](../theorie/glossaire/entrees/contrat.md), cascade, pragmatique | 🔬 **R0.7** : 9 niveaux, **398 langues à 0,9687**, script 1,0000 ; analyse heuristique (5 schémas) ; **contrat de substitution à écrire** | **le contrat de L** (heuristique/neuronal), la mesure 71 langues |
+36: | **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %
+… [1741 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/roadmap.md", "new_string": "| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF**  … [1033 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/roadmap.md", "new_string": "**État au 02/11 18 h 45.** B13 est à **140/140** (gold 432, 116 liens) et le **gold neuronal**\nest qualifié — tagger **7B local**, POS **0,8483**, cascade **0,9440** ; **syntagmes** BIO **0,6173**,\ntête **0,7606**, cascade confiance **0,7592 … [1433 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "grep -n \"dernière mise à jour\\|16 h 24\\|18 h 25\" docs/pilotage/roadmap.md | head", "description": "Find roadmap date lines"}`
+
+  ```
+53:L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 16 h 49**.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/roadmap.md", "new_string": "L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 18 h 45**.", "old_string": "L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 16 h 49**."}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "docs/pilotage/chantiers.md", "limit": 6, "offset": 87}`
+- **read** `{"file_path": "docs/pilotage/plan-travail.md", "limit": 10, "offset": 36}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/chantiers.md</path>
+<type>file</type>
+<content>
+87: | **S — les structures** | quelles structures d'interprétation candidates, et lesquelles un humain valide ? | 🔬 v0 : 7 phrases, générateur, pragmatique (niveaux 0–4, double sens), LLM, export ; 19 tests | **analyseur plus riche** (rôles, subordonnées) ; brancher l'export au corpus | L (annotations), D (corpus), B (sens) | L (banque), B (pragmatique), D (corpus) |
+88: | **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, **398 langues à 0,9687**, **gold 432 réels + 160 synthétiques** (POS 0,7544 à 320 phrases, réel 0,7657, exact 0,194, tête 0,510), **attachement tête 1,0/0,966/0,932** ; **coréférence 116 liens, CV 0,847 ± 0,051** ; cascade 67,1 % | **B13 neuronal bloqué** (pas de modèle local) ; **la cascade mesurée** | D (corpus), S (banque), N2 (entraînement) | R (prétraitement), B (sémantique), N2 (allègement) |
+89: | **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G c
+… [2363 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+36: | session | mandat | chantiers | charge | prochaine action |
+37: |---|---|---|---|---|
+38: | **N2 — le natif (à ouvrir)** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | **N2.ac** (1,02 Go, 60 k pas) : **3,49** domaine / **6,03** littérature — le modèle de production ; prochaine action : **200 k pas**, puis R1.1/R1.2. **Aucune session active.** |
+39: | **L/B13 — en pause** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | **140/140**, gold **432**, coréférence **116 liens** ; le cycle est committé. Reprise : `e181ce02` (`--resume`), puis **gold neuronal** / **DRVM/native** (bloqué). |
+40: | **S — les structures (à ouvrir)** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | l'analyseur plus riche (rôles, subordonnées), l'export vers le corpus. **Aucune session DSH ; sous-module `tools
+… [714 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/chantiers.md", "new_string": "| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (322 Mo), **documents** (872 M car., 8 Ko 2,07 %), **O … [665 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/chantiers.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "sed -n '89p' docs/pilotage/chantiers.md; echo \"---\"; grep -c \"D — les données\" docs/pilotage/chantiers.md", "description": "Verify chantiers D line"}`
+
+  ```
+| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (322 Mo), **documents** (872 M car., 8 Ko 2,07 %), **OCR** (20 livres, 7 381 p, 15,36 M car. ; CEGEP **91 scans uniques**, 60 documents, 1 982 p, 4,41 M car. ; 8 Ko 0) ; dédup, splits | texte intégral (dumps), PDF/OCR, filtrage des stubs, licences | — | N2, L, S, R03 |
+---
+1
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/plan-travail.md", "new_string": "| **D/R/A — terminé (02/11)** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | 10 corpus, PDF, **OCR CEGEP 91 scans uniques (60 documents, 1 982  … [509 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "docs/pilotage/plan-travail.md", "limit": 14, "offset": 191}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+191:    à garder verts. Le sous-module se commit **dans son dépôt** avant de bouger le pointeur.
+192: 3. **L/B13 — la langue et la pensée (CPU).** Reprendre `e181ce02` par `--resume`, puis **remettre
+193:    `État : actif`** et rafraîchir le heartbeat (07:50 → maintenant). Le cycle **140/140** est
+194:    committé. Prochaine action : **gold neuronal** (qualifier un modèle local) ; **DRVM/native** est
+195:    bloqué par l'absence de poids/tagger.
+196: 4. **D/R/A — les données (CPU/IO).** Reprendre `fe3c05f0` par `--resume`, remettre `État : actif` et
+197:    rafraîchir le heartbeat (01/11 22:50 → maintenant). Prochaine action : **OCR ~127 scans CEGEP**
+198:    (`tools/ocr_pdf.py --racine CEGEP --deja …`), puis la **clôture**.
+199: 
+200: **Le premier prompt (à coller dans chaque terminal).**
+201: 
+202: > Tu es la session `<rôle>`. Lis `AGENTS.md`, `docs/pilotage/en-cours.md` et **seulement** le
+203: > document de ta tâche. Crée (ou reprends) `journal/sessions/<id>/plan.md` avec les onze champs,
+204: > réserve ton territoire, puis exécute la prochaine action nommée ci
+… [99 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/plan-travail.md", "new_string": "4. **D/R/A — les données (CPU/IO).** **Close le 02/11 à 18 h 45** : OCR du fonds CEGEP —\n   **147 scans détectés** (91 uniques, 2 053 p), **60 documents, 1 982 p, 4,41 M car.**, 8 Ko 0 ;\n   fiche [`ocr-cegep`](../../reports/rapport-ocr- … [400 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md", "limit": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — D/R/A : les données, le lecteur, le moteur
+2: 
+3: > **Mandat ouvert** le 2026-11-01 16 h 25 HNE depuis
+4: > [`docs/pilotage/plan-travail.md`](../../../docs/pilotage/plan-travail.md) (§ 2, § 3) — la session
+5: > reprend la session `fe3c05f0` (R4.4 close) pour le rôle **D/R/A**. Le heartbeat est celui de
+6: > l'état.
+7: 
+8: - **Session** : `fe3c05f0-834b-44f2-8739-501865d652c1`
+9: - **Rôle** : **D/R/A — les données, le lecteur, le moteur** : le texte intégral, l'extraction
+10:   PDF/OCR, la préparation de R1.1/R1.2, A2.6/A8.3.
+11: - **Périmètre** : D (texte intégral, PDF/OCR, licences, stubs), R1.1/R1.2 (préparation), A2.6/A8.3
+12: - **Fichiers réservés** : `data/wikipedia/` (lecture), `data/corpus_wiki_*`,
+13:   `tools/corpus_wikipedia*.py`, `tools/verifie_contamination.py`, `tools/catalogue_corpus.py`,
+14:   `reports/corpus-wiki-*`, `reports/corpus-wikipedia-*`, `reports/inventaire-*`,
+15:   `reports/rapport-corpus-*`, `reports/r11-*`, `reports/r12-*`, `reports/a26-*`, `reports/a83-*`,
+16:   `journal/sessions/f
+… [840 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md", "offset": 31}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md</path>
+<type>file</type>
+<content>
+31: 2. l'**extraction PDF native et OCR** des documents locaux (les 104 livres, les 2 711 PDF du
+32:    CEGEP, les collections) avec leurs licences ;
+33: 3. la **préparation de R1.1/R1.2** (le contexte natif) et les mesures A2.6/A8.3 ;
+34: 4. pour chaque livraison : le chiffre, la fiche, le JSON, le commit et la ligne d'état.
+35: 
+36: ## Ambition
+37: 
+38: Que **D** cesse d'être un inventaire et devienne le **carburant mesuré** de N2, L et S : des
+39: corpus dont on connaît la taille, la qualité, les fuites et les limites — et dont le passage à
+40: l'échelle (10 langues, texte intégral, documents) est reproduit par un outil, pas à la main.
+41: 
+42: ## Stratégie
+43: 
+44: 1. **Le pilote avant le run** : 100 000 articles pour mesurer le débaliseur (temps, résidus,
+45:    volume), puis le run complet en arrière-plan.
+46: 2. **La même chaîne que les résumés** : dédup exacte, split par article, SHA-256, manifeste,
+47:    contamination — pour que les deux corpus se comparent.
+48: 3. **Les limites écrites** : débaliseur regex (infobox, formul
+… [360 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md", "new_string": "- **Heartbeat** : 2026-11-02 18:45 EST\n- **État** : terminé\n- **Résultat** : **OCR du fonds CEGEP** — 147 scans détectés sur le texte intégral (91 uniques,\n  2 053 p), **60 documents, 1 982 p, 4 408 811  … [1088 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md", "limit": 18, "offset": 15}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md</path>
+<type>file</type>
+<content>
+15:   `reports/rapport-corpus-*`, `reports/r11-*`, `reports/r12-*`, `reports/a26-*`, `reports/a83-*`,
+16:   `journal/sessions/fe3c05f0-…/`
+17: - **Heartbeat** : 2026-11-02 18:45 EST
+18: - **État** : terminé
+19: - **Résultat** : **OCR du fonds CEGEP** — 147 scans détectés sur le texte intégral (91 uniques,
+20:   2 053 p), **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; la détection à deux pages
+21:   sur-classait 5,5× (807) et **9 des 10 notes du pilote étaient des livres natifs** (erratum) ;
+22:   fiche [`ocr-cegep`](../../../reports/rapport-ocr-cegep.md), manifeste
+23:   `reports/ocr-pdf-cegep.json` ; limite nommée : 8 scans `.PDF` (58 p).
+24: - **Prochaine action** : **aucune — session close** ; **R1.1/R1.2** (N2) et **A2.6** (A) sont
+25:   portés par leurs sessions ; les 8 scans `.PDF` restent une limite nommée.
+26: - **Arrêt** : 2026-11-02 18 h 45 (clôture) — corpus, fiche, JSON, état et commit ; session
+27:   archivée ; le reboot du 15 h 06 et la reprise de 16 h 21 sont dans l'histoire.
+28: 
+29: ## Objectif final
+30: 
+31: **
+… [164 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Session `fe3c05f0` — fermée le 2026-11-02 à 18 h 45\n\n> **Id DSH** : `fe3c05f0-834b-44f2-8739-501865d652c1`.\n> **Rôle** : D/R/A — les données, le lecteur, le moteur.\n> **Clôture** : le fonds CEGEP est océrisé ; R1.1/R1.2 et A2.6 passent à leurs sessions.\n\n## Ce qui a été livré\n\ … [1835 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **read** `{"file_path": "journal/2026-11-02/README.md", "limit": 35, "offset": 211}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md</path>
+<type>file</type>
+<content>
+211: ## Le récit de la journée (écrit à la main)
+212: 
+213: <!-- notes -->
+214: **Le jour de la clôture de la campagne D/R/A.**
+215: 
+216: ## Ce qui a été livré
+217: 
+218: - **Les dix corpus Wikipédia en texte intégral** : 20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0 partout ; l'anglais clos à 99,2 % (l'écriture bloquée à 125/125 Go, le manifeste reconstruit depuis le journal et les SHA-256 ; la limite nommée : ~75 Go de résidence pour 6 M d'articles).
+219: - **Le corpus PDF** : 2 785 PDF, 1 927 documents, 322 Mo, 8 Ko 0, licences nommées.
+220: - **Le corpus Documents** : 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (les 372 tronçons dupliqués).
+221: - **Le corpus OCR** : 20 livres, 7 381 pages, 15,36 M caractères, 8 Ko 0 (val 115 fenêtres, éval 0/40) ; le pilote `--max-doc 20` est clos (le 20e, *Life Histories of Etnos Theory*, 450 p).
+222: - **Le corpus OCR du CEGEP** : 10 notes scannées, 1 596 pages, 2 519 507 caractères, 8 Ko 0 (val 11 fenêtres) — le pilote `--racine CEGEP` ferme la boucle « livres, CEGEP, collections » (4 *Algorithms Illum
+… [2203 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "journal/2026-11-02/README.md", "offset": 244}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md</path>
+<type>file</type>
+<content>
+244: Le même **7B local**, en **BIO** contraint par grammaire, segmente les **418 syntagmes** du
+245: gold : exact **0,6173**, **tête 0,7606** (heuristique **0,1992 / 0,5614**) ; les 20 réelles
+246: **0,5138 / 0,6606**, les 160 synthétiques **0,6331 / 0,7759**. La cascade par défaut (priorité
+247: heuristique) reste à **0,2137 / 0,5670** : c'est la **politique de fusion** qui muselait le
+248: tagger. La politique `confiance` rend **0,6168 / 0,7592**. Quatre segments imbriqués restent
+249: hors de portée du BIO ; l'anglais est le point faible (0,3571 / 0,5000). Fiche
+250: [`pensee-gold-syntagmes`](../../reports/rapport-pensee-gold-syntagmes.md), JSON
+251: [`pensee-gold-syntagmes.json`](../../reports/pensee-gold-syntagmes.json).
+252: 
+253: **18 h 20 — la cascade complète : POS 0,9415, syntagmes 0,7539, acte 1,0.**
+254: 
+255: Le composite `NeuronalLLMCompose` (POS + syntagmes) branché dans la cascade rend, sur les 180 :
+256: POS **0,9415**, syntagmes exacts **0,6088** / tête **0,7539**, acte **1,0**, fraction **0,6381**.
+257: Les **ablations sont exactes** : la complèt
+… [477 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "journal/2026-11-02/README.md", "new_string": "- **Le corpus OCR du CEGEP** : le pilote du matin (10 « notes », 1 596 pages, 2 519 507 caractères) était **neuf faux positifs** — neuf livres natifs dont seules les couvertures manquaient de texte ; seul *inscription AQPC* (2 p) était un  … [630 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "journal/2026-11-02/README.md", "new_string": "**18 h 45 — le fonds CEGEP est océrisé : 147 scans détectés, 91 uniques, 60 documents, 1 982 p.**\n\nLa détection sur le texte **intégral** (`pdftotext` complet, seuil 50 car/p, SHA-256) trouve\n**147 scans** dans les 2 681 PDF du fonds, * … [905 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "sed -n '255,280p' journal/2026-11-02/README.md", "description": "Check journal notes after edit"}`
+
+  ```
+Le composite `NeuronalLLMCompose` (POS + syntagmes) branché dans la cascade rend, sur les 180 :
+POS **0,9415**, syntagmes exacts **0,6088** / tête **0,7539**, acte **1,0**, fraction **0,6381**.
+Les **ablations sont exactes** : la complète vaut la cascade POS (0,9415) et la cascade
+syntagmes (0,6088 / 0,7539) ; la politique `confiance` vaut **+0,1869** de tête sur le défaut
+(0,5670). La pragmatique reste à l'heuristique (1,0). **360 appels**, **0 refus**, ~**21,6 min**
+CPU. Fiche [`pensee-gold-cascade`](../../reports/rapport-pensee-gold-cascade.md), JSON
+**18 h 45 — le fonds CEGEP est océrisé : 147 scans détectés, 91 uniques, 60 documents, 1 982 p.**
+
+La détection sur le texte **intégral** (`pdftotext` complet, seuil 50 car/p, SHA-256) trouve
+**147 scans** dans les 2 681 PDF du fonds, **91 uniques** (2 053 p) après **56 doublons exacts**
+(dont une seconde copie du *Tesla* de 499 p). L'OCR des 91 scans donne **60 documents,
+1 982 p, 4 408 811 caractères**, 8 Ko 0, éval **0/40 · 0/24 · 0/40** ; le PDF de 359 p
+(*MicroPython*) dépasse le timeout de rendu à 300 dpi et est repris à **150 dpi**. La règle à
+deux pages — celle du pilote — sur-classait **5,5×** (**807** candidats) : les **10
+… [384 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "journal/2026-11-02/README.md", "new_string": "CPU. Fiche [`pensee-gold-cascade`](../../reports/rapport-pensee-gold-cascade.md), JSON\n[`pensee-gold-cascade.json`](../../reports/pensee-gold-cascade.json).\n\n**18 h 45 — le fonds CEGEP est océrisé : 147 scans détectés, 91 uniques, 60 do … [224 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -8; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -4; echo \"=== taille ===\"; python3 tools/taille_documents.py 2>&1 | tail -4; echo \"=== journal ===\"; python3 tools/verifie_journal.py 2>&1 | tail -5", "descr … [46 caractères tronqués]`
+
+  ```
+revue de documentation · 556 fiche(s) · 643 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== en-cours ===
+  en-cours · 1566 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== taille ===
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+=== journal ===
+  journal · 39 jour(s) · 117 session(s) · 1850 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "python3 tools/sessions.py --check --strict; echo \"[exit $?]\"", "description": "Strict check after closure"}`
+
+  ```
+⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ❌ mandat périmé (105 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+  ❌ mandat périmé (120 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — heartbeat à rafraîchir
+[exit 1]
+  ```
+
+- **bash** `{"command": "git status --short; echo \"=== diff stat ===\"; git diff --stat", "description": "Check working tree before staging"}`
+
+  ```
+M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M journal/2026-11-02/README.md
+ M journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md
+ M reports/INDEX.md
+ M reports/README.md
+ M reports/ocr-pdf-cegep-contamination.json
+ M reports/ocr-pdf-cegep.json
+ M reports/rapport-ocr-cegep.md
+ M tools/pensee/operateurs.py
+?? journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md
+?? reports/n2-r11.json
+?? reports/pensee-politique-llm.json
+?? reports/rapport-n2-r11.md
+?? reports/rapport-pensee-politique-llm.md
+?? tools/tests/qualifier_politique_drvm.py
+?? tools/tests/test_pensee_politique.py
+=== diff stat ===
+ docs/implantation/moteur-de-pensee.md              |  10 ++
+ docs/pilotage/chantiers.md                         |   2 +-
+ docs/pilotage/en-cours.md                          |  34 +++----
+ docs/pilotage/plan-travail.md                      |   9 +-
+ docs/pilotage/roadmap.md                           |  11 ++-
+ journal/2026-11-02/README.md                       |  15 ++-
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/plan.md   |  18 ++--
+ reports/INDEX.md            
+… [434 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git diff reports/INDEX.md reports/README.md | head -40; echo \"=== journal diff ===\"; git diff journal/2026-11-02/README.md | head -50", "description": "Inspect index and journal diffs"}`
+
+  ```
+diff --git a/reports/INDEX.md b/reports/INDEX.md
+index 10718771..b0cc8492 100644
+--- a/reports/INDEX.md
++++ b/reports/INDEX.md
+@@ -1,6 +1,6 @@
+ # Index des fiches de reports/
+ 
+-> **Généré** par `tools/index_reports.py` — **552 fiches**. Les fichiers
++> **Généré** par `tools/index_reports.py` — **553 fiches**. Les fichiers
+ > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
+ > la page d'état, elle, compte tous les `.md` de `reports/`.
+ 
+@@ -238,7 +238,7 @@
+ | [rapport-n2-pas-vs-texte.md](rapport-n2-pas-vs-texte.md) | N2.ab — Plus de pas paie ; plus de texte paie en largeur, pas en français |
+ | [rapport-n2-professeur.md](rapport-n2-professeur.md) | N2.u — Le professeur plus gros ne change presque rien en domaine, mais gagne 0,3 hors domaine |
+ | [rapport-n2-propre.md](rapport-n2-propre.md) | N2.h1 — Le corpus propre : la validation n'était pas tenue à l'écart, et la porte honnête vaut 3,09 |
+-| [rapport-n2-r11.md](rapport-n2-r11.md) | R1.1 — Les positions relatives : la courbe de longueur s'aplatit, la table absolue explose |
++| [rapport-n2-r11.md](rapport-n2-r11.md) | R1.1/R1.2 — Les positions relatives ôtent l'explosion, la fenêtre entraînée don
+… [5557 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git diff reports/README.md; echo \"=== index tool ===\"; python3 tools/index_reports.py 2>&1 | tail -3", "description": "Inspect reports README diff and regenerate index"}`
+
+  ```
+diff --git a/reports/README.md b/reports/README.md
+index 7e505cde..900378f8 100644
+--- a/reports/README.md
++++ b/reports/README.md
+@@ -15,7 +15,7 @@
+ 
+ | fichier | ce qu'il porte |
+ |---|---|
+-| [`rapport-pensee-gold-cascade.md`](rapport-pensee-gold-cascade.md) | **B13** 7B **0,754** |
++| [`rapport-pensee-politique-llm.md`](rapport-pensee-politique-llm.md) | **B13** **3 nœuds** |
+ | [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
+ | [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
+ | [`rapport-pensee-miroir.md`](rapport-pensee-miroir.md) | **B13** — le miroir entrée/sortie : surface 1,0, mots 0,2095, **119/119** |
+=== index tool ===
+  553 fiches → reports/INDEX.md
+  ```
+
+- **bash** `{"command": "git add docs/pilotage/chantiers.md docs/pilotage/en-cours.md docs/pilotage/plan-travail.md docs/pilotage/roadmap.md journal/2026-11-02/README.md journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md reports/ocr-pdf … [159 caractères tronqués]`
+
+  ```
+docs/pilotage/chantiers.md                         |  6 +-
+ docs/pilotage/en-cours.md                          | 34 ++++------
+ docs/pilotage/plan-travail.md                      |  9 +--
+ docs/pilotage/roadmap.md                           | 11 ++--
+ journal/2026-11-02/README.md                       | 15 ++++-
+ .../cloture.md                                     | 32 ++++++++++
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/plan.md   | 18 ++++--
+ reports/ocr-pdf-cegep-contamination.json           | 16 ++---
+ reports/ocr-pdf-cegep.json                         | 52 +++++++++------
+ reports/rapport-ocr-cegep.md                       | 74 ++++++++++++----------
+ 10 files changed, 163 insertions(+), 104 deletions(-)
+  ```
+
+- **bash** `{"command": "git diff --cached docs/pilotage/en-cours.md | head -80", "description": "Review staged en-cours diff"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 97bc3b09..ab7f99c5 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,14 +1,15 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-02, 18 h 25 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-02, 18 h 45 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+ > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+ > [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+ >
+ > **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
+-> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; les GPU sont
+-> sains ; reprise par `dsh --profile dsh-tui --resume <id>` ; runbook dans
++> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; **D/R/A est
++> close à 18 h 45** (OCR du fonds CEGEP) ; les GPU sont sains ; reprise par
++> `dsh --profile dsh-tui --resume <id>` ; runbook dans
+ > [`plan-travail.md`](plan-travail.md) § 9.
+ 
+ ## Sessions en cours
+@@ -86,28 +87,16 @@
+ - **Bloquants** : aucun pour POS/syntag
+… [4339 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_etat_a_jour.py --index; echo \"[exit $?]\"", "description": "Run the state hook check"}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[exit 0]
+  ```
+
+- **bash** `{"command": "git commit -m \"DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS\" -m \"La détection sur le texte intégral (pdftotext complet, seuil 50 car/page, SHA-256) trouve 147 scans dans le … [942 caractères tronqués]`

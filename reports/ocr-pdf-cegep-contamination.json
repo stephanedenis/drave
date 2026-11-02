@@ -1,15 +1,15 @@
 {
  "train": "data/corpus_ocr_cegep/train.txt",
  "doublons_entre_splits": {
-  "train_troncons": 20441,
+  "train_troncons": 13970,
   "par_split": {
    "val.txt": {
-    "troncons": 603,
-    "doublons": 0,
-    "taux": 0.0
+    "troncons": 77,
+    "doublons": 5,
+    "taux": 0.064935
    },
    "test.txt": {
-    "troncons": 0,
+    "troncons": 56,
     "doublons": 0,
     "taux": 0.0
    }
@@ -40,15 +40,15 @@
  ],
  "taille_troncon": 8192,
  "doublons_entre_splits_troncon": {
-  "train_troncons": 302,
+  "train_troncons": 542,
   "par_split": {
    "val.txt": {
-    "troncons": 11,
+    "troncons": 2,
     "doublons": 0,
     "taux": 0.0
    },
    "test.txt": {
-    "troncons": 0,
+    "troncons": 2,
     "doublons": 0,
     "taux": 0.0
    }

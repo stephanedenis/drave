@@ -3319,3 +3319,183 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-135", "timeout_ms": 600000, "wait": true}`
+
+  ```
+18:27:10
+zero-absolu fini 18:01:07
+zero-rope fini 18:25:20
+}
+work/n2ac/zero-absolu.pt.json: "ppl_val": 4.0770019645310205,
+work/n2ac/zero-rope.pt.json: "ppl_val": 3.740288978476749,
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle depuis zéro : RoPE gagne aussi sans initialisation absolue
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/zero-rope.pt --rope --longueurs 128,256,512,1000 --sortie work/n2ac/courbe-zero-rope.json 2>&1 | tail -5; echo \"=== même texte ===\"; PYTHONPATH=. CUDA_VIS … [198 caractères tronqués]`
+
+  ```
+L128 : 3.5428
+  L256 : 4.2294
+  L512 : 5.4354
+  L1000 : 6.2163
+{"fichier": "zero-rope.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L128": 3.5428, "L256": 4.2294, "L512": 5.4354, "L1000": 6.2163}
+=== même texte ===
+  contexte  256 · PPL des 128 derniers octets 4.9826
+  contexte  512 · PPL des 128 derniers octets 7.0432
+  contexte 1000 · PPL des 128 derniers octets 7.0735
+{"fichier": "zero-rope.pt", "positions": "rope", "cible": 128, "ppl": {"256": 4.9826, "512": 7.0432, "1000": 7.0735}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Anomalie à instruire : le RoPE depuis zéro se dégrade avec la longueur ; balayage fin
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for m in \"work/n2ac/zero-rope.pt --rope\" \"work/n2ac/zero-absolu.pt\"; do echo \"=== $m ===\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py $m --longueurs 128,160,192,224,256,320 --sortie /tmp/x.json 2>&1 | ta … [76 caractères tronqués]`
+
+  ```
+=== work/n2ac/zero-rope.pt --rope ===
+  L128 : 3.5428
+  L160 : 3.5344
+  L192 : 3.7188
+  L224 : 3.9766
+  L256 : 4.2294
+  L320 : 4.6834
+{"fichier": "zero-rope.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L128": 3.5428, "L160": 3.5344, "L192": 3.7188, "L224": 3.9766, "L256": 4.2294, "L320": 4.6834}
+=== work/n2ac/zero-absolu.pt ===
+  L128 : 3.8333
+  L160 : 3.7599
+  L192 : 3.7747
+  L224 : 3.7747
+  L256 : 3.7754
+  L320 : 3.8137
+{"fichier": "zero-absolu.pt", "val": "data/wiki_fr/propre", "positions": "absolues", "L128": 3.8333, "L160": 3.7599, "L192": 3.7747, "L224": 3.7747, "L256": 3.7754, "L320": 3.8137}
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de l'hypothèse « le RoPE plat demande plus d'entraînement » : suite à 40 k pas
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=1 PYTHONPATH=. ~/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal --pas 20000 --seq  … [412 caractères tronqués]`
+
+  ```
+pid 135378
+18:29:20
+pas 131300 · perte 1.1918 · PPL val 3.202 · 7563 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Réécriture de la fiche : la nuance « depuis zéro » change la lecture
+
+- **write** `{"content": "# R1.1/R1.2 — Les positions relatives ôtent l'explosion, la fenêtre entraînée donne la lecture\n\n> **Ligne de roadmap** : R1 · **Date** : 2026-11-02 · **Verdict** : à recette N2 (34,3 M, canal,\n> 20 000 pas depuis `base-wiki-45m`), remplacer la position **absolue** par un **RoPE** fai … [12426 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/GitHub/Qtrinet/reports/rapport-n2-r11.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/reports/rapport-n2-r11.md", "limit": 5}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-n2-r11.md</path>
+<type>file</type>
+<content>
+1: # R1.1 — Les positions relatives : la courbe de longueur s'aplatit, la table absolue explose
+2: 
+3: > **Ligne de roadmap** : R1 · **Date** : 2026-11-02 · **Verdict** : remplacer la position
+4: > apprise **absolue** par un **RoPE** fait passer la PPL à 1 000 octets de **8,2024** à
+5: > **3,2545** sur la même recette (34,3 M, canal, 20 000 pas, même initialisation, même graine).
+
+(Showing lines 1-5 of 187. Use offset=6 to continue.)
+</content>
+  ```
+
+- **write** `{"content": "# R1.1/R1.2 — Les positions relatives ôtent l'explosion, la fenêtre entraînée donne la lecture\n\n> **Ligne de roadmap** : R1 · **Date** : 2026-11-02 · **Verdict** : à recette N2 (34,3 M, canal,\n> 20 000 pas depuis `base-wiki-45m`), remplacer la position **absolue** par un **RoPE** fai … [12432 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-n2-r11.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; grep -E \"ppl_val|perte_finale\" work/n2ac/zero-rope-40k.pt.json 2>/dev/null; tail -1 work/n2ac/zero-rope-40k.log; echo \"--- 200k ---\"; tail -1 work/n2ac/mix-200k.log", "description": "Check 40k continuation and 200k"}`
+
+  ```
+18:30:25
+pas    900 · perte 1.2381 · PPL val 3.680 · 52 s
+--- 200k ---
+pas 132500 · perte 1.2153 · PPL val 3.236 · 7630 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head; echo \"=== en-cours actuel (sections) ===\"; grep -n \"^### Session\\|^## \\|fichiers / JSON\" docs/pilotage/en-cours.md | head -20; echo \"=== N2 ===\"; grep -n \"N2.ac\" docs/pilotage/en-cours.md | head -5", "description": … [35 caractères tronqués]`
+
+  ```
+M reports/ocr-pdf-cegep.json
+ M tools/pensee/operateurs.py
+?? reports/n2-r11.json
+?? reports/pensee-politique-llm.json
+?? reports/rapport-n2-r11.md
+?? tools/tests/qualifier_politique_drvm.py
+?? tools/tests/test_pensee_politique.py
+=== en-cours actuel (sections) ===
+14:## Sessions en cours
+21:### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+37:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
+53:### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+71:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+89:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+106:## Ce qui est en cours
+120:## Les chiffres de l'état
+128:| fichiers / JSON de résultats | **555** / **642** | `reports/*.md` / `reports/*.json` |
+132:## Les chantiers et leurs bloquants
+149:## Ce qui reste
+157:## Les questions ouvertes
+165:## La carte
+=== N2 ===
+112:- **N2** : **N2.ac** (mélange **1,02 Go**, 60 k pas) : **3,49** domaine, **6,03** littérature,
+141:| **N — le natif** | **N2, N3, N4** | N2 : **N2.ac 1 Go
+… [162 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "offset": 1, "limit": 60}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 18 h 25 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+6: > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+7: > [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+8: >
+9: > **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
+10: > et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; les GPU sont
+11: > sains ; reprise par `dsh --profile dsh-tui --resume <id>` ; runbook dans
+12: > [`plan-travail.md`](plan-travail.md) § 9.
+13: 
+14: ## Sessions en cours
+15: 
+16: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+17: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+18: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+19: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+20: 
+21: ### Ses
+… [3072 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- 40k ---\"; tail -1 work/n2ac/zero-rope-40k.log; echo \"--- 200k ---\"; tail -1 work/n2ac/mix-200k.log; git log --oneline -2", "description": "Wait for 40k run"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-141]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-141", "timeout_ms": 600000, "wait": true}`

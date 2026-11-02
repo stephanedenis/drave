@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 2.1 h |
+| Durée | 2.4 h |
 | Tours | 3 |
-| Messages | 259 |
-| Appels d'outils | 358 |
-| Fichiers touchés | 23 |
-| Commandes | 241 |
+| Messages | 279 |
+| Appels d'outils | 382 |
+| Fichiers touchés | 24 |
+| Commandes | 264 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -119,7 +119,7 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 
 ### Tour 3 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*44 appels d'outils.* Actions notables :
+*68 appels d'outils.* Actions notables :
 
 - bash — Inspect repo, plan, and 7B server state
 - bash — Check sessions status and en-cours
@@ -135,11 +135,11 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - bash — Refresh plan heartbeat during cascade run
 - bash — Find DRVM/native references
 - bash — Read heterogeneous operators
-- … et 27 autres
+- … et 51 autres
 
 **Synthèse produite :**
 
-⏵ Commit de la cascade complète (les fichiers DRVM restent pour le fait suivant)
+⏵ Commit du hub imminent (10 fichiers stagés) ; nouvelle attente courte
 
 ## 3. Travail accompli
 
@@ -170,6 +170,7 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 | `/home/stephane/GitHub/Qtrinet/tools/tests/test_pensee_politique.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_politique_drvm.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-cascade.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-politique-llm.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -213,7 +214,7 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 201 autres
+- … et 224 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -273,6 +274,17 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - **T2** `**tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock) **67,1 %** ;`
 - **T3** `48.44.592.457 I slot print_timing: id  1 | task 12021 |       total time =    2698.68 ms /    33 tokens`
 - **T3** `docs/pilotage/roadmap.md:249:| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantiq`
+- **T3** `187:| **T15** | la porte stochastique tient-elle ? | 80 % d'ouverture ; la politique réessaie | le but est atteint malgré le bruit |`
+- **T3** `211:| **T39** | la porte aléatoire est-elle suivie ? | saut à 20 % par pas : 20/20 buts | la politique réagit, ne prédit pas |`
+- **T3** `217:| **T45** | l'observation bruitée tient-elle ? | non : 0/20 buts, 10 % d'erreur casse la politique | il faut répéter et compter |`
+- **T3** `| **T13** | la courbe est-elle plate ? | 5 budgets × 3 graines : le but est atteint, les nœuds stables | la Q-table grandit sans gain |`
+- **T3** `| **4 ter** | `tools/pensee/` (`taquin.py`, `banc.py`) | taquin 3×3, AUC/regret, aléatoire | T7 |`
+- **T3** `**Le corpus v0** : un jeu de petits graphes (morpion, taquin 3×3, un CSP jouet) et un jeu de`
+- **T3** `+> **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; les 10 notes du pilote étaient`
+- **T3** `-| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 6`
+- **T3** `+| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 6`
+- **T3** `| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, **398 langues à 0,9687**, **gold 432 réels + 160`
+- **T3** `| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (322 Mo), **d`
 
 ## 5. Erreurs rencontrées
 

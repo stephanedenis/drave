@@ -38,7 +38,7 @@ sous-agents pour les tâches bornées.
 | **N2 — le natif (à ouvrir)** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | **N2.ac** (1,02 Go, 60 k pas) : **3,49** domaine / **6,03** littérature — le modèle de production ; prochaine action : **200 k pas**, puis R1.1/R1.2. **Aucune session active.** |
 | **L/B13 — en pause** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | **140/140**, gold **432**, coréférence **116 liens** ; le cycle est committé. Reprise : `e181ce02` (`--resume`), puis **gold neuronal** / **DRVM/native** (bloqué). |
 | **S — les structures (à ouvrir)** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | l'analyseur plus riche (rôles, subordonnées), l'export vers le corpus. **Aucune session DSH ; sous-module `tools/structures`.** |
-| **D/R/A — en pause** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | 10 corpus, PDF, OCR 20 livres + 10 notes CEGEP, glossaire 355 entrées : **fait et committé**. Reprise : `fe3c05f0` (`--resume`), OCR ~127 scans, clôture. |
+| **D/R/A — terminé (02/11)** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | 10 corpus, PDF, **OCR CEGEP 91 scans uniques (60 documents, 1 982 p, 4,41 M car.)**, glossaire 355 entrées : **fait et committé** ; **clôture** le 02/11. Restent R1.1/R1.2 (N2) et A2.6 (A) ; les 8 scans `.PDF` sont une limite nommée. |
 
 **Le rôle d'intégration** (le « hub ») : tient `en-cours`, `roadmap`, `chantiers`, ce plan,
 `journal/`, `reports/INDEX.md`, `AGENTS.md`, les compteurs et la revue de documentation. Il ne
@@ -193,9 +193,10 @@ depuis la racine du dépôt.
    `État : actif`** et rafraîchir le heartbeat (07:50 → maintenant). Le cycle **140/140** est
    committé. Prochaine action : **gold neuronal** (qualifier un modèle local) ; **DRVM/native** est
    bloqué par l'absence de poids/tagger.
-4. **D/R/A — les données (CPU/IO).** Reprendre `fe3c05f0` par `--resume`, remettre `État : actif` et
-   rafraîchir le heartbeat (01/11 22:50 → maintenant). Prochaine action : **OCR ~127 scans CEGEP**
-   (`tools/ocr_pdf.py --racine CEGEP --deja …`), puis la **clôture**.
+4. **D/R/A — les données (CPU/IO).** **Close le 02/11 à 18 h 45** : OCR du fonds CEGEP —
+   **147 scans détectés** (91 uniques, 2 053 p), **60 documents, 1 982 p, 4,41 M car.**, 8 Ko 0 ;
+   fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md). Restent **R1.1/R1.2** (N2) et
+   **A2.6** (A) ; les 8 scans `.PDF` (58 p) sont une limite nommée.
 
 **Le premier prompt (à coller dans chaque terminal).**
 

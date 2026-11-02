@@ -33,23 +33,24 @@
 | **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ; **R0.7 — bloc linguistique** (398 langues, 0,9687) | **R4.4 close** (limites nommées) ; **R1.1/R1.2** ([contexte](../theorie/glossaire/entrees/contexte.md) natif) ; R2/R3 attendent N5/N4 |
 | **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v2** : rôles **contextuels** et subordonnées typées, gold **39** phrases ; analyseur **38/39** types (97,4 %), **99/100** rôles, **45/45** compléments ; corpus **39** structures (SHA `973c70a4…`) ; **40 tests** | **validation humaine** de la banque (mode `banque` à 0), puis frontière du GN sans auxiliaire (h033) |
 | **L — le bloc langue** | surface, heuristique CPU + neuronal, [contrat](../theorie/glossaire/entrees/contrat.md), cascade, pragmatique | 🔬 **R0.7** : 9 niveaux, **398 langues à 0,9687**, script 1,0000 ; analyse heuristique (5 schémas) ; **contrat de substitution à écrire** | **le contrat de L** (heuristique/neuronal), la mesure 71 langues |
-| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; [CEGEP](../theorie/glossaire/entrees/cegep.md) 10 notes, 1 596 p, 2,52 M car., 8 Ko 0) ; **genres** mesurés | **l'OCR complet** (le [fonds](../theorie/glossaire/entrees/fonds.md) CEGEP : ~127 scans, dont l'*Encyclopedia of Algorithms* avec `--max-pages`), la préparation R1.1/R1.2 |
+| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; [CEGEP](../theorie/glossaire/entrees/cegep.md) **91 scans uniques**, 60 documents, 1 982 p, 4,41 M car., 8 Ko 0) ; **genres** mesurés | **l'OCR est clos** (limite : 8 scans `.PDF`, 58 p) ; la préparation **R1.1/R1.2** (N2) et **A2.6** (A) |
 
-**État au 02/11 18 h 25.** B13 est à **140/140** (gold 432, 116 liens) et le **gold neuronal**
+**État au 02/11 18 h 45.** B13 est à **140/140** (gold 432, 116 liens) et le **gold neuronal**
 est qualifié — tagger **7B local**, POS **0,8483**, cascade **0,9440** ; **syntagmes** BIO **0,6173**,
 tête **0,7606**, cascade confiance **0,7592** ; **cascade complète** POS **0,9415**, syntagmes
 **0,7539**, acte **1,0** ; **N2.ac** (1 Go) est le
 modèle de production (3,49 / 6,03) ; **S** — l'analyseur rôles/subordonnées est **mesuré**
 (38/39 types, 99/100 rôles, 45/45 compléments) et le corpus de **39** structures est exporté
 (SHA `973c70a4…`) ; les **quatre** sessions ont rouvert après le reboot —
-`e181ce02` (16 h 16), `fe3c05f0` (16 h 21), **N2** `0733c5bb` (16 h 17) et **S** `29ad180d`
-(16 h 19). Le runbook de reprise est dans [`plan-travail.md`](plan-travail.md) § 9.
+`e181ce02` (16 h 16), **N2** `0733c5bb` (16 h 17) et **S** `29ad180d` (16 h 19), et **D/R/A**
+`fe3c05f0` est **close à 18 h 45** (OCR CEGEP : **91 scans uniques**, 60 documents, 1 982 p).
+Le runbook de reprise est dans [`plan-travail.md`](plan-travail.md) § 9.
 
 **La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail multi-sessions** (qui fait quoi, où, à quelle cadence) est dans [`plan-travail.md`](plan-travail.md). Les demandes des 48 h y sont reliées à ce qu'elles ont déplacé.
 
 ## L'ordre du jour (carpe diem)
 
-L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 16 h 49**.
+L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 18 h 45**.
 
 1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
    30 % sur 5 types et **249 questions**) ; **R0.4** ([tête](../theorie/glossaire/entrees/tete.md) de survol) et **R0.5** ([routeur](../theorie/glossaire/entrees/routeur.md)) sont

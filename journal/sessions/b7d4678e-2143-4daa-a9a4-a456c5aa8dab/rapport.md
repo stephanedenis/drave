@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 2.1 h |
+| Durée | 2.4 h |
 | Tours | 2 |
-| Messages | 201 |
-| Appels d'outils | 218 |
-| Fichiers touchés | 8 |
-| Commandes | 153 |
+| Messages | 256 |
+| Appels d'outils | 276 |
+| Fichiers touchés | 15 |
+| Commandes | 175 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -49,7 +49,7 @@
 
 ### Tour 2 — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État  … [367 caractères tronqués]
 
-*207 appels d'outils.* Actions notables :
+*265 appels d'outils.* Actions notables :
 
 - read
 - get_goal
@@ -65,7 +65,7 @@
 - bash — Locate scan census sources
 - bash — Search 127 mentions across docs
 - bash — Read session report around next steps
-- … et 145 autres
+- … et 191 autres
 
 **Synthèse produite :**
 
@@ -77,14 +77,21 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md` | 0 | 3 |
+| `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md` | 0 | 4 |
 | `work/ocr/census_cegep.py` | 1 | 0 |
 | `work/ocr/detecte_cegep.py` | 1 | 0 |
 | `tools/ocr_pdf.py` | 0 | 6 |
 | `tools/detecte_scans_pdf.py` | 1 | 0 |
-| `work/ocr/fiche-cegep.md` | 1 | 0 |
+| `work/ocr/fiche-cegep.md` | 1 | 4 |
 | `work/ocr/fait_fiche.py` | 1 | 1 |
 | `work/ocr/ajoute_micro.py` | 1 | 0 |
+| `reports/rapport-ocr-cegep.md` | 0 | 2 |
+| `docs/pilotage/en-cours.md` | 0 | 7 |
+| `docs/pilotage/roadmap.md` | 0 | 3 |
+| `docs/pilotage/chantiers.md` | 0 | 1 |
+| `docs/pilotage/plan-travail.md` | 0 | 2 |
+| `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md` | 1 | 0 |
+| `journal/2026-11-02/README.md` | 0 | 3 |
 
 ### Commandes exécutées (échantillon)
 
@@ -128,7 +135,7 @@
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 113 autres
+- … et 135 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -205,6 +212,17 @@
 - **T2** `tmpfs            63G     0   63G   0% /dev/shm`
 - **T2** `tmpfs            63G   59M   63G   1% /tmp`
 - **T2** `dispositif {'ocr': 'tesseract 5.5.3 sans root (work/ocr/root)', 'langues': 'fra+eng', 'dpi': 300, 'psm': 3, 'pretraitement': 'aucun (le R4.4 le fera)', 'detection': 'liste explicite de scans qualifiés`
+- **T2** `24:| tronçons 8 Ko | **{{troncons}}** |`
+- **T2** `32:3. **Splits** : hash salé du chemin (`graine=1`) — 5 % val, 5 % test ; les mêmes règles que les autres corpus.`
+- **T2** `38:- **8 Ko** : `verifie_contamination.py --taille-troncon 8192` — **{{w_train}}** fenêtres en train, **{{w_val}}** en val, **{{w_dup}}** duplication entre splits.`
+- **T2** `59:- `reports/ocr-pdf-cegep-contamination.json` — le contrôle 8 Ko et évaluations.`
+- **T2** `éval : `fr-xnli.txt` **0/40** · `fr-udhr.txt` **0/24** · `en-xnli.txt` **0/40** · 8 Ko : 542 / 2 / 0`
+- **T2** `| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (322 Mo), **d`
+- **T2** `1 982 p, 4 408 811 caractères**, 8 Ko 0, éval **0/40 · 0/24 · 0/40** ; le PDF de 359 p`
+- **T2** `| [rapport-native-tetes.md](rapport-native-tetes.md) | N1.4 — les têtes précoces de `drave-n0` : 55,2 / 60,9 / 62,1 % |`
+- **T2** `-- **Le corpus OCR du CEGEP** : 10 notes scannées, 1 596 pages, 2 519 507 caractères, 8 Ko 0 (val 11 fenêtres) — le pilote `--racine CEGEP` ferme la boucle « livres, CEGEP, collections » (4 *Algorithm`
+- **T2** `+1 982 p, 4 408 811 caractères**, 8 Ko 0, éval **0/40 · 0/24 · 0/40** ; le PDF de 359 p`
+- **T2** `+> **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; les 10 notes du pilote étaient`
 
 ## 5. Erreurs rencontrées
 
@@ -215,4 +233,5 @@
 ## 6. Commits
 
 - ps -eo pid,etime,args | grep -E "git commit|git add|pre-commit|archive_sessions|session_report" | grep -v grep | head -8; echo "--- staged now ---"; git diff --
+- DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS" -m
 

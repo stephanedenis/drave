@@ -1,14 +1,15 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 18 h 25 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 18 h 45 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
 > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
 > [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
 >
 > **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
-> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; les GPU sont
-> sains ; reprise par `dsh --profile dsh-tui --resume <id>` ; runbook dans
+> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; **D/R/A est
+> close à 18 h 45** (OCR du fonds CEGEP) ; les GPU sont sains ; reprise par
+> `dsh --profile dsh-tui --resume <id>` ; runbook dans
 > [`plan-travail.md`](plan-travail.md) § 9.
 
 ## Sessions en cours
@@ -86,28 +87,16 @@
 - **Bloquants** : aucun pour POS/syntagmes/cascade ; restent **pragmatique** et **DRVM/native**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
-### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
-
-- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
-- **Rôle** : **D/R/A** — texte intégral, PDF/OCR, prépa R1.1/R1.2, A2.6/A8.3.
-- **Plan** : texte intégral, PDF, OCR, glossaire.
-- **Ambition** : le français réel.
-- **Stratégie** : dump, débaliseur, OCR page à page, glossaire au rendu.
-- **Objectif final** : 10 corpus, ficés.
-- **Ce qu'elle fait** : 10 corpus (**20,53 M**) ; PDF 1 927 ; OCR 20 livres + 10 notes
-  CEGEP ; **détection CEGEP** 2 681 PDF → **147 scans** (91 uniques, 2 053 p) ;
-  glossaire 355 ; [`ocr-cegep`](../../reports/rapport-ocr-cegep.md),
-  [`détection`](../../reports/ocr-pdf-cegep-detection.json).
-- **Ce que font les autres** : **N2**, **S**, **Pensée**, **hub**.
-- **Prochaine action** : **OCR des 147 scans** (91 uniques) via `--liste --ouvriers` ; clôture.
-- **Bloquants** : aucun ; reprise à **16 h 21**.
-- **Journal** : [le 02/11](../../journal/2026-11-02/README.md).
+> **Session close** : `fe3c05f0` (D/R/A) — **147 scans détectés** (91 uniques, 2 053 p),
+> **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; les 10 notes du pilote étaient
+> **9 livres natifs + AQPC** (erratum) ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
+> fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
 
 ## Ce qui est en cours
 
 - **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
 - **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
-- **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** 10 notes, 1 596 p ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md).
+- **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
 - **S — le banc de structures** : **analyseur rôles/subordonnées 38/39 types, 99/100 rôles, 45/45 compléments**, gold **39**, **40 tests** ; corpus **39** structures (SHA `973c70a4…`) ; [`fiche`](../../reports/rapport-s-analyseur-roles.md) ; **banque validée à 0**.
 - **N2** : **N2.ac** (mélange **1,02 Go**, 60 k pas) : **3,49** domaine, **6,03** littérature,
   **8,34** anglais, **9,05** wikitext2 — **le modèle de production** ; N4 **0/40** ; **session
@@ -125,7 +114,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **555** / **642** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **556** / **643** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
 
@@ -150,7 +139,8 @@ externes** et la **prochaine action**.
 
 **N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **DRVM, pragmatique** ; **S** — la **validation
 humaine** de la banque et la frontière du GN (h033) ; **N4** — la consigne ; **B10.3** — le `z` ;
-**R0.7** — le tagger complet.
+**R0.7** — le tagger complet ; **D** — l'**OCR est clos** (91 scans uniques, 1 982 p) ; les 8 scans
+`.PDF` (58 p) restent une limite nommée.
 
 - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
 

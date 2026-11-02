@@ -1,5 +1,5 @@
 {
- "date": "2026-11-01",
+ "date": "2026-11-02",
  "ligne": "Données (R4.4 appliqué)",
  "nature": "corpus OCR des PDF scannés",
  "dispositif": {
@@ -8,39 +8,49 @@
   "dpi": 300,
   "psm": 3,
   "pretraitement": "aucun (le R4.4 le fera)",
+  "detection": "liste explicite de scans qualifiés sur le texte intégral",
+  "liste": "work/ocr/scans-uniques.txt",
+  "ouvriers": 8,
   "split": "hash salé du chemin : 5% val, 5% test",
-  "deduplication": "documents + tronçons"
+  "deduplication": "documents + tronçons",
+  "reprise_micropython": {
+   "raison": "timeout pdftoppm (1 800 s) sur 359 pages au run principal",
+   "dpi": 150,
+   "pages": 359,
+   "documents": 1,
+   "temps_s": 1369.5
+  }
  },
- "pdfs": 52,
- "scannes": 10,
- "ocrises": 10,
- "pages_ocr": 1596,
- "caracteres": 2519507,
- "troncons": 312,
+ "pdfs": 91,
+ "scannes": 91,
+ "ocrises": 60,
+ "pages_ocr": 1982,
+ "caracteres": 4408811,
+ "troncons": 573,
  "documents": {
-  "train": 8,
-  "val": 2,
-  "test": 0
+  "train": 53,
+  "val": 4,
+  "test": 3
  },
  "octets": {
-  "train": 2464185,
-  "val": 86688,
-  "test": 0
+  "train": 4430959,
+  "val": 12536,
+  "test": 10524
  },
- "temps_s": 5308.7,
- "echantillon": "---\nExercices de synthèse Excel 2010 Fonctions avancées\nExercices de synthèse\n\nExcel 2010\nFonctions avancées\n\nEditions Logitell inc.\n\n\nL'éditeur donne l’autorisation de reproduire des parties ou la totalité de ce document, uniquement si\nces copies sont utilisées avec les manuels de formation publiés par Les éditions Logitell inc. Le\nnombre maximum de copies ne peut dépasser le nombre de manuels de formation en usage à ce\nmoment-là.\n\nGarantie. Les éditions Logitell s’engage à remplacer tout CD-ROM fo\n---\nAMF-AO-Annexes 12 à 15 (Tech)\nAutorité des marchés financiers Appel d'offres public 2016A013\n\nANNEXE 12 : PROCESSUS D'AFFAIRES\n\nPROJET: SYSTÈME DE REMBOURSEMENT EN ASSURANCE-DÉPÔTS\n\n1 Le Cadre d'intervention\n\nLes processus d'affaires qui sont supportés par le Système de remboursement en assurance-dépôts font partie du Cadre\nd'intervention, soit le cadre opérationnel d'intervention applicable aux institutions inscrites en vertu de la LAD et dont la viabilité ou la\nsolvabilité sont menacées.\n\nNous",
+ "temps_s": 7070.5,
+ "echantillon": "---\ninscription AQPC\nAQPC- Confirmation d'inscription\n\n36e COLLOQUE ANNUEL DE L'AQPC\n\n8, 9 et 10 juin 2016\n\nVotre inscription est confirmée, sous réserve de validation par l'administration.\n\nCoordonnées\n\nParticipant\nNuméro de contact\n\nAdresse\n\nTéléphone\n\nNuméro d'inscription\nDate de transaction\nÀ payer par\n\nTarif appliqué\n\nMontant avant taxes\nTPS\nTVQ\nTotal\n\nNuméros de taxes\n\n(numéro de référence: 6669)\n\nStéphane Denis\n3789\n\n3000, avenue Boullé\nSaint-Hyacinthe QC CA J2S 1H9\n\n514-839-7074 514-418-4323\n---\ndocument%20de%20revision_pages_12a15_5421\n@\n®\n©\n@\n©\n©\n\n© © © © 6 © ©\n\n®\n\nIndique dans la colonne de droite le type de chacune des phrases suivantes.\n\nLe cirque est parti depuis longtemps.\nLe facteur est passé dans l'après-midi.\nSurtout ne crie pas! =. _\nQuand le printemps reviendra-t-il?\n\nComme je voudrais avoir ce vélo!\n\nQuand est-ce que ce groupe viendra à Hull ?\n\nIla manqué l’autobus ce matin.\n\nL'école est fermée à cause de la tempête de neige.\nEst-ce que tu connais la réponse à cette questio",
  "racines": [
   {
    "nom": "CEGEP",
    "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP",
-   "pdfs": 2681,
+   "pdfs": 91,
    "licence": "notes de cours — droits réservés, usage local, non diffusé"
   }
  ],
- "mots_estimes": 406372,
- "sha256_train": "be8475e1c80d0b40fdd2a87f3f0e379a2da14c572a88d86ef9b4bf6ee604afb8",
- "sha256_val": "13ba376d1d2c87026b665765a62fd30f034e6458cd0deedd1ccfc31d23541fa0",
- "sha256_test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+ "mots_estimes": 711098,
+ "sha256_train": "6d53a023db1ab7aaa93608c0995bbe40fb37524a8f74f53f86951fa7ada77310",
+ "sha256_val": "dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063ccd0e1",
+ "sha256_test": "1c9ab73459c1e44ae7c1e23e46210091c54a5be360df698bdad150e9c1153b84",
  "limites": [
   "OCR brut : rotation/contraste/colonnes non traités (le R4.4 les traite)",
   "WER non mesurée (pas de vérité terrain sur les scans réels)",

@@ -14,13 +14,17 @@
   `reports/corpus-wiki-*`, `reports/corpus-wikipedia-*`, `reports/inventaire-*`,
   `reports/rapport-corpus-*`, `reports/r11-*`, `reports/r12-*`, `reports/a26-*`, `reports/a83-*`,
   `journal/sessions/fe3c05f0-…/`
-- **Heartbeat** : 2026-11-02 18:20 EST
-- **État** : actif
-- **Prochaine action** : le **fonds CEGEP** (~127 scans) ; la **clôture** de la session ;
-  R1.1/R1.2 après N2, A2.6 après A6.2. Les 20 livres, les 10 notes CEGEP, le PDF, les documents,
-  le glossaire (335 + 20 entrées) et docwatch sont committés.
-- **Arrêt** : 2026-11-02 15 h 06 (reboot) — dernière trace 13 h 25 ; **reprise** le 02/11 à 16 h 21 ;
-  heartbeat rafraîchi.
+- **Heartbeat** : 2026-11-02 18:45 EST
+- **État** : terminé
+- **Résultat** : **OCR du fonds CEGEP** — 147 scans détectés sur le texte intégral (91 uniques,
+  2 053 p), **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; la détection à deux pages
+  sur-classait 5,5× (807) et **9 des 10 notes du pilote étaient des livres natifs** (erratum) ;
+  fiche [`ocr-cegep`](../../../reports/rapport-ocr-cegep.md), manifeste
+  `reports/ocr-pdf-cegep.json` ; limite nommée : 8 scans `.PDF` (58 p).
+- **Prochaine action** : **aucune — session close** ; **R1.1/R1.2** (N2) et **A2.6** (A) sont
+  portés par leurs sessions ; les 8 scans `.PDF` restent une limite nommée.
+- **Arrêt** : 2026-11-02 18 h 45 (clôture) — corpus, fiche, JSON, état et commit ; session
+  archivée ; le reboot du 15 h 06 et la reprise de 16 h 21 sont dans l'histoire.
 
 ## Objectif final
 
