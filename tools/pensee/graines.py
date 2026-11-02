@@ -142,6 +142,24 @@ def executer_courbe(graines: int = 5) -> list[dict]:
     return lignes
 
 
+def executer_bord_fin(graines: int = 20, runs: int = 20) -> list[dict]:
+    """Le bord fin : facteurs 0,38 → 0,42, 20 graines, 20 exécutions par graine."""
+    lignes = []
+    for fac in (0.38, 0.39, 0.40, 0.41, 0.42):
+        buts, n = 0, 0
+        for g in range(graines):
+            p = PolitiqueAppriseBayesOubliSeuil(episodes=4000, graine=g, facteur=fac)
+            p.apprendre()
+            for h in range(runs):
+                p.rng.seed(2000 + h)
+                b, _ = seule_bayes_oubli_seuil(p)
+                buts += b
+                n += 1
+        lignes.append({"facteur": fac, "buts": buts, "runs": n,
+                       "taux": round(buts / n, 3)})
+    return lignes
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--json", default="")
@@ -151,6 +169,17 @@ def main() -> int:
         print(f"graine {l['graine']}  Q {l['etats_q']:3d}  "
               f"bruit {l['sto_but']}/{l['sto_pas']} pas ({l['sto_essais']} essais)  "
               f"stable {l['stable_but']}/{l['stable_pas']} pas")
+    if args.json and "bord-fin" in args.json:
+        lignes_bf = executer_bord_fin()
+        for l in lignes_bf:
+            print(f"facteur {l['facteur']:.2f}  {l['buts']}/{l['runs']} buts")
+        pth = pathlib.Path(args.json)
+        pth.parent.mkdir(parents=True, exist_ok=True)
+        pth.write_text(json.dumps({"date": "2026-11-02", "ligne": "B13",
+                                   "graines": list(range(20)), "runs": 20,
+                                   "lignes": lignes_bf},
+                                  ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        return 0
     if args.json and "courbe20" in args.json:
         lignes_c = executer_courbe(graines=20)
         for l in lignes_c:

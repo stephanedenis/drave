@@ -1,0 +1,45 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "87/87",
+ "graines": 20,
+ "runs": 20,
+ "lignes": [
+  {
+   "facteur": 0.38,
+   "buts": 292,
+   "runs": 400,
+   "taux": 0.73
+  },
+  {
+   "facteur": 0.39,
+   "buts": 380,
+   "runs": 400,
+   "taux": 0.95
+  },
+  {
+   "facteur": 0.4,
+   "buts": 380,
+   "runs": 400,
+   "taux": 0.95
+  },
+  {
+   "facteur": 0.41,
+   "buts": 400,
+   "runs": 400,
+   "taux": 1.0
+  },
+  {
+   "facteur": 0.42,
+   "buts": 400,
+   "runs": 400,
+   "taux": 1.0
+  }
+ ],
+ "seuil_robuste": 0.41,
+ "limites": [
+  "dépendance intra-graine",
+  "20 graines",
+  "toy"
+ ]
+}

@@ -24600,3 +24600,52 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T83 la courbe élargie             5 graines : ×0,35 0/25, ×0,41 25/25\\n\",\n\"  T83 la courbe élargie             5 grain … [1133 caractères tronqués]`
+
+  ```
+ok
+  ✅ T82 pénalité -1        pénalité -1 : but 0 0/20, but 1 20/20 (le cycle tient)
+  ✅ T83 courbe élargie     courbe 5 graines : ×0,35 0/25, ×0,41 25/25
+  ✅ T84 bord fin           bord fin : ×0,38 20/25, ×0,41 25/25
+  87/87 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-bord-fin.md <<'MD'\n# B13 — le bord fin : 0,41 est le seuil robuste\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **87/87 portes** : le bord du seuil  … [7307 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 490 fiche(s) · 579 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2821 mots > budget 2800 (T1)
+  en-cours · 1625 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-verite.md`](rapport-pensee-verite.md) | **B13** — la vérité qui change : porte cachée, 20/20 aux deux phases, ** … [634 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 490 fiche(s) · 579 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2803 mots > budget 2800 (T1)
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1800 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, seuil robuste 0,4 … [280 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/graines.py tools/pensee/autotest.py reports/rapport-pensee-bord-fin.md reports/pensee-bord-fin.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md  … [486 caractères tronqués]`

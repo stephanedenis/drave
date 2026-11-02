@@ -17647,3 +17647,38 @@ reports/rapport-n2-multilingue.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d{2} h \\d{2} HNE \\(heure locale, EST\\)\\.\\*\\*\",\n           \"**Mis à jour : … [1397 caractères tronqués]`
+
+  ```
+ts ok
+[still running after 60000ms; moved to background job bash-1047]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1047", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+4bad0fab N2 — LES FICHES DE LA FIN DE NUIT : PROFESSEUR, MULTILINGUE 34 M, ÉCHANTILLON, FENÊTRE, ANGLAIS 34 M
+?? reports/corpus-wiki-it-texte-contamination.json
+?? reports/corpus-wiki-it-texte.json
+?? reports/ocr-pdf-contamination.json
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1045 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do export GIT_INDEX_FILE=/tmp/index.n2; git read-tree HEAD 2>/dev/null && git add journal/2026-11-01/nuit-n2.md 2>/dev/null && git commit -q -m "JOURNAL — LA FIN DE NUIT : L'ANGLAIS, LE PROFESSEUR, LA STRUCTURE
+
+L'anglais suit le français chiffre pour chiffre (3,765 distillé, 4,19 à 512), le professeur plus
+gros ne paie presque pas (3,889 contre 3,876 en domaine, +0,3 hors domaine), le multilingue sature
+(6,68 → 5,89 → 5,58), et l'analyseur du banc de structures retrouve 7/7 séquences et 93,9 % de
+couverture après trois corrections." 2>/dev/null && { echo "commit ok ($i)"; break; }; echo "course $i"; sleep 4; done; unset GIT_INDEX_FILE; git log --oneline -1; date '+%H:%M') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 1080; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/C-g*.pt 2>/dev/null; tail -1 work/n2j/C-g1.log 2>/dev/null; tail -1 work/n2j/C-g2.log 2>/dev/null", "description": "Wait for the channel distillations"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1048]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1048", "timeout_ms": 1100000, "wait": true}`

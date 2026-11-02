@@ -1329,6 +1329,15 @@ def t83_courbe20() -> tuple[bool, str]:
     return ok, f"courbe 5 graines : ×0,35 {par[0.35]}/25, ×0,41 {par[0.41]}/25"
 
 
+def t84_bord_fin() -> tuple[bool, str]:
+    """Le bord fin : × 0,38 n'atteint pas 100 %, × 0,41 atteint 100 %."""
+    from .graines import executer_bord_fin
+    lignes = executer_bord_fin(graines=5, runs=5)
+    par = {l["facteur"]: l["buts"] for l in lignes}
+    ok = par[0.41] == 25 and par[0.38] < 25
+    return ok, (f"bord fin : ×0,38 {par[0.38]}/25, ×0,41 {par[0.41]}/25")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1411,7 +1420,8 @@ def main() -> int:
               ("T80 phase devinée", t80_phase_devinee()),
               ("T81 vote de 5 signaux", t81_vote()),
               ("T82 pénalité -1", t82_cycle()),
-              ("T83 courbe élargie", t83_courbe20())]
+              ("T83 courbe élargie", t83_courbe20()),
+              ("T84 bord fin", t84_bord_fin())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

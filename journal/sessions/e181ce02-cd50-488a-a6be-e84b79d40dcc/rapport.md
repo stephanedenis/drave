@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 35.0 h |
+| Durée | 35.1 h |
 | Tours | 101 |
-| Messages | 1301 |
-| Appels d'outils | 1146 |
+| Messages | 1304 |
+| Appels d'outils | 1149 |
 | Fichiers touchés | 25 |
-| Commandes | 928 |
+| Commandes | 930 |
 | Sous-agents | 2 |
-| Commits | 130 |
+| Commits | 131 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -5366,12 +5366,15 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round resserre le bord avec **
 
 ### Tour 101 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Mesurer le bord fin 0,38–0,42 (400 par facteur)
 - bash — Ajouter la porte T84 (bord fin)
 - bash — Écrire la fiche du bord fin
 - bash — Trim README et portes
+- bash — Réduire le README de 3 mots
+- bash — Committer le bord fin
+- job_output
 
 ## 3. Travail accompli
 
@@ -5452,7 +5455,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round resserre le bord avec **
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 888 autres
+- … et 890 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5730,4 +5733,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round resserre le bord avec **
 - B13 — LA COURBE SUR 20 GRAINES : 20 % À 0,35, 100 % À 0,41, SEUIL ~0,41 ; 86/86" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "COURBE SUR 20 GRAINES";
 - B13 — LA COURBE SUR 20 GRAINES : 20 % À 0,35, 100 % À 0,41, SEUIL ~0,41 ; 86/86" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "COURBE SUR 20 GRAINES";
 - ÉTAT — COMPTEURS RÉELS (488/578)" 2>&1 | tail -2; git log -1 --format='%h %s'
+- B13 — LE BORD FIN : 73 % À 0,38, 100 % À 0,41 (400 ESSAIS), SEUIL ROBUSTE 0,41 ; 87/87" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BORD FIN"; then 
 

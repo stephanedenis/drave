@@ -32728,3 +32728,60 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf|pdftoppm\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 7 min then check OCR progress", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+03:43
+  Biblio_large · 005.11 Inconnu(e) 2022, Raff 2022, Insid · 602 p · 1210468 car
+  Biblio_large · 005.276 Author 2023, Title.pdf · 105 p · 125524 car
+2375777 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af "tesseract.*ocr-pdf|pdftoppm" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 11642918  2 nov 03:18 data/corpus_ocr/train.txt
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract|pdftoppm\" | head -1; ls /tmp/ | grep \"ocr-pdf-\" | head -2; ps -p 1616198 -o stat,etime= 2>/dev/null", "description": "Check 17th book start", "timeoutMs": 120000, "workdir": "/home/stephane/Data1 … [29 caractères tronqués]`
+
+  ```
+03:43
+2383244 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-_m5882by/p-661.png stdout -l fra+eng --psm 3
+ocr-pdf-_m5882by
+STAT            
+S       06:57:41
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pdfinfo \"/home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/005 Logiciels/005.3 Architecture/005.3 Inconnu(e) 2025, metapatterns.pdf\" 2>/dev/null | grep -E \"^Pages\"; ls \"/home/stephane/Data13TB/stephane/Biblio_large/00 … [202 caractères tronqués]`
+
+  ```
+Pages:           839
+005.3 APIs 2015, The API Lifecycle.pdf
+005.3 Inconnu(e) 2025, metapatterns.pdf
+005.3 Information Architecture, 4th Edition.pdf
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 346 : correction — le 16e `metapatterns` fait 839 p (édition différente, pas un doublon)
+
+**Round 346/1000 — le 16e livre est une autre édition (839 pages).**
+
+- **Correction** : le `005.3 Architecture/metapatterns.pdf` fait **839 pages** (le 14e, `005.13`, en faisait 373 et a été rejeté comme doublon du 3e) — le 16e est donc **une édition différente**, sans doute unique, et comptera.
+- **`tesseract`** lit la page **661/839** (79 %) ; la fin vers **03 h 52**, puis la ligne et l'ajout au train.
+- **Le corpus reste : 14 livres, 4 864 pages, 11 528 066 caractères** ; le train **11 642 918 octets**.
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le 16e livre est en fait une édition de 839 p ; le goal reste actif.
+
+
+## Tour 359
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 347/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf|pdftoppm\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 7 min then check OCR progress", "timeoutMs":  … [69 caractères tronqués]`
