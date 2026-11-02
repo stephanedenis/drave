@@ -1,0 +1,30 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "56/56",
+ "p_erreur": "0,05 → 0,50 linéaire",
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 738,
+  "v_final": 0.5,
+  "runs": 20,
+  "buts": 20,
+  "pas_moyen": 8.6
+ },
+ "contraste": {
+  "deux_regimes": {
+   "v_final": 0.56,
+   "pas": 8.0
+  },
+  "adaptative": {
+   "v_final": 0.8,
+   "pas": 8.0
+  }
+ },
+ "limites": [
+  "dérive monotone",
+  "pente constante",
+  "toy"
+ ]
+}

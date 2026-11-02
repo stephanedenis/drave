@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 31.5 h |
-| Tours | 101 |
-| Messages | 1292 |
-| Appels d'outils | 1094 |
+| Durée | 31.6 h |
+| Tours | 105 |
+| Messages | 1303 |
+| Appels d'outils | 1097 |
 | Fichiers touchés | 25 |
-| Commandes | 1007 |
+| Commandes | 1010 |
 | Sous-agents | 0 |
 | Commits | 70 |
 | Compactages de contexte | 3 |
@@ -229,6 +229,14 @@
 **Tour 100** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 101** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 102** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 103** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 104** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 105** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2847,7 +2855,73 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 
 **Synthèse produite :**
 
-⏵ Round 89 : je change d'approche — je regarde la préparation R1.1/R1.2 plutôt que de re-poll l'OCR
+⏵ Round 89 : la préparation R1.1/R1.2 est ficée et committée (df42425a)
+
+**Round 89/1000 — une livraison de plus : la préparation R1.1/R1.2 est documentée.**
+
+J'ai écrit `reports/rapport-r1-preparation.md` (commit `df42425a`) : ce que R1.1/R1.2 demandent, ce qui est **prêt** côté D/R/A (les dix corpus, le PDF, les documents, l'OCR, les évaluations, la comparaison des genres), ce qui **bloque** (la hiérarchie de lecture est portée par N2 — la préparation est faite, l'exécution attend N2), et la suite. C'est la pièce manquante du mandat « préparation R1.1/R1.2 » : elle **nomme** ce qui est prêt et ce qui attend, sans toucher aux GPU de N2.
+
+**L'OCR** : train **4 193 550 octets** ; le 8e livre (*Sprenger 2025, inflammationcycling*) est un volume de **782 pages** en cours de rendu. Les val/test restent à 0 (écrits à la clôture).
+
+**Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test). **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** et **A2.6/A8.3** restent mesurés et committés ; la roadmap, l'état et le journal du 2/11 sont à jour.
+
+**La suite** : l'OCR (le 8e livre puis ses val/test), la clôture de la session. Le goal reste actif.
+
+### Tour 102 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR book 8 pages and manifest
+
+**Synthèse produite :**
+
+⏵ Round 90 : le 8e livre OCR atteint 1 075 pages rendues (24 min 34)
+
+**Round 90/1000 — le 8e livre est énorme, mais le rendu avance vite.**
+
+- **L'OCR** : train **4 193 550 octets** ; `pdftoppm` rend le 8e livre (*Sprenger 2025, inflammationcycling*) depuis **24 min 34**, **1 075 pages** rendues (+293 en 6 min). L'océrisation suivra. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3**, la **comparaison des genres** et la **préparation R1.1/R1.2** (fiche `df42425a`) restent mesurés et committés ; la roadmap, l'état et le journal du 2/11 sont à jour.
+
+**Le constat** : le 8e livre est un volume de 1 000+ pages ; son rendu avance à ~50 pages/min. Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
+
+### Tour 103 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR book 8 pages and manifest
+
+**Synthèse produite :**
+
+⏵ Round 91 : le 8e livre OCR atteint 1 093 pages rendues (24 min 59)
+
+**Round 91/1000 — le 8e livre continue son rendu.**
+
+- **L'OCR** : train **4 193 550 octets** ; `pdftoppm` rend le 8e livre (*Sprenger 2025, inflammationcycling*) depuis **24 min 59**, **1 093 pages** rendues. L'océrisation suivra. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3**, la **comparaison des genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; la roadmap, l'état et le journal du 2/11 sont à jour.
+
+**Le constat** : le 8e livre est un volume de 1 000+ pages ; son rendu avance. Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
+
+### Tour 104 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check OCR book 8 pages
+
+**Synthèse produite :**
+
+⏵ Round 92 : le 8e livre OCR atteint 1 110 pages rendues (25 min 22)
+
+**Round 92/1000 — le 8e livre continue.**
+
+- **L'OCR** : train **4 193 550 octets** ; `pdftoppm` rend le 8e livre (*Sprenger 2025, inflammationcycling*) depuis **25 min 22**, **1 110 pages** rendues. L'océrisation suivra. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3**, la **comparaison des genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; la roadmap, l'état et le journal du 2/11 sont à jour.
+
+**Le constat** : le 8e livre est un volume de 1 100+ pages ; son rendu avance. Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
+
+### Tour 105 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -2923,7 +2997,7 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 967 autres
+- … et 970 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3051,7 +3125,7 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 
 ## 5. Erreurs rencontrées
 
-59 sorties en erreur ou divergentes. Les premières :
+61 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

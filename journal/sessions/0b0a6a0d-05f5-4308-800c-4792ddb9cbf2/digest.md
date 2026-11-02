@@ -16308,3 +16308,53 @@ def generer(modele, prompt: str, n: int = 128, top_k: int = 0, temperature: floa
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 300 ~/gpu-env/bin/python tools/generer_natif.py --modele work/n2j/W34-g1.pt --prompt \"La France est un pays\" --n 100 2>&1 | tail -3; echo \"=== autres ===\"; for p in \"Le chat de la vois … [274 caractères tronqués]`
+
+  ```
+La France est un pays de la commune de Saint-Germain-de-Communes de la commune de Saint-Germain-de-Comté de Saint-Germai
+=== autres ===
+Le chat de la voisine de la commune de Saint-Germain-de-Commune est située à  au sud-est de Saint-G
+Dans les années 1950 et 1970. Le contexte de la commune est située à  au sud de La Grande à  au s
+The history of the Steeper of the Steeper Constantin of the Steen of the Steen of the Steen of
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"add_argument\" tools/generer_natif.py | head -8; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 120 ~/gpu-env/bin/python tools/generer_natif.py --modele work/n2j/W34-g1.pt --prompt \"La France est un pays\" --n 100 --temperatu … [109 caractères tronqués]`
+
+  ```
+52:    ap.add_argument("--modele", default="/tmp/drave-n0-distille.pt")
+53:    ap.add_argument("--prompt", default="La France est un pays")
+54:    ap.add_argument("--n", type=int, default=128)
+55:    ap.add_argument("--top-k", type=int, default=0)
+56:    ap.add_argument("--temperature", type=float, default=0.0)
+57:    ap.add_argument("--device", default="cpu")
+58:    ap.add_argument("--json", default="reports/native-generation.json")
+La France est un pays d'État sorti en 1985. Sa famille permet de la fin du Royaume de 1974 à la guerre de l'Institut de
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-echantillon.md <<'EOF'\n# N2.s — Ce que le meilleur modèle écrit : du français grammatical, des boucles et des collages\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : le modèle de 34,3 … [3962 caractères tronqués]`
+
+  ```
+fiche échantillon écrite
+en-cours ok
+  T0 max : 4005 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.s** : échantillon — français grammatical, boucles de gabarit ;\", \"**N2.s** : échantillon, boucles de gabar … [579 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3999 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 452 fichiers, le disque en a 454
+     · compteurs : en-cours.md dit 546 JSON, le disque en a 547
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1288 caractères tronqués]`
+
+  ```
+ok
+[still running after 60000ms; moved to background job bash-960]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-960", "timeout_ms": 300000, "wait": true}`

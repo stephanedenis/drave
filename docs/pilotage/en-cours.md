@@ -78,7 +78,7 @@
 - **A8** : **A8.0 : 19** ; **A8.3b refusé** (lot) ; **A8.3c/d** : lot 1≠≥2, threads innocents ; fiches [`a83`](../../reports/rapport-a83-defaut.md), [`a83b`](../../reports/rapport-a83b-regimes.md), [`a83c`](../../reports/rapport-a83c-lot.md), [`a83d`](../../reports/rapport-a83d-lot-threads.md).
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
-- **N2.h/N2.i** : **3,09** ; **N2.j** : **7,42** ; **N2.k** : **5,68** ; **N2.j2** : **4,49** ; **N2.j3** : **4,20** ; **N2.n** : **3,94** ; **N2.o** : **5,41** ; **N2.p** : **4,00** ; **N2.q** : multi **5,89** ; **N2 → R1** : note de passage ; **N2.r** : 34,3 M distillé **3,69**, 512 **4,09** ; **N2.j4** : **3,88** ; **N2.m** : **4,42** ; **N2.l** : **4,17** ; N4 **0/40**. Fiches [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md), [`n2-capacite-reelle`](../../reports/rapport-n2-capacite-reelle.md), [`n2-canal`](../../reports/rapport-n2-canal.md), [`n2-anglais`](../../reports/rapport-n2-anglais.md).
+- **N2.h** : **3,09** ; **N2.j** : **7,42** ; **N2.k** : **5,68** ;  **N2.j3** : **4,20** ; **N2.n** : **3,94** ; **N2.o** : **5,41** ; **N2.p** : **4,00** ; **N2.q** : multi **5,89** ; **N2 → R1** : note de passage ; **N2.r** : **3,69**, 512 **4,09** ; **N2.s** : échantillon, boucles de gabarit ; **N2.j4** : **3,88** ; **N2.m** : **4,42** ; **N2.l** : **4,17** ; N4 **0/40**. Fiches [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md), [`n2-capacite-reelle`](../../reports/rapport-n2-capacite-reelle.md), [`n2-canal`](../../reports/rapport-n2-canal.md), [`n2-anglais`](../../reports/rapport-n2-anglais.md).
 - **Pensée — state store v0** : 6/6 portes (BFS, greedy, A*, MCTS-lite), jouet des cruches ; fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine AC-3, alpha-bêta, DRVF.
 
 
@@ -90,7 +90,7 @@
 |---|---|---|
 | portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **453** / **547** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **454** / **547** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

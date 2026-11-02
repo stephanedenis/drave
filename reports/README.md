@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-glisse.md`](rapport-pensee-glisse.md) | **B13** — la dérive continue : 5 % → 50 %, v final 0,5, 20/20, 8,6 pas, **56/56** |
 | [`rapport-pensee-adaptive.md`](rapport-pensee-adaptive.md) | **B13** — la fenêtre adaptative : v final 0,8, 20/20, 8,0 pas, **55/55** |
 | [`rapport-pensee-derive.md`](rapport-pensee-derive.md) | **B13** — la fiabilité qui dérive : v final 0,56, 20/20, 8,0 pas, **54/54** |
 | [`rapport-pensee-bayes-appris.md`](rapport-pensee-bayes-appris.md) | **B13** — la vraisemblance apprise : v=0,899, 20/20, 8,6 pas, **53/53** |
@@ -45,9 +46,7 @@
 | [`rapport-pensee-reseau.md`](rapport-pensee-reseau.md) | **B13** — le réseau linéaire : 12 poids, l'imitation échoue seule, **26/26** |
 | [`rapport-pensee-shaping.md`](rapport-pensee-shaping.md) | **B13** — le reward shaping : 56 états-Q, la politique seule échoue encore, **25/25** |
 | [`rapport-pensee-minute-entrainee.md`](rapport-pensee-minute-entrainee.md) | **B13** — la Q-table entraînée/minute : 60 états-Q, politique seule échoue, **24/24** |
-| [`rapport-pensee-minute-apprise.md`](rapport-pensee-minute-apprise.md) | **B13** — la Q-table sur la porte minute : 28 nœuds/but, sonde 6, **22/22** |
 | [`rapport-pensee-minute.md`](rapport-pensee-minute.md) | **B13** — la porte à un tour : 27 nœuds/but, sonde 5, **21/21** |
-| [`rapport-pensee-ferme.md`](rapport-pensee-ferme.md) | **B13** — la porte qui se referme : 27 nœuds/but, sonde 5, coût 57, **20/20** |
 | [`rapport-pensee-sto-seule.md`](rapport-pensee-sto-seule.md) | **B13** — la politique seule sur le bruit : 8–10 pas, 1–3 essais, 15/15 buts, **19/19** |
 | [`rapport-pensee-stochastique.md`](rapport-pensee-stochastique.md) | **B13** — la porte stochastique : 80 %, 30 nœuds/but, sonde 7, **18/18** |
 | [`rapport-pensee-seule.md`](rapport-pensee-seule.md) | **B13** — la politique seule : 8 pas, 15/15 buts sans A*, **17/17** |
