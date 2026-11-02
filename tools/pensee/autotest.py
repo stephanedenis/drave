@@ -691,6 +691,20 @@ def t42_croyance() -> tuple[bool, str]:
                      f"la croyance seule ne suffit pas")
 
 
+def t43_curieuse() -> tuple[bool, str]:
+    """La curiosité : 0/20 buts, le bonus de certitude ne suffit pas (négatif)."""
+    from .operateurs import PolitiqueAppriseCurieuse, seule_curieuse
+    p = PolitiqueAppriseCurieuse(episodes=2000, graine=0)
+    p.apprendre()
+    ok = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, _ = seule_curieuse(p)
+        ok += b
+    return ok == 0, (f"curiosité : {ok}/20 buts ({len(p.q)} états-Q), "
+                     f"le bonus de certitude ne suffit pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -732,7 +746,8 @@ def main() -> int:
               ("T39 porte aléatoire", t39_aleatoire()),
               ("T40 hasard variable", t40_hasard()),
               ("T41 observation partielle", t41_partielle()),
-              ("T42 croyance", t42_croyance())]
+              ("T42 croyance", t42_croyance()),
+              ("T43 curiosité", t43_curieuse())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

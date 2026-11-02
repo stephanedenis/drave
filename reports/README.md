@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-curieuse.md`](rapport-pensee-curieuse.md) | **B13** — la curiosité : 0/20 buts, le bonus de certitude ne suffit pas, **46/46** |
 | [`rapport-pensee-croyance.md`](rapport-pensee-croyance.md) | **B13** — la croyance : 0/20 buts, la distribution seule ne suffit pas, **45/45** |
 | [`rapport-pensee-partielle.md`](rapport-pensee-partielle.md) | **B13** — l'observation partielle : 0/20 buts, la mémoire d'un pas ne suffit pas, **44/44** |
 | [`rapport-pensee-hasard.md`](rapport-pensee-hasard.md) | **B13** — le hasard variable : 20–60 %, 20/20 à chaque taux, 8 pas, **43/43** |

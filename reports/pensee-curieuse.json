@@ -1,0 +1,30 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "46/46",
+ "p_saut": 0.2,
+ "bonus": 0.5,
+ "politique": {
+  "episodes": 2000,
+  "graine": 0,
+  "etats_q": 148,
+  "runs": 20,
+  "buts": 0,
+  "pas": 200
+ },
+ "contraste": {
+  "complete": {
+   "buts": 20,
+   "runs": 20,
+   "pas": 8
+  },
+  "croyance": {
+   "buts": 0
+  }
+ },
+ "limites": [
+  "bonus additif",
+  "pas d'action observer",
+  "toy"
+ ]
+}

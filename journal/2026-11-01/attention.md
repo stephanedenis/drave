@@ -4,11 +4,12 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 06:50 | `47f72042` | N2.h3b — LE SECOND VERROU N'EST PAS LE MASQUE : ÉLARGIR LA FENÊTRE À L'INFÉRENCE NE RÉCUPÈRE RIEN | `en-cours.md`, `roadmap.md`, `README.md` (+9) |
+| 23:24 | `2f56daa8` | N2 → R1 — CE QUE LA NUIT DIT À LA FENÊTRE : POSITION RELATIVE, FENÊTRE ENTRAÎNÉE, CAPACITÉ | `en-cours.md`, `README.md`, `apprentissage.md` (+18) |
 
 ## Sessions actives ce jour
 
@@ -19,6 +20,7 @@
 
 ## Mesures et rapports touchés
 
+- [reports/rapport-n2-fenetre-r1.md](../../reports/rapport-n2-fenetre-r1.md)
 - [reports/rapport-n2-longueur.md](../../reports/rapport-n2-longueur.md)
 
 <!-- notes -->

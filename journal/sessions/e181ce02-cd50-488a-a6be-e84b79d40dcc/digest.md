@@ -18554,3 +18554,42 @@ q 148
 20 runs: 0 /20 pas moyen 200.0
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T42 la croyance                   0/20 buts : la distribution seule ne suffit pas (négatif)\\n\",\n\"  T42 la croyance     … [1305 caractères tronqués]`
+
+  ```
+ok
+  ✅ T41 observation partielle partielle : 0/20 buts (la mémoire ne suffit pas), 115 états-Q
+  ✅ T42 croyance           croyance : 0/20 buts (154 états-Q), la croyance seule ne suffit pas
+  ✅ T43 curiosité          curiosité : 0/20 buts (148 états-Q), le bonus de certitude ne suffit pas
+  46/46 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-curieuse.md <<'MD'\n# B13 — la curiosité : 0/20, le bonus de certitude ne suffit pas\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **46/46 portes** :  … [6244 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 439 fichiers, le disque en a 440
+  ❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\", \"| fichiers / JSON de résultats | **440* … [754 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 440 fiche(s) · 534 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-curieuse.md reports/pensee-curieuse.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours. … [475 caractères tronqués]`

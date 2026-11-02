@@ -1081,6 +1081,33 @@ def seule_croyance(p: PolitiqueAppriseCroyance, max_pas: int = 200) -> tuple[boo
     return False, pas
 
 
+class PolitiqueAppriseCurieuse(PolitiqueAppriseCroyance):
+    """La croyance **+ curiosité** : bonus pour la certitude gagnée (aller voir la porte)."""
+
+    nom = "curieuse"
+
+    def _pas(self, cle, action, ouvre: bool):
+        ncle, gain = super()._pas(cle, action, ouvre)
+        cert0 = abs(_BELIEF_P[cle[3]] - 0.5)
+        cert2 = abs(_BELIEF_P[ncle[3]] - 0.5)
+        return ncle, gain + 0.5 * (cert2 - cert0)
+
+
+def seule_curieuse(p: PolitiqueAppriseCurieuse, max_pas: int = 200) -> tuple[bool, int]:
+    """La politique seule avec la curiosité (le hasard et l'observation sont dans `_pas`)."""
+    cle, pas = (0, 0, False, 2), 0
+    for _ in range(max_pas):
+        if cle[:2] == P_BUT:
+            return True, pas
+        e = _etat_pmob(cle[0], cle[1], cle[2], 0 if cle[3] >= 2 else 1)
+        a = p.propose(e, P_BUT)
+        if a is None:
+            return False, pas
+        cle, _ = p._pas(cle, a, True)
+        pas += 1
+    return False, pas
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 30.8 h |
 | Tours | 60 |
-| Messages | 911 |
-| Appels d'outils | 842 |
+| Messages | 913 |
+| Appels d'outils | 844 |
 | Fichiers touchés | 25 |
-| Commandes | 680 |
+| Commandes | 681 |
 | Sous-agents | 2 |
-| Commits | 76 |
+| Commits | 77 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3202,12 +3202,14 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque l'**exploration 
 
 ### Tour 60 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Ajouter la curiosité et tester
 - bash — Ajouter la porte T43 (curiosité)
 - bash — Écrire la fiche de la curiosité
 - bash — Aligner les compteurs, trim et portes
+- bash — Committer la curiosité
+- job_output
 
 ## 3. Travail accompli
 
@@ -3288,7 +3290,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque l'**exploration 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 640 autres
+- … et 641 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3511,4 +3513,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque l'**exploration 
 - B13 — LE HASARD VARIABLE : 20–60 %, 20/20 À CHAQUE TAUX, 8 PAS ; 43/43" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "HASARD VARIABLE"; then echo "COM
 - B13 — L'OBSERVATION PARTIELLE : 0/20 BUTS, LA MÉMOIRE D'UN PAS NE SUFFIT PAS ; 44/44" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "OBSERVATION PARTIE
 - B13 — LA CROYANCE : 0/20 BUTS, LA DISTRIBUTION SEULE NE SUFFIT PAS ; 45/45" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA CROYANCE"; then echo "COM
+- B13 — LA CURIOSITÉ : 0/20 BUTS, LE BONUS DE CERTITUDE NE SUFFIT PAS ; 46/46" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA CURIOSITÉ"; then echo "C
 

@@ -16094,3 +16094,31 @@ ef47fd92 B13 — LA CROYANCE : 0/20 BUTS, LA DISTRIBUTION SEULE NE SUFFIT PAS ; 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg-r1.txt <<'EOF'\nN2 → R1 — CE QUE LA NUIT DIT À LA FENÊTRE : POSITION RELATIVE, FENÊTRE ENTRAÎNÉE, CAPACITÉ\n\nTrois faits mesurés (la position absolue est un défaut d'architecture, la fenêtre locale est un\nplafond mai … [837 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-943]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-943", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (essai 1)
+2f56daa8 N2 → R1 — CE QUE LA NUIT DIT À LA FENÊTRE : POSITION RELATIVE, FENÊTRE ENTRAÎNÉE, CAPACITÉ
+23:26
+pas  2000 · seq 128 · perte 24.9188 · PPL 128/4 3.8902 · 236 s
+pas  2250 · seq 128 · perte 25.8841 · PPL 128/4 3.8555 · 265 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/portes-nuit.out; grep -c \"✅\" /tmp/portes-nuit.out; grep -c \"❌\" /tmp/portes-nuit.out; date '+%H:%M'", "description": "Check the gates progress"}`
+
+  ```
+porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          27 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           9 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+25
+0
+23:26
+  ```
+

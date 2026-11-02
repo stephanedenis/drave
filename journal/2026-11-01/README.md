@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**133 commits** · **4 session(s)** · **10 thème(s)**
+**134 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | apprentissage | 3 | [apprentissage.md](apprentissage.md) |
-| attention | 1 | [attention.md](attention.md) |
+| attention | 2 | [attention.md](attention.md) |
 | distribue | 16 | [distribue.md](distribue.md) |
 | docs | 35 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
@@ -172,6 +172,7 @@
 | 23:17 | `e87a0a91` | N2.q — LA CAPACITÉ MULTILINGUE : À RECETTE ÉGALE, 21,65 M GAGNE 0,79 |
 | 23:19 | `1da205d7` | DONNÉES — FICHES DU CORPUS DOCUMENTS ET DU CORPUS OCR (EN COURS, CHIFFRES FIXÉS À LA CLÔTURE) |
 | 23:22 | `ef47fd92` | B13 — LA CROYANCE : 0/20 BUTS, LA DISTRIBUTION SEULE NE SUFFIT PAS ; 45/45 |
+| 23:24 | `2f56daa8` | N2 → R1 — CE QUE LA NUIT DIT À LA FENÊTRE : POSITION RELATIVE, FENÊTRE ENTRAÎNÉE, CAPACITÉ |
 
 ## Le récit de la journée (écrit à la main)
 
