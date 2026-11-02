@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**103 commits** · **3 session(s)** · **8 thème(s)**
+**104 commits** · **3 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,7 +18,7 @@
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 56 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
-| portes | 5 | [portes.md](portes.md) |
+| portes | 6 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -135,6 +135,7 @@
 | 07:44 | `b788ba04` | N2 — RESTAURATION DES FICHES EFFACÉES PAR UNE COURSE DE COMMIT |
 | 07:52 | `65708212` | DONNÉES — LE CEGEP PASSE À 7 NOTES : 739 PAGES, 1,21 M CARACTÈRES (2 ALGORITHMS ILLUMINATED AJOUTÉS) |
 | 09:09 | `4cbc84a3` | PILOTAGE — LA NUIT N2 EST CLOSE : LE MEILLEUR MODÈLE EST LE 34,3 M + CANAL (3,53) |
+| 09:14 | `62fff503` | PILOTAGE — LE DOSSIER PORTE L'OCR DES 20 LIVRES + 7 NOTES CEGEP ET LE LOT SUIVANT (21e-40e) |
 
 ## Le récit de la journée (écrit à la main)
 

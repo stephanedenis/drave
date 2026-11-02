@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 09 h 15 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 09 h 17 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -30,14 +30,13 @@
 - **Bloc** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
   (9 niveaux) ; **398 langues à 0,9687** ; fiche et porte.
 - **Moteur B13** : **AC-3/alpha-bêta**, **DRVF**, **banc**, **opérateurs 109** ; fiches
-  [`pensee-croyance`](../../reports/rapport-pensee-croyance.md), [`pensee-observatrice`](../../reports/rapport-pensee-observatrice.md),
-  [`pensee-bayes`](../../reports/rapport-pensee-bayes.md), [`pensee-derive`](../../reports/rapport-pensee-derive.md),
-  [`pensee-rupture`](../../reports/rapport-pensee-rupture.md), [`pensee-alternance`](../../reports/rapport-pensee-alternance.md),
+  [`pensee-bayes`](../../reports/rapport-pensee-bayes.md), [`pensee-rupture`](../../reports/rapport-pensee-rupture.md),
   [`pensee-correction`](../../reports/rapport-pensee-correction.md), [`pensee-audit`](../../reports/rapport-pensee-audit.md).
-- **Gold 360** : **200 + 160 synthétiques** ; POS **0,772** (fermé 0,939/ouvert 0,621),
-  syntagmes exacts **0,194**/**tête 0,560**, pragmatique **0,994–1,0** ; cascade (mock) ; **attachement tête 1,0/0,966/0,932** (59 ambiguës), hasard 0,015 ; neuronal
-  **refusé** ; fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :
-  **lecture du gold + modèle qualifié**.
+- **Gold** : **342 réels + 160 synthétiques + 20 de `gold.py`** ; POS complet (320 phrases)
+  **0,7544** (fermé 0,897/ouvert 0,615), **réel 0,7657** ; 20 nouvelles **0,8214**, complexes
+  **0,6984** ; pragmatique **0,994–1,0** ; **coréférence 27/30, CV 0,847 ± 0,051, κ 1,0** —
+  [`pensee-anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md) ; neuronal **refusé** ;
+  fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md).
 - **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes**  sur le jouet des cruches ; BFS, greedy, A* et
   MCTS-lite ; puis **AC-3 et alpha-bêta** (8/8 ; 1 495/296 contre 18 730) ; fiches
   [`pensee-v0`](../../reports/rapport-pensee-v0.md) et
@@ -45,9 +44,12 @@
 - **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
   avance ; **N4** en file ; **A/B** gardent les leurs.
 - **Interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state`.
-- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `reports/r44-*`, `docs/theorie/pre-traitement-linguistique.md`, `docs/schemas/heuristique-*.svg`, `tools/bloc_linguistique.py`, `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`, `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`, `reports/bloc-*`, `journal/sessions/e181ce02-…/`.
-- **Prochaine action** : **L** — 200+ ; **B13** — DRVM.
-- **Bloquants** : aucun ; corpus de test à choisir ; pas de GPU.
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `docs/theorie/pre-traitement-linguistique.md`, `tools/bloc_linguistique.py`, `tools/tests/linguistique/`, `docs/implantation/bloc-linguistique.md`, `journal/sessions/e181ce02-…/`.
+- **Prochaine action** : **L** — POS au gold complet (522 phrases) et 100 liens de coréférence ;
+  **B13** — DRVM/native **bloqué**, la cascade mesurée reste la lecture.
+- **Bloquants** : **neuronal réel bloqué** — `llama-cli` refuse/timeout, aucun tagger (`spacy`,
+  `stanza`, `nltk`, `transformers`), aucun poids `drave-n0` ; le mock reste un contrat. Trois
+  options : un modèle local, les poids, ou acter la cascade.
 - **Journal** : [le 31/10](../../journal/2026-10-31/README.md) · [le 01/11](../../journal/2026-11-01/README.md) · [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 > **Sessions archivées** : `8156fdcb`, `c3d0f0bd`, `N2-GPU`, `71d57f53`, `0b69f616`, `22e518ee`,
@@ -64,7 +66,7 @@
 - **Objectif final** : 10 corpus, ficés.
 - **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 8 Ko 0 ; éval 0/40) ; **OCR CEGEP** (7 notes, 739 p, 1,21 M car. ; 8 Ko 0) ; **genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée, S, N2.
-- **Prochaine action** : l'**OCR complet** — le lot suivant des livres (21e-40e) et des notes CEGEP ; les collections ; la clôture de la session.
+- **Prochaine action** : l'**OCR complet** — le **fonds CEGEP** (les 137 scans restants ; lot de 40 lancé) ; les collections ; la clôture de la session.
 - **Bloquants** : aucun.
 - **Journal** : [le 02/11](../../journal/2026-11-02/README.md) (la nuit D/R/A).
 
@@ -82,7 +84,7 @@
 - **N2** : **N2.z** (34,3 M + canal) **3,53**, 512 **3,66** — le meilleur ; **N2.r** 3,69 ;
   **N2.w** anglais **3,77** ; **N2.v** multilingue **4,79** ; N4 **0/40** ; fiches
   [`n2-canaux`](../../reports/rapport-n2-canal-34m.md), [`n2-anglais`](../../reports/rapport-n2-anglais-34m.md).
-- **Pensée — state store v0** : 6/6 portes (BFS, greedy, A*, MCTS-lite), jouet des cruches ; fiche [`pensee-v0`](../../reports/rapport-pensee-v0.md) ; prochaine AC-3, alpha-bêta, DRVF.
+- **Pensée — B13** : state store v0, AC-3/alpha-bêta, DRVF, banc anytime, opérateurs hétérogènes, **109/109 portes** ; gold **342 réels**, coréférence **27/30** (CV 0,847).
 
 
 ## Les chiffres de l'état
@@ -123,7 +125,7 @@ styles · **C5** domaines · **C6** documentation · **C7** pensée — hors gra
 ## Ce qui reste
 
 **N2** — la chaîne réelle est mesurée (**3,53**) ; reste le **corpus d'un autre ordre** et la fenêtre ;
-**Pensée** — **DRVM/L** (AC-3/alpha-bêta/DRVF/banc/opérateurs/gold 180/attachement faits ; session `e181ce02`) ; **N4** — la consigne
+**Pensée** — **DRVM/L** (DRVF/banc/opérateurs/gold 342/coréférence 27/30 faits ; neuronal bloqué ; session `e181ce02`) ; **N4** — la consigne
 courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — close, limites nommées ; **R0.7** — gold/neuronal ; **R1.1/R1.2** — le contexte natif ; **S** — l'export au corpus.
 
 - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
@@ -137,6 +139,7 @@ courte ; **B10.3** — le `z` et l'encodeur ; **R4.4** — close, limites nommé
 - **B10.3** : chrF **> 39,6** ? → **B10.3** (attention croisée) tranche.
 - **Pensée** : l'A* = greedy sur ces scores ; un score 0/1 et un opérateur hétérogène les séparent-ils ? →
   le **v0 suivant** tranche.
+
 
 ## La carte
 

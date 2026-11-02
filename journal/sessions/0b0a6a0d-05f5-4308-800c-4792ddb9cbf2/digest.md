@@ -19792,3 +19792,33 @@ CE QUE FAIT L'OUTIL.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/corpus_propre.py --source data/wiki_big/brut.txt --sortie data/wiki_big/propre --manifeste reports/corpus-wiki-big-propre.json > work/n2w/corpus_big.l … [163 caractères tronqués]`
+
+  ```
+corpus 3440377
+[still running after 60000ms; moved to background job bash-1150]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1150", "timeout_ms": 300000, "wait": true}`
+
+  ```
+09:16
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -eo pid,etime,pcpu,rss,cmd | grep corpus_propre | grep -v grep | awk '{printf \"%s %s %s%% %sMo\\n\", $1, $2, $3, int($4/1024)}'; tail -3 work/n2w/corpus_big.log; ls -la data/wiki_big/propre/ 2>/dev/null | head -3; date '+%H:%M'", … [51 caractères tronqués]`
+
+  ```
+3440377 02:26 0.0% 2Mo
+3440379 02:26 0.0% 4Mo
+3440380 02:26 99.9% 12389Mo
+09:16
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ps -eo pid,etime,pcpu,rss,cmd | grep corpus_propre | grep -v grep | awk '{printf \"%s %s %s%% %sMo\\n\", $1, $2, $3, int($4/1024)}'; tail -4 work/n2w/corpus_big.log; ls -la data/wiki_big/propre/ 2>/dev/null  … [56 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1152]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+

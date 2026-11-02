@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 40.6 h |
 | Tours | 125 |
-| Messages | 1515 |
-| Appels d'outils | 1313 |
+| Messages | 1523 |
+| Appels d'outils | 1321 |
 | Fichiers touchés | 25 |
-| Commandes | 1063 |
+| Commandes | 1071 |
 | Sous-agents | 2 |
 | Commits | 159 |
 | Compactages de contexte | 4 |
@@ -6622,13 +6622,21 @@ Au choix, un seul suffit :
 
 ### Tour 125 — mets le dossier de pilotage à jour et continue
 
-*5 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - get_goal
 - bash — Vérifier l'heure, le HEAD et les compteurs
 - update_goal
 - bash — Repérer les lignes B13/L dans la roadmap, les chantiers et le plan
 - read
+- bash — Lire les lignes exactes à mettre à jour
+- bash — Mettre à jour en-cours, roadmap, chantiers et plan-travail
+- bash — Compacter l'en-cours et retirer la question en trop
+- bash — Retirer les doublons et vérifier les budgets
+- bash — Rétablir Ce qu'elle fait et vérifier
+- bash — Mesurer le POS complet au gold de 522 phrases
+- bash — Écrire la fiche du gold complet et la porte T107
+- bash — Trim README et passer toutes les portes
 
 **Synthèse produite :**
 
@@ -6713,7 +6721,7 @@ Au choix, un seul suffit :
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1023 autres
+- … et 1031 autres
 
 ## 4. Mesures et résultats marquants
 

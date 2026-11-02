@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 40.7 h |
 | Tours | 385 |
-| Messages | 2314 |
-| Appels d'outils | 1535 |
+| Messages | 2315 |
+| Appels d'outils | 1536 |
 | Fichiers touchés | 26 |
-| Commandes | 1365 |
+| Commandes | 1366 |
 | Sous-agents | 0 |
-| Commits | 89 |
+| Commits | 90 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -9070,13 +9070,14 @@ La campagne D/R/A est close, et le goal est marqué **complete** à 07 h 55, à 
 
 ### Tour 385 — mets le dossier pilotage à jour et continue
 
-*5 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Audit pilotage folder and counters
 - bash — Read state D/R/A section and roadmap D
 - bash — Read open questions and other pilotage docs
 - bash — Update pilotage state, plan, chantiers, roadmap
 - bash — Commit pilotage update
+- bash — Fix pilotage next action and commit
 
 **Synthèse produite :**
 
@@ -9157,7 +9158,7 @@ La campagne D/R/A est close, et le goal est marqué **complete** à 07 h 55, à 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1325 autres
+- … et 1326 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9394,4 +9395,5 @@ La campagne D/R/A est close, et le goal est marqué **complete** à 07 h 55, à 
 - ÉTAT — COMPTEURS 509/597, T0 SOUS 4 000, LES PILOTES OCR (20 LIVRES + 5 NOTES CEGEP) SONT CLOS" > /tmp/commit-etat2.log 2>&1; code=$?; tail -3 /tmp/commit-etat2
 - DONNÉES — LE CEGEP PASSE À 7 NOTES : 739 PAGES, 1,21 M CARACTÈRES (2 ALGORITHMS ILLUMINATED AJOUTÉS)" > /tmp/commit-cegep7.log 2>&1; code=$?; tail -3 /tmp/commi
 - PILOTAGE — LE DOSSIER PORTE L'OCR DES 20 LIVRES + 7 NOTES CEGEP ET LE LOT SUIVANT (21e-40e)" > /tmp/commit-pilotage.log 2>&1; code=$?; tail -3 /tmp/commit-pilot
+- PILOTAGE — LE RESTE DE L'OCR EST LE FONDS CEGEP : 137 SCANS (LES 20 LIVRES SONT TOUS FAITS), LOT DE 40 LANCÉ" > /tmp/commit-pilotage2.log 2>&1; code=$?; tail -3
 

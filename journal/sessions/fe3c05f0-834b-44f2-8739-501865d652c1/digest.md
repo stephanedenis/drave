@@ -34988,3 +34988,17 @@ docs/pilotage/chantiers.md:89:| **D — les données** (nouveau) | avec quoi ent
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add docs/pilotage/en-cours.md docs/pilotage/plan-travail.md docs/pilotage/chantiers.md docs/pilotage/roadmap.md; git diff --cached --name-only; git commit -m \"PILOTAGE — LE … [324 caractères tronqués]`
+
+  ```
+docs/pilotage/chantiers.md
+docs/pilotage/en-cours.md
+docs/pilotage/plan-travail.md
+docs/pilotage/roadmap.md
+  ✅ index : aucun fait stagé sans état
+[master 62fff503] PILOTAGE — LE DOSSIER PORTE L'OCR DES 20 LIVRES + 7 NOTES CEGEP ET LE LOT SUIVANT (21e-40e)
+ 20 files changed, 492 insertions(+), 62 deletions(-)
+code=0
+62fff503 PILOTAGE — LE DOSSIER PORTE L'OCR DES 20 LIVRES + 7 NOTES CEGEP ET LE LOT SUIVANT (21e-40e)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib, re\n# en-cours : corriger le lot suivant (les livres sont tous faits ; le reste est CEGEP)\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nold = \" … [1973 caractères tronqués]`

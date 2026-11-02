@@ -27920,3 +27920,133 @@ Au choix, un seul suffit :
 
 Dites-moi laquelle des trois options vous choisissez, et je reprends.
 
+
+## Tour 125
+
+### 👤 Utilisateur
+
+mets le dossier de pilotage à jour et continue
+
+### 🤖 Assistant
+
+⏵ Réarmer le goal et remettre le pilotage à jour
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d","revision":2,"objective":"Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit.","phase":"blocked","roundsStarted":111,"maxGoalRounds":1000,"blockedReason":{"code":"model-reported","message":"Qualification neuronale réelle impossible dans cet environnement : llama-cli refuse/timeout (Qwen2.5-0.5B-Q4_0), aucun tagger installé (spacy, stanza, nltk, transformers absents), aucun poids drave-n0 sous models/ ni data/. Le mock neuronal reste un contrat (cascade mesurée) et non un modèle. La même condition bloque la ligne depuis des dizaines de rounds (T0–T106) ; toutes les autres lignes de l'objectif sont livrées et committées (DRVF thought 
+… [156 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date && git log -1 --format='%h %s' && python3 - <<'PY'\nimport pathlib\nfor f in ('docs/pilotage/en-cours.md','docs/pilotage/roadmap.md','docs/pilotage/chantiers.md','docs/pilotage/plan-travail.md'):\n    p=pathlib.Path(f); t=p.read … [306 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 09:15:12 EST
+4cbc84a3 PILOTAGE — LA NUIT N2 EST CLOSE : LE MEILLEUR MODÈLE EST LE 34,3 M + CANAL (3,53)
+docs/pilotage/en-cours.md 1630 mots
+docs/pilotage/roadmap.md 6196 mots
+docs/pilotage/chantiers.md 3895 mots
+docs/pilotage/plan-travail.md 1842 mots
+disk 516 604
+  revue de documentation · 516 fiche(s) · 604 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **update_goal** `{"action": "resume", "goal_id": "goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d", "revision": 2}`
+
+> **Objectif** (resume) : Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit.
+
+
+  ```
+{"goal":{"id":"goal-7beacaeb-2ac8-43bc-b7aa-9e9311d1180d","revision":3,"objective":"Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit.","phase":"active","roundsStarted":111,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"B13\\|coréf\\|anaphore\\|gold\" docs/pilotage/roadmap.md | head -30; echo ---; grep -n \"B13\\|L \\|session L\\|coréf\\|anaphore\" docs/pilotage/chantiers.md | head -20; echo ---; grep -n \"L\\b\\|B13\\|gold\\|neural\" docs … [123 caractères tronqués]`
+
+  ```
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **DRVF `thought`** + **banc anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **porte** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **professeur** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bouge graines** + **période** + **phase** + **phase graines** + **aléatoire** + **hasard** + **partielle** + **croyance** + **curiosité** + **observatrice** + **bruitée** + **votante** + **trois looks** + **bayésien** + **bayésien 2** + **vraisemblance** + **dérive** + **adaptative** + **glisse** + **rupture** + **alternance** + **chaotique** + **fréquent** + **rapide** + **limite** + **hasard 2** + **intra** + **asym** + **ra
+… [10126 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 09 h 15 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
+6: > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
+7: > [`reports/`](../../reports/). Histoire : [`journal/`](../../journal/). Plan : [`roadmap.md`](roadmap.md).
+8: 
+9: ## Sessions en cours
+10: 
+11: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+12: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+13: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+14: > le hook pre-commit refuse un fait sans ligne d'état ; une session qui trouve l'état en retard
+15: > le corrige.
+16: 
+17: ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+18: 
+19: - **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+20: -
+… [12528 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '88p' docs/pilotage/chantiers.md | cut -c1-600; echo ===; sed -n '90p' docs/pilotage/chantiers.md | tail -c 400; echo ===; sed -n '39p' docs/pilotage/plan-travail.md | cut -c1-700; echo ===; sed -n '164p' docs/pilotage/roadmap … [140 caractères tronqués]`
+
+  ```
+| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, **398 langues à 0,9687**, **gold 360** (POS 0,772, exact 0,190, tête 0,510), **attachement tête 1,0/0,966/0,932** (59 ambiguës ; 40 nouveaux sans cible) ; cascade 67,1 % | **B13 neuronal nécessaire** ; **modèle neuronal qualifié** | D (corpus), S (banque), N2 (entraînement) | R (prétraitement), B (sémantique), N2 (allègement) |
+===
+s** + **discours** + **anaphore** + **pièges anaphore** + **anaphore corrigée** + **pronoms objets** + **chaînes longues** + **rôles** + **hybride** + **sémantique** + **plafond** + **kappa** + **méta** + **pondéré** + **CV** + **CV graines** + **bilan anaphore**, **109/109 portes** | la **politique DRVM/native** et le coût mesuré | L (états), R (documents), N (opérateurs) | B, R, L |
+===
+| **L — la langue et la pensée** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | le contrat/bloc (**398 langues**), le **gold 360 (200 réels) + attachement tête** et les **opérateurs + nécessaire + labyrinthe + porte + apprise B13*
+… [627 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# --- chantiers\np=pathlib.Path('docs/pilotage/chantiers.md'); t=p.read_text()\nt=t.replace(\"**gold 360** (POS 0,772, exact 0,190, tête 0,510), **attachement tête 1,0/0,966/0,932** (59 ambiguës ; 40 … [4680 caractères tronqués]`
+
+  ```
+pilotage édité
+  revue de documentation · 516 fiche(s) · 604 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · T0 : 4066 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ❌ 1 anomalie(s) :
+     · 6 questions ouvertes > 5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"\"\"- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`, `docs/implantation/moteur-de … [1915 caractères tronqués]`
+
+  ```
+trim ok
+
+  ❌ 1 violation(s) :
+     · T0 : 4040 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1666 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 516 fiche(s) · 604 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"\"\"- **Coloration** : analyse [`pre-traitement-linguistique`](../theorie/pre-traitement-linguistique.md)\n  (5 schémas) —  … [693 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 1 anomalie(s) :
+     · session « Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 » ne dit pas « **Ce qu'elle fait** »
+  revue de documentation · 516 fiche(s) · 604 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ docs/pilotage/chantiers.md    |  6 ++---
+ docs/pilotage/en-cours.md     | 58 ++++++++++++++++++++-----------------------
+ docs/pilotage/plan-travail.md |  6 ++---
+ docs/pilotage/roadmap.md      | 10 ++++----
+ 4 files changed, 38 insertions(+), 42 deletions(-)
+  ```
+

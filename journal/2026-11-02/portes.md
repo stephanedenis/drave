@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,6 +13,7 @@
 | 00:55 | `2bf24422` | ÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 00 h 03 : 77 VERTES, 4 ROUGES (LES CONNUES) | `en-cours.md`, `README.md`, `apprentissage.md` (+15) |
 | 02:23 | `58f47624` | B13 — LA VÉRITÉ QUI CHANGE : PORTE CACHÉE, 20/20 AUX DEUX PHASES ; 80/80 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
 | 05:48 | `bfe57da7` | CHANTIERS — LA LIGNE D PORTE L'OCR DES 20 LIVRES (15,36 M CARACTÈRES, 8 Ko 0) | `chantiers.md`, `en-cours.md`, `README.md` (+16) |
+| 09:14 | `62fff503` | PILOTAGE — LE DOSSIER PORTE L'OCR DES 20 LIVRES + 7 NOTES CEGEP ET LE LOT SUIVANT (21e-40e) | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+17) |
 
 ## Chiffres du jour
 
