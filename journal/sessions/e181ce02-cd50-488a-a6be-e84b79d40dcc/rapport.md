@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 43.1 h |
-| Tours | 139 |
-| Messages | 1662 |
-| Appels d'outils | 1428 |
+| Durée | 43.2 h |
+| Tours | 140 |
+| Messages | 1669 |
+| Appels d'outils | 1433 |
 | Fichiers touchés | 25 |
-| Commandes | 1163 |
+| Commandes | 1167 |
 | Sous-agents | 2 |
-| Commits | 175 |
+| Commits | 176 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -313,6 +313,8 @@
 **Tour 138** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 139** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 140** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7380,6 +7382,55 @@ Je continue : prochain round, **la réponse au contenu** — la seule sortie qui
 - bash — Committer la réponse au contenu
 - job_output
 
+**Synthèse produite :**
+
+⏵ Réponse au contenu : 0/19, la frontière du modèle ; 124/124
+
+Le round 125 est livré : le bloc **reconnaît** les questions (19/19) mais ne peut pas y **répondre** (0/19) — c'est la frontière, nommée. Commit **`c65b68d6`**.
+
+\## Les sept sorties
+
+| sortie | source | **mesure** | nature |
+|---|---|---:|---|
+| surface (graphèmes) | 587 phrases | 1,0000 | contrôle |
+| POS + intervalles | 587 phrases | 1,0000 | restitution |
+| résumé (syntagmes) | 587 phrases | 0,7834 / 0,7472 | sémantique |
+| réponse (acte) | 19 questions | 1,0000 | contrat |
+| **réponse au contenu** | 19 questions | **0,0000** | **modèle** |
+
+**Ce que ça dit** :
+
+- **Le bloc ne répond pas** : il *reconnaît* les questions (19/19) mais ne peut pas y répondre ; la réponse au contenu exige un modèle de langue.
+- **La frontière est nommée** : les quatre premières sorties sont **restitutives** (elles recopient ou classent) ; la cinquième est **générative** — et c'est celle que le mock ne fournit pas.
+- **Le mock n'est pas un modèle** : il produit des étiquettes, pas des réponses ; le 0/19 le prouve, alors que le contrat (la forme) passe.
+- **La mesure est honnête** : un `None` explicite vaut mieux qu'une réponse inventée.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-reponse-contenu.md`](../../reports/rapport-pensee-reponse-contenu.md) ; JSON [`pensee-reponse-contenu.json`](../../reports/pensee-reponse-contenu.json) ; T121 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **124/124 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **532 fiches / 620 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` à jour.
+- L'horloge réelle est **11 h 45 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée) : c'est exactement ce que la fiche nomme.
+
+\## La suite
+
+1. **La réponse au contenu heuristique** : tenter une réponse par extraction (le syntagme sujet + le prédicat) et mesurer l'échec — la seule voie sans modèle.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **la réponse par extraction** — mesurer ce que l'heuristique peut arracher au texte.
+
+### Tour 140 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Mesurer la réponse par extraction
+- bash — Écrire la fiche de l'extraction et la porte T122
+- bash — Trim README et passer toutes les portes
+- bash — Committer l'extraction
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7459,7 +7510,7 @@ Je continue : prochain round, **la réponse au contenu** — la seule sortie qui
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1123 autres
+- … et 1127 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7782,4 +7833,5 @@ Je continue : prochain round, **la réponse au contenu** — la seule sortie qui
 - B13 — LA RESTITUTION SÉMANTIQUE : LE RÉSUMÉ RAPPELLE 78 % (0,7834 HEUR / 0,7472 CASCADE) ; 122/122" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "REST
 - B13 — LA RÉPONSE : 19/19, L'ACTE COMMANDE LA SORTIE ; 123/123" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LA RÉPONSE"; then echo "COMMIT OK $i"; br
 - B13 — LA RÉPONSE AU CONTENU : 0/19, LA FRONTIÈRE DU MODÈLE ; 124/124" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÉPONSE AU CONTENU"; then echo "CO
+- B13 — LA RÉPONSE PAR EXTRACTION : 19/19, UNE FAUSSE VICTOIRE ; 125/125" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÉPONSE PAR EXTRACTION"; then ec
 

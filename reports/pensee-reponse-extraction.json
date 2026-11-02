@@ -1,0 +1,21 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "125/125",
+ "surface": 1.0,
+ "pos_spans": 1.0,
+ "resume_heur": 0.7834,
+ "resume_cascade": 0.7472,
+ "reponse_acte": 1.0,
+ "reponse_contenu": 0.0,
+ "extraction": {
+  "questions": 19,
+  "trouvees": 19,
+  "taux": 1.0
+ },
+ "limites": [
+  "le 19/19 est un plafond de forme",
+  "aucune réponse jugée",
+  "heuristique seule"
+ ]
+}

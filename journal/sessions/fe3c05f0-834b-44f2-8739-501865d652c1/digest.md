@@ -35489,3 +35489,18 @@ CEGEP encyclopedia job 3510124
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 570; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-ency.log 2>/dev/null; tail -3 /tmp/ocr-cegep-ency.log; ps -p 3510124 -o pid,etime= 2>/dev/null || echo \"job fini\"; for d in /tmp/ocr-pdf-*/; do echo \"$d $(ls \"$d\" 2>/dev/n … [177 caractères tronqués]`
+
+  ```
+11:46
+0
+    PID            
+3510124       10:07
+/tmp/ocr-pdf-hqrequij/ 221
+/tmp/ocr-pdf-wqwhcggj/ 274
+  ```
+
+### 🤖 Assistant
+
+⏵ Encyclopedia of Algorithms : rendu 221/500 pages (option `--deja 41` et `--max-pages 500` actives)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-ency.log 2>/dev/null; tail -3 /tmp/ocr-cegep-ency.log; ps -p 3510124 -o pid,etime= 2>/dev/null || echo \"job fini\"; ls -la reports/ocr-pdf-cegep.json; cat /proc/3510124/io 2>/ … [155 caractères tronqués]`

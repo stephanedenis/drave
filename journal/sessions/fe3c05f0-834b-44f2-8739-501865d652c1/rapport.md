@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 43.0 h |
+| Durée | 43.2 h |
 | Tours | 387 |
-| Messages | 2348 |
-| Appels d'outils | 1563 |
+| Messages | 2349 |
+| Appels d'outils | 1564 |
 | Fichiers touchés | 26 |
-| Commandes | 1389 |
+| Commandes | 1390 |
 | Sous-agents | 0 |
 | Commits | 94 |
 | Compactages de contexte | 4 |
@@ -9153,14 +9153,15 @@ Je laisse donc le goal actif jusqu'à 12 h 20 en surveillance légère, et je ma
 
 ### Tour 387 — <goal_round> Objective: "Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot  … [1044 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*3 appels d'outils.* Actions notables :
 
 - bash — Add deja option and relaunch at 42nd PDF
 - bash — Check Encyclopedia 500-page run
+- bash — Check Encyclopedia OCR completion
 
 **Synthèse produite :**
 
-⏵ Round 1 : j'ajoute l'option `--deja` (reprise) et je relance le CEGEP avec `--max-pages 500`
+⏵ Encyclopedia of Algorithms : rendu 221/500 pages (option `--deja 41` et `--max-pages 500` actives)
 
 ## 3. Travail accompli
 
@@ -9237,7 +9238,7 @@ Je laisse donc le goal actif jusqu'à 12 h 20 en surveillance légère, et je ma
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1349 autres
+- … et 1350 autres
 
 ## 4. Mesures et résultats marquants
 

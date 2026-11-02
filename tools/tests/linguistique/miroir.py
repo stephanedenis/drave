@@ -114,6 +114,32 @@ def repondre_contenu(a: bl.Annotation) -> str | None:
     return None
 
 
+def repondre_extraction(a: bl.Annotation) -> str | None:
+    """La réponse par **extraction** : le premier GN de la phrase, à défaut le GV.
+
+    Ce n'est pas une réponse *au* contenu : c'est ce que l'heuristique peut arracher au texte
+    (le sujet, ou le prédicat). La fiche mesure ce que cela vaut.
+    """
+    gn = [e for e in a.etiquettes if e.niveau == "syntagme" and e.type == "GN"]
+    if gn:
+        return gn[0].valeur
+    gv = [e for e in a.etiquettes if e.niveau == "syntagme" and e.type == "GV"]
+    return gv[0].valeur if gv else None
+
+
+def fidelite_extraction(phrases: list[dict], bloc=None) -> dict:
+    """Le taux de questions pour lesquelles l'extraction trouve une réponse."""
+    bloc = bloc or bl.Heuristique()
+    q = [p for p in phrases if "?" in p["texte"]]
+    trouvees = 0
+    for p in q:
+        a = bloc.analyser(p["texte"], p["langue"])
+        if repondre_extraction(a) is not None:
+            trouvees += 1
+    return {"questions": len(q), "trouvees": trouvees,
+            "taux": round(trouvees / max(1, len(q)), 4)}
+
+
 def fidelite_contenu(phrases: list[dict], bloc=None) -> dict:
     """Le taux de réponses au contenu : 0 tant que le bloc n'a pas de modèle."""
     bloc = bloc or bl.Heuristique()
@@ -173,6 +199,7 @@ def main() -> int:
         fr = sum(fidelite_reponse(bloc.analyser(p["texte"], p["langue"])) for p in q) / max(1, len(q))
         print(nom, "réponse", len(q), "questions", round(fr, 4))
         print(nom, "réponse au contenu", fidelite_contenu(ph, bloc))
+        print(nom, "extraction", fidelite_extraction(ph, bloc))
     return 0
 
 

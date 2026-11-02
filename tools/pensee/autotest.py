@@ -1858,6 +1858,15 @@ def t121_reponse_contenu() -> tuple[bool, str]:
         f"réponse au contenu : {r['repondues']}/{r['questions']} (frontière)")
 
 
+def t122_extraction() -> tuple[bool, str]:
+    """La réponse par extraction : 19/19, une fausse victoire."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_extraction
+    r = fidelite_extraction(charger())
+    return r["questions"] == 19 and r["trouvees"] == 19, (
+        f"extraction : {r['trouvees']}/{r['questions']} (le GN, pas la réponse)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1978,7 +1987,8 @@ def main() -> int:
               ("T118 restitution spans", t118_miroir_espaces()),
               ("T119 restitution sémantique", t119_miroir_resume()),
               ("T120 réponse", t120_miroir_reponse()),
-              ("T121 réponse contenu", t121_reponse_contenu())]
+              ("T121 réponse contenu", t121_reponse_contenu()),
+              ("T122 extraction", t122_extraction())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
