@@ -18593,3 +18593,132 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-curieuse.md reports/pensee-curieuse.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours. … [475 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-681]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-681", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-curieuse.json
+ delete mode 100644 reports/rapport-n2-fenetre-r1.md
+ create mode 100644 reports/rapport-pensee-curieuse.md
+COMMIT OK 1
+e5fea549 B13 — LA CURIOSITÉ : 0/20 BUTS, LE BONUS DE CERTITUDE NE SUFFIT PAS ; 46/46
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat HEAD | head -8; ls reports/rapport-n2-fenetre-r1.md 2>/dev/null; git log --oneline -2 -- reports/rapport-n2-fenetre-r1.md", "description": "Vérifier la suppression du rapport N2"}`
+
+  ```
+commit e5fea549763e58ef9cffd255ac888cfcc41aa890
+Author: Stéphane <stephane@localhost>
+Date:   Sun Nov 1 23:26:21 2026 -0500
+
+    B13 — LA CURIOSITÉ : 0/20 BUTS, LE BONUS DE CERTITUDE NE SUFFIT PAS ; 46/46
+
+ docs/implantation/moteur-de-pensee.md              |  5 +-
+ docs/pilotage/chantiers.md                         |  2 +-
+reports/rapport-n2-fenetre-r1.md
+e5fea549 B13 — LA CURIOSITÉ : 0/20 BUTS, LE BONUS DE CERTITUDE NE SUFFIT PAS ; 46/46
+2f56daa8 N2 → R1 — CE QUE LA NUIT DIT À LA FENÊTRE : POSITION RELATIVE, FENÊTRE ENTRAÎNÉE, CAPACITÉ
+  ```
+
+### 🤖 Assistant
+
+⏵ Curiosité : 0/20 buts, le bonus de certitude ne suffit pas ; 46/46
+
+Le round 47 du goal est livré : la **curiosité** (le bonus de certitude) ne suffit pas — il manque un **geste** pour aller voir. Commit **`e5fea549`**.
+
+## La curiosité
+
+Même monde que T42 (porte sautant à 20 %, vue à distance 1), mais la récompense ajoute `0,5 × (|p' − 0,5| − |p − 0,5|)` : la politique est payée quand sa croyance devient plus certaine.
+
+| dispositif | buts | états-Q | pas |
+|---|---:|---:|---:|
+| **curiosité** | **0/20** | 148 | 200 |
+| croyance (T42) | 0/20 | 154 | 200 |
+| complète (T39/T40) | **20/20** | 182 | 8 |
+
+**Ce que ça dit** :
+
+- **Le bonus ne suffit pas** : la politique reste réactive ; elle ne va pas **chercher** l'observation, qui n'arrive que par hasard (l'adjacence).
+- **Il manque un geste** : sans action « observer » (ou un plan POMDP), la certitude ne se gagne qu'en passant près de la porte, ce que la politique ne fait pas exprès.
+- **148 états** : la curiosité ne change pas la compétence.
+- **La négative est explicite** : 0/20, 200 pas, 148 états-Q.
+
+## L'état
+
+- Fiche : [`rapport-pensee-curieuse.md`](../../reports/rapport-pensee-curieuse.md) ; JSON [`pensee-curieuse.json`](../../reports/pensee-curieuse.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T43 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **46/46 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **440 fiches / 534 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `reports/rapport-n2-fenetre-r1.md` d'une autre session (course d'index) ; le fichier est **toujours sur le disque**, donc restaurable.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Action « observer »** : un geste explicite qui révèle la porte ; la politique apprendra à l'utiliser.
+2. **POMDP** : la valeur d'information dans la fonction de valeur.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute l'**action « observer »** — le vrai levier de l'exploration active.
+
+
+## Tour 61
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 48/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; cat > /tmp/pobs.py <<'PY'\nclass PolitiqueAppriseObservatrice(PolitiqueAppriseCroyance):\n    \"\"\"La croyance **+ action d'observer** : un geste révèle la porte (coût 0,1).\"\"\"\n\n    nom = \"observat … [3337 caractères tronqués]`
+
+  ```
+e5fea549 B13 — LA CURIOSITÉ : 0/20 BUTS, LE BONUS DE CERTITUDE NE SUFFIT PAS ; 46/46
+ok
+2000 q 448 20 runs: 20 /20 pas moyen 8.3
+4000 q 464 20 runs: 20 /20 pas moyen 8.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T43 la curiosité                  0/20 buts : le bonus de certitude ne suffit pas (négatif)\\n\",\n\"  T43 la curiosité    … [1362 caractères tronqués]`
+
+  ```
+ok
+  ✅ T42 croyance           croyance : 0/20 buts (154 états-Q), la croyance seule ne suffit pas
+  ✅ T43 curiosité          curiosité : 0/20 buts (148 états-Q), le bonus de certitude ne suffit pas
+  ✅ T44 action observer    observatrice : 20/20 buts, 448 états-Q, 8.3 pas
+  47/47 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-observatrice.md <<'MD'\n# B13 — l'action observer : 20/20, le geste qui révèle la porte\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **47/47 portes** … [6511 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 441 fiche(s) · 535 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [300 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-observatrice.md reports/pensee-observatrice.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/e … [501 caractères tronqués]`

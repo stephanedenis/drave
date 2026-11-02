@@ -1108,6 +1108,71 @@ def seule_curieuse(p: PolitiqueAppriseCurieuse, max_pas: int = 200) -> tuple[boo
     return False, pas
 
 
+class PolitiqueAppriseObservatrice(PolitiqueAppriseCroyance):
+    """La croyance **+ action d'observer** : un geste révèle la porte (coût 0,1)."""
+
+    nom = "observatrice"
+    ACTIONS = ("haut", "bas", "gauche", "droite", "observer")
+
+    def _pas(self, cle, action, d: int):
+        x, y, o, b = cle
+        if action == "observer":
+            return (x, y, o, 3 if d == 0 else 0), -0.1, d
+        dx = {"droite": 1, "gauche": -1}.get(action, 0)
+        dy = {"bas": 1, "haut": -1}.get(action, 0)
+        nx, ny = x + dx, y + dy
+        o2 = o or ((nx, ny) == PORTES_MOBILE[d])
+        if not _libre_pmob(nx, ny, o2, d):
+            return cle, 0.0, d
+        monde = 1 - d if self.rng.random() < self.p_saut else d
+        vu = _obs_partielle(nx, ny, monde)
+        if vu >= 0:
+            b2 = 3 if vu == 0 else 0
+        else:
+            b2 = _belief_bucket(_BELIEF_P[b] * (1 - self.p_saut)
+                                + (1 - _BELIEF_P[b]) * self.p_saut)
+        gain = 0.1 if (o2 and not o) else -0.01
+        return (nx, ny, o2, b2), gain, monde
+
+    def apprendre(self) -> None:
+        for _ in range(self.episodes):
+            d = self.rng.randint(0, 1)
+            cle = (0, 0, False, 2)
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain, d = self._pas(cle, a, d)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+    def propose(self, etat, but):
+        cle = self._cle(etat)
+        return max(self.ACTIONS, key=lambda a: self._q(cle, a))
+
+
+def seule_observatrice(p: PolitiqueAppriseObservatrice, max_pas: int = 200) -> tuple[bool, int]:
+    """La politique seule avec l'action d'observer (le monde et l'observation sont dans `_pas`)."""
+    d = p.rng.randint(0, 1)
+    cle, pas = (0, 0, False, 2), 0
+    for _ in range(max_pas):
+        if cle[:2] == P_BUT:
+            return True, pas
+        e = _etat_pmob(cle[0], cle[1], cle[2], cle[3])
+        a = p.propose(e, P_BUT)
+        if a is None:
+            return False, pas
+        cle, _, d = p._pas(cle, a, d)
+        pas += 1
+    return False, pas
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

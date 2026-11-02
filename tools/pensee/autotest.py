@@ -705,6 +705,22 @@ def t43_curieuse() -> tuple[bool, str]:
                      f"le bonus de certitude ne suffit pas")
 
 
+def t44_observatrice() -> tuple[bool, str]:
+    """L'action observer : 20/20 buts, le geste qui révèle la porte."""
+    from .operateurs import PolitiqueAppriseObservatrice, seule_observatrice
+    p = PolitiqueAppriseObservatrice(episodes=2000, graine=0)
+    p.apprendre()
+    ok = 0
+    pas_total = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, pas = seule_observatrice(p)
+        ok += b
+        pas_total += pas
+    return ok == 20, (f"observatrice : {ok}/20 buts, {len(p.q)} états-Q, "
+                      f"{round(pas_total / 20, 1)} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -747,7 +763,8 @@ def main() -> int:
               ("T40 hasard variable", t40_hasard()),
               ("T41 observation partielle", t41_partielle()),
               ("T42 croyance", t42_croyance()),
-              ("T43 curiosité", t43_curieuse())]
+              ("T43 curiosité", t43_curieuse()),
+              ("T44 action observer", t44_observatrice())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

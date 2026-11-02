@@ -15,7 +15,7 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-02 00:25 EST
+- **Heartbeat** : 2026-11-02 00:35 EST
 - **Prochaine action** : le bloc linguistique v0 est livré (398 langues) et **AC-3/alpha-bêta**
   sont mesurés (8/8), le DRVF (9/9) et le banc (10/10) ; qualifier un gold et un modèle neuronal ; puis les **opérateurs hétérogènes/DRVM**
   (S reste à l'autre TUI).

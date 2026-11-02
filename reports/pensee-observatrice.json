@@ -1,0 +1,38 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "47/47",
+ "actions": [
+  "haut",
+  "bas",
+  "gauche",
+  "droite",
+  "observer"
+ ],
+ "cout_observer": 0.1,
+ "politique": {
+  "episodes": 2000,
+  "graine": 0,
+  "etats_q": 448,
+  "runs": 20,
+  "buts": 20,
+  "pas_moyen": 8.3
+ },
+ "contraste": {
+  "croyance": {
+   "buts": 0
+  },
+  "curiosite": {
+   "buts": 0
+  },
+  "complete": {
+   "buts": 20,
+   "pas": 8
+  }
+ },
+ "limites": [
+  "observation parfaite",
+  "coût fixe",
+  "toy"
+ ]
+}

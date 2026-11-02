@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 30.8 h |
-| Tours | 60 |
-| Messages | 913 |
-| Appels d'outils | 844 |
+| Tours | 61 |
+| Messages | 922 |
+| Appels d'outils | 851 |
 | Fichiers touchés | 25 |
-| Commandes | 681 |
+| Commandes | 687 |
 | Sous-agents | 2 |
-| Commits | 77 |
+| Commits | 78 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -151,6 +151,8 @@
 **Tour 59** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 60** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 61** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3202,13 +3204,64 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque l'**exploration 
 
 ### Tour 60 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Ajouter la curiosité et tester
 - bash — Ajouter la porte T43 (curiosité)
 - bash — Écrire la fiche de la curiosité
 - bash — Aligner les compteurs, trim et portes
 - bash — Committer la curiosité
+- job_output
+- bash — Vérifier la suppression du rapport N2
+
+**Synthèse produite :**
+
+⏵ Curiosité : 0/20 buts, le bonus de certitude ne suffit pas ; 46/46
+
+Le round 47 du goal est livré : la **curiosité** (le bonus de certitude) ne suffit pas — il manque un **geste** pour aller voir. Commit **`e5fea549`**.
+
+\## La curiosité
+
+Même monde que T42 (porte sautant à 20 %, vue à distance 1), mais la récompense ajoute `0,5 × (|p' − 0,5| − |p − 0,5|)` : la politique est payée quand sa croyance devient plus certaine.
+
+| dispositif | buts | états-Q | pas |
+|---|---:|---:|---:|
+| **curiosité** | **0/20** | 148 | 200 |
+| croyance (T42) | 0/20 | 154 | 200 |
+| complète (T39/T40) | **20/20** | 182 | 8 |
+
+**Ce que ça dit** :
+
+- **Le bonus ne suffit pas** : la politique reste réactive ; elle ne va pas **chercher** l'observation, qui n'arrive que par hasard (l'adjacence).
+- **Il manque un geste** : sans action « observer » (ou un plan POMDP), la certitude ne se gagne qu'en passant près de la porte, ce que la politique ne fait pas exprès.
+- **148 états** : la curiosité ne change pas la compétence.
+- **La négative est explicite** : 0/20, 200 pas, 148 états-Q.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-curieuse.md`](../../reports/rapport-pensee-curieuse.md) ; JSON [`pensee-curieuse.json`](../../reports/pensee-curieuse.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T43 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **46/46 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **440 fiches / 534 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `reports/rapport-n2-fenetre-r1.md` d'une autre session (course d'index) ; le fichier est **toujours sur le disque**, donc restaurable.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Action « observer »** : un geste explicite qui révèle la porte ; la politique apprendra à l'utiliser.
+2. **POMDP** : la valeur d'information dans la fonction de valeur.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute l'**action « observer »** — le vrai levier de l'exploration active.
+
+### Tour 61 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Ajouter l'action observer et tester
+- bash — Ajouter la porte T44 (action observer)
+- bash — Écrire la fiche de l'action observer
+- bash — Passer toutes les portes
+- bash — Committer l'action observer
 - job_output
 
 ## 3. Travail accompli
@@ -3290,7 +3343,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque l'**exploration 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 641 autres
+- … et 647 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3514,4 +3567,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque l'**exploration 
 - B13 — L'OBSERVATION PARTIELLE : 0/20 BUTS, LA MÉMOIRE D'UN PAS NE SUFFIT PAS ; 44/44" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "OBSERVATION PARTIE
 - B13 — LA CROYANCE : 0/20 BUTS, LA DISTRIBUTION SEULE NE SUFFIT PAS ; 45/45" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA CROYANCE"; then echo "COM
 - B13 — LA CURIOSITÉ : 0/20 BUTS, LE BONUS DE CERTITUDE NE SUFFIT PAS ; 46/46" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA CURIOSITÉ"; then echo "C
+- B13 — L'ACTION OBSERVER : 20/20 BUTS, 8,3 PAS, LE GESTE QUI RÉVÈLE LA PORTE ; 47/47" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "L'ACTION OBSERVER";
 

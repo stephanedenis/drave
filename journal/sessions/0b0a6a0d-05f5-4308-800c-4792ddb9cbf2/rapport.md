@@ -7,10 +7,10 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 31.1 h |
+| Durée | 31.2 h |
 | Tours | 18 |
-| Messages | 1262 |
-| Appels d'outils | 1172 |
+| Messages | 1263 |
+| Appels d'outils | 1173 |
 | Fichiers touchés | 11 |
 | Commandes | 945 |
 | Sous-agents | 0 |
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*206 appels d'outils.* Actions notables :
+*207 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal

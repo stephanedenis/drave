@@ -16122,3 +16122,11 @@ porte-etat             ✅                           0 s  ✅ porte état verte 
 23:26
   ```
 
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W34-g*.pt 2>/dev/null; tail -1 work/n2j/W34-g1.log; tail -1 work/n2j/W34-g2.log; tail -2 /tmp/portes-nuit.out", "description": "Wait for the 34M students and check the gates"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-945]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-945", "timeout_ms": 1500000, "wait": true}`
