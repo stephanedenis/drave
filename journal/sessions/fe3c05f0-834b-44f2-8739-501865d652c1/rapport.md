@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 28.1 h |
 | Tours | 20 |
-| Messages | 965 |
-| Appels d'outils | 948 |
+| Messages | 967 |
+| Appels d'outils | 950 |
 | Fichiers touchés | 18 |
-| Commandes | 872 |
+| Commandes | 874 |
 | Sous-agents | 0 |
-| Commits | 57 |
+| Commits | 58 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -974,12 +974,14 @@ L'**anglais** (le 10e corpus) → son contrôle 8 Ko → la **fiche et le catalo
 
 ### Tour 20 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Check English manifest and running checks
 - bash — Inspect lot measurement inputs and ids
 - bash — Launch A8.3 lot measurement on disk
 - bash — Wait for lot measurement completion
+- bash — Write lot measurement report and update state
+- bash — Commit A2.6 lot measurement and trim budget
 
 ## 3. Travail accompli
 
@@ -1048,7 +1050,7 @@ L'**anglais** (le 10e corpus) → son contrôle 8 Ko → la **fiche et le catalo
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 832 autres
+- … et 834 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1253,4 +1255,5 @@ L'**anglais** (le 10e corpus) → son contrôle 8 Ko → la **fiche et le catalo
 - ÉTAT — LA REVUE R1/A : A8.3 (LOT) MESURABLE, R11/R12 ET A2.6 BLOQUÉS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /tmp/co
 - ÉTAT — T0 REVIENT SOUS 4 000" 2>&1 | tail -1; git reset -q; git log --oneline -1 echo "=== en/pdf"; ls reports/corpus-wiki-en-texte.json reports/corpus-pdf.json
 - DONNÉES — LE CORPUS PDF LOCAL : 2 785 PDF, 1 927 DOCUMENTS, 322 MO, 8 KO 0, LICENCES NOMMÉES" 2>/tmp/commit.err; then echo "commit OK (essai $i)"; break; else e
+- A2.6/A8.3 — LE LOT SUR LE DISQUE : IL NE DIVISE PAS LES LECTURES (503→502 MIO), IL ACCÉLÈRE LE CALCUL (+27 %)" 2>/tmp/commit.err; then echo "commit OK"; break; 
 

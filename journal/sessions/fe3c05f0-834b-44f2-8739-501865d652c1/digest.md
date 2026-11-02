@@ -17400,3 +17400,57 @@ demarrer_serveur() {
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -la models/Qwen2.5-0.5B-Q8_0.gguf 2>/dev/null; nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --tokenize --fichier data/wikitext2_test.txt --sortie  … [447 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 531068480 25 sep 16:52 models/Qwen2.5-0.5B-Q8_0.gguf
+lot job 1601953
+85626 tokens écrits dans /tmp/ids-a26.txt (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (359041 octets)
+# préremplissage par lots sur DISQUE · Qwen2.5-0.5B-Q8_0.gguf · 192 jetons, ctx 512
+| lot | PPL | lus (Mio) | mur (s) | tok/s |
+|---:|---:|---:|---:|---:|
+  (cache du modèle évincé : 0.5 Go)
+| 1 | 15.8452 | 503 | 0:12.04 | 24.0 |
+  (cache du modèle évincé : 0.5 Go)
+| 2 | 15.8443 | 502 | 0:10.38 | 30.5 |
+  (cache du modèle évincé : 0.5 Go)
+-rw-r--r--. 1 stephane stephane 394684  1 nov 20:38 /tmp/ids-a26.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 30); do grep -q \"# fin\" /tmp/a26-lot.log 2>/dev/null && break; sleep 5; done; cat /tmp/a26-lot.log | tail -14; echo \"=== journal\"; cat /tmp/a26-lot-journal.txt 2>/dev/null | tail -8", "description": "Wait for lot m … [106 caractères tronqués]`
+
+  ```
+85626 tokens écrits dans /tmp/ids-a26.txt (vocabulaire du modèle : 151936)
+réversibilité : texte reconstruit identique ✅ (359041 octets)
+# préremplissage par lots sur DISQUE · Qwen2.5-0.5B-Q8_0.gguf · 192 jetons, ctx 512
+| lot | PPL | lus (Mio) | mur (s) | tok/s |
+|---:|---:|---:|---:|---:|
+  (cache du modèle évincé : 0.5 Go)
+| 1 | 15.8452 | 503 | 0:12.04 | 24.0 |
+  (cache du modèle évincé : 0.5 Go)
+| 2 | 15.8443 | 502 | 0:10.38 | 30.5 |
+  (cache du modèle évincé : 0.5 Go)
+| 4 | 15.8443 | 502 | 0:10.18 | 30.0 |
+  (cache du modèle évincé : 0.5 Go)
+| 8 | 15.8443 | 502 | 0:09.96 | 30.5 |
+# fin
+=== journal
+[01/11 20:38:14] charge 8.24 · # préremplissage par lots sur DISQUE · Qwen2.5-0.5B-Q8_0.gguf · 192 jetons, ctx 512
+[01/11 20:38:14] charge 8.24 · | lot | PPL | lus (Mio) | mur (s) | tok/s |
+[01/11 20:38:14] charge 8.24 · |---:|---:|---:|---:|---:|
+[01/11 20:38:26] charge 11.43 · | 1 | 15.8452 | 503 | 0:12.04 | 24.0 |
+[01/11 20:38:37] charge 13.94 · | 2 | 15.8443 | 502 | 0:10.38 | 30.5 |
+[01/11 20:38:47] charge 14.70 · | 4 | 15.8443 | 502 | 0:10.18 | 30.0 |
+[01/11 20:38:57] charge 15.43 · | 8 | 15.8443 | 502 | 0:09.96 | 30.5 |
+[01/11 20:38:57] charge 15.43 · # fin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ncat > reports/rapport-a26-lot-disque.md <<'EOF'\n# A2.6 / A8.3 — le lot sur le disque : il accélère le calcul, il ne divise pas les lectures\n\n> **Verdict.** Sur un modèle **dense** de 0,5 Go (Qwen2.5-0.5B-Q8), avec l'**éviction du ca … [6862 caractères tronqués]`
+
+  ```
+T0 max : 4008 mots (budget 4 000)
+  revue de documentation · 403 fiche(s) · 505 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"les 9 (**12,12 M** ; **8 Ko 0**) ; **PDF** (322 Mo, 8 Ko 0) ; **A2.6/A8.3** (lot : lectures non divisées, +27 % calcul) ;  … [2022 caractères tronqués]`

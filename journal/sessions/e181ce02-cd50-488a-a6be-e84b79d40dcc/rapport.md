@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 27.9 h |
-| Tours | 30 |
-| Messages | 622 |
-| Appels d'outils | 619 |
+| Durée | 28.0 h |
+| Tours | 31 |
+| Messages | 629 |
+| Appels d'outils | 624 |
 | Fichiers touchés | 25 |
-| Commandes | 497 |
+| Commandes | 502 |
 | Sous-agents | 2 |
-| Commits | 45 |
+| Commits | 46 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -91,6 +91,8 @@
 **Tour 29** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 30** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 31** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1624,6 +1626,59 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Passer les portes et committer la courbe
 - job_output
 
+**Synthèse produite :**
+
+⏵ Courbe d'apprentissage : 15/15 buts (50–800 épisodes × 3 graines), 30 nœuds, Q 52–83 ; 16/16
+
+Le round 17 du goal est livré : la **courbe d'apprentissage** de la porte est tracée sur 15 runs. Commit **`039e0500`**.
+
+\## La courbe
+
+`PolitiqueApprise` (Q-learning tabulaire) entraînée sur **5 budgets d'épisodes** (50, 100, 200, 400, 800) × **3 graines** (15 runs).
+
+| épisodes | graines | états-Q | nœuds | sonde | coût | buts |
+|---:|---:|---:|---:|---:|---:|---:|
+| 50 | 0,1,2 | 52–74 | 30 | 7 | 68 | **3/3** |
+| 100 | 0,1,2 | 52–74 | 30 | 7 | 68 | **3/3** |
+| 200 | 0,1,2 | 61–74 | 30 | 7 | 68 | **3/3** |
+| 400 | 0,1,2 | 62–83 | 30 | 7 | 68 | **3/3** |
+| 800 | 0,1,2 | 62–83 | 30 | 7 | 68 | **3/3** |
+
+**Ce que ça dit** :
+
+- **La porte est apprise dès 50 épisodes** : 15/15 runs atteignent le but ; le Q-learning tabulaire n'a pas besoin de 200 épisodes pour trouver la direction.
+- **La performance est plate** (30 nœuds, coût 68) : une fois la porte connue, l'A* fait le reste ; les épisodes supplémentaires n'améliorent pas le chemin.
+- **La Q-table grandit** (52 → 83 états) : plus d'exploration, plus de couples état-action, mais pas de gain de chemin.
+- **Les 3 graines convergent** : la porte n'est pas un coup de chance d'une graine.
+- **La limite est écrite** : l'A* **masque** la politique ; la courbe plate mesure l'A*, pas l'apprentissage seul.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-courbe.md`](../../reports/rapport-pensee-courbe.md) ; JSON [`pensee-courbe.json`](../../reports/pensee-courbe.json) ; code [`courbe.py`](../../tools/pensee/courbe.py) ; T13 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **16/16 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **402 fiches / 504 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+\## La suite
+
+1. **La politique seule** (sans A*) : mesurer le taux de but et les nœuds par épisodes, pour voir l'apprentissage sans le masque de l'A*.
+2. **Porte stochastique** : l'ouverture réussit à 80 % ; la politique doit réessayer.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round mesure la politique seu
+… [12 caractères tronqués]
+
+### Tour 31 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Mesurer la politique seule sans A*
+- bash — Ajouter la porte T14 et lancer l'autotest
+- bash — Écrire la fiche de la politique seule et l'état
+- bash — Aligner les compteurs et passer les portes
+- bash — Committer la politique seule
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1703,7 +1758,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 457 autres
+- … et 462 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1893,4 +1948,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LA PORTE APPRISE : Q-TABLE 67 ÉTATS, 30 NŒUDS/BUT (SONDE 7), 200 ÉPISODES ; 15/15" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE APPRISE";
 - B13 — LA PORTE APPRISE : Q-TABLE 67 ÉTATS, 30 NŒUDS/BUT (SONDE 7), 200 ÉPISODES ; 15/15" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA COURBE : 15/15 BUTS (50–800 ÉPISODES × 3 GRAINES), 30 NŒUDS, Q 52–83 ; 16/16" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA COURBE"; then 
+- B13 — LA POLITIQUE SEULE : 8 PAS, 15/15 BUTS SANS A* ; 17/17" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "POLITIQUE SEULE"; then echo "COMMIT OK $i"
 

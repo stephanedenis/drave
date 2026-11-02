@@ -14,10 +14,10 @@
   `reports/corpus-wiki-*`, `reports/corpus-wikipedia-*`, `reports/inventaire-*`,
   `reports/rapport-corpus-*`, `reports/r11-*`, `reports/r12-*`, `reports/a26-*`, `reports/a83-*`,
   `journal/sessions/fe3c05f0-…/`
-- **Heartbeat** : 2026-11-01 21:50
+- **Heartbeat** : 2026-11-01 22:05
 - **État** : en cours
-- **Prochaine action** : l'**anglais** et le **PDF** (en cours) ; puis la **mesure A8.3** (le lot) ;
-  R11/R12 bloqués sur N2, A2.6 sur A6.2.
+- **Prochaine action** : l'**anglais** (le PDF et l'A8.3 sont faits) ; le catalogue ; l'OCR des
+  159 scans ; les collections ; R11/R12 bloqués sur N2, A2.6 sur A6.2.
 
 ## Objectif final
 

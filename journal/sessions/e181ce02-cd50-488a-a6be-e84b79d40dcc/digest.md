@@ -13876,3 +13876,132 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-497", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 2f913a1a3e3272eae8253ce40f9e8e5f63977c42 but expected ad3da0b686eec09bcb45a40784686297e8d9c848
+retry 1
+ create mode 100644 reports/pensee-courbe.json
+ create mode 100644 reports/rapport-pensee-courbe.md
+ create mode 100644 tools/pensee/courbe.py
+COMMIT OK 2
+039e0500 B13 — LA COURBE : 15/15 BUTS (50–800 ÉPISODES × 3 GRAINES), 30 NŒUDS, Q 52–83 ; 16/16
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Courbe d'apprentissage : 15/15 buts (50–800 épisodes × 3 graines), 30 nœuds, Q 52–83 ; 16/16
+
+Le round 17 du goal est livré : la **courbe d'apprentissage** de la porte est tracée sur 15 runs. Commit **`039e0500`**.
+
+## La courbe
+
+`PolitiqueApprise` (Q-learning tabulaire) entraînée sur **5 budgets d'épisodes** (50, 100, 200, 400, 800) × **3 graines** (15 runs).
+
+| épisodes | graines | états-Q | nœuds | sonde | coût | buts |
+|---:|---:|---:|---:|---:|---:|---:|
+| 50 | 0,1,2 | 52–74 | 30 | 7 | 68 | **3/3** |
+| 100 | 0,1,2 | 52–74 | 30 | 7 | 68 | **3/3** |
+| 200 | 0,1,2 | 61–74 | 30 | 7 | 68 | **3/3** |
+| 400 | 0,1,2 | 62–83 | 30 | 7 | 68 | **3/3** |
+| 800 | 0,1,2 | 62–83 | 30 | 7 | 68 | **3/3** |
+
+**Ce que ça dit** :
+
+- **La porte est apprise dès 50 épisodes** : 15/15 runs atteignent le but ; le Q-learning tabulaire n'a pas besoin de 200 épisodes pour trouver la direction.
+- **La performance est plate** (30 nœuds, coût 68) : une fois la porte connue, l'A* fait le reste ; les épisodes supplémentaires n'améliorent pas le chemin.
+- **La Q-table grandit** (52 → 83 états) : plus d'exploration, plus de couples état-action, mais pas de gain de chemin.
+- **Les 3 graines convergent** : la porte n'est pas un coup de chance d'une graine.
+- **La limite est écrite** : l'A* **masque** la politique ; la courbe plate mesure l'A*, pas l'apprentissage seul.
+
+## L'état
+
+- Fiche : [`rapport-pensee-courbe.md`](../../reports/rapport-pensee-courbe.md) ; JSON [`pensee-courbe.json`](../../reports/pensee-courbe.json) ; code [`courbe.py`](../../tools/pensee/courbe.py) ; T13 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **16/16 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **402 fiches / 504 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+## La suite
+
+1. **La politique seule** (sans A*) : mesurer le taux de but et les nœuds par épisodes, pour voir l'apprentissage sans le masque de l'A*.
+2. **Porte stochastique** : l'ouverture réussit à 80 % ; la politique doit réessayer.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round mesure la politique seule, sans A*.
+
+
+## Tour 31
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 18/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/courbe.py'); t=p.read_text()\nt=t.replace(\"\"\"from .moteur import AStar\nfrom .operateurs import DRVM, LABYRINTHE_PORTE, REGISTRE_P, Politi … [2142 caractères tronqués]`
+
+  ```
+039e0500 B13 — LA COURBE : 15/15 BUTS (50–800 ÉPISODES × 3 GRAINES), 30 NŒUDS, Q 52–83 ; 16/16
+ok
+  50 ep g0  Q  52   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+  50 ep g1  Q  61   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+  50 ep g2  Q  74   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+ 100 ep g0  Q  52   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+ 100 ep g1  Q  61   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+ 100 ep g2  Q  74   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+ 200 ep g0  Q  67   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+ 200 ep g1  Q  61   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+ 200 ep g2  Q  74   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+ 400 ep g0  Q  69   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+ 400 ep g1  Q  62   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+ 400 ep g2  Q  83   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+ 800 ep g0  Q  83   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+ 800 ep g1  Q  62   30 nœuds  sonde  7  coût  68.0  but True  seule True/8
+ 800 ep g2  Q  83   30 nœuds  sonde  7  coût  68.0  
+… [29 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T13 la courbe d'apprentissage       épisodes × graines : le but est atteint, les nœuds stables\\n\",\n\"  T13 la courbe d' … [1366 caractères tronqués]`
+
+  ```
+ok
+  ✅ T12 porte apprise      porte apprise : 67 états-Q, 30 nœuds/but, sonde 7
+  ✅ T13 courbe d'apprentissage courbe : 9/9 buts (50–200 épisodes, 3 graines)
+  ✅ T14 politique seule    politique seule : 9/9 buts, 8 pas
+  17/17 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-seule.md <<'MD'\n# B13 — la politique seule : 8 pas, 15/15 buts, sans A*\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **17/17 portes** : la `Politiqu … [6205 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 403 fichiers, le disque en a 404
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text().replace(\"| fichiers / JSON de résultats | **403** / **505** |\", \"| fichiers / JSON de résultats | **404** / **505** |\")\np.write_text( … [596 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 404 fiche(s) · 505 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 240 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/pensee/courbe.py tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-seule.md reports/pensee-courbe.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilo … [483 caractères tronqués]`

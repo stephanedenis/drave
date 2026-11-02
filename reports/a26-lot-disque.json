@@ -1,0 +1,23 @@
+{
+ "date": "2026-11-01",
+ "ligne": "A2.6 / A8.3",
+ "question": "le lot divise-t-il les lectures du disque ? (réduire le lot)",
+ "dispositif": {
+  "modele": "Qwen2.5-0.5B-Q8_0",
+  "jetons": 192,
+  "source_jetons": "data/wikitext2_test.txt (85 626 jetons)",
+  "ctx": 512,
+  "threads": 20,
+  "eviction": "posix_fadvise(POSIX_FADV_DONTNEED) avant chaque lot",
+  "outil": "tools/mesure_lot_disque.sh"
+ },
+ "mesures": {
+  "lot_1": {"ppl": 15.8452, "lus_mio": 503, "mur_s": 12.04, "tok_s": 24.0},
+  "lot_2": {"ppl": 15.8443, "lus_mio": 502, "mur_s": 10.38, "tok_s": 30.5},
+  "lot_4": {"ppl": 15.8443, "lus_mio": 502, "mur_s": 10.18, "tok_s": 30.0},
+  "lot_8": {"ppl": 15.8443, "lus_mio": 502, "mur_s": 9.96, "tok_s": 30.5}
+ },
+ "verdict": "le lot ne divise pas les lectures denses (503->502 Mio) ; il accélère le calcul (+27 % tok/s) ; la PPL bouge de -0,006 % (lot 1 vs lot 2+)",
+ "consequence": "réduire le lot est inutile pour le disque ; garder le lot >= 2 pour le calcul ; les lectures partagées relèvent du MoE (A6.2, bloqué)",
+ "limites": ["0,5B dense, anglais, Q8, 192 jetons", "charge 8-15 pendant la mesure", "PPL à 192 jetons, pas celle du corpus"]
+}
