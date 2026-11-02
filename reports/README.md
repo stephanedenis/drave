@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-bruitee.md`](rapport-pensee-bruitee.md) | **B13** — l'observation bruitée : 0/20 buts, 10 % d'erreur casse la politique, **48/48** |
 | [`rapport-pensee-observatrice.md`](rapport-pensee-observatrice.md) | **B13** — l'action observer : 20/20 buts, 8,3 pas, le geste qui révèle, **47/47** |
 | [`rapport-pensee-curieuse.md`](rapport-pensee-curieuse.md) | **B13** — la curiosité : 0/20 buts, le bonus de certitude ne suffit pas, **46/46** |
 | [`rapport-pensee-croyance.md`](rapport-pensee-croyance.md) | **B13** — la croyance : 0/20 buts, la distribution seule ne suffit pas, **45/45** |

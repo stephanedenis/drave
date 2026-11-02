@@ -1173,6 +1173,31 @@ def seule_observatrice(p: PolitiqueAppriseObservatrice, max_pas: int = 200) -> t
     return False, pas
 
 
+class PolitiqueAppriseObservatriceBruitee(PolitiqueAppriseObservatrice):
+    """L'observatrice avec une révélation **bruitée** : 10 % du temps, la porte annoncée est fausse."""
+
+    nom = "observatrice_bruitee"
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, p_saut: float = 0.2,
+                 p_erreur: float = 0.1):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma,
+                         eps=eps, p_saut=p_saut)
+        self.p_erreur = p_erreur
+
+    def _pas(self, cle, action, d: int):
+        x, y, o, b = cle
+        if action == "observer":
+            vu = d if self.rng.random() >= self.p_erreur else 1 - d
+            return (x, y, o, 3 if vu == 0 else 0), -0.1, d
+        return super()._pas(cle, action, d)
+
+
+def seule_observatrice_bruitee(p: PolitiqueAppriseObservatriceBruitee,
+                                max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

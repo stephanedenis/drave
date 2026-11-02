@@ -1,0 +1,25 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "48/48",
+ "p_erreur": 0.1,
+ "politique": {
+  "episodes": 2000,
+  "graine": 0,
+  "etats_q": 398,
+  "runs": 20,
+  "buts": 0,
+  "pas": 200
+ },
+ "contraste": {
+  "observatrice": {
+   "buts": 20,
+   "pas": 8.3
+  }
+ },
+ "limites": [
+  "une seule observation",
+  "croyance discrète",
+  "toy"
+ ]
+}

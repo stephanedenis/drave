@@ -721,6 +721,20 @@ def t44_observatrice() -> tuple[bool, str]:
                       f"{round(pas_total / 20, 1)} pas")
 
 
+def t45_bruitee() -> tuple[bool, str]:
+    """L'observation bruitée : 0/20 buts, 10 % d'erreur casse la politique (négatif)."""
+    from .operateurs import PolitiqueAppriseObservatriceBruitee, seule_observatrice_bruitee
+    p = PolitiqueAppriseObservatriceBruitee(episodes=2000, graine=0)
+    p.apprendre()
+    ok = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, _ = seule_observatrice_bruitee(p)
+        ok += b
+    return ok == 0, (f"observatrice bruitée : {ok}/20 buts ({len(p.q)} états-Q), "
+                     f"10 % d'erreur casse la politique")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -764,7 +778,8 @@ def main() -> int:
               ("T41 observation partielle", t41_partielle()),
               ("T42 croyance", t42_croyance()),
               ("T43 curiosité", t43_curieuse()),
-              ("T44 action observer", t44_observatrice())]
+              ("T44 action observer", t44_observatrice()),
+              ("T45 observation bruitée", t45_bruitee())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

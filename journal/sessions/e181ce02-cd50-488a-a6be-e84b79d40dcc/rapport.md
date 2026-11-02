@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 30.8 h |
-| Tours | 61 |
-| Messages | 922 |
-| Appels d'outils | 851 |
+| Durée | 30.9 h |
+| Tours | 62 |
+| Messages | 930 |
+| Appels d'outils | 857 |
 | Fichiers touchés | 25 |
-| Commandes | 687 |
+| Commandes | 692 |
 | Sous-agents | 2 |
-| Commits | 78 |
+| Commits | 79 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -153,6 +153,8 @@
 **Tour 60** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 61** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 62** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3264,6 +3266,57 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute l'**action « obs
 - bash — Committer l'action observer
 - job_output
 
+**Synthèse produite :**
+
+⏵ Action observer : 20/20 buts, 8,3 pas, le geste qui révèle la porte ; 47/47
+
+Le round 48 du goal est livré : l'**action `observer`** débloque l'observation partielle — 0/20 deviennent **20/20**. Commit **`4aa8e1d8`**.
+
+\## L'action observer
+
+Même monde que T42 (porte sautant à 20 %, vue à distance 1), mais la politique a **5 actions** : les 4 pas et **`observer`**, qui met la croyance à 1 (porte vue) ou 0, au coût de 0,1.
+
+| dispositif | buts | états-Q | pas |
+|---|---:|---:|---:|
+| **observatrice** | **20/20** | 448 | 8,3 |
+| curiosité (T43) | 0/20 | 148 | 200 |
+| croyance (T42) | 0/20 | 154 | 200 |
+| mémoire (T41) | 0/20 | 115 | 200 |
+| complète (T39/T40) | 20/20 | 182 | 8 |
+
+**Ce que ça dit** :
+
+- **Le geste débloque** : la même information, obtenue par une **action**, suffit ; la croyance passive (T41/T42) et la curiosité (T43) échouaient.
+- **Le coût est faible** : 8,3 pas contre 8 (observation complète) ; l'observation coûte 0,1 et un pas de temps.
+- **La table grandit** (448 états, 5 actions) mais la compétence est là : c'est le prix de l'exploration.
+- **La négative reste** : sans l'action (T41/T42/T43), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-observatrice.md`](../../reports/rapport-pensee-observatrice.md) ; JSON [`pensee-observatrice.json`](../../reports/pensee-observatrice.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T44 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **47/47 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **441 fiches / 535 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Observation bruitée** : la révélation se trompe 10 % du temps.
+2. **Coût variable** : observer cher ; la politique doit choisir quand.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round rend l'observation **bruitée**.
+
+### Tour 62 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Tester l'observation bruitée à 10 %
+- bash — Ajouter la porte T45 (observation bruitée)
+- bash — Écrire la fiche de l'observation bruitée
+- bash — Aligner le compteur et passer les portes
+- bash — Committer l'observation bruitée
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3343,7 +3396,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute l'**action « obs
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 647 autres
+- … et 652 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3568,4 +3621,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute l'**action « obs
 - B13 — LA CROYANCE : 0/20 BUTS, LA DISTRIBUTION SEULE NE SUFFIT PAS ; 45/45" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA CROYANCE"; then echo "COM
 - B13 — LA CURIOSITÉ : 0/20 BUTS, LE BONUS DE CERTITUDE NE SUFFIT PAS ; 46/46" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA CURIOSITÉ"; then echo "C
 - B13 — L'ACTION OBSERVER : 20/20 BUTS, 8,3 PAS, LE GESTE QUI RÉVÈLE LA PORTE ; 47/47" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "L'ACTION OBSERVER";
+- B13 — L'OBSERVATION BRUITÉE : 10 % D'ERREUR CASSE LA POLITIQUE (0/20) ; 48/48" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "OBSERVATION BRUITÉE"; the
 

@@ -20628,3 +20628,38 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 tools/compare_genres.py 2>&1 | tail -20; date '+%H:%M'", "description": "Run genre comparison across corpora", "timeoutMs": 600000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+23:23
+fr            193394323 car ·  111.1 car/ligne · dup 15.1% · cov 0.01
+ar            111647469 car ·  103.1 car/ligne · dup 16.2% · cov 0.22
+pt            194221526 car ·  116.9 car/ligne · dup 15.1% · cov 0.01
+zh             75776369 car ·   40.8 car/ligne · dup 13.5% · cov 0.12
+ja             75061812 car ·   42.0 car/ligne · dup 11.8% · cov 0.09
+it            198563527 car ·  113.1 car/ligne · dup 18.4% · cov 0.02
+ru            111322847 car ·  107.2 car/ligne · dup 13.5% · cov 0.14
+es            195934583 car ·  127.4 car/ligne · dup 10.7% · cov 0.01
+de            196611300 car ·  115.8 car/ligne · dup 8.7% · cov 0.03
+en            199406899 car ·  146.8 car/ligne · dup 9.6% · cov 0.01
+pdf           196464075 car ·   37.2 car/ligne · dup 23.8% · cov 0.01
+documents     196133787 car ·   37.5 car/ligne · dup 22.1% · cov 0.01
+ocr             3739120 car ·   32.1 car/ligne · dup 4.8% · cov 0.07
+→ reports/corpus-genres.json
+23:33
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 63 : la comparaison des genres est mesurée (13 corpus, 200 Mo chacun) — j'écris la fiche
+
+- **write** `{"content": "# Le genre se mesure — encyclopédie, livres, documents, cours\n\n**Date** : 2026-11-01 · **Ligne** : Données · **Session** : fe3c05f0\n\n## 1. Ce que c'est\n\nLa comparaison des **genres** : les 10 corpus Wikipédia (l'encyclopédie), le corpus PDF (les livres et manuels), le corpus Docum … [2313 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-genres.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| [^|]+ \\|\", \"| fichiers / JSON de résultats | **438** / **533** |\", s)\ns=s.replace( … [893 caractères tronqués]`

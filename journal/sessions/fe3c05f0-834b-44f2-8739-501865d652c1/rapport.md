@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 30.8 h |
+| Durée | 31.0 h |
 | Tours | 75 |
-| Messages | 1188 |
-| Appels d'outils | 1044 |
-| Fichiers touchés | 21 |
-| Commandes | 962 |
+| Messages | 1190 |
+| Appels d'outils | 1046 |
+| Fichiers touchés | 22 |
+| Commandes | 963 |
 | Sous-agents | 0 |
-| Commits | 63 |
+| Commits | 64 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2270,15 +2270,17 @@ Les deux fiches sont écrites **en cours** et portent la mention que leurs chiff
 
 ### Tour 75 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Check documents and OCR status
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_genres.py`
 - bash — Run genre comparison across corpora
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-genres.md`
+- bash — Commit genre comparison tool and fiche
 
 **Synthèse produite :**
 
-⏵ Round 63 : je change d'approche — j'écris l'outil de comparaison des genres pendant l'extraction
+⏵ Round 63 : la comparaison des genres est mesurée (13 corpus, 200 Mo chacun) — j'écris la fiche
 
 ## 3. Travail accompli
 
@@ -2307,6 +2309,7 @@ Les deux fiches sont écrites **en cours** et portent la mention que leurs chiff
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-documents.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-pdf.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_genres.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-genres.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -2350,7 +2353,7 @@ Les deux fiches sont écrites **en cours** et portent la mention que leurs chiff
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 922 autres
+- … et 923 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2561,4 +2564,5 @@ Les deux fiches sont écrites **en cours** et portent la mention que leurs chiff
 - DONNÉES — LES DIX CORPUS EN TEXTE INTÉGRAL : 20,53 M ARTICLES, 67,73 G CARACTÈRES, 81,2 GO (ANGLAIS CLOS À 99,2 %, LIMITE MÉMOIRE NOMMÉE)" 2>/tmp/commit.err; th
 - DONNÉES — FICHES DU CORPUS DOCUMENTS ET DU CORPUS OCR (EN COURS, CHIFFRES FIXÉS À LA CLÔTURE)" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus
 - DONNÉES — FICHES DU CORPUS DOCUMENTS ET DU CORPUS OCR (EN COURS, CHIFFRES FIXÉS À LA CLÔTURE)" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus
+- DONNÉES — LE GENRE SE MESURE : ENCYCLOPÉDIE 103-147 CAR/LIGNE, LIVRES 32-37 ; LIGNES DUPLIQUÉES 8,7-24 %, OCR 4,8 %" 2>/tmp/commit.err; then echo "commit OK"; b
 
