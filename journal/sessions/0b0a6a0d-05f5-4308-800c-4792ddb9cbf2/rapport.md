@@ -7,12 +7,12 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 43.6 h |
+| Durée | 43.8 h |
 | Tours | 20 |
-| Messages | 1655 |
-| Appels d'outils | 1519 |
+| Messages | 1659 |
+| Appels d'outils | 1522 |
 | Fichiers touchés | 11 |
-| Commandes | 1193 |
+| Commandes | 1195 |
 | Sous-agents | 0 |
 | Commits | 83 |
 | Compactages de contexte | 2 |
@@ -1062,7 +1062,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 
 ### Tour 20 — mets le dossier de pilotage à jour et continue
 
-*84 appels d'outils.* Actions notables :
+*87 appels d'outils.* Actions notables :
 
 - bash — Read the state's N2 section and timestamp
 - read
@@ -1078,7 +1078,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - bash — Find the Wikipedia extraction tool
 - bash — Read the extraction tool's options
 - bash — Look at the earlier extraction script
-- … et 44 autres
+- … et 45 autres
 
 **Synthèse produite :**
 
@@ -1144,7 +1144,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1153 autres
+- … et 1155 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1272,7 +1272,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 
 ## 5. Erreurs rencontrées
 
-69 sorties en erreur ou divergentes. Les premières :
+70 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : -rw-r--r--. 1 stephane stephane 610 31 oct 17:24 work/n2d/essai-fr.json -rw-r--r--. 1 stephane stephane 650 31 oct 17:24 work/n2d/essai-multi.json === logs === -- A-fr-g1 pas  2250 · seq 128 · perte 5

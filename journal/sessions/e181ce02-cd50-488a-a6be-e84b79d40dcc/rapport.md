@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 43.4 h |
-| Tours | 141 |
-| Messages | 1678 |
-| Appels d'outils | 1440 |
+| Tours | 142 |
+| Messages | 1690 |
+| Appels d'outils | 1450 |
 | Fichiers touchés | 25 |
-| Commandes | 1173 |
+| Commandes | 1183 |
 | Sous-agents | 2 |
 | Commits | 177 |
 | Compactages de contexte | 5 |
@@ -317,6 +317,8 @@
 **Tour 140** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 141** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 142** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7485,6 +7487,59 @@ Je continue : prochain round, **le juge des réponses** — distinguer un 1,0 de
 - bash — Committer le juge
 - job_output
 
+**Synthèse produite :**
+
+⏵ Juge des réponses : couverture 0/19, la référence manque ; 126/126
+
+Le round 127 est livré : le **juge** est en place, mais sa **couverture est 0/19** — le gold annote l'acte des questions, pas leur réponse. Commit **`f864970e`**.
+
+\## Le juge
+
+| mesure | valeur |
+|---|---:|
+| questions du gold | 19 |
+| questions avec **réponse de référence** | **0** |
+| couverture | **0,0000** |
+| `juge(None, None)` | 0,0 |
+
+**Ce que ça dit** :
+
+- **Le juge est aveugle** : il compare à une référence qui n'existe pas ; 0/19 de couverture signifie que la mesure de correction est **impossible** en l'état.
+- **Le gold mesure la forme, pas le fond** : l'`acte` (19/19) est annoté, la `reponse` ne l'est pas — c'est le **biais** de tout le gold actuel.
+- **La pièce manquante est nommée** : il faut **écrire les 19 réponses de référence** (le oui/non, le contenu) avant de juger ; c'est le prochain round.
+- **Le juge ne juge pas** : `juge(None, None) = 0` ; le 0 n'est pas une performance du bloc, c'est l'absence de référence.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-juge.md`](../../reports/rapport-pensee-juge.md) ; JSON [`pensee-juge.json`](../../reports/pensee-juge.json) ; module [`juge.py`](../../tools/tests/linguistique/juge.py) ; T123 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **126/126 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **534 fiches / 622 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` à jour.
+- L'horloge réelle est **12 h 02 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **Écrire les 19 réponses de référence** dans le gold (`pragma.reponse`), puis re-mesurer la couverture et le juge.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **les 19 réponses de référence** — la pièce qui rend le juge utilisable.
+
+### Tour 142 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Ajouter les réponses des 4 questions réalistes
+- bash — Inspecter la structure des phrases à question
+- bash — Ajouter les réponses et inspecter les autres golds
+- bash — Lire la construction des questions synthétiques
+- bash — Ajouter les réponses restantes et mesurer la couverture
+- bash — Régénérer le gold JSON et remesurer
+- bash — Repérer les générateurs JSON des golds
+- bash — Régénérer les golds hand et synthétique
+- bash — Écrire la fiche des réponses de référence et la porte T124
+- bash — Trim README et passer toutes les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7564,7 +7619,7 @@ Je continue : prochain round, **le juge des réponses** — distinguer un 1,0 de
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1133 autres
+- … et 1143 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7692,7 +7747,7 @@ Je continue : prochain round, **le juge des réponses** — distinguer un 1,0 de
 
 ## 5. Erreurs rencontrées
 
-23 sorties en erreur ou divergentes. Les premières :
+24 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]

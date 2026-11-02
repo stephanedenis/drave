@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 43.3 h |
+| Durée | 43.5 h |
 | Tours | 387 |
-| Messages | 2350 |
-| Appels d'outils | 1565 |
+| Messages | 2352 |
+| Appels d'outils | 1567 |
 | Fichiers touchés | 26 |
-| Commandes | 1391 |
+| Commandes | 1393 |
 | Sous-agents | 0 |
-| Commits | 94 |
+| Commits | 95 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -9153,16 +9153,18 @@ Je laisse donc le goal actif jusqu'à 12 h 20 en surveillance légère, et je ma
 
 ### Tour 387 — <goal_round> Objective: "Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot  … [1044 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Add deja option and relaunch at 42nd PDF
 - bash — Check Encyclopedia 500-page run
 - bash — Check Encyclopedia OCR completion
 - bash — Check Encyclopedia OCR near cutoff
+- bash — Stop CEGEP run at cutoff
+- bash — Document corpus overwrite lesson and commit
 
 **Synthèse produite :**
 
-⏵ Le run a repris au 42e PDF (Part 2 re-océrisé) et rend l'Encyclopedia en 221/500 ; cutoff à 12 h 05
+⏵ Alerte : le run de reprise (`--deja 41`) a réécrit le corpus CEGEP en mode `w` — les 2 Algorithms restent, les 10 notes sont à re-océriser ; je fiche la leçon
 
 ## 3. Travail accompli
 
@@ -9239,7 +9241,7 @@ Je laisse donc le goal actif jusqu'à 12 h 20 en surveillance légère, et je ma
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1351 autres
+- … et 1353 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9481,4 +9483,5 @@ Je laisse donc le goal actif jusqu'à 12 h 20 en surveillance légère, et je ma
 - DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA, 1 000+ P) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE DÉSORMAIS" > /tmp/commi
 - DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE" > /tmp/commit-cegep10c.log 2>&1;
 - ÉTAT — T0 SOUS 4 000 APRÈS LE CEGEP 10 NOTES" > /tmp/commit-t0.log 2>&1; code=$?; tail -2 /tmp/commit-t0.log; echo "code=$code"; git log --oneline -1
+- DONNÉES — LE RUN DE REPRISE A ÉCRASÉ LE CORPUS CEGEP : LES 2 ALGORITHMS RESTENT, LES 10 NOTES SONT À RE-OCÉRISER (LEÇON : SORTIE SÉPARÉE)" > /tmp/commit-lecon.l
 

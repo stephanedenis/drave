@@ -20483,3 +20483,30 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1193", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1189 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null; ls work/n2w/fr-60k.pt work/n2w/big-60k.pt 2>/dev/null", "description": "Check the 60k trainings"}`
+
+  ```
+12:03
+pas 52100 · perte 1.3197 · PPL val 3.730 · 2811 s
+pas 51800 · perte 1.3689 · PPL val 3.099 · 2681 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2w/fr-60k.pt work/n2w/big-60k.pt 2>/dev/null; tail -2 work/n2w/fr-60k.log | head -2; tail -2 work/n2w/big-60k.log | head -2", "description": "Wait for the 60k checkpoints"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1195]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1195", "timeout_ms": 600000, "wait": true}`

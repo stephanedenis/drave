@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 12 h 45 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 12 h 08 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -37,7 +37,7 @@
 - **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
   avance ; **N4** en file ; **A/B** gardent les leurs.
 - **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `docs/theorie/pre-traitement-linguistique.md`, `tools/bloc_linguistique.py`, `tools/tests/linguistique/`, `docs/implantation/bloc-linguistique.md`, `journal/sessions/e181ce02-…/`.
-- **Prochaine action** : **L** — les **19 réponses de référence** du gold (T123 : le juge a une couverture 0/19 ; sans référence, pas de correction) ;
+- **Prochaine action** : **L** — le **juge contre le bloc** (T124 : couverture 19/19 ; mesurer ce que le bloc et l'extraction répondent) ;
   **B13** — DRVM/native **bloqué**, la cascade mesurée reste la lecture.
 - **Bloquants** : **neuronal réel bloqué** — `llama-cli` refuse/timeout, aucun tagger (`spacy`,
   `stanza`, `nltk`, `transformers`), aucun poids `drave-n0` ; le mock reste un contrat. Trois
@@ -57,7 +57,7 @@
 - **Ambition** : le français réel.
 - **Stratégie** : le dump, débaliseur.
 - **Objectif final** : 10 corpus, ficés.
-- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 8 Ko 0 ; éval 0/40) ; **OCR CEGEP** (10 notes, 1 596 p, 2,52 M car. ; 8 Ko 0) ; **genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
+- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 8 Ko 0 ; éval 0/40) ; **OCR CEGEP** (10 notes, 1 596 p, 2,52 M car. mesurés — **corpus sur disque à re-océriser**, le run de reprise l'a écrasé) ; **genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée, S, N2.
 - **Journal** : [le 02/11](../../journal/2026-11-02/README.md) (la nuit D/R/A).
 - **Prochaine action** : l'**OCR complet** — le **fonds CEGEP** (~127 scans ; le 11e PDF exige `--max-pages`) ; la clôture.
@@ -88,7 +88,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges à la passe du 02/11 06 h : les 4 connues + greffe à la borne 700 s, rejouée verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **534** / **622** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **535** / **623** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

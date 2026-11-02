@@ -30736,3 +30736,203 @@ timeout 2400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/juge.py tools/pensee/autotest.py reports/rapport-pensee-juge.md reports/pensee-juge.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md … [487 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1173]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1173", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-pensee-juge.md
+ create mode 100644 tools/tests/linguistique/juge.py
+COMMIT OK 1
+f864970e B13 — LE JUGE DES RÉPONSES : COUVERTURE 0/19, LA RÉFÉRENCE MANQUE ; 126/126
+lun 02 nov 2026 12:02:11 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Juge des réponses : couverture 0/19, la référence manque ; 126/126
+
+Le round 127 est livré : le **juge** est en place, mais sa **couverture est 0/19** — le gold annote l'acte des questions, pas leur réponse. Commit **`f864970e`**.
+
+## Le juge
+
+| mesure | valeur |
+|---|---:|
+| questions du gold | 19 |
+| questions avec **réponse de référence** | **0** |
+| couverture | **0,0000** |
+| `juge(None, None)` | 0,0 |
+
+**Ce que ça dit** :
+
+- **Le juge est aveugle** : il compare à une référence qui n'existe pas ; 0/19 de couverture signifie que la mesure de correction est **impossible** en l'état.
+- **Le gold mesure la forme, pas le fond** : l'`acte` (19/19) est annoté, la `reponse` ne l'est pas — c'est le **biais** de tout le gold actuel.
+- **La pièce manquante est nommée** : il faut **écrire les 19 réponses de référence** (le oui/non, le contenu) avant de juger ; c'est le prochain round.
+- **Le juge ne juge pas** : `juge(None, None) = 0` ; le 0 n'est pas une performance du bloc, c'est l'absence de référence.
+
+## L'état
+
+- Fiche : [`rapport-pensee-juge.md`](../../reports/rapport-pensee-juge.md) ; JSON [`pensee-juge.json`](../../reports/pensee-juge.json) ; module [`juge.py`](../../tools/tests/linguistique/juge.py) ; T123 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **126/126 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **534 fiches / 622 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` à jour.
+- L'horloge réelle est **12 h 02 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+## La suite
+
+1. **Écrire les 19 réponses de référence** dans le gold (`pragma.reponse`), puis re-mesurer la couverture et le juge.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **les 19 réponses de référence** — la pièce qui rend le juge utilisable.
+
+
+## Tour 142
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 128/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# 1) gold_reel : r010, r030, r304, r314\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\nrepl={\n \"'r010'\":'\"oui\"', \"'r030'\":'\"yes\"', \"'r304'\":'\"oui\"', \"'r3 … [784 caractères tronqués]`
+
+  ```
+r010 {'acte': 'question'}
+r030 {'acte': 'question'}
+r304 {'acte': 'question'}
+r314 {'acte': 'question'}
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+AssertionError: 'r010'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"r010\\|r030\\|r304\\|r314\" tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold.py | head; echo ===; grep -n \"question\" tools/tests/linguistique/gold_reel.py | head -5; sed -n \"$(grep -n \"'r010'\" tools/ … [166 caractères tronqués]`
+
+  ```
+tools/tests/linguistique/gold_reel.py:40:    ("r010", "fr", "Tu viens demain ?",
+tools/tests/linguistique/gold_reel.py:103:    ("r030", "en", "You come tomorrow?",
+tools/tests/linguistique/gold_reel.py:940:    ('r304', 'fr', 'Viens-tu demain ?',
+tools/tests/linguistique/gold_reel.py:970:    ('r314', 'en', 'Do you come tomorrow?',
+===
+42:     [("GN", "Tu", "agent"), ("GV", "viens", "prédicat")], {"acte": "question"}),
+105:     [("GN", "You", "agent"), ("GV", "come", "prédicat")], {"acte": "question"}),
+942:     [('GV', 'Viens', 'prédicat'), ('GN', 'tu', 'agent'), ('ADV', 'demain', 'temps')], {'acte': 'question'}),
+972:     [('GN', 'you', 'agent'), ('GV', 'come', 'prédicat'), ('ADV', 'tomorrow', 'temps')], {'acte': 'question'}),
+[stderr]
+sed: -e expression #1, char 1: unknown command: ','
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\npaires=[\n ('[(\"GN\", \"Tu\", \"agent\"), (\"GV\", \"viens\", \"prédicat\")], {\"acte\": \"question\"})',\n  '[(\"GN\", \"Tu … [1160 caractères tronqués]`
+
+  ```
+gold_reel : 4 réponses
+58:     [("GV", "Peux-tu venir", "prédicat")], {"acte": "question"}),
+===
+4:une grammaire hors du bloc (GN, GV, GP, REL, SUB, question, exclamation, impératif, négation,
+89:        mode = self.rng.choice(["sv", "sv_gp", "rel", "sub", "question", "exclamation",
+117:        elif mode == "question":
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '105,135p' tools/tests/linguistique/gold_synthetique.py", "description": "Lire la construction des questions synthétiques"}`
+
+  ```
+elif mode == "rel":
+            gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
+            i = len(tokens); nom = gn[-1][0]; tokens.append(("qui", "PRON"))
+            v = self.verbe(); tokens.append((v, "VERB"))
+            segs.append(("REL", i, len(tokens), [nom]))
+            v2 = self.verbe(); tokens.append((v2, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))
+        elif mode == "sub":
+            gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
+            v = self.verbe(); tokens.append((v, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))
+            i = len(tokens); tokens.append(("que", "CONJ"))
+            gn2, _ = self.gn(); tokens += gn2; v2 = self.verbe(); tokens.append((v2, "VERB"))
+            segs.append(("SUB", i, len(tokens), [v]))
+        elif mode == "question":
+            gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
+            v = self.verbe(); tokens.append((v, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))
+            pragma["acte"] = "question"; tokens.append(("?", "PONCT"))
+        elif mode == "exclamation":
+            gn, _ = self.gn(); tokens += gn; 
+… [945 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold.py'); t=p.read_text()\na='[(\"GV\", \"Peux-tu venir\", \"prédicat\")], {\"acte\": \"question\"})'\nb='[(\"GV\", \"Peux-tu venir\", \"prédicat\")], {\"act … [873 caractères tronqués]`
+
+  ```
+gold.py + synthetique : réponses
+couverture {'questions': 19, 'avec_reference': 0, 'taux': 0.0}
+juge(oui,oui) 1.0 | juge(oui,non) 0.0 | juge(None,None) 0.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def charger\" -A 20 tools/tests/linguistique/evaluer_gold.py | head -25; python3 tools/tests/linguistique/gold_reel.py 2>&1 | tail -1; python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.tests.linguistique.eval … [167 caractères tronqués]`
+
+  ```
+24:def charger() -> list[dict]:
+25-    hand = json.loads(GOLD.read_text(encoding="utf-8"))["phrases"]
+26-    reel = json.loads(REEL.read_text(encoding="utf-8"))["phrases"]
+27-    synth = json.loads(SYNTH.read_text(encoding="utf-8"))["phrases"]
+28-    for p in hand:
+29-        p["source"] = "hand"
+30-    for p in reel:
+31-        p["source"] = "reel"
+32-    return hand + reel + synth
+33-
+34-
+35-def par_source(phrases: list[dict], source: str) -> list[dict]:
+36-    return [p for p in phrases if p.get("source") == source]
+37-
+38-
+39-def _pos_map(a: bl.Annotation) -> dict[tuple[int, int], str]:
+40-    return {(e.debut, e.fin): e.type for e in a.etiquettes if e.niveau == "pos"}
+41-
+42-
+43-def _seg(a: bl.Annotation) -> set[tuple[str, int, int]]:
+44-    return {(e.type, e.debut, e.fin) for e in a.etiquettes if e.niveau == "syntagme"}
+407 phrases réelles → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json
+{'questions': 19, 'avec_reference': 4, 'taux': 0.2105}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"__main__\\|def construire\\|def main\" tools/tests/linguistique/gold.py tools/tests/linguistique/gold_synthetique.py | head; ls -la tools/tests/linguistique/*.json 2>/dev/null", "description": "Repérer les générateurs JSON  … [11 caractères tronqués]`
+
+  ```
+tools/tests/linguistique/gold.py:89:def construire() -> dict:
+tools/tests/linguistique/gold.py:117:if __name__ == "__main__":
+tools/tests/linguistique/gold_synthetique.py:162:def construire(n=160, graine=42) -> dict:
+tools/tests/linguistique/gold_synthetique.py:201:if __name__ == "__main__":
+-rw-r--r--. 1 stephane stephane  19987  2 nov 11:56 tools/tests/linguistique/gold.json
+-rw-r--r--. 1 stephane stephane 446335  2 nov 12:03 tools/tests/linguistique/gold_reel.json
+-rw-r--r--. 1 stephane stephane 148883  1 nov 19:37 tools/tests/linguistique/gold_synthetique.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/gold.py 2>&1 | tail -1; python3 tools/tests/linguistique/gold_synthetique.py 2>&1 | tail -1; python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import cha … [152 caractères tronqués]`
+
+  ```
+20 phrases, 105 tokens → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold.json
+gold synthétique écrit → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_synthetique.json
+{'questions': 19, 'avec_reference': 19, 'taux': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-reponses.md <<'MD'\n# B13 — les 19 réponses de référence : le juge a une couverture de 1,0\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **12 … [6603 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 535 fiche(s) · 623 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2808 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-juge.md`](rapport-pensee-juge.md) | **B13** — le juge des réponses : couverture 0/19, la référence manque, **126 … [598 caractères tronqués]`

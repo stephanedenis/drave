@@ -35521,3 +35521,36 @@ wchar: 180405303
 ⏵ Le run a repris au 42e PDF (Part 2 re-océrisé) et rend l'Encyclopedia en 221/500 ; cutoff à 12 h 05
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-ency.log 2>/dev/null; tail -4 /tmp/ocr-cegep-ency.log; ps -p 3510124 -o pid,etime= 2>/dev/null || echo \"job fini\"; for d in /tmp/ocr-pdf-*/; do echo \"$d $(ls \"$d\" 2>/dev/n … [180 caractères tronqués]`
+
+  ```
+12:02
+2
+  CEGEP · Algorithms Illuminated (Part 2) Graph Al · 221 p · 342432 car
+  CEGEP · Algorithms Illuminated (Part 3) Greedy A · 226 p · 359423 car
+    PID            
+3510124       26:19
+/tmp/ocr-pdf-wqwhcggj/ 274
+/tmp/ocr-pdf-zkebhp8g/ 244
+  ```
+
+### 🤖 Assistant
+
+⏵ 12 h 02 : les 42e et 43e PDF sont re-océrisés, le 44e rend 244 pages ; cutoff dans 3 min
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 200; date '+%H:%M'; tail -2 /tmp/ocr-cegep-ency.log; ps -p 3510124 -o pid= 2>/dev/null && kill 3510124 && echo \"run arrêté\"; sleep 3; ps -p 3510124 -o stat= 2>/dev/null || echo \"arrêt confirmé\"; grep -c \" car$\" /tmp/ocr-ceg … [139 caractères tronqués]`
+
+  ```
+12:06
+  CEGEP · Algorithms Illuminated (Part 2) Graph Al · 221 p · 342432 car
+  CEGEP · Algorithms Illuminated (Part 3) Greedy A · 226 p · 359423 car
+3510124
+run arrêté
+arrêt confirmé
+2
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte : le run de reprise (`--deja 41`) a réécrit le corpus CEGEP en mode `w` — les 2 Algorithms restent, les 10 notes sont à re-océriser ; je fiche la leçon
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_ocr_cegep/; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('reports/rapport-ocr-cegep.md'); t = p.read_text(encoding='utf-8')\nold = \"> **Note** : le manifeste a été reconstruit après l'arrêt  … [1705 caractères tronqués]`
