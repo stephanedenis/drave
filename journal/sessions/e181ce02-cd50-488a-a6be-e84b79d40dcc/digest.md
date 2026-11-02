@@ -12832,3 +12832,80 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-456", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at e0e71213ed536caa49ccb108a5d5d436efdb8781 but expected a72567e1bf1f88035bdb1c75d7ac43be0817aae6
+retry 1
+  ✅ index : aucun fait stagé sans état
+[master 46fa2c82] L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510
+ 18 files changed, 55 insertions(+), 27 deletions(-)
+COMMIT OK tentative 2
+46fa2c82 L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Gold 220 : 60 réels + 160 synthétiques, POS 0,765 (réel 0,861), tête 0,510 ; 12/12
+
+Le round 9 du goal est livré : le gold réel passe de 20 à **60 phrases**, le gold total à **220**. Commit **`46fa2c82`**.
+
+## Le gold 220
+
+**60 phrases réelles** (20 dans `gold.py` + **40 nouvelles** dans `gold_reel.py`, 20 françaises et 20 anglaises) + **160 synthétiques** ; **993 tokens**. Les 40 nouvelles sont écrites après le bloc, avec POS, segments GN/GV/GP/REL/SUB et pragmatique (négation, modalité, question, double sens).
+
+| lecture | phrases | POS | syntagmes exacts | tête | att. tête | top-k tête |
+|---|---:|---:|---:|---:|---:|---:|
+| **heuristique — 220** | **220** | **0,765** | **0,190** | **0,510** | 0,957 | **1,000** |
+| heuristique — 60 réels | 60 | **0,861** | 0,241 | 0,370 | 0,800 | 1,000 |
+| dont 20 réels | 20 | 0,924 | 0,356 | 0,489 | 0,800 | 1,000 |
+| dont 40 nouveaux | 40 | 0,825 | 0,176 | 0,302 | — | — |
+| heuristique — 160 synth. | 160 | 0,725 | 0,168 | **0,570** | 1,000 | 1,000 |
+| mock seul — 220 | 220 | 0,416 | 0,147 | 0,538 | 0 | 0 |
+| **hasard** | 220 | — | — | — | **0,015** | — |
+
+**Ce que ça dit** :
+
+- **Les 60 réels** : POS **0,861**, contre 0,725 sur le synthétique ; les 40 nouvelles (0,825) sont un peu sous les 20 premières (0,924) — c'est la **variété réelle** qui coûte.
+- **Le syntagme exact** reste bas (0,190 ; 0,241 sur le réel) : c'est la **découpe** du S, pas la structure ; la **tête** est à 0,510.
+- **L'attachement** est mesuré sur **97 cibles** (les 20 réels + les 160 synthétiques) ; les **40 nouvelles n'ont pas encore de cible** : leur attachement n'est pas compté, et le top-1 tête reste 0,957 sur les 97.
+- **Le hasard** 1,5 % ; le mock 0 ; les 60 réels sont un **vrai** test, pas un doublon du générateur.
+
+## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; golds [`gold_reel.py`](../../tools/tests/linguistique/gold_reel.py) / [`gold_reel.json`](../../tools/tests/linguistique/gold_reel.json).
+- Portes : `porte-bloc-linguistique` **verte** (gold 220 + tests + 398 langues), `porte-pensee` **12/12**, `revue` **396 fiches / 498 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé ; la session R4.4 doit le rafraîchir.
+
+## La suite
+
+1. **Annoter les cibles d'attachement des 40 nouvelles** pour que les 60 réels soient mesurés sur les deux niveaux.
+2. **200+ phrases réelles** : continuer le gold réel au-delà de 60 ; le synthétique ne remplace pas le réel.
+3. **Politique DRVM/native** et coût mesuré, si les poids natifs arrivent.
+4. **Modèle neuronal** si un tagger/runner se débloque ; sinon, garder le mock et le dire.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque les cibles des 40 nouvelles et la suite du gold réel.
+
+
+## Tour 23
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 10/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\nsubs = {\n '(\"GP\", \"à son frère\", \"destinataire\")': '(\"GP\", \"à son frère\", \"destinataire\", \"parle\")',\n '(\"GP\ … [3086 caractères tronqués]`
+
+  ```
+ok
+40 phrases réelles → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json
+EXIT=0
+cibles 21 ambig 4
+  ```
+

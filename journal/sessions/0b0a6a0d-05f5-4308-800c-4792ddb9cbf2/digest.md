@@ -14650,3 +14650,112 @@ a72567e1 ÉTAT — T0 À 3 996 ET COMPTEURS 396/498
 [status: completed, exit code: 0]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && for p in \"Je pense que le chat dort.\" \"Il est parti parce qu'il pleuvait.\" \"Quand la pluie tombe, le chat rentre.\" \"Le livre que j'ai lu est bon.\" \"Il court et il rit.\"; do echo \"=== $p\"; python3 generate … [87 caractères tronqués]`
+
+  ```
+=== Je pense que le chat dort.
+- « que le chat dort » → Je pense
+   'Je pense' [GV · predicat]
+     'que le chat dort' [REL · qualite]
+=== Il est parti parce qu'il pleuvait.
+- structure la plus proche
+   'Il est parti' [GV · predicat]
+     "parce qu'il pleuvait" [SUB · contenu]
+=== Quand la pluie tombe, le chat rentre.
+- structure la plus proche
+     'Quand la pluie tombe' [SUB · contenu]
+   'le chat rentre' [GN · agent]
+=== Le livre que j'ai lu est bon.
+- « que j'ai lu est bon » → Le livre
+   'Le livre' [GN · agent]
+     "que j'ai lu est bon" [REL · qualite]
+=== Il court et il rit.
+- structure la plus proche
+   'Il court' [GV · predicat]
+     'et il rit' [SUB · contenu]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('generateur.py'); s = p.read_text()\ns = s.replace('CONJ = set(\"et ou mais donc or ni car quand comme si parce puisque lorsque pendant\".split())',\n'''CONJ = set(\ … [3866 caractères tronqués]`
+
+  ```
+générateur enrichi
+=== Je pense que le chat dort.
+- structure la plus proche
+   'Je pense' [GV · predicat]
+     'que le chat dort' [SUB · contenu]
+=== Il est parti parce qu'il pleuvait.
+- structure la plus proche
+   'Il est parti' [GV · predicat]
+     "parce qu'il pleuvait" [SUB · contenu]
+=== Quand la pluie tombe, le chat rentre.
+- structure la plus proche
+     'Quand la pluie tombe' [SUB · contenu]
+   'le chat rentre' [GN · agent]
+=== Le livre que j'ai lu est bon.
+- « que j'ai lu » → Le livre
+   'Le livre' [GN · agent]
+     "que j'ai lu" [REL · qualite]
+   'est bon' [GV · predicat]
+=== Il court et il rit.
+- structure la plus proche
+   'Il court' [GV · predicat]
+   'il rit' [GV · predicat]
+=== Le chat de la voisine qui dort sur le toit se réveille.
+- « qui dort sur le toit » → voisine
+   'Le chat' [GN · agent]
+     'de la voisine' [GP · theme]
+       'qui dort sur le toit' [REL · qualite]
+   'se réveille' [GV · predicat]
+- « qui dort sur le toit » → Le chat
+   'Le chat' [GN · agent]
+     'de la voisine' [GP · theme]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && PYTHONPATH=. python3 -m unittest discover -s tests 2>&1 | tail -5", "description": "Run the structure tests after the analyzer change"}`
+
+  ```
+.
+----------------------------------------------------------------------
+Ran 12 tests in 3.646s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && cat >> tests/test_generateur.py <<'PY'\n\n\nclass TestSubordination(unittest.TestCase):\n    def test_complement_apres_verbe(self):\n        cs = generateur.analyser(\"Je pense que le chat dort.\")\n        types = { … [4031 caractères tronqués]`
+
+  ```
+Ran 15 tests in 3.634s
+
+OK
+Le chat de la voisine qui dort sur le toit se réveille.
+[GN:agent]Le chat[/GN][GP:possession] de la voisine[/GP][REL:qualite] qui dort sur le toit[/REL][GV:predicat] se réveille[/GV]
+
+J'ai vu l'homme avec le télescope.
+[GV:predicat]J'ai vu[/GV][GN:patient] l'homme[/GN][GP:instrument] avec le télescope[/GP]
+
+---
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git add -A && git -c user.name=\"Stéphane\" -c user.email=\"stephane@local\" commit -q -m \"ANALYSEUR — SUBORDONNÉES, COORDINATION, ET EXPORT VERS LE CORPUS\n\nLe générateur distingue désormais le « que » complément  … [1021 caractères tronqués]`
+
+  ```
+a7d41a3 ANALYSEUR — SUBORDONNÉES, COORDINATION, ET EXPORT VERS LE CORPUS
+733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+76:- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (double sens, niveaux 0–4), export JSONL (12 tests) ; 7 phrases, 14 candidats ; [`README`](../../tools/structures/README.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git -C tools/structures checkout -q a7d41a3 && git -C tools/structures log --oneline -1; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"- **S — le banc de structures** : outi … [1096 caractères tronqués]`
+
+  ```
+a7d41a3 ANALYSEUR — SUBORDONNÉES, COORDINATION, ET EXPORT VERS LE CORPUS
+en-cours ok
+roadmap ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/structures docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"S — L'ANALYSEUR PLUS RICHE : SUBORDONNÉES, COORDINATION, ET L'EXPORT VERS LE CORPUS\n\nLe générateur distingue le « que » comp … [551 caractères tronqués]`

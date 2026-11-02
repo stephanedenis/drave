@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 27.4 h |
-| Tours | 22 |
-| Messages | 556 |
-| Appels d'outils | 569 |
+| Tours | 23 |
+| Messages | 562 |
+| Appels d'outils | 573 |
 | Fichiers touchés | 25 |
-| Commandes | 456 |
+| Commandes | 460 |
 | Sous-agents | 2 |
-| Commits | 36 |
+| Commits | 37 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -75,6 +75,8 @@
 **Tour 21** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 **Tour 22** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
+
+**Tour 23** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1221,6 +1223,50 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Vérifier si le gold 220 est dans HEAD
 - bash — Recommitter le gold 220 avec réessai
 
+**Synthèse produite :**
+
+⏵ Gold 220 : 60 réels + 160 synthétiques, POS 0,765 (réel 0,861), tête 0,510 ; 12/12
+
+Le round 9 du goal est livré : le gold réel passe de 20 à **60 phrases**, le gold total à **220**. Commit **`46fa2c82`**.
+
+\## Le gold 220
+
+**60 phrases réelles** (20 dans `gold.py` + **40 nouvelles** dans `gold_reel.py`, 20 françaises et 20 anglaises) + **160 synthétiques** ; **993 tokens**. Les 40 nouvelles sont écrites après le bloc, avec POS, segments GN/GV/GP/REL/SUB et pragmatique (négation, modalité, question, double sens).
+
+| lecture | phrases | POS | syntagmes exacts | tête | att. tête | top-k tête |
+|---|---:|---:|---:|---:|---:|---:|
+| **heuristique — 220** | **220** | **0,765** | **0,190** | **0,510** | 0,957 | **1,000** |
+| heuristique — 60 réels | 60 | **0,861** | 0,241 | 0,370 | 0,800 | 1,000 |
+| dont 20 réels | 20 | 0,924 | 0,356 | 0,489 | 0,800 | 1,000 |
+| dont 40 nouveaux | 40 | 0,825 | 0,176 | 0,302 | — | — |
+| heuristique — 160 synth. | 160 | 0,725 | 0,168 | **0,570** | 1,000 | 1,000 |
+| mock seul — 220 | 220 | 0,416 | 0,147 | 0,538 | 0 | 0 |
+| **hasard** | 220 | — | — | — | **0,015** | — |
+
+**Ce que ça dit** :
+
+- **Les 60 réels** : POS **0,861**, contre 0,725 sur le synthétique ; les 40 nouvelles (0,825) sont un peu sous les 20 premières (0,924) — c'est la **variété réelle** qui coûte.
+- **Le syntagme exact** reste bas (0,190 ; 0,241 sur le réel) : c'est la **découpe** du S, pas la structure ; la **tête** est à 0,510.
+- **L'attachement** est mesuré sur **97 cibles** (les 20 réels + les 160 synthétiques) ; les **40 nouvelles n'ont pas encore de cible** : leur attachement n'est pas compté, et le top-1 tête reste 0,957 sur les 97.
+- **Le hasard** 1,5 % ; le mock 0 ; les 60 réels sont un **vrai** test, pas un doublon du générateur.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; golds [`gold_reel.py`](../../tools/tests/linguistique/gold_reel.py) / [`gold_reel.json`](../../tools/tests/linguistique/gold_reel.json).
+- Portes : `porte-bloc-linguistique` **verte** (gold 220 + tests + 398 langues), `porte-pensee` **12/12**, `revue` **396 fiches / 498 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` r
+… [596 caractères tronqués]
+
+### Tour 23 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Annoter les cibles des 40 nouvelles phrases réelles
+- bash — Mesurer l'attachement sur les 60 phrases réelles
+- bash — Mettre à jour la fiche et l'état pour les 60 réels
+- bash — Passer les portes et committer les cibles des 60 réels
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1300,7 +1346,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 416 autres
+- … et 420 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1480,4 +1526,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510" 2>&1 | tail -4; then :; fi   if git log -1 --format='%s' | grep -q "GOLD 220"; t
+- L — GOLD 220 : CIBLES DES 60 RÉELS, ATTACHEMENT TÊTE 0,972 (0,929 RÉEL), 36 AMBIGUËS" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CIBLES DES 60"; th
 
