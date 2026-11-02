@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 33.5 h |
 | Tours | 93 |
-| Messages | 1211 |
-| Appels d'outils | 1076 |
+| Messages | 1215 |
+| Appels d'outils | 1080 |
 | Fichiers touchés | 25 |
-| Commandes | 871 |
+| Commandes | 873 |
 | Sous-agents | 2 |
-| Commits | 116 |
+| Commits | 118 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4928,12 +4928,15 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round trace la **courbe compl�
 
 ### Tour 93 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Tracer la courbe complète du seuil
 - bash — Ajouter la porte T76 (courbe complète)
 - bash — Écrire la fiche de la courbe du seuil
 - bash — Trim README et portes
+- bash — Committer la courbe du seuil
+- job_output
+- bash — Committer la courbe du seuil (2e essai)
 
 ## 3. Travail accompli
 
@@ -5014,7 +5017,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round trace la **courbe compl�
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 831 autres
+- … et 833 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5278,4 +5281,6 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round trace la **courbe compl�
 - B13 — LE SEUIL SUR 5 GRAINES : ×0,35 0/25, ×0,4 25/25, SEUIL ~0,4 ; 76/76" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL SUR 5 GRAINES"; then ec
 - B13 — LE BORD DU SEUIL : ×0,42 ET ×0,44 RÉUSSISSENT 50/50, BORD > 0,44 ; 77/77" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BORD DU SEUIL"; then ech
 - B13 — LE SEUIL BAS : GRADUÉ (~0,40), ×0,36 20/25, ×0,40 25/25 ; 78/78" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL BAS"; then echo "COMMIT OK 
+- B13 — LA COURBE DU SEUIL : 0,35→0,50, 0 → 80 % → 100 %, CREUX À 0,45 ; 79/79" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "COURBE DU SEUIL"; then ech
+- B13 — LA COURBE DU SEUIL : 0,35→0,50, 0 → 80 % → 100 %, CREUX À 0,45 ; 79/79" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "COURBE DU SEUIL"; then ech
 

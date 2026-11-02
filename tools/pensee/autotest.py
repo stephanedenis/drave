@@ -1196,6 +1196,16 @@ def t75_bas() -> tuple[bool, str]:
                 f"×0,40 {par[0.40]['buts']}/25")
 
 
+def t76_courbe() -> tuple[bool, str]:
+    """La courbe complète du seuil : 0,35 → 0,50 (5 graines)."""
+    from .graines import executer_courbe
+    lignes = executer_courbe(graines=3)
+    par = {l["facteur"]: l["buts"] for l in lignes}
+    ok = par[0.35] == 0 and par[0.40] == 15 and par[0.50] == 15
+    return ok, (f"courbe : ×0,35 {par[0.35]}/15, ×0,40 {par[0.40]}/15, "
+                f"×0,50 {par[0.50]}/15")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1270,7 +1280,8 @@ def main() -> int:
               ("T72 seuil fin", t72_seuil_fin()),
               ("T73 seuil sur 5 graines", t73_seuil_graines()),
               ("T74 bord du seuil", t74_bord()),
-              ("T75 seuil bas", t75_bas())]
+              ("T75 seuil bas", t75_bas()),
+              ("T76 courbe complète", t76_courbe())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

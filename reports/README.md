@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-courbe-seuil.md`](rapport-pensee-courbe-seuil.md) | **B13** — la courbe du seuil : 0,35→0,50, 0 → 80 % → 100 %, creux à 0,45, **79/79** |
 | [`rapport-pensee-seuil-bas.md`](rapport-pensee-seuil-bas.md) | **B13** — le seuil bas : gradué (~0,40), ×0,36 20/25, ×0,40 25/25, **78/78** |
 | [`rapport-pensee-seuil-bord.md`](rapport-pensee-seuil-bord.md) | **B13** — le bord du seuil : ×0,42/×0,44 50/50, bord > 0,44, **77/77** |
 | [`rapport-pensee-seuil-fin.md`](rapport-pensee-seuil-fin.md) | **B13** — le seuil fin : ×0,4 réussit, ×0,45 échoue, non monotone, **75/75** |
@@ -38,7 +39,6 @@
 | [`rapport-pensee-hasard.md`](rapport-pensee-hasard.md) | **B13** — le hasard variable : 20–60 %, 20/20 à chaque taux, 8 pas, **43/43** |
 | [`rapport-pensee-phase-graines.md`](rapport-pensee-phase-graines.md) | **B13** — la phase sur 5 graines : 5/5 buts, 10–14 pas, 376–422 états-Q, **41/41** |
 | [`rapport-pensee-phase.md`](rapport-pensee-phase.md) | **B13** — la période qui change : 3 puis 2 pas, A* 28 nœuds, politique but/10, **40/40** |
-| [`rapport-pensee-bruit.md`](rapport-pensee-bruit.md) | **B13** — le bruit variable : 50–95 %, 6/6 buts, effort 3 → 1 essai, **36/36** |
 | [`rapport-pensee-graines.md`](rapport-pensee-graines.md) | **B13** — la robustesse sur 5 graines : 5/5 bruits, 5/5 stables, **33/33** |
 | [`rapport-pensee-audit.md`](rapport-pensee-audit.md) | **B13** — l'audit des mesures : 15/15 cohérentes, la politique minute ne transfère pas au bruit, **31/31** |
 | [`rapport-pensee-correction.md`](rapport-pensee-correction.md) | **B13** — la mesure corrigée : bug de `seule_minute`, 4 politiques à but/8, 4 fiches corrigées, **30/30** |

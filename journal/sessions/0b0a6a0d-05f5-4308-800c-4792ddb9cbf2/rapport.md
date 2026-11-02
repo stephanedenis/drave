@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 33.8 h |
+| Durée | 33.9 h |
 | Tours | 18 |
-| Messages | 1342 |
-| Appels d'outils | 1244 |
+| Messages | 1357 |
+| Appels d'outils | 1259 |
 | Fichiers touchés | 11 |
-| Commandes | 995 |
+| Commandes | 1009 |
 | Sous-agents | 0 |
-| Commits | 55 |
+| Commits | 56 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*278 appels d'outils.* Actions notables :
+*293 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,11 +963,11 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 184 autres
+- … et 198 autres
 
 **Synthèse produite :**
 
-⏵ Mémoire libérée : je lance la loi d'échelle — capacité 45 M en français, 21,65 M en multilingue
+⏵ Session S : mesure de l'analyseur contre les structures écrites à la main
 
 ## 3. Travail accompli
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 955 autres
+- … et 969 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1232,4 +1232,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - JOURNAL — LA NUIT N2, SECONDE MOITIÉ : LES LOIS (CAPACITÉ, DISTILLATION, MULTILINGUE, CANAL)  Les lois de la nuit : capacité × données (−0,19 par palier, la lon
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() a = "
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = r
+- FUSION — LE BANC DE STRUCTURES : PRAGMATIQUE, EXPORT ET ANALYSEUR EN UN SEUL ARBRE  Réunit les trois lignes du sous-projet : le niveau pragmatique (statuts, dou
 

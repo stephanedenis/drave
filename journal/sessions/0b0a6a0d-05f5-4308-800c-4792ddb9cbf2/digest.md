@@ -16875,3 +16875,169 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-995", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+50d1e6f7 N2.v — LE MULTILINGUE 34,3 M DISTILLÉ : 5,58 → 4,79, LA DISTILLATION PAIE AVEC LA CAPACITÉ
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Session S : mesure de l'analyseur contre les structures écrites à la main
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/n2w && cat > work/n2w/analyse.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"analyse.py — l'analyseur contre les structures écrites à la main (les 7 phrases du banc).\"\"\"\nimport json, sys\nsys.path.insert(0, 'tools/structu … [1478 caractères tronqués]`
+
+  ```
+p003 · types OK · spans non · Jaccard 0.14
+   réf ['GN', 'GV', 'GN', 'GP']
+   gén ['GN', 'GV', 'GN', 'GP']
+p004 · types OK · spans non · Jaccard 0.33
+   réf ['GV', 'GP']
+   gén ['GV', 'GP']
+p005 · types OK · spans non · Jaccard 0.20
+   réf ['GV', 'GP', 'GP']
+   gén ['GV', 'GP', 'GP']
+p006 · types non · spans non · Jaccard 0.25
+   réf ['GV', 'SUB', 'GP']
+   gén ['GV', 'REL']
+p007 · types OK · spans non · Jaccard 0.20
+   réf ['GN', 'GV', 'GP']
+   gén ['GN', 'GV', 'GP']
+{"phrases": 7, "types_ok": 6, "spans_ok": 0, "jaccard_moyen": 0.21}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, sys\nsys.path.insert(0, 'tools/structures')\nimport generateur\nd = json.load(open('tools/structures/donnees/phrases.json'))\ntot_ref = tot_cov = 0\nfor p in d['phrases']:\n    ref = p['candidats'][0]\n … [804 caractères tronqués]`
+
+  ```
+p001 · couverture 94 % · réf 4 seg · gén 4 seg
+p002 · couverture 94 % · réf 3 seg · gén 3 seg
+p003 · couverture 91 % · réf 4 seg · gén 4 seg
+p004 · couverture 97 % · réf 2 seg · gén 2 seg
+p005 · couverture 94 % · réf 3 seg · gén 3 seg
+p006 · couverture 30 % · réf 3 seg · gén 2 seg
+p007 · couverture 93 % · réf 3 seg · gén 3 seg
+couverture globale 85.2 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('generateur.py'); s = p.read_text()\ns = s.replace('''                if utiles[j].cls == \"AUX\" and vu_verbe:\n                    break''',\n'''                if … [1249 caractères tronqués]`
+
+  ```
+ok
+
+OK
+p001 · 94 % · réf 4 · gén 4
+p002 · 94 % · réf 3 · gén 3
+p003 · 91 % · réf 4 · gén 4
+p004 · 97 % · réf 2 · gén 2
+p005 · 94 % · réf 3 · gén 3
+p006 · 42 % · réf 3 · gén 3
+p007 · 93 % · réf 3 · gén 3
+global 86.9 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys; sys.path.insert(0, 'tools/structures')\nimport generateur, json\np = 'Elle a dit qu\\'elle viendrait hier.'\nprint(json.dumps(generateur.analyser(p)[0]['segments'], ensure_ascii=False, indent=0))\"", "descr … [39 caractères tronqués]`
+
+  ```
+[
+{
+"debut": 0,
+"fin": 10,
+"texte": "Elle a dit",
+"type": "GV",
+"role": "predicat",
+"niveau": 0
+},
+{
+"debut": 11,
+"fin": 28,
+"texte": "qu'elle viendrait",
+"type": "REL",
+"role": "qualite",
+"niveau": 1
+},
+{
+"debut": 29,
+"fin": 33,
+"texte": "hier",
+"type": "GP",
+"role": "temps",
+"niveau": 1
+}
+]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('generateur.py'); s = p.read_text()\ns = s.replace('''            if _norm(t.texte) in (\"que\", \"qu\") and precedent == \"GV\":''',\n'''            if _norm(t.text … [1225 caractères tronqués]`
+
+  ```
+ok
+
+OK
+p001 · 94 % · types OK
+p002 · 94 % · types OK
+p003 · 91 % · types OK
+p004 · 97 % · types OK
+p005 · 94 % · types OK
+p006 · 94 % · types OK
+p007 · 93 % · types OK
+global 93.9 % · types 7/7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git add -A && git -c user.name=\"Stéphane\" -c user.email=\"stephane@local\" commit -q -m \"ANALYSEUR — L'ADVERBE DE TEMPS ET LE « QU'ELLE » : 7/7 SÉQUENCES, 94 % DE COUVERTURE\n\nDeux corrections mesurées contre les … [755 caractères tronqués]`
+
+  ```
+c7232b3 ANALYSEUR — L'ADVERBE DE TEMPS ET LE « QU'ELLE » : 7/7 SÉQUENCES, 94 % DE COUVERTURE
+1cf64d2 EXPORT — LA BANQUE VALIDÉE DEVIENT UN CORPUS JSONL (SPANS VÉRIFIÉS)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git -C tools/structures log --oneline -4; git -C tools/structures status --short | head -3; grep -c \"split(\\\"'\\\")\\[0\\]\" tools/structures/generateur.py; PYTHONPATH=. python3 -m unittest discover -s tools/structures/tests 2>&1  … [75 caractères tronqués]`
+
+  ```
+1cf64d2 EXPORT — LA BANQUE VALIDÉE DEVIENT UN CORPUS JSONL (SPANS VÉRIFIÉS)
+a407095 GÉNÉRATEUR — UNE PHRASE BRUTE → DES STRUCTURES CANDIDATES (V0 HEURISTIQUE)
+ccb1006 v0 — le banc de structures : phrases, candidats, validation, LLM, banque
+1
+
+FAILED (errors=3)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/drave-structures && git log --oneline -3; echo \"=== clone ===\"; git -C /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures log --oneline -3; git -C /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures status --short | … [210 caractères tronqués]`
+
+  ```
+733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+7366191 PRAGMATIQUE — LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE
+a407095 GÉNÉRATEUR — UNE PHRASE BRUTE → DES STRUCTURES CANDIDATES (V0 HEURISTIQUE)
+=== clone ===
+1cf64d2 EXPORT — LA BANQUE VALIDÉE DEVIENT UN CORPUS JSONL (SPANS VÉRIFIÉS)
+a407095 GÉNÉRATEUR — UNE PHRASE BRUTE → DES STRUCTURES CANDIDATES (V0 HEURISTIQUE)
+ccb1006 v0 — le banc de structures : phrases, candidats, validation, LLM, banque
+=== divergence ===
+* 733b1a4 CONTEXTE — DES NIVEAUX GRADUÉS, ET LA MESURE DU NIVEAU MINIMAL POUR TRANCHER
+* 7366191 PRAGMATIQUE — LE CONTEXTE TRANCHE, LE DOUBLE SENS SE CONSERVE
+| * 1cf64d2 EXPORT — LA BANQUE VALIDÉE DEVIENT UN CORPUS JSONL (SPANS VÉRIFIÉS)
+|/  
+* a407095 GÉNÉRATEUR — UNE PHRASE BRUTE → DES STRUCTURES CANDIDATES (V0 HEURISTIQUE)
+* ccb1006 v0 — le banc de structures : phrases, candidats, validation, LLM, banque
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git reflog | head -12; echo \"=== fichiers 1cf64d2 ===\"; git show --stat --oneline 1cf64d2 | head -10; echo \"=== mes commits ===\"; git cat-file -t a7d41a3 2>/dev/null && git show --stat --oneline a7d41a3 | head -6 … [65 caractères tronqués]`
+
+  ```
+1cf64d2 HEAD@{0}: checkout: moving from c7232b38aff41e0e2d98eb2892801f71b8502611 to 1cf64d2b4ae8726d5dd610c1b2c097e166e649bf
+c7232b3 HEAD@{1}: commit: ANALYSEUR — L'ADVERBE DE TEMPS ET LE « QU'ELLE » : 7/7 SÉQUENCES, 94 % DE COUVERTURE
+a7d41a3 HEAD@{2}: checkout: moving from 733b1a47d0923433ea79aa0d8e4383e9fe933825 to a7d41a3
+733b1a4 HEAD@{3}: checkout: moving from a7d41a377994801f318e8f78940a067f267074ab to 733b1a47d0923433ea79aa0d8e4383e9fe933825
+a7d41a3 HEAD@{4}: commit: ANALYSEUR — SUBORDONNÉES, COORDINATION, ET EXPORT VERS LE CORPUS
+733b1a4 HEAD@{5}: checkout: moving from 73661919fb53b4dd058949149405eff30610e959 to 733b1a4
+7366191 HEAD@{6}: checkout: moving from master to 7366191
+1cf64d2 HEAD@{7}: checkout: moving from 1cf64d2b4ae8726d5dd610c1b2c097e166e649bf to master
+1cf64d2 HEAD@{8}: commit: EXPORT — LA BANQUE VALIDÉE DEVIENT UN CORPUS JSONL (SPANS VÉRIFIÉS)
+a407095 HEAD@{9}: checkout: moving from master to a407095
+ccb1006 HEAD@{10}: clone: from /home/stephane/Data13TB/stephane/GitHub/drave-structures
+=== fichiers 1cf64d2 ===
+1cf64d2 EXPORT — LA BANQUE VALIDÉE DEVIENT UN CORPUS JSONL (SPANS VÉRIFIÉS)
+ README.md            |  51 ++++++++++++++----
+ exporter_corpus.py   | 144
+… [524 caractères tronqués]
+  ```
+
