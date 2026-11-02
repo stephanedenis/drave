@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (37)
+## Commits du jour (38)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -45,6 +45,7 @@
 | 04:42 | `09244748` | B13 — LES 20 PHRASES COMPLEXES : POS 0,6829, SYNTAGME 0,2963, GOLD 220 ; 91/91 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 04:50 | `67b33af0` | B13 — LES 50 PHRASES COMPLEXES : POS 0,7013, SYNTAGME 0,3060, GOLD 250 ; 92/92 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
 | 04:58 | `c5ab1fa3` | B13 — LES 100 PHRASES COMPLEXES : POS 0,6984, SYNTAGME 0,2677, GOLD 300 ; 93/93 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+25) |
+| 05:10 | `15f2c8f6` | DONNÉES — L'OCR DES 20 LIVRES EST CLOS : 7 381 PAGES, 15,36 M CARACTÈRES, 8 KO 0 (VAL 115, ÉVAL 0/40) | `en-cours.md`, `plan-travail.md`, `roadmap.md` (+22) |
 
 ## Chiffres du jour
 
@@ -55,7 +56,7 @@
 ## Sessions actives ce jour
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 36.9 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 36.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 36.6 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 36.6 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés

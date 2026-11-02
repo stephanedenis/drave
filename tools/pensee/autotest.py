@@ -1421,6 +1421,22 @@ def t90_complexes100() -> tuple[bool, str]:
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
 
+def t91_discours() -> tuple[bool, str]:
+    """Le discours : acte 0,9, négation 1,0, modalité 0,9, POS 0,7609 sur r301-r320."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.gold_reel import construire
+    from ..tests.linguistique.evaluer_gold import evaluer_bloc
+    g = construire()
+    h = bl.Heuristique()
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 320]
+    r = evaluer_bloc("h", h, ps)
+    pr = r["pragmatique"]
+    return (abs(pr["acte"] - 0.9) < 1e-9 and abs(pr["negation"] - 1.0) < 1e-9
+            and abs(pr["modalite"] - 0.9) < 1e-9), (
+        f"r301-320 : acte {pr['acte']}, neg {pr['negation']}, "
+        f"mod {pr['modalite']}, POS {round(r['pos']['exactitude'], 4)}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1510,7 +1526,8 @@ def main() -> int:
               ("T87 phrases complexes", t87_complexes()),
               ("T88 20 complexes", t88_complexes20()),
               ("T89 50 complexes", t89_complexes50()),
-              ("T90 100 complexes", t90_complexes100())]
+              ("T90 100 complexes", t90_complexes100()),
+              ("T91 discours", t91_discours())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

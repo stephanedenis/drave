@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 36.5 h |
+| Durée | 36.6 h |
 | Tours | 108 |
-| Messages | 1379 |
-| Appels d'outils | 1210 |
+| Messages | 1381 |
+| Appels d'outils | 1212 |
 | Fichiers touchés | 25 |
-| Commandes | 984 |
+| Commandes | 985 |
 | Sous-agents | 2 |
-| Commits | 139 |
+| Commits | 140 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -5734,7 +5734,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **discours** 
 
 ### Tour 108 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Ajouter 20 phrases de discours et mesurer la pragmatique
 - bash — Localiser la ligne r300
@@ -5750,6 +5750,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **discours** 
 - bash — Lire le verdict et les métriques par source
 - bash — Ajuster le seuil tête et relancer la porte
 - bash — Passer toutes les portes
+- … et 2 autres
 
 ## 3. Travail accompli
 
@@ -5830,7 +5831,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **discours** 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 944 autres
+- … et 945 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6117,4 +6118,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **discours** 
 - B13 — LES 50 PHRASES COMPLEXES : POS 0,7013, SYNTAGME 0,3060, GOLD 250 ; 92/92" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "50 PHRASES COMPLEXES"; t
 - B13 — LES 50 PHRASES COMPLEXES : POS 0,7013, SYNTAGME 0,3060, GOLD 250 ; 92/92" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "50 PHRASES COMPLEXES"; t
 - B13 — LES 100 PHRASES COMPLEXES : POS 0,6984, SYNTAGME 0,2677, GOLD 300 ; 93/93" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "100 PHRASES COMPLEXES";
+- B13 — LE DISCOURS : ACTE 0,9, NÉGATION 1,0, MODALITÉ 0,9, GOLD 320 ; 94/94" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LE DISCOURS"; then echo "COM
 

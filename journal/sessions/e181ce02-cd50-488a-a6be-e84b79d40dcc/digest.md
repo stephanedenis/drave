@@ -25868,3 +25868,20 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [323 caractères tronqués]`
+
+  ```
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+python3 tools/revue_documentation.py         EXIT=1
+  revue de documentation · 499 fiche(s) · 587 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 586 JSON, le disque en a 587
+python3 tools/taille_documents.py            EXIT=0
+timeout 1800 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichi … [1086 caractères tronqués]`

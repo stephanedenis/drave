@@ -18125,3 +18125,14 @@ Traceback (most recent call last):
   ```
 
 - **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/Z-g*.pt 2>/dev/null; export PYTHONPATH=.; for g in 1 2; do CUDA_VISIBLE_DEVICES=$((g-1)) timeout 900 ~/gpu-env/bin/python work/n2j/evalue_canal.py work/n2j/Z-g$g.pt 2>&1 | grep -v Loading | tail  … [69 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1077]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1074 (bash: sleep 1320; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/Z-g*.pt 2>/dev/null; tail -1 work/n2j/Z-g1.log 2>/dev/null; tail -1 work/n2j/Z-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1077", "timeout_ms": 900000, "wait": true}`

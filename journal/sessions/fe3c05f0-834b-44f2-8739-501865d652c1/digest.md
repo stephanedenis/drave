@@ -33468,3 +33468,33 @@ journal/2026-11-02/README.md:119:- **Le corpus OCR** : 20 livres, 7 381 pages, 1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; ok=0; for i in 1 2 3 4 5; do git read-tree HEAD; git add reports/ocr-pdf.json reports/ocr-pdf-contamination.json reports/rapport-ocr-pdf.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/p … [475 caractères tronqués]`
+
+  ```
+[master 15f2c8f6] DONNÉES — L'OCR DES 20 LIVRES EST CLOS : 7 381 PAGES, 15,36 M CARACTÈRES, 8 KO 0 (VAL 115, ÉVAL 0/40)
+ 25 files changed, 771 insertions(+), 87 deletions(-)
+ create mode 100644 reports/ocr-pdf-contamination.json
+ create mode 100644 reports/ocr-pdf.json
+ok=1
+15f2c8f6 DONNÉES — L'OCR DES 20 LIVRES EST CLOS : 7 381 PAGES, 15,36 M CARACTÈRES, 8 KO 0 (VAL 115, ÉVAL 0/40)
+c5ab1fa3 B13 — LES 100 PHRASES COMPLEXES : POS 0,6984, SYNTAGME 0,2677, GOLD 300 ; 93/93
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 359 : OCR CLOS ET COMMITTÉ (`15f2c8f6`) — 20 livres, 7 381 p, 15,36 M car. ; je vérifie les portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 tools/revue_documentation.py 2>&1 | tail -3; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -2", "description" … [123 caractères tronqués]`
+
+  ```
+05:12
+  revue de documentation · 499 fiche(s) · 587 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  état · dernier fait 15f2c8f6 · dernier état 15f2c8f6
+  ✅ aucun fait commité après le dernier état
+  en-cours · 1621 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/compare_genres.py --help 2>&1 | head -12", "description": "Check genres comparison CLI", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`

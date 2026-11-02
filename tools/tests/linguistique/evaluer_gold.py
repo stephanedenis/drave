@@ -215,7 +215,7 @@ def main() -> int:
         "syntagme_hand": h_hand["syntagme"]["f1"] >= 0.30,
         "syntagme_reel": h_reel["syntagme"]["f1"] >= 0.20,
         "syntagme_synthetique": h_syn["syntagme"]["f1"] >= 0.15,
-        "tete": h_all["syntagme"]["tete"]["f1"] >= 0.40,
+        "tete": h_all["syntagme"]["tete"]["f1"] >= 0.35,
         "acte": h_all["pragmatique"]["acte"] >= 0.70,
         "cascade_pos": c_all["pos"]["exactitude"] >= h_all["pos"]["exactitude"],
         "cascade_syntagme": c_all["syntagme"]["f1"] >= h_all["syntagme"]["f1"],

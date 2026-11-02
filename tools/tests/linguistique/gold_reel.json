@@ -20551,6 +20551,1291 @@
     "acte": "assertion"
    },
    "source": "reel"
+  },
+  {
+   "id": "r301",
+   "langue": "fr",
+   "texte": "Il pleut, donc je reste.",
+   "mots": [
+    {
+     "texte": "Il",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "pleut",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "donc",
+     "pos": "CONJ",
+     "debut": 10,
+     "fin": 14
+    },
+    {
+     "texte": "je",
+     "pos": "PRON",
+     "debut": 15,
+     "fin": 17
+    },
+    {
+     "texte": "reste",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Il",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "pleut",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "GN",
+     "texte": "je",
+     "role": "agent",
+     "debut": 15,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "reste",
+     "role": "prédicat",
+     "debut": 18,
+     "fin": 23
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r302",
+   "langue": "fr",
+   "texte": "Elle est venue, mais elle repart.",
+   "mots": [
+    {
+     "texte": "Elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 5,
+     "fin": 8
+    },
+    {
+     "texte": "venue",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "texte": "mais",
+     "pos": "CONJ",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 21,
+     "fin": 25
+    },
+    {
+     "texte": "repart",
+     "pos": "VERB",
+     "debut": 26,
+     "fin": 32
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Elle",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "est venue",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 14
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 21,
+     "fin": 25
+    },
+    {
+     "type": "GV",
+     "texte": "repart",
+     "role": "prédicat",
+     "debut": 26,
+     "fin": 32
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r303",
+   "langue": "fr",
+   "texte": "Je pars car il est tard.",
+   "mots": [
+    {
+     "texte": "Je",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "pars",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "car",
+     "pos": "CONJ",
+     "debut": 8,
+     "fin": 11
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 12,
+     "fin": 14
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 15,
+     "fin": 18
+    },
+    {
+     "texte": "tard",
+     "pos": "ADV",
+     "debut": 19,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Je",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "pars",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "type": "SUB",
+     "texte": "car il est tard",
+     "role": "cause",
+     "debut": 8,
+     "fin": 23,
+     "cibles": [
+      "pars"
+     ],
+     "cible": "pars"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r304",
+   "langue": "fr",
+   "texte": "Viens-tu demain ?",
+   "mots": [
+    {
+     "texte": "Viens",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "tu",
+     "pos": "PRON",
+     "debut": 6,
+     "fin": 8
+    },
+    {
+     "texte": "demain",
+     "pos": "ADV",
+     "debut": 9,
+     "fin": 15
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Viens",
+     "role": "prédicat",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GN",
+     "texte": "tu",
+     "role": "agent",
+     "debut": 6,
+     "fin": 8
+    },
+    {
+     "type": "ADV",
+     "texte": "demain",
+     "role": "temps",
+     "debut": 9,
+     "fin": 15
+    }
+   ],
+   "pragma": {
+    "acte": "question"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r305",
+   "langue": "fr",
+   "texte": "Ferme la porte !",
+   "mots": [
+    {
+     "texte": "Ferme",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 6,
+     "fin": 8
+    },
+    {
+     "texte": "porte",
+     "pos": "NOUN",
+     "debut": 9,
+     "fin": 14
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Ferme",
+     "role": "prédicat",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GN",
+     "texte": "la porte",
+     "role": "patient",
+     "debut": 6,
+     "fin": 14
+    }
+   ],
+   "pragma": {
+    "acte": "ordre"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r306",
+   "langue": "fr",
+   "texte": "Il ne vient pas.",
+   "mots": [
+    {
+     "texte": "Il",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "ne",
+     "pos": "ADV",
+     "debut": 3,
+     "fin": 5
+    },
+    {
+     "texte": "vient",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "texte": "pas",
+     "pos": "ADV",
+     "debut": 12,
+     "fin": 15
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Il",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "ne vient pas",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 15
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "negation": true
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r307",
+   "langue": "fr",
+   "texte": "Le chat dort ; il rêve.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chat",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "dort",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 15,
+     "fin": 17
+    },
+    {
+     "texte": "rêve",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chat",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "dort",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 15,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "rêve",
+     "role": "prédicat",
+     "debut": 18,
+     "fin": 22
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r308",
+   "langue": "fr",
+   "texte": "Marie lit. Elle aime les livres.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "lit",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "texte": "Elle",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 15
+    },
+    {
+     "texte": "aime",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "livres",
+     "pos": "NOUN",
+     "debut": 25,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "lit",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "Elle",
+     "role": "agent",
+     "debut": 11,
+     "fin": 15
+    },
+    {
+     "type": "GV",
+     "texte": "aime",
+     "role": "prédicat",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "type": "GN",
+     "texte": "les livres",
+     "role": "patient",
+     "debut": 21,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r309",
+   "langue": "fr",
+   "texte": "Peut-être qu'il viendra.",
+   "mots": [
+    {
+     "texte": "Peut-être",
+     "pos": "ADV",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "texte": "qu'",
+     "pos": "CONJ",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 15
+    },
+    {
+     "texte": "viendra",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "ADV",
+     "texte": "Peut-être",
+     "role": "modalité",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "SUB",
+     "texte": "qu'il viendra",
+     "role": "complément",
+     "debut": 10,
+     "fin": 23,
+     "cibles": [
+      "viendra"
+     ],
+     "cible": "viendra"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "modalite": true
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r310",
+   "langue": "fr",
+   "texte": "Je dois partir maintenant.",
+   "mots": [
+    {
+     "texte": "Je",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "dois",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "partir",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 14
+    },
+    {
+     "texte": "maintenant",
+     "pos": "ADV",
+     "debut": 15,
+     "fin": 25
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Je",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "dois partir",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 14
+    },
+    {
+     "type": "ADV",
+     "texte": "maintenant",
+     "role": "temps",
+     "debut": 15,
+     "fin": 25
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "modalite": true
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r311",
+   "langue": "en",
+   "texte": "It rains, so I stay.",
+   "mots": [
+    {
+     "texte": "It",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "rains",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "so",
+     "pos": "CONJ",
+     "debut": 10,
+     "fin": 12
+    },
+    {
+     "texte": "I",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 14
+    },
+    {
+     "texte": "stay",
+     "pos": "VERB",
+     "debut": 15,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "It",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "rains",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "GN",
+     "texte": "I",
+     "role": "agent",
+     "debut": 13,
+     "fin": 14
+    },
+    {
+     "type": "GV",
+     "texte": "stay",
+     "role": "prédicat",
+     "debut": 15,
+     "fin": 19
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r312",
+   "langue": "en",
+   "texte": "She came, but she leaves again.",
+   "mots": [
+    {
+     "texte": "She",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "came",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "but",
+     "pos": "CONJ",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "texte": "she",
+     "pos": "PRON",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "leaves",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 24
+    },
+    {
+     "texte": "again",
+     "pos": "ADV",
+     "debut": 25,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "She",
+     "role": "agent",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "came",
+     "role": "prédicat",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "type": "GN",
+     "texte": "she",
+     "role": "agent",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "leaves again",
+     "role": "prédicat",
+     "debut": 18,
+     "fin": 30
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r313",
+   "langue": "en",
+   "texte": "I leave because it is late.",
+   "mots": [
+    {
+     "texte": "I",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 1
+    },
+    {
+     "texte": "leave",
+     "pos": "VERB",
+     "debut": 2,
+     "fin": 7
+    },
+    {
+     "texte": "because",
+     "pos": "CONJ",
+     "debut": 8,
+     "fin": 15
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "texte": "late",
+     "pos": "ADV",
+     "debut": 22,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "I",
+     "role": "agent",
+     "debut": 0,
+     "fin": 1
+    },
+    {
+     "type": "GV",
+     "texte": "leave",
+     "role": "prédicat",
+     "debut": 2,
+     "fin": 7
+    },
+    {
+     "type": "SUB",
+     "texte": "because it is late",
+     "role": "cause",
+     "debut": 8,
+     "fin": 26,
+     "cibles": [
+      "leave"
+     ],
+     "cible": "leave"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r314",
+   "langue": "en",
+   "texte": "Do you come tomorrow?",
+   "mots": [
+    {
+     "texte": "Do",
+     "pos": "AUX",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "you",
+     "pos": "PRON",
+     "debut": 3,
+     "fin": 6
+    },
+    {
+     "texte": "come",
+     "pos": "VERB",
+     "debut": 7,
+     "fin": 11
+    },
+    {
+     "texte": "tomorrow",
+     "pos": "ADV",
+     "debut": 12,
+     "fin": 20
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "you",
+     "role": "agent",
+     "debut": 3,
+     "fin": 6
+    },
+    {
+     "type": "GV",
+     "texte": "come",
+     "role": "prédicat",
+     "debut": 7,
+     "fin": 11
+    },
+    {
+     "type": "ADV",
+     "texte": "tomorrow",
+     "role": "temps",
+     "debut": 12,
+     "fin": 20
+    }
+   ],
+   "pragma": {
+    "acte": "question"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r315",
+   "langue": "en",
+   "texte": "Close the door!",
+   "mots": [
+    {
+     "texte": "Close",
+     "pos": "VERB",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "texte": "door",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 14
+    }
+   ],
+   "segments": [
+    {
+     "type": "GV",
+     "texte": "Close",
+     "role": "prédicat",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GN",
+     "texte": "the door",
+     "role": "patient",
+     "debut": 6,
+     "fin": 14
+    }
+   ],
+   "pragma": {
+    "acte": "ordre"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r316",
+   "langue": "en",
+   "texte": "He does not come.",
+   "mots": [
+    {
+     "texte": "He",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "does",
+     "pos": "AUX",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "not",
+     "pos": "ADV",
+     "debut": 8,
+     "fin": 11
+    },
+    {
+     "texte": "come",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 16
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "He",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "does not come",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 16
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "negation": true
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r317",
+   "langue": "en",
+   "texte": "The cat sleeps; it dreams.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "cat",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "sleeps",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 14
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "dreams",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 25
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The cat",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "sleeps",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 14
+    },
+    {
+     "type": "GN",
+     "texte": "it",
+     "role": "agent",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "type": "GV",
+     "texte": "dreams",
+     "role": "prédicat",
+     "debut": 19,
+     "fin": 25
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r318",
+   "langue": "en",
+   "texte": "Marie reads. She loves books.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "reads",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "texte": "She",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "texte": "loves",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 22
+    },
+    {
+     "texte": "books",
+     "pos": "NOUN",
+     "debut": 23,
+     "fin": 28
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "reads",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "type": "GN",
+     "texte": "She",
+     "role": "agent",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "loves",
+     "role": "prédicat",
+     "debut": 17,
+     "fin": 22
+    },
+    {
+     "type": "GN",
+     "texte": "books",
+     "role": "patient",
+     "debut": 23,
+     "fin": 28
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r319",
+   "langue": "en",
+   "texte": "Maybe he will come.",
+   "mots": [
+    {
+     "texte": "Maybe",
+     "pos": "ADV",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "he",
+     "pos": "PRON",
+     "debut": 6,
+     "fin": 8
+    },
+    {
+     "texte": "will",
+     "pos": "AUX",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "texte": "come",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 18
+    }
+   ],
+   "segments": [
+    {
+     "type": "ADV",
+     "texte": "Maybe",
+     "role": "modalité",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GN",
+     "texte": "he",
+     "role": "agent",
+     "debut": 6,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "will come",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 18
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "modalite": true
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r320",
+   "langue": "en",
+   "texte": "I must leave now.",
+   "mots": [
+    {
+     "texte": "I",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 1
+    },
+    {
+     "texte": "must",
+     "pos": "AUX",
+     "debut": 2,
+     "fin": 6
+    },
+    {
+     "texte": "leave",
+     "pos": "VERB",
+     "debut": 7,
+     "fin": 12
+    },
+    {
+     "texte": "now",
+     "pos": "ADV",
+     "debut": 13,
+     "fin": 16
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "I",
+     "role": "agent",
+     "debut": 0,
+     "fin": 1
+    },
+    {
+     "type": "GV",
+     "texte": "must leave",
+     "role": "prédicat",
+     "debut": 2,
+     "fin": 12
+    },
+    {
+     "type": "ADV",
+     "texte": "now",
+     "role": "temps",
+     "debut": 13,
+     "fin": 16
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "modalite": true
+   },
+   "source": "reel"
   }
  ]
 }

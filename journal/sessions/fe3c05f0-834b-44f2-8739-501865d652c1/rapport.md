@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 36.6 h |
 | Tours | 371 |
-| Messages | 2205 |
-| Appels d'outils | 1457 |
+| Messages | 2207 |
+| Appels d'outils | 1459 |
 | Fichiers touchés | 26 |
-| Commandes | 1293 |
+| Commandes | 1295 |
 | Sous-agents | 0 |
 | Commits | 80 |
 | Compactages de contexte | 4 |
@@ -8697,7 +8697,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 371 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Wait 5 min then check manifest
 - bash — Read OCR manifest keys
@@ -8706,6 +8706,12 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Fix fiche decimal and review
 - bash — Update state, roadmap, journal, plan to final OCR
 - bash — Commit final OCR corpus 20 books
+- bash — Verify gates after final OCR commit
+- bash — Check genres comparison CLI
+
+**Synthèse produite :**
+
+⏵ Round 359 : OCR CLOS ET COMMITTÉ (`15f2c8f6`) — 20 livres, 7 381 p, 15,36 M car. ; je vérifie les portes
 
 ## 3. Travail accompli
 
@@ -8782,7 +8788,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1253 autres
+- … et 1255 autres
 
 ## 4. Mesures et résultats marquants
 

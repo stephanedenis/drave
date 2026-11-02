@@ -1,0 +1,26 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "94/94",
+ "r001_300": {
+  "phrases": 300,
+  "acte": 1.0,
+  "negation": 1.0,
+  "modalite": 0.9867,
+  "double_sens": 0.9767,
+  "pos": 0.7556
+ },
+ "r301_320": {
+  "phrases": 20,
+  "acte": 0.9,
+  "negation": 1.0,
+  "modalite": 0.9,
+  "double_sens": 0.95,
+  "pos": 0.7609
+ },
+ "limites": [
+  "20 phrases",
+  "coréférence non mesurée",
+  "heuristique seule"
+ ]
+}
