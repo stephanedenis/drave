@@ -12736,3 +12736,50 @@ timeout 120 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/tests/linguistique/evaluer_gold.py reports/pensee-gold-linguistique.json reports/rapport-pensee-gold-linguistique.md reports/README.md docs/i … [466 caractères tronqués]`
+
+  ```
+docs/pilotage/plan-travail.md                      |    2 +-
+ docs/pilotage/roadmap.md                           |    2 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |    4 +-
+ reports/README.md                                  |    3 +-
+ reports/pensee-gold-linguistique.json              | 1018 +++++++--
+ reports/rapport-pensee-gold-linguistique.md        |    6 +-
+ tools/tests/linguistique/evaluer_gold.py           |   16 +-
+ tools/tests/linguistique/gold_reel.json            | 2411 ++++++++++++++++++++
+ tools/tests/linguistique/gold_reel.py              |  166 ++
+ 12 files changed, 3492 insertions(+), 161 deletions(-)
+[still running after 60000ms; moved to background job bash-452]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-452", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at c989dd86817817c38a9f3c3174f79f5d0b917364 but expected 0e5c89be2f0131276429e29b86fac0e41b03c9e1
+EXIT=128
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; echo '=== HEAD has ? ==='; git show --stat HEAD | grep -E \"gold_reel|pensee-gold|evaluer|en-cours\" | head -6; echo '=== status ==='; git status --short | grep -E \"gold_reel|pensee-gold|evaluer|en-cours … [246 caractères tronqués]`
+
+  ```
+c989dd86 DONNÉES — LE CATALOGUE DU TEXTE INTÉGRAL (9 LANGUES, 14,51 M ARTICLES, 59,0 GO) DEPUIS LES MANIFESTES
+=== HEAD has ? ===
+ docs/pilotage/en-cours.md                          | 17 ++--
+=== status ===
+ M docs/pilotage/en-cours.md
+ M reports/pensee-gold-linguistique.json
+ M reports/rapport-pensee-gold-linguistique.md
+ M tools/tests/linguistique/evaluer_gold.py
+?? tools/tests/linguistique/gold_reel.json
+?? tools/tests/linguistique/gold_reel.py
+=== cached ===
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md     |  7 ++++---
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/digest.md      | 16 ++++++++++++++++
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md     | 16 +++++++++-------
+ 18 files changed, 72 insertions(+), 34 deletions(-)
+=== HEAD gold_reel ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/tests/linguistique/evaluer_gold.py reports/pensee-gold-linguistique.json reports/rapport-pensee-gold-linguistique.md docs/pilotage/en-cours.m … [262 caractères tronqués]`

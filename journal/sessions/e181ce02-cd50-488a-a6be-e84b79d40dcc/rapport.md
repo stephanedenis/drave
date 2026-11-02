@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 27.3 h |
 | Tours | 22 |
-| Messages | 549 |
-| Appels d'outils | 562 |
+| Messages | 552 |
+| Appels d'outils | 565 |
 | Fichiers touchés | 25 |
-| Commandes | 452 |
+| Commandes | 454 |
 | Sous-agents | 2 |
-| Commits | 34 |
+| Commits | 35 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1205,7 +1205,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 
 ### Tour 22 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Écrire 40 phrases réelles supplémentaires
 - bash — Corriger la phrase r030 et générer le gold réel
@@ -1215,6 +1215,9 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Corriger la ligne des compteurs et relancer la revue
 - bash — Aligner les compteurs et passer les portes
 - bash — Committer le gold 220 avec 40 phrases réelles
+- job_output
+- bash — Voir si la course a emporté le gold 220
+- bash — Recommitter le gold 220 sur le nouveau HEAD
 
 ## 3. Travail accompli
 
@@ -1295,7 +1298,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 412 autres
+- … et 414 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1472,5 +1475,6 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12)" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12)" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12)" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
+- L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 

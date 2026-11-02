@@ -14587,3 +14587,30 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-851", "timeout_ms": 400000, "wait": true}`
+
+  ```
+{"fichier": "base-en.pt", "params": 11816136, "val": 4.4234, "test": 4.6954, "litterature": 21.172, "litterature_propre": 21.1066, "anglais": 5.2967, "wikitext2": 5.5607, "permute": 148.9731, "decomposition": {"complete": 4.5942, "apres_2_blocs": 5.9484, "apres_4_blocs": 5.0688, "apres_6_blocs": 4.6336, "sans_pensee": 60780470.3052}, "longueurs": {"129": 4.4159, "192": 4.4853, "256": 4.7235, "384": 5.5464, "512": 6.5968}}
+{"fichier": "base-multi.pt", "params": 11816136, "val": 6.1152, "test": 6.5253, "litterature": 8.7248, "litterature_propre": 8.81, "anglais": 7.0461, "wikitext2": 7.3391, "permute": 131.3638}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2k/evalue_un.py <<'PY'\nimport json, math, pathlib, sys\nimport torch, torch.nn.functional as F\nsys.path.insert(0, '.')\nfrom tools.eval_n2_propre import charge, charger_bytes, ppl_protocole\npt, fichier = sys.argv[1], s … [714 caractères tronqués]`
+
+  ```
+{"fichier": "base-en.pt", "val": 4.6739}
+{"fichier": "base-multi.pt", "val": 6.3024}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-anglais.md <<'EOF'\n# N2.m — L'anglais seul : 4,42 sur 204 Mo, et ce que le multilingue coûte (1,6 PPL)\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-01 · **Verdict** : la base **anglaise\n> monolingue* … [4548 caractères tronqués]`
+
+  ```
+fiche écrite
+en-cours ok
+roadmap ok
+  T0 max : 4002 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 396 fichiers, le disque en a 397
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.m** (anglais seul) : **4,42**\\n  (10 langues : 6,12) ;\", \"**N2.m** (anglais) : **4,42** (10 langues 6,12) … [1251 caractères tronqués]`

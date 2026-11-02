@@ -16933,3 +16933,19 @@ catalogue --texte
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-corpus-wiki-texte.md'); s=p.read_text()\ns=s.replace(\"Même outil, même chaîne. Les neuf premiers corpus (fr, ar, pt, zh, ja, it, ru, es, de) sont mesurés ; le dernier ( … [3017 caractères tronqués]`
+
+  ```
+T0 max : 4004 mots (budget 4 000)
+  revue de documentation · 396 fiche(s) · 498 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+refus/course (essai 1)
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 0e5c89be2f0131276429e29b86fac0e41b03c9e1 but expected 15c69b983943322a6f157ebefb23d393688ab2d9
+[master c989dd86] DONNÉES — LE CATALOGUE DU TEXTE INTÉGRAL (9 LANGUES, 14,51 M ARTICLES, 59,0 GO) DEPUIS LES MANIFESTES
+ 23 files changed, 250 insertions(+), 58 deletions(-)
+ create mode 100644 journal/2026-11-01/apprentissage.md
+commit OK (essai 2)
+c989dd86 DONNÉES — LE CATALOGUE DU TEXTE INTÉGRAL (9 LANGUES, 14,51 M ARTICLES, 59,0 GO) DEPUIS LES MANIFESTES
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"fr/ar/pt/zh/ja/it/ru/es/de (**12,12 M** ; **8 Ko 0**) ; en, le PDF local en cours\",\n            \"fr/ar/pt/zh/ja/it/ru/e … [1371 caractères tronqués]`

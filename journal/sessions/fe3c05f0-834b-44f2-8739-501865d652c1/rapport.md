@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 27.3 h |
+| Durée | 27.4 h |
 | Tours | 17 |
-| Messages | 936 |
-| Appels d'outils | 926 |
+| Messages | 937 |
+| Appels d'outils | 927 |
 | Fichiers touchés | 18 |
-| Commandes | 852 |
+| Commandes | 853 |
 | Sous-agents | 0 |
-| Commits | 53 |
+| Commits | 54 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -860,7 +860,7 @@ L'**anglais** (8,0 M pages lues, 2,54 M articles, 12,0 G de texte) finit ; son c
 
 ### Tour 17 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Check English and PDF extraction progress
 - bash — Read catalogue tool structure
@@ -868,6 +868,7 @@ L'**anglais** (8,0 M pages lues, 2,54 M articles, 12,0 G de texte) finit ; son c
 - bash — Add full-text mode to corpus catalogue
 - bash — Check English and PDF manifest status
 - bash — Commit catalogue tool and state
+- bash — Fix budget and counters, check English and PDF
 
 ## 3. Travail accompli
 
@@ -936,7 +937,7 @@ L'**anglais** (8,0 M pages lues, 2,54 M articles, 12,0 G de texte) finit ; son c
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 812 autres
+- … et 813 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1137,4 +1138,5 @@ L'**anglais** (8,0 M pages lues, 2,54 M articles, 12,0 G de texte) finit ; son c
 - DONNÉES — HUIT CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES) : 11,65 M ARTICLES, 48,4 GO, 8 KO 0" 2>/tmp/commit.err; then echo "commit OK (essai $i)
 - DONNÉES — NEUF CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES, DE) : 14,51 M ARTICLES, 59,0 GO, 8 KO 0" 2>/tmp/commit.err; then echo "commit OK (essai
 - DONNÉES — LE CATALOGUE DU TEXTE INTÉGRAL (9 LANGUES, 14,51 M ARTICLES, 59,0 GO) DEPUIS LES MANIFESTES" 2>/tmp/commit.err; then echo "commit OK (essai $i)"; brea
+- ÉTAT — T0 À 3 996 ET COMPTEURS 396/498" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus/course"; tail -2 /tmp/commit.err; sleep 8; fi done git
 
