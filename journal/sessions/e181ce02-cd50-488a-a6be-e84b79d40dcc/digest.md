@@ -18846,3 +18846,111 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-692", "timeout_ms": 600000, "wait": true}`
+
+  ```
+27 files changed, 400 insertions(+), 56 deletions(-)
+ create mode 100644 reports/pensee-bruitee.json
+ create mode 100644 reports/rapport-pensee-bruitee.md
+COMMIT OK 1
+f3b70959 B13 — L'OBSERVATION BRUITÉE : 10 % D'ERREUR CASSE LA POLITIQUE (0/20) ; 48/48
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Observation bruitée : 10 % d'erreur casse la politique (0/20) ; 48/48
+
+Le round 49 du goal est livré : **10 % d'erreur** suffisent à casser la politique — une seule révélation ne pardonne pas. Commit **`f3b70959`**.
+
+## L'observation bruitée
+
+Même monde que T44 (porte sautant à 20 %, observation révélée par l'action), mais la révélation se trompe avec probabilité **0,1** : la croyance est mise à la **mauvaise** porte.
+
+| dispositif | buts | états-Q | pas |
+|---|---:|---:|---:|
+| **observatrice bruitée** | **0/20** | 398 | 200 |
+| observatrice (T44) | 20/20 | 448 | 8,3 |
+| complète (T39/T40) | 20/20 | 182 | 8 |
+
+**Ce que ça dit** :
+
+- **Le bruit casse la politique** : une seule révélation fausse envoie la politique vers la mauvaise porte ; elle ne réessaie pas.
+- **La croyance n'intègre pas le bruit** : la politique met la certitude à 1 sur une observation bruitée ; il faudrait **répéter** et **compter** (le Bayes).
+- **La table est plus petite** (398 états) : la politique a appris moins, pas mieux.
+- **La négative est explicite** : 0/20, 200 pas, 398 états-Q.
+
+## L'état
+
+- Fiche : [`rapport-pensee-bruitee.md`](../../reports/rapport-pensee-bruitee.md) ; JSON [`pensee-bruitee.json`](../../reports/pensee-bruitee.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T45 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **48/48 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **442 fiches / 538 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Deux observations** : observer deux fois, voter ; le bruit tombe à 1 % en majorité.
+2. **Croyance bayésienne** : mettre à jour la distribution avec la fiabilité de l'observation.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round fait **voter deux observations** — le bruit doit tomber.
+
+
+## Tour 63
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 50/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1806 caractères tronqués]`
+
+  ```
+f3b70959 B13 — L'OBSERVATION BRUITÉE : 10 % D'ERREUR CASSE LA POLITIQUE (0/20) ; 48/48
+ok
+2000 q 372 20 runs: 20 /20 pas moyen 8.0
+4000 q 410 20 runs: 20 /20 pas moyen 8.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T45 l'observation bruitée         0/20 buts : 10 % d'erreur casse la politique (négatif)\\n\",\n\"  T45 l'observation brui … [1364 caractères tronqués]`
+
+  ```
+ok
+  ✅ T44 action observer    observatrice : 20/20 buts, 448 états-Q, 8.3 pas
+  ✅ T45 observation bruitée observatrice bruitée : 0/20 buts (398 états-Q), 10 % d'erreur casse la politique
+  ✅ T46 observation votante votante : 20/20 buts, 372 états-Q, 8.0 pas
+  49/49 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-votante.md <<'MD'\n# B13 — l'observation votante : deux looks, 20/20, 1 % d'erreur\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **49/49 portes** : l' … [6261 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 443 fichiers, le disque en a 444
+  ❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\", \"| fichiers / JSON de résultats | **444* … [730 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 444 fiche(s) · 539 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-votante.md reports/pensee-votante.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md … [488 caractères tronqués]`

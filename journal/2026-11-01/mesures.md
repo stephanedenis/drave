@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (54)
+## Commits du jour (55)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -62,10 +62,11 @@
 | 23:12 | `d1fde4db` | B13 — LE HASARD VARIABLE : 20–60 %, 20/20 À CHAQUE TAUX, 8 PAS ; 43/43 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+16) |
 | 23:22 | `ef47fd92` | B13 — LA CROYANCE : 0/20 BUTS, LA DISTRIBUTION SEULE NE SUFFIT PAS ; 45/45 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 | 23:26 | `e5fea549` | B13 — LA CURIOSITÉ : 0/20 BUTS, LE BONUS DE CERTITUDE NE SUFFIT PAS ; 46/46 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+15) |
+| 23:33 | `f3b70959` | B13 — L'OBSERVATION BRUITÉE : 10 % D'ERREUR CASSE LA POLITIQUE (0/20) ; 48/48 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 
 ## Chiffres du jour
 
-`60 %` · `95 %` · `+27 %` · `0,772` · `0,966` · `0,946` · `0,773` · `0,962` · `0,936` · `0,774` · `0,954` · `0,909`
+`10 %` · `60 %` · `95 %` · `+27 %` · `0,772` · `0,966` · `0,946` · `0,773` · `0,962` · `0,936` · `0,774` · `0,954`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -99,6 +100,7 @@
 - [reports/rapport-n2-propre.md](../../reports/rapport-n2-propre.md)
 - [reports/rapport-pensee-audit.md](../../reports/rapport-pensee-audit.md)
 - [reports/rapport-pensee-bruit.md](../../reports/rapport-pensee-bruit.md)
+- [reports/rapport-pensee-bruitee.md](../../reports/rapport-pensee-bruitee.md)
 - [reports/rapport-pensee-correction.md](../../reports/rapport-pensee-correction.md)
 - [reports/rapport-pensee-croyance.md](../../reports/rapport-pensee-croyance.md)
 - [reports/rapport-pensee-curieuse.md](../../reports/rapport-pensee-curieuse.md)
