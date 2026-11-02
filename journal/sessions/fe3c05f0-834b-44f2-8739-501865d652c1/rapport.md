@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 26.8 h |
 | Tours | 15 |
-| Messages | 910 |
-| Appels d'outils | 904 |
+| Messages | 914 |
+| Appels d'outils | 908 |
 | Fichiers touchés | 18 |
-| Commandes | 831 |
+| Commandes | 834 |
 | Sous-agents | 0 |
 | Commits | 50 |
 | Compactages de contexte | 2 |
@@ -769,7 +769,7 @@ Les cinq derniers runs courent : **it** (bientôt), **de, ru, es** (~30-60 min),
 
 ### Tour 15 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Check remaining runs and manifests
 - bash — Read Italian manifest and run final contamination
@@ -779,6 +779,10 @@ Les cinq derniers runs courent : **it** (bientôt), **de, ru, es** (~30-60 min),
 - bash — Commit Italian and repaired counters
 - bash — Inspect pre-commit hook and failure output
 - bash — Retry Italian commit with genuine state change
+- bash — Verify commit and remaining runs
+- bash — Read Russian and Spanish manifests, launch checks
+- job_output
+- bash — Wait for Russian and Spanish checks
 
 ## 3. Travail accompli
 
@@ -847,7 +851,7 @@ Les cinq derniers runs courent : **it** (bientôt), **de, ru, es** (~30-60 min),
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 791 autres
+- … et 794 autres
 
 ## 4. Mesures et résultats marquants
 

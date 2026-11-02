@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 26.7 h |
-| Tours | 18 |
-| Messages | 496 |
-| Appels d'outils | 517 |
+| Durée | 26.9 h |
+| Tours | 19 |
+| Messages | 513 |
+| Appels d'outils | 532 |
 | Fichiers touchés | 25 |
-| Commandes | 412 |
+| Commandes | 426 |
 | Sous-agents | 2 |
-| Commits | 27 |
+| Commits | 28 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -67,6 +67,8 @@
 **Tour 17** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 **Tour 18** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
+
+**Tour 19** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -997,13 +999,67 @@ Les deux golds annotent désormais la **cible** d'attachement : **68 cibles** (1
 
 ### Tour 18 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Inspecter l'état avant l'attachement par tête
 - bash — Ajouter l'attachement par tête et remesurer
 - bash — Mettre à jour la fiche et l'état pour l'attachement par tête
 - bash — Passer toutes les portes après l'attachement par tête
 - bash — Committer l'attachement par tête
+- job_output
+- bash — Confirmer que le contenu de l'attachement est dans HEAD
+
+**Synthèse produite :**
+
+⏵ Attachement par tête : couverture 1,0, top-1 0,870, top-k 1,0 ; le span reste 0,338
+
+Le round 5 du goal est livré : l'**attachement par tête** mesure la cible sans que la découpe du S la masque.
+
+\## Le résultat
+
+| lecture | source | cibles | couv. tête | **top-1 tête** | **top-k tête** | couv. span | top-1 span |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| **heuristique** | **180** | **68** | **1,000** | **0,870** | **1,000** | 0,338 | 0,294 |
+| heuristique | 20 réels | 13 | 1,000 | 0,400 | 1,000 | 0,385 | 0,154 |
+| heuristique | 160 synth. | 55 | 1,000 | **1,000** | 1,000 | 0,327 | 0,327 |
+| mock seul | 180 | 68 | 1,000 | 0 | 0 | 0,338 | 0 |
+| **hasard** | 180 | 68 | — | **0,015** | — | — | — |
+
+**Ce que ça dit** :
+
+- **La couverture par tête est de 100 %** : le segment prédit qui couvre la **tête** du gold (même type) existe toujours. La couverture de 34 % par **span** était un désaccord de **segmentation**, pas d'attachement.
+- **Top-1 tête 87 %, top-k tête 100 %** : la bonne cible est **toujours** dans les candidats du S, et en premier **87 %** du temps.
+- **Réels 40 %** : les GP au verbe (`dans le parc` → `vu`) sont lus par le S comme le GN le plus proche (`l'homme`) ; le gold préfère le verbe — le désaccord classique d'attachement, que le top-1 paie.
+- **Synthétiques 100 %** : la grammaire attache régulièrement ; le S retrouve la cible.
+- **Hasard 1,5 %** : le contrôle négatif.
+- **Le span** (34 %, top-1 29 %) reste la mesure de la **découpe** ; la tête est la mesure de l'**attachement**.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; évaluateur [`evaluer_gold.py`](../../tools/tests/linguistique/evaluer_gold.py).
+- Portes : `porte-bloc-linguistique` **verte** (gold 180 + attachement + tests + autotest 398 langues), `porte-pensee` **10/10**, `taille`, `porte-tableaux`, `schemas`, `journal`, `verifie_en_cours`, `sessions` — **vertes** avant le commit.
+- **Course de commit** : le commit **`bcf13fb0`** (D/R/A, six corpus) a emporté mes fichiers **stagés** ; le contenu de l'attachement par tête est bien dans HEAD (`attachement_tete`), mais le message est celui de D/R/A. Le prochain round peut ajouter un commit L/B13 avec le bon chiffre.
+- `revue` : rouge sur **un seul compteur** (en-cours 490, disque 491) : un JSON de corpus est arrivé après mon commit ; le prochain round aligne.
+- `en-cours` : 2 sessio
+… [829 caractères tronqués]
+
+### Tour 19 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
+
+*14 appels d'outils.* Actions notables :
+
+- bash — Inspecter DRVM, opérateurs et compteurs
+- bash — Inspecter le modèle natif/DRVM et ses points d'appel
+- bash — Chercher le serveur natif et les poids DRVM
+- bash — Écrire le registre hétérogène et le conteneur DRVM
+- bash — Lire les champs de Candidat
+- bash — Corriger le champ id et exécuter le DRVM
+- bash — Corriger le score et exécuter les trois stratégies
+- bash — Ajouter la porte T8 et lancer l'autotest
+- bash — Écrire la fiche des opérateurs et mettre l'état à jour
+- bash — Passer les portes après les opérateurs hétérogènes
+- bash — Rentrer dans T0 et aligner le compteur JSON
+- bash — Rentrer dans T0 et repasser les portes
+- bash — Committer les opérateurs hétérogènes
 - job_output
 
 ## 3. Travail accompli
@@ -1085,7 +1141,7 @@ Les deux golds annotent désormais la **cible** d'attachement : **68 cibles** (1
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 372 autres
+- … et 386 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1213,7 +1269,7 @@ Les deux golds annotent désormais la **cible** d'attachement : **68 cibles** (1
 
 ## 5. Erreurs rencontrées
 
-8 sorties en erreur ou divergentes. Les premières :
+10 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -1223,6 +1279,8 @@ Les deux golds annotent désormais la **cible** d'attachement : **68 cibles** (1
 - **T12** : [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 43, in joueur_de     return next(c
 - **T12** : ok [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 182, in decider     _, meilleur
 - **T17** : gold cibles ok 20 phrases, 105 tokens → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold.json [stderr] Traceback (most recent call last):   File "/home/stephane/Data13TB/s
+- **T19** : COMPILE=0 [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 213, in penser    
+- **T19** : ok [stderr] Traceback (most recent call last):   File "<stdin>", line 5, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 231, in instantane     b[
 
 ## 6. Commits
 
@@ -1253,4 +1311,5 @@ Les deux golds annotent désormais la **cible** d'attachement : **68 cibles** (1
 - L — GOLD 180 : POS 0,751 (0,924 RÉEL / 0,725 SYNTH), TÊTE 0,560, PRAGMATIQUE 1,0/1,0/0,99/0,89" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - L — ATTACHEMENT : TOP-1 0,294 / TOP-K 0,338 SUR 68 CIBLES (COUVERTURE 0,338), HASARD 0,015" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - L — ATTACHEMENT PAR TÊTE : COUVERTURE 1,0, TOP-1 0,870, TOP-K 1,0 (SPAN 0,338/0,294)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — OPÉRATEURS HÉTÉROGÈNES : 3 GENRES, SONDE 4 APPELS/COÛT 48 VS AVEUGLE 1/33 (11/11)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

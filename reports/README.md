@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-operateurs.md`](rapport-pensee-operateurs.md) | **B13** — les opérateurs hétérogènes : 3 genres, A* 23 nœuds/4 appels/coût 48 vs aveugle 1/33, **11/11** |
 | [`rapport-pensee-gold-linguistique.md`](rapport-pensee-gold-linguistique.md) | **L/R0.7** — le gold 180 : POS 0,751, exact 0,194/tête 0,560, **attachement tête 1,0/0,870/1,0**, pragmatique 1,0/1,0/0,994/0,889 ; neuronal réel refusé |
 | [`rapport-pensee-banc.md`](rapport-pensee-banc.md) | **B13** — le banc anytime : A* but en 32 nœuds, AUC 0,528/0,624 contre 0,246/0,116 à l'aléatoire, **10/10** |
 | [`rapport-pensee-drvf.md`](rapport-pensee-drvf.md) | **B13** — le DRVF `thought` : 23 597 octets, 93 événements, rejeu identique, corruption refusée, **9/9** |

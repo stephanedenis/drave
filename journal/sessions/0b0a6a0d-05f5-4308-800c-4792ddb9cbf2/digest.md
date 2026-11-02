@@ -14325,3 +14325,62 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-835", "timeout_ms": 500000, "wait": true}`
+
+  ```
+19:26
+work/n2j/W-g1.pt
+work/n2j/W-g2.pt
+-- W-g1
+}
+-- W-g2
+}
+-- W-g3
+# init work/n2j/base-wiki-pos.pt · manquants ['embed_canal.weight'] · graine 3 · décalage 20000038
+pas 1200 · perte 2.5667 · PPL val 12.012 · 50 s
+ }
+}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-829 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for g in 1 2 3; do echo "-- W-g$g"; tail -1 work/n2j/W-g$g.log 2>/dev/null; done; ls work/n2j/W-g*.pt 2>/dev/null) finished [status: completed, exit code: 2]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 work/n2j/W-g1.log; echo \"---\"; tail -3 work/n2j/W-g2.log; echo \"=== en ===\"; python3 -c \"\nimport json; d=json.load(open('reports/corpus-wiki-en-propre.json')); print('train', d['train_octets']/1e6, 'Mo · dédup', d['dedu … [172 caractères tronqués]`
+
+  ```
+"duree_s": 1392.943650484085,
+ "positions_aleatoires": 384
+}
+---
+ "duree_s": 1380.4944009780884,
+ "positions_aleatoires": 384
+}
+=== en ===
+train 204.5563 Mo · dédup 1.44 % · contamination {'fenetres': 100, 'contaminees': 0, 'taux': 0.0}
+19:26
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; for g in 1 2; do ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/W-g$g.pt --decomposition --longueurs --corpus-dir data/wiki_fr/propre --sortie work/n2j/eval-distill.json 2>&1 | grep  … [78 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-837]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-837", "timeout_ms": 400000, "wait": true}`
+
+  ```
+{"fichier": "W-g1.pt", "params": 11816136, "val": 3.8766, "test": 3.9659, "litterature": 7.0652, "litterature_propre": 7.16, "anglais": 12.2419, "wikitext2": 12.8609, "permute": 154.1566, "decomposition": {"complete": 3.7508, "apres_2_blocs": 5.6923, "apres_4_blocs": 4.3246, "apres_6_blocs": 3.7496, "sans_pensee": 27059385.2959}, "longueurs": {"129": 3.8787, "192": 3.8588, "256": 3.9863, "384": 4.7974, "512": 5.7779}}
+{"fichier": "W-g2.pt", "params": 11816136, "val": 3.8794, "test": 3.9676, "litterature": 7.0777, "litterature_propre": 7.175, "anglais": 12.2648, "wikitext2": 12.8382, "permute": 152.7083, "decomposition": {"complete": 3.7326, "apres_2_blocs": 5.6909, "apres_4_blocs": 4.3363, "apres_6_blocs": 3.7439, "sans_pensee": 23291437.087}, "longueurs": {"129": 3.8817, "192": 3.8629, "256": 3.9948, "384": 4.8201, "512": 5.8079}}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 780; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W-g3.pt work/n2j/base-placebo.pt 2>/dev/null; tail -1 work/n2j/W-g3.log 2>/dev/null; tail -1 work/n2j/base-placebo.log 2>/dev/null", "description": "Wait for the third student and the placebo"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-838]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-838", "timeout_ms": 800000, "wait": true}`

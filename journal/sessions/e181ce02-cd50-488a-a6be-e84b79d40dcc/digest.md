@@ -11796,3 +11796,343 @@ timeout 120 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/tests/linguistique/evaluer_gold.py reports/rapport-pensee-gold-linguistique.md reports/pensee-gold-linguistique.json reports/README.md docs/implantation/bloc-linguistique.md docs/pilotage/en-cours.md docs/pilotage/roadm … [381 caractères tronqués]`
+
+  ```
+docs/implantation/bloc-linguistique.md             |  10 +-
+ docs/pilotage/chantiers.md                         |   2 +-
+ docs/pilotage/en-cours.md                          |  10 +-
+ docs/pilotage/plan-travail.md                      |   2 +-
+ docs/pilotage/roadmap.md                           |   2 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |   6 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-gold-linguistique.json              | 111 +++++++++++++++++++++
+ reports/rapport-pensee-gold-linguistique.md        |  56 ++++++-----
+ tools/tests/linguistique/evaluer_gold.py           |  24 +++++
+ 10 files changed, 185 insertions(+), 40 deletions(-)
+[still running after 60000ms; moved to background job bash-412]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-412", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master bcf13fb0] DONNÉES — SIX CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT) : 7,83 M ARTICLES, 30,4 GO
+ 30 files changed, 507 insertions(+), 94 deletions(-)
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; git show --stat HEAD | grep -E \"pensee-gold|evaluer_gold|en-cours|rapport-pensee-gold\" | head -6; git show HEAD:reports/pensee-gold-linguistique.json | grep -o '\"attachement_tete\"' | head -1; python3  … [119 caractères tronqués]`
+
+  ```
+bcf13fb0 DONNÉES — SIX CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT) : 7,83 M ARTICLES, 30,4 GO
+ docs/pilotage/en-cours.md                          |  10 +-
+ reports/pensee-gold-linguistique.json              | 111 +++++++++++++++++
+ reports/rapport-pensee-gold-linguistique.md        |  56 +++++----
+ tools/tests/linguistique/evaluer_gold.py           |  24 ++++
+"attachement_tete"
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 490 JSON, le disque en a 491
+  ```
+
+### 🤖 Assistant
+
+⏵ Attachement par tête : couverture 1,0, top-1 0,870, top-k 1,0 ; le span reste 0,338
+
+Le round 5 du goal est livré : l'**attachement par tête** mesure la cible sans que la découpe du S la masque.
+
+## Le résultat
+
+| lecture | source | cibles | couv. tête | **top-1 tête** | **top-k tête** | couv. span | top-1 span |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| **heuristique** | **180** | **68** | **1,000** | **0,870** | **1,000** | 0,338 | 0,294 |
+| heuristique | 20 réels | 13 | 1,000 | 0,400 | 1,000 | 0,385 | 0,154 |
+| heuristique | 160 synth. | 55 | 1,000 | **1,000** | 1,000 | 0,327 | 0,327 |
+| mock seul | 180 | 68 | 1,000 | 0 | 0 | 0,338 | 0 |
+| **hasard** | 180 | 68 | — | **0,015** | — | — | — |
+
+**Ce que ça dit** :
+
+- **La couverture par tête est de 100 %** : le segment prédit qui couvre la **tête** du gold (même type) existe toujours. La couverture de 34 % par **span** était un désaccord de **segmentation**, pas d'attachement.
+- **Top-1 tête 87 %, top-k tête 100 %** : la bonne cible est **toujours** dans les candidats du S, et en premier **87 %** du temps.
+- **Réels 40 %** : les GP au verbe (`dans le parc` → `vu`) sont lus par le S comme le GN le plus proche (`l'homme`) ; le gold préfère le verbe — le désaccord classique d'attachement, que le top-1 paie.
+- **Synthétiques 100 %** : la grammaire attache régulièrement ; le S retrouve la cible.
+- **Hasard 1,5 %** : le contrôle négatif.
+- **Le span** (34 %, top-1 29 %) reste la mesure de la **découpe** ; la tête est la mesure de l'**attachement**.
+
+## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; évaluateur [`evaluer_gold.py`](../../tools/tests/linguistique/evaluer_gold.py).
+- Portes : `porte-bloc-linguistique` **verte** (gold 180 + attachement + tests + autotest 398 langues), `porte-pensee` **10/10**, `taille`, `porte-tableaux`, `schemas`, `journal`, `verifie_en_cours`, `sessions` — **vertes** avant le commit.
+- **Course de commit** : le commit **`bcf13fb0`** (D/R/A, six corpus) a emporté mes fichiers **stagés** ; le contenu de l'attachement par tête est bien dans HEAD (`attachement_tete`), mais le message est celui de D/R/A. Le prochain round peut ajouter un commit L/B13 avec le bon chiffre.
+- `revue` : rouge sur **un seul compteur** (en-cours 490, disque 491) : un JSON de corpus est arrivé après mon commit ; le prochain round aligne.
+- `en-cours` : 2 sessions, T0 dans le budget ; `sessions.py` : le plan R4.4 reste périmé, la session R4.4 doit le rafraîchir.
+- Le **vrai neuronal** reste **refusé** (`llama-cli`), et `spacy`/`stanza`/`nltk`/`transformers` sont absents.
+
+## La suite
+
+1. **Opérateurs hétérogènes/DRVM** de B13 : un opérateur symbolique, un numérique et un « neuronal » (double) dans le même moteur, avec coût et trace — la prochaine ligne B13.
+2. **Lecture double du gold** : annoter les deux lectures des GP ambigus (`dans le parc` → `vu` ou `l'homme`) pour mesurer le top-1 sans trancher.
+3. **200+ phrases réelles** (relatives, portée, anglais).
+4. **Modèle neuronal** si un tagger/runner se débloque ; sinon, les opérateurs B13 sans attendre.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque les opérateurs hétérogènes de B13.
+
+
+## Tour 19
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 6/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; grep -rn \"DRVM\" docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md | head -12; echo '=== operateurs ==='; g … [249 caractères tronqués]`
+
+  ```
+bcf13fb0 DONNÉES — SIX CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT) : 7,83 M ARTICLES, 30,4 GO
+docs/pilotage/en-cours.md:49:- **Prochaine action** : **L** — lecture double du gold et modèle neuronal ; **B13** v0 complet, opérateurs hétérogènes/DRVM.
+docs/pilotage/en-cours.md:109:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : AC-3/alpha-bêta 8/8, DRVF 9/9, banc 10/10** | **B11.10 close** ; **B13 : opérateurs/DRVM** ; B10.3 bloquée |
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, banc externe, sémantique, modules | ✅ B1–B12 ; **B1.5 corpus**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **DRVF `thought`** + **banc anytime**, **10/10 portes** | B10.3 attend un **encodeur qui porte** ; **B13** : **opérateurs hétérogènes/DRVM** |
+docs/pilotage/roadmap.md:32:| **N — le natif** | DRVM, `drave-n0`, distillation, usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; N2.h : corpus propre, **3,0904** en domaine, **16,70 → 3,85** hors dépôt ; N4 partiel | **N2** (plus de français
+… [2774 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la models 2>/dev/null | head -8; echo '=== native ==='; head -60 tools/native_model.py; echo '=== drvm ==='; ls tools | grep -i \"drvm\\|natif\\|native\" | head", "description": "Inspecter le modèle natif/DRVM et ses points d'app … [4 caractères tronqués]`
+
+  ```
+total 863324
+drwxr-xr-x. 1 stephane stephane       100 15 oct 09:02 .
+drwxr-xr-x. 1 stephane stephane       660  1 nov 10:50 ..
+-rw-r--r--. 1 stephane stephane 352972352 25 sep 17:13 Qwen2.5-0.5B-Q4_0.gguf
+-rw-r--r--. 1 stephane stephane 531068480 25 sep 16:52 Qwen2.5-0.5B-Q8_0.gguf
+drwxr-xr-x. 1 stephane stephane       138 15 oct 09:02 vision
+=== native ===
+#!/usr/bin/env python3
+"""native_model.py — `drave-n0`, le modèle natif du programme N.
+
+Ce n'est pas un Qwen3-MoE : c'est un graphe de blocs en **octets**, avec
+attention locale, FFN creux routé, sorties précoces, cellule de pensée et pont.
+Le modèle est petit (12 M) : c'est un **banc de mécanismes**, pas un assistant.
+
+Le fichier définit l'architecture, l'export DRVM et les tests de forme. Il ne
+prétend pas que l'entraînement est fait : N1.2 reste à mesurer.
+"""
+from __future__ import annotations
+
+import json
+import math
+from dataclasses import dataclass
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+from tools.drvm import TensorSpec, write_drvm
+
+
+@dataclass
+class NativeConfig:
+    vocab: int = 256
+    d_model: int = 224
+    n_blocks: int = 6
+    n_heads: int = 4
+    expert_hidden: int = 288
+    n_expert
+… [1371 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -50 tools/serveur_natif.py; echo '=== generer ==='; head -30 tools/generer_natif.py; echo '=== data ==='; ls -la data 2>/dev/null | head -5; find data models -maxdepth 2 \\( -name \"*.drvm\" -o -name \"*.pt\" -o -name \"*n0*\" - … [192 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""serveur_natif.py — N4.2 : service local minimal pour `drave-n0`.
+
+HTTP stdlib, pas de dépendance : `GET /sante`, `POST /generer` avec
+`{"prompt": "...", "n": 64}`. Génération greedy, déterministe. Ce n'est pas un
+service de production : pas d'authentification, pas de cache KV, un seul modèle.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+from tools.generer_natif import charger, generer
+
+VERROU = threading.Lock()
+MODELE = None
+
+
+class Handler(BaseHTTPRequestHandler):
+    def _json(self, code, obj):
+        b = json.dumps(obj, ensure_ascii=False).encode()
+        self.send_response(code); self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b)
+
+    def do_GET(self):
+        if self.path == "/sante":
+            self._json(200, {"ok": True, "parametres": MODELE.nb_parametres()})
+        else:
+            self._json(404, {"erreur": "chemin inconnu"})
+
+    def do_POST(self):
+        if self.path != "/generer":
+            self._json(404, {"erreur": "chemin inconn
+… [1985 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/pensee/operateurs.py <<'PY'\n\"\"\"operateurs.py — les opérateurs **hétérogènes** de B13 et le conteneur DRVM.\n\nUn problème peut mélanger trois genres d'opérateurs :\n\n  - **symbolique** : une règle discrète (`pas`, le … [8099 caractères tronqués]`
+
+  ```
+COMPILE=0
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 213, in penser
+    self.resultat = self.moteur.boucle(probleme, strategie, budget,
+                    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                       arret_sur_but=arret_sur_but)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/moteur.py", line 105, in boucle
+    self.store.push(racine, probleme.score(self.store.get(racine)))
+                            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 147, in score
+    x, y = _xy(e)
+           ~~~^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 87, in _xy
+    d = {c.nom: c.corps["v"] for c in e.candidats}
+         ^^^^^
+AttributeError: 'Candidat' object has no attribute 'nom'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/class Candidat/,/class /p' tools/pensee/coeur.py | head -30", "description": "Lire les champs de Candidat"}`
+
+  ```
+class Candidat:
+    id: str
+    corps: dict
+    annotation: dict = field(default_factory=dict)
+    statut: str = "hypothese"
+
+    def empreinte(self) -> str:
+        return h(self.corps)
+
+    def vers_dict(self) -> dict:
+        return {"id": self.id, "corps": self.corps, "annotation": self.annotation,
+                "statut": self.statut}
+
+
+@dataclass
+class Etat:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text().replace('d = {c.nom: c.corps[\"v\"] for c in e.candidats}', 'd = {c.id: c.corps[\"v\"] for c in e.candidats}')\np.write_text(t); print('o … [423 caractères tronqués]`
+
+  ```
+ok
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 231, in instantane
+    b["score"] = self.resultat.score if self.resultat else 0.0
+                 ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Decision' object has no attribute 'score'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text().replace('b[\"score\"] = self.resultat.score if self.resultat else 0.0', 'b[\"score\"] = GRILLE.score(self.resultat.etat) if self.resultat … [563 caractères tronqués]`
+
+  ```
+ok
+astar manhattan {'noeuds': 23, 'but': True, 'par_operateur': {'pas': 10, 'saut': 9, 'sonde': 4}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 48.0, 'appels': 4, 'budget': 22, 'politique': 'manhattan', 'score': 1.0}
+astar aveugle {'noeuds': 20, 'but': True, 'par_operateur': {'pas': 10, 'saut': 9, 'sonde': 1}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 33.0, 'appels': 4, 'budget': 19, 'politique': 'aveugle', 'score': 1.0}
+greedy manhattan {'noeuds': 23, 'but': True, 'par_operateur': {'pas': 10, 'saut': 9, 'sonde': 4}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 48.0, 'appels': 4, 'budget': 22, 'politique': 'manhattan', 'score': 1.0}
+greedy aveugle {'noeuds': 20, 'but': True, 'par_operateur': {'pas': 10, 'saut': 9, 'sonde': 1}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 33.0, 'appels': 4, 'budget': 19, 'politique': 'aveugle', 'score': 1.0}
+bfs manhattan {'noeuds': 130, 'but': True, 'par_operateur': {'pas': 63, 'saut': 47, 'sonde': 20}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 257.0, 'appels': 20, 'budget': 129, 'politique': 'manhattan', 'score': 1.0}
+bfs aveugle {'noeuds': 119, 'but': True, 'par_operateu
+… [173 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T7  le banc anytime                 best-so-far monotone, AUC A* > AUC aléatoire, but atteint\",\n\"  T6  alpha-bêta décid … [2396 caractères tronqués]`
+
+  ```
+ok
+  ✅ T4 justification       justification valide sur 7 nœuds ; chemin inventé refusé
+  ✅ T5 AC-3                chaîne {'A': ('r',), 'B': ('g',), 'C': ('r',)} ; carte 3-colorable non réduite ; contradiction domaine vide = True
+  ✅ T6 alpha-bêta          gain en 2 ; blocage en 5 ; profondeur 1 rate (1) ; alpha-bêta 1495 nœuds/296 coupes vs minimax 18730
+  ✅ T7 banc anytime        AUC A* 0.5283 vs aléatoire 0.2458 ; but A* 32, aléatoire None ; regret A* 0.0
+  ✅ T8 opérateurs hétérogènes 3 genres ; manhattan 23 nœuds/4 appels/coût 48.0 ; aveugle sonde 1 nœud/coût 33.0 ; but atteint
+  11/11 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-operateurs.md <<'MD'\n# B13 — les opérateurs hétérogènes : trois genres, un coût, des appels\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **11/11 por … [12627 caractères tronqués]`
+
+  ```
+état ok
+2026-11-01 19:31 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [326 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=1
+  revue de documentation · 393 fiche(s) · 494 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 492 JSON, le disque en a 494
+python3 tools/taille_documents.py            EXIT=1
+
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4017 mots (AGENTS + en-cours + une tâche) > budget 4 000
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Ce qu'elle fait\\|Moteur B13\\|6 bis\\|fichiers / JSON\" docs/pilotage/en-cours.md | head; python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" **opérateurs\\n  h … [1088 caractères tronqués]`
+
+  ```
+21:- **Plan** : 1) ~~RSN plurielle, arbre, cycle~~ ; 2) ~~portefeuille, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes)~~ ; 4) ~~moteur v0 (BFS, greedy, A*, MCTS-lite)~~ ; 5) ~~AC-3, alpha-bêta~~ (**8/8**) ; ~~DRVF~~ (**9/9**) ; 6) ~~banc anytime~~ (**10/10**) ; 6 bis) ~~opérateurs hétérogènes~~ (**11/11**) ; 7) ~~reprise R4.4~~ ; 8) ~~couche heuristique~~ ; 9) **bloc linguistique** (R0.7).
+32:- **Moteur B13** : **AC-3/alpha-bêta (8/8)**, **DRVF (9/9)**, **banc (10/10)**, **opérateurs
+41:- **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes** (T0 canonique, T1 rejeu,
+66:- **Ce qu'elle fait** : le **texte intégral** : fr (**2,39 M**) ; ar/pt/zh/ja/it (**1,00/0,97/0,64/1,27/1,56 M** ; **8 Ko 0**) ; les 4 en cours ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
+95:| fichiers / JSON de résultats | **393** / **492** | `reports/*.md` / `reports/*.json` |
+trim ok
+  ❌ 1 violation(s) :
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 393 fiche(s) · 494 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\(T0 canonique, T1 rejeu,\\n  T2 stratégies, T3 anytime, T4 justification\\)\", \"\", t)\nt=t.replace(\"6 bis) ~~opérateu … [677 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 393 fiche(s) · 494 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-operateurs.md reports/pensee-operateurs.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotage/roadmap.m … [384 caractères tronqués]`

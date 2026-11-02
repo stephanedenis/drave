@@ -16536,3 +16536,66 @@ def main(argv=None) -> int:
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"**Mis à jour : 2026-11-01, 19 h 40 HNE (heure locale, EST).**\",\"**Mis à jour : 2026-11-01, 19 h 55 HNE (heure locale, EST). … [1082 caractères tronqués]`
+
+  ```
+refus/course (essai 1)
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at bcf13fb0eb87018aa1864a72b5a1e0fa6ab10a9b but expected c5d38030a072c8a40d6ae492920254fc39b5970b
+refus/course (essai 2)
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+refus/course (essai 3)
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+refus/course (essai 5)
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+bcf13fb0 DONNÉES — SIX CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT) : 7,83 M ARTICLES, 30,4 GO
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git log --oneline -3; git status --short | head -5; echo \"=== runs\"; ps -eo pid,etime,cmd | grep \"corpus_wikipedia_texte.py --langue\" | grep -v grep | awk '{print $1,$2,$NF}'; echo \"=== tailles\"; du -sh data/corpus_wiki_*_texte 2 … [245 caractères tronqués]`
+
+  ```
+bcf13fb0 DONNÉES — SIX CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT) : 7,83 M ARTICLES, 30,4 GO
+c5d38030 L — ATTACHEMENT : TOP-1 0,294 / TOP-K 0,338 SUR 68 CIBLES (COUVERTURE 0,338), HASARD 0,015
+1a39470d DONNÉES — CINQ CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA) : 6,27 M ARTICLES, 25,1 GO, 8 KO 0, UDHR CITÉE
+ M reports/rapport-corpus-wiki-texte.md
+ m tools/docwatch
+ M tools/entrainer_native.py
+ M tools/native_model.py
+ ? tools/structures
+=== runs
+1494795 53:26 reports/corpus-wiki-en-texte.json
+1494796 53:26 reports/corpus-wiki-de-texte.json
+=== tailles
+3,4G	data/corpus_wiki_ar_texte
+9,1G	data/corpus_wiki_de_texte
+8,5G	data/corpus_wiki_en_texte
+6,4G	data/corpus_wiki_es_texte
+7,8G	data/corpus_wiki_fr_texte
+5,0G	data/corpus_wiki_it_texte
+6,9G	data/corpus_wiki_ja_texte
+3,0G	data/corpus_wiki_pt_texte
+11G	data/corpus_wiki_ru_texte
+2,5G	data/corpus_wiki_zh_texte
+=== compteurs
+  revue de documentation · 392 fiche(s) · 491 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -la reports/corpus-wiki-{ru,es}-texte.json 2>/dev/null; for l in ru es; do [ -f reports/corpus-wiki-$l-texte.json ] && python3 - \"$l\" <<'PY'\nimport json,pathlib,sys\nl=sys.argv[1]; d=json.loads(pathlib.Path(f'reports/corpus-wiki- … [1056 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 3344  1 nov 19:14 reports/corpus-wiki-es-texte.json
+-rw-r--r--. 1 stephane stephane 4295  1 nov 19:23 reports/corpus-wiki-ru-texte.json
+ru 6336895 1943725 2862268 6.258 {'train': 10056093945, 'val': 558798185, 'test': 549393375} {'modele': 0, 'lien': 52, 'balise': 0, 'lignes_echantillon': 20000}
+es 4865254 1868078 2054988 6.651 {'train': 6155005737, 'val': 339642132, 'test': 337603366} {'modele': 1, 'lien': 228, 'balise': 1, 'lignes_echantillon': 20000}
+checks job 1530824
+  ```
+
+- **job_output** `{"job_id": "1530824", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+Error: unknown job 1530824
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 70); do [ -f reports/corpus-wiki-es-texte-contamination.json ] && break; sleep 20; done; echo \"attente $((i*20))s\"; ls -la reports/corpus-wiki-{ru,es}-texte-contamination.json 2>/dev/null; for l in ru es; do [ -f rep … [824 caractères tronqués]`

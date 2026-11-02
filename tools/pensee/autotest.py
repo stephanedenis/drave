@@ -11,7 +11,11 @@
                                       arc-consistante ne se réduit pas (contrôle)
   T6  alpha-bêta décide               gagner en un coup, bloquer, couper ; le minimax exact
                                       visite plus de nœuds ; la profondeur 1 sans évaluation rate
+  T6  alpha-bêta décide               gagner en un coup, bloquer, couper ; le minimax exact
+                                      visite plus de nœuds ; la profondeur 1 sans évaluation rate
   T7  le banc anytime                 best-so-far monotone, AUC A* > AUC aléatoire, but atteint
+  T8  les opérateurs hétérogènes      trois genres, coût et appels, le négatif reste inutile
+  T8  les opérateurs hétérogènes      trois genres, coût et appels, le négatif reste inutile
 
 Usage : PYTHONPATH=. ~/gpu-env/bin/python tools/pensee/autotest.py
 """
@@ -214,13 +218,30 @@ def t7_banc() -> tuple[bool, str]:
                 f"aléatoire {r.budget_but} ; regret A* {a.regret}")
 
 
+def t8_operateurs() -> tuple[bool, str]:
+    """Les opérateurs hétérogènes et le DRVM : trois genres, coût, appels, négatif."""
+    from .operateurs import DRVM, GRILLE, REGISTRE, PolitiqueAveugle, PolitiqueManhattan
+    a = DRVM(REGISTRE, PolitiqueManhattan())
+    a.penser(GRILLE, AStar(), Budget(160))
+    ba = a.instantane()
+    b = DRVM(REGISTRE, PolitiqueAveugle())
+    b.penser(GRILLE, AStar(), Budget(160))
+    bb = b.instantane()
+    ok = (ba["but"] and len(ba["genres"]) == 3 and ba["par_operateur"].get("sonde", 0) > 0
+          and ba["appels"] > 0 and ba["cout"] > 0
+          and bb["but"] and bb["par_operateur"].get("sonde", 0) < ba["par_operateur"]["sonde"])
+    return ok, (f"3 genres ; manhattan {ba['noeuds']} nœuds/{ba['appels']} appels/coût {ba['cout']} ; "
+                f"aveugle sonde {bb['par_operateur'].get('sonde', 0)} nœud/coût {bb['cout']} ; but atteint")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
               ("T2 stratégies", t2_strategies()),
               ("T3 anytime", t3_anytime()), ("T4 justification", t4_justification()),
               ("T5 AC-3", t5_ac3()), ("T6 alpha-bêta", t6_alphabeta()),
-              ("T7 banc anytime", t7_banc())]
+              ("T7 banc anytime", t7_banc()),
+              ("T8 opérateurs hétérogènes", t8_operateurs())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

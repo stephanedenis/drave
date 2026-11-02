@@ -1,0 +1,92 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "11/11",
+ "grille": {
+  "cote": 5,
+  "depart": [
+   0,
+   0
+  ],
+  "but": [
+   4,
+   4
+  ]
+ },
+ "operateurs": {
+  "pas": {
+   "genre": "symbolique",
+   "cout": 1
+  },
+  "saut": {
+   "genre": "numérique",
+   "cout": 2
+  },
+  "sonde": {
+   "genre": "neuronal",
+   "cout": 5,
+   "politique": "double de contrat"
+  }
+ },
+ "resultats": [
+  {
+   "strategie": "astar",
+   "politique": "manhattan",
+   "noeuds": 23,
+   "par_operateur": {
+    "pas": 10,
+    "saut": 9,
+    "sonde": 4
+   },
+   "cout": 48.0,
+   "appels": 4,
+   "but": true
+  },
+  {
+   "strategie": "astar",
+   "politique": "aveugle",
+   "noeuds": 20,
+   "par_operateur": {
+    "pas": 10,
+    "saut": 9,
+    "sonde": 1
+   },
+   "cout": 33.0,
+   "appels": 4,
+   "but": true
+  },
+  {
+   "strategie": "bfs",
+   "politique": "manhattan",
+   "noeuds": 130,
+   "par_operateur": {
+    "pas": 63,
+    "saut": 47,
+    "sonde": 20
+   },
+   "cout": 257.0,
+   "appels": 20,
+   "but": true
+  },
+  {
+   "strategie": "bfs",
+   "politique": "aveugle",
+   "noeuds": 119,
+   "par_operateur": {
+    "pas": 63,
+    "saut": 47,
+    "sonde": 9
+   },
+   "cout": 202.0,
+   "appels": 20,
+   "but": true
+  }
+ ],
+ "negatif": "la politique aveugle n'utilise la sonde qu'une fois ; le but est atteint par pas/saut",
+ "limites": [
+  "politique = double de contrat, pas un modèle",
+  "poids natifs absents",
+  "A* = greedy sur ce score",
+  "DRVM runtime ≠ format N"
+ ]
+}
