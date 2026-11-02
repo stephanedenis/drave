@@ -190,12 +190,13 @@ ré-exécution.
 | **T18** | la porte à un tour tient-elle ? | la porte ne s'ouvre qu'un pas ; la sonde ouvre et passe | le pas/saut ne trichent pas |
 | **T19** | la Q-table transfère-t-elle à la porte minute ? | la politique apprise ouvre et passe ; 28 nœuds | la règle fait 27 nœuds |
 | **T20** | la politique seule/minute échoue-t-elle ? | sans A*, la Q-table échoue 9/9 | l'A* était nécessaire |
-| **T21** | la Q-table entraînée/minute échoue-t-elle ? | même entraînée, la politique seule échoue (8 pas) | la politique est incomplète |
-| **T22** | le shaping suffit-il ? | le shaping ne suffit pas ; la politique seule échoue encore | 56 états-Q, 8 pas |
+| **T21** | la Q-table entraînée/minute réussit-elle ? | la politique seule atteint le but en 8 pas | (mesure corrigée au round 31) |
+| **T22** | le shaping suffit-il ? | le shaping atteint le but en 8 pas | 56 états-Q (corrigé) |
 | **T23** | le réseau linéaire généralise-t-il ? | l'imitation échoue ; le réseau seul ne va pas au but | 12 poids, 200 pas |
 | **T24** | le MLP généralise-t-il ? | le MLP échoue seul ; l'imitation hérite du professeur incomplet | 60 poids, 200 pas |
-| **T25** | le professeur complet réussit-il seul ? | non : +1 au but ne suffit pas, la politique est incomplète | 56 états-Q, 8 pas |
-| **T26** | la politique sans None réussit-elle ? | non : elle tourne 200 pas, sans but | 56 états-Q, 200 pas |
+| **T25** | le professeur complet réussit-il seul ? | oui : but en 8 pas (mesure corrigée) | 56 états-Q |
+| **T26** | la politique sans None réussit-elle ? | oui : but en 8 pas (mesure corrigée) | 56 états-Q |
+| **T27** | la mesure corrigée tient-elle ? | minute but/8 ; stable échec/200 | contrôle positif + négatif |
 
 **T5/T6 sont les portes de la modularité et du coût** : AC-3, alpha-bêta et un encodeur RSN doivent
 se brancher sur le **même** contrat, sans modifier le moteur. Si l'un demande une exception, le
@@ -212,9 +213,9 @@ contrat est faux ; si le coût n'est pas dans la trace, l'anytime est décoratif
 | **4** | `tools/pensee/` (`moteur.py`) | BFS, greedy, A*, MCTS-lite | T2 |
 | **4 bis** | `tools/pensee/` (`csp.py`, `jeux.py`) | AC-3, alpha-bêta, minimax | T5, T6 |
 | **4 ter** | `tools/pensee/` (`taquin.py`, `banc.py`) | taquin 3×3, AUC/regret, aléatoire | T7 |
-| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None | T8–T26 |
+| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction | T8–T27 |
 | **5** | `tools/pensee/` (`trace.py`) | DRVF `thought`, rejeu, diff | T1, T6 |
-| **6** | `tools/pensee/autotest.py` | T0–T26, contrôles négatifs | toutes |
+| **6** | `tools/pensee/autotest.py` | T0–T27, contrôles négatifs | toutes |
 
 **Le corpus v0** : un jeu de petits graphes (morpion, taquin 3×3, un CSP jouet) et un jeu de
 RSN-visuelles déjà produit par N1. Pas de GPU ; le CPU suffit pour 10³–10⁴ nœuds.

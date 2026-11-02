@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 29.2 h |
-| Tours | 28 |
-| Messages | 1009 |
-| Appels d'outils | 972 |
+| Durée | 29.4 h |
+| Tours | 29 |
+| Messages | 1018 |
+| Appels d'outils | 978 |
 | Fichiers touchés | 18 |
-| Commandes | 895 |
+| Commandes | 900 |
 | Sous-agents | 0 |
 | Commits | 60 |
 | Compactages de contexte | 2 |
@@ -83,6 +83,8 @@
 **Tour 27** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 28** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 29** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1221,9 +1223,32 @@ Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des di
 
 ### Tour 28 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Check English manifest and check progress
+- bash — Wait for English manifest and launch check
+- job_output
+- bash — Check English data files and remaining jobs
+- bash — Diagnose English process disk wait
+
+**Synthèse produite :**
+
+⏵ Round 16 : l'anglais bloque en I/O — la machine est à 124/125 Go de mémoire
+
+**Round 16/1000 — un vrai incident matériel, pas un bug du corpus.** L'anglais est à **25,4 M pages sur 25,6 M** (6,02 M articles, 21,98 G caractères), mais son processus est en état **`D`** (`rq_qos_wait` : il attend la file d'E/S du disque) depuis ~35 min, avec **36,5 Go lus et 22,3 Go écrits**. La cause est visible : **124 Go de mémoire utilisés sur 125**, 0 disponible — la machine est saturée (page cache de l'anglais + les autres sessions + les documents/OCR), et le noyau bloque les écritures du train anglais (20 Go).
+
+**Ce que je ne fais pas** : tuer l'anglais (il ne reste que ~200 000 pages ; il finira quand la mémoire se libérera) ; forcer un `drop_caches` (pas de root, et cela pénaliserait les autres sessions). Je **surveille** et je **ralentis** les autres extractions pour rendre la mémoire au run anglais : les documents (3 500/7 496, 785 M caractères) et l'OCR (2,2 M, 2 livres) sont eux aussi en I/O ; ils peuvent attendre.
+
+**Ce qui est mesuré et committé** : les neuf corpus (11,65 M articles, 48,4 Go, 8 Ko 0), le corpus PDF (1 927 documents, 322 Mo, 8 Ko 0), l'A2.6/A8.3 (le lot), l'OCR (l'outil + deux livres), les documents (3 500/7 496), l'état et la roadmap.
+
+**La suite** : dès que l'anglais rend son manifeste, le contrôle 8 Ko et le catalogue des dix ; sinon, je libère de la mémoire en arrêtant proprement les extractions non critiques (documents, OCR) et je relance l'anglais seul. Le goal reste actif.
+
+### Tour 29 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Diagnose memory, sync caches, and check English
+- bash — Wait for English manifest and launch check
 
 ## 3. Travail accompli
 
@@ -1292,7 +1317,7 @@ Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des di
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 855 autres
+- … et 860 autres
 
 ## 4. Mesures et résultats marquants
 

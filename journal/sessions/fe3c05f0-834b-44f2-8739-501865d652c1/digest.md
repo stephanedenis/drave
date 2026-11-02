@@ -18045,3 +18045,129 @@ nohup python3 tools/verifie_contamination.py --train data/corpus_wiki_en_texte/t
 echo "check en job $!"; else tail -1 /tmp/run-texte-en.log | cut -c1-70; fi) finished [status: killed, signal: SIGTERM]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 40); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 15; done; echo \"attente $((i*15))s\"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo \"en: pas encore\"; tail -1 /tmp/run-texte-en.log;  … [806 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-894]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 15 : l'anglais à 25,4/25,6 M pages (99 %), le manifeste dans les dernières minutes
+
+**Round 15/1000 — l'anglais touche au but ; les watchers redondants sont nettoyés.**
+
+## L'anglais
+
+**25,4 M pages sur 25,6 M** (99 %), **6,02 M articles**, 21,98 G caractères. Il ne reste que ~200 000 pages ; le manifeste tombe dans les minutes qui viennent, et le contrôle 8 Ko (les deux unités + XNLI + wikitext2) est armé pour partir dès qu'il apparaît. J'ai supprimé les **trois boucles d'attente** redondantes (deux auraient lancé le contrôle en double) : une seule attente reste, la mienne, et elle vérifie le manifeste avant de lancer le contrôle — jamais sur un fichier en cours d'écriture.
+
+## Les documents
+
+**2 500 PDF sur 7 496**, **675 Mo**, 598,1 M caractères. Le parcours continue ; le manifeste à la fin (~1 h 30).
+
+## L'OCR
+
+Le deuxième livre est passé (*Bioinformatics for beginners*, 225 pages, 923 245 caractères) ; la détection des scannés sur les 2 785 PDF continue. C'est le poste le plus lent — les documents et l'anglais d'abord.
+
+## La suite
+
+Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des dix** ; les **manifestes OCR et Documents** → leurs fiches ; les **159 scans**. Le goal reste actif ; le prochain round devrait enfin annoncer le 10e corpus.
+
+
+## Tour 28
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 16/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la reports/corpus-wiki-en-texte.json reports/corpus-wiki-en-texte-contamination.json 2>/dev/null; echo \"=== en\"; ps -p 1494795 -o pid,etime= 2>/dev/null; tail -2 /tmp/run-texte-en.log; echo \"=== check\"; ps -eo pi … [458 caractères tronqués]`
+
+  ```
+21:46
+=== en
+    PID            
+1494795    03:15:43
+  [en] 24600000 lus · 5889611 gardés · 21.61 G caractères
+  [en] 25400000 lus · 6023249 gardés · 21.98 G caractères
+=== check
+1662403       10:25 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 40)
+=== doc/ocr
+  3000 PDF · 1837 gardés · 734.2 M car
+  Biblio_large · 001.0 Bioinformatics for beginners genes · 225 p · 923245 car
+759M	data/corpus_pdf_documents
+1,1M	data/corpus_ocr
+21G	data/corpus_wiki_en_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 55); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 15; done; echo \"attente $((i*15))s\"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo \"en: pas encore\"; tail -1 /tmp/run-texte-en.log;  … [827 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-896]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-894 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 40); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 15; done; echo "attente $((i*15))s"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo "en: pas encore"; tail -1 /tmp/run-texte-en.log; exit 0; }; python3 - <<'PY'
+import json,pathlib
+d=json.loads(pathlib.Path('reports/corpus-wiki-en-texte.json').read_text())
+for k in ('articles_lus','articles_gardes','articles_rediriges','articles_courts','caracteres_gardes','mots_estimes','troncons','octets','residus'): print(k, d.get(k))
+PY
+nohup python3 tools/verifie_contamination.py --train data/corpus_wiki_en_texte/train.txt --val data/corpus_wiki_en_texte/val.txt --test data/corpus_wiki_en_texte/test.txt --eval work/dr/eval/en-xnli.txt --eval data/wikitext2_test.txt --taille-troncon 8192 --sortie reports/corpus-wiki-en-texte-contamination.json > /tmp/check-en.log 2>&1 &
+echo "check en $!") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-894", "timeout_ms": 60000}`
+
+  ```
+attente 600s
+en: pas encore
+  [en] 25400000 lus · 6023249 gardés · 21.98 G caractères
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ps -p 1494795 -o pid,etime,pcpu,stat= 2>/dev/null; tail -1 /tmp/run-texte-en.log; du -sh data/corpus_wiki_en_texte; ls -la data/corpus_wiki_en_texte/*.txt 2>/dev/null; echo \"=== jobs\"; ps -eo pid,etime,cmd | grep \"for … [325 caractères tronqués]`
+
+  ```
+21:58
+    PID     ELAPSED %CPU 
+1494795    03:27:08 84.2 D
+  [en] 25400000 lus · 6023249 gardés · 21.98 G caractères
+21G	data/corpus_wiki_en_texte
+-rw-r--r--. 1 stephane stephane  1110437204  1 nov 21:24 data/corpus_wiki_en_texte/test.txt
+-rw-r--r--. 1 stephane stephane 20053154324  1 nov 21:24 data/corpus_wiki_en_texte/train.txt
+-rw-r--r--. 1 stephane stephane  1115365980  1 nov 21:24 data/corpus_wiki_en_texte/val.txt
+=== jobs
+1666653       11:02 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; 
+=== doc/ocr
+  3500 PDF · 2188 gardés · 785.0 M car
+  Biblio_large · 001.0 Bioinformatics for beginners genes · 225 p · 923245 car
+769M	data/corpus_pdf_documents
+1,1M	data/corpus_ocr
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; df -h /home/stephane/Data13TB | tail -1; timeout 15 iostat -x 1 2 2>/dev/null | tail -10; echo \"=== io du processus\"; cat /proc/1494795/io 2>/dev/null; cat /proc/1494795/wchan 2>/dev/null; echo; ps -eo pid,stat,wchan:20,cmd | grep -E … [279 caractères tronqués]`
+
+  ```
+/dev/mapper/system-root   11T  9,0T  2,0T  83% /home/stephane/Data13TB
+=== io du processus
+rchar: 68654220955
+wchar: 22278958912
+syscr: 3234379
+syscw: 1989651
+read_bytes: 36491964416
+write_bytes: 22284095488
+cancelled_write_bytes: 0
+folio_wait_bit_common
+1494795 D    rq_qos_wait          python3 tools/corpus_wikipedia_texte.py --langue en --sortie data/
+1615747 S    poll_schedule_timeou python3 tools/extrait_pdf.py --racine /home/stephane/Data13TB/step
+1616198 S    poll_schedule_timeou python3 tools/ocr_pdf.py --max-doc 20
+=== charge
+ 21:59:19  up 1 day  5:43,  2 users,  load average: 21,85, 20,13, 19,40
+Mem:             125         124           0           5           7           0
+  ```
+

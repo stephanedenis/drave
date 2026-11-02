@@ -420,8 +420,8 @@ def t21_minute_entrainee() -> tuple[bool, str]:
     p = PolitiqueAppriseMinute(episodes=200, graine=0)
     p.apprendre()
     ok, pas = seule_minute(p)
-    return (not ok) and len(p.q) > 0, (f"minute entraînée : {len(p.q)} états-Q, "
-                                      f"seule {'but' if ok else 'échec'}/{pas} pas")
+    return ok and len(p.q) > 0, (f"minute entraînée : {len(p.q)} états-Q, "
+                                f"seule {'but' if ok else 'échec'}/{pas} pas")
 
 
 def t22_shaping() -> tuple[bool, str]:
@@ -431,8 +431,8 @@ def t22_shaping() -> tuple[bool, str]:
     p = PolitiqueAppriseShaping(episodes=200, graine=0)
     p.apprendre()
     ok, pas = seule_minute(p)
-    return (not ok) and len(p.q) > 0, (f"shaping : {len(p.q)} états-Q, "
-                                      f"seule {'but' if ok else 'échec'}/{pas} pas")
+    return ok and len(p.q) > 0, (f"shaping : {len(p.q)} états-Q, "
+                                f"seule {'but' if ok else 'échec'}/{pas} pas")
 
 
 def t23_reseau() -> tuple[bool, str]:
@@ -464,8 +464,8 @@ def t25_professeur() -> tuple[bool, str]:
     p = PolitiqueAppriseComplete(episodes=1000, graine=0)
     p.apprendre()
     ok, pas = seule_minute(p)
-    return (not ok) and len(p.q) > 0, (f"professeur complet : {len(p.q)} états-Q, "
-                                      f"seule {'but' if ok else 'échec'}/{pas} pas")
+    return ok and len(p.q) > 0, (f"professeur complet : {len(p.q)} états-Q, "
+                                f"seule {'but' if ok else 'échec'}/{pas} pas")
 
 
 def t26_sans_none() -> tuple[bool, str]:
@@ -475,8 +475,22 @@ def t26_sans_none() -> tuple[bool, str]:
     p = PolitiqueAppriseComplete(episodes=1000, graine=0)
     p.apprendre()
     ok, pas = seule_minute(p)
-    return (not ok) and len(p.q) > 0, (f"sans None : {len(p.q)} états-Q, "
-                                      f"seule {'but' if ok else 'échec'}/{pas} pas")
+    return ok and len(p.q) > 0, (f"sans None : {len(p.q)} états-Q, "
+                                f"seule {'but' if ok else 'échec'}/{pas} pas")
+
+
+def t27_correction() -> tuple[bool, str]:
+    """La mesure corrigée : minute entraînée = but en 8 pas ; stable entraînée = échec."""
+    from .courbe import seule_minute
+    from .operateurs import PolitiqueApprise, PolitiqueAppriseMinute
+    bonne = PolitiqueAppriseMinute(episodes=200, graine=0)
+    bonne.apprendre()
+    ok_bonne, pas_bonne = seule_minute(bonne)
+    stable = PolitiqueApprise(episodes=200, graine=0)
+    stable.apprendre()
+    ok_stable, pas_stable = seule_minute(stable)
+    return (ok_bonne and not ok_stable), (f"mesure corrigée : minute but/{pas_bonne} pas, "
+                                         f"stable échec/{pas_stable} pas")
 
 
 def main() -> int:
@@ -504,7 +518,8 @@ def main() -> int:
               ("T23 réseau linéaire", t23_reseau()),
               ("T24 MLP", t24_mlp()),
               ("T25 professeur complet", t25_professeur()),
-              ("T26 politique sans None", t26_sans_none())]
+              ("T26 politique sans None", t26_sans_none()),
+              ("T27 mesure corrigée", t27_correction())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

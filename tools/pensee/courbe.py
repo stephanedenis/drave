@@ -64,19 +64,19 @@ def seule_sto(p: PolitiqueApprise, graine: int = 0, p_ouvre: float = 0.8,
 
 def seule_minute(p: PolitiqueApprise, max_pas: int = 200) -> tuple[bool, int]:
     """La politique seule sur la porte minute : elle ouvre et passe dans le même pas."""
-    cle, pas = (0, 0), 0
+    cle, pas = (0, 0, False), 0
     for _ in range(max_pas):
-        if cle == P_BUT:
+        if cle[:2] == P_BUT:
             return True, pas
-        e = _etat_p(cle[0], cle[1], False)
+        e = _etat_p(cle[0], cle[1], cle[2])
         a = p.propose(e, P_BUT)
         if a is None:
             return False, pas
         if (cle[0], cle[1]) == (3, 2) and a == "bas":
-            cle = (3, 3)
+            cle = (3, 3, False)
             pas += 1
             continue
-        cle, _ = p._pas((cle[0], cle[1], False), a, True)
+        cle, _ = p._pas(cle, a, True)
         pas += 1
     return False, pas
 

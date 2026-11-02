@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 29.1 h |
+| Durée | 29.3 h |
 | Tours | 44 |
-| Messages | 756 |
-| Appels d'outils | 720 |
+| Messages | 765 |
+| Appels d'outils | 729 |
 | Fichiers touchés | 25 |
-| Commandes | 582 |
+| Commandes | 588 |
 | Sous-agents | 2 |
-| Commits | 58 |
+| Commits | 60 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2333,7 +2333,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 
 ### Tour 44 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*35 appels d'outils.* Actions notables :
 
 - bash — Inspecter les méthodes de PolitiqueApprise
 - bash — Lire apprendre et _q de PolitiqueApprise
@@ -2349,7 +2349,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Voir le diff de roadmap et la fin du bloc
 - bash — Comprendre la validation des diagrammes inline
 - bash — Lire la fonction de validation inline
-- … et 10 autres
+- … et 16 autres
 
 ## 3. Travail accompli
 
@@ -2430,7 +2430,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 542 autres
+- … et 548 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2635,4 +2635,6 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LE MLP : 60 POIDS, L'IMITATION ÉCHOUE ENCORE SEULE ; 27/27" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LE MLP"; then echo "COMMIT OK $i"; bre
 - B13 — LE PROFESSEUR COMPLET : 56 ÉTATS-Q, IL ÉCHOUE ENCORE SEUL ; 28/28" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PROFESSEUR COMPLET"; then echo 
 - B13 — LA POLITIQUE SANS NONE : 56 ÉTATS-Q, ELLE TOURNE 200 PAS ; 29/29" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SANS NONE"; then echo "COMMIT OK
+- B13 — LA MESURE CORRIGÉE : BUG DE seule_minute, 4 POLITIQUES À BUT/8, 4 FICHES CORRIGÉES ; 30/30" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MESURE
+- B13 — LA MESURE CORRIGÉE : BUG DE seule_minute, 4 POLITIQUES À BUT/8, 4 FICHES CORRIGÉES ; 30/30" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MESURE
 

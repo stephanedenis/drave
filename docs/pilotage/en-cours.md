@@ -25,8 +25,8 @@
 - **Reprise** : **R4.4** — note de clôture des trois limites (fax 1 bit, exposant fusionné,
   parité réelle sans questions) ; **S** est actif dans une autre TUI (export pragmatique, 11 tests).
 - **Coloration** : analyse [`pre-traitement-linguistique`](../theorie/pre-traitement-linguistique.md)
-  (5 schémas) — le CPU étiquette la surface et énumère le plausible, le réseau tranche l'ambiguïté ;
-  la cascade se juge sur la couverture × la précision par unité de calcul, pas sur le débit.
+  (5 schémas) — le CPU étiquette et énumère, le réseau tranche l'ambiguïté ;
+  la cascade se juge sur couverture × précision par calcul, pas sur le débit.
 - **Bloc linguistique** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
   (9 niveaux) ; **398 langues à 0,9687** ; fiche et porte.
 - **Moteur B13** : **AC-3/alpha-bêta (8/8)**, **DRVF (9/9)**, **banc (10/10)**, **opérateurs 11/11**, **nécessaire 12/12**, **labyrinthe 13/13** ; fiches
@@ -34,9 +34,15 @@
   [`pensee-drvf`](../../reports/rapport-pensee-drvf.md), [`pensee-banc`](../../reports/rapport-pensee-banc.md),
   [`pensee-operateurs`](../../reports/rapport-pensee-operateurs.md), [`pensee-necessaire`](../../reports/rapport-pensee-necessaire.md),
   [`pensee-labyrinthe`](../../reports/rapport-pensee-labyrinthe.md), [`pensee-porte`](../../reports/rapport-pensee-porte.md),
-  [`pensee-porte-apprise`](../../reports/rapport-pensee-porte-apprise.md).
+  [`pensee-porte-apprise`](../../reports/rapport-pensee-porte-apprise.md),
+  [`pensee-courbe`](../../reports/rapport-pensee-courbe.md), [`pensee-ferme`](../../reports/rapport-pensee-ferme.md),
+  [`pensee-minute`](../../reports/rapport-pensee-minute.md), [`pensee-minute-apprise`](../../reports/rapport-pensee-minute-apprise.md),
+  [`pensee-minute-seule`](../../reports/rapport-pensee-minute-seule.md), [`pensee-minute-entrainee`](../../reports/rapport-pensee-minute-entrainee.md),
+  [`pensee-shaping`](../../reports/rapport-pensee-shaping.md), [`pensee-reseau`](../../reports/rapport-pensee-reseau.md),
+  [`pensee-mlp`](../../reports/rapport-pensee-mlp.md), [`pensee-professeur`](../../reports/rapport-pensee-professeur.md),
+  [`pensee-sans-none`](../../reports/rapport-pensee-sans-none.md), [`pensee-correction`](../../reports/rapport-pensee-correction.md).
 - **Gold L 220** : **200 réels + 160 synthétiques** ; POS **0,772** (fermé 0,939/ouvert 0,621),
-  syntagmes exacts **0,194**/**tête 0,560**, pragmatique **0,994–1,0** ; cascade (mock) ; **attachement tête 1,0/0,966/0,932** (59 ambiguës), hasard 0,015 ; vrai neuronal
+  syntagmes exacts **0,194**/**tête 0,560**, pragmatique **0,994–1,0** ; cascade (mock) ; **attachement tête 1,0/0,966/0,932** (59 ambiguës), hasard 0,015 ; neuronal
   **refusé** ; fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :
   **lecture du gold + modèle qualifié**.
 - **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes**  sur le jouet des cruches ; BFS, greedy, A* et

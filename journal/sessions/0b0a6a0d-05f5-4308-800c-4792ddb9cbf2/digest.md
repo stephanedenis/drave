@@ -15377,3 +15377,30 @@ d0c231ae B13 — LA POLITIQUE SANS NONE : 56 ÉTATS-Q, ELLE TOURNE 200 PAS ; 29/
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"N2.n — LA DISTILLATION ANGLAISE : 4,42 → 3,94, LA CHAÎNE COMPLÈTE SUR 204 Mo\n\nLe professeur 23,57 M entraîné sur les 204,6 Mo d'anglais, distillé dans la base anglaise à\npositions aléatoires, trois graines : 3,9403 … [496 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-899]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-899", "timeout_ms": 300000, "wait": true}`
+
+  ```
+[master 902349b0] N2.n — LA DISTILLATION ANGLAISE : 4,42 → 3,94, LA CHAÎNE COMPLÈTE SUR 204 Mo
+ 23 files changed, 1058 insertions(+), 72 deletions(-)
+ create mode 100644 reports/rapport-n2-anglais-distille.md
+exit=0
+902349b0 N2.n — LA DISTILLATION ANGLAISE : 4,42 → 3,94, LA CHAÎNE COMPLÈTE SUR 204 Mo
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/M-g2.pt work/n2k/C-g1.pt 2>/dev/null; tail -1 work/n2k/M-g2.log 2>/dev/null; tail -1 work/n2k/C-g1.log 2>/dev/null", "description": "Wait for the multilingual and channel distillations"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-900]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-900", "timeout_ms": 1500000, "wait": true}`

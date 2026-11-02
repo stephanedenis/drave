@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-correction.md`](rapport-pensee-correction.md) | **B13** — la mesure corrigée : bug de `seule_minute`, 4 politiques à but/8, 4 fiches corrigées, **30/30** |
 | [`rapport-pensee-sans-none.md`](rapport-pensee-sans-none.md) | **B13** — la politique sans None : 56 états-Q, elle tourne 200 pas, **29/29** |
 | [`rapport-pensee-professeur.md`](rapport-pensee-professeur.md) | **B13** — le professeur complet : 56 états-Q, il échoue seul, **28/28** |
 | [`rapport-pensee-mlp.md`](rapport-pensee-mlp.md) | **B13** — le MLP : 60 poids, l'imitation échoue seule, **27/27** |

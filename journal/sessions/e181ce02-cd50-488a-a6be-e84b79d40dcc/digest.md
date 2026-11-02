@@ -16078,3 +16078,155 @@ documents contains roadmap True
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 tools/verifier_schemas.py 2>&1 | tail -3; ps aux | grep -c \"[p]lantuml\"", "description": "Relancer le vérificateur et compter les plantuml"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-578]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-578", "timeout_ms": 300000, "wait": true}`
+
+  ```
+schémas · 438 document(s) · 66 SVG · 2 source(s)
+  ❌ 1 anomalie(s) :
+     · diagramme inline invalide : docs/pilotage/roadmap.md:77
+0
+[stderr]
+
+real	1m18,106s
+user	0m3,199s
+sys	0m2,542s
+[status: completed, exit code: 1]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-578 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 tools/verifier_schemas.py 2>&1 | tail -3; ps aux | grep -c "[p]lantuml") finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"schema\\|plantuml\" docs/pilotage/references-non-regression.md | head; echo ---; python3 - <<'PY'\nimport importlib.util, re, pathlib, time\nspec=importlib.util.spec_from_file_location('vs','tools/verifier_schemas.py'); vs= … [407 caractères tronqués]`
+
+  ```
+---
+valide True en 7.01 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 240 python3 - <<'PY'\nimport importlib.util, time\nspec=importlib.util.spec_from_file_location('vs','tools/verifier_schemas.py'); vs=importlib.util.module_from_spec(spec); spec.loader.exec_module(vs)\norig=vs.subprocess.run\n … [527 caractères tronqués]`
+
+  ```
+appel ['/home/stephane/.local/share/../bin/plantuml', '-tsvg'] rc 0 svg True err b'' en 0.73 s
+alertes []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time timeout 300 python3 tools/verifier_schemas.py 2>&1 | tail -3; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Relancer le vérificateur complet"}`
+
+  ```
+schémas · 438 document(s) · 66 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+EXIT=0
+[stderr]
+
+real	0m0,889s
+user	0m2,310s
+sys	0m0,222s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [316 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+[still running after 60000ms; moved to background job bash-582]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-582", "timeout_ms": 300000, "wait": true}`
+
+  ```
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/pensee/courbe.py tools/pensee/autotest.py reports/rapport-pensee-correction.md reports/pensee-correction.json reports/rapport-pensee-minute-entrainee.md reports/rapport-pensee-shaping.md report … [656 caractères tronqués]`
+
+  ```
+⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 1
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 2
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 3
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 4
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 5
+902349b0 N2.n — LA DISTILLATION ANGLAISE : 4,42 → 3,94, LA CHAÎNE COMPLÈTE SUR 204 Mo
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pensee-porte-apprise\\|pensee-courbe\\|pensee-ferme\" docs/pilotage/en-cours.md | head -5", "description": "Voir la liste des fiches dans en-cours"}`
+
+  ```
+37:  [`pensee-porte-apprise`](../../reports/rapport-pensee-porte-apprise.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 28,40p docs/pilotage/en-cours.md", "description": "Lire le bloc de fiches"}`
+
+  ```
+(5 schémas) — le CPU étiquette la surface et énumère le plausible, le réseau tranche l'ambiguïté ;
+  la cascade se juge sur la couverture × la précision par unité de calcul, pas sur le débit.
+- **Bloc linguistique** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
+  (9 niveaux) ; **398 langues à 0,9687** ; fiche et porte.
+- **Moteur B13** : **AC-3/alpha-bêta (8/8)**, **DRVF (9/9)**, **banc (10/10)**, **opérateurs 11/11**, **nécessaire 12/12**, **labyrinthe 13/13** ; fiches
+  [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
+  [`pensee-drvf`](../../reports/rapport-pensee-drvf.md), [`pensee-banc`](../../reports/rapport-pensee-banc.md),
+  [`pensee-operateurs`](../../reports/rapport-pensee-operateurs.md), [`pensee-necessaire`](../../reports/rapport-pensee-necessaire.md),
+  [`pensee-labyrinthe`](../../reports/rapport-pensee-labyrinthe.md), [`pensee-porte`](../../reports/rapport-pensee-porte.md),
+  [`pensee-porte-apprise`](../../reports/rapport-pensee-porte-apprise.md).
+- **Gold L 220** : **200 réels + 160 synthétiques** ; POS **0,772** (fermé 0,939/ouvert 0,621),
+  syntagmes exacts **0,194**/**tête 0,560**, pragmatique **0,994–1,0**
+… [201 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"\"\"  [`pensee-porte-apprise`](../../reports/rapport-pensee-porte-apprise.md).\"\"\",\n\"\"\"  [`pensee-porte-apprise`](../ … [981 caractères tronqués]`
+
+  ```
+ok
+
+  ❌ 1 violation(s) :
+     · T0 : 4006 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"le CPU étiquette la surface et énumère le plausible, le réseau tranche l'ambiguïté ;\",\n            \"le CPU étiquette et  … [511 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 418 fiche(s) · 516 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/pensee/courbe.py tools/pensee/autotest.py reports/rapport-pensee-correction.md reports/pensee-correction.json reports/rapport-pensee-minute-entrainee.md reports/rapport-pensee-shaping.md report … [667 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-588]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-588", "timeout_ms": 600000, "wait": true}`

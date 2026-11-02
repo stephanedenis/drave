@@ -1,3 +1,8 @@
+> **⚠ Correction (2026-11-02, round 31)** : la mesure `seule_minute` avait un bug de
+> comparaison (triplet contre couple) et rendait de **faux échecs**. Après correction, cette
+> politique **atteint le but en 8 pas**. Les chiffres ci-dessous sont ceux de la mesure
+> buguée ; voir [rapport-pensee-correction.md](rapport-pensee-correction.md).
+
 # B13 — le professeur complet : 56 états-Q, il échoue encore seul
 
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅

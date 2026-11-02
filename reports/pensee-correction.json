@@ -1,0 +1,32 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "30/30",
+ "bug": "seule_minute comparait un triplet à P_BUT",
+ "avant": {
+  "minute": "échec/8",
+  "shaping": "échec/8",
+  "complete": "échec/8",
+  "sans_none": "échec/200"
+ },
+ "apres": {
+  "minute": "but/8",
+  "shaping": "but/8",
+  "complete": "but/8",
+  "sans_none": "but/8",
+  "stable": "échec/200",
+  "reseau": "échec/200",
+  "mlp": "échec/200"
+ },
+ "fiches_invalidees": [
+  "T21",
+  "T22",
+  "T25",
+  "T26"
+ ],
+ "controles": [
+  "T20",
+  "T23",
+  "T24"
+ ]
+}
