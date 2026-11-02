@@ -22825,3 +22825,90 @@ Continue working toward the objective in this same session. Treat the current wo
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/plan-travail.md')\ns = p.read_text()\nold = \"| **D/R/A — les données, le lecteur, le moteur** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de … [1321 caractères tronqués]`
+
+  ```
+plan : ligne D/R/A à jour
+  T0 max : 3978 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master 9b4f0208] PLAN — LA LIGNE D/R/A PORTE SES LIVRAISONS : DIX CORPUS FAITS, PDF/OCR, PRÉPA R1
+ 15 files changed, 261 insertions(+), 29 deletions(-)
+commit OK
+9b4f0208 PLAN — LA LIGNE D/R/A PORTE SES LIVRAISONS : DIX CORPUS FAITS, PDF/OCR, PRÉPA R1
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 106 : le plan de travail porte les livraisons D/R/A (commit 9b4f0208)
+
+**Round 106/1000 — le plan est à jour, la revue passe.**
+
+- **Le plan** (`docs/pilotage/plan-travail.md`, commit `9b4f0208`) : la ligne D/R/A porte désormais ses livraisons — « le texte intégral des 10 corpus (**fait**), l'extraction PDF/OCR (**documents clos, OCR en cours**), la prépa R1 (**fiche faite**) ».
+- **Le T0** reste à **3 978 mots** ; la revue de documentation passe.
+- **Le surveillant OCR** (PID 2136539) attend toujours `reports/ocr-pdf.json` et lancera le contrôle 8 Ko automatiquement.
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les 1 264 pages du 8e livre. **Les documents** sont clos (`5c27a3fb`) ; **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : l'état, la roadmap et le plan sont à jour ; la chaîne OCR est automatisée. Le goal reste actif jusqu'à 8 h.
+
+
+## Tour 119
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 107/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; echo \"=== surveillant\"; ps -p 2136539 -o pid,stat,etime= 2>/dev/null || echo \"surveillant terminé\"; echo \"=== manifeste\"; ls reports/ocr-pdf.json 2>&1; echo \"=== OCR\"; tail -1 /tmp/ocr-pilote.log; ls -la data/cor … [149 caractères tronqués]`
+
+  ```
+00:28
+=== surveillant
+    PID STAT            
+2136539 S          02:51
+=== manifeste
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+=== OCR
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 107 : le surveillant OCR tourne (2 min 51), l'OCR avance dans le 8e livre
+
+**Round 107/1000 — la chaîne OCR est automatisée.**
+
+- **Le surveillant** (PID 2136539) tourne depuis 2 min 51 ; il attend `reports/ocr-pdf.json` (toutes les 30 s, 6 h max) puis lancera le **contrôle 8 Ko**.
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les **1 264 pages** du 8e livre (*Sprenger 2025, inflammationcycling*). Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; l'état, la roadmap, le plan et le journal du 2/11 sont à jour.
+
+**Le constat** : l'état est vert ; il reste l'OCR du 8e livre (~1 100 pages) puis la clôture à 8 h. Le goal reste actif.
+
+
+## Tour 120
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 108/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max\"; python3 tools/revue_documentation.py 2>&1 | tail -1; echo \"=== surveillant\"; ps -p 2136539 -o pid,stat,etime= 2>/dev/null; ls reports/ocr-pdf.json 2>&1", "de … [141 caractères tronqués]`
+
+  ```
+00:28
+  T0 max : 3978 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== surveillant
+    PID STAT            
+2136539 S          03:13
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+

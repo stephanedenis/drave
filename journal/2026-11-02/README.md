@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**12 commits** · **3 session(s)** · **6 thème(s)**
+**13 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -17,12 +17,13 @@
 | docs | 2 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
+| portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 32.0 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 32.2 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 31.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 31.9 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
@@ -42,6 +43,7 @@
 | 00:20 | `47089fd7` | ÉTAT — OCR 8 LIVRES, PROCHAINE ACTION : L'OCR COMPLET ET LA CLÔTURE |
 | 00:22 | `4b886521` | ÉTAT — T0 REVENU SOUS 4 000 |
 | 00:24 | `896a3df0` | B13 — LES RUPTURES RÉPÉTÉES : 0,9/0,1 ALTERNÉS, v FINAL 0,14, 20/20, 8,0 PAS ; 58/58 |
+| 00:26 | `9b4f0208` | PLAN — LA LIGNE D/R/A PORTE SES LIVRAISONS : DIX CORPUS FAITS, PDF/OCR, PRÉPA R1 |
 
 ## Le récit de la journée (écrit à la main)
 

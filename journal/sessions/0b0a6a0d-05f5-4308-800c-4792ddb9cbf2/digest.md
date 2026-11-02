@@ -16387,3 +16387,37 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-962", "timeout_ms": 700000, "wait": true}`
+
+  ```
+00:27
+pas 11650 · perte 1.9516 · PPL val 8.327 · 607 s
+0, 1504 MiB, 58 %
+1, 1442 MiB, 95 %
+64
+2
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"❌\" /tmp/portes-nuit.out | head -5; echo \"=== lignes ===\"; tail -3 /tmp/portes-nuit.out; date '+%H:%M'", "description": "Identify the failing gates"}`
+
+  ```
+porte-homeostasie      ❌ code 2                    0 s    ❌ le LoRA de référence est absent : /tmp/n4/rang4-lora.pt
+  porte-melange          ❌ code 1                  117 s    ❌ l'état de A ne rend pas le code de A dans une
+=== lignes ===
+  porte-poids-creux      ✅                         322 s  ✅ porte poids creux : le noyau creux est EXACT et il paie la sparsité — paires divisées sur
+  porte-pont             ✅                          89 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+  porte-prechargement    ✅                         179 s    PORTE TENUE
+00:27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== teacher480 ===\"; tail -2 work/n2j/teacher-480.log; echo \"=== multi34 ===\"; tail -2 work/n2k/base-multi-34m.log; date '+%H:%M'", "description": "Check both runs separately"}`
+
+  ```
+=== teacher480 ===
+=== multi34 ===
+pas 11900 · perte 1.7136 · PPL val 8.136 · 620 s
+pas 11950 · perte 2.2457 · PPL val 8.206 · 623 s
+00:27
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/base-multi-34m.pt work/n2j/route-480 2>/dev/null; echo \"=== teacher ===\"; tail -2 work/n2j/teacher-480.log; echo \"=== multi34 ===\"; tail -1 work/n2k/base-multi-34m.log; grep -c \"✅\" /tmp/por … [108 caractères tronqués]`

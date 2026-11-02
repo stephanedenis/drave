@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
 | Durée | 31.9 h |
-| Tours | 118 |
-| Messages | 1356 |
-| Appels d'outils | 1120 |
+| Tours | 124 |
+| Messages | 1374 |
+| Appels d'outils | 1126 |
 | Fichiers touchés | 25 |
-| Commandes | 1033 |
+| Commandes | 1038 |
 | Sous-agents | 0 |
 | Commits | 73 |
 | Compactages de contexte | 3 |
@@ -263,6 +263,18 @@
 **Tour 117** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 118** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 119** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 120** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 121** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 122** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 123** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 124** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3199,7 +3211,112 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 **Synthèse produite :**
 
-⏵ Round 106 : je vérifie la ligne D/R/A du plan de travail
+⏵ Round 106 : le plan de travail porte les livraisons D/R/A (commit 9b4f0208)
+
+**Round 106/1000 — le plan est à jour, la revue passe.**
+
+- **Le plan** (`docs/pilotage/plan-travail.md`, commit `9b4f0208`) : la ligne D/R/A porte désormais ses livraisons — « le texte intégral des 10 corpus (**fait**), l'extraction PDF/OCR (**documents clos, OCR en cours**), la prépa R1 (**fiche faite**) ».
+- **Le T0** reste à **3 978 mots** ; la revue de documentation passe.
+- **Le surveillant OCR** (PID 2136539) attend toujours `reports/ocr-pdf.json` et lancera le contrôle 8 Ko automatiquement.
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les 1 264 pages du 8e livre. **Les documents** sont clos (`5c27a3fb`) ; **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés.
+
+**Le constat** : l'état, la roadmap et le plan sont à jour ; la chaîne OCR est automatisée. Le goal reste actif jusqu'à 8 h.
+
+### Tour 119 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check watcher and OCR status
+
+**Synthèse produite :**
+
+⏵ Round 107 : le surveillant OCR tourne (2 min 51), l'OCR avance dans le 8e livre
+
+**Round 107/1000 — la chaîne OCR est automatisée.**
+
+- **Le surveillant** (PID 2136539) tourne depuis 2 min 51 ; il attend `reports/ocr-pdf.json` (toutes les 30 s, 6 h max) puis lancera le **contrôle 8 Ko**.
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les **1 264 pages** du 8e livre (*Sprenger 2025, inflammationcycling*). Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; l'état, la roadmap, le plan et le journal du 2/11 sont à jour.
+
+**Le constat** : l'état est vert ; il reste l'OCR du 8e livre (~1 100 pages) puis la clôture à 8 h. Le goal reste actif.
+
+### Tour 120 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Run documentation checks and watcher status
+
+**Synthèse produite :**
+
+⏵ Round 108 : revue verte, T0 à 3 978, surveillant OCR actif (3 min 13)
+
+**Round 108/1000 — l'état documentaire est vert.**
+
+- **La revue de documentation** passe (classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation) ; le **T0** est à **3 978 mots**.
+- **Le surveillant OCR** (PID 2136539) tourne depuis 3 min 13 ; il attend `reports/ocr-pdf.json` puis lancera le **contrôle 8 Ko**.
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les 1 264 pages du 8e livre. **Les documents** sont clos (`5c27a3fb`) ; **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; l'état, la roadmap, le plan et le journal du 2/11 sont à jour.
+
+**Le constat** : tout est vert et automatisé ; il reste l'OCR puis la clôture à 8 h. Le goal reste actif.
+
+### Tour 121 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check watcher and OCR status
+
+**Synthèse produite :**
+
+⏵ Round 109 : surveillant OCR actif (3 min 30), OCR dans le 8e livre
+
+**Round 109/1000 — la chaîne OCR est automatisée, tout est vert.**
+
+- **Le surveillant** (PID 2136539) tourne depuis 3 min 30 ; il attend `reports/ocr-pdf.json` puis lancera le **contrôle 8 Ko**.
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les 1 264 pages du 8e livre. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; la revue passe, le T0 est à 3 978, l'état, la roadmap, le plan et le journal du 2/11 sont à jour.
+
+**Le constat** : tout est vert et automatisé ; il reste l'OCR puis la clôture à 8 h. Le goal reste actif.
+
+### Tour 122 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check watcher and OCR status
+
+**Synthèse produite :**
+
+⏵ Round 110 : surveillant OCR actif (3 min 48), OCR dans le 8e livre
+
+**Round 110/1000 — la chaîne OCR est automatisée, tout est stable.**
+
+- **Le surveillant** (PID 2136539) tourne depuis 3 min 48 ; il attend `reports/ocr-pdf.json` puis lancera le **contrôle 8 Ko**.
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les 1 264 pages du 8e livre. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; la revue passe, le T0 est à 3 978, l'état, la roadmap, le plan et le journal du 2/11 sont à jour.
+
+**Le constat** : tout est vert et automatisé ; il reste l'OCR puis la clôture à 8 h. Le goal reste actif.
+
+### Tour 123 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- get_goal
+
+**Synthèse produite :**
+
+⏵ Round 111 : goal actif (111 rounds sur 1 000), l'OCR est le dernier poste
+
+**Round 111/1000 — le goal est actif et cohérent avec le travail.**
+
+- **Le goal** (`goal-2631cfd8-…`, phase active) : 111 rounds démarrés sur 1 000 ; l'objectif porte bien les dix corpus, l'extraction PDF/OCR, la préparation R1.1/R1.2 et A2.6/A8.3, avec l'état, la roadmap et le plan à jour.
+- **Les livraisons** : les **dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF** (1 927 doc., 322 Mo), les **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %, clos `5c27a3fb`), les **genres** (`7e819b56`), la **préparation R1.1/R1.2** (`df42425a`), **A2.6/A8.3** (`f708b7ee`) — toutes mesurées, ficées, committées.
+- **L'OCR** (dernier poste) : train **4 193 550 octets** ; `tesseract` avance dans les 1 264 pages du 8e livre ; le **surveillant** (PID 2136539) lancera le contrôle 8 Ko dès le manifeste.
+
+**Le constat** : le mandat est tenu ; il reste l'OCR et la clôture à 8 h. Le goal reste actif.
+
+### Tour 124 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check watcher and OCR status
 
 ## 3. Travail accompli
 
@@ -3275,7 +3392,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 993 autres
+- … et 998 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3403,7 +3520,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ## 5. Erreurs rencontrées
 
-73 sorties en erreur ou divergentes. Les premières :
+74 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 00 h 55 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 01 h 05 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -29,7 +29,7 @@
   cascade
 - **Bloc** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
   (9 niveaux) ; **398 langues à 0,9687** ; fiche et porte.
-- **Moteur B13** : **AC-3/alpha-bêta**, **DRVF**, **banc**, **opérateurs 58** ; fiches
+- **Moteur B13** : **AC-3/alpha-bêta**, **DRVF**, **banc**, **opérateurs 59** ; fiches
   [`pensee-croyance`](../../reports/rapport-pensee-croyance.md), [`pensee-observatrice`](../../reports/rapport-pensee-observatrice.md),
   [`pensee-bayes`](../../reports/rapport-pensee-bayes.md), [`pensee-derive`](../../reports/rapport-pensee-derive.md),
   [`pensee-rupture`](../../reports/rapport-pensee-rupture.md), [`pensee-alternance`](../../reports/rapport-pensee-alternance.md),
@@ -91,7 +91,7 @@
 |---|---|---|
 | portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **456** / **549** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **457** / **550** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
@@ -106,7 +106,7 @@ action** — pas les statuts, qui dérivent. Vue d'ensemble :
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : AC-3/alpha-bêta 8/8, DRVF 9/9, banc 10/10, opérateurs 58** | **B11.10 close** ; **B13 : DRVM/native** ; B10.3 bloquée |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : AC-3/alpha-bêta 8/8, DRVF 9/9, banc 10/10, opérateurs 59** | **B11.10 close** ; **B13 : DRVM/native** ; B10.3 bloquée |
 | **N — le natif** | **N3, N4** | N2.h close ; N2 < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2 close** ; **N4** (consigne) |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R1/R2/R3 attendent N5/N4 | **R1.1/R1.2** (contexte natif) |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |

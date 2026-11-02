@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-chaotique.md`](rapport-pensee-chaotique.md) | **B13** — l'alternance aléatoire : bascule 1/500, v final 0,12, 20/20, **59/59** |
 | [`rapport-pensee-alternance.md`](rapport-pensee-alternance.md) | **B13** — les ruptures répétées : 0,9/0,1 alternés, v final 0,14, 20/20, **58/58** |
 | [`rapport-pensee-rupture.md`](rapport-pensee-rupture.md) | **B13** — la rupture : 90 % d'erreur, v final 0,12, 20/20, 8,0 pas, **57/57** |
 | [`rapport-pensee-adaptive.md`](rapport-pensee-adaptive.md) | **B13** — la fenêtre adaptative : v final 0,8, 20/20, 8,0 pas, **55/55** |
@@ -35,7 +36,6 @@
 | [`rapport-pensee-bouge-graines.md`](rapport-pensee-bouge-graines.md) | **B13** — la porte qui bouge sur 5 graines : 5/5 buts en 10 pas, 230–253 états-Q, **38/38** |
 | [`rapport-pensee-bouge.md`](rapport-pensee-bouge.md) | **B13** — la porte qui bouge : horloge `t % 6`, A* 28 nœuds, politique but/10, **37/37** |
 | [`rapport-pensee-bruit.md`](rapport-pensee-bruit.md) | **B13** — le bruit variable : 50–95 %, 6/6 buts, effort 3 → 1 essai, **36/36** |
-| [`rapport-pensee-mobile-graines.md`](rapport-pensee-mobile-graines.md) | **B13** — la porte mobile sur 5 graines : 5/5 d0, 5/5 d1, 147–184 états-Q, **35/35** |
 | [`rapport-pensee-mobile.md`](rapport-pensee-mobile.md) | **B13** — la porte mobile : 2 positions, A* 2/2, politique seule but/8, 170 états-Q, **34/34** |
 | [`rapport-pensee-graines.md`](rapport-pensee-graines.md) | **B13** — la robustesse sur 5 graines : 5/5 bruits, 5/5 stables, **33/33** |
 | [`rapport-pensee-ouverte.md`](rapport-pensee-ouverte.md) | **B13** — le curriculum `open` : 74 états-Q, bruit but/9, stable but/8, **32/32** |
