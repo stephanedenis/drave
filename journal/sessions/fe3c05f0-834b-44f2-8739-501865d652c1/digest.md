@@ -16949,3 +16949,76 @@ c989dd86 DONNÉES — LE CATALOGUE DU TEXTE INTÉGRAL (9 LANGUES, 14,51 M ARTICL
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"fr/ar/pt/zh/ja/it/ru/es/de (**12,12 M** ; **8 Ko 0**) ; en, le PDF local en cours\",\n            \"fr/ar/pt/zh/ja/it/ru/e … [1371 caractères tronqués]`
+
+  ```
+T0 max : 3991 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master a72567e1] ÉTAT — T0 À 3 996 ET COMPTEURS 396/498
+ 20 files changed, 142 insertions(+), 43 deletions(-)
+commit OK
+a72567e1 ÉTAT — T0 À 3 996 ET COMPTEURS 396/498
+=== en/pdf
+  [en] 9800000 lus · 2940682 gardés · 13.21 G caractères
+16M	data/corpus_pdf
+13G	data/corpus_wiki_en_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== pdf proc\"; ps -eo pid,etime,pcpu,cmd | grep -E \"extrait_pdf|pdftotext|pdfinfo\" | grep -v grep | head -5; echo \"=== log\"; cat /tmp/pdf-pilote.log | tail -5; echo \"=== en\"; ps -eo pid,etime,cmd | grep \"corpus_wikipedia … [369 caractères tronqués]`
+
+  ```
+=== pdf proc
+1549012       08:34  0.2 python3 tools/extrait_pdf.py
+1557013       01:46  100 pdftotext -enc UTF-8 /home/stephane/Data13TB/stephane/Biblio_large/001.0_General_Imported_Documents/f168962400_Valgrind_Documentation.pdf -
+=== log
+=== en
+1494795 01:29:56
+  [en] 9800000 lus · 2940682 gardés · 13.21 G caractères
+=== polls
+1550618       06:52 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; while [ ! -f reports/corpus-wiki-en-texte.json ]; do sleep 20; done; echo EN_OK
+1550619       06:52 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; while [ ! -f reports/corpus-pdf.json ]; do sleep 20; done; echo PDF_OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 5 : catalogue du texte intégral committé ; l'anglais à 9,8 M pages, le PDF avance
+
+**Round 5/1000 — le catalogue est reproductible, l'anglais et le PDF finissent leur course.** Commit `c989dd86` (le catalogue + la fiche) et `a72567e1` (T0 3 991, compteurs 396/498).
+
+## Le catalogue du texte intégral
+
+`tools/catalogue_corpus.py --texte` lit les manifestes `-texte` et rend la table des neuf langues : **14,51 M articles, 45,54 G caractères, 6 723 M mots, 59,0 Go**, le **8 Ko à zéro partout**, l'UDHR citée (fr 2/24, it 2/23, ja 1/23, pt 2/40). La fiche `rapport-corpus-wiki-texte.md` cite le catalogue et le régénère depuis les manifestes — plus de table manuelle.
+
+## Les deux chantiers en cours
+
+- **L'anglais** : 9,8 M pages lues, **2,94 M articles**, **13,21 G caractères**, 13 Go écrits. Le plus gros dump (25 Go) ; il reste ~2 M pages, puis son contrôle 8 Ko (le plus lourd : ~18-20 Go).
+- **Le PDF local** : les 70 livres de `Biblio_large` et les 2 711 notes du CEGEP ; 16 M de texte écrit. Un **PDF de documentation Valgrind** bloque 2 minutes à lui seul (le `pdftotext` découpe la page à page) ; le script a un délai de 120 s par PDF, les cas extrêmes seront nommés dans la fiche. Les **scannés** sont comptés et signalés ; l'OCR viendra du pipeline R4.4.
+
+## La suite
+
+Le **manifeste de l'anglais** (le 10e corpus) → son contrôle 8 Ko → la **fiche et le catalogue des dix** ; le **manifeste du corpus PDF** → sa fiche (les licences, le natif/scanné) ; puis la **préparation R1.1/R1.2** et les mesures **A2.6/A8.3**. Le goal reste actif ; les deux fins de run sont attendues au prochain round.
+
+
+## Tour 18
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 6/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; cat /tmp/poll-en.log /tmp/poll-pdf.log 2>/dev/null; ls -la reports/corpus-wiki-en-texte.json reports/corpus-pdf.json 2>/dev/null; echo \"=== en\"; ps -eo pid,etime,pcpu,cmd | grep \"corpus_wikipedia_texte.py --langue en\ … [411 caractères tronqués]`
+
+  ```
+20:01
+=== en
+1494795 01:30:22 97.2
+  [en] 9800000 lus · 2940682 gardés · 13.21 G caractères
+=== pdf
+1549012 09:00 0.2
+17M	data/corpus_pdf
+13G	data/corpus_wiki_en_texte
+  ```
+

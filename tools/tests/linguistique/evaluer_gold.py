@@ -17,15 +17,19 @@ sys.path.insert(0, str(RACINE / "tools"))
 import bloc_linguistique as bl  # noqa: E402
 
 GOLD = pathlib.Path(__file__).with_name("gold.json")
+REEL = pathlib.Path(__file__).with_name("gold_reel.json")
 SYNTH = pathlib.Path(__file__).with_name("gold_synthetique.json")
 
 
 def charger() -> list[dict]:
     hand = json.loads(GOLD.read_text(encoding="utf-8"))["phrases"]
+    reel = json.loads(REEL.read_text(encoding="utf-8"))["phrases"]
     synth = json.loads(SYNTH.read_text(encoding="utf-8"))["phrases"]
     for p in hand:
         p["source"] = "hand"
-    return hand + synth
+    for p in reel:
+        p["source"] = "reel"
+    return hand + reel + synth
 
 
 def par_source(phrases: list[dict], source: str) -> list[dict]:
@@ -168,7 +172,10 @@ def main() -> int:
     cascade = bl.Cascade(h, n)
     blocs = {"heuristique": h, "mock_neuronal": n,
              "parallele": bl.Parallele([h, n]), "cascade": cascade}
-    sources = {"all": phrases, "hand": par_source(phrases, "hand"),
+    sources = {"all": phrases,
+               "reel": [p for p in phrases if p["source"] in ("hand", "reel")],
+               "hand": par_source(phrases, "hand"),
+               "reel_new": par_source(phrases, "reel"),
                "synthetique": par_source(phrases, "synthetique")}
     resultats = {nom: {src: evaluer_bloc(nom, bloc, ps) for src, ps in sources.items()}
                  for nom, bloc in blocs.items()}
@@ -191,17 +198,22 @@ def main() -> int:
     resultats["attachement_hasard"] = {"cibles": len(cibles),
                                        "top1_taux": round(hasard_ok / max(1, len(cibles)), 4)}
     resultats["gold"] = {"phrases": len(phrases),
+                         "reel": len(sources["reel"]),
                          "hand": len(sources["hand"]),
+                         "reel_new": len(sources["reel_new"]),
                          "synthetique": len(sources["synthetique"]),
                          "tokens": sum(len(p["mots"]) for p in phrases)}
     h_all = resultats["heuristique"]["all"]
     h_hand = resultats["heuristique"]["hand"]
+    h_reel = resultats["heuristique"]["reel"]
     h_syn = resultats["heuristique"]["synthetique"]
     c_all = resultats["cascade"]["all"]
     resultats["verdict"] = {
         "pos_hand": h_hand["pos"]["exactitude"] >= 0.85,
+        "pos_reel": h_reel["pos"]["exactitude"] >= 0.70,
         "pos_synthetique": h_syn["pos"]["exactitude"] >= 0.60,
         "syntagme_hand": h_hand["syntagme"]["f1"] >= 0.30,
+        "syntagme_reel": h_reel["syntagme"]["f1"] >= 0.20,
         "syntagme_synthetique": h_syn["syntagme"]["f1"] >= 0.15,
         "tete": h_all["syntagme"]["tete"]["f1"] >= 0.40,
         "acte": h_all["pragmatique"]["acte"] >= 0.70,

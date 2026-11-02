@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (19)
+## Commits du jour (20)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -27,6 +27,7 @@
 | 18:36 | `dd2ed894` | ÉTAT — T0 REVIENT À 3 993 (LISTE DES LANGUES DANS LE PLAN) | `en-cours.md`, `README.md`, `docs.md` (+8) |
 | 18:57 | `d8d384c5` | ÉTAT — COMPTEURS SYNCHRONISÉS, JOURNAL DU CONTRÔLE 8 KO ET DE L'UDHR 2/24 | `en-cours.md`, `README.md`, `attention.md` (+17) |
 | 19:45 | `7a083904` | N2.l — LE CANAL DE STRUCTURE : +5 % DE PPL POUR 1 344 PARAMÈTRES, ET LE MÊME ALPHABET | `en-cours.md`, `README.md`, `attention.md` (+15) |
+| 19:59 | `a72567e1` | ÉTAT — T0 À 3 996 ET COMPTEURS 396/498 | `en-cours.md`, `README.md`, `apprentissage.md` (+17) |
 
 ## Chiffres du jour
 
@@ -38,7 +39,7 @@
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 27.7 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `b6a672ec-3349-4a4c-9e23-4478aa823170` — Git push to origin remote (début 2026-11-01 13:28, 0.1 h) → [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 27.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 27.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 27.4 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés

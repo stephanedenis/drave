@@ -12783,3 +12783,45 @@ c989dd86 DONNÉES — LE CATALOGUE DU TEXTE INTÉGRAL (9 LANGUES, 14,51 M ARTICL
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/tests/linguistique/evaluer_gold.py reports/pensee-gold-linguistique.json reports/rapport-pensee-gold-linguistique.md docs/pilotage/en-cours.m … [262 caractères tronqués]`
+
+  ```
+.../fe3c05f0-834b-44f2-8739-501865d652c1/digest.md |   16 +
+ .../rapport.md                                     |   16 +-
+ reports/pensee-gold-linguistique.json              | 1018 +++++++--
+ reports/rapport-pensee-gold-linguistique.md        |    6 +-
+ tools/tests/linguistique/evaluer_gold.py           |   16 +-
+ tools/tests/linguistique/gold_reel.json            | 2411 ++++++++++++++++++++
+ tools/tests/linguistique/gold_reel.py              |  166 ++
+ 24 files changed, 3551 insertions(+), 181 deletions(-)
+[still running after 60000ms; moved to background job bash-454]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-454", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at a72567e1bf1f88035bdb1c75d7ac43be0817aae6 but expected c989dd86817817c38a9f3c3174f79f5d0b917364
+EXIT=128
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; git show --stat HEAD | grep -E \"gold_reel|pensee-gold|evaluer\" | head -4; echo '=== HEAD file ==='; git show HEAD:tools/tests/linguistique/gold_reel.py 2>/dev/null | head -1; echo '=== status ==='; git  … [195 caractères tronqués]`
+
+  ```
+a72567e1 ÉTAT — T0 À 3 996 ET COMPTEURS 396/498
+=== HEAD file ===
+=== status ===
+ M docs/pilotage/en-cours.md
+ M reports/pensee-gold-linguistique.json
+ M reports/rapport-pensee-gold-linguistique.md
+ M tools/tests/linguistique/evaluer_gold.py
+?? tools/tests/linguistique/gold_reel.json
+?? tools/tests/linguistique/gold_reel.py
+=== cached ===
+ .../rapport.md                                     |  6 ++--
+ .../rapport.md                                     | 40 ++++++++++++++++++----
+ 5 files changed, 45 insertions(+), 15 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/tests/linguistique/evaluer_gold.py reports/pensee-gold-linguistique.json reports/rapport-pensee-gold-linguistique.m … [394 caractères tronqués]`

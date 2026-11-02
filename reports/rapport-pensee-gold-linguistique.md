@@ -1,4 +1,4 @@
-# L — le gold 180 : 20 réels + 160 synthétiques, POS 0,751, tête 0,560
+# L — le gold 220 : 60 réels + 160 synthétiques, POS 0,765, tête 0,510
 
 > **Ligne de roadmap** : **R0.7** (bloc linguistique) / **L** · **Date** : 2026-11-01 ·
 > **Verdict** : ✅ **le gold étendu et l'attachement sont mesurés** — **180 phrases** (20 réelles écrites à la main,
@@ -35,6 +35,7 @@
 
 **Ce que ça dit** :
 
+- **60 réels** : POS **0,861** (20 réels 0,924 ; 40 nouveaux 0,825), syntagmes exacts **0,241**, tête **0,370** ; **160 synthétiques** : POS 0,725, exacts 0,168, tête 0,570.
 - **fermé 0,939 / ouvert 0,621** : les classes fermées tiennent ; les **classes ouvertes
   chutent** sur le lexique disjoint (les verbes/adjectifs inconnus tombent en NOUN). C'est le
   **vrai** coût de la généralisation, et il est mesuré.
@@ -55,8 +56,9 @@ entre le S et le gold.
 
 | lecture | source | cibles | ambiguës | couv. tête | **top-1 tête** (1 lecture) | **top-1 tête** (2 lectures) | **top-k tête** |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **heuristique** | **180** | **97** | **29** | **1,000** | 0,870 | **0,957** | **1,000** |
+| **heuristique** | **220** | **97** | **29** | **1,000** | 0,870 | **0,957** | **1,000** |
 | heuristique | 20 réels | 18 | 5 | 1,000 | 0,400 | **0,800** | 1,000 |
+| heuristique | 40 réels (nouveaux) | — | 0 | — | — | — | — |
 | heuristique | 160 synth. | 79 | 24 | 1,000 | **1,000** | **1,000** | 1,000 |
 | mock seul | 180 | 97 | 29 | 1,000 | 0 | 0 | 0 |
 | **hasard** | 180 | 97 | — | — | **0,015** | — | — |

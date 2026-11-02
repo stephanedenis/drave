@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 27.3 h |
+| Durée | 27.4 h |
 | Tours | 22 |
-| Messages | 552 |
-| Appels d'outils | 565 |
+| Messages | 556 |
+| Appels d'outils | 569 |
 | Fichiers touchés | 25 |
-| Commandes | 454 |
+| Commandes | 456 |
 | Sous-agents | 2 |
-| Commits | 35 |
+| Commits | 36 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1205,7 +1205,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 
 ### Tour 22 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Écrire 40 phrases réelles supplémentaires
 - bash — Corriger la phrase r030 et générer le gold réel
@@ -1218,6 +1218,8 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - job_output
 - bash — Voir si la course a emporté le gold 220
 - bash — Recommitter le gold 220 sur le nouveau HEAD
+- bash — Vérifier si le gold 220 est dans HEAD
+- bash — Recommitter le gold 220 avec réessai
 
 ## 3. Travail accompli
 
@@ -1298,7 +1300,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 414 autres
+- … et 416 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1477,4 +1479,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12)" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
+- L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510" 2>&1 | tail -4; then :; fi   if git log -1 --format='%s' | grep -q "GOLD 220"; t
 

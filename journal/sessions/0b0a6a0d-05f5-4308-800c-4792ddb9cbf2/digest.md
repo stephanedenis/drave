@@ -14614,3 +14614,22 @@ roadmap ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.m** (anglais seul) : **4,42**\\n  (10 langues : 6,12) ;\", \"**N2.m** (anglais) : **4,42** (10 langues 6,12) … [1251 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-854]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-854", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at a72567e1bf1f88035bdb1c75d7ac43be0817aae6 but expected c989dd86817817c38a9f3c3174f79f5d0b917364
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git reset -q && git add reports/rapport-n2-anglais.md reports/corpus-wiki-en-propre.json docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"N2.m — L'ANGLAIS SEUL : 4,42 SUR 204 Mo, ET LE MULTILINGUE COÛ … [728 caractères tronqués]`

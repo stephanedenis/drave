@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 27.7 h |
 | Tours | 18 |
-| Messages | 1124 |
-| Appels d'outils | 1046 |
+| Messages | 1126 |
+| Appels d'outils | 1048 |
 | Fichiers touchés | 11 |
-| Commandes | 854 |
+| Commandes | 855 |
 | Sous-agents | 0 |
-| Commits | 32 |
+| Commits | 33 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*80 appels d'outils.* Actions notables :
+*82 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 47 autres
+- … et 48 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 814 autres
+- … et 815 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1208,5 +1208,6 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - N2.l — LE CANAL DE STRUCTURE : +5 % DE PPL POUR 1 344 PARAMÈTRES, ET LE MÊME ALPHABET  Donner au modèle une classe de structure par octet (mot plein, grammatica
 - N2.l — LE CANAL DE STRUCTURE : +5 % DE PPL POUR 1 344 PARAMÈTRES, ET LE MÊME ALPHABET  Donner au modèle une classe de structure par octet (mot plein, grammatica
 - N2.j4 — LA DISTILLATION SUR LE CORPUS RÉEL : 4,39 → 3,88, ET TOUT LE RESTE BAISSE  Professeur 23,57 M sur les 186 Mo de Wikipédia (1,6655 bit/octet), distillé d
+- N2.m — L'ANGLAIS SEUL : 4,42 SUR 204 Mo, ET LE MULTILINGUE COÛTE 1,6 PPL  La base anglaise monolingue (120 000 articles, 204,6 Mo d'entraînement, positions aléa
 - N2.m — L'ANGLAIS SEUL : 4,42 SUR 204 Mo, ET LE MULTILINGUE COÛTE 1,6 PPL  La base anglaise monolingue (120 000 articles, 204,6 Mo d'entraînement, positions aléa
 
