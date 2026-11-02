@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **376 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **547 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -14,9 +14,11 @@
 | [bilan-multi-materiel.md](bilan-multi-materiel.md) | Bilan multi-matériel — CPU, FPGA, GPU |
 | [campagne-benefices.md](campagne-benefices.md) | Campagne 24 h — où Drave est à son meilleur, tâche par tâche |
 | [fiche-nuit-17-10.md](fiche-nuit-17-10.md) | La nuit du 17 au 18 octobre : la couche commune entrée-sortie, de 2 langues à 448 |
+| [inventaire-donnees-entrainement.md](inventaire-donnees-entrainement.md) | L'inventaire local des données pour l'entraînement |
 | [rapport-32b-couche-confondant.md](rapport-32b-couche-confondant.md) | Le 32 B : le pont à 0,49 — et le confondant de la couche relative |
 | [rapport-8bits.md](rapport-8bits.md) | Drave — 8 bits : la perfection est-elle atteignable ? |
 | [rapport-a26-bilan.md](rapport-a26-bilan.md) | A2.6 — l'ordonnanceur est partiel : le générique et le KV sont faits, la tête est refusée, les experts bloqués |
+| [rapport-a26-lot-disque.md](rapport-a26-lot-disque.md) | A2.6 / A8.3 — le lot sur le disque : il accélère le calcul, il ne divise pas les lectures |
 | [rapport-a80-audit-final.md](rapport-a80-audit-final.md) | A8.0 — audit final : 19/33, les 14 restantes classées |
 | [rapport-a80-indice-qualifie.md](rapport-a80-indice-qualifie.md) | A8.0 — `porte-indice` : rouge structurelle qualifiée |
 | [rapport-a80-melange-qualifie.md](rapport-a80-melange-qualifie.md) | A8.0 — `porte-melange` : la rouge est qualifiée, pas maquillée |
@@ -65,6 +67,7 @@
 | [rapport-b1110-cartes.md](rapport-b1110-cartes.md) | B11.10 — Cartes et ambiguïtés : le codec lit, le dispatcher devinait |
 | [rapport-b1110b-hybride.md](rapport-b1110b-hybride.md) | B11.10b — l’indice de jeu strippé route les quatre ambiguës |
 | [rapport-b1110c-case.md](rapport-b1110c-case.md) | B11.10c — `E4` lu comme requête de case : l’hybride passe à 4/4 |
+| [rapport-bloc-linguistique.md](rapport-bloc-linguistique.md) | Le bloc linguistique — 398 langues au niveau langue, un contrat pour l'heuristique et le neuronal |
 | [rapport-budget-attention-allocation.md](rapport-budget-attention-allocation.md) | Où dépenser le budget d'attention — uniforme ou sur la moitié des couches ? (second ordre) |
 | [rapport-budget-decision.md](rapport-budget-decision.md) | Le budget d'une DÉCISION — deux monnaies, et la métrique du plan n'en voit qu'une |
 | [rapport-budget-kimi-k3.md](rapport-budget-kimi-k3.md) | Kimi-K3 Q4 : ce qu'un jeton lit vraiment, et ce que ça impose |
@@ -94,7 +97,11 @@
 | [rapport-consolidation-balayage.md](rapport-consolidation-balayage.md) | Le balayage de la consolidation — un optimum INTÉRIEUR de capacité (rang 4) et de pas (3e-4), qui ne composent PAS |
 | [rapport-consolidation-c7.md](rapport-consolidation-c7.md) | C7 — la consolidation : le rejeu met bien l'expérience dans les poids (−16,4 % en domaine, **+1,3 % hors domaine**) |
 | [rapport-consolidation-structure-partagee.md](rapport-consolidation-structure-partagee.md) | Ce qui se consolide, c'est la STRUCTURE PARTAGÉE — même mémorisation (−22,5 %), transfert −7,4 % ou +1,2 % |
+| [rapport-corpus-documents.md](rapport-corpus-documents.md) | Le corpus Documents — 7 496 PDF locaux, 2 992 documents, 845,7 M caractères |
 | [rapport-corpus-gele.md](rapport-corpus-gele.md) | Le corpus gelé — la dérive des bancs est close |
+| [rapport-corpus-pdf.md](rapport-corpus-pdf.md) | Le corpus PDF local — les livres et les cours |
+| [rapport-corpus-wiki-texte.md](rapport-corpus-wiki-texte.md) | Le texte intégral de Wikipédia — les dix langues |
+| [rapport-corpus-wikipedia.md](rapport-corpus-wikipedia.md) | Les corpus Wikipédia par langue |
 | [rapport-couche-distante.md](rapport-couche-distante.md) | A7.6 — une couche exécutée à distance : logits identiques au bit près |
 | [rapport-couche-int8-canal.md](rapport-couche-int8-canal.md) | A7.8 — int8 par canal : l'argmax tient, le bit non |
 | [rapport-couche-int8.md](rapport-couche-int8.md) | A7.7 — int8 sur le hidden : le volume baisse, la fidélité casse |
@@ -130,6 +137,7 @@
 | [rapport-execution-v41.md](rapport-execution-v41.md) | Rapport — test d'exécution locale de DeepSeek-V4.1-Flash, avec toutes les optimisations |
 | [rapport-familles-9.md](rapport-familles-9.md) | C3.2c — les 9 familles : 7 sur 9 au-dessus de 30 % |
 | [rapport-fenetre-puits-attention.md](rapport-fenetre-puits-attention.md) | Fenêtre d'attention × puits : jusqu'où la fenêtre est-elle gratuite ? |
+| [rapport-genres.md](rapport-genres.md) | Le genre se mesure — encyclopédie, livres, documents, cours |
 | [rapport-gguf-drvm.md](rapport-gguf-drvm.md) | N0.4 — GGUF ↔ DRVM : aller-retour identique au bit près |
 | [rapport-gpt-oss-perplexite.md](rapport-gpt-oss-perplexite.md) | Perplexité de gpt-oss : deux bugs réels, une prémisse fausse |
 | [rapport-gpu-scores.md](rapport-gpu-scores.md) | Noyau GPU de scores d'attention — le premier des trois du top-k |
@@ -197,14 +205,38 @@
 | [rapport-morcellement-experts.md](rapport-morcellement-experts.md) | Rapport — peut-on « morceler » un modèle ? L'élagage par fréquence, mesuré |
 | [rapport-multilingue.md](rapport-multilingue.md) | B15 — M1 sur 66 langues : invariance et exactitude |
 | [rapport-mur-memoire-4bits.md](rapport-mur-memoire-4bits.md) | Le mur mémoire, et ce que les 4 bits achètent vraiment |
+| [rapport-n2-34m-distille.md](rapport-n2-34m-distille.md) | N2.r — Le 34,3 M distillé : **3,69**, le meilleur modèle de la nuit, et la courbe plate |
+| [rapport-n2-anglais-34m.md](rapport-n2-anglais-34m.md) | N2.w — L'anglais à 34,3 M distillé : 3,77, et 4,18 à 512 octets |
+| [rapport-n2-anglais-distille.md](rapport-n2-anglais-distille.md) | N2.n — La distillation anglaise : 4,42 → 3,94, la chaîne complète sur 204 Mo |
+| [rapport-n2-anglais.md](rapport-n2-anglais.md) | N2.m — L'anglais seul : 4,42 sur 204 Mo, et ce que le multilingue coûte (1,6 PPL) |
 | [rapport-n2-budget.md](rapport-n2-budget.md) | N2 — le budget paie, les quatre sources coûtent, et la validation n'est pas tenue à l'écart |
+| [rapport-n2-canal-34m.md](rapport-n2-canal-34m.md) | N2.z — Le canal à 34,3 M : 4,00 → 3,51, le meilleur modèle de la nuit |
+| [rapport-n2-canal-distille.md](rapport-n2-canal-distille.md) | N2.x — La distillation du canal : −0,03 en domaine, +0,24 à 512 octets |
+| [rapport-n2-canal-kd-34m.md](rapport-n2-canal-kd-34m.md) | N2.y — Le canal et la distillation ne s'additionnent pas, même à 34,3 M |
+| [rapport-n2-canal.md](rapport-n2-canal.md) | N2.l — Le canal de structure : +5 % de PPL, et le même alphabet |
+| [rapport-n2-capacite-34m.md](rapport-n2-capacite-34m.md) | N2.p — La capacité à 34,3 M : −0,19 par palier, et le verrou de longueur s'efface |
+| [rapport-n2-capacite-reelle.md](rapport-n2-capacite-reelle.md) | N2.j3 — La capacité sur 186 Mo : 21,65 M paie (4,39 → 4,20, et mieux partout) |
 | [rapport-n2-capacite.md](rapport-n2-capacite.md) | N2.h5 — La capacité sur le mètre propre : 21,65 M contre 11,47 M |
 | [rapport-n2-combine.md](rapport-n2-combine.md) | N2.h4 — Les deux leviers ensemble : lire du français **et** 256 octets |
+| [rapport-n2-corpus-1go.md](rapport-n2-corpus-1go.md) | N2.aa — Le corpus de 831 Mo à compute constant : un autre domaine, pas plus de savoir |
 | [rapport-n2-corpus-elargi.md](rapport-n2-corpus-elargi.md) | N2.i — Le corpus élargi : 4,84 Mo uniques au lieu de 3,24 |
+| [rapport-n2-corpus-reel.md](rapport-n2-corpus-reel.md) | N2.j — Du vrai français : 186 Mo de Wikipédia, et ce que vaut le filtre « non ambigu » |
+| [rapport-n2-distillation-reelle.md](rapport-n2-distillation-reelle.md) | N2.j4 — La distillation sur le corpus réel : 4,39 → 3,88, et tout le reste baisse |
 | [rapport-n2-distillation.md](rapport-n2-distillation.md) | N2 — la hiérarchie ne paie pas non plus sur le dispositif de distillation |
 | [rapport-n2-diversite.md](rapport-n2-diversite.md) | N2.h2 — La diversité française : un modèle de français plutôt qu'un modèle du dépôt |
+| [rapport-n2-echantillon.md](rapport-n2-echantillon.md) | N2.s — Ce que le meilleur modèle écrit : du français grammatical, des boucles et des collages |
+| [rapport-n2-fenetre-r1.md](rapport-n2-fenetre-r1.md) | N2 → R1 — Ce que la nuit dit à la ligne « fenêtre » |
 | [rapport-n2-hierarchie.md](rapport-n2-hierarchie.md) | N2 — l'état de section ne paie pas : le contrôle étranger fait aussi bien |
+| [rapport-n2-longueur-reelle.md](rapport-n2-longueur-reelle.md) | N2.j2 — Positions aléatoires sur 186 Mo : le verrou de longueur tombe encore (÷2,4 à 512) |
 | [rapport-n2-longueur.md](rapport-n2-longueur.md) | N2.h3 — Le verrou de longueur : les positions absolues, pas le contexte |
+| [rapport-n2-melange.md](rapport-n2-melange.md) | N2.ac — Le mélange des deux corpus : la largeur sans perdre le français |
+| [rapport-n2-multilingue-34m-distille.md](rapport-n2-multilingue-34m-distille.md) | N2.v — Le multilingue 34,3 M distillé : 5,58 → 4,79, la distillation paie avec la capacité |
+| [rapport-n2-multilingue-34m.md](rapport-n2-multilingue-34m.md) | N2.t — Le multilingue à 34,3 M : 6,68 → 5,89 → 5,58, le rendement décroît |
+| [rapport-n2-multilingue-capacite.md](rapport-n2-multilingue-capacite.md) | N2.q — La capacité multilingue : à recette égale, 21,65 M gagne 0,79 |
+| [rapport-n2-multilingue-distille.md](rapport-n2-multilingue-distille.md) | N2.o — La distillation multilingue : dix langues s'améliorent, la dilution reste |
+| [rapport-n2-multilingue.md](rapport-n2-multilingue.md) | N2.k — Dix langues : la base multilingue paie **0,60 bit/octet** en français et en gagne **0,8 à 3,2** ailleurs |
+| [rapport-n2-pas-vs-texte.md](rapport-n2-pas-vs-texte.md) | N2.ab — Plus de pas paie ; plus de texte paie en largeur, pas en français |
+| [rapport-n2-professeur.md](rapport-n2-professeur.md) | N2.u — Le professeur plus gros ne change presque rien en domaine, mais gagne 0,3 hors domaine |
 | [rapport-n2-propre.md](rapport-n2-propre.md) | N2.h1 — Le corpus propre : la validation n'était pas tenue à l'écart, et la porte honnête vaut 3,09 |
 | [rapport-n3.1-etat.md](rapport-n3.1-etat.md) | N3.1 — l’état des opérations natives : une porte composée serait prématurée |
 | [rapport-n3.2a-service.md](rapport-n3.2a-service.md) | N3.2a — le service natif répond, et il est déterministe |
@@ -285,6 +317,8 @@
 | [rapport-native-tetes.md](rapport-native-tetes.md) | N1.4 — les têtes précoces de `drave-n0` : 55,2 / 60,9 / 62,1 % |
 | [rapport-niah-fragilite.md](rapport-niah-fragilite.md) | Le critère de `porte-indice` ne survit pas à une reconstruction de son entrée |
 | [rapport-nli-francais-dur.md](rapport-nli-francais-dur.md) | Le NLI français plus dur que XNLI : DACCORD +26,9, GQNLI +56,7 — et le 1,5 B bat le 3 B |
+| [rapport-ocr-cegep.md](rapport-ocr-cegep.md) | Le corpus OCR du CEGEP — 10 notes scannées, 2 519 507 caractères |
+| [rapport-ocr-pdf.md](rapport-ocr-pdf.md) | Le corpus OCR — les livres scannés, 20 livres, 15,4 M caractères |
 | [rapport-operateur-negation.md](rapport-operateur-negation.md) | B4.1 — la négation n'est pas une opération portée par l'état |
 | [rapport-optimisations-auto.md](rapport-optimisations-auto.md) | Rapport — détection matérielle et configuration automatique |
 | [rapport-optimisations.md](rapport-optimisations.md) | Moteur d'événements Rust — les 4 optimisations, et les 3 pièges |
@@ -296,9 +330,143 @@
 | [rapport-passe-complete-13-octobre.md](rapport-passe-complete-13-octobre.md) | Deux passes complètes dans la même nuit — et ce qu'elles ont attrapé |
 | [rapport-passe-complete-portes.md](rapport-passe-complete-portes.md) | Passe COMPLÈTE des portes : de 22 à 47 portes — et une porte qui était verte en ne mesurant RIEN |
 | [rapport-passe-k3-disque.md](rapport-passe-k3-disque.md) | Où passe le temps d'une passe Kimi-K3 : le disque, et rien d'autre |
+| [rapport-pensee-absents.md](rapport-pensee-absents.md) | B13 — les absents : 0, les quatre étaient des faux |
+| [rapport-pensee-ac3-alphabeta.md](rapport-pensee-ac3-alphabeta.md) | B13 — AC-3 et alpha-bêta : la contrainte propage, le jeu coupe |
+| [rapport-pensee-adaptive.md](rapport-pensee-adaptive.md) | B13 — la fenêtre adaptative : v = 0,8, le régime courant |
+| [rapport-pensee-aleatoire.md](rapport-pensee-aleatoire.md) | B13 — la porte aléatoire : elle saute à 20 % par pas, la politique réussit 20/20 |
+| [rapport-pensee-alternance.md](rapport-pensee-alternance.md) | B13 — les ruptures répétées : 20/20, v = 0,14 |
+| [rapport-pensee-anaphore-103.md](rapport-pensee-anaphore-103.md) | B13 — la coréférence à 103 liens : la cible est atteinte |
+| [rapport-pensee-anaphore-68.md](rapport-pensee-anaphore-68.md) | B13 — la coréférence à 68 liens : le rôle passe devant |
+| [rapport-pensee-anaphore-bilan.md](rapport-pensee-anaphore-bilan.md) | B13 — le bilan de l'anaphore : 27/30, CV 0,847, huit mesures |
+| [rapport-pensee-anaphore-chaines.md](rapport-pensee-anaphore-chaines.md) | B13 — les chaînes anaphoriques longues : 7/10, le rôle manque |
+| [rapport-pensee-anaphore-corrige.md](rapport-pensee-anaphore-corrige.md) | B13 — l'anaphore corrigée : 12/12 en ignorant les noms des PP |
+| [rapport-pensee-anaphore-cv-graines.md](rapport-pensee-anaphore-cv-graines.md) | B13 — la CV sur 20 graines : 0,8467 ± 0,051 |
+| [rapport-pensee-anaphore-cv.md](rapport-pensee-anaphore-cv.md) | B13 — la validation croisée : 25/30, le dernier nom généralise |
+| [rapport-pensee-anaphore-hybride.md](rapport-pensee-anaphore-hybride.md) | B13 — l'hybride : 24/30, aucune règle simple n'atteint 30/30 |
+| [rapport-pensee-anaphore-kappa.md](rapport-pensee-anaphore-kappa.md) | B13 — l'accord entre règles : kappa de −0,16 à 1,0 |
+| [rapport-pensee-anaphore-limite.md](rapport-pensee-anaphore-limite.md) | B13 — le plafond du gold : 27/30, quatre règles divergent |
+| [rapport-pensee-anaphore-meta.md](rapport-pensee-anaphore-meta.md) | B13 — la méta-règle : 25/30, le vote ne bat pas le dernier nom |
+| [rapport-pensee-anaphore-objets.md](rapport-pensee-anaphore-objets.md) | B13 — les pronoms objets : 8/8 |
+| [rapport-pensee-anaphore-pieges.md](rapport-pensee-anaphore-pieges.md) | B13 — les pièges d'anaphore : 10/12, la règle naïve échoue sur 2 cas |
+| [rapport-pensee-anaphore-pondere.md](rapport-pensee-anaphore-pondere.md) | B13 — le vote pondéré : poids (1,0,0,0), test 7/10 |
+| [rapport-pensee-anaphore-roles.md](rapport-pensee-anaphore-roles.md) | B13 — la résolution par rôle : 23/30, complémentaire du dernier nom |
+| [rapport-pensee-anaphore-semantique.md](rapport-pensee-anaphore-semantique.md) | B13 — la sémantique des verbes : 23/30, la table ne bat pas le dernier nom |
+| [rapport-pensee-anaphore.md](rapport-pensee-anaphore.md) | B13 — l'anaphore : 4/4 liens justes |
+| [rapport-pensee-asym.md](rapport-pensee-asym.md) | B13 — la fiabilité asymétrique : 0,9 / 0,5, 20/20 |
+| [rapport-pensee-audit.md](rapport-pensee-audit.md) | B13 — l'audit des mesures « seule » : 15/15 cohérentes, et un transfert qui manque |
+| [rapport-pensee-banc.md](rapport-pensee-banc.md) | B13 — le banc anytime : l'A* atteint le but en 32 nœuds, l'aléatoire n'y arrive pas |
+| [rapport-pensee-bayes-appris.md](rapport-pensee-bayes-appris.md) | B13 — la vraisemblance apprise : v = 0,899, 20/20 |
+| [rapport-pensee-bayes.md](rapport-pensee-bayes.md) | B13 — la croyance bayésienne : un seul look, 20/20 |
+| [rapport-pensee-bayes2.md](rapport-pensee-bayes2.md) | B13 — le bayésien à deux looks : 8,0 pas, 0,99 de confiance |
+| [rapport-pensee-bord-fin.md](rapport-pensee-bord-fin.md) | B13 — le bord fin : 0,41 est le seuil robuste |
+| [rapport-pensee-bouge-graines.md](rapport-pensee-bouge-graines.md) | B13 — la porte qui bouge sur 5 graines : 5/5 buts en 10 pas |
+| [rapport-pensee-bouge.md](rapport-pensee-bouge.md) | B13 — la porte qui bouge : l'horloge dans l'état |
+| [rapport-pensee-bruit.md](rapport-pensee-bruit.md) | B13 — le bruit variable : la politique tient de 50 % à 95 % |
+| [rapport-pensee-bruitee.md](rapport-pensee-bruitee.md) | B13 — l'observation bruitée : 10 % d'erreur casse la politique |
+| [rapport-pensee-cascade-tete.md](rapport-pensee-cascade-tete.md) | B13 — la tête de la cascade : la correction dégrade (0,419 contre 0,441) |
+| [rapport-pensee-cascade-union.md](rapport-pensee-cascade-union.md) | B13 — la cascade avec l'union : F1 0,2170, tête 0,4410, 1 601 appels |
+| [rapport-pensee-chaotique.md](rapport-pensee-chaotique.md) | B13 — l'alternance aléatoire : 20/20, v = 0,12 |
+| [rapport-pensee-concurrentes.md](rapport-pensee-concurrentes.md) | B13 — les routes concurrentes : 0/20 au but 0, 20/20 au but 1 |
+| [rapport-pensee-contexte.md](rapport-pensee-contexte.md) | B13 — la réponse contextuelle : 5/5, la phrase précédente tranche |
+| [rapport-pensee-correction.md](rapport-pensee-correction.md) | B13 — la mesure corrigée : `seule_minute` rendait de faux échecs |
+| [rapport-pensee-courbe-seuil.md](rapport-pensee-courbe-seuil.md) | B13 — la courbe complète du seuil : 0 → 80 % → 100 % (un creux à 0,45) |
+| [rapport-pensee-courbe.md](rapport-pensee-courbe.md) | B13 — la courbe d'apprentissage : la porte est apprise dès 50 épisodes |
+| [rapport-pensee-courbe20.md](rapport-pensee-courbe20.md) | B13 — la courbe sur 20 graines : le seuil est ~0,41 |
+| [rapport-pensee-croyance.md](rapport-pensee-croyance.md) | B13 — la croyance : 0/20, la distribution seule ne suffit pas |
+| [rapport-pensee-curieuse.md](rapport-pensee-curieuse.md) | B13 — la curiosité : 0/20, le bonus de certitude ne suffit pas |
+| [rapport-pensee-cycle.md](rapport-pensee-cycle.md) | B13 — la pénalité -1 ne casse pas le cycle : 0/20 |
+| [rapport-pensee-derive.md](rapport-pensee-derive.md) | B13 — la fiabilité qui dérive : v = 0,56, 20/20 |
+| [rapport-pensee-drvf.md](rapport-pensee-drvf.md) | B13 — DRVF `thought` : la trace se relit, la corruption se voit |
+| [rapport-pensee-ferme.md](rapport-pensee-ferme.md) | B13 — la porte qui se referme : le moteur repasse |
+| [rapport-pensee-frequent.md](rapport-pensee-frequent.md) | B13 — la bascule fréquente : 1/50, 20/20 |
+| [rapport-pensee-glisse.md](rapport-pensee-glisse.md) | B13 — la dérive continue : v = 0,5, 20/20 |
+| [rapport-pensee-gold-200-subsets.md](rapport-pensee-gold-200-subsets.md) | B13 — les sous-ensembles du gold : POS 0,8214 sur les 20 nouvelles |
+| [rapport-pensee-gold-200.md](rapport-pensee-gold-200.md) | B13 — le gold à 200 phrases réelles : POS 0,7738 |
+| [rapport-pensee-gold-342.md](rapport-pensee-gold-342.md) | B13 — le gold complet : 522 phrases, POS 0,7586 |
+| [rapport-pensee-gold-complexes.md](rapport-pensee-gold-complexes.md) | B13 — les phrases complexes : POS 0,6471, syntagme 0,4828 |
+| [rapport-pensee-gold-complexes100.md](rapport-pensee-gold-complexes100.md) | B13 — les 100 phrases complexes : POS 0,6984, syntagme 0,2677 |
+| [rapport-pensee-gold-complexes20.md](rapport-pensee-gold-complexes20.md) | B13 — les 20 phrases complexes : POS 0,6829, syntagme 0,2963 |
+| [rapport-pensee-gold-complexes50.md](rapport-pensee-gold-complexes50.md) | B13 — les 50 phrases complexes : POS 0,7013, syntagme 0,3060 |
+| [rapport-pensee-gold-discours.md](rapport-pensee-gold-discours.md) | B13 — le discours : acte 0,9, négation 1,0, modalité 0,9 |
+| [rapport-pensee-gold-gele.md](rapport-pensee-gold-gele.md) | B13 — le gold gelé : les portes ne cassent plus quand le gold grandit |
+| [rapport-pensee-gold-linguistique.md](rapport-pensee-gold-linguistique.md) | L — le gold 360 : 200 réels + 160 synthétiques, POS 0,772, tête 0,966 |
+| [rapport-pensee-graines.md](rapport-pensee-graines.md) | B13 — la robustesse sur 5 graines : le curriculum `open` tient |
+| [rapport-pensee-hasard.md](rapport-pensee-hasard.md) | B13 — le hasard variable : 20–60 %, 20/20 à chaque taux |
+| [rapport-pensee-hasard2.md](rapport-pensee-hasard2.md) | B13 — le régime aléatoire : 1/2, 20/20 |
+| [rapport-pensee-intra.md](rapport-pensee-intra.md) | B13 — le régime intra-épisode : 20/20, v = 0,48 |
+| [rapport-pensee-juge-bloc.md](rapport-pensee-juge-bloc.md) | B13 — le juge contre le bloc : 0/19, la première mesure de correction |
+| [rapport-pensee-juge.md](rapport-pensee-juge.md) | B13 — le juge des réponses : sa couverture est 0/19 |
+| [rapport-pensee-labyrinthe.md](rapport-pensee-labyrinthe.md) | B13 — le labyrinthe non linéaire : la bonne politique utilise la sonde, l'aveugle l'ignore |
+| [rapport-pensee-lien-auto-fixe.md](rapport-pensee-lien-auto-fixe.md) | B13 — le lien automatique réparé : 5/5 après le réordonnancement |
+| [rapport-pensee-lien-auto.md](rapport-pensee-lien-auto.md) | B13 — le lien automatique : 0/5, le sujet ne suffit pas |
+| [rapport-pensee-lien-coref.md](rapport-pensee-lien-coref.md) | B13 — la coréférence comme lien : 62/116, la moitié des antécédents retrouvés |
+| [rapport-pensee-liens-classes.md](rapport-pensee-liens-classes.md) | B13 — les liens classés : 50 intra, 62 inter, 4 absents |
+| [rapport-pensee-limite.md](rapport-pensee-limite.md) | B13 — la bascule limite : 1/5, 20/20 |
+| [rapport-pensee-look-tardif.md](rapport-pensee-look-tardif.md) | B13 — le look tardif : 20/20 |
+| [rapport-pensee-minute-apprise.md](rapport-pensee-minute-apprise.md) | B13 — la Q-table sur la porte minute : elle apprend l'ouverture-passage |
+| [rapport-pensee-minute-entrainee.md](rapport-pensee-minute-entrainee.md) | B13 — la Q-table entraînée sur la minute : la politique seule échoue encore |
+| [rapport-pensee-minute-seule.md](rapport-pensee-minute-seule.md) | B13 — la politique seule sur la porte minute : elle échoue, l'A* était nécessaire |
+| [rapport-pensee-minute.md](rapport-pensee-minute.md) | B13 — la porte à un tour : la sonde ouvre et passe dans le même pas |
+| [rapport-pensee-miroir-espaces.md](rapport-pensee-miroir-espaces.md) | B13 — la restitution avec les intervalles : 1,0, la perte était le rendu |
+| [rapport-pensee-miroir-pos.md](rapport-pensee-miroir-pos.md) | B13 — la sortie POS : 0,201, la restitution sémantique ne restitue pas |
+| [rapport-pensee-miroir-reponse.md](rapport-pensee-miroir-reponse.md) | B13 — la réponse : 19/19, l'acte commande la sortie |
+| [rapport-pensee-miroir-resume.md](rapport-pensee-miroir-resume.md) | B13 — la restitution sémantique : le résumé rappelle 78 % |
+| [rapport-pensee-miroir.md](rapport-pensee-miroir.md) | B13 — le miroir entrée/sortie : surface 1,0, mots 0,2095 |
+| [rapport-pensee-mlp.md](rapport-pensee-mlp.md) | B13 — le MLP : 60 poids, l'imitation échoue encore seule |
+| [rapport-pensee-mobile-graines.md](rapport-pensee-mobile-graines.md) | B13 — la porte mobile sur 5 graines : 5/5 aux deux positions |
+| [rapport-pensee-mobile.md](rapport-pensee-mobile.md) | B13 — la porte mobile : deux positions, une seule politique |
+| [rapport-pensee-necessaire.md](rapport-pensee-necessaire.md) | B13 — le neuronal nécessaire : le cadenas, la sonde seule, l'aveugle échoue |
+| [rapport-pensee-negatives.md](rapport-pensee-negatives.md) | B13 — les questions négatives : 19/29, la règle ne s'inverse pas |
+| [rapport-pensee-observatrice.md](rapport-pensee-observatrice.md) | B13 — l'action observer : 20/20, le geste qui révèle la porte |
+| [rapport-pensee-operateurs.md](rapport-pensee-operateurs.md) | B13 — les opérateurs hétérogènes : trois genres, un coût, des appels |
+| [rapport-pensee-oubli-fort.md](rapport-pensee-oubli-fort.md) | B13 — la mémoire très courte : 20/20, 8,0 pas |
+| [rapport-pensee-oubli-total.md](rapport-pensee-oubli-total.md) | B13 — l'oubli total : 0/20, la mémoire est nécessaire |
+| [rapport-pensee-oubli.md](rapport-pensee-oubli.md) | B13 — la mémoire courte : 20/20, 10,0 pas |
+| [rapport-pensee-ouverte.md](rapport-pensee-ouverte.md) | B13 — le curriculum des états `open` : le trou de transfert est comblé |
+| [rapport-pensee-partielle.md](rapport-pensee-partielle.md) | B13 — l'observation partielle : 0/20, la mémoire ne suffit pas |
+| [rapport-pensee-periode.md](rapport-pensee-periode.md) | B13 — la période variable : 2–5 pas, la même politique |
+| [rapport-pensee-phase-devine.md](rapport-pensee-phase-devine.md) | B13 — la phase devinée : 10 % de bruit, 0/20 au but 0 |
+| [rapport-pensee-phase-etat.md](rapport-pensee-phase-etat.md) | B13 — la phase dans l'état : le correctif, 20/20 aux deux buts |
+| [rapport-pensee-phase-graines.md](rapport-pensee-phase-graines.md) | B13 — la phase sur 5 graines : 5/5 buts, 10–14 pas |
+| [rapport-pensee-phase.md](rapport-pensee-phase.md) | B13 — la période qui change : 3 pas puis 2 pas |
+| [rapport-pensee-pieges.md](rapport-pensee-pieges.md) | B13 — les questions pièges : 0/5, la règle du `si` est cassée |
+| [rapport-pensee-porte-apprise.md](rapport-pensee-porte-apprise.md) | B13 — la porte apprise : la Q-table trouve la porte seule |
+| [rapport-pensee-porte.md](rapport-pensee-porte.md) | B13 — la porte neuronale : la bonne politique ouvre, l'aveugle échoue |
+| [rapport-pensee-professeur.md](rapport-pensee-professeur.md) | B13 — le professeur complet : 56 états-Q, il échoue encore seul |
+| [rapport-pensee-rapide.md](rapport-pensee-rapide.md) | B13 — la bascule très fréquente : 1/10, 20/20 |
+| [rapport-pensee-rare.md](rapport-pensee-rare.md) | B13 — l'information rare : utile 10 % du temps, 20/20 |
+| [rapport-pensee-reponse-contenu.md](rapport-pensee-reponse-contenu.md) | B13 — la réponse au contenu : 0/19, la frontière du modèle |
+| [rapport-pensee-reponse-dirigee.md](rapport-pensee-reponse-dirigee.md) | B13 — la réponse dirigée : 19/19, la première réponse juste |
+| [rapport-pensee-reponse-extraction.md](rapport-pensee-reponse-extraction.md) | B13 — la réponse par extraction : 19/19, mais ce n'est pas une réponse |
+| [rapport-pensee-reponses.md](rapport-pensee-reponses.md) | B13 — les 19 réponses de référence : le juge a une couverture de 1,0 |
+| [rapport-pensee-reseau.md](rapport-pensee-reseau.md) | B13 — le réseau linéaire : l'imitation échoue, il ne généralise pas seul |
+| [rapport-pensee-rupture.md](rapport-pensee-rupture.md) | B13 — la rupture : 90 % d'erreur, v = 0,12, 20/20 |
+| [rapport-pensee-sans-none.md](rapport-pensee-sans-none.md) | B13 — la politique sans None : elle tourne, sans but |
 | [rapport-pensee-sans-verbaliser.md](rapport-pensee-sans-verbaliser.md) | Rapport — la pensée sans verbaliser : le journal des mesures 77–168 |
+| [rapport-pensee-segmenteur-defaut.md](rapport-pensee-segmenteur-defaut.md) | B13 — l'union par défaut : F1 0,2005, tête 0,4662 |
+| [rapport-pensee-segmenteur-hybride.md](rapport-pensee-segmenteur-hybride.md) | B13 — l'hybride frontières/têtes : 0,3732, le chunker garde les têtes |
+| [rapport-pensee-segmenteur-union.md](rapport-pensee-segmenteur-union.md) | B13 — l'union des segmenteurs : F1 0,2005, le rappel paie |
+| [rapport-pensee-segmenteur.md](rapport-pensee-segmenteur.md) | B13 — le segmenteur : deux chunkers complémentaires, F1 0,1722 contre 0,1425 |
+| [rapport-pensee-seuil-bas.md](rapport-pensee-seuil-bas.md) | B13 — le seuil bas : un seuil gradué (~0,40) |
+| [rapport-pensee-seuil-bord.md](rapport-pensee-seuil-bord.md) | B13 — le bord du seuil : × 0,42 et × 0,44 réussissent (50/50) |
+| [rapport-pensee-seuil-fin.md](rapport-pensee-seuil-fin.md) | B13 — le seuil fin : × 0,4 réussit, × 0,45 échoue (non monotone) |
+| [rapport-pensee-seuil-graines.md](rapport-pensee-seuil-graines.md) | B13 — le seuil sur 5 graines : le seuil est ~0,4 |
+| [rapport-pensee-seuil.md](rapport-pensee-seuil.md) | B13 — le seuil d'oubli : dans (0,2 ; 0,5] |
+| [rapport-pensee-seule.md](rapport-pensee-seule.md) | B13 — la politique seule : 8 pas, 15/15 buts, sans A* |
+| [rapport-pensee-shaping.md](rapport-pensee-shaping.md) | B13 — le reward shaping : il ne suffit pas, la politique seule échoue encore |
+| [rapport-pensee-si.md](rapport-pensee-si.md) | B13 — la règle du `si` : 29/29, la dernière règle de surface |
 | [rapport-pensee-silencieuse.md](rapport-pensee-silencieuse.md) | PENSER SANS VERBALISER — la boucle d'état naïve détruit la prédiction, et verbaliser n'est PAS du gaspillage |
+| [rapport-pensee-sto-seule.md](rapport-pensee-sto-seule.md) | B13 — la politique seule sur le bruit : elle réessaie et atteint le but |
+| [rapport-pensee-stochastique.md](rapport-pensee-stochastique.md) | B13 — la porte stochastique : 80 % d'ouverture, la politique réessaie |
+| [rapport-pensee-tres-rare.md](rapport-pensee-tres-rare.md) | B13 — l'information très rare : utile 1 %, 20/20 |
+| [rapport-pensee-ultra-rare.md](rapport-pensee-ultra-rare.md) | B13 — l'information ultra-rare : utile 0,1 %, 20/20 |
+| [rapport-pensee-un-look.md](rapport-pensee-un-look.md) | B13 — un seul look : 20/20 |
 | [rapport-pensee-v0.md](rapport-pensee-v0.md) | Pensée v0 — le state store, l'arbre hashé et six portes |
+| [rapport-pensee-verite.md](rapport-pensee-verite.md) | B13 — la vérité qui change : porte cachée, 20/20 aux deux phases |
+| [rapport-pensee-votante.md](rapport-pensee-votante.md) | B13 — l'observation votante : deux looks, 20/20, 1 % d'erreur |
+| [rapport-pensee-votante3.md](rapport-pensee-votante3.md) | B13 — l'observation à trois looks : 20/20, mais 4000 épisodes |
+| [rapport-pensee-vote.md](rapport-pensee-vote.md) | B13 — le vote de signaux : 5 looks, toujours 0/20 |
+| [rapport-pensee-vrais-absents.md](rapport-pensee-vrais-absents.md) | B13 — les vrais absents : 5 phrases sans antécédent, 0 lien |
 | [rapport-phase3-reparti.md](rapport-phase3-reparti.md) | Phase 3 — le calcul réparti redevient fidèle |
 | [rapport-pipeline-m2.md](rapport-pipeline-m2.md) | B14 — M2 dans la chaîne : un rameau, pas un étage |
 | [rapport-pipeline-memoire.md](rapport-pipeline-memoire.md) | B17 — M7-bis dans la chaîne : LFU aide la mémoire, pas M8 |
@@ -333,6 +501,7 @@
 | [rapport-r06-publication.md](rapport-r06-publication.md) | R06 v6 — la cascade à confiance est publiée : deux fichiers, un seuil, une recette |
 | [rapport-r06-relecture.md](rapport-r06-relecture.md) | R06 — la relecture : relire plus ne sert à rien, changer de lecteur ne s'aiguille pas |
 | [rapport-r07-routeur.md](rapport-r07-routeur.md) | R0.5 — le routeur : le signal prédit (0,839), la règle ne transfère pas |
+| [rapport-r1-preparation.md](rapport-r1-preparation.md) | La préparation de R1.1/R1.2 — ce qui est prêt, ce qui bloque |
 | [rapport-r13-decision.md](rapport-r13-decision.md) | R13 — la décision : rester en octets, parce que le BPE ne gagne pas à octets égaux |
 | [rapport-r13-tokenisation.md](rapport-r13-tokenisation.md) | R13.0 — BPE : 3,4 à 5,2 octets par jeton, réversible ; la PPL reste à mesurer |
 | [rapport-r13.1-bpe.md](rapport-r13.1-bpe.md) | R13.1 — pilote : le BPE gagne 11,9 % à 200/400 pas (corrigé 11,0 %) |
@@ -353,6 +522,7 @@
 | [rapport-routage-experts.md](rapport-routage-experts.md) | Rapport — le routage des experts était faux pour quatre gros modèles sur cinq |
 | [rapport-routeur-confiance.md](rapport-routeur-confiance.md) | B24 — le round-trip M1 améliore la typo, mais coûte les espaces |
 | [rapport-routeur-m1-m2.md](rapport-routeur-m1-m2.md) | B23 — routeur M1→M2 : gagne sur les espaces, perd sur les typos |
+| [rapport-s-analyseur.md](rapport-s-analyseur.md) | S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture |
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
 | [rapport-semantique.md](rapport-semantique.md) | Le protocole sémantique natif — premier passage |
 | [rapport-session-2026-09-30.md](rapport-session-2026-09-30.md) | Session du 30/09 — index des chantiers |
@@ -369,6 +539,7 @@
 | [rapport-tete-restreinte.md](rapport-tete-restreinte.md) | Rapport — restreindre la tête de sortie : ce qui marche, ce qui ne marche pas |
 | [rapport-transport-liste.md](rapport-transport-liste.md) | Phase 3.2 — transporter la LISTE au lieu du vecteur |
 | [rapport-travail-reel.md](rapport-travail-reel.md) | Le moteur est-il prêt pour du vrai travail ? |
+| [rapport-typoglycemie.md](rapport-typoglycemie.md) | La typoglycémie du modèle : il lit les lettres, pas les formes |
 | [rapport-universaux.md](rapport-universaux.md) | Rapport — base d'universaux typés |
 | [rapport-v4-couches-0-1.md](rapport-v4-couches-0-1.md) | V4-Flash, couches 0 et 1 — la première comparaison étage par étage |
 | [rapport-v4-hca.md](rapport-v4-hca.md) | Les compresseurs de DeepSeek-V4 (HCA et CSA), validés contre llama.cpp |

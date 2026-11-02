@@ -18,7 +18,7 @@
 #   5. il sort en 1 s'il y a la moindre rouge, en imprimant de quoi la relire.
 #
 # Usage :
-#   tools/toutes-les-portes.sh                 # les 22 portes
+#   tools/toutes-les-portes.sh                 # les 81 portes
 #   PORTES="gain topologie" tools/toutes-les-portes.sh    # un sous-ensemble (filtre)
 #   DELAI=300 tools/toutes-les-portes.sh       # borne plus serrée
 #
@@ -29,7 +29,7 @@ set -u
 cd "$(dirname "$0")/.."
 DELAI=${DELAI:-1800}
 FILTRE=${PORTES:-}
-JOURNAUX=${JOURNAUX:-/tmp/portes-$(date +%m%d-%Hh%M)}
+JOURNAUX=${JOURNAUX:-work/portes-$(date +%m%d-%Hh%M)}
 mkdir -p "$JOURNAUX"
 
 portes=$(ls tools/porte-*.sh | sort)

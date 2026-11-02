@@ -1,6 +1,12 @@
 # Références de non-régression
 
-> **Dernière passe complète — 2026-11-01 à 00 h 56 :** **80 portes, 76 vertes, 4 rouges, 1 h 46**
+> **Dernière passe complète — 2026-11-02 à 06 h :** **81 portes, 76 vertes, 5 rouges** (journaux
+> `/tmp/portes-…`, **effacés au reboot de 15 h 06** : ce fichier est le registre). Les 4 rouges
+> connues : `porte-indice`, `porte-melange`, `porte-homeostasie`, `porte-reparti-moteur` ; la 5e,
+> **`porte-greffe`** à 700 s, **rejouée verte à 1200 s** (un délai, pas une régression). La passe
+> du 02/11 00 h 03 : 81 portes, 77 vertes, 4 rouges. Journaux durables : `work/portes/`.
+
+> **Passe précédente — 2026-11-01 à 00 h 56 :** **80 portes, 76 vertes, 4 rouges, 1 h 46**
 > (journaux `/tmp/portes-1101-n2h`). Mêmes rouges que la passe du 31/10 : `porte-indice` (921 s),
 > `porte-melange` (112 s), `porte-homeostasie` (environnementale) et `porte-reparti-moteur`.
 > Aucune régression ; `porte-vision` et `porte-ocr-scans` sont vertes.
@@ -24,11 +30,6 @@
 > budgets, latences) sont dans `reports/` — une fiche par expérience — et non ici :
 > ce fichier ne porte que ce qu'une **porte** vérifie.
 
-> **Passe du 2026-10-28 à 00 h 12** (**49 portes, 46 vertes, 3 rouges**, **1 h 40 min**) — la passe
-> du programme N. Les deux rouges structurelles (`porte-indice`, `porte-melange`) et
-> `porte-occupation-moteur` (contention ; elle passe **verte seule**) ; aucune régression.
-> Journaux : [`journal/2026-10-28/README.md`](../../journal/2026-10-28/README.md).
-
 > **Passe précédente — 2026-10-27 à 14 h 33** (**49 portes, 47 vertes, 2 rouges**, **1 h 48 min**) — la passe
 > finale du sprint 24 h. `porte-indice` **843 s** et `porte-melange` **112 s** restent les deux
 > rouges structurelles, avec les mêmes diagnostics ; **aucune régression**. Journaux :
@@ -50,7 +51,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
-| toutes les portes | `tools/toutes-les-portes.sh` | **49 portes** ; dernière passe : **46 vertes, 3 rouges** (28/10 00 h 12), **1 h 40**, aucune sautée — les deux rouges sont **structurelles** et connues (`porte-indice`, `porte-melange`) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
+| toutes les portes | `tools/toutes-les-portes.sh` | **81 portes** ; dernière passe **76 vertes, 5 rouges** (02/11 06 h) — les 4 connues + `porte-greffe` rejouée verte à 1200 s · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 > ### ⚠️ DEUX DÉFAUTS DE MESURE, TROUVÉS LE 16/10 — ET ILS SONT DE LA MÊME FAMILLE

@@ -6,7 +6,7 @@
 > fichiers qui bougent**. Il ne remplace ni l'un ni l'autre : l'état reste la source du présent,
 > la roadmap la source de l'ordre.
 >
-> **Date** : 2026-11-01. **Machine** : une seule — 40 cœurs, 125 Go de RAM, 2 GPU de 16 Go,
+> **Date** : 2026-11-02. **Machine** : une seule — 40 cœurs, 125 Go de RAM, 2 GPU de 16 Go,
 > 2,0 To libres sur `Data13TB`, 34 Go sur `IA`. **Capacité** : voir
 > [`chantiers.md`](chantiers.md) § 8 (4 sessions, 4 à 6 chantiers, 2 à 4 sous-agents par session).
 >
@@ -35,10 +35,10 @@ sous-agents pour les tâches bornées.
 
 | session | mandat | chantiers | charge | prochaine action |
 |---|---|---|---|---|
-| **N2 — le natif** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | la chaîne réelle est mesurée (N2.h → N2.z) : **le meilleur modèle est le 34,3 M + canal (3,53)** ; prochaine action : le **corpus d'un autre ordre** (132 Go de wiki), puis la fenêtre (R1) |
-| **L — la langue et la pensée** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | le contrat/bloc (**398 langues**), le **gold 342 réels + 160 synthétiques + attachement tête** et les **opérateurs + coréférence (27/30, CV 0,847) B13** sont faits ; L 342 ; DRVM/native **bloqué** (pas de modèle local) |
-| **S — les structures** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | l'analyseur plus riche (rôles, subordonnées), l'export vers le corpus |
-| **D/R/A — les données, le lecteur, le moteur** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | le texte intégral des 10 corpus (**fait**), l'extraction PDF/OCR (**documents clos, OCR 20 livres + 10 notes CEGEP clos, les ~127 scans CEGEP ensuite**), la prépa R1 (**fiche faite**) |
+| **N2 — le natif (à ouvrir)** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | **N2.ac** (1,02 Go, 60 k pas) : **3,49** domaine / **6,03** littérature — le modèle de production ; prochaine action : **200 k pas**, puis R1.1/R1.2. **Aucune session active.** |
+| **L/B13 — en pause** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | **140/140**, gold **432**, coréférence **116 liens** ; le cycle est committé. Reprise : `e181ce02` (`--resume`), puis **gold neuronal** / **DRVM/native** (bloqué). |
+| **S — les structures (à ouvrir)** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | l'analyseur plus riche (rôles, subordonnées), l'export vers le corpus. **Aucune session DSH ; sous-module `tools/structures`.** |
+| **D/R/A — en pause** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | 10 corpus, PDF, OCR 20 livres + 10 notes CEGEP, glossaire 355 entrées : **fait et committé**. Reprise : `fe3c05f0` (`--resume`), OCR ~127 scans, clôture. |
 
 **Le rôle d'intégration** (le « hub ») : tient `en-cours`, `roadmap`, `chantiers`, ce plan,
 `journal/`, `reports/INDEX.md`, `AGENTS.md`, les compteurs et la revue de documentation. Il ne
@@ -122,7 +122,7 @@ la roadmap et l'état, vérifie les compteurs et la revue, et note dans le journ
 
 | outil | ce qu'il vérifie | quand |
 |---|---|---|
-| `python3 tools/sessions.py --check` | plans complets, états connus, heartbeats < 45 min, **périmètres et fichiers réservés qui se recouvrent**, sessions de l'état sans plan | avant d'ouvrir une session, et au checkpoint |
+| `python3 tools/sessions.py --check --strict` | plans complets, états connus, heartbeats < 45 min (hors `en pause`), **périmètres et fichiers réservés qui se recouvrent**, sessions de l'état sans plan | avant d'ouvrir une session, et au checkpoint |
 | `python3 tools/surveille_sessions.py` | les **fichiers en mouvement** (`git status`) rangés par session, les **orphelins** et les **conflits** (un fichier réservé par deux sessions) | à chaque checkpoint, et avant un commit partagé |
 | `python3 tools/verifie_etat_a_jour.py` | aucun fait commité sans ligne d'état | à chaque commit |
 | `python3 tools/revue_documentation.py` | classement, liens, compteurs, fraîcheur | avant chaque commit de clôture |
@@ -151,10 +151,71 @@ supprimer).
 
 ## 8. La mise en route
 
-1. **Ouvrir les sessions** : N2 (GPU), L (Pensée), S (structures), D/R/A ; chacune crée son
-   `journal/sessions/<id>/plan.md` (les onze champs), réserve son territoire (§ 3) et met à jour
-   sa section dans `en-cours` **via le hub**.
-2. **Vérifier** : `sessions.py --check` (aucun recouvrement), `surveille_sessions.py` (les
+1. **Ouvrir les sessions** : N2 (GPU, à ouvrir), L/B13 (reprise de `e181ce02`), S (structures, à ouvrir), D/R/A (reprise de `fe3c05f0`) ; chacune crée ou reprend son `journal/sessions/<id>/plan.md` (les onze champs), réserve son territoire (§ 3) et met à jour sa section dans `en-cours` **via le hub**.
+2. **Vérifier** : `sessions.py --check --strict` (aucun recouvrement), `surveille_sessions.py` (les
    orphelins), `revue_documentation.py` (compteurs).
 3. **Premier checkpoint** : le hub intègre les quatre sections, met à jour la roadmap et note le
    journal. Ensuite, chaque session suit la cadence du § 4.
+
+## 9. Reprise après le reboot du 02/11 15 h 06 — ouvrir ou reprendre
+
+**L'état au 02/11 16 h 10.** Deux sessions sont **en pause** (`e181ce02` L/B13, `fe3c05f0` D/R/A) ;
+leurs cycles sont committés. Deux chantiers n'ont **pas** de session : **N2** (GPU) et **S**
+(sous-module `tools/structures`). Le hub `536cd5d6` tient l'état, la roadmap et l'index ; les GPU
+sont revenus sains.
+
+**Le principe.** Un terminal = une session = un `plan.md` = un territoire. Une seule session écrit
+`en-cours` à la fois ; les autres **proposent** leur ligne au hub. Toutes les commandes se lancent
+depuis la racine du dépôt.
+
+**Les commandes.**
+
+| besoin | commande |
+|---|---|
+| ouvrir une **nouvelle** session | `dsh --profile dsh-tui` (ou `dsh dsh-tui`) |
+| **reprendre** une session | `dsh --profile dsh-tui --resume <id>` |
+| voir les mandats | `python3 tools/sessions.py --status` |
+| vérifier les mandats | `python3 tools/sessions.py --check --strict` |
+| voir les fichiers en mouvement | `python3 tools/surveille_sessions.py` |
+
+**Les quatre mandats, dans l'ordre de valeur.**
+
+1. **N2 — le natif (GPU).** Nouvelle session. Lire `AGENTS.md`, `en-cours`, `backlog/N2-distillation.md`.
+   Créer `journal/sessions/<id>/plan.md` (modèle `_modele/plan.md`), réserver `data/`, `tools/corpus*`,
+   `reports/n2-*`, `work/n2*`. Prochaine action : **200 000 pas sur le mélange 1 Go** (N2.ac :
+   3,49 domaine / 6,03 littérature), puis la fenêtre **R1.1/R1.2**. Ne pas toucher aux GPU de
+   l'autre session ; ne pas écrire `en-cours` sans le hub.
+2. **S — les structures (CPU).** Nouvelle session. Lire `docs/theorie/jeux-symboliques.md` et
+   `tools/structures/` (sous-module `heads/fusion`). Réserver `tools/structures/`, ses exports et sa
+   banque. Prochaine action : **analyseur rôles/subordonnées**, puis **export au corpus** ; 19 tests
+   à garder verts. Le sous-module se commit **dans son dépôt** avant de bouger le pointeur.
+3. **L/B13 — la langue et la pensée (CPU).** Reprendre `e181ce02` par `--resume`, puis **remettre
+   `État : actif`** et rafraîchir le heartbeat (07:50 → maintenant). Le cycle **140/140** est
+   committé. Prochaine action : **gold neuronal** (qualifier un modèle local) ; **DRVM/native** est
+   bloqué par l'absence de poids/tagger.
+4. **D/R/A — les données (CPU/IO).** Reprendre `fe3c05f0` par `--resume`, remettre `État : actif` et
+   rafraîchir le heartbeat (01/11 22:50 → maintenant). Prochaine action : **OCR ~127 scans CEGEP**
+   (`tools/ocr_pdf.py --racine CEGEP --deja …`), puis la **clôture**.
+
+**Le premier prompt (à coller dans chaque terminal).**
+
+> Tu es la session `<rôle>`. Lis `AGENTS.md`, `docs/pilotage/en-cours.md` et **seulement** le
+> document de ta tâche. Crée (ou reprends) `journal/sessions/<id>/plan.md` avec les onze champs,
+> réserve ton territoire, puis exécute la prochaine action nommée ci-dessus. Un fait = mesure +
+> contrôle négatif + fiche + `en-cours` + commit (`git add` explicite). Ne touche pas à
+> `en-cours`, `roadmap`, `chantiers`, `AGENTS` sans le hub. À la fin du cycle, rends ta ligne
+> d'état et le hash du commit.
+
+**Les pièges.**
+
+- **Ne pas écrire `en-cours` à deux.** Le hook refuse un fait sans état, pas deux écrivains : c'est
+  la discipline (ou le hub) qui évite la course.
+- **`git add` explicite**, jamais `-A` : deux sessions sur le même arbre ; l'index alterné
+  (`GIT_INDEX_FILE=/tmp/index.<session>`) est la ceinture.
+- **Committer avant de rebooter** : le reboot du 02/11 a laissé 67 fichiers non committés.
+- **Les portes lourdes une à une** ; les GPU sont partagés.
+- **Le sous-module `docwatch`** se commit dans son dépôt, puis le pointeur dans le superprojet.
+
+**Quand une session finit.** Elle passe `État : terminé`, écrit sa `cloture.md` si le rapport
+automatique ne dit pas ce qui est livré, et le hub la sort d'`en-cours` vers
+`journal/sessions/`.

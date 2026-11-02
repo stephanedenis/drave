@@ -3,10 +3,12 @@
 
 Chaque session active expose son mandat dans `journal/sessions/<id>/plan.md` :
 périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
-sessions consultent `--status` avant de claim, et `--check` refuse les mandats
-incomplets, les identifiants dupliqués, les périmètres qui se recouvrent et
-les heartbeats périmés. `en-cours` reste la seule source de l'état : ce plan
-est le **contrat de travail** qui le précède.
+sessions consultent `--status` avant de claim, et `--check --strict` refuse les
+mandats incomplets, les identifiants dupliqués, les périmètres qui se recouvrent
+et les heartbeats périmés (le `--check` seul les signale). `en-cours` reste la
+seule source de l'état : ce plan est le **contrat de travail** qui le précède.
+Une session arrêtée (reboot, panne) passe à `État : en pause` : elle reste dans
+l'état, son heartbeat n'est plus exigé, et la reprise la remet `actif`.
 """
 from __future__ import annotations
 
@@ -23,8 +25,9 @@ ETAT = "docs/pilotage/en-cours.md"
 CHAMPS = ("session", "rôle", "périmètre", "fichiers réservés", "heartbeat",
           "prochaine action", "état")
 ACTIFS = {"actif", "active", "en cours", "bloqué", "bloquee", "bloqué(e)"}
+PAUSE = {"en pause", "pause", "suspendu", "suspendue"}
 A_CONFIRMER = {"à confirmer", "a confirmer"}
-ETATS_CONNUS = ACTIFS | {"terminé", "termine", "libre", "libre."} | A_CONFIRMER
+ETATS_CONNUS = ACTIFS | PAUSE | {"terminé", "termine", "libre", "libre."} | A_CONFIRMER
 PEREMPTION_MIN = 45
 
 
@@ -237,14 +240,24 @@ def autotest() -> int:
             "- **État** : actif\n", encoding="utf-8")
         e, _ = verifier(r)
         assert any("manquant" in x for x in e), e
-    print("autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé")
+        # une session arrêtée passe en pause : plus de heartbeat exigé, même en strict
+        (d / "plan.md").write_text(
+            "# Plan\n\n- **Session** : `a`\n- **Rôle** : test\n- **Périmètre** : A8.0\n"
+            "- **Fichiers réservés** : `tools/a.py`\n- **Heartbeat** : 2026-10-30 11:00 HAE\n"
+            "- **Prochaine action** : reprendre\n- **État** : en pause\n", encoding="utf-8")
+        e, _ = verifier(r)
+        assert not e, e
+        e, _ = verifier(r, strict=True)
+        assert not e, e
+    print("autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, "
+          "pause sans heartbeat exigé")
     return 0
 
 
 MODELE = """# Plan de session — <id>
 
 > **Mandat vivant.** Écris ce fichier **avant** `en-cours`, mets-le à jour à chaque cycle,
-> et passe `État : terminé` quand la session se retire.
+> et passe `État : en pause` (arrêt) ou `État : terminé` (retrait) quand elle s'arrête.
 
 - **Session** : `<id>`
 - **Rôle** : <chantier / programme>
@@ -252,7 +265,7 @@ MODELE = """# Plan de session — <id>
 - **Fichiers réservés** : `tools/...`, `reports/...`
 - **Heartbeat** : <AAAA-MM-JJ HH:MM HAE>
 - **Prochaine action** : <une action nommée>
-- **État** : actif
+- **État** : actif (ou `en pause` / `terminé`)
 """
 
 

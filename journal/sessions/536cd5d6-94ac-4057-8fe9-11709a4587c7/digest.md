@@ -2973,3 +2973,92 @@ ca06ab0b D — L'OCR CEGEP, LE GLOSSAIRE AU RENDU ET LES LIENS DE LA FAMILLE 13
 ⏵ Je commite le flux N2 (mélange 1 Go, canal et pénalité).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"**Mis à jour : 2026-11-02, 16 h 25 HNE (heure locale, EST).**\"\nnew=\"**Mis à jour : 2026-11-02, 16 h 35 HNE (heure locale, EST).* … [1187 caractères tronqués]`
+
+  ```
+horodatage ok
+== staged ==
+ docs/pilotage/en-cours.md           |  2 +-
+ reports/corpus-wiki-big-propre.json | 17 +++++++++++++++++
+ reports/native-generation.json      | 16 ++++++++--------
+ tools/distiller_budget.py           | 29 ++++++++++++++++++++---------
+ tools/generer_natif.py              |  9 ++++++++-
+ 5 files changed, 54 insertions(+), 19 deletions(-)
+
+[exit 0]
+86cfb580 N2 — N2.ac EST LE MODÈLE DE PRODUCTION : LE MÉLANGE 1 Go, LE CANAL ET LA PÉNALITÉ
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie l'archive de la session hub, puis je commite le pilotage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== session hub ==\" && ls -l journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/ && echo && echo \"== status ==\" && git status --short && echo && echo \"== checks ==\" && python3 tools/verifie_en_cours.py && python3 tools/ … [235 caractères tronqués]`
+
+  ```
+== session hub ==
+total 1004
+-rw-r--r--. 1 stephane stephane 159902  2 nov 16:01 digest.md
+-rw-------. 1 stephane stephane   2320  2 nov 15:47 plan.md
+-rw-r--r--. 1 stephane stephane  16864  2 nov 16:02 rapport.md
+-rw-------. 1 stephane stephane 838973  2 nov 16:01 session.v4.jsonl.zstd
+
+== status ==
+ M docs/methode/portes.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/references-non-regression.md
+ M docs/pilotage/roadmap.md
+ M docs/theorie/glossaire.md
+ M reports/INDEX.md
+ M tools/porte-sessions.sh
+ M tools/sessions.py
+ M tools/toutes-les-portes.sh
+
+== checks ==
+  en-cours · 1625 mots · 7 sections · 3 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  journal · 39 jour(s) · 112 session(s) · 1809 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  revue de documentation · 550 fiche(s) · 636 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie le dernier écart du glossaire avant le commit de pilotage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff -- docs/theorie/glossaire.md && echo \"== stat INDEX ==\" && git diff --stat -- reports/INDEX.md", "description": "Inspect remaining glossary and index diffs"}`
+
+  ```
+diff --git a/docs/theorie/glossaire.md b/docs/theorie/glossaire.md
+index f74849d4..15f7d3da 100644
+--- a/docs/theorie/glossaire.md
++++ b/docs/theorie/glossaire.md
+@@ -103,7 +103,7 @@ check-list de reprise ; ils emploient le même vocabulaire que ce glossaire.
+ ---
+ 
+ 
+-## Les onze familles
++## Les treize familles
+ 
+ Le glossaire fait **2 276 lignes** : il est découpé en **onze familles**, chacune atteignable
+ directement. Les liens vers ce fichier continuent de fonctionner.
+@@ -121,8 +121,9 @@ directement. Les liens vers ce fichier continuent de fonctionner.
+ | **9.** Sources externes citées | [09-sources-externes-citees.md](glossaire/09-sources-externes-citees.md) | 79 |
+ | **10.** Le pont linguistico-sémantique — le vocabulaire de l'émulation | [10-le-pont-linguistico-semantique-le-vocabu.md](glossaire/10-le-pont-linguistico-semantique-le-vocabu.md) | 514 |
+ | **11.** Sources externes ajoutées par le §10 | [11-sources-externes-ajoutees-par-le-10.md](glossaire/11-sources-externes-ajoutees-par-le-10.md) | 50 |
++| **13.** Le corpus et la mesure documentaire | [13-le-corpus-et-la-mesure-documentaire.md](glossaire/13-le-corpus-et-la-mesure-documentaire.md) | 41 |
+ 
+ > **Les fiches par 
+… [623 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je commite le pilotage : état, roadmap, runbook, porte stricte et INDEX.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"**Mis à jour : 2026-11-02, 16 h 35 HNE (heure locale, EST).**\"\nnew=\"**Mis à jour : 2026-11-02, 16 h 45 HNE (heure locale, EST).* … [1716 caractères tronqués]`

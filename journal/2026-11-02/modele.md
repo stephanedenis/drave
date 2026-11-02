@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,6 +15,7 @@
 | 09:09 | `4cbc84a3` | PILOTAGE — LA NUIT N2 EST CLOSE : LE MEILLEUR MODÈLE EST LE 34,3 M + CANAL (3,53) | `en-cours.md`, `plan-travail.md`, `roadmap.md` (+15) |
 | 11:44 | `c65b68d6` | B13 — LA RÉPONSE AU CONTENU : 0/19, LA FRONTIÈRE DU MODÈLE ; 124/124 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
 | 13:33 | `6e6e9f61` | ÉTAT ET ROADMAP — LE MÉLANGE 1 Go EST LE MODÈLE DE PRODUCTION | `en-cours.md`, `roadmap.md`, `README.md` (+14) |
+| 16:01 | `86cfb580` | N2 — N2.ac EST LE MODÈLE DE PRODUCTION : LE MÉLANGE 1 Go, LE CANAL ET LA PÉNALITÉ | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |
 
 ## Chiffres du jour
 
