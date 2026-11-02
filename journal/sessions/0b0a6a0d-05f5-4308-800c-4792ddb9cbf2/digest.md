@@ -20325,3 +20325,37 @@ en-cours ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.aa** : 831 Mo à compute constant — un autre domaine, pas plus de savoir ;\", \"**N2.aa** : 831 Mo à compute  … [1790 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3997 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 605 JSON, le disque en a 616
+[still running after 60000ms; moved to background job bash-1182]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1176 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/base-big-canal.log 2>/dev/null; ls work/n2w/base-big-canal.pt 2>/dev/null && echo OK; tail -4 work/n2w/base-big.log | head -3) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1182", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+5d33e266 N2.aa — LE CORPUS DE 831 Mo À COMPUTE CONSTANT : UN AUTRE DOMAINE, PAS PLUS DE SAVOIR
+11:15
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal -- … [936 caractères tronqués]`
+
+  ```
+fr60 3497463
+big60 3497464
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+11:16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\na = \"canal + KD **ne s'additionnent pas** (N2.y : +0,12 à 512) |\"\nb = (\"canal + KD **ne s'additionnent pas** (N2.y : +0,12 à 512)  … [2020 caractères tronqués]`

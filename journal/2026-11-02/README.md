@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**116 commits** · **3 session(s)** · **8 thème(s)**
+**117 commits** · **3 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 13 | [docs.md](docs.md) |
 | memoire | 10 | [memoire.md](memoire.md) |
-| mesures | 64 | [mesures.md](mesures.md) |
+| mesures | 65 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | portes | 6 | [portes.md](portes.md) |
 
@@ -148,6 +148,7 @@
 | 10:51 | `72cbd359` | B13 — LA TÊTE DE LA CASCADE : LA CORRECTION DÉGRADE (0,419 CONTRE 0,441) ; 118/118 |
 | 11:03 | `518381c7` | B13 — LE MIROIR ENTRÉE/SORTIE : SURFACE 1,0, MOTS 0,2095, LA FLUIDITÉ N'EST PAS LA FIDÉLITÉ ; 119/119 |
 | 11:11 | `0e2d6a64` | B13 — LA SORTIE POS : 0,201, LA RESTITUTION SÉMANTIQUE NE RESTITUE PAS ; 120/120 |
+| 11:13 | `5d33e266` | N2.aa — LE CORPUS DE 831 Mo À COMPUTE CONSTANT : UN AUTRE DOMAINE, PAS PLUS DE SAVOIR |
 
 ## Le récit de la journée (écrit à la main)
 

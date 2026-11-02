@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (64)
+## Commits du jour (65)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -72,10 +72,11 @@
 | 10:51 | `72cbd359` | B13 — LA TÊTE DE LA CASCADE : LA CORRECTION DÉGRADE (0,419 CONTRE 0,441) ; 118/118 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+21) |
 | 11:03 | `518381c7` | B13 — LE MIROIR ENTRÉE/SORTIE : SURFACE 1,0, MOTS 0,2095, LA FLUIDITÉ N'EST PAS LA FIDÉLITÉ ; 119/119 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+22) |
 | 11:11 | `0e2d6a64` | B13 — LA SORTIE POS : 0,201, LA RESTITUTION SÉMANTIQUE NE RESTITUE PAS ; 120/120 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+21) |
+| 11:13 | `5d33e266` | N2.aa — LE CORPUS DE 831 Mo À COMPUTE CONSTANT : UN AUTRE DOMAINE, PAS PLUS DE SAVOIR | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |
 
 ## Chiffres du jour
 
-`0,201` · `0,2095` · `0,419` · `0,441` · `0,2170` · `0,4410` · `0,2005` · `0,4662` · `0,3732` · `0,1722` · `0,1425` · `0,7586`
+`831 Mo` · `0,201` · `0,2095` · `0,419` · `0,441` · `0,2170` · `0,4410` · `0,2005` · `0,4662` · `0,3732` · `0,1722` · `0,1425`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -93,6 +94,7 @@
 - [reports/rapport-n2-canal-34m.md](../../reports/rapport-n2-canal-34m.md)
 - [reports/rapport-n2-canal-distille.md](../../reports/rapport-n2-canal-distille.md)
 - [reports/rapport-n2-canal-kd-34m.md](../../reports/rapport-n2-canal-kd-34m.md)
+- [reports/rapport-n2-corpus-1go.md](../../reports/rapport-n2-corpus-1go.md)
 - [reports/rapport-n2-echantillon.md](../../reports/rapport-n2-echantillon.md)
 - [reports/rapport-n2-fenetre-r1.md](../../reports/rapport-n2-fenetre-r1.md)
 - [reports/rapport-n2-multilingue-34m-distille.md](../../reports/rapport-n2-multilingue-34m-distille.md)

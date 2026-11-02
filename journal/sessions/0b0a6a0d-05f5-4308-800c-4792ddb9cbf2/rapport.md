@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 43.0 h |
 | Tours | 20 |
-| Messages | 1638 |
-| Appels d'outils | 1503 |
+| Messages | 1640 |
+| Appels d'outils | 1505 |
 | Fichiers touchés | 11 |
-| Commandes | 1182 |
+| Commandes | 1184 |
 | Sous-agents | 0 |
-| Commits | 82 |
+| Commits | 83 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1062,7 +1062,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 
 ### Tour 20 — mets le dossier de pilotage à jour et continue
 
-*68 appels d'outils.* Actions notables :
+*70 appels d'outils.* Actions notables :
 
 - bash — Read the state's N2 section and timestamp
 - read
@@ -1078,7 +1078,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - bash — Find the Wikipedia extraction tool
 - bash — Read the extraction tool's options
 - bash — Look at the earlier extraction script
-- … et 36 autres
+- … et 38 autres
 
 **Synthèse produite :**
 
@@ -1144,7 +1144,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1142 autres
+- … et 1144 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1374,4 +1374,5 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/generer_natif.py; python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilo
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg-pilotage.txt <<'EOF' PILOTAGE — LA NUIT N2 EST CLOSE : LE MEILLEUR MODÈLE EST LE 34,3 M + C
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text() a = "canal
 
