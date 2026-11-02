@@ -290,7 +290,11 @@
      "texte": "à son frère",
      "role": "destinataire",
      "debut": 11,
-     "fin": 22
+     "fin": 22,
+     "cibles": [
+      "parle"
+     ],
+     "cible": "parle"
     }
    ],
    "pragma": {
@@ -424,7 +428,11 @@
      "texte": "sur la chaise",
      "role": "lieu",
      "debut": 13,
-     "fin": 26
+     "fin": 26,
+     "cibles": [
+      "dort"
+     ],
+     "cible": "dort"
     }
    ],
    "pragma": {
@@ -482,7 +490,11 @@
      "texte": "depuis hier",
      "role": "temps",
      "debut": 9,
-     "fin": 20
+     "fin": 20,
+     "cibles": [
+      "pleut"
+     ],
+     "cible": "pleut"
     }
    ],
    "pragma": {
@@ -643,7 +655,11 @@
      "texte": "à midi",
      "role": "temps",
      "debut": 14,
-     "fin": 20
+     "fin": 20,
+     "cibles": [
+      "part"
+     ],
+     "cible": "part"
     }
    ],
    "pragma": {
@@ -827,7 +843,11 @@
      "texte": "que j'ai lu",
      "role": "qualité",
      "debut": 9,
-     "fin": 20
+     "fin": 20,
+     "cibles": [
+      "livre"
+     ],
+     "cible": "livre"
     },
     {
      "type": "GV",
@@ -903,7 +923,11 @@
      "texte": "dont elle parle",
      "role": "qualité",
      "debut": 8,
-     "fin": 23
+     "fin": 23,
+     "cibles": [
+      "film"
+     ],
+     "cible": "film"
     },
     {
      "type": "GV",
@@ -1078,7 +1102,12 @@
      "texte": "à manger",
      "role": "but",
      "debut": 20,
-     "fin": 28
+     "fin": 28,
+     "cibles": [
+      "prête",
+      "souris"
+     ],
+     "cible": "prête"
     }
    ],
    "pragma": {
@@ -1200,7 +1229,12 @@
      "texte": "dans le parc",
      "role": "lieu",
      "debut": 19,
-     "fin": 31
+     "fin": 31,
+     "cibles": [
+      "jouent",
+      "enfants"
+     ],
+     "cible": "jouent"
     }
    ],
    "pragma": {
@@ -1489,7 +1523,11 @@
      "texte": "to her brother",
      "role": "destinataire",
      "debut": 10,
-     "fin": 24
+     "fin": 24,
+     "cibles": [
+      "talks"
+     ],
+     "cible": "talks"
     }
    ],
    "pragma": {
@@ -1559,7 +1597,11 @@
      "texte": "to the teacher",
      "role": "destinataire",
      "debut": 20,
-     "fin": 34
+     "fin": 34,
+     "cibles": [
+      "listen"
+     ],
+     "cible": "listen"
     }
    ],
    "pragma": {
@@ -1629,7 +1671,11 @@
      "texte": "on the chair",
      "role": "lieu",
      "debut": 15,
-     "fin": 27
+     "fin": 27,
+     "cibles": [
+      "sleeps"
+     ],
+     "cible": "sleeps"
     }
    ],
    "pragma": {
@@ -1687,7 +1733,11 @@
      "texte": "since yesterday",
      "role": "temps",
      "debut": 9,
-     "fin": 24
+     "fin": 24,
+     "cibles": [
+      "rains"
+     ],
+     "cible": "rains"
     }
    ],
    "pragma": {
@@ -1848,7 +1898,11 @@
      "texte": "at noon",
      "role": "temps",
      "debut": 17,
-     "fin": 24
+     "fin": 24,
+     "cibles": [
+      "leaves"
+     ],
+     "cible": "leaves"
     }
    ],
    "pragma": {
@@ -2026,7 +2080,11 @@
      "texte": "that I read",
      "role": "qualité",
      "debut": 9,
-     "fin": 20
+     "fin": 20,
+     "cibles": [
+      "book"
+     ],
+     "cible": "book"
     },
     {
      "type": "GV",
@@ -2102,7 +2160,11 @@
      "texte": "she talks about",
      "role": "qualité",
      "debut": 9,
-     "fin": 24
+     "fin": 24,
+     "cibles": [
+      "film"
+     ],
+     "cible": "film"
     },
     {
      "type": "GV",
@@ -2277,7 +2339,12 @@
      "texte": "to eat",
      "role": "but",
      "debut": 19,
-     "fin": 25
+     "fin": 25,
+     "cibles": [
+      "ready",
+      "mouse"
+     ],
+     "cible": "ready"
     }
    ],
    "pragma": {
@@ -2399,7 +2466,12 @@
      "texte": "in the park",
      "role": "lieu",
      "debut": 18,
-     "fin": 29
+     "fin": 29,
+     "cibles": [
+      "play",
+      "children"
+     ],
+     "cible": "play"
     }
    ],
    "pragma": {

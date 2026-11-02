@@ -12909,3 +12909,27 @@ EXIT=0
 cibles 21 ambig 4
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 180 python3 tools/tests/linguistique/evaluer_gold.py --json reports/pensee-gold-linguistique.json --reel >/tmp/gold12.out 2>&1; echo \"EXIT=$?\"; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-gold-linguistiq … [525 caractères tronqués]`
+
+  ```
+EXIT=0
+gold {'phrases': 220, 'reel': 60, 'hand': 20, 'reel_new': 40, 'synthetique': 160, 'tokens': 993}
+all POS 0.7654 SEG 0.21 TETE 0.5134 | att 85 0.4235 0.4118 0.3765 | tete 36 1.0 0.9722 0.8889
+reel POS 0.8605 SEG 0.2937 TETE 0.3968 | att 30 0.4667 0.4333 0.4667 | tete 14 1.0 0.9286 1.0
+hand POS 0.9238 SEG 0.3956 TETE 0.5055 | att 13 0.4615 0.3846 0.4615 | tete 6 1.0 0.8333 1.0
+reel_new POS 0.8254 SEG 0.236 TETE 0.3354 | att 17 0.4706 0.4706 0.4706 | tete 8 1.0 1.0 1.0
+synthetique POS 0.7253 SEG 0.1752 TETE 0.562 | att 55 0.4 0.4 0.3273 | tete 22 1.0 1.0 0.8182
+verdict {'pos_hand': True, 'pos_reel': True, 'pos_synthetique': True, 'syntagme_hand': True, 'syntagme_reel': True, 'syntagme_synthetique': True, 'tete': True, 'acte': True, 'cascade_pos': True, 'cascade_syntagme': True, 'attachement_topk': True, 'attachement_hasard': True, 'attachement_tete_couverture': True, 'attachement_tete_topk': True, 'attachement_tete_hasard': True, 'reel_non_requis': True} ok True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('reports/rapport-pensee-gold-linguistique.md'); t=p.read_text()\nt=t.replace(\"| **heuristique** | **220** | **97** | **29** | **1,000** | 0,870 | **0,957** | **1,000** |\",\n\"| ** … [3002 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 397 fiche(s) · 498 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [1368 caractères tronqués]`

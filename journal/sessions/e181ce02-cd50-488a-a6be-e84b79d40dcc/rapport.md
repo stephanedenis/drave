@@ -9,8 +9,8 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 27.4 h |
 | Tours | 23 |
-| Messages | 562 |
-| Appels d'outils | 573 |
+| Messages | 563 |
+| Appels d'outils | 574 |
 | Fichiers touchés | 25 |
 | Commandes | 460 |
 | Sous-agents | 2 |
@@ -1260,12 +1260,13 @@ Le round 9 du goal est livré : le gold réel passe de 20 à **60 phrases**, le 
 
 ### Tour 23 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Annoter les cibles des 40 nouvelles phrases réelles
 - bash — Mesurer l'attachement sur les 60 phrases réelles
 - bash — Mettre à jour la fiche et l'état pour les 60 réels
 - bash — Passer les portes et committer les cibles des 60 réels
+- job_output
 
 ## 3. Travail accompli
 

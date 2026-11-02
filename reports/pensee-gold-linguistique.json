@@ -50,19 +50,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.2573,
-    "rappel": 0.1508,
-    "f1": 0.1901,
-    "tp": 79,
-    "fp": 228,
-    "fn": 445,
+    "precision": 0.2703,
+    "rappel": 0.1718,
+    "f1": 0.21,
+    "tp": 90,
+    "fp": 243,
+    "fn": 434,
     "tete": {
-     "precision": 0.6906,
-     "rappel": 0.4046,
-     "f1": 0.5102,
-     "tp": 212,
-     "fp": 95,
-     "fn": 312
+     "precision": 0.6607,
+     "rappel": 0.4198,
+     "f1": 0.5134,
+     "tp": 220,
+     "fp": 113,
+     "fn": 304
     }
    },
    "pragmatique": {
@@ -73,23 +73,23 @@
    },
    "fraction_semantique": 0.6148,
    "attachement": {
-    "cibles": 68,
-    "labels": 23,
-    "top1": 22,
-    "topk": 23,
+    "cibles": 85,
+    "labels": 36,
+    "top1": 35,
+    "topk": 32,
     "exact": 0,
-    "top1_taux": 0.3235,
-    "topk_taux": 0.3382,
+    "top1_taux": 0.4118,
+    "topk_taux": 0.3765,
     "exact_taux": 0.0,
-    "couverture": 0.3382
+    "couverture": 0.4235
    },
    "attachement_tete": {
-    "cibles": 23,
-    "labels": 23,
-    "top1": 22,
-    "topk": 23,
-    "top1_taux": 0.9565,
-    "topk_taux": 1.0,
+    "cibles": 36,
+    "labels": 36,
+    "top1": 35,
+    "topk": 32,
+    "top1_taux": 0.9722,
+    "topk_taux": 0.8889,
     "couverture": 1.0
    }
   },
@@ -142,19 +142,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.3448,
-    "rappel": 0.1852,
-    "f1": 0.241,
-    "tp": 30,
-    "fp": 57,
-    "fn": 132,
+    "precision": 0.4111,
+    "rappel": 0.2284,
+    "f1": 0.2937,
+    "tp": 37,
+    "fp": 53,
+    "fn": 125,
     "tete": {
-     "precision": 0.5287,
-     "rappel": 0.284,
-     "f1": 0.3695,
-     "tp": 46,
-     "fp": 41,
-     "fn": 116
+     "precision": 0.5556,
+     "rappel": 0.3086,
+     "f1": 0.3968,
+     "tp": 50,
+     "fp": 40,
+     "fn": 112
     }
    },
    "pragmatique": {
@@ -165,22 +165,22 @@
    },
    "fraction_semantique": 0.4964,
    "attachement": {
-    "cibles": 13,
-    "labels": 5,
-    "top1": 4,
-    "topk": 5,
+    "cibles": 30,
+    "labels": 14,
+    "top1": 13,
+    "topk": 14,
     "exact": 0,
-    "top1_taux": 0.3077,
-    "topk_taux": 0.3846,
+    "top1_taux": 0.4333,
+    "topk_taux": 0.4667,
     "exact_taux": 0.0,
-    "couverture": 0.3846
+    "couverture": 0.4667
    },
    "attachement_tete": {
-    "cibles": 5,
-    "labels": 5,
-    "top1": 4,
-    "topk": 5,
-    "top1_taux": 0.8,
+    "cibles": 14,
+    "labels": 14,
+    "top1": 13,
+    "topk": 14,
+    "top1_taux": 0.9286,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -228,19 +228,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.4706,
-    "rappel": 0.2857,
-    "f1": 0.3556,
-    "tp": 16,
-    "fp": 18,
-    "fn": 40,
+    "precision": 0.5143,
+    "rappel": 0.3214,
+    "f1": 0.3956,
+    "tp": 18,
+    "fp": 17,
+    "fn": 38,
     "tete": {
-     "precision": 0.6471,
-     "rappel": 0.3929,
-     "f1": 0.4889,
-     "tp": 22,
+     "precision": 0.6571,
+     "rappel": 0.4107,
+     "f1": 0.5055,
+     "tp": 23,
      "fp": 12,
-     "fn": 34
+     "fn": 33
     }
    },
    "pragmatique": {
@@ -252,21 +252,21 @@
    "fraction_semantique": 0.469,
    "attachement": {
     "cibles": 13,
-    "labels": 5,
-    "top1": 4,
-    "topk": 5,
+    "labels": 6,
+    "top1": 5,
+    "topk": 6,
     "exact": 0,
-    "top1_taux": 0.3077,
-    "topk_taux": 0.3846,
+    "top1_taux": 0.3846,
+    "topk_taux": 0.4615,
     "exact_taux": 0.0,
-    "couverture": 0.3846
+    "couverture": 0.4615
    },
    "attachement_tete": {
-    "cibles": 5,
-    "labels": 5,
-    "top1": 4,
-    "topk": 5,
-    "top1_taux": 0.8,
+    "cibles": 6,
+    "labels": 6,
+    "top1": 5,
+    "topk": 6,
+    "top1_taux": 0.8333,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -318,19 +318,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.2642,
-    "rappel": 0.1321,
-    "f1": 0.1761,
-    "tp": 14,
-    "fp": 39,
-    "fn": 92,
+    "precision": 0.3455,
+    "rappel": 0.1792,
+    "f1": 0.236,
+    "tp": 19,
+    "fp": 36,
+    "fn": 87,
     "tete": {
-     "precision": 0.4528,
-     "rappel": 0.2264,
-     "f1": 0.3019,
-     "tp": 24,
-     "fp": 29,
-     "fn": 82
+     "precision": 0.4909,
+     "rappel": 0.2547,
+     "f1": 0.3354,
+     "tp": 27,
+     "fp": 28,
+     "fn": 79
     }
    },
    "pragmatique": {
@@ -341,24 +341,24 @@
    },
    "fraction_semantique": 0.5101,
    "attachement": {
-    "cibles": 0,
-    "labels": 0,
-    "top1": 0,
-    "topk": 0,
+    "cibles": 17,
+    "labels": 8,
+    "top1": 8,
+    "topk": 8,
     "exact": 0,
-    "top1_taux": 0.0,
-    "topk_taux": 0.0,
+    "top1_taux": 0.4706,
+    "topk_taux": 0.4706,
     "exact_taux": 0.0,
-    "couverture": 0.0
+    "couverture": 0.4706
    },
    "attachement_tete": {
-    "cibles": 0,
-    "labels": 0,
-    "top1": 0,
-    "topk": 0,
-    "top1_taux": 0.0,
-    "topk_taux": 0.0,
-    "couverture": 0.0
+    "cibles": 8,
+    "labels": 8,
+    "top1": 8,
+    "topk": 8,
+    "top1_taux": 1.0,
+    "topk_taux": 1.0,
+    "couverture": 1.0
    }
   },
   "synthetique": {
@@ -403,19 +403,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.2227,
-    "rappel": 0.1354,
-    "f1": 0.1684,
-    "tp": 49,
-    "fp": 171,
-    "fn": 313,
+    "precision": 0.2181,
+    "rappel": 0.1464,
+    "f1": 0.1752,
+    "tp": 53,
+    "fp": 190,
+    "fn": 309,
     "tete": {
-     "precision": 0.7545,
-     "rappel": 0.4586,
-     "f1": 0.5704,
-     "tp": 166,
-     "fp": 54,
-     "fn": 196
+     "precision": 0.6996,
+     "rappel": 0.4696,
+     "f1": 0.562,
+     "tp": 170,
+     "fp": 73,
+     "fn": 192
     }
    },
    "pragmatique": {
@@ -427,22 +427,22 @@
    "fraction_semantique": 0.6592,
    "attachement": {
     "cibles": 55,
-    "labels": 18,
-    "top1": 18,
+    "labels": 22,
+    "top1": 22,
     "topk": 18,
     "exact": 0,
-    "top1_taux": 0.3273,
+    "top1_taux": 0.4,
     "topk_taux": 0.3273,
     "exact_taux": 0.0,
-    "couverture": 0.3273
+    "couverture": 0.4
    },
    "attachement_tete": {
-    "cibles": 18,
-    "labels": 18,
-    "top1": 18,
+    "cibles": 22,
+    "labels": 22,
+    "top1": 22,
     "topk": 18,
     "top1_taux": 1.0,
-    "topk_taux": 1.0,
+    "topk_taux": 0.8182,
     "couverture": 1.0
    }
   }
@@ -517,19 +517,19 @@
    },
    "fraction_semantique": 0.6517,
    "attachement": {
-    "cibles": 68,
-    "labels": 23,
+    "cibles": 85,
+    "labels": 33,
     "top1": 0,
     "topk": 0,
     "exact": 0,
     "top1_taux": 0.0,
     "topk_taux": 0.0,
     "exact_taux": 0.0,
-    "couverture": 0.3382
+    "couverture": 0.3882
    },
    "attachement_tete": {
-    "cibles": 23,
-    "labels": 23,
+    "cibles": 33,
+    "labels": 33,
     "top1": 0,
     "topk": 0,
     "top1_taux": 0.0,
@@ -606,19 +606,19 @@
    },
    "fraction_semantique": 0.5528,
    "attachement": {
-    "cibles": 13,
-    "labels": 3,
+    "cibles": 30,
+    "labels": 13,
     "top1": 0,
     "topk": 0,
     "exact": 0,
     "top1_taux": 0.0,
     "topk_taux": 0.0,
     "exact_taux": 0.0,
-    "couverture": 0.2308
+    "couverture": 0.4333
    },
    "attachement_tete": {
-    "cibles": 3,
-    "labels": 3,
+    "cibles": 13,
+    "labels": 13,
     "top1": 0,
     "topk": 0,
     "top1_taux": 0.0,
@@ -778,24 +778,24 @@
    },
    "fraction_semantique": 0.5666,
    "attachement": {
-    "cibles": 0,
-    "labels": 0,
+    "cibles": 17,
+    "labels": 10,
     "top1": 0,
     "topk": 0,
     "exact": 0,
     "top1_taux": 0.0,
     "topk_taux": 0.0,
     "exact_taux": 0.0,
-    "couverture": 0.0
+    "couverture": 0.5882
    },
    "attachement_tete": {
-    "cibles": 0,
-    "labels": 0,
+    "cibles": 10,
+    "labels": 10,
     "top1": 0,
     "topk": 0,
     "top1_taux": 0.0,
     "topk_taux": 0.0,
-    "couverture": 0.0
+    "couverture": 1.0
    }
   },
   "synthetique": {
@@ -934,19 +934,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.2573,
-    "rappel": 0.1508,
-    "f1": 0.1901,
-    "tp": 79,
-    "fp": 228,
-    "fn": 445,
+    "precision": 0.2703,
+    "rappel": 0.1718,
+    "f1": 0.21,
+    "tp": 90,
+    "fp": 243,
+    "fn": 434,
     "tete": {
-     "precision": 0.6906,
-     "rappel": 0.4046,
-     "f1": 0.5102,
-     "tp": 212,
-     "fp": 95,
-     "fn": 312
+     "precision": 0.6607,
+     "rappel": 0.4198,
+     "f1": 0.5134,
+     "tp": 220,
+     "fp": 113,
+     "fn": 304
     }
    },
    "pragmatique": {
@@ -957,23 +957,23 @@
    },
    "fraction_semantique": 0.6517,
    "attachement": {
-    "cibles": 68,
-    "labels": 23,
-    "top1": 22,
-    "topk": 23,
+    "cibles": 85,
+    "labels": 36,
+    "top1": 35,
+    "topk": 32,
     "exact": 0,
-    "top1_taux": 0.3235,
-    "topk_taux": 0.3382,
+    "top1_taux": 0.4118,
+    "topk_taux": 0.3765,
     "exact_taux": 0.0,
-    "couverture": 0.3382
+    "couverture": 0.4235
    },
    "attachement_tete": {
-    "cibles": 23,
-    "labels": 23,
-    "top1": 22,
-    "topk": 23,
-    "top1_taux": 0.9565,
-    "topk_taux": 1.0,
+    "cibles": 36,
+    "labels": 36,
+    "top1": 35,
+    "topk": 32,
+    "top1_taux": 0.9722,
+    "topk_taux": 0.8889,
     "couverture": 1.0
    }
   },
@@ -1026,19 +1026,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.3448,
-    "rappel": 0.1852,
-    "f1": 0.241,
-    "tp": 30,
-    "fp": 57,
-    "fn": 132,
+    "precision": 0.4111,
+    "rappel": 0.2284,
+    "f1": 0.2937,
+    "tp": 37,
+    "fp": 53,
+    "fn": 125,
     "tete": {
-     "precision": 0.5287,
-     "rappel": 0.284,
-     "f1": 0.3695,
-     "tp": 46,
-     "fp": 41,
-     "fn": 116
+     "precision": 0.5556,
+     "rappel": 0.3086,
+     "f1": 0.3968,
+     "tp": 50,
+     "fp": 40,
+     "fn": 112
     }
    },
    "pragmatique": {
@@ -1049,22 +1049,22 @@
    },
    "fraction_semantique": 0.5528,
    "attachement": {
-    "cibles": 13,
-    "labels": 5,
-    "top1": 4,
-    "topk": 5,
+    "cibles": 30,
+    "labels": 14,
+    "top1": 13,
+    "topk": 14,
     "exact": 0,
-    "top1_taux": 0.3077,
-    "topk_taux": 0.3846,
+    "top1_taux": 0.4333,
+    "topk_taux": 0.4667,
     "exact_taux": 0.0,
-    "couverture": 0.3846
+    "couverture": 0.4667
    },
    "attachement_tete": {
-    "cibles": 5,
-    "labels": 5,
-    "top1": 4,
-    "topk": 5,
-    "top1_taux": 0.8,
+    "cibles": 14,
+    "labels": 14,
+    "top1": 13,
+    "topk": 14,
+    "top1_taux": 0.9286,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -1112,19 +1112,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.4706,
-    "rappel": 0.2857,
-    "f1": 0.3556,
-    "tp": 16,
-    "fp": 18,
-    "fn": 40,
+    "precision": 0.5143,
+    "rappel": 0.3214,
+    "f1": 0.3956,
+    "tp": 18,
+    "fp": 17,
+    "fn": 38,
     "tete": {
-     "precision": 0.6471,
-     "rappel": 0.3929,
-     "f1": 0.4889,
-     "tp": 22,
+     "precision": 0.6571,
+     "rappel": 0.4107,
+     "f1": 0.5055,
+     "tp": 23,
      "fp": 12,
-     "fn": 34
+     "fn": 33
     }
    },
    "pragmatique": {
@@ -1136,21 +1136,21 @@
    "fraction_semantique": 0.525,
    "attachement": {
     "cibles": 13,
-    "labels": 5,
-    "top1": 4,
-    "topk": 5,
+    "labels": 6,
+    "top1": 5,
+    "topk": 6,
     "exact": 0,
-    "top1_taux": 0.3077,
-    "topk_taux": 0.3846,
+    "top1_taux": 0.3846,
+    "topk_taux": 0.4615,
     "exact_taux": 0.0,
-    "couverture": 0.3846
+    "couverture": 0.4615
    },
    "attachement_tete": {
-    "cibles": 5,
-    "labels": 5,
-    "top1": 4,
-    "topk": 5,
-    "top1_taux": 0.8,
+    "cibles": 6,
+    "labels": 6,
+    "top1": 5,
+    "topk": 6,
+    "top1_taux": 0.8333,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -1202,19 +1202,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.2642,
-    "rappel": 0.1321,
-    "f1": 0.1761,
-    "tp": 14,
-    "fp": 39,
-    "fn": 92,
+    "precision": 0.3455,
+    "rappel": 0.1792,
+    "f1": 0.236,
+    "tp": 19,
+    "fp": 36,
+    "fn": 87,
     "tete": {
-     "precision": 0.4528,
-     "rappel": 0.2264,
-     "f1": 0.3019,
-     "tp": 24,
-     "fp": 29,
-     "fn": 82
+     "precision": 0.4909,
+     "rappel": 0.2547,
+     "f1": 0.3354,
+     "tp": 27,
+     "fp": 28,
+     "fn": 79
     }
    },
    "pragmatique": {
@@ -1225,24 +1225,24 @@
    },
    "fraction_semantique": 0.5666,
    "attachement": {
-    "cibles": 0,
-    "labels": 0,
-    "top1": 0,
-    "topk": 0,
+    "cibles": 17,
+    "labels": 8,
+    "top1": 8,
+    "topk": 8,
     "exact": 0,
-    "top1_taux": 0.0,
-    "topk_taux": 0.0,
+    "top1_taux": 0.4706,
+    "topk_taux": 0.4706,
     "exact_taux": 0.0,
-    "couverture": 0.0
+    "couverture": 0.4706
    },
    "attachement_tete": {
-    "cibles": 0,
-    "labels": 0,
-    "top1": 0,
-    "topk": 0,
-    "top1_taux": 0.0,
-    "topk_taux": 0.0,
-    "couverture": 0.0
+    "cibles": 8,
+    "labels": 8,
+    "top1": 8,
+    "topk": 8,
+    "top1_taux": 1.0,
+    "topk_taux": 1.0,
+    "couverture": 1.0
    }
   },
   "synthetique": {
@@ -1287,19 +1287,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.2227,
-    "rappel": 0.1354,
-    "f1": 0.1684,
-    "tp": 49,
-    "fp": 171,
-    "fn": 313,
+    "precision": 0.2181,
+    "rappel": 0.1464,
+    "f1": 0.1752,
+    "tp": 53,
+    "fp": 190,
+    "fn": 309,
     "tete": {
-     "precision": 0.7545,
-     "rappel": 0.4586,
-     "f1": 0.5704,
-     "tp": 166,
-     "fp": 54,
-     "fn": 196
+     "precision": 0.6996,
+     "rappel": 0.4696,
+     "f1": 0.562,
+     "tp": 170,
+     "fp": 73,
+     "fn": 192
     }
    },
    "pragmatique": {
@@ -1311,22 +1311,22 @@
    "fraction_semantique": 0.6888,
    "attachement": {
     "cibles": 55,
-    "labels": 18,
-    "top1": 18,
+    "labels": 22,
+    "top1": 22,
     "topk": 18,
     "exact": 0,
-    "top1_taux": 0.3273,
+    "top1_taux": 0.4,
     "topk_taux": 0.3273,
     "exact_taux": 0.0,
-    "couverture": 0.3273
+    "couverture": 0.4
    },
    "attachement_tete": {
-    "cibles": 18,
-    "labels": 18,
-    "top1": 18,
+    "cibles": 22,
+    "labels": 22,
+    "top1": 22,
     "topk": 18,
     "top1_taux": 1.0,
-    "topk_taux": 1.0,
+    "topk_taux": 0.8182,
     "couverture": 1.0
    }
   }
@@ -1381,19 +1381,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.2573,
-    "rappel": 0.1508,
-    "f1": 0.1901,
-    "tp": 79,
-    "fp": 228,
-    "fn": 445,
+    "precision": 0.2703,
+    "rappel": 0.1718,
+    "f1": 0.21,
+    "tp": 90,
+    "fp": 243,
+    "fn": 434,
     "tete": {
-     "precision": 0.6906,
-     "rappel": 0.4046,
-     "f1": 0.5102,
-     "tp": 212,
-     "fp": 95,
-     "fn": 312
+     "precision": 0.6607,
+     "rappel": 0.4198,
+     "f1": 0.5134,
+     "tp": 220,
+     "fp": 113,
+     "fn": 304
     }
    },
    "pragmatique": {
@@ -1404,23 +1404,23 @@
    },
    "fraction_semantique": 0.6517,
    "attachement": {
-    "cibles": 68,
-    "labels": 23,
-    "top1": 22,
-    "topk": 23,
+    "cibles": 85,
+    "labels": 36,
+    "top1": 35,
+    "topk": 32,
     "exact": 0,
-    "top1_taux": 0.3235,
-    "topk_taux": 0.3382,
+    "top1_taux": 0.4118,
+    "topk_taux": 0.3765,
     "exact_taux": 0.0,
-    "couverture": 0.3382
+    "couverture": 0.4235
    },
    "attachement_tete": {
-    "cibles": 23,
-    "labels": 23,
-    "top1": 22,
-    "topk": 23,
-    "top1_taux": 0.9565,
-    "topk_taux": 1.0,
+    "cibles": 36,
+    "labels": 36,
+    "top1": 35,
+    "topk": 32,
+    "top1_taux": 0.9722,
+    "topk_taux": 0.8889,
     "couverture": 1.0
    }
   },
@@ -1473,19 +1473,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.3448,
-    "rappel": 0.1852,
-    "f1": 0.241,
-    "tp": 30,
-    "fp": 57,
-    "fn": 132,
+    "precision": 0.4111,
+    "rappel": 0.2284,
+    "f1": 0.2937,
+    "tp": 37,
+    "fp": 53,
+    "fn": 125,
     "tete": {
-     "precision": 0.5287,
-     "rappel": 0.284,
-     "f1": 0.3695,
-     "tp": 46,
-     "fp": 41,
-     "fn": 116
+     "precision": 0.5556,
+     "rappel": 0.3086,
+     "f1": 0.3968,
+     "tp": 50,
+     "fp": 40,
+     "fn": 112
     }
    },
    "pragmatique": {
@@ -1496,22 +1496,22 @@
    },
    "fraction_semantique": 0.5528,
    "attachement": {
-    "cibles": 13,
-    "labels": 5,
-    "top1": 4,
-    "topk": 5,
+    "cibles": 30,
+    "labels": 14,
+    "top1": 13,
+    "topk": 14,
     "exact": 0,
-    "top1_taux": 0.3077,
-    "topk_taux": 0.3846,
+    "top1_taux": 0.4333,
+    "topk_taux": 0.4667,
     "exact_taux": 0.0,
-    "couverture": 0.3846
+    "couverture": 0.4667
    },
    "attachement_tete": {
-    "cibles": 5,
-    "labels": 5,
-    "top1": 4,
-    "topk": 5,
-    "top1_taux": 0.8,
+    "cibles": 14,
+    "labels": 14,
+    "top1": 13,
+    "topk": 14,
+    "top1_taux": 0.9286,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -1559,19 +1559,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.4706,
-    "rappel": 0.2857,
-    "f1": 0.3556,
-    "tp": 16,
-    "fp": 18,
-    "fn": 40,
+    "precision": 0.5143,
+    "rappel": 0.3214,
+    "f1": 0.3956,
+    "tp": 18,
+    "fp": 17,
+    "fn": 38,
     "tete": {
-     "precision": 0.6471,
-     "rappel": 0.3929,
-     "f1": 0.4889,
-     "tp": 22,
+     "precision": 0.6571,
+     "rappel": 0.4107,
+     "f1": 0.5055,
+     "tp": 23,
      "fp": 12,
-     "fn": 34
+     "fn": 33
     }
    },
    "pragmatique": {
@@ -1583,21 +1583,21 @@
    "fraction_semantique": 0.525,
    "attachement": {
     "cibles": 13,
-    "labels": 5,
-    "top1": 4,
-    "topk": 5,
+    "labels": 6,
+    "top1": 5,
+    "topk": 6,
     "exact": 0,
-    "top1_taux": 0.3077,
-    "topk_taux": 0.3846,
+    "top1_taux": 0.3846,
+    "topk_taux": 0.4615,
     "exact_taux": 0.0,
-    "couverture": 0.3846
+    "couverture": 0.4615
    },
    "attachement_tete": {
-    "cibles": 5,
-    "labels": 5,
-    "top1": 4,
-    "topk": 5,
-    "top1_taux": 0.8,
+    "cibles": 6,
+    "labels": 6,
+    "top1": 5,
+    "topk": 6,
+    "top1_taux": 0.8333,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -1649,19 +1649,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.2642,
-    "rappel": 0.1321,
-    "f1": 0.1761,
-    "tp": 14,
-    "fp": 39,
-    "fn": 92,
+    "precision": 0.3455,
+    "rappel": 0.1792,
+    "f1": 0.236,
+    "tp": 19,
+    "fp": 36,
+    "fn": 87,
     "tete": {
-     "precision": 0.4528,
-     "rappel": 0.2264,
-     "f1": 0.3019,
-     "tp": 24,
-     "fp": 29,
-     "fn": 82
+     "precision": 0.4909,
+     "rappel": 0.2547,
+     "f1": 0.3354,
+     "tp": 27,
+     "fp": 28,
+     "fn": 79
     }
    },
    "pragmatique": {
@@ -1672,24 +1672,24 @@
    },
    "fraction_semantique": 0.5666,
    "attachement": {
-    "cibles": 0,
-    "labels": 0,
-    "top1": 0,
-    "topk": 0,
+    "cibles": 17,
+    "labels": 8,
+    "top1": 8,
+    "topk": 8,
     "exact": 0,
-    "top1_taux": 0.0,
-    "topk_taux": 0.0,
+    "top1_taux": 0.4706,
+    "topk_taux": 0.4706,
     "exact_taux": 0.0,
-    "couverture": 0.0
+    "couverture": 0.4706
    },
    "attachement_tete": {
-    "cibles": 0,
-    "labels": 0,
-    "top1": 0,
-    "topk": 0,
-    "top1_taux": 0.0,
-    "topk_taux": 0.0,
-    "couverture": 0.0
+    "cibles": 8,
+    "labels": 8,
+    "top1": 8,
+    "topk": 8,
+    "top1_taux": 1.0,
+    "topk_taux": 1.0,
+    "couverture": 1.0
    }
   },
   "synthetique": {
@@ -1734,19 +1734,19 @@
     }
    },
    "syntagme": {
-    "precision": 0.2227,
-    "rappel": 0.1354,
-    "f1": 0.1684,
-    "tp": 49,
-    "fp": 171,
-    "fn": 313,
+    "precision": 0.2181,
+    "rappel": 0.1464,
+    "f1": 0.1752,
+    "tp": 53,
+    "fp": 190,
+    "fn": 309,
     "tete": {
-     "precision": 0.7545,
-     "rappel": 0.4586,
-     "f1": 0.5704,
-     "tp": 166,
-     "fp": 54,
-     "fn": 196
+     "precision": 0.6996,
+     "rappel": 0.4696,
+     "f1": 0.562,
+     "tp": 170,
+     "fp": 73,
+     "fn": 192
     }
    },
    "pragmatique": {
@@ -1758,22 +1758,22 @@
    "fraction_semantique": 0.6888,
    "attachement": {
     "cibles": 55,
-    "labels": 18,
-    "top1": 18,
+    "labels": 22,
+    "top1": 22,
     "topk": 18,
     "exact": 0,
-    "top1_taux": 0.3273,
+    "top1_taux": 0.4,
     "topk_taux": 0.3273,
     "exact_taux": 0.0,
-    "couverture": 0.3273
+    "couverture": 0.4
    },
    "attachement_tete": {
-    "cibles": 18,
-    "labels": 18,
-    "top1": 18,
+    "cibles": 22,
+    "labels": 22,
+    "top1": 22,
     "topk": 18,
     "top1_taux": 1.0,
-    "topk_taux": 1.0,
+    "topk_taux": 0.8182,
     "couverture": 1.0
    }
   },
@@ -1784,8 +1784,8 @@
   "detail": "RefusNeuronal: Command '['llama-cli', '-m', '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/Qwen2.5-0.5B-Q4_0.gguf', '-p', 'Tu es un étiqueteur linguistique. Réponds U"
  },
  "attachement_hasard": {
-  "cibles": 68,
-  "top1_taux": 0.0147
+  "cibles": 85,
+  "top1_taux": 0.0353
  },
  "gold": {
   "phrases": 220,

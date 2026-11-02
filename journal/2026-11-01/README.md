@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**83 commits** · **4 session(s)** · **10 thème(s)**
+**84 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 5 | [distribue.md](distribue.md) |
-| docs | 21 | [docs.md](docs.md) |
+| docs | 22 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 40 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -118,6 +118,7 @@
 | 19:59 | `a72567e1` | ÉTAT — T0 À 3 996 ET COMPTEURS 396/498 |
 | 20:01 | `e0e71213` | N2.m — L'ANGLAIS SEUL : 4,42 SUR 204 Mo, ET LE MULTILINGUE COÛTE 1,6 PPL |
 | 20:03 | `46fa2c82` | L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510 |
+| 20:04 | `fa1b74a4` | S — L'ANALYSEUR PLUS RICHE : SUBORDONNÉES, COORDINATION, ET L'EXPORT VERS LE CORPUS |
 
 ## Le récit de la journée (écrit à la main)
 

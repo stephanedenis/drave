@@ -4,7 +4,7 @@
 > **Verdict** : ✅ **le gold étendu et l'attachement sont mesurés** — **180 phrases** (20 réelles écrites à la main,
 > 160 synthétiques d'une grammaire indépendante), **804 tokens** ; POS **0,751** (fermé
 > **0,939**, ouvert **0,621**), syntagmes exacts **0,194**, **par tête 0,560**, pragmatique
-> **1,0/1,0/0,994/0,889**, cascade **67,1 %**, **attachement par tête couverture 1,0 / top-1 0,957 / top-k 1,0** (span 0,323/0,338), hasard 0,015 ; **29 cibles ambiguës annotées en double lecture**. ⚠️ **le vrai modèle
+> **1,0/1,0/0,994/0,889**, cascade **67,1 %**, **attachement par tête couverture 1,0 / top-1 0,957 / top-k 1,0** (span 0,323/0,338), hasard 0,015 ; **36 cibles ambiguës annotées en double lecture**. ⚠️ **le vrai modèle
 > neuronal est refusé** (`llama-cli` local) ; la cascade est mesurée avec le **mock de contrat**.
 >
 > **Dispositif** : [`gold.py`](../tools/tests/linguistique/gold.py) (20 réels),
@@ -56,11 +56,12 @@ entre le S et le gold.
 
 | lecture | source | cibles | ambiguës | couv. tête | **top-1 tête** (1 lecture) | **top-1 tête** (2 lectures) | **top-k tête** |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **heuristique** | **220** | **97** | **29** | **1,000** | 0,870 | **0,957** | **1,000** |
-| heuristique | 20 réels | 18 | 5 | 1,000 | 0,400 | **0,800** | 1,000 |
-| heuristique | 40 réels (nouveaux) | — | 0 | — | — | — | — |
-| heuristique | 160 synth. | 79 | 24 | 1,000 | **1,000** | **1,000** | 1,000 |
-| mock seul | 180 | 97 | 29 | 1,000 | 0 | 0 | 0 |
+| **heuristique** | **220** | **85** | **36** | **1,000** | 0,870 | **0,972** | **0,889** |
+| heuristique | 60 réels | 30 | 14 | 1,000 | — | **0,929** | **1,000** |
+| heuristique | 20 réels | 13 | 6 | 1,000 | 0,400 | 0,833 | 1,000 |
+| heuristique | 40 réels (nouveaux) | 17 | 8 | 1,000 | — | **1,000** | 1,000 |
+| heuristique | 160 synth. | 55 | 22 | 1,000 | **1,000** | **1,000** | 0,818 |
+| mock seul | 220 | 85 | 36 | 1,000 | 0 | 0 | 0 |
 | **hasard** | 180 | 97 | — | — | **0,015** | — | — |
 
 - **La couverture par tête est de 100 %** : le segment prédit qui couvre la **tête** du gold
@@ -69,7 +70,7 @@ entre le S et le gold.
 - **Top-1 tête 87 % (une lecture), 96 % (deux lectures)** : quand on regarde la tête, la bonne
   cible est dans les candidats du S **toujours**, et en premier **87 %** du temps quand le gold
   n'a qu'une lecture, **96 %** quand on lui donne les **deux** lectures de l'ambiguïté.
-- **La lecture double** : **29 cibles** sur 97 ont deux lectures (`dans le parc` → `vu` **ou**
+- **La lecture double** : **36 cibles** sur 85 ont deux lectures (`dans le parc` → `vu` **ou**
   `l'homme`, `avec le télescope` → `vu` **ou** `l'homme`, `à manger` → `prêt` **ou** `canard`).
   Le top-1 des réels passe de **40 %** à **80 %** ; les synthétiques restent à 100 %.
 - **Le span** (34 %, top-1 29 %) reste la mesure de la **découpe** ; la tête est la mesure de
@@ -122,8 +123,8 @@ Les seuils sont **postérieurs** à la première mesure : bornes de non-régress
 - **L'attachement par tête couvre 100 %**, mais le gold ne donne **qu'une** lecture des
   ambiguïtés (le GP au verbe) ; le 40 % des réels est un **désaccord de lecture**, pas seulement
   de découpe.
-- **Les 3 cibles anglaises** n'ont pas d'attachement S (le générateur est français) ; leurs têtes
-  sont couvertes par le chunker simple, mais sans cible : le top-1/top-k ne les compte pas.
+- **Les 40 nouvelles phrases** ont maintenant **21 cibles** (dont 4 ambiguës) : le réel est mesuré
+  sur **85 cibles** (30 réelles, 55 synthétiques) ; les têtes réelles sont à **0,929** de top-1.
 - **Les deux lectures sont celles de l'auteur** : elles ne couvrent pas toutes les ambiguïtés
   possibles (`avec` peut attacher au GN, au GV ou à un instrument) ; le gold les **déclare**.
 - **Les 3 cibles anglaises** ne sont pas couvertes (le S est français) ; la couverture réelle

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-01, 20 h 05 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-01, 20 h 15 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -35,7 +35,7 @@
   [`pensee-operateurs`](../../reports/rapport-pensee-operateurs.md), [`pensee-necessaire`](../../reports/rapport-pensee-necessaire.md).
 - **Gold L 220** : **60 réels + 160 synthétiques** ; POS **0,765** (fermé 0,939/ouvert 0,621),
   syntagmes exacts **0,194**/**tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock)
-  **67,1 %** ; **attachement tête 1,0/0,957/1,0** (29 ambiguës), hasard 0,015 ; vrai neuronal
+  **67,1 %** ; **attachement tête 1,0/0,972/0,889** (36 ambiguës), hasard 0,015 ; vrai neuronal
   **refusé** ; fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :
   **lecture du gold + modèle qualifié**.
 - **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes**  sur le jouet des cruches ; BFS, greedy, A* et

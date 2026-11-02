@@ -14759,3 +14759,22 @@ roadmap ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/structures docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"S — L'ANALYSEUR PLUS RICHE : SUBORDONNÉES, COORDINATION, ET L'EXPORT VERS LE CORPUS\n\nLe générateur distingue le « que » comp … [551 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-862]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-862", "timeout_ms": 300000, "wait": true}`
+
+  ```
+[master fa1b74a4] S — L'ANALYSEUR PLUS RICHE : SUBORDONNÉES, COORDINATION, ET L'EXPORT VERS LE CORPUS
+ 13 files changed, 264 insertions(+), 28 deletions(-)
+fa1b74a4 S — L'ANALYSEUR PLUS RICHE : SUBORDONNÉES, COORDINATION, ET L'EXPORT VERS LE CORPUS
+46fa2c82 L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510
+54:def charger(txt: str | pathlib.Path) -> torch.Tensor:
+58:def lot_fr(data, n, seq, device, compteur):
+103:    def lot(self, n, seq, device, compteur):
+[status: completed, exit code: 0]
+  ```
+
