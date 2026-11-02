@@ -1,0 +1,55 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "nature": "corpus PDF local (texte natif)",
+ "methode": {
+  "extraction": "pdftotext -enc UTF-8",
+  "page": "pdfinfo",
+  "scanne": "moins de 50 caractères/page",
+  "deduplication": "documents + tronçons (BLAKE2b)",
+  "split": "hash salé du chemin : 5% val, 5% test"
+ },
+ "racines": [
+  {
+   "nom": "personnel — usage local, non diffusé",
+   "chemin": "/home/stephane/Data13TB/stephane/Documents",
+   "pdfs": 7459
+  }
+ ],
+ "pdfs": 7459,
+ "pages": 803817,
+ "documents_gardes": 3384,
+ "documents_scannes": 1017,
+ "documents_courts": 1316,
+ "documents_doublons": 1742,
+ "caracteres_gardes": 871972648,
+ "troncons": 107976,
+ "troncons_doublons": 372,
+ "octets": {
+  "train": 802954509,
+  "val": 49570820,
+  "test": 34389340
+ },
+ "documents": {
+  "train": 3071,
+  "val": 166,
+  "test": 147
+ },
+ "echantillon": "---\nAvis de cotisation ARC 2025 (version HTML)\n16/07/2026 19:41\n\nAvis de cotisation (version HTML)\n\nAvis de cotisation (version HTML)\nDétails concernant l'avis\nAdresse :\nSTÉPHANE DENIS\n10-915 RUE SAINT-PIERRE OSAINT-HYACINTHE QC J2T 1N9\nNuméro d'assurance sociale : XXX XX9 035\nAnnée d'imposition : 2025\nDate de l'avis : 11 mai 2026\nCentre Fiscal : JONQUIÈRE QC G7S 5J1\nCode d'accès : GG7N8BX7\nNous avons\n---\nDictionnaireGenealofiqueFamillesCanadienne - Bibliotheque et Archives nationales du Que\nDICTIONNAIRE\n\nGENEALOGIQUE\nDES\n\nFAMILLES CANADIENNES\n\n\f\fDICTIONNAIRE\n\nDES\n\nF A M I L L E S CANADIENNES\nD E P U I S L A F O N D A T I O N DE LA C O L O N I E\nJUSQU'À N O S JOURS\n\nPAR\n\nL'ABBÉ\n\nGYPRIEN TANGUAY\nPREMIER VOLUME\nDepuis 1608 jusqu'à 1700.\n\nEUSÈBE\n\nPROVINCE DE QUEBEC\nSÉNÉGAL,IMPRIMEUR-ÉDITEUR\nMDCCCLXXl.",
+ "mots_estimes": 140640749,
+ "note_mots": "caractères / 6,2 (estimation, le cas échéant)",
+ "sha256_train": "795a5d76c47e33d35c8704be2274e45cf043f11509c3a6c2cc7a6b3ba26754a6",
+ "sha256_val": "d2c1508fbc285abd87de47c542b7937e1a684d16c503687bd8e88639b777e8d9",
+ "sha256_test": "5618cf21921d77db629d6e8f1eddf6e9b9dc0b9fa336d720597e6f94f4f7a8e2",
+ "licences": [
+  {
+   "racine": "personnel — usage local, non diffusé",
+   "licence": "à préciser"
+  }
+ ],
+ "limites": [
+  "texte natif seulement : les scannés sont comptés, pas océrisés",
+  "en-têtes et pieds de page conservés ; formules et tableaux perdus",
+  "licences : droits réservés, corpus local non diffusé"
+ ]
+}

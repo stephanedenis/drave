@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**138 commits** · **4 session(s)** · **10 thème(s)**
+**139 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 16 | [distribue.md](distribue.md) |
 | docs | 35 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
-| mesures | 56 | [mesures.md](mesures.md) |
+| mesures | 57 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -177,6 +177,7 @@
 | 23:30 | `4aa8e1d8` | B13 — L'ACTION OBSERVER : 20/20 BUTS, 8,3 PAS, LE GESTE QUI RÉVÈLE LA PORTE ; 47/47 |
 | 23:33 | `f3b70959` | B13 — L'OBSERVATION BRUITÉE : 10 % D'ERREUR CASSE LA POLITIQUE (0/20) ; 48/48 |
 | 23:36 | `7e819b56` | DONNÉES — LE GENRE SE MESURE : ENCYCLOPÉDIE 103-147 CAR/LIGNE, LIVRES 32-37 ; LIGNES DUPLIQUÉES 8,7-24 %, OCR 4,8 % |
+| 23:38 | `2bd6bcc4` | B13 — L'OBSERVATION VOTANTE : DEUX LOOKS, 20/20 BUTS, 1 % D'ERREUR ; 49/49 |
 
 ## Le récit de la journée (écrit à la main)
 

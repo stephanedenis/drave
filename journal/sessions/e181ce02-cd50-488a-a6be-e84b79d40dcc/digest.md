@@ -18961,3 +18961,114 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-697", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 7e819b56fadf50414c00b50497f2521106f523a7 but expected f3b70959483c697494ac36c21ea9b2954e04dcb6
+retry 1
+ 29 files changed, 446 insertions(+), 73 deletions(-)
+ create mode 100644 reports/pensee-votante.json
+ create mode 100644 reports/rapport-pensee-votante.md
+COMMIT OK 2
+2bd6bcc4 B13 — L'OBSERVATION VOTANTE : DEUX LOOKS, 20/20 BUTS, 1 % D'ERREUR ; 49/49
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Observation votante : deux looks, 20/20 buts, 1 % d'erreur ; 49/49
+
+Le round 50 du goal est livré : **deux looks** absorbent le bruit — 0/20 deviennent **20/20**. Commit **`2bd6bcc4`**.
+
+## L'observation votante
+
+Même monde que T45 (10 % d'erreur par révélation), mais `observer` fait **deux looks** : s'ils concordent, la croyance est certaine ; s'ils diffèrent, elle reste hésitante (b = 1 ou 2).
+
+| dispositif | buts | états-Q | pas |
+|---|---:|---:|---:|
+| **votante** | **20/20** | 372 | 8,0 |
+| bruitée (T45) | 0/20 | 398 | 200 |
+| observatrice (T44) | 20/20 | 448 | 8,3 |
+
+**Ce que ça dit** :
+
+- **La répétition restaure la robustesse** : 0/20 → 20/20 ; le vote absorbe le bruit (1 % d'erreur effective au lieu de 10 %).
+- **Le coût est nul** : 8,0 pas (mieux que l'observatrice simple, 8,3) ; la politique observe une fois et le vote interne ne coûte pas de pas.
+- **La croyance hésitante** (b = 1/2) est un signal : la politique peut réobserver.
+- **La table est plus petite** (372 états) : moins d'états, plus de compétence.
+
+## L'état
+
+- Fiche : [`rapport-pensee-votante.md`](../../reports/rapport-pensee-votante.md) ; JSON [`pensee-votante.json`](../../reports/pensee-votante.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T46 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **49/49 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **444 fiches / 539 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Trois looks** : 0,1 % d'erreur ; le coût.
+2. **Croyance bayésienne** : mettre à jour la distribution avec la fiabilité.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round essaie **trois looks** et la croyance bayésienne.
+
+
+## Tour 64
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 51/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1775 caractères tronqués]`
+
+  ```
+2bd6bcc4 B13 — L'OBSERVATION VOTANTE : DEUX LOOKS, 20/20 BUTS, 1 % D'ERREUR ; 49/49
+ok
+2000 q 457 20 runs: 0 /20 pas moyen 200.0
+4000 q 481 20 runs: 20 /20 pas moyen 9.2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T46 l'observation votante         20/20 buts : deux looks, 1 % d'erreur effective\\n\",\n\"  T46 l'observation votante     … [1321 caractères tronqués]`
+
+  ```
+ok
+  ✅ T45 observation bruitée observatrice bruitée : 0/20 buts (398 états-Q), 10 % d'erreur casse la politique
+  ✅ T46 observation votante votante : 20/20 buts, 372 états-Q, 8.0 pas
+  ✅ T47 trois looks        votante3 : 20/20 buts, 481 états-Q, 9.2 pas
+  50/50 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-votante3.md <<'MD'\n# B13 — l'observation à trois looks : 20/20, mais 4000 épisodes\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **50/50 portes** : l … [6299 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 540 JSON, le disque en a 541
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\", \"| fichiers / JSON de résultats | **445* … [628 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 445 fiche(s) · 541 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-votante3.md reports/pensee-votante3.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours. … [476 caractères tronqués]`

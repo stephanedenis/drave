@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 31.0 h |
-| Tours | 63 |
-| Messages | 938 |
-| Appels d'outils | 863 |
+| Tours | 64 |
+| Messages | 945 |
+| Appels d'outils | 868 |
 | Fichiers touchés | 25 |
-| Commandes | 697 |
+| Commandes | 702 |
 | Sous-agents | 2 |
-| Commits | 80 |
+| Commits | 81 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -157,6 +157,8 @@
 **Tour 62** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 63** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 64** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3368,6 +3370,54 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait **voter deux observ
 - bash — Committer l'observation votante
 - job_output
 
+**Synthèse produite :**
+
+⏵ Observation votante : deux looks, 20/20 buts, 1 % d'erreur ; 49/49
+
+Le round 50 du goal est livré : **deux looks** absorbent le bruit — 0/20 deviennent **20/20**. Commit **`2bd6bcc4`**.
+
+\## L'observation votante
+
+Même monde que T45 (10 % d'erreur par révélation), mais `observer` fait **deux looks** : s'ils concordent, la croyance est certaine ; s'ils diffèrent, elle reste hésitante (b = 1 ou 2).
+
+| dispositif | buts | états-Q | pas |
+|---|---:|---:|---:|
+| **votante** | **20/20** | 372 | 8,0 |
+| bruitée (T45) | 0/20 | 398 | 200 |
+| observatrice (T44) | 20/20 | 448 | 8,3 |
+
+**Ce que ça dit** :
+
+- **La répétition restaure la robustesse** : 0/20 → 20/20 ; le vote absorbe le bruit (1 % d'erreur effective au lieu de 10 %).
+- **Le coût est nul** : 8,0 pas (mieux que l'observatrice simple, 8,3) ; la politique observe une fois et le vote interne ne coûte pas de pas.
+- **La croyance hésitante** (b = 1/2) est un signal : la politique peut réobserver.
+- **La table est plus petite** (372 états) : moins d'états, plus de compétence.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-votante.md`](../../reports/rapport-pensee-votante.md) ; JSON [`pensee-votante.json`](../../reports/pensee-votante.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T46 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **49/49 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **444 fiches / 539 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Trois looks** : 0,1 % d'erreur ; le coût.
+2. **Croyance bayésienne** : mettre à jour la distribution avec la fiabilité.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round essaie **trois looks** et la croyance bayésienne.
+
+### Tour 64 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Tester l'observation à trois looks
+- bash — Ajouter la porte T47 (trois looks)
+- bash — Écrire la fiche des trois looks
+- bash — Aligner le compteur et passer les portes
+- bash — Committer les trois looks
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3447,7 +3497,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait **voter deux observ
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 657 autres
+- … et 662 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3674,4 +3724,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait **voter deux observ
 - B13 — L'ACTION OBSERVER : 20/20 BUTS, 8,3 PAS, LE GESTE QUI RÉVÈLE LA PORTE ; 47/47" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "L'ACTION OBSERVER";
 - B13 — L'OBSERVATION BRUITÉE : 10 % D'ERREUR CASSE LA POLITIQUE (0/20) ; 48/48" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "OBSERVATION BRUITÉE"; the
 - B13 — L'OBSERVATION VOTANTE : DEUX LOOKS, 20/20 BUTS, 1 % D'ERREUR ; 49/49" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "OBSERVATION VOTANTE"; then e
+- B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "TROIS LOOKS"; then echo "COM
 

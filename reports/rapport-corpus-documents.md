@@ -1,7 +1,7 @@
 # Le corpus Documents — 7 496 PDF locaux, 2 992 documents, 845,7 M caractères
 
 **Date** : 2026-11-01 · **Ligne** : Données · **Session** : fe3c05f0
-**Statut** : en cours (6 000 PDF sur 7 496 au 1/11 23 h 12) ; les chiffres finaux seront ajoutés à la clôture.
+**Statut** : **terminé** (7 459 PDF, manifeste `reports/corpus-pdf-documents.json`).
 
 ## 1. Ce que c'est
 
@@ -11,12 +11,15 @@ Le corpus des **documents personnels** : les 7 496 PDF du fonds `Documents/` (li
 
 | grandeur | valeur |
 |---|---:|
-| PDF lus | 6 000 / 7 496 |
-| documents gardés | 2 992 |
-| caractères | 845,7 M |
-| train / val / test | 789,9 Mo / 49,3 Mo / 32,7 Mo |
-| tronçons 8 Ko | à la fin |
-| doublons 8 Ko | à la fin |
+| PDF lus | **7 459** |
+| pages | 803 817 |
+| documents gardés | **3 384** |
+| documents scannés | 1 017 |
+| documents courts | 1 316 |
+| doublons de documents | 1 742 |
+| caractères | **871 972 648** |
+| train / val / test | 803,0 Mo / 49,6 Mo / 34,4 Mo |
+| tronçons 8 Ko | 107 976 (372 doublons) |
 | licences | personnel — usage local, non diffusé |
 
 ## 3. Le dispositif
@@ -29,13 +32,13 @@ Les doublons exacts et les tronçons : la mesure 8 Ko tranchera à la fin. Les �
 
 ## 5. Ce qui pourrait être faux
 
-- Le corpus est **partiel** : les PDF lourds (plus de 120 s) sont coupés par le délai et comptés « courts » ; leur part exacte sera dans le manifeste.
+- **45 % des PDF seulement** sont gardés (3 384 sur 7 459) : 1 017 sont des scans (sans couche texte), 1 316 trop courts, 1 742 doublons. Les scans iront à l'OCR.
 - Les licences sont **personnelles** : usage local, non diffusé ; le corpus ne sortira pas du dépôt.
 - Le texte extrait d'un PDF n'est pas du texte natif : les colonnes, les notes de bas de page et les formules peuvent être mélangés.
 
 ## 6. La suite
 
-Les 1 496 PDF restants ; puis la mesure 8 Ko, les évaluations et la fiche finale (les chiffres du § 2 seront figés).
+La mesure 8 Ko (en cours), les évaluations ; puis l'OCR des 1 017 scans du corpus Documents.
 
 ## 7. Les fichiers
 

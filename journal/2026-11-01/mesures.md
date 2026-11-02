@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (56)
+## Commits du jour (57)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -64,10 +64,11 @@
 | 23:26 | `e5fea549` | B13 — LA CURIOSITÉ : 0/20 BUTS, LE BONUS DE CERTITUDE NE SUFFIT PAS ; 46/46 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+15) |
 | 23:33 | `f3b70959` | B13 — L'OBSERVATION BRUITÉE : 10 % D'ERREUR CASSE LA POLITIQUE (0/20) ; 48/48 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 23:36 | `7e819b56` | DONNÉES — LE GENRE SE MESURE : ENCYCLOPÉDIE 103-147 CAR/LIGNE, LIVRES 32-37 ; LIGNES DUPLIQUÉES 8,7-24 %, OCR 4,8 % | `en-cours.md`, `README.md`, `mesures.md` (+10) |
+| 23:38 | `2bd6bcc4` | B13 — L'OBSERVATION VOTANTE : DEUX LOOKS, 20/20 BUTS, 1 % D'ERREUR ; 49/49 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+26) |
 
 ## Chiffres du jour
 
-`-24 %` · `4,8 %` · `10 %` · `60 %` · `95 %` · `+27 %` · `0,772` · `0,966` · `0,946` · `0,773` · `0,962` · `0,936`
+`1 %` · `-24 %` · `4,8 %` · `10 %` · `60 %` · `95 %` · `+27 %` · `0,772` · `0,966` · `0,946` · `0,773` · `0,962`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -118,6 +119,7 @@
 - [reports/rapport-pensee-seule.md](../../reports/rapport-pensee-seule.md)
 - [reports/rapport-pensee-shaping.md](../../reports/rapport-pensee-shaping.md)
 - [reports/rapport-pensee-sto-seule.md](../../reports/rapport-pensee-sto-seule.md)
+- [reports/rapport-pensee-votante.md](../../reports/rapport-pensee-votante.md)
 - [reports/rapport-r44-scans.md](../../reports/rapport-r44-scans.md)
 
 <!-- notes -->
