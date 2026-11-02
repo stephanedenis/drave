@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 45.1 h |
-| Tours | 149 |
-| Messages | 1771 |
-| Appels d'outils | 1517 |
+| Durée | 45.2 h |
+| Tours | 150 |
+| Messages | 1778 |
+| Appels d'outils | 1522 |
 | Fichiers touchés | 25 |
-| Commandes | 1240 |
+| Commandes | 1244 |
 | Sous-agents | 2 |
-| Commits | 190 |
+| Commits | 191 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -333,6 +333,8 @@
 **Tour 148** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 149** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 150** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7920,6 +7922,56 @@ Je continue : prochain round, **le contexte** — l'accord explicite, sans modè
 - bash — Committer la réponse contextuelle
 - job_output
 
+**Synthèse produite :**
+
+⏵ Réponse contextuelle : 5/5, la phrase précédente tranche ; 134/134
+
+Le round 135 est livré : la **réponse contextuelle** retrouve les **5/5** pièges — la polarité de la phrase précédente tranche l'accord. Commit **`297c4f17`**.
+
+\## Les 5 paires
+
+| question (piège) | précédente | réponse | **contextuelle** |
+|---|---|---|---|
+| r418 `Tu ne viens pas demain ?` | r423 `Tu viens demain.` | `non` | **non** ✅ |
+| r419 `Il ne mange pas ?` | r424 `Il mange.` | `non` | **non** ✅ |
+| r420 `Elle ne dort pas ?` | r425 `Elle dort.` | `non` | **non** ✅ |
+| r421 `Ils ne partent pas ?` | r426 `Ils partent.` | `non` | **non** ✅ |
+| r422 `You don't come tomorrow?` | r427 `You come tomorrow.` | `no` | **no** ✅ |
+
+**Ce que ça dit** :
+
+- **Le contexte suffit pour ces 5 cas** : la polarité de la phrase précédente (affirmative) dit que la question **constate**, donc `non` ; la règle du `si` seule (sans contexte) se trompait.
+- **La règle est encore de surface** : elle lit la négation de la précédente, pas le sens ; une question rhétorique attendrait `si` — le contexte ne fait que déplacer le problème.
+- **5/5 vs 0/5** : c'est le **contrôle négatif** du round — sans contexte, 0/5 ; avec, 5/5.
+- **La frontière n'est pas franchie** : le contexte est un signal, pas une compréhension.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-contexte.md`](../../reports/rapport-pensee-contexte.md) ; JSON [`pensee-contexte.json`](../../reports/pensee-contexte.json) ; T131 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **134/134 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **544 fiches / 630 JSON / 119 docs / 81 portes** — ✅ ; `en-cours` à jour (14 h 30).
+- Le **gold gelé** protège les portes : le vivant est à 427 réels + 160 + 20 = 607 phrases, sans casse.
+- L'horloge réelle est **13 h 47 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **Le lien automatique** : trouver la phrase précédente par le thème (le sujet partagé), pas par l'index codé en dur.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold vivant peut grandir.
+
+Je continue : prochain round, **le lien automatique** — la seule façon de rendre le contexte utilisable hors des 5 paires.
+
+### Tour 150 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Mesurer le lien automatique par le sujet
+- bash — Écrire la fiche du lien automatique et la porte T132
+- bash — Trim README et passer toutes les portes
+- bash — Committer le lien automatique
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7999,7 +8051,7 @@ Je continue : prochain round, **le contexte** — l'accord explicite, sans modè
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1200 autres
+- … et 1204 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8337,4 +8389,5 @@ Je continue : prochain round, **le contexte** — l'accord explicite, sans modè
 - B13 — LE GOLD GELÉ : 602 PHRASES, 21 PORTES PROTÉGÉES ; 133/133" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "GOLD GELÉ"; then echo "COMMIT OK $i"; b
 - B13 — LE GOLD GELÉ : 602 PHRASES, 21 PORTES PROTÉGÉES ; 133/133" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "GOLD GELÉ"; then echo "COMMIT OK $i"; b
 - B13 — LA RÉPONSE CONTEXTUELLE : 5/5, LA PHRASE PRÉCÉDENTE TRANCHE ; 134/134" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÉPONSE CONTEXTUELLE"; then
+- B13 — LE LIEN AUTOMATIQUE : 0/5, LE SUJET NE SUFFIT PAS ; 135/135" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "LIEN AUTOMATIQUE"; then echo "COMMIT 
 

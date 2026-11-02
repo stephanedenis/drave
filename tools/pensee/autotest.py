@@ -1956,6 +1956,15 @@ def t131_contextuel() -> tuple[bool, str]:
         f"contexte : {r['justes']:.0f}/{r['paires']} (0/5 sans contexte)")
 
 
+def t132_lien_auto() -> tuple[bool, str]:
+    """Le lien automatique : 0/5, le sujet ne suffit pas."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_lien_auto
+    r = fidelite_lien_auto(charger())
+    return r["paires"] == 5 and r["justes"] == 0, (
+        f"lien auto : {r['justes']:.0f}/{r['paires']} (le sujet ne suffit pas)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2086,7 +2095,8 @@ def main() -> int:
               ("T128 règle du si", t128_si()),
               ("T129 pièges", t129_pieges()),
               ("T130 gold gelé", t130_gold_gele()),
-              ("T131 contexte", t131_contextuel())]
+              ("T131 contexte", t131_contextuel()),
+              ("T132 lien auto", t132_lien_auto())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

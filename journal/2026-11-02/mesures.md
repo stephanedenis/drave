@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (79)
+## Commits du jour (80)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -87,6 +87,7 @@
 | 13:07 | `5b7a3e99` | B13 — LA RÈGLE DU SI : 29/29, LA DERNIÈRE RÈGLE DE SURFACE ; 131/131 | `README.md`, `format-flux.md`, `moteur-de-pensee.md` (+32) |
 | 13:31 | `2c394fbc` | N2.ac — LE MÉLANGE DES DEUX CORPUS : LA LARGEUR SANS PERDRE LE FRANÇAIS | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |
 | 13:35 | `26b8c442` | N2 — RESTAURATION (ENCORE) DES FICHES N2.aa, N2.ab ET N2.ac | `en-cours.md`, `README.md`, `modele.md` (+7) |
+| 13:46 | `297c4f17` | B13 — LA RÉPONSE CONTEXTUELLE : 5/5, LA PHRASE PRÉCÉDENTE TRANCHE ; 134/134 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
 
 ## Chiffres du jour
 
@@ -97,7 +98,7 @@
 ## Sessions actives ce jour
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 45.3 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 45.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 45.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 44.8 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
@@ -137,6 +138,7 @@
 - [reports/rapport-pensee-cascade-union.md](../../reports/rapport-pensee-cascade-union.md)
 - [reports/rapport-pensee-chaotique.md](../../reports/rapport-pensee-chaotique.md)
 - [reports/rapport-pensee-concurrentes.md](../../reports/rapport-pensee-concurrentes.md)
+- [reports/rapport-pensee-contexte.md](../../reports/rapport-pensee-contexte.md)
 - [reports/rapport-pensee-courbe-seuil.md](../../reports/rapport-pensee-courbe-seuil.md)
 - [reports/rapport-pensee-courbe20.md](../../reports/rapport-pensee-courbe20.md)
 - [reports/rapport-pensee-derive.md](../../reports/rapport-pensee-derive.md)

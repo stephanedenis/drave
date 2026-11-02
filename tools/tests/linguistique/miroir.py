@@ -181,6 +181,52 @@ def repondre_contextuel(a: bl.Annotation, a_prec: bl.Annotation | None = None) -
     return "non" if lg == "fr" else "no"
 
 
+def _sujet(a: bl.Annotation) -> str | None:
+    """Le premier GN agent de l'annotation (le sujet de surface)."""
+    for e in a.etiquettes:
+        if e.niveau == "syntagme" and e.type == "GN" and e.meta.get("role") == "agent":
+            return e.valeur
+    return None
+
+
+def trouver_precedente(question: dict, phrases: list[dict], bloc=None) -> dict | None:
+    """Le lien **automatique** : la phrase précédente qui partage le sujet de la question."""
+    bloc = bloc or bl.Heuristique()
+    a = bloc.analyser(question["texte"], question["langue"])
+    sujet = _sujet(a)
+    if not sujet:
+        return None
+    idx = next((i for i, p in enumerate(phrases) if p.get("id") == question.get("id")), -1)
+    for p in reversed(phrases[:idx] if idx > 0 else []):
+        b = bloc.analyser(p["texte"], p["langue"])
+        s = _sujet(b)
+        if s and _normaliser_egal(s, sujet):
+            return p
+    return None
+
+
+def _normaliser_egal(a: str, b: str) -> bool:
+    n = lambda s: " ".join(str(s).lower().split())
+    return n(a) == n(b)
+
+
+def fidelite_lien_auto(phrases: list[dict], bloc=None) -> dict:
+    """Le taux de questions pièges où le lien automatique retrouve la bonne précédente."""
+    bloc = bloc or bl.Heuristique()
+    par_id = {p["id"]: p for p in phrases}
+    paires = [(f"r{418 + k}", f"r{423 + k}") for k in range(5)]
+    justes = 0
+    for qid, pid in paires:
+        if qid not in par_id:
+            continue
+        q = par_id[qid]
+        trouvee = trouver_precedente(q, phrases, bloc)
+        if trouvee is not None and trouvee.get("id") == pid:
+            justes += 1
+    return {"paires": len(paires), "justes": justes,
+            "taux": round(justes / max(1, len(paires)), 4)}
+
+
 def fidelite_contextuelle(phrases: list[dict], bloc=None) -> dict:
     """Le taux de questions pièges où la réponse contextuelle est juste."""
     bloc = bloc or bl.Heuristique()

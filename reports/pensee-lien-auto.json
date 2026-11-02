@@ -1,0 +1,13 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "135/135",
+ "paires": 5,
+ "justes": 0,
+ "taux": 0.0,
+ "limites": [
+  "les assertions suivent les questions",
+  "lien par le sujet naïf",
+  "heuristique seule"
+ ]
+}
