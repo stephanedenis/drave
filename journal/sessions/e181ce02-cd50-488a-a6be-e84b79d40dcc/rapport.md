@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 34.0 h |
-| Tours | 96 |
-| Messages | 1253 |
-| Appels d'outils | 1108 |
+| Durée | 34.2 h |
+| Tours | 97 |
+| Messages | 1263 |
+| Appels d'outils | 1116 |
 | Fichiers touchés | 25 |
-| Commandes | 895 |
+| Commandes | 902 |
 | Sous-agents | 2 |
-| Commits | 124 |
+| Commits | 125 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -223,6 +223,8 @@
 **Tour 95** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 96** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 97** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5103,6 +5105,57 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round met la **phase dans l'é
 - bash — Committer la phase dans l'état
 - job_output
 
+**Synthèse produite :**
+
+⏵ Phase dans l'état : le correctif, 20/20 aux deux buts, 6,0 pas ; 82/82
+
+Le round 83 du goal est livré : la **phase dans l'état** corrige les routes concurrentes — 0/20 → 20/20 au but 0. Commit **`81c71956`**.
+
+\## Le correctif
+
+Même monde que T78 (but caché `(4,4)` ou `(4,0)`), mais la clé contient la **phase**.
+
+| version | but 0 | but 1 | états-Q | pas |
+|---|---:|---:|---:|---:|
+| T78 (sans phase) | **0/20** | 20/20 | 86 | 200 |
+| **T79 (avec phase)** | **20/20** | **20/20** | 145 | 6,0 |
+
+**Ce que ça dit** :
+
+- **Le correctif est net** : 0/20 → 20/20 au but 0 ; les deux politiques sont **séparées** par la phase.
+- **Le coût est nul** : 6,0 pas, mieux que T78 au but 1 (0 pas, mais 200 au but 0) ; la moyenne est meilleure.
+- **145 états** : deux buts × deux routes, la table double (86 → 145) — le prix de la séparation.
+- **La négative reste** : sans la phase, 0/20 (T78).
+
+\## L'état
+
+- Fiche : [`rapport-pensee-phase-etat.md`](../../reports/rapport-pensee-phase-etat.md) ; JSON [`pensee-phase-etat.json`](../../reports/pensee-phase-etat.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T79 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **82/82 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **484 fiches / 574 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~11 min** ; les portes tiennent avec `timeout 1200`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **La phase devinée** : l'agent infère la phase de ses observations (le vrai POMDP).
+2. **20 graines** : lisser la courbe du seuil.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **phase devinée** — le pas vers le vrai POMDP.
+
+### Tour 97 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Tester la phase devinée (signal bruité)
+- bash — Tracer la politique phase 0 signal 0
+- bash — Ajouter la porte T80 (phase devinée)
+- bash — Écrire la fiche de la phase devinée
+- bash — Trim README et portes
+- bash — Réduire le README de 4 mots
+- bash — Committer la phase devinée
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5182,7 +5235,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round met la **phase dans l'é
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 855 autres
+- … et 862 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5454,4 +5507,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round met la **phase dans l'é
 - B13 — LA VÉRITÉ QUI CHANGE : PORTE CACHÉE, 20/20 AUX DEUX PHASES ; 80/80" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VÉRITÉ QUI CHANGE"; then echo 
 - B13 — LES ROUTES CONCURRENTES : BUT CACHÉ, 0/20 ET 20/20, LA PHASE DOIT ENTRER ; 81/81" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ROUTES CONCURREN
 - B13 — LA PHASE DANS L'ÉTAT : LE CORRECTIF, 20/20 AUX DEUX BUTS, 6,0 PAS ; 82/82" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHASE DANS L'ÉTAT"; the
+- B13 — LA PHASE DEVINÉE : SIGNAL 90 %, 0/20 AU BUT 0, BOUCLE (3,0)↔(4,0) ; 83/83" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHASE DEVINÉE"; then ec
 

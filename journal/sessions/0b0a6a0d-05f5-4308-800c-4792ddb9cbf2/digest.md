@@ -17322,3 +17322,69 @@ FileNotFoundError: [Errno 2] No such file or directory: 'data/wiki_en/prepro/val
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for gpu in 0 1; do g=$((gpu+1)); nohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=$gpu PYTHONPATH=. ~/gpu-env/bin/python tools/distiller_budget.py --corpus fr --train data/wiki_en/propre/trai … [508 caractères tronqués]`
+
+  ```
+E34-g1 2339693
+E34-g2 2339694
+# init work/n2k/base-en-34m.pt · manquants [] · graine 1 · décalage 0
+# init work/n2k/base-en-34m.pt · manquants [] · graine 2 · décalage 10000019
+02:41
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --status 2>&1 | tail -4; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅|❌\"; git log --oneline -5; date '+%H:%M'", "description": "Hub check: … [35 caractères tronqués]`
+
+  ```
+→ le bloc linguistique v0 est livré (398 langues) et **AC-3/alpha-bêta** sont mesurés (8/8), le DRVF (9/9) et le banc (10/10) ; qualifier un gold et un modèle neuronal ; puis les **opérateurs hétérogènes/DRVM** (S reste à l'autre TUI).
+  ⏰ fe3c05f0-834b-44f2 · en cours · 231 min · D (texte intégral, PDF/OCR, licences, stubs), R1.1/R1.2 (préparation), A2.6/A8.3
+      → l'**anglais** (le PDF et l'A8.3 sont faits) ; le catalogue ; l'OCR des 159 scans ; les collections ; R11/R12 bloqués sur N2, A2.6 sur A6.2.
+  ⚠ mandat périmé (231 min) : fe3c05f0-834b-44f2-8739-501865d652c1 — heartbeat à rafraîchir
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3993 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+e97e3d4d B13 — LES ROUTES CONCURRENTES : BUT CACHÉ, 0/20 ET 20/20, LA PHASE DOIT ENTRER ; 81/81
+58f47624 B13 — LA VÉRITÉ QUI CHANGE : PORTE CACHÉE, 20/20 AUX DEUX PHASES ; 80/80
+07e87a6f DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40
+ace1717b PLAN — LA SESSION N2 A MESURÉ LA CHAÎNE RÉELLE, SA PROCHAINE ACTION CHANGE
+f332e287 S 
+… [97 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E34-g*.pt 2>/dev/null; tail -1 work/n2k/E34-g1.log 2>/dev/null; tail -1 work/n2k/E34-g2.log 2>/dev/null", "description": "Wait for the English 34M students"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1029]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1029", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E34-g*.pt 2>/dev/null; tail -1 work/n2k/E34-g1.log 2>/dev/null; tail -1 work/n2k/E34-g2.log 2>/dev/null", "description": "Check the English 34M students"}`
+
+  ```
+02:52
+pas  5250 · seq 128 · perte 18.3732 · PPL 128/4 4.4260 · 602 s
+pas  5500 · seq 128 · perte 18.1570 · PPL 128/4 4.4008 · 610 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"Prochaine action : [^|]*\" docs/pilotage/roadmap.md | head -3; grep -c \"N2\" docs/pilotage/roadmap.md", "description": "Check the roadmap's next actions"}`
+
+  ```
+Prochaine action : **la distillation sur le corpus réel**, puis le canal d'annotation 
+14
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\na = \"Prochaine action : **la distillation sur le corpus réel**, puis le canal d'annotation |\"\nb = (\"Prochaine action : **la distil … [430 caractères tronqués]`
+
+  ```
+roadmap ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+02:52
+pas  5500 · seq 128 · perte 17.9702 · PPL 128/4 4.4479 · 631 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d{2} h \\d{2} HNE \\(heure locale, EST\\)\\.\\*\\*\",\n           \"**Mis à jour : … [903 caractères tronqués]`

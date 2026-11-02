@@ -2196,6 +2196,66 @@ def seule_verite3(p: PolitiqueAppriseVerite3, phase: int,
     return seule_verite2(p, phase, max_pas)
 
 
+class PolitiqueAppriseVerite4(PolitiqueAppriseVerite3):
+    """La Q-table à **phase devinée** : l'agent reçoit un signal bruité (90 %) sur le but."""
+
+    nom = "verite4"
+    signal = 0.9
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, phase: int = 0,
+                 signal: float = 0.9):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma,
+                         eps=eps, phase=phase)
+        self.signal = signal
+        self.signal_courant = 0
+
+    def _signal(self, phase: int) -> int:
+        return phase if self.rng.random() < self.signal else 1 - phase
+
+    def _cle(self, etat):
+        return super()._cle(etat)[:3] + (self.signal_courant,)
+
+    def apprendre(self) -> None:
+        for i in range(self.episodes):
+            self.phase = 0 if i < self.episodes // 2 else 1
+            s = self._signal(self.phase)
+            self.signal_courant = s
+            cle = (0, 0, False, s)
+            for _ in range(120):
+                if cle[:2] == GOALS_VERITE2[self.phase]:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle3, gain = self._pas(cle[:3], a, True)
+                ncle = (ncle3[0], ncle3[1], ncle3[2], s)
+                but = 1.0 if ncle[:2] == GOALS_VERITE2[self.phase] else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+
+def seule_verite4(p: PolitiqueAppriseVerite4, phase: int, signal: int,
+                  max_pas: int = 200) -> tuple[bool, int]:
+    p.phase = phase
+    p.signal_courant = signal
+    cle, pas = (0, 0, False, signal), 0
+    for _ in range(max_pas):
+        if cle[:2] == GOALS_VERITE2[phase]:
+            return True, pas
+        e = _etat_p(cle[0], cle[1], cle[2])
+        a = p.propose(e, None)
+        if a is None:
+            return False, pas
+        ncle3, _ = p._pas(cle[:3], a, True)
+        cle = (ncle3[0], ncle3[1], ncle3[2], signal)
+        pas += 1
+    return False, pas
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

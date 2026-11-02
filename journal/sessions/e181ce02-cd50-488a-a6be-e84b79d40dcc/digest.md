@@ -23873,3 +23873,136 @@ timeout 1200 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-phase-etat.md reports/pensee-phase-etat.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-co … [504 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-895]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-895", "timeout_ms": 600000, "wait": true}`
+
+  ```
+26 files changed, 602 insertions(+), 69 deletions(-)
+ create mode 100644 reports/pensee-phase-etat.json
+ create mode 100644 reports/rapport-pensee-phase-etat.md
+COMMIT OK 1
+81c71956 B13 — LA PHASE DANS L'ÉTAT : LE CORRECTIF, 20/20 AUX DEUX BUTS, 6,0 PAS ; 82/82
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Phase dans l'état : le correctif, 20/20 aux deux buts, 6,0 pas ; 82/82
+
+Le round 83 du goal est livré : la **phase dans l'état** corrige les routes concurrentes — 0/20 → 20/20 au but 0. Commit **`81c71956`**.
+
+## Le correctif
+
+Même monde que T78 (but caché `(4,4)` ou `(4,0)`), mais la clé contient la **phase**.
+
+| version | but 0 | but 1 | états-Q | pas |
+|---|---:|---:|---:|---:|
+| T78 (sans phase) | **0/20** | 20/20 | 86 | 200 |
+| **T79 (avec phase)** | **20/20** | **20/20** | 145 | 6,0 |
+
+**Ce que ça dit** :
+
+- **Le correctif est net** : 0/20 → 20/20 au but 0 ; les deux politiques sont **séparées** par la phase.
+- **Le coût est nul** : 6,0 pas, mieux que T78 au but 1 (0 pas, mais 200 au but 0) ; la moyenne est meilleure.
+- **145 états** : deux buts × deux routes, la table double (86 → 145) — le prix de la séparation.
+- **La négative reste** : sans la phase, 0/20 (T78).
+
+## L'état
+
+- Fiche : [`rapport-pensee-phase-etat.md`](../../reports/rapport-pensee-phase-etat.md) ; JSON [`pensee-phase-etat.json`](../../reports/pensee-phase-etat.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T79 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **82/82 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **484 fiches / 574 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~11 min** ; les portes tiennent avec `timeout 1200`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **La phase devinée** : l'agent infère la phase de ses observations (le vrai POMDP).
+2. **20 graines** : lisser la courbe du seuil.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **phase devinée** — le pas vers le vrai POMDP.
+
+
+## Tour 97
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 84/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [3171 caractères tronqués]`
+
+  ```
+81c71956 B13 — LA PHASE DANS L'ÉTAT : LE CORRECTIF, 20/20 AUX DEUX BUTS, 6,0 PAS ; 82/82
+ok
+4000 q 136 but 0: 0 /20 but 1: 20 /20
+8000 q 137 but 0: 0 /20 but 1: 20 /20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom tools.pensee.operateurs import PolitiqueAppriseVerite4, seule_verite4, _etat_p, GOALS_VERITE2\np=PolitiqueAppriseVerite4(episodes=4000, graine=0); p.apprendre()\np.phase=0; p.signal_courant=0\ncle=(0,0,False,0) … [341 caractères tronqués]`
+
+  ```
+[((0, 0, False), 'droite', 1.484), ((1, 0, False), 'droite', 1.573), ((2, 0, False), 'droite', 1.666), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764), ((4, 0, False), 'gauche', 0.815), ((3, 0, False), 'droite', 1.764)]
+but (4, 0, False)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T79 la phase dans l'état          le correctif : but 0 20/20, but 1 20/20\\n\",\n\"  T79 la phase dans l'état          le  … [1546 caractères tronqués]`
+
+  ```
+ok
+  ✅ T78 routes concurrentes concurrentes : but 0 0/20, but 1 20/20 (la phase doit entrer)
+  ✅ T79 phase dans l'état  phase dans l'état : but 0 20/20, but 1 20/20, 145 Q
+  ✅ T80 phase devinée      phase devinée : but 0 0/20, but 1 20/20 (le bruit de 10 % casse)
+  83/83 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-phase-devine.md <<'MD'\n# B13 — la phase devinée : 10 % de bruit, 0/20 au but 0\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **83/83 portes** : l'age … [7488 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 485 fiche(s) · 575 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2820 mots > budget 2800 (T1)
+  en-cours · 1619 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-seuil-bord.md`](rapport-pensee-seuil-bord.md) | **B13** — le bord du seuil : ×0,42/×0,44 50/50, bord > 0,44, **7 … [633 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 485 fiche(s) · 575 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2803 mots > budget 2800 (T1)
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1200 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-phase-devine.md`](rapport-pensee-phase-devine.md) | **B13** — la phase devinée : signal 90 %, 0/20 au but 0, bou … [307 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-phase-devine.md reports/pensee-phase-devine.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/e … [500 caractères tronqués]`

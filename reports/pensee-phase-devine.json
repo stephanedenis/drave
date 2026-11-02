@@ -1,0 +1,25 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "83/83",
+ "signal": 0.9,
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 136,
+  "but0": {
+   "buts": 0,
+   "pas": 200
+  },
+  "but1": {
+   "buts": 20,
+   "pas": 4
+  }
+ },
+ "trace_boucle": "(3,0) <-> (4,0)",
+ "limites": [
+  "un seul look",
+  "bruit symétrique",
+  "toy"
+ ]
+}

@@ -15,11 +15,11 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-phase-devine.md`](rapport-pensee-phase-devine.md) | **B13** — la phase devinée : signal 90 %, 0/20, boucle, **83/83** |
 | [`rapport-pensee-phase-etat.md`](rapport-pensee-phase-etat.md) | **B13** — la phase dans l'état : 20/20 aux deux buts, 145 Q, 6,0 pas, **82/82** |
 | [`rapport-pensee-concurrentes.md`](rapport-pensee-concurrentes.md) | **B13** — les routes concurrentes : but caché, 0/20 et 20/20, **81/81** |
 | [`rapport-pensee-verite.md`](rapport-pensee-verite.md) | **B13** — la vérité qui change : porte cachée, 20/20 aux deux phases, **80/80** |
 | [`rapport-pensee-courbe-seuil.md`](rapport-pensee-courbe-seuil.md) | **B13** — la courbe du seuil : 0,35→0,50, 0 → 80 % → 100 %, creux à 0,45, **79/79** |
-| [`rapport-pensee-seuil-bord.md`](rapport-pensee-seuil-bord.md) | **B13** — le bord du seuil : ×0,42/×0,44 50/50, bord > 0,44, **77/77** |
 | [`rapport-pensee-seuil.md`](rapport-pensee-seuil.md) | **B13** — le seuil d'oubli : ×0,5 réussit, ×0,2 échoue, seuil dans (0,2 ; 0,5], **74/74** |
 | [`rapport-pensee-oubli-total.md`](rapport-pensee-oubli-total.md) | **B13** — l'oubli total : 0/20 buts, la mémoire est nécessaire, **73/73** |
 | [`rapport-pensee-oubli-fort.md`](rapport-pensee-oubli-fort.md) | **B13** — la mémoire très courte : Q × 0,5/10, 20/20, 8,0 pas, **72/72** |
