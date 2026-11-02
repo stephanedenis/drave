@@ -1,0 +1,30 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "112/112",
+ "liens": 103,
+ "dernier_nom": 86,
+ "role": 86,
+ "sous_ensembles": {
+  "court": {
+   "liens": 30,
+   "dernier": 27,
+   "role": 23
+  },
+  "enchaine": {
+   "liens": 38,
+   "dernier": 24,
+   "role": 29
+  },
+  "sujet_simple": {
+   "liens": 35,
+   "dernier": 35,
+   "role": 35
+  }
+ },
+ "limites": [
+  "103 liens",
+  "réfléchis/possessifs absents",
+  "heuristique seule"
+ ]
+}

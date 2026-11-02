@@ -35089,3 +35089,62 @@ wchar: 274379146
 ⏵ Lot CEGEP : 1er scan (redo) fait en 12 min, détection en cours
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 600; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -2 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2", "descripti … [119 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-1369]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Lot CEGEP en cours : la vérification de 10 min tourne en tâche de fond (`bash-1369`)
+
+**La fenêtre de 3 h est lancée** (goal `goal-ee38a99b`, jusqu'à ~12 h 20) et le lot CEGEP de 40 notes tourne depuis 09 h 19 (PID 3445044).
+
+- **À 09 h 31** : le 1er scan (le redo d'*Exercices de synthèse Excel 2010*, 43 p) est passé en 12 min ; **800 Mo lus**, **274 Mo écrits** — la détection ré-examine les 41 PDF du parcours avant d'attaquer les notes neuves.
+- **Le rythme observé** la nuit : 7 notes en ~58 min, dont ~45 min de détection et ~10 min d'OCR. Le lot de 40 devrait donc produire ses premières **notes neuves (8e, 9e…)** vers **10 h 20-10 h 30**, puis avancer d'une note toutes les ~5-10 min.
+- **Le cutoff est fixé à 12 h 05** : si le run n'a pas écrit son manifeste, je l'arrête, je reconstruis `reports/ocr-pdf-cegep.json` depuis le journal, je relance le contrôle 8 Ko, je réécris `reports/rapport-ocr-cegep.md` et je mets le pilotage à jour — le même enchaînement que pour les 7 notes.
+- **Ce qui est déjà committé** : `62fff503` (le dossier pilotage porte les 20 livres + 7 notes) et `ed7e8b3d` (le reste de l'OCR = 137 scans CEGEP, aucun livre).
+
+La vérification de 10 min (`bash-1369`) me rendra la main vers 09 h 41 ; d'ici là je ne touche à rien.
+
+### 👤 Utilisateur
+
+background job bash-1369 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 600; date '+%H:%M'; grep -c " car$" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -2 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo "lot40 fini"; cat /proc/3445044/io 2>/dev/null | head -2) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1369", "wait": false}`
+
+  ```
+09:42
+2
+  CEGEP · Exercices de synthèse Excel 2010 Fonctio · 43 p · 81675 car
+  CEGEP · AMF-AO-Annexes 12 à 15 (Tech).pdf · 121 p · 191523 car
+    PID            
+3445044       22:36
+rchar: 1694250122
+wchar: 315074371
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lot CEGEP : 2 scans en 22 min (1,69 Go lus), la détection approche des notes neuves
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 570; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -2 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2", "descripti … [147 caractères tronqués]`
+
+  ```
+09:52
+5
+  CEGEP · inscription AQPC.pdf · 2 p · 2582 car
+  CEGEP · programme_du_colloque_2016_de_laqpc.pdf · 66 p · 205021 car
+    PID            
+3445044       32:41
+rchar: 4102407203
+wchar: 477882348
+  ```
+
+### 🤖 Assistant
+
+⏵ Lot CEGEP : 5 scans en 33 min (4,1 Go lus, 478 Mo écrits), les 2 Algorithms arrivent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 570; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -2 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2", "descripti … [131 caractères tronqués]`

@@ -19906,3 +19906,137 @@ Mem:             125          46          78           5           7          78
 09:39
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 42,60p tools/corpus_propre.py; sed -n 82,110p tools/corpus_propre.py", "description": "Read the shingle and split functions"}`
+
+  ```
+def hachages(data: bytes, fenetre: int) -> list[int]:
+    """Hachage roulant de toutes les fenêtres de `fenetre` octets (Rabin-Karp)."""
+    n = len(data)
+    if n < fenetre:
+        return []
+    puissance = pow(BASE, fenetre - 1, MOD)
+    h = 0
+    for i in range(fenetre):
+        h = (h * BASE + data[i]) % MOD
+    out = [h]
+    for i in range(fenetre, n):
+        h = (h - data[i - fenetre] * puissance) % MOD
+        h = (h * BASE + data[i]) % MOD
+        out.append(h)
+    return out
+
+
+def couverture(hs: list[int], fenetre: int) -> list[bool]:
+    """Vrai pour chaque position couverte par un shingle déjà vu plus tôt."""
+def deduit(data: bytes, fenetre: int, min_run: int = 64) -> tuple[bytes, dict]:
+    hs = hachages(data, fenetre)
+    couvert = couverture(hs, fenetre)
+    # garder les runs non couverts d'au moins min_run octets
+    morceaux, stats = [], {"retires": 0, "runs": 0, "plus_long_run": 0}
+    i, n = 0, len(data)
+    while i < n:
+        if not couvert[i]:
+            j = i
+            while j < n and not couvert[j]:
+                j += 1
+            if j - i >= min_run:
+                morceaux.append(data[i:j])
+                stats["runs"] += 1
+                stats[
+… [446 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 113,135p tools/corpus_propre.py", "description": "Read the split and contamination functions"}`
+
+  ```
+def split(chunks: list[bytes], val_un_sur: int, test_un_sur: int):
+    train, val, test = [], [], []
+    for i, c in enumerate(chunks):
+        if i % val_un_sur == val_un_sur - 1:
+            val.append(c)
+        elif i % test_un_sur == test_un_sur - 2:  # décalé : sinon val et test se recouvrent
+            test.append(c)
+        else:
+            train.append(c)
+    return b"".join(train), b"".join(val), b"".join(test)
+
+
+def taux_contamination(train: bytes, val: bytes, fenetre: int = 128, pas: int = 64,
+                       maxi: int | None = None) -> dict:
+    n = len(val) - fenetre - 1
+    positions = list(range(0, max(0, n), pas))
+    if maxi:
+        positions = positions[:maxi]
+    touchees = sum(1 for j in positions if val[j:j + fenetre + 1] in train)
+    return {"fenetres": len(positions), "contaminees": touchees,
+            "taux": round(touchees / max(1, len(positions)), 4)}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2w/deduit_leger.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"deduit_leger.py — la déduplication de corpus_propre.py, en mémoire bornée.\n\nMême logique (Rabin-Karp 96 octets, première occurrence gardée, positions couvertes re … [2941 caractères tronqués]`
+
+  ```
+leger 3453309
+[still running after 60000ms; moved to background job bash-1160]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1160", "timeout_ms": 300000, "wait": true}`
+
+  ```
+brut 1048 Mo
+3453309 01:30 0.0% 4Mo
+3453311 01:30 96.1% 10193Mo
+09:41
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,25p tools/canal_structure.py | head -25; grep -n \"add_argument\" tools/canal_structure.py", "description": "Read the canal tool's usage"}`
+
+  ```
+#!/usr/bin/env python3
+"""canal_structure.py — la classe de structure de chaque octet, pour le canal d'annotation.
+
+Le canal est une **seconde entrée** : à chaque octet du texte, une classe (0–5) que le modèle
+reçoit en plus de l'octet. Les classes viennent du générateur de structures
+([`tools/structures/generateur.py`](../tools/structures/generateur.py)) : mot plein, mot
+grammatical, espace, ponctuation, chiffre, et **frontière de proposition**.
+
+    python3 tools/canal_structure.py --entree data/wiki_fr/propre/train.txt --sortie data/wiki_fr/propre/train.canal
+"""
+from __future__ import annotations
+
+import argparse
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent / "structures"))
+import generateur  # noqa: E402
+
+MOTIF = __import__("re").compile(r"[A-Za-zÀ-ÿ'’-]+|\d+|[.,;:!?…()«»]|\s+|[^\s]")
+PLEIN, GRAMMA, ESPACE, PONCT, CHIFFRE, FRONTIERE = 0, 1, 2, 3, 4, 5
+CLASSES_GRAM = {"DET", "PREP", "CONJ", "RELATIF", "PRON", "AUX"}
+PONCT_FORTE = set(".;:!?…")
+
+
+61:    ap.add_argument("--entree", required=True)
+62:    ap.add_argument("--sortie", required=True)
+63:    ap.add_argument("--frontieres", action="store_true")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2w/pipeline_big.sh <<'SH'\n#!/bin/bash\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport PYTHONPATH=. CUDA_VISIBLE_DEVICES=0\nP=\"$HOME/gpu-env/bin/python\"\n\n# 1. le canal de structure (train + val)\n$ … [1589 caractères tronqués]`
+
+  ```
+09:41
+brut 1048 Mo
+3453309 01:49 0.0% 4Mo
+3453311 01:49 96.8% 11177Mo
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -3 work/n2w/deduit_leger.log; ps -eo pid,etime,pcpu,rss,cmd | grep deduit_leger | grep -v grep | awk '{printf \"%s %s %s%% %sMo\\n\", $1, $2, $3, int($4/1024)}'; ls -la data/wiki_big/propre/ 2>/dev/null … [73 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1163]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1163", "timeout_ms": 900000, "wait": true}`
