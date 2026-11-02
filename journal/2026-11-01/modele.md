@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 10:31 | `e6d92ce4` | LA TYPOGLYCÉMIE DU MODÈLE : IL LIT LES LETTRES, PAS LES FORMES (×17,8 AU MÉLANGE) | `en-cours.md`, `README.md`, `attention.md` (+11) |
 | 21:09 | `e651ffcb` | B13 — LA Q-TABLE ENTRAÎNÉE/MINUTE : 60 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ; 24/24 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
+| 21:15 | `de6dbe0e` | B13 — LE RÉSEAU LINÉAIRE : 12 POIDS, L'IMITATION ÉCHOUE SEULE ; 26/26 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 
 ## Chiffres du jour
 
@@ -28,6 +29,7 @@
 
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-pensee-minute-entrainee.md](../../reports/rapport-pensee-minute-entrainee.md)
+- [reports/rapport-pensee-reseau.md](../../reports/rapport-pensee-reseau.md)
 - [reports/rapport-typoglycemie.md](../../reports/rapport-typoglycemie.md)
 
 <!-- notes -->

@@ -15,6 +15,7 @@ de poids dans cet environnement ; la structure est prête pour un `PolitiqueDRVM
 """
 from __future__ import annotations
 
+import math
 import random
 from collections import Counter
 from dataclasses import dataclass, field
@@ -358,6 +359,92 @@ class PolitiqueReseau(Politique):
     @property
     def nb_poids(self) -> int:
         return 12
+
+
+class PolitiqueMLP(Politique):
+    """Un **MLP** (2 → 8 → 4, tanh), entraîné par imitation du professeur (porte minute).
+
+    Implémentation **pure Python** (pas de torch dans l'environnement) : forward, softmax,
+    cross-entropy et rétropropagation manuels. Il peut représenter des décisions non linéaires.
+    """
+
+    nom = "mlp"
+    ACTIONS = ("haut", "bas", "gauche", "droite")
+
+    def __init__(self, epochs: int = 500, graine: int = 0):
+        super().__init__()
+        self.rng = random.Random(graine)
+        self.W1 = [[self.rng.uniform(-0.5, 0.5) for _ in range(2)] for _ in range(8)]
+        self.b1 = [0.0] * 8
+        self.W2 = [[self.rng.uniform(-0.5, 0.5) for _ in range(8)] for _ in range(4)]
+        self.b2 = [0.0] * 4
+        self.epochs = epochs
+
+    def _pas(self, cle, action, ouvre: bool):
+        x, y, o = cle
+        if (x, y) == (3, 2) and action == "bas":
+            return (3, 3, False), 0.1
+        dx = {"droite": 1, "gauche": -1}.get(action, 0)
+        dy = {"bas": 1, "haut": -1}.get(action, 0)
+        nx, ny = x + dx, y + dy
+        if not _libre_p(nx, ny, o):
+            return cle, 0.0
+        return (nx, ny, o), -0.01
+
+    def _forward(self, x, y):
+        x0, y0 = x / 4.0, y / 4.0
+        z1 = [self.W1[i][0] * x0 + self.W1[i][1] * y0 + self.b1[i] for i in range(8)]
+        h = [math.tanh(v) for v in z1]
+        z2 = [sum(self.W2[j][i] * h[i] for i in range(8)) + self.b2[j] for j in range(4)]
+        m = max(z2)
+        e = [math.exp(v - m) for v in z2]
+        s = sum(e)
+        return x0, y0, z1, h, z2, [v / s for v in e]
+
+    def propose(self, etat, but):
+        if _xy_p(etat) == P_BUT:
+            return None
+        x, y = _xy_p(etat)
+        *_, p = self._forward(x, y)
+        return self.ACTIONS[max(range(4), key=lambda j: p[j])]
+
+    def apprendre(self) -> "PolitiqueMLP":
+        prof = PolitiqueAppriseMinute(episodes=200, graine=0)
+        prof.apprendre()
+        X, Y = [], []
+        for x in range(5):
+            for y in range(5):
+                if (x, y) == P_BUT:
+                    continue
+                a = prof.propose(_etat_p(x, y, False), P_BUT)
+                if a is None:
+                    continue
+                X.append((x, y))
+                Y.append(self.ACTIONS.index(a))
+        lr = 0.10
+        for _ in range(self.epochs):
+            for (x, y), t in zip(X, Y):
+                x0, y0, z1, h, z2, p = self._forward(x, y)
+                d2 = p[:]
+                d2[t] -= 1.0
+                dW2 = [[d2[j] * h[i] for i in range(8)] for j in range(4)]
+                db2 = d2[:]
+                dh = [sum(self.W2[j][i] * d2[j] for j in range(4)) for i in range(8)]
+                dz1 = [dh[i] * (1.0 - h[i] * h[i]) for i in range(8)]
+                dW1 = [[dz1[i] * x0, dz1[i] * y0] for i in range(8)]
+                for j in range(4):
+                    for i in range(8):
+                        self.W2[j][i] -= lr * dW2[j][i]
+                    self.b2[j] -= lr * db2[j]
+                for i in range(8):
+                    self.W1[i][0] -= lr * dW1[i][0]
+                    self.W1[i][1] -= lr * dW1[i][1]
+                    self.b1[i] -= lr * dz1[i]
+        return self
+
+    @property
+    def nb_poids(self) -> int:
+        return 8 * 2 + 8 + 4 * 8 + 4
 
 
 # --------------------------------------------------------------------------- cadenas (le neuronal nécessaire)
@@ -881,7 +968,7 @@ class DRVM:
 __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle",
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
-           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise", "PolitiqueAppriseMinute", "PolitiqueAppriseShaping", "PolitiqueReseau",
+           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise", "PolitiqueAppriseMinute", "PolitiqueAppriseShaping", "PolitiqueReseau", "PolitiqueMLP",
            "LABYRINTHE_PORTE", "REGISTRE_P", "LABYRINTHE_PORTE_STO", "REGISTRE_PSTO",
            "LABYRINTHE_PORTE_FERME", "REGISTRE_PF",
            "LABYRINTHE_PORTE_MINUTE", "REGISTRE_PM",

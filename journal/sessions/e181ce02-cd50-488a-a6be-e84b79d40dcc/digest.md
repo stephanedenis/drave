@@ -15055,3 +15055,121 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [981 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+[still running after 60000ms; moved to background job bash-546]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-546", "timeout_ms": 600000, "wait": true}`
+
+  ```
+27 files changed, 419 insertions(+), 55 deletions(-)
+ create mode 100644 reports/pensee-reseau.json
+ create mode 100644 reports/rapport-pensee-reseau.md
+COMMIT OK 1
+de6dbe0e B13 — LE RÉSEAU LINÉAIRE : 12 POIDS, L'IMITATION ÉCHOUE SEULE ; 26/26
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Réseau linéaire : 12 poids, l'imitation échoue seule ; 26/26
+
+Le round 27 du goal est livré : le **réseau linéaire** par imitation ne généralise pas la politique du professeur. Commit **`de6dbe0e`**.
+
+## Le réseau linéaire
+
+Un perceptron `(x/4, y/4, 1) → 4 actions` (**12 poids**) apprend l'action du professeur (la Q-table de la porte minute) sur les 25 états ; il est ensuite exécuté **seul**, sans A*.
+
+| politique | poids | buts seuls | pas | A* + sonde (T19) |
+|---|---:|---:|---:|---:|
+| **réseau linéaire** | **12** | **0** | **200** | 28 nœuds |
+
+**Ce que ça dit** :
+
+- **L'imitation ne suffit pas** : le réseau apprend des **scores** mais pas la **séquence** de la porte minute ; la politique seule échoue.
+- **12 poids ne peuvent pas représenter** la politique du professeur (la table a 60 états) : c'est une **sous-capacité**, pas seulement un défaut d'entraînement.
+- **L'A* reste nécessaire** : c'est lui qui explore et atteint le but (T19) ; le réseau seul ne le fait pas.
+- **La négative est explicite** : 0 but, 200 pas, 12 poids.
+
+## L'état
+
+- Fiche : [`rapport-pensee-reseau.md`](../../reports/rapport-pensee-reseau.md) ; JSON [`pensee-reseau.json`](../../reports/pensee-reseau.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T23 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **26/26 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **413 fiches / 512 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+## La suite
+
+1. **MLP** : une couche cachée, plus de capacité, la même imitation.
+2. **Distillation** : entraîner sur les **chemins** du professeur, pas seulement les états.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque le MLP.
+
+
+## Tour 41
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 28/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- cadenas (le ne … [3053 caractères tronqués]`
+
+  ```
+de6dbe0e B13 — LE RÉSEAU LINÉAIRE : 12 POIDS, L'IMITATION ÉCHOUE SEULE ; 26/26
+ok
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 375, in __init__
+    import torch
+ModuleNotFoundError: No module named 'torch'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nstart=t.index('class PolitiqueMLP(Politique):')\nend=t.index('# -------------------------------------------------------------------- … [3925 caractères tronqués]`
+
+  ```
+ok
+poids 60 seule (False, 200)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T23 le réseau linéaire             l'imitation échoue : le réseau ne généralise pas seul\\n\",\n\"  T23 le réseau linéaire … [1166 caractères tronqués]`
+
+  ```
+ok
+  ✅ T22 reward shaping     shaping : 56 états-Q, seule échec/8 pas
+  ✅ T23 réseau linéaire    réseau : 12 poids, seule échec/200 pas
+  ✅ T24 MLP                MLP : 60 poids, seule échec/200 pas
+  27/27 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-mlp.md <<'MD'\n# B13 — le MLP : 60 poids, l'imitation échoue encore seule\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **27/27 portes** : un **MLP**  … [5813 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 414 fiche(s) · 513 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [949 caractères tronqués]`

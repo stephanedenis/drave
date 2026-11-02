@@ -1,0 +1,26 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "27/27",
+ "mlp": {
+  "couches": "2-8-4",
+  "activation": "tanh",
+  "poids": 60,
+  "entrainement": "imitation, 500 époques"
+ },
+ "resultat": {
+  "seule_but": false,
+  "seule_pas": 200,
+  "a_star": {
+   "noeuds": 28,
+   "sonde": 6,
+   "but": true
+  }
+ },
+ "limites": [
+  "professeur incomplet",
+  "imitation hors-ligne",
+  "rétropropagation manuelle",
+  "toy"
+ ]
+}

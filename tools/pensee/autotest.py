@@ -446,6 +446,17 @@ def t23_reseau() -> tuple[bool, str]:
                                         f"seule {'but' if ok else 'échec'}/{pas} pas")
 
 
+def t24_mlp() -> tuple[bool, str]:
+    """Le MLP par imitation échoue seul (négatif)."""
+    from .courbe import seule_minute
+    from .operateurs import PolitiqueMLP
+    p = PolitiqueMLP(epochs=200)
+    p.apprendre()
+    ok, pas = seule_minute(p)
+    return (not ok) and p.nb_poids > 0, (f"MLP : {p.nb_poids} poids, "
+                                        f"seule {'but' if ok else 'échec'}/{pas} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -468,7 +479,8 @@ def main() -> int:
               ("T20 politique seule/minute", t20_minute_seule()),
               ("T21 Q-table entraînée/minute", t21_minute_entrainee()),
               ("T22 reward shaping", t22_shaping()),
-              ("T23 réseau linéaire", t23_reseau())]
+              ("T23 réseau linéaire", t23_reseau()),
+              ("T24 MLP", t24_mlp())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

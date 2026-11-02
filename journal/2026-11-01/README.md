@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**107 commits** · **4 session(s)** · **10 thème(s)**
+**108 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -17,7 +17,7 @@
 | docs | 28 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 47 | [mesures.md](mesures.md) |
-| modele | 2 | [modele.md](modele.md) |
+| modele | 3 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -142,6 +142,7 @@
 | 21:07 | `bd9b78ee` | ÉTAT — DOCUMENTS 1 000/7 496 (295 MO), OCR EN COURS, ANGLAIS 19,4/25,6 M |
 | 21:09 | `e651ffcb` | B13 — LA Q-TABLE ENTRAÎNÉE/MINUTE : 60 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ; 24/24 |
 | 21:12 | `28f5d388` | B13 — LE REWARD SHAPING : 56 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ENCORE ; 25/25 |
+| 21:15 | `de6dbe0e` | B13 — LE RÉSEAU LINÉAIRE : 12 POIDS, L'IMITATION ÉCHOUE SEULE ; 26/26 |
 
 ## Le récit de la journée (écrit à la main)
 

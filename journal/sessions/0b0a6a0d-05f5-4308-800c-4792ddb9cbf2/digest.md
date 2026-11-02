@@ -15257,3 +15257,10 @@ pas 11500 · seq 128 · perte 45.7076 · PPL 128/4 6.5494 · 810 s
   ```
 
 - **bash** `{"command": "sleep 960; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E-g3.pt work/n2k/M-g1.pt 2>/dev/null; for f in E-g3 M-g1 C-g1; do echo \"-- $f\"; tail -1 work/n2k/$f.log 2>/dev/null; done", "description": "Wait for the third student and the multilingual one"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-891]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-891", "timeout_ms": 900000, "wait": true}`
