@@ -30991,3 +30991,109 @@ lun 02 nov 2026 12:14:51 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1698 caractères tronqués]`
+
+  ```
+en-cours patché
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+ docs/pilotage/en-cours.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+[still running after 60000ms; moved to background job bash-1186]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1186", "timeout_ms": 600000, "wait": true}`
+
+  ```
+delete mode 100644 reports/rapport-ocr-cegep.md
+ create mode 100644 reports/rapport-pensee-reponses.md
+COMMIT OK 1
+56b22212 B13 — LES 19 RÉPONSES DE RÉFÉRENCE : COUVERTURE 19/19, LE JUGE EST UTILISABLE ; 127/127
+lun 02 nov 2026 12:16:35 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ 19 réponses de référence : couverture 19/19, le juge est utilisable ; 127/127
+
+Le round 128 est livré : les **19 questions** du gold portent désormais une **réponse de référence** — la couverture du juge passe de 0 à **1,0**. Commit **`56b22212`**.
+
+## La couverture
+
+| mesure | avant | **après** |
+|---|---:|---:|
+| questions du gold | 19 | 19 |
+| questions avec réponse de référence | 0 | **19** |
+| **couverture** | 0,0000 | **1,0000** |
+
+**Ce que ça dit** :
+
+- **La référence existe** : les 19 questions (5 réalistes, 14 synthétiques) portent une réponse (`oui`/`yes` pour les questions fermées) ; `gold.json`, `gold_reel.json` et `gold_synthetique.json` sont régénérés.
+- **Le juge devient utilisable** : `juge("oui", "oui") = 1,0`, `juge("oui", "non") = 0,0`, `juge(None, None) = 0,0` — la mesure de correction est **possible**.
+- **Ce n'est pas encore une mesure du bloc** : le bloc répond 0/19 au contenu (T121) ; le juge mesurerait donc 0/19 pour lui. La référence est la condition, pas le résultat.
+- **Le biais est corrigé** : le gold annotait la forme (l'acte), il annote maintenant le fond (la réponse) — pour les questions fermées.
+
+## L'état
+
+- Fiche : [`rapport-pensee-reponses.md`](../../reports/rapport-pensee-reponses.md) ; JSON [`pensee-reponses.json`](../../reports/pensee-reponses.json) ; T124 dans [`autotest.py`](../../tools/pensee/autotest.py) ; T123 mis à jour (il vérifie que le juge ne juge pas le vide).
+- **127/127 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **535 fiches / 623 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` à jour (12 h 52).
+- Le commit a dû être retenté : le hook refusait tant que `en-cours` n'avait pas de vraie ligne d'état — corrigé, puis commité.
+- L'horloge réelle est **12 h 16 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+## La suite
+
+1. **Le juge contre le bloc** : mesurer ce que le bloc répond (0/19) et ce que l'extraction donnerait (le GN), à comparer aux références.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **le juge contre le bloc** — la première mesure de correction réelle.
+
+
+## Tour 143
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 129/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/juge.py'); t=p.read_text()\nt=t.replace('''def main() -> int:''',\n'''def juge_bloc(phrases: list[dict], bloc=None) -> dict:\n    \"\"\"Le juge contre le bloc … [1624 caractères tronqués]`
+
+  ```
+bloc {'questions': 19, 'justes': 0.0, 'taux': 0.0}
+extraction {'questions': 19, 'justes': 0.0, 'taux': 0.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-juge-bloc.md <<'MD'\n# B13 — le juge contre le bloc : 0/19, la première mesure de correction\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-02 · **Verdict** : ✅\n> ** … [6500 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 536 fiche(s) · 624 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2810 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-reponses.md`](rapport-pensee-reponses.md) | **B13** — les 19 réponses de référence : couverture 1,0, **127/127** … [592 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/juge.py tools/pensee/autotest.py reports/rapport-pensee-juge-bloc.md reports/pensee-juge-bloc.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/e … [526 caractères tronqués]`

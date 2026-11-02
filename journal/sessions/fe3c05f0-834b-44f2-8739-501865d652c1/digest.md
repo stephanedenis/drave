@@ -35602,3 +35602,56 @@ reprise 10 notes job 3526736
 ⏵ 12 h 14 : le re-OCR repart (1re note, train réinitialisé comme prévu), état vert
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-reprise.log 2>/dev/null; tail -2 /tmp/ocr-cegep-reprise.log; ps -p 3526736 -o pid,etime= 2>/dev/null || echo \"reprise finie\"; ls -la data/corpus_ocr_cegep/train.txt", "descri … [127 caractères tronqués]`
+
+  ```
+12:20
+1
+  CEGEP · Exercices de synthèse Excel 2010 Fonctio · 43 p · 81675 car
+    PID            
+3526736       10:41
+-rw-r--r--. 1 stephane stephane 0  2 nov 12:09 data/corpus_ocr_cegep/train.txt
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-ee38a99b-965a-4611-9b49-f95cc7a9a713", "revision": 1}`
+
+> **Objectif** (complete) : Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécrire reports/rapport-ocr-cegep.md avec les chiffres, mettre docs/pilotage/ (en-cours, roadmap, plan-travail, chantiers, journal du 02/11) à jour et committer ; puis enchaîner sur le lot suivant du fonds CEGEP si le temps le permet. Sans toucher aux GPU de N2 ni aux fichiers des autres sessions.
+
+
+  ```
+{"goal":{"id":"goal-ee38a99b-965a-4611-9b49-f95cc7a9a713","revision":2,"objective":"Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécrire reports/rapport-ocr-cegep.md avec les chiffres, mettre docs/pilotage/ (en-cours, roadmap, plan-travail, chantiers, journal du 02/11) à jour et committer ; puis enchaîner sur le lot suivant du fonds CEGEP si le temps le permet. Sans toucher aux GPU de N2 ni aux fichiers des autres sessions.","phase":"complete","roundsStarted":1,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécrire reports/rapport-ocr-cegep.md avec les chiffres, mettre docs/pilotage/ (en-cours, roadmap, plan-travail, chantiers, journal du 02/11) à jour et committer ; puis enchaîner sur le lot suivant du fonds CEGEP si le temps le permet. Sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
+
+## Ce qui a été fait et mesuré
+
+**Le corpus OCR du CEGEP est passé de 7 à 10 notes** : *Algorithms Illuminated (Part 4)* 274 p, *Part 1* 217 p et *Data Structures and Algorithms in C* 366 p se sont ajoutés. Total mesuré : **10 notes, 1 596 pages, 2 519 507 caractères**, train 2,46 Mo, val 87 ko, **8 Ko : 302 fenêtres train + 11 val, 0 doublon**, recouvrement éval **0/40, 0/24, 0/40** (commit `4f7631aa`).
+
+**Le lot de 40 s'est arrêté sur un mur** : le 11e PDF, l'*Encyclopedia of Algorithms* (plus de 1 000 pages), a fait dépasser à `pdftoppm` son timeout de 1 800 s ; l'exception `subprocess.TimeoutExpired` n'était pas rattrapée et le run est tombé. C'est une limite de l'outil, nommée dans la fiche.
+
+**Deux corrections d'outil** : `tools/ocr_pdf.py` attrape désormais le timeout (il journalise et passe au PDF suivant) ; il gagne aussi `--deja N` pour reprendre un parcours après N PDF examinés.
+
+**Une erreur que j'ai faite et documentée** : le run de reprise (`--deja 41`) a réécrit `data/corpus_ocr_cegep/` en mode `w` et n'a laissé que les deux *Algorithms* re-océrisés — **les 10 notes mesurées ne sont plus sur le disque**. C'est écrit noir sur blanc dans `reports/rapport-ocr-cegep.md` et dans l'état, avec la leçon : une reprise avec `--deja` doit écrire dans une **sortie séparée**, jamais dans le corpus existant (commit `a041333c`).
+
+**Le pilotage est à jour** : `en-cours.md`, `roadmap.md`, `plan-travail.md`, `chantiers.md` et le récit du 02/11 portent les 10 notes et la mise en garde ; le T0 est revenu sous 4 000 mots (commit `8e467fa7`) ; l'état est vert (dernier fait = dernier état, `a041333c`).
+
+## Ce qui tourne encore
+
+**Le re-OCR des 10 notes** (PID 3526736, lancé à 12 h 09, sans `--deja` donc repartant de zéro) : la 1re note (*Exercices de synthèse Excel*) est passée à 12 h 14 ; compte **~2 h**, donc un manifeste vers **14 h 10**. C'est lui qui reconstituera le corpus perdu.
+
+## Ce qu'il faut que tu saches / décides
+
+1. **Le corpus CEGEP sur disque est incomplet** (2 notes sur 10) tant que le re-OCR n'a pas fini — la fiche et l'état le disent, ne te fie pas aux chiffres du disque avant 14 h 10.
+2. **La leçon `--deja`** est à appliquer : la prochaine reprise doit passer par une sortie séparée (ou un mode `-a`), pas par le corpus existant.
+3. **L'Encyclopedia of Algorithms** exige `--max-pages 500` (ou plus) et un timeout plus grand ; c'est la prochaine cible du fonds CEGEP (~127 scans restants).
+4. Les commits de la fenêtre : `4f7631aa`, `8e467fa7`, `a041333c`.
+

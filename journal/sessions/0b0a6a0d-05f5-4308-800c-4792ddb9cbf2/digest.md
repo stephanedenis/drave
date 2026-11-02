@@ -20573,3 +20573,47 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2w/eval_ood_canal.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"eval_ood_canal.py — la PPL hors domaine avec le canal (littérature, anglais, wikitext2).\"\"\"\nimport json, pathlib, sys\nimport torch\nsys.path.insert(0, '.')\n … [1414 caractères tronqués]`
+
+  ```
+ood0 3528760
+ood1 3528761
+[still running after 60000ms; moved to background job bash-1199]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1199", "timeout_ms": 600000, "wait": true}`
+
+  ```
+12:16
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; cat work/n2w/ood-fr60.json 2>/dev/null; echo; cat work/n2w/ood-big60.json 2>/dev/null; ps -eo pid,etime,pcpu,cmd | grep eval_ood | grep -v grep | head -2", "description": "Read the OOD evaluations"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1200]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1200", "timeout_ms": 400000, "wait": true}`
+
+  ```
+12:21
+{"fichier": "fr-60k.pt", "litterature": 6.0011, "anglais": 9.5185, "wikitext2": 10.7138}
+
+{"fichier": "big-60k.pt", "litterature": 6.1381, "anglais": 8.3173, "wikitext2": 9.1609}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-pas-vs-texte.md <<'EOF'\n# N2.ab — Plus de pas paie ; plus de texte paie en largeur, pas en français\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : à 60 000 pas, le corpus de\n> **186  … [4092 caractères tronqués]`
+
+  ```
+fiche 60k écrite
+en-cours ok
+  T0 max : 4012 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · compteurs : en-cours.md dit 536 fichiers, le disque en a 537
+12:21
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.aa** : 831 Mo à compute constant, autre domaine ; **N2.ab** : 60 k pas — fr **3,44**, le 831 Mo gagne en ang … [1614 caractères tronqués]`

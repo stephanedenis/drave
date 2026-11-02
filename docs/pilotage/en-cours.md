@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 12 h 52 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 12 h 55 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -37,7 +37,7 @@
 - **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
   avance ; **N4** en file ; **A/B** gardent les leurs.
 - **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `docs/theorie/pre-traitement-linguistique.md`, `tools/bloc_linguistique.py`, `tools/tests/linguistique/`, `docs/implantation/bloc-linguistique.md`, `journal/sessions/e181ce02-…/`.
-- **Prochaine action** : **L** — le **juge contre le bloc** (T124 : couverture 19/19, le juge est utilisable ; mesurer ce que le bloc et l'extraction répondent) ;
+- **Prochaine action** : **L** — la **réponse par extraction dirigée** (T125 : bloc 0/19, extraction 0/19 ; chercher le GN qui suit le verbe) ;
   **B13** — DRVM/native **bloqué**, la cascade mesurée reste la lecture.
 - **Bloquants** : **neuronal réel bloqué** — `llama-cli` refuse/timeout, aucun tagger (`spacy`,
   `stanza`, `nltk`, `transformers`), aucun poids `drave-n0` ; le mock reste un contrat. Trois
@@ -75,7 +75,7 @@
 - **B11.10** : **hybride 4/4** — codec **161/161**, ambiguïtés refusées ; **69,3 %** natif ;
   [`b1110`](../../reports/rapport-b1110-cartes.md).
 - **N2** : **N2.z** (34,3 M + canal) **3,53**, 512 **3,66** — le meilleur ; **N2.r** 3,69 ;
-  **N2.w** anglais **3,77** ; **N2.v** multilingue **4,79** ; **N2.aa** : 831 Mo à compute constant, autre domaine ; N4 **0/40** ; fiches
+  **N2.w** anglais **3,77** ; **N2.v** multilingue **4,79** ; **N2.aa** : 831 Mo, autre domaine ; **N2.ab** : 60 k pas, fr **3,44** ; N4 **0/40** ; fiches
   [`n2-canaux`](../../reports/rapport-n2-canal-34m.md), [`n2-anglais`](../../reports/rapport-n2-anglais-34m.md).
 - **Pensée — B13** : state store v0, AC-3/alpha-bêta, DRVF, banc anytime, opérateurs hétérogènes, **111/111 portes** ; gold **407 réels**, coréférence **27/30** (CV 0,847).
 
@@ -88,7 +88,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges à la passe du 02/11 06 h : les 4 connues + greffe à la borne 700 s, rejouée verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **535** / **623** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **537** / **621** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

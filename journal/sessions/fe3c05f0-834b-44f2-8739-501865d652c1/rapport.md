@@ -7,10 +7,10 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 43.7 h |
+| Durée | 43.8 h |
 | Tours | 387 |
-| Messages | 2355 |
-| Appels d'outils | 1570 |
+| Messages | 2358 |
+| Appels d'outils | 1571 |
 | Fichiers touchés | 26 |
 | Commandes | 1396 |
 | Sous-agents | 0 |
@@ -28,6 +28,8 @@
 - **complete** — Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locau
 … [279 caractères tronqués]
 - **create** — Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécr
+… [294 caractères tronqués]
+- **complete** — Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécr
 … [294 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -9153,7 +9155,7 @@ Je laisse donc le goal actif jusqu'à 12 h 20 en surveillance légère, et je ma
 
 ### Tour 387 — <goal_round> Objective: "Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot  … [1044 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Add deja option and relaunch at 42nd PDF
 - bash — Check Encyclopedia 500-page run
@@ -9164,10 +9166,34 @@ Je laisse donc le goal actif jusqu'à 12 h 20 en surveillance légère, et je ma
 - bash — Restart CEGEP 10 notes re-OCR
 - bash — Check re-OCR progress and state
 - bash — Check re-OCR and reach window end
+- update_goal
 
 **Synthèse produite :**
 
-⏵ 12 h 14 : le re-OCR repart (1re note, train réinitialisé comme prévu), état vert
+La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
+
+\## Ce qui a été fait et mesuré
+
+**Le corpus OCR du CEGEP est passé de 7 à 10 notes** : *Algorithms Illuminated (Part 4)* 274 p, *Part 1* 217 p et *Data Structures and Algorithms in C* 366 p se sont ajoutés. Total mesuré : **10 notes, 1 596 pages, 2 519 507 caractères**, train 2,46 Mo, val 87 ko, **8 Ko : 302 fenêtres train + 11 val, 0 doublon**, recouvrement éval **0/40, 0/24, 0/40** (commit `4f7631aa`).
+
+**Le lot de 40 s'est arrêté sur un mur** : le 11e PDF, l'*Encyclopedia of Algorithms* (plus de 1 000 pages), a fait dépasser à `pdftoppm` son timeout de 1 800 s ; l'exception `subprocess.TimeoutExpired` n'était pas rattrapée et le run est tombé. C'est une limite de l'outil, nommée dans la fiche.
+
+**Deux corrections d'outil** : `tools/ocr_pdf.py` attrape désormais le timeout (il journalise et passe au PDF suivant) ; il gagne aussi `--deja N` pour reprendre un parcours après N PDF examinés.
+
+**Une erreur que j'ai faite et documentée** : le run de reprise (`--deja 41`) a réécrit `data/corpus_ocr_cegep/` en mode `w` et n'a laissé que les deux *Algorithms* re-océrisés — **les 10 notes mesurées ne sont plus sur le disque**. C'est écrit noir sur blanc dans `reports/rapport-ocr-cegep.md` et dans l'état, avec la leçon : une reprise avec `--deja` doit écrire dans une **sortie séparée**, jamais dans le corpus existant (commit `a041333c`).
+
+**Le pilotage est à jour** : `en-cours.md`, `roadmap.md`, `plan-travail.md`, `chantiers.md` et le récit du 02/11 portent les 10 notes et la mise en garde ; le T0 est revenu sous 4 000 mots (commit `8e467fa7`) ; l'état est vert (dernier fait = dernier état, `a041333c`).
+
+\## Ce qui tourne encore
+
+**Le re-OCR des 10 notes** (PID 3526736, lancé à 12 h 09, sans `--deja` donc repartant de zéro) : la 1re note (*Exercices de synthèse Excel*) est passée à 12 h 14 ; compte **~2 h**, donc un manifeste vers **14 h 10**. C'est lui qui reconstituera le corpus perdu.
+
+\## Ce qu'il faut que tu saches / décides
+
+1. **Le corpus CEGEP sur disque est incomplet** (2 notes sur 10) tant que le re-OCR n'a pas fini — la fiche et l'état le disent, ne te fie pas aux chiffres du disque avant 14 h 10.
+2. **La leçon `--deja`** est à appliquer : la prochaine reprise doit passer par une sortie séparée (ou un mode `-a`), pas par le corpus existant.
+3. **L'Encyclopedia of Algorithms** exige `--max-pages 500` (ou plus) et un timeout plus grand ; c'est la prochaine cible du fonds CEGEP (~127 sc
+… [81 caractères tronqués]
 
 ## 3. Travail accompli
 

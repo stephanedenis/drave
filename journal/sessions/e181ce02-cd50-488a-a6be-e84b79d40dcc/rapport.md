@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 43.6 h |
-| Tours | 142 |
-| Messages | 1694 |
-| Appels d'outils | 1454 |
+| Durée | 43.7 h |
+| Tours | 143 |
+| Messages | 1700 |
+| Appels d'outils | 1458 |
 | Fichiers touchés | 25 |
-| Commandes | 1186 |
+| Commandes | 1190 |
 | Sous-agents | 2 |
-| Commits | 179 |
+| Commits | 180 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -319,6 +319,8 @@
 **Tour 141** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 142** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 143** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7544,6 +7546,53 @@ Je continue : prochain round, **les 19 réponses de référence** — la pièce 
 - bash — Mettre l'état à jour et committer
 - job_output
 
+**Synthèse produite :**
+
+⏵ 19 réponses de référence : couverture 19/19, le juge est utilisable ; 127/127
+
+Le round 128 est livré : les **19 questions** du gold portent désormais une **réponse de référence** — la couverture du juge passe de 0 à **1,0**. Commit **`56b22212`**.
+
+\## La couverture
+
+| mesure | avant | **après** |
+|---|---:|---:|
+| questions du gold | 19 | 19 |
+| questions avec réponse de référence | 0 | **19** |
+| **couverture** | 0,0000 | **1,0000** |
+
+**Ce que ça dit** :
+
+- **La référence existe** : les 19 questions (5 réalistes, 14 synthétiques) portent une réponse (`oui`/`yes` pour les questions fermées) ; `gold.json`, `gold_reel.json` et `gold_synthetique.json` sont régénérés.
+- **Le juge devient utilisable** : `juge("oui", "oui") = 1,0`, `juge("oui", "non") = 0,0`, `juge(None, None) = 0,0` — la mesure de correction est **possible**.
+- **Ce n'est pas encore une mesure du bloc** : le bloc répond 0/19 au contenu (T121) ; le juge mesurerait donc 0/19 pour lui. La référence est la condition, pas le résultat.
+- **Le biais est corrigé** : le gold annotait la forme (l'acte), il annote maintenant le fond (la réponse) — pour les questions fermées.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-reponses.md`](../../reports/rapport-pensee-reponses.md) ; JSON [`pensee-reponses.json`](../../reports/pensee-reponses.json) ; T124 dans [`autotest.py`](../../tools/pensee/autotest.py) ; T123 mis à jour (il vérifie que le juge ne juge pas le vide).
+- **127/127 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **535 fiches / 623 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` à jour (12 h 52).
+- Le commit a dû être retenté : le hook refusait tant que `en-cours` n'avait pas de vraie ligne d'état — corrigé, puis commité.
+- L'horloge réelle est **12 h 16 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **Le juge contre le bloc** : mesurer ce que le bloc répond (0/19) et ce que l'extraction donnerait (le GN), à comparer aux références.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **le juge contre le bloc** — la première mesure de correction réelle.
+
+### Tour 143 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Mesurer le juge contre le bloc et l'extraction
+- bash — Écrire la fiche du juge contre le bloc et la porte T125
+- bash — Trim README et passer toutes les portes
+- bash — Committer le juge contre le bloc
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7623,7 +7672,7 @@ Je continue : prochain round, **les 19 réponses de référence** — la pièce 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1146 autres
+- … et 1150 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7950,4 +7999,5 @@ Je continue : prochain round, **les 19 réponses de référence** — la pièce 
 - B13 — LE JUGE DES RÉPONSES : COUVERTURE 0/19, LA RÉFÉRENCE MANQUE ; 126/126" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "JUGE DES RÉPONSES"; then ec
 - B13 — LES 19 RÉPONSES DE RÉFÉRENCE : COUVERTURE 19/19, LE JUGE EST UTILISABLE ; 127/127" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÉPONSES DE RÉF
 - B13 — LES 19 RÉPONSES DE RÉFÉRENCE : COUVERTURE 19/19, LE JUGE EST UTILISABLE ; 127/127" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÉPONSES DE RÉF
+- B13 — LE JUGE CONTRE LE BLOC : 0/19 ET 0/19, LA PREMIÈRE MESURE DE CORRECTION ; 128/128" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "JUGE CONTRE LE 
 
