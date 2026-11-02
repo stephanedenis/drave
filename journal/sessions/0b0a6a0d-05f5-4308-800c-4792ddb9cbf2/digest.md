@@ -17438,3 +17438,56 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1036", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E34-g*.pt 2>/dev/null; tail -1 work/n2k/E34-g1.log 2>/dev/null; tail -1 work/n2k/E34-g2.log 2>/dev/null", "description": "Check the English 34M students again"}`
+
+  ```
+03:18
+pas 18750 · seq 128 · perte 12.8230 · PPL 128/4 4.3066 · 2151 s
+pas 19750 · seq 128 · perte 14.7104 · PPL 128/4 4.2764 · 2177 s
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E34-g*.pt 2>/dev/null; export PYTHONPATH=.; for g in 1 2; do CUDA_VISIBLE_DEVICES=$((g-1)) ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2k/E34-g$g.pt --decomposition --longueurs --corpus-di … [145 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1038]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1038", "timeout_ms": 600000, "wait": true}`
+
+  ```
+03:23
+work/n2k/E34-g1.pt
+work/n2k/E34-g2.pt
+{"fichier": "E34-g1.pt", "params": 34301224, "val": 3.7644, "test": 3.9635, "litterature": 17.0652, "litterature_propre": 17.1729, "anglais": 4.3887, "wikitext2": 4.6721, "permute": 103.1821, "decomposition": {"complete": 3.8874, "apres_2_blocs": 5.0544, "apres_4_blocs": 4.3001, "apres_6_blocs": 3.8795, "sans_pensee": 96060.7765}, "longueurs": {"129": 3.759, "192": 3.728, "256": 3.7367, "384": 3.929, "512": 4.1813}}
+{"fichier": "E34-g2.pt", "params": 34301224, "val": 3.7657, "test": 3.9774, "litterature": 16.8377, "litterature_propre": 17.0216, "anglais": 4.3998, "wikitext2": 4.6931, "permute": 101.7387, "decomposition": {"complete": 3.886, "apres_2_blocs": 5.042, "apres_4_blocs": 4.3015, "apres_6_blocs": 3.8785, "sans_pensee": 92689.2616}, "longueurs": {"129": 3.7555, "192": 3.7317, "256": 3.7373, "384": 3.9399, "512": 4.1891}}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1034 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E34-g*.pt 2>/dev/null; tail -1 work/n2k/E34-g1.log 2>/dev/null; tail -1 work/n2k/E34-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-1036 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E34-g*.pt 2>/dev/null; tail -1 work/n2k/E34-g1.log 2>/dev/null; tail -1 work/n2k/E34-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-anglais-34m.md <<'EOF'\n# N2.w — L'anglais à 34,3 M distillé : 3,77, et 4,18 à 512 octets\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : la chaîne anglaise complète\n> (base 34,3 M à p … [2962 caractères tronqués]`
+
+  ```
+fiche EN34 écrite
+en-cours ok
+  T0 max : 4003 mots (budget 4 000)
+  ❌ 2 violation(s) :
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 488 fichiers, le disque en a 489
+03:26
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.w** : anglais 34,3 M distillé **3,77**, 512 **4,18** ;\", \"**N2.w** : anglais 34,3 M **3,77**, 512 **4,18** … [1504 caractères tronqués]`

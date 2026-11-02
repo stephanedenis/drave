@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 34.6 h |
-| Tours | 354 |
-| Messages | 2127 |
-| Appels d'outils | 1413 |
+| Durée | 34.9 h |
+| Tours | 356 |
+| Messages | 2137 |
+| Appels d'outils | 1419 |
 | Fichiers touchés | 26 |
-| Commandes | 1249 |
+| Commandes | 1255 |
 | Sous-agents | 0 |
 | Commits | 79 |
 | Compactages de contexte | 4 |
@@ -735,6 +735,10 @@
 **Tour 353** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 354** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 355** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 356** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8307,9 +8311,53 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 354 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*2 appels d'outils.* Actions notables :
 
 - bash — Wait 6 min then check OCR progress
+- bash — Check 15th book start
+
+**Synthèse produite :**
+
+⏵ Round 342 : 14e livre = doublon confirmé (rejeté), 15e en rendu
+
+**Round 342/1000 — le doublon est confirmé ; le 15e livre entre.**
+
+- **Le `metapatterns` du 14e** n'a produit **ni ligne ni octet** : le texte est identique au 3e livre, la **déduplication par empreinte l'a rejeté** — le coût de l'OCR (~15 min) est la limite nommée.
+- **Le corpus reste : 13 livres, 4 759 pages, 11 402 542 caractères** ; le train **11 516 755 octets**.
+- **Le 15e livre** est `005.276 Author 2023, Title.pdf` (dossier Tests DevOps), en rendu `pdftoppm`.
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le doublon est prouvé, le 15e livre entre ; le goal reste actif.
+
+### Tour 355 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Wait 6 min then check OCR progress
+- bash — Check 16th book start
+- bash — Check 16th OCR start
+
+**Synthèse produite :**
+
+⏵ Round 343 : 15e livre TERMINÉ — Author 2023, 105 p, 125 524 car.
+
+**Round 343/1000 — le 15e livre est clos ; 14 livres au corpus.**
+
+- **Author 2023, Title.pdf** : **105 pages, 125 524 caractères** ; le **train** passe à **11 642 918 octets**.
+- **Le corpus OCR : 14 livres, 4 864 pages, 11 528 066 caractères**.
+- **Le 16e livre** entre en rendu (`pdftoppm`, dossier `ocr-pdf-t50_fioi`).
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40) ; **le doublon** du 14e est prouvé (rejeté, zéro octet).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : 14 livres, 11,53 M caractères ; le goal reste actif.
+
+### Tour 356 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Wait 7 min then check OCR progress
+- bash — Check 16th OCR progress
 
 ## 3. Travail accompli
 
@@ -8386,7 +8434,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1209 autres
+- … et 1215 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8514,7 +8562,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ## 5. Erreurs rencontrées
 
-106 sorties en erreur ou divergentes. Les premières :
+109 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

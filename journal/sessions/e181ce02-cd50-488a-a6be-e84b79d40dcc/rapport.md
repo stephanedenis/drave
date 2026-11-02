@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 34.5 h |
-| Tours | 99 |
-| Messages | 1282 |
-| Appels d'outils | 1131 |
+| Durée | 34.7 h |
+| Tours | 100 |
+| Messages | 1289 |
+| Appels d'outils | 1136 |
 | Fichiers touchés | 25 |
-| Commandes | 915 |
+| Commandes | 920 |
 | Sous-agents | 2 |
 | Commits | 127 |
 | Compactages de contexte | 4 |
@@ -229,6 +229,8 @@
 **Tour 98** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 99** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 100** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5262,6 +5264,54 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round **casse le cycle** — l
 - bash — Committer la pénalité -1
 - job_output
 
+**Synthèse produite :**
+
+⏵ Pénalité -1 : 0/20, le cycle tient, (3,0) stale ; 85/85
+
+Le round 86 du goal est livré : la **pénalité -1** au `(4,0)` ne casse pas le cycle — le `(3,0)` reste stale et l'argmax tourne. Commit **`2469d4fc`**.
+
+\## La pénalité
+
+Même monde que T80, mais `_pas` renvoie **-1** quand l'agent entre dans `(4,0)` en phase 0 (le but de la phase 1).
+
+| version | but 0 | but 1 | états-Q |
+|---|---:|---:|---:|
+| T80 (signal) | 0/20 | 20/20 | 136 |
+| **T82 (pénalité -1)** | **0/20** | **20/20** | 144 |
+
+**Ce que ça dit** :
+
+- **La pénalité ne suffit pas** : le `(4,0)`'s « gauche » garde 0,815 ; le `(3,0)`'s « droite » garde 1,517 (stale) ; le cycle est un **point fixe** de la mise à jour (le `(3,0)` est peu visité, l'alpha 0,25 met longtemps à le corriger).
+- **La trace est explicite** : `(0,0) → (1,0) → (2,0) → (3,0) → (4,0) → (3,0) → …`, le `(4,0)` n'est pas pénalisé **à l'entrée** — la pénalité est sur la case, pas sur la transition.
+- **Le vrai correctif** est structurel : la **phase dans l'état** (T79, 20/20) sépare les deux politiques ; le reward shaping (T82) ne suffit pas.
+- **La négative est explicite** : 0/20 au but 0.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-cycle.md`](../../reports/rapport-pensee-cycle.md) ; JSON [`pensee-cycle.json`](../../reports/pensee-cycle.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T82 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **85/85 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **487 fiches / 577 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~11 min** ; les portes tiennent avec `timeout 1200`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Le correctif structurel** : la phase dans l'état (déjà T79, 20/20) — la pénalité est un détour inutile.
+2. **20 graines** : lisser la courbe du seuil.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round tire la **leçon** de la série : le state doit porter la variable cachée — et consolide la ligne B13.
+
+### Tour 100 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Tracer la courbe sur 20 graines
+- bash — Tracer la courbe sur 20 graines (vrai)
+- bash — Ajouter la porte T83 (courbe élargie)
+- bash — Écrire la fiche de la courbe 20 graines
+- bash — Dédupliquer, trim README et portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5341,7 +5391,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round **casse le cycle** — l
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 875 autres
+- … et 880 autres
 
 ## 4. Mesures et résultats marquants
 

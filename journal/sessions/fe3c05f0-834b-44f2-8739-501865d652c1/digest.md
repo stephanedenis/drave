@@ -32529,3 +32529,106 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 360; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf|pdftoppm\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 6 min then check OCR progress", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+03:14
+  Biblio_large · 004.65 api lifecycle.pdf · 115 p · 120690 car
+  Biblio_large · 005.11 Inconnu(e) 2022, Raff 2022, Insid · 602 p · 1210468 car
+2356154 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 360; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af "tesseract.*ocr-pdf|pdftoppm" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 11516755  2 nov 02:51 data/corpus_ocr/train.txt
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract|pdftoppm\" | head -1; ps -p 1616198 -o stat,etime= 2>/dev/null", "description": "Check 15th book start", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+03:14
+2359089 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/005 Logiciels/005.276 Tests DevOps/005.276 Author 2023, Title.pdf /tmp/ocr-pdf-1akglleb/p
+STAT            
+S       06:29:06
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 342 : 14e livre = doublon confirmé (rejeté), 15e en rendu
+
+**Round 342/1000 — le doublon est confirmé ; le 15e livre entre.**
+
+- **Le `metapatterns` du 14e** n'a produit **ni ligne ni octet** : le texte est identique au 3e livre, la **déduplication par empreinte l'a rejeté** — le coût de l'OCR (~15 min) est la limite nommée.
+- **Le corpus reste : 13 livres, 4 759 pages, 11 402 542 caractères** ; le train **11 516 755 octets**.
+- **Le 15e livre** est `005.276 Author 2023, Title.pdf` (dossier Tests DevOps), en rendu `pdftoppm`.
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le doublon est prouvé, le 15e livre entre ; le goal reste actif.
+
+
+## Tour 355
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 343/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 360; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf|pdftoppm\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 6 min then check OCR progress", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+03:20
+  Biblio_large · 005.11 Inconnu(e) 2022, Raff 2022, Insid · 602 p · 1210468 car
+  Biblio_large · 005.276 Author 2023, Title.pdf · 105 p · 125524 car
+2359531 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 360; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af "tesseract.*ocr-pdf|pdftoppm" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 11642918  2 nov 03:18 data/corpus_ocr/train.txt
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"pdftoppm\" | head -1; ps -p 1616198 -o stat,etime= 2>/dev/null", "description": "Check 16th book start", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+03:21
+2362637 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af "pdftoppm" | head -1; ps -p 1616198 -o stat,etime= 2>/dev/null
+STAT            
+S       06:35:26
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract\" | head -1; ls /tmp/ | grep \"ocr-pdf-\" | head -2; tail -1 /tmp/ocr-pilote.log", "description": "Check 16th OCR start", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtr … [6 caractères tronqués]`
+
+  ```
+03:21
+2362698 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af "tesseract" | head -1; ls /tmp/ | grep "ocr-pdf-" | head -2; tail -1 /tmp/ocr-pilote.log
+ocr-pdf-t50_fioi
+  Biblio_large · 005.276 Author 2023, Title.pdf · 105 p · 125524 car
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 343 : 15e livre TERMINÉ — Author 2023, 105 p, 125 524 car.
+
+**Round 343/1000 — le 15e livre est clos ; 14 livres au corpus.**
+
+- **Author 2023, Title.pdf** : **105 pages, 125 524 caractères** ; le **train** passe à **11 642 918 octets**.
+- **Le corpus OCR : 14 livres, 4 864 pages, 11 528 066 caractères**.
+- **Le 16e livre** entre en rendu (`pdftoppm`, dossier `ocr-pdf-t50_fioi`).
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40) ; **le doublon** du 14e est prouvé (rejeté, zéro octet).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : 14 livres, 11,53 M caractères ; le goal reste actif.
+
+
+## Tour 356
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 344/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf|pdftoppm\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 7 min then check OCR progress", "timeoutMs":  … [69 caractères tronqués]`
