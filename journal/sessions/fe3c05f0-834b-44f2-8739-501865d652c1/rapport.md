@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 42.9 h |
+| Durée | 43.0 h |
 | Tours | 386 |
-| Messages | 2342 |
-| Appels d'outils | 1559 |
+| Messages | 2344 |
+| Appels d'outils | 1561 |
 | Fichiers touchés | 26 |
-| Commandes | 1385 |
+| Commandes | 1387 |
 | Sous-agents | 0 |
-| Commits | 93 |
+| Commits | 94 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -9111,7 +9111,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 
 ### Tour 386 — continue pendent 3h
 
-*22 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — First 5-min check of CEGEP lot 40
@@ -9127,7 +9127,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - bash — Wait 15 min then check Encyclopedia render
 - bash — Write 10-note CEGEP manifest and check
 - bash — Update CEGEP fiche and docs to 10 notes
-- … et 3 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
@@ -9208,7 +9208,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1345 autres
+- … et 1347 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9449,4 +9449,5 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA, 1 000+ P) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE DÉSORMAIS" > /tmp/commi
 - DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA, 1 000+ P) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE DÉSORMAIS" > /tmp/commi
 - DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE" > /tmp/commit-cegep10c.log 2>&1;
+- ÉTAT — T0 SOUS 4 000 APRÈS LE CEGEP 10 NOTES" > /tmp/commit-t0.log 2>&1; code=$?; tail -2 /tmp/commit-t0.log; echo "code=$code"; git log --oneline -1
 

@@ -20426,3 +20426,14 @@ revue de documentation · 530 fiche(s) · 618 JSON · 118 doc(s) · 81 porte(s) 
   ```
 
 - **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null", "description": "Wait for the 60k trainings"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1189]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1186 (bash: sleep 700; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1189", "timeout_ms": 1500000, "wait": true}`

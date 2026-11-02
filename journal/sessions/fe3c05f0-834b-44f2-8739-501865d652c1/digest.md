@@ -35393,3 +35393,39 @@ ok=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; git diff HEAD --stat -- docs/pilotage/en-cours.md; sed -n '3p' docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); t = p.read_text(encoding='utf-8')\nt, n = re. … [1010 caractères tronqués]`
+
+  ```
+11:30
+ docs/pilotage/en-cours.md | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+**Mis à jour : 2026-11-02, 12 h 02 HNE (heure locale, EST).**
+timestamp ok
+docs/pilotage/en-cours.md
+journal/2026-11-02/README.md
+reports/ocr-pdf-cegep-contamination.json
+reports/ocr-pdf-cegep.json
+reports/rapport-ocr-cegep.md
+tools/ocr_pdf.py
+ create mode 100644 reports/ocr-pdf-cegep-contamination.json
+ create mode 100644 reports/ocr-pdf-cegep.json
+ create mode 100644 reports/rapport-ocr-cegep.md
+code=0
+4f7631aa DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 tools/revue_documentation.py 2>&1 | tail -3; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2; git log --oneline -3", "description": "Verify gates after CEGEP  … [93 caractères tronqués]`
+
+  ```
+11:32
+  revue de documentation · 531 fiche(s) · 619 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  état · dernier fait 4f7631aa · dernier état 4f7631aa
+  ✅ aucun fait commité après le dernier état
+4f7631aa DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE
+7e1b15de B13 — LA RESTITUTION SÉMANTIQUE : LE RÉSUMÉ RAPPELLE 78 % (0,7834 HEUR / 0,7472 CASCADE) ; 122/122
+bfc2d1b4 B13 — LA RESTITUTION AVEC SPANS : 1,0, LA PERTE ÉTAIT LE RENDU ; 121/121
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); t = p.read_text(encoding='utf-8')\nold = \"- **Prochaine action** : l'**OCR complet** — le **fonds CEGEP** (~127 scans restants après 1 … [982 caractères tronqués]`

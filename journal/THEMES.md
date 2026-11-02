@@ -364,6 +364,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-17](2026-10-17/outils.md) | `37 %` · `37,5 %` |
 | [2026-10-27](2026-10-27/outils.md) | — |
 | [2026-11-01](2026-11-01/outils.md) | — |
+| [2026-11-02](2026-11-02/outils.md) | — |
 
 ### `divers` — Ce qui ne rentre dans aucun thème
 
