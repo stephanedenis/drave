@@ -17813,3 +17813,57 @@ d9acb4a6 B13 — LE GOLD À 200 RÉELS : POS 0,7738, 1 782 TOKENS, LA CIBLE EST 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.s** : pénalité de répétition — boucle cassée, mots inventés ;\", \"**N2.s** : pénalité — boucle cassée, mots … [758 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3999 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-1056]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1056", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+479a0951 N2.s (suite) — LA PÉNALITÉ DE RÉPÉTITION CASSE LA BOUCLE, PAS LE COLLAGE
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal -- … [404 caractères tronqués]`
+
+  ```
+34canal 2400048
+04:09
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/^- \\*\\*N2\\*\\*/,+1p' docs/pilotage/en-cours.md | cut -c1-600; echo \"=== roadmap N2 ===\"; grep -o \"N2\\*\\* |.*Prochaine action[^|]*\" docs/pilotage/roadmap.md | tail -c 400; date '+%H:%M'", "description": "Review the s … [35 caractères tronqués]`
+
+  ```
+- **N2** : **N2.h** 3,09 ; **N2.j** 7,42 ; **N2.n** 3,94 ; **N2.o** 5,41 ; **N2.p** 4,00 ; **N2.q** 5,89 ; **N2.t** 5,58 ; **N2.r** 3,69 ; **N2.v** multi 34 M distillé **4,79** ; **S** : 7/7 séquences, 94 % ; **N2.w** : anglais **3,77** ; **N2.x** : canal −0,03 ; **N2.s** : pénalité — boucle cassée, mots inventés ; N4 **0/40** ; fiches
+  [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-anglais`](../../reports/rapport-n2-anglais.md), [`n2-canal`](../../reports/rapport-n2-canal.md).
+- **N2** : la porte **< 2,5** est-elle la bonne, après N2.h (**3,09** en domaine, **12,93** en littérature) ? →
+  la **roadmap N** tranche.
+=== roadmap N2 ===
+port-n2-fenetre-r1.md) fixe ce que R1.1/R1.2 doivent tester (position relative, fenêtre entraînée, capacité) ; le **34,3 M distillé** (N2.r) donne **3,69** en domaine, **6,78** en littérature, **4,10** à 512 octets. Prochaine action : **la distillation du canal** (tuée par la pression mémoire, à reprendre), l'**anglais 34,3 M** (N2.w), puis la **fenêtre** (R1, note de passage écrite) 
+04:09
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\na = \"Prochaine action : **la distillation du canal** (tuée par la pression mémoire, à reprendre), l'**anglais 34,3 M** (N2.w), puis l … [1326 caractères tronqués]`
+
+  ```
+roadmap ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+course 1
+course 2
+course 3
+course 4
+course 5
+course 6
+479a0951 N2.s (suite) — LA PÉNALITÉ DE RÉPÉTITION CASSE LA BOUCLE, PAS LE COLLAGE
+04:10
+pas  700 · perte 1.5627 · PPL val 4.118 · 37 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d{2} h \\d{2} HNE \\(heure locale, EST\\)\\.\\*\\*\",\n           \"**Mis à jour : … [505 caractères tronqués]`

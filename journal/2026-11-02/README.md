@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**63 commits** · **3 session(s)** · **7 thème(s)**
+**64 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | attention | 5 | [attention.md](attention.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 8 | [docs.md](docs.md) |
-| memoire | 7 | [memoire.md](memoire.md) |
+| memoire | 8 | [memoire.md](memoire.md) |
 | mesures | 32 | [mesures.md](mesures.md) |
 | portes | 4 | [portes.md](portes.md) |
 
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 35.8 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 35.9 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 35.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 35.5 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
@@ -94,6 +94,7 @@
 | 03:45 | `cc65ff92` | B13 — LE BORD FIN : 73 % À 0,38, 100 % À 0,41 (400 ESSAIS), SEUIL ROBUSTE 0,41 ; 87/87 |
 | 04:02 | `0f0449f2` | N2.x — LA DISTILLATION DU CANAL : −0,03 EN DOMAINE, +0,24 À 512 OCTETS |
 | 04:04 | `d9acb4a6` | B13 — LE GOLD À 200 RÉELS : POS 0,7738, 1 782 TOKENS, LA CIBLE EST ATTEINTE ; 88/88 |
+| 04:07 | `479a0951` | N2.s (suite) — LA PÉNALITÉ DE RÉPÉTITION CASSE LA BOUCLE, PAS LE COLLAGE |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 35.8 h |
+| Durée | 35.9 h |
 | Tours | 18 |
-| Messages | 1430 |
-| Appels d'outils | 1324 |
+| Messages | 1435 |
+| Appels d'outils | 1329 |
 | Fichiers touchés | 11 |
-| Commandes | 1056 |
+| Commandes | 1060 |
 | Sous-agents | 0 |
-| Commits | 68 |
+| Commits | 70 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*358 appels d'outils.* Actions notables :
+*363 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 242 autres
+- … et 246 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1016 autres
+- … et 1020 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1245,4 +1245,6 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-n2-echantillon.md'); s = p.read_text() a
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text() a = "Proch
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = r
 
