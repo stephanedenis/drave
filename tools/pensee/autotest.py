@@ -1957,12 +1957,21 @@ def t131_contextuel() -> tuple[bool, str]:
 
 
 def t132_lien_auto() -> tuple[bool, str]:
-    """Le lien automatique : 0/5, le sujet ne suffit pas."""
+    """Le lien automatique par le sujet : 5/5 après réparation (0/5 avant)."""
     from ..tests.linguistique.evaluer_gold import charger
     from ..tests.linguistique.miroir import fidelite_lien_auto
     r = fidelite_lien_auto(charger())
-    return r["paires"] == 5 and r["justes"] == 0, (
-        f"lien auto : {r['justes']:.0f}/{r['paires']} (le sujet ne suffit pas)")
+    return r["paires"] == 5 and r["justes"] == 5, (
+        f"lien auto : {r['justes']:.0f}/{r['paires']} (sujet de surface)")
+
+
+def t133_lien_auto_fixe() -> tuple[bool, str]:
+    """Le lien réparé : 5/5 après réordonnancement et repli PRON/NOUN."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_lien_auto
+    r = fidelite_lien_auto(charger())
+    return r["paires"] == 5 and r["justes"] == 5, (
+        f"lien réparé : {r['justes']:.0f}/{r['paires']}")
 
 
 def main() -> int:
@@ -2096,7 +2105,8 @@ def main() -> int:
               ("T129 pièges", t129_pieges()),
               ("T130 gold gelé", t130_gold_gele()),
               ("T131 contexte", t131_contextuel()),
-              ("T132 lien auto", t132_lien_auto())]
+              ("T132 lien auto", t132_lien_auto()),
+              ("T133 lien réparé", t133_lien_auto_fixe())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

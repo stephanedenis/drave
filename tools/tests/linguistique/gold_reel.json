@@ -30068,6 +30068,292 @@
    "source": "reel"
   },
   {
+   "id": "r423",
+   "langue": "fr",
+   "texte": "Tu viens demain.",
+   "mots": [
+    {
+     "texte": "Tu",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "viens",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "demain",
+     "pos": "ADV",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": ".",
+     "pos": "PONCT",
+     "debut": 15,
+     "fin": 16
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Tu",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "viens",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "ADV",
+     "texte": "demain",
+     "role": "temps",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "type": "PONCT",
+     "texte": ".",
+     "role": "ponctuation",
+     "debut": 15,
+     "fin": 16
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r424",
+   "langue": "fr",
+   "texte": "Il mange.",
+   "mots": [
+    {
+     "texte": "Il",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "mange",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": ".",
+     "pos": "PONCT",
+     "debut": 8,
+     "fin": 9
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Il",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "mange",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "PONCT",
+     "texte": ".",
+     "role": "ponctuation",
+     "debut": 8,
+     "fin": 9
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r425",
+   "langue": "fr",
+   "texte": "Elle dort.",
+   "mots": [
+    {
+     "texte": "Elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "dort",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "texte": ".",
+     "pos": "PONCT",
+     "debut": 9,
+     "fin": 10
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Elle",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "dort",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "type": "PONCT",
+     "texte": ".",
+     "role": "ponctuation",
+     "debut": 9,
+     "fin": 10
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r426",
+   "langue": "fr",
+   "texte": "Ils partent.",
+   "mots": [
+    {
+     "texte": "Ils",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "partent",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": ".",
+     "pos": "PONCT",
+     "debut": 11,
+     "fin": 12
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Ils",
+     "role": "agent",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "partent",
+     "role": "prédicat",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "type": "PONCT",
+     "texte": ".",
+     "role": "ponctuation",
+     "debut": 11,
+     "fin": 12
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r427",
+   "langue": "en",
+   "texte": "You come tomorrow.",
+   "mots": [
+    {
+     "texte": "You",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "come",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "tomorrow",
+     "pos": "ADV",
+     "debut": 9,
+     "fin": 17
+    },
+    {
+     "texte": ".",
+     "pos": "PONCT",
+     "debut": 17,
+     "fin": 18
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "You",
+     "role": "agent",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "come",
+     "role": "prédicat",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "type": "ADV",
+     "texte": "tomorrow",
+     "role": "temps",
+     "debut": 9,
+     "fin": 17
+    },
+    {
+     "type": "PONCT",
+     "texte": ".",
+     "role": "ponctuation",
+     "debut": 17,
+     "fin": 18
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
    "id": "r418",
    "langue": "fr",
    "texte": "Tu ne viens pas demain ?",
@@ -30415,292 +30701,6 @@
    "pragma": {
     "acte": "question",
     "reponse": "no"
-   },
-   "source": "reel"
-  },
-  {
-   "id": "r423",
-   "langue": "fr",
-   "texte": "Tu viens demain.",
-   "mots": [
-    {
-     "texte": "Tu",
-     "pos": "PRON",
-     "debut": 0,
-     "fin": 2
-    },
-    {
-     "texte": "viens",
-     "pos": "VERB",
-     "debut": 3,
-     "fin": 8
-    },
-    {
-     "texte": "demain",
-     "pos": "ADV",
-     "debut": 9,
-     "fin": 15
-    },
-    {
-     "texte": ".",
-     "pos": "PONCT",
-     "debut": 15,
-     "fin": 16
-    }
-   ],
-   "segments": [
-    {
-     "type": "GN",
-     "texte": "Tu",
-     "role": "agent",
-     "debut": 0,
-     "fin": 2
-    },
-    {
-     "type": "GV",
-     "texte": "viens",
-     "role": "prédicat",
-     "debut": 3,
-     "fin": 8
-    },
-    {
-     "type": "ADV",
-     "texte": "demain",
-     "role": "temps",
-     "debut": 9,
-     "fin": 15
-    },
-    {
-     "type": "PONCT",
-     "texte": ".",
-     "role": "ponctuation",
-     "debut": 15,
-     "fin": 16
-    }
-   ],
-   "pragma": {
-    "acte": "assertion"
-   },
-   "source": "reel"
-  },
-  {
-   "id": "r424",
-   "langue": "fr",
-   "texte": "Il mange.",
-   "mots": [
-    {
-     "texte": "Il",
-     "pos": "PRON",
-     "debut": 0,
-     "fin": 2
-    },
-    {
-     "texte": "mange",
-     "pos": "VERB",
-     "debut": 3,
-     "fin": 8
-    },
-    {
-     "texte": ".",
-     "pos": "PONCT",
-     "debut": 8,
-     "fin": 9
-    }
-   ],
-   "segments": [
-    {
-     "type": "GN",
-     "texte": "Il",
-     "role": "agent",
-     "debut": 0,
-     "fin": 2
-    },
-    {
-     "type": "GV",
-     "texte": "mange",
-     "role": "prédicat",
-     "debut": 3,
-     "fin": 8
-    },
-    {
-     "type": "PONCT",
-     "texte": ".",
-     "role": "ponctuation",
-     "debut": 8,
-     "fin": 9
-    }
-   ],
-   "pragma": {
-    "acte": "assertion"
-   },
-   "source": "reel"
-  },
-  {
-   "id": "r425",
-   "langue": "fr",
-   "texte": "Elle dort.",
-   "mots": [
-    {
-     "texte": "Elle",
-     "pos": "PRON",
-     "debut": 0,
-     "fin": 4
-    },
-    {
-     "texte": "dort",
-     "pos": "VERB",
-     "debut": 5,
-     "fin": 9
-    },
-    {
-     "texte": ".",
-     "pos": "PONCT",
-     "debut": 9,
-     "fin": 10
-    }
-   ],
-   "segments": [
-    {
-     "type": "GN",
-     "texte": "Elle",
-     "role": "agent",
-     "debut": 0,
-     "fin": 4
-    },
-    {
-     "type": "GV",
-     "texte": "dort",
-     "role": "prédicat",
-     "debut": 5,
-     "fin": 9
-    },
-    {
-     "type": "PONCT",
-     "texte": ".",
-     "role": "ponctuation",
-     "debut": 9,
-     "fin": 10
-    }
-   ],
-   "pragma": {
-    "acte": "assertion"
-   },
-   "source": "reel"
-  },
-  {
-   "id": "r426",
-   "langue": "fr",
-   "texte": "Ils partent.",
-   "mots": [
-    {
-     "texte": "Ils",
-     "pos": "PRON",
-     "debut": 0,
-     "fin": 3
-    },
-    {
-     "texte": "partent",
-     "pos": "VERB",
-     "debut": 4,
-     "fin": 11
-    },
-    {
-     "texte": ".",
-     "pos": "PONCT",
-     "debut": 11,
-     "fin": 12
-    }
-   ],
-   "segments": [
-    {
-     "type": "GN",
-     "texte": "Ils",
-     "role": "agent",
-     "debut": 0,
-     "fin": 3
-    },
-    {
-     "type": "GV",
-     "texte": "partent",
-     "role": "prédicat",
-     "debut": 4,
-     "fin": 11
-    },
-    {
-     "type": "PONCT",
-     "texte": ".",
-     "role": "ponctuation",
-     "debut": 11,
-     "fin": 12
-    }
-   ],
-   "pragma": {
-    "acte": "assertion"
-   },
-   "source": "reel"
-  },
-  {
-   "id": "r427",
-   "langue": "en",
-   "texte": "You come tomorrow.",
-   "mots": [
-    {
-     "texte": "You",
-     "pos": "PRON",
-     "debut": 0,
-     "fin": 3
-    },
-    {
-     "texte": "come",
-     "pos": "VERB",
-     "debut": 4,
-     "fin": 8
-    },
-    {
-     "texte": "tomorrow",
-     "pos": "ADV",
-     "debut": 9,
-     "fin": 17
-    },
-    {
-     "texte": ".",
-     "pos": "PONCT",
-     "debut": 17,
-     "fin": 18
-    }
-   ],
-   "segments": [
-    {
-     "type": "GN",
-     "texte": "You",
-     "role": "agent",
-     "debut": 0,
-     "fin": 3
-    },
-    {
-     "type": "GV",
-     "texte": "come",
-     "role": "prédicat",
-     "debut": 4,
-     "fin": 8
-    },
-    {
-     "type": "ADV",
-     "texte": "tomorrow",
-     "role": "temps",
-     "debut": 9,
-     "fin": 17
-    },
-    {
-     "type": "PONCT",
-     "texte": ".",
-     "role": "ponctuation",
-     "debut": 17,
-     "fin": 18
-    }
-   ],
-   "pragma": {
-    "acte": "assertion"
    },
    "source": "reel"
   }

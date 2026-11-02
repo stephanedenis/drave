@@ -182,9 +182,12 @@ def repondre_contextuel(a: bl.Annotation, a_prec: bl.Annotation | None = None) -
 
 
 def _sujet(a: bl.Annotation) -> str | None:
-    """Le premier GN agent de l'annotation (le sujet de surface)."""
+    """Le sujet de surface : le premier GN, à défaut le premier PRON/NOUN."""
     for e in a.etiquettes:
-        if e.niveau == "syntagme" and e.type == "GN" and e.meta.get("role") == "agent":
+        if e.niveau == "syntagme" and e.type == "GN":
+            return e.valeur
+    for e in a.etiquettes:
+        if e.niveau == "pos" and e.type in ("PRON", "NOUN"):
             return e.valeur
     return None
 

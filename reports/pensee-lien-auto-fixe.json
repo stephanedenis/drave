@@ -1,0 +1,16 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "136/136",
+ "lien_auto": {
+  "avant": 0.0,
+  "apres": 1.0
+ },
+ "contexte": 1.0,
+ "paires": 5,
+ "limites": [
+  "5 paires",
+  "sujet de surface",
+  "heuristique seule"
+ ]
+}
