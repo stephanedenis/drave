@@ -20636,3 +20636,34 @@ commit ok (1)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.ab** : 60 k pas, fr **3,44** ;\", \"**N2.ab** : 60 k pas ;\")\ns = re.sub(r\"\\| fichiers / JSON de résultat … [1712 caractères tronqués]`
+
+  ```
+en-cours ok
+roadmap ok
+  T0 max : 3999 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-1203]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1203", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+2e767b1b ÉTAT ET ROADMAP — N2.aa/N2.ab : LE COMPUTE PAIE, LE CORPUS EST UN ÉCHANGE
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p data/wiki_mix/propre && cat data/wiki_fr/propre/train.txt data/wiki_big/propre/train.txt > data/wiki_mix/propre/train.txt && cat data/wiki_fr/propre/train.canal data/wiki_big/propre/train.canal > data/wiki_mix/propre/train.c … [234 caractères tronqués]`
+
+  ```
+total 2007456
+drwxr-xr-x. 1 stephane stephane         72  2 nov 12:25 .
+drwxr-xr-x. 1 stephane stephane         12  2 nov 12:25 ..
+-rw-r--r--. 1 stephane stephane 1017487092  2 nov 12:25 train.canal
+-rw-r--r--. 1 stephane stephane 1017487092  2 nov 12:25 train.txt
+12:25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal  … [427 caractères tronqués]`

@@ -1888,6 +1888,18 @@ def t124_reponses() -> tuple[bool, str]:
         f"références : {c['avec_reference']}/{c['questions']} (couverture {c['taux']})")
 
 
+def t125_juge_bloc() -> tuple[bool, str]:
+    """Le juge contre le bloc : 0/19 pour le bloc et l'extraction."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.juge import juge_bloc, juge_extraction
+    ph = charger()
+    b = juge_bloc(ph)
+    e = juge_extraction(ph)
+    return (b["questions"] == 19 and b["justes"] == 0
+            and e["justes"] == 0), (
+        f"juge : bloc {b['justes']}/19, extraction {e['justes']}/19")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -2011,7 +2023,8 @@ def main() -> int:
               ("T121 réponse contenu", t121_reponse_contenu()),
               ("T122 extraction", t122_extraction()),
               ("T123 juge", t123_juge()),
-              ("T124 réponses", t124_reponses())]
+              ("T124 réponses", t124_reponses()),
+              ("T125 juge contre le bloc", t125_juge_bloc())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -31104,3 +31104,32 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1190", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 2b3eeba9ed19483dc53dcf05b6416a9c203e5a06 but expected 56b222123401a0130da2b45d169a715ebc84d6bb
+retry 1
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 2e767b1b9e6b87fb9dc6695a7b7e62c09db0751a but expected 2b3eeba9ed19483dc53dcf05b6416a9c203e5a06
+retry 2
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 3
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 4
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 5
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 6
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 7
+2e767b1b ÉTAT ET ROADMAP — N2.aa/N2.ab : LE COMPUTE PAIE, LE CORPUS EST UN ÉCHANGE
+lun 02 nov 2026 12:25:50 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-02, 13 h 00 HNE\", t)\np.write_text(t); print( … [873 caractères tronqués]`

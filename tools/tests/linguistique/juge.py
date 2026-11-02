@@ -30,6 +30,36 @@ def couverture(phrases: list[dict]) -> dict:
             "taux": round(avec / max(1, len(q)), 4)}
 
 
+def juge_bloc(phrases: list[dict], bloc=None) -> dict:
+    """Le juge contre le bloc : ce qu'il répond au contenu (None) vs les références."""
+    import tools.bloc_linguistique as bl
+    from tools.tests.linguistique.miroir import repondre_contenu
+    bloc = bloc or bl.Heuristique()
+    q = [p for p in phrases if "?" in p["texte"]]
+    justes = 0
+    for p in q:
+        a = bloc.analyser(p["texte"], p["langue"])
+        ref = (p.get("pragma") or {}).get("reponse")
+        justes += juge(repondre_contenu(a), ref)
+    return {"questions": len(q), "justes": justes,
+            "taux": round(justes / max(1, len(q)), 4)}
+
+
+def juge_extraction(phrases: list[dict], bloc=None) -> dict:
+    """Le juge contre l'extraction : le GN extrait vs les références."""
+    import tools.bloc_linguistique as bl
+    from tools.tests.linguistique.miroir import repondre_extraction
+    bloc = bloc or bl.Heuristique()
+    q = [p for p in phrases if "?" in p["texte"]]
+    justes = 0
+    for p in q:
+        a = bloc.analyser(p["texte"], p["langue"])
+        ref = (p.get("pragma") or {}).get("reponse")
+        justes += juge(repondre_extraction(a), ref)
+    return {"questions": len(q), "justes": justes,
+            "taux": round(justes / max(1, len(q)), 4)}
+
+
 def main() -> int:
     ph = charger()
     c = couverture(ph)

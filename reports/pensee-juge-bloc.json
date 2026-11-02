@@ -1,0 +1,25 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "128/128",
+ "bloc": {
+  "questions": 19,
+  "justes": 0,
+  "taux": 0.0
+ },
+ "extraction": {
+  "questions": 19,
+  "justes": 0,
+  "taux": 0.0
+ },
+ "reference": {
+  "questions": 19,
+  "justes": 19,
+  "taux": 1.0
+ },
+ "limites": [
+  "questions fermées",
+  "chaîne exacte",
+  "heuristique seule"
+ ]
+}
