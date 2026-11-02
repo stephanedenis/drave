@@ -1,0 +1,55 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "langue": "it",
+ "nature": "corpus Wikipédia it (texte intégral)",
+ "source": {
+  "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/it/itwiki-latest-pages-articles-multistream.xml.bz2",
+  "octets": 4364894248
+ },
+ "methode": {
+  "debaliseur": "regex : commentaires, refs, tableaux, modèles (30 itérations), fichiers/catégories, liens → libellé, titres de sections, listes",
+  "filtre": "ns 0, sans redirection, texte >= 300 caractères",
+  "deduplication": "articles (BLAKE2b) + tronçons (train), première occurrence gardée",
+  "split": "hash salé (graine 1) de page_id : 5% val, 5% test"
+ },
+ "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/it/itwiki-latest-pages-articles-multistream.xml.bz2",
+ "dump_octets": 4364894248,
+ "articles_lus": 4098658,
+ "articles_gardes": 1561411,
+ "articles_rediriges": 1120115,
+ "articles_hors_ns": 1011163,
+ "articles_courts": 405682,
+ "articles_doublons": 287,
+ "caracteres_gardes": 5210818583,
+ "troncons": 1801652,
+ "troncons_doublons": 110,
+ "octets": {
+  "train": 4766825191,
+  "val": 261531889,
+  "test": 259774399
+ },
+ "articles": {
+  "train": 1405558,
+  "val": 78335,
+  "test": 77518
+ },
+ "residus": {
+  "modele": 0,
+  "lien": 0,
+  "balise": 0,
+  "lignes_echantillon": 20000
+ },
+ "echantillon": "---\nArmonium\nLarmonium o armonio (in francese, harmonium) è un tipo di organo a serbatoio d'aria con tastiera (solitamente una) e due pedali che servono ad azionare i mantici per l'aria. Il suono è prodotto da una o più file di ance libere, analogamente alla fisarmonica e all'armonica a bocca.\n\nNella classificazione Hornbostel-Sachs, rientra nella famiglia denominata \"serie di aerofoni ad ancia libera\" (codice 412.132).\n\nDescrizione\nL’armonium è uno strumento relativamente recente, in quanto inventato attorno alla metà del XIX secolo. \n\nPrima della sua invenzione, esisteva un diverso organo privo di canne,\n---\nAntropologia\n(1817). Prometeo è stato talvolta citato dagli antropologi in quanto simbolo mitico della coscienza e del pensiero dell'uomo sul mondo e su di sé.]]\nLantropologia (dal greco , ànthropos, \"uomo\", e , lògos, \"discorso, dottrina\", quindi letteralmente: \"studio dell'uomo\") è una branca scientifica sviluppatasi in particolar modo in epoca moderna che studia l'essere umano sotto diverse prospettive (sociale, culturale, morfologica, psicoevolutiva, sociologica, artistico-espressiva, filosofico-religiosa), indagando i suoi vari comportamenti all'interno della società. Nata come disciplina interna alla\n---\nAgricoltura\n]]\nLagricoltura (dal latino agricultura, ager campi, e cultura coltivazione) è l'attività umana che consiste nella coltivazione di specie vegetali, da parte dell'agricoltore. Lo scopo basilare dell'agricoltura è ottenere prodotti dalle piante, da utilizzare soprattutto a scopo alimentare. In economia, l'agricoltura rientra nel settore primario.\n\nTradizionalmente è popolarmente riferita alla produzione di risorse vegetali a fini alimentari sia direttamente sia indirettamente tramite produzione animale nell'allevamento. A fini scientifici e giuridici, comunque, entrambe le materie sono comunemen",
+ "mots_estimes": 840454610,
+ "note_mots": "caractères / 6,2 (estimation ; le japonais et le chinois se comptent en caractères)",
+ "sha256_train": "c1f3118549c9d0cf59886b3548de86f22b84d4e38dd6a9520177763732de8904",
+ "sha256_val": "e1f0b632573bd30e7162a029b8344904fe0b2702c029418b13dec3ad358bf4ab",
+ "sha256_test": "60cd6f0b75515ba9d3a0d5b522f50d6a8feee48eaec401640242512b5df8c092",
+ "licence": "Wikipédia : CC-BY-SA 4.0 (et GFDL) — attribution et partage à l'identique ; corpus local",
+ "limites": [
+  "débaliseur regex : infobox/dates de modèles perdues, formules <math> retirées, tableaux perdus",
+  "les redirections et les espaces de noms autres que 0 sont exclus",
+  "déduplication exacte seulement (quasi-doublons non détectés)"
+ ]
+}

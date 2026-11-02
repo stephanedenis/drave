@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**149 commits** · **5 session(s)** · **9 thème(s)**
+**150 commits** · **5 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 6 | [attention.md](attention.md) |
-| distribue | 12 | [distribue.md](distribue.md) |
+| distribue | 13 | [distribue.md](distribue.md) |
 | docs | 18 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 81 | [mesures.md](mesures.md) |
@@ -184,6 +184,7 @@
 | 14:13 | `49ca52fb` | B13 — LA CORÉFÉRENCE COMME LIEN : 62/116, LA MOITIÉ DES ANTÉCÉDENTS ; 137/137 |
 | 14:20 | `004c5f64` | B13 — LES LIENS CLASSÉS : 50 INTRA, 62 INTER, 4 ABSENTS ; 138/138 |
 | 14:37 | `139a8b16` | B13 — LES ABSENTS : 0, LES QUATRE ÉTAIENT DES FAUX (TOKENISATION) ; 139/139 |
+| 15:57 | `702b368c` | B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140 |
 
 ## Le récit de la journée (écrit à la main)
 

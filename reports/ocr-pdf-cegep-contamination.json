@@ -1,0 +1,57 @@
+{
+ "train": "data/corpus_ocr_cegep/train.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 20441,
+  "par_split": {
+   "val.txt": {
+    "troncons": 603,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 0,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ },
+ "recouvrement_eval": [
+  {
+   "fichier": "fr-xnli.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "fr-udhr.txt",
+   "fenetre": 128,
+   "fenetres": 24,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "en-xnli.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  }
+ ],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 302,
+  "par_split": {
+   "val.txt": {
+    "troncons": 11,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 0,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}

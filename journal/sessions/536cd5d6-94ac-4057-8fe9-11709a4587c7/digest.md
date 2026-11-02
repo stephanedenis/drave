@@ -2864,3 +2864,84 @@ d256888 GLOSSAIRE — LES TESTS DE L'ANNOTATION AU RENDU ; SERVEUR, SPA ET RENDU
 ⏵ Je commite le flux B13 avec son état et le cycle de clôture.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/implantation/bloc-linguistique.md docs/implantation/moteur-de-pensee.md tools/pensee/autotest.py tools/tests/linguistique/gold_reel.json tools/tests/linguistique/gold_reel.py reports/pensee-vrais-absents.json reports/rap … [1335 caractères tronqués]`
+
+  ```
+== staged ==
+ docs/implantation/bloc-linguistique.md             |   2 +-
+ docs/implantation/moteur-de-pensee.md              |   5 +-
+ docs/pilotage/en-cours.md                          | 136 +++++-----
+ journal/2026-11-02/README.md                       |   1 +
+ .../536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md   |  30 +++
+ .../cloture.md                                     |  39 +++
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |  19 +-
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/plan.md   |   9 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-partielle.json                      |  27 ++
+ reports/pensee-vrais-absents.json                  |  14 +
+ reports/rapport-pensee-partielle.md                |  59 ++++
+ reports/rapport-pensee-vrais-absents.md            |  68 +++++
+ tools/pensee/autotest.py                           |  13 +-
+ tools/tests/linguistique/gold_reel.json            | 296 +++++++++++++++++++++
+ tools/tests/linguistique/gold_reel.py              |  15 ++
+ 16 files changed, 652 insertions(+), 83 deletions(-)
+
+[exit 0]
+702b368c B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140
+[stderr]
+  ✅ index : aucun fait stagé sans
+… [5 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie le commit B13, puis je prépare le flux données (OCR + glossaire).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== HEAD ==\" && git show --stat --oneline HEAD | tail -6 && echo && echo \"== restant ==\" && git status --short | sed -n '1,80p'", "description": "Inspect B13 commit and remaining files"}`
+
+  ```
+== HEAD ==
+ reports/rapport-pensee-partielle.md                |   59 +
+ reports/rapport-pensee-vrais-absents.md            |   68 +
+ tools/pensee/autotest.py                           |   13 +-
+ tools/tests/linguistique/gold_reel.json            |  296 ++
+ tools/tests/linguistique/gold_reel.py              |   15 +
+ 33 files changed, 4102 insertions(+), 114 deletions(-)
+
+== restant ==
+ M docs/README.md
+ M docs/implantation/format-flux.md
+ M docs/methode/contexte.md
+ M docs/methode/portes.md
+ M docs/methode/resultats.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/references-non-regression.md
+ M docs/pilotage/roadmap.md
+ M docs/theorie/carte.md
+ M docs/theorie/glossaire.md
+ M docs/theorie/glossaire/README.md
+ M docs/theorie/glossaire/index.json
+ M docs/theorie/lecture-rapide.md
+ M docs/theorie/vision.md
+ M reports/INDEX.md
+ M reports/corpus-genres.json
+ M reports/native-generation.json
+ M reports/rapport-genres.md
+ M reports/rapport-ocr-pdf.md
+ M tools/distiller_budget.py
+ M tools/docwatch
+ M tools/generer_natif.py
+ M tools/glossaire_cartes.py
+ M tools/ocr_pdf.py
+ M tools/porte-sessions.sh
+ M tools/sessions.py
+ M tools/toutes-les-portes.sh
+?? docs
+… [1276 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je commite le flux données : OCR CEGEP, glossaire, docwatch et liens.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"**Mis à jour : 2026-11-02, 16 h 10 HNE (heure locale, EST).**\"\nnew=\"**Mis à jour : 2026-11-02, 16 h 25 HNE (heure locale, EST).* … [1650 caractères tronqués]`

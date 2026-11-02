@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (12)
+## Commits du jour (13)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -20,6 +20,7 @@
 | 14:06 | `651c1fc0` | B13 — LE LIEN AUTOMATIQUE RÉPARÉ : 5/5 APRÈS RÉORDONNANCEMENT ET REPLI PRON/NOUN ; 136/136 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
 | 14:13 | `49ca52fb` | B13 — LA CORÉFÉRENCE COMME LIEN : 62/116, LA MOITIÉ DES ANTÉCÉDENTS ; 137/137 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+18) |
 | 14:20 | `004c5f64` | B13 — LES LIENS CLASSÉS : 50 INTRA, 62 INTER, 4 ABSENTS ; 138/138 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
+| 15:57 | `702b368c` | B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140 | `bloc-linguistique.md`, `moteur-de-pensee.md`, `en-cours.md` (+30) |
 
 ## Chiffres du jour
 
@@ -54,6 +55,8 @@
 - [reports/rapport-pensee-lien-auto.md](../../reports/rapport-pensee-lien-auto.md)
 - [reports/rapport-pensee-lien-coref.md](../../reports/rapport-pensee-lien-coref.md)
 - [reports/rapport-pensee-liens-classes.md](../../reports/rapport-pensee-liens-classes.md)
+- [reports/rapport-pensee-partielle.md](../../reports/rapport-pensee-partielle.md)
+- [reports/rapport-pensee-vrais-absents.md](../../reports/rapport-pensee-vrais-absents.md)
 - [reports/rapport-s-analyseur.md](../../reports/rapport-s-analyseur.md)
 
 <!-- notes -->
