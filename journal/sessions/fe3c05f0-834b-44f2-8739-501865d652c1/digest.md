@@ -18606,3 +18606,23 @@ Mem:             125          27          72           5          33          98
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 55); do [ -f reports/corpus-wiki-en-texte-contamination.json ] && break; sleep 15; done; echo \"attente $((i*15))s\"; ls -la reports/corpus-wiki-en-texte-contamination.json 2>/dev/null || { echo \"check en: pas encore\ … [692 caractères tronqués]`
+
+  ```
+attente 600s
+-rw-r--r--. 1 stephane stephane 846  1 nov 22:46 reports/corpus-wiki-en-texte-contamination.json
+lignes {'val.txt': 0.027299, 'test.txt': 0.027967}
+8 Ko {'val.txt': 0.0, 'test.txt': 0.0}
+éval [('en-xnli.txt', 0, 40), ('wikitext2_test.txt', 0, 40)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-corpus-wiki-texte.md'); s=p.read_text()\ns=s.replace(\"# Le texte intégral de Wikipédia — le français et les neuf langues\",\n            \"# Le texte intégral de Wikipé … [3932 caractères tronqués]`
+
+  ```
+fiche : les dix
+état : les dix
+  T0 max : 3994 mots (budget 4 000)
+  revue de documentation · 425 fiche(s) · 524 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=re.sub(r\"\\| fichiers / JSON de résultats \\| [^|]+ \\|\", \"| fichiers / JSON de résultats | **425** / **524** |\", s)\np.write_text … [1783 caractères tronqués]`

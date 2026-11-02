@@ -1,0 +1,34 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "langue": "en",
+ "nature": "corpus Wikipédia en (texte intégral, run interrompu)",
+ "source": {
+  "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/en/enwiki-latest-pages-articles-multistream.xml.bz2"
+ },
+ "methode": {
+  "debaliseur": "même outil que les neuf autres langues (corpus_wikipedia_texte.py)",
+  "filtre": "ns 0, sans redirection, texte >= 300 caractères",
+  "deduplication": "articles + tronçons (BLAKE2b)",
+  "split": "hash salé du page_id : 5 % val, 5 % test"
+ },
+ "articles_lus": 25400000,
+ "articles_gardes": 6023249,
+ "caracteres_gardes": 21980000000,
+ "mots_estimes": 3545161290,
+ "note_mots": "caractères / 6,2 (estimation)",
+ "octets": {
+  "train": 20053154324,
+  "val": 1115365980,
+  "test": 1110437204
+ },
+ "sha256_train": "7e86b59151309e070fc9b33bde161e2039cfcb79829d50c42338c4ce3aa14b5d",
+ "sha256_val": "e47e98fcb4e2b027932610b52dfdd25c509a62ce5855a4de4c566aa1db62251f",
+ "sha256_test": "41d437da7234f1f45250fa2a249888ffed69579809a599cafe727406b5ec9538",
+ "note_interruption": "le run s'est bloqué à 25,4 M pages sur 25,6 M (99,2 %) : l'écriture du train était en attente d'E/S, mémoire 125/125 Go. Les trois fichiers sont clos ; 200 000 pages environ (0,8 %) ne sont pas traitées. Le manifeste est reconstruit depuis le journal et les fichiers (SHA-256 recalculés).",
+ "limites": [
+  "run interrompu à 99,2 % des pages (l'écriture du train bloquée par la mémoire : ~75 Go de résidence pour 6 M d'articles)",
+  "déduplication exacte seulement",
+  "licence CC-BY-SA 4.0 (et GFDL), corpus local"
+ ]
+}

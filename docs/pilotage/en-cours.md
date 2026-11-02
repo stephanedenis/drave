@@ -40,7 +40,7 @@
   [`pensee-minute-seule`](../../reports/rapport-pensee-minute-seule.md), [`pensee-minute-entrainee`](../../reports/rapport-pensee-minute-entrainee.md),
   [`pensee-shaping`](../../reports/rapport-pensee-shaping.md), [`pensee-reseau`](../../reports/rapport-pensee-reseau.md),
   [`pensee-mlp`](../../reports/rapport-pensee-mlp.md), [`pensee-professeur`](../../reports/rapport-pensee-professeur.md),
-  [`pensee-sans-none`](../../reports/rapport-pensee-sans-none.md), [`pensee-correction`](../../reports/rapport-pensee-correction.md), [`pensee-audit`](../../reports/rapport-pensee-audit.md), [`pensee-ouverte`](../../reports/rapport-pensee-ouverte.md), [`pensee-graines`](../../reports/rapport-pensee-graines.md), [`pensee-mobile`](../../reports/rapport-pensee-mobile.md), [`pensee-mobile-graines`](../../reports/rapport-pensee-mobile-graines.md), [`pensee-bruit`](../../reports/rapport-pensee-bruit.md).
+  [`pensee-sans-none`](../../reports/rapport-pensee-sans-none.md), [`pensee-correction`](../../reports/rapport-pensee-correction.md), [`pensee-audit`](../../reports/rapport-pensee-audit.md), [`pensee-ouverte`](../../reports/rapport-pensee-ouverte.md), [`pensee-graines`](../../reports/rapport-pensee-graines.md), [`pensee-mobile`](../../reports/rapport-pensee-mobile.md), [`pensee-mobile-graines`](../../reports/rapport-pensee-mobile-graines.md), [`pensee-bruit`](../../reports/rapport-pensee-bruit.md), [`pensee-bouge`](../../reports/rapport-pensee-bouge.md).
 - **Gold L 220** : **200 réels + 160 synthétiques** ; POS **0,772** (fermé 0,939/ouvert 0,621),
   syntagmes exacts **0,194**/**tête 0,560**, pragmatique **0,994–1,0** ; cascade (mock) ; **attachement tête 1,0/0,966/0,932** (59 ambiguës), hasard 0,015 ; neuronal
   **refusé** ; fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :
@@ -69,7 +69,7 @@
 - **Ambition** : le français réel.
 - **Stratégie** : le dump, débaliseur.
 - **Objectif final** : 10 corpus, ficés.
-- **Ce qu'elle fait** : le **texte intégral** : les 9 (**12,12 M** ; 8 Ko 0) ; **PDF** (322 Mo) ; **Documents** 1 000/7 496 (295 Mo) ; **OCR** 1er livre ; en 19,4/25,6 M ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
+- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (322 Mo) ; **Documents** 4 000/7 496 ; **OCR** 3 livres ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée, S, N2.
 - **Prochaine action** : l'**en**, le catalogue ; l'OCR des 159 scans ; les collections.
 - **Bloquants** : aucun.
@@ -98,7 +98,7 @@
 |---|---|---|
 | portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **425** / **523** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **426** / **525** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
@@ -113,7 +113,7 @@ action** — pas les statuts, qui dérivent. Vue d'ensemble :
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : AC-3/alpha-bêta 8/8, DRVF 9/9, banc 10/10, opérateurs 36** | **B11.10 close** ; **B13 : DRVM/native** ; B10.3 bloquée |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : AC-3/alpha-bêta 8/8, DRVF 9/9, banc 10/10, opérateurs 37** | **B11.10 close** ; **B13 : DRVM/native** ; B10.3 bloquée |
 | **N — le natif** | **N3, N4** | N2.h close ; N2 < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2 close** ; **N4** (consigne) |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R1/R2/R3 attendent N5/N4 | **R1.1/R1.2** (contexte natif) |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |

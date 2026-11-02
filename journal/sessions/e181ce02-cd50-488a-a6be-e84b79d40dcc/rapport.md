@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 30.1 h |
-| Tours | 50 |
-| Messages | 823 |
-| Appels d'outils | 774 |
+| Durée | 30.2 h |
+| Tours | 51 |
+| Messages | 831 |
+| Appels d'outils | 780 |
 | Fichiers touchés | 25 |
-| Commandes | 622 |
+| Commandes | 627 |
 | Sous-agents | 2 |
-| Commits | 66 |
+| Commits | 67 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -131,6 +131,8 @@
 **Tour 49** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 50** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 51** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2678,6 +2680,58 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Committer le bruit variable
 - job_output
 
+**Synthèse produite :**
+
+⏵ Bruit variable : 50–95 %, 6/6 buts, l'effort s'adapte (3 → 1 essai) ; 36/36
+
+Le round 37 du goal est livré : la politique entraînée à **80 %** tient de **50 % à 95 %**. Commit **`de32beb8`**.
+
+\## Le bruit variable
+
+Même labyrinthe que T16-T29 ; la politique est entraînée à **80 %** (1000 épisodes, graine 0, 74 états-Q) puis évaluée **seule** à six taux d'ouverture.
+
+| p(ouverture) | but | pas | essais |
+|---:|---|---:|---:|
+| 0,50 | **oui** | 10 | 3 |
+| 0,60 | **oui** | 10 | 3 |
+| 0,70 | **oui** | 10 | 3 |
+| 0,80 | **oui** | 9 | 2 |
+| 0,90 | **oui** | 8 | 1 |
+| 0,95 | **oui** | 8 | 1 |
+
+**Ce que ça dit** :
+
+- **6/6 buts** : la politique entraînée à 80 % **généralise** à des taux très différents ; elle n'a pas mémorisé un taux, elle a appris la **structure** (viser la porte, réessayer).
+- **L'effort s'adapte** : 3 essais quand la porte résiste (50–70 %), 1 quand elle s'ouvre presque toujours ; 10 pas contre 8.
+- **Le bruit est un coût, pas un mur** : la politique ralentit mais n'échoue pas.
+- **La négative reste** : la politique minute (T21/T28) échoue sur le bruit ; le contraste est le contrôle.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-bruit.md`](../../reports/rapport-pensee-bruit.md) ; JSON [`pensee-bruit.json`](../../reports/pensee-bruit.json) ; code [`courbe.py`](../../tools/pensee/courbe.py) ; T33 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **36/36 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **425 fiches / 523 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Entraînement au taux le plus dur** (50 %) : comparer.
+2. **Porte qui bouge** : `d` change en cours d'épisode ; l'état doit suivre.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round fait bouger la porte en cours d'épisode.
+
+### Tour 51 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Ajouter la porte qui bouge et la tester
+- bash — Ajouter la porte T34 (porte qui bouge)
+- bash — Écrire la fiche de la porte qui bouge
+- bash — Aligner les compteurs et passer les portes
+- bash — Committer la porte qui bouge
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2757,7 +2811,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 582 autres
+- … et 587 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2970,4 +3024,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LA PORTE MOBILE : 2 POSITIONS, A* 2/2, POLITIQUE SEULE BUT/8, 170 ÉTATS-Q ; 34/34" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE MOBILE"; 
 - B13 — LA PORTE MOBILE SUR 5 GRAINES : 5/5 D0, 5/5 D1, 147–184 ÉTATS-Q ; 35/35" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MOBILE SUR 5 GRAINES"; th
 - B13 — LE BRUIT VARIABLE : 50–95 %, 6/6 BUTS, L'EFFORT S'ADAPTE (3 → 1 ESSAI) ; 36/36" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BRUIT VARIABLE"; t
+- B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE QUI 
 

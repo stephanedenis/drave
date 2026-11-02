@@ -15754,3 +15754,19 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-917", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-45m.log; tail -1 work/n2k/base-multi-21m.log; ls work/n2j/base-wiki-45m.pt work/n2k/base-multi-21m.pt 2>/dev/null", "description": "Check the scaling trainings"}`
+
+  ```
+22:49
+pas 17600 · perte 1.5317 · PPL val 4.253 · 945 s
+pas 12350 · perte 2.1352 · PPL val 8.675 · 944 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/base-wiki-45m.pt 2>/dev/null && echo OK45; tail -1 work/n2j/base-wiki-45m.log; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/base-wiki-45m. … [161 caractères tronqués]`

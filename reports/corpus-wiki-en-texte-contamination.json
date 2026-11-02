@@ -1,0 +1,50 @@
+{
+ "train": "data/corpus_wiki_en_texte/train.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 56192388,
+  "par_split": {
+   "val.txt": {
+    "troncons": 3121013,
+    "doublons": 85199,
+    "taux": 0.027299
+   },
+   "test.txt": {
+    "troncons": 3116677,
+    "doublons": 87165,
+    "taux": 0.027967
+   }
+  }
+ },
+ "recouvrement_eval": [
+  {
+   "fichier": "en-xnli.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  },
+  {
+   "fichier": "wikitext2_test.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 0,
+   "taux": 0.0
+  }
+ ],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 2449433,
+  "par_split": {
+   "val.txt": {
+    "troncons": 136239,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 135637,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}
