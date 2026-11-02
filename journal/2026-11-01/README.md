@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**90 commits** · **4 session(s)** · **10 thème(s)**
+**91 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 1 | [apprentissage.md](apprentissage.md) |
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 7 | [distribue.md](distribue.md) |
-| docs | 22 | [docs.md](docs.md) |
+| docs | 23 | [docs.md](docs.md) |
 | memoire | 9 | [memoire.md](memoire.md) |
 | mesures | 44 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -125,6 +125,7 @@
 | 20:17 | `adaaeae9` | L — GOLD 360 : 200 RÉELS + 160 SYNTHÉTIQUES, POS 0,772, TÊTE 0,966 (RÉEL 0,946) |
 | 20:21 | `0e5d99fe` | B13 — LE LABYRINTHE NON LINÉAIRE : BONNE POLITIQUE 17 NŒUDS/34 (SONDE 2), AVEUGLE 15/24 (SONDE 0) ; 13/13 |
 | 20:25 | `5853b206` | B13 — LA PORTE NEURONALE : BONNE POLITIQUE 28 NŒUDS/58 (SONDE 5), AVEUGLE 200/483 SANS BUT ; 14/14 |
+| 20:28 | `2b71aa2c` | ÉTAT — LA REVUE R1/A : A8.3 (LOT) MESURABLE, R11/R12 ET A2.6 BLOQUÉS |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -17103,3 +17103,21 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"fr/ar/pt/zh/ja/it/ru/es/de (**12,12 M** ; **8 Ko 0**) ; en et le PDF en cours\",\n            \"les 9 (**12,12 M** ; **8 Ko 0 … [2579 caractères tronqués]`
+
+  ```
+T0 max : 4004 mots (budget 4 000)
+  revue de documentation · 399 fiche(s) · 500 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+refus/course
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 5853b20645fc826febe6aadd47e1c5872a0e0d5f but expected 0e5d99fec3b464cc08612b47a3d0e9c9890b2f71
+[master 2b71aa2c] ÉTAT — LA REVUE R1/A : A8.3 (LOT) MESURABLE, R11/R12 ET A2.6 BLOQUÉS
+ 19 files changed, 265 insertions(+), 33 deletions(-)
+commit OK
+2b71aa2c ÉTAT — LA REVUE R1/A : A8.3 (LOT) MESURABLE, R11/R12 ET A2.6 BLOQUÉS
+=== en/pdf
+  [en] 14000000 lus · 3876560 gardés · 15.92 G caractères
+265M	data/corpus_pdf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"- **Ambition** : le français réel pour N2 ; D, carburant.\",\"- **Ambition** : le français réel pour N2.\")\ns=s.replace(\"-  … [950 caractères tronqués]`

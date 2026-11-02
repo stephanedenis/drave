@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (22)
+## Commits du jour (23)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -30,6 +30,7 @@
 | 19:59 | `a72567e1` | ÉTAT — T0 À 3 996 ET COMPTEURS 396/498 | `en-cours.md`, `README.md`, `apprentissage.md` (+17) |
 | 20:03 | `46fa2c82` | L — GOLD 220 : 60 RÉELS + 160 SYNTHÉTIQUES, POS 0,765 (RÉEL 0,861), TÊTE 0,510 | `README.md`, `apprentissage.md`, `attention.md` (+15) |
 | 20:04 | `fa1b74a4` | S — L'ANALYSEUR PLUS RICHE : SUBORDONNÉES, COORDINATION, ET L'EXPORT VERS LE CORPUS | `en-cours.md`, `roadmap.md`, `README.md` (+10) |
+| 20:28 | `2b71aa2c` | ÉTAT — LA REVUE R1/A : A8.3 (LOT) MESURABLE, R11/R12 ET A2.6 BLOQUÉS | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |
 
 ## Chiffres du jour
 

@@ -9,8 +9,8 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 27.8 h |
 | Tours | 29 |
-| Messages | 611 |
-| Appels d'outils | 610 |
+| Messages | 612 |
+| Appels d'outils | 611 |
 | Fichiers touchés | 25 |
 | Commandes | 491 |
 | Sous-agents | 2 |
@@ -1559,7 +1559,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 
 ### Tour 29 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Ajouter la politique apprise par Q-learning et la tester
 - bash — Importer random et tester la politique apprise
@@ -1569,6 +1569,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Trim final pour T0
 - bash — Trim final et portes
 - bash — Committer la porte apprise
+- job_output
 
 ## 3. Travail accompli
 
