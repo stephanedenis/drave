@@ -102,7 +102,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `4e86f5e2` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 37 | 0 | 0 | [rapport](sessions/4e86f5e2-cc8e-43d7-8be0-ba9622de2dc7/rapport.md) |
 | `4f3e8570` | Configuration RAID0 NVMe pour modèles IA | 2026-10-12 15:30 | 25.5 h | 13 | 822 | 41 | 57 | [rapport](sessions/4f3e8570-3d81-41e0-a055-1002702a6959/rapport.md) |
 | `5185ccb1` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 17:03 | 0.4 h | 1 | 123 | 9 | 0 | [rapport](sessions/5185ccb1-be24-4716-89df-62621e790444/rapport.md) |
-| `536cd5d6` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 0.5 h | 2 | 110 | 4 | 5 | [rapport](sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) |
+| `536cd5d6` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 0.5 h | 2 | 111 | 4 | 6 | [rapport](sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) |
 | `54621513` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:41 | 0.7 h | 1 | 78 | 4 | 0 | [rapport](sessions/54621513-76ae-401e-87df-a5084cacb359/rapport.md) |
 | `564fbe3a` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:07 | 0.1 h | 1 | 35 | 0 | 0 | [rapport](sessions/564fbe3a-a859-4b3b-bd17-4da73a2f4e22/rapport.md) |
 | `56879594` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 29 | 0 | 0 | [rapport](sessions/56879594-1434-4e34-83cc-de42cdf192a1/rapport.md) |

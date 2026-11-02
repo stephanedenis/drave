@@ -3062,3 +3062,34 @@ index f74849d4..15f7d3da 100644
 ⏵ Je commite le pilotage : état, roadmap, runbook, porte stricte et INDEX.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"**Mis à jour : 2026-11-02, 16 h 35 HNE (heure locale, EST).**\"\nnew=\"**Mis à jour : 2026-11-02, 16 h 45 HNE (heure locale, EST).* … [1716 caractères tronqués]`
+
+  ```
+horodatage ok
+== staged ==
+ docs/methode/portes.md                     |  18 +--
+ docs/pilotage/chantiers.md                 |  16 ++-
+ docs/pilotage/en-cours.md                  |   2 +-
+ docs/pilotage/plan-travail.md              |  81 ++++++++++++--
+ docs/pilotage/references-non-regression.md |  15 +--
+ docs/pilotage/roadmap.md                   |  33 +++---
+ docs/theorie/glossaire.md                  |   5 +-
+ reports/INDEX.md                           | 173 ++++++++++++++++++++++++++++-
+ tools/porte-sessions.sh                    |   6 +-
+ tools/sessions.py                          |  29 +++--
+ tools/toutes-les-portes.sh                 |   4 +-
+ 11 files changed, 318 insertions(+), 64 deletions(-)
+
+[exit 0]
+2dab14e4 PILOTAGE — L'ÉTAT REPREND : 140/140, N2.ac, DEUX SESSIONS EN PAUSE, PORTE STRICTE
+86cfb580 N2 — N2.ac EST LE MODÈLE DE PRODUCTION : LE MÉLANGE 1 Go, LE CANAL ET LA PÉNALITÉ
+ca06ab0b D — L'OCR CEGEP, LE GLOSSAIRE AU RENDU ET LES LIENS DE LA FAMILLE 13
+702b368c B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Je rafraîchis le heartbeat du hub, puis je vérifie la commande de reprise DSH.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md'); t=p.read_text()\nt=t.replace('- **Heartbeat** : 2026-11-02 15:50 EST','- **Heartbeat** : 2026-11-02 16:50 EST')\nt=t.r … [1367 caractères tronqués]`

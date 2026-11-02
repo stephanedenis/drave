@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,6 +15,7 @@
 | 05:48 | `bfe57da7` | CHANTIERS — LA LIGNE D PORTE L'OCR DES 20 LIVRES (15,36 M CARACTÈRES, 8 Ko 0) | `chantiers.md`, `en-cours.md`, `README.md` (+16) |
 | 09:14 | `62fff503` | PILOTAGE — LE DOSSIER PORTE L'OCR DES 20 LIVRES + 7 NOTES CEGEP ET LE LOT SUIVANT (21e-40e) | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+17) |
 | 13:37 | `20194fb1` | B13 — LE GOLD GELÉ : 602 PHRASES, 21 PORTES PROTÉGÉES ; 133/133 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+21) |
+| 16:03 | `2dab14e4` | PILOTAGE — L'ÉTAT REPREND : 140/140, N2.ac, DEUX SESSIONS EN PAUSE, PORTE STRICTE | `portes.md`, `chantiers.md`, `en-cours.md` (+14) |
 
 ## Chiffres du jour
 
@@ -32,6 +33,7 @@
 
 ## Mesures et rapports touchés
 
+- [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-ocr-pdf.md](../../reports/rapport-ocr-pdf.md)
 - [reports/rapport-pensee-gold-gele.md](../../reports/rapport-pensee-gold-gele.md)

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 16 h 45 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 16 h 50 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -27,7 +27,7 @@
 - **Objectif final** : sédimentation à zéro, mandats explicites (N2, S, L/B13, D/R/A), runbook.
 - **Ce qu'elle fait** : audit des 111 sessions ; commits B13 **140/140**, D (OCR/glossaire), N2.ac ; sessions en pause ; porte stricte ; INDEX.
 - **Ce que font les autres** : `e181ce02` et `fe3c05f0` en pause ; N2 et S sans session.
-- **Prochaine action** : le **runbook** (§ 9) et la **passe de portes**.
+- **Prochaine action** : la **passe de portes** (1 h 46) quand la machine est libre ; suivre les sessions ouvertes.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
 

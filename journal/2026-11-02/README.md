@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**152 commits** · **5 session(s)** · **9 thème(s)**
+**153 commits** · **5 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -19,7 +19,7 @@
 | mesures | 81 | [mesures.md](mesures.md) |
 | modele | 8 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
-| portes | 7 | [portes.md](portes.md) |
+| portes | 8 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -187,6 +187,7 @@
 | 15:57 | `702b368c` | B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140 |
 | 15:59 | `ca06ab0b` | D — L'OCR CEGEP, LE GLOSSAIRE AU RENDU ET LES LIENS DE LA FAMILLE 13 |
 | 16:01 | `86cfb580` | N2 — N2.ac EST LE MODÈLE DE PRODUCTION : LE MÉLANGE 1 Go, LE CANAL ET LA PÉNALITÉ |
+| 16:03 | `2dab14e4` | PILOTAGE — L'ÉTAT REPREND : 140/140, N2.ac, DEUX SESSIONS EN PAUSE, PORTE STRICTE |
 
 ## Le récit de la journée (écrit à la main)
 
