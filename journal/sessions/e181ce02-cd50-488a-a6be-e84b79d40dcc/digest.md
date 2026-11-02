@@ -25066,3 +25066,109 @@ timeout 1800 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-gold-200-subsets.md reports/pensee-gold-subsets.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotag … [483 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-949]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-949", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-gold-subsets.json
+ delete mode 100644 reports/rapport-n2-echantillon.md
+ create mode 100644 reports/rapport-pensee-gold-200-subsets.md
+COMMIT OK 1
+4712db13 B13 — LES SOUS-ENSEMBLES DU GOLD : POS 0,8214 SUR LES 20 NOUVELLES ; 89/89
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Sous-ensembles du gold : POS 0,8214 sur les 20 nouvelles ; 89/89
+
+Le round 90 du goal est livré : les **20 nouvelles phrases** ont un meilleur POS mais un syntagme plus faible — la segmentation des GV à ADV reste le point dur. Commit **`4712db13`**.
+
+## Les deux sous-ensembles
+
+| sous-ensemble | phrases | POS | tokens | syntagme F1 | tête F1 |
+|---|---:|---:|---:|---:|---:|
+| r001–r180 | 180 | 0,7897 | 894 | 0,1916 | 0,3255 |
+| **r181–r200** | **20** | **0,8214** | 84 | 0,1053 | 0,2632 |
+
+**Ce que ça dit** :
+
+- **Le POS des nouvelles est meilleur** (+0,0317) : les phrases sont plus régulières (SVQ simple, GN/GV/GN), le POS fermé y domine.
+- **Le syntagme des nouvelles est plus faible** (−0,0863) : les GV à ADV (`souffle fort`, `roule vite`) et les GP (`à midi`, `sur le toit`) sont mal délimités par l'heuristique.
+- **Le sous-ensemble est petit** (84 tokens) : ±0,04 d'intervalle à 95 %.
+- **La négative reste** : le POS du hasard (0,0147) sur le même gold.
+
+## L'état
+
+- Fiche : [`rapport-pensee-gold-200-subsets.md`](../../reports/rapport-pensee-gold-200-subsets.md) ; JSON [`pensee-gold-subsets.json`](../../reports/pensee-gold-subsets.json) ; T86 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **89/89 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **493 fiches / 581 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `rapport-n2-echantillon.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Des phrases complexes** : REL, SUB ; le POS ouvert doit progresser et la segmentation se mesurer.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round écrit les **phrases complexes** (REL/SUB) — le POS ouvert et la segmentation.
+
+
+## Tour 104
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 91/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\nnew = '''    (\"r201\", \"fr\", \"L'homme qui parle est mon père.\",\n     [(\"L'\", \"DET\"), (\"homme\", \"NOUN\"), (\"qui\ … [2778 caractères tronqués]`
+
+  ```
+ok
+205 phrases réelles → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json
+r001-r200 200 POS 0.7924 tokens 978 syntagme F1 0.1838 tete F1 0.3198
+r201-r205 5 POS 0.6471 tokens 34 syntagme F1 0.4828 tete F1 0.5517
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T86 les sous-ensembles du gold   r181-200 : POS 0,8214 ; r001-180 : 0,7897\\n\",\n\"  T86 les sous-ensembles du gold   r18 … [7404 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 494 fiche(s) · 582 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2811 mots > budget 2800 (T1)
+  en-cours · 1625 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-cycle.md`](rapport-pensee-cycle.md) | **B13** — la pénalité -1 ne casse pas le cycle : 0/20, (3,0) stale, **85/8 … [588 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1800 python3 -m tools.pensee.autotest EXIT=1
+  ✅ T86 sous-ensembles     r181-200 POS 0.8214 ; r001-180 POS 0.7897
+  ✅ T87 phrases complexes  r201-205 : POS 0.6471, syntagme 0.4828
+  89/90 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('return len(d[\"phrases\"]) == 200, (f\"gold réel : {len(d[\\'phrases\\'])} phrases, \"\\n                                     … [478 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 35.7 h |
-| Tours | 103 |
-| Messages | 1329 |
-| Appels d'outils | 1170 |
+| Durée | 35.8 h |
+| Tours | 104 |
+| Messages | 1335 |
+| Appels d'outils | 1174 |
 | Fichiers touchés | 25 |
-| Commandes | 949 |
+| Commandes | 953 |
 | Sous-agents | 2 |
 | Commits | 133 |
 | Compactages de contexte | 4 |
@@ -237,6 +237,8 @@
 **Tour 102** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 103** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 104** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5493,6 +5495,52 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **phrases co
 - bash — Committer les sous-ensembles du gold
 - job_output
 
+**Synthèse produite :**
+
+⏵ Sous-ensembles du gold : POS 0,8214 sur les 20 nouvelles ; 89/89
+
+Le round 90 du goal est livré : les **20 nouvelles phrases** ont un meilleur POS mais un syntagme plus faible — la segmentation des GV à ADV reste le point dur. Commit **`4712db13`**.
+
+\## Les deux sous-ensembles
+
+| sous-ensemble | phrases | POS | tokens | syntagme F1 | tête F1 |
+|---|---:|---:|---:|---:|---:|
+| r001–r180 | 180 | 0,7897 | 894 | 0,1916 | 0,3255 |
+| **r181–r200** | **20** | **0,8214** | 84 | 0,1053 | 0,2632 |
+
+**Ce que ça dit** :
+
+- **Le POS des nouvelles est meilleur** (+0,0317) : les phrases sont plus régulières (SVQ simple, GN/GV/GN), le POS fermé y domine.
+- **Le syntagme des nouvelles est plus faible** (−0,0863) : les GV à ADV (`souffle fort`, `roule vite`) et les GP (`à midi`, `sur le toit`) sont mal délimités par l'heuristique.
+- **Le sous-ensemble est petit** (84 tokens) : ±0,04 d'intervalle à 95 %.
+- **La négative reste** : le POS du hasard (0,0147) sur le même gold.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-200-subsets.md`](../../reports/rapport-pensee-gold-200-subsets.md) ; JSON [`pensee-gold-subsets.json`](../../reports/pensee-gold-subsets.json) ; T86 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **89/89 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **493 fiches / 581 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `rapport-n2-echantillon.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Des phrases complexes** : REL, SUB ; le POS ouvert doit progresser et la segmentation se mesurer.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round écrit les **phrases complexes** (REL/SUB) — le POS ouvert et la segmentation.
+
+### Tour 104 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Ajouter 5 phrases complexes et mesurer
+- bash — Écrire la fiche des phrases complexes
+- bash — Trim README et passer les portes
+- bash — Corriger T85 (205 phrases) et relancer les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5572,7 +5620,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **phrases co
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 909 autres
+- … et 913 autres
 
 ## 4. Mesures et résultats marquants
 

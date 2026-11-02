@@ -17891,3 +17891,46 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1061", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/base-34m-canal.pt 2>/dev/null && echo OK; tail -1 work/n2j/base-34m-canal.log", "description": "Check the 34M channel model"}`
+
+  ```
+04:23
+pas 15150 · perte 1.2595 · PPL val 3.734 · 808 s
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/base-34m-canal.pt 2>/dev/null && echo OK; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 900 ~/gpu-env/bin/python work/n2j/evalue_canal.py work/n2j/base-34m-canal.pt 2>&1 | grep -v Loading | tee wor … [76 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1063]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1063", "timeout_ms": 600000, "wait": true}`
+
+  ```
+04:28
+work/n2j/base-34m-canal.pt
+OK
+{"fichier": "base-34m-canal.pt", "L128_canal": 3.5131, "L128_sans": 4.4167, "L256_canal": 3.4836, "L256_sans": 4.3334, "L512_canal": 3.6558, "L512_sans": 4.4764, "mélange_propre": 3.5169, "mélange_milieu": 23.0589, "mélange_tout": 39.5418}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-canal-34m.md <<'EOF'\n# N2.z — Le canal à 34,3 M : 4,00 → 3,51, le meilleur modèle de la nuit\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : le canal de structure, qui\n> valait **−0,2 … [3904 caractères tronqués]`
+
+  ```
+fiche 34M canal écrite
+en-cours ok
+  T0 max : 4011 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 494 fichiers, le disque en a 495
+04:29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.x** : canal −0,03 ; \", \"\")\ns = s.replace(\"**N2.z** : canal à 34,3 M **3,51**, 512 **3,66** (le meilleur … [1663 caractères tronqués]`
