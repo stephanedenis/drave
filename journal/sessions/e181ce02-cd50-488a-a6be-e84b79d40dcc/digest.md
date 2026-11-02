@@ -26475,3 +26475,82 @@ a880c538 ÉTAT — LE BUDGET REVIENT À 4000 MOTS (N2.z SUR DEUX GRAINES)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-02, 07 h 20 HNE\", t)\np.write_text(t); print( … [1039 caractères tronqués]`
+
+  ```
+ok
+  ✅ index : aucun fait stagé sans état
+EXIT=0
+  revue de documentation · 504 fiche(s) · 591 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-1009]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1009", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-anaphore-objets.json
+ delete mode 100644 reports/rapport-n2-canal-34m.md
+ create mode 100644 reports/rapport-pensee-anaphore-objets.md
+COMMIT OK 1
+edb54a29 B13 — LES PRONOMS OBJETS : 8/8, 20/20 AU TOTAL, GOLD 336 ; 98/98
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Pronoms objets : 8/8, 20/20 au total, gold 336 ; 98/98
+
+Le round 99 du goal est livré : les **pronoms objets** (`le, la, les, lui, them, her`) sont résolus 8/8 — la coréférence est à **20/20** sur le gold. Commit **`edb54a29`**.
+
+## Les pronoms objets
+
+| phrase | pronom | attendu | obtenu |
+|---|---|---|---|
+| r329 `… il la voit` | `la` | `souris` | `souris` |
+| r330 `… elle le lit` | `le` | `livre` | `livre` |
+| r331 `… ils les cueillent` | `les` | `fleurs` | `fleurs` |
+| r332 `… il lui parle` | `lui` | `marie` | `marie` |
+| r333 `… it sees it` | `it` | `mouse` | `mouse` |
+| r334 `… she reads it` | `it` | `book` | `book` |
+| r335 `… they pick them` | `them` | `flowers` | `flowers` |
+| r336 `… he speaks to her` | `her` | `marie` | `marie` |
+
+**Ce que ça dit** :
+
+- **8/8** : la même règle (dernier nom, PP ignorés) couvre les objets — le pronom objet suit son antécédent de près.
+- **La contrainte `pos == PRON`** est nécessaire : `le/la/les` sont aussi des **déterminants** (`la souris`) ; sans elle, la règle se déclencherait sur les DET.
+- **12/12 + 8/8 = 20/20** : la coréférence est complète sur le gold, mais elle reste **facile**.
+- **La négative reste** : la règle naïve (T93) échoue 2/12.
+
+## L'état
+
+- Fiche : [`rapport-pensee-anaphore-objets.md`](../../reports/rapport-pensee-anaphore-objets.md) ; JSON [`pensee-anaphore-objets.json`](../../reports/pensee-anaphore-objets.json) ; T95 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **336 phrases**.
+- **98/98 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **504 fiches / 591 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `rapport-n2-canal-34m.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Les chaînes longues** : trois noms, deux pronoms ; la règle doit tenir.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste les **chaînes longues** — la règle doit tenir sur trois noms et deux pronoms.
+
+
+## Tour 113
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 100/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

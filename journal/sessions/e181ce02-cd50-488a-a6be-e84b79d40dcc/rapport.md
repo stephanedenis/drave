@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 37.1 h |
-| Tours | 112 |
-| Messages | 1418 |
-| Appels d'outils | 1241 |
+| Durée | 37.2 h |
+| Tours | 113 |
+| Messages | 1423 |
+| Appels d'outils | 1244 |
 | Fichiers touchés | 25 |
-| Commandes | 1009 |
+| Commandes | 1012 |
 | Sous-agents | 2 |
 | Commits | 146 |
 | Compactages de contexte | 4 |
@@ -255,6 +255,8 @@
 **Tour 111** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 112** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 113** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5970,6 +5972,57 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **pronoms ob
 - job_output
 - bash — Committer les pronoms objets (2e essai)
 
+**Synthèse produite :**
+
+⏵ Pronoms objets : 8/8, 20/20 au total, gold 336 ; 98/98
+
+Le round 99 du goal est livré : les **pronoms objets** (`le, la, les, lui, them, her`) sont résolus 8/8 — la coréférence est à **20/20** sur le gold. Commit **`edb54a29`**.
+
+\## Les pronoms objets
+
+| phrase | pronom | attendu | obtenu |
+|---|---|---|---|
+| r329 `… il la voit` | `la` | `souris` | `souris` |
+| r330 `… elle le lit` | `le` | `livre` | `livre` |
+| r331 `… ils les cueillent` | `les` | `fleurs` | `fleurs` |
+| r332 `… il lui parle` | `lui` | `marie` | `marie` |
+| r333 `… it sees it` | `it` | `mouse` | `mouse` |
+| r334 `… she reads it` | `it` | `book` | `book` |
+| r335 `… they pick them` | `them` | `flowers` | `flowers` |
+| r336 `… he speaks to her` | `her` | `marie` | `marie` |
+
+**Ce que ça dit** :
+
+- **8/8** : la même règle (dernier nom, PP ignorés) couvre les objets — le pronom objet suit son antécédent de près.
+- **La contrainte `pos == PRON`** est nécessaire : `le/la/les` sont aussi des **déterminants** (`la souris`) ; sans elle, la règle se déclencherait sur les DET.
+- **12/12 + 8/8 = 20/20** : la coréférence est complète sur le gold, mais elle reste **facile**.
+- **La négative reste** : la règle naïve (T93) échoue 2/12.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-objets.md`](../../reports/rapport-pensee-anaphore-objets.md) ; JSON [`pensee-anaphore-objets.json`](../../reports/pensee-anaphore-objets.json) ; T95 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **336 phrases**.
+- **98/98 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **504 fiches / 591 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `rapport-n2-canal-34m.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Les chaînes longues** : trois noms, deux pronoms ; la règle doit tenir.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste les **chaînes longues** — la règle doit tenir sur trois noms et deux pronoms.
+
+### Tour 113 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Ajouter 6 chaînes anaphoriques longues et mesurer
+- bash — Écrire la fiche des chaînes longues
+- bash — Trim README et passer les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6049,7 +6102,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque les **pronoms ob
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 969 autres
+- … et 972 autres
 
 ## 4. Mesures et résultats marquants
 

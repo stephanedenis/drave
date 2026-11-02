@@ -18647,3 +18647,10 @@ revue de documentation · 504 fiche(s) · 591 JSON · 118 doc(s) · 81 porte(s) 
   ```
 
 - **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt 2>/dev/null | head -4; tail -2 /tmp/portes-fin.out", "description": "Monitor the final gates pass"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1091]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1091", "timeout_ms": 1500000, "wait": true}`

@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 37.2 h |
 | Tours | 375 |
-| Messages | 2245 |
-| Appels d'outils | 1488 |
+| Messages | 2247 |
+| Appels d'outils | 1490 |
 | Fichiers touchés | 26 |
-| Commandes | 1321 |
+| Commandes | 1323 |
 | Sous-agents | 0 |
-| Commits | 83 |
+| Commits | 84 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -8807,9 +8807,11 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 375 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*3 appels d'outils.* Actions notables :
 
 - bash — Check chantiers OCR mentions
+- bash — Update chantiers D row to 20 books
+- bash — Commit chantiers update
 
 ## 3. Travail accompli
 
@@ -8886,7 +8888,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1281 autres
+- … et 1283 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9117,4 +9119,5 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M)" > /tmp/commit-genres.log 2>&1; code=$?; tail -3 /tmp/commit-genres.log; if [ $c
 - GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M)" > /tmp/commit-genres.log 2>&1; code=$?; tail -3 /tmp/commit-genres.log; if [ $c
 - GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M)" 2>&1 | tail -8; echo "=== après"; git diff --cached --name-only | head -3
+- CHANTIERS — LA LIGNE D PORTE L'OCR DES 20 LIVRES (15,36 M CARACTÈRES, 8 Ko 0)" > /tmp/commit-chantiers.log 2>&1; code=$?; tail -3 /tmp/commit-chantiers.log; ech
 

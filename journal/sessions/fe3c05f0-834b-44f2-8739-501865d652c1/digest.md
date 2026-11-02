@@ -34010,3 +34010,46 @@ porte-fusion 0 9
 ---
   ```
 
+### 🤖 Assistant
+
+⏵ Round 362 : registre des portes — 26 portes, **toutes vertes** (`awk '$2 != 0'` vide)
+
+**Round 362/1000 — la passe des portes est verte jusqu'ici.**
+
+- **Le registre** `/tmp/portes-1102-05h27/registre.txt` : `porte-document 0`, `porte-echange-experts 0`, `porte-episodique 0`, `porte-etat 0`, `porte-flux 0`, `porte-fusion 0`… — **`awk '$2 != 0'` rend zéro ligne** : aucune porte rouge à ce stade.
+- **Le verdict se lit au registre** (jamais aux marques ni à travers un tube) : le fichier est la source.
+- **Le commit `166896b4`** (genres : OCR 38,5 car/ligne, 6,8 % de doublons) et **`15f2c8f6`** (OCR 20 livres, 7 381 p, 15,36 M) tiennent ; l'état porte « OCR 20 livres, genres mesurés, l'OCR complet (159 scans) en suite ».
+- **La borne** : 30 min (fin ~05 h 57).
+
+**Le constat** : les portes tiennent ; le goal reste actif jusqu'à 8 h.
+
+
+## Tour 375
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 363/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"OCR\" docs/pilotage/chantiers.md | head -6", "description": "Check chantiers OCR mentions", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+89:| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (322 Mo), **documents** (872 M car., 8 Ko 2,07 %), **OCR** (8 livres) ; dédup, splits | texte intégral (dumps), PDF/OCR, filtrage des stubs, licences | — | N2, L, S, R03 |
+131:| **les portes** | 80 portes, dont la porte OCR-scans et la porte état | tous les commits |
+178:| 7 | **texte intégral** des 10 corpus + PDF/OCR | D | 38,8 Go de résumés, pas encore les articles entiers |
+189:| 40 cœurs, 125 Go | 6 à 10 tâches CPU simultanées (OCR 1–2 cœurs, entraînement 8–16, éval 4–8) | les gros entraînements CPU se disputent les cœurs |
+195:**S** (analyseur + export), **D** (texte intégral, PDF/OCR), **A2.6/A8.3** (CPU), **B13**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/chantiers.md\")\nt = p.read_text(encoding=\"utf-8\")\nold = \"**OCR** (8 livres)\"\nnew = \"**OCR** (20 livres, 7 381 p, 15,36 M car., 8 Ko 0)\"\nassert old in t\np … [640 caractères tronqués]`
+
+  ```
+ok
+89:| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (322 Mo), **documents** (872 M car., 8 Ko 2,07 %), **OCR** (20 livres, 7 381 p, 15,36 M car., 8 Ko 0) ; dédup, splits | texte intégral (dumps), PDF/OCR, filtrage des stubs, licences | — | N2, L, S, R03 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add docs/pilotage/chantiers.md docs/pilotage/en-cours.md; git diff --cached --name-only; git commit -m \"CHANTIERS — LA LIGNE D PORTE L'OCR DES 20 LIVRES (15,36 M CARACTÈRES … [258 caractères tronqués]`
