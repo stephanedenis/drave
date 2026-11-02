@@ -1,4 +1,4 @@
-# Le [contexte](../theorie/glossaire/entrees/contexte.md) de l'IA — ce qu'on [charge](../theorie/glossaire/entrees/charge-flux-chargeflux.md), et ce qu'on ne charge pas
+# Le contexte de l'IA — ce qu'on charge, et ce qu'on ne charge pas
 
 > **Principe.** Le contexte est un **budget**, pas un espace gratuit. On charge le **minimum** qui
 > permet de faire la tâche, et **jamais** « pour être complet ». Un document qui n'est pas nécessaire
@@ -11,8 +11,8 @@
 
 | niveau | ce qu'on charge | budget | exemples |
 |---|---|---:|---|
-| **T0 — toujours** | les règles, l'[état](../theorie/glossaire/entrees/etat.md), **un** document de tâche | **≤ 4 000 mots** | `AGENTS.md` · `docs/pilotage/en-cours.md` · `docs/methode/<tâche>.md` |
-| **T1 — à la demande** | **un** concept, **une** section de roadmap, **un** verdict de fiche, **une** fiche de glossaire | **budget par document** ([tableau](../theorie/glossaire/entrees/tableau.md) ci-dessous) | `docs/theorie/vision.md` · `docs/theorie/synthese/0*.md` · `reports/<fiche>.md` (verdict + section) · `docs/theorie/glossaire/0*.md` |
+| **T0 — toujours** | les règles, l'état, **un** document de tâche | **≤ 4 000 mots** | `AGENTS.md` · `docs/pilotage/en-cours.md` · `docs/methode/<tâche>.md` |
+| **T1 — à la demande** | **un** concept, **une** section de roadmap, **un** verdict de fiche, **une** fiche de glossaire | **budget par document** (tableau ci-dessous) | `docs/theorie/vision.md` · `docs/theorie/synthese/0*.md` · `reports/<fiche>.md` (verdict + section) · `docs/theorie/glossaire/0*.md` |
 | **T2 — jamais en entier** | l'histoire, les mesures brutes, les archives, les journaux | **0 mot par défaut** | `journal/` · `docs/archive/` · `reports/` (sauf verdict) · les documents datés |
 
 ## Le protocole de chargement
@@ -21,7 +21,7 @@
 2. Lire [`docs/pilotage/en-cours.md`](../pilotage/en-cours.md) — l'état courant, pas l'historique.
 3. Lire **un seul** document de tâche dans [`docs/methode/`](.) — celui de la tâche.
 4. Si la tâche a besoin d'un **concept**, lire le chapitre de [`docs/theorie/synthese/`](../theorie/synthese/)
-   ou la page de `docs/` qui le [porte](../theorie/glossaire/entrees/porte.md) — **pas les deux**, et **pas** le glossaire entier.
+   ou la page de `docs/` qui le porte — **pas les deux**, et **pas** le glossaire entier.
 5. Si la tâche a besoin d'un **résultat**, lire le **verdict** de la fiche (les 10 premières lignes)
    puis **une** section ; jamais la fiche entière si elle dépasse 300 lignes.
 6. Si la tâche a besoin d'un **mot**, lire sa **fiche** (`docs/theorie/glossaire/entrees/<slug>.md`, 2-3 lignes) ; si elle n'existe pas, `grep` la famille — jamais les 11.
@@ -31,7 +31,7 @@
 
 - **Début** : `AGENTS.md` + `en-cours` (« Sessions en cours » + « Les chantiers et leurs bloquants » +
   « Ce qui reste ») + **un** document de tâche. Les sessions terminées sont dans `journal/sessions/`.
-- **Pendant** : les sous-agents travaillent en parallèle ; le principal ne lit que leur **[rapport](../theorie/glossaire/entrees/rapport.md) de 10 lignes**.
+- **Pendant** : les sous-agents travaillent en parallèle ; le principal ne lit que leur **rapport de 10 lignes**.
 - **Fin** : `en-cours` (une ligne/résultat + prochaine action), roadmap, commit ;
   `python3 tools/verifie_en_cours.py`.
 - **Jamais** : charger le journal ou les rapports « pour suivre » ; `en-cours` est le seul état.
@@ -62,7 +62,7 @@
 > ne comptent pas dans le budget. Le document les porte, la page montre le SVG.
 
 Les documents **datés** (`contexte-long`, `numa-segregation`, `configuration-nvme-raid-amd`,
-`convertisseur`, `manques`, `modularisation`) ont un **résumé** en [tête](../theorie/glossaire/entrees/tete.md) et ne se chargent **jamais**
+`convertisseur`, `manques`, `modularisation`) ont un **résumé** en tête et ne se chargent **jamais**
 par défaut : on lit le résumé, puis la section utile.
 
 Les **fiches de résultats** ne sont pas dans ce tableau : elles ne s'intègrent pas au contexte

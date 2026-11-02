@@ -31606,3 +31606,31 @@ s104 | Paul observe? | ref oui | dirigée yes | langue und | neg []
   ✅ état court, structuré, multi-session et reprenable
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-negatives.md`](rapport-pensee-negatives.md) | **B13** — les questions négatives : 19/29, la règle ne s'inverse p … [607 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=1
+  ❌ T127 négatives         négatives : 29/29 (19/19 en affirmatif)
+  ✅ T128 règle du si       si : 29/29 (25/29 sans le repli)
+  130/131 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nold='''def t127_negatives() -> tuple[bool, str]:\n    \"\"\"Les questions négatives : 19/29, la règle ne s'inverse pas.\"\"\"\n    from .. … [1266 caractères tronqués]`
+
+  ```
+T127 corrigé
+  ✅ T128 règle du si       si : 29/29 (25/29 sans le repli)
+  131/131 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/miroir.py tools/pensee/autotest.py reports/rapport-pensee-si.md reports/pensee-si.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md d … [479 caractères tronqués]`

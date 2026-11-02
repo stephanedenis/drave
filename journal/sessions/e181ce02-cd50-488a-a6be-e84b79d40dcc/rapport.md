@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 44.3 h |
+| Durée | 44.5 h |
 | Tours | 146 |
-| Messages | 1736 |
-| Appels d'outils | 1488 |
+| Messages | 1739 |
+| Appels d'outils | 1491 |
 | Fichiers touchés | 25 |
-| Commandes | 1215 |
+| Commandes | 1217 |
 | Sous-agents | 2 |
-| Commits | 185 |
+| Commits | 186 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -7748,13 +7748,16 @@ Je continue : prochain round, **la règle du `si`** — la dernière règle de s
 
 ### Tour 146 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Implémenter la règle du si et mesurer
 - bash — Identifier les échecs de la règle du si
 - bash — Replier und sur fr et mesurer
 - bash — Écrire la fiche de la règle du si et la porte T128
 - bash — Trim README et passer toutes les portes
+- bash — Corriger T127 et relancer l'autotest
+- bash — Committer la règle du si
+- job_output
 
 ## 3. Travail accompli
 
@@ -7835,7 +7838,7 @@ Je continue : prochain round, **la règle du `si`** — la dernière règle de s
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1175 autres
+- … et 1177 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8168,4 +8171,5 @@ Je continue : prochain round, **la règle du `si`** — la dernière règle de s
 - B13 — LES QUESTIONS NÉGATIVES : 19/29, LA RÈGLE DE SURFACE NE S'INVERSE PAS ; 130/130" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "QUESTIONS NÉGATIV
 - B13 — LES QUESTIONS NÉGATIVES : 19/29, LA RÈGLE DE SURFACE NE S'INVERSE PAS ; 130/130" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "QUESTIONS NÉGATIV
 - ÉTAT — T0 DANS LE BUDGET (3996 MOTS) APRÈS LE GOLD 417" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COMMIT OK $i"; br
+- B13 — LA RÈGLE DU SI : 29/29, LA DERNIÈRE RÈGLE DE SURFACE ; 131/131" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÈGLE DU SI"; then echo "COMMIT OK
 

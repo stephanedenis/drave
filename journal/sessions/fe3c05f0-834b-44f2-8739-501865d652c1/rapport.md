@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 44.3 h |
-| Tours | 388 |
-| Messages | 2399 |
-| Appels d'outils | 1611 |
+| Durée | 44.6 h |
+| Tours | 389 |
+| Messages | 2403 |
+| Appels d'outils | 1613 |
 | Fichiers touchés | 29 |
-| Commandes | 1428 |
+| Commandes | 1429 |
 | Sous-agents | 0 |
 | Commits | 99 |
 | Compactages de contexte | 4 |
@@ -32,6 +32,8 @@
 - **complete** — Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécr
 … [294 caractères tronqués]
 - **create** — Enrichir le glossaire de docs (316 entrées + les termes manquants du corpus récent : corpus, WARC, dump, BLAKE2b, OCR, CEGEP, contamination, split, etc.), ajouter les hyperliens vers le glossaire à la première occurrence par page seulement (pas « partout » : pas de gonflement), et intégrer la foncti
+… [426 caractères tronqués]
+- **complete** — Enrichir le glossaire de docs (316 entrées + les termes manquants du corpus récent : corpus, WARC, dump, BLAKE2b, OCR, CEGEP, contamination, split, etc.), ajouter les hyperliens vers le glossaire à la première occurrence par page seulement (pas « partout » : pas de gonflement), et intégrer la foncti
 … [426 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -811,6 +813,8 @@
 **Tour 387** — <goal_round> Objective: "Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot OCR CEGEP de 40 notes le plus loin possible, arrêter au cutoff de 12 h 05, reconstruire le manifeste si le run n'a pas fini, mesurer le contrôle 8 Ko (verifie_contamination.py --taille-troncon 8192), réécrire reports/rapport-ocr-cegep.md avec les chiffres, mettre docs/pilotage/ ( … [764 caractères tronqués]
 
 **Tour 388** — fais une passe dans docs pour enrichir le glossaire et une autre passe ajouter les hyperliens vers le glossaire partout ou les termes aparaissent. Serait-il préférable de modifier docwatch pour intégrer une fonctionnalité glossaire à même l'affichage et éviter de grossir inutilement le gontenu avec des liens qui ne devraient être qu'en pointillé?
+
+**Tour 389** — as-tu redémarré le sserveur? je ne vois pas l'effet
 
 ## 2. Déroulé, étape par étape
 
@@ -9201,7 +9205,7 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 
 ### Tour 388 — fais une passe dans docs pour enrichir le glossaire et une autre passe ajouter les hyperliens vers le glossaire partout  … [228 caractères tronqués]
 
-*40 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - bash — Inspect glossary, docwatch and existing links
 - read
@@ -9217,11 +9221,42 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 - bash — Add CSS and glossary tests, run them
 - bash — Run glossary tests with src on path
 - bash — Regenerate glossary index and verify cards
-- … et 23 autres
+- … et 24 autres
 
 **Synthèse produite :**
 
-Le dry-run montre 1 796 liens sur 108 pages — c'est précisément le « partout » qui gonflerait. Je n'applique que sur les **10 pages pivots** (entrée, méthode, vision, synthèse), pas les 108.
+C'est fait, et la réponse à ta question est **oui pour docwatch** — je l'ai implémenté.
+
+\## La réponse, d'abord
+
+Le `docs/theorie/glossaire/index.json` est décrit dans son propre README comme « pour docwatch », mais **aucun outil ne le lisait**. C'était le bon endroit : j'ai branché le glossaire **au rendu**, pas dans le texte.
+
+- **Docwatch annote** chaque terme du manifeste en `<span class="glossaire">` : pointillé, `cursor: help`, et le **résumé de la fiche en survol** via l'attribut `title`. Une occurrence par terme et par page, jamais dans le code, les liens, les scripts ni les styles.
+- **Le Markdown reste propre** : aucun `[terme](...)` ajouté par cette voie, donc aucun gonflement du contenu pour la lecture GitHub.
+- **La clé de cache du rendu inclut la signature du manifeste** : ajouter une entrée rafraîchit les pages déjà rendues, sans redémarrer docwatch.
+
+\## Les deux passes
+
+**Le glossaire : 316 → 335 entrées.** J'ai ajouté la **famille 13, « Le corpus et la mesure documentaire »** (41 lignes, 19 entrées) : corpus, sous-corpus, dump, **WARC**, **BLAKE2b**, SHA-256, CEGEP, split, contamination, tronçon, manifeste, fiche de résultat, pipeline, tesseract, Poppler, licence, genre, catalogue, fonds. C'étaient les mots de la campagne D/R/A qui manquaient. `index.json` régénéré, cartes vérifiées (`glossaire_cartes.py --verifier` ✅, 335 entrées).
+
+**Les hyperliens : 10 pages pivots, 269 liens.** Je n'ai **pas** appliqué le « partout » : le dry-run montrait **1 796 liens sur 108 pages**, exactement ce qui aurait noyé la lecture. J'ai lié la **première occurrence de chaque terme** dans les pages d'entrée : `vision.md` (24), `README.md` (26), `roadmap.md` (76), `lecture-rapide.md` (50), `format-flux.md` (28), `synthese/index.md` (22), `resultats.md` (15), `carte.md` (12), `portes.md` (9), `contexte.md` (7). Le script `tools/liens_glossaire.py` sait faire le reste page par page, sans jamais toucher aux blocs de code ni aux liens existants.
+
+\## Vérifications
+
+- **Docwatch** : `tools/docwatch` passe en **0.6.0** (CHANGELOG), module `docwatch.glossaire` (`charger`, `surligner`, `cle`), **4 tests dédiés verts** (première occurrence, balises muettes, manifeste trouvé, cache). Le sous-module a son commit, le dépôt pointe dessus.
+- **La revue de documentation** ✅ (539 fiches, 626 JSON, 119 docs, 81 portes), **le budget T0** ✅ (revenu sous 4 000 après deux trims), **l'état à jour** ✅.
+- **Commits** : `546411f6` (famille 13 + docwatch), `ac8f334f` (état), `80c37a25`
+… [580 caractères tronqués]
+
+### Tour 389 — as-tu redémarré le sserveur? je ne vois pas l'effet
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Find running docwatch server
+
+**Synthèse produite :**
+
+⏵ Je vérifie si un serveur docwatch tourne et je le redémarre
 
 ## 3. Travail accompli
 
@@ -9301,7 +9336,7 @@ Le dry-run montre 1 796 liens sur 108 pages — c'est précisément le « partou
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1388 autres
+- … et 1389 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -1,0 +1,16 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "131/131",
+ "chemin": {
+  "negation_seule": 0.6552,
+  "si": 0.8621,
+  "und_fr": 1.0
+ },
+ "questions": 29,
+ "limites": [
+  "plafond de forme",
+  "repli und→fr",
+  "heuristique seule"
+ ]
+}

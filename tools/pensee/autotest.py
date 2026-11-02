@@ -1912,12 +1912,23 @@ def t126_dirigee() -> tuple[bool, str]:
 
 
 def t127_negatives() -> tuple[bool, str]:
-    """Les questions négatives : 19/29, la règle ne s'inverse pas."""
+    """Les questions négatives : 10/10 avec la règle du si (19/29 avant)."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import fidelite_dirigee
+    ph = charger()
+    q = [p for p in ph if "?" in p["texte"] and int(p["id"][1:]) >= 408]
+    r = fidelite_dirigee(q)
+    return r["questions"] == 10 and r["justes"] == 10, (
+        f"négatives : {r['justes']:.0f}/{r['questions']} avec le si (19/29 avant)")
+
+
+def t128_si() -> tuple[bool, str]:
+    """La règle du si : 29/29 (25/29 sans le repli und→fr)."""
     from ..tests.linguistique.evaluer_gold import charger
     from ..tests.linguistique.miroir import fidelite_dirigee
     r = fidelite_dirigee(charger())
-    return r["questions"] == 29 and r["justes"] == 19, (
-        f"négatives : {r['justes']:.0f}/{r['questions']} (19/19 en affirmatif)")
+    return r["questions"] == 29 and r["justes"] == 29, (
+        f"si : {r['justes']:.0f}/{r['questions']} (25/29 sans le repli)")
 
 
 def main() -> int:
@@ -2046,7 +2057,8 @@ def main() -> int:
               ("T124 réponses", t124_reponses()),
               ("T125 juge contre le bloc", t125_juge_bloc()),
               ("T126 réponse dirigée", t126_dirigee()),
-              ("T127 négatives", t127_negatives())]
+              ("T127 négatives", t127_negatives()),
+              ("T128 règle du si", t128_si())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -152,8 +152,12 @@ def repondre_dirigee(a: bl.Annotation) -> str | None:
         return None
     nie = any(e.niveau == "phrase" and e.type == "négation" for e in a.etiquettes)
     lg = getattr(a, "langue", "fr")
-    oui, non = ("yes", "no") if lg == "en" else ("oui", "non")
-    return non if nie else oui
+    if lg not in ("fr", "en"):
+        lg = "fr"  # la langue non détectée : repli sur le français du gold
+    if nie:
+        # la question nie : le français répond « si » (accord), l'anglais « yes »
+        return "si" if lg == "fr" else "yes"
+    return "oui" if lg == "fr" else "yes"
 
 
 def fidelite_dirigee(phrases: list[dict], bloc=None) -> dict:

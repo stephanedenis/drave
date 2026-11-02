@@ -36431,3 +36431,53 @@ code=128
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; export GIT_INDEX_FILE=/tmp/index.dra; ok=0; for i in 1 2 3 4 5; do git read-tree HEAD; git add tools/liens_glossaire.py docs/theorie/vision.md docs/methode/resultats.md docs/methode/contexte.md docs/methode/portes.md doc … [622 caractères tronqués]`
+
+  ```
+12:55
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 52c530ce8cc85232e301d8545a4e721010d5bf9f but expected 866fcaa79dcb92edc95c4207dccea1f3dbebba44
+ 16 files changed, 471 insertions(+), 171 deletions(-)
+ create mode 100644 tools/liens_glossaire.py
+ok=1
+80c37a25 GLOSSAIRE — LES 10 PAGES PIVOTS LIENT LA PREMIÈRE OCCURRENCE DES TERMES (269 LIENS) ; LE SCRIPT LIE PAR PAGE, PAS « PARTOUT »
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-3b29d4e7-32fe-424c-84c1-a8f86d9d60f6", "revision": 1}`
+
+> **Objectif** (complete) : Enrichir le glossaire de docs (316 entrées + les termes manquants du corpus récent : corpus, WARC, dump, BLAKE2b, OCR, CEGEP, contamination, split, etc.), ajouter les hyperliens vers le glossaire à la première occurrence par page seulement (pas « partout » : pas de gonflement), et intégrer la fonction glossaire à docwatch (sous-module tools/docwatch) : un endpoint /glossaire lisant docs/theorie/glossaire/index.json, un rendu des termes en pointillé avec la fiche en survol, sans modifier le markdown source. Régénérer index.json (glossaire_cartes.py), vérifier les cartes, la revue de documentation, le budget T0, les portes, et committer avec l'état à jour. Sans toucher aux GPU de N2 ni aux fichiers des autres sessions.
+
+
+  ```
+{"goal":{"id":"goal-3b29d4e7-32fe-424c-84c1-a8f86d9d60f6","revision":2,"objective":"Enrichir le glossaire de docs (316 entrées + les termes manquants du corpus récent : corpus, WARC, dump, BLAKE2b, OCR, CEGEP, contamination, split, etc.), ajouter les hyperliens vers le glossaire à la première occurrence par page seulement (pas « partout » : pas de gonflement), et intégrer la fonction glossaire à docwatch (sous-module tools/docwatch) : un endpoint /glossaire lisant docs/theorie/glossaire/index.json, un rendu des termes en pointillé avec la fiche en survol, sans modifier le markdown source. Régénérer index.json (glossaire_cartes.py), vérifier les cartes, la revue de documentation, le budget T0, les portes, et committer avec l'état à jour. Sans toucher aux GPU de N2 ni aux fichiers des autres sessions.","phase":"complete","roundsStarted":0,"maxGoalRounds":400},"activation":"disarmed"}
+  ```
+
+### 🤖 Assistant
+
+C'est fait, et la réponse à ta question est **oui pour docwatch** — je l'ai implémenté.
+
+## La réponse, d'abord
+
+Le `docs/theorie/glossaire/index.json` est décrit dans son propre README comme « pour docwatch », mais **aucun outil ne le lisait**. C'était le bon endroit : j'ai branché le glossaire **au rendu**, pas dans le texte.
+
+- **Docwatch annote** chaque terme du manifeste en `<span class="glossaire">` : pointillé, `cursor: help`, et le **résumé de la fiche en survol** via l'attribut `title`. Une occurrence par terme et par page, jamais dans le code, les liens, les scripts ni les styles.
+- **Le Markdown reste propre** : aucun `[terme](...)` ajouté par cette voie, donc aucun gonflement du contenu pour la lecture GitHub.
+- **La clé de cache du rendu inclut la signature du manifeste** : ajouter une entrée rafraîchit les pages déjà rendues, sans redémarrer docwatch.
+
+## Les deux passes
+
+**Le glossaire : 316 → 335 entrées.** J'ai ajouté la **famille 13, « Le corpus et la mesure documentaire »** (41 lignes, 19 entrées) : corpus, sous-corpus, dump, **WARC**, **BLAKE2b**, SHA-256, CEGEP, split, contamination, tronçon, manifeste, fiche de résultat, pipeline, tesseract, Poppler, licence, genre, catalogue, fonds. C'étaient les mots de la campagne D/R/A qui manquaient. `index.json` régénéré, cartes vérifiées (`glossaire_cartes.py --verifier` ✅, 335 entrées).
+
+**Les hyperliens : 10 pages pivots, 269 liens.** Je n'ai **pas** appliqué le « partout » : le dry-run montrait **1 796 liens sur 108 pages**, exactement ce qui aurait noyé la lecture. J'ai lié la **première occurrence de chaque terme** dans les pages d'entrée : `vision.md` (24), `README.md` (26), `roadmap.md` (76), `lecture-rapide.md` (50), `format-flux.md` (28), `synthese/index.md` (22), `resultats.md` (15), `carte.md` (12), `portes.md` (9), `contexte.md` (7). Le script `tools/liens_glossaire.py` sait faire le reste page par page, sans jamais toucher aux blocs de code ni aux liens existants.
+
+## Vérifications
+
+- **Docwatch** : `tools/docwatch` passe en **0.6.0** (CHANGELOG), module `docwatch.glossaire` (`charger`, `surligner`, `cle`), **4 tests dédiés verts** (première occurrence, balises muettes, manifeste trouvé, cache). Le sous-module a son commit, le dépôt pointe dessus.
+- **La revue de documentation** ✅ (539 fiches, 626 JSON, 119 docs, 81 portes), **le budget T0** ✅ (revenu sous 4 000 après deux trims), **l'état à jour** ✅.
+- **Commits** : `546411f6` (famille 13 + docwatch), `ac8f334f` (état), `80c37a25` (les 10 pages liées + le script), plus le commit docwatch interne.
+
+## Ce qui reste
+
+- **Les 98 autres pages** ne sont pas liées : c'est volontaire, mais le script est prêt (`--page … --ecrire`). Si tu veux couvrir plus large, on peut cibler les pages de méthode et d'implantation, qui portent le plus de termes.
+- **Le WARC** est défini mais le dépôt n'en produit pas encore : c'est une définition d'attente, à raccrocher le jour où l'on archivera des pages vivantes.
+- **Le re-OCR des 10 notes CEGEP** (lancé à 12 h 09) tourne toujours ; son manifeste est attendu vers 14 h 10.
+
