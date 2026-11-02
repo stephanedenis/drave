@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 42.7 h |
-| Tours | 136 |
-| Messages | 1635 |
-| Appels d'outils | 1407 |
+| Durée | 42.8 h |
+| Tours | 137 |
+| Messages | 1642 |
+| Appels d'outils | 1412 |
 | Fichiers touchés | 25 |
-| Commandes | 1145 |
+| Commandes | 1149 |
 | Sous-agents | 2 |
-| Commits | 172 |
+| Commits | 173 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -307,6 +307,8 @@
 **Tour 135** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 136** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 137** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7226,7 +7228,52 @@ Je continue : prochain round, **la restitution avec les espaces d'origine** — 
 
 **Synthèse produite :**
 
-⏵ Contourner le refus de commit : mettre l'état à jour réellement
+⏵ Restitution avec spans : 1,0, la perte était le rendu ; 121/121
+
+Le round 122 est livré : la restitution **POS avec les intervalles d'origine** est **exacte (1,0)** — le 0,201 du round précédent mesurait le format, pas l'information. Commit **`bfc2d1b4`**.
+
+\## Les quatre restitutions
+
+| restitution | source | **fidélité** |
+|---|---|---:|
+| graphèmes (surface) | 587 phrases | 1,0000 |
+| mots (tokens, `" ".join`) | 587 phrases | 0,2095 |
+| POS (`" ".join`) | 587 phrases | 0,2010 |
+| **POS + intervalles d'origine** | 587 phrases | **1,0000** |
+
+**Ce que ça dit** :
+
+- **Le bloc est restituif** : avec les `debut/fin`, la sortie POS redonne le texte exact ; la perte du 0,201 était le **séparateur**, pas l'analyse.
+- **La leçon du miroir change de signe** : ce n'est pas « le bloc perd 80 % », c'est « le rendu naïf perd 80 % ; le rendu qui garde les intervalles ne perd rien ».
+- **Le contrat de sortie doit porter les spans** : c'est la conclusion pratique — une sortie sans `debut/fin` n'est pas restituable.
+- **La cascade = l'heuristique** : le mock neuronal ne change pas le rendu.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-miroir-espaces.md`](../../reports/rapport-pensee-miroir-espaces.md) ; JSON [`pensee-miroir-espaces.json`](../../reports/pensee-miroir-espaces.json) ; T118 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **121/121 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **529 fiches / 617 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` à jour (horodaté 11 h 22).
+- Le commit a dû être retenté : le hook refusait tant que `en-cours` n'avait pas de vraie ligne d'état — corrigé, puis commité (HEAD concurrent `fff4825f` puis le mien).
+- L'horloge réelle est **11 h 21 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **La restitution sémantique** : un résumé ou une réponse, pas le texte — la vraie mesure.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **la restitution sémantique** — la seule mesure que le miroir n'a pas encore faite.
+
+### Tour 137 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Ajouter le résumé sémantique et mesurer
+- bash — Écrire la fiche du résumé et la porte T119
+- bash — Trim README et passer toutes les portes
+- bash — Committer la restitution sémantique
+- job_output
 
 ## 3. Travail accompli
 
@@ -7307,7 +7354,7 @@ Je continue : prochain round, **la restitution avec les espaces d'origine** — 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1105 autres
+- … et 1109 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7627,4 +7674,5 @@ Je continue : prochain round, **la restitution avec les espaces d'origine** — 
 - B13 — LA SORTIE POS : 0,201, LA RESTITUTION SÉMANTIQUE NE RESTITUE PAS ; 120/120" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SORTIE POS"; then echo
 - B13 — LA RESTITUTION AVEC SPANS : 1,0, LA PERTE ÉTAIT LE RENDU ; 121/121" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RESTITUTION AVEC SPANS"; then 
 - B13 — LA RESTITUTION AVEC SPANS : 1,0, LA PERTE ÉTAIT LE RENDU ; 121/121" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RESTITUTION AVEC SPANS"; then 
+- B13 — LA RESTITUTION SÉMANTIQUE : LE RÉSUMÉ RAPPELLE 78 % (0,7834 HEUR / 0,7472 CASCADE) ; 122/122" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "REST
 

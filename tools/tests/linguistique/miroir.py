@@ -71,6 +71,19 @@ def fidelite_pos_espaces(a: bl.Annotation, source: str) -> float:
     return 1.0 if rendre_pos_espaces(a, source) == source else 0.0
 
 
+def resume(a: bl.Annotation) -> str:
+    """La sortie **sémantique** : le résumé par les syntagmes (GN, GV), pas le texte."""
+    seg = [e for e in a.etiquettes if e.niveau == "syntagme"]
+    return " ".join(e.valeur for e in sorted(seg, key=lambda e: (e.debut, e.fin)))
+
+
+def rappel_resume(a: bl.Annotation, source: str) -> float:
+    """La part des mots de la source que le résumé couvre (rappel des tokens)."""
+    mots = set(source.split())
+    rendus = set(resume(a).split())
+    return round(len(mots & rendus) / max(1, len(mots)), 4)
+
+
 def fluidite(a: bl.Annotation) -> float:
     """La part de la longueur restituée qui est du texte (pas des trous)."""
     r = rendre(a)
@@ -108,6 +121,9 @@ def main() -> int:
         fid_esp = sum(fidelite_pos_espaces(bloc.analyser(p["texte"], p["langue"]), p["texte"])
                       for p in ph) / max(1, len(ph))
         print(nom, "POS+espaces", round(fid_esp, 4))
+        rap = sum(rappel_resume(bloc.analyser(p["texte"], p["langue"]), p["texte"])
+                  for p in ph) / max(1, len(ph))
+        print(nom, "résumé rappel", round(rap, 4))
     return 0
 
 

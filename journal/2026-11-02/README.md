@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**118 commits** · **3 session(s)** · **8 thème(s)**
+**119 commits** · **3 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 14 | [docs.md](docs.md) |
 | memoire | 10 | [memoire.md](memoire.md) |
-| mesures | 65 | [mesures.md](mesures.md) |
+| mesures | 66 | [mesures.md](mesures.md) |
 | modele | 5 | [modele.md](modele.md) |
 | portes | 6 | [portes.md](portes.md) |
 
@@ -25,8 +25,8 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 43.0 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 42.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 42.8 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 42.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 42.9 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -150,6 +150,7 @@
 | 11:11 | `0e2d6a64` | B13 — LA SORTIE POS : 0,201, LA RESTITUTION SÉMANTIQUE NE RESTITUE PAS ; 120/120 |
 | 11:13 | `5d33e266` | N2.aa — LE CORPUS DE 831 Mo À COMPUTE CONSTANT : UN AUTRE DOMAINE, PAS PLUS DE SAVOIR |
 | 11:16 | `fff4825f` | ROADMAP — LA LEÇON DU CORPUS DE 831 Mo : LA DONNÉE DEMANDE PLUS DE PAS, PAS PLUS DE TEXTE |
+| 11:19 | `bfc2d1b4` | B13 — LA RESTITUTION AVEC SPANS : 1,0, LA PERTE ÉTAIT LE RENDU ; 121/121 |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -162,7 +163,7 @@
 - **Le corpus PDF** : 2 785 PDF, 1 927 documents, 322 Mo, 8 Ko 0, licences nommées.
 - **Le corpus Documents** : 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (les 372 tronçons dupliqués).
 - **Le corpus OCR** : 20 livres, 7 381 pages, 15,36 M caractères, 8 Ko 0 (val 115 fenêtres, éval 0/40) ; le pilote `--max-doc 20` est clos (le 20e, *Life Histories of Etnos Theory*, 450 p).
-- **Le corpus OCR du CEGEP** : 7 notes scannées, 739 pages, 1 208 656 caractères, 8 Ko 0 (val 11 fenêtres) — le pilote `--racine CEGEP` ferme la boucle « livres, CEGEP, collections » (2 *Algorithms Illuminated* ajoutés en fin de nuit).
+- **Le corpus OCR du CEGEP** : 10 notes scannées, 1 596 pages, 2 519 507 caractères, 8 Ko 0 (val 11 fenêtres) — le pilote `--racine CEGEP` ferme la boucle « livres, CEGEP, collections » (4 *Algorithms Illuminated* + *Data Structures in C* ajoutés). **Le lot de 40 s'est arrêté sur l'*Encyclopedia of Algorithms* (1 000+ pages) : `pdftoppm` a dépassé son timeout de 1 800 s et le run est tombé — limite de l'outil, à traiter par `--max-pages`.**
 - **Les genres** : l'encyclopédie 103–147 car/ligne, les livres et documents 32–37, les lignes dupliquées 8,7–24 % (l'OCR 4,8 %).
 - **A2.6/A8.3** : le lot ne divise pas les lectures denses (+27 % de calcul, PPL −0,006 %).
 

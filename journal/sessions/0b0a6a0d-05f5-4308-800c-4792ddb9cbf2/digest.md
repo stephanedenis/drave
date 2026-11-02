@@ -20393,3 +20393,10 @@ pas 1950 · perte 1.8852 · PPL val 7.397 · 104 s
   ```
 
 - **bash** `{"command": "sleep 700; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Check the 60k trainings"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1186]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1186", "timeout_ms": 800000, "wait": true}`

@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 42.8 h |
+| Durée | 42.9 h |
 | Tours | 386 |
-| Messages | 2336 |
-| Appels d'outils | 1553 |
+| Messages | 2340 |
+| Appels d'outils | 1557 |
 | Fichiers touchés | 26 |
-| Commandes | 1380 |
+| Commandes | 1383 |
 | Sous-agents | 0 |
-| Commits | 90 |
+| Commits | 91 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -9111,7 +9111,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 
 ### Tour 386 — continue pendent 3h
 
-*16 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — First 5-min check of CEGEP lot 40
@@ -9125,10 +9125,13 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - bash — Check CEGEP lot 40 for 11th note
 - bash — Diagnose CEGEP lot stall
 - bash — Wait 15 min then check Encyclopedia render
+- bash — Write 10-note CEGEP manifest and check
+- bash — Update CEGEP fiche and docs to 10 notes
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Lot CEGEP : le rendu de l'Encyclopedia of Algorithms continue (job de vérification `bash-1380`)
+⏵ Lot CEGEP interrompu : `pdftoppm` a dépassé 30 min sur l'Encyclopedia of Algorithms — 10 scans faits, je fige le corpus
 
 ## 3. Travail accompli
 
@@ -9205,7 +9208,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1340 autres
+- … et 1343 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9443,4 +9446,5 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - DONNÉES — LE CEGEP PASSE À 7 NOTES : 739 PAGES, 1,21 M CARACTÈRES (2 ALGORITHMS ILLUMINATED AJOUTÉS)" > /tmp/commit-cegep7.log 2>&1; code=$?; tail -3 /tmp/commi
 - PILOTAGE — LE DOSSIER PORTE L'OCR DES 20 LIVRES + 7 NOTES CEGEP ET LE LOT SUIVANT (21e-40e)" > /tmp/commit-pilotage.log 2>&1; code=$?; tail -3 /tmp/commit-pilot
 - PILOTAGE — LE RESTE DE L'OCR EST LE FONDS CEGEP : 137 SCANS (LES 20 LIVRES SONT TOUS FAITS), LOT DE 40 LANCÉ" > /tmp/commit-pilotage2.log 2>&1; code=$?; tail -3
+- DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA, 1 000+ P) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE DÉSORMAIS" > /tmp/commi
 

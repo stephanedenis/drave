@@ -35307,3 +35307,60 @@ poll_schedule_timeout.constprop.0
 ⏵ Diagnostic : le 11e PDF est l'**Encyclopedia of Algorithms** (1 000+ pages, 870 rendues) — le stall est un gros rendu, pas un blocage
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 900; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -2 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2; pgrep -af \ … [181 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-1380]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Lot CEGEP : le rendu de l'Encyclopedia of Algorithms continue (job de vérification `bash-1380`)
+
+- **job_output** `{"job_id": "bash-1380", "timeout_ms": 240000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-1380", "timeout_ms": 600000, "wait": true}`
+
+  ```
+11:25
+10
+            stderr=b''.join(stderr_seq) if stderr_seq else None)
+subprocess.TimeoutExpired: Command '['pdftoppm', '-r', '300', '-gray', '-png', '/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Algorithmie/Encyclopedia of Algorithms by Michele Mosca (auth.), Ming-Yang Kao Professor of Computer Science (eds.).pdf', '/tmp/ocr-pdf-s1eqd52t/p']' timed out after 1800 seconds
+    PID            
+lot40 fini
+3493749 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 900; date '+%H:%M'; grep -c " car$" /tmp/ocr-c
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lot CEGEP interrompu : `pdftoppm` a dépassé 30 min sur l'Encyclopedia of Algorithms — 10 scans faits, je fige le corpus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log; python3 - <<'PY'\nimport json, pathlib, hashlib\nlignes = [l for l in pathlib.Path('/tmp/ocr-cegep-lot40.log').read_text(encoding='utf-8', errors='ignore').splitlines() if l.st … [3141 caractères tronqués]`
+
+  ```
+11:26
+10
+manifeste 10 notes : 10 scans, 1596 pages, 2519507 car ; {'train': 2464185, 'val': 86688, 'test': 0}
+[check 0]
+8 Ko train 302 | val {'troncons': 11, 'doublons': 0, 'taux': 0.0} | éval [(0, 40), (0, 24), (0, 40)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib, json, re\nm = json.load(open('reports/ocr-pdf-cegep.json')); c = json.load(open('reports/ocr-pdf-cegep-contamination.json'))\nfen = c['doublons_entre_splits_troncon']['train_troncons'];  … [5969 caractères tronqués]`
+
+  ```
+11:27
+ok 10 1596 2519507 302 {'troncons': 11, 'doublons': 0, 'taux': 0.0}
+reports/rapport-ocr-cegep.md:1:# Le corpus OCR du CEGEP — 10 notes scannées, 2 519 507 caractères
+reports/rapport-ocr-cegep.md:47:> **Note** : le manifeste a été reconstruit après l'arrêt à 10 notes à 11 h 25 ; `documents` (train/val/test) n'est pas recompté, les octets et les SHA-256 sont ceux du disque. **Le 11e PDF — l'*Encyclopedia of Algorithms* (Ming-Yang Kao, 1 000+ pages) — a dépassé le timeout `pdftoppm` de 1 800 s et fait tomber le run** (`subprocess.TimeoutExpired` non rattrapé). Limite de l'outil : rendre ces monstres avec `--max-pages` (ou un timeout plus grand).
+docs/pilotage/en-cours.md:60:- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 8 Ko 0 ; éval 0/40) ; **OCR CEGEP** (10 notes, 1 596 p, 2,52 M car. ; 8 Ko 0) ; **genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
+docs/pilotage/en-cours.md:62:- **Prochaine action** : l'**OCR complet** — le **fonds CEGEP** (~127 scans restants a
+… [669 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/ocr_pdf.py'); t = p.read_text(encoding='utf-8')\nold = '''        cmd += [str(pdf), str(tmp / \"p\")]\n        subprocess.run(cmd, capture_output=True, timeout=18 … [1230 caractères tronqués]`

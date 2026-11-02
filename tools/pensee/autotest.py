@@ -1819,6 +1819,22 @@ def t118_miroir_espaces() -> tuple[bool, str]:
     return abs(fid - 1.0) < 1e-9, f"restitution POS + spans : {round(fid, 4)}"
 
 
+def t119_miroir_resume() -> tuple[bool, str]:
+    """La restitution sémantique : rappel 0,7834 (heur), 0,7472 (cascade)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.miroir import rappel_resume
+    ph = charger()
+    h = bl.Heuristique()
+    rap_h = sum(rappel_resume(h.analyser(p["texte"], p["langue"]), p["texte"])
+                for p in ph) / max(1, len(ph))
+    cas = bl.Cascade(h, bl.MockNeuronal())
+    rap_c = sum(rappel_resume(cas.analyser(p["texte"], p["langue"]), p["texte"])
+                for p in ph) / max(1, len(ph))
+    return (abs(rap_h - 0.7834) < 0.001 and abs(rap_c - 0.7472) < 0.001), (
+        f"résumé : heur {round(rap_h, 4)}, cascade {round(rap_c, 4)}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1936,7 +1952,8 @@ def main() -> int:
               ("T115 tête cascade", t115_tete_cascade()),
               ("T116 miroir", t116_miroir()),
               ("T117 sortie POS", t117_miroir_pos()),
-              ("T118 restitution spans", t118_miroir_espaces())]
+              ("T118 restitution spans", t118_miroir_espaces()),
+              ("T119 restitution sémantique", t119_miroir_resume())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

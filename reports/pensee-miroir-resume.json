@@ -1,0 +1,14 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "122/122",
+ "surface": 1.0,
+ "pos_spans": 1.0,
+ "resume_heur": 0.7834,
+ "resume_cascade": 0.7472,
+ "limites": [
+  "rappel de tokens, pas le sens",
+  "le résumé répète la surface",
+  "heuristique seule"
+ ]
+}
