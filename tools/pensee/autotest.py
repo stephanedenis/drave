@@ -1672,8 +1672,8 @@ def t110_segmenteur() -> tuple[bool, str]:
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
     ph = charger()
-    h1 = bl.Heuristique()
-    h2 = bl.Heuristique()
+    h1 = bl.Heuristique(union=False)
+    h2 = bl.Heuristique(union=False)
     h2.segmenter_s = False
     r1 = evaluer_bloc("h", h1, ph)
     r2 = evaluer_bloc("h", h2, ph)
@@ -1691,8 +1691,8 @@ def t111_hybride_seg() -> tuple[bool, str]:
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, _tete
     ph = charger()
-    h1 = bl.Heuristique()
-    h2 = bl.Heuristique()
+    h1 = bl.Heuristique(union=False)
+    h2 = bl.Heuristique(union=False)
     h2.segmenter_s = False
     tp = fp = fn = 0
     for phrase in ph:
@@ -1716,8 +1716,8 @@ def t112_union() -> tuple[bool, str]:
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger, _seg, _tete
     ph = charger()
-    h1 = bl.Heuristique()
-    h2 = bl.Heuristique()
+    h1 = bl.Heuristique(union=False)
+    h2 = bl.Heuristique(union=False)
     h2.segmenter_s = False
     tp = fp = fn = 0
     for phrase in ph:
@@ -1729,6 +1729,19 @@ def t112_union() -> tuple[bool, str]:
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
     return abs(f1 - 0.2005) < 0.001, f"union : segments F1 {f1} (S 0,1722)"
+
+
+def t113_union_defaut() -> tuple[bool, str]:
+    """L'union par défaut : F1 0,2005, tête 0,4662 dans l'analyseur."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    ph = charger()
+    h = bl.Heuristique()
+    r = evaluer_bloc("h", h, ph)
+    f1 = round(r["syntagme"]["f1"], 4)
+    tete = round(r["syntagme"]["tete"]["f1"], 4)
+    return abs(f1 - 0.2005) < 0.001 and abs(tete - 0.4662) < 0.001, (
+        f"union par défaut : F1 {f1}, tête {tete}")
 
 
 def main() -> int:
@@ -1842,7 +1855,8 @@ def main() -> int:
               ("T109 coréférence 103", t109_anaphore_103()),
               ("T110 segmenteur", t110_segmenteur()),
               ("T111 hybride segmenteur", t111_hybride_seg()),
-              ("T112 union segmenteurs", t112_union())]
+              ("T112 union segmenteurs", t112_union()),
+              ("T113 union par défaut", t113_union_defaut())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

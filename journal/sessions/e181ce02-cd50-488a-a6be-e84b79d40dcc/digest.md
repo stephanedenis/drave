@@ -28912,3 +28912,163 @@ timeout 2400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-segmenteur-union.md reports/pensee-segmenteur-union.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pil … [490 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1107]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1107", "timeout_ms": 600000, "wait": true}`
+
+  ```
+24 files changed, 382 insertions(+), 55 deletions(-)
+ create mode 100644 reports/pensee-segmenteur-union.json
+ create mode 100644 reports/rapport-pensee-segmenteur-union.md
+COMMIT OK 1
+24d48387 B13 — L'UNION DES SEGMENTEURS : F1 0,2005, LE RAPPEL PAIE ; 115/115
+lun 02 nov 2026 10:19:06 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Union des segmenteurs : F1 0,2005, le rappel paie ; 115/115
+
+Le round 116 est livré : l'**union** des deux segmenteurs donne le premier gain de syntagme depuis longtemps — **F1 0,2005** contre 0,1722. Commit **`24d48387`**.
+
+## L'union
+
+| segmenteur | précision | rappel | **F1** |
+|---|---:|---:|---:|
+| S générateur | 0,2424 | 0,1335 | 0,1722 |
+| chunker simple | 0,2600 | 0,0981 | 0,1425 |
+| **union des segments** | 0,2328 | **0,1761** | **0,2005** |
+| **union des têtes** | 0,5646 | 0,3971 | 0,4662 |
+
+**Ce que ça dit** :
+
+- **Le rappel paie** : l'union ajoute les segments que chaque segmenteur rate seul ; +0,028 de F1, le premier gain depuis le début de la ligne gold.
+- **La précision tient** (0,2328 contre 0,2424) : l'union ajoute peu de faux positifs.
+- **Les têtes ne gagnent pas** (0,4662 < 0,4707) : le chunker reste le meilleur pour les têtes.
+- **La négative est explicite** : l'union des têtes perd 0,004 contre le chunker.
+
+## L'état
+
+- Fiche : [`rapport-pensee-segmenteur-union.md`](../../reports/rapport-pensee-segmenteur-union.md) ; JSON [`pensee-segmenteur-union.json`](../../reports/pensee-segmenteur-union.json) ; T112 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **115/115 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **522 fiches / 610 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 607 mots, T0 dans le budget.
+- L'horloge réelle est **10 h 19 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+## La suite
+
+1. **L'union par défaut** : passer le segmenteur à l'union (S + chunker) et mesurer la cascade.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **l'union par défaut** — le gain doit entrer dans le bloc, pas seulement dans la mesure.
+
+
+## Tour 131
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 117/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nold='''        else:\n            for s in self._syntagmes_simple(texte, lg):\n                etiquettes.append(Etiquette(\"syntagme\", … [2190 caractères tronqués]`
+
+  ```
+union intégrée
+syn F1 0.2005 tete 0.4662 P 0.2328 R 0.1761
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T112 l'union des segmenteurs      segments F1 0,2005 (S 0,1722), tête 0,4662\\n\",\n\"  T112 l'union des segmenteurs       … [6300 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 523 fiche(s) · 612 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2811 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+ "ok": true
+}
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-segmenteur-hybride.md`](rapport-pensee-segmenteur-hybride.md) | **B13** — l'hybride frontières/têtes : 0,3732, l … [630 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=1
+  ✅ T112 union segmenteurs union : segments F1 0.2005 (S 0,1722)
+  ✅ T113 union par défaut  union par défaut : F1 0.2005, tête 0.4662
+  114/116 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '385,400p' tools/bloc_linguistique.py", "description": "Lire l'init de l'Heuristique"}`
+
+  ```
+class Heuristique:
+    """L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couvre pas."""
+
+    nom = "heuristique"
+
+    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+                 seuil_ouvert: float = 0.55, seuil_langue: float = 0.12):
+        self.profils = profils
+        self.segmenter_s = segmenter_s
+        self.seuil_ouvert = seuil_ouvert
+        self.seuil_langue = seuil_langue
+
+    # -- langues / script ---------------------------------------------------
+    def _langue(self, texte: str, indice: str | None) -> tuple[str, float, str]:
+        langue, conf, _ = detecter_langue(texte, self.profils, indice)
+        script = detecter_script(texte)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,\n                 seuil_ouvert:  … [2405 caractères tronqués]`
+
+  ```
+ok
+1675:    h1 = bl.Heuristique(union=False)
+1676:    h2 = bl.Heuristique(union=False)
+1694:    h1 = bl.Heuristique(union=False)
+1695:    h2 = bl.Heuristique(union=False)
+1719:    h1 = bl.Heuristique(union=False)
+1720:    h2 = bl.Heuristique(union=False)
+(True, 'segmenteur : S F1 0.1722 tête 0.3552 ; chunker F1 0.1425 tête 0.4707')
+(True, 'hybride : tête F1 0.3732 (S 0,3552, chunker 0,4707)')
+(True, 'union : segments F1 0.2005 (S 0,1722)')
+(True, 'union par défaut : F1 0.2005, tête 0.4662')
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/sessions.py --check\" \"bash tools/porte-bloc-linguistique.sh\ … [345 caractères tronqués]`
+
+  ```
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-pensee-segmenteur-defaut.md reports/pensee-segmenteur-defaut.json reports/README.md docs/implantation/moteur-de-pensee.md docs/ … [526 caractères tronqués]`

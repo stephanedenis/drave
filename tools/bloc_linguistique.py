@@ -388,11 +388,13 @@ class Heuristique:
     nom = "heuristique"
 
     def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
-                 seuil_ouvert: float = 0.55, seuil_langue: float = 0.12):
+                 seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
+                 union: bool = True):
         self.profils = profils
         self.segmenter_s = segmenter_s
         self.seuil_ouvert = seuil_ouvert
         self.seuil_langue = seuil_langue
+        self.union = union
 
     # -- langues / script ---------------------------------------------------
     def _langue(self, texte: str, indice: str | None) -> tuple[str, float, str]:
@@ -669,6 +671,18 @@ class Heuristique:
                                             s["fin"], self.nom, 0.35,
                                             candidats=[s["type"]], langue=lg, script=script,
                                             meta={"role": s["role"], "niveau": s["niveau"]}))
+        # 5 bis. union : les segments du chunker que le générateur S ne fournit pas
+        if cands and self.union:
+            deja = {(s.get("type"), s.get("debut"), s.get("fin"))
+                    for s in cands[0].get("segments", [])}
+            for s in self._syntagmes_simple(texte, lg):
+                if (s["type"], s["debut"], s["fin"]) in deja:
+                    continue
+                etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
+                                            s["fin"], self.nom, 0.30,
+                                            candidats=[s["type"]], langue=lg, script=script,
+                                            meta={"role": s["role"], "niveau": s["niveau"],
+                                                  "union": True}))
     
         # 6. discours / document
         for d, f, p, _ in self._phrases(texte):

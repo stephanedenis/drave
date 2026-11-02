@@ -20149,3 +20149,58 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1169", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/canal_big.log 2>/dev/null; ls -la data/wiki_big/propre/*.canal 2>/dev/null; cat reports/corpus-wiki-big-propre.json 2>/dev/null | head -12; ps -eo pid,etime,pcpu,rss,cmd | grep -E \"canal_structure|ent … [154 caractères tronqués]`
+
+  ```
+10:27
+{
+  "source": "data/wiki_big/brut.txt",
+  "fenetre": 96,
+  "chunk": 8192,
+  "brut_octets": 1047525530,
+  "propre_octets": 923770612,
+  "train_octets": 831397620,
+  "val_octets": 46186496,
+  "test_octets": 46186496,
+  "ratio_garde": 0.8819,
+  "contamination": {
+    "fenetres": 4000,
+3469602 12:17 99.9% 6258Mo
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat reports/corpus-wiki-big-propre.json; date '+%H:%M'", "description": "Read the big corpus manifest"}`
+
+  ```
+{
+  "source": "data/wiki_big/brut.txt",
+  "fenetre": 96,
+  "chunk": 8192,
+  "brut_octets": 1047525530,
+  "propre_octets": 923770612,
+  "train_octets": 831397620,
+  "val_octets": 46186496,
+  "test_octets": 46186496,
+  "ratio_garde": 0.8819,
+  "contamination": {
+    "fenetres": 4000,
+    "contaminees": 0,
+    "taux": 0.0
+  },
+  "sha256_train": "1de9aaf3ac662816"
+}10:27
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -3 work/n2w/canal_big.log 2>/dev/null; ls -la data/wiki_big/propre/*.canal 2>/dev/null; tail -2 work/n2w/base-big.log 2>/dev/null; ps -eo pid,etime,pcpu,rss,cmd | grep -E \"canal_structure|entrainer_nat … [146 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1172]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1172", "timeout_ms": 900000, "wait": true}`

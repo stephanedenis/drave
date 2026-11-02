@@ -1,0 +1,26 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "116/116",
+ "S": {
+  "f1": 0.1722,
+  "precision": 0.2424,
+  "rappel": 0.1335,
+  "tete": 0.3552
+ },
+ "union": {
+  "f1": 0.2005,
+  "precision": 0.2328,
+  "rappel": 0.1761,
+  "tete": 0.4662
+ },
+ "delta": {
+  "f1": 0.0283,
+  "tete": 0.111
+ },
+ "limites": [
+  "587 phrases",
+  "dépend du S",
+  "heuristique seule"
+ ]
+}
