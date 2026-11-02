@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 33.6 h |
 | Tours | 94 |
-| Messages | 1223 |
-| Appels d'outils | 1086 |
+| Messages | 1225 |
+| Appels d'outils | 1088 |
 | Fichiers touchés | 25 |
-| Commandes | 877 |
+| Commandes | 879 |
 | Sous-agents | 2 |
 | Commits | 120 |
 | Compactages de contexte | 3 |
@@ -4986,10 +4986,12 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round lisse la courbe avec **2
 
 ### Tour 94 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Tester la vérité qui change (porte cachée)
 - bash — Ajouter la porte T77 (vérité qui change)
+- bash — Écrire la fiche de la vérité qui change
+- bash — Trim README et portes
 
 ## 3. Travail accompli
 
@@ -5070,7 +5072,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round lisse la courbe avec **2
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 837 autres
+- … et 839 autres
 
 ## 4. Mesures et résultats marquants
 

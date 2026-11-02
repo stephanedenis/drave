@@ -17201,3 +17201,48 @@ a8d58b3f B13 — LA COURBE DU SEUIL : 0,35→0,50, 0 → 80 % → 100 %, CREUX �
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\*\\*Mis à jour : 2026-11-0\\d, \\d{2} h \\d{2} HNE \\(heure locale, EST\\)\\.\\*\\*\",\n           \"**Mis à jour … [900 caractères tronqués]`
+
+  ```
+ok
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-1017]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1017", "timeout_ms": 300000, "wait": true}`
+
+  ```
+f332e287 S — L'ANALYSEUR CONTRE LES STRUCTURES ÉCRITES À LA MAIN : 7/7 SÉQUENCES, 93,9 % DE COUVERTURE
+02:16
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_en/propre/train.txt --pas 20000 --seq 128 --lot 8 --lr 3e-4 -- … [307 caractères tronqués]`
+
+  ```
+en34 2322995
+02:17
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"work/n2k/\" docs/pilotage/plan-travail.md | head -2; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/plan-travail.md'); s = p.read_text()\ns = s.replace(\"`work/n2j/`, `work/n2k/`, `models/`\", \"`work/n2j … [303 caractères tronqués]`
+
+  ```
+60:| **N2** | `data/corpus_propre/`, `data/corpus_litt_propre/`, `data/corpus_repo_propre/`, `data/corpus_*.txt`, `tools/corpus_propre.py`, `tools/eval_n2_propre.py`, `tools/distiller_budget.py`, `reports/n2-*`, `reports/rapport-n2-*`, `reports/corpus-propre.json`, `reports/corpus-litt-propre.json`, `reports/corpus-repo-propre.json`, `reports/corpus-wiki-propre.json`, `reports/corpus-multi-propre.json`, `data/wiki_fr/`, `data/wiki_multi/`, `tools/entrainer_native.py`, `work/n2d/`, `work/n2h/`, `work/n2i/`, `work/n2j/`, `work/n2k/`, `models/` | `data/corpus_wiki_*`, `reports/corpus-wiki-*`, `reports/inventaire-*` |
+territoire ok
+38:| **N2 — le natif** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | N2 sur les corpus wiki fr/en ; le verrou 129→512 ; la capacité |
+| **N2 — le natif** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | N2 sur les corpus wiki fr/en ; le verrou 129→512 ; la capacité |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/plan-travail.md'); s = p.read_text()\na = \"| **N2 — le natif** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4 … [782 caractères tronqués]`
+
+  ```
+plan ok
+  T0 max : 3991 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+02:17
+pas  250 · perte 2.6630 · PPL val 15.285 · 13 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export GIT_INDEX_FILE=/tmp/index.n2; git read-tree HEAD && git add docs/pilotage/plan-travail.md && git commit -q -m \"PLAN — LA SESSION N2 A MESURÉ LA CHAÎNE RÉELLE, SA PROCHAINE ACTION CHANGE\n\nLe plan de travail disait « N2 sur l … [385 caractères tronqués]`

@@ -23232,3 +23232,27 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T76 la courbe complète            0,35 → 0,50 : 0 puis 80 % puis 100 % (un creux)\\n\",\n\"  T76 la courbe complète        … [1417 caractères tronqués]`
+
+  ```
+ok
+  ✅ T75 seuil bas          seuil bas : ×0,36 20/25, ×0,40 25/25
+  ✅ T76 courbe complète    courbe : ×0,35 0/15, ×0,40 15/15, ×0,50 15/15
+  ✅ T77 vérité qui change  vérité : phase 0 20/20, phase 1 20/20
+  80/80 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-verite.md <<'MD'\n# B13 — la vérité qui change : porte cachée, 20/20 aux deux phases\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **80/80 portes** :  … [7106 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 482 fiche(s) · 572 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2817 mots > budget 2800 (T1)
+  en-cours · 1617 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-hasard.md`](rapport-pensee-hasard.md) | **B13** — le hasard variable : 20–60 %, 20/20 à chaque taux, 8 pas, **43 … [632 caractères tronqués]`

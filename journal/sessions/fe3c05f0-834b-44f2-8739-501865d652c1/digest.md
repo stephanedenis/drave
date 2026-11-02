@@ -32059,3 +32059,92 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 360; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 6 min then check OCR progress", "timeoutMs": 420000, " … [60 caractères tronqués]`
+
+  ```
+02:17
+  Biblio_large · 004.65 Pautasso 2025, Unethical Software · 97 p · 111013 car
+  Biblio_large · 004.65 Peterson 2013, Learning Responsiv · 412 p · 721702 car
+2315114 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 360; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af "tesseract.*ocr-pdf" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 10176922  2 nov 02:16 data/corpus_ocr/train.txt
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"pdftoppm|tesseract\" | head -1; ls /tmp/ | grep \"ocr-pdf-\" | head -2", "description": "Check 12th book start", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+02:17
+2322748 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/004 CS Linux/004.65 Web/004.65 api lifecycle.pdf /tmp/ocr-pdf-16u1kjr3/p
+ocr-pdf-16u1kjr3
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 333 : 11e livre TERMINÉ — Peterson 412 p, 721 702 car., train 10,18 Mo
+
+**Round 333/1000 — le 11e livre est clos ; le corpus passe 10 M caractères.**
+
+- **Le Peterson 2013, Learning Responsive Web Design** : **412 pages, 721 702 caractères** ; le **train** passe à **10 176 922 octets**.
+- **Le corpus OCR : 11 livres, 4 042 pages, 10 071 384 caractères**.
+- **Le 12e livre** (api lifecycle, 115 p) entre en rendu ; le tri du parcours place l'« api » après les majuscules.
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** (8 livres) est committé (`a9a511e8`), **la roadmap** et le **récit** alignés (`868399c8`).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : 11 livres, 10 M caractères océrisés ; le goal reste actif.
+
+
+## Tour 346
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 334/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; timeout 600 python3 tools/verifie_contamination.py --train data/corpus_ocr/train.txt --val data/corpus_ocr/val.txt --test data/corpus_ocr/test.txt --eval work/dr/eval/fr-xnli.txt --eval work/dr/eval/fr-udhr.txt --eval wo … [595 caractères tronqués]`
+
+  ```
+02:17
+[code 0]
+8 Ko train 1244 | lignes 74751
+fr-xnli.txt 0 / 40
+fr-udhr.txt 0 / 24
+en-xnli.txt 0 / 40
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib, json\nd = json.load(open(\"reports/ocr-pdf-contamination.json\"))\nfen = d[\"doublons_entre_splits_troncon\"][\"train_troncons\"]\nlignes = d[\"doublons_entre_splits\"][\"train_troncons\"]\neval_s = \" … [4194 caractères tronqués]`
+
+  ```
+fiche ok 1244 74751 fr-xnli.txt 0/40, fr-udhr.txt 0/24, en-xnli.txt 0/40
+4:**Statut** : en cours (11 livres océrisés au 2/11 02 h 16 ; le 12e — api lifecycle, 115 p — est en OCR ; la clôture figera les chiffres).
+14:| livres océrisés | **11** |
+15:| pages | **4 042** |
+16:| caractères | **10 071 384** |
+18:| pages / livre | 16 à 1 264 |
+20:| fenêtres 8 Ko (train) | **1244** (74751 lignes) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\n# fiche : séparateurs de milliers\np = pathlib.Path(\"reports/rapport-ocr-pdf.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"**1244** (74751 lignes)\", \"**1 244** (74 751 lignes)\")\nt =  … [1938 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+TypeError: replace() takes at least 2 positional arguments (1 given)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-ocr-pdf.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"**1244** (74751 lignes)\", \"**1 244** (74 751 lignes)\")\np.write_text(t, encoding=\"utf-8\")\np  … [1774 caractères tronqués]`
+
+  ```
+ok
+docs/pilotage/en-cours.md:65:- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 11 livres (4 042 p, 10,07 M car. ; 1 244 fenêtres 8 Ko ; éval 0/40, 0/24, 0/40) ; **genres** mesurés ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
+docs/pilotage/en-cours.md:67:- **Prochaine action** : l'**OCR complet** (les 159 scans après les 11 livres ; le 12e — api lifecycle, 115 p — est en OCR) ; la clôture de la session à 8 h ; les collections.
+docs/pilotage/roadmap.md:36:| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/OCR, documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (11 livres, 4 042 p, 10,1 M, 1 244 fenêtres 8 Ko) ; **genres** mesurés | **l'OCR complet** (159 scans), la préparation R1.1/R1.2 |
+journal/2026-11-02/README.md:91:- **Le corpus OCR** : 11 livres, 4 042 pages, 10,1 M caractères (le 8e *inflammationcycling* 1 264 p, le 9e CSS 718 p, le 10e *Pautasso 2025* 
+… [36 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; for i in 1 2 3 4; do git read-tree HEAD; git add reports/rapport-ocr-pdf.md reports/ocr-pdf-contamination.json docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/2026-11-02/README.md; if gi … [308 caractères tronqués]`
