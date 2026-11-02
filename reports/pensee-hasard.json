@@ -1,0 +1,31 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "43/43",
+ "entrainement": 0.2,
+ "lignes": [
+  {
+   "p_saut": 0.2,
+   "buts": 20,
+   "runs": 20,
+   "pas_moyen": 8.0
+  },
+  {
+   "p_saut": 0.4,
+   "buts": 20,
+   "runs": 20,
+   "pas_moyen": 8.0
+  },
+  {
+   "p_saut": 0.6,
+   "buts": 20,
+   "runs": 20,
+   "pas_moyen": 8.0
+  }
+ ],
+ "limites": [
+  "trois taux",
+  "saut après le pas",
+  "toy"
+ ]
+}

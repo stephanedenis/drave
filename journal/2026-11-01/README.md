@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**127 commits** · **4 session(s)** · **10 thème(s)**
+**128 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -20,7 +20,7 @@
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
-| portes | 7 | [portes.md](portes.md) |
+| portes | 8 | [portes.md](portes.md) |
 
 ## Autres pièces du jour
 
@@ -166,6 +166,7 @@
 | 22:58 | `f9d693a6` | B13 — LA PÉRIODE VARIABLE : 2–5 PAS, 4/4 BUTS, 10 PAS, LA MÊME POLITIQUE ; 39/39 |
 | 23:02 | `c7f4b8d7` | B13 — LA PÉRIODE QUI CHANGE : 3 PUIS 2 PAS, A* 28 NŒUDS, POLITIQUE BUT/10, 376 ÉTATS-Q ; 40/40 |
 | 23:05 | `f9cc2718` | B13 — LA PHASE SUR 5 GRAINES : 5/5 BUTS (10–14 PAS), 376–422 ÉTATS-Q ; 41/41 |
+| 23:08 | `f0681eb9` | B13 — LA PORTE ALÉATOIRE : SAUT À 20 % PAR PAS, 20/20 BUTS, 182 ÉTATS-Q ; 42/42 |
 
 ## Le récit de la journée (écrit à la main)
 

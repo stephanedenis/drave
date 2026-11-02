@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,6 +15,13 @@
 | 22:40 | `bd93762d` | B13 — LA PORTE MOBILE : 2 POSITIONS, A* 2/2, POLITIQUE SEULE BUT/8, 170 ÉTATS-Q ; 34/34 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+25) |
 | 22:43 | `fa524ac5` | B13 — LA PORTE MOBILE SUR 5 GRAINES : 5/5 D0, 5/5 D1, 147–184 ÉTATS-Q ; 35/35 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
 | 22:55 | `06462a3d` | B13 — LA PORTE QUI BOUGE SUR 5 GRAINES : 5/5 BUTS EN 10 PAS, 230–253 ÉTATS-Q ; 38/38 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+26) |
+| 23:08 | `f0681eb9` | B13 — LA PORTE ALÉATOIRE : SAUT À 20 % PAR PAS, 20/20 BUTS, 182 ÉTATS-Q ; 42/42 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
+
+## Chiffres du jour
+
+`20 %`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
@@ -26,6 +33,7 @@
 ## Mesures et rapports touchés
 
 - [reports/README.md](../../reports/README.md)
+- [reports/rapport-pensee-aleatoire.md](../../reports/rapport-pensee-aleatoire.md)
 - [reports/rapport-pensee-bouge-graines.md](../../reports/rapport-pensee-bouge-graines.md)
 - [reports/rapport-pensee-minute-seule.md](../../reports/rapport-pensee-minute-seule.md)
 - [reports/rapport-pensee-mobile-graines.md](../../reports/rapport-pensee-mobile-graines.md)

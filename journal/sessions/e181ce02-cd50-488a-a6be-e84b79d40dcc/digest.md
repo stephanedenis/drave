@@ -18113,3 +18113,121 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-aleatoire.md reports/pensee-aleatoire.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cour … [490 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-660]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-660", "timeout_ms": 600000, "wait": true}`
+
+  ```
+27 files changed, 1047 insertions(+), 54 deletions(-)
+ create mode 100644 reports/pensee-aleatoire.json
+ create mode 100644 reports/rapport-pensee-aleatoire.md
+COMMIT OK 1
+f0681eb9 B13 — LA PORTE ALÉATOIRE : SAUT À 20 % PAR PAS, 20/20 BUTS, 182 ÉTATS-Q ; 42/42
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte aléatoire : saut à 20 % par pas, 20/20 buts, 182 états-Q ; 42/42
+
+Le round 43 du goal est livré : la **porte aléatoire** (20 % de saut par pas) est suivie **20/20**. Commit **`f0681eb9`**.
+
+## La porte aléatoire
+
+Même labyrinthe à deux portes que T31-T38, mais la porte **saute** à chaque pas avec probabilité 0,2, sans période : `d(t+1) = 1 - d(t)` avec p = 0,2. L'état porte `d` ; la politique voit la porte du moment et **réagit**.
+
+| dispositif | résultat |
+|---|---|
+| **politique seule** | **20/20 buts**, 182 états-Q |
+| hasard | 20 exécutions, graines 1000–1019 |
+
+**Ce que ça dit** :
+
+- **La politique réagit** : 20/20 avec un hasard qui change la porte à chaque pas ; elle n'a pas besoin de prédire — elle voit `d` et vise la porte du moment.
+- **La table est petite** (182 états) : la porte aléatoire n'ajoute pas d'états par rapport à la porte mobile (170) ; c'est la **réaction** qui compte.
+- **La négative reste** : la politique minute (T21/T28) ne connaît que la porte fixe ; la politique bouge (T34) ne connaît qu'une période.
+- **Le hasard est dans le monde, pas dans la politique** : `_pas` simule le saut ; la politique apprend à viser l'état courant.
+
+## L'état
+
+- Fiche : [`rapport-pensee-aleatoire.md`](../../reports/rapport-pensee-aleatoire.md) ; JSON [`pensee-aleatoire.json`](../../reports/pensee-aleatoire.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T39 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **42/42 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **432 fiches / 530 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Plus de hasard** : 40 %, 60 % ; mesurer la dégradation.
+2. **Porte qui saute avant le pas** : la politique doit anticiper.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round augmente le hasard à 40 % et 60 %.
+
+
+## Tour 57
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 44/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''    nom = \"aleatoire\"\n\n    def _cle(self, e: Etat) -> tuple:\n        return _xy_pmob(e) … [1136 caractères tronqués]`
+
+  ```
+f0681eb9 B13 — LA PORTE ALÉATOIRE : SAUT À 20 % PAR PAS, 20/20 BUTS, 182 ÉTATS-Q ; 42/42
+ok
+q 182
+0.2 20 /20 pas moyen 8.0
+0.3 20 /20 pas moyen 8.0
+0.4 20 /20 pas moyen 8.0
+0.5 20 /20 pas moyen 8.0
+0.6 20 /20 pas moyen 8.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T39 la porte aléatoire            porte qui saute à 20 % : 20/20 buts\\n\",\n\"  T39 la porte aléatoire            porte q … [1368 caractères tronqués]`
+
+  ```
+ok
+  ✅ T38 phase sur 5 graines phase graines : 5/5 buts, pas [10, 10, 10, 10, 14]
+  ✅ T39 porte aléatoire    aléatoire : 20/20 buts, 182 états-Q
+  ✅ T40 hasard variable    hasard 20–60 % : [(0.2, 20), (0.4, 20), (0.6, 20)] (20 exécutions par taux)
+  43/43 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-hasard.md <<'MD'\n# B13 — le hasard variable : 20–60 %, 20/20 à chaque taux\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **43/43 portes** : la `Polit … [6143 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 433 fiche(s) · 531 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text().replace(\"la cascade se juge sur couverture × précision par calcul, pas le débit.\", \"la cascade se juge sur couverture × précision, pas  … [595 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 433 fiche(s) · 531 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-hasard.md reports/pensee-hasard.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md d … [475 caractères tronqués]`

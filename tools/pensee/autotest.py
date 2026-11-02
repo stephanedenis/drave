@@ -645,6 +645,24 @@ def t39_aleatoire() -> tuple[bool, str]:
     return ok == 20, f"aléatoire : {ok}/20 buts, {len(p.q)} états-Q"
 
 
+def t40_hasard() -> tuple[bool, str]:
+    """Le hasard variable : entraînée à 20 %, la politique réussit 20/20 à 20–60 %."""
+    from .operateurs import PolitiqueAppriseAleatoire, seule_aleatoire
+    p = PolitiqueAppriseAleatoire(episodes=2000, graine=0)
+    p.apprendre()
+    res = []
+    for ps in (0.2, 0.4, 0.6):
+        p.p_saut = ps
+        ok = 0
+        for g in range(20):
+            p.rng.seed(1000 + g)
+            b, _ = seule_aleatoire(p)
+            ok += b
+        res.append((ps, ok))
+    return all(r[1] == 20 for r in res), (
+        f"hasard 20–60 % : {res} (20 exécutions par taux)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -683,7 +701,8 @@ def main() -> int:
               ("T36 période variable", t36_periode()),
               ("T37 période qui change", t37_phase()),
               ("T38 phase sur 5 graines", t38_phase_graines()),
-              ("T39 porte aléatoire", t39_aleatoire())]
+              ("T39 porte aléatoire", t39_aleatoire()),
+              ("T40 hasard variable", t40_hasard())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

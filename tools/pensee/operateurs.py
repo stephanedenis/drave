@@ -872,6 +872,11 @@ class PolitiqueAppriseAleatoire(PolitiqueApprise):
 
     nom = "aleatoire"
 
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, p_saut: float = 0.2):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma, eps=eps)
+        self.p_saut = p_saut
+
     def _cle(self, e: Etat) -> tuple:
         return _xy_pmob(e)[0], _xy_pmob(e)[1], _open_pmob(e), _d_pmob(e)
 
@@ -885,7 +890,7 @@ class PolitiqueAppriseAleatoire(PolitiqueApprise):
             o = True
         if not _libre_pmob(nx, ny, o, d):
             return cle, 0.0
-        d2 = 1 - d if self.rng.random() < 0.2 else d
+        d2 = 1 - d if self.rng.random() < self.p_saut else d
         gain = 0.1 if (o and not cle[2]) else -0.01
         return (nx, ny, o, d2), gain
 
