@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (23)
+## Commits du jour (24)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -31,6 +31,7 @@
 | 16:16 | `dc7f9c56` | N2 — MANDAT 200 k PAS SUR LE MÉLANGE 1 Go, PUIS R1.1/R1.2 (session 0733c5bb) | `README.md`, `apprentissage.md`, `attention.md` (+23) |
 | 16:32 | `13f4e131` | S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES | `README.md`, `apprentissage.md`, `attention.md` (+18) |
 | 16:39 | `9223d054` | ÉTAT — COMPTEURS AU DISQUE (551 FICHES / 638 JSON) ; HEARTBEAT 16 h 40 | `en-cours.md`, `README.md`, `moteur.md` (+11) |
+| 16:54 | `63927a03` | S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES | `en-cours.md`, `roadmap.md`, `README.md` (+27) |
 
 ## Chiffres du jour
 
@@ -56,6 +57,7 @@
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-pensee-phase-etat.md](../../reports/rapport-pensee-phase-etat.md)
 - [reports/rapport-pensee-pieges.md](../../reports/rapport-pensee-pieges.md)
+- [reports/rapport-s-analyseur-roles.md](../../reports/rapport-s-analyseur-roles.md)
 
 <!-- notes -->
 

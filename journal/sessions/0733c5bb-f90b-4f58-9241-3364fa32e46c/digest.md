@@ -2102,3 +2102,239 @@ pas   50 · perte 2.4076 · PPL val 4.774 · 6 s
 pas 32450 · perte 1.4397 · PPL val 3.684 · 1886 s
   ```
 
+### 🤖 Assistant
+
+⏵ Lecture du format de fiche exigé (méthode résultats)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 1,80p docs/methode/resultats.md", "description": "Read result documentation method"}`
+
+  ```
+# Ce qu'un résultat doit porter
+
+> Document de tâche, chargé depuis [`AGENTS.md`](../../AGENTS.md). À lire **avant d'écrire une fiche**, un JSON de
+> résultats, ou un message de commit.
+
+## Les cinq pièces d'un résultat
+
+1. **Le chiffre** — la valeur, avec son [unité](../theorie/glossaire/entrees/unite.md) et son arrondi utile (jamais plus de chiffres que l'instrument n'en
+   [porte](../theorie/glossaire/entrees/porte.md)) ;
+2. **La mesure qui le produit** — le calcul exact, la métrique ([chrF](../theorie/glossaire/entrees/chrf.md), précision, rappel, [AUC](../theorie/glossaire/entrees/auc.md)…), et ce qu'elle ne
+   mesure pas ;
+3. **Le dispositif** — quel [corpus](../theorie/glossaire/entrees/corpus.md) (et sa provenance), quel modèle (taille, [quantification](../theorie/glossaire/entrees/quantification.md), date de coupure),
+   quelles **couches de neurones** sondées, quel découpage, **quelle unité de mesure** (unité de sens ou unité
+   grammaticale ; si c'est un [jeton](../theorie/glossaire/entrees/jeton.md), le dire comme **technique**), quels réglages (prompt, gabarit, longueur de
+   sortie, graine) ;
+4. **Le [contrôle négatif](../theorie/glossaire/entrees/controle-negatif.md)
+… [2500 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && head -40 reports/n2-propre.json; echo \"=== INDEX mentions n2 ===\"; grep -n \"n2-\" reports/INDEX.md | head -10", "description": "Inspect n2 JSON format and index"}`
+
+  ```
+{
+ "A": {
+  "val": 3.0904,
+  "test": 3.1959666666666666,
+  "litterature_propre": 16.703433333333333,
+  "anglais": 57.577333333333335,
+  "wikitext2": 56.8821
+ },
+ "C": {
+  "val": 3.080433333333333,
+  "test": 3.1878666666666664,
+  "litterature_propre": 16.817233333333334
+ },
+ "D": {
+  "val": 3.2625333333333333,
+  "test": 3.3221333333333334,
+  "litterature_propre": 3.8546,
+  "anglais": 25.6755,
+  "wikitext2": 26.058933333333332
+ },
+ "R": {
+  "val": 3.2380999999999998,
+  "test": 3.3426666666666667,
+  "litterature_propre": 16.816466666666667
+ },
+ "longueurs_A": {
+  "129": 3.1318,
+  "192": 8.5551,
+  "256": 14.105333333333332,
+  "384": 23.902633333333334,
+  "512": 32.4114
+ },
+ "longueurs_R": {
+  "129": 3.2429333333333332,
+  "192": 3.2338666666666667,
+  "256": 3.2482666666666664,
+  "384": 5.057666666666667,
+  "512": 5.9328
+ },
+ "decomposition_A": {
+=== INDEX mentions n2 ===
+208:| [rapport-n2-34m-distille.md](rapport-n2-34m-distille.md) | N2.r — Le 34,3 M distillé : **3,69**, le meilleur modèle de la nuit, et la courbe plate |
+209:| [rapport-n2-anglais-34m.md](rapport-n2-anglais-34m.md) | N2.w — L'anglais à 34,3 M distillé : 3,77, et 4,18 à 512 octets |
+210:| [rapport-n2-anglais-distille.md
+… [1118 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture de la revue de documentation (compteurs, liens, index)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 1,60p tools/revue_documentation.py", "description": "Read documentation review tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""revue_documentation.py — LA REVUE DE FIN DE SOUS-CHANTIER (AGENTS.md §4).
+
+Ce qu'elle vérifie, et qu'il faut corriger AVANT le commit de clôture :
+  1. classement : pas de résultats dans docs/ (les fiches sont dans reports/ et citées) ;
+  2. structure  : les sept chantiers de en-cours.md ont leur entrée, leur état et leur fiche ;
+  3. annotation : les liens relatifs des docs/ et reports/ résolvent, et leur libellé ne
+     ment pas sur la cible ; les sources externes sont citées ;
+  4. fraîcheur  : en-cours.md date du dernier commit, ET aucun fait n'a été commité après
+     le dernier état (comparaison de commits, pas de dates : voir verifie_etat_a_jour.py) ;
+  5. cohérence  : la synthèse (index.md) liste les huit chapitres, le chapitre 7 et B10–B12 ;
+     les compteurs de la page d'état sont ceux du disque (portes, chapitres, fiches, docs) ;
+  6. vocabulaire : « jeton » ne désigne **jamais** la représentation sémantique neutre (RSN) ;
+  7. navigation : aucun document vivant n'est orphelin, et aucun chemin en code inline
+     ne pointe vers un fichier absent (hors gabarits `AAAA`, `<...>`, `*`).
+
+Sortie : un rapport lisible, code 0 si tout passe, 1 sinon (u
+… [1251 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"compteurs\\|550\\|636\\|def verifier_compteurs\" -A6 tools/revue_documentation.py | sed -n 1,60p", "description": "Read counter verification logic"}`
+
+  ```
+12:     les compteurs de la page d'état sont ceux du disque (portes, chapitres, fiches, docs) ;
+13-  6. vocabulaire : « jeton » ne désigne **jamais** la représentation sémantique neutre (RSN) ;
+14-  7. navigation : aucun document vivant n'est orphelin, et aucun chemin en code inline
+15-     ne pointe vers un fichier absent (hors gabarits `AAAA`, `<...>`, `*`).
+16-
+17-Sortie : un rapport lisible, code 0 si tout passe, 1 sinon (utilisable comme porte).
+18-"""
+--
+172:    # 5. compteurs : la page d'état est la source unique, et elle dit le disque
+173-    portes = extrait_entier(t, r"\|\s*portes\s*\|\s*\*\*(\d+)\*\*")
+174-    chapitres = extrait_entier(t, r"\|\s*chapitres de la synthèse\s*\|\s*\*\*(\d+)\*\*")
+175-    documents = extrait_entier(t, r"\|\s*documents de[^|]*\|\s*\*\*(\d+)\*\*")
+176-    fiches = re.search(r"\|\s*fichiers / JSON de résultats\s*\|\s*\*\*(\d+)\*\*\s*/\s*\*\*(\d+)\*\*", t)
+177-    for nom, valeur, disque in (
+178-        ("portes", portes, compte_portes()),
+--
+183:            alertes.append(f"compteurs : la ligne « {nom} » manque dans en-cours.md")
+184-        elif valeur != disque:
+185:            alertes.append(f"compteurs : en-cours.md dit {valeur} {nom}, le 
+… [1018 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n 140,175p tools/revue_documentation.py; grep -n \"def etat_modifie\" -A20 tools/verifie_etat_a_jour.py", "description": "Read freshness check"}`
+
+  ```
+m = re.search(r"Mis à jour : (\d{4}-\d\d-\d\d)", t)
+    if not m:
+        alertes.append("fraîcheur : en-cours.md n'a pas de date « Mis à jour : AAAA-MM-JJ »")
+    else:
+        page, dernier = m.group(1), date_dernier_commit()
+        if dernier and page != dernier:
+            alertes.append(
+                f"fraîcheur : en-cours.md dit {page}, le dernier commit date du {dernier}"
+            )
+    retard = retards(RACINE)
+    if retard and not etat_modifie(RACINE):
+        etat, _fait, lignes = retard
+        if etat == "absent":
+            alertes.append("fraîcheur : en-cours.md n'a jamais été commité")
+        else:
+            alertes.append(
+                f"fraîcheur : {len(lignes)} fait(s) commité(s) après le dernier état "
+                f"({etat[1]}) — mettre en-cours.md à jour"
+            )
+
+    # 1. classement : aucune donnée de résultat dans docs/
+    for f in (RACINE / "docs").rglob("*"):
+        if f.suffix in (".json", ".csv", ".npz", ".jsonl") and f.is_file():
+            if f.name == "index.json" and f.parent.name == "glossaire":
+                continue
+            alertes.append(f"classement : donnée de résultat dans docs/ → {f.relative_to(RACINE)}")
+    f
+… [1538 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2ac/mix-200k.log; echo \"--- g2 ---\"; tail -1 work/n2ac/rope-20k-g2.log; echo \"--- abs1152 ---\"; tail -1 work/n2ac/absolu-pos1152.log; echo \"--- chaine ---\"; cat work/n2ac/chaine_r1.out", "description": "Status of  … [16 caractères tronqués]`
+
+  ```
+16:55:14
+pas 33050 · perte 1.3855 · PPL val 3.696 · 1918 s
+--- g2 ---
+pas   6250 · perte 1.2809 · PPL val 3.735 · 414 s
+--- abs1152 ---
+pas  350 · perte 2.2714 · PPL val 4.493 · 39 s
+--- chaine ---
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du test d'aiguille natif (2e critère de R1.1)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && head -30 tools/aiguille.py; echo \"=== grep natif ===\"; grep -n \"native\\|drave-n0\\|charge(\" tools/aiguille.py | head", "description": "Inspect needle test tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""Aiguille dans la botte de foin — version 2, celle qui mesure vraiment.
+
+La perplexité ne dit pas si un modèle RETROUVE une information. Ce script plante
+un code à une profondeur donnée dans un contexte long, puis le redemande.
+
+Ce qui a changé par rapport à la v1 (mesurée et arrêtée) :
+
+1. **le remplissage est du vrai texte VARIÉ** (`data/wikitext2_test.txt`), et non
+   la même phrase recopiée jusqu'à la longueur voulue. Un remplissage répété ne
+   teste rien : le modèle pouvait répondre en devinant la structure. Chaque sonde
+   prend en plus une FENÊTRE DIFFÉRENTE du corpus, pour que les sondes ne
+   partagent pas leur remplissage ;
+2. **la réponse est longue** (`--n 40` par défaut) : un code peut sortir au
+   deuxième ou troisième jeton, et s'arrêter à 8 jetons faisait échouer des
+   sondes que le modèle savait résoudre ;
+3. **le préremplissage par lots** (`--lot`) rend chaque sonde abordable : le
+   moteur ne l'utilisait que pour la perplexité ;
+   ⚠️ et depuis le sprint 4, le décalage de fenêtre est RÉELLEMENT appliqué (il
+   comparait à une marge de 400 000 caractères pour un corpus qui en fait 353 778,
+   donc il remettait l'offset à zéro à chaque so
+… [392 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle de reproductibilité : les 60 000 premiers pas sont-ils identiques ?
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for s in 100 1000 10000 30000 60000; do a=$(grep -m1 \"^pas *$s ·\" work/n2w/mix-60k.log | sed 's/ · [0-9]* s//'); b=$(grep -m1 \"^pas *$s ·\" work/n2ac/mix-200k.log | sed 's/ · [0-9]* s//'); if [ \"$a\" = \"$b\" ]; then echo \"$s : IDENTIQUE — $a\";  … [141 caractères tronqués]`
+
+  ```
+100 : DIFFÉRENT
+   60k  : pas  100 · perte 2.7028 · PPL val 13.620
+   200k : pas  100 · perte 2.7043 · PPL val 13.642
+1000 : DIFFÉRENT
+   60k  : pas 1000 · perte 2.4320 · PPL val 10.242
+   200k : pas 1000 · perte 2.4110 · PPL val 10.192
+10000 : DIFFÉRENT
+   60k  : pas 10000 · perte 1.5757 · PPL val 4.593
+   200k : pas 10000 · perte 1.5646 · PPL val 4.646
+30000 : DIFFÉRENT
+   60k  : pas 30000 · perte 1.5627 · PPL val 3.782
+   200k : pas 30000 · perte 1.5581 · PPL val 3.781
+60000 : DIFFÉRENT
+   60k  : pas 60000 · perte 1.2579 · PPL val 3.480
+   200k :
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- 200k ---\"; tail -1 work/n2ac/mix-200k.log; echo \"--- g2 ---\"; tail -1 work/n2ac/rope-20k-g2.log; echo \"--- abs1152 ---\"; tail -1 work/n2ac/absolu-pos1152.log; echo \"--- chaine ---\"; cat work/n2ac/chaine_r … [49 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-83]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-83", "timeout_ms": 300000, "wait": true}`

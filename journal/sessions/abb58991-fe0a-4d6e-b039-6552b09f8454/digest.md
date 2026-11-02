@@ -3056,3 +3056,258 @@ tools/index_reports.py
 … [2803 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Écriture de la fiche `reports/rapport-pensee-gold-neuronal.md`
+
+- **write** `{"content": "# L — le gold neuronal : un tagger 7B local, la cascade POS à 0,944\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) / **R0.7** (bloc linguistique) · **Date** : 2026-11-02 ·\n> **Verdict** : ✅ **le tagger 7B-Instruct local est qualifié** — POS seul **0,8483** (heuristique\n> **0,7 … [9593 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-neuronal.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de `reports/README.md` et de la doc d'implantation du bloc
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/reports/README.md", "new_string": "| fichier | ce qu'il porte |\n|---|---|\n| [`rapport-pensee-gold-neuronal.md`](rapport-pensee-gold-neuronal.md) | **B13/R0.7** — le gold neuronal : tagger 7B local, cascade POS **0,944** |\n| [`rapport-pensee-vrais-absen … [301 caractères tronqués]`
+
+  ```
+Error: cannot modify "/home/stephane/GitHub/Qtrinet/reports/README.md": file has not been read — read the file, then retry
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/docs/implantation/bloc-linguistique.md", "new_string": "- **`NeuronalLLM`** : l'**adaptateur réel**. Il construit un prompt JSON, appelle un modèle local\n  (`llama-cli`), parse la réponse et la convertit en `Annotation` ; si le modèle est absent, ne\n  r … [2054 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/docs/implantation/bloc-linguistique.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/docs/implantation/bloc-linguistique.md", "new_string": "et `bloc` peut être `Heuristique`, `MockNeuronal`, `NeuronalLLM`, `NeuronalLLMPOS`, `Parallele`\nou `Cascade`. Le", "old_string": "et `bloc` peut être `Heuristique`, `MockNeuronal`, `NeuronalLLM`, `P … [28 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/docs/implantation/bloc-linguistique.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/reports/README.md", "limit": 25, "offset": 10}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/README.md</path>
+<type>file</type>
+<content>
+10: > **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) est un **hub** de
+11: > **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par
+12: > partie**, jamais en entier ; l'index exhaustif des fiches est [`INDEX.md`](INDEX.md).
+13: 
+14: ## Les fiches courantes
+15: 
+16: | fichier | ce qu'il porte |
+17: |---|---|
+18: | [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
+19: | [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
+20: | [`rapport-pensee-miroir.md`](rapport-pensee-miroir.md) | **B13** — le miroir entrée/sortie : surface 1,0, mots 0,2095, **119/119** |
+21: | [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |
+22: | [`rapport-pensee-anaphore-bilan.md`](rapport-pensee-anaphore-bilan.md) | **B13** — le bilan de l'anaphore : 27/30, CV 0,847, huit mesures, *
+… [1861 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/reports/README.md", "new_string": "| fichier | ce qu'il porte |\n|---|---|\n| [`rapport-pensee-gold-neuronal.md`](rapport-pensee-gold-neuronal.md) | **B13/R0.7** — le gold neuronal : tagger 7B local, cascade POS **0,944** |\n| [`rapport-pensee-vrais-absen … [301 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/reports/README.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Régénération de l'index des fiches et ajout de la note au journal du jour
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/index_reports.py 2>&1 | tail -3; git status --short reports/INDEX.md reports/README.md", "description": "Regenerate reports index"}`
+
+  ```
+549 fiches → reports/INDEX.md
+ M reports/INDEX.md
+ M reports/README.md
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md", "limit": 15, "offset": 107}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md</path>
+<type>file</type>
+<content>
+107: | 04:07 | `479a0951` | N2.s (suite) — LA PÉNALITÉ DE RÉPÉTITION CASSE LA BOUCLE, PAS LE COLLAGE |
+108: | 04:10 | `bf94bf27` | ROADMAP — N2 EST COMPLET : LA SUITE EST LA FENÊTRE, L'ÉCHELLE MULTILINGUE ET LA RESTITUTION |
+109: | 04:20 | `4712db13` | B13 — LES SOUS-ENSEMBLES DU GOLD : POS 0,8214 SUR LES 20 NOUVELLES ; 89/89 |
+110: | 04:29 | `24fb271e` | N2.z — LE CANAL À 34,3 M : 4,00 → 3,51, LE MEILLEUR MODÈLE DE LA NUIT |
+111: | 04:32 | `c58ae86c` | ÉTAT — COMPTEURS APRÈS N2.z (495 FICHIERS, 582 JSON) ET L'HEURE DE LA NUIT |
+112: | 04:34 | `7a6cc15a` | B13 — LES PHRASES COMPLEXES : POS 0,6471, SYNTAGME 0,4828, GOLD 205 ; 90/90 |
+113: | 04:42 | `09244748` | B13 — LES 20 PHRASES COMPLEXES : POS 0,6829, SYNTAGME 0,2963, GOLD 220 ; 91/91 |
+114: | 04:45 | `28c6be5c` | ROADMAP — LE CANAL REVIT À 34,3 M : 3,51 EN DOMAINE, 3,66 À 512 OCTETS |
+115: | 04:46 | `486bc494` | ROADMAP — LE CANAL REVIT À 34,3 M (N2.z) : 3,51 EN DOMAINE, 3,66 À 512 |
+116: | 04:50 | `67b33af0` | B13 — LES 50 PHRASES COMPLEXES : POS 0,7013, SYNTAGME 0,3060, GOLD 250 ; 92/92 |
+117: | 04:58 | `c5ab1fa3` | B13 — LES 1
+… [591 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md", "limit": 25, "offset": 200}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md</path>
+<type>file</type>
+<content>
+200: | 16:16 | `dc7f9c56` | N2 — MANDAT 200 k PAS SUR LE MÉLANGE 1 Go, PUIS R1.1/R1.2 (session 0733c5bb) |
+201: | 16:30 | `e420267a` | ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE |
+202: | 16:32 | `13f4e131` | S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES |
+203: | 16:37 | `bee2527d` | PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8 |
+204: 
+205: ## Le récit de la journée (écrit à la main)
+206: 
+207: <!-- notes -->
+208: **Le jour de la clôture de la campagne D/R/A.**
+209: 
+210: ## Ce qui a été livré
+211: 
+212: - **Les dix corpus Wikipédia en texte intégral** : 20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0 partout ; l'anglais clos à 99,2 % (l'écriture bloquée à 125/125 Go, le manifeste reconstruit depuis le journal et les SHA-256 ; la limite nommée : ~75 Go de résidence pour 6 M d'articles).
+213: - **Le corpus PDF** : 2 785 PDF, 1 927 documents, 322 Mo, 8 Ko 0, licences nommées.
+214: - **Le corpus Documents** : 7 459 PDF, 3 384 d
+… [1543 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md", "new_string": "- **15 h 06 — reboot.** Les deux GPU étaient bloqués (`GPU requires reset`, `nvidia_drm refcnt -1`) ; le reset logiciel a échoué et le reboot a rendu les cartes (1 Mio, 0 %). Les deux sessions de travail (`e18 … [1400 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Point sur les modifications concurrentes avant d'éditer en-cours/roadmap
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -20; echo '---'; git log -1 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '---'; stat -c '%y %n' docs/pilotage/en-cours.md docs/pilotage/roadmap.md", "description": "Check concurrent modifications and latest commit"}`
+
+  ```
+M docs/implantation/bloc-linguistique.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/bloc_linguistique.py
+ M tools/ocr_pdf.py
+ M tools/tests/linguistique/test_bloc_linguistique.py
+?? reports/ocr-pdf-cegep-detection.json
+?? reports/pensee-gold-neuronal.json
+?? reports/rapport-pensee-gold-neuronal.md
+?? tools/detecte_scans_pdf.py
+?? tools/tests/linguistique/qualifier_neuronal.py
+---
+63927a03 16:54:43 S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES
+---
+2026-11-02 16:53:53.289031029 -0500 docs/pilotage/en-cours.md
+2026-11-02 16:51:38.584978043 -0500 docs/pilotage/roadmap.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls reports/*.md | wc -l; ls reports/*.json | wc -l; sed -n '84,106p' docs/pilotage/en-cours.md", "description": "Count reports and read current session section"}`
+
+  ```
+552
+639
+- **Prochaine action** : **gold neuronal** (modèle local) ; **DRVM/native** bloqué.
+- **Bloquants** : **neuronal réel bloqué** (`llama-cli`, taggers, poids) ; le mock reste un contrat.
+- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **D/R/A** — texte intégral, PDF/OCR, prépa R1.1/R1.2, A2.6/A8.3.
+- **Plan** : texte intégral, PDF, OCR, glossaire.
+- **Ambition** : le français réel.
+- **Stratégie** : dump, débaliseur, OCR page à page, glossaire au rendu.
+- **Objectif final** : 10 corpus, ficés.
+- **Ce qu'elle fait** : 10 corpus (**20,53 M**) ; PDF 1 927 ; OCR 20 livres + 10 notes
+  CEGEP ; glossaire 355 ; [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+- **Ce que font les autres** : **N2**, **S**, **Pensée**, **hub**.
+- **Prochaine action** : **OCR ~127 scans CEGEP** (cens en cours) ; clôture.
+- **Bloquants** : aucun ; reprise à **16 h 21**.
+- **Journal** : [le 02/11](../../journal/2026-11-
+… [378 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub a committé l'état : je peux éditer en-cours et roadmap sans emporter son travail
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '34,100p' docs/pilotage/en-cours.md; echo '---COUNTERS---'; grep -n \"fichiers / JSON\\|Mis à jour\\|^| portes\" docs/pilotage/en-cours.md", "description": "Read current en-cours session section and counters"}`
+
+  ```
+la tenir machine libre.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
+
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
+
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre native
+  (R1.1/R1.2).
+- **Plan** : 1) ~~plan et réservations~~ ; 2) **200 000 pas** (en cours) ; 3) **banc R1.1/R1.2** ;
+  4) **mesure** (cinq PPL, courbe) ; 5) **fiche, JSON, état, commit**.
+- **Ambition** : que N réponde « plus de pas, quelle position, quelle fenêtre ».
+- **Stratégie** : recette constante (34,3 M, canal, positions aléatoires, graine 1) ; banc sur le GPU 1.
+- **Objectif final** : trancher **< 2,5 sans perdre le français**, puis **R1.1/R1.2**.
+- **Ce qu'elle fait** : mandat ouvert à **16 h 17** ; **200 k pas** sur `data/wiki_mix/propre`, GPU 0.
+- **Ce que font les autres** : **hub**, **S**, **Pensée**, **D/R/A**.
+- **Prochaine action** : la fin des 200 k pas, puis les **cinq PPL** et la **courbe**.
+- **Bloquants** : 
+… [3940 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Revue de documentation pour connaître les compteurs attendus avant d'éditer l'état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -25", "description": "Run documentation review to check counters and links", "timeoutMs": 180000}`
+
+  ```
+revue de documentation · 552 fiche(s) · 639 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 551 fichiers, le disque en a 552
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M %Z'; echo '---'; sed -n '106,195p' docs/pilotage/en-cours.md", "description": "Read rest of en-cours for targeted edits"}`
+
+  ```
+2026-11-02 16:56 EST
+---
+- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
+- **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** 10 notes, 1 596 p ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md).
+- **S — le banc de structures** : **analyseur rôles/subordonnées 38/39 types, 99/100 rôles, 45/45 compléments**, gold **39**, **40 tests** ; corpus **39** structures (SHA `973c70a4…`) ; [`fiche`](../../reports/rapport-s-analyseur-roles.md) ; **banque validée à 0**.
+- **N2** : **N2.ac** (mélange **1,02 Go**, 60 k pas) : **3,49** domaine, **6,03** littérature,
+  **8,34** anglais, **9,05** wikitext2 — **le modèle de production** ; N4 **0/40** ; **session
+  `0733c5bb`** ouverte le 02/11 16 h 17 — **200 k pas en cours** ; [`n2-canaux`](../../reports/rapport-n2-canal-34m.md),
+  [`n2-1go`](../../reports/rapport-n2-corpus-1go.md).
+- **Pensée — B13** : state store v0, AC-3/alpha
+… [3336 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour ciblée de `en-cours` : fait neuronal, prochaine action, bloquants, compteurs
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "**Mis à jour : 2026-11-02, 16 h 56 HNE (heure locale, EST).**", "old_string": "**Mis à jour : 2026-11-02, 16 h 49 HNE (heure locale, EST).**"}`
+
+  ```
+Error: cannot edit "/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **Fait** : B13 **140/140**, gold **432**, coréférence **116 liens** ; **R0.7** — 9 niveaux,\n  **398 langues à 0,9687** ; **R4.4** — trois limites nommées.\n- **Gold neuronal** : **tagger 7B local** (Qwen2.5-7B … [1261 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **Pensée — B13** : state store v0, AC-3/alpha-bêta, DRVF, banc, opérateurs, **140/140** ; gold\n  **432 réels**, coréférence **116 liens** ; **gold neuronal** — tagger 7B local, **cascade POS\n  0,9440** ; [`pe … [535 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md": file changed since it was read — re-read the file, then retry
+  ```
+

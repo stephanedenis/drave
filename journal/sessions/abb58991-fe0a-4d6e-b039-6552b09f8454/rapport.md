@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 104 |
-| Appels d'outils | 151 |
-| Fichiers touchés | 10 |
-| Commandes | 114 |
+| Messages | 127 |
+| Appels d'outils | 187 |
+| Fichiers touchés | 15 |
+| Commandes | 124 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu reprends la session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`. Lis son plan, AGENTS.md  et docs/pilotage/en-cours. … [394 caractères tronqués]
 
-*151 appels d'outils.* Actions notables :
+*187 appels d'outils.* Actions notables :
 
 - bash — Show repo state and recent commits
 - bash — List root and sessions tool help
@@ -41,11 +41,11 @@
 - edit `/home/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md`
 - bash — Run strict session plan check
 - bash — Inspect the unlisted active plan
-- … et 122 autres
+- … et 149 autres
 
 **Synthèse produite :**
 
-⏵ Écriture de la fiche `reports/rapport-pensee-gold-neuronal.md`
+⏵ Mise à jour du plan de session : heartbeat, prochaine action, gold neuronal fait
 
 ## 3. Travail accompli
 
@@ -63,6 +63,11 @@
 | `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py` | 0 | 1 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py` | 1 | 6 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-neuronal.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/README.md` | 0 | 2 |
+| `/home/stephane/GitHub/Qtrinet/docs/implantation/bloc-linguistique.md` | 0 | 2 |
+| `/home/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md` | 0 | 1 |
+| `/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 8 |
+| `/home/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 4 |
 
 ### Commandes exécutées (échantillon)
 
@@ -106,7 +111,7 @@
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 74 autres
+- … et 84 autres
 
 ## 4. Mesures et résultats marquants
 

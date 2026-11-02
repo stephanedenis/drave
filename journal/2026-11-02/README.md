@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**161 commits** · **10 session(s)** · **10 thème(s)**
+**162 commits** · **10 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 6 | [attention.md](attention.md) |
 | distribue | 14 | [distribue.md](distribue.md) |
-| docs | 23 | [docs.md](docs.md) |
+| docs | 24 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 81 | [mesures.md](mesures.md) |
 | modele | 8 | [modele.md](modele.md) |
@@ -202,6 +202,7 @@
 | 16:32 | `13f4e131` | S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES |
 | 16:37 | `bee2527d` | PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8 |
 | 16:39 | `9223d054` | ÉTAT — COMPTEURS AU DISQUE (551 FICHES / 638 JSON) ; HEARTBEAT 16 h 40 |
+| 16:54 | `63927a03` | S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES |
 
 ## Le récit de la journée (écrit à la main)
 

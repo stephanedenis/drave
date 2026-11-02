@@ -3769,3 +3769,183 @@ dell
 … [316 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Je vérifie les derniers leviers disponibles (BIOS/BMC, hwmon, sudo) avant de conclure.
+
+- **bash** `{"command": "echo \"== sudo ==\" && sudo -n true 2>&1; echo \"[exit $?]\"; echo; echo \"== outils ==\" && for c in ipmitool dellfan i8kfan nvidia-settings sensors; do printf '%-16s ' $c; command -v $c || echo absent; done; echo; echo \"== hwmon ==\" && for d in /sys/class/hwmon/hwmon*; do echo \"$d  … [260 caractères tronqués]`
+
+  ```
+== sudo ==
+sudo: a password is required
+[exit 1]
+
+== outils ==
+ipmitool         absent
+dellfan          absent
+i8kfan           absent
+nvidia-settings  absent
+sensors          /usr/bin/sensors
+
+== hwmon ==
+/sys/class/hwmon/hwmon0 -> nvme
+/sys/class/hwmon/hwmon1 -> nvme
+/sys/class/hwmon/hwmon10 -> coretemp
+/sys/class/hwmon/hwmon2 -> nvme
+/sys/class/hwmon/hwmon3 -> nvme
+/sys/class/hwmon/hwmon4 -> nvme
+/sys/class/hwmon/hwmon5 -> amdgpu
+/sys/class/hwmon/hwmon6 -> dell_smm
+/sys/class/hwmon/hwmon7 -> ucsi_source_psy_12_00081
+/sys/class/hwmon/hwmon8 -> ucsi_source_psy_13_00081
+/sys/class/hwmon/hwmon9 -> coretemp
+
+== hwmon GPU0 ==
+(fin)
+  ```
+
+- **bash** `{"command": "echo \"== params nvidia ==\" && grep -iE 'fan|thermal|registry' /proc/driver/nvidia/params 2>/dev/null | head -10; echo; echo \"== xorg config ==\" && ls -l /etc/X11/xorg.conf /etc/X11/xorg.conf.d/ 2>/dev/null | head -15; echo; echo \"== GPU0 1 min ==\" && nvidia-smi --query-gpu=index,t … [220 caractères tronqués]`
+
+  ```
+== params nvidia ==
+RegistryDwords: ""
+RegistryDwordsPerDevice: ""
+
+== xorg config ==
+/etc/X11/xorg.conf.d/:
+total 20
+-rw-r--r--. 1 root root  361 12 oct 15:11 00-keyboard.conf
+-rw-r--r--. 1 root root  383 28 jui 14:44 00-keyboard.conf.bak-20261012-151121
+-rw-r--r--. 1 root root 2304 14 oct 10:50 20-bureau-amd.conf
+-rw-r--r--. 1 root root 1711 11 oct 11:14 20-bureau-amd.conf.bak-20261014
+-rw-r--r--. 1 root root  378 10 aoû 15:41 20-nvidia.conf.desactive-20261011-111435
+
+== GPU0 1 min ==
+ERROR: Option --query-gpu=index,temperature.gpu,fan.speed,power.draw,clocks.sm,clocks_throttle_reasons.sw_thermal_slowdown is not recognized. Please run 'nvidia-smi -h' for help.
+  ```
+
+### 🤖 Assistant
+
+⏵ Diagnostic thermique : GPU 0 à 87 °C, ventilateur à 89 %, throttle actif.
+
+# GPU 0 : 87 °C, ventilateur 89 % — que peut-on faire ?
+
+## Le constat
+
+| | GPU 0 | GPU 1 |
+|---|---:|---:|
+| température | **87 °C** | 73 °C |
+| ventilateur | **89 %** | 47 % |
+| puissance | 206 W / 230 W | 202 W / 230 W |
+| cœur | 1 800 MHz (max 2 100) | 1 860 MHz |
+| charge | 92 % | 67 % |
+| throttle | **SW Thermal Slowdown actif** | aucun |
+
+Les deux cartes sont des **Quadro RTX 5000** (TU104, 230 W, VBIOS différentes : `90.04.4a` et `90.04.99`). Les limites sont : cible **83 °C**, max d'exploitation **89 °C**, ralentissement **93 °C**, arrêt **96 °C**.
+
+**Le point clé** : à puissance presque égale (206 W contre 202 W), le GPU 0 est **14 °C plus chaud** que le GPU 1. Ce n'est donc pas la charge : c'est **l'air qui arrive à la carte**. Et le GPU 0 est déjà en **throttle thermique** — il perd des MHz pour se protéger.
+
+## Réponse directe : au-delà de 88-89 %, probablement pas par logiciel
+
+Le 89 % n'est pas un plafond choisi : c'est la **courbe automatique** de la carte, déjà au maximum de ce qu'elle veut faire. Pour forcer 100 %, il faudrait `nvidia-settings` + `Coolbits` dans Xorg. Or, sur cette machine :
+
+- `nvidia-settings` n'est **pas installé** ;
+- les GPU NVIDIA sont **headless** (l'écran X est sur l'AMD Radeon, `20-bureau-amd.conf`) ;
+- il n'y a **ni hwmon NVIDIA ni PWM** dans `/sys` : `nvidia-smi` ne peut pas piloter le ventilateur ;
+- même avec Coolbits, le VBIOS d'une Quadro plafonne souvent la consigne.
+
+Le gain attendu d'un 100 % forcé serait de **1 à 2 °C**. Ce n'est pas le bon levier. Le ventilateur n'est pas le problème : **l'air qui entre dans la carte est trop chaud**, ou le radiateur est encrassé.
+
+## Les leviers, par ordre d'efficacité
+
+### 1. Les ventilateurs de boîtier / de la carte (le plus rentable, gratuit)
+
+`lm-sensors` voit :
+
+- **Processor Fan** : 2 830 / 5 755 tr/min ;
+- **Other Fan** : **2 150 / 5 000 tr/min** — ce sont très probablement les ventilateurs du couloir GPU du Precision 7910.
+
+À 2 150 tr/min sur 5 000, ils sont à **43 %**. Le BIOS régule probablement en profil « Optimized ». Pour un calcul GPU soutenu :
+
+1. redémarrer, **F2** (BIOS Dell) ;
+2. **Power Management → Thermal Management → Maximum** (ou « Performance » selon le firmware) ;
+3. vérifier au retour : `sensors | grep 'Other Fan'` doit monter vers **3 500–5 000 tr/min**, et le GPU 0 perdre plusieurs degrés.
+
+Vérifie aussi que le **carénage GPU** du 7910 est bien en place et que ses ventilateurs tournent : sans ce carénage, la carte du haut respire l'air chaud du boîtier. C'est l'explication la plus probable du delta de 14 °C.
+
+### 2. Nettoyer le GPU 0
+
+Carte du haut, souvent la plus poussiéreuse. Souffler le radiateur et la turbine à l'air comprimé (carte hors tension, pales tenues), vérifier que la turbine tourne librement. Si la carte a 4–5 ans, un **repâtage** peut rendre 5–10 °C, mais c'est une opération avancée.
+
+### 3. Déplacer la charge vers le GPU 1
+
+Le GPU 1 est à 73 °C et 47 % de ventilateur, avec presque la même puissance. Si le job le permet :
+
+```bash
+CUDA_VISIBLE_DEVICES=1 <commande>
+```
+
+ou répartir les deux processus. Le GPU 0 est le seul à throttler ; le bas de la carte est plus frais.
+
+### 4. Plafonner la puissance du GPU 0 (réversible, sans redémarrage)
+
+C'est le levier logiciel le plus efficace. La carte est **thermiquement limitée**, pas électriquement (206 W sur 230 W). Un plafond à 180 W réduit la température de 3–6 °C et **stabilise les horloges** ; le coût est de quelques pour cent de débit.
+
+```bash
+sudo nvidia-smi -i 0 -pl 180
+
+# surveiller
+watch -n 2 'nvidia-smi --query-gpu=index,temperature.gpu,fan.speed,power.draw,clocks.sm --format=csv,noheader'
+
+# revenir en arrière
+sudo nvidia-smi -i 0 -pl 230
+```
+
+La limite minimale est **125 W** ; 180 W est un bon compromis. Si le job est court, 200 W suffit à supprimer le throttle.
+
+Pour rendre le plafond persistant après reboot, un service systemd :
+
+```ini
+# /etc/systemd/system/nvidia-powercap.service
+[Unit]
+Description=Plafond de puissance GPU 0 (thermique)
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/nvidia-smi -i 0 -pl 180
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### 5. Espacer les cartes / ajouter un ventilateur de slot
+
+GPU 0 est en **slot physique 2**, GPU 1 en **slot 4**. Si la carte du bas peut descendre d'un emplacement (ou si un slot libre existe), l'entrée d'air du haut se dégage. Sinon, un **ventilateur PCIe de slot** soufflant entre les deux cartes fait gagner plusieurs degrés pour ~20 €.
+
+### 6. Forcer 100 % (dernier recours, à tester)
+
+Si tu veux vraiment essayer :
+
+```bash
+sudo zypper install nvidia-settings
+```
+
+Puis ajouter un écran NVIDIA headless avec `Option "Coolbits" "4"` dans `/etc/X11/xorg.conf.d/` (le fichier `20-nvidia.conf.desactive-20261011-111435` montre que cette config a déjà existé), redémarrer X, et :
+
+```bash
+nvidia-settings -a [gpu:0]/GPUFanControlState=1 -a [fan:0]/GPUTargetFanSpeed=100
+nvidia-smi --query-gpu=fan.speed,temperature.gpu --format=csv
+# puis rendre la main à la carte
+nvidia-settings -a [gpu:0]/GPUFanControlState=0
+```
+
+Si l'attribut est indisponible ou si le ventilateur reste à 89 %, c'est le VBIOS qui plafonne : inutile d'insister. Le redémarrage de X ferme la session graphique ; à faire quand le job GPU est arrêté.
+
+## Sécurité
+
+À **87 °C**, la carte est **dans les spec** (max 89 °C) et se protège elle-même : le throttle est actif, elle ne grillera pas. Mais elle perd des MHz, le ventilateur vieillit à 89 % en permanence, et la marge avant le ralentissement matériel (93 °C) est faible. Il faut traiter l'air, pas seulement la consigne.
+
+**Ce que je ne peux pas faire ici** : `sudo` demande un mot de passe, et je n'ai pas installé `nvidia-settings`. Je peux te préparer le service systemd, le fichier Xorg Coolbits ou un script de surveillance — dis-moi lequel. Le plus utile maintenant : **profil thermique BIOS + carénage GPU + nettoyage**, puis éventuellement le plafond 180 W.
+

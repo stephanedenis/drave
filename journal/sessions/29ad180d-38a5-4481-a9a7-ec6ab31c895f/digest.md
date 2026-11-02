@@ -3060,3 +3060,80 @@ plan mis à jour 63 lignes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md reports/rapport-s-analyseur-roles.md reports/s-banque-structures.json && git diff --cached --stat && git commit  … [596 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                          |  37 +++---
+ docs/pilotage/roadmap.md                           |  12 +-
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md   |  59 ++-------
+ reports/rapport-s-analyseur-roles.md               | 140 +++++++++++++++++++++
+ reports/s-banque-structures.json                   |  11 ++
+ 5 files changed, 188 insertions(+), 71 deletions(-)
+[master 63927a03] S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES
+ 30 files changed, 2385 insertions(+), 193 deletions(-)
+ create mode 100644 reports/rapport-s-analyseur-roles.md
+ create mode 100644 reports/s-banque-structures.json
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; echo \"=== fichiers du commit ===\"; git show --stat --oneline 63927a03 | head -40; echo \"=== status ===\"; git status --short | head -12", "description": "Inspect committed files and status"}`
+
+  ```
+63927a03 S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES
+9223d054 ÉTAT — COMPTEURS AU DISQUE (551 FICHES / 638 JSON) ; HEARTBEAT 16 h 40
+=== fichiers du commit ===
+63927a03 S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES
+ docs/pilotage/en-cours.md                          |  37 +-
+ docs/pilotage/roadmap.md                           |  12 +-
+ journal/2026-11-02/README.md                       |  28 +-
+ journal/2026-11-02/apprentissage.md                |  12 +-
+ journal/2026-11-02/attention.md                    |  12 +-
+ journal/2026-11-02/distribue.md                    |  12 +-
+ journal/2026-11-02/docs.md                         |  15 +-
+ journal/2026-11-02/memoire.md                      |  12 +-
+ journal/2026-11-02/mesures.md                      |  12 +-
+ journal/2026-11-02/modele.md                       |  12 +-
+ journal/2026-11-02/moteur.md                       |  12 +-
+ journal/2026-11-02/outils.md                       |  12 +-
+ journal/2026-11-02/portes.md                       |  12 +-
+ journal/README.md                                  |  14 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md | 262 +++
+… [1440 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -4; echo \"=== taille ===\"; python3 tools/taille_documents.py 2>&1 | tail -5; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -3; echo … [126 caractères tronqués]`
+
+  ```
+=== revue ===
+  revue de documentation · 552 fiche(s) · 639 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 551 fichiers, le disque en a 552
+=== taille ===
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2809 mots > budget 2800 (T1)
+=== en-cours ===
+  en-cours · 1626 mots · 7 sections · 5 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== etat --head ===
+  état · dernier fait 63927a03 · dernier état 63927a03
+  ✅ aucun fait commité après le dernier état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; python3 - <<'PY'\nfrom pathlib import Path\np = Path('docs/pilotage/en-cours.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"**Mis à jour : 2026-11-02, 16 h 49 HNE (heure locale, EST).**\",\n              \"** … [435 caractères tronqués]`
+
+  ```
+16:56
+compteur 552
+  revue de documentation · 552 fiche(s) · 639 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== taille ===
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2809 mots > budget 2800 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && git commit -m \"ÉTAT — COMPTEURS AU DISQUE (552 FICHES / 639 JSON) ; LA FICHE S EST INTÉGRÉE\" -m \"Le compteur passe à 552 fiches / 639 JSON après l'intégration de la fiche S et de la fiche Pensé … [266 caractères tronqués]`

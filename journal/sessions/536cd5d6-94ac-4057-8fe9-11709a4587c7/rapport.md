@@ -9,7 +9,7 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 1.4 h |
 | Tours | 3 |
-| Messages | 97 |
+| Messages | 98 |
 | Appels d'outils | 134 |
 | Fichiers touchés | 4 |
 | Commandes | 111 |
@@ -165,7 +165,53 @@ Les 92 micro-sessions sont du bruit d'archive : elles ne portent ni mandat ni r�
 
 **Synthèse produite :**
 
-⏵ Je vérifie les derniers leviers disponibles (BIOS/BMC, hwmon, sudo) avant de conclure.
+⏵ Diagnostic thermique : GPU 0 à 87 °C, ventilateur à 89 %, throttle actif.
+
+\# GPU 0 : 87 °C, ventilateur 89 % — que peut-on faire ?
+
+\## Le constat
+
+| | GPU 0 | GPU 1 |
+|---|---:|---:|
+| température | **87 °C** | 73 °C |
+| ventilateur | **89 %** | 47 % |
+| puissance | 206 W / 230 W | 202 W / 230 W |
+| cœur | 1 800 MHz (max 2 100) | 1 860 MHz |
+| charge | 92 % | 67 % |
+| throttle | **SW Thermal Slowdown actif** | aucun |
+
+Les deux cartes sont des **Quadro RTX 5000** (TU104, 230 W, VBIOS différentes : `90.04.4a` et `90.04.99`). Les limites sont : cible **83 °C**, max d'exploitation **89 °C**, ralentissement **93 °C**, arrêt **96 °C**.
+
+**Le point clé** : à puissance presque égale (206 W contre 202 W), le GPU 0 est **14 °C plus chaud** que le GPU 1. Ce n'est donc pas la charge : c'est **l'air qui arrive à la carte**. Et le GPU 0 est déjà en **throttle thermique** — il perd des MHz pour se protéger.
+
+\## Réponse directe : au-delà de 88-89 %, probablement pas par logiciel
+
+Le 89 % n'est pas un plafond choisi : c'est la **courbe automatique** de la carte, déjà au maximum de ce qu'elle veut faire. Pour forcer 100 %, il faudrait `nvidia-settings` + `Coolbits` dans Xorg. Or, sur cette machine :
+
+- `nvidia-settings` n'est **pas installé** ;
+- les GPU NVIDIA sont **headless** (l'écran X est sur l'AMD Radeon, `20-bureau-amd.conf`) ;
+- il n'y a **ni hwmon NVIDIA ni PWM** dans `/sys` : `nvidia-smi` ne peut pas piloter le ventilateur ;
+- même avec Coolbits, le VBIOS d'une Quadro plafonne souvent la consigne.
+
+Le gain attendu d'un 100 % forcé serait de **1 à 2 °C**. Ce n'est pas le bon levier. Le ventilateur n'est pas le problème : **l'air qui entre dans la carte est trop chaud**, ou le radiateur est encrassé.
+
+\## Les leviers, par ordre d'efficacité
+
+\### 1. Les ventilateurs de boîtier / de la carte (le plus rentable, gratuit)
+
+`lm-sensors` voit :
+
+- **Processor Fan** : 2 830 / 5 755 tr/min ;
+- **Other Fan** : **2 150 / 5 000 tr/min** — ce sont très probablement les ventilateurs du couloir GPU du Precision 7910.
+
+À 2 150 tr/min sur 5 000, ils sont à **43 %**. Le BIOS régule probablement en profil « Optimized ». Pour un calcul GPU soutenu :
+
+1. redémarrer, **F2** (BIOS Dell) ;
+2. **Power Management → Thermal Management → Maximum** (ou « Performance » selon le firmware) ;
+3. vérifier au retour : `sensors | grep 'Other Fan'` doit monter vers **3 500–5 000 tr/min**, et le GPU 0 perdre plusieurs degrés.
+
+Vérifie aussi que le **carénage GPU** du 7910 est bien en place et que ses 
+… [3524 caractères tronqués]
 
 ## 3. Travail accompli
 

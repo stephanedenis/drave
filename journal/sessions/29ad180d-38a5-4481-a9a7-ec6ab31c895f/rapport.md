@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 0.7 h |
 | Tours | 2 |
-| Messages | 140 |
-| Appels d'outils | 154 |
+| Messages | 143 |
+| Appels d'outils | 158 |
 | Fichiers touchés | 9 |
-| Commandes | 98 |
+| Commandes | 102 |
 | Sous-agents | 0 |
-| Commits | 5 |
+| Commits | 6 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -77,7 +77,7 @@ Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && 
 
 ### Tour 2 — mets le dossier copilotage à jour
 
-*25 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - read
 - bash — Get current report/JSON counts before editing state
@@ -93,7 +93,7 @@ Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && 
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md`
 - bash — Run documentation and state checks after edits
 - bash — Run tables and size checks, inspect diff
-- … et 9 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
@@ -157,7 +157,7 @@ Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && 
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 58 autres
+- … et 62 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -186,4 +186,5 @@ Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && 
 - ps -eo pid,etime,cmd | grep -E "git commit|archive_sessions|journal_auto|session_report|python3" | grep -v grep | head -20; echo "=== index lock ==="; ls -la /h
 - ps -eo pid,ppid,etime,pcpu,stat,cmd | grep -E "57032|57052|57681|job|git commit" | grep -v grep; echo "=== enfants ==="; ps --ppid 57032 -o pid,etime,pcpu,stat,
 - S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES" -m "La fiche reports/rapport-s-analyseur-roles.md, le manifeste reports/s-banqu
+- ÉTAT — COMPTEURS AU DISQUE (552 FICHES / 639 JSON) ; LA FICHE S EST INTÉGRÉE" -m "Le compteur passe à 552 fiches / 639 JSON après l'intégration de la fiche S et
 
