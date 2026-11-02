@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**167 commits** · **10 session(s)** · **10 thème(s)**
+**168 commits** · **10 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 6 | [attention.md](attention.md) |
 | distribue | 14 | [distribue.md](distribue.md) |
-| docs | 25 | [docs.md](docs.md) |
+| docs | 26 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 84 | [mesures.md](mesures.md) |
 | modele | 8 | [modele.md](modele.md) |
@@ -26,7 +26,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 2.3 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
+| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 2.5 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 45.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 1.4 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
 | `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 2.2 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
@@ -208,6 +208,7 @@
 | 17:21 | `d2fc26c6` | D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE |
 | 17:53 | `df899b90` | B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592 |
 | 18:23 | `01838589` | B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES |
+| 18:37 | `83f78803` | DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -273,4 +274,15 @@ du pilote étaient **neuf livres natifs** (463–1 706 car/p) et un seul scan (*
 Erratum dans la fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md) ; clôture de la session
 [`fe3c05f0`](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md). Les **8 scans en
 `.PDF`** (58 p) restent une limite nommée : `rglob("*.pdf")` ne les voit pas.
+
+**18 h 33 — la politique DRVM/native : le cadenas s'ouvre avec la règle, pas sans.**
+
+Le **7B local** entre dans le conteneur DRVM comme politique (`PolitiqueLLM`). Sur le cadenas,
+le prompt **minimal** fait dire `arriere` à la position 0 : **0 nœud**, échec ; le prompt avec la
+**règle** (« la position augmente avec avant ») ouvre en **3 nœuds**, 3 appels, **5,5 s**. Le
+**labyrinthe** utilise la sonde **2 fois** (comme l'oracle, 17 nœuds) ; la **porte** reste un
+**négatif** (200 nœuds, 3 appels, 179,5 s, sans but) et le **hasard** l'ouvre par chance
+(44 nœuds) : la porte n'est pas un contrôle propre. Fiche
+[`pensee-politique-llm`](../../reports/rapport-pensee-politique-llm.md), JSON
+[`pensee-politique-llm.json`](../../reports/pensee-politique-llm.json).
 <!-- /notes -->

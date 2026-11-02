@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 2.4 h |
 | Tours | 2 |
-| Messages | 256 |
-| Appels d'outils | 276 |
+| Messages | 262 |
+| Appels d'outils | 282 |
 | Fichiers touchés | 15 |
-| Commandes | 175 |
+| Commandes | 179 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -20,6 +20,7 @@
 ## Objectifs déclarés
 
 - **create** — Session D/R/A (fe3c05f0) : OCR du fonds CEGEP restant (~127 scans) en sortie séparée, fusion et contrôle du corpus (10 notes + suite), fiche + JSON, en-cours + commit explicite, puis clôture de la session.
+- **complete** — Session D/R/A (fe3c05f0) : OCR du fonds CEGEP restant (~127 scans) en sortie séparée, fusion et contrôle du corpus (10 notes + suite), fiche + JSON, en-cours + commit explicite, puis clôture de la session.
 
 ## 1. Ce qui a été demandé
 
@@ -49,7 +50,7 @@
 
 ### Tour 2 — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État  … [367 caractères tronqués]
 
-*265 appels d'outils.* Actions notables :
+*271 appels d'outils.* Actions notables :
 
 - read
 - get_goal
@@ -65,11 +66,25 @@
 - bash — Locate scan census sources
 - bash — Search 127 mentions across docs
 - bash — Read session report around next steps
-- … et 191 autres
+- … et 196 autres
 
 **Synthèse produite :**
 
-⏵ Correction mesurée : 807 candidats à 2 pages, mais 147 vrais scans (91 uniques, 2 053 p) — j'adapte l'outil
+⏵ Session D/R/A terminée : OCR du fonds CEGEP mesuré, fiché et committé
+
+**Session `fe3c05f0` (D/R/A) reprise puis close.** Le plan est passé `État : actif` avec heartbeat, puis `État : terminé` après livraison ; `cloture.md` est écrit, la session est sortie d'`en-cours`.
+
+**Le chiffre, et la correction qu'il impose.** Le « ~127 scans » venait d'une détection sur les **deux premières pages**, qui sur-classe **5,5×** : **807 candidats** (179 426 p) côté outil, **147 vrais scans** (2 701 p) au texte **intégral**, **91 uniques** (2 053 p) après 56 doublons exacts (dont un second *Tesla* de 499 p). Les **10 « notes » du pilote** étaient en réalité **9 livres natifs** (463 à 1 706 car/p) et un seul scan (*AQPC*, 2 p) — erratum dans la fiche, corpus du pilote archivé.
+
+**OCR du fonds, mesuré.** 91 scans traités (`--liste` explicite, `--ouvriers 8`), **60 documents retenus**, **1 982 pages**, **4 408 811 caractères**, splits **53 / 4 / 3**, 8 Ko **0 duplication** (542/2/2 fenêtres), éval `fr-xnli 0/40`, `fr-udhr 0/24`, `en-xnli 0/40`. Le PDF *MicroPython* (359 p) dépassait le timeout de rendu à 300 dpi : repris à **150 dpi** et ajouté au corpus.
+
+**Livré et committé (`83f78803`) :** fiche [`rapport-ocr-cegep.md`](reports/rapport-ocr-cegep.md), manifeste [`ocr-pdf-cegep.json`](reports/ocr-pdf-cegep.json), détection [`ocr-pdf-cegep-detection.json`](reports/ocr-pdf-cegep-detection.json), contrôle [`contamination`](reports/ocr-pdf-cegep-contamination.json), outils `tools/detecte_scans_pdf.py` et `tools/ocr_pdf.py` (`--liste`, `--ouvriers`), état (`en-cours`, roadmap, chantiers, plan-travail), [clôture](journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md), journal du jour.
+
+**Contrôles passés :** revue de documentation ✅ (556 fiches / 643 JSON), `verifie_en_cours` ✅ (1 566 mots), `verifie_journal` ✅, hook d'état ✅. **`sessions.py --check --strict` reste rouge, mais hors D/R/A** : `29ad180d` (S, heartbeat de 108 min) et `536cd5d6` (hub, 123 min) sont périmés — ces deux sessions doivent rafraîchir leur plan. D/R/A est `terminé` et n'est plus exigé.
+
+**Limites nommées :** 8 scans en `.PDF` (58 p) échappent à `rglob("*.pdf")` ; 31 documents courts (71 p) écartés par `--min-chars 300` ; WER non mesurée (pas de vérité terrain). Restent **R1.1/R1.2** (N2) et **A2.6** (A).
+
+La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) et poursuit le gold neuronal.
 
 ## 3. Travail accompli
 
@@ -135,7 +150,7 @@
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 135 autres
+- … et 139 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -223,6 +238,7 @@
 - **T2** `-- **Le corpus OCR du CEGEP** : 10 notes scannées, 1 596 pages, 2 519 507 caractères, 8 Ko 0 (val 11 fenêtres) — le pilote `--racine CEGEP` ferme la boucle « livres, CEGEP, collections » (4 *Algorithm`
 - **T2** `+1 982 p, 4 408 811 caractères**, 8 Ko 0, éval **0/40 · 0/24 · 0/40** ; le PDF de 359 p`
 - **T2** `+> **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; les 10 notes du pilote étaient`
+- **T2** `2 053 p), **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; la détection à deux pages`
 
 ## 5. Erreurs rencontrées
 

@@ -4279,3 +4279,114 @@ index 97bc3b09..ab7f99c5 100644
   ```
 
 - **bash** `{"command": "git commit -m \"DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS\" -m \"La détection sur le texte intégral (pdftotext complet, seuil 50 car/page, SHA-256) trouve 147 scans dans le … [942 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 83f78803] DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS
+ 29 files changed, 1739 insertions(+), 169 deletions(-)
+ create mode 100644 journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | head -35; echo \"--- status ---\"; git status --short | head -15", "description": "Inspect the closure commit"}`
+
+  ```
+83f78803 DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS
+ docs/pilotage/chantiers.md                         |   6 +-
+ docs/pilotage/en-cours.md                          |  34 +-
+ docs/pilotage/plan-travail.md                      |   9 +-
+ docs/pilotage/roadmap.md                           |  11 +-
+ journal/2026-11-02/README.md                       |  26 +-
+ journal/2026-11-02/apprentissage.md                |   6 +-
+ journal/2026-11-02/attention.md                    |   6 +-
+ journal/2026-11-02/distribue.md                    |   6 +-
+ journal/2026-11-02/docs.md                         |   6 +-
+ journal/2026-11-02/memoire.md                      |   6 +-
+ journal/2026-11-02/mesures.md                      |  12 +-
+ journal/2026-11-02/modele.md                       |   6 +-
+ journal/2026-11-02/moteur.md                       |   6 +-
+ journal/2026-11-02/outils.md                       |   6 +-
+ journal/2026-11-02/portes.md                       |   6 +-
+ journal/README.md                                  |   6 +-
+ journal/THEMES.md                                  |   2 
+… [1182 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4; echo \"=== état ===\"; python3 tools/verifie_etat_a_jour.py --head 2>&1 | tail -3; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -2; echo \"=== journal ===\"; python3 tools/verifie_journal.py 2>&1 | tail -2" … [42 caractères tronqués]`
+
+  ```
+revue de documentation · 556 fiche(s) · 643 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== état ===
+  état · dernier fait 83f78803 · dernier état 83f78803
+  ✅ aucun fait commité après le dernier état
+=== en-cours ===
+  en-cours · 1566 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== journal ===
+  journal · 39 jour(s) · 117 session(s) · 1850 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "python3 tools/sessions.py --check --strict; echo \"[exit $?]\"; echo \"--- D/R/A plan ---\"; sed -n '17,27p' journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md", "description": "Final strict session check"}`
+
+  ```
+⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ❌ mandat périmé (108 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+  ❌ mandat périmé (123 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — heartbeat à rafraîchir
+[exit 1]
+--- D/R/A plan ---
+- **Heartbeat** : 2026-11-02 18:45 EST
+- **État** : terminé
+- **Résultat** : **OCR du fonds CEGEP** — 147 scans détectés sur le texte intégral (91 uniques,
+  2 053 p), **60 documents, 1 982 p, 4 408 811 car.**, 8 Ko 0 ; la détection à deux pages
+  sur-classait 5,5× (807) et **9 des 10 notes du pilote étaient des livres natifs** (erratum) ;
+  fiche [`ocr-cegep`](../../../reports/rapport-ocr-cegep.md), manifeste
+  `reports/ocr-pdf-cegep.json` ; limite nommée : 8 scans `.PDF` (58 p).
+- **Prochaine action** : **aucune — session close** ; **R1.1/R1.2** (N2) et **A2.6** (A) sont
+  portés par leurs sessions ; les 8 scans `.PDF` restent une limite nommée.
+- **Arrêt** : 2026-11-02 18 h 45 (clôture) — corpus, fiche, JSON, état et commit ; session
+  archivée ; le reboot du 15 h 06 et la reprise de 16 h 21 sont dans l'histoire.
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-3245c476-82de-4e45-8c82-e9d23035ed61","revision":1,"objective":"Session D/R/A (fe3c05f0) : OCR du fonds CEGEP restant (~127 scans) en sortie séparée, fusion et contrôle du corpus (10 notes + suite), fiche + JSON, en-cours + commit explicite, puis clôture de la session.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-3245c476-82de-4e45-8c82-e9d23035ed61", "revision": 1}`
+
+> **Objectif** (complete) : Session D/R/A (fe3c05f0) : OCR du fonds CEGEP restant (~127 scans) en sortie séparée, fusion et contrôle du corpus (10 notes + suite), fiche + JSON, en-cours + commit explicite, puis clôture de la session.
+
+
+  ```
+{"goal":{"id":"goal-3245c476-82de-4e45-8c82-e9d23035ed61","revision":2,"objective":"Session D/R/A (fe3c05f0) : OCR du fonds CEGEP restant (~127 scans) en sortie séparée, fusion et contrôle du corpus (10 notes + suite), fiche + JSON, en-cours + commit explicite, puis clôture de la session.","phase":"complete","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **bash** `{"command": "grep -n \"Heartbeat\\|^- \\*\\*État\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md; echo \"---\"; git log --oneline -1", "description": "Check L/B13 plan state"}`
+
+  ```
+18:- **Heartbeat** : 2026-11-02 18:22 EST
+23:- **État** : actif
+---
+83f78803 DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS
+  ```
+
+### 🤖 Assistant
+
+⏵ Session D/R/A terminée : OCR du fonds CEGEP mesuré, fiché et committé
+
+**Session `fe3c05f0` (D/R/A) reprise puis close.** Le plan est passé `État : actif` avec heartbeat, puis `État : terminé` après livraison ; `cloture.md` est écrit, la session est sortie d'`en-cours`.
+
+**Le chiffre, et la correction qu'il impose.** Le « ~127 scans » venait d'une détection sur les **deux premières pages**, qui sur-classe **5,5×** : **807 candidats** (179 426 p) côté outil, **147 vrais scans** (2 701 p) au texte **intégral**, **91 uniques** (2 053 p) après 56 doublons exacts (dont un second *Tesla* de 499 p). Les **10 « notes » du pilote** étaient en réalité **9 livres natifs** (463 à 1 706 car/p) et un seul scan (*AQPC*, 2 p) — erratum dans la fiche, corpus du pilote archivé.
+
+**OCR du fonds, mesuré.** 91 scans traités (`--liste` explicite, `--ouvriers 8`), **60 documents retenus**, **1 982 pages**, **4 408 811 caractères**, splits **53 / 4 / 3**, 8 Ko **0 duplication** (542/2/2 fenêtres), éval `fr-xnli 0/40`, `fr-udhr 0/24`, `en-xnli 0/40`. Le PDF *MicroPython* (359 p) dépassait le timeout de rendu à 300 dpi : repris à **150 dpi** et ajouté au corpus.
+
+**Livré et committé (`83f78803`) :** fiche [`rapport-ocr-cegep.md`](reports/rapport-ocr-cegep.md), manifeste [`ocr-pdf-cegep.json`](reports/ocr-pdf-cegep.json), détection [`ocr-pdf-cegep-detection.json`](reports/ocr-pdf-cegep-detection.json), contrôle [`contamination`](reports/ocr-pdf-cegep-contamination.json), outils `tools/detecte_scans_pdf.py` et `tools/ocr_pdf.py` (`--liste`, `--ouvriers`), état (`en-cours`, roadmap, chantiers, plan-travail), [clôture](journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md), journal du jour.
+
+**Contrôles passés :** revue de documentation ✅ (556 fiches / 643 JSON), `verifie_en_cours` ✅ (1 566 mots), `verifie_journal` ✅, hook d'état ✅. **`sessions.py --check --strict` reste rouge, mais hors D/R/A** : `29ad180d` (S, heartbeat de 108 min) et `536cd5d6` (hub, 123 min) sont périmés — ces deux sessions doivent rafraîchir leur plan. D/R/A est `terminé` et n'est plus exigé.
+
+**Limites nommées :** 8 scans en `.PDF` (58 p) échappent à `rglob("*.pdf")` ; 31 documents courts (71 p) écartés par `--min-chars 300` ; WER non mesurée (pas de vérité terrain). Restent **R1.1/R1.2** (N2) et **A2.6** (A).
+
+La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) et poursuit le gold neuronal.
+

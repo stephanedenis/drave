@@ -15,8 +15,12 @@ de poids dans cet environnement ; la structure est prête pour un `PolitiqueDRVM
 """
 from __future__ import annotations
 
+import json
 import math
 import random
+import re
+import time
+import urllib.request
 from collections import Counter
 from dataclasses import dataclass, field
 from typing import Callable
@@ -75,6 +79,101 @@ class PolitiqueAveugle(Politique):
         if dy != 0:
             return "haut" if dy > 0 else "bas"
         return None
+
+
+class PolitiqueLLM(Politique):
+    """La politique **DRVM/native** : un modèle local décide le pas.
+
+    Le conteneur `DRVM` l'appelle comme les autres politiques ; le modèle ne rend qu'un mot
+    de direction, contraint par une grammaire GBNF. Le **coût réel** (latence cumulée) est
+    mesuré à côté du coût symbolique du registre. `transport` est injectable pour tester le
+    contrat sans modèle ; en production, il interroge `llama-server` en CPU.
+    """
+
+    nom = "llm"
+
+    def __init__(self, modele: str, endpoint: str = "http://127.0.0.1:18082",
+                 jeu: str = "labyrinthe", variante: str = "regle", timeout: int = 120,
+                 transport=None):
+        super().__init__()
+        self.modele = str(modele)
+        self.endpoint = endpoint.rstrip("/")
+        self.jeu = jeu
+        self.variante = variante
+        self.timeout = timeout
+        self.transport = transport or self._post
+        self.latence = 0.0
+        self.erreurs = 0
+        self.derniere = ""
+
+    def _grammaire(self) -> str:
+        if self.jeu == "cadenas":
+            return 'root ::= "avant" | "arriere"'
+        return 'root ::= "droite" | "gauche" | "bas" | "haut"'
+
+    def _autorisees(self) -> tuple[str, ...]:
+        return ("avant", "arriere") if self.jeu == "cadenas" else ("droite", "gauche", "bas", "haut")
+
+    def _invite(self, etat, but) -> str:
+        if self.jeu == "cadenas":
+            if self.variante == "minimal":
+                return ("Tu es la politique d'un moteur de recherche. Position : "
+                        f"{_pos_c(etat)}. But : {but}. Réponds uniquement par avant ou arriere.")
+            return ("Tu es la politique d'un moteur de recherche. Position : "
+                    f"{_pos_c(etat)}. But : {but}. "
+                    "La position augmente quand on va avant et diminue quand on va arriere. "
+                    "Si la position est inférieure au but, réponds avant ; sinon réponds arriere. "
+                    "Réponds uniquement par avant ou arriere.")
+        x, y = _xy_l(etat)
+        murs = ", ".join(f"({a},{b})" for a, b in sorted(MURS))
+        return ("Tu es la politique d'un moteur de recherche dans une grille 5x5. "
+                "x va vers la droite, y vers le bas. "
+                f"Murs : {murs}. Position : ({x},{y}). But : ({but[0]},{but[1]}). "
+                "Réponds uniquement par droite, gauche, bas ou haut. Ne propose pas un mur.")
+
+    def _post(self, invite: str, grammaire: str) -> str:
+        corps = {"messages": [{"role": "user", "content": invite}], "temperature": 0,
+                 "max_tokens": 8, "grammar": grammaire}
+        requete = urllib.request.Request(
+            self.endpoint + "/v1/chat/completions",
+            data=json.dumps(corps).encode("utf-8"),
+            headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(requete, timeout=self.timeout) as reponse:
+            return json.loads(reponse.read().decode("utf-8"))["choices"][0]["message"]["content"]
+
+    def propose(self, etat, but):
+        t0 = time.perf_counter()
+        try:
+            sortie = self.transport(self._invite(etat, but), self._grammaire())
+        except Exception as e:
+            self.erreurs += 1
+            self.derniere = f"erreur: {type(e).__name__}: {str(e)[:80]}"
+            return None
+        finally:
+            self.latence += time.perf_counter() - t0
+        self.derniere = sortie.strip()
+        mots = [m for m in re.findall(r"avant|arriere|droite|gauche|bas|haut",
+                                      self.derniere.lower()) if m in self._autorisees()]
+        if not mots:
+            self.erreurs += 1
+            return None
+        return mots[0]
+
+
+
+class PolitiqueHasard(Politique):
+    """Le contrôle négatif **aléatoire** : une direction tirée, sans lire l'état."""
+
+    nom = "hasard"
+
+    def __init__(self, directions=("droite", "gauche", "bas", "haut"), graine: int = 0):
+        super().__init__()
+        self.directions = tuple(directions)
+        self.rng = random.Random(graine)
+
+    def propose(self, etat, but):
+        return self.rng.choice(self.directions)
+
 
 
 # --------------------------------------------------------------------------- état
@@ -2943,7 +3042,7 @@ class DRVM:
         return b
 
 
-__all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle",
+__all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle", "PolitiqueHasard", "PolitiqueLLM",
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
            "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise", "PolitiqueAppriseMinute", "PolitiqueAppriseShaping", "PolitiqueReseau", "PolitiqueMLP", "PolitiqueAppriseComplete", "PolitiqueAppriseOuverte",

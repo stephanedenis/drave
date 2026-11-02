@@ -330,6 +330,16 @@ contrat est faux ; si le coût n'est pas dans la trace, l'anytime est décoratif
 **Le corpus v0** : un jeu de petits graphes (morpion, taquin 3×3, un CSP jouet) et un jeu de
 RSN-visuelles déjà produit par N1. Pas de GPU ; le CPU suffit pour 10³–10⁴ nœuds.
 
+**La politique DRVM/native.** Le conteneur `DRVM` accepte désormais un **vrai modèle** :
+`PolitiqueLLM` (Qwen2.5-7B-Instruct, `llama-server` CPU, grammaire GBNF d'un mot de direction).
+Sur le cadenas, le prompt minimal échoue (le modèle dit `arriere` à la position 0, 0 nœud) et
+la règle explicite ouvre en **3 nœuds** ; sur le labyrinthe, il utilise la sonde **2 fois**
+(comme l'oracle) ; la porte reste un **négatif** (sa règle n'est pas dans le prompt, et le
+hasard l'ouvre par chance). Fiche
+[`pensee-politique-llm`](../../reports/rapport-pensee-politique-llm.md). La ligne B13 n'est plus
+bloquée par l'absence de poids — elle est limitée par la **qualité de la politique** sur les
+problèmes non décrits.
+
 ## 9. Ce qui rendrait le moteur faux
 
 - **L'empreinte n'est pas canonique** : deux états identiques ont deux empreintes, la

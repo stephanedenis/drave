@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **552 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **553 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -238,7 +238,7 @@
 | [rapport-n2-pas-vs-texte.md](rapport-n2-pas-vs-texte.md) | N2.ab — Plus de pas paie ; plus de texte paie en largeur, pas en français |
 | [rapport-n2-professeur.md](rapport-n2-professeur.md) | N2.u — Le professeur plus gros ne change presque rien en domaine, mais gagne 0,3 hors domaine |
 | [rapport-n2-propre.md](rapport-n2-propre.md) | N2.h1 — Le corpus propre : la validation n'était pas tenue à l'écart, et la porte honnête vaut 3,09 |
-| [rapport-n2-r11.md](rapport-n2-r11.md) | R1.1 — Les positions relatives : la courbe de longueur s'aplatit, la table absolue explose |
+| [rapport-n2-r11.md](rapport-n2-r11.md) | R1.1/R1.2 — Les positions relatives ôtent l'explosion, la fenêtre entraînée donne la lecture |
 | [rapport-n3.1-etat.md](rapport-n3.1-etat.md) | N3.1 — l’état des opérations natives : une porte composée serait prématurée |
 | [rapport-n3.2a-service.md](rapport-n3.2a-service.md) | N3.2a — le service natif répond, et il est déterministe |
 | [rapport-n3.2b0-profondeur.md](rapport-n3.2b0-profondeur.md) | N3.2b0 — la profondeur de service est branchée, et le service lisait mal les requêtes |
@@ -318,7 +318,7 @@
 | [rapport-native-tetes.md](rapport-native-tetes.md) | N1.4 — les têtes précoces de `drave-n0` : 55,2 / 60,9 / 62,1 % |
 | [rapport-niah-fragilite.md](rapport-niah-fragilite.md) | Le critère de `porte-indice` ne survit pas à une reconstruction de son entrée |
 | [rapport-nli-francais-dur.md](rapport-nli-francais-dur.md) | Le NLI français plus dur que XNLI : DACCORD +26,9, GQNLI +56,7 — et le 1,5 B bat le 3 B |
-| [rapport-ocr-cegep.md](rapport-ocr-cegep.md) | Le corpus OCR du CEGEP — 10 notes scannées, 2 519 507 caractères |
+| [rapport-ocr-cegep.md](rapport-ocr-cegep.md) | Le corpus OCR du CEGEP — 147 scans détectés, 91 uniques, 1 982 pages océrisées |
 | [rapport-ocr-pdf.md](rapport-ocr-pdf.md) | Le corpus OCR — les livres scannés, 20 livres, 15,4 M caractères |
 | [rapport-operateur-negation.md](rapport-operateur-negation.md) | B4.1 — la négation n'est pas une opération portée par l'état |
 | [rapport-optimisations-auto.md](rapport-optimisations-auto.md) | Rapport — détection matérielle et configuration automatique |
@@ -434,6 +434,7 @@
 | [rapport-pensee-phase-graines.md](rapport-pensee-phase-graines.md) | B13 — la phase sur 5 graines : 5/5 buts, 10–14 pas |
 | [rapport-pensee-phase.md](rapport-pensee-phase.md) | B13 — la période qui change : 3 pas puis 2 pas |
 | [rapport-pensee-pieges.md](rapport-pensee-pieges.md) | B13 — les questions pièges : 0/5, la règle du `si` est cassée |
+| [rapport-pensee-politique-llm.md](rapport-pensee-politique-llm.md) | B13 — la politique DRVM/native : le 7B ouvre le cadenas avec la règle, pas sans |
 | [rapport-pensee-porte-apprise.md](rapport-pensee-porte-apprise.md) | B13 — la porte apprise : la Q-table trouve la porte seule |
 | [rapport-pensee-porte.md](rapport-pensee-porte.md) | B13 — la porte neuronale : la bonne politique ouvre, l'aveugle échoue |
 | [rapport-pensee-professeur.md](rapport-pensee-professeur.md) | B13 — le professeur complet : 56 états-Q, il échoue encore seul |

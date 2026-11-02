@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 2.4 h |
 | Tours | 3 |
-| Messages | 279 |
-| Appels d'outils | 382 |
+| Messages | 288 |
+| Appels d'outils | 392 |
 | Fichiers touchés | 24 |
-| Commandes | 264 |
+| Commandes | 274 |
 | Sous-agents | 0 |
-| Commits | 3 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -119,7 +119,7 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 
 ### Tour 3 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*68 appels d'outils.* Actions notables :
+*78 appels d'outils.* Actions notables :
 
 - bash — Inspect repo, plan, and 7B server state
 - bash — Check sessions status and en-cours
@@ -135,11 +135,11 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - bash — Refresh plan heartbeat during cascade run
 - bash — Find DRVM/native references
 - bash — Read heterogeneous operators
-- … et 51 autres
+- … et 60 autres
 
 **Synthèse produite :**
 
-⏵ Commit du hub imminent (10 fichiers stagés) ; nouvelle attente courte
+⏵ Tests finaux, index explicite et commit du fait DRVM/native
 
 ## 3. Travail accompli
 
@@ -214,7 +214,7 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 224 autres
+- … et 234 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -300,4 +300,5 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)" 2>&1 | tail -25; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592" 2>&1 | tail -15; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
 

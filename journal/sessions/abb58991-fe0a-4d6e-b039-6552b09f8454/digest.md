@@ -6997,3 +6997,201 @@ M  docs/pilotage/roadmap.md
 ⏵ Le hub a stagé la clôture D/R/A ; j'attends son commit avant de toucher à l'état
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 30; git log -2 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '---'; git status --short docs/pilotage/en-cours.md docs/pilotage/roadmap.md; echo '---'; git diff --cached --stat | tail -5", "description": "Check hub commit after staged state … [22 caractères tronqués]`
+
+  ```
+01838589 18:23:31 B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES
+df899b90 17:53:59 B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592
+---
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+---
+ .../fe3c05f0-834b-44f2-8739-501865d652c1/plan.md   | 18 ++++--
+ reports/ocr-pdf-cegep-contamination.json           | 16 ++---
+ reports/ocr-pdf-cegep.json                         | 52 +++++++++------
+ reports/rapport-ocr-cegep.md                       | 74 ++++++++++++----------
+ 10 files changed, 163 insertions(+), 104 deletions(-)
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit du hub imminent (10 fichiers stagés) ; nouvelle attente courte
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 60; git log -2 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '---'; git status --short docs/pilotage/en-cours.md docs/pilotage/roadmap.md", "description": "Wait for hub commit", "timeoutMs": 75000}`
+
+  ```
+01838589 18:23:31 B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES
+df899b90 17:53:59 B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592
+---
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub a laissé la clôture D/R/A stagée ; je la commite séparément (message D), puis je committerai le fait DRVM
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git diff --cached --stat; echo '=== HOOK ==='; python3 tools/verifie_etat_a_jour.py --index; echo \"EXIT=$?\"; git diff --cached --check; echo \"CHECK=$?\"", "description": "Review staged D closure before committing"}`
+
+  ```
+=== HOOK ===
+  ✅ index : aucun fait stagé sans état
+EXIT=0
+CHECK=0
+  ```
+
+### 🤖 Assistant
+
+⏵ L'index s'est vidé : le hub a probablement committé la clôture D/R/A ; je vérifie
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -3 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '=== STATUS ==='; git status --short | head -15; echo '=== EN-COURS ==='; grep -n \"Mis à jour\\|fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Check hub commit and state"}`
+
+  ```
+83f78803 18:37:41 DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS
+01838589 18:23:31 B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES
+df899b90 17:53:59 B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592
+=== STATUS ===
+ M docs/implantation/moteur-de-pensee.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/pensee/operateurs.py
+?? reports/n2-r11.json
+?? reports/pensee-politique-llm.json
+?? reports/rapport-n2-r11.md
+?? reports/rapport-pensee-politique-llm.md
+?? tools/tests/qualifier_politique_drvm.py
+?? tools/tests/test_pensee_politique.py
+=== EN-COURS ===
+3:**Mis à jour : 2026-11-02, 18 h 45 HNE (heure locale, EST).**
+117:| fichiers / JSON de résultats | **556** / **643** | `reports/*.md` / `reports/*.json` |
+  ```
+
+### 🤖 Assistant
+
+⏵ La clôture D/R/A est committée (`83f78803`) ; j'applique le fait DRVM sur cette base propre
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -1 --stat --oneline -- docs/pilotage/chantiers.md | head -5; git show HEAD:docs/pilotage/chantiers.md | grep -c \"cascade complète\"; echo '---'; sed -n '79,88p' docs/pilotage/en-cours.md; echo '---'; grep -n \"B — l'intelligence\\|Pensée\\*\\ … [93 caractères tronqués]`
+
+  ```
+83f78803 DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS
+ docs/pilotage/chantiers.md | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+2
+---
+- **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
+- **Fait** : B13 **140/140**, gold **432** ; **gold neuronal** POS **0,8483**, cascade **0,9440** ;
+  **syntagmes** BIO **0,6173**, tête **0,7606**, cascade confiance **0,7592** ; **cascade
+  complète** POS **0,9415**, syntagmes **0,7539**, acte **1,0** ;
+  [fiche](../../reports/rapport-pensee-gold-cascade.md).
+- **Ce qu'elle fait** : **gold neuronal POS et syntagmes** mesurés ; reprise **16 h 16**.
+- **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
+- **Prochaine action** : **DRVM/native** (politique LLM) ; **pragmatique**.
+- **Bloquants** : aucun pour POS/syntagmes/cascade ; restent **pragmatique** et **DRVM/native**.
+- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+---
+75:- **Rôle** : **Pensée** — RSN plurielle, arbre d'états, moteur N3 ; R4.4 ; heuristique ; bloc linguistique.
+
+… [276 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re, time\n# en-cours\np=pathlib.Path('docs/pilotage/en-cours.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace('**Mis à jour : 2026-11-02, 18 h 45 HNE (heure locale, EST).**','**Mis à jour : 2026-11-02, 18 h 55 HNE ( … [4857 caractères tronqués]`
+
+  ```
+ok 2026-11-02 18:40 EST
+EN-COURS: 1564
+  T0 max : 3938 mots (budget 4 000)
+  en-cours · 1564 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Le timestamp 18 h 55 était en avance (il est 18 h 40) ; je corrige le futur
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfor f in ('docs/pilotage/en-cours.md','docs/pilotage/roadmap.md'):\n    p=pathlib.Path(f); t=p.read_text(encoding='utf-8')\n    t=t.replace('18 h 55','18 h 40')\n    p.write_text(t,encoding='utf-8')\nprint('ok')\nPY\n … [199 caractères tronqués]`
+
+  ```
+ok
+docs/pilotage/en-cours.md:3:**Mis à jour : 2026-11-02, 18 h 40 HNE (heure locale, EST).**
+docs/pilotage/roadmap.md:38:**État au 02/11 18 h 40.** B13 est à **140/140** (gold 432, 116 liens) et le **gold neuronal**
+docs/pilotage/roadmap.md:54:L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-02 18 h 40**.
+18:40:33
+  ```
+
+### 🤖 Assistant
+
+⏵ Note de journal DRVM/native, puis contrôles de clôture
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-02/README.md')\nt=p.read_text(encoding='utf-8')\nnote = \"\"\"\n**18 h 33 — la politique DRVM/native : le cadenas s'ouvre avec la règle, pas sans.**\n\nLe **7B local** entre dans le con … [1131 caractères tronqués]`
+
+  ```
+ok
+  ✅ 1562 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 2649 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+  revue de documentation · 556 fiche(s) · 643 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3938 mots (budget 4 000)
+  en-cours · 1564 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  journal · 39 jour(s) · 117 session(s) · 1852 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ Tests finaux, index explicite et commit du fait DRVM/native
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m unittest tools/tests/test_pensee_politique.py 2>&1 | tail -3; python3 -m unittest discover -s tools/tests/linguistique -p 'test_bloc_linguistique.py' 2>&1 | tail -3; echo '=== SESSIONS ==='; python3 tools/sessions.py --check --strict >/tmp/ … [167 caractères tronqués]`
+
+  ```
+Ran 5 tests in 0.001s
+
+OK
+Ran 15 tests in 0.063s
+
+OK
+=== SESSIONS ===
+EXIT=1
+  ❌ mandat périmé (46 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — heartbeat à rafraîchir
+  ❌ mandat périmé (109 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+  ❌ mandat périmé (124 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -15", "description": "Check working tree before staging"}`
+
+  ```
+M docs/implantation/moteur-de-pensee.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/2026-11-02/README.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/pensee/operateurs.py
+?? reports/n2-r11.json
+?? reports/pensee-politique-llm.json
+?? reports/rapport-n2-r11.md
+?? reports/rapport-pensee-politique-llm.md
+?? tools/tests/qualifier_politique_drvm.py
+?? tools/tests/test_pensee_politique.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add tools/pensee/operateurs.py tools/tests/test_pensee_politique.py tools/tests/qualifier_politique_drvm.py reports/pensee-politique-llm.json reports/rapport-pensee-politique-llm.md reports/README.md reports/INDEX.md docs/implantation/moteur-de-pe … [354 caractères tronqués]`
+
+  ```
+journal/2026-11-02/README.md                       |  12 +
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |  12 +-
+ reports/INDEX.md                                   |   7 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-politique-llm.json                  | 299 +++++++++++++++++++++
+ reports/rapport-pensee-politique-llm.md            | 120 +++++++++
+ tools/pensee/operateurs.py                         | 101 ++++++-
+ tools/tests/qualifier_politique_drvm.py            | 151 +++++++++++
+ tools/tests/test_pensee_politique.py               |  44 +++
+ 12 files changed, 762 insertions(+), 25 deletions(-)
+  ✅ index : aucun fait stagé sans état
+HOOK=0
+CHECK=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -m \"B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE\" 2>&1 | tail -12; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Commit the DRVM/native policy fact", "timeoutMs": 300000}`

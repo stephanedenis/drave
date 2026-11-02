@@ -3499,3 +3499,16 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-141", "timeout_ms": 600000, "wait": true}`
+
+  ```
+18:40:46
+--- 40k ---
+pas  12000 · perte 1.1912 · PPL val 3.578 · 671 s
+--- 200k ---
+pas 143500 · perte 1.2313 · PPL val 3.241 · 8249 s
+83f78803 DONNÉES — L'OCR CEGEP EST CLOS : 147 SCANS DÉTECTÉS (91 UNIQUES, 2 053 P), 60 DOCUMENTS, 1 982 P, 4,41 M CAR. ; LE PILOTE DES 10 NOTES ÉTAIT 9 FAUX POSITIFS
+01838589 B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_zero.out; tail -1 work/n2ac/zero-rope-40k.log; grep -E \"ppl_val\" work/n2ac/zero-rope-40k.pt.json 2>/dev/null", "description": "Wait for 40k completion"}`

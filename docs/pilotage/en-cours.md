@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 18 h 45 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 18 h 40 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
 > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
@@ -77,14 +77,14 @@
 - **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels.
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
-- **Fait** : B13 **140/140**, gold **432** ; **gold neuronal** POS **0,8483**, cascade **0,9440** ;
-  **syntagmes** BIO **0,6173**, tête **0,7606**, cascade confiance **0,7592** ; **cascade
-  complète** POS **0,9415**, syntagmes **0,7539**, acte **1,0** ;
-  [fiche](../../reports/rapport-pensee-gold-cascade.md).
-- **Ce qu'elle fait** : **gold neuronal POS et syntagmes** mesurés ; reprise **16 h 16**.
+- **Fait** : B13 **140/140**, gold **432** ; **gold neuronal** POS/syntagmes, **cascade
+  complète** 0,9415/0,7539/1,0 ; **DRVM/native** — cadenas **3 nœuds** (règle), minimal **0**,
+  labyrinthe **2 sonde**, porte **négatif** ;
+  [fiche](../../reports/rapport-pensee-politique-llm.md).
+- **Ce qu'elle fait** : **gold neuronal et politique DRVM** mesurés ; reprise **16 h 16**.
 - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
-- **Prochaine action** : **DRVM/native** (politique LLM) ; **pragmatique**.
-- **Bloquants** : aucun pour POS/syntagmes/cascade ; restent **pragmatique** et **DRVM/native**.
+- **Prochaine action** : **pragmatique** ; **DRVM/native — porte** (règle).
+- **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM ; restent **pragmatique** et **porte**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 > **Session close** : `fe3c05f0` (D/R/A) — **147 scans détectés** (91 uniques, 2 053 p),
@@ -137,7 +137,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **DRVM, pragmatique** ; **S** — la **validation
+**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **porte DRVM, pragmatique** ; **S** — la **validation
 humaine** de la banque et la frontière du GN (h033) ; **N4** — la consigne ; **B10.3** — le `z` ;
 **R0.7** — le tagger complet ; **D** — l'**OCR est clos** (91 scans uniques, 1 982 p) ; les 8 scans
 `.PDF` (58 p) restent une limite nommée.
