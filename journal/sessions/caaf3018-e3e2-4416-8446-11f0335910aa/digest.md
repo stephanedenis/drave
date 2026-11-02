@@ -2157,3 +2157,136 @@ lun 02 nov 2026 16:37:14 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md && git diff --cached --stat && python3 tools/verifie_etat_a_jour.py --index && git commit -m \"PASSE — REPORTÉE SU … [941 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                                   | 13 +++++++------
+ docs/pilotage/roadmap.md                                    |  4 ++--
+ .../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md   | 11 +++++++----
+ 3 files changed, 16 insertions(+), 12 deletions(-)
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-87]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-87", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master bee2527d] PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8
+ 22 files changed, 1155 insertions(+), 95 deletions(-)
+COMMIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Final verification of the tree, sessions, and budgets
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== git ===\"; git status --short; echo \"=== dernier commit ===\"; git log --oneline -2; echo \"=== sessions ===\"; python3 tools/sessions.py --check --strict >/dev/null; echo \"strict=$?\"; echo \"=== budgets ===\"; python3 to … [145 caractères tronqués]`
+
+  ```
+=== git ===
+ M tools/ocr_pdf.py
+?? reports/ocr-pdf-cegep-detection.json
+?? reports/rapport-s-analyseur-roles.md
+?? reports/s-banque-structures.json
+?? tools/detecte_scans_pdf.py
+=== dernier commit ===
+bee2527d PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8
+13f4e131 S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES
+=== sessions ===
+strict=0
+=== budgets ===
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3996 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; awk '$2 != 0' work/portes/sous-passe-1102-16h35/registre.txt; echo \"--- bilan ---\"; tail -2 work/portes/sous-passe-1102-16h35/registre.txt; echo \"--- gpu/heure ---\"; date; nvidia-smi --query-gpu=index,memory.used,utilization.gpu -- … [96 caractères tronqués]`
+
+  ```
+porte-bloc-maths 1 2
+--- 7 vertes, 1 rouges ---
+--- bilan ---
+porte-tableaux 0 1
+--- 7 vertes, 1 rouges ---
+--- gpu/heure ---
+lun 02 nov 2026 16:39:13 EST
+0, 1918 MiB, 90 %
+1, 1540 MiB, 74 %
+ 16:39:13  up  1:32,  2 users,  load average: 18,68, 26,17, 19,15
+  ```
+
+### 🤖 Assistant
+
+⏵ Integrating S's fresh commit (analyser, gold 39, export) into the state
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git show --stat --oneline 13f4e131 | head -20; echo \"=== rapport S (extrait) ===\"; head -60 reports/rapport-s-analyseur-roles.md 2>/dev/null", "description": "Inspect S commit and report"}`
+
+  ```
+13f4e131 S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES
+ journal/2026-11-02/README.md                       |   7 +-
+ journal/2026-11-02/apprentissage.md                |   2 +-
+ journal/2026-11-02/attention.md                    |   2 +-
+ journal/2026-11-02/distribue.md                    |   2 +-
+ journal/2026-11-02/docs.md                         |   2 +-
+ journal/2026-11-02/memoire.md                      |   2 +-
+ journal/2026-11-02/mesures.md                      |   2 +-
+ journal/2026-11-02/modele.md                       |   2 +-
+ journal/2026-11-02/outils.md                       |   2 +-
+ journal/2026-11-02/portes.md                       |   5 +-
+ journal/README.md                                  |   8 +-
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md | 123 +++++++++++++++++++++
+ .../rapport.md                                     |  20 ++--
+ journal/sessions/MANIFEST.md                       |  10 +-
+ .../abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md |  37 +++++++
+ .../rapport.md                                     |  17 +--
+ .../b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md | 109 ++++++++++++++++++
+ ...
+… [4049 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Final green check after S's commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/revue_documentation.py | tail -2; python3 tools/verifie_journal.py | tail -1; python3 tools/verifie_en_cours.py | tail -1; python3 tools/sessions.py --check --strict >/dev/null; echo \"sessions_strict=$?\"; python3 tools/ … [85 caractères tronqués]`
+
+  ```
+❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 637 JSON, le disque en a 638
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ état court, structuré, multi-session et reprenable
+sessions_strict=0
+  T0 max : 3996 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git log --oneline -3; echo \"---\"; git status --short | head; echo \"--- gpu ---\"; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; date", "description": "Confirm commits and machine state"}`
+
+  ```
+bee2527d PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8
+13f4e131 S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES
+e420267a ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE
+---
+ M tools/ocr_pdf.py
+?? reports/ocr-pdf-cegep-detection.json
+?? reports/rapport-s-analyseur-roles.md
+?? reports/s-banque-structures.json
+?? tools/detecte_scans_pdf.py
+--- gpu ---
+0, 1688 MiB, 90 %
+1, 1422 MiB, 95 %
+lun 02 nov 2026 16:39:45 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"| fichiers / JSON de résultats | **551** / **637** |\"\nn = \"| fichiers / JSON de résultats | **551** / **63 … [217 caractères tronqués]`
+
+  ```
+compteurs : 551 / 638
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Committing the final counter alignment
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"Mis à jour : 2026-11-02, 16 h 37\"\nn = \"Mis à jour : 2026-11-02, 16 h 40\"\nassert t.count(o) == 1\np … [487 caractères tronqués]`

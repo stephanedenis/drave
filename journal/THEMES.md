@@ -237,6 +237,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-30](2026-10-30/moteur.md) | `1,90 %` |
 | [2026-10-31](2026-10-31/moteur.md) | — |
 | [2026-11-01](2026-11-01/moteur.md) | — |
+| [2026-11-02](2026-11-02/moteur.md) | — |
 
 ### `mesures` — Campagnes et mesures
 

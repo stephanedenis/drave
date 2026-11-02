@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 90 |
-| Appels d'outils | 117 |
+| Messages | 96 |
+| Appels d'outils | 125 |
 | Fichiers touchés | 2 |
-| Commandes | 87 |
+| Commandes | 94 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu reprends le hub `536cd5d6-94ac-4057-8fe9-11709a4587c7`. Lis son plan, en-cours et  plan-travail §9. Prochaine action  … [180 caractères tronqués]
 
-*117 appels d'outils.* Actions notables :
+*125 appels d'outils.* Actions notables :
 
 - bash — List working directory and check hub directory
 - bash — Find hub id references in repo
@@ -41,11 +41,11 @@
 - bash — Find heartbeat mentions
 - bash — Check current time and gates scripts
 - bash — Read gates method doc
-- … et 94 autres
+- … et 101 autres
 
 **Synthèse produite :**
 
-⏵ Final heartbeat stamp and commit of the deferred-pass state
+⏵ Committing the final counter alignment
 
 ## 3. Travail accompli
 
@@ -98,7 +98,7 @@
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 47 autres
+- … et 54 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -121,6 +121,17 @@
 - **T1** `6. coût        : ×2.84 de temps pour ×4 termes (0.81 ms / 50 additions)`
 - **T1** `6. coût        : ×4.12 de temps pour ×4 termes (0.86 ms / 50 additions)`
 - **T1** `[still running after 60000ms; moved to background job bash-87]`
+- **T1** `0, 1918 MiB, 90 %`
+- **T1** `1, 1540 MiB, 74 %`
+- **T1** `> 38/39** (97,4 %), les **rôles 99/100** (99 %), les **compléments 45/45**, et couvre`
+- **T1** `> **1 156/1 161 octets** (99,6 %). L'échec est **nommé** : « La femme parle » est lu comme un`
+- **T1** `| `dev` | 7 | **7/7** | 229/229 (100 %) | **22/22** | **10/10** |`
+- **T1** `| `test` | 16 | **16/16** | 475/475 (100 %) | **40/40** | **19/19** |`
+- **T1** `| `holdout` | 16 | **15/16** | 452/457 (98,9 %) | **37/38** | **16/16** |`
+- **T1** `| **global** | **39** | **38/39** (97,4 %) | **1 156/1 161** (99,6 %) | **99/100** (99 %) | **45/45** |`
+- **T1** `0, 1688 MiB, 90 %`
+- **T1** `1, 1422 MiB, 95 %`
+- **T1** `[still running after 60000ms; moved to background job bash-94]`
 
 ## 5. Erreurs rencontrées
 
@@ -132,4 +143,5 @@
 
 - ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE  Le hub intègre les quatre mandats rouverts après le reboot d
 - PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8  La passe complète n'est pas lancée : à 16 h 32, GPU 0 à 92 % (N2 200 k pas
+- ÉTAT — COMPTEURS AU DISQUE (551 FICHES / 638 JSON) ; HEARTBEAT 16 h 40  Les quatre sessions actives écrivent : les compteurs bougent sous le hub. Mis à jour sur
 

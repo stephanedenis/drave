@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 110 |
-| Appels d'outils | 125 |
+| Messages | 115 |
+| Appels d'outils | 129 |
 | Fichiers touchés | 7 |
-| Commandes | 85 |
+| Commandes | 88 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu es la session S (les structures, CPU). Lis AGENTS.md, docs/pilotage/en-cours.md,  docs/theorie/jeux-symboliques.md et … [565 caractères tronqués]
 
-*125 appels d'outils.* Actions notables :
+*129 appels d'outils.* Actions notables :
 
 - bash — Get session id and git status
 - read
@@ -41,11 +41,37 @@
 - bash — Search hub coordination mechanism
 - bash — Read sessions.py second half
 - bash — Read date and plan-travail territory rules
-- … et 89 autres
+- … et 92 autres
 
 **Synthèse produite :**
 
-Je pose le plan et la réservation, puis je mesure l'état de l'analyseur sur un jeu de phrases candidates avant de coder les règles de rôles et de subordonnées.
+⏵ Cycle S clos côté code ; la fiche attend le hub pour la ligne d'état.
+
+**Fait — analyseur rôles/subordonnées + export**
+
+- **Gold** : 39 phrases (`dev` 7, `test` 16, `holdout` 16), dans `tools/structures/donnees/gold-analyseur.json`.
+- **Mesure** (`mesure_analyseur.py`) : types **38/39** (97,4 %), rôles **99/100** (99 %), compléments **45/45**, couverture **1 156/1 161** (99,6 %).
+- **Contrôles** : baseline à rôle constant **64/100** ; règles coupées **66/100** ; rôles mélangés **0,099** [0,00–0,22] sur 200 permutations ; `verifier_corpus.py --autotest` refuse un span corrompu.
+- **Échec nommé** : `h033` — « La femme parle » est lu comme un GN, le verbe sans auxiliaire est avalé. Non corrigé par une liste apprise sur le holdout.
+- **Export** : `data/structures/banque.jsonl`, **39 lignes**, SHA-256 `973c70a4…cd7db71` ; modes `banque` (0 ligne, aucun verdict humain — nommé) et `reference` (7 lignes). Manifeste copié dans `reports/s-banque-structures.json`.
+- **Tests** : **40/40** verts, dont les 19 d'origine.
+
+**Commits**
+
+- Sous-module : **`647205a`** (committé dans son dépôt avant le pointeur).
+- Pointeur principal : **`13f4e131`**, avec le journal du jour.
+- Plan de session + bloc d'état proposé : dans **`e420267a`** (le hub l'a intégré au journal), section « Ligne d'état proposée au hub ».
+
+**Reste un geste du hub** — je n'ai pas touché à `en-cours` :
+
+- committer [`reports/rapport-s-analyseur-roles.md`](reports/rapport-s-analyseur-roles.md) et [`reports/s-banque-structures.json`](reports/s-banque-structures.json) avec la section S du plan ;
+- compteurs **551 fiches / 637 JSON** (au lieu de 550/636), `reports/INDEX.md`, ligne roadmap **S**.
+
+`revue_documentation.py` signale exactement ces deux compteurs : c'est l'écart attendu tant que la fiche n'est pas intégrée. `verifie_en_cours`, `verifie_journal`, `porte-tableaux`, `verifier_schemas` et `sessions.py --check --strict` passent.
+
+**Prochaine action S** : validation humaine de la banque (le mode `banque` est à zéro), puis frontière du GN sans auxiliaire (`h033`) et gold plus large (voix, causatives).
+
+Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && python3 mesure_analyseur.py && python3 exporter_corpus.py && python3 verifier_corpus.py ../../data/structures/banque.jsonl`.
 
 ## 3. Travail accompli
 
@@ -103,7 +129,7 @@ Je pose le plan et la réservation, puis je mesure l'état de l'analyseur sur un
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 45 autres
+- … et 48 autres
 
 ## 4. Mesures et résultats marquants
 

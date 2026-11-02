@@ -2577,3 +2577,186 @@ journal
 … [2061 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 -m unittest discover -s tests 2>&1 | tail -3; python3 mesure_analyseur.py --json 2>/dev/null | head -8; python3 verifier_corpus.py ../../data/structures/banque.jsonl; echo \"=== statut sous-module ===\"; git  … [175 caractères tronqués]`
+
+  ```
+Ran 40 tests in 3.717s
+
+OK
+  gold · 39 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout    16  15/16      0.99  37/38    16/16  
+  global     39  38/39      0.99  99/100   45/45  
+  contrôle · baseline 64/100 (0.64) · règles coupées 66/100 (0.66) · rôles mélangés 0.10 [0.00, 0.22]
+{
+  ✅ ../../data/structures/banque.jsonl · empreinte, comptes, spans et restitution vérifiés
+=== statut sous-module ===
+=== en-cours mtime ===
+-rw-r--r--. 1 stephane stephane 11890 16:37:14 ../../docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -10; echo \"=== diff en-cours ===\"; git diff docs/pilotage/en-cours.md | head -120; echo \"=== S section ===\"; sed -n '55,90p' docs/pilotage/en-cours.md", "description": "Check hub en-cours update for S re … [6 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+M  journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+ M journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md
+ M tools/ocr_pdf.py
+?? reports/rapport-s-analyseur-roles.md
+?? reports/s-banque-structures.json
+?? tools/detecte_scans_pdf.py
+=== diff en-cours ===
+=== S section ===
+
+- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+- **Rôle** : **S — les structures** : le banc d'interprétations candidates, l'**analyseur** (rôles,
+  subordonnées) et l'**export au corpus**.
+- **Plan** : 1) ~~plan et réservation~~ ; 2) **analyseur rôles/subordonnées** (en cours) ; 3) **export
+  au corpus** ; 4) **tests** ; 5) **fiche, sous-module** ; 6) **ligne d'état**.
+- **Ambition** : un analyseur qui **nomme le rôle** et **coupe la subordonnée**.
+- **Stratégie** : une règle = une phrase du gold, un contrôle négatif par mesure, 19 tests.
+- **Objectif final** : un gold de 20 phrases, une mesure reproductible, `data
+… [2075 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== roadmap staged (S) ===\"; git diff --cached docs/pilotage/roadmap.md | grep -n -i -A4 -B2 \"structures\\|analyseur\\|\\*\\*S\\*\\*\" | head -60; echo \"=== en-cours staged (S) ===\"; git diff --cached docs/pilotage/en-cour … [124 caractères tronqués]`
+
+  ```
+=== roadmap staged (S) ===
+10-+**État au 02/11 16 h 37.** B13 est à **140/140** (gold 432, 116 liens) ; **N2.ac** (1 Go) est le
+11- modèle de production (3,49 / 6,03) ; les **quatre** sessions ont rouvert après le reboot —
+12: `e181ce02` (16 h 16), `fe3c05f0` (16 h 21), **N2** `0733c5bb` (16 h 17) et **S** `29ad180d`
+13- (16 h 19). Le runbook de reprise est dans [`plan-travail.md`](plan-travail.md) § 9.
+14-@@ -44,7 +44,7 @@ modèle de production (3,49 / 6,03) ; les **quatre** sessions ont rouvert après
+15- 
+16- ## L'ordre du jour (carpe diem)
+=== en-cours staged (S) ===
+46- ## Ce qui reste
+47- 
+48:-**N2** — les **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **DRVM/L** ; **S** — l'analyseur
+49:+**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **DRVM/L** ; **S** — l'analyseur
+50- puis l'export ; **N4** — la consigne ; **B10.3** — le `z` ; **R0.7** — gold/neuronal.
+51- 
+52- - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== porte-tableaux ===\"; bash tools/porte-tableaux.sh >/tmp/pt.out 2>&1; echo \"exit=$?\"; tail -6 /tmp/pt.out; echo \"=== verifier_schemas ===\"; python3 tools/verifier_schemas.py 2>&1 | tail -4; echo \"=== git log ===\"; gi … [208 caractères tronqués]`
+
+  ```
+=== porte-tableaux ===
+exit=0
+  ✅ 1556 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 2604 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+=== verifier_schemas ===
+  schémas · 458 document(s) · 66 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+=== git log ===
+13f4e131 S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES
+e420267a ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE
+dc7f9c56 N2 — MANDAT 200 k PAS SUR LE MÉLANGE 1 Go, PUIS R1.1/R1.2 (session 0733c5bb)
+=== en-cours mtime ===
+-rw-r--r--. 1 stephane stephane 11890 16:37:14 docs/pilotage/en-cours.md
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+M  journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md
+ M journal/sessions/MANIFEST.md
+ M 
+… [131 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== plan vs HEAD ===\"; git diff HEAD --stat -- journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md; git log --oneline -2 -- journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md; echo \"=== plan: ligne d'éta … [485 caractères tronqués]`
+
+  ```
+=== plan vs HEAD ===
+e420267a ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE
+=== plan: ligne d'état présente dans HEAD ? ===
+1
+=== tailles ===
+102 journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+=== status S ===
+?? reports/rapport-s-analyseur-roles.md
+?? reports/s-banque-structures.json
+  ```
+
+- **todo_write** `{"todos": [{"content": "Créer le plan de session S et réserver le territoire", "status": "completed"}, {"content": "Écrire le gold 39 phrases (types, rôles, subordonnées) avant les règles", "status": "completed"}, {"content": "Améliorer generateur.py : rôles contextuels, subordonnées, passif, copule … [688 caractères tronqués]`
+
+  ```
+Updated todo list: 1 pending, 0 in progress, 8 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; git log --oneline -2; git status --short -- reports/rapport-s-analyseur-roles.md reports/s-banque-structures.json docs/pilotage/en-cours.md; echo \"=== S section plan/fait ===\"; grep -n \"Fait\\|analyseur rôles\\|3 … [99 caractères tronqués]`
+
+  ```
+16:39:07
+bee2527d PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8
+13f4e131 S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES
+?? reports/rapport-s-analyseur-roles.md
+?? reports/s-banque-structures.json
+=== S section plan/fait ===
+59:- **Plan** : 1) ~~plan et réservation~~ ; 2) **analyseur rôles/subordonnées** (en cours) ; 3) **export
+65:- **Ce qu'elle fait** : mandat ouvert à **16 h 19** ; l'analyseur rôles/subordonnées est en cours.
+79:- **Fait** : B13 **140/140**, gold **432**, coréférence **116 liens** ; **R0.7** — 9 niveaux,
+108:  **session `29ad180d`** ouverte le 02/11 16 h 19 — analyseur rôles/subordonnées en cours.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"13f4e131\\|SOUS-MODULE 647205a\" journal/2026-11-02/ journal/sessions/MANIFEST.md 2>/dev/null | head -10; echo \"=== journal outils (dernier) ===\"; tail -30 journal/2026-11-02/outils.md", "description": "Check journal rec … [22 caractères tronqués]`
+
+  ```
+journal/2026-11-02/README.md:201:| 16:32 | `13f4e131` | S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES |
+journal/2026-11-02/docs.md:32:| 16:32 | `13f4e131` | S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES | `README.md`, `apprentissage.md`, `attention.md` (+18) |
+=== journal outils (dernier) ===
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
+
+## Commits du jour (1)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 11:30 | `4f7631aa` | DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA) DÉPASSE LE TIMEOUT PDFTOPPM, L'OUTIL LE RATTRAPE | `en-cours.md`, `README.md`, `apprentissage.md` (+20) |
+
+## Sessions actives ce jour
+
+- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 0.2 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46
+… [2532 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Cycle S clos côté code ; la fiche attend le hub pour la ligne d'état.
+
+**Fait — analyseur rôles/subordonnées + export**
+
+- **Gold** : 39 phrases (`dev` 7, `test` 16, `holdout` 16), dans `tools/structures/donnees/gold-analyseur.json`.
+- **Mesure** (`mesure_analyseur.py`) : types **38/39** (97,4 %), rôles **99/100** (99 %), compléments **45/45**, couverture **1 156/1 161** (99,6 %).
+- **Contrôles** : baseline à rôle constant **64/100** ; règles coupées **66/100** ; rôles mélangés **0,099** [0,00–0,22] sur 200 permutations ; `verifier_corpus.py --autotest` refuse un span corrompu.
+- **Échec nommé** : `h033` — « La femme parle » est lu comme un GN, le verbe sans auxiliaire est avalé. Non corrigé par une liste apprise sur le holdout.
+- **Export** : `data/structures/banque.jsonl`, **39 lignes**, SHA-256 `973c70a4…cd7db71` ; modes `banque` (0 ligne, aucun verdict humain — nommé) et `reference` (7 lignes). Manifeste copié dans `reports/s-banque-structures.json`.
+- **Tests** : **40/40** verts, dont les 19 d'origine.
+
+**Commits**
+
+- Sous-module : **`647205a`** (committé dans son dépôt avant le pointeur).
+- Pointeur principal : **`13f4e131`**, avec le journal du jour.
+- Plan de session + bloc d'état proposé : dans **`e420267a`** (le hub l'a intégré au journal), section « Ligne d'état proposée au hub ».
+
+**Reste un geste du hub** — je n'ai pas touché à `en-cours` :
+
+- committer [`reports/rapport-s-analyseur-roles.md`](reports/rapport-s-analyseur-roles.md) et [`reports/s-banque-structures.json`](reports/s-banque-structures.json) avec la section S du plan ;
+- compteurs **551 fiches / 637 JSON** (au lieu de 550/636), `reports/INDEX.md`, ligne roadmap **S**.
+
+`revue_documentation.py` signale exactement ces deux compteurs : c'est l'écart attendu tant que la fiche n'est pas intégrée. `verifie_en_cours`, `verifie_journal`, `porte-tableaux`, `verifier_schemas` et `sessions.py --check --strict` passent.
+
+**Prochaine action S** : validation humaine de la banque (le mode `banque` est à zéro), puis frontière du GN sans auxiliaire (`h033`) et gold plus large (voix, causatives).
+
+Reproduction : `cd tools/structures && python3 -m unittest discover -s tests && python3 mesure_analyseur.py && python3 exporter_corpus.py && python3 verifier_corpus.py ../../data/structures/banque.jsonl`.
+

@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 0.4 h |
 | Tours | 2 |
-| Messages | 110 |
-| Appels d'outils | 130 |
+| Messages | 126 |
+| Appels d'outils | 145 |
 | Fichiers touchés | 5 |
-| Commandes | 83 |
+| Commandes | 98 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -49,7 +49,7 @@
 
 ### Tour 2 — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État  … [367 caractères tronqués]
 
-*119 appels d'outils.* Actions notables :
+*134 appels d'outils.* Actions notables :
 
 - read
 - get_goal
@@ -65,7 +65,7 @@
 - bash — Locate scan census sources
 - bash — Search 127 mentions across docs
 - bash — Read session report around next steps
-- … et 76 autres
+- … et 89 autres
 
 **Synthèse produite :**
 
@@ -125,7 +125,7 @@
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 43 autres
+- … et 58 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -188,4 +188,6 @@
 - **T2** `| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67`
 - **T2** `- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typogly`
 - **T2** `- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (niveaux 0–4), export ; analyseur **7/7** séquences, **93,9 %** de couverture, **19 tests** ; [`analyseur`](..`
+- **T2** `[still running after 60000ms; moved to background job bash-83]`
+- **T2** `docs/pilotage/chantiers.md:89:| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 `
 

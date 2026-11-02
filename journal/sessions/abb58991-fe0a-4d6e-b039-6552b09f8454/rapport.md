@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 75 |
-| Appels d'outils | 112 |
-| Fichiers touchés | 6 |
-| Commandes | 91 |
+| Messages | 87 |
+| Appels d'outils | 126 |
+| Fichiers touchés | 8 |
+| Commandes | 98 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu reprends la session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`. Lis son plan, AGENTS.md  et docs/pilotage/en-cours. … [394 caractères tronqués]
 
-*112 appels d'outils.* Actions notables :
+*126 appels d'outils.* Actions notables :
 
 - bash — Show repo state and recent commits
 - bash — List root and sessions tool help
@@ -41,11 +41,11 @@
 - edit `/home/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md`
 - bash — Run strict session plan check
 - bash — Inspect the unlisted active plan
-- … et 86 autres
+- … et 98 autres
 
 **Synthèse produite :**
 
-⏵ Test de la vraie `Cascade` avec un tagger cached à confiance 0,6 (POS résiduel)
+⏵ Test réel du tagger via le serveur 7B sur une phrase
 
 ## 3. Travail accompli
 
@@ -59,6 +59,8 @@
 | `/tmp/qualif_proto_srv2.py` | 1 | 0 |
 | `/tmp/qualif_7b.py` | 1 | 0 |
 | `/tmp/qualif_7b_180.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py` | 0 | 3 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -102,7 +104,7 @@
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 51 autres
+- … et 58 autres
 
 ## 4. Mesures et résultats marquants
 

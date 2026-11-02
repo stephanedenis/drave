@@ -2237,3 +2237,152 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && time python3 /tmp/qualif_7b_180.py 2>&1 | tail -12", "description": "Run 7B minimal prompt on all 180 sentences", "timeoutMs": 900000}`
+
+  ```
+durée totale 359.2 s
+hand 87 / 105 0.8286
+synth 596 / 699 0.8526
+all 683 / 804 0.8495
+[stderr]
+
+real	5m59,301s
+user	0m0,617s
+sys	0m0,068s
+  ```
+
+### 🤖 Assistant
+
+⏵ Gain neuronal confirmé (0,8495 vs 0,7512) ; je simule la fusion cascade par confiance
+
+- **bash** `{"command": "grep -n \"def _supprimer_chevauchements\" -A 35 tools/bloc_linguistique.py", "description": "Read span conflict resolution"}`
+
+  ```
+869:def _supprimer_chevauchements(etiquettes: list[Etiquette]) -> list[Etiquette]:
+870-    """Les alternatives se suppriment **par type** quand les types sont complémentaires.
+871-
+872-    `pos` et `syntagme` sont des alternatives de **span** : on garde la plus confiante.
+873-    `phrase` (type/négation/modalité), `pragmatique` (acte/double_sens/contexte), `discours`
+874-    (paragraphe/connecteur) et `document` (titre/paragraphe) portent des types **complémentaires**
+875-    sur le même span : les supprimer ensemble effacerait la négation au profit du type."""
+876-    modes = {"pos": "span", "syntagme": "span", "phrase": "type", "pragmatique": "type",
+877-             "discours": "type", "document": "type"}
+878-    gardees: list[Etiquette] = [e for e in etiquettes if e.niveau not in modes]
+879-    for niveau, mode in modes.items():
+880-        groupes = {}
+881-        for e in (x for x in etiquettes if x.niveau == niveau):
+882-            groupes.setdefault(e.type if mode == "type" else "", []).append(e)
+883-        for _, es in groupes.items():
+884-            if niveau == "syntagme":
+885-                candidates = sorted(es, key=lambda e: (0 if e.source == "heuristique" else 1
+… [1059 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=bl.Heuristique()\nhand=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\nsynth=json.load(open('tools/tests/linguistique/gold_synthetique.j … [700 caractères tronqués]`
+
+  ```
+0.6 hand 0.9714  0.6 synth 0.9685  0.6 all 0.9689  
+0.7 hand 0.9714  0.7 synth 0.9685  0.7 all 0.9689  
+0.72 hand 0.9714  0.72 synth 0.9685  0.72 all 0.9689  
+0.75 hand 0.9524  0.75 synth 0.9442  0.75 all 0.9453  
+0.8 hand 0.9524  0.8 synth 0.9442  0.8 all 0.9453  
+0.85 hand 0.9524  0.85 synth 0.9442  0.85 all 0.9453  
+0.9 hand 0.9524  0.9 synth 0.9442  0.9 all 0.9453  
+0.95 hand 0.8286  0.95 synth 0.8526  0.95 all 0.8495
+  ```
+
+### 🤖 Assistant
+
+⏵ Bogue dans la simulation : la branche heuristique utilisait l'or ; je corrige
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=bl.Heuristique()\nhand=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\nsynth=json.load(open('tools/tests/linguistique/gold_synthetique.j … [901 caractères tronqués]`
+
+  ```
+0.5 hand=0.9238 synth=0.9499 all=0.9465
+0.55 hand=0.9238 synth=0.9499 all=0.9465
+0.56 hand=0.9238 synth=0.9471 all=0.9440
+0.6 hand=0.9238 synth=0.9471 all=0.9440
+0.65 hand=0.9238 synth=0.9471 all=0.9440
+0.7 hand=0.9238 synth=0.9471 all=0.9440
+0.72 hand=0.9238 synth=0.9471 all=0.9440
+0.75 hand=0.9048 synth=0.9227 all=0.9204
+0.8 hand=0.9048 synth=0.9227 all=0.9204
+0.9 hand=0.9048 synth=0.9227 all=0.9204
+0.95 hand=0.8286 synth=0.8526 all=0.8495
+heur hand 0.9238
+heur synth 0.7253
+heur all 0.7512
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de la vraie `Cascade` avec un tagger cached à confiance 0,6 (POS résiduel)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,sys,time\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=bl.Heuristique()\nhand=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\nsynth=json.load(open('tools/tests/linguistique/gold_syntheti … [1391 caractères tronqués]`
+
+  ```
+conf 0.6 hand 0.9238  conf 0.6 synth 0.9471  conf 0.6 all 0.944  appels 360 / 180
+conf 0.7 hand 0.9238  conf 0.7 synth 0.9471  conf 0.7 all 0.944  appels 360 / 180
+conf 0.75 hand 0.9048  conf 0.75 synth 0.9227  conf 0.75 all 0.9204  appels 360 / 180
+  ```
+
+### 🤖 Assistant
+
+⏵ Le 7B qualifie le tagger (0,8495) et la cascade à 0,6 donne 0,9440 ; je planifie la mise en forme
+
+- **todo_write** `{"todos": [{"content": "Reprendre le plan L/B13 (état actif, heartbeat) et vérifier sessions --strict", "status": "completed"}, {"content": "Qualifier le tagger local : 0,5B refusé, 3B vs 7B, 7B sur 180 et cascade à 0,6", "status": "in_progress"}, {"content": "Implémenter NeuronalLLMPOS (serveur loc … [368 caractères tronqués]`
+
+  ```
+Updated todo list: 4 pending, 1 in progress, 1 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && (llama-server -m models/qwen2.5-3b-instruct-q4_k_m.gguf --host 127.0.0.1 --port 18080 -ngl 0 -c 1024 --no-webui > /tmp/llama-server-3b.log 2>&1 &) ; sleep 5; curl -s http://127.0.0.1:18080/health", "description": "Restart 3B server for comparable dev  … [26 caractères tronqués]`
+
+  ```
+{"status":"ok"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 /tmp/qualif_7b.py 18080 min 2>&1 | tail -4", "description": "Run 3B minimal prompt on 20 dev sentences", "timeoutMs": 300000}`
+
+  ```
+g019 1/3 1.13s ['DET', 'VERB', 'VERB']
+g020 4/6 1.95s ['DET', 'NOUN', 'VERB', 'ADJ', 'CONJ', 'VERB']
+min POS 70 / 105 0.6667 lat moy 1.89
+conf [(('AUX', 'VERB'), 6), (('DET', 'NOUN'), 4), (('PRON', 'DET'), 4), (('PRON', 'NOUN'), 2), (('CONJ', 'PRON'), 2), (('ADV', 'ADJ'), 2), (('ADV', 'NOUN'), 2), (('PREP', 'CONJ'), 2), (('DET', 'PRON'), 1), (('NOUN', 'ADJ'), 1), (('ADV', 'PUNCT'), 1), (('VERB', 'PRON'), 1)]
+  ```
+
+### 🤖 Assistant
+
+⏵ 3B = 0,667 vs 7B = 0,829 : le 7B est retenu ; j'arrête le 3B et j'implémente le tagger
+
+- **bash** `{"command": "ps -eo pid,cmd | grep \"llama-server.*18080\" | grep -v grep | awk '{print $1}' | xargs -r kill; sed -n '1,45p' tools/bloc_linguistique.py", "description": "Stop 3B server and read module imports"}`
+
+  ```
+#!/usr/bin/env python3
+"""bloc_linguistique.py — le bloc d'étiquetage linguistique, du graphème à la pragmatique.
+
+Un seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** :
+
+  - `Heuristique` : CPU, déterministe, ultra-rapide ; elle étiquette la surface et produit des
+    **candidats** pour l'ambigu ; elle déclare sa couverture et sa confiance ;
+  - `MockNeuronal` : une implémentation neuronale **de contrat**, déterministe, pour tester la
+    substitution et le parallèle sans GPU ;
+  - `NeuronalLLM` : l'adaptateur réel, qui interroge un modèle local (`llama-cli`) et rend le
+    même type d'annotation ;
+  - `Parallele` et `Cascade` : les deux modes de composition. Le parallèle fusionne les
+    étiquettes par confiance ; la cascade n'envoie au neuronal que le **résidu** des niveaux
+    que l'heuristique ne couvre pas.
+
+La sortie est une **annotation typée** — pas le corps de la RSN : chaque étiquette porte son
+`niveau`, son `span`, sa `source`, sa `confiance`, sa `langue`, son `script` et ses `candidats`.
+La couche sémantique ne reçoit que `unites_semantiques` ; l'heuristique peut donc l'activer à
+une **fraction** du coût, avant même que le neuronal ait fini.
+
+
+… [914 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des classes POS du gold (compatibilité grammaire) avant le code
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,collections\nps=json.load(open('tools/tests/linguistique/gold.json'))['phrases']+json.load(open('tools/tests/linguistique/gold_synthetique.json'))['phrases']\nc=collections.Counter(m['pos'] for p in ps for m in p['mots']) … [64 caractères tronqués]`

@@ -2330,3 +2330,194 @@ revue de documentation · 551 fiche(s) · 637 JSON · 119 doc(s) · 81 porte(s) 
 126-| documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
   ```
 
+- **bash** `{"command": "P=$(find /home/stephane/Data13TB/stephane/archives/CEGEP -name \"Algorithms Illuminated Part 1*\" | head -1); echo \"$P\"; pdftotext -f 50 -l 51 -enc UTF-8 \"$P\" - | head -8; echo \"=== Data Structures ===\"; P2=$(find /home/stephane/Data13TB/stephane/archives/CEGEP -name \"Data Struct … [150 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement/Administration/Algorithmie/Algorithms Illuminated Part 1 The Basics by Tim Roughgarden.pdf
+2.1
+
+37
+
+The Gist
+
+asymptotic analysis helps us diﬀerentiate between better and worse
+approaches to sorting, better and worse approaches to multiplying
+=== Data Structures ===
+P1: JZP
+0521670152c02
+
+CUNY656/McMillan
+
+Printer: cupusbw
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -3 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; ls -l data/corpus_ocr_cegep/", "description": "OCR progress update"}`
+
+  ```
+19 work/ocr/run-cegep-02.log
+  CEGEP · Raphael à Gabriel Choquette-Denis ..pdf · 1 p · 1112 car
+  CEGEP · 14004-K-A631-réfection classes élévation · 1 p · 1794 car
+  CEGEP · 14004-K-A701-réfection classes mobilier  · 1 p · 2028 car
+      05:43
+total 112
+-rw-r--r--. 1 stephane stephane      0  2 nov 16:31 test.txt
+-rw-r--r--. 1 stephane stephane 113661  2 nov 16:37 train.txt
+-rw-r--r--. 1 stephane stephane      0  2 nov 16:31 val.txt
+  ```
+
+- **bash** `{"command": "ls tools/ | grep -i \"index\\|rapport\" | head; echo \"---\"; grep -rn \"INDEX\" tools/revue_documentation.py | head -5; echo \"---\"; grep -n \"ocr-pdf-cegep\" reports/INDEX.md reports/README.md | head", "description": "Check reports index maintenance"}`
+
+  ```
+decouper-rapport.py
+index_reports.py
+index_spans.py
+index_wiki_en.py
+rapport_du_pont.py
+---
+---
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; echo \"--- detection ---\"; ls -l reports/ocr-pdf-cegep-detection.json 2>/dev/null || echo \"pas encore\"", "description": "Progress check"}`
+
+  ```
+22 work/ocr/run-cegep-02.log
+  CEGEP · Scan from a McGill uPrint device001.pdf · 1 p · 2508 car
+  CEGEP · 20150223 420 AC Graph liens cours préala · 1 p · 1131 car
+      06:10
+--- detection ---
+pas encore
+  ```
+
+- **job_output** `{"job_id": "bash-59", "timeout_ms": 180000, "wait": true}`
+
+  ```
+{
+ "pdfs": 2681,
+ "scans": 147,
+ "pages_scans": 2701,
+ "uniques": 91,
+ "pages_uniques": 2053,
+ "doublons": 56
+}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; ls -l reports/ocr-pdf-cegep-detection.json; python3 -c \"import json; d=json.load(open('reports/ocr-pdf-cegep-detection.json')); print(d['methode']); print(d['detail'][0].keys())\"", "des … [57 caractères tronqués]`
+
+  ```
+25 work/ocr/run-cegep-02.log
+  CEGEP · Plan cadre 401-TF2-HY - Ancien.pdf · 2 p · 3195 car
+  CEGEP · Budget de fonctionnement 2013-2014.pdf · 1 p · 953 car
+      06:27
+-rw-r--r--. 1 stephane stephane 30894  2 nov 16:38 reports/ocr-pdf-cegep-detection.json
+{'outil': 'pdftotext complet + pdfinfo', 'seuil_car_par_page': 50, 'deduplication': 'SHA-256 des fichiers', 'racine': '/home/stephane/Data13TB/stephane/archives/CEGEP'}
+dict_keys(['chemin', 'pages', 'caracteres', 'scan', 'sha256', 'doublon'])
+  ```
+
+- **bash** `{"command": "sleep 90; wc -l work/ocr/run-cegep-02.log; tail -3 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1", "description": "Wait and check OCR progress"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-83]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -3 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1", "description": "Check OCR progress"}`
+
+  ```
+28 work/ocr/run-cegep-02.log
+  CEGEP · Règles de saisie-Kamaji.pdf · 4 p · 7902 car
+  CEGEP · Chap16_17.pdf · 3 p · 5894 car
+  CEGEP · Territoire de la CMM 20171001_carteGener · 1 p · 7151 car
+      07:41
+  ```
+
+- **bash** `{"command": "ls -l data/corpus_ocr_cegep/*.txt; grep -c \"CEGEP ·\" work/ocr/run-cegep-02.log; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('work/ocr/scans-uniques.txt')\nprint('docs liste', len(p.read_text().splitlines()))\nPY", "description": "Check splits and list size"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane      0  2 nov 16:31 data/corpus_ocr_cegep/test.txt
+-rw-r--r--. 1 stephane stephane 151733  2 nov 16:39 data/corpus_ocr_cegep/train.txt
+-rw-r--r--. 1 stephane stephane      0  2 nov 16:31 data/corpus_ocr_cegep/val.txt
+28
+docs liste 91
+  ```
+
+- **bash** `{"command": "grep -rn \"1 596\\|1,596\\|2 519 507\\|2,52 M\\|2,52M\\|10 notes\" docs/pilotage docs/theorie docs/implantation reports/README.md 2>/dev/null | head -20", "description": "Find stale CEGEP OCR numbers in docs"}`
+
+  ```
+docs/pilotage/roadmap.md:36:| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; [CEGEP](../theorie/glossaire/entrees/cegep.md) 10 notes, 1 596 p, 2,52 M car., 8 Ko 0) ; **genres** mesurés | **l'OCR complet** (le [fonds](../theorie/glossaire/entrees/fonds.md) CEGEP : ~127 scans, dont l'*Encyclopedia of Algorithms* avec `--max-pages`), la préparation R1.1/R1.2 |
+docs/pilotage/chantiers.md:89:| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (322 Mo), **documents** (872 M car., 8 Ko 2,07 %), **OCR** (20 livres, 7 381 p, 15,36 M car. ; 10 notes CEGEP, 1 596 p, 2,52 M car. ; 8 Ko 0) ; dédup, splits | texte intégral (dumps), PDF/OCR, filtrage des stubs, licences | — | N2, L, S, R03 |
+docs/pilotage/plan-travail.md:41:| **D/R/A — en pause** | les
+… [724 caractères tronqués]
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1", "description": "OCR progress"}`
+
+  ```
+29 work/ocr/run-cegep-02.log
+  CEGEP · Territoire de la CMM 20171001_carteGener · 1 p · 7151 car
+  CEGEP · Exercice2M.pdf · 2 p · 2430 car
+      07:58
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib\nd=json.load(open('work/ocr/detection-cegep.json'))\nunis={m['chemin']:m for m in d['detail'] if m['scan']}\n# same order as the worklist: detection order, dedup first occurrences\nseen=set(); ordered=[]\nfor m in d['detail']:\n    if not m['scan'] … [287 caractères tronqués]`
+
+  ```
+29    1 p  20150223 420 AC Graph liens cours préalables.pdf
+ 30    3 p  Plan cadre 401-TF1-HY.pdf
+ 31    2 p  Plan cadre 401-TF2-HY - Ancien.pdf
+ 32    1 p  Budget de fonctionnement 2013-2014.pdf
+ 33    4 p  Règles de saisie-Kamaji.pdf
+ 34    3 p  Chap16_17.pdf
+ 35    4 p  Règles de saisie.pdf
+ 36    1 p  B2346.pdf
+ 37    1 p  Élévation B2346 .pdf
+ 38    1 p  Territoire de la CMM 20171001_carteGenerale_24x36.pdf
+ 39    2 p  Prélab partie 2 calcul incertitude.pdf
+ 40    2 p  Exercice2M.pdf
+ 41    2 p  Exercice3O.pdf
+ 42    1 p  ExamFinal.pdf
+ 43  499 p  Complete Us Patents Of Nikola Tesla Free Energy Electricity Alternativ
+ 44    1 p  Stationnement_Travaux_centre-ville_carte_2021.pdf
+ 45    1 p  CarteMembre.pdf
+  ```
+
+- **bash** `{"command": "grep -n \"Sessions archivées\" -A4 docs/pilotage/en-cours.md; echo \"--- D/R/A section ---\"; grep -n \"fe3c05f0\" docs/pilotage/en-cours.md", "description": "Locate archived sessions line in en-cours"}`
+
+  ```
+--- D/R/A section ---
+10:> et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; les GPU sont
+87:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+89:- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+  ```
+
+### 👤 Utilisateur
+
+background job bash-83 (bash: sleep 90; wc -l work/ocr/run-cegep-02.log; tail -3 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sed -n '85,115p' docs/pilotage/en-cours.md", "description": "Read en-cours D/R/A section boundaries"}`
+
+  ```
+- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **D/R/A** — texte intégral, PDF/OCR, prépa R1.1/R1.2, A2.6/A8.3.
+- **Plan** : texte intégral, PDF, OCR, glossaire.
+- **Ambition** : le français réel.
+- **Stratégie** : dump, débaliseur, OCR page à page, glossaire au rendu.
+- **Objectif final** : 10 corpus, ficés.
+- **Ce qu'elle fait** : 10 corpus (**20,53 M**) ; PDF 1 927 ; OCR 20 livres + 10 notes
+  CEGEP ; glossaire 355 ; [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+- **Ce que font les autres** : **N2**, **S**, **Pensée**, **hub**.
+- **Prochaine action** : **OCR ~127 scans CEGEP** (cens en cours) ; clôture.
+- **Bloquants** : aucun ; reprise à **16 h 21**.
+- **Journal** : [le 02/11](../../journal/2026-11-02/README.md).
+
+## Ce qui est en cours
+
+- **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
+- **R4.1–R4.4** : **mesur
+… [1457 caractères tronqués]
+  ```
+

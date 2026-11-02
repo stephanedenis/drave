@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**159 commits** · **10 session(s)** · **9 thème(s)**
+**160 commits** · **10 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -18,6 +18,7 @@
 | memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 81 | [mesures.md](mesures.md) |
 | modele | 8 | [modele.md](modele.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 10 | [portes.md](portes.md) |
 
@@ -199,6 +200,7 @@
 | 16:16 | `dc7f9c56` | N2 — MANDAT 200 k PAS SUR LE MÉLANGE 1 Go, PUIS R1.1/R1.2 (session 0733c5bb) |
 | 16:30 | `e420267a` | ÉTAT — QUATRE SESSIONS OUVERTES (N2, S, PENSÉE, D/R/A) ; HEARTBEAT 16 h 24 ; PORTE STRICTE RÉPARÉE |
 | 16:32 | `13f4e131` | S — LE SOUS-MODULE 647205a : L'ANALYSEUR NOMME LES RÔLES, LE GOLD DE 39 PHRASES, L'EXPORT DE 39 STRUCTURES |
+| 16:37 | `bee2527d` | PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8 |
 
 ## Le récit de la journée (écrit à la main)
 
