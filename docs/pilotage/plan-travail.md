@@ -36,7 +36,7 @@ sous-agents pour les tâches bornées.
 | session | mandat | chantiers | charge | prochaine action |
 |---|---|---|---|---|
 | **N2 — le natif** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **GPU** (1 des 2), 8–16 cœurs | N2 sur les corpus wiki fr/en ; le verrou 129→512 ; la capacité |
-| **L — la langue et la pensée** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | le contrat/bloc (**398 langues**), le **gold 300 + attachement tête 140 réels** et les **opérateurs + nécessaire B13** sont faits ; L 200+ ; DRVM/native |
+| **L — la langue et la pensée** | le bloc langue (contrat heuristique + neuronal), la cascade, la pragmatique ; B13 | L, B13, la couche heuristique | **CPU**, 2–8 cœurs | le contrat/bloc (**398 langues**), le **gold 360 (200 réels) + attachement tête** et les **opérateurs + nécessaire B13** sont faits ; L 200+ ; DRVM/native |
 | **S — les structures** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | l'analyseur plus riche (rôles, subordonnées), l'export vers le corpus |
 | **D/R/A — les données, le lecteur, le moteur** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | le texte intégral des 10 corpus, l'extraction PDF/OCR, la prépa R1 |
 

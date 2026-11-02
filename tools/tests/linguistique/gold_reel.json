@@ -7731,6 +7731,3874 @@
     "acte": "assertion"
    },
    "source": "reel"
+  },
+  {
+   "id": "r121",
+   "langue": "fr",
+   "texte": "Le jardinier plante des fleurs.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "jardinier",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 12
+    },
+    {
+     "texte": "plante",
+     "pos": "VERB",
+     "debut": 13,
+     "fin": 19
+    },
+    {
+     "texte": "des",
+     "pos": "PREP",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "texte": "fleurs",
+     "pos": "NOUN",
+     "debut": 24,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le jardinier",
+     "role": "agent",
+     "debut": 0,
+     "fin": 12
+    },
+    {
+     "type": "GV",
+     "texte": "plante",
+     "role": "prédicat",
+     "debut": 13,
+     "fin": 19
+    },
+    {
+     "type": "GN",
+     "texte": "des fleurs",
+     "role": "patient",
+     "debut": 20,
+     "fin": 30
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r122",
+   "langue": "fr",
+   "texte": "La neige couvre la montagne.",
+   "mots": [
+    {
+     "texte": "La",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "neige",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "couvre",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "montagne",
+     "pos": "NOUN",
+     "debut": 19,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "La neige",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "couvre",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "la montagne",
+     "role": "patient",
+     "debut": 16,
+     "fin": 27
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r123",
+   "langue": "fr",
+   "texte": "Nous attendons le bus.",
+   "mots": [
+    {
+     "texte": "Nous",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "attendons",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 14
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 15,
+     "fin": 17
+    },
+    {
+     "texte": "bus",
+     "pos": "NOUN",
+     "debut": 18,
+     "fin": 21
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Nous",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "attendons",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 14
+    },
+    {
+     "type": "GN",
+     "texte": "le bus",
+     "role": "patient",
+     "debut": 15,
+     "fin": 21
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r124",
+   "langue": "fr",
+   "texte": "Le vendeur montre les articles.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "vendeur",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "montre",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 17
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 18,
+     "fin": 21
+    },
+    {
+     "texte": "articles",
+     "pos": "NOUN",
+     "debut": 22,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le vendeur",
+     "role": "agent",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "montre",
+     "role": "prédicat",
+     "debut": 11,
+     "fin": 17
+    },
+    {
+     "type": "GN",
+     "texte": "les articles",
+     "role": "patient",
+     "debut": 18,
+     "fin": 30
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r125",
+   "langue": "fr",
+   "texte": "Elle range sa chambre.",
+   "mots": [
+    {
+     "texte": "Elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "range",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 10
+    },
+    {
+     "texte": "sa",
+     "pos": "DET",
+     "debut": 11,
+     "fin": 13
+    },
+    {
+     "texte": "chambre",
+     "pos": "NOUN",
+     "debut": 14,
+     "fin": 21
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Elle",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "range",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 10
+    },
+    {
+     "type": "GN",
+     "texte": "sa chambre",
+     "role": "patient",
+     "debut": 11,
+     "fin": 21
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r126",
+   "langue": "fr",
+   "texte": "Le poisson nage dans l'eau.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "poisson",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "nage",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 15
+    },
+    {
+     "texte": "dans",
+     "pos": "PREP",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "texte": "l'eau",
+     "pos": "NOUN",
+     "debut": 21,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le poisson",
+     "role": "agent",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "nage",
+     "role": "prédicat",
+     "debut": 11,
+     "fin": 15
+    },
+    {
+     "type": "GP",
+     "texte": "dans l'eau",
+     "role": "lieu",
+     "debut": 16,
+     "fin": 26,
+     "cibles": [
+      "nage",
+      "poisson"
+     ],
+     "cible": "nage"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r127",
+   "langue": "fr",
+   "texte": "Il ferme la porte.",
+   "mots": [
+    {
+     "texte": "Il",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "texte": "porte",
+     "pos": "NOUN",
+     "debut": 12,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Il",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "ferme",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "GN",
+     "texte": "la porte",
+     "role": "patient",
+     "debut": 9,
+     "fin": 17
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r128",
+   "langue": "fr",
+   "texte": "La lune éclaire la nuit.",
+   "mots": [
+    {
+     "texte": "La",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "lune",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "éclaire",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 15
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "nuit",
+     "pos": "NOUN",
+     "debut": 19,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "La lune",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "éclaire",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "la nuit",
+     "role": "patient",
+     "debut": 16,
+     "fin": 23
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r129",
+   "langue": "fr",
+   "texte": "Les agriculteurs cultivent le blé.",
+   "mots": [
+    {
+     "texte": "Les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "agriculteurs",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 16
+    },
+    {
+     "texte": "cultivent",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 26
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 27,
+     "fin": 29
+    },
+    {
+     "texte": "blé",
+     "pos": "NOUN",
+     "debut": 30,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Les agriculteurs",
+     "role": "agent",
+     "debut": 0,
+     "fin": 16
+    },
+    {
+     "type": "GV",
+     "texte": "cultivent",
+     "role": "prédicat",
+     "debut": 17,
+     "fin": 26
+    },
+    {
+     "type": "GN",
+     "texte": "le blé",
+     "role": "patient",
+     "debut": 27,
+     "fin": 33
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r130",
+   "langue": "fr",
+   "texte": "Le facteur passe le matin.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "facteur",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "passe",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 16
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "texte": "matin",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 25
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le facteur",
+     "role": "agent",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "passe",
+     "role": "prédicat",
+     "debut": 11,
+     "fin": 16
+    },
+    {
+     "type": "GN",
+     "texte": "le matin",
+     "role": "temps",
+     "debut": 17,
+     "fin": 25
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r131",
+   "langue": "fr",
+   "texte": "Elle prépare un café.",
+   "mots": [
+    {
+     "texte": "Elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "prépare",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 12
+    },
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 13,
+     "fin": 15
+    },
+    {
+     "texte": "café",
+     "pos": "NOUN",
+     "debut": 16,
+     "fin": 20
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Elle",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "prépare",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 12
+    },
+    {
+     "type": "GN",
+     "texte": "un café",
+     "role": "patient",
+     "debut": 13,
+     "fin": 20
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r132",
+   "langue": "fr",
+   "texte": "Le tableau est accroché au mur.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "tableau",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "texte": "accroché",
+     "pos": "VERB",
+     "debut": 15,
+     "fin": 23
+    },
+    {
+     "texte": "au",
+     "pos": "PREP",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "texte": "mur",
+     "pos": "NOUN",
+     "debut": 27,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le tableau",
+     "role": "patient",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "est accroché",
+     "role": "prédicat",
+     "debut": 11,
+     "fin": 23
+    },
+    {
+     "type": "GP",
+     "texte": "au mur",
+     "role": "lieu",
+     "debut": 24,
+     "fin": 30,
+     "cibles": [
+      "accroché",
+      "tableau"
+     ],
+     "cible": "accroché"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r133",
+   "langue": "fr",
+   "texte": "Les étudiants révisent leurs cours.",
+   "mots": [
+    {
+     "texte": "Les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "étudiants",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 13
+    },
+    {
+     "texte": "révisent",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 22
+    },
+    {
+     "texte": "leurs",
+     "pos": "DET",
+     "debut": 23,
+     "fin": 28
+    },
+    {
+     "texte": "cours",
+     "pos": "NOUN",
+     "debut": 29,
+     "fin": 34
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Les étudiants",
+     "role": "agent",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "GV",
+     "texte": "révisent",
+     "role": "prédicat",
+     "debut": 14,
+     "fin": 22
+    },
+    {
+     "type": "GN",
+     "texte": "leurs cours",
+     "role": "patient",
+     "debut": 23,
+     "fin": 34
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r134",
+   "langue": "fr",
+   "texte": "Le chef goûte la sauce.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chef",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "goûte",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 14,
+     "fin": 16
+    },
+    {
+     "texte": "sauce",
+     "pos": "NOUN",
+     "debut": 17,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chef",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "goûte",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "la sauce",
+     "role": "patient",
+     "debut": 14,
+     "fin": 22
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r135",
+   "langue": "fr",
+   "texte": "La cloche sonne midi.",
+   "mots": [
+    {
+     "texte": "La",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "cloche",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "sonne",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "texte": "midi",
+     "pos": "NOUN",
+     "debut": 16,
+     "fin": 20
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "La cloche",
+     "role": "agent",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "sonne",
+     "role": "prédicat",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "midi",
+     "role": "patient",
+     "debut": 16,
+     "fin": 20
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r136",
+   "langue": "fr",
+   "texte": "Les voyageurs montent dans le train.",
+   "mots": [
+    {
+     "texte": "Les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "voyageurs",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 13
+    },
+    {
+     "texte": "montent",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "texte": "dans",
+     "pos": "PREP",
+     "debut": 22,
+     "fin": 26
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 27,
+     "fin": 29
+    },
+    {
+     "texte": "train",
+     "pos": "NOUN",
+     "debut": 30,
+     "fin": 35
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Les voyageurs",
+     "role": "agent",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "GV",
+     "texte": "montent",
+     "role": "prédicat",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "type": "GP",
+     "texte": "dans le train",
+     "role": "lieu",
+     "debut": 22,
+     "fin": 35,
+     "cibles": [
+      "montent",
+      "voyageurs"
+     ],
+     "cible": "montent"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r137",
+   "langue": "fr",
+   "texte": "Le peintre mélange les couleurs.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "peintre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "mélange",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 18
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 19,
+     "fin": 22
+    },
+    {
+     "texte": "couleurs",
+     "pos": "NOUN",
+     "debut": 23,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le peintre",
+     "role": "agent",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "mélange",
+     "role": "prédicat",
+     "debut": 11,
+     "fin": 18
+    },
+    {
+     "type": "GN",
+     "texte": "les couleurs",
+     "role": "patient",
+     "debut": 19,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r138",
+   "langue": "fr",
+   "texte": "Elle écoute de la musique.",
+   "mots": [
+    {
+     "texte": "Elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "écoute",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 11
+    },
+    {
+     "texte": "de",
+     "pos": "PREP",
+     "debut": 12,
+     "fin": 14
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 15,
+     "fin": 17
+    },
+    {
+     "texte": "musique",
+     "pos": "NOUN",
+     "debut": 18,
+     "fin": 25
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Elle",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "écoute",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 11
+    },
+    {
+     "type": "GN",
+     "texte": "de la musique",
+     "role": "patient",
+     "debut": 12,
+     "fin": 25
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r139",
+   "langue": "fr",
+   "texte": "Le bébé sourit à sa mère.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "bébé",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "sourit",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 14
+    },
+    {
+     "texte": "à",
+     "pos": "PREP",
+     "debut": 15,
+     "fin": 16
+    },
+    {
+     "texte": "sa",
+     "pos": "DET",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "texte": "mère",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le bébé",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "sourit",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 14
+    },
+    {
+     "type": "GP",
+     "texte": "à sa mère",
+     "role": "destinataire",
+     "debut": 15,
+     "fin": 24,
+     "cibles": [
+      "sourit"
+     ],
+     "cible": "sourit"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r140",
+   "langue": "fr",
+   "texte": "La forêt abrite des animaux.",
+   "mots": [
+    {
+     "texte": "La",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "forêt",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "abrite",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "des",
+     "pos": "PREP",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "texte": "animaux",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "La forêt",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "abrite",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "des animaux",
+     "role": "patient",
+     "debut": 16,
+     "fin": 27
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r141",
+   "langue": "fr",
+   "texte": "Le professeur corrige les copies.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "professeur",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 13
+    },
+    {
+     "texte": "corrige",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 22,
+     "fin": 25
+    },
+    {
+     "texte": "copies",
+     "pos": "NOUN",
+     "debut": 26,
+     "fin": 32
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le professeur",
+     "role": "agent",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "GV",
+     "texte": "corrige",
+     "role": "prédicat",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "type": "GN",
+     "texte": "les copies",
+     "role": "patient",
+     "debut": 22,
+     "fin": 32
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r142",
+   "langue": "fr",
+   "texte": "Nous visitons un château.",
+   "mots": [
+    {
+     "texte": "Nous",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "visitons",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 13
+    },
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 14,
+     "fin": 16
+    },
+    {
+     "texte": "château",
+     "pos": "NOUN",
+     "debut": 17,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Nous",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "visitons",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "un château",
+     "role": "patient",
+     "debut": 14,
+     "fin": 24
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r143",
+   "langue": "fr",
+   "texte": "Le vent agite les feuilles.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "vent",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "agite",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "feuilles",
+     "pos": "NOUN",
+     "debut": 18,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le vent",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "agite",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "les feuilles",
+     "role": "patient",
+     "debut": 14,
+     "fin": 26
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r144",
+   "langue": "fr",
+   "texte": "La pièce est sombre.",
+   "mots": [
+    {
+     "texte": "La",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "pièce",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "texte": "sombre",
+     "pos": "ADJ",
+     "debut": 13,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "La pièce",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "est sombre",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 19
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r145",
+   "langue": "fr",
+   "texte": "Il répare la bicyclette.",
+   "mots": [
+    {
+     "texte": "Il",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "répare",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 10,
+     "fin": 12
+    },
+    {
+     "texte": "bicyclette",
+     "pos": "NOUN",
+     "debut": 13,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Il",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "répare",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "la bicyclette",
+     "role": "patient",
+     "debut": 10,
+     "fin": 23
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r146",
+   "langue": "fr",
+   "texte": "Le fleuve traverse la ville.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "fleuve",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "traverse",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 18
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "texte": "ville",
+     "pos": "NOUN",
+     "debut": 22,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le fleuve",
+     "role": "agent",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "traverse",
+     "role": "prédicat",
+     "debut": 10,
+     "fin": 18
+    },
+    {
+     "type": "GN",
+     "texte": "la ville",
+     "role": "patient",
+     "debut": 19,
+     "fin": 27
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r147",
+   "langue": "fr",
+   "texte": "Les clients attendent devant la porte.",
+   "mots": [
+    {
+     "texte": "Les",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "clients",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "attendent",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 21
+    },
+    {
+     "texte": "devant",
+     "pos": "PREP",
+     "debut": 22,
+     "fin": 28
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 29,
+     "fin": 31
+    },
+    {
+     "texte": "porte",
+     "pos": "NOUN",
+     "debut": 32,
+     "fin": 37
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Les clients",
+     "role": "agent",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "attendent",
+     "role": "prédicat",
+     "debut": 12,
+     "fin": 21
+    },
+    {
+     "type": "GP",
+     "texte": "devant la porte",
+     "role": "lieu",
+     "debut": 22,
+     "fin": 37,
+     "cibles": [
+      "attendent"
+     ],
+     "cible": "attendent"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r148",
+   "langue": "fr",
+   "texte": "Le chien suit son maître.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chien",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "suit",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "texte": "son",
+     "pos": "DET",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "maître",
+     "pos": "NOUN",
+     "debut": 18,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chien",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "suit",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "son maître",
+     "role": "patient",
+     "debut": 14,
+     "fin": 24
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r149",
+   "langue": "fr",
+   "texte": "La pluie lave les rues.",
+   "mots": [
+    {
+     "texte": "La",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "pluie",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "lave",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "texte": "les",
+     "pos": "DET",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "rues",
+     "pos": "NOUN",
+     "debut": 18,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "La pluie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "lave",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "les rues",
+     "role": "patient",
+     "debut": 14,
+     "fin": 22
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r150",
+   "langue": "fr",
+   "texte": "Le livre appartient à la bibliothèque.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "appartient",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 19
+    },
+    {
+     "texte": "à",
+     "pos": "PREP",
+     "debut": 20,
+     "fin": 21
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 22,
+     "fin": 24
+    },
+    {
+     "texte": "bibliothèque",
+     "pos": "NOUN",
+     "debut": 25,
+     "fin": 37
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le livre",
+     "role": "patient",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "appartient",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 19
+    },
+    {
+     "type": "GP",
+     "texte": "à la bibliothèque",
+     "role": "destinataire",
+     "debut": 20,
+     "fin": 37,
+     "cibles": [
+      "appartient"
+     ],
+     "cible": "appartient"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r151",
+   "langue": "en",
+   "texte": "The gardener plants flowers.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "gardener",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 12
+    },
+    {
+     "texte": "plants",
+     "pos": "VERB",
+     "debut": 13,
+     "fin": 19
+    },
+    {
+     "texte": "flowers",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The gardener",
+     "role": "agent",
+     "debut": 0,
+     "fin": 12
+    },
+    {
+     "type": "GV",
+     "texte": "plants",
+     "role": "prédicat",
+     "debut": 13,
+     "fin": 19
+    },
+    {
+     "type": "GN",
+     "texte": "flowers",
+     "role": "patient",
+     "debut": 20,
+     "fin": 27
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r152",
+   "langue": "en",
+   "texte": "The snow covers the mountain.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "snow",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "covers",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "texte": "mountain",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 28
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The snow",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "covers",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "the mountain",
+     "role": "patient",
+     "debut": 16,
+     "fin": 28
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r153",
+   "langue": "en",
+   "texte": "We wait for the bus.",
+   "mots": [
+    {
+     "texte": "We",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "wait",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "for",
+     "pos": "PREP",
+     "debut": 8,
+     "fin": 11
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 12,
+     "fin": 15
+    },
+    {
+     "texte": "bus",
+     "pos": "NOUN",
+     "debut": 16,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "We",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "wait",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "type": "GP",
+     "texte": "for the bus",
+     "role": "cible",
+     "debut": 8,
+     "fin": 19,
+     "cibles": [
+      "wait"
+     ],
+     "cible": "wait"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r154",
+   "langue": "en",
+   "texte": "The seller shows the items.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "seller",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "shows",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 16
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 17,
+     "fin": 20
+    },
+    {
+     "texte": "items",
+     "pos": "NOUN",
+     "debut": 21,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The seller",
+     "role": "agent",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "shows",
+     "role": "prédicat",
+     "debut": 11,
+     "fin": 16
+    },
+    {
+     "type": "GN",
+     "texte": "the items",
+     "role": "patient",
+     "debut": 17,
+     "fin": 26
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r155",
+   "langue": "en",
+   "texte": "She tidies her room.",
+   "mots": [
+    {
+     "texte": "She",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "tidies",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "her",
+     "pos": "DET",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "texte": "room",
+     "pos": "NOUN",
+     "debut": 15,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "She",
+     "role": "agent",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "tidies",
+     "role": "prédicat",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "type": "GN",
+     "texte": "her room",
+     "role": "patient",
+     "debut": 11,
+     "fin": 19
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r156",
+   "langue": "en",
+   "texte": "The fish swims in the water.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "fish",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "swims",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "texte": "in",
+     "pos": "PREP",
+     "debut": 15,
+     "fin": 17
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 18,
+     "fin": 21
+    },
+    {
+     "texte": "water",
+     "pos": "NOUN",
+     "debut": 22,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The fish",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "swims",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "type": "GP",
+     "texte": "in the water",
+     "role": "lieu",
+     "debut": 15,
+     "fin": 27,
+     "cibles": [
+      "swims",
+      "fish"
+     ],
+     "cible": "swims"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r157",
+   "langue": "en",
+   "texte": "He closes the door.",
+   "mots": [
+    {
+     "texte": "He",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "closes",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "texte": "door",
+     "pos": "NOUN",
+     "debut": 14,
+     "fin": 18
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "He",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "closes",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "the door",
+     "role": "patient",
+     "debut": 10,
+     "fin": 18
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r158",
+   "langue": "en",
+   "texte": "The moon lights the night.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "moon",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "lights",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "texte": "night",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 25
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The moon",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "lights",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "the night",
+     "role": "patient",
+     "debut": 16,
+     "fin": 25
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r159",
+   "langue": "en",
+   "texte": "The farmers grow wheat.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "farmers",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "grow",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 16
+    },
+    {
+     "texte": "wheat",
+     "pos": "NOUN",
+     "debut": 17,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The farmers",
+     "role": "agent",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "grow",
+     "role": "prédicat",
+     "debut": 12,
+     "fin": 16
+    },
+    {
+     "type": "GN",
+     "texte": "wheat",
+     "role": "patient",
+     "debut": 17,
+     "fin": 22
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r160",
+   "langue": "en",
+   "texte": "The postman passes in the morning.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "postman",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "passes",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "texte": "in",
+     "pos": "PREP",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 22,
+     "fin": 25
+    },
+    {
+     "texte": "morning",
+     "pos": "NOUN",
+     "debut": 26,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The postman",
+     "role": "agent",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "passes",
+     "role": "prédicat",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "type": "GP",
+     "texte": "in the morning",
+     "role": "temps",
+     "debut": 19,
+     "fin": 33,
+     "cibles": [
+      "passes"
+     ],
+     "cible": "passes"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r161",
+   "langue": "en",
+   "texte": "She prepares a coffee.",
+   "mots": [
+    {
+     "texte": "She",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "prepares",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 12
+    },
+    {
+     "texte": "a",
+     "pos": "DET",
+     "debut": 13,
+     "fin": 14
+    },
+    {
+     "texte": "coffee",
+     "pos": "NOUN",
+     "debut": 15,
+     "fin": 21
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "She",
+     "role": "agent",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "prepares",
+     "role": "prédicat",
+     "debut": 4,
+     "fin": 12
+    },
+    {
+     "type": "GN",
+     "texte": "a coffee",
+     "role": "patient",
+     "debut": 13,
+     "fin": 21
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r162",
+   "langue": "en",
+   "texte": "The painting is hung on the wall.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "painting",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 12
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 13,
+     "fin": 15
+    },
+    {
+     "texte": "hung",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "texte": "on",
+     "pos": "PREP",
+     "debut": 21,
+     "fin": 23
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 24,
+     "fin": 27
+    },
+    {
+     "texte": "wall",
+     "pos": "NOUN",
+     "debut": 28,
+     "fin": 32
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The painting",
+     "role": "patient",
+     "debut": 0,
+     "fin": 12
+    },
+    {
+     "type": "GV",
+     "texte": "is hung",
+     "role": "prédicat",
+     "debut": 13,
+     "fin": 20
+    },
+    {
+     "type": "GP",
+     "texte": "on the wall",
+     "role": "lieu",
+     "debut": 21,
+     "fin": 32,
+     "cibles": [
+      "hung",
+      "painting"
+     ],
+     "cible": "hung"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r163",
+   "langue": "en",
+   "texte": "The students review their lessons.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "students",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 12
+    },
+    {
+     "texte": "review",
+     "pos": "VERB",
+     "debut": 13,
+     "fin": 19
+    },
+    {
+     "texte": "their",
+     "pos": "DET",
+     "debut": 20,
+     "fin": 25
+    },
+    {
+     "texte": "lessons",
+     "pos": "NOUN",
+     "debut": 26,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The students",
+     "role": "agent",
+     "debut": 0,
+     "fin": 12
+    },
+    {
+     "type": "GV",
+     "texte": "review",
+     "role": "prédicat",
+     "debut": 13,
+     "fin": 19
+    },
+    {
+     "type": "GN",
+     "texte": "their lessons",
+     "role": "patient",
+     "debut": 20,
+     "fin": 33
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r164",
+   "langue": "en",
+   "texte": "The chef tastes the sauce.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "chef",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "tastes",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "texte": "sauce",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 25
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The chef",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "tastes",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "the sauce",
+     "role": "patient",
+     "debut": 16,
+     "fin": 25
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r165",
+   "langue": "en",
+   "texte": "The bell rings noon.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "bell",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "rings",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "texte": "noon",
+     "pos": "NOUN",
+     "debut": 15,
+     "fin": 19
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The bell",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "rings",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 14
+    },
+    {
+     "type": "GN",
+     "texte": "noon",
+     "role": "patient",
+     "debut": 15,
+     "fin": 19
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r166",
+   "langue": "en",
+   "texte": "The travelers get on the train.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "travelers",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 13
+    },
+    {
+     "texte": "get",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "on",
+     "pos": "PREP",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "train",
+     "pos": "NOUN",
+     "debut": 25,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The travelers",
+     "role": "agent",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "GV",
+     "texte": "get",
+     "role": "prédicat",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "type": "GP",
+     "texte": "on the train",
+     "role": "lieu",
+     "debut": 18,
+     "fin": 30,
+     "cibles": [
+      "get",
+      "travelers"
+     ],
+     "cible": "get"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r167",
+   "langue": "en",
+   "texte": "The painter mixes the colors.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "painter",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "mixes",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 17
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 18,
+     "fin": 21
+    },
+    {
+     "texte": "colors",
+     "pos": "NOUN",
+     "debut": 22,
+     "fin": 28
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The painter",
+     "role": "agent",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "mixes",
+     "role": "prédicat",
+     "debut": 12,
+     "fin": 17
+    },
+    {
+     "type": "GN",
+     "texte": "the colors",
+     "role": "patient",
+     "debut": 18,
+     "fin": 28
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r168",
+   "langue": "en",
+   "texte": "She listens to music.",
+   "mots": [
+    {
+     "texte": "She",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "listens",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "to",
+     "pos": "PREP",
+     "debut": 12,
+     "fin": 14
+    },
+    {
+     "texte": "music",
+     "pos": "NOUN",
+     "debut": 15,
+     "fin": 20
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "She",
+     "role": "agent",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "listens",
+     "role": "prédicat",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "type": "GP",
+     "texte": "to music",
+     "role": "cible",
+     "debut": 12,
+     "fin": 20,
+     "cibles": [
+      "listens"
+     ],
+     "cible": "listens"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r169",
+   "langue": "en",
+   "texte": "The baby smiles at his mother.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "baby",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "smiles",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "at",
+     "pos": "PREP",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "his",
+     "pos": "DET",
+     "debut": 19,
+     "fin": 22
+    },
+    {
+     "texte": "mother",
+     "pos": "NOUN",
+     "debut": 23,
+     "fin": 29
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The baby",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "smiles",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "type": "GP",
+     "texte": "at his mother",
+     "role": "destinataire",
+     "debut": 16,
+     "fin": 29,
+     "cibles": [
+      "smiles"
+     ],
+     "cible": "smiles"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r170",
+   "langue": "en",
+   "texte": "The forest shelters animals.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "forest",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 10
+    },
+    {
+     "texte": "shelters",
+     "pos": "VERB",
+     "debut": 11,
+     "fin": 19
+    },
+    {
+     "texte": "animals",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The forest",
+     "role": "agent",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "GV",
+     "texte": "shelters",
+     "role": "prédicat",
+     "debut": 11,
+     "fin": 19
+    },
+    {
+     "type": "GN",
+     "texte": "animals",
+     "role": "patient",
+     "debut": 20,
+     "fin": 27
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r171",
+   "langue": "en",
+   "texte": "The teacher corrects the copies.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "teacher",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "corrects",
+     "pos": "VERB",
+     "debut": 12,
+     "fin": 20
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "copies",
+     "pos": "NOUN",
+     "debut": 25,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The teacher",
+     "role": "agent",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "GV",
+     "texte": "corrects",
+     "role": "prédicat",
+     "debut": 12,
+     "fin": 20
+    },
+    {
+     "type": "GN",
+     "texte": "the copies",
+     "role": "patient",
+     "debut": 21,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r172",
+   "langue": "en",
+   "texte": "We visit a castle.",
+   "mots": [
+    {
+     "texte": "We",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "visit",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "a",
+     "pos": "DET",
+     "debut": 9,
+     "fin": 10
+    },
+    {
+     "texte": "castle",
+     "pos": "NOUN",
+     "debut": 11,
+     "fin": 17
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "We",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "visit",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "GN",
+     "texte": "a castle",
+     "role": "patient",
+     "debut": 9,
+     "fin": 17
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r173",
+   "langue": "en",
+   "texte": "The wind shakes the leaves.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "wind",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "shakes",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "texte": "leaves",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The wind",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "shakes",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "the leaves",
+     "role": "patient",
+     "debut": 16,
+     "fin": 26
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r174",
+   "langue": "en",
+   "texte": "The room is dark.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "room",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "texte": "dark",
+     "pos": "ADJ",
+     "debut": 12,
+     "fin": 16
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The room",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "is dark",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 16
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r175",
+   "langue": "en",
+   "texte": "He repairs the bicycle.",
+   "mots": [
+    {
+     "texte": "He",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "repairs",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 11,
+     "fin": 14
+    },
+    {
+     "texte": "bicycle",
+     "pos": "NOUN",
+     "debut": 15,
+     "fin": 22
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "He",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "repairs",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "type": "GN",
+     "texte": "the bicycle",
+     "role": "patient",
+     "debut": 11,
+     "fin": 22
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r176",
+   "langue": "en",
+   "texte": "The river crosses the city.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "river",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "crosses",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 18,
+     "fin": 21
+    },
+    {
+     "texte": "city",
+     "pos": "NOUN",
+     "debut": 22,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The river",
+     "role": "agent",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "GV",
+     "texte": "crosses",
+     "role": "prédicat",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "type": "GN",
+     "texte": "the city",
+     "role": "patient",
+     "debut": 18,
+     "fin": 26
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r177",
+   "langue": "en",
+   "texte": "The customers wait in front of the door.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "customers",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 13
+    },
+    {
+     "texte": "wait",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 18
+    },
+    {
+     "texte": "in",
+     "pos": "PREP",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "texte": "front",
+     "pos": "NOUN",
+     "debut": 22,
+     "fin": 27
+    },
+    {
+     "texte": "of",
+     "pos": "PREP",
+     "debut": 28,
+     "fin": 30
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 31,
+     "fin": 34
+    },
+    {
+     "texte": "door",
+     "pos": "NOUN",
+     "debut": 35,
+     "fin": 39
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The customers",
+     "role": "agent",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "GV",
+     "texte": "wait",
+     "role": "prédicat",
+     "debut": 14,
+     "fin": 18
+    },
+    {
+     "type": "GP",
+     "texte": "in front of the door",
+     "role": "lieu",
+     "debut": 19,
+     "fin": 39,
+     "cibles": [
+      "wait"
+     ],
+     "cible": "wait"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r178",
+   "langue": "en",
+   "texte": "The dog follows its master.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "dog",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "follows",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 15
+    },
+    {
+     "texte": "its",
+     "pos": "DET",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "texte": "master",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The dog",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "follows",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "its master",
+     "role": "patient",
+     "debut": 16,
+     "fin": 26
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r179",
+   "langue": "en",
+   "texte": "The rain washes the streets.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "rain",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "washes",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "texte": "streets",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The rain",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "washes",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "the streets",
+     "role": "patient",
+     "debut": 16,
+     "fin": 27
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r180",
+   "langue": "en",
+   "texte": "The book belongs to the library.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "book",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "belongs",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 16
+    },
+    {
+     "texte": "to",
+     "pos": "PREP",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "texte": "library",
+     "pos": "NOUN",
+     "debut": 24,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The book",
+     "role": "patient",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "belongs",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 16
+    },
+    {
+     "type": "GP",
+     "texte": "to the library",
+     "role": "destinataire",
+     "debut": 17,
+     "fin": 31,
+     "cibles": [
+      "belongs"
+     ],
+     "cible": "belongs"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
   }
  ]
 }

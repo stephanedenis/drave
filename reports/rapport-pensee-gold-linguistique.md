@@ -1,4 +1,4 @@
-# L — le gold 300 : 140 réels + 160 synthétiques, POS 0,773, tête 0,962
+# L — le gold 360 : 200 réels + 160 synthétiques, POS 0,772, tête 0,966
 
 > **Ligne de roadmap** : **R0.7** (bloc linguistique) / **L** · **Date** : 2026-11-01 ·
 > **Verdict** : ✅ **le gold étendu et l'attachement sont mesurés** — **180 phrases** (20 réelles écrites à la main,
@@ -56,12 +56,12 @@ entre le S et le gold.
 
 | lecture | source | cibles | ambiguës | couv. tête | **top-1 tête** (1 lecture) | **top-1 tête** (2 lectures) | **top-k tête** |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **heuristique** | **300** | **123** | **53** | **1,000** | 0,870 | **0,962** | **0,925** |
-| heuristique | 140 réels | 68 | 31 | 1,000 | — | **0,936** | **1,000** |
+| **heuristique** | **360** | **138** | **59** | **1,000** | 0,870 | **0,966** | **0,932** |
+| heuristique | 200 réels | 83 | 37 | 1,000 | — | **0,946** | **1,000** |
 | heuristique | 20 réels | 13 | 6 | 1,000 | 0,400 | 0,833 | 1,000 |
-| heuristique | 120 réels (nouveaux) | 55 | 25 | 1,000 | — | **0,960** | **1,000** |
+| heuristique | 180 réels (nouveaux) | 70 | 31 | 1,000 | — | **0,968** | **1,000** |
 | heuristique | 160 synth. | 55 | 22 | 1,000 | **1,000** | **1,000** | 0,818 |
-| mock seul | 300 | 123 | 53 | 1,000 | 0 | 0 | 0 |
+| mock seul | 360 | 138 | 59 | 1,000 | 0 | 0 | 0 |
 | **hasard** | 180 | 97 | — | — | **0,015** | — | — |
 
 - **La couverture par tête est de 100 %** : le segment prédit qui couvre la **tête** du gold

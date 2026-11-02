@@ -17086,3 +17086,13 @@ while [ $# -gt 0 ]; do
   ```
 
 - **job_output** `{"job_id": "bash-856", "timeout_ms": 600000, "wait": true}`
+
+  ```
+attente 840s
+en: pas encore
+1494795 01:45:05
+  [en] 12800000 lus · 3606314 gardés · 15.15 G caractères
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 55); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 20; done; echo \"attente $((i*20))s\"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo \"en: pas encore\"; tail -1 /tmp/run-texte-en.log | … [807 caractères tronqués]`

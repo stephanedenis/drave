@@ -3,16 +3,16 @@
  "heuristique": {
   "all": {
    "bloc": "heuristique",
-   "phrases": 300,
+   "phrases": 360,
    "pos": {
-    "exactitude": 0.7725,
-    "exactitude_ferme": 0.9428,
-    "exactitude_ouvert": 0.6339,
-    "tokens": 1402,
+    "exactitude": 0.7715,
+    "exactitude_ferme": 0.9526,
+    "exactitude_ouvert": 0.6247,
+    "tokens": 1698,
     "confusions": {
      "ADJ": {
       "ADJ": 17,
-      "NOUN": 61,
+      "NOUN": 63,
       "VERB": 3
      },
      "ADV": {
@@ -21,7 +21,7 @@
      },
      "AUX": {
       "PREP": 3,
-      "AUX": 39
+      "AUX": 43
      },
      "CONJ": {
       "CONJ": 1,
@@ -29,88 +29,89 @@
       "DET": 4
      },
      "DET": {
-      "DET": 307
+      "DET": 401
      },
      "NOUN": {
-      "NOUN": 313,
+      "NOUN": 405,
       "ADJ": 9,
-      "VERB": 24
+      "VERB": 36,
+      "DET": 1
      },
      "NUM": {
       "NUM": 2
      },
      "PREP": {
-      "PREP": 77,
+      "PREP": 96,
       "NOUN": 3
      },
      "PRON": {
-      "PRON": 105,
+      "PRON": 119,
       "NOUN": 2
      },
      "VERB": {
-      "VERB": 160,
-      "NOUN": 183,
+      "VERB": 164,
+      "NOUN": 237,
       "ADJ": 2,
       "PREP": 1
      }
     }
    },
    "syntagme": {
-    "precision": 0.2844,
-    "rappel": 0.17,
-    "f1": 0.2128,
-    "tp": 128,
-    "fp": 322,
-    "fn": 625,
+    "precision": 0.2732,
+    "rappel": 0.1547,
+    "f1": 0.1975,
+    "tp": 144,
+    "fp": 383,
+    "fn": 787,
     "tete": {
-     "precision": 0.6222,
-     "rappel": 0.3718,
-     "f1": 0.4655,
-     "tp": 280,
-     "fp": 170,
-     "fn": 473
+     "precision": 0.6015,
+     "rappel": 0.3405,
+     "f1": 0.4348,
+     "tp": 317,
+     "fp": 210,
+     "fn": 614
     }
    },
    "pragmatique": {
     "acte": 1.0,
     "negation": 1.0,
-    "modalite": 0.9933,
-    "double_sens": 0.92
+    "modalite": 0.9944,
+    "double_sens": 0.9306
    },
-   "fraction_semantique": 0.6029,
+   "fraction_semantique": 0.6021,
    "attachement": {
-    "cibles": 123,
-    "labels": 53,
-    "top1": 51,
-    "topk": 49,
+    "cibles": 138,
+    "labels": 59,
+    "top1": 57,
+    "topk": 55,
     "exact": 0,
-    "top1_taux": 0.4146,
-    "topk_taux": 0.3984,
+    "top1_taux": 0.413,
+    "topk_taux": 0.3986,
     "exact_taux": 0.0,
-    "couverture": 0.4309
+    "couverture": 0.4275
    },
    "attachement_tete": {
-    "cibles": 53,
-    "labels": 53,
-    "top1": 51,
-    "topk": 49,
-    "top1_taux": 0.9623,
-    "topk_taux": 0.9245,
+    "cibles": 59,
+    "labels": 59,
+    "top1": 57,
+    "topk": 55,
+    "top1_taux": 0.9661,
+    "topk_taux": 0.9322,
     "couverture": 1.0
    }
   },
   "reel": {
    "bloc": "heuristique",
-   "phrases": 140,
+   "phrases": 200,
    "pos": {
-    "exactitude": 0.8193,
-    "exactitude_ferme": 0.9412,
-    "exactitude_ouvert": 0.6936,
-    "tokens": 703,
+    "exactitude": 0.8038,
+    "exactitude_ferme": 0.957,
+    "exactitude_ouvert": 0.6575,
+    "tokens": 999,
     "confusions": {
      "ADJ": {
       "ADJ": 17,
-      "NOUN": 7,
+      "NOUN": 9,
       "VERB": 3
      },
      "ADV": {
@@ -119,7 +120,7 @@
      },
      "AUX": {
       "PREP": 3,
-      "AUX": 36
+      "AUX": 40
      },
      "CONJ": {
       "CONJ": 1,
@@ -127,72 +128,73 @@
       "DET": 4
      },
      "DET": {
-      "DET": 162
+      "DET": 256
      },
      "NOUN": {
-      "NOUN": 161,
+      "NOUN": 253,
       "ADJ": 3,
-      "VERB": 19
+      "VERB": 31,
+      "DET": 1
      },
      "NUM": {
       "NUM": 2
      },
      "PREP": {
-      "PREP": 53,
+      "PREP": 72,
       "NOUN": 3
      },
      "PRON": {
-      "PRON": 62,
+      "PRON": 76,
       "NOUN": 2
      },
      "VERB": {
-      "VERB": 62,
-      "NOUN": 71,
+      "VERB": 66,
+      "NOUN": 125,
       "ADJ": 2,
       "PREP": 1
      }
     }
    },
    "syntagme": {
-    "precision": 0.3623,
-    "rappel": 0.1918,
-    "f1": 0.2508,
-    "tp": 75,
-    "fp": 132,
-    "fn": 316,
+    "precision": 0.3204,
+    "rappel": 0.1599,
+    "f1": 0.2134,
+    "tp": 91,
+    "fp": 193,
+    "fn": 478,
     "tete": {
-     "precision": 0.5314,
-     "rappel": 0.2813,
-     "f1": 0.3679,
-     "tp": 110,
-     "fp": 97,
-     "fn": 281
+     "precision": 0.5176,
+     "rappel": 0.2583,
+     "f1": 0.3447,
+     "tp": 147,
+     "fp": 137,
+     "fn": 422
     }
    },
    "pragmatique": {
     "acte": 1.0,
     "negation": 1.0,
-    "modalite": 0.9857,
-    "double_sens": 0.9571
+    "modalite": 0.99,
+    "double_sens": 0.965
    },
-   "fraction_semantique": 0.5385,
+   "fraction_semantique": 0.5564,
    "attachement": {
-    "cibles": 68,
-    "labels": 31,
-    "top1": 29,
-    "topk": 31,
+    "cibles": 83,
+    "labels": 37,
+    "top1": 35,
+    "topk": 37,
     "exact": 0,
-    "top1_taux": 0.4265,
-    "topk_taux": 0.4559,
+    "top1_taux": 0.4217,
+    "topk_taux": 0.4458,
     "exact_taux": 0.0,
-    "couverture": 0.4559
+    "couverture": 0.4458
    },
    "attachement_tete": {
-    "cibles": 31,
-    "labels": 31,
-    "top1": 29,
-    "topk": 31,
-    "top1_taux": 0.9355,
+    "cibles": 37,
+    "labels": 37,
+    "top1": 35,
+    "topk": 37,
+    "top1_taux": 0.9459,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -285,15 +287,15 @@
   },
   "reel_new": {
    "bloc": "heuristique",
-   "phrases": 120,
+   "phrases": 180,
    "pos": {
-    "exactitude": 0.801,
-    "exactitude_ferme": 0.9467,
-    "exactitude_ouvert": 0.6544,
-    "tokens": 598,
+    "exactitude": 0.7897,
+    "exactitude_ferme": 0.9629,
+    "exactitude_ouvert": 0.6285,
+    "tokens": 894,
     "confusions": {
      "ADJ": {
-      "NOUN": 7,
+      "NOUN": 9,
       "ADJ": 14,
       "VERB": 3
      },
@@ -302,79 +304,80 @@
       "NOUN": 5
      },
      "AUX": {
-      "AUX": 30
+      "AUX": 34
      },
      "CONJ": {
       "PRON": 3,
       "DET": 3
      },
      "DET": {
-      "DET": 141
+      "DET": 235
      },
      "NOUN": {
-      "NOUN": 140,
+      "NOUN": 232,
       "ADJ": 3,
-      "VERB": 19
+      "VERB": 31,
+      "DET": 1
      },
      "NUM": {
       "NUM": 2
      },
      "PREP": {
-      "PREP": 44,
+      "PREP": 63,
       "NOUN": 3
      },
      "PRON": {
-      "PRON": 53,
+      "PRON": 67,
       "NOUN": 2
      },
      "VERB": {
-      "VERB": 41,
-      "NOUN": 68,
+      "VERB": 45,
+      "NOUN": 122,
       "ADJ": 2,
       "PREP": 1
      }
     }
    },
    "syntagme": {
-    "precision": 0.3314,
-    "rappel": 0.1701,
-    "f1": 0.2249,
-    "tp": 57,
-    "fp": 115,
-    "fn": 278,
+    "precision": 0.2932,
+    "rappel": 0.1423,
+    "f1": 0.1916,
+    "tp": 73,
+    "fp": 176,
+    "fn": 440,
     "tete": {
-     "precision": 0.5058,
-     "rappel": 0.2597,
-     "f1": 0.3432,
-     "tp": 87,
-     "fp": 85,
-     "fn": 248
+     "precision": 0.498,
+     "rappel": 0.2417,
+     "f1": 0.3255,
+     "tp": 124,
+     "fp": 125,
+     "fn": 389
     }
    },
    "pragmatique": {
     "acte": 1.0,
     "negation": 1.0,
-    "modalite": 0.9917,
-    "double_sens": 0.9667
+    "modalite": 0.9944,
+    "double_sens": 0.9722
    },
-   "fraction_semantique": 0.5501,
+   "fraction_semantique": 0.5661,
    "attachement": {
-    "cibles": 55,
-    "labels": 25,
-    "top1": 24,
-    "topk": 25,
+    "cibles": 70,
+    "labels": 31,
+    "top1": 30,
+    "topk": 31,
     "exact": 0,
-    "top1_taux": 0.4364,
-    "topk_taux": 0.4545,
+    "top1_taux": 0.4286,
+    "topk_taux": 0.4429,
     "exact_taux": 0.0,
-    "couverture": 0.4545
+    "couverture": 0.4429
    },
    "attachement_tete": {
-    "cibles": 25,
-    "labels": 25,
-    "top1": 24,
-    "topk": 25,
-    "top1_taux": 0.96,
+    "cibles": 31,
+    "labels": 31,
+    "top1": 30,
+    "topk": 31,
+    "top1_taux": 0.9677,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -468,16 +471,16 @@
  "mock_neuronal": {
   "all": {
    "bloc": "mock_neuronal",
-   "phrases": 300,
+   "phrases": 360,
    "pos": {
-    "exactitude": 0.3937,
-    "exactitude_ferme": 0.0986,
-    "exactitude_ouvert": 0.6339,
-    "tokens": 1402,
+    "exactitude": 0.3816,
+    "exactitude_ferme": 0.0816,
+    "exactitude_ouvert": 0.6247,
+    "tokens": 1698,
     "confusions": {
      "ADJ": {
       "ADJ": 17,
-      "NOUN": 61,
+      "NOUN": 63,
       "VERB": 3
      },
      "ADV": {
@@ -485,75 +488,76 @@
       "NOUN": 5
      },
      "AUX": {
-      "?": 42
+      "?": 46
      },
      "CONJ": {
       "?": 24
      },
      "DET": {
-      "?": 307
+      "?": 401
      },
      "NOUN": {
-      "NOUN": 313,
+      "NOUN": 405,
       "ADJ": 9,
-      "VERB": 24
+      "VERB": 36,
+      "?": 1
      },
      "NUM": {
       "?": 2
      },
      "PREP": {
-      "?": 77,
+      "?": 96,
       "NOUN": 3
      },
      "PRON": {
-      "?": 105,
+      "?": 119,
       "NOUN": 2
      },
      "VERB": {
-      "VERB": 160,
-      "NOUN": 183,
+      "VERB": 164,
+      "NOUN": 237,
       "ADJ": 2,
       "?": 1
      }
     }
    },
    "syntagme": {
-    "precision": 0.3284,
-    "rappel": 0.1461,
-    "f1": 0.2022,
-    "tp": 110,
-    "fp": 225,
-    "fn": 643,
+    "precision": 0.3398,
+    "rappel": 0.1504,
+    "f1": 0.2085,
+    "tp": 140,
+    "fp": 272,
+    "fn": 791,
     "tete": {
-     "precision": 0.9134,
-     "rappel": 0.4064,
-     "f1": 0.5625,
-     "tp": 306,
-     "fp": 29,
-     "fn": 447
+     "precision": 0.9223,
+     "rappel": 0.4082,
+     "f1": 0.5659,
+     "tp": 380,
+     "fp": 32,
+     "fn": 551
     }
    },
    "pragmatique": {
     "acte": 1.0,
-    "negation": 0.9167,
-    "modalite": 0.9167,
-    "double_sens": 0.9467
+    "negation": 0.9306,
+    "modalite": 0.9306,
+    "double_sens": 0.9556
    },
-   "fraction_semantique": 0.6316,
+   "fraction_semantique": 0.626,
    "attachement": {
-    "cibles": 123,
-    "labels": 60,
+    "cibles": 138,
+    "labels": 73,
     "top1": 0,
     "topk": 0,
     "exact": 0,
     "top1_taux": 0.0,
     "topk_taux": 0.0,
     "exact_taux": 0.0,
-    "couverture": 0.4878
+    "couverture": 0.529
    },
    "attachement_tete": {
-    "cibles": 60,
-    "labels": 60,
+    "cibles": 73,
+    "labels": 73,
     "top1": 0,
     "topk": 0,
     "top1_taux": 0.0,
@@ -563,16 +567,16 @@
   },
   "reel": {
    "bloc": "mock_neuronal",
-   "phrases": 140,
+   "phrases": 200,
    "pos": {
-    "exactitude": 0.3698,
-    "exactitude_ferme": 0.056,
-    "exactitude_ouvert": 0.6936,
-    "tokens": 703,
+    "exactitude": 0.3564,
+    "exactitude_ferme": 0.041,
+    "exactitude_ouvert": 0.6575,
+    "tokens": 999,
     "confusions": {
      "ADJ": {
       "ADJ": 17,
-      "NOUN": 7,
+      "NOUN": 9,
       "VERB": 3
      },
      "ADV": {
@@ -580,75 +584,76 @@
       "NOUN": 5
      },
      "AUX": {
-      "?": 39
+      "?": 43
      },
      "CONJ": {
       "?": 9
      },
      "DET": {
-      "?": 162
+      "?": 256
      },
      "NOUN": {
-      "NOUN": 161,
+      "NOUN": 253,
       "ADJ": 3,
-      "VERB": 19
+      "VERB": 31,
+      "?": 1
      },
      "NUM": {
       "?": 2
      },
      "PREP": {
-      "?": 53,
+      "?": 72,
       "NOUN": 3
      },
      "PRON": {
-      "?": 62,
+      "?": 76,
       "NOUN": 2
      },
      "VERB": {
-      "VERB": 62,
-      "NOUN": 71,
+      "VERB": 66,
+      "NOUN": 125,
       "ADJ": 2,
       "?": 1
      }
     }
    },
    "syntagme": {
-    "precision": 0.4599,
-    "rappel": 0.2199,
-    "f1": 0.2976,
-    "tp": 86,
-    "fp": 101,
-    "fn": 305,
+    "precision": 0.4394,
+    "rappel": 0.2039,
+    "f1": 0.2785,
+    "tp": 116,
+    "fp": 148,
+    "fn": 453,
     "tete": {
-     "precision": 0.893,
-     "rappel": 0.4271,
-     "f1": 0.5779,
-     "tp": 167,
-     "fp": 20,
-     "fn": 224
+     "precision": 0.9129,
+     "rappel": 0.4236,
+     "f1": 0.5786,
+     "tp": 241,
+     "fp": 23,
+     "fn": 328
     }
    },
    "pragmatique": {
     "acte": 1.0,
-    "negation": 0.9714,
-    "modalite": 0.9571,
-    "double_sens": 0.9714
+    "negation": 0.98,
+    "modalite": 0.97,
+    "double_sens": 0.98
    },
-   "fraction_semantique": 0.5663,
+   "fraction_semantique": 0.5758,
    "attachement": {
-    "cibles": 68,
-    "labels": 40,
+    "cibles": 83,
+    "labels": 53,
     "top1": 0,
     "topk": 0,
     "exact": 0,
     "top1_taux": 0.0,
     "topk_taux": 0.0,
     "exact_taux": 0.0,
-    "couverture": 0.5882
+    "couverture": 0.6386
    },
    "attachement_tete": {
-    "cibles": 40,
-    "labels": 40,
+    "cibles": 53,
+    "labels": 53,
     "top1": 0,
     "topk": 0,
     "top1_taux": 0.0,
@@ -741,15 +746,15 @@
   },
   "reel_new": {
    "bloc": "mock_neuronal",
-   "phrases": 120,
+   "phrases": 180,
    "pos": {
-    "exactitude": 0.3495,
-    "exactitude_ferme": 0.0467,
-    "exactitude_ouvert": 0.6544,
-    "tokens": 598,
+    "exactitude": 0.3412,
+    "exactitude_ferme": 0.0325,
+    "exactitude_ouvert": 0.6285,
+    "tokens": 894,
     "confusions": {
      "ADJ": {
-      "NOUN": 7,
+      "NOUN": 9,
       "ADJ": 14,
       "VERB": 3
      },
@@ -758,75 +763,76 @@
       "NOUN": 5
      },
      "AUX": {
-      "?": 30
+      "?": 34
      },
      "CONJ": {
       "?": 6
      },
      "DET": {
-      "?": 141
+      "?": 235
      },
      "NOUN": {
-      "NOUN": 140,
+      "NOUN": 232,
       "ADJ": 3,
-      "VERB": 19
+      "VERB": 31,
+      "?": 1
      },
      "NUM": {
       "?": 2
      },
      "PREP": {
-      "?": 44,
+      "?": 63,
       "NOUN": 3
      },
      "PRON": {
-      "?": 53,
+      "?": 67,
       "NOUN": 2
      },
      "VERB": {
-      "VERB": 41,
-      "NOUN": 68,
+      "VERB": 45,
+      "NOUN": 122,
       "ADJ": 2,
       "?": 1
      }
     }
    },
    "syntagme": {
-    "precision": 0.472,
-    "rappel": 0.2269,
-    "f1": 0.3065,
-    "tp": 76,
-    "fp": 85,
-    "fn": 259,
+    "precision": 0.4454,
+    "rappel": 0.2066,
+    "f1": 0.2823,
+    "tp": 106,
+    "fp": 132,
+    "fn": 407,
     "tete": {
-     "precision": 0.9193,
-     "rappel": 0.4418,
-     "f1": 0.5968,
-     "tp": 148,
-     "fp": 13,
-     "fn": 187
+     "precision": 0.9328,
+     "rappel": 0.4327,
+     "f1": 0.5912,
+     "tp": 222,
+     "fp": 16,
+     "fn": 291
     }
    },
    "pragmatique": {
     "acte": 1.0,
-    "negation": 0.9833,
-    "modalite": 0.9667,
-    "double_sens": 0.9833
+    "negation": 0.9889,
+    "modalite": 0.9778,
+    "double_sens": 0.9889
    },
-   "fraction_semantique": 0.5732,
+   "fraction_semantique": 0.5815,
    "attachement": {
-    "cibles": 55,
-    "labels": 37,
+    "cibles": 70,
+    "labels": 50,
     "top1": 0,
     "topk": 0,
     "exact": 0,
     "top1_taux": 0.0,
     "topk_taux": 0.0,
     "exact_taux": 0.0,
-    "couverture": 0.6727
+    "couverture": 0.7143
    },
    "attachement_tete": {
-    "cibles": 37,
-    "labels": 37,
+    "cibles": 50,
+    "labels": 50,
     "top1": 0,
     "topk": 0,
     "top1_taux": 0.0,
@@ -923,16 +929,16 @@
  "parallele": {
   "all": {
    "bloc": "parallele",
-   "phrases": 300,
+   "phrases": 360,
    "pos": {
-    "exactitude": 0.7725,
-    "exactitude_ferme": 0.9428,
-    "exactitude_ouvert": 0.6339,
-    "tokens": 1402,
+    "exactitude": 0.7715,
+    "exactitude_ferme": 0.9526,
+    "exactitude_ouvert": 0.6247,
+    "tokens": 1698,
     "confusions": {
      "ADJ": {
       "ADJ": 17,
-      "NOUN": 61,
+      "NOUN": 63,
       "VERB": 3
      },
      "ADV": {
@@ -941,7 +947,7 @@
      },
      "AUX": {
       "PREP": 3,
-      "AUX": 39
+      "AUX": 43
      },
      "CONJ": {
       "CONJ": 1,
@@ -949,88 +955,89 @@
       "DET": 4
      },
      "DET": {
-      "DET": 307
+      "DET": 401
      },
      "NOUN": {
-      "NOUN": 313,
+      "NOUN": 405,
       "ADJ": 9,
-      "VERB": 24
+      "VERB": 36,
+      "DET": 1
      },
      "NUM": {
       "NUM": 2
      },
      "PREP": {
-      "PREP": 77,
+      "PREP": 96,
       "NOUN": 3
      },
      "PRON": {
-      "PRON": 105,
+      "PRON": 119,
       "NOUN": 2
      },
      "VERB": {
-      "VERB": 160,
-      "NOUN": 183,
+      "VERB": 164,
+      "NOUN": 237,
       "ADJ": 2,
       "PREP": 1
      }
     }
    },
    "syntagme": {
-    "precision": 0.2844,
-    "rappel": 0.17,
-    "f1": 0.2128,
-    "tp": 128,
-    "fp": 322,
-    "fn": 625,
+    "precision": 0.2732,
+    "rappel": 0.1547,
+    "f1": 0.1975,
+    "tp": 144,
+    "fp": 383,
+    "fn": 787,
     "tete": {
-     "precision": 0.6222,
-     "rappel": 0.3718,
-     "f1": 0.4655,
-     "tp": 280,
-     "fp": 170,
-     "fn": 473
+     "precision": 0.6015,
+     "rappel": 0.3405,
+     "f1": 0.4348,
+     "tp": 317,
+     "fp": 210,
+     "fn": 614
     }
    },
    "pragmatique": {
     "acte": 1.0,
     "negation": 1.0,
-    "modalite": 0.9933,
-    "double_sens": 0.92
+    "modalite": 0.9944,
+    "double_sens": 0.9306
    },
-   "fraction_semantique": 0.6316,
+   "fraction_semantique": 0.626,
    "attachement": {
-    "cibles": 123,
-    "labels": 53,
-    "top1": 51,
-    "topk": 49,
+    "cibles": 138,
+    "labels": 59,
+    "top1": 57,
+    "topk": 55,
     "exact": 0,
-    "top1_taux": 0.4146,
-    "topk_taux": 0.3984,
+    "top1_taux": 0.413,
+    "topk_taux": 0.3986,
     "exact_taux": 0.0,
-    "couverture": 0.4309
+    "couverture": 0.4275
    },
    "attachement_tete": {
-    "cibles": 53,
-    "labels": 53,
-    "top1": 51,
-    "topk": 49,
-    "top1_taux": 0.9623,
-    "topk_taux": 0.9245,
+    "cibles": 59,
+    "labels": 59,
+    "top1": 57,
+    "topk": 55,
+    "top1_taux": 0.9661,
+    "topk_taux": 0.9322,
     "couverture": 1.0
    }
   },
   "reel": {
    "bloc": "parallele",
-   "phrases": 140,
+   "phrases": 200,
    "pos": {
-    "exactitude": 0.8193,
-    "exactitude_ferme": 0.9412,
-    "exactitude_ouvert": 0.6936,
-    "tokens": 703,
+    "exactitude": 0.8038,
+    "exactitude_ferme": 0.957,
+    "exactitude_ouvert": 0.6575,
+    "tokens": 999,
     "confusions": {
      "ADJ": {
       "ADJ": 17,
-      "NOUN": 7,
+      "NOUN": 9,
       "VERB": 3
      },
      "ADV": {
@@ -1039,7 +1046,7 @@
      },
      "AUX": {
       "PREP": 3,
-      "AUX": 36
+      "AUX": 40
      },
      "CONJ": {
       "CONJ": 1,
@@ -1047,72 +1054,73 @@
       "DET": 4
      },
      "DET": {
-      "DET": 162
+      "DET": 256
      },
      "NOUN": {
-      "NOUN": 161,
+      "NOUN": 253,
       "ADJ": 3,
-      "VERB": 19
+      "VERB": 31,
+      "DET": 1
      },
      "NUM": {
       "NUM": 2
      },
      "PREP": {
-      "PREP": 53,
+      "PREP": 72,
       "NOUN": 3
      },
      "PRON": {
-      "PRON": 62,
+      "PRON": 76,
       "NOUN": 2
      },
      "VERB": {
-      "VERB": 62,
-      "NOUN": 71,
+      "VERB": 66,
+      "NOUN": 125,
       "ADJ": 2,
       "PREP": 1
      }
     }
    },
    "syntagme": {
-    "precision": 0.3623,
-    "rappel": 0.1918,
-    "f1": 0.2508,
-    "tp": 75,
-    "fp": 132,
-    "fn": 316,
+    "precision": 0.3204,
+    "rappel": 0.1599,
+    "f1": 0.2134,
+    "tp": 91,
+    "fp": 193,
+    "fn": 478,
     "tete": {
-     "precision": 0.5314,
-     "rappel": 0.2813,
-     "f1": 0.3679,
-     "tp": 110,
-     "fp": 97,
-     "fn": 281
+     "precision": 0.5176,
+     "rappel": 0.2583,
+     "f1": 0.3447,
+     "tp": 147,
+     "fp": 137,
+     "fn": 422
     }
    },
    "pragmatique": {
     "acte": 1.0,
     "negation": 1.0,
-    "modalite": 0.9857,
-    "double_sens": 0.9571
+    "modalite": 0.99,
+    "double_sens": 0.965
    },
-   "fraction_semantique": 0.5663,
+   "fraction_semantique": 0.5758,
    "attachement": {
-    "cibles": 68,
-    "labels": 31,
-    "top1": 29,
-    "topk": 31,
+    "cibles": 83,
+    "labels": 37,
+    "top1": 35,
+    "topk": 37,
     "exact": 0,
-    "top1_taux": 0.4265,
-    "topk_taux": 0.4559,
+    "top1_taux": 0.4217,
+    "topk_taux": 0.4458,
     "exact_taux": 0.0,
-    "couverture": 0.4559
+    "couverture": 0.4458
    },
    "attachement_tete": {
-    "cibles": 31,
-    "labels": 31,
-    "top1": 29,
-    "topk": 31,
-    "top1_taux": 0.9355,
+    "cibles": 37,
+    "labels": 37,
+    "top1": 35,
+    "topk": 37,
+    "top1_taux": 0.9459,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -1205,15 +1213,15 @@
   },
   "reel_new": {
    "bloc": "parallele",
-   "phrases": 120,
+   "phrases": 180,
    "pos": {
-    "exactitude": 0.801,
-    "exactitude_ferme": 0.9467,
-    "exactitude_ouvert": 0.6544,
-    "tokens": 598,
+    "exactitude": 0.7897,
+    "exactitude_ferme": 0.9629,
+    "exactitude_ouvert": 0.6285,
+    "tokens": 894,
     "confusions": {
      "ADJ": {
-      "NOUN": 7,
+      "NOUN": 9,
       "ADJ": 14,
       "VERB": 3
      },
@@ -1222,79 +1230,80 @@
       "NOUN": 5
      },
      "AUX": {
-      "AUX": 30
+      "AUX": 34
      },
      "CONJ": {
       "PRON": 3,
       "DET": 3
      },
      "DET": {
-      "DET": 141
+      "DET": 235
      },
      "NOUN": {
-      "NOUN": 140,
+      "NOUN": 232,
       "ADJ": 3,
-      "VERB": 19
+      "VERB": 31,
+      "DET": 1
      },
      "NUM": {
       "NUM": 2
      },
      "PREP": {
-      "PREP": 44,
+      "PREP": 63,
       "NOUN": 3
      },
      "PRON": {
-      "PRON": 53,
+      "PRON": 67,
       "NOUN": 2
      },
      "VERB": {
-      "VERB": 41,
-      "NOUN": 68,
+      "VERB": 45,
+      "NOUN": 122,
       "ADJ": 2,
       "PREP": 1
      }
     }
    },
    "syntagme": {
-    "precision": 0.3314,
-    "rappel": 0.1701,
-    "f1": 0.2249,
-    "tp": 57,
-    "fp": 115,
-    "fn": 278,
+    "precision": 0.2932,
+    "rappel": 0.1423,
+    "f1": 0.1916,
+    "tp": 73,
+    "fp": 176,
+    "fn": 440,
     "tete": {
-     "precision": 0.5058,
-     "rappel": 0.2597,
-     "f1": 0.3432,
-     "tp": 87,
-     "fp": 85,
-     "fn": 248
+     "precision": 0.498,
+     "rappel": 0.2417,
+     "f1": 0.3255,
+     "tp": 124,
+     "fp": 125,
+     "fn": 389
     }
    },
    "pragmatique": {
     "acte": 1.0,
     "negation": 1.0,
-    "modalite": 0.9917,
-    "double_sens": 0.9667
+    "modalite": 0.9944,
+    "double_sens": 0.9722
    },
-   "fraction_semantique": 0.5732,
+   "fraction_semantique": 0.5815,
    "attachement": {
-    "cibles": 55,
-    "labels": 25,
-    "top1": 24,
-    "topk": 25,
+    "cibles": 70,
+    "labels": 31,
+    "top1": 30,
+    "topk": 31,
     "exact": 0,
-    "top1_taux": 0.4364,
-    "topk_taux": 0.4545,
+    "top1_taux": 0.4286,
+    "topk_taux": 0.4429,
     "exact_taux": 0.0,
-    "couverture": 0.4545
+    "couverture": 0.4429
    },
    "attachement_tete": {
-    "cibles": 25,
-    "labels": 25,
-    "top1": 24,
-    "topk": 25,
-    "top1_taux": 0.96,
+    "cibles": 31,
+    "labels": 31,
+    "top1": 30,
+    "topk": 31,
+    "top1_taux": 0.9677,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -1388,16 +1397,16 @@
  "cascade": {
   "all": {
    "bloc": "cascade",
-   "phrases": 300,
+   "phrases": 360,
    "pos": {
-    "exactitude": 0.7725,
-    "exactitude_ferme": 0.9428,
-    "exactitude_ouvert": 0.6339,
-    "tokens": 1402,
+    "exactitude": 0.7715,
+    "exactitude_ferme": 0.9526,
+    "exactitude_ouvert": 0.6247,
+    "tokens": 1698,
     "confusions": {
      "ADJ": {
       "ADJ": 17,
-      "NOUN": 61,
+      "NOUN": 63,
       "VERB": 3
      },
      "ADV": {
@@ -1406,7 +1415,7 @@
      },
      "AUX": {
       "PREP": 3,
-      "AUX": 39
+      "AUX": 43
      },
      "CONJ": {
       "CONJ": 1,
@@ -1414,88 +1423,89 @@
       "DET": 4
      },
      "DET": {
-      "DET": 307
+      "DET": 401
      },
      "NOUN": {
-      "NOUN": 313,
+      "NOUN": 405,
       "ADJ": 9,
-      "VERB": 24
+      "VERB": 36,
+      "DET": 1
      },
      "NUM": {
       "NUM": 2
      },
      "PREP": {
-      "PREP": 77,
+      "PREP": 96,
       "NOUN": 3
      },
      "PRON": {
-      "PRON": 105,
+      "PRON": 119,
       "NOUN": 2
      },
      "VERB": {
-      "VERB": 160,
-      "NOUN": 183,
+      "VERB": 164,
+      "NOUN": 237,
       "ADJ": 2,
       "PREP": 1
      }
     }
    },
    "syntagme": {
-    "precision": 0.2844,
-    "rappel": 0.17,
-    "f1": 0.2128,
-    "tp": 128,
-    "fp": 322,
-    "fn": 625,
+    "precision": 0.2732,
+    "rappel": 0.1547,
+    "f1": 0.1975,
+    "tp": 144,
+    "fp": 383,
+    "fn": 787,
     "tete": {
-     "precision": 0.6222,
-     "rappel": 0.3718,
-     "f1": 0.4655,
-     "tp": 280,
-     "fp": 170,
-     "fn": 473
+     "precision": 0.6015,
+     "rappel": 0.3405,
+     "f1": 0.4348,
+     "tp": 317,
+     "fp": 210,
+     "fn": 614
     }
    },
    "pragmatique": {
     "acte": 1.0,
     "negation": 1.0,
-    "modalite": 0.9933,
-    "double_sens": 0.92
+    "modalite": 0.9944,
+    "double_sens": 0.9306
    },
-   "fraction_semantique": 0.6316,
+   "fraction_semantique": 0.626,
    "attachement": {
-    "cibles": 123,
-    "labels": 53,
-    "top1": 51,
-    "topk": 49,
+    "cibles": 138,
+    "labels": 59,
+    "top1": 57,
+    "topk": 55,
     "exact": 0,
-    "top1_taux": 0.4146,
-    "topk_taux": 0.3984,
+    "top1_taux": 0.413,
+    "topk_taux": 0.3986,
     "exact_taux": 0.0,
-    "couverture": 0.4309
+    "couverture": 0.4275
    },
    "attachement_tete": {
-    "cibles": 53,
-    "labels": 53,
-    "top1": 51,
-    "topk": 49,
-    "top1_taux": 0.9623,
-    "topk_taux": 0.9245,
+    "cibles": 59,
+    "labels": 59,
+    "top1": 57,
+    "topk": 55,
+    "top1_taux": 0.9661,
+    "topk_taux": 0.9322,
     "couverture": 1.0
    }
   },
   "reel": {
    "bloc": "cascade",
-   "phrases": 140,
+   "phrases": 200,
    "pos": {
-    "exactitude": 0.8193,
-    "exactitude_ferme": 0.9412,
-    "exactitude_ouvert": 0.6936,
-    "tokens": 703,
+    "exactitude": 0.8038,
+    "exactitude_ferme": 0.957,
+    "exactitude_ouvert": 0.6575,
+    "tokens": 999,
     "confusions": {
      "ADJ": {
       "ADJ": 17,
-      "NOUN": 7,
+      "NOUN": 9,
       "VERB": 3
      },
      "ADV": {
@@ -1504,7 +1514,7 @@
      },
      "AUX": {
       "PREP": 3,
-      "AUX": 36
+      "AUX": 40
      },
      "CONJ": {
       "CONJ": 1,
@@ -1512,72 +1522,73 @@
       "DET": 4
      },
      "DET": {
-      "DET": 162
+      "DET": 256
      },
      "NOUN": {
-      "NOUN": 161,
+      "NOUN": 253,
       "ADJ": 3,
-      "VERB": 19
+      "VERB": 31,
+      "DET": 1
      },
      "NUM": {
       "NUM": 2
      },
      "PREP": {
-      "PREP": 53,
+      "PREP": 72,
       "NOUN": 3
      },
      "PRON": {
-      "PRON": 62,
+      "PRON": 76,
       "NOUN": 2
      },
      "VERB": {
-      "VERB": 62,
-      "NOUN": 71,
+      "VERB": 66,
+      "NOUN": 125,
       "ADJ": 2,
       "PREP": 1
      }
     }
    },
    "syntagme": {
-    "precision": 0.3623,
-    "rappel": 0.1918,
-    "f1": 0.2508,
-    "tp": 75,
-    "fp": 132,
-    "fn": 316,
+    "precision": 0.3204,
+    "rappel": 0.1599,
+    "f1": 0.2134,
+    "tp": 91,
+    "fp": 193,
+    "fn": 478,
     "tete": {
-     "precision": 0.5314,
-     "rappel": 0.2813,
-     "f1": 0.3679,
-     "tp": 110,
-     "fp": 97,
-     "fn": 281
+     "precision": 0.5176,
+     "rappel": 0.2583,
+     "f1": 0.3447,
+     "tp": 147,
+     "fp": 137,
+     "fn": 422
     }
    },
    "pragmatique": {
     "acte": 1.0,
     "negation": 1.0,
-    "modalite": 0.9857,
-    "double_sens": 0.9571
+    "modalite": 0.99,
+    "double_sens": 0.965
    },
-   "fraction_semantique": 0.5663,
+   "fraction_semantique": 0.5758,
    "attachement": {
-    "cibles": 68,
-    "labels": 31,
-    "top1": 29,
-    "topk": 31,
+    "cibles": 83,
+    "labels": 37,
+    "top1": 35,
+    "topk": 37,
     "exact": 0,
-    "top1_taux": 0.4265,
-    "topk_taux": 0.4559,
+    "top1_taux": 0.4217,
+    "topk_taux": 0.4458,
     "exact_taux": 0.0,
-    "couverture": 0.4559
+    "couverture": 0.4458
    },
    "attachement_tete": {
-    "cibles": 31,
-    "labels": 31,
-    "top1": 29,
-    "topk": 31,
-    "top1_taux": 0.9355,
+    "cibles": 37,
+    "labels": 37,
+    "top1": 35,
+    "topk": 37,
+    "top1_taux": 0.9459,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -1670,15 +1681,15 @@
   },
   "reel_new": {
    "bloc": "cascade",
-   "phrases": 120,
+   "phrases": 180,
    "pos": {
-    "exactitude": 0.801,
-    "exactitude_ferme": 0.9467,
-    "exactitude_ouvert": 0.6544,
-    "tokens": 598,
+    "exactitude": 0.7897,
+    "exactitude_ferme": 0.9629,
+    "exactitude_ouvert": 0.6285,
+    "tokens": 894,
     "confusions": {
      "ADJ": {
-      "NOUN": 7,
+      "NOUN": 9,
       "ADJ": 14,
       "VERB": 3
      },
@@ -1687,79 +1698,80 @@
       "NOUN": 5
      },
      "AUX": {
-      "AUX": 30
+      "AUX": 34
      },
      "CONJ": {
       "PRON": 3,
       "DET": 3
      },
      "DET": {
-      "DET": 141
+      "DET": 235
      },
      "NOUN": {
-      "NOUN": 140,
+      "NOUN": 232,
       "ADJ": 3,
-      "VERB": 19
+      "VERB": 31,
+      "DET": 1
      },
      "NUM": {
       "NUM": 2
      },
      "PREP": {
-      "PREP": 44,
+      "PREP": 63,
       "NOUN": 3
      },
      "PRON": {
-      "PRON": 53,
+      "PRON": 67,
       "NOUN": 2
      },
      "VERB": {
-      "VERB": 41,
-      "NOUN": 68,
+      "VERB": 45,
+      "NOUN": 122,
       "ADJ": 2,
       "PREP": 1
      }
     }
    },
    "syntagme": {
-    "precision": 0.3314,
-    "rappel": 0.1701,
-    "f1": 0.2249,
-    "tp": 57,
-    "fp": 115,
-    "fn": 278,
+    "precision": 0.2932,
+    "rappel": 0.1423,
+    "f1": 0.1916,
+    "tp": 73,
+    "fp": 176,
+    "fn": 440,
     "tete": {
-     "precision": 0.5058,
-     "rappel": 0.2597,
-     "f1": 0.3432,
-     "tp": 87,
-     "fp": 85,
-     "fn": 248
+     "precision": 0.498,
+     "rappel": 0.2417,
+     "f1": 0.3255,
+     "tp": 124,
+     "fp": 125,
+     "fn": 389
     }
    },
    "pragmatique": {
     "acte": 1.0,
     "negation": 1.0,
-    "modalite": 0.9917,
-    "double_sens": 0.9667
+    "modalite": 0.9944,
+    "double_sens": 0.9722
    },
-   "fraction_semantique": 0.5732,
+   "fraction_semantique": 0.5815,
    "attachement": {
-    "cibles": 55,
-    "labels": 25,
-    "top1": 24,
-    "topk": 25,
+    "cibles": 70,
+    "labels": 31,
+    "top1": 30,
+    "topk": 31,
     "exact": 0,
-    "top1_taux": 0.4364,
-    "topk_taux": 0.4545,
+    "top1_taux": 0.4286,
+    "topk_taux": 0.4429,
     "exact_taux": 0.0,
-    "couverture": 0.4545
+    "couverture": 0.4429
    },
    "attachement_tete": {
-    "cibles": 25,
-    "labels": 25,
-    "top1": 24,
-    "topk": 25,
-    "top1_taux": 0.96,
+    "cibles": 31,
+    "labels": 31,
+    "top1": 30,
+    "topk": 31,
+    "top1_taux": 0.9677,
     "topk_taux": 1.0,
     "couverture": 1.0
    }
@@ -1849,23 +1861,23 @@
     "couverture": 1.0
    }
   },
-  "appels_neuronal": 740
+  "appels_neuronal": 920
  },
  "reel": {
   "statut": "refus",
   "detail": "RefusNeuronal: Command '['llama-cli', '-m', '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/Qwen2.5-0.5B-Q4_0.gguf', '-p', 'Tu es un étiqueteur linguistique. Réponds U"
  },
  "attachement_hasard": {
-  "cibles": 123,
-  "top1_taux": 0.0163
+  "cibles": 138,
+  "top1_taux": 0.0072
  },
  "gold": {
-  "phrases": 300,
-  "reel": 140,
+  "phrases": 360,
+  "reel": 200,
   "hand": 20,
-  "reel_new": 120,
+  "reel_new": 180,
   "synthetique": 160,
-  "tokens": 1402
+  "tokens": 1698
  },
  "verdict": {
   "pos_hand": true,
