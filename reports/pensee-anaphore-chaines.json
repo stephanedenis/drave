@@ -1,0 +1,40 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "99/99",
+ "court": {
+  "liens": 20,
+  "justes": 20,
+  "taux": 1.0
+ },
+ "long": {
+  "liens": 10,
+  "justes": 7,
+  "taux": 0.7,
+  "erreurs": [
+   {
+    "id": "r337",
+    "pronom": "il",
+    "attendu": "paul",
+    "obtenu": "sophie"
+   },
+   {
+    "id": "r339",
+    "pronom": "elle",
+    "attendu": "marie",
+    "obtenu": "livre"
+   },
+   {
+    "id": "r341",
+    "pronom": "she",
+    "attendu": "marie",
+    "obtenu": "book"
+   }
+  ]
+ },
+ "limites": [
+  "10 liens",
+  "rôle non utilisé",
+  "heuristique seule"
+ ]
+}

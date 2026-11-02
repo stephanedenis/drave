@@ -1475,10 +1475,21 @@ def t95_objets() -> tuple[bool, str]:
     from ..tests.linguistique.anaphore import mesurer
     from ..tests.linguistique.gold_reel import construire
     g = construire()
-    ps = [p for p in g["phrases"] if 329 <= int(p["id"][1:]) <= 340]
+    ps = [p for p in g["phrases"] if 329 <= int(p["id"][1:]) <= 336]
     r = mesurer(ps, ignorer_pp=True)
     return r["liens"] == 8 and r["taux"] == 1.0, (
         f"pronoms objets : {r['justes']}/{r['liens']} liens justes")
+
+
+def t96_chaines() -> tuple[bool, str]:
+    """Les chaînes longues : 7/10, le rôle sujet/objet manque."""
+    from ..tests.linguistique.anaphore import mesurer
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    ps = [p for p in g["phrases"] if 337 <= int(p["id"][1:]) <= 342]
+    r = mesurer(ps, ignorer_pp=True)
+    return r["liens"] == 10 and r["justes"] == 7, (
+        f"chaînes longues : {r['justes']}/{r['liens']} liens justes")
 
 
 def main() -> int:
@@ -1575,7 +1586,8 @@ def main() -> int:
               ("T92 anaphore", t92_anaphore()),
               ("T93 pièges anaphore", t93_anaphore_pieges()),
               ("T94 anaphore corrigée", t94_anaphore_corrigee()),
-              ("T95 pronoms objets", t95_objets())]
+              ("T95 pronoms objets", t95_objets()),
+              ("T96 chaînes longues", t96_chaines())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 37.2 h |
-| Tours | 375 |
-| Messages | 2247 |
-| Appels d'outils | 1490 |
+| Durée | 37.4 h |
+| Tours | 378 |
+| Messages | 2259 |
+| Appels d'outils | 1496 |
 | Fichiers touchés | 26 |
-| Commandes | 1323 |
+| Commandes | 1329 |
 | Sous-agents | 0 |
 | Commits | 84 |
 | Compactages de contexte | 4 |
@@ -777,6 +777,12 @@
 **Tour 374** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 375** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 376** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 377** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 378** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8807,11 +8813,73 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 375 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Check chantiers OCR mentions
 - bash — Update chantiers D row to 20 books
 - bash — Commit chantiers update
+- bash — Check gates register and process
+- bash — Add racine option to OCR tool
+- bash — Start CEGEP OCR pilot
+
+**Synthèse produite :**
+
+⏵ Round 363 : pilote OCR du **CEGEP** lancé (PID 2644645) — la pièce manquante du mandat
+
+**Round 363/1000 — le pilote OCR du CEGEP est lancé.**
+
+- **`tools/ocr_pdf.py --racine CEGEP --max-doc 5`** (PID 2644645) : la détection des scannés sur les **2 681 PDF** du CEGEP, puis l'OCR des **5 premiers scans**, dans `data/corpus_ocr_cegep/` avec `reports/ocr-pdf-cegep.json`.
+- **L'option `--racine`** est nouvelle (le script ne savait parcourir que les deux racines d'un coup) ; le compilateur passe.
+- **Le commit `bfe57da7`** : la ligne D des **chantiers** porte l'OCR des **20 livres** (7 381 p, 15,36 M car., 8 Ko 0).
+- **Les portes** : 26/81 au registre, **toutes vertes** (`awk '$2 != 0'` vide), la borne à 05 h 57.
+- **Le corpus OCR des livres** : 20 livres, 7 381 p, 15,36 M car., train 19 doc./14,6 Mo, val 1 doc./934 ko, 8 Ko 0, éval 0/40.
+
+**Le constat** : le CEGEP entre dans l'OCR — la dernière pièce du mandat « livres, CEGEP, collections » ; le goal reste actif jusqu'à 8 h.
+
+### Tour 376 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check CEGEP OCR and gates progress
+
+**Synthèse produite :**
+
+⏵ Round 364 : OCR CEGEP en détection (50 s, 65 Mo lus), portes 26/81 vertes
+
+**Round 364/1000 — le CEGEP scanne ses 2 681 PDF.**
+
+- **Le processus** (PID 2644645) : **50 s**, **65,7 Mo lus**, **19,8 Mo écrits** — la détection des scannés (`pdfinfo` + `pdftotext` des 2 premières pages) parcourt le fonds CEGEP ; l'OCR des **5 premiers scans** suivra.
+- **Les portes** : **26/81** au registre, **toutes vertes** ; la `porte-gain` (220 s) tourne ; la borne 30 min coupe vers **05 h 57**.
+- **Les commits** : `15f2c8f6` (OCR 20 livres), `166896b4` (genres 38,5), `bfe57da7` (chantiers D 20 livres).
+- **Le corpus OCR des livres** : 20 livres, 7 381 p, 15,36 M car., train 19 doc./14,6 Mo, val 1 doc./934 ko, **8 Ko 0**, éval 0/40.
+
+**Le constat** : le CEGEP entre dans l'OCR ; le goal reste actif jusqu'à 8 h.
+
+### Tour 377 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait 6 min then check CEGEP and gates
+
+**Synthèse produite :**
+
+⏵ Round 365 : premier scan du CEGEP océrisé (43 p, 81 675 car.) ; portes 26/81 vertes
+
+**Round 365/1000 — le CEGEP a trouvé ses scans et le premier est océrisé.**
+
+- **Le journal** : `CEGEP · Exercices de synthèse Excel 2010 Fonctio · 43 p · 81 675 car` — **le 1er scan du CEGEP est fait** ; la détection a lu **371 Mo** des 2 681 PDF.
+- **Le `--max-doc 5`** : 4 scans restants, puis le manifeste `reports/ocr-pdf-cegep.json`.
+- **Les portes** : 26/81 au registre, **toutes vertes** ; la `porte-gain` (220 s) est la 27e, la passe tourne depuis 32 min.
+- **Les commits** : `15f2c8f6` (OCR 20 livres), `166896b4` (genres 38,5), `bfe57da7` (chantiers D 20 livres).
+- **Le corpus OCR des livres** : 20 livres, 7 381 p, 15,36 M car., **8 Ko 0**, éval 0/40.
+
+**Le constat** : le CEGEP livre ses premiers caractères océrisés ; le goal reste actif jusqu'à 8 h.
+
+### Tour 378 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait 7 min then check CEGEP and gates
 
 ## 3. Travail accompli
 
@@ -8888,7 +8956,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1283 autres
+- … et 1289 autres
 
 ## 4. Mesures et résultats marquants
 

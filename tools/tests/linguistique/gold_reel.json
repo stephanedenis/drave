@@ -23362,6 +23362,699 @@
     }
    },
    "source": "reel"
+  },
+  {
+   "id": "r337",
+   "langue": "fr",
+   "texte": "Paul voit Marie et Sophie ; il lui parle.",
+   "mots": [
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "voit",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "texte": "et",
+     "pos": "CONJ",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "Sophie",
+     "pos": "NOUN",
+     "debut": 19,
+     "fin": 25
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 28,
+     "fin": 30
+    },
+    {
+     "texte": "lui",
+     "pos": "PRON",
+     "debut": 31,
+     "fin": 34
+    },
+    {
+     "texte": "parle",
+     "pos": "VERB",
+     "debut": 35,
+     "fin": 40
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Paul",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "voit",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "Marie et Sophie",
+     "role": "patient",
+     "debut": 10,
+     "fin": 25
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 28,
+     "fin": 30
+    },
+    {
+     "type": "GV",
+     "texte": "parle",
+     "role": "prédicat",
+     "debut": 35,
+     "fin": 40
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "il": "paul",
+     "lui": "sophie"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r338",
+   "langue": "fr",
+   "texte": "Le chat, le chien et la souris dorment ; ils rêvent.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chat",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "texte": "chien",
+     "pos": "NOUN",
+     "debut": 12,
+     "fin": 17
+    },
+    {
+     "texte": "et",
+     "pos": "CONJ",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 21,
+     "fin": 23
+    },
+    {
+     "texte": "souris",
+     "pos": "NOUN",
+     "debut": 24,
+     "fin": 30
+    },
+    {
+     "texte": "dorment",
+     "pos": "VERB",
+     "debut": 31,
+     "fin": 38
+    },
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 41,
+     "fin": 44
+    },
+    {
+     "texte": "rêvent",
+     "pos": "VERB",
+     "debut": 45,
+     "fin": 51
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chat, le chien et la souris",
+     "role": "agent",
+     "debut": 0,
+     "fin": 30
+    },
+    {
+     "type": "GV",
+     "texte": "dorment",
+     "role": "prédicat",
+     "debut": 31,
+     "fin": 38
+    },
+    {
+     "type": "GN",
+     "texte": "ils",
+     "role": "agent",
+     "debut": 41,
+     "fin": 44
+    },
+    {
+     "type": "GV",
+     "texte": "rêvent",
+     "role": "prédicat",
+     "debut": 45,
+     "fin": 51
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "ils": "souris"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r339",
+   "langue": "fr",
+   "texte": "Marie lit un livre ; elle le ferme ; elle le pose.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "lit",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "texte": "un",
+     "pos": "DET",
+     "debut": 10,
+     "fin": 12
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 13,
+     "fin": 18
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 21,
+     "fin": 25
+    },
+    {
+     "texte": "le",
+     "pos": "PRON",
+     "debut": 26,
+     "fin": 28
+    },
+    {
+     "texte": "ferme",
+     "pos": "VERB",
+     "debut": 29,
+     "fin": 34
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 37,
+     "fin": 41
+    },
+    {
+     "texte": "le",
+     "pos": "PRON",
+     "debut": 42,
+     "fin": 44
+    },
+    {
+     "texte": "pose",
+     "pos": "VERB",
+     "debut": 45,
+     "fin": 49
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "lit",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "un livre",
+     "role": "patient",
+     "debut": 10,
+     "fin": 18
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 21,
+     "fin": 25
+    },
+    {
+     "type": "GV",
+     "texte": "ferme",
+     "role": "prédicat",
+     "debut": 29,
+     "fin": 34
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 37,
+     "fin": 41
+    },
+    {
+     "type": "GV",
+     "texte": "pose",
+     "role": "prédicat",
+     "debut": 45,
+     "fin": 49
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "elle": "marie",
+     "le": "livre"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r340",
+   "langue": "en",
+   "texte": "The cat, the dog and the mouse sleep; they dream.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "cat",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "texte": "dog",
+     "pos": "NOUN",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "texte": "and",
+     "pos": "CONJ",
+     "debut": 17,
+     "fin": 20
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "mouse",
+     "pos": "NOUN",
+     "debut": 25,
+     "fin": 30
+    },
+    {
+     "texte": "sleep",
+     "pos": "VERB",
+     "debut": 31,
+     "fin": 36
+    },
+    {
+     "texte": "they",
+     "pos": "PRON",
+     "debut": 38,
+     "fin": 42
+    },
+    {
+     "texte": "dream",
+     "pos": "VERB",
+     "debut": 43,
+     "fin": 48
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The cat, the dog and the mouse",
+     "role": "agent",
+     "debut": 0,
+     "fin": 30
+    },
+    {
+     "type": "GV",
+     "texte": "sleep",
+     "role": "prédicat",
+     "debut": 31,
+     "fin": 36
+    },
+    {
+     "type": "GN",
+     "texte": "they",
+     "role": "agent",
+     "debut": 38,
+     "fin": 42
+    },
+    {
+     "type": "GV",
+     "texte": "dream",
+     "role": "prédicat",
+     "debut": 43,
+     "fin": 48
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "they": "mouse"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r341",
+   "langue": "en",
+   "texte": "Marie reads a book; she closes it; she puts it down.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "reads",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "texte": "a",
+     "pos": "DET",
+     "debut": 12,
+     "fin": 13
+    },
+    {
+     "texte": "book",
+     "pos": "NOUN",
+     "debut": 14,
+     "fin": 18
+    },
+    {
+     "texte": "she",
+     "pos": "PRON",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "texte": "closes",
+     "pos": "VERB",
+     "debut": 24,
+     "fin": 30
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 31,
+     "fin": 33
+    },
+    {
+     "texte": "she",
+     "pos": "PRON",
+     "debut": 35,
+     "fin": 38
+    },
+    {
+     "texte": "puts",
+     "pos": "VERB",
+     "debut": 39,
+     "fin": 43
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 44,
+     "fin": 46
+    },
+    {
+     "texte": "down",
+     "pos": "ADV",
+     "debut": 47,
+     "fin": 51
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "reads",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "type": "GN",
+     "texte": "a book",
+     "role": "patient",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "type": "GN",
+     "texte": "she",
+     "role": "agent",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "type": "GV",
+     "texte": "closes",
+     "role": "prédicat",
+     "debut": 24,
+     "fin": 30
+    },
+    {
+     "type": "GN",
+     "texte": "she",
+     "role": "agent",
+     "debut": 35,
+     "fin": 38
+    },
+    {
+     "type": "GV",
+     "texte": "puts",
+     "role": "prédicat",
+     "debut": 39,
+     "fin": 43
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "she": "marie",
+     "it": "book"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r342",
+   "langue": "en",
+   "texte": "Paul sees Marie; he speaks to her; she listens.",
+   "mots": [
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "sees",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "texte": "he",
+     "pos": "PRON",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "texte": "speaks",
+     "pos": "VERB",
+     "debut": 20,
+     "fin": 26
+    },
+    {
+     "texte": "to",
+     "pos": "PREP",
+     "debut": 27,
+     "fin": 29
+    },
+    {
+     "texte": "her",
+     "pos": "PRON",
+     "debut": 30,
+     "fin": 33
+    },
+    {
+     "texte": "she",
+     "pos": "PRON",
+     "debut": 35,
+     "fin": 38
+    },
+    {
+     "texte": "listens",
+     "pos": "VERB",
+     "debut": 39,
+     "fin": 46
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Paul",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "sees",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 9
+    },
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "patient",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "type": "GN",
+     "texte": "he",
+     "role": "agent",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "type": "GV",
+     "texte": "speaks",
+     "role": "prédicat",
+     "debut": 20,
+     "fin": 26
+    },
+    {
+     "type": "GP",
+     "texte": "to her",
+     "role": "destinataire",
+     "debut": 27,
+     "fin": 33
+    },
+    {
+     "type": "GN",
+     "texte": "she",
+     "role": "agent",
+     "debut": 35,
+     "fin": 38
+    },
+    {
+     "type": "GV",
+     "texte": "listens",
+     "role": "prédicat",
+     "debut": 39,
+     "fin": 46
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "her": "marie",
+     "she": "marie"
+    }
+   },
+   "source": "reel"
   }
  ]
 }

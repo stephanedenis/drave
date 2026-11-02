@@ -18654,3 +18654,25 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1091", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt 2>/dev/null | head -4; tail -1 /tmp/portes-fin.out", "description": "Check the final gates progress"}`
+
+  ```
+05:58
+13
+  porte-cerveau          ✅                           9 s    ✅ porte tenue (quatre facultés composent, chacune reste active, le tout est déterministe)
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt 2>/dev/null | head -4; tail -1 /tmp/portes-fin.out", "description": "Monitor the final gates"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1093]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1093", "timeout_ms": 1500000, "wait": true}`

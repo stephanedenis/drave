@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 37.2 h |
+| Durée | 37.4 h |
 | Tours | 113 |
-| Messages | 1423 |
-| Appels d'outils | 1244 |
+| Messages | 1426 |
+| Appels d'outils | 1247 |
 | Fichiers touchés | 25 |
-| Commandes | 1012 |
+| Commandes | 1014 |
 | Sous-agents | 2 |
-| Commits | 146 |
+| Commits | 147 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -6017,11 +6017,14 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste les **chaînes lon
 
 ### Tour 113 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Ajouter 6 chaînes anaphoriques longues et mesurer
 - bash — Écrire la fiche des chaînes longues
 - bash — Trim README et passer les portes
+- bash — Corriger T95 et relancer les portes
+- bash — Committer les chaînes longues
+- job_output
 
 ## 3. Travail accompli
 
@@ -6102,7 +6105,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste les **chaînes lon
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 972 autres
+- … et 974 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6396,4 +6399,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste les **chaînes lon
 - B13 — L'ANAPHORE CORRIGÉE : 12/12 EN IGNORANT LES PP ; 97/97" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ANAPHORE CORRIGÉE"; then echo "COMMIT OK $
 - B13 — LES PRONOMS OBJETS : 8/8, 20/20 AU TOTAL, GOLD 336 ; 98/98" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PRONOMS OBJETS"; then echo "COMMIT OK 
 - B13 — LES PRONOMS OBJETS : 8/8, 20/20 AU TOTAL, GOLD 336 ; 98/98" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PRONOMS OBJETS"; then echo "COMMIT OK 
+- B13 — LES CHAÎNES LONGUES : 7/10, LE RÔLE MANQUE, GOLD 342 ; 99/99" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CHAÎNES LONGUES"; then echo "COMMIT 
 
