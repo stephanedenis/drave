@@ -126,7 +126,7 @@ modèle. C'est ce qui rend la **substitution** possible.
 
 ### 5.2 La version neuronale
 
-Deux objets, un même contrat :
+Quatre objets, un même contrat :
 
 - **`MockNeuronal`** : le **double de contrat**. Il est déterministe, sans GPU, et rend les
   niveaux profonds (morphème, POS ouverte, syntagme, pragmatique) avec `source = neuronal`. Il
@@ -141,14 +141,23 @@ Deux objets, un même contrat :
   le modèle ne les invente pas. La confiance par défaut (0,6) le destine à la **cascade** : il ne
   remplace que les tokens que l'heuristique déclare peu sûrs, et laisse les classes fermées à
   l'heuristique.
+- **`NeuronalLLMChunks`** : le **tagger de syntagmes**. Il demande une étiquette **BIO** par token
+  (`B-GN`/`I-GN`, `B-GV`/`I-GV`, `B-GP`/`I-GP`, `B-REL`/`I-REL`, `B-SUB`/`I-SUB`, `O`) sous
+  grammaire GBNF, puis **reconstruit** les spans sur la tokenisation du bloc. Le prompt est
+  **few-shot** (cinq exemples hors gold) : sans eux, les frontières (déterminant hors GN,
+  auxiliaire hors GV) se perdent. Il ne rend que le niveau `syntagme`.
 
 **Ce que le modèle local a fait ici.** Le vrai Qwen2.5-0.5B (de base) ne suit pas le format : il
 recopie le schéma du prompt et ne rend pas de POS exploitables ; le 3B-Instruct est dominé sur les
 20 phrases réelles (0,667). Le **7B-Instruct Q4_K_M** est le plus petit modèle testé qui qualifie
 le contrat : POS seul **0,8483**, et en **cascade à 0,6** sur le gold de 180 phrases (**0,9440**,
-sans régression sur les réelles). Le tagger ne rend que le niveau **POS** ; les syntagmes, la
-pragmatique et l'annotation complète restent à mesurer. Les chiffres, les contrôles et les limites
-sont dans [`rapport-pensee-gold-neuronal.md`](../../reports/rapport-pensee-gold-neuronal.md).
+sans régression sur les réelles). Le **tagger de syntagmes** est qualifié sur le même gold :
+exact **0,6173**, tête **0,7606** (heuristique 0,1992 / 0,5614) ; la cascade `confiance` rend
+**0,6168 / 0,7592**, la cascade par défaut (priorité heuristique) reste à 0,2137 / 0,5670. Le
+tagger de syntagmes ne rend que ce niveau ; la pragmatique et l'annotation complète restent à
+mesurer. Les chiffres, les contrôles et les limites sont dans
+[`rapport-pensee-gold-neuronal.md`](../../reports/rapport-pensee-gold-neuronal.md) et
+[`rapport-pensee-gold-syntagmes.md`](../../reports/rapport-pensee-gold-syntagmes.md).
 
 ## 6. Substituer, paralléliser, cascader
 
@@ -162,8 +171,8 @@ Le consommateur écrit :
 annotation = bloc.analyser(texte, langue="fr")
 ```
 
-et `bloc` peut être `Heuristique`, `MockNeuronal`, `NeuronalLLM`, `NeuronalLLMPOS`, `Parallele`
-ou `Cascade`. Le
+et `bloc` peut être `Heuristique`, `MockNeuronal`, `NeuronalLLM`, `NeuronalLLMPOS`,
+`NeuronalLLMChunks`, `Parallele` ou `Cascade`. Le
 test `test_substitution` vérifie que `Heuristique` et `MockNeuronal` rendent **le même schéma**
 (mêmes clés, mêmes spans valides) et que seules la `source` et les valeurs changent.
 
@@ -173,18 +182,21 @@ test `test_substitution` vérifie que `Heuristique` et `MockNeuronal` rendent **
 
 - la clé de fusion est `(niveau, debut, fin, type, source)` : les deux sources restent visibles ;
 - à niveau égal, les étiquettes qui se **chevauchent** sont des **alternatives** : on garde la
-  plus confiante, sauf pour le **syntagme**, où la segmentation **heuristique** (le générateur
-  de la coloration) est prioritaire — le mock neuronal ne doit pas écraser un découpage plus
-  fin avec un gros span ;
+  plus confiante. Pour le **syntagme**, la politique est explicite (`priorite_syntagme`) :
+  `"heuristique"` (défaut) garde le découpage de l'heuristique — le mock neuronal ne doit pas
+  écraser un découpage plus fin ; `"confiance"` laisse la plus confiante gagner, ce qui est
+  nécessaire quand le tagger réel est meilleur (mesure : 0,6168 / 0,7592 contre 0,2137 / 0,5670
+  avec le défaut) ;
 - la langue et le script vont à la meilleure source ; les unités sémantiques sont réunies.
 
 ### 6.3 La cascade
 
-`Cascade(heuristique, neuronal, seuil=0,6)` exécute d'abord l'heuristique, regarde les niveaux
-`morphème`, `pos`, `syntagme`, `discours`, `pragmatique` : si l'un reste sous le seuil, elle
-appelle le neuronal et fusionne ; sinon, elle rend l'heuristique seule. La trace porte le
-**résidu** et `appel_neuronal`. C'est le mode qui **paie** quand l'heuristique couvre la surface
-et que le neuronal est cher.
+`Cascade(heuristique, neuronal, seuil=0,6, priorite_syntagme="heuristique")` exécute d'abord
+l'heuristique, regarde les niveaux `morphème`, `pos`, `syntagme`, `discours`, `pragmatique` : si
+l'un reste sous le seuil, elle appelle le neuronal et fusionne ; sinon, elle rend l'heuristique
+seule. La trace porte le **résidu** et `appel_neuronal`. `priorite_syntagme="confiance"` applique
+la politique de confiance au syntagme ; le défaut reste `"heuristique"`. C'est le mode qui
+**paie** quand l'heuristique couvre la surface et que le neuronal est cher.
 
 ## 7. Activer la couche sémantique à une fraction
 

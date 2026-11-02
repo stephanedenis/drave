@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 1.1 h |
+| Durée | 1.6 h |
 | Tours | 2 |
-| Messages | 139 |
-| Appels d'outils | 157 |
-| Fichiers touchés | 5 |
-| Commandes | 106 |
+| Messages | 173 |
+| Appels d'outils | 191 |
+| Fichiers touchés | 7 |
+| Commandes | 132 |
 | Sous-agents | 0 |
-| Commits | 0 |
+| Commits | 1 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -49,7 +49,7 @@
 
 ### Tour 2 — Tu reprends la session D/R/A `fe3c05f0-834b-44f2-8739-501865d652c1`. Lis son plan, AGENTS.md  et en-cours. Remets `État  … [367 caractères tronqués]
 
-*146 appels d'outils.* Actions notables :
+*180 appels d'outils.* Actions notables :
 
 - read
 - get_goal
@@ -65,7 +65,7 @@
 - bash — Locate scan census sources
 - bash — Search 127 mentions across docs
 - bash — Read session report around next steps
-- … et 96 autres
+- … et 122 autres
 
 **Synthèse produite :**
 
@@ -82,6 +82,8 @@
 | `work/ocr/detecte_cegep.py` | 1 | 0 |
 | `tools/ocr_pdf.py` | 0 | 6 |
 | `tools/detecte_scans_pdf.py` | 1 | 0 |
+| `work/ocr/fiche-cegep.md` | 1 | 0 |
+| `work/ocr/fait_fiche.py` | 1 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -125,7 +127,7 @@
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 66 autres
+- … et 92 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -190,10 +192,23 @@
 - **T2** `- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (niveaux 0–4), export ; analyseur **7/7** séquences, **93,9 %** de couverture, **19 tests** ; [`analyseur`](..`
 - **T2** `[still running after 60000ms; moved to background job bash-83]`
 - **T2** `docs/pilotage/chantiers.md:89:| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 `
+- **T2** `220:- **Le corpus OCR du CEGEP** : 10 notes scannées, 1 596 pages, 2 519 507 caractères, 8 Ko 0 (val 11 fenêtres) — le pilote `--racine CEGEP` ferme la boucle « livres, CEGEP, collections » (4 *Algori`
+- **T2** `- **Les dix corpus Wikipédia en texte intégral** : 20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0 partout ; l'anglais clos à 99,2 % (l'écriture bloquée à 125/125 Go, le manifeste reconstruit de`
+- **T2** `- **Le corpus PDF** : 2 785 PDF, 1 927 documents, 322 Mo, 8 Ko 0, licences nommées.`
+- **T2** `- **Le corpus Documents** : 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (les 372 tronçons dupliqués).`
+- **T2** `- **Le corpus OCR** : 20 livres, 7 381 pages, 15,36 M caractères, 8 Ko 0 (val 115 fenêtres, éval 0/40) ; le pilote `--max-doc 20` est clos (le 20e, *Life Histories of Etnos Theory*, 450 p).`
+- **T2** `- **Le corpus OCR du CEGEP** : 10 notes scannées, 1 596 pages, 2 519 507 caractères, 8 Ko 0 (val 11 fenêtres) — le pilote `--racine CEGEP` ferme la boucle « livres, CEGEP, collections » (4 *Algorithms`
+- **T2** `- **Les genres** : l'encyclopédie 103–147 car/ligne, les livres et documents 32–37, les lignes dupliquées 8,7–24 % (l'OCR 4,8 %).`
+- **T2** `- **A2.6/A8.3** : le lot ne divise pas les lectures denses (+27 % de calcul, PPL −0,006 %).`
+- **T2** `- **15 h 06 — reboot.** Les deux GPU étaient bloqués (`GPU requires reset`, `nvidia_drm refcnt -1`) ; le reset logiciel a échoué et le reboot a rendu les cartes (1 Mio, 0 %). Les deux sessions de trav`
 
 ## 5. Erreurs rencontrées
 
 1 sorties en erreur ou divergentes. Les premières :
 
 - **T2** : 19:48 /tmp/ocr-pdf-19jav9ag: 453 page(s) 0 [exit code: 1]
+
+## 6. Commits
+
+- ps -eo pid,etime,args | grep -E "git commit|git add|pre-commit|archive_sessions|session_report" | grep -v grep | head -8; echo "--- staged now ---"; git diff --
 

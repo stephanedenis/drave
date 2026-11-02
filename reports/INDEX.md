@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **549 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **551 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -238,6 +238,7 @@
 | [rapport-n2-pas-vs-texte.md](rapport-n2-pas-vs-texte.md) | N2.ab — Plus de pas paie ; plus de texte paie en largeur, pas en français |
 | [rapport-n2-professeur.md](rapport-n2-professeur.md) | N2.u — Le professeur plus gros ne change presque rien en domaine, mais gagne 0,3 hors domaine |
 | [rapport-n2-propre.md](rapport-n2-propre.md) | N2.h1 — Le corpus propre : la validation n'était pas tenue à l'écart, et la porte honnête vaut 3,09 |
+| [rapport-n2-r11.md](rapport-n2-r11.md) | R1.1 — Les positions relatives : la courbe de longueur s'aplatit, la table absolue explose |
 | [rapport-n3.1-etat.md](rapport-n3.1-etat.md) | N3.1 — l’état des opérations natives : une porte composée serait prématurée |
 | [rapport-n3.2a-service.md](rapport-n3.2a-service.md) | N3.2a — le service natif répond, et il est déterministe |
 | [rapport-n3.2b0-profondeur.md](rapport-n3.2b0-profondeur.md) | N3.2b0 — la profondeur de service est branchée, et le service lisait mal les requêtes |
@@ -391,6 +392,7 @@
 | [rapport-pensee-gold-gele.md](rapport-pensee-gold-gele.md) | B13 — le gold gelé : les portes ne cassent plus quand le gold grandit |
 | [rapport-pensee-gold-linguistique.md](rapport-pensee-gold-linguistique.md) | L — le gold 360 : 200 réels + 160 synthétiques, POS 0,772, tête 0,966 |
 | [rapport-pensee-gold-neuronal.md](rapport-pensee-gold-neuronal.md) | L — le gold neuronal : un tagger 7B local, la cascade POS à 0,944 |
+| [rapport-pensee-gold-syntagmes.md](rapport-pensee-gold-syntagmes.md) | B13 — les syntagmes neuronaux : BIO, tête 0,7606, et la politique de fusion |
 | [rapport-pensee-graines.md](rapport-pensee-graines.md) | B13 — la robustesse sur 5 graines : le curriculum `open` tient |
 | [rapport-pensee-hasard.md](rapport-pensee-hasard.md) | B13 — le hasard variable : 20–60 %, 20/20 à chaque taux |
 | [rapport-pensee-hasard2.md](rapport-pensee-hasard2.md) | B13 — le régime aléatoire : 1/2, 20/20 |

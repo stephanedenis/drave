@@ -4453,3 +4453,829 @@ Other Fan:     4739 RPM  (min =    0 RPM, max = 5000 RPM)
 ⏵ Les « Other Fan » montent à 5 150 / 4 739 tr/min via sysfs. Je mesure l'effet sur le GPU.
 
 - **bash** `{"command": "for i in 1 2 3 4; do sleep 15; echo -n \"t+$((i*15))s  \"; nvidia-smi --query-gpu=index,temperature.gpu,fan.speed,power.draw,clocks.sm,clocks_throttle_reasons.sw_thermal_slowdown --format=csv,noheader | head -1; done; echo; echo \"== boîtier ==\"; sensors 2>/dev/null | grep -E 'Processo … [167 caractères tronqués]`
+
+  ```
+t+15s  0, 85, 81 %, 173.80 W, 1710 MHz, Not Active
+t+30s  0, 85, 80 %, 169.12 W, 1665 MHz, Not Active
+t+45s  0, 84, 80 %, 176.28 W, 1725 MHz, Not Active
+t+60s  0, 84, 80 %, 173.73 W, 1695 MHz, Not Active
+
+== boîtier ==
+Processor Fan: 2704 RPM  (min =    0 RPM, max = 5755 RPM)
+Processor Fan: 2729 RPM  (min =    0 RPM, max = 5755 RPM)
+Other Fan:     5004 RPM  (min =    0 RPM, max = 5000 RPM)
+Other Fan:     4728 RPM  (min =    0 RPM, max = 5000 RPM)
+CPU:            +45.0°C  
+CPU:            +67.0°C  
+Package id 1:  +67.0°C  (high = +84.0°C, crit = +94.0°C)
+Package id 0:  +46.0°C  (high = +84.0°C, crit = +94.0°C)
+
+== pwm ==
+fan3=5008 pwm3=255 pwm3_enable=1
+fan4=4736 pwm4=255 pwm4_enable=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Les ventilateurs boîtier au max ne font pas baisser le GPU ; je remets l'automatique et je fais le bilan.
+
+- **bash** `{"command": "echo \"== retour auto ==\"; timeout 120 pkexec /bin/bash /tmp/dell_fan.sh auto 2>&1; echo \"[exit ${PIPESTATUS[0]}]\"; sleep 10; echo; echo \"== boîtier après 10 s ==\"; /tmp/dell_fan.sh; sensors 2>/dev/null | grep -E 'Processor Fan|Other Fan|CPU:' | head -6; echo; echo \"== GPU ==\"; n … [239 caractères tronqués]`
+
+  ```
+== retour auto ==
+fan3=5000 pwm3=cat: /sys/class/hwmon/hwmon6/pwm3: No data available pwm3_enable=2
+fan4=4728 pwm4=cat: /sys/class/hwmon/hwmon6/pwm4: No data available pwm4_enable=2
+[exit 0]
+
+== boîtier après 10 s ==
+fan3=3452 pwm3=cat: /sys/class/hwmon/hwmon6/pwm3: No data available pwm3_enable=2
+fan4=3403 pwm4=cat: /sys/class/hwmon/hwmon6/pwm4: No data available pwm4_enable=2
+Processor Fan: 2693 RPM  (min =    0 RPM, max = 5755 RPM)
+Processor Fan: 2712 RPM  (min =    0 RPM, max = 5755 RPM)
+Other Fan:     3446 RPM  (min =    0 RPM, max = 5000 RPM)
+Other Fan:     3399 RPM  (min =    0 RPM, max = 5000 RPM)
+CPU:            +43.0°C  
+CPU:            +61.0°C  
+
+== GPU ==
+0, 85, 80 %, 177.27 W, 180.00 W, 1680 MHz, Not Active
+1, 75, 50 %, 214.11 W, 230.00 W, 1860 MHz, Not Active
+  ```
+
+### 🤖 Assistant
+
+⏵ Oui : les ventilateurs Dell sont pilotables par sysfs, sans BIOS ; mais le GPU ne gagne presque rien.
+
+# Oui, on peut piloter les ventilateurs Dell sans toucher au BIOS
+
+Le pilote `dell_smm` expose quatre canaux PWM dans `/sys/class/hwmon/hwmon6/` :
+
+| canal | ventilateur | état |
+|---|---|---|
+| `pwm1` / `pwm2` | **Processor Fan** | 2 700 tr/min |
+| `pwm3` / `pwm4` | **Other Fan** (boîtier / couloir GPU) | 2 150 tr/min |
+
+`pwmN_enable` vaut `2` (automatique BIOS). En écrivant `1` (manuel) puis une valeur `0–255` dans `pwmN`, on prend la main. Testé :
+
+| | avant | manuel 255 |
+|---|---:|---:|
+| Other Fan 1 | 2 157 tr/min | **5 155 tr/min** |
+| Other Fan 2 | 2 145 tr/min | **4 736 tr/min** |
+
+Aucun BIOS, aucun redémarrage. Le retour à l'automatique se fait avec `pwmN_enable=2`.
+
+## Les commandes
+
+```bash
+# Other Fan au maximum (une seule fenêtre pkexec)
+pkexec /bin/bash -c 'H=/sys/class/hwmon/hwmon6; for i in 3 4; do echo 255 > $H/pwm$i; echo 1 > $H/pwm${i}_enable; done'
+
+# revenir à l'automatique BIOS
+pkexec /bin/bash -c 'H=/sys/class/hwmon/hwmon6; for i in 3 4; do echo 2 > $H/pwm${i}_enable; done'
+
+# vérifier
+for i in 3 4; do echo "fan$i=$(cat /sys/class/hwmon/hwmon6/fan${i}_input) tr/min, enable=$(cat /sys/class/hwmon/hwmon6/pwm${i}_enable)"; done
+```
+
+Le chemin `hwmon6` peut changer après un reboot : le retrouver avec
+`grep -l '^dell_smm$' /sys/class/hwmon/hwmon*/name`.
+La lecture de `pwmN` peut afficher « No data available » sur ce pilote ; c'est `fanN_input` qui confirme l'effet.
+
+## Ce que ça donne — et pourquoi ce n'est pas la solution au GPU
+
+J'ai laissé les « Other Fan » au maximum pendant une minute, avec le plafond 180 W déjà actif :
+
+| | auto | Other Fan max |
+|---|---:|---:|
+| GPU 0 | 84–85 °C, ventilateur 85–89 % | **84–85 °C, ventilateur 80 %** |
+| CPU | 70–77 °C | **67 °C** |
+
+**Le GPU ne descend pas.** Les ventilateurs de boîtier au maximum refroidissent le CPU, mais pas la carte graphique : le GPU 0 est limité par **son propre radiateur / son entrée d'air**, pas par l'air du boîtier. Le ventilateur de la carte tourne moins vite (80 % au lieu de 89 %), mais la température reste à 84–85 °C. Le vrai gain vient du **plafond 180 W** (87 → 84–85 °C, throttle supprimé).
+
+## État actuel
+
+- **Other Fan : automatique** (le BIOS a stabilisé autour de **3 450 tr/min** après le test, plus haut qu'avant car le CPU/GPU restent chauds).
+- **GPU 0 : 85 °C, 177 W, 1 680 MHz, throttle inactif** ; plafond 180 W toujours appliqué.
+- **GPU 1 : 75 °C, 214 W, 1 860 MHz**, aucun throttle.
+
+## Ce que je recommande
+
+1. **Ne pas laisser les « Other Fan » au maximum** : ils ne font pas baisser le GPU et ils sont bruyants. L'automatique (ou un manuel modéré autour de 180–200/255 si le CPU chauffe) suffit.
+2. **Garder le plafond 180 W** sur le GPU 0 : c'est lui qui a supprimé le throttle et gagné 2–3 °C, pour ~3 % de fréquence.
+3. **Le vrai correctif GPU** est physique : souffler le radiateur du GPU 0, vérifier le carénage GPU du Precision 7910, et si possible **ajouter un ventilateur de slot** entre les deux cartes ou descendre le GPU 1 d'un emplacement. Le delta de 14 °C à puissance égale (avant le plafond) ne s'explique pas par les ventilateurs de boîtier — ils sont au maximum et le GPU ne bouge pas.
+
+## Persistance
+
+Le réglage manuel est **volatile** : après reboot, le pilote repart en automatique. Si tu veux un contrôle durable, je peux créer :
+
+- un petit script `/usr/local/bin/dell-fan` (`max` / `auto`) ;
+- un service systemd qui applique une valeur au démarrage ;
+- ou une **courbe simple** : `auto` sous 75 °C, `pwm=200` au-dessus, `255` au-delà de 82 °C — mais pour le GPU, on a mesuré que cela ne sert presque à rien ; c'est surtout le CPU qui en profite.
+
+Dis-moi si tu veux le service systemd pour les « Other Fan » (ou pour le plafond 180 W), et je le pose via le popup.
+
+
+## Tour 6
+
+### 👤 Utilisateur
+
+oui un service permanent. consigne toutes ces modifications dans le repo GitHub equipment-hauru
+
+### 🤖 Assistant
+
+⏵ Je localise le dépôt `equipment-hauru` et je prépare le service systemd.
+
+- **bash** `{"command": "echo \"== recherche locale ==\" && ls -d /home/stephane/Data13TB/stephane/GitHub/*hauru* /home/stephane/GitHub/*hauru* /home/stephane/*hauru* 2>/dev/null; find /home/stephane -maxdepth 5 -type d -iname '*equipment*hauru*' 2>/dev/null | head; echo; echo \"== gh ==\" && command -v gh || e … [266 caractères tronqués]`
+
+  ```
+== recherche locale ==
+/home/stephane/Data13TB/stephane/GitHub/equipment-hauru
+/home/stephane/Data13TB/stephane/GitHub/hauru-top
+/home/stephane/GitHub/equipment-hauru
+/home/stephane/GitHub/hauru-top
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-equipment-hauru--
+/home/stephane/Data13TB/stephane/GitHub/equipment-hauru
+/home/stephane/Data13TB/stephane/.gemini/tmp/equipment-hauru
+/home/stephane/Data13TB/stephane/.gemini/history/equipment-hauru
+
+== gh ==
+/usr/bin/gh
+
+== remote probable ==
+0bedb54ae1cdd9dd89a20c84760a1647b0fa8f93	HEAD
+0bedb54ae1cdd9dd89a20c84760a1647b0fa8f93	refs/heads/main
+[exit 0]
+  ```
+
+- **bash** `{"command": "echo \"== services existants ==\" && ls /etc/systemd/system/ | grep -iE 'nvidia|hauru|fan|thermal' || echo \"aucun\"; echo; echo \"== état actuel ==\" && nvidia-smi --query-gpu=index,temperature.gpu,fan.speed,power.draw,power.limit,clocks.sm,clocks_throttle_reasons.sw_thermal_slowdown - … [114 caractères tronqués]`
+
+  ```
+== services existants ==
+aucun
+
+== état actuel ==
+0, 85, 81 %, 172.78 W, 180.00 W, 1725 MHz, Not Active
+1, 74, 51 %, 212.47 W, 230.00 W, 1860 MHz, Not Active
+
+fan3=2147 pwm3=cat: /sys/class/hwmon/hwmon6/pwm3: No data available pwm3_enable=2
+fan4=2138 pwm4=cat: /sys/class/hwmon/hwmon6/pwm4: No data available pwm4_enable=2
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis la structure du dépôt `equipment-hauru` avant d'y consigner l'intervention.
+
+- **bash** `{"command": "for d in /home/stephane/Data13TB/stephane/GitHub/equipment-hauru /home/stephane/GitHub/equipment-hauru; do echo \"===== $d\"; ls -ld \"$d\"; readlink -f \"$d\"; git -C \"$d\" remote -v 2>&1 | head -3; git -C \"$d\" status --short 2>&1 | head -10; git -C \"$d\" log --oneline -5 2>&1; ech … [63 caractères tronqués]`
+
+  ```
+===== /home/stephane/Data13TB/stephane/GitHub/equipment-hauru
+drwxr-xr-x. 1 stephane stephane 2130 31 oct 17:05 /home/stephane/Data13TB/stephane/GitHub/equipment-hauru
+/home/stephane/Data13TB/stephane/GitHub/equipment-hauru
+origin	git@github.com:stephanedenis/equipment-hauru.git (fetch)
+origin	git@github.com:stephanedenis/equipment-hauru.git (push)
+ M AGENTS.md
+ M system/maintenance/logs/scrub-data13tb-20260921-164933.log
+ M system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/JOURNAL.md
+ M system/migrations-2026/2026-10-30-radeon-blocage-gpu-xorg/JOURNAL.md
+?? system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/02-collecter-etat-lecture-seule.sh
+?? system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/02-etat-materiel-20261013-192107.log
+?? system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/03-redemarrage-greeter-20261013-191749.log
+?? system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/03-reinitialiser-greeter.sh
+?? system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/04-surveiller-greeter.sh
+?? system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/05-reparation-greeter-20261013-223922.log
+1620bec fix(
+… [1926 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/equipment-hauru && echo \"== top ==\" && ls -la && echo && echo \"== README ==\" && sed -n '1,120p' README.md 2>/dev/null", "description": "Read equipment-hauru top-level and README"}`
+
+  ```
+== top ==
+total 152276
+drwxr-xr-x. 1 stephane stephane      2130 31 oct 17:05 .
+drwxr-xr-x. 1 stephane stephane      2496  1 nov 10:47 ..
+-rw-------. 1 stephane stephane     26574 31 oct 17:05 AGENTS.md
+drwxr-xr-x. 1 stephane stephane        44 27 jan  2026 archive
+drwxr-xr-x. 1 stephane stephane       122 27 jan  2026 backup-pre-nvme-20251203
+drwxr-xr-x. 1 stephane stephane        30 27 jan  2026 benchmark-results-20251203_124603
+drwxr-xr-x. 1 stephane stephane        62 27 jan  2026 benchmark-results-20251203_125007
+-rwxr-xr-x. 1 stephane stephane      2619 17 fév  2026 COMMANDES_RETRAIT_4TB.sh
+drwxr-xr-x. 1 stephane stephane        26 27 jan  2026 config
+-rw-r--r--. 1 stephane stephane      1318 26 fév  2026 CONSOLIDATION_NEXTPHASE.md
+-rw-r--r--. 1 stephane stephane      6331 16 fév  2026 CONSOLIDATION_QUALITY_REPORT.md
+-rw-r--r--. 1 stephane stephane      7294 17 fév  2026 CONSOLIDATION_SSD_USB_REPORT.md
+-rw-r--r--. 1 stephane stephane     15266 17 fév  2026 CONSOLIDATION_WORKFLOW.md
+drwxr-xr-x. 1 stephane stephane      8508 21 oct 13:15 docs
+-rwxr-xr-x. 1 stephane stephane      5136 17 fév  2026 EFFACEMENT_HDD_4TB.sh
+-rwxr-xr-x. 1 stephane stephane      4677 17 fév  2026 EFFAC
+… [8001 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie l'état git du dépôt et son hook avant d'ajouter la documentation thermique.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/equipment-hauru && echo \"== branche ==\" && git status -sb | head -5 && echo && echo \"== HEAD/origin ==\" && git rev-parse --short HEAD origin/main 2>&1 && echo -n 'origin/main ancêtre de HEAD ? ' && (git merge-base --is-ancestor origin/main  … [371 caractères tronqués]`
+
+  ```
+== branche ==
+## main...origin/main [ahead 24]
+ M AGENTS.md
+ M system/maintenance/logs/scrub-data13tb-20260921-164933.log
+ M system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/JOURNAL.md
+ M system/migrations-2026/2026-10-30-radeon-blocage-gpu-xorg/JOURNAL.md
+
+== HEAD/origin ==
+fatal: Needed a single revision
+[exit code: 128]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/equipment-hauru && echo \"== hook ==\" && ls -l .git/hooks/pre-commit 2>/dev/null && head -30 .git/hooks/pre-commit 2>/dev/null; echo; echo \"== system ==\" && ls system/ && echo; echo \"== docs thermiques existants ==\" && find docs system scr … [218 caractères tronqués]`
+
+  ```
+== hook ==
+
+== system ==
+ENVIRONNEMENT_DEVELOPPEMENT.md
+GUIDE_RECONSTRUCTION.md
+maintenance
+MICROCONTROLEURS.md
+migrations-2026
+OPTIMISATIONS_APPLIQUEES.md
+PLAN_OPTIMISATION_NVME.md
+secours
+
+== docs thermiques existants ==
+
+== README fin ==
+**Statut**: ✅ Système sur NVMe, audit de santé complet effectué, 0 unité en échec
+
+> ⚠️ **`inventory/hardware.yml` est périmé** : il décrit encore l'ancienne configuration
+> (Xeon E5-2650, 62 Go, Radeon RX 470, 5 disques). Les valeurs réelles sont celles de la
+> section « Spécifications » ci-dessus. À régénérer avec un détecteur produisant le bon
+> schéma — `scripts/system/detect-hardware.sh` génère un schéma différent et ne convient pas.
+
+## 🤖 Développement Microcontrôleurs
+
+Support ESP32, Arduino, STM32, et autres microcontrôleurs via PlatformIO.
+
+### Outils Disponibles
+- **PlatformIO Core 6.1.18** - Framework embedded universel
+- **AVR GCC 15** - Compilation Arduino/AVR
+- **ESP32 Toolchain** - Via PlatformIO
+- **Extensions VS Code** - PlatformIO IDE, Serial Monitor
+
+### Projets Exemples
+- `/opt/builds/projects/esp32-test/` - ESP32 blink + serial
+- `/opt/builds/projects/arduino-test/` - Arduino Uno blink + serial
+
+### Documentation Complète
+Vo
+… [413 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie la visibilité du dépôt et les 24 commits locaux avant de décider du push.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/equipment-hauru && echo \"== remote ref ==\" && git rev-parse --short HEAD; git rev-parse --short origin/main; echo; echo \"== 24 commits ==\" && git log --oneline origin/main..HEAD | head -30; echo; echo \"== visibilité ==\" && timeout 20 gh r … [188 caractères tronqués]`
+
+  ```
+== remote ref ==
+1620bec
+0bedb54
+
+== 24 commits ==
+1620bec fix(nvidia): reconstruit le module 580.196.07 pour 7.2.6 et 7.3.0
+a4f0636 docs(affichage): archive le blocage GPU du 30/10 (Xorg tue par Mesa)
+9c781e2 fix(affichage): monitor-hotplug relit son coupon X et sonde sysfs
+3400174 docs(agents): consigne l'etat du 28/10 (secrets, 4K, topologie des ecrans)
+2e17c7f docs(migrations): indexe les chantiers d'octobre et le rapatriement du 28/10
+8c12c06 fix(securite): sort les cles API du .bashrc et purge les copies
+1991fb9 docs(affichage): archive le dossier Radeon 7750 (amdgpu.dc, DPM, vblank)
+48f630b docs(fpga): archive la chaîne FPGA locale et son script de vérification
+ff8df19 docs(epson): rapatrie le chantier du scanner Epson V370
+cb1fced feat(monitoring): ajoute des barres PCIe TX/RX par lien
+a9d8072 feat(monitoring): ajoute les métriques PCIe, NVLink, QPI, tensor et AMD
+fc85770 feat(monitoring): ajoute un portage Rust de hauru-top
+150ccc4 feat(monitoring): apparie les threads SMT en demi-blocs et alerte à 100 %
+86a8a56 fix(monitoring): corrige le nom haaru-top en hauru-top
+2e62902 feat(monitoring): ajoute haaru-top, tableau de bord CPU/GPU
+8647fc0 docs(affichage): isole la perte 
+… [781 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je crée la documentation et les fichiers du service dans `equipment-hauru/system/thermal/`.
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal", "content": "#!/bin/bash\n# hauru-thermal — plafonne le GPU 0 et pilote les « Other Fan » Dell, sans BIOS.\n#\n# Usage : hauru-thermal [apply|auto|status]\n#   apply   applique le plafond de puissanc … [3687 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal.service", "content": "[Unit]\nDescription=Hauru — plafond de puissance GPU 0 et ventilation Dell (sans BIOS)\nDocumentation=file:///home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/therma … [222 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal.service</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal.default", "content": "# /etc/default/hauru-thermal — configuration de hauru-thermal.service\n#\n# GPU visé (index nvidia-smi). 0 = la carte du haut, celle qui throttle.\nGPU_INDEX=0\n\n# Plafond de pu … [733 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal.default</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/install.sh", "content": "#!/bin/bash\n# Installe hauru-thermal.service (à lancer en root : sudo ou pkexec).\nset -euo pipefail\n\nif [ \"$(id -u)\" -ne 0 ]; then\n    echo \"  ⛔ à lancer en root : sudo $0 (ou pkexe … [617 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/install.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/uninstall.sh", "content": "#!/bin/bash\n# Désinstalle hauru-thermal.service et rend la main au BIOS / à la puissance d'origine.\n# À lancer en root : sudo ou pkexec.\nset -euo pipefail\n\nif [ \"$(id -u)\" -ne 0 ]; … [530 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/uninstall.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/MESURES-2026-11-02.md", "content": "# Mesures thermiques — GPU 0, 2 novembre 2026\n\n> **Machine** : Hauru, Dell Precision Tower 7910, 2× Quadro RTX 5000 (16 Go, NVLink),\n> openSUSE Tumbleweed, noyau `7.2.6-1-defa … [5477 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/MESURES-2026-11-02.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/README.md", "content": "# Thermique — GPU 0 et ventilateurs Dell\n\n> **En une phrase.** Le GPU 0 est plafonné à **180 W** et les « Other Fan » Dell sont pilotés par\n> `hauru-thermal.service` — **sans modification … [5350 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/README.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute le lien thermique au README principal du dépôt.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/README.md", "offset": 80, "limit": 45}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/README.md</path>
+<type>file</type>
+<content>
+80: 
+81: ## 🔧 État du système
+82: 
+83: ### Depuis septembre 2026 — le système tourne sur le NVMe
+84: - **Racine** : `/dev/nvme0n1p2[/@]` — btrfs `compress=zstd:3`, `noatime`, `discard=async`
+85: - **Sous-volume par défaut** : `@` (corrigé le 21/09 — il valait `FS_TREE`, ce qui aurait
+86:   rendu le système non démarrable à la prochaine mise à jour du noyau)
+87: - **Espace utilisé** : 98 Gio / 828 Gio (12 %) · `Data13TB` 6,3 To / 11 To (58 %)
+88: - **Amorçage** : `grub2-bls`, 13 entrées BLS sur l'ESP (787 Mio / 2 Gio)
+89: - **SELinux** : `enforcing` · **pare-feu** : firewalld + **fail2ban** (jail sshd)
+90: 
+91: > Le détail complet des chantiers (reconstruction NVMe, audit de santé, corrections RPM/KDE/Packman)
+92: > se trouve dans [`system/migrations-2026/`](system/migrations-2026/README.md),
+93: > avec tous les scripts exécutés et leurs journaux.
+94: 
+95: ### Historique des volumes
+96: | Période | Système | Données |
+97: |---|---|---|
+98: | avant juil. 2026 | HDD 10,9 To (LVM) | HDD 10,9 To |
+99: | juil. 2026 | HDD 10,9 To | `Data13TB` séparé |
+100: | **depuis sept. 2026** | *
+… [871 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/README.md", "old_string": "### Historique des volumes", "new_string": "### Thermique GPU et ventilateurs Dell\nLe GPU 0 est plafonné à **180 W** et les « Other Fan » Dell sont pilotés par\n`hauru-thermal.service` — **sans modific … [362 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/equipment-hauru/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal && chmod +x hauru-thermal install.sh uninstall.sh && ls -l && echo && bash -n hauru-thermal && bash -n install.sh && bash -n uninstall.sh && echo \"syntaxe bash OK\"", "description": "Make scripts executable and c … [18 caractères tronqués]`
+
+  ```
+total 36
+-rwx--x--x. 1 stephane stephane 3666  2 nov 17:31 hauru-thermal
+-rw-------. 1 stephane stephane  907  2 nov 17:31 hauru-thermal.default
+-rw-------. 1 stephane stephane  386  2 nov 17:31 hauru-thermal.service
+-rwx--x--x. 1 stephane stephane  779  2 nov 17:31 install.sh
+-rw-------. 1 stephane stephane 5634  2 nov 17:32 MESURES-2026-11-02.md
+-rw-------. 1 stephane stephane 5510  2 nov 17:32 README.md
+-rwx--x--x. 1 stephane stephane  704  2 nov 17:32 uninstall.sh
+
+syntaxe bash OK
+  ```
+
+### 🤖 Assistant
+
+⏵ J'installe le service via le popup PolicyKit et je vérifie son état.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal && chmod 755 hauru-thermal install.sh uninstall.sh && chmod 644 hauru-thermal.default hauru-thermal.service MESURES-2026-11-02.md README.md && ls -l && echo && echo \"== installation ==\" && timeout 240 pkexec /bi … [209 caractères tronqués]`
+
+  ```
+total 36
+-rwxr-xr-x. 1 stephane stephane 3666  2 nov 17:31 hauru-thermal
+-rw-r--r--. 1 stephane stephane  907  2 nov 17:31 hauru-thermal.default
+-rw-r--r--. 1 stephane stephane  386  2 nov 17:31 hauru-thermal.service
+-rwxr-xr-x. 1 stephane stephane  779  2 nov 17:31 install.sh
+-rw-r--r--. 1 stephane stephane 5634  2 nov 17:32 MESURES-2026-11-02.md
+-rw-r--r--. 1 stephane stephane 5510  2 nov 17:32 README.md
+-rwxr-xr-x. 1 stephane stephane  704  2 nov 17:32 uninstall.sh
+
+== installation ==
+  ✅ /etc/default/hauru-thermal créé
+Created symlink '/etc/systemd/system/multi-user.target.wants/hauru-thermal.service' → '/etc/systemd/system/hauru-thermal.service'.
+● hauru-thermal.service - Hauru — plafond de puissance GPU 0 et ventilation Dell (sans BIOS)
+     Loaded: loaded (/etc/systemd/system/hauru-thermal.service; enabled; preset: disabled)
+     Active: active (exited) since Mon 2026-11-02 17:36:10 EST; 14ms ago
+ Invocation: 50555e2f5e214557b9909650ab144f51
+       Docs: file:///home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/README.md
+    Process: 113558 ExecStart=/usr/local/bin/hauru-thermal apply (code=exited, status=0/SUCCESS)
+   Main PID: 113558 (code=exited, statu
+… [435 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le service tourne (GPU 180 W, Other Fan ~3 500 tr/min). Je corrige le code de sortie puis je le réinstalle.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal", "old_string": "    apply)\n        apply_power\n        set_fan_pwm\n        ;;", "new_string": "    apply)\n        rc=0\n        apply_power || rc=1\n        set_fan_pwm || rc=1\n        exit \"$r … [17 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/equipment-hauru && echo \"== log service ==\" && sudo -n true 2>/dev/null || true; tail -10 /var/log/hauru-thermal.log 2>/dev/null || echo \"log inaccessible (root)\"; echo; echo \"== service ==\" && systemctl is-enabled hauru-thermal.service 2 … [190 caractères tronqués]`
+
+  ```
+== log service ==
+Power limit for GPU 00000000:03:00.0 was set to 180.00 W from 180.00 W.
+All done.
+2026-11-02T17:36:10-05:00 plafond GPU0 : 180 W
+2026-11-02T17:36:10-05:00 ventilateurs Dell : Other Fan pwm=180 (/sys/class/hwmon/hwmon6)
+
+== service ==
+enabled
+active
+
+== statut ==
+0, 85, 82 %, 173.80 W, 180.00 W, 1680 MHz, Not Active
+1, 74, 52 %, 212.63 W, 230.00 W, 1860 MHz, Not Active
+fan3=5008 tr/min pwm3_enable=1
+fan4=4724 tr/min pwm4_enable=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Le PWM 180 sature déjà les « Other Fan » ; je balaie les valeurs pour trouver un régime modéré.
+
+- **bash** `{"command": "timeout 180 pkexec /bin/bash -c 'H=\"\"; for d in /sys/class/hwmon/hwmon*; do [ \"$(cat $d/name 2>/dev/null)\" = dell_smm ] && H=$d; done; echo \"hwmon=$H\"; for v in 80 100 120 140 160; do echo $v > $H/pwm3; echo $v > $H/pwm4; echo 1 > $H/pwm3_enable; echo 1 > $H/pwm4_enable; sleep 8;  … [206 caractères tronqués]`
+
+  ```
+hwmon=/sys/class/hwmon/hwmon6
+pwm=80 fan3=5106 fan4=4717 rpm
+pwm=100 fan3=5068 fan4=4713 rpm
+pwm=120 fan3=5076 fan4=4717 rpm
+pwm=140 fan3=5080 fan4=4728 rpm
+pwm=160 fan3=5085 fan4=4717 rpm
+[exit 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le PWM manuel sature à fond dès 80/255 : sur ce 7910, c'est tout ou rien. Je passe le service en `auto` et je corrige le script.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal", "offset": 95, "limit": 25}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal</path>
+<type>file</type>
+<content>
+95:         /usr/bin/nvidia-smi --query-gpu=index,temperature.gpu,fan.speed,power.draw,power.limit,clocks.sm,clocks_throttle_reasons.sw_thermal_slowdown --format=csv,noheader 2>/dev/null
+96:         if H=$(find_dell); then
+97:             for i in 3 4; do
+98:                 printf 'fan%s=%s tr/min pwm%s_enable=%s\n' \
+99:                     "$i" "$(cat "$H/fan${i}_input" 2>/dev/null)" \
+100:                     "$i" "$(cat "$H/pwm${i}_enable" 2>/dev/null)"
+101:             done
+102:         else
+103:             echo "dell_smm : absent"
+104:         fi
+105:         ;;
+106:     *)
+107:         echo "usage: $0 [apply|auto|status]" >&2
+108:         exit 2
+109:         ;;
+110: esac
+
+(End of file - total 110 lines)
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal", "offset": 72, "limit": 22}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal</path>
+<type>file</type>
+<content>
+72:         if /usr/bin/nvidia-smi -i "$GPU" -pl "$PL" >>"$LOG" 2>&1; then
+73:             log "plafond GPU$GPU : ${PL} W"
+74:             return 0
+75:         fi
+76:         n=$((n + 1))
+77:         sleep 5
+78:     done
+79:     log "plafond GPU$GPU : ÉCHEC après 5 essais"
+80:     return 1
+81: }
+82: 
+83: case "${1:-apply}" in
+84:     apply)
+85:         apply_power
+86:         set_fan_pwm
+87:         ;;
+88:     auto)
+89:         set_fan_auto
+90:         /usr/bin/nvidia-smi -i "$GPU" -pl "$PL_DEFAULT" >>"$LOG" 2>&1 \
+91:             && log "plafond GPU$GPU : ${PL_DEFAULT} W (défaut)" \
+92:             || log "plafond GPU$GPU : retour au défaut impossible"
+93:         ;;
+
+(Showing lines 72-93 of 110. Use offset=94 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal", "old_string": "    apply)\n        apply_power\n        set_fan_pwm\n        ;;", "new_string": "    apply)\n        rc=0\n        apply_power || rc=1\n        set_fan_pwm || rc=1\n        exit \"$r … [17 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('hauru-thermal.default'); t=p.read_text()\nt=t.replace(\"#   auto  : le BIOS garde la main (le plus silencieux).\\n#   180   : ≈ 70 %, bon compromis CPU/bruit ;  … [615 caractères tronqués]`
+
+  ```
+default -> auto
+21:OTHER_FAN_PWM=auto
+  ```
+
+### 🤖 Assistant
+
+⏵ Je corrige la documentation (défaut `auto`, saturation du PWM) puis je réapplique le service.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal && python3 - <<'PY'\nimport pathlib\n\ndef sub(t, old, new, n=1):\n    c=t.count(old); assert c==n, f\"{c} != {n}: {old[:70]!r}\"; return t.replace(old,new)\n\np=pathlib.Path('README.md'); t=p.read_text()\nt=sub(t … [2245 caractères tronqués]`
+
+  ```
+README ok
+MESURES ok
+README.md:31:2. règle les « Other Fan » Dell selon `OTHER_FAN_PWM` (`auto` par défaut ; `255` pour forcer
+README.md:70:| `OTHER_FAN_PWM` | `auto` | `auto` = BIOS ; `255` = maximum. Le manuel sature à fond dès 80/255 sur ce 7910. |
+MESURES-2026-11-02.md:90:| `OTHER_FAN_PWM` | **auto** | BIOS ; `255` = maximum (le manuel sature à fond dès 80/255) |
+hauru-thermal.default:21:OTHER_FAN_PWM=auto
+  ```
+
+### 🤖 Assistant
+
+⏵ Je réinstalle le script corrigé, passe le défaut à `auto` et redémarre le service.
+
+- **bash** `{"command": "timeout 240 pkexec /bin/bash -c '\nset -e\ninstall -m 755 /home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal /usr/local/bin/hauru-thermal\nsed -i \"s/^OTHER_FAN_PWM=.*/OTHER_FAN_PWM=auto/\" /etc/default/hauru-thermal\nsystemctl restart hauru-thermal.ser … [421 caractères tronqués]`
+
+  ```
+● hauru-thermal.service - Hauru — plafond de puissance GPU 0 et ventilation Dell (sans BIOS)
+     Loaded: loaded (/etc/systemd/system/hauru-thermal.service; enabled; preset: disabled)
+     Active: active (exited) since Mon 2026-11-02 17:41:29 EST; 8s ago
+ Invocation: f0081de7587040988ca88e6d3f13d557
+       Docs: file:///home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/README.md
+    Process: 115624 ExecStart=/usr/local/bin/hauru-thermal apply (code=exited, status=0/SUCCESS)
+   Main PID: 115624 (code=exited, status=0/SUCCESS)
+        CPU: 93ms
+
+0, 84, 79 %, 161.87 W, 180.00 W, 1785 MHz, Not Active
+1, 75, 51 %, 211.19 W, 230.00 W, 1860 MHz, Not Active
+fan3=3759 tr/min pwm3_enable=2
+fan4=3722 tr/min pwm4_enable=2
+[exit 0]
+
+== config ==
+GPU_POWER_LIMIT=180
+GPU_POWER_LIMIT_DEFAULT=230
+OTHER_FAN_PWM=auto
+
+== log ==
+2026-11-02T17:36:10-05:00 ventilateurs Dell : Other Fan pwm=180 (/sys/class/hwmon/hwmon6)
+Power limit for GPU 00000000:03:00.0 was set to 180.00 W from 180.00 W.
+All done.
+2026-11-02T17:41:29-05:00 plafond GPU0 : 180 W
+2026-11-02T17:41:29-05:00 ventilateurs Dell : auto (BIOS)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le service est permanent (plafond 180 W, ventilateur en auto). Je commit et pousse la documentation.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/equipment-hauru && git add system/thermal README.md && echo \"== staged ==\" && git diff --cached --stat && echo && echo \"== non staged (préexistant) ==\" && git status --short | grep -v '^A ' | head -12 && echo && timeout 60 git commit -q -m  … [856 caractères tronqués]`
+
+  ```
+== staged ==
+ README.md                            |  10 +++
+ system/thermal/MESURES-2026-11-02.md | 128 +++++++++++++++++++++++++++++++++
+ system/thermal/README.md             | 134 +++++++++++++++++++++++++++++++++++
+ system/thermal/hauru-thermal         | 112 +++++++++++++++++++++++++++++
+ system/thermal/hauru-thermal.default |  21 ++++++
+ system/thermal/hauru-thermal.service |  14 ++++
+ system/thermal/install.sh            |  26 +++++++
+ system/thermal/uninstall.sh          |  19 +++++
+ 8 files changed, 464 insertions(+)
+
+== non staged (préexistant) ==
+ M AGENTS.md
+M  README.md
+ M system/maintenance/logs/scrub-data13tb-20260921-164933.log
+ M system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/JOURNAL.md
+ M system/migrations-2026/2026-10-30-radeon-blocage-gpu-xorg/JOURNAL.md
+?? system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/02-collecter-etat-lecture-seule.sh
+?? system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/02-etat-materiel-20261013-192107.log
+?? system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/03-redemarrage-greeter-20261013-191749.log
+?? system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/03-reinitialiser
+… [407 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je pousse le commit et les 24 commits locaux en attente vers `origin/main`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/equipment-hauru && echo \"== fetch ==\" && timeout 60 git fetch origin 2>&1; echo \"[fetch ${PIPESTATUS[0]}]\"; echo; echo \"== état ==\" && git status -sb | head -3 && echo -n 'commits à pousser: ' && git rev-list --count origin/main..HEAD &&  … [184 caractères tronqués]`
+
+  ```
+== fetch ==
+[fetch 0]
+
+== état ==
+## main...origin/main [ahead 25]
+ M AGENTS.md
+ M system/maintenance/logs/scrub-data13tb-20260921-164933.log
+commits à pousser: 25
+
+== push ==
+To github.com:stephanedenis/equipment-hauru.git
+   0bedb54..f5883f9  main -> main
+[push 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie le service, le commit distant et l'état thermique final.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/equipment-hauru && echo \"== git ==\" && git log --oneline -1 && git status -sb | head -2 && echo -n 'HEAD=' && git rev-parse --short HEAD && echo -n 'origin/main=' && git rev-parse --short origin/main && echo && echo \"== remote ==\" && timeou … [419 caractères tronqués]`
+
+  ```
+== git ==
+f5883f9 feat(thermal): plafonne le GPU 0 à 180 W et documente les ventilateurs Dell sans BIOS
+## main...origin/main
+ M AGENTS.md
+HEAD=f5883f9
+origin/main=f5883f9
+
+== remote ==
+f5883f970d4a258a62a86f9350da8c32d062d21b	refs/heads/main
+
+== service ==
+enabled
+active
+0
+
+== config ==
+GPU_POWER_LIMIT=180
+GPU_POWER_LIMIT_DEFAULT=230
+OTHER_FAN_PWM=auto
+  ```
+
+- **bash** `{"command": "echo \"== état thermique ==\" && /usr/local/bin/hauru-thermal status 2>&1; echo; echo \"== log ==\" && tail -4 /var/log/hauru-thermal.log 2>/dev/null; echo; echo \"== service ==\" && systemctl status --no-pager hauru-thermal.service 2>&1 | head -7", "description": "Final thermal status  … [19 caractères tronqués]`
+
+  ```
+== état thermique ==
+0, 85, 79 %, 182.96 W, 180.00 W, 1770 MHz, Not Active
+1, 74, 51 %, 204.99 W, 230.00 W, 1860 MHz, Not Active
+fan3=2157 tr/min pwm3_enable=2
+fan4=2144 tr/min pwm4_enable=2
+
+== log ==
+Power limit for GPU 00000000:03:00.0 was set to 180.00 W from 180.00 W.
+All done.
+2026-11-02T17:41:29-05:00 plafond GPU0 : 180 W
+2026-11-02T17:41:29-05:00 ventilateurs Dell : auto (BIOS)
+
+== service ==
+● hauru-thermal.service - Hauru — plafond de puissance GPU 0 et ventilation Dell (sans BIOS)
+     Loaded: loaded (/etc/systemd/system/hauru-thermal.service; enabled; preset: disabled)
+     Active: active (exited) since Mon 2026-11-02 17:41:29 EST; 2min 3s ago
+ Invocation: f0081de7587040988ca88e6d3f13d557
+       Docs: file:///home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/README.md
+    Process: 115624 ExecStart=/usr/local/bin/hauru-thermal apply (code=exited, status=0/SUCCESS)
+   Main PID: 115624 (code=exited, status=0/SUCCESS)
+  ```
+
+### 🤖 Assistant
+
+⏵ Service permanent actif et documentation poussée sur `equipment-hauru` (commit `f5883f9`).
+
+# C'est fait : service permanent + documentation GitHub
+
+## 1. Service installé et actif
+
+| | |
+|---|---|
+| unité | **`hauru-thermal.service`** — `enabled`, `active (exited)`, code 0 |
+| au boot | applique `nvidia-smi -i 0 -pl 180` |
+| ventilateurs Dell | `OTHER_FAN_PWM=auto` (BIOS), pilotables via `pwm3`/`pwm4` |
+| config | `/etc/default/hauru-thermal` |
+| journal | `/var/log/hauru-thermal.log` + `journalctl -u hauru-thermal` |
+
+État actuel :
+
+```
+GPU 0 : 85 °C · ventilateur 79 % · 183 W / 180 W · 1 770 MHz · throttle INACTIF
+GPU 1 : 74 °C · ventilateur 51 % · 205 W / 230 W · 1 860 MHz
+Other Fan : 2 157 / 2 144 tr/min · auto (BIOS)
+```
+
+Le plafond **180 W** est le levier qui a supprimé le throttle (87 → 84-85 °C, ~3 % de fréquence en moins). Le ventilateur de la carte reste en automatique.
+
+### Pourquoi les ventilateurs Dell sont en `auto`
+
+Le mode manuel `pwm3`/`pwm4` est **binaire** sur ce 7910 : tout valeur ≥ 80/255 donne le plein régime (5 100/4 700 tr/min). Et le plein régime **ne refroidit pas le GPU 0** (84-85 °C, inchangé) ; il ne refroidit que le CPU. Le service laisse donc le BIOS gérer, et le plafond 180 W fait le travail. Si tu veux forcer le maximum :
+
+```bash
+sudo sed -i 's/^OTHER_FAN_PWM=.*/OTHER_FAN_PWM=255/' /etc/default/hauru-thermal
+sudo systemctl restart hauru-thermal.service
+```
+
+Pour un peu plus de performance GPU, `GPU_POWER_LIMIT=200` ; pour revenir à l'origine, `GPU_POWER_LIMIT=230` (le throttle revient).
+
+### Commandes
+
+```bash
+/usr/local/bin/hauru-thermal status      # GPU + Other Fan
+sudo /usr/local/bin/hauru-thermal apply  # réappliquer
+sudo /usr/local/bin/hauru-thermal auto   # rendu au BIOS + 230 W
+sudo systemctl restart hauru-thermal.service
+```
+
+Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
+
+## 2. Documentation poussée sur GitHub
+
+**Commit** : [`f5883f9`](https://github.com/stephanedenis/equipment-hauru/commit/f5883f9) — `main` local = `origin/main`.
+
+| fichier | contenu |
+|---|---|
+| `system/thermal/README.md` | le problème, le service, la config, les commandes, le pour/contre, le physique |
+| `system/thermal/MESURES-2026-11-02.md` | les quatre campagnes : état initial, ventilateur GPU 100 %, plafond 180 W, Other Fan Dell |
+| `system/thermal/hauru-thermal` | script `apply` / `auto` / `status` |
+| `system/thermal/hauru-thermal.service` | unité systemd oneshot, au boot |
+| `system/thermal/hauru-thermal.default` | configuration par défaut |
+| `system/thermal/install.sh` / `uninstall.sh` | installation / retour à l'auto |
+| `README.md` (racine) | section « Thermique GPU et ventilateurs Dell » avec le lien |
+
+**Transparence sur le push** : la branche `main` locale était en avance de **24 commits** (le `git push origin` de la session du 02/11 avait été interrompu par l'incident GPU). Le push a publié ces 24 commits **avec** la documentation thermique (`0bedb54..f5883f9`). Le dépôt est **privé**. Les fichiers non committés qui préexistaient (`AGENTS.md`, journaux de maintenance, migrations) n'ont **pas** été touchés.
+
+## 3. Ce qui reste (physique)
+
+Le service règle le logiciel ; il ne règle pas le radiateur :
+
+1. souffler le **radiateur du GPU 0** (carte hors tension, pales tenues) ;
+2. vérifier le **carénage GPU** du Precision 7910 et les deux « Other Fan » du couloir avant ;
+3. **espacer les cartes** ou ajouter un ventilateur de slot entre les deux Quadro ;
+4. repâtage du GPU 0 si la carte a plusieurs années.
+
+Le delta de 14 °C à puissance égale (avant le plafond) reste la meilleure preuve : ce n'est ni la charge ni le ventilateur de la carte, c'est l'air qui arrive au radiateur du haut.
+
+**Après un reboot** : `systemctl is-enabled hauru-thermal.service` doit rester `enabled` ; le service réapplique 180 W automatiquement. Vérifie avec `/usr/local/bin/hauru-thermal status`.
+

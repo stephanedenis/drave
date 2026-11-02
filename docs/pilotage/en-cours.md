@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 17 h 20 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 17 h 50 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
 > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
@@ -76,13 +76,13 @@
 - **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels.
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
-- **Fait** : B13 **140/140**, gold **432**, **116 liens** ; **gold neuronal** POS **0,8483**,
-  cascade **0,9440** ; **R4.4** — trois limites nommées ;
-  [fiche](../../reports/rapport-pensee-gold-neuronal.md).
-- **Ce qu'elle fait** : cycle **140/140** committé ; **gold neuronal** mesuré ; reprise **16 h 16**.
+- **Fait** : B13 **140/140**, gold **432** ; **gold neuronal** POS **0,8483**, cascade **0,9440** ;
+  **syntagmes** BIO **0,6173**, tête **0,7606**, cascade confiance **0,7592** ;
+  [fiche](../../reports/rapport-pensee-gold-syntagmes.md).
+- **Ce qu'elle fait** : **gold neuronal POS et syntagmes** mesurés ; reprise **16 h 16**.
 - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
-- **Prochaine action** : **syntagmes/pragmatique** ; **DRVM/native** (parité).
-- **Bloquants** : aucun pour le POS ; le **complet** (syntagmes) reste à mesurer.
+- **Prochaine action** : **pragmatique** ; **DRVM/native** (parité).
+- **Bloquants** : aucun pour POS/syntagmes ; la **pragmatique** reste à mesurer.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 ### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
@@ -124,7 +124,7 @@
 |---|---|---|
 | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **553** / **639** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **554** / **640** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
 
@@ -136,7 +136,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : syntagmes/pragmatique** ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : pragmatique** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N3, N4** | N2 : **N2.ac 1 Go — 3,49 domaine / 6,03 littérature** ; < 2,5 non atteinte ; N4 0/4 ; N5 gelé | **N2** : 200 k pas **en cours** (session `0733c5bb`), puis **R1.1/R1.2** ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R1/R2/R3 attendent N5/N4 | **R1.1/R1.2** (contexte natif) |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
@@ -147,7 +147,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **syntagmes** ; **S** — la **validation
+**N2** — **200 k pas**, puis **R1.1/R1.2** ; **Pensée** — **pragmatique** ; **S** — la **validation
 humaine** de la banque et la frontière du GN (h033) ; **N4** — la consigne ; **B10.3** — le `z` ;
 **R0.7** — le tagger complet.
 

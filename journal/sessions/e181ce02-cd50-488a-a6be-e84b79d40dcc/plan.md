@@ -15,16 +15,16 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-02 16:57 EST
-- **Prochaine action** : le **gold neuronal POS** est mesuré (tagger 7B local, cascade **0,9440**) ;
-  reprendre par les **syntagmes/pragmatique** du tagger, puis **DRVM/native** (poids et tagger
-  présents, **parité à mesurer**) ; la cascade complète reste la lecture.
+- **Heartbeat** : 2026-11-02 17:53 EST
+- **Prochaine action** : les **syntagmes** sont mesurés (BIO 7B, tête **0,7606** ; cascade
+  confiance **0,7592**) ; reprendre par la **pragmatique**, puis la cascade complète et
+  **DRVM/native** (poids et taggers présents, **parité à mesurer**).
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
 - **État** : actif
 - **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
   stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
   (BFS, greedy, A*, MCTS-lite)~~ ; 5) ~~AC-3, alpha-bêta~~ (**8/8**) ; ~~DRVF~~ (**9/9**) ; 6) **banc anytime** (AUC,
-  regret, justification, rejeu) et intégration DRVM/DRVF ; 9) ~~bloc linguistique~~ (R0.7, 398 langues) ; 10) ~~coréférence et absences~~ (140/140, gold 432) ; 11) ~~gold neuronal~~ (tagger 7B local, cascade POS 0,9440).
+  regret, justification, rejeu) et intégration DRVM/DRVF ; 9) ~~bloc linguistique~~ (R0.7, 398 langues) ; 10) ~~coréférence et absences~~ (140/140, gold 432) ; 11) ~~gold neuronal~~ (tagger 7B local, cascade POS 0,9440) ; 12) ~~syntagmes~~ (BIO 7B, exact 0,6173, tête 0,7606).
 - **Ambition** : faire de Drave un **runtime cognitif** où penser est une **recherche tracée** sur
   des **états pluriels**, avec des opérateurs hétérogènes (neuronaux, classiques, matériel) et des
   décisions justifiables et rejouables.
@@ -38,8 +38,8 @@
   juge sur la couverture × la précision par unité de calcul, pas sur le débit.
 - **Bloc linguistique** : **R0.7** — le contrat `bloc_linguistique.py` (9 niveaux, heuristique
   CPU + neuronal de contrat, parallèle/cascade, activation 51–76 %) ; **398 langues à 0,9687**,
-  script **1,0000**, profils permutés **0,0022** ; le **tagger POS 7B** local est qualifié
-  (cascade **0,9440**) ; **syntagmes/pragmatique** à mesurer ;
+  script **1,0000**, profils permutés **0,0022** ; les **taggers 7B** locaux sont qualifiés — POS
+  (cascade **0,9440**) et **syntagmes** (tête **0,7606**) ; **pragmatique** à mesurer ;
   fiche [`bloc`](../../reports/rapport-bloc-linguistique.md) et porte.
 - **Moteur B13** : **AC-3, alpha-bêta (8/8)**, **DRVF `thought` (9/9)**, **banc anytime
   (10/10)**, **140/140** (T137 : 5 phrases sans antécédent, 0 lien ; 116 liens = 51 intra + 65 inter) ;
@@ -49,11 +49,13 @@
   [`pensee-banc`](../../reports/rapport-pensee-banc.md) ; prochain : **opérateurs hétérogènes/DRVM**.
 - **Gold L** : **432 réels + 160 synthétiques + 20** ; POS **0,765**, syntagmes exacts **0,194**/
   **tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock) **67,1 %** ;
-  **attachement tête 1,0/0,966/0,932** (span 0,323/0,338 ; 29 ambiguës), hasard 0,015 ; **tagger
-  7B local** — POS **0,8483**, cascade **0,9440** ;
-  fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) et
-  [`pensee-gold-neuronal`](../../reports/rapport-pensee-gold-neuronal.md) ; prochain :
-  **syntagmes/pragmatique** ; la coréférence est faite (116 liens).
+  **attachement tête 1,0/0,966/0,932** (span 0,323/0,338 ; 29 ambiguës), hasard 0,015 ; **taggers
+  7B locaux** — POS **0,8483**, cascade **0,9440** ; **syntagmes** **0,6173**, tête
+  **0,7606**, cascade confiance **0,7592** ;
+  fiches [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md),
+  [`pensee-gold-neuronal`](../../reports/rapport-pensee-gold-neuronal.md) et
+  [`pensee-gold-syntagmes`](../../reports/rapport-pensee-gold-syntagmes.md) ; prochain :
+  **pragmatique** ; la coréférence est faite (116 liens).
 - **Objectif final** : un **moteur de pensée v0 exécutable** — state store typé, arbre d'états,
   A*/MCTS/AC-3 sur le même contrat, trace/rejeu, banc anytime avec contrôles — documenté, mesuré
   et committé.

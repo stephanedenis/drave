@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-pensee-gold-neuronal.md`](rapport-pensee-gold-neuronal.md) | **B13** 7B **0,944** |
+| [`rapport-pensee-gold-syntagmes.md`](rapport-pensee-gold-syntagmes.md) | **B13** 7B **0,760** |
 | [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
 | [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
 | [`rapport-pensee-miroir.md`](rapport-pensee-miroir.md) | **B13** — le miroir entrée/sortie : surface 1,0, mots 0,2095, **119/119** |

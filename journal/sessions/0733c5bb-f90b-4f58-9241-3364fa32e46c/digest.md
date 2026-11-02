@@ -2694,3 +2694,418 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-101", "timeout_ms": 180000, "wait": true}`
+
+  ```
+17:22:17
+ "ppl_val": 3.5371263065339433,
+ "duree_s": 1947.2954514026642
+--- chaine ---
+R11-g2 fini 17:20:47
+--- rope512-5k ---
+pas    100 · perte 1.3509 · PPL val 3.970 · 40 s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification : la graine a-t-elle un effet quand `--init` fournit tous les poids ?
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sha256sum work/n2ac/rope-20k.pt work/n2ac/rope-20k-g2.pt; echo \"--- logs (fin) ---\"; tail -c 400 work/n2ac/rope-20k.log | tr -d '\\n' | tail -c 300; echo; tail -c 400 work/n2ac/rope-20k-g2.log | tr -d '\\n' | tail -c 300; echo; echo \"--- premiers p … [153 caractères tronqués]`
+
+  ```
+0ceeb3f9513f522e25eeb92674d140f09b1193ea62680ef2a95ac65568696c5a  work/n2ac/rope-20k.pt
+5bb7de1d38d57555014ebad0dc8453aa8995a055fdf848e04eed7040447621e3  work/n2ac/rope-20k-g2.pt
+--- logs (fin) ---
+ns": "rope", "init": "work/n2j/base-wiki-45m.pt", "perte_finale": 1.3000273704528809, "ppl_val": 3.5371263065339433, "jetons_val": 8192, "tetes": true, "drvm": "work/n2ac/rope-20k.drvm", "sha256_drvm": "67d81ab3fce8af14eb92b7008bd3d4a307f9e7a325e46974228fa8bbde9130f0", "duree_s": 1220.1019806861877}
+: "rope", "init": "work/n2j/base-wiki-45m.pt", "perte_finale": 1.3000273704528809, "ppl_val": 3.5371263065339433, "jetons_val": 8192, "tetes": true, "drvm": "work/n2ac/rope-20k-g2.drvm", "sha256_drvm": "67d81ab3fce8af14eb92b7008bd3d4a307f9e7a325e46974228fa8bbde9130f0", "duree_s": 1947.2954514026642}
+--- premiers pas ---
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  pertes.append(float(perte))
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  pertes.append(float(perte))
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && head -3 work/n2j/base-34m-canal-g2.log | tail -2; grep -E \"init|graine|ppl_val\" work/n2j/base-34m-canal-g2.pt.json; echo \"=== normal ===\"; grep -E \"init|graine|ppl_val\" work/n2j/base-34m-canal.pt.json; echo \"=== drvm hash ===\"; grep -E \"sha25 … [88 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_native.py:105: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+ "graine": 2,
+ "ppl_val": 3.6891241109510333,
+=== normal ===
+ "graine": 1,
+ "ppl_val": 3.683441230210883,
+=== drvm hash ===
+work/n2j/base-34m-canal-g2.pt.json: "sha256_drvm": "47d764e98b6879658e92768f01be29a34519ce4a69aff2cce2b45852eb7cec5b",
+work/n2j/base-34m-canal.pt.json: "sha256_drvm": "2720f49a5a28fc6164994c8ee9f72dca2a93404db2399f3bdf2c6a75f0491d6c",
+  ```
+
+### 🤖 Assistant
+
+⏵ Découverte : la graine est inerte sous `--init` ; correction de la fiche
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-r11.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\n\"\"\"La courbe RoPE est **décroissante** (3,37 → 3,25), pas seulement plate ; la courbe absolue\n**monte** puis ** … [1689 caractères tronqués]`
+
+  ```
+fiche mise à jour
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- abs1152 ---\"; tail -1 work/n2ac/absolu-pos1152.log; echo \"--- rope512-5k ---\"; tail -1 work/n2ac/rope512-5k.log; echo \"--- 200k ---\"; tail -1 work/n2ac/mix-200k.log", "description": "Check control runs progress"}`
+
+  ```
+17:22:51
+--- abs1152 ---
+pas 15700 · perte 1.3762 · PPL val 3.750 · 1692 s
+--- rope512-5k ---
+pas    200 · perte 1.2537 · PPL val 3.725 · 79 s
+--- 200k ---
+pas 63650 · perte 1.4642 · PPL val 3.421 · 3575 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation du contrôle « depuis zéro, initialisation figée » (pair absolu/RoPE)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"init_figee.py — une initialisation aléatoire **figée**, la même pour les deux schémas de position.\n\nPourquoi : les points de contrôle de N2 partent tous de `base-wiki-45m.pt`, un modèle **absolu**\ndéjà entraîné. Comparer RoPE à absolu depuis cette initia … [1328 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/init_figee.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. python3 work/n2ac/init_figee.py --sortie work/n2ac/init-figee.pt; echo \"--- status ---\"; date '+%H:%M:%S'; tail -1 work/n2ac/absolu-pos1152.log; tail -1 work/n2ac/rope512-5k.log", "description": "Create frozen init and check runs"}`
+
+  ```
+--- status ---
+17:23:15
+pas 15950 · perte 1.3986 · PPL val 3.802 · 1721 s
+pas    250 · perte 1.3449 · PPL val 3.666 · 98 s
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2ac/init_figee.py", line 18, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. ~/gpu-env/bin/python work/n2ac/init_figee.py --sortie work/n2ac/init-figee.pt", "description": "Create frozen init with gpu python"}`
+
+  ```
+work/n2ac/init-figee.pt · 34301224 paramètres · graine 20261102
+  ```
+
+- **write** `{"content": "#!/usr/bin/env bash\n# chaine_zero.sh — le contrôle « depuis zéro » de R1.1 : même initialisation figée, deux schémas.\n#\n#   A. absolu : positions apprises 0…511, décalage aléatoire dans [0, 384] (recette N2.z)\n#   B. RoPE   : mêmes blocs, q/k tournés, aucune position apprise\n# Même … [952 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_zero.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- abs1152 ---\"; tail -2 work/n2ac/absolu-pos1152.log; echo \"--- rope512-5k ---\"; tail -1 work/n2ac/rope512-5k.log; echo \"--- chaine ---\"; cat work/n2ac/chaine_r1.out; echo \"--- 200k ---\"; tail -1 work/n2ac/ … [60 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-108]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-108", "timeout_ms": 420000, "wait": true}`
+
+  ```
+17:30:29
+--- abs1152 ---
+pas 19650 · perte 1.3130 · PPL val 3.663 · 2144 s
+pas 19700 · perte 1.1467 · PPL val 3.750 · 2150 s
+--- rope512-5k ---
+pas   1350 · perte 1.2681 · PPL val 3.300 · 525 s
+--- chaine ---
+R11-g2 fini 17:20:47
+--- 200k ---
+pas 71950 · perte 1.3112 · PPL val 3.332 · 4034 s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle causal : positions 0–1279 entraînées — la courbe doit se replier
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -E \"ppl_val|duree_s\" work/n2ac/absolu-pos1152.pt.json; PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/absolu-pos1152.pt --longueurs 128,256,512,1000 --sortie work/n2ac/courbe-absolu-pos1152.json 2 … [436 caractères tronqués]`
+
+  ```
+File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ~~~~^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'work/n2ac/absolu-pos1152.pt'
+--- normes ---
+[stderr]
+grep: work/n2ac/absolu-pos1152.pt.json: No such file or directory
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/serialization.py", line 1530, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/home/stephane/gpu-env/lib64/python3.13/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ~~~~^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such fi
+… [61 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7 8; do [ -f work/n2ac/absolu-pos1152.pt.json ] && break; sleep 15; done; date '+%H:%M:%S'; ls -la work/n2ac/absolu-pos1152.pt* 2>/dev/null; grep -E \"ppl_val|duree_s\" work/n2ac/absolu-pos1152.pt.json 2>/dev/null", "description": … [48 caractères tronqués]`
+
+  ```
+17:31:03
+-rw-r--r--. 1 stephane stephane 137248740  2 nov 17:30 work/n2ac/absolu-pos1152.pt
+-rw-r--r--. 1 stephane stephane       561  2 nov 17:31 work/n2ac/absolu-pos1152.pt.json
+ "ppl_val": 3.7058978207614164,
+ "duree_s": 2186.147589445114
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/absolu-pos1152.pt --longueurs 128,256,512,1000 --sortie work/n2ac/courbe-absolu-pos1152.json 2>&1 | tail -6; echo \"--- normes ---\"; PYTHONPATH=. ~/gpu-env … [381 caractères tronqués]`
+
+  ```
+L128 : 3.5745
+  L256 : 3.5389
+  L512 : 3.7449
+  L1000 : 4.0956
+{"fichier": "absolu-pos1152.pt", "val": "data/wiki_fr/propre", "positions": "absolues", "L128": 3.5745, "L256": 3.5389, "L512": 3.7449, "L1000": 4.0956}
+--- normes ---
+  positions 0–511 : norme moyenne 16.7397
+  positions 512–1023 : norme moyenne 16.9821
+  positions 1024–1279 : norme moyenne 17.0362
+  positions 1280–2047 : norme moyenne 17.3864
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_fenetre.py work/n2ac/absolu-pos1152.pt --sortie work/n2ac/queue-absolu-pos1152.json 2>&1 | tail -4", "description": "Same-text control on wide-shift absolute model"}`
+
+  ```
+contexte  256 · PPL des 128 derniers octets 3.3485
+  contexte  512 · PPL des 128 derniers octets 4.0368
+  contexte 1000 · PPL des 128 derniers octets 4.5486
+{"fichier": "absolu-pos1152.pt", "positions": "absolues", "cible": 128, "ppl": {"256": 3.3485, "512": 4.0368, "1000": 4.5486}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Bascule GPU 1 : arrêt du 20k@512 trop lent, lancement du contrôle depuis zéro
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ps -eo pid,ppid,etime,cmd --no-headers | grep -E \"[c]haine_r1|[r]ope512|[e]ntrainer_rope\" | cut -c1-120", "description": "Inspect chain and child PIDs"}`
+
+  ```
+79387    2893       44:50 bash -c cd /home/stephane/GitHub/Qtrinet && nohup bash work/n2ac/chaine_r1.sh > work/n2ac/ch
+  79389   79387       44:50 bash work/n2ac/chaine_r1.sh
+ 105363   79389       11:26 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre/t
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && kill 79389 2>/dev/null; sleep 3; ps -p 79389 >/dev/null && echo \"chaine encore là\" || echo \"chaine arrêtée\"; ps -p 105363 >/dev/null && echo \"rope512-5k continue (pid 105363)\" || echo \"rope512-5k arrêté !\"; nohup bash work/n2ac/chaine_zero.sh  … [261 caractères tronqués]`
+
+  ```
+chaine arrêtée
+rope512-5k continue (pid 105363)
+paire lancée pid 111874
+17:33:01
+pas   2050 · perte 1.1256 · PPL val 3.225 · 690 s
+pas 74600 · perte 1.0614 · PPL val 3.411 · 4185 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Insertion du contrôle causal dans la fiche R1.1
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-r11.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"Le contrôle causal — réentraîner la **même** recette avec un décalage dans [0, 1 152] pour que\nles positions 0–1 279 … [1154 caractères tronqués]`
+
+  ```
+ok
+1
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de l'extracteur de trajectoire et de la loi de compute
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"trajectoire.py — la courbe PPL(pas) lue dans le journal d'entraînement, et sa loi.\n\nLe journal de `entrainer_native.py` imprime, tous les 50 pas, la perte du pas et la PPL de\nvalidation interne (les 5 % finaux du corpus). On en tire :\n\n  - la **traject … [2842 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/trajectoire.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 work/n2ac/trajectoire.py work/n2w/mix-60k.log --depuis 20000 --cible 2.5 --sortie work/n2ac/traj-60k.json 2>&1 | head -30", "description": "Test trajectory tool on 60k run"}`
+
+  ```
+{
+ "journal": "work/n2w/mix-60k.log",
+ "points": 1201,
+ "dernier_pas": 60000,
+ "ppl_finale": 3.48,
+ "ajustement": {
+  "depuis": 20000,
+  "a": 13.921838,
+  "b": 0.126496
+ },
+ "pas_pour_cible": 786116,
+ "trajectoire": [
+  [
+   10000,
+   4.593
+  ],
+  [
+   20000,
+   3.989
+  ],
+  [
+   30000,
+   3.782
+  ],
+  [
+   40000,
+   3.644
+  ],
+  [
+   50000,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 work/n2ac/trajectoire.py work/n2ac/mix-200k.log --depuis 20000 --cible 2.5 2>&1 | head -14; date '+%H:%M:%S'; tail -1 work/n2ac/rope512-5k.log; tail -1 work/n2ac/zero-absolu.log 2>/dev/null", "description": "Check 200k trajectory fit so far"}`
+
+  ```
+{
+ "journal": "work/n2ac/mix-200k.log",
+ "points": 1506,
+ "dernier_pas": 75250,
+ "ppl_finale": 3.403,
+ "ajustement": {
+  "depuis": 20000,
+  "a": 13.867161,
+  "b": 0.126665
+ },
+ "pas_pour_cible": 748405,
+ "trajectoire": [
+  [
+   10000,
+17:33:38
+pas   2150 · perte 1.1269 · PPL val 3.235 · 715 s
+pas  200 · perte 2.3910 · PPL val 12.086 · 23 s
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- rope512-5k ---\"; tail -2 work/n2ac/rope512-5k.log; echo \"--- zero ---\"; cat work/n2ac/chaine_zero.out; tail -1 work/n2ac/zero-absolu.log; echo \"--- 200k ---\"; tail -1 work/n2ac/mix-200k.log", "description": … [23 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-118]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-118", "timeout_ms": 600000, "wait": true}`
+
+  ```
+17:43:49
+--- rope512-5k ---
+pas   3700 · perte 1.1119 · PPL val 3.136 · 1315 s
+pas   3750 · perte 1.4317 · PPL val 3.128 · 1334 s
+--- zero ---
+pas 5500 · perte 1.5644 · PPL val 5.446 · 632 s
+--- 200k ---
+pas 85300 · perte 1.3653 · PPL val 3.293 · 4834 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; echo \"--- rope512-5k ---\"; tail -2 work/n2ac/rope512-5k.log; grep -E \"ppl_val|duree\" work/n2ac/rope512-5k.pt.json 2>/dev/null; echo \"--- zero ---\"; tail -1 work/n2ac/zero-absolu.log; echo \"--- 200k ---\"; tail -1 wo … [65 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-119]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-119", "timeout_ms": 420000, "wait": true}`
+
+  ```
+17:51:05
+--- rope512-5k ---
+pas   4800 · perte 1.1644 · PPL val 3.057 · 1739 s
+pas   4850 · perte 1.1718 · PPL val 3.055 · 1758 s
+--- zero ---
+pas 9300 · perte 1.5338 · PPL val 4.699 · 1069 s
+--- 200k ---
+pas 92250 · perte 1.3513 · PPL val 3.334 · 5268 s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 90; cd /home/stephane/GitHub/Qtrinet && cat work/n2ac/chaine_r1.out; grep -E \"ppl_val|duree\" work/n2ac/rope512-5k.pt.json 2>/dev/null; echo \"=== courbe ===\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/rope512-5k.pt --rope --l … [154 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-120]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-120", "timeout_ms": 240000, "wait": true}`
+
+  ```
+R11-g2 fini 17:20:47
+ "ppl_val": 3.1461741415909055,
+ "duree_s": 1819.359084367752
+=== courbe ===
+  L128 : 3.3399
+  L192 : 3.2747
+  L256 : 3.2271
+  L384 : 3.17
+  L512 : 3.099
+  L1000 : 3.0107
+{"fichier": "rope512-5k.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L128": 3.3399, "L192": 3.2747, "L256": 3.2271, "L384": 3.17, "L512": 3.099, "L1000": 3.0107}
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ R1.2 : courbe meilleure à octets constants ; test « octets au-delà de 256 utilisés ? »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_fenetre.py work/n2ac/rope512-5k.pt --rope --sortie work/n2ac/queue-rope512.json 2>&1 | tail -4; echo \"--- miroir copie (fenêtre 512) ---\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/ … [206 caractères tronqués]`
+
+  ```
+contexte  256 · PPL des 128 derniers octets 2.9654
+  contexte  512 · PPL des 128 derniers octets 2.8819
+  contexte 1000 · PPL des 128 derniers octets 2.8638
+{"fichier": "rope512-5k.pt", "positions": "rope", "cible": 128, "ppl": {"256": 2.9654, "512": 2.8819, "1000": 2.8638}}
+--- miroir copie (fenêtre 512) ---
+  d=  16 · justesse 0.0000
+  d=  64 · justesse 0.0000
+  d= 128 · justesse 0.0000
+  d= 200 · justesse 0.0000
+  d= 240 · justesse 0.0000
+  d= 255 · justesse 0.0000
+  d= 300 · justesse 0.0078
+  d= 400 · justesse 0.0000
+{"fichier": "rope512-5k.pt", "positions": "rope", "fenetre": 512, "contexte": 512, "code": "K7Q2M9XA4B1Z8W3C", "distances": {"16": 0.0, "64": 0.0, "128": 0.0, "200": 0.0, "240": 0.0, "255": 0.0, "300": 0.0078, "400": 0.0}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la section R1.2 (octets constants, fenêtre 512)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-r11.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"Même recette, RoPE, mais `--seq 512 --window 512` : le modèle peut lire 512 octets en arrière.\nDeux budgets : **5 00 … [2313 caractères tronqués]`
+
+  ```
+ok
+0
+17:53:50
+pas 11800 · perte 1.5586 · PPL val 4.465 · 1236 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1. verdict : ajouter R1.2\np = pathlib.Path(\"reports/rapport-n2-r11.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"3,1662) et multiplie la PPL absolue par **4,8** (3,8468 → 18,6055), parce que les lignes … [1277 caractères tronqués]`
+
+  ```
+ok
+  reports/n2-r11.json · 11 source(s)
+['courbe_rope_graine1', 'courbe_absolu', 'courbe_absolu_pos1152', 'courbe_rope512_5k', 'meme_texte_rope', 'meme_texte_absolu', 'meme_texte_rope512', 'miroir_copie_rope', 'entrainement_graine1', 'entrainement_graine2', 'entrainement_rope512_5k', 'dispositif']
+  ```
+

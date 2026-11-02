@@ -7,14 +7,14 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 1.8 h |
-| Tours | 5 |
-| Messages | 115 |
-| Appels d'outils | 152 |
-| Fichiers touchés | 4 |
-| Commandes | 129 |
+| Durée | 2.2 h |
+| Tours | 6 |
+| Messages | 139 |
+| Appels d'outils | 183 |
+| Fichiers touchés | 12 |
+| Commandes | 147 |
 | Sous-agents | 0 |
-| Commits | 8 |
+| Commits | 9 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -28,6 +28,8 @@
 **Tour 4** — jai fait le zypper continue toi-même. tu peux me demander le mdp en popup pour les sudo
 
 **Tour 5** — peut-on controller les fan de dell sans avoir à modifier le bios
+
+**Tour 6** — oui un service permanent. consigne toutes ces modifications dans le repo GitHub equipment-hauru
 
 ## 2. Déroulé, étape par étape
 
@@ -307,7 +309,141 @@ Le script `/tmp/fan_set.py` disparaîtra au reboot. Le plafond 180 W **n'est pas
 
 **Synthèse produite :**
 
-⏵ Les ventilateurs boîtier au max ne font pas baisser le GPU ; je remets l'automatique et je fais le bilan.
+⏵ Oui : les ventilateurs Dell sont pilotables par sysfs, sans BIOS ; mais le GPU ne gagne presque rien.
+
+\# Oui, on peut piloter les ventilateurs Dell sans toucher au BIOS
+
+Le pilote `dell_smm` expose quatre canaux PWM dans `/sys/class/hwmon/hwmon6/` :
+
+| canal | ventilateur | état |
+|---|---|---|
+| `pwm1` / `pwm2` | **Processor Fan** | 2 700 tr/min |
+| `pwm3` / `pwm4` | **Other Fan** (boîtier / couloir GPU) | 2 150 tr/min |
+
+`pwmN_enable` vaut `2` (automatique BIOS). En écrivant `1` (manuel) puis une valeur `0–255` dans `pwmN`, on prend la main. Testé :
+
+| | avant | manuel 255 |
+|---|---:|---:|
+| Other Fan 1 | 2 157 tr/min | **5 155 tr/min** |
+| Other Fan 2 | 2 145 tr/min | **4 736 tr/min** |
+
+Aucun BIOS, aucun redémarrage. Le retour à l'automatique se fait avec `pwmN_enable=2`.
+
+\## Les commandes
+
+```bash
+\# Other Fan au maximum (une seule fenêtre pkexec)
+pkexec /bin/bash -c 'H=/sys/class/hwmon/hwmon6; for i in 3 4; do echo 255 > $H/pwm$i; echo 1 > $H/pwm${i}_enable; done'
+
+\# revenir à l'automatique BIOS
+pkexec /bin/bash -c 'H=/sys/class/hwmon/hwmon6; for i in 3 4; do echo 2 > $H/pwm${i}_enable; done'
+
+\# vérifier
+for i in 3 4; do echo "fan$i=$(cat /sys/class/hwmon/hwmon6/fan${i}_input) tr/min, enable=$(cat /sys/class/hwmon/hwmon6/pwm${i}_enable)"; done
+```
+
+Le chemin `hwmon6` peut changer après un reboot : le retrouver avec
+`grep -l '^dell_smm$' /sys/class/hwmon/hwmon*/name`.
+La lecture de `pwmN` peut afficher « No data available » sur ce pilote ; c'est `fanN_input` qui confirme l'effet.
+
+\## Ce que ça donne — et pourquoi ce n'est pas la solution au GPU
+
+J'ai laissé les « Other Fan » au maximum pendant une minute, avec le plafond 180 W déjà actif :
+
+| | auto | Other Fan max |
+|---|---:|---:|
+| GPU 0 | 84–85 °C, ventilateur 85–89 % | **84–85 °C, ventilateur 80 %** |
+| CPU | 70–77 °C | **67 °C** |
+
+**Le GPU ne descend pas.** Les ventilateurs de boîtier au maximum refroidissent le CPU, mais pas la carte graphique : le GPU 0 est limité par **son propre radiateur / son entrée d'air**, pas par l'air du boîtier. Le ventilateur de la carte tourne moins vite (80 % au lieu de 89 %), mais la température reste à 84–85 °C. Le vrai gain vient du **plafond 180 W** (87 → 84–85 °C, throttle supprimé).
+
+\## État actuel
+
+- **Other Fan : automatique** (le BIOS a stabilisé autour de **3 450 tr/min** après le test, plus haut qu'avant car le CPU/GPU restent chauds).
+- **GPU 0 : 85 °C, 177 W, 1 680 MHz, throttle inactif** ; plafond 180 W toujours appliqué.
+- **GPU 1 : 75 °C, 214 W, 
+… [1337 caractères tronqués]
+
+### Tour 6 — oui un service permanent. consigne toutes ces modifications dans le repo GitHub equipment-hauru
+
+*31 appels d'outils.* Actions notables :
+
+- bash — Locate equipment-hauru repo and check remote
+- bash — Check existing services and current thermal state
+- bash — Inspect both equipment-hauru clones
+- bash — Read equipment-hauru top-level and README
+- bash — Check equipment-hauru branch and remote divergence
+- bash — Inspect repo hooks, system folder and existing thermal docs
+- bash — Inspect local commits and GitHub repo visibility
+- write `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal`
+- write `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal.service`
+- write `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal.default`
+- write `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/install.sh`
+- write `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/uninstall.sh`
+- write `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/MESURES-2026-11-02.md`
+- write `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/README.md`
+- … et 15 autres
+
+**Synthèse produite :**
+
+⏵ Service permanent actif et documentation poussée sur `equipment-hauru` (commit `f5883f9`).
+
+\# C'est fait : service permanent + documentation GitHub
+
+\## 1. Service installé et actif
+
+| | |
+|---|---|
+| unité | **`hauru-thermal.service`** — `enabled`, `active (exited)`, code 0 |
+| au boot | applique `nvidia-smi -i 0 -pl 180` |
+| ventilateurs Dell | `OTHER_FAN_PWM=auto` (BIOS), pilotables via `pwm3`/`pwm4` |
+| config | `/etc/default/hauru-thermal` |
+| journal | `/var/log/hauru-thermal.log` + `journalctl -u hauru-thermal` |
+
+État actuel :
+
+```
+GPU 0 : 85 °C · ventilateur 79 % · 183 W / 180 W · 1 770 MHz · throttle INACTIF
+GPU 1 : 74 °C · ventilateur 51 % · 205 W / 230 W · 1 860 MHz
+Other Fan : 2 157 / 2 144 tr/min · auto (BIOS)
+```
+
+Le plafond **180 W** est le levier qui a supprimé le throttle (87 → 84-85 °C, ~3 % de fréquence en moins). Le ventilateur de la carte reste en automatique.
+
+\### Pourquoi les ventilateurs Dell sont en `auto`
+
+Le mode manuel `pwm3`/`pwm4` est **binaire** sur ce 7910 : tout valeur ≥ 80/255 donne le plein régime (5 100/4 700 tr/min). Et le plein régime **ne refroidit pas le GPU 0** (84-85 °C, inchangé) ; il ne refroidit que le CPU. Le service laisse donc le BIOS gérer, et le plafond 180 W fait le travail. Si tu veux forcer le maximum :
+
+```bash
+sudo sed -i 's/^OTHER_FAN_PWM=.*/OTHER_FAN_PWM=255/' /etc/default/hauru-thermal
+sudo systemctl restart hauru-thermal.service
+```
+
+Pour un peu plus de performance GPU, `GPU_POWER_LIMIT=200` ; pour revenir à l'origine, `GPU_POWER_LIMIT=230` (le throttle revient).
+
+\### Commandes
+
+```bash
+/usr/local/bin/hauru-thermal status      # GPU + Other Fan
+sudo /usr/local/bin/hauru-thermal apply  # réappliquer
+sudo /usr/local/bin/hauru-thermal auto   # rendu au BIOS + 230 W
+sudo systemctl restart hauru-thermal.service
+```
+
+Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
+
+\## 2. Documentation poussée sur GitHub
+
+**Commit** : [`f5883f9`](https://github.com/stephanedenis/equipment-hauru/commit/f5883f9) — `main` local = `origin/main`.
+
+| fichier | contenu |
+|---|---|
+| `system/thermal/README.md` | le problème, le service, la config, les commandes, le pour/contre, le physique |
+| `system/thermal/MESURES-2026-11-02.md` | les quatre campagnes : état initial, ventilateur GPU 100 %, plafond 180 W, Other Fan Dell |
+| `system/thermal/hauru-thermal` | script `apply` / `auto` / `status` |
+| `system/thermal/hauru-thermal.service` | unité systemd oneshot, au boot |
+| `system/thermal/hauru-thermal.defau
+… [1389 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -319,6 +455,14 @@ Le script `/tmp/fan_set.py` disparaîtra au reboot. Le plafond 180 W **n'est pas
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/sessions.py` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/cloture.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal` | 1 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal.service` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/hauru-thermal.default` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/install.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/uninstall.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/MESURES-2026-11-02.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/thermal/README.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/README.md` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -362,7 +506,7 @@ Le script `/tmp/fan_set.py` disparaîtra au reboot. Le plafond 180 W **n'est pas
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 89 autres
+- … et 107 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -471,16 +615,33 @@ Le script `/tmp/fan_set.py` disparaîtra au reboot. Le plafond 180 W **n'est pas
 - **T5** `t+60s  0, 84, 80 %, 173.73 W, 1695 MHz, Not Active`
 - **T5** `0, 85, 80 %, 177.27 W, 180.00 W, 1680 MHz, Not Active`
 - **T5** `1, 75, 50 %, 214.11 W, 230.00 W, 1860 MHz, Not Active`
+- **T6** `0, 85, 81 %, 172.78 W, 180.00 W, 1725 MHz, Not Active`
+- **T6** `1, 74, 51 %, 212.47 W, 230.00 W, 1860 MHz, Not Active`
+- **T6** `- **Espace utilisé** : 98 Gio / 828 Gio (12 %) · `Data13TB` 6,3 To / 11 To (58 %)`
+- **T6** `150ccc4 feat(monitoring): apparie les threads SMT en demi-blocs et alerte à 100 %`
+- **T6** `Active: active (exited) since Mon 2026-11-02 17:36:10 EST; 14ms ago`
+- **T6** `CPU: 62ms`
+- **T6** `0, 86, 83 %, 175.04 W, 180.00 W, 1725 MHz, Not Active`
+- **T6** `1, 75, 52 %, 205.71 W, 230.00 W, 1860 MHz, Not Active`
+- **T6** `0, 85, 82 %, 173.80 W, 180.00 W, 1680 MHz, Not Active`
+- **T6** `1, 74, 52 %, 212.63 W, 230.00 W, 1860 MHz, Not Active`
+- **T6** `CPU: 93ms`
+- **T6** `0, 84, 79 %, 161.87 W, 180.00 W, 1785 MHz, Not Active`
+- **T6** `1, 75, 51 %, 211.19 W, 230.00 W, 1860 MHz, Not Active`
+- **T6** `0, 85, 79 %, 182.96 W, 180.00 W, 1770 MHz, Not Active`
+- **T6** `1, 74, 51 %, 204.99 W, 230.00 W, 1860 MHz, Not Active`
+- … (tronqué)
 
 ## 5. Erreurs rencontrées
 
-5 sorties en erreur ou divergentes. Les premières :
+6 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ===== b6a672ec digest (head) ===== # Session DSH — relecture  - identifiant : `b6a672ec-3349-4a4c-9e23-4478aa823170` - dossier : `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` - créée : 2026-11-01 
 - **T1** : == uptime == [stderr] uptime: invalid option -- 's' Try 'uptime --help' for more information. [exit code: 1]
 - **T1** : == N2.ac dans les docs de pilotage == docs/pilotage/en-cours.md:1 docs/pilotage/roadmap.md:1 docs/pilotage/plan-travail.md:0 docs/pilotage/chantiers.md:0  == B10.2bis dans index == docs/pilotage/backl
 - **T1** : == commits 'portes/passe' aujourd'hui == 20194fb1 B13 — LE GOLD GELÉ : 602 PHRASES, 21 PORTES PROTÉGÉES ; 133/133 4f7631aa DONNÉES — LE CEGEP PASSE À 10 NOTES (2,52 M CAR.) ; LE 11E PDF (ENCYCLOPEDIA)
 - **T2** : == dsh help == Usage: dsh [--profile] <name> [options] [app-args...]        dsh plugin --profile <name> <pnpm-args...>  dsh: boot a DeepSeek Harness profile — an ordered stack of plugin-bundle patch l
+- **T6** : == branche == ## main...origin/main [ahead 24]  M AGENTS.md  M system/maintenance/logs/scrub-data13tb-20260921-164933.log  M system/migrations-2026/2026-10-13-plasma-fige-contexte-gl-perdu/JOURNAL.md 
 
 ## 6. Commits
 
@@ -492,4 +653,5 @@ Le script `/tmp/fan_set.py` disparaîtra au reboot. Le plafond 180 W **n'est pas
 - HUB — LE RUNBOOK EST PUBLIÉ ; HEARTBEAT À JOUR, PROCHAINE ACTION LA PASSE DE PORTES"; echo "[exit $?]"; git log --oneline -1
 - ÉTAT — T0 REVENU SOUS 4 000 (3 998) APRÈS LE RUNBOOK"; echo "[exit $?]"; git log --oneline -1
 - ÉTAT — HORODATAGE RÉEL (16 h 09) APRÈS LA REPRISE ; LE FUTUR N'EST PAS UNE HEURE"; echo "[exit $?]"; echo "== status ==" && git status --short && echo "(fin)" &
+- feat(thermal): plafonne le GPU 0 à 180 W et documente les ventilateurs Dell sans BIOS" -m "Le GPU 0 throttle à 87 °C (SW Thermal Slowdown) alors que le GPU 1 re
 

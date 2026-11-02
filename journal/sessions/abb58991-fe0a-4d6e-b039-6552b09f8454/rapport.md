@@ -7,19 +7,26 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 1.1 h |
-| Tours | 1 |
-| Messages | 169 |
-| Appels d'outils | 244 |
-| Fichiers touchés | 15 |
-| Commandes | 167 |
+| Durée | 1.6 h |
+| Tours | 2 |
+| Messages | 220 |
+| Appels d'outils | 311 |
+| Fichiers touchés | 19 |
+| Commandes | 207 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
+
+## Objectifs déclarés
+
+- **create** — Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas touch
+… [77 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
 **Tour 1** — Tu reprends la session L/B13 `e181ce02-cd50-488a-a6be-e84b79d40dcc`. Lis son plan, AGENTS.md  et docs/pilotage/en-cours.md. Remets `- **État** : actif` et `- **Heartbeat** : <maintenant>`  dans son plan, puis vérifie `python3 tools/sessions.py --check --strict`. Le cycle 140/140  (gold 432, 116 liens) est committé. Prochaine action : gold neuronal (qualifier un modèle  local) ; DRVM/native est blo … [114 caractères tronqués]
+
+**Tour 2** — continue toute la nuit
 
 ## 2. Déroulé, étape par étape
 
@@ -70,6 +77,30 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 
 **Suite.** Les **syntagmes/pragmatique** du tagger, puis la cascade complète ; côté DRVM/native, les poids GGUF et le tagger existent désormais — la **parité native** reste à mesurer.
 
+### Tour 2 — continue toute la nuit
+
+*67 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Inspect gold segment types and nesting
+- bash — Measure heuristic syntagme F1 on 180
+- bash — Start 7B server for chunk tagging
+- bash — Show sample gold segments
+- write `/tmp/test_bio.py`
+- bash — Test BIO chunk prompt on 5 sentences
+- write `/tmp/bio_eval.py`
+- bash — Evaluate BIO chunker on 20 real sentences
+- bash — Fix set conversion bug in BIO evaluator
+- bash — Re-run BIO evaluation on 20 real sentences
+- bash — Evaluate BIO chunker on 20 synthetic sentences
+- bash — Check languages and example leakage
+- bash — Locate insertion point for chunks class
+- … et 48 autres
+
+**Synthèse produite :**
+
+⏵ Commit du fait syntagmes (la porte du bloc est verte ; les 4 mandats périmés sont hors session)
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -82,15 +113,19 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 | `/tmp/qualif_proto_srv2.py` | 1 | 0 |
 | `/tmp/qualif_7b.py` | 1 | 0 |
 | `/tmp/qualif_7b_180.py` | 1 | 0 |
-| `/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py` | 0 | 3 |
-| `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py` | 0 | 1 |
+| `/home/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py` | 0 | 5 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py` | 0 | 2 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_neuronal.py` | 1 | 6 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-neuronal.md` | 1 | 1 |
-| `/home/stephane/GitHub/Qtrinet/reports/README.md` | 0 | 3 |
-| `/home/stephane/GitHub/Qtrinet/docs/implantation/bloc-linguistique.md` | 0 | 2 |
+| `/home/stephane/GitHub/Qtrinet/reports/README.md` | 0 | 4 |
+| `/home/stephane/GitHub/Qtrinet/docs/implantation/bloc-linguistique.md` | 0 | 7 |
 | `/home/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md` | 0 | 1 |
-| `/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 15 |
+| `/home/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 21 |
 | `/home/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 4 |
+| `/tmp/test_bio.py` | 1 | 0 |
+| `/tmp/bio_eval.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_syntagmes.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-syntagmes.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -134,7 +169,7 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 127 autres
+- … et 167 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -187,6 +222,11 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 - **T1** `| **R0.3** | **[banc de lecture rapide](../theorie/glossaire/entrees/banc-de-lecture-rapide.md)** : 30 documents, 5 types, 10 questions/spans gold, modes intégral/écrémage/balayage/sélectif, contrôles`
 - **T1** `-| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 langues`
 - **T1** `+| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 langues`
+- **T2** `[still running after 600000ms; moved to background job bash-185]`
+- **T2** `247:| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 lang`
+- **T2** `248:| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 lang`
+- **T2** `CPU + neuronal de contrat, parallèle/cascade, activation 51–76 %) ; **398 langues à 0,9687**,`
+- **T2** `**tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock) **67,1 %** ;`
 
 ## 5. Erreurs rencontrées
 
@@ -200,4 +240,5 @@ S'y ajoutent quatre avertissements « fichiers proches » (le `data/` de N2 reco
 ## 6. Commits
 
 - B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)" 2>&1 | tail -25; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LES SYNTAGMES NEURONAUX : BIO 7B, EXACT 0,6173, TÊTE 0,7606 ; CASCADE CONFIANCE 0,7592" 2>&1 | tail -15; echo "EXIT=${PIPESTATUS[0]}"
 

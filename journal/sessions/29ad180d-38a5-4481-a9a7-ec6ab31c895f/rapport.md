@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 1.1 h |
-| Tours | 3 |
-| Messages | 160 |
-| Appels d'outils | 176 |
+| Durée | 1.4 h |
+| Tours | 4 |
+| Messages | 172 |
+| Appels d'outils | 185 |
 | Fichiers touchés | 9 |
-| Commandes | 118 |
+| Commandes | 127 |
 | Sous-agents | 0 |
 | Commits | 7 |
 | Compactages de contexte | 0 |
@@ -24,6 +24,8 @@
 **Tour 2** — mets le dossier copilotage à jour
 
 **Tour 3** — commit l'ensemble
+
+**Tour 4** — push
 
 ## 2. Déroulé, étape par étape
 
@@ -116,7 +118,7 @@ Prochaine action S inchangée : **validation humaine de la banque**, puis fronti
 
 ### Tour 3 — commit l'ensemble
 
-*12 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Full worktree status before integration
 - bash — Inspect other sessions' diffs
@@ -130,10 +132,49 @@ Prochaine action S inchangée : **validation humaine de la banque**, puis fronti
 - bash — Check whether Pensée set was committed concurrently
 - bash — Review staged en-cours delta and run checks
 - bash — Commit D/R/A detection integration
+- bash — Final integration status and checks
 
 **Synthèse produite :**
 
-⏵ Intégration de l'ensemble : je vérifie les changements en cours, je remets les compteurs et les budgets au vert, puis je commite tout.
+⏵ Intégration committée : Pensée (`7ef0199c`), D/R/A (`d2fc26c6`), S (`63927a03`/`dca7e7a2`). Seul le brouillon N2 reste hors commit.
+
+**Committé**
+
+- **`7ef0199c`** — Pensée/B13 : gold neuronal, tagger 7B local, POS **0,8483**, cascade **0,9440** ; fiche + JSON + doc + outils ; état, README et INDEX.
+- **`d2fc26c6`** — D/R/A : détection CEGEP **2 681 PDF → 147 scans** (91 uniques, 2 053 p) ; `ocr_pdf.py --liste --ouvriers`, `detecte_scans_pdf.py`, `reports/ocr-pdf-cegep-detection.json` ; ligne D/R/A d'`en-cours`.
+- **`dca7e7a2`** et **`63927a03`** — S : fiche, manifeste, section S, roadmap, compteurs **553 fiches / 639 JSON**.
+
+**Contrôles** : `revue_documentation.py` ✅ · budgets T0/T1 ✅ · `en-cours` **1 612 mots**, 5 questions ✅ · `verifie_en_cours.py` ✅ · `verifie_etat_a_jour.py` ✅.
+
+**Reste hors commit** : `reports/rapport-n2-r11.md` — la fiche R1.1 de N2 contient encore `{{G2}}`, `{{ABS1152}}` et `{{R12}}` : c'est un **brouillon en cours d'écriture**, pas un fait publiable. La session N2 le terminera ; je le committerai ensuite si tu veux. Tout le reste de l'arbre est propre.
+
+### Tour 4 — push
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Inspect remotes and ahead/behind
+- bash — Inspect uncommitted code and submodule remote state
+- bash — Push structures submodule
+- bash — Inspect submodule remote repo and gitmodules
+- bash — Allow updateInstead and push submodule
+- bash — Test GitHub SSH connectivity
+- bash — Push main repository to GitHub
+- bash — Verify pushed refs and remaining local changes
+
+**Synthèse produite :**
+
+⏵ Push terminé : principal `d2fc26c6`, sous-module `647205a`.
+
+- **Dépôt principal** — `origin/master` : `a31a2e4d..d2fc26c6` (**263 commits** poussés). `master...origin/master` à jour.
+- **Sous-module `tools/structures`** — `origin/master` : `3b68143..647205a`. Le remote local `drave-structures` refusait le push (branche `master` checkoutée, dépôt non bare) ; réglé par `receive.denyCurrentBranch=updateInstead`, puis poussé.
+- Le pointeur commité dans le principal (`647205a`) existe donc bien sur le remote du sous-module.
+
+**Reste local, non poussé** — travail en cours d'autres sessions :
+
+- `tools/bloc_linguistique.py`, `tools/tests/linguistique/test_bloc_linguistique.py`, `tools/tests/linguistique/qualifier_syntagmes.py` : le tagger de **syntagmes** (BIO/GBNF) de Pensée, encore en écriture ;
+- `reports/rapport-n2-r11.md` : brouillon N2 R1.1 avec `{{G2}}`, `{{ABS1152}}`, `{{R12}}`.
+
+Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je pousse.
 
 ## 3. Travail accompli
 
@@ -193,7 +234,7 @@ Prochaine action S inchangée : **validation humaine de la banque**, puis fronti
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 78 autres
+- … et 87 autres
 
 ## 4. Mesures et résultats marquants
 

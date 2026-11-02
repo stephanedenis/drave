@@ -2733,3 +2733,475 @@ CEGEP · ITIL service design by Vernon Lloyd Shar · 352 p · 998198 car
   ```
 
 - **job_output** `{"job_id": "bash-49", "timeout_ms": 900000, "wait": true}`
+
+  ```
+CEGEP · Rust in Action (MEAP) by T.S. McNamara ( · 331 p · 573304 car
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -3 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; ls -l data/corpus_ocr_cegep/*.txt", "description": "Check OCR progress and corpus sizes"}`
+
+  ```
+38 work/ocr/run-cegep-02.log
+  CEGEP · Exercices 8Q et 8R.pdf · 5 p · 7068 car
+  CEGEP · Article 4.pdf · 8 p · 14633 car
+  CEGEP · Rust in Action (MEAP) by T.S. McNamara ( · 331 p · 573304 car
+      50:05
+-rw-r--r--. 1 stephane stephane       0  2 nov 16:31 data/corpus_ocr_cegep/test.txt
+-rw-r--r--. 1 stephane stephane 3315866  2 nov 17:21 data/corpus_ocr_cegep/train.txt
+-rw-r--r--. 1 stephane stephane       0  2 nov 16:31 data/corpus_ocr_cegep/val.txt
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport hashlib, pathlib\ndef empreinte(t, taille=8):\n    return hashlib.blake2b(t.encode('utf-8'), digest_size=taille).hexdigest()\npaths=[l for l in pathlib.Path('work/ocr/scans-uniques.txt').read_text().splitlines() if l]\nhashes=[int(empreinte(f'1:{p}',8),16)%1000  … [349 caractères tronqués]`
+
+  ```
+docs 91
+val (<50) 5 test (<100) 4 train 82
+min 0 max 993 moyenne 463.4945054945055
+premiers [13, 615, 791, 185, 613, 758, 451, 154, 218, 713]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args | grep -E \"pdftoppm|tesseract|ocr_pdf\" | grep -v grep | head -4; echo \"--- next docs ---\"; python3 - <<'PY'\nimport json, pathlib\nd=json.load(open('work/ocr/detection-cegep.json'))\nseen=set(); ordered=[]\nfor m in d['detail']:\n    if not m['scan']: cont … [282 caractères tronqués]`
+
+  ```
+56487       50:18  0.0 bash -c python3 tools/ocr_pdf.py --liste work/ocr/scans-uniques.txt --racine CEGEP --sortie data/corpus_ocr_cegep --manifeste reports/ocr-pdf-cegep.json --ouvriers 8 2>&1 | tee work/ocr/run-cegep-02.log
+  56494       50:18  0.0 python3 tools/ocr_pdf.py --liste work/ocr/scans-uniques.txt --racine CEGEP --sortie data/corpus_ocr_cegep --manifeste reports/ocr-pdf-cegep.json --ouvriers 8
+ 105766       00:49  0.2 git commit -m D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE -m La détection sur le texte intégral (pdftotext + pdfinfo, seuil 50 car/page, SHA-256) trouve 147 scans sur 2 681 PDF, 91 uniques, 2 053 pages ; la détection sur les deux premières pages en sur-classait 5,5× (807 candidats). ocr_pdf.py gagne --liste et --ouvriers (tesseract mono-thread, 1,5 s/page à 1 thread contre 2,0 s à 2) ; detecte_scans_pdf.py et reports/ocr-pdf-cegep-detection.json. La ligne D/R/A d'en-cours est mise à jour ; compteurs 553 fiches / 639 JSON. Le brouillon N2 R1.1 (placeholders {{G2}}, {{ABS1152}}, {{R12}}) n'est pas committé.
+ 106570       00:19  100 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/impor
+… [1112 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 3; git log --oneline -3; echo \"--- status ---\"; git status --short | head -20; echo \"--- commit stat ---\"; git show --stat --oneline HEAD | head -25", "description": "Inspect the concurrent commit"}`
+
+  ```
+7ef0199c B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)
+dca7e7a2 ÉTAT — COMPTEURS AU DISQUE (552 FICHES / 639 JSON) ; LA FICHE S EST INTÉGRÉE
+63927a03 S — L'ÉTAT INTÈGRE L'ANALYSEUR RÔLES : 38/39 TYPES, 99/100 RÔLES, 39 STRUCTURES
+--- status ---
+M  docs/pilotage/en-cours.md
+ M journal/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md
+A  reports/ocr-pdf-cegep-detection.json
+A  tools/detecte_scans_pdf.py
+M  tools/ocr_pdf.py
+?? reports/rapport-n2-r11.md
+--- commit stat ---
+7ef0199c B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,94
+… [1583 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"git commit|git add|pre-commit|archive_sessions|session_report\" | grep -v grep | head -8; echo \"--- staged now ---\"; git diff --cached --stat | head -12", "description": "Check for in-flight git operations"}`
+
+  ```
+105766       01:13 git commit -m D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE -m La détection sur le texte intégral (pdftotext + pdfinfo, seuil 50 car/page, SHA-256) trouve 147 scans sur 2 681 PDF, 91 uniques, 2 053 pages ; la détection sur les deux premières pages en sur-classait 5,5× (807 candidats). ocr_pdf.py gagne --liste et --ouvriers (tesseract mono-thread, 1,5 s/page à 1 thread contre 2,0 s à 2) ; detecte_scans_pdf.py et reports/ocr-pdf-cegep-detection.json. La ligne D/R/A d'en-cours est mise à jour ; compteurs 553 fiches / 639 JSON. Le brouillon N2 R1.1 (placeholders {{G2}}, {{ABS1152}}, {{R12}}) n'est pas committé.
+ 105785       01:13 /bin/sh .git/hooks/pre-commit
+ 107088       00:14 python3 tools/session_report.py --quiet
+--- staged now ---
+ docs/pilotage/en-cours.md            |  27 +-
+ reports/ocr-pdf-cegep-detection.json | 747 +++++++++++++++++++++++++++++++++++
+ tools/detecte_scans_pdf.py           | 118 ++++++
+ tools/ocr_pdf.py                     |  61 ++-
+ 4 files changed, 929 insertions(+), 24 deletions(-)
+  ```
+
+- **bash** `{"command": "git diff --cached docs/pilotage/en-cours.md | head -60", "description": "Read staged en-cours changes"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index ad15c8d9..878c814a 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-02, 16 h 56 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-02, 17 h 20 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+ > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+@@ -22,16 +22,15 @@
+ 
+ - **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
+ - **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
+-- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8) **intégration** ;
+-  9) **passe de portes** (GPU 1).
++- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration,
++  portes** (GPU 1).
+ - **Ambition** : un état reprenable, des mandats qui disent la vérité.
+ - **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
+ - **Objectif final** : sédimentat
+… [2678 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git diff --cached docs/pilotage/en-cours.md | sed -n '60,130p'", "description": "Read rest of staged en-cours diff"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "git show :docs/pilotage/en-cours.md | sed -n '88,110p'", "description": "Read staged D/R/A section"}`
+
+  ```
+### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+
+- **Id** : `fe3c05f0-834b-44f2-8739-501865d652c1` — [`plan.md`](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md).
+- **Rôle** : **D/R/A** — texte intégral, PDF/OCR, prépa R1.1/R1.2, A2.6/A8.3.
+- **Plan** : texte intégral, PDF, OCR, glossaire.
+- **Ambition** : le français réel.
+- **Stratégie** : dump, débaliseur, OCR page à page, glossaire au rendu.
+- **Objectif final** : 10 corpus, ficés.
+- **Ce qu'elle fait** : 10 corpus (**20,53 M**) ; PDF 1 927 ; OCR 20 livres + 10 notes
+  CEGEP ; **détection CEGEP** 2 681 PDF → **147 scans** (91 uniques, 2 053 p) ;
+  glossaire 355 ; [`ocr-cegep`](../../reports/rapport-ocr-cegep.md),
+  [`détection`](../../reports/ocr-pdf-cegep-detection.json).
+- **Ce que font les autres** : **N2**, **S**, **Pensée**, **hub**.
+- **Prochaine action** : **OCR des 147 scans** (91 uniques) via `--liste --ouvriers` ; clôture.
+- **Bloquants** : aucun ; reprise à **16 h 21**.
+- **Journal** : [le 02/11](../../journal/2026-11-02/README.md).
+
+## Ce qui est en cours
+
+- **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20
+… [796 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for i in $(seq 1 30); do kill -0 105766 2>/dev/null || break; sleep 2; done; git log --oneline -2; echo \"--- status ---\"; git status --short | head -12; echo \"--- ocr ---\"; wc -l work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1", "description": "Wait for hub commit and chec … [7 caractères tronqués]`
+
+  ```
+d2fc26c6 D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE
+7ef0199c B13 — LE GOLD NEURONAL : TAGGER 7B LOCAL, CASCADE POS 0,944 ; PORTE BLOC VERTE, B13 134/140 (6 ROUGES S)
+--- status ---
+?? reports/rapport-n2-r11.md
+--- ocr ---
+38 work/ocr/run-cegep-02.log
+      51:12
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args | grep -E \"pdftoppm|tesseract\" | grep -v grep | head -3; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) page(s)\"; done; tail -2 work/ocr/run-cegep-02.log", "description": "Check Haken OCR phase"}`
+
+  ```
+106570       01:17  100 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/SW Engineering/Information and self-organization (Hermann Haken) (z-lib.org).pdf /tmp/ocr-pdf-locg3wu3/p
+/tmp/ocr-pdf-locg3wu3: 36 page(s)
+  CEGEP · Article 4.pdf · 8 p · 14633 car
+  CEGEP · Rust in Action (MEAP) by T.S. McNamara ( · 331 p · 573304 car
+  ```
+
+- **bash** `{"command": "grep -n \"d2fc26c6\\|DÉTECTION CEGEP\" journal/2026-11-02/README.md journal/2026-11-02/mesures.md 2>/dev/null | head; echo \"---\"; git log -1 --format=\"%h %ci %s\" d2fc26c6", "description": "Check journal integration of the detection commit"}`
+
+  ```
+---
+d2fc26c6 2026-11-02 17:21:20 -0500 D/R/A — LA DÉTECTION CEGEP SÉPARE 147 SCANS DE 2 681 PDF ; L'OCR PASSE À LA LISTE EXPLICITE
+  ```
+
+- **bash** `{"command": "python3 tools/journal_auto.py --jour 2026-11-02 --dry-run 2>&1 | head -20", "description": "Dry-run journal generation"}`
+
+  ```
+2026-11-02 : 165 commits
+  (sec) journal/2026-11-02/apprentissage.md
+  (sec) journal/2026-11-02/attention.md
+  (sec) journal/2026-11-02/distribue.md
+  (sec) journal/2026-11-02/docs.md
+  (sec) journal/2026-11-02/memoire.md
+  (sec) journal/2026-11-02/mesures.md
+  (sec) journal/2026-11-02/modele.md
+  (sec) journal/2026-11-02/moteur.md
+  (sec) journal/2026-11-02/outils.md
+  (sec) journal/2026-11-02/portes.md
+  (sec) journal/2026-11-02/README.md
+  (sec) journal/THEMES.md
+12 fichiers (simulation) · 165 commits classés
+  ```
+
+- **bash** `{"command": "head -40 journal/2026-11-02/README.md; echo \"...\"; grep -n \"notes\\|<!--\" journal/2026-11-02/README.md | head", "description": "Inspect day journal structure"}`
+
+  ```
+# 2026-11-02
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-11-02/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
+
+**164 commits** · **10 session(s)** · **10 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| apprentissage | 6 | [apprentissage.md](apprentissage.md) |
+| attention | 6 | [attention.md](attention.md) |
+| distribue | 14 | [distribue.md](distribue.md) |
+| docs | 25 | [docs.md](docs.md) |
+| memoire | 11 | [memoire.md](memoire.md) |
+| mesures | 81 | [mesures.md](mesures.md) |
+| modele | 8 | [modele.md](modele.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
+| outils | 1 | [outils.md](outils.md) |
+| portes | 11 | [portes.md](portes.md) |
+
+## Sessions DSH
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 1.1 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46
+… [2914 caractères tronqués]
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; ps -eo args | grep pdftoppm | grep -v grep | head -1 | cut -c1-160", "description": "Check OCR current document"}`
+
+  ```
+38 work/ocr/run-cegep-02.log
+  CEGEP · Article 4.pdf · 8 p · 14633 car
+  CEGEP · Rust in Action (MEAP) by T.S. McNamara ( · 331 p · 573304 car
+      51:42
+pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/SW Engineering/Information
+  ```
+
+- **bash** `{"command": "for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) page(s)\"; done; date \"+%H:%M:%S\"", "description": "Check Haken render count"}`
+
+  ```
+/tmp/ocr-pdf-locg3wu3: 52 page(s)
+17:23:37
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/corpus-pdf.json'))\nprint('date', d.get('date'), 'pdfs', d['pdfs'], 'scans', d['documents_scannes'])\nPY\nfind /home/stephane/Data13TB/stephane/archives/CEGEP -name '*.pdf' -newermt \"2026-11-02 00:00\" | wc -l", "description": "C … [35 caractères tronqués]`
+
+  ```
+date 2026-11-01 pdfs 2785 scans 159
+0
+  ```
+
+- **bash** `{"command": "find /home/stephane/Data13TB/stephane/archives/CEGEP -name '*.pdf' | wc -l; find /home/stephane/Data13TB/stephane/archives/CEGEP -iname '*.pdf' | wc -l; find /home/stephane/Data13TB/stephane/archives/CEGEP -iname '*.PDF' | wc -l", "description": "Check PDF count case sensitivity"}`
+
+  ```
+2681
+2711
+2711
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib, subprocess, concurrent.futures as cf\nracine=pathlib.Path('/home/stephane/Data13TB/stephane/archives/CEGEP')\npdfs=sorted(p for p in racine.rglob('*') if p.is_file() and p.suffix.lower()=='.pdf' and p.suffix!='.pdf')\nprint('uppercase PDFs', len(pdfs))\ … [851 caractères tronqués]`
+
+  ```
+uppercase PDFs 30
+pages 1540 scans 8 pages scans 58
+  1 p 0 car DOC.PDF
+  6 p 0 car Choquette c. Chagnon.PDF
+  1 p 0 car DOC.PDF
+  6 p 0 car Choquette c. Chagnon.PDF
+  22 p 0 car DOC1.PDF
+  20 p 0 car DOC2.PDF
+  1 p 0 car Assurance pour stagiaires-B2344-11403.PDF
+  1 p 0 car Assurance pour stagiaires.PDF
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib, hashlib, concurrent.futures as cf\nracine=pathlib.Path('/home/stephane/Data13TB/stephane/archives/CEGEP')\nupper=sorted(p for p in racine.rglob('*') if p.is_file() and p.suffix=='.PDF')\ndef h(p):\n    x=hashlib.sha256()\n    with p.open('rb') as f:\n   … [1688 caractères tronqués]`
+
+  ```
+upper scans 8 dont déjà dans le corpus principal 0 nouveaux 8
+  DOC.PDF
+  Choquette c. Chagnon.PDF
+  DOC.PDF
+  Choquette c. Chagnon.PDF
+  DOC1.PDF
+  DOC2.PDF
+  Assurance pour stagiaires-B2344-11403.PDF
+  Assurance pour stagiaires.PDF
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$d: $(ls $d | wc -l) page(s)\"; done", "description": "Check OCR progress"}`
+
+  ```
+38 work/ocr/run-cegep-02.log
+  CEGEP · Article 4.pdf · 8 p · 14633 car
+  CEGEP · Rust in Action (MEAP) by T.S. McNamara ( · 331 p · 573304 car
+      52:51
+/tmp/ocr-pdf-locg3wu3: 87 page(s)
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; ps -eo args | grep pdftoppm | grep -v grep | head -1 | cut -c1-150", "description": "Check Haken completion"}`
+
+  ```
+38 work/ocr/run-cegep-02.log
+  CEGEP · Article 4.pdf · 8 p · 14633 car
+  CEGEP · Rust in Action (MEAP) by T.S. McNamara ( · 331 p · 573304 car
+      53:01
+pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Cours/SW Engineering/In
+  ```
+
+- **job_output** `{"job_id": "bash-49", "timeout_ms": 420000, "wait": true}`
+
+  ```
+CEGEP · Information and self-organization (Herma · 116 p · 412753 car
+  CEGEP · 6GD.pdf · 4 p · 6365 car
+  CEGEP · 4.3寸电容触摸屏裸屏尺寸图.pdf · 1 p · 1148 car
+  CEGEP · ov2640_ds_1.8_.pdf · 45 p · 59387 car
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -eo args | grep pdftoppm | grep -v grep | head -1 | cut -c1-170; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$(ls $d | wc -l) page(s)\"; done; wc -l work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1", "description": "Check MicroPython render progress"}`
+
+  ```
+pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ressources-STM32/Hardware/MicroPython Progr
+28 page(s)
+42 work/ocr/run-cegep-02.log
+   01:00:12
+  ```
+
+- **write** `{"content": "# Le corpus OCR du CEGEP — 147 scans détectés, 91 uniques, {{pages_ocr}} pages océrisées\n\n**Date** : 2026-11-02 (détection 16 h 35–16 h 46, OCR 16 h 31–{{fin}}) · **Ligne** : Données · **Session** : `fe3c05f0`\n**Statut** : **fonds `.pdf` clos** — 91 scans uniques océrisés, manifeste  … [5391 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/fiche-cegep.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "wc -l work/ocr/run-cegep-02.log; tail -2 work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1; for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$(ls $d | wc -l) page(s)\"; done", "description": "Check MicroPython render progress"}`
+
+  ```
+42 work/ocr/run-cegep-02.log
+  CEGEP · 4.3寸电容触摸屏裸屏尺寸图.pdf · 1 p · 1148 car
+  CEGEP · ov2640_ds_1.8_.pdf · 45 p · 59387 car
+   01:00:41
+34 page(s)
+  ```
+
+- **job_output** `{"job_id": "bash-49", "timeout_ms": 480000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$(ls $d | wc -l) page(s)\"; done; ps -eo args | grep -E \"pdftoppm|tesseract\" | grep -v grep | head -3 | cut -c1-120; ps -o etime -p 56494 | tail -1", "description": "Check MicroPython phase and workers"}`
+
+  ```
+131 page(s)
+pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseigneme
+   01:08:53
+  ```
+
+- **bash** `{"command": "for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$(ls $d | wc -l) page(s)\"; done; wc -l work/ocr/run-cegep-02.log; ps -o etime -p 56494 | tail -1", "description": "Check render progress"}`
+
+  ```
+137 page(s)
+42 work/ocr/run-cegep-02.log
+   01:09:25
+  ```
+
+- **bash** `{"command": "uptime; ps -eo pid,pcpu,comm,args --sort=-pcpu | head -7 | cut -c1-160", "description": "Check system load and top consumers"}`
+
+  ```
+17:41:24  up  2:34,  2 users,  load average: 27,10, 21,28, 16,62
+    PID %CPU COMMAND         COMMAND
+ 110066 1223 llama-server    llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 18082 -ngl 0 -c 1024 --no-webui
+ 111877  100 python          /home/stephane/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/trai
+ 105363  100 python          /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/tr
+ 110838 99.9 pdftoppm        pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/Enseignement__02/Ress
+  35572 97.8 python          /home/stephane/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/tr
+ 115565 93.3 bash            bash -c uptime; ps -eo pid,pcpu,comm,args --sort=-pcpu | head -7 | cut -c1-160
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Remplit la fiche OCR du CEGEP depuis le manifeste, la détection et le contrôle 8 Ko.\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport pathlib\nimport re\nfrom datetime import datetime, timedelta\n\nRACINE = pathlib.Path(__file__).resolve().p … [2616 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/fait_fiche.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **edit** `{"file_path": "work/ocr/fait_fiche.py", "new_string": "RACINE = pathlib.Path(__file__).resolve().parents[2]\n\n\ndef fmt(n: int) -> str:", "old_string": "RACINE = pathlib.Path(__file__).resolve().parents[2]\nif str(RACINE) not in (\"\",):\n    pass\n\ndef fmt(n: int) -> str:"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/fait_fiche.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$(ls $d | wc -l) page(s)\"; done; ps -o etime -p 56494 | tail -1", "description": "Check render count"}`
+
+  ```
+144 page(s)
+   01:10:06
+  ```
+
+- **job_output** `{"job_id": "bash-49", "timeout_ms": 500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$(ls $d | wc -l) page(s)\"; done; ps -eo args | grep -E \"pdftoppm|tesseract\" | grep -v grep | head -2 | cut -c1-110; ps -o etime -p 56494 | tail -1; wc -l work/ocr/run-cegep-02.log", "description": "Check MicroPython O … [10 caractères tronqués]`
+
+  ```
+236 page(s)
+pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/archives/CEGEP/import-export-2026-06-20/Documents/
+   01:18:31
+42 work/ocr/run-cegep-02.log
+  ```
+
+- **read** `{"file_path": "journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md", "limit": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md</path>
+<type>file</type>
+<content>
+1: # Plan de session — D/R/A : les données, le lecteur, le moteur
+2: 
+3: > **Mandat ouvert** le 2026-11-01 16 h 25 HNE depuis
+4: > [`docs/pilotage/plan-travail.md`](../../../docs/pilotage/plan-travail.md) (§ 2, § 3) — la session
+5: > reprend la session `fe3c05f0` (R4.4 close) pour le rôle **D/R/A**. Le heartbeat est celui de
+6: > l'état.
+7: 
+8: - **Session** : `fe3c05f0-834b-44f2-8739-501865d652c1`
+9: - **Rôle** : **D/R/A — les données, le lecteur, le moteur** : le texte intégral, l'extraction
+10:   PDF/OCR, la préparation de R1.1/R1.2, A2.6/A8.3.
+11: - **Périmètre** : D (texte intégral, PDF/OCR, licences, stubs), R1.1/R1.2 (préparation), A2.6/A8.3
+12: - **Fichiers réservés** : `data/wikipedia/` (lecture), `data/corpus_wiki_*`,
+13:   `tools/corpus_wikipedia*.py`, `tools/verifie_contamination.py`, `tools/catalogue_corpus.py`,
+14:   `reports/corpus-wiki-*`, `reports/corpus-wikipedia-*`, `reports/inventaire-*`,
+15:   `reports/rapport-corpus-*`, `reports/r11-*`, `reports/r12-*`, `reports/a26-*`, `reports/a83-*`,
+16:   `journal/sessions/f
+… [840 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '211,239p' journal/2026-11-02/README.md", "description": "Read journal notes block"}`
+
+  ```
+<!-- notes -->
+**Le jour de la clôture de la campagne D/R/A.**
+
+## Ce qui a été livré
+
+- **Les dix corpus Wikipédia en texte intégral** : 20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0 partout ; l'anglais clos à 99,2 % (l'écriture bloquée à 125/125 Go, le manifeste reconstruit depuis le journal et les SHA-256 ; la limite nommée : ~75 Go de résidence pour 6 M d'articles).
+- **Le corpus PDF** : 2 785 PDF, 1 927 documents, 322 Mo, 8 Ko 0, licences nommées.
+- **Le corpus Documents** : 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (les 372 tronçons dupliqués).
+- **Le corpus OCR** : 20 livres, 7 381 pages, 15,36 M caractères, 8 Ko 0 (val 115 fenêtres, éval 0/40) ; le pilote `--max-doc 20` est clos (le 20e, *Life Histories of Etnos Theory*, 450 p).
+- **Le corpus OCR du CEGEP** : 10 notes scannées, 1 596 pages, 2 519 507 caractères, 8 Ko 0 (val 11 fenêtres) — le pilote `--racine CEGEP` ferme la boucle « livres, CEGEP, collections » (4 *Algorithms Illuminated* + *Data Structures in C* ajoutés). **Le lot de 40 s'est arrêté sur l'*Encyclopedia of Algorithms* (1 000+ pages) : `pdftoppm` a dépassé son timeout de 1 800 s et le run est tombé — limite de l'outil, à traiter par `
+… [1538 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for d in $(ls -dt /tmp/ocr-pdf-* 2>/dev/null | head -1); do echo \"$(ls $d | wc -l) page(s)\"; done; ps -o etime -p 56494 | tail -1; wc -l work/ocr/run-cegep-02.log", "description": "Check render progress"}`
+
+  ```
+239 page(s)
+   01:18:47
+42 work/ocr/run-cegep-02.log
+  ```
+
+- **job_output** `{"job_id": "bash-49", "timeout_ms": 540000, "wait": true}`

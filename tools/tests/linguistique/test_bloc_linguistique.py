@@ -128,6 +128,36 @@ class TestBlocLinguistique(unittest.TestCase):
         self.assertEqual(a.etiquettes, [])
         self.assertEqual(a.source, "neuronal")
 
+    def test_tagger_neuronal_chunks_avec_faux_transport(self):
+        def transport(invite, grammaire, max_jetons):
+            return '{"bio":["B-GN","I-GN","B-GV"]}'
+
+        n = bl.NeuronalLLMChunks("faux-modele", transport=transport)
+        a = n.analyser("Le chat dort.", "fr")
+        self.assertEqual(a.source, "neuronal")
+        self.assertEqual([(e.type, e.debut, e.fin) for e in a.etiquettes],
+                         [("GN", 0, 7), ("GV", 8, 12)])
+        self.assertEqual(n.appels, 1)
+        b = n.analyser("Le chat dort.", "fr")
+        self.assertEqual(n.appels, 1, "le cache doit éviter le second appel")
+        self.assertEqual(a.json(), b.json())
+
+    def test_tagger_neuronal_chunks_refus(self):
+        n = bl.NeuronalLLMChunks("faux-modele", transport=lambda *_: '{"bio":["B-GN"]}')
+        a = n.analyser("Le chat dort.", "fr")
+        self.assertTrue(a.refus)
+        self.assertEqual(a.etiquettes, [])
+
+    def test_priorite_syntagme_confiance(self):
+        defaut = bl.Parallele([bl.Heuristique(), bl.MockNeuronal()]).analyser(TEXTE, "fr")
+        confiance = bl.Parallele([bl.Heuristique(), bl.MockNeuronal()],
+                                 priorite_syntagme="confiance").analyser(TEXTE, "fr")
+        n_defaut = sum(1 for e in defaut.etiquettes
+                       if e.niveau == "syntagme" and e.source == "neuronal")
+        n_confiance = sum(1 for e in confiance.etiquettes
+                          if e.niveau == "syntagme" and e.source == "neuronal")
+        self.assertGreater(n_confiance, n_defaut)
+
 
 if __name__ == "__main__":
     unittest.main()

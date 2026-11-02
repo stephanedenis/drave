@@ -988,14 +988,175 @@ class NeuronalLLMPOS:
         return annotation
 
 
+ETIQUETTES_BIO = ("O", "B-GN", "I-GN", "B-GV", "I-GV", "B-GP", "I-GP",
+                  "B-REL", "I-REL", "B-SUB", "I-SUB")
+TYPES_SYNTAGME = ("GN", "GV", "GP", "REL", "SUB")
+EXEMPLES_BIO = (
+    (["Un", "oiseau", "chante"], ["B-GN", "I-GN", "B-GV"]),
+    (["La", "voisine", "de", "Paul", "arrive"],
+     ["B-GN", "I-GN", "B-GP", "I-GP", "B-GV"]),
+    (["Elle", "a", "vu", "le", "bus", "dans", "la", "rue"],
+     ["B-GN", "B-GV", "I-GV", "B-GN", "I-GN", "B-GP", "I-GP", "I-GP"]),
+    (["Le", "livre", "que", "tu", "lis", "tombe"],
+     ["B-GN", "I-GN", "B-SUB", "I-SUB", "I-SUB", "B-GV"]),
+    (["Il", "part", "demain"], ["B-GN", "B-GV", "O"]),
+)
+
+
+def grammaire_bio(n: int) -> str:
+    """La grammaire GBNF des étiquettes BIO : exactement `n` étiquettes, dans l'ordre."""
+    corps = " tag" + ' ("," tag)' * (n - 1) if n > 1 else " tag"
+    texte = 'root ::= "{\\"bio\\":["' + corps + ' "]}"\n'
+    texte += "tag ::= " + " | ".join('"\\"%s\\""' % t for t in ETIQUETTES_BIO) + "\n"
+    return texte
+
+
+class NeuronalLLMChunks:
+    """Le tagger de **syntagmes** réel : une étiquette BIO par token, puis les spans.
+
+    Le modèle local rend `{"bio":[...]}` — une étiquette par token, contrainte par la
+    grammaire `grammaire_bio` ; le bloc **reconstruit** les syntagmes à partir des tokens et
+    de leurs offsets. Un `B-X` ouvre un syntagme, un `I-X` le continue, `O` le ferme ; une
+    étiquette `I-X` orpheline ouvre un syntagme (tolérance déclarée). Les spans sont donc
+    ceux de la tokenisation du bloc, pas ceux que le modèle inventerait.
+
+    Le prompt est **few-shot** (cinq exemples hors gold) : sans exemple, le modèle confond
+    les frontières (DET hors GN, GV sans auxiliaire) et le gain disparaît. Le tagger rend
+    le niveau `syntagme` seulement ; le POS et la pragmatique restent à `NeuronalLLMPOS` et
+    à l'heuristique.
+    """
+
+    nom = "neuronal"
+
+    def __init__(self, modele: str | pathlib.Path, endpoint: str = "http://127.0.0.1:18082",
+                 confiance: float = 0.6, timeout: int = 180, max_jetons: int = 0,
+                 transport=None, cache: bool = True):
+        self.modele = str(modele)
+        self.endpoint = endpoint.rstrip("/")
+        self.confiance = float(confiance)
+        self.timeout = timeout
+        self.max_jetons = max_jetons
+        self.transport = transport or self._post
+        self.cache = cache
+        self.appels = 0
+        self._cache: dict[tuple[str, str | None], Annotation] = {}
+        self._verrou = threading.Lock()
+
+    @staticmethod
+    def _tokens(texte: str) -> list[tuple[int, int, str]]:
+        return [(d, f, t) for d, f, t, typ in Heuristique._mots(texte)
+                if typ in ("mot", "nombre")]
+
+    @staticmethod
+    def _invite(tokens: Sequence[str]) -> str:
+        invite = ("Tu es un segmenteur en syntagmes du français. Pour chaque token de la liste, "
+                  "donne son étiquette BIO. Réponds UNIQUEMENT par un objet JSON {\"bio\":[...]} "
+                  "avec exactement un élément par token, dans l'ordre, sans texte autour.\n"
+                  "Étiquettes : O (hors syntagme), B-GN/I-GN (groupe nominal), B-GV/I-GV (groupe "
+                  "verbal), B-GP/I-GP (groupe prépositionnel), B-REL/I-REL (relative), "
+                  "B-SUB/I-SUB (subordonnée). B-X ouvre un syntagme, I-X le continue, O est un "
+                  "token hors syntagme.\nExemples :\n")
+        for toks, tags in EXEMPLES_BIO:
+            invite += ("Tokens : " + json.dumps(toks, ensure_ascii=False) + " -> "
+                       + json.dumps({"bio": tags}, ensure_ascii=False) + "\n")
+        return invite + "Tokens : " + json.dumps(list(tokens), ensure_ascii=False) + "\nRéponse :"
+
+    def _post(self, invite: str, grammaire: str, max_jetons: int) -> str:
+        corps = {"messages": [{"role": "user", "content": invite}], "temperature": 0,
+                 "max_tokens": max_jetons, "grammar": grammaire}
+        requete = urllib.request.Request(
+            self.endpoint + "/v1/chat/completions",
+            data=json.dumps(corps).encode("utf-8"),
+            headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(requete, timeout=self.timeout) as reponse:
+            sortie = json.loads(reponse.read().decode("utf-8"))
+        return sortie["choices"][0]["message"]["content"]
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        t0 = time.perf_counter()
+        script = detecter_script(texte)
+        lg = langue or "und"
+        if not texte.strip():
+            return Annotation(texte=texte, langue=lg, script=script, refus="vide", source=self.nom)
+        cle = (texte, langue)
+        if self.cache and cle in self._cache:
+            return copy.deepcopy(self._cache[cle])
+        tokens = self._tokens(texte)
+        if not tokens:
+            return Annotation(texte=texte, langue=lg, script=script, refus="vide", source=self.nom)
+        noms = [t for _, _, t in tokens]
+        grammaire = grammaire_bio(len(noms))
+        max_jetons = self.max_jetons or max(32, 8 * len(noms))
+        try:
+            with self._verrou:
+                self.appels += 1
+            sortie = self.transport(self._invite(noms), grammaire, max_jetons)
+            debut, fin = sortie.find("{"), sortie.rfind("}")
+            if debut < 0 or fin <= debut:
+                raise ValueError(f"pas de JSON : {sortie[:120]!r}")
+            bio = json.loads(sortie[debut:fin + 1]).get("bio")
+            if not isinstance(bio, list) or len(bio) != len(tokens):
+                raise ValueError(f"longueur BIO {len(bio) if isinstance(bio, list) else '?'}"
+                                 f" / {len(tokens)}")
+            etiquettes = []
+            courant: list | None = None
+            for (d, f, mot), etiquette in zip(tokens, bio):
+                etiquette = str(etiquette).upper()
+                if etiquette not in ETIQUETTES_BIO:
+                    raise ValueError(f"étiquette inconnue : {etiquette!r}")
+                if etiquette == "O":
+                    if courant:
+                        etiquettes.append(_syntagme_bio(courant, texte, self.nom, self.confiance,
+                                                        lg, script))
+                        courant = None
+                    continue
+                prefixe, typ = etiquette.split("-", 1)
+                if prefixe == "B" or courant is None or courant[0] != typ:
+                    if courant:
+                        etiquettes.append(_syntagme_bio(courant, texte, self.nom,
+                                                        self.confiance, lg, script))
+                    courant = [typ, d, f]
+                else:
+                    courant[2] = f
+            if courant:
+                etiquettes.append(_syntagme_bio(courant, texte, self.nom, self.confiance,
+                                                lg, script))
+            annotation = Annotation(texte=texte, langue=lg, script=script, etiquettes=etiquettes,
+                                    source=self.nom,
+                                    trace=[{"etape": "neuronal-syntagmes", "modele": self.modele}],
+                                    cout={"octets": len(texte.encode()), "tokens": len(tokens),
+                                          "syntagmes": len(etiquettes),
+                                          "duree_s": round(time.perf_counter() - t0, 6)})
+        except Exception as e:
+            annotation = Annotation(texte=texte, langue=lg, script=script, source=self.nom,
+                                    refus=f"neuronal-syntagmes: {type(e).__name__}: {str(e)[:160]}",
+                                    trace=[{"etape": "neuronal-syntagmes", "erreur": str(e)[:160]}],
+                                    cout={"octets": len(texte.encode()),
+                                          "duree_s": round(time.perf_counter() - t0, 6)})
+        if self.cache:
+            self._cache[cle] = annotation
+        return annotation
+
+
+def _syntagme_bio(courant: list, texte: str, nom: str, confiance: float,
+                  langue: str, script: str) -> Etiquette:
+    typ, debut, fin = courant
+    return Etiquette("syntagme", typ, texte[debut:fin], debut, fin, nom, confiance,
+                     langue=langue, script=script, meta={"bio": True})
+
+
 # --------------------------------------------------------------------------- compositions
 
 
-def _supprimer_chevauchements(etiquettes: list[Etiquette]) -> list[Etiquette]:
+def _supprimer_chevauchements(etiquettes: list[Etiquette],
+                              priorite_syntagme: str = "heuristique") -> list[Etiquette]:
     """Les alternatives se suppriment **par type** quand les types sont complémentaires.
 
     `pos` et `syntagme` sont des alternatives de **span** : on garde la plus confiante.
-    `phrase` (type/négation/modalité), `pragmatique` (acte/double_sens/contexte), `discours`
+    Pour le **syntagme**, la politique par défaut (`heuristique`) garde la segmentation de
+    l'heuristique ; `confiance` laisse la plus confiante gagner (le tagger neuronal à 0,6
+    passe devant l'heuristique à 0,4). `phrase` (type/négation/modalité), `pragmatique` (acte/double_sens/contexte), `discours`
     (paragraphe/connecteur) et `document` (titre/paragraphe) portent des types **complémentaires**
     sur le même span : les supprimer ensemble effacerait la négation au profit du type."""
     modes = {"pos": "span", "syntagme": "span", "phrase": "type", "pragmatique": "type",
@@ -1006,7 +1167,7 @@ def _supprimer_chevauchements(etiquettes: list[Etiquette]) -> list[Etiquette]:
         for e in (x for x in etiquettes if x.niveau == niveau):
             groupes.setdefault(e.type if mode == "type" else "", []).append(e)
         for _, es in groupes.items():
-            if niveau == "syntagme":
+            if niveau == "syntagme" and priorite_syntagme == "heuristique":
                 candidates = sorted(es, key=lambda e: (0 if e.source == "heuristique" else 1,
                                                        e.fin - e.debut, -e.confiance))
             else:
@@ -1020,7 +1181,8 @@ def _supprimer_chevauchements(etiquettes: list[Etiquette]) -> list[Etiquette]:
     return sorted(gardees, key=lambda e: (e.debut, e.fin, e.niveau))
 
 
-def _fusion(a: Annotation, b: Annotation, source: str) -> Annotation:
+def _fusion(a: Annotation, b: Annotation, source: str,
+            priorite_syntagme: str = "heuristique") -> Annotation:
     """Fusion déterministe : la meilleure confiance par (niveau, span, type) ; les candidats
     sont réunis ; la langue/le script vont à la meilleure confiance."""
     meilleures: dict[tuple, Etiquette] = {}
@@ -1030,7 +1192,7 @@ def _fusion(a: Annotation, b: Annotation, source: str) -> Annotation:
             meilleures[cle] = e
         else:
             meilleures[cle].candidats = sorted(set(meilleures[cle].candidats) | set(e.candidats))
-    etiquettes = _supprimer_chevauchements(list(meilleures.values()))
+    etiquettes = _supprimer_chevauchements(list(meilleures.values()), priorite_syntagme)
     if a.langue != "und" and (b.langue == "und" or a.langue == b.langue):
         lg, script = a.langue, a.script
     else:
@@ -1052,16 +1214,18 @@ class Parallele:
 
     nom = "parallele"
 
-    def __init__(self, blocs: Sequence[BlocLinguistique]):
+    def __init__(self, blocs: Sequence[BlocLinguistique],
+                 priorite_syntagme: str = "heuristique"):
         if len(blocs) != 2:
             raise ValueError("le parallèle attend exactement deux blocs")
         self.blocs = list(blocs)
+        self.priorite_syntagme = priorite_syntagme
 
     def analyser(self, texte: str, langue: str | None = None,
                  contexte: str | None = None) -> Annotation:
         a = self.blocs[0].analyser(texte, langue, contexte)
         b = self.blocs[1].analyser(texte, langue, contexte)
-        return _fusion(a, b, self.nom)
+        return _fusion(a, b, self.nom, self.priorite_syntagme)
 
 
 class Cascade:
@@ -1070,11 +1234,13 @@ class Cascade:
     nom = "cascade"
 
     def __init__(self, heuristique: BlocLinguistique, neuronal: BlocLinguistique,
-                 seuil: float = 0.6, niveaux=("morphème", "pos", "syntagme", "discours", "pragmatique")):
+                 seuil: float = 0.6, niveaux=("morphème", "pos", "syntagme", "discours", "pragmatique"),
+                 priorite_syntagme: str = "heuristique"):
         self.h = heuristique
         self.n = neuronal
         self.seuil = seuil
         self.niveaux = niveaux
+        self.priorite_syntagme = priorite_syntagme
         self.appels_neuronal = 0
 
     def analyser(self, texte: str, langue: str | None = None,
@@ -1088,7 +1254,7 @@ class Cascade:
             return a
         self.appels_neuronal += 1
         b = self.n.analyser(texte, langue, contexte)
-        fusion = _fusion(a, b, self.nom)
+        fusion = _fusion(a, b, self.nom, self.priorite_syntagme)
         fusion.trace.append({"etape": "cascade", "residuel": residuel, "appel_neuronal": True,
                              "seuil": self.seuil})
         return fusion
