@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (14)
+## Commits du jour (15)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -22,18 +22,19 @@
 | 00:45 | `40f74212` | B13 — LE RÉGIME ALÉATOIRE : 1/2, v FINAL 0,42, 20/20, 8,0 PAS ; 63/63 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 | 00:48 | `881b7a12` | B13 — LE RÉGIME INTRA-ÉPISODE : BASCULE À CHAQUE LOOK, v FINAL 0,48, 20/20, 8,0 PAS ; 64/64 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+21) |
 | 00:52 | `64b4b14d` | B13 — LA FIABILITÉ ASYMÉTRIQUE : 0,9/0,5, v FINAL 0,44, 20/20, 8,0 PAS ; 65/65 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+21) |
+| 00:59 | `013c9118` | B13 — L'INFORMATION RARE : UTILE 10 %, v FINAL 0,8, 20/20, 8,0 PAS ; 66/66 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+16) |
 
 ## Chiffres du jour
 
-`90 %` · `5 %` · `50 %`
+`10 %` · `90 %` · `5 %` · `50 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 32.7 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 32.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 32.4 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 32.8 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 32.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 32.5 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -50,6 +51,7 @@
 - [reports/rapport-pensee-intra.md](../../reports/rapport-pensee-intra.md)
 - [reports/rapport-pensee-limite.md](../../reports/rapport-pensee-limite.md)
 - [reports/rapport-pensee-rapide.md](../../reports/rapport-pensee-rapide.md)
+- [reports/rapport-pensee-rare.md](../../reports/rapport-pensee-rare.md)
 - [reports/rapport-pensee-rupture.md](../../reports/rapport-pensee-rupture.md)
 - [reports/rapport-r1-preparation.md](../../reports/rapport-r1-preparation.md)
 

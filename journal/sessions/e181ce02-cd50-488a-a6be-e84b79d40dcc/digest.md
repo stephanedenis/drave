@@ -21330,3 +21330,117 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-802", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at c0fd470b57576ad77b32ce52168e9ec2e66bd406 but expected 2bf24422eda6402048ee7a9f887d6a0cdbe345b6
+retry 1
+ 19 files changed, 624 insertions(+), 32 deletions(-)
+ create mode 100644 reports/pensee-rare.json
+ create mode 100644 reports/rapport-pensee-rare.md
+COMMIT OK 2
+013c9118 B13 — L'INFORMATION RARE : UTILE 10 %, v FINAL 0,8, 20/20, 8,0 PAS ; 66/66
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Information rare : utile 10 %, v final 0,8, 20/20, 8,0 pas ; 66/66
+
+Le round 67 du goal est livré : **10 % d'information utile** suffisent — la politique trouve la porte avec un look sur dix. Commit **`013c9118`**.
+
+## L'information rare
+
+Même monde que T62, mais la fiabilité est **0,9 un épisode sur dix** et **0,5** les autres : l'observation est le plus souvent inutile.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| **4000** | **20/20** | **0,8** | 589 | 8,0 |
+| 8000 | 20/20 | 0,6 | 636 | 8,0 |
+| asymétrie 50/50 (T62) | 20/20 | 0,44 | 679 | 8,0 |
+
+**Ce que ça dit** :
+
+- **10 % d'information suffisent** : la politique trouve la porte avec un look utile sur dix.
+- **v monte à 0,8** : la fenêtre attrape les looks utiles récents et les pèse ; le filtre exploite la rareté.
+- **Le coût est nul** (8,0 pas) : les looks inutiles ne coûtent pas de pas.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+## L'état
+
+- Fiche : [`rapport-pensee-rare.md`](../../reports/rapport-pensee-rare.md) ; JSON [`pensee-rare.json`](../../reports/pensee-rare.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T63 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **66/66 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **465 fiches / 557 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Un look sur cent** : la limite de la rareté.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round pousse à **un look sur cent** — la limite de la rareté.
+
+
+## Tour 81
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 68/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1907 caractères tronqués]`
+
+  ```
+013c9118 B13 — L'INFORMATION RARE : UTILE 10 %, v FINAL 0,8, 20/20, 8,0 PAS ; 66/66
+ok
+4000 q 535 v final 0.54 20 runs: 20 /20 pas moyen 8.0
+8000 q 579 v final 0.52 20 runs: 20 /20 pas moyen 8.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T63 l'information rare           utile 10 % du temps : 20/20 buts, v final ≈ 0,8\\n\",\n\"  T63 l'information rare         … [1370 caractères tronqués]`
+
+  ```
+ok
+  ✅ T62 fiabilité asymétrique asym : 20/20 buts, v final 0.44, 8.0 pas
+  ✅ T63 information rare   rare : 20/20 buts, v final 0.8, 8.0 pas
+  ✅ T64 information très rare très rare : 20/20 buts, v final 0.54, 8.0 pas
+  67/67 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-tres-rare.md <<'MD'\n# B13 — l'information très rare : utile 1 %, 20/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **67/67 portes** : l'observation … [6636 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 466 fiche(s) · 558 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2814 mots > budget 2800 (T1)
+  en-cours · 1563 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-observatrice.md`](rapport-pensee-observatrice.md) | **B13** — l'action observer : 20/20 buts, 8,3 pas, le geste  … [625 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 466 fiche(s) · 558 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-tres-rare.md reports/pensee-tres-rare.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cour … [509 caractères tronqués]`
