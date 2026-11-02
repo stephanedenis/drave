@@ -18136,3 +18136,26 @@ The command keeps running in the background. You will be notified when it finish
 background job bash-1074 (bash: sleep 1320; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/Z-g*.pt 2>/dev/null; tail -1 work/n2j/Z-g1.log 2>/dev/null; tail -1 work/n2j/Z-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **job_output** `{"job_id": "bash-1077", "timeout_ms": 900000, "wait": true}`
+
+  ```
+05:13
+work/n2j/Z-g1.pt
+work/n2j/Z-g2.pt
+{"fichier": "Z-g1.pt", "L128_canal": 3.525, "L128_sans": 3.7873, "L256_canal": 3.4957, "L256_sans": 3.703, "L512_canal": 3.7725, "L512_sans": 3.9759, "mélange_propre": 3.5027, "mélange_milieu": 22.5958, "mélange_tout": 37.3244}
+{"fichier": "Z-g2.pt", "L128_canal": 3.5304, "L128_sans": 3.7987, "L256_canal": 3.5011, "L256_sans": 3.7031, "L512_canal": 3.783, "L512_sans": 3.9742, "mélange_propre": 3.5103, "mélange_milieu": 22.4347, "mélange_tout": 37.262}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-canal-kd-34m.md <<'EOF'\n# N2.y — Le canal et la distillation ne s'additionnent pas, même à 34,3 M\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : le 34,3 M **canal + distillation**\n>  … [3588 caractères tronqués]`
+
+  ```
+fiche Z écrite
+en-cours ok
+  T0 max : 4004 mots (budget 4 000)
+  ❌ 1 violation(s) :
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 499 fichiers, le disque en a 500
+05:15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.y** : canal + KD 3,53 (n'ajoute rien) ;\", \"**N2.y** : canal + KD 3,53 ;\")\ns = s.replace(\"**N2.w** : ang … [1496 caractères tronqués]`

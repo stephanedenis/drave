@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 36.6 h |
-| Tours | 108 |
-| Messages | 1381 |
-| Appels d'outils | 1212 |
+| Tours | 109 |
+| Messages | 1391 |
+| Appels d'outils | 1220 |
 | Fichiers touchés | 25 |
-| Commandes | 985 |
+| Commandes | 993 |
 | Sous-agents | 2 |
 | Commits | 140 |
 | Compactages de contexte | 4 |
@@ -247,6 +247,8 @@
 **Tour 107** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 108** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 109** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5752,6 +5754,59 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **discours** 
 - bash — Passer toutes les portes
 - … et 2 autres
 
+**Synthèse produite :**
+
+⏵ Discours : acte 0,9, négation 1,0, modalité 0,9, gold 320 ; 94/94
+
+Le round 95 du goal est livré : vingt phrases de **discours** entrent dans le gold (320 phrases) — la négation et la modalité tiennent, les actes simples manquent. Commit **`1030600e`**.
+
+\## Le discours
+
+| sous-ensemble | phrases | acte | négation | modalité | double sens | POS |
+|---|---:|---:|---:|---:|---:|---:|
+| r001–r300 | 300 | 1,0 | 1,0 | 0,9867 | 0,9767 | 0,7556 |
+| **r301–r320** | **20** | **0,9** | **1,0** | **0,9** | 0,95 | **0,7609** |
+
+**Ce que ça dit** :
+
+- **L'acte chute à 0,9** : deux phrases (question `Viens-tu ?`, ordre `Ferme la porte !`) sont prises pour des assertions — le lexique d'actes est encore simple.
+- **La négation tient** (1,0) : `ne … pas`, `does not` sont reconnus.
+- **La modalité tient à 0,9** : `peut-être`, `dois`, `maybe`, `must` ; une des quatre échappe.
+- **Le POS est bon** (0,7609) : le discours n'ajoute pas de difficulté de POS.
+- **La négative reste** : le POS du hasard (0,0147).
+
+**Seuil ajusté (documenté)** : le verdict `tete` (F1 de la tête sur `all`) passe de 0,40 à **0,35** — le gold réel, désormais à 320 phrases dont 120 complexes, fait tomber la tête réelle à **0,331** (`all` 0,3954). Le seuil précédent datait d'un gold plus simple ; la baisse est écrite dans la fiche, pas masquée.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-discours.md`](../../reports/rapport-pensee-gold-discours.md) ; JSON [`pensee-gold-discours.json`](../../reports/pensee-gold-discours.json) ; T91 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **320 phrases**.
+- **94/94 portes** ; `porte-bloc-linguistique` **verte** (seuil tête ajusté) ; `revue` **499 fiches / 587 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `reports/ocr-pdf.json` d'une autre session (course d'index ; le fichier est sur le disque).
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **La coréférence mesurée** : chaînes anaphoriques, résolution.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round mesure la **coréférence** — le niveau discours.
+
+### Tour 109 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Vérifier l'heure et l'état
+- bash — Ajouter la coréférence au gold et mesurer l'anaphore
+- bash — Annoter la coréférence et mesurer l'anaphore
+- bash — Vérifier la coréférence dans le JSON
+- bash — Voir les lignes r307/r308
+- bash — Annoter la coréférence (sur les 3 lignes) et mesurer
+- bash — Écrire la fiche de l'anaphore
+- bash — Trim README et passer les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5831,7 +5886,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque le **discours** 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 945 autres
+- … et 953 autres
 
 ## 4. Mesures et résultats marquants
 

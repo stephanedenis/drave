@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 36.6 h |
-| Tours | 371 |
-| Messages | 2207 |
-| Appels d'outils | 1459 |
+| Durée | 36.7 h |
+| Tours | 372 |
+| Messages | 2218 |
+| Appels d'outils | 1468 |
 | Fichiers touchés | 26 |
-| Commandes | 1295 |
+| Commandes | 1301 |
 | Sous-agents | 0 |
-| Commits | 80 |
+| Commits | 81 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -769,6 +769,8 @@
 **Tour 370** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 371** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 372** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8697,7 +8699,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 371 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Wait 5 min then check manifest
 - bash — Read OCR manifest keys
@@ -8708,10 +8710,33 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Commit final OCR corpus 20 books
 - bash — Verify gates after final OCR commit
 - bash — Check genres comparison CLI
+- job_output
+- bash — Inspect genres script head
+- bash — Inspect genres script tail
 
 **Synthèse produite :**
 
-⏵ Round 359 : OCR CLOS ET COMMITTÉ (`15f2c8f6`) — 20 livres, 7 381 p, 15,36 M car. ; je vérifie les portes
+⏵ Round 359 : OCR clos et committé, portes ✅ ; le rafraîchissement des genres tourne
+
+**Round 359/1000 — l'OCR des 20 livres est committé, les portes sont vertes.**
+
+- **Commit `15f2c8f6`** : « L'OCR DES 20 LIVRES EST CLOS : 7 381 PAGES, 15,36 M CARACTÈRES, 8 KO 0 (VAL 115, ÉVAL 0/40) » — **25 fichiers**, 771 insertions (le manifeste, le contrôle, la fiche, l'état, la roadmap, le plan, le récit).
+- **Les portes** : revue ✅ (**499 fiches · 587 JSON · 118 docs · 81 portes**), budget de docs ✅, **état à jour** ✅ (le dernier fait = le dernier état, `15f2c8f6`), **en-cours** ✅ (1 621 mots, 7 sections, 2 sessions).
+- **Le genre se rafraîchit** : `compare_genres.py` mesure les 13 corpus (les 10 Wikipédia, le PDF, les documents, **l'OCR des 20 livres**) — le job `bash-1295` tourne ; sa sortie écrasera `reports/corpus-genres.json` avec les mêmes chiffres plus l'OCR actualisé.
+- **Le corpus OCR final** : **20 livres, 7 381 pages, 15 356 972 caractères** ; train 19 doc./14 596 847 o, **val 1 doc./934 044 o**, test 0 ; **8 Ko : 1 784 fenêtres train + 115 val, 0 doublon** ; éval **0/40, 0/24, 0/40** ; temps mur **8,4 h** ; un doublon exact rejeté (373 p) et un PDF sauté.
+
+**Le constat** : la livraison OCR est close et committée ; le goal reste actif jusqu'à 8 h.
+
+### Tour 372 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- job_output
+- job_kill
+- bash — Measure OCR genres and update JSON
+- bash — Find OCR mentions in genres fiche
+- bash — Update genres fiche with 20-book OCR
+- bash — Commit genres refresh
 
 ## 3. Travail accompli
 
@@ -8788,7 +8813,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1255 autres
+- … et 1261 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9016,4 +9041,5 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40" 2>&1 | tail -4; then break; fi; sleep 8; done; git log --oneline
 - DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40" > /tmp/commit-ocr.log 2>&1; code=$?; tail -4 /tmp/commit-ocr.log
 - DONNÉES — L'OCR DES 20 LIVRES EST CLOS : 7 381 PAGES, 15,36 M CARACTÈRES, 8 KO 0 (VAL 115, ÉVAL 0/40)" > /tmp/commit-final.log 2>&1; code=$?; tail -4 /tmp/commi
+- GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M)" > /tmp/commit-genres.log 2>&1; code=$?; tail -3 /tmp/commit-genres.log; if [ $c
 

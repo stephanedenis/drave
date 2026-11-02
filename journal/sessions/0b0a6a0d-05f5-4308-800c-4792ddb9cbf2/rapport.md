@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 36.9 h |
+| Durée | 37.0 h |
 | Tours | 18 |
-| Messages | 1466 |
-| Appels d'outils | 1357 |
+| Messages | 1469 |
+| Appels d'outils | 1360 |
 | Fichiers touchés | 11 |
-| Commandes | 1077 |
+| Commandes | 1079 |
 | Sous-agents | 0 |
-| Commits | 74 |
+| Commits | 75 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*391 appels d'outils.* Actions notables :
+*394 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 261 autres
+- … et 263 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1037 autres
+- … et 1039 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1251,4 +1251,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - ÉTAT — COMPTEURS APRÈS N2.z (495 FICHIERS, 582 JSON) ET L'HEURE DE LA NUIT  La revue repasse ; l'état porte la dernière mesure (canal à 34,3 M : 3,51)." 2>/dev/
 - ROADMAP — LE CANAL REVIT À 34,3 M : 3,51 EN DOMAINE, 3,66 À 512 OCTETS  Le canal était tranché à 11,47 M (N2.x : −0,03 après distillation, +0,24 à 512). À 34,3 
 - ROADMAP — LE CANAL REVIT À 34,3 M (N2.z) : 3,51 EN DOMAINE, 3,66 À 512  Le canal est tranché à 11,47 M (N2.x) mais il revit à 34,3 M : N2.z donne le meilleur mo
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
 
