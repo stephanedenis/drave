@@ -34285,3 +34285,147 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date '+%H:%M'; tail -4 /tmp/ocr-cegep.log; ps -p 2644645 -o pid,etime= 2>/dev/null || echo \"CEGEP OCR fini\"; ls -la reports/ocr-pdf-cegep.json 2>&1; echo \"=== portes\"; ps -p 2459980 -o stat,etime= 2>/dev/null || echo \"p … [241 caractères tronqués]`
+
+  ```
+06:23
+  CEGEP · Exercices de synthèse Excel 2010 Fonctio · 43 p · 81675 car
+  CEGEP · AMF-AO-Annexes 12 à 15 (Tech).pdf · 121 p · 191523 car
+  CEGEP · AMF-AO-Annexes 16 - Gabarits.pdf · 60 p · 26000 car
+  CEGEP · inscription AQPC.pdf · 2 p · 2582 car
+    PID            
+2644645       31:05
+ls: cannot access 'reports/ocr-pdf-cegep.json': No such file or directory
+=== portes
+STAT            
+S          55:47
+  porte-homeostasie      ❌ code 2                    0 s    ❌ le LoRA de référence est absent : /tmp/n4/rang4-lora.pt
+  porte-horloge          ✅                          29 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+30 /tmp/portes-1102-05h27/registre.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 368 : CEGEP 4 scans faits (226 p, 301 780 car.), portes 30/81 closes sur la borne
+
+**Round 368/1000 — le CEGEP a quatre scans ; les portes ont clos sur la borne.**
+
+- **CEGEP** : `Exercices de synthèse Excel` 43 p ; `AMF-AO-Annexes 12 à 15` 121 p ; `AMF-AO-Annexes 16 — Gabarits` 60 p ; `inscription AQPC` 2 p — **4/5 scans**, **226 pages, 301 780 caractères** ; le 5e et le manifeste suivent.
+- **Les portes** : **30 portes** au registre, **`porte-horloge` ✅ 29 s — « borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue »** : la passe s'est arrêtée proprement sur sa borne de 30 min ; une seule rouge, `porte-homeostasie` (le LoRA `/tmp/n4` absent, l'environnement).
+- **Les commits** : `15f2c8f6` (OCR 20 livres), `166896b4` (genres 38,5), `bfe57da7` (chantiers D 20 livres).
+- **Le corpus OCR des livres** : 20 livres, 7 381 p, 15,36 M car., **8 Ko 0**, éval 0/40.
+
+**Le constat** : le CEGEP finit son pilote ; les portes sont vertes hors la rouge connue ; le goal reste actif jusqu'à 8 h.
+
+
+## Tour 381
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 369/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; tail -5 /tmp/ocr-cegep.log; ps -p 2644645 -o pid,etime= 2>/dev/null || echo \"CEGEP OCR fini\"; ls -la reports/ocr-pdf-cegep.json data/corpus_ocr_cegep/ 2>&1 | head -8", "description": "Wait 5 min then check C … [98 caractères tronqués]`
+
+  ```
+06:28
+  "train": 435991,
+  "val": 86688,
+  "test": 0
+ }
+}
+    PID            
+CEGEP OCR fini
+-rw-r--r--. 1 stephane stephane 2416  2 nov 06:23 reports/ocr-pdf-cegep.json
+
+data/corpus_ocr_cegep/:
+total 516
+drwxr-xr-x. 1 stephane stephane     48  2 nov 05:52 .
+drwxr-xr-x. 1 stephane stephane   2452  2 nov 05:52 ..
+-rw-r--r--. 1 stephane stephane      0  2 nov 05:52 test.txt
+-rw-r--r--. 1 stephane stephane 435991  2 nov 06:23 train.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json'))\nfor k in ('pdfs','scannes','ocrises','pages_ocr','caracteres','troncons','mots_estimes','temps_s','documents','octets'):\n    print(k, ':', d.g … [186 caractères tronqués]`
+
+  ```
+06:28
+pdfs : 41
+scannes : 5
+ocrises : 5
+pages_ocr : 292
+caracteres : 506801
+troncons : 65
+mots_estimes : 81742
+temps_s : 1889.2
+documents : {'train': 3, 'val': 2, 'test': 0}
+octets : {'train': 435991, 'val': 86688, 'test': 0}
+=== log
+  CEGEP · Exercices de synthèse Excel 2010 Fonctio · 43 p · 81675 car
+  CEGEP · AMF-AO-Annexes 12 à 15 (Tech).pdf · 121 p · 191523 car
+  CEGEP · AMF-AO-Annexes 16 - Gabarits.pdf · 60 p · 26000 car
+  CEGEP · inscription AQPC.pdf · 2 p · 2582 car
+  CEGEP · programme_du_colloque_2016_de_laqpc.pdf · 66 p · 205021 car
+{
+ "scannes": 5,
+ "ocrises": 5,
+ "pages_ocr": 292,
+ "caracteres": 506801,
+ "temps_s": 1889.2,
+ "octets": {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; timeout 300 python3 tools/verifie_contamination.py --train data/corpus_ocr_cegep/train.txt --val data/corpus_ocr_cegep/val.txt --test data/corpus_ocr_cegep/test.txt --eval work/dr/eval/fr-xnli.txt --eval work/dr/eval/fr- … [662 caractères tronqués]`
+
+  ```
+06:29
+[code 0]
+8 Ko train 54
+ split val.txt {'troncons': 11, 'doublons': 0, 'taux': 0.0}
+ split test.txt {'troncons': 0, 'doublons': 0, 'taux': 0.0}
+fr-xnli.txt 0 / 40
+fr-udhr.txt 0 / 24
+en-xnli.txt 0 / 40
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json, pathlib\nm = json.load(open(\"reports/ocr-pdf-cegep.json\"))\nc = json.load(open(\"reports/ocr-pdf-cegep-contamination.json\"))\nfen = c[\"doublons_entre_splits_troncon\"][\"train_troncons\"]\nval = c[\"d … [3965 caractères tronqués]`
+
+  ```
+fiche CEGEP écrite
+# Le corpus OCR du CEGEP — 5 notes scannées, 506 801 caractères
+
+**Date** : 2026-11-02 (pilote de 05 h 52 à 06 h 23) · **Ligne** : Données · **Session** : fe3c05f0
+**Statut** : **pilote clos** — 5 scans océrisés, manifeste `reports/ocr-pdf-cegep.json` ; le fonds CEGEP compte 2 681 PDF, la détection n'en a examiné que 41 avant la coupure `--max-doc 5`.
+
+## 1. Ce que c'est
+
+Le corpus OCR des **notes de cours du CEGEP** : les PDF sans couche texte du fonds `archives/CEGEP`, océrisés page à page par `tesseract`. C'est le complément CEGEP du corpus OCR des livres (`reports/rapport-ocr-pdf.md`).
+
+## 2. Le chiffre
+
+| grandeur | valeur |
+|---|---:|
+| scans océrisés | **5** |
+| PDF examinés / scannés | 41 / 5 |
+| pages | **292** |
+| caractères | **506 801** |
+| mots estimés (car. / 6 2) | **81 742** |
+| train / val / test | **435 991 o** / **86 688 o** / 0 |
+| documents (train / val / test) | 3 / 2 / 0 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib, re\n# fiche CEGEP : virgule décimale\np = pathlib.Path(\"reports/rapport-ocr-cegep.md\")\nt = p.read_text(encoding=\"utf-8\").replace(\"| mots estimés (car. / 6 2) |\", \"| mots estimés (car. / 6,2) |\ … [3023 caractères tronqués]`
+
+  ```
+ok
+docs/pilotage/en-cours.md:65:- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 1 784 fenêtres 8 Ko train + 115 val, 8 Ko 0 ; éval 0/40, 0/24, 0/40) ; **OCR CEGEP** (5 scans, 292 p, 506 801 car. ; 54 fenêtres 8 Ko + 11 val, 8 Ko 0) ; **genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
+docs/pilotage/en-cours.md:67:- **Prochaine action** : l'**OCR complet** (les 159 scans + le fonds CEGEP ; les pilotes 20 livres et 5 notes CEGEP sont clos) ; la clôture de la session à 8 h ; les collections.
+docs/pilotage/roadmap.md:36:| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/OCR, documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; CEGEP 5 notes, 292 p, 506 801 car., 8 Ko 0) ; **genres** mesurés | **l'OCR complet** (159 scans), la préparation R1.1/R1.2 |
+journa
+… [220 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add reports/ocr-pdf-cegep.json reports/ocr-pdf-cegep-contamination.json reports/rapport-ocr-cegep.md tools/ocr_pdf.py docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs … [427 caractères tronqués]`

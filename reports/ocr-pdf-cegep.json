@@ -1,0 +1,49 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données (R4.4 appliqué)",
+ "nature": "corpus OCR des PDF scannés",
+ "dispositif": {
+  "ocr": "tesseract 5.5.3 sans root (work/ocr/root)",
+  "langues": "fra+eng",
+  "dpi": 300,
+  "psm": 3,
+  "pretraitement": "aucun (le R4.4 le fera)",
+  "split": "hash salé du chemin : 5% val, 5% test",
+  "deduplication": "documents + tronçons"
+ },
+ "pdfs": 41,
+ "scannes": 5,
+ "ocrises": 5,
+ "pages_ocr": 292,
+ "caracteres": 506801,
+ "troncons": 65,
+ "documents": {
+  "train": 3,
+  "val": 2,
+  "test": 0
+ },
+ "octets": {
+  "train": 435991,
+  "val": 86688,
+  "test": 0
+ },
+ "temps_s": 1889.2,
+ "echantillon": "---\nExercices de synthèse Excel 2010 Fonctions avancées\nExercices de synthèse\n\nExcel 2010\nFonctions avancées\n\nEditions Logitell inc.\n\n\nL'éditeur donne l’autorisation de reproduire des parties ou la totalité de ce document, uniquement si\nces copies sont utilisées avec les manuels de formation publiés par Les éditions Logitell inc. Le\nnombre maximum de copies ne peut dépasser le nombre de manuels de formation en usage à ce\nmoment-là.\n\nGarantie. Les éditions Logitell s’engage à remplacer tout CD-ROM fo\n---\nAMF-AO-Annexes 12 à 15 (Tech)\nAutorité des marchés financiers Appel d'offres public 2016A013\n\nANNEXE 12 : PROCESSUS D'AFFAIRES\n\nPROJET: SYSTÈME DE REMBOURSEMENT EN ASSURANCE-DÉPÔTS\n\n1 Le Cadre d'intervention\n\nLes processus d'affaires qui sont supportés par le Système de remboursement en assurance-dépôts font partie du Cadre\nd'intervention, soit le cadre opérationnel d'intervention applicable aux institutions inscrites en vertu de la LAD et dont la viabilité ou la\nsolvabilité sont menacées.\n\nNous",
+ "racines": [
+  {
+   "nom": "CEGEP",
+   "chemin": "/home/stephane/Data13TB/stephane/archives/CEGEP",
+   "pdfs": 2681,
+   "licence": "notes de cours — droits réservés, usage local, non diffusé"
+  }
+ ],
+ "mots_estimes": 81742,
+ "sha256_train": "40542edb6fecbbd97d7f0fa479cc1e42ea2b44bde18dbd2f40c5847b9936f3dd",
+ "sha256_val": "13ba376d1d2c87026b665765a62fd30f034e6458cd0deedd1ccfc31d23541fa0",
+ "sha256_test": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+ "limites": [
+  "OCR brut : rotation/contraste/colonnes non traités (le R4.4 les traite)",
+  "WER non mesurée (pas de vérité terrain sur les scans réels)",
+  "licences : droits réservés, corpus local non diffusé"
+ ]
+}
