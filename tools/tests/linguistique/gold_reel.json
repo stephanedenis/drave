@@ -14297,6 +14297,2386 @@
     "acte": "assertion"
    },
    "source": "reel"
+  },
+  {
+   "id": "r221",
+   "langue": "fr",
+   "texte": "Le village où je vis est petit.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "village",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 10
+    },
+    {
+     "texte": "où",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 13
+    },
+    {
+     "texte": "je",
+     "pos": "PRON",
+     "debut": 14,
+     "fin": 16
+    },
+    {
+     "texte": "vis",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 20
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "petit",
+     "pos": "ADJ",
+     "debut": 25,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le village",
+     "role": "patient",
+     "debut": 0,
+     "fin": 10
+    },
+    {
+     "type": "REL",
+     "texte": "où je vis",
+     "role": "lieu",
+     "debut": 11,
+     "fin": 20,
+     "cibles": [
+      "village"
+     ],
+     "cible": "village"
+    },
+    {
+     "type": "GV",
+     "texte": "est",
+     "role": "prédicat",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "type": "ADJ",
+     "texte": "petit",
+     "role": "attribut",
+     "debut": 25,
+     "fin": 30
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r222",
+   "langue": "fr",
+   "texte": "Si tu viens, nous partirons.",
+   "mots": [
+    {
+     "texte": "Si",
+     "pos": "CONJ",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "tu",
+     "pos": "PRON",
+     "debut": 3,
+     "fin": 5
+    },
+    {
+     "texte": "viens",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "texte": "nous",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 17
+    },
+    {
+     "texte": "partirons",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 27
+    }
+   ],
+   "segments": [
+    {
+     "type": "SUB",
+     "texte": "Si tu viens",
+     "role": "condition",
+     "debut": 0,
+     "fin": 11,
+     "cibles": [
+      "partirons"
+     ],
+     "cible": "partirons"
+    },
+    {
+     "type": "GN",
+     "texte": "nous",
+     "role": "agent",
+     "debut": 13,
+     "fin": 17
+    },
+    {
+     "type": "GV",
+     "texte": "partirons",
+     "role": "prédicat",
+     "debut": 18,
+     "fin": 27
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r223",
+   "langue": "fr",
+   "texte": "Elle chante parce qu'elle est heureuse.",
+   "mots": [
+    {
+     "texte": "Elle",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "chante",
+     "pos": "VERB",
+     "debut": 5,
+     "fin": 11
+    },
+    {
+     "texte": "parce",
+     "pos": "CONJ",
+     "debut": 12,
+     "fin": 17
+    },
+    {
+     "texte": "qu'",
+     "pos": "CONJ",
+     "debut": 18,
+     "fin": 21
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 21,
+     "fin": 25
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 26,
+     "fin": 29
+    },
+    {
+     "texte": "heureuse",
+     "pos": "ADJ",
+     "debut": 30,
+     "fin": 38
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Elle",
+     "role": "agent",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "type": "GV",
+     "texte": "chante",
+     "role": "prédicat",
+     "debut": 5,
+     "fin": 11
+    },
+    {
+     "type": "SUB",
+     "texte": "parce qu'elle est heureuse",
+     "role": "cause",
+     "debut": 12,
+     "fin": 38,
+     "cibles": [
+      "chante"
+     ],
+     "cible": "chante"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r224",
+   "langue": "fr",
+   "texte": "L'homme dont la voiture est rouge arrive.",
+   "mots": [
+    {
+     "texte": "L'",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "homme",
+     "pos": "NOUN",
+     "debut": 2,
+     "fin": 7
+    },
+    {
+     "texte": "dont",
+     "pos": "PRON",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 13,
+     "fin": 15
+    },
+    {
+     "texte": "voiture",
+     "pos": "NOUN",
+     "debut": 16,
+     "fin": 23
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 24,
+     "fin": 27
+    },
+    {
+     "texte": "rouge",
+     "pos": "ADJ",
+     "debut": 28,
+     "fin": 33
+    },
+    {
+     "texte": "arrive",
+     "pos": "VERB",
+     "debut": 34,
+     "fin": 40
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "L'homme",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "REL",
+     "texte": "dont la voiture est rouge",
+     "role": "objet",
+     "debut": 8,
+     "fin": 33,
+     "cibles": [
+      "homme"
+     ],
+     "cible": "homme"
+    },
+    {
+     "type": "GV",
+     "texte": "arrive",
+     "role": "prédicat",
+     "debut": 34,
+     "fin": 40
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r225",
+   "langue": "fr",
+   "texte": "Je crois qu'il a raison.",
+   "mots": [
+    {
+     "texte": "Je",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "crois",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "qu'",
+     "pos": "CONJ",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 12,
+     "fin": 14
+    },
+    {
+     "texte": "a",
+     "pos": "AUX",
+     "debut": 15,
+     "fin": 16
+    },
+    {
+     "texte": "raison",
+     "pos": "NOUN",
+     "debut": 17,
+     "fin": 23
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Je",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "crois",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "SUB",
+     "texte": "qu'il a raison",
+     "role": "complément",
+     "debut": 9,
+     "fin": 23,
+     "cibles": [
+      "crois"
+     ],
+     "cible": "crois"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r226",
+   "langue": "fr",
+   "texte": "Le jour où nous sommes partis était beau.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "jour",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "où",
+     "pos": "PRON",
+     "debut": 8,
+     "fin": 10
+    },
+    {
+     "texte": "nous",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 15
+    },
+    {
+     "texte": "sommes",
+     "pos": "AUX",
+     "debut": 16,
+     "fin": 22
+    },
+    {
+     "texte": "partis",
+     "pos": "VERB",
+     "debut": 23,
+     "fin": 29
+    },
+    {
+     "texte": "était",
+     "pos": "AUX",
+     "debut": 30,
+     "fin": 35
+    },
+    {
+     "texte": "beau",
+     "pos": "ADJ",
+     "debut": 36,
+     "fin": 40
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le jour",
+     "role": "patient",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "REL",
+     "texte": "où nous sommes partis",
+     "role": "temps",
+     "debut": 8,
+     "fin": 29,
+     "cibles": [
+      "jour"
+     ],
+     "cible": "jour"
+    },
+    {
+     "type": "GV",
+     "texte": "était",
+     "role": "prédicat",
+     "debut": 30,
+     "fin": 35
+    },
+    {
+     "type": "ADJ",
+     "texte": "beau",
+     "role": "attribut",
+     "debut": 36,
+     "fin": 40
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r227",
+   "langue": "fr",
+   "texte": "Pendant qu'il dort, elle lit.",
+   "mots": [
+    {
+     "texte": "Pendant",
+     "pos": "CONJ",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "texte": "qu'",
+     "pos": "CONJ",
+     "debut": 8,
+     "fin": 11
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 11,
+     "fin": 13
+    },
+    {
+     "texte": "dort",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 18
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 20,
+     "fin": 24
+    },
+    {
+     "texte": "lit",
+     "pos": "VERB",
+     "debut": 25,
+     "fin": 28
+    }
+   ],
+   "segments": [
+    {
+     "type": "SUB",
+     "texte": "Pendant qu'il dort",
+     "role": "temps",
+     "debut": 0,
+     "fin": 18,
+     "cibles": [
+      "lit"
+     ],
+     "cible": "lit"
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 20,
+     "fin": 24
+    },
+    {
+     "type": "GV",
+     "texte": "lit",
+     "role": "prédicat",
+     "debut": 25,
+     "fin": 28
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r228",
+   "langue": "fr",
+   "texte": "La maison que nous avons achetée est vieille.",
+   "mots": [
+    {
+     "texte": "La",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "maison",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "que",
+     "pos": "PRON",
+     "debut": 10,
+     "fin": 13
+    },
+    {
+     "texte": "nous",
+     "pos": "PRON",
+     "debut": 14,
+     "fin": 18
+    },
+    {
+     "texte": "avons",
+     "pos": "AUX",
+     "debut": 19,
+     "fin": 24
+    },
+    {
+     "texte": "achetée",
+     "pos": "VERB",
+     "debut": 25,
+     "fin": 32
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 33,
+     "fin": 36
+    },
+    {
+     "texte": "vieille",
+     "pos": "ADJ",
+     "debut": 37,
+     "fin": 44
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "La maison",
+     "role": "patient",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "REL",
+     "texte": "que nous avons achetée",
+     "role": "objet",
+     "debut": 10,
+     "fin": 32,
+     "cibles": [
+      "maison"
+     ],
+     "cible": "maison"
+    },
+    {
+     "type": "GV",
+     "texte": "est",
+     "role": "prédicat",
+     "debut": 33,
+     "fin": 36
+    },
+    {
+     "type": "ADJ",
+     "texte": "vieille",
+     "role": "attribut",
+     "debut": 37,
+     "fin": 44
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r229",
+   "langue": "fr",
+   "texte": "Il pleure parce qu'il est triste.",
+   "mots": [
+    {
+     "texte": "Il",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "pleure",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "texte": "parce",
+     "pos": "CONJ",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "texte": "qu'",
+     "pos": "CONJ",
+     "debut": 16,
+     "fin": 19
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 22,
+     "fin": 25
+    },
+    {
+     "texte": "triste",
+     "pos": "ADJ",
+     "debut": 26,
+     "fin": 32
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Il",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "pleure",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 9
+    },
+    {
+     "type": "SUB",
+     "texte": "parce qu'il est triste",
+     "role": "cause",
+     "debut": 10,
+     "fin": 32,
+     "cibles": [
+      "pleure"
+     ],
+     "cible": "pleure"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r230",
+   "langue": "fr",
+   "texte": "Quand tu arrives, appelle-moi.",
+   "mots": [
+    {
+     "texte": "Quand",
+     "pos": "CONJ",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "tu",
+     "pos": "PRON",
+     "debut": 6,
+     "fin": 8
+    },
+    {
+     "texte": "arrives",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 16
+    },
+    {
+     "texte": "appelle",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 25
+    },
+    {
+     "texte": "moi",
+     "pos": "PRON",
+     "debut": 26,
+     "fin": 29
+    }
+   ],
+   "segments": [
+    {
+     "type": "SUB",
+     "texte": "Quand tu arrives",
+     "role": "temps",
+     "debut": 0,
+     "fin": 16,
+     "cibles": [
+      "appelle"
+     ],
+     "cible": "appelle"
+    },
+    {
+     "type": "GV",
+     "texte": "appelle-moi",
+     "role": "prédicat",
+     "debut": 18,
+     "fin": 29
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r231",
+   "langue": "fr",
+   "texte": "Le chien qui aboie est méchant.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chien",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "qui",
+     "pos": "PRON",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "texte": "aboie",
+     "pos": "VERB",
+     "debut": 13,
+     "fin": 18
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 19,
+     "fin": 22
+    },
+    {
+     "texte": "méchant",
+     "pos": "ADJ",
+     "debut": 23,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chien",
+     "role": "patient",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "REL",
+     "texte": "qui aboie",
+     "role": "sujet",
+     "debut": 9,
+     "fin": 18,
+     "cibles": [
+      "chien"
+     ],
+     "cible": "chien"
+    },
+    {
+     "type": "GV",
+     "texte": "est",
+     "role": "prédicat",
+     "debut": 19,
+     "fin": 22
+    },
+    {
+     "type": "ADJ",
+     "texte": "méchant",
+     "role": "attribut",
+     "debut": 23,
+     "fin": 30
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r232",
+   "langue": "fr",
+   "texte": "Je pense que nous devons partir.",
+   "mots": [
+    {
+     "texte": "Je",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "pense",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "que",
+     "pos": "CONJ",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "texte": "nous",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 17
+    },
+    {
+     "texte": "devons",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 24
+    },
+    {
+     "texte": "partir",
+     "pos": "VERB",
+     "debut": 25,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Je",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "pense",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "SUB",
+     "texte": "que nous devons partir",
+     "role": "complément",
+     "debut": 9,
+     "fin": 31,
+     "cibles": [
+      "pense"
+     ],
+     "cible": "pense"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r233",
+   "langue": "fr",
+   "texte": "La fille dont tu parles est ma sœur.",
+   "mots": [
+    {
+     "texte": "La",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "fille",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "dont",
+     "pos": "PRON",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "texte": "tu",
+     "pos": "PRON",
+     "debut": 14,
+     "fin": 16
+    },
+    {
+     "texte": "parles",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 23
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 24,
+     "fin": 27
+    },
+    {
+     "texte": "ma",
+     "pos": "DET",
+     "debut": 28,
+     "fin": 30
+    },
+    {
+     "texte": "sœur",
+     "pos": "NOUN",
+     "debut": 31,
+     "fin": 35
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "La fille",
+     "role": "patient",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "REL",
+     "texte": "dont tu parles",
+     "role": "objet",
+     "debut": 9,
+     "fin": 23,
+     "cibles": [
+      "fille"
+     ],
+     "cible": "fille"
+    },
+    {
+     "type": "GV",
+     "texte": "est",
+     "role": "prédicat",
+     "debut": 24,
+     "fin": 27
+    },
+    {
+     "type": "GN",
+     "texte": "ma sœur",
+     "role": "attribut",
+     "debut": 28,
+     "fin": 35
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r234",
+   "langue": "fr",
+   "texte": "Comme il pleuvait, nous sommes restés.",
+   "mots": [
+    {
+     "texte": "Comme",
+     "pos": "CONJ",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 6,
+     "fin": 8
+    },
+    {
+     "texte": "pleuvait",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 17
+    },
+    {
+     "texte": "nous",
+     "pos": "PRON",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "texte": "sommes",
+     "pos": "AUX",
+     "debut": 24,
+     "fin": 30
+    },
+    {
+     "texte": "restés",
+     "pos": "VERB",
+     "debut": 31,
+     "fin": 37
+    }
+   ],
+   "segments": [
+    {
+     "type": "SUB",
+     "texte": "Comme il pleuvait",
+     "role": "cause",
+     "debut": 0,
+     "fin": 17,
+     "cibles": [
+      "restés"
+     ],
+     "cible": "restés"
+    },
+    {
+     "type": "GN",
+     "texte": "nous",
+     "role": "agent",
+     "debut": 19,
+     "fin": 23
+    },
+    {
+     "type": "GV",
+     "texte": "sommes restés",
+     "role": "prédicat",
+     "debut": 24,
+     "fin": 37
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r235",
+   "langue": "fr",
+   "texte": "L'endroit où nous allons est loin.",
+   "mots": [
+    {
+     "texte": "L'",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "endroit",
+     "pos": "NOUN",
+     "debut": 2,
+     "fin": 9
+    },
+    {
+     "texte": "où",
+     "pos": "PRON",
+     "debut": 10,
+     "fin": 12
+    },
+    {
+     "texte": "nous",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 17
+    },
+    {
+     "texte": "allons",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 24
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 25,
+     "fin": 28
+    },
+    {
+     "texte": "loin",
+     "pos": "ADV",
+     "debut": 29,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "L'endroit",
+     "role": "patient",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "REL",
+     "texte": "où nous allons",
+     "role": "lieu",
+     "debut": 10,
+     "fin": 24,
+     "cibles": [
+      "endroit"
+     ],
+     "cible": "endroit"
+    },
+    {
+     "type": "GV",
+     "texte": "est",
+     "role": "prédicat",
+     "debut": 25,
+     "fin": 28
+    },
+    {
+     "type": "ADV",
+     "texte": "loin",
+     "role": "attribut",
+     "debut": 29,
+     "fin": 33
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r236",
+   "langue": "en",
+   "texte": "The village where I live is small.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "village",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 11
+    },
+    {
+     "texte": "where",
+     "pos": "PRON",
+     "debut": 12,
+     "fin": 17
+    },
+    {
+     "texte": "I",
+     "pos": "PRON",
+     "debut": 18,
+     "fin": 19
+    },
+    {
+     "texte": "live",
+     "pos": "VERB",
+     "debut": 20,
+     "fin": 24
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 25,
+     "fin": 27
+    },
+    {
+     "texte": "small",
+     "pos": "ADJ",
+     "debut": 28,
+     "fin": 33
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The village",
+     "role": "patient",
+     "debut": 0,
+     "fin": 11
+    },
+    {
+     "type": "REL",
+     "texte": "where I live",
+     "role": "lieu",
+     "debut": 12,
+     "fin": 24,
+     "cibles": [
+      "village"
+     ],
+     "cible": "village"
+    },
+    {
+     "type": "GV",
+     "texte": "is",
+     "role": "prédicat",
+     "debut": 25,
+     "fin": 27
+    },
+    {
+     "type": "ADJ",
+     "texte": "small",
+     "role": "attribut",
+     "debut": 28,
+     "fin": 33
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r237",
+   "langue": "en",
+   "texte": "If you come, we will leave.",
+   "mots": [
+    {
+     "texte": "If",
+     "pos": "CONJ",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "you",
+     "pos": "PRON",
+     "debut": 3,
+     "fin": 6
+    },
+    {
+     "texte": "come",
+     "pos": "VERB",
+     "debut": 7,
+     "fin": 11
+    },
+    {
+     "texte": "we",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 15
+    },
+    {
+     "texte": "will",
+     "pos": "AUX",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "texte": "leave",
+     "pos": "VERB",
+     "debut": 21,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "SUB",
+     "texte": "If you come",
+     "role": "condition",
+     "debut": 0,
+     "fin": 11,
+     "cibles": [
+      "leave"
+     ],
+     "cible": "leave"
+    },
+    {
+     "type": "GN",
+     "texte": "we",
+     "role": "agent",
+     "debut": 13,
+     "fin": 15
+    },
+    {
+     "type": "GV",
+     "texte": "will leave",
+     "role": "prédicat",
+     "debut": 16,
+     "fin": 26
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r238",
+   "langue": "en",
+   "texte": "She sings because she is happy.",
+   "mots": [
+    {
+     "texte": "She",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "sings",
+     "pos": "VERB",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "because",
+     "pos": "CONJ",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "texte": "she",
+     "pos": "PRON",
+     "debut": 18,
+     "fin": 21
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 22,
+     "fin": 24
+    },
+    {
+     "texte": "happy",
+     "pos": "ADJ",
+     "debut": 25,
+     "fin": 30
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "She",
+     "role": "agent",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "type": "GV",
+     "texte": "sings",
+     "role": "prédicat",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "type": "SUB",
+     "texte": "because she is happy",
+     "role": "cause",
+     "debut": 10,
+     "fin": 30,
+     "cibles": [
+      "sings"
+     ],
+     "cible": "sings"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r239",
+   "langue": "en",
+   "texte": "The man whose car is red arrives.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "man",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "whose",
+     "pos": "PRON",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "texte": "car",
+     "pos": "NOUN",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "red",
+     "pos": "ADJ",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "arrives",
+     "pos": "VERB",
+     "debut": 25,
+     "fin": 32
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The man",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "REL",
+     "texte": "whose car is red",
+     "role": "objet",
+     "debut": 8,
+     "fin": 24,
+     "cibles": [
+      "man"
+     ],
+     "cible": "man"
+    },
+    {
+     "type": "GV",
+     "texte": "arrives",
+     "role": "prédicat",
+     "debut": 25,
+     "fin": 32
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r240",
+   "langue": "en",
+   "texte": "I believe that he is right.",
+   "mots": [
+    {
+     "texte": "I",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 1
+    },
+    {
+     "texte": "believe",
+     "pos": "VERB",
+     "debut": 2,
+     "fin": 9
+    },
+    {
+     "texte": "that",
+     "pos": "CONJ",
+     "debut": 10,
+     "fin": 14
+    },
+    {
+     "texte": "he",
+     "pos": "PRON",
+     "debut": 15,
+     "fin": 17
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 18,
+     "fin": 20
+    },
+    {
+     "texte": "right",
+     "pos": "ADJ",
+     "debut": 21,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "I",
+     "role": "agent",
+     "debut": 0,
+     "fin": 1
+    },
+    {
+     "type": "GV",
+     "texte": "believe",
+     "role": "prédicat",
+     "debut": 2,
+     "fin": 9
+    },
+    {
+     "type": "SUB",
+     "texte": "that he is right",
+     "role": "complément",
+     "debut": 10,
+     "fin": 26,
+     "cibles": [
+      "believe"
+     ],
+     "cible": "believe"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r241",
+   "langue": "en",
+   "texte": "The day when we left was beautiful.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "day",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "when",
+     "pos": "PRON",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "we",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 15
+    },
+    {
+     "texte": "left",
+     "pos": "VERB",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "texte": "was",
+     "pos": "AUX",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "texte": "beautiful",
+     "pos": "ADJ",
+     "debut": 25,
+     "fin": 34
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The day",
+     "role": "patient",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "REL",
+     "texte": "when we left",
+     "role": "temps",
+     "debut": 8,
+     "fin": 20,
+     "cibles": [
+      "day"
+     ],
+     "cible": "day"
+    },
+    {
+     "type": "GV",
+     "texte": "was",
+     "role": "prédicat",
+     "debut": 21,
+     "fin": 24
+    },
+    {
+     "type": "ADJ",
+     "texte": "beautiful",
+     "role": "attribut",
+     "debut": 25,
+     "fin": 34
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r242",
+   "langue": "en",
+   "texte": "While he sleeps, she reads.",
+   "mots": [
+    {
+     "texte": "While",
+     "pos": "CONJ",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "he",
+     "pos": "PRON",
+     "debut": 6,
+     "fin": 8
+    },
+    {
+     "texte": "sleeps",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "she",
+     "pos": "PRON",
+     "debut": 17,
+     "fin": 20
+    },
+    {
+     "texte": "reads",
+     "pos": "VERB",
+     "debut": 21,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "SUB",
+     "texte": "While he sleeps",
+     "role": "temps",
+     "debut": 0,
+     "fin": 15,
+     "cibles": [
+      "reads"
+     ],
+     "cible": "reads"
+    },
+    {
+     "type": "GN",
+     "texte": "she",
+     "role": "agent",
+     "debut": 17,
+     "fin": 20
+    },
+    {
+     "type": "GV",
+     "texte": "reads",
+     "role": "prédicat",
+     "debut": 21,
+     "fin": 26
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r243",
+   "langue": "en",
+   "texte": "The house that we bought is old.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "house",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "that",
+     "pos": "PRON",
+     "debut": 10,
+     "fin": 14
+    },
+    {
+     "texte": "we",
+     "pos": "PRON",
+     "debut": 15,
+     "fin": 17
+    },
+    {
+     "texte": "bought",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 24
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 25,
+     "fin": 27
+    },
+    {
+     "texte": "old",
+     "pos": "ADJ",
+     "debut": 28,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The house",
+     "role": "patient",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "REL",
+     "texte": "that we bought",
+     "role": "objet",
+     "debut": 10,
+     "fin": 24,
+     "cibles": [
+      "house"
+     ],
+     "cible": "house"
+    },
+    {
+     "type": "GV",
+     "texte": "is",
+     "role": "prédicat",
+     "debut": 25,
+     "fin": 27
+    },
+    {
+     "type": "ADJ",
+     "texte": "old",
+     "role": "attribut",
+     "debut": 28,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r244",
+   "langue": "en",
+   "texte": "He cries because he is sad.",
+   "mots": [
+    {
+     "texte": "He",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "cries",
+     "pos": "VERB",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "because",
+     "pos": "CONJ",
+     "debut": 9,
+     "fin": 16
+    },
+    {
+     "texte": "he",
+     "pos": "PRON",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 20,
+     "fin": 22
+    },
+    {
+     "texte": "sad",
+     "pos": "ADJ",
+     "debut": 23,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "He",
+     "role": "agent",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "type": "GV",
+     "texte": "cries",
+     "role": "prédicat",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "type": "SUB",
+     "texte": "because he is sad",
+     "role": "cause",
+     "debut": 9,
+     "fin": 26,
+     "cibles": [
+      "cries"
+     ],
+     "cible": "cries"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r245",
+   "langue": "en",
+   "texte": "When you arrive, call me.",
+   "mots": [
+    {
+     "texte": "When",
+     "pos": "CONJ",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "you",
+     "pos": "PRON",
+     "debut": 5,
+     "fin": 8
+    },
+    {
+     "texte": "arrive",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 15
+    },
+    {
+     "texte": "call",
+     "pos": "VERB",
+     "debut": 17,
+     "fin": 21
+    },
+    {
+     "texte": "me",
+     "pos": "PRON",
+     "debut": 22,
+     "fin": 24
+    }
+   ],
+   "segments": [
+    {
+     "type": "SUB",
+     "texte": "When you arrive",
+     "role": "temps",
+     "debut": 0,
+     "fin": 15,
+     "cibles": [
+      "call"
+     ],
+     "cible": "call"
+    },
+    {
+     "type": "GV",
+     "texte": "call me",
+     "role": "prédicat",
+     "debut": 17,
+     "fin": 24
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r246",
+   "langue": "en",
+   "texte": "The dog that barks is mean.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "dog",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "that",
+     "pos": "PRON",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "barks",
+     "pos": "VERB",
+     "debut": 13,
+     "fin": 18
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "texte": "mean",
+     "pos": "ADJ",
+     "debut": 22,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The dog",
+     "role": "patient",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "REL",
+     "texte": "that barks",
+     "role": "sujet",
+     "debut": 8,
+     "fin": 18,
+     "cibles": [
+      "dog"
+     ],
+     "cible": "dog"
+    },
+    {
+     "type": "GV",
+     "texte": "is",
+     "role": "prédicat",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "type": "ADJ",
+     "texte": "mean",
+     "role": "attribut",
+     "debut": 22,
+     "fin": 26
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r247",
+   "langue": "en",
+   "texte": "I think that we must leave.",
+   "mots": [
+    {
+     "texte": "I",
+     "pos": "PRON",
+     "debut": 0,
+     "fin": 1
+    },
+    {
+     "texte": "think",
+     "pos": "VERB",
+     "debut": 2,
+     "fin": 7
+    },
+    {
+     "texte": "that",
+     "pos": "CONJ",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "we",
+     "pos": "PRON",
+     "debut": 13,
+     "fin": 15
+    },
+    {
+     "texte": "must",
+     "pos": "AUX",
+     "debut": 16,
+     "fin": 20
+    },
+    {
+     "texte": "leave",
+     "pos": "VERB",
+     "debut": 21,
+     "fin": 26
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "I",
+     "role": "agent",
+     "debut": 0,
+     "fin": 1
+    },
+    {
+     "type": "GV",
+     "texte": "think",
+     "role": "prédicat",
+     "debut": 2,
+     "fin": 7
+    },
+    {
+     "type": "SUB",
+     "texte": "that we must leave",
+     "role": "complément",
+     "debut": 8,
+     "fin": 26,
+     "cibles": [
+      "think"
+     ],
+     "cible": "think"
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r248",
+   "langue": "en",
+   "texte": "The girl whom you mention is my sister.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "girl",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "whom",
+     "pos": "PRON",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "texte": "you",
+     "pos": "PRON",
+     "debut": 14,
+     "fin": 17
+    },
+    {
+     "texte": "mention",
+     "pos": "VERB",
+     "debut": 18,
+     "fin": 25
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 26,
+     "fin": 28
+    },
+    {
+     "texte": "my",
+     "pos": "DET",
+     "debut": 29,
+     "fin": 31
+    },
+    {
+     "texte": "sister",
+     "pos": "NOUN",
+     "debut": 32,
+     "fin": 38
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The girl",
+     "role": "patient",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "REL",
+     "texte": "whom you mention",
+     "role": "objet",
+     "debut": 9,
+     "fin": 25,
+     "cibles": [
+      "girl"
+     ],
+     "cible": "girl"
+    },
+    {
+     "type": "GV",
+     "texte": "is",
+     "role": "prédicat",
+     "debut": 26,
+     "fin": 28
+    },
+    {
+     "type": "GN",
+     "texte": "my sister",
+     "role": "attribut",
+     "debut": 29,
+     "fin": 38
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r249",
+   "langue": "en",
+   "texte": "As it was raining, we stayed.",
+   "mots": [
+    {
+     "texte": "As",
+     "pos": "CONJ",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 3,
+     "fin": 5
+    },
+    {
+     "texte": "was",
+     "pos": "AUX",
+     "debut": 6,
+     "fin": 9
+    },
+    {
+     "texte": "raining",
+     "pos": "VERB",
+     "debut": 10,
+     "fin": 17
+    },
+    {
+     "texte": "we",
+     "pos": "PRON",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "texte": "stayed",
+     "pos": "VERB",
+     "debut": 22,
+     "fin": 28
+    }
+   ],
+   "segments": [
+    {
+     "type": "SUB",
+     "texte": "As it was raining",
+     "role": "cause",
+     "debut": 0,
+     "fin": 17,
+     "cibles": [
+      "stayed"
+     ],
+     "cible": "stayed"
+    },
+    {
+     "type": "GN",
+     "texte": "we",
+     "role": "agent",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "type": "GV",
+     "texte": "stayed",
+     "role": "prédicat",
+     "debut": 22,
+     "fin": 28
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r250",
+   "langue": "en",
+   "texte": "The place where we go is far.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "place",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 9
+    },
+    {
+     "texte": "where",
+     "pos": "PRON",
+     "debut": 10,
+     "fin": 15
+    },
+    {
+     "texte": "we",
+     "pos": "PRON",
+     "debut": 16,
+     "fin": 18
+    },
+    {
+     "texte": "go",
+     "pos": "VERB",
+     "debut": 19,
+     "fin": 21
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 22,
+     "fin": 24
+    },
+    {
+     "texte": "far",
+     "pos": "ADV",
+     "debut": 25,
+     "fin": 28
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The place",
+     "role": "patient",
+     "debut": 0,
+     "fin": 9
+    },
+    {
+     "type": "REL",
+     "texte": "where we go",
+     "role": "lieu",
+     "debut": 10,
+     "fin": 21,
+     "cibles": [
+      "place"
+     ],
+     "cible": "place"
+    },
+    {
+     "type": "GV",
+     "texte": "is",
+     "role": "prédicat",
+     "debut": 22,
+     "fin": 24
+    },
+    {
+     "type": "ADV",
+     "texte": "far",
+     "role": "attribut",
+     "debut": 25,
+     "fin": 28
+    }
+   ],
+   "pragma": {
+    "acte": "assertion"
+   },
+   "source": "reel"
   }
  ]
 }

@@ -33221,3 +33221,49 @@ attente du manifeste ou du cutoff 06:45…
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 20; date '+%H:%M'; ls -la reports/ocr-pdf.json 2>&1; ps -p 1616198 -o stat,etime= 2>/dev/null || echo \"OCR terminé\"; tail -2 /tmp/ocr-pilote.log; cat /tmp/finaliser-ocr.log | tail -2", "description": "Check manifest writing", " … [81 caractères tronqués]`
+
+  ```
+04:47
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+STAT            
+S       08:01:52
+  Biblio_large · 006.31 sophiadialogues.pdf · 86 p · 162034 car
+  Biblio_large · David_Gamez_-_Human_and_Machine_Consciou · 236 p · 435043 car
+attente du manifeste ou du cutoff 06:45…
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"tesseract|pdftoppm\" | head -1; ls -la data/corpus_ocr/train.txt", "description": "Check 20th book start", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+04:47
+2422759 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/001.0_General_Imported_Documents/[David G. Anderson2019] Life Histories of Etnos Theory in Russia and Beyond.pdf /tmp/ocr-pdf-4m6akibr/p
+-rw-r--r--. 1 stephane stephane 14596847  2 nov 04:44 data/corpus_ocr/train.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 356 : 19e livre TERMINÉ — David Gamez 236 p, 435 043 car. ; le 20e (le dernier) entre
+
+**Round 356/1000 — 19 livres au corpus ; le 20e est le dernier du `--max-doc 20`.**
+
+- **David_Gamez, Human and Machine Consciousness** : **236 pages, 435 043 caractères** ; le **train** passe à **14 596 847 octets**.
+- **Le corpus OCR : 19 livres, 6 931 pages, 14 436 209 caractères**.
+- **Le 20e livre** : `[David G. Anderson2019] Life Histories of Etnos Theory in Russia and Beyond.pdf`, en rendu ; après lui, **l'outil écrira son manifeste** (fin des 20 océrisés).
+- **Le finisher** (PID 2275241) reste en attente ; s'il voit le manifeste, il s'arrête sans rien faire ; sinon, cutoff 06:45.
+- **Le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40) ; **les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : 19 livres, 14,44 M caractères ; le 20e livre est en cours ; le goal reste actif.
+
+
+## Tour 369
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 357/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 480; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf|pdftoppm\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1; ps -p 1616198 -o stat,etime= 2>/dev/null || echo \"OCR terminé\"",  … [145 caractères tronqués]`

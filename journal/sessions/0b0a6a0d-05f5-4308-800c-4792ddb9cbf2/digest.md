@@ -18048,3 +18048,29 @@ Prochaine action : la **fenêtre** (R1.1/R1.2, note de passage écrite), la **lo
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\na = \"; le canal est tranché (N2.x : −0,03 en domaine, +0,24 à 512) |\"\nb = (\"; le canal est tranché à 11,47 M (N2.x) mais **rev … [1207 caractères tronqués]`
+
+  ```
+roadmap ok
+ts ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-1073]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1073", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+486bc494 ROADMAP — LE CANAL REVIT À 34,3 M (N2.z) : 3,51 EN DOMAINE, 3,66 À 512
+04:48
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 1320; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/Z-g*.pt 2>/dev/null; tail -1 work/n2j/Z-g1.log 2>/dev/null; tail -1 work/n2j/Z-g2.log 2>/dev/null", "description": "Wait for the Z-g distillations"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1074]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1074", "timeout_ms": 1300000, "wait": true}`

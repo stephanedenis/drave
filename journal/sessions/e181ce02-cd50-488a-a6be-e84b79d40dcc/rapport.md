@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 36.1 h |
+| Durée | 36.2 h |
 | Tours | 106 |
-| Messages | 1352 |
-| Appels d'outils | 1187 |
+| Messages | 1355 |
+| Appels d'outils | 1190 |
 | Fichiers touchés | 25 |
-| Commandes | 963 |
+| Commandes | 965 |
 | Sous-agents | 2 |
-| Commits | 136 |
+| Commits | 138 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -5636,11 +5636,14 @@ Le goal `goal-7beacaeb` reste actif (la deadline 08:00 est encore devant, il est
 
 ### Tour 106 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Ajouter 30 phrases complexes (50 au total) et mesurer
 - bash — Écrire la fiche des 50 phrases complexes
 - bash — Trim README et passer les portes
+- bash — Committer les 50 phrases complexes
+- bash — Committer les 50 phrases complexes (2e essai)
+- job_output
 
 ## 3. Travail accompli
 
@@ -5721,7 +5724,7 @@ Le goal `goal-7beacaeb` reste actif (la deadline 08:00 est encore devant, il est
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 923 autres
+- … et 925 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6005,4 +6008,6 @@ Le goal `goal-7beacaeb` reste actif (la deadline 08:00 est encore devant, il est
 - B13 — LES PHRASES COMPLEXES : POS 0,6471, SYNTAGME 0,4828, GOLD 205 ; 90/90" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHRASES COMPLEXES"; then ec
 - B13 — LES PHRASES COMPLEXES : POS 0,6471, SYNTAGME 0,4828, GOLD 205 ; 90/90" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHRASES COMPLEXES"; then ec
 - B13 — LES 20 PHRASES COMPLEXES : POS 0,6829, SYNTAGME 0,2963, GOLD 220 ; 91/91" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "20 PHRASES COMPLEXES"; t
+- B13 — LES 50 PHRASES COMPLEXES : POS 0,7013, SYNTAGME 0,3060, GOLD 250 ; 92/92" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "50 PHRASES COMPLEXES"; t
+- B13 — LES 50 PHRASES COMPLEXES : POS 0,7013, SYNTAGME 0,3060, GOLD 250 ; 92/92" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "50 PHRASES COMPLEXES"; t
 

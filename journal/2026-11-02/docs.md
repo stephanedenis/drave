@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,11 +18,12 @@
 | 03:31 | `87cb9caa` | ÉTAT — COMPTEURS RÉELS (488/578) | `en-cours.md`, `README.md`, `apprentissage.md` (+13) |
 | 04:32 | `c58ae86c` | ÉTAT — COMPTEURS APRÈS N2.z (495 FICHIERS, 582 JSON) ET L'HEURE DE LA NUIT | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |
 | 04:45 | `28c6be5c` | ROADMAP — LE CANAL REVIT À 34,3 M : 3,51 EN DOMAINE, 3,66 À 512 OCTETS | `en-cours.md`, `README.md`, `apprentissage.md` (+15) |
+| 04:46 | `486bc494` | ROADMAP — LE CANAL REVIT À 34,3 M (N2.z) : 3,51 EN DOMAINE, 3,66 À 512 | `en-cours.md`, `roadmap.md`, `README.md` (+14) |
 
 ## Sessions actives ce jour
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 36.5 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 36.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 36.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 36.2 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
