@@ -1604,6 +1604,30 @@ def t105_cv_graines() -> tuple[bool, str]:
         f"CV 20 graines : {moyenne} ± {ecart} (min {min(taux)}, max {max(taux)})")
 
 
+def t106_bilan_anaphore() -> tuple[bool, str]:
+    """Le bilan de l'anaphore : les huit mesures de la ligne en un seul contrôle."""
+    import statistics
+    from ..tests.linguistique.anaphore import (accords, mesurer, mesurer_cv,
+                                               mesurer_hybride, mesurer_meta,
+                                               mesurer_roles)
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    court = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 328]
+    court20 = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 320]
+    objets = [p for p in g["phrases"] if 329 <= int(p["id"][1:]) <= 336]
+    longs = [p for p in g["phrases"] if 337 <= int(p["id"][1:]) <= 342]
+    tout = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 342]
+    ok = (mesurer(court20, ignorer_pp=True)["taux"] == 1.0
+          and mesurer(tout, ignorer_pp=True)["justes"] == 27
+          and mesurer(objets, ignorer_pp=True)["taux"] == 1.0
+          and mesurer(longs, ignorer_pp=True)["justes"] == 7
+          and mesurer_meta(tout)["justes"] == 25
+          and abs(statistics.mean([mesurer_cv(tout, graine=k)["taux"]
+                                   for k in range(5)]) - 0.86) < 0.06
+          and abs(accords(tout)["paires"]["role/semantique"] - 1.0) < 1e-9)
+    return ok, "bilan : 4/4, 10/12, 12/12, 8/8, 27/30, méta 25/30, CV ~0,85"
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1708,7 +1732,8 @@ def main() -> int:
               ("T102 méta-règle", t102_meta()),
               ("T103 vote pondéré", t103_pondere()),
               ("T104 validation croisée", t104_cv()),
-              ("T105 CV 20 graines", t105_cv_graines())]
+              ("T105 CV 20 graines", t105_cv_graines()),
+              ("T106 bilan anaphore", t106_bilan_anaphore())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

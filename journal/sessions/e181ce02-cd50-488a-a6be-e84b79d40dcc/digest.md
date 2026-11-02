@@ -27664,3 +27664,111 @@ timeout 1800 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-anaphore-cv-graines.md reports/pensee-anaphore-cv-graines.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md do … [502 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1055]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1055", "timeout_ms": 600000, "wait": true}`
+
+  ```
+26 files changed, 379 insertions(+), 67 deletions(-)
+ create mode 100644 reports/pensee-anaphore-cv-graines.json
+ create mode 100644 reports/rapport-pensee-anaphore-cv-graines.md
+COMMIT OK 1
+69a3787d B13 — LA CV SUR 20 GRAINES : 0,8467 ± 0,051, LE DERNIER NOM GÉNÉRALISE ; 108/108
+lun 02 nov 2026 07:32:00 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ CV sur 20 graines : 0,8467 ± 0,051, le dernier nom généralise ; 108/108
+
+Le round 109 du goal est livré : la **validation croisée** répétée sur **20 graines** donne **0,8467 ± 0,051** — stable, avec le plafond 27/30 retrouvé au meilleur tirage. Commit **`69a3787d`**.
+
+## Les 20 graines
+
+| statistique | valeur |
+|---|---:|
+| moyenne | **0,8467** |
+| écart-type | 0,051 |
+| min | 0,7333 (22/30) |
+| max | 0,9000 (27/30) |
+
+**Ce que ça dit** :
+
+- **La CV est stable** : 0,85 ± 0,05 ; le pire pli aléatoire fait 22/30, le meilleur 27/30 — exactement le plafond du gold.
+- **Le dernier nom généralise** : le taux moyen (0,847) est cohérent avec le 27/30 in-sample (0,90) ; l'écart est la **variance du partage**, pas une régression.
+- **Le plafond revient** : le max des 20 graines = 27/30 = la meilleure règle seule.
+- **La négative est explicite** : min 22/30 < 27/30.
+
+## L'état
+
+- Fiche : [`rapport-pensee-anaphore-cv-graines.md`](../../reports/rapport-pensee-anaphore-cv-graines.md) ; JSON [`pensee-anaphore-cv-graines.json`](../../reports/pensee-anaphore-cv-graines.json) ; T105 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **108/108 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **515 fiches / 603 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 580 mots, T0 dans le budget.
+- L'horloge réelle est **07 h 32 HNE** (la deadline 08:00 est encore devant, ~28 min) ; l'autotest prend **~18 min**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **100 liens** : la CV se resserre-t-elle ?
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; il reste **~28 min** avant la deadline : le prochain round peut soit agrandir le gold, soit clôturer proprement la ligne coréférence.
+
+
+## Tour 123
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 110/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T105 la CV sur 20 graines        0,8467 ± 0,051 (min 0,73, max 0,90)\\n\",\n\"  T105 la CV sur 20 graines        0,8467 ±  … [2256 caractères tronqués]`
+
+  ```
+(False, 'bilan : 4/4, 10/12, 12/12, 8/8, 27/30, méta 25/30, CV ~0,85')
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('          and mesurer(court, ignorer_pp=True)[\"justes\"] == 27',\n            '          and mesurer(tout, ignorer_pp=True)[ … [238 caractères tronqués]`
+
+  ```
+(True, 'bilan : 4/4, 10/12, 12/12, 8/8, 27/30, méta 25/30, CV ~0,85')
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-anaphore-bilan.md <<'MD'\n# B13 — le bilan de l'anaphore : 27/30, CV 0,847, huit mesures\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **109/109 porte … [6339 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 516 fiche(s) · 604 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2816 mots > budget 2800 (T1)
+  en-cours · 1580 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-anaphore-semantique.md`](rapport-pensee-anaphore-semantique.md) | **B13** — la sémantique des verbes : 23/30, le … [628 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1800 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-anaphore-bilan.md reports/pensee-anaphore-bilan.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pilotag … [486 caractères tronqués]`

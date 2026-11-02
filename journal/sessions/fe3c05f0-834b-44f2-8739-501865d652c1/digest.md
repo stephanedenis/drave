@@ -34703,3 +34703,27 @@ manifeste ocrises 5 pages 292 car 506801
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; tail -3 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json')); print('manifeste ocrises', d['ocrises … [238 caractères tronqués]`
+
+  ```
+07:31
+  CEGEP · AMF-AO-Annexes 16 - Gabarits.pdf · 60 p · 26000 car
+  CEGEP · inscription AQPC.pdf · 2 p · 2582 car
+  CEGEP · programme_du_colloque_2016_de_laqpc.pdf · 66 p · 205021 car
+    PID            
+3011320       38:30
+manifeste ocrises 5 pages 292 car 506801 docs {'train': 3, 'val': 2, 'test': 0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 240; date '+%H:%M'; tail -3 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json')); print('manifeste ocrises', d['ocrises … [210 caractères tronqués]`
+
+  ```
+07:35
+  CEGEP · inscription AQPC.pdf · 2 p · 2582 car
+  CEGEP · programme_du_colloque_2016_de_laqpc.pdf · 66 p · 205021 car
+  CEGEP · Algorithms Illuminated (Part 2) Graph Al · 221 p · 342432 car
+    PID            
+3011320       42:41
+manifeste ocrises 5 pages 292 car 506801
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 240; date '+%H:%M'; tail -3 /tmp/ocr-cegep2.log; ps -p 3011320 -o pid,etime= 2>/dev/null || echo \"CEGEP 8 fini\"; python3 -c \"\nimport json\nd=json.load(open('reports/ocr-pdf-cegep.json')); print('manifeste ocrises', d['ocrises … [236 caractères tronqués]`

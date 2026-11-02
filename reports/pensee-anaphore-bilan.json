@@ -1,0 +1,24 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "109/109",
+ "mesures": {
+  "dernier_nom": 27,
+  "role": 23,
+  "hybride": 24,
+  "semantique": 23,
+  "meta": 25,
+  "cv5": 0.833,
+  "cv20": {
+   "moyenne": 0.8467,
+   "ecart_type": 0.051
+  },
+  "kappa_role_semantique": 1.0
+ },
+ "plafond": 27,
+ "limites": [
+  "30 liens",
+  "cas ambigus non arbitrés",
+  "neuronal bloqué"
+ ]
+}

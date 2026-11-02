@@ -18956,3 +18956,29 @@ porte-reparti-moteur 1 3
   ```
 
 - **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; awk '$2 != 0' /tmp/portes-fin/registre.txt; tail -4 /tmp/portes-fin.out", "description": "Read the final gates verdict"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1114]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1114", "timeout_ms": 600000, "wait": true}`
+
+  ```
+07:37
+porte-greffe 124 700
+porte-homeostasie 2 0
+porte-indice 124 700
+porte-melange 1 161
+porte-reparti-moteur 1 3
+  porte-tableaux         ✅                           0 s    ✅ la page vivante date du dernier commit (2026-11-02)
+  porte-tokenizer-kimi   ✅                           6 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                         104 s    ✅ PPL épinglées : reference 17.4702 · historique 30.4363 · topologie 30.4363 · relais 2 42.547
+  porte-trace            ✅                          29 s    ✅ la trace fausse est détectée et nommée
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1110 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c "✅" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt | head -6; tail -2 /tmp/portes-fin.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
