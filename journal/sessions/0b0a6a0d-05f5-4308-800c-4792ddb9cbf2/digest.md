@@ -15178,3 +15178,32 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-886", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-881 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for g in 1 2 3; do echo "-- E-g$g"; tail -1 work/n2k/E-g$g.log 2>/dev/null; done; ls work/n2k/E-g*.pt 2>/dev/null) finished [status: completed, exit code: 2]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E-g*.pt 2>/dev/null; for f in E-g1 E-g2 E-g3 M-g1 M-g2; do echo \"-- $f\"; tail -1 work/n2k/$f.log 2>/dev/null; done", "description": "Check the English and multilingual students"}`
+
+  ```
+21:00
+work/n2k/E-g1.pt
+work/n2k/E-g2.pt
+-- E-g1
+}
+-- E-g2
+}
+-- E-g3
+# init work/n2k/base-en.pt · manquants [] · graine 3 · décalage 20000038
+-- M-g1
+# init work/n2k/base-multi.pt · manquants ['embed_canal.weight'] · graine 1 · décalage 0
+-- M-g2
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; for g in 1 2; do ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2k/E-g$g.pt --decomposition --longueurs --corpus-dir data/wiki_en/propre --sortie work/n2k/eval-en-distill.json 2>&1 | gr … [79 caractères tronqués]`

@@ -17602,3 +17602,119 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"les 9 (**12,12 M** ; **8 Ko 0**) ; **PDF** (322 Mo) ; **A2.6/A8.3** (lot : lectures non divisées) ; en\",\n            \"l … [2263 caractères tronqués]`
+
+  ```
+T0 max : 3993 mots (budget 4 000)
+  revue de documentation · 408 fiche(s) · 508 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+refus/course
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at e2770e7aad56d01d586e58bd7b2da3c88281c36a but expected bcf6c281f8c2f681308921c3997ca40e2e83e3cf
+[master 530ac733] DONNÉES — L'OCR DES SCANS (tesseract 5.5.3) ET LES 7 496 DOCUMENTS LANCÉS
+ 10 files changed, 395 insertions(+), 17 deletions(-)
+ create mode 100644 tools/ocr_pdf.py
+commit OK
+530ac733 DONNÉES — L'OCR DES SCANS (tesseract 5.5.3) ET LES 7 496 DOCUMENTS LANCÉS
+=== etat
+  Biblio_large · 001.0 3dprintingandreprap.pdf · 134 p · 159776 car
+160K	data/corpus_ocr
+177M	data/corpus_pdf_documents
+  [en] 19400000 lus · 4966408 gardés · 18.91 G caractères
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 9 : OCR des scans et 7 496 documents lancés ; l'anglais à 76 %
+
+**Round 9/1000 — les documents et les scans entrent dans la chaîne ; l'anglais approche.** Commit `530ac733`.
+
+## L'OCR des scans
+
+`tools/ocr_pdf.py` (nouveau) applique le **tesseract 5.5.3** installé sans root (R4.4) aux PDF **sans couche texte** : `pdftoppm` rend les pages, `tesseract` les lit, le corpus est dédupliqué et séparé par document. Le **pilote de 20 documents** tourne ; le premier livre est passé : *3D Printing and RepRap*, **134 pages**, **159 776 caractères** (≈ 1 200 caractères/page). Les limites sont écrites : OCR **brut** (le prétraitement R4.4 — rotation, contraste, colonnes — n'est pas appliqué), **WER non mesurée** (pas de vérité terrain sur les scans réels), droits réservés.
+
+## Les documents
+
+`extrait_pdf.py` tourne sur les **7 496 PDF de `Documents`** (personnel, usage local, non diffusé) : **177 Mo** de texte déjà extraits. Le manifeste et la fiche suivront.
+
+## L'anglais
+
+**19,4 M pages lues** sur **25,6 M** (76 %), **4,97 M articles**, 18,91 G caractères. Il reste ~6 M pages ; le contrôle 8 Ko (le plus lourd) suivra, puis la **fiche et le catalogue des dix**.
+
+## La suite
+
+L'**anglais** et son contrôle → le **catalogue des dix** ; le **manifeste OCR** → sa fiche ; le **manifeste des Documents** → sa fiche (licences, natif/scanné) ; puis l'OCR des **159 scans** complets et la comparaison des genres. Le goal reste actif ; le prochain round ramasse l'anglais et l'OCR.
+
+### 👤 Utilisateur
+
+background job bash-880 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 55); do [ -f reports/ocr-pdf.json ] && break; sleep 15; done; echo "attente $((i*15))s"; tail -25 /tmp/ocr-pilote.log; echo "=== manifest"; python3 - <<'PY'
+import json,pathlib
+p=pathlib.Path('reports/ocr-pdf.json')
+if p.exists():
+    d=json.loads(p.read_text())
+    for k in ('pdfs','scannes','ocrises','pages_ocr','caracteres','mots_estimes','temps_s','documents','octets'):
+        print(k, ':', d.get(k))
+else: print('pas encore')
+PY
+du -sh data/corpus_ocr data/corpus_pdf_documents 2>/dev/null; tail -1 /tmp/run-texte-en.log | cut -c1-60) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-880", "timeout_ms": 60000}`
+
+  ```
+attente 825s
+  Biblio_large · 001.0 3dprintingandreprap.pdf · 134 p · 159776 car
+=== manifest
+pas encore
+160K	data/corpus_ocr
+177M	data/corpus_pdf_documents
+  [en] 19400000 lus · 4966408 gardés · 18.91 G caractères
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 9 (suite) : l'OCR et les documents tournent ; l'anglais à 76 %, le contrôle suivra
+
+**L'OCR des scans est en cours, pas fini.** Le pilote a passé le premier livre (*3D Printing and RepRap*, 134 pages, 159 776 caractères) ; les 20 documents prennent ~30-60 min (les livres scannés ont 20-50 pages chacun, le tesseract 1-3 s/page). Le manifeste `reports/ocr-pdf.json` n'est pas encore écrit — la fiche suivra.
+
+**Les documents avancent** : 177 Mo de texte extraits des 7 496 PDF de `Documents` (le manifeste à la fin du parcours).
+
+**L'anglais** : 19,4 M pages sur **25,6 M** (76 %), 4,97 M articles, 18,91 G caractères. À ~70 k pages/min, il finit vers **23 h** ; le contrôle 8 Ko (~35 min) suivra, puis la fiche et le catalogue des dix.
+
+**Le reste du plan** : le manifeste OCR → sa fiche (le débit, les caractères, un échantillon, les limites — OCR brut, WER non mesurée, droits réservés) ; le manifeste des Documents → sa fiche (licences, natif/scanné) ; puis l'OCR des **159 scans** complets et la comparaison des genres. Le goal reste actif ; le prochain round ramasse l'OCR, les Documents et l'anglais.
+
+
+## Tour 22
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 10/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; echo \"=== manifestes\"; ls -la reports/corpus-wiki-en-texte.json reports/ocr-pdf.json reports/corpus-pdf-documents.json 2>/dev/null; echo \"=== en\"; ps -eo pid,etime,cmd | grep \"corpus_wikipedia_texte.py --langue en\" … [566 caractères tronqués]`
+
+  ```
+21:00
+=== manifestes
+=== en
+1494795 02:29:51
+  [en] 19400000 lus · 4966408 gardés · 18.91 G caractères
+=== ocr
+1616198 15:14
+  Biblio_large · 001.0 3dprintingandreprap.pdf · 134 p · 159776 car
+=== documents
+1615747 16:12
+160K	data/corpus_ocr
+184M	data/corpus_pdf_documents
+19G	data/corpus_wiki_en_texte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 110); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 20; done; echo \"attente $((i*20))s\"; if [ -f reports/corpus-wiki-en-texte.json ]; then python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Pat … [800 caractères tronqués]`
+
+  ```
+started background job bash-883
+  ```
+

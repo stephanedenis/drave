@@ -1,0 +1,35 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "22/22",
+ "porte_minute_apprise": {
+  "politique": "PolitiqueApprise(200, graine 0)",
+  "porte": [
+   3,
+   3
+  ]
+ },
+ "resultat": {
+  "noeuds": 28,
+  "par_operateur": {
+   "pas": 13,
+   "saut": 10,
+   "sonde": 6
+  },
+  "cout": 62.0,
+  "appels": 7,
+  "but": true
+ },
+ "comparaison": {
+  "manhattan": {
+   "noeuds": 27,
+   "sonde": 5,
+   "cout": 57.0
+  }
+ },
+ "limites": [
+  "Q-learning tabulaire",
+  "transfert testé sur un seul changement",
+  "coût 5 déclaré"
+ ]
+}

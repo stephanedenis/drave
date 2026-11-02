@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
 | Durée | 28.4 h |
-| Tours | 21 |
-| Messages | 976 |
-| Appels d'outils | 957 |
+| Tours | 23 |
+| Messages | 986 |
+| Appels d'outils | 961 |
 | Fichiers touchés | 18 |
-| Commandes | 881 |
+| Commandes | 884 |
 | Sous-agents | 0 |
 | Commits | 59 |
 | Compactages de contexte | 2 |
@@ -69,6 +69,10 @@
 **Tour 20** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 **Tour 21** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
+
+**Tour 22** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 23** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1016,7 +1020,7 @@ L'**anglais** → le **catalogue des dix** ; l'**OCR des 159 scannés** du PDF (
 
 ### Tour 21 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Check English progress and repository state
 - bash — Count English pages and check OCR tools
@@ -1025,6 +1029,51 @@ L'**anglais** → le **catalogue des dix** ; l'**OCR des 159 scannés** du PDF (
 - bash — Write and launch scanned PDF OCR pilot
 - bash — Wait for OCR pilot results
 - bash — Commit OCR tool and documents launch
+- job_output
+
+**Synthèse produite :**
+
+⏵ Round 9 (suite) : l'OCR et les documents tournent ; l'anglais à 76 %, le contrôle suivra
+
+**L'OCR des scans est en cours, pas fini.** Le pilote a passé le premier livre (*3D Printing and RepRap*, 134 pages, 159 776 caractères) ; les 20 documents prennent ~30-60 min (les livres scannés ont 20-50 pages chacun, le tesseract 1-3 s/page). Le manifeste `reports/ocr-pdf.json` n'est pas encore écrit — la fiche suivra.
+
+**Les documents avancent** : 177 Mo de texte extraits des 7 496 PDF de `Documents` (le manifeste à la fin du parcours).
+
+**L'anglais** : 19,4 M pages sur **25,6 M** (76 %), 4,97 M articles, 18,91 G caractères. À ~70 k pages/min, il finit vers **23 h** ; le contrôle 8 Ko (~35 min) suivra, puis la fiche et le catalogue des dix.
+
+**Le reste du plan** : le manifeste OCR → sa fiche (le débit, les caractères, un échantillon, les limites — OCR brut, WER non mesurée, droits réservés) ; le manifeste des Documents → sa fiche (licences, natif/scanné) ; puis l'OCR des **159 scans** complets et la comparaison des genres. Le goal reste actif ; le prochain round ramasse l'OCR, les Documents et l'anglais.
+
+### Tour 22 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check English, OCR, and documents progress
+- bash — Wait for English manifest and launch check
+
+**Synthèse produite :**
+
+⏵ Round 10 : l'anglais à 19,4/25,6 M pages, le contrôle se lance dès le manifeste
+
+**Round 10/1000 — l'anglais est le dernier run ; le contrôle 8 Ko partira automatiquement.**
+
+\## L'anglais
+
+**19,4 M pages lues sur 25,6 M** (76 %), **4,97 M articles**, 18,91 G caractères. Le débit s'est redressé (~180 k pages/min) : le manifeste est attendu vers **21 h 35**. Un job de fond surveille le fichier et lance **le contrôle 8 Ko** dès qu'il apparaît (les deux unités + le XNLI anglais + le wikitext2) — c'est le dernier gros contrôle de la campagne.
+
+\## L'OCR et les documents
+
+- **L'OCR** : le premier livre est passé (*3D Printing and RepRap*, 134 pages, 159 776 caractères) ; la **détection des scannés** sur les 2 785 PDF (le `pdftotext` de deux pages par document) prend l'essentiel du temps ; les 20 documents du pilote suivent.
+- **Les documents** : **184 Mo** extraits des 7 496 PDF de `Documents` ; le manifeste à la fin du parcours.
+
+\## La suite
+
+Le **manifeste de l'anglais** → son contrôle → la **fiche et le catalogue des dix** (la table finale, les totaux, les fuites) ; les **manifestes OCR et Documents** → leurs fiches (les licences, le natif/scanné, l'OCR brut) ; puis les **159 scans** complets. Le goal reste actif ; le prochain round devrait ramasser l'anglais, l'OCR et les Documents.
+
+### Tour 23 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check English check, OCR, and documents
 
 ## 3. Travail accompli
 
@@ -1093,7 +1142,7 @@ L'**anglais** → le **catalogue des dix** ; l'**OCR des 159 scannés** du PDF (
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 841 autres
+- … et 844 autres
 
 ## 4. Mesures et résultats marquants
 

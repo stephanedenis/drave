@@ -9,8 +9,8 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 28.3 h |
 | Tours | 36 |
-| Messages | 669 |
-| Appels d'outils | 654 |
+| Messages | 670 |
+| Appels d'outils | 655 |
 | Fichiers touchés | 25 |
 | Commandes | 527 |
 | Sous-agents | 2 |
@@ -1928,7 +1928,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 
 ### Tour 36 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Ajouter la fenêtre temporelle et la tester
 - bash — Tester la fenêtre avec un budget plus grand
@@ -1936,6 +1936,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Écrire la fiche de la Q-table sur la porte minute
 - bash — Ajuster la date et passer les portes
 - bash — Committer la Q-table sur la porte minute
+- job_output
 
 ## 3. Travail accompli
 

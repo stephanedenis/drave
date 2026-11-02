@@ -642,6 +642,103 @@ LABYRINTHE_PORTE_MINUTE = Probleme(
 )
 
 
+# --------------------------------------------------------------------------- fenêtre temporelle
+
+def _etat_pw(x: int, y: int, t: int, parent: str | None = None,
+             profondeur: int = 0) -> Etat:
+    return Etat(f"w{x}:{y}:{t % 3}", parent, profondeur,
+                (Candidat("x", {"v": x}), Candidat("y", {"v": y}),
+                 Candidat("t", {"v": t % 3})))
+
+
+def _xy_pw(e: Etat) -> tuple[int, int]:
+    d = {c.id: c.corps["v"] for c in e.candidats}
+    return int(d["x"]), int(d["y"])
+
+
+def _t_pw(e: Etat) -> int:
+    return int(next(c.corps["v"] for c in e.candidats if c.id == "t"))
+
+
+def _open_pw(e: Etat) -> bool:
+    return _t_pw(e) == 0
+
+
+def _libre_pw(x: int, y: int, t: int) -> bool:
+    if not (0 <= x < 5 and 0 <= y < 5) or (x, y) in MURS_P:
+        return False
+    return (x, y) != (3, 3) or t % 3 == 0
+
+
+def _deplacer_pw(e: Etat, dx: int, dy: int, profondeur: int = 1) -> list[Etat]:
+    x, y, t = _xy_pw(e)[0], _xy_pw(e)[1], _t_pw(e)
+    nx, ny = x + dx, y + dy
+    if not _libre_pw(nx, ny, t):
+        return []
+    return [_etat_pw(nx, ny, t + 1, e.empreinte(), e.profondeur + profondeur)]
+
+
+def pas_pw(e: Etat, _p: dict | None = None) -> list[Etat]:
+    return [c for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)) for c in _deplacer_pw(e, dx, dy)]
+
+
+def saut_pw(e: Etat, _p: dict | None = None) -> list[Etat]:
+    return [c for dx, dy in ((2, 0), (-2, 0), (0, 2), (0, -2)) for c in _deplacer_pw(e, dx, dy, 2)]
+
+
+def attendre(e: Etat, _p: dict | None = None) -> list[Etat]:
+    x, y, t = _xy_pw(e)[0], _xy_pw(e)[1], _t_pw(e)
+    return [_etat_pw(x, y, t + 1, e.empreinte(), e.profondeur + 1)]
+
+
+def sonde_pw(e: Etat, _p: dict | None = None) -> list[Etat]:
+    p = POLITIQUE[0]
+    if p is None:
+        return []
+    direction = p.propose(e, P_BUT)
+    p.appels += 1
+    if not direction:
+        return []
+    x, y, t = _xy_pw(e)[0], _xy_pw(e)[1], _t_pw(e)
+    dx = {"droite": 1, "gauche": -1}.get(direction, 0)
+    dy = {"bas": 1, "haut": -1}.get(direction, 0)
+    nx, ny = x + dx, y + dy
+    if not _libre_pw(nx, ny, t):
+        return []
+    return [_etat_pw(nx, ny, t + 1, e.empreinte(), e.profondeur + 1)]
+
+
+def but_pw(e: Etat) -> bool:
+    return _xy_pw(e) == P_BUT
+
+
+def score_pw(e: Etat) -> float:
+    x, y = _xy_pw(e)
+    return 1.0 / (1.0 + abs(x - P_BUT[0]) + abs(y - P_BUT[1]))
+
+
+def heuristique_pw(e: Etat) -> float:
+    x, y = _xy_pw(e)
+    return -float(abs(x - P_BUT[0]) + abs(y - P_BUT[1]))
+
+
+REGISTRE_PW = Registre({
+    "pas": Operateur("pas", "symbolique", 1.0, pas_pw, "un pas ; le temps avance"),
+    "saut": Operateur("saut", "numérique", 2.0, saut_pw, "un saut ; le temps avance"),
+    "attendre": Operateur("attendre", "temporel", 1.0, attendre, "attendre le tour de la porte"),
+    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_pw, "la politique propose le pas"),
+})
+
+LABYRINTHE_PORTE_FENETRE = Probleme(
+    nom="labyrinthe_porte_fenetre",
+    initial=lambda: _etat_pw(0, 0, 0),
+    operateurs={n: o.applique for n, o in REGISTRE_PW.operateurs.items()},
+    but=but_pw,
+    heuristique=heuristique_pw,
+    score=score_pw,
+)
+
+
 class DRVM:
     """Le conteneur d'exécution : registre, politique, moteur, trace, bilan."""
 
@@ -686,4 +783,5 @@ __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "Politique
            "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise",
            "LABYRINTHE_PORTE", "REGISTRE_P", "LABYRINTHE_PORTE_STO", "REGISTRE_PSTO",
            "LABYRINTHE_PORTE_FERME", "REGISTRE_PF",
-           "LABYRINTHE_PORTE_MINUTE", "REGISTRE_PM"]
+           "LABYRINTHE_PORTE_MINUTE", "REGISTRE_PM",
+           "LABYRINTHE_PORTE_FENETRE", "REGISTRE_PW"]

@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-minute-apprise.md`](rapport-pensee-minute-apprise.md) | **B13** — la Q-table sur la porte minute : 28 nœuds/but, sonde 6, **22/22** |
 | [`rapport-pensee-minute.md`](rapport-pensee-minute.md) | **B13** — la porte à un tour : 27 nœuds/but, sonde 5, **21/21** |
 | [`rapport-pensee-ferme.md`](rapport-pensee-ferme.md) | **B13** — la porte qui se referme : 27 nœuds/but, sonde 5, coût 57, **20/20** |
 | [`rapport-pensee-sto-seule.md`](rapport-pensee-sto-seule.md) | **B13** — la politique seule sur le bruit : 8–10 pas, 1–3 essais, 15/15 buts, **19/19** |
