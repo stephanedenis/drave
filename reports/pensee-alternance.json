@@ -1,0 +1,29 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "58/58",
+ "alternance": "0,9 / 0,1 toutes les 1000",
+ "politique": {
+  "episodes": 8000,
+  "graine": 0,
+  "etats_q": 797,
+  "v_final": 0.14,
+  "runs": 20,
+  "buts": 20,
+  "pas_moyen": 8.0
+ },
+ "contraste": {
+  "rupture_unique": {
+   "v_final": 0.12,
+   "pas": 8.0
+  },
+  "sans_mise_a_jour": {
+   "buts": 0
+  }
+ },
+ "limites": [
+  "alternance régulière",
+  "période fixe",
+  "toy"
+ ]
+}
