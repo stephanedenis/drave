@@ -22162,3 +22162,122 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-oubli-total.md reports/pensee-oubli-total.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en- … [480 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-838]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-838", "timeout_ms": 600000, "wait": true}`
+
+  ```
+27 files changed, 954 insertions(+), 51 deletions(-)
+ create mode 100644 reports/pensee-oubli-total.json
+ create mode 100644 reports/rapport-pensee-oubli-total.md
+COMMIT OK 1
+28151434 B13 — L'OUBLI TOTAL : 0/20 BUTS, LA MÉMOIRE EST NÉCESSAIRE ; 73/73
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Oubli total : 0/20 buts, la mémoire est nécessaire ; 73/73
+
+Le round 74 du goal est livré : l'**oubli total** (Q vidée tous les 10 épisodes) **casse** la politique — la limite de la mémoire courte est trouvée. Commit **`28151434`**.
+
+## L'oubli total
+
+Même monde que T69 (look à l'épisode 3000), mais la Q-table est **vidée** tous les 10 épisodes.
+
+| oubli | buts | états-Q | pas |
+|---|---|---:|---:|
+| **total (× 0)** | **0/20** | 86 | 200 |
+| × 0,5 (T69) | 20/20 | 586 | 8,0 |
+| aucun (T67) | 20/20 | 530 | 8,0 |
+
+**Ce que ça dit** :
+
+- **La mémoire est nécessaire** : sans elle, la politique ne peut pas garder la porte ; elle tourne (0/20).
+- **La limite est trouvée** : entre × 0,5 (réussit) et × 0 (échoue), il y a un seuil ; ce banc ne le localise pas.
+- **86 états** : la politique n'a que les états des dix derniers épisodes ; trop peu.
+- **La négative est explicite** : 0/20, 200 pas, 86 états-Q.
+
+## L'état
+
+- Fiche : [`rapport-pensee-oubli-total.md`](../../reports/rapport-pensee-oubli-total.md) ; JSON [`pensee-oubli-total.json`](../../reports/pensee-oubli-total.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T70 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **73/73 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **472 fiches / 564 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Seuil d'oubli** : × 0,1, × 0,2 ; localiser la limite.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil d'oubli** (× 0,1 / × 0,2).
+
+
+## Tour 88
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 75/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [2449 caractères tronqués]`
+
+  ```
+28151434 B13 — L'OUBLI TOTAL : 0/20 BUTS, LA MÉMOIRE EST NÉCESSAIRE ; 73/73
+ok
+facteur 0.2 q 646 20 runs: 0 /20 pas moyen 200.0
+facteur 0.1 q 647 20 runs: 0 /20 pas moyen 200.0
+facteur 0.05 q 649 20 runs: 0 /20 pas moyen 200.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T70 l'oubli total                0/20 buts : la mémoire est nécessaire (négatif)\\n\",\n\"  T70 l'oubli total              … [1321 caractères tronqués]`
+
+  ```
+ok
+  ✅ T69 mémoire très courte oubli fort : 20/20 buts, v final 0.38, 8.0 pas
+  ✅ T70 oubli total        oubli total : 0/20 buts (86 états-Q), la mémoire est nécessaire
+  ✅ T71 seuil d'oubli      seuil : ×0,2 → 0/20 buts (×0,5 réussit), 646 états-Q
+  74/74 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-seuil.md <<'MD'\n# B13 — le seuil d'oubli : dans (0,2 ; 0,5]\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **74/74 portes** : le facteur d'oubli est b … [6649 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 473 fiche(s) · 565 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2816 mots > budget 2800 (T1)
+  en-cours · 1563 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-adaptive.md`](rapport-pensee-adaptive.md) | **B13** — la fenêtre adaptative : v final 0,8, 20/20, 8,0 pas, **55/ … [608 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 473 fiche(s) · 565 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-seuil.md reports/pensee-seuil.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md doc … [489 caractères tronqués]`

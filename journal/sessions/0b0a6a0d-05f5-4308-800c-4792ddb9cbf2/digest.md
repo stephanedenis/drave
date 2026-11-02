@@ -16719,3 +16719,10 @@ pas  2250 · seq 128 · perte 34.0654 · PPL 128/4 4.1596 · 175 s
   ```
 
 - **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/T-g3.pt work/n2k/M34-g1.pt 2>/dev/null; tail -1 work/n2j/T-g3.log 2>/dev/null; tail -1 work/n2k/M34-g1.log 2>/dev/null", "description": "Wait for T-g3 and the multilingual 34M student"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-985]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-985", "timeout_ms": 1200000, "wait": true}`
