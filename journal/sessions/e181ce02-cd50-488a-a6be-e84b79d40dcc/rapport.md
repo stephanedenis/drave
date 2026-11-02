@@ -7,10 +7,10 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 29.7 h |
+| Durée | 29.9 h |
 | Tours | 46 |
-| Messages | 787 |
-| Appels d'outils | 746 |
+| Messages | 788 |
+| Appels d'outils | 747 |
 | Fichiers touchés | 25 |
 | Commandes | 599 |
 | Sous-agents | 2 |
@@ -2458,7 +2458,7 @@ Le round 32 du goal est livré : les trois mesures « seule » rendent désormai
 
 ### Tour 46 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Ajouter la politique entraînée sur la porte stochastique
 - bash — Ajouter la porte T29 (curriculum open)

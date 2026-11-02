@@ -15690,3 +15690,42 @@ README.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > journal/2026-11-01/nuit-n2.md <<'EOF'\n# La nuit N2 — du corpus propre au corpus réel\n\n> Récit de la session `0b0a6a0d` (N2) dans la nuit du 1er au 2 novembre. Les fiches portent les\n> chiffres ; ce fichier dit l'enchaînemen … [3610 caractères tronqués]`
+
+  ```
+journal écrit
+[still running after 60000ms; moved to background job bash-913]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-913", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+87516306 JOURNAL — LA NUIT N2 : DU CORPUS PROPRE AU CORPUS RÉEL
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && free -g | head -2; ps -eo pid,etime,pcpu,rss,cmd | grep corpus_wikipedia_texte | grep -v grep | awk '{printf \"%s %s %s%% %sMo\\n\", $1, $2, $3, int($4/1024)}'; ls -la data/corpus_wiki_en_texte/ 2>/dev/null | head -3; date '+%H:%M'", … [59 caractères tronqués]`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          20          94           5          17         105
+total 21756800
+drwxr-xr-x. 1 stephane stephane          48  1 nov 18:30 .
+drwxr-xr-x. 1 stephane stephane        2420  1 nov 20:45 ..
+22:32
+  ```
+
+### 🤖 Assistant
+
+⏵ Mémoire libérée : je lance la loi d'échelle — capacité 45 M en français, 21,65 M en multilingue
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_fr/propre/train.txt --pas 20000 --seq 128 --lot 8 --lr 3e-4 -- … [806 caractères tronqués]`
+
+  ```
+45m 1690586
+multi21 1690587
+22:32
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2j/base-wiki-45m.log; tail -1 work/n2k/base-multi-21m.log; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Check the scaling-law trainings"}`
