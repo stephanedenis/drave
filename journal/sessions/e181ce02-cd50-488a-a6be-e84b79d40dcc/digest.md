@@ -20189,3 +20189,61 @@ ok
 EXIT=0
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-alternance.md <<'MD'\n# B13 — les ruptures répétées : 20/20, v = 0,14\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **58/58 portes** : la fiabilité ** … [6521 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 456 fiche(s) · 549 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 2 violation(s) :
+     · reports/README.md : 2817 mots > budget 2800 (T1)
+     · T0 : 4011 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"\"\"  [`pensee-audit`](../../reports/rapport-pensee-audit.md), [`pensee-ouverte`](../../reports/rapport-pensee-ouverte.md), … [2477 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 456 fiche(s) · 549 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · T0 : 4011 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 30,46p docs/pilotage/en-cours.md", "description": "Lire la ligne du Moteur B13"}`
+
+  ```
+- **Bloc** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
+  (9 niveaux) ; **398 langues à 0,9687** ; fiche et porte.
+- **Moteur B13** : **AC-3/alpha-bêta (8/8)**, **DRVF (9/9)**, **banc (10/10)**, **opérateurs 11/11**, **nécessaire 12/12**, **labyrinthe 13/13** ; fiches
+  [`pensee-porte-apprise`](../../reports/rapport-pensee-porte-apprise.md),
+  [`pensee-mlp`](../../reports/rapport-pensee-mlp.md), [`pensee-professeur`](../../reports/rapport-pensee-professeur.md),
+  [`pensee-sans-none`](../../reports/rapport-pensee-sans-none.md), [`pensee-correction`](../../reports/rapport-pensee-correction.md), [`pensee-audit`](../../reports/rapport-pensee-audit.md), [`pensee-ouverte`](../../reports/rapport-pensee-ouverte.md), [`pensee-graines`](../../reports/rapport-pensee-graines.md), [`pensee-mobile`](../../reports/rapport-pensee-mobile.md), [`pensee-mobile-graines`](../../reports/rapport-pensee-mobile-graines.md), [`pensee-bruit`](../../reports/rapport-pensee-bruit.md), [`pensee-bouge`](../../reports/rapport-pensee-bouge.md), [`pensee-bouge-graines`](../../reports/rapport-pensee-bouge-graines.md), [`pensee-periode`](../../reports/rapport-pensee-periode.md), [`p
+… [2192 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nstart=t.index('- **Moteur B13**')\nend=t.index('- **Gold 360**')\nnew='''- **Moteur B13** : **AC-3/alpha-bêta**, **DRVF**, **banc**,  … [756 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 456 fiche(s) · 549 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [300 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-alternance.md reports/pensee-alternance.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-co … [510 caractères tronqués]`

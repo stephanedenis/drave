@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 31.7 h |
+| Durée | 31.8 h |
 | Tours | 113 |
-| Messages | 1337 |
-| Appels d'outils | 1112 |
+| Messages | 1338 |
+| Appels d'outils | 1113 |
 | Fichiers touchés | 25 |
-| Commandes | 1025 |
+| Commandes | 1026 |
 | Sous-agents | 0 |
-| Commits | 71 |
+| Commits | 72 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3088,11 +3088,12 @@ J'ai écrit `reports/rapport-r1-preparation.md` (commit `df42425a`) : ce que R1.
 
 ### Tour 113 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Check OCR book 8 pages and manifest
 - bash — Read session state lines
 - bash — Update state OCR count and commit
+- bash — Trim state under T0 and commit
 
 **Synthèse produite :**
 
@@ -3172,7 +3173,7 @@ J'ai écrit `reports/rapport-r1-preparation.md` (commit `df42425a`) : ce que R1.
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 985 autres
+- … et 986 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3391,4 +3392,5 @@ J'ai écrit `reports/rapport-r1-preparation.md` (commit `df42425a`) : ce que R1.
 - JOURNAL — LE 2 NOVEMBRE : LIEN VERS L'INDEX DES SESSIONS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err; sleep 8; 
 - DONNÉES — LA PRÉPARATION R1.1/R1.2 EST FICÉE : CE QUI EST PRÊT, CE QUI ATTEND N2" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /t
 - ÉTAT — OCR 8 LIVRES, PROCHAINE ACTION : L'OCR COMPLET ET LA CLÔTURE" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err
+- ÉTAT — T0 REVENU SOUS 4 000" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err; sleep 8; fi done git reset -q; git log
 

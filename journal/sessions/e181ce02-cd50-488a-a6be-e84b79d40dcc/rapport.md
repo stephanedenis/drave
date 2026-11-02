@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 31.7 h |
 | Tours | 72 |
-| Messages | 1025 |
-| Appels d'outils | 932 |
+| Messages | 1027 |
+| Appels d'outils | 934 |
 | Fichiers touchés | 25 |
-| Commandes | 756 |
+| Commandes | 757 |
 | Sous-agents | 2 |
-| Commits | 90 |
+| Commits | 91 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3832,7 +3832,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round enchaîne les **ruptures
 
 ### Tour 72 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Tester les ruptures répétées
 - bash — Ajouter la porte T55 (ruptures répétées)
@@ -3841,6 +3841,8 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round enchaîne les **ruptures
 - bash — Lire la ligne du Moteur B13
 - bash — Compacter le bloc Moteur B13
 - bash — Passer toutes les portes
+- bash — Committer les ruptures répétées
+- job_output
 
 ## 3. Travail accompli
 
@@ -3921,7 +3923,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round enchaîne les **ruptures
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 716 autres
+- … et 717 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4159,4 +4161,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round enchaîne les **ruptures
 - B13 — LA DÉRIVE CONTINUE : 5 % → 50 %, v FINAL 0,5, 20/20, 8,6 PAS ; 56/56" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "DÉRIVE CONTINUE"; then echo 
 - B13 — LA RUPTURE : 90 % D'ERREUR, v FINAL 0,12, 20/20, 8,0 PAS ; 57/57" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA RUPTURE"; then echo "COMMIT O
 - B13 — LA RUPTURE : 90 % D'ERREUR, v FINAL 0,12, 20/20, 8,0 PAS ; 57/57" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA RUPTURE"; then echo "COMMIT O
+- B13 — LES RUPTURES RÉPÉTÉES : 0,9/0,1 ALTERNÉS, v FINAL 0,14, 20/20, 8,0 PAS ; 58/58" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RUPTURES RÉPÉTÉES"
 
