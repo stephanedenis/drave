@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 30.2 h |
 | Tours | 51 |
-| Messages | 831 |
-| Appels d'outils | 780 |
+| Messages | 840 |
+| Appels d'outils | 789 |
 | Fichiers touchés | 25 |
-| Commandes | 627 |
+| Commandes | 635 |
 | Sous-agents | 2 |
-| Commits | 67 |
+| Commits | 68 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2723,7 +2723,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 
 ### Tour 51 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Ajouter la porte qui bouge et la tester
 - bash — Ajouter la porte T34 (porte qui bouge)
@@ -2731,6 +2731,14 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Aligner les compteurs et passer les portes
 - bash — Committer la porte qui bouge
 - job_output
+- bash — Voir si la fiche bouge est référencée
+- bash — Trouver le hook et sa règle
+- bash — Lire le hook pre-commit
+- bash — Comprendre la vérification d'état
+- bash — Voir l'état de l'index et de en-cours
+- bash — Comparer les dates du commit et du système
+- bash — Faire une vraie modification d'état et vérifier le hook
+- bash — Committer la porte qui bouge (2e essai)
 
 ## 3. Travail accompli
 
@@ -2811,7 +2819,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 587 autres
+- … et 595 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3024,5 +3032,6 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LA PORTE MOBILE : 2 POSITIONS, A* 2/2, POLITIQUE SEULE BUT/8, 170 ÉTATS-Q ; 34/34" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE MOBILE"; 
 - B13 — LA PORTE MOBILE SUR 5 GRAINES : 5/5 D0, 5/5 D1, 147–184 ÉTATS-Q ; 35/35" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MOBILE SUR 5 GRAINES"; th
 - B13 — LE BRUIT VARIABLE : 50–95 %, 6/6 BUTS, L'EFFORT S'ADAPTE (3 → 1 ESSAI) ; 36/36" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BRUIT VARIABLE"; t
+- B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE QUI 
 - B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE QUI 
 

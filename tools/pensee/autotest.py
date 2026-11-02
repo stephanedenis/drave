@@ -568,6 +568,22 @@ def t33_bruit() -> tuple[bool, str]:
                                    f"buts (essais {[r[3] for r in res]})")
 
 
+def t34_bouge() -> tuple[bool, str]:
+    """La porte qui bouge : l'horloge dans l'état, A* et politique seule réussissent."""
+    from .moteur import AStar
+    from .operateurs import (DRVM, LABYRINTHE_PORTE_BOUGE, REGISTRE_PB,
+                             PolitiqueAppriseBouge, PolitiqueManhattan, seule_bouge)
+    from .store import Budget
+    d = DRVM(REGISTRE_PB, PolitiqueManhattan())
+    d.penser(LABYRINTHE_PORTE_BOUGE, AStar(), Budget(200))
+    b = d.instantane()
+    p = PolitiqueAppriseBouge(episodes=1000, graine=0)
+    p.apprendre()
+    ok, pas = seule_bouge(p)
+    return (b["but"] and ok), (f"porte bouge : A* {b['noeuds']} nœuds/but, "
+                               f"seule but/{pas} pas ({len(p.q)} états-Q)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -600,7 +616,8 @@ def main() -> int:
               ("T30 robustesse sur 5 graines", t30_graines()),
               ("T31 porte mobile", t31_mobile()),
               ("T32 porte mobile sur 5 graines", t32_mobile_graines()),
-              ("T33 bruit variable", t33_bruit())]
+              ("T33 bruit variable", t33_bruit()),
+              ("T34 porte qui bouge", t34_bouge())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

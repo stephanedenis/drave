@@ -15770,3 +15770,10 @@ pas 12350 · perte 2.1352 · PPL val 8.675 · 944 s
   ```
 
 - **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/base-wiki-45m.pt 2>/dev/null && echo OK45; tail -1 work/n2j/base-wiki-45m.log; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/base-wiki-45m. … [161 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-919]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-919", "timeout_ms": 600000, "wait": true}`

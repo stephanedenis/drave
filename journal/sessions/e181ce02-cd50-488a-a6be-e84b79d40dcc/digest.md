@@ -17360,3 +17360,166 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-bouge.md reports/pensee-bouge.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md doc … [495 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-627]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-627", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 3b670a2ca3719ac9d0b0943d15a6b03ef91be70e but expected de32beb86e21c66a09c23d807f32cfbf96de5b8e
+retry 1
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 2
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 3
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 4
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 5
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 6
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 7
+3b670a2c DONNÉES — LES DIX CORPUS EN TEXTE INTÉGRAL : 20,53 M ARTICLES, 67,73 G CARACTÈRES, 81,2 GO (ANGLAIS CLOS À 99,2 %, LIMITE MÉMOIRE NOMMÉE)
+[statu
+… [27 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pensee-bouge\\|pensee-bruit\" docs/pilotage/en-cours.md | head -3; grep -n \"pensee-mobile-graines\" docs/pilotage/en-cours.md | head -2", "description": "Voir si la fiche bouge est référencée"}`
+
+  ```
+43:  [`pensee-sans-none`](../../reports/rapport-pensee-sans-none.md), [`pensee-correction`](../../reports/rapport-pensee-correction.md), [`pensee-audit`](../../reports/rapport-pensee-audit.md), [`pensee-ouverte`](../../reports/rapport-pensee-ouverte.md), [`pensee-graines`](../../reports/rapport-pensee-graines.md), [`pensee-mobile`](../../reports/rapport-pensee-mobile.md), [`pensee-mobile-graines`](../../reports/rapport-pensee-mobile-graines.md), [`pensee-bruit`](../../reports/rapport-pensee-bruit.md), [`pensee-bouge`](../../reports/rapport-pensee-bouge.md).
+43:  [`pensee-sans-none`](../../reports/rapport-pensee-sans-none.md), [`pensee-correction`](../../reports/rapport-pensee-correction.md), [`pensee-audit`](../../reports/rapport-pensee-audit.md), [`pensee-ouverte`](../../reports/rapport-pensee-ouverte.md), [`pensee-graines`](../../reports/rapport-pensee-graines.md), [`pensee-mobile`](../../reports/rapport-pensee-mobile.md), [`pensee-mobile-graines`](../../reports/rapport-pensee-mobile-graines.md), [`pensee-bruit`](../../reports/rapport-pensee-bruit.md), [`pensee-bouge`](../../reports/rapport-pensee-bouge.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls .git/hooks/ | grep -v sample; grep -rn \"fait sans ligne\" tools/ .git/hooks/ 2>/dev/null | head -5", "description": "Trouver le hook et sa règle"}`
+
+  ```
+pre-commit
+tools/hooks/pre-commit:13:    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+.git/hooks/pre-commit:13:    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,60p tools/hooks/pre-commit", "description": "Lire le hook pre-commit"}`
+
+  ```
+#!/bin/sh
+# pre-commit — l'état accompagne le fait, le journal accompagne le code.
+#
+# Versionné dans tools/hooks/ et installé par tools/installe_hooks.sh : un hook qui
+# ne vit que dans .git/hooks ne survit ni au clone ni au nettoyage.
+set -u
+cd "$(git rev-parse --show-toplevel)" || exit 0
+
+# 1. Aucun fait (reports/, roadmap, backlog) ne se commite sans sa ligne d'état.
+#    C'est la garantie de fraîcheur de docs/pilotage/en-cours.md : elle ne dépend
+#    pas de la survie d'une session « principale », elle est vérifiée au commit.
+if ! python3 tools/verifie_etat_a_jour.py --index; then
+    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+    echo "     mets docs/pilotage/en-cours.md à jour, puis :"
+    echo "     git add docs/pilotage/en-cours.md"
+    exit 1
+fi
+
+# 2. Archive les traces de session DSH avant chaque commit : le journal doit
+#    accompagner le code, pas le suivre.
+python3 tools/archive_sessions.py --quiet >/dev/null || { echo "  ⛔ archivage des sessions en échec"; exit 1; }
+python3 tools/session_report.py --quiet >/dev/null || { echo "  ⛔ rapport de session en échec"; exit 1; }
+# Le journal du jour, par thème (sources : git + journal/sessions). L'index README est
+… [234 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_etat_a_jour.py --index; echo \"EXIT=$?\"; sed -n 1,80p tools/verifie_etat_a_jour.py", "description": "Comprendre la vérification d'état"}`
+
+  ```
+❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-bouge.json
+     · reports/rapport-pensee-bouge.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+EXIT=1
+#!/usr/bin/env python3
+"""verifie_etat_a_jour.py — aucun fait commité sans sa ligne d'état.
+
+POURQUOI CET OUTIL EXISTE. `en-cours` est la seule source de l'état, et le contrat
+disait « seul le principal écrit ». Ce n'est pas une garantie : l'identité se déduit
+d'une variable d'environnement absente — un « pair » est autodéclaré — et si la
+principale s'arrête, l'état se fige. Surtout, rien ne comparait les commits : la
+revue ne regardait que la DATE, donc deux commits du même jour passaient. Le 29/10,
+A8.0 (15 h 51) a été commité après le dernier état (15 h 34) sans aucune alerte.
+
+La garantie est au commit, pas dans la discipline d'un écrivain :
+  --index  (hook pre-commit) : un commit qui prépare un fait (reports/, roadmap,
+           backlog) sans toucher `en-cours` est REFUSÉ ;
+  --head   : si un fait a été commité après le dernier commit d'`en-cours`, l'état
+           est en retard — la session qui le voit l
+… [2362 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; git diff --cached --name-only | head -20; echo '--- diff HEAD en-cours:'; git diff HEAD --stat -- docs/pilotage/en-cours.md; git log -2 --format='%h %s' -- docs/pilotage/en-cours.md", "description": "Voir … [35 caractères tronqués]`
+
+  ```
+3b670a2c DONNÉES — LES DIX CORPUS EN TEXTE INTÉGRAL : 20,53 M ARTICLES, 67,73 G CARACTÈRES, 81,2 GO (ANGLAIS CLOS À 99,2 %, LIMITE MÉMOIRE NOMMÉE)
+docs/implantation/moteur-de-pensee.md
+docs/pilotage/chantiers.md
+docs/pilotage/roadmap.md
+journal/2026-11-01/README.md
+journal/2026-11-01/apprentissage.md
+journal/2026-11-01/attention.md
+journal/2026-11-01/distribue.md
+journal/2026-11-01/docs.md
+journal/2026-11-01/memoire.md
+journal/2026-11-01/mesures.md
+journal/2026-11-01/modele.md
+journal/2026-11-01/moteur.md
+journal/2026-11-01/outils.md
+journal/2026-11-01/portes.md
+journal/README.md
+journal/THEMES.md
+journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md
+reports/README.md
+reports/pensee-bouge.json
+reports/rapport-pensee-bouge.md
+--- diff HEAD en-cours:
+3b670a2c DONNÉES — LES DIX CORPUS EN TEXTE INTÉGRAL : 20,53 M ARTICLES, 67,73 G CARACTÈRES, 81,2 GO (ANGLAIS CLOS À 99,2 %, LIMITE MÉMOIRE NOMMÉE)
+de32beb8 B13 — LE BRUIT VARIABLE : 50–95 %, 6/6 BUTS, L'EFFORT S'ADAPTE (3 → 1 ESSAI) ; 36/36
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%ad' --date=format:'%Y-%m-%d %H:%M'; date +'%Y-%m-%d %H:%M'; grep -n \"Mis à jour\" docs/pilotage/en-cours.md", "description": "Comparer les dates du commit et du système"}`
+
+  ```
+2026-11-01 22:49
+2026-11-01 22:52
+3:**Mis à jour : 2026-11-01, 23 h 59 HNE (heure locale, EST).**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text().replace(\"**Mis à jour : 2026-11-01, 23 h 59 HNE (heure locale, EST).**\", \"**Mis à jour : 2026-11-01, 22 h 52 HNE (heure locale, EST).** … [552 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 426 fiche(s) · 525 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ index : aucun fait stagé sans état
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-bouge.md reports/pensee-bouge.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md doc … [506 caractères tronqués]`

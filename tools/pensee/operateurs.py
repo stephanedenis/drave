@@ -866,6 +866,166 @@ LABYRINTHE_PORTE_MINUTE = Probleme(
 )
 
 
+# --------------------------------------------------------------------------- porte qui bouge
+
+
+def _d_bouge(t: int) -> int:
+    return (t // 3) % 2
+
+
+def _etat_pb(x: int, y: int, open_: bool, t: int, parent: str | None = None,
+             profondeur: int = 0) -> Etat:
+    return Etat(f"b{x}:{y}:{int(open_)}:{t % 6}", parent, profondeur,
+                (Candidat("x", {"v": x}), Candidat("y", {"v": y}),
+                 Candidat("open", {"v": bool(open_)}), Candidat("t", {"v": int(t) % 6})))
+
+
+def _xy_pb(e: Etat) -> tuple[int, int]:
+    d = {c.id: c.corps["v"] for c in e.candidats}
+    return int(d["x"]), int(d["y"])
+
+
+def _open_pb(e: Etat) -> bool:
+    return bool(next(c.corps["v"] for c in e.candidats if c.id == "open"))
+
+
+def _t_pb(e: Etat) -> int:
+    return int(next(c.corps["v"] for c in e.candidats if c.id == "t"))
+
+
+def _libre_pb(x: int, y: int, open_: bool, t: int) -> bool:
+    d = _d_bouge(t)
+    if not (0 <= x < 5 and 0 <= y < 5):
+        return False
+    if (x, y) == PORTES_MOBILE[d]:
+        return open_
+    if (x, y) in PORTES_MOBILE:
+        return True
+    return (x, y) not in MURS_P
+
+
+def _deplacer_pb(e: Etat, dx: int, dy: int, profondeur: int = 1,
+                 open_: bool | None = None) -> list[Etat]:
+    x, y = _xy_pb(e)
+    t = _t_pb(e)
+    o = _open_pb(e) if open_ is None else open_
+    nx, ny = x + dx, y + dy
+    if not _libre_pb(nx, ny, o, t):
+        return []
+    return [_etat_pb(nx, ny, o, t + 1, e.empreinte(), e.profondeur + profondeur)]
+
+
+def pas_pb(e: Etat, _p: dict | None = None) -> list[Etat]:
+    return [c for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)) for c in _deplacer_pb(e, dx, dy)]
+
+
+def saut_pb(e: Etat, _p: dict | None = None) -> list[Etat]:
+    return [c for dx, dy in ((2, 0), (-2, 0), (0, 2), (0, -2)) for c in _deplacer_pb(e, dx, dy, 2)]
+
+
+def sonde_pb(e: Etat, _p: dict | None = None) -> list[Etat]:
+    p = POLITIQUE[0]
+    if p is None:
+        return []
+    direction = p.propose(e, P_BUT)
+    p.appels += 1
+    if not direction:
+        return []
+    x, y, t = _xy_pb(e)[0], _xy_pb(e)[1], _t_pb(e)
+    dx = {"droite": 1, "gauche": -1}.get(direction, 0)
+    dy = {"bas": 1, "haut": -1}.get(direction, 0)
+    open_ = _open_pb(e) or ((x + dx, y + dy) == PORTES_MOBILE[_d_bouge(t)])
+    return _deplacer_pb(e, dx, dy, open_=open_)
+
+
+def but_pb(e: Etat) -> bool:
+    return _xy_pb(e) == P_BUT
+
+
+def score_pb(e: Etat) -> float:
+    x, y = _xy_pb(e)
+    return 1.0 / (1.0 + abs(x - P_BUT[0]) + abs(y - P_BUT[1]))
+
+
+def heuristique_pb(e: Etat) -> float:
+    x, y = _xy_pb(e)
+    return -float(abs(x - P_BUT[0]) + abs(y - P_BUT[1]))
+
+
+REGISTRE_PB = Registre({
+    "pas": Operateur("pas", "symbolique", 1.0, pas_pb, "un pas ; la porte bouge"),
+    "saut": Operateur("saut", "numérique", 2.0, saut_pb, "un saut ; la porte bouge"),
+    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_pb, "la politique ouvre la porte du moment"),
+})
+
+LABYRINTHE_PORTE_BOUGE = Probleme(
+    nom="labyrinthe_porte_bouge",
+    initial=lambda: _etat_pb(0, 0, False, 0),
+    operateurs={n: o.applique for n, o in REGISTRE_PB.operateurs.items()},
+    but=but_pb,
+    heuristique=heuristique_pb,
+    score=score_pb,
+)
+
+
+class PolitiqueAppriseBouge(PolitiqueApprise):
+    """La Q-table de la porte **qui bouge** : l'état porte l'horloge (t % 6)."""
+
+    nom = "bouge"
+
+    def _cle(self, e: Etat) -> tuple:
+        return _xy_pb(e)[0], _xy_pb(e)[1], _open_pb(e), _t_pb(e)
+
+    def _pas(self, cle, action, ouvre: bool):
+        x, y, o, t = cle
+        d = _d_bouge(t)
+        dx = {"droite": 1, "gauche": -1}.get(action, 0)
+        dy = {"bas": 1, "haut": -1}.get(action, 0)
+        nx, ny = x + dx, y + dy
+        if ouvre and not o and (nx, ny) == PORTES_MOBILE[d]:
+            o = True
+        if not _libre_pb(nx, ny, o, t):
+            return cle, 0.0
+        gain = 0.1 if (o and not cle[2]) else -0.01
+        return (nx, ny, o, (t + 1) % 6), gain
+
+    def apprendre(self) -> None:
+        for _ in range(self.episodes):
+            cle = (0, 0, False, 0)
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain = self._pas(cle, a, True)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+    def propose(self, etat, but):
+        cle = self._cle(etat)
+        return max(self.ACTIONS, key=lambda a: self._q(cle, a))
+
+
+def seule_bouge(p: PolitiqueAppriseBouge, max_pas: int = 200) -> tuple[bool, int]:
+    """La politique seule sur la porte qui bouge."""
+    cle, pas = (0, 0, False, 0), 0
+    for _ in range(max_pas):
+        if cle[:2] == P_BUT:
+            return True, pas
+        e = _etat_pb(cle[0], cle[1], cle[2], cle[3])
+        a = p.propose(e, P_BUT)
+        if a is None:
+            return False, pas
+        cle, _ = p._pas(cle, a, True)
+        pas += 1
+    return False, pas
+
+
 # --------------------------------------------------------------------------- porte mobile
 
 
