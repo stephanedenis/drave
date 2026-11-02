@@ -931,6 +931,156 @@ def seule_aleatoire(p: PolitiqueAppriseAleatoire, max_pas: int = 200) -> tuple[b
     return False, pas
 
 
+def _obs_partielle(x: int, y: int, d: int) -> int:
+    """La porte n'est vue qu'à distance de Manhattan ≤ 1 ; sinon -1 (inconnue)."""
+    px, py = PORTES_MOBILE[d]
+    return d if abs(x - px) + abs(y - py) <= 1 else -1
+
+
+class PolitiqueApprisePartielle(PolitiqueApprise):
+    """La Q-table à **observation partielle** : le souvenir de la porte (`vu`) est dans l'état.
+
+    La politique croit la porte là où elle l'a vue ; le monde peut la faire sauter (20 %).
+    """
+
+    nom = "partielle"
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, p_saut: float = 0.2):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma, eps=eps)
+        self.p_saut = p_saut
+
+    def _cle(self, e: Etat) -> tuple:
+        return _xy_pmob(e)[0], _xy_pmob(e)[1], _open_pmob(e), _d_pmob(e)
+
+    def _pas(self, cle, action, ouvre: bool):
+        x, y, o, vu = cle
+        d = vu if vu >= 0 else 0          # la croyance : la dernière porte vue
+        dx = {"droite": 1, "gauche": -1}.get(action, 0)
+        dy = {"bas": 1, "haut": -1}.get(action, 0)
+        nx, ny = x + dx, y + dy
+        if ouvre and not o and (nx, ny) == PORTES_MOBILE[d]:
+            o = True
+        if not _libre_pmob(nx, ny, o, d):
+            return cle, 0.0
+        monde = 1 - d if self.rng.random() < self.p_saut else d
+        vu2 = _obs_partielle(nx, ny, monde)
+        gain = 0.1 if (o and not cle[2]) else -0.01
+        return (nx, ny, o, vu2), gain
+
+    def apprendre(self) -> None:
+        for _ in range(self.episodes):
+            cle = (0, 0, False, _obs_partielle(0, 0, 0))
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain = self._pas(cle, a, True)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+    def propose(self, etat, but):
+        cle = self._cle(etat)
+        return max(self.ACTIONS, key=lambda a: self._q(cle, a))
+
+
+def seule_partielle(p: PolitiqueApprisePartielle, max_pas: int = 200) -> tuple[bool, int]:
+    """La politique seule à observation partielle (le hasard et la mémoire sont dans `_pas`)."""
+    cle, pas = (0, 0, False, _obs_partielle(0, 0, 0)), 0
+    for _ in range(max_pas):
+        if cle[:2] == P_BUT:
+            return True, pas
+        e = _etat_pmob(cle[0], cle[1], cle[2], max(cle[3], 0))
+        a = p.propose(e, P_BUT)
+        if a is None:
+            return False, pas
+        cle, _ = p._pas(cle, a, True)
+        pas += 1
+    return False, pas
+
+
+def _belief_bucket(p: float) -> int:
+    return 0 if p < 0.25 else 1 if p < 0.5 else 2 if p < 0.75 else 3
+
+
+_BELIEF_P = (0.1, 0.35, 0.65, 0.9)
+
+
+class PolitiqueAppriseCroyance(PolitiqueApprise):
+    """La Q-table à **croyance** : l'état porte la probabilité que la porte soit en (3,3)."""
+
+    nom = "croyance"
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, p_saut: float = 0.2):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma, eps=eps)
+        self.p_saut = p_saut
+
+    def _cle(self, e: Etat) -> tuple:
+        return _xy_pmob(e)[0], _xy_pmob(e)[1], _open_pmob(e), _d_pmob(e)
+
+    def _pas(self, cle, action, ouvre: bool):
+        x, y, o, b = cle
+        d = 0 if b >= 2 else 1          # la porte la plus probable
+        dx = {"droite": 1, "gauche": -1}.get(action, 0)
+        dy = {"bas": 1, "haut": -1}.get(action, 0)
+        nx, ny = x + dx, y + dy
+        if ouvre and not o and (nx, ny) == PORTES_MOBILE[d]:
+            o = True
+        if not _libre_pmob(nx, ny, o, d):
+            return cle, 0.0
+        monde = 1 - d if self.rng.random() < self.p_saut else d
+        p0 = _BELIEF_P[b] * (1 - self.p_saut) + (1 - _BELIEF_P[b]) * self.p_saut
+        vu = _obs_partielle(nx, ny, monde)
+        if vu >= 0:
+            p0 = 1.0 if vu == 0 else 0.0
+        b2 = _belief_bucket(p0)
+        gain = 0.1 if (o and not cle[2]) else -0.01
+        return (nx, ny, o, b2), gain
+
+    def apprendre(self) -> None:
+        for _ in range(self.episodes):
+            cle = (0, 0, False, 2)       # au départ, on ne sait pas : p(0) ≈ 0,65
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain = self._pas(cle, a, True)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+    def propose(self, etat, but):
+        cle = self._cle(etat)
+        return max(self.ACTIONS, key=lambda a: self._q(cle, a))
+
+
+def seule_croyance(p: PolitiqueAppriseCroyance, max_pas: int = 200) -> tuple[bool, int]:
+    """La politique seule avec la croyance (le hasard et l'observation sont dans `_pas`)."""
+    cle, pas = (0, 0, False, 2), 0
+    for _ in range(max_pas):
+        if cle[:2] == P_BUT:
+            return True, pas
+        e = _etat_pmob(cle[0], cle[1], cle[2], 0 if cle[3] >= 2 else 1)
+        a = p.propose(e, P_BUT)
+        if a is None:
+            return False, pas
+        cle, _ = p._pas(cle, a, True)
+        pas += 1
+    return False, pas
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

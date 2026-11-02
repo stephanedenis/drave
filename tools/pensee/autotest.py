@@ -663,6 +663,34 @@ def t40_hasard() -> tuple[bool, str]:
         f"hasard 20–60 % : {res} (20 exécutions par taux)")
 
 
+def t41_partielle() -> tuple[bool, str]:
+    """L'observation partielle : 0/20 buts, la mémoire ne suffit pas (négatif)."""
+    from .operateurs import PolitiqueApprisePartielle, seule_partielle
+    p = PolitiqueApprisePartielle(episodes=2000, graine=0)
+    p.apprendre()
+    ok = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, _ = seule_partielle(p)
+        ok += b
+    return ok == 0, (f"partielle : {ok}/20 buts (la mémoire ne suffit pas), "
+                     f"{len(p.q)} états-Q")
+
+
+def t42_croyance() -> tuple[bool, str]:
+    """La croyance : 0/20 buts, la distribution seule ne suffit pas (négatif)."""
+    from .operateurs import PolitiqueAppriseCroyance, seule_croyance
+    p = PolitiqueAppriseCroyance(episodes=2000, graine=0)
+    p.apprendre()
+    ok = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, _ = seule_croyance(p)
+        ok += b
+    return ok == 0, (f"croyance : {ok}/20 buts ({len(p.q)} états-Q), "
+                     f"la croyance seule ne suffit pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -702,7 +730,9 @@ def main() -> int:
               ("T37 période qui change", t37_phase()),
               ("T38 phase sur 5 graines", t38_phase_graines()),
               ("T39 porte aléatoire", t39_aleatoire()),
-              ("T40 hasard variable", t40_hasard())]
+              ("T40 hasard variable", t40_hasard()),
+              ("T41 observation partielle", t41_partielle()),
+              ("T42 croyance", t42_croyance())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

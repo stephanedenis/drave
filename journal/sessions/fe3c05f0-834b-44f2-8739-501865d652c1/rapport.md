@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 30.7 h |
-| Tours | 72 |
-| Messages | 1176 |
-| Appels d'outils | 1039 |
-| Fichiers touchés | 20 |
-| Commandes | 958 |
+| Durée | 30.8 h |
+| Tours | 75 |
+| Messages | 1188 |
+| Appels d'outils | 1044 |
+| Fichiers touchés | 21 |
+| Commandes | 962 |
 | Sous-agents | 0 |
 | Commits | 63 |
 | Compactages de contexte | 3 |
@@ -171,6 +171,12 @@
 **Tour 71** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 72** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 73** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 74** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 75** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2209,7 +2215,70 @@ Côté documents, le train est à **776,7 Mo** (23 h 08, +6,5 Mo) et `pdftotext`
 
 **Synthèse produite :**
 
-⏵ Round 60 : je rédige la fiche du corpus Documents pendant que l'extraction tourne
+⏵ Round 60 : les deux fiches (Documents et OCR) sont écrites et committées
+
+**Round 60/1000 — deux livraisons documentaires, pendant que les extractions tournent.**
+
+J'ai écrit et committé les **deux fiches** des corpus en cours (commit `1da205d7`) :
+
+- **Documents** (`reports/rapport-corpus-documents.md`) : 7 496 PDF locaux, 6 000 lus, **2 992 documents**, **845,7 M caractères**, train 789,9 Mo / val 49,3 Mo / test 32,7 Mo ; le dispositif (`pdftotext`, délai 120 s), les licences **personnelles** (usage local, non diffusé), les limites (PDF lourds coupés, texte non natif), et la mesure 8 Ko à la clôture.
+- **OCR** (`reports/rapport-ocr-pdf.md`) : **6 livres**, **3,8 M caractères**, tesseract 5.5.3, 300 dpi, `fra+eng` ; la **WER n'est pas mesurée** (limite nommée), le texte est brut, les livres sont les premiers du fonds.
+
+Les deux fiches sont écrites **en cours** et portent la mention que leurs chiffres seront figés à la clôture — comme pour l'anglais, la mesure finale viendra avec le manifeste.
+
+**L'état** : les compteurs ont été resynchronisés (436 fichiers, 524 JSON à l'instant du commit), le T0 reste à 4 000 mots, la revue passe. Les dix corpus Wikipédia, le corpus PDF et l'A2.6/A8.3 restent mesurés et committés.
+
+**La suite** : les documents sont à 6 000/7 496 (789,9 Mo) et l'OCR à son 6e livre ; dès leurs manifestes, je fige les chiffres des deux fiches et je commite. Le goal reste actif.
+
+### Tour 73 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check documents and OCR status
+
+**Synthèse produite :**
+
+⏵ Round 61 : les documents accélèrent (799,7 Mo à 23 h 20, +10 Mo), l'OCR tient son 6e livre
+
+**Round 61/1000 — les documents reprennent un très bon débit.**
+
+- **Les documents** : 6 000 PDF sur 7 496 (2 992 gardés, **845,7 M caractères**), train **799,7 Mo** (23 h 20, **+10 Mo** depuis 23 h 12) — les PDF techniques s'enchaînent vite. Il reste ~1 500 PDF.
+- **L'OCR** : le 6e livre (*Dictionnaire des …*, 249 p, 1 202 859 caractères) est toujours en cours ; le train reste à **3,80 Mo** (23 h 09), écrit à la fin de chaque livre.
+- **Les manifestes** (`corpus-pdf-documents.json`, `ocr-pdf.json`) ne sont pas encore écrits.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; les deux fiches en cours (Documents, OCR) sont committées (`1da205d7`) ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les documents approchent de la fin à bon rythme ; l'OCR est le poste lent. Le goal reste actif ; le prochain round vérifie les manifestes et fige les chiffres des deux fiches.
+
+### Tour 74 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check documents and OCR status
+
+**Synthèse produite :**
+
+⏵ Round 62 : état inchangé, documents à 799,7 Mo, OCR à 3,8 Mo
+
+**Round 62/1000 — aucun changement mesurable.**
+
+- **Les documents** : 6 000 PDF sur 7 496 (2 992 gardés, **845,7 M caractères**), train **799,7 Mo** (23 h 20) — pas de nouvelle écriture depuis le dernier point.
+- **L'OCR** : le 6e livre (*Dictionnaire des …*, 249 p, 1 202 859 caractères) toujours en cours ; le train reste à **3,80 Mo** (23 h 09).
+- **Les manifestes** (`corpus-pdf-documents.json`, `ocr-pdf.json`) ne sont pas encore écrits.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; les fiches Documents et OCR sont committées (`1da205d7`) ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les documents avancent par à-coups (les PDF lourds), l'OCR est sur un livre long ; les deux sont sains. Le goal reste actif ; le prochain round vérifie les manifestes et fige les chiffres des deux fiches.
+
+### Tour 75 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check documents and OCR status
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_genres.py`
+- bash — Run genre comparison across corpora
+
+**Synthèse produite :**
+
+⏵ Round 63 : je change d'approche — j'écris l'outil de comparaison des genres pendant l'extraction
 
 ## 3. Travail accompli
 
@@ -2237,6 +2306,7 @@ Côté documents, le train est à **776,7 Mo** (23 h 08, +6,5 Mo) et `pdftotext`
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-r44-scans.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-documents.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-pdf.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/compare_genres.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -2280,7 +2350,7 @@ Côté documents, le train est à **776,7 Mo** (23 h 08, +6,5 Mo) et `pdftotext`
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 918 autres
+- … et 922 autres
 
 ## 4. Mesures et résultats marquants
 

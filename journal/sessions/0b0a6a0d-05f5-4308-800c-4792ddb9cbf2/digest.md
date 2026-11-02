@@ -16057,3 +16057,21 @@ roadmap ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nq = pathlib.Path('docs/pilotage/roadmap.md'); t = q.read_text()\nt = t.replace(\"La note de passage [N2 → R1](rapport-n2-fenetre-r1.md)\", \"La note de passage [N2 → R1](../../reports/rapport-n2- … [1309 caractères tronqués]`
+
+  ```
+ok
+     · compteurs : en-cours.md dit 532 JSON, le disque en a 533
+[still running after 60000ms; moved to background job bash-941]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-941", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 1da205d7dbfc877ac2dd49f11b3e756cfcbc8dac but expected e87a0a914897d5390f847a9ac7ce77d0c20b2298
+1da205d7 DONNÉES — FICHES DU CORPUS DOCUMENTS ET DU CORPUS OCR (EN COURS, CHIFFRES FIXÉS À LA CLÔTURE)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [947 caractères tronqués]`

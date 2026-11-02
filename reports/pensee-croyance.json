@@ -1,0 +1,35 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "45/45",
+ "p_saut": 0.2,
+ "croyance": [
+  0.1,
+  0.35,
+  0.65,
+  0.9
+ ],
+ "politique": {
+  "episodes": 2000,
+  "graine": 0,
+  "etats_q": 154,
+  "runs": 20,
+  "buts": 0,
+  "pas": 200
+ },
+ "contraste": {
+  "complete": {
+   "buts": 20,
+   "runs": 20,
+   "pas": 8
+  },
+  "memoire": {
+   "buts": 0
+  }
+ },
+ "limites": [
+  "croyance discrète",
+  "pas de valeur d'information",
+  "toy"
+ ]
+}
