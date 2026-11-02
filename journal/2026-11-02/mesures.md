@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (58)
+## Commits du jour (59)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -66,17 +66,18 @@
 | 07:52 | `65708212` | DONNÉES — LE CEGEP PASSE À 7 NOTES : 739 PAGES, 1,21 M CARACTÈRES (2 ALGORITHMS ILLUMINATED AJOUTÉS) | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
 | 09:23 | `b69064c5` | PILOTAGE — B13/L À JOUR : GOLD 342 (POS 0,7586 SUR 522), CORÉFÉRENCE 27/30 (CV 0,847), NEURONAL BLOQUÉ ; 110/110 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 10:02 | `e7977df1` | B13 — LE SEGMENTEUR : S F1 0,1722 / CHUNKER 0,1425, TÊTES INVERSÉES, COMPLÉMENTAIRES ; 113/113 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
+| 10:10 | `ca7c440d` | B13 — L'HYBRIDE FRONTIÈRES/TÊTES : 0,3732, LE CHUNKER GARDE LES TÊTES ; 114/114 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+20) |
 
 ## Chiffres du jour
 
-`0,1722` · `0,1425` · `0,7586` · `0,847` · `0,8467` · `0,051` · `6,8 %` · `0,6984` · `0,2677` · `0,7013` · `0,3060` · `0,6829`
+`0,3732` · `0,1722` · `0,1425` · `0,7586` · `0,847` · `0,8467` · `0,051` · `6,8 %` · `0,6984` · `0,2677` · `0,7013` · `0,3060`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 41.8 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 41.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 42.0 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 41.6 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 41.6 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
@@ -131,6 +132,7 @@
 - [reports/rapport-pensee-rapide.md](../../reports/rapport-pensee-rapide.md)
 - [reports/rapport-pensee-rare.md](../../reports/rapport-pensee-rare.md)
 - [reports/rapport-pensee-rupture.md](../../reports/rapport-pensee-rupture.md)
+- [reports/rapport-pensee-segmenteur-hybride.md](../../reports/rapport-pensee-segmenteur-hybride.md)
 - [reports/rapport-pensee-segmenteur.md](../../reports/rapport-pensee-segmenteur.md)
 - [reports/rapport-pensee-seuil-bas.md](../../reports/rapport-pensee-seuil-bas.md)
 - [reports/rapport-pensee-seuil-bord.md](../../reports/rapport-pensee-seuil-bord.md)

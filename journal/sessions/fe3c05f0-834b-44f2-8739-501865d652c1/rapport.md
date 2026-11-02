@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 41.6 h |
 | Tours | 386 |
-| Messages | 2327 |
-| Appels d'outils | 1544 |
+| Messages | 2328 |
+| Appels d'outils | 1545 |
 | Fichiers touchés | 26 |
-| Commandes | 1372 |
+| Commandes | 1373 |
 | Sous-agents | 0 |
 | Commits | 90 |
 | Compactages de contexte | 4 |
@@ -9111,7 +9111,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 
 ### Tour 386 — continue pendent 3h
 
-*7 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — First 5-min check of CEGEP lot 40
@@ -9119,10 +9119,11 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - job_output
 - bash — Check CEGEP lot 40 after 10 more minutes
 - bash — Check CEGEP lot 40 progress
+- bash — Check CEGEP lot 40 for 8th note
 
 **Synthèse produite :**
 
-⏵ Lot CEGEP : 6 scans en 42 min, le 7e (Algorithms Part 3) en cours
+⏵ Lot CEGEP : 7 scans (le redo est fini), la 8e note neuve approche
 
 ## 3. Travail accompli
 
@@ -9199,7 +9200,7 @@ Quand il finit, il faudra : relancer `verifie_contamination.py --taille-troncon 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1332 autres
+- … et 1333 autres
 
 ## 4. Mesures et résultats marquants
 

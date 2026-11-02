@@ -281,6 +281,7 @@ ré-exécution.
 | **T109** | la coréférence à 103 liens tient-elle ? | 86/103 pour les deux règles | la cible 100 est atteinte |
 | **T110** | quel segmenteur est le meilleur ? | F1 : S 0,1722, chunker 0,1425 ; tête inversée | les deux sont complémentaires |
 | **T111** | l'hybride frontières/têtes tient-il ? | tête F1 0,3732 (S 0,3552, chunker 0,4707) | le chunker garde les têtes |
+| **T112** | l'union des segmenteurs paie-t-elle ? | segments F1 0,2005 (S 0,1722) | le rappel paie |
 
 **T5/T6 sont les portes de la modularité et du coût** : AC-3, alpha-bêta et un encodeur RSN doivent
 se brancher sur le **même** contrat, sans modifier le moteur. Si l'un demande une exception, le
@@ -297,9 +298,9 @@ contrat est faux ; si le coût n'est pas dans la trace, l'anytime est décoratif
 | **4** | `tools/pensee/` (`moteur.py`) | BFS, greedy, A*, MCTS-lite | T2 |
 | **4 bis** | `tools/pensee/` (`csp.py`, `jeux.py`) | AC-3, alpha-bêta, minimax | T5, T6 |
 | **4 ter** | `tools/pensee/` (`taquin.py`, `banc.py`) | taquin 3×3, AUC/regret, aléatoire | T7 |
-| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`, `audit.py`, `graines.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction, audit, curriculum, graines, mobile, bruit variable, porte qui bouge, période, phase, aléatoire, hasard, partielle, croyance, curiosité, observatrice, bruitée, votante, trois looks, bayésien, dérive, adaptative, glisse, rupture, alternance, chaotique, fréquent, rapide, limite, hasard2, intra, asym, rare, très rare, ultra-rare, un look, look tardif, oubli, oubli fort, oubli total, seuil, seuil fin, seuil graines, bord, seuil bas, courbe, vérité, concurrentes, phase dans l'état, phase devinée, vote, cycle, courbe20, bord fin, gold 200, sous-ensembles, complexes, 20, 50, 100 complexes, discours, anaphore, pièges, corrigée, objets, chaînes, rôles, hybride, sémantique, plafond, kappa, méta, pondéré, CV, CV graines, bilan anaphore, gold complet, coréférence 68, 103, segmenteur, hybride | T8–T111 |
+| **4 quater** | `tools/pensee/` (`operateurs.py`, `courbe.py`, `audit.py`, `graines.py`) | genres, politiques, DRVM, cadenas, labyrinthe, porte, Q-learning, courbe, politique seule, bruit, portes, transfert, minute, shaping, réseau, MLP, professeur, sans None, correction, audit, curriculum, graines, mobile, bruit variable, porte qui bouge, période, phase, aléatoire, hasard, partielle, croyance, curiosité, observatrice, bruitée, votante, trois looks, bayésien, dérive, adaptative, glisse, rupture, alternance, chaotique, fréquent, rapide, limite, hasard2, intra, asym, rare, très rare, ultra-rare, un look, look tardif, oubli, oubli fort, oubli total, seuil, seuil fin, seuil graines, bord, seuil bas, courbe, vérité, concurrentes, phase dans l'état, phase devinée, vote, cycle, courbe20, bord fin, gold 200, sous-ensembles, complexes, 20, 50, 100 complexes, discours, anaphore, pièges, corrigée, objets, chaînes, rôles, hybride, sémantique, plafond, kappa, méta, pondéré, CV, CV graines, bilan anaphore, gold complet, coréférence 68, 103, segmenteur, hybride, union | T8–T112 |
 | **5** | `tools/pensee/` (`trace.py`) | DRVF `thought`, rejeu, diff | T1, T6 |
-| **6** | `tools/pensee/autotest.py` | T0–T111, contrôles négatifs | toutes |
+| **6** | `tools/pensee/autotest.py` | T0–T112, contrôles négatifs | toutes |
 
 **Le corpus v0** : un jeu de petits graphes (morpion, taquin 3×3, un CSP jouet) et un jeu de
 RSN-visuelles déjà produit par N1. Pas de GPU ; le CPU suffit pour 10³–10⁴ nœuds.

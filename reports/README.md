@@ -15,9 +15,9 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-segmenteur-union.md`](rapport-pensee-segmenteur-union.md) | **B13** — l'union des segmenteurs : F1 0,2005, le rappel paie, **115/115** |
 | [`rapport-pensee-segmenteur-hybride.md`](rapport-pensee-segmenteur-hybride.md) | **B13** — l'hybride frontières/têtes : 0,3732, le chunker garde les têtes, **114/114** |
 | [`rapport-pensee-anaphore-103.md`](rapport-pensee-anaphore-103.md) | **B13** — la coréférence à 103 liens : 86/103, cible 100 atteinte, **112/112** |
-| [`rapport-pensee-anaphore-68.md`](rapport-pensee-anaphore-68.md) | **B13** — la coréférence à 68 liens : rôle 52, dernier nom 51, **111/111** |
 | [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |
 | [`rapport-pensee-anaphore-bilan.md`](rapport-pensee-anaphore-bilan.md) | **B13** — le bilan de l'anaphore : 27/30, CV 0,847, huit mesures, **109/109** |
 | [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, **87/87** |

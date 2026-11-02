@@ -1711,6 +1711,26 @@ def t111_hybride_seg() -> tuple[bool, str]:
         f"hybride : tête F1 {f1} (S 0,3552, chunker 0,4707)")
 
 
+def t112_union() -> tuple[bool, str]:
+    """L'union des segmenteurs : segments F1 0,2005 (S 0,1722), tête 0,4662."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, _seg, _tete
+    ph = charger()
+    h1 = bl.Heuristique()
+    h2 = bl.Heuristique()
+    h2.segmenter_s = False
+    tp = fp = fn = 0
+    for phrase in ph:
+        a1 = h1.analyser(phrase["texte"], phrase["langue"])
+        a2 = h2.analyser(phrase["texte"], phrase["langue"])
+        gold = {(s["type"], s["debut"], s["fin"]) for s in phrase["segments"]}
+        pred = _seg(a1) | _seg(a2)
+        tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
+    p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
+    f1 = round(2 * p * r / max(1e-9, p + r), 4)
+    return abs(f1 - 0.2005) < 0.001, f"union : segments F1 {f1} (S 0,1722)"
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1821,7 +1841,8 @@ def main() -> int:
               ("T108 coréférence 68", t108_anaphore_68()),
               ("T109 coréférence 103", t109_anaphore_103()),
               ("T110 segmenteur", t110_segmenteur()),
-              ("T111 hybride segmenteur", t111_hybride_seg())]
+              ("T111 hybride segmenteur", t111_hybride_seg()),
+              ("T112 union segmenteurs", t112_union())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

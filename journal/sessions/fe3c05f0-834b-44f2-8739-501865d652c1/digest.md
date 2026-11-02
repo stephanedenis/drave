@@ -35165,3 +35165,20 @@ wchar: 478551897
 ⏵ Lot CEGEP : 6 scans en 42 min, le 7e (Algorithms Part 3) en cours
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 570; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -2 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2", "descripti … [118 caractères tronqués]`
+
+  ```
+10:11
+7
+  CEGEP · Algorithms Illuminated (Part 2) Graph Al · 221 p · 342432 car
+  CEGEP · Algorithms Illuminated (Part 3) Greedy A · 226 p · 359423 car
+    PID            
+3445044       52:02
+rchar: 7477739413
+wchar: 569653882
+  ```
+
+### 🤖 Assistant
+
+⏵ Lot CEGEP : 7 scans (le redo est fini), la 8e note neuve approche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 570; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-lot40.log 2>/dev/null; tail -3 /tmp/ocr-cegep-lot40.log; ps -p 3445044 -o pid,etime= 2>/dev/null || echo \"lot40 fini\"; cat /proc/3445044/io 2>/dev/null | head -2", "descripti … [122 caractères tronqués]`

@@ -20110,3 +20110,42 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1167", "timeout_ms": 600000, "wait": true}`
+
+  ```
+10:14
+brut 1048 Mo
+propre 924 Mo (88.2 %)
+3453309       34:35  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 work/n2w/deduit_leger.py > work/n2w/deduit_leger.log 2>&1
+total 902120
+drwxr-xr-x. 1 stephane stephane        48  2 nov 10:03 .
+drwxr-xr-x. 1 stephane stephane        28  2 nov 10:03 ..
+-rw-r--r--. 1 stephane stephane  46186496  2 nov 10:03 test.txt
+-rw-r--r--. 1 stephane stephane 831397620  2 nov 10:03 train.txt
+-rw-r--r--. 1 stephane stephane  46186496  2 nov 10:03 val.txt
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash work/n2w/pipeline_big.sh > work/n2w/pipeline_big.out 2>&1 & echo \"pipeline $!\"; sleep 60; tail -2 work/n2w/canal_big.log 2>/dev/null; ps -eo pid,etime,pcpu,rss,cmd | grep -E \"canal_structure|entrainer_native\" | grep -v … [137 caractères tronqués]`
+
+  ```
+pipeline 3469599
+[still running after 60000ms; moved to background job bash-1168]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1168", "timeout_ms": 300000, "wait": true}`
+
+  ```
+3469602 01:00 99.6% 3151Mo
+10:15
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/canal_big.log 2>/dev/null; ls -la data/wiki_big/propre/*.canal 2>/dev/null; cat reports/corpus-wiki-big-propre.json 2>/dev/null | head -12; ps -eo pid,etime,pcpu,cmd | grep -E \"canal_struct … [115 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1169]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1169", "timeout_ms": 900000, "wait": true}`

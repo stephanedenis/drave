@@ -28808,3 +28808,107 @@ timeout 2400 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-segmenteur-hybride.md reports/pensee-segmenteur-hybride.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs … [500 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1103]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1103", "timeout_ms": 600000, "wait": true}`
+
+  ```
+23 files changed, 351 insertions(+), 60 deletions(-)
+ create mode 100644 reports/pensee-segmenteur-hybride.json
+ create mode 100644 reports/rapport-pensee-segmenteur-hybride.md
+COMMIT OK 1
+ca7c440d B13 — L'HYBRIDE FRONTIÈRES/TÊTES : 0,3732, LE CHUNKER GARDE LES TÊTES ; 114/114
+lun 02 nov 2026 10:11:41 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Hybride frontières/têtes : 0,3732, le chunker garde les têtes ; 114/114
+
+Le round 115 est livré : l'**hybride** (frontières du S, tête du chunker à l'intérieur) ne bat pas le chunker seul — le vrai levier est le **rappel**. Commit **`ca7c440d`**.
+
+## Les têtes
+
+| segmenteur | précision | rappel | **F1** |
+|---|---:|---:|---:|
+| S générateur | 0,5000 | 0,2754 | 0,3552 |
+| **chunker simple** | **0,8588** | **0,3242** | **0,4707** |
+| hybride | 0,5255 | 0,2894 | 0,3732 |
+
+**Ce que ça dit** :
+
+- **Le chunker a la précision** (0,8588) : quand il place une tête, il a raison 6 fois sur 7 ; son rappel est faible (0,3242) — il manque des segments.
+- **L'hybride n'améliore pas** : prendre la tête du chunker **à l'intérieur** du segment du S ne récupère que les segments communs ; le F1 (0,3732) reste sous le chunker.
+- **La vraie piste** est **le rappel** : garder les têtes du chunker et **compléter les segments manquants** — pas fusionner les deux listes.
+- **La négative est explicite** : 0,3732 < 0,4707.
+
+## L'état
+
+- Fiche : [`rapport-pensee-segmenteur-hybride.md`](../../reports/rapport-pensee-segmenteur-hybride.md) ; JSON [`pensee-segmenteur-hybride.json`](../../reports/pensee-segmenteur-hybride.json) ; T111 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **114/114 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **521 fiches / 609 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 1 628 mots, T0 dans le budget.
+- L'horloge réelle est **10 h 11 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+## La suite
+
+1. **Le rappel du chunker** : compléter les segments manquants (le S en fournit les bornes).
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **le rappel du chunker** — la seule voie vers un vrai gain de syntagme.
+
+
+## Tour 130
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 116/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, _seg, _tete\nph=charger()\nh1=bl.Heuristique(); h2=bl.Heuristique(); h2.segmenter_ … [911 caractères tronqués]`
+
+  ```
+S P 0.2424 R 0.1335 F1 0.1722
+chunker P 0.26 R 0.0981 F1 0.1425
+union_seg P 0.2328 R 0.1761 F1 0.2005
+union_tete P 0.5646 R 0.3971 F1 0.4662
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T111 l'hybride frontières/têtes    tête F1 0,3732 (S 0,3552, chunker 0,4707)\\n\",\n\"  T111 l'hybride frontières/têtes    … [6831 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 522 fiche(s) · 610 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2813 mots > budget 2800 (T1)
+  en-cours · 1607 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-anaphore-68.md`](rapport-pensee-anaphore-68.md) | **B13** — la coréférence à 68 liens : rôle 52, dernier nom 51, … [604 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 2400 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/autotest.py reports/rapport-pensee-segmenteur-union.md reports/pensee-segmenteur-union.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pil … [490 caractères tronqués]`
