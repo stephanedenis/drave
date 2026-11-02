@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (39)
+## Commits du jour (40)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -47,22 +47,24 @@
 | 04:58 | `c5ab1fa3` | B13 — LES 100 PHRASES COMPLEXES : POS 0,6984, SYNTAGME 0,2677, GOLD 300 ; 93/93 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+25) |
 | 05:10 | `15f2c8f6` | DONNÉES — L'OCR DES 20 LIVRES EST CLOS : 7 381 PAGES, 15,36 M CARACTÈRES, 8 KO 0 (VAL 115, ÉVAL 0/40) | `en-cours.md`, `plan-travail.md`, `roadmap.md` (+22) |
 | 05:12 | `1030600e` | B13 — LE DISCOURS : ACTE 0,9, NÉGATION 1,0, MODALITÉ 0,9, GOLD 320 ; 94/94 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+26) |
+| 05:25 | `166896b4` | GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M) | `en-cours.md`, `README.md`, `distribue.md` (+11) |
 
 ## Chiffres du jour
 
-`0,6984` · `0,2677` · `0,7013` · `0,3060` · `0,6829` · `0,2963` · `0,6471` · `0,4828` · `0,8214` · `0,7738` · `20 %` · `100 %`
+`6,8 %` · `0,6984` · `0,2677` · `0,7013` · `0,3060` · `0,6829` · `0,2963` · `0,6471` · `0,4828` · `0,8214` · `0,7738` · `20 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 37.1 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 36.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 36.8 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 36.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 36.9 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/README.md](../../reports/README.md)
+- [reports/rapport-genres.md](../../reports/rapport-genres.md)
 - [reports/rapport-n2-anglais-34m.md](../../reports/rapport-n2-anglais-34m.md)
 - [reports/rapport-n2-canal-34m.md](../../reports/rapport-n2-canal-34m.md)
 - [reports/rapport-n2-canal-distille.md](../../reports/rapport-n2-canal-distille.md)

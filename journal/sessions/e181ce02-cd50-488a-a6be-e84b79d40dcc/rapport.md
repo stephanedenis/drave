@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 36.7 h |
+| Durée | 36.8 h |
 | Tours | 110 |
-| Messages | 1398 |
-| Appels d'outils | 1225 |
+| Messages | 1401 |
+| Appels d'outils | 1228 |
 | Fichiers touchés | 25 |
-| Commandes | 997 |
+| Commandes | 999 |
 | Sous-agents | 2 |
-| Commits | 141 |
+| Commits | 143 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -5852,11 +5852,14 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute les **cas pièges
 
 ### Tour 110 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Ajouter 8 cas pièges d'anaphore et mesurer
 - bash — Écrire la fiche des pièges d'anaphore
 - bash — Trim README et passer les portes
+- bash — Committer les pièges d'anaphore
+- bash — Committer les pièges d'anaphore (2e essai)
+- job_output
 
 ## 3. Travail accompli
 
@@ -5937,7 +5940,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute les **cas pièges
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 957 autres
+- … et 959 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6226,4 +6229,6 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute les **cas pièges
 - B13 — LES 100 PHRASES COMPLEXES : POS 0,6984, SYNTAGME 0,2677, GOLD 300 ; 93/93" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "100 PHRASES COMPLEXES";
 - B13 — LE DISCOURS : ACTE 0,9, NÉGATION 1,0, MODALITÉ 0,9, GOLD 320 ; 94/94" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LE DISCOURS"; then echo "COM
 - B13 — L'ANAPHORE : 4/4 LIENS JUSTES, PREMIÈRE MESURE DE CORÉFÉRENCE ; 95/95" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "L'ANAPHORE"; then echo "COM
+- B13 — LES PIÈGES D'ANAPHORE : 10/12, LE PP LOCATIF ÉCHOUE, GOLD 328 ; 96/96" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PIÈGES D'ANAPHORE"; then ec
+- B13 — LES PIÈGES D'ANAPHORE : 10/12, LE PP LOCATIF ÉCHOUE, GOLD 328 ; 96/96" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PIÈGES D'ANAPHORE"; then ec
 

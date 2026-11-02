@@ -21848,6 +21848,751 @@
     "modalite": true
    },
    "source": "reel"
+  },
+  {
+   "id": "r321",
+   "langue": "fr",
+   "texte": "Le chat voit le chien ; il dort.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chat",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 7
+    },
+    {
+     "texte": "voit",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 13,
+     "fin": 15
+    },
+    {
+     "texte": "chien",
+     "pos": "NOUN",
+     "debut": 16,
+     "fin": 21
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "texte": "dort",
+     "pos": "VERB",
+     "debut": 27,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chat",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "voit",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "type": "GN",
+     "texte": "le chien",
+     "role": "patient",
+     "debut": 13,
+     "fin": 21
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "type": "GV",
+     "texte": "dort",
+     "role": "prédicat",
+     "debut": 27,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "il": "chien"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r322",
+   "langue": "fr",
+   "texte": "Le chien voit le chat ; il dort.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "chien",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "voit",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "texte": "le",
+     "pos": "DET",
+     "debut": 14,
+     "fin": 16
+    },
+    {
+     "texte": "chat",
+     "pos": "NOUN",
+     "debut": 17,
+     "fin": 21
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "texte": "dort",
+     "pos": "VERB",
+     "debut": 27,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le chien",
+     "role": "agent",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "voit",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "le chat",
+     "role": "patient",
+     "debut": 14,
+     "fin": 21
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 24,
+     "fin": 26
+    },
+    {
+     "type": "GV",
+     "texte": "dort",
+     "role": "prédicat",
+     "debut": 27,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "il": "chat"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r323",
+   "langue": "fr",
+   "texte": "Marie appelle Sophie ; elle répond.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "appelle",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 13
+    },
+    {
+     "texte": "Sophie",
+     "pos": "NOUN",
+     "debut": 14,
+     "fin": 20
+    },
+    {
+     "texte": "elle",
+     "pos": "PRON",
+     "debut": 23,
+     "fin": 27
+    },
+    {
+     "texte": "répond",
+     "pos": "VERB",
+     "debut": 28,
+     "fin": 34
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "appelle",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 13
+    },
+    {
+     "type": "GN",
+     "texte": "Sophie",
+     "role": "patient",
+     "debut": 14,
+     "fin": 20
+    },
+    {
+     "type": "GN",
+     "texte": "elle",
+     "role": "agent",
+     "debut": 23,
+     "fin": 27
+    },
+    {
+     "type": "GV",
+     "texte": "répond",
+     "role": "prédicat",
+     "debut": 28,
+     "fin": 34
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "elle": "sophie"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r324",
+   "langue": "fr",
+   "texte": "Le livre est sur la table ; il est rouge.",
+   "mots": [
+    {
+     "texte": "Le",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 2
+    },
+    {
+     "texte": "livre",
+     "pos": "NOUN",
+     "debut": 3,
+     "fin": 8
+    },
+    {
+     "texte": "est",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "texte": "sur",
+     "pos": "PREP",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "texte": "la",
+     "pos": "DET",
+     "debut": 17,
+     "fin": 19
+    },
+    {
+     "texte": "table",
+     "pos": "NOUN",
+     "debut": 20,
+     "fin": 25
+    },
+    {
+     "texte": "il",
+     "pos": "PRON",
+     "debut": 28,
+     "fin": 30
+    },
+    {
+     "texte": "est",
+     "pos": "AUX",
+     "debut": 31,
+     "fin": 34
+    },
+    {
+     "texte": "rouge",
+     "pos": "ADJ",
+     "debut": 35,
+     "fin": 40
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Le livre",
+     "role": "patient",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "est",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 12
+    },
+    {
+     "type": "GP",
+     "texte": "sur la table",
+     "role": "lieu",
+     "debut": 13,
+     "fin": 25
+    },
+    {
+     "type": "GN",
+     "texte": "il",
+     "role": "agent",
+     "debut": 28,
+     "fin": 30
+    },
+    {
+     "type": "GV",
+     "texte": "est",
+     "role": "prédicat",
+     "debut": 31,
+     "fin": 34
+    },
+    {
+     "type": "ADJ",
+     "texte": "rouge",
+     "role": "attribut",
+     "debut": 35,
+     "fin": 40
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "il": "livre"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r325",
+   "langue": "fr",
+   "texte": "Paul et Marie lisent ; ils rient.",
+   "mots": [
+    {
+     "texte": "Paul",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 4
+    },
+    {
+     "texte": "et",
+     "pos": "CONJ",
+     "debut": 5,
+     "fin": 7
+    },
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 8,
+     "fin": 13
+    },
+    {
+     "texte": "lisent",
+     "pos": "VERB",
+     "debut": 14,
+     "fin": 20
+    },
+    {
+     "texte": "ils",
+     "pos": "PRON",
+     "debut": 23,
+     "fin": 26
+    },
+    {
+     "texte": "rient",
+     "pos": "VERB",
+     "debut": 27,
+     "fin": 32
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Paul et Marie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 13
+    },
+    {
+     "type": "GV",
+     "texte": "lisent",
+     "role": "prédicat",
+     "debut": 14,
+     "fin": 20
+    },
+    {
+     "type": "GN",
+     "texte": "ils",
+     "role": "agent",
+     "debut": 23,
+     "fin": 26
+    },
+    {
+     "type": "GV",
+     "texte": "rient",
+     "role": "prédicat",
+     "debut": 27,
+     "fin": 32
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "ils": "marie"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r326",
+   "langue": "en",
+   "texte": "The cat sees the dog; it sleeps.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "cat",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 7
+    },
+    {
+     "texte": "sees",
+     "pos": "VERB",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 13,
+     "fin": 16
+    },
+    {
+     "texte": "dog",
+     "pos": "NOUN",
+     "debut": 17,
+     "fin": 20
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 22,
+     "fin": 24
+    },
+    {
+     "texte": "sleeps",
+     "pos": "VERB",
+     "debut": 25,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The cat",
+     "role": "agent",
+     "debut": 0,
+     "fin": 7
+    },
+    {
+     "type": "GV",
+     "texte": "sees",
+     "role": "prédicat",
+     "debut": 8,
+     "fin": 12
+    },
+    {
+     "type": "GN",
+     "texte": "the dog",
+     "role": "patient",
+     "debut": 13,
+     "fin": 20
+    },
+    {
+     "type": "GN",
+     "texte": "it",
+     "role": "agent",
+     "debut": 22,
+     "fin": 24
+    },
+    {
+     "type": "GV",
+     "texte": "sleeps",
+     "role": "prédicat",
+     "debut": 25,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "it": "dog"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r327",
+   "langue": "en",
+   "texte": "Marie calls Sophie; she answers.",
+   "mots": [
+    {
+     "texte": "Marie",
+     "pos": "NOUN",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "texte": "calls",
+     "pos": "VERB",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "texte": "Sophie",
+     "pos": "NOUN",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "texte": "she",
+     "pos": "PRON",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "texte": "answers",
+     "pos": "VERB",
+     "debut": 24,
+     "fin": 31
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "Marie",
+     "role": "agent",
+     "debut": 0,
+     "fin": 5
+    },
+    {
+     "type": "GV",
+     "texte": "calls",
+     "role": "prédicat",
+     "debut": 6,
+     "fin": 11
+    },
+    {
+     "type": "GN",
+     "texte": "Sophie",
+     "role": "patient",
+     "debut": 12,
+     "fin": 18
+    },
+    {
+     "type": "GN",
+     "texte": "she",
+     "role": "agent",
+     "debut": 20,
+     "fin": 23
+    },
+    {
+     "type": "GV",
+     "texte": "answers",
+     "role": "prédicat",
+     "debut": 24,
+     "fin": 31
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "she": "sophie"
+    }
+   },
+   "source": "reel"
+  },
+  {
+   "id": "r328",
+   "langue": "en",
+   "texte": "The book is on the table; it is red.",
+   "mots": [
+    {
+     "texte": "The",
+     "pos": "DET",
+     "debut": 0,
+     "fin": 3
+    },
+    {
+     "texte": "book",
+     "pos": "NOUN",
+     "debut": 4,
+     "fin": 8
+    },
+    {
+     "texte": "is",
+     "pos": "VERB",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "texte": "on",
+     "pos": "PREP",
+     "debut": 12,
+     "fin": 14
+    },
+    {
+     "texte": "the",
+     "pos": "DET",
+     "debut": 15,
+     "fin": 18
+    },
+    {
+     "texte": "table",
+     "pos": "NOUN",
+     "debut": 19,
+     "fin": 24
+    },
+    {
+     "texte": "it",
+     "pos": "PRON",
+     "debut": 26,
+     "fin": 28
+    },
+    {
+     "texte": "is",
+     "pos": "AUX",
+     "debut": 29,
+     "fin": 31
+    },
+    {
+     "texte": "red",
+     "pos": "ADJ",
+     "debut": 32,
+     "fin": 35
+    }
+   ],
+   "segments": [
+    {
+     "type": "GN",
+     "texte": "The book",
+     "role": "patient",
+     "debut": 0,
+     "fin": 8
+    },
+    {
+     "type": "GV",
+     "texte": "is",
+     "role": "prédicat",
+     "debut": 9,
+     "fin": 11
+    },
+    {
+     "type": "GP",
+     "texte": "on the table",
+     "role": "lieu",
+     "debut": 12,
+     "fin": 24
+    },
+    {
+     "type": "GN",
+     "texte": "it",
+     "role": "agent",
+     "debut": 26,
+     "fin": 28
+    },
+    {
+     "type": "GV",
+     "texte": "is",
+     "role": "prédicat",
+     "debut": 29,
+     "fin": 31
+    },
+    {
+     "type": "ADJ",
+     "texte": "red",
+     "role": "attribut",
+     "debut": 32,
+     "fin": 35
+    }
+   ],
+   "pragma": {
+    "acte": "assertion",
+    "coref": {
+     "it": "book"
+    }
+   },
+   "source": "reel"
   }
  ]
 }

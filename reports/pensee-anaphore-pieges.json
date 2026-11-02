@@ -1,0 +1,28 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "96/96",
+ "phrases_avec_coref": 12,
+ "liens": 12,
+ "justes": 10,
+ "taux": 0.8333,
+ "erreurs": [
+  {
+   "id": "r324",
+   "pronom": "il",
+   "attendu": "livre",
+   "obtenu": "table"
+  },
+  {
+   "id": "r328",
+   "pronom": "it",
+   "attendu": "book",
+   "obtenu": "table"
+  }
+ ],
+ "limites": [
+  "12 liens",
+  "PP locatif seul échec",
+  "règle naïve"
+ ]
+}

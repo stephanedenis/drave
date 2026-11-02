@@ -33825,3 +33825,55 @@ exit 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add reports/corpus-genres.json reports/rapport-genres.md docs/pilotage/en-cours.md; git diff --cached --name-only; echo \"=== commit\"; git commit -m \"GENRES — L'OCR DES 20 … [272 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md
+reports/corpus-genres.json
+reports/rapport-genres.md
+=== commit
+  ✅ index : aucun fait stagé sans état
+[master 166896b4] GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M)
+ 14 files changed, 317 insertions(+), 44 deletions(-)
+=== après
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 361 : genres rafraîchis et committés (`166896b4`) ; je lance la passe complète des portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; nohup bash tools/toutes-les-portes.sh > /tmp/portes-final.log 2>&1 & echo \"portes job $!\"; sleep 5; tail -2 /tmp/portes-final.log", "description": "Run full gates pass in background", "timeoutMs": 120000, "workdir": "/ … [48 caractères tronqués]`
+
+  ```
+05:27
+portes job 2459980
+=== PASSE COMPLÈTE DES PORTES (81 portes, borne 1800 s) ===
+    journaux : /tmp/portes-1102-05h27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"OCR\\|ocr\" journal/2026-11-01/README.md | head -10; wc -l journal/2026-11-01/README.md", "description": "Check night journal OCR mentions", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+143:| 20:58 | `530ac733` | DONNÉES — L'OCR DES SCANS (tesseract 5.5.3) ET LES 7 496 DOCUMENTS LANCÉS |
+146:| 21:07 | `bd9b78ee` | ÉTAT — DOCUMENTS 1 000/7 496 (295 MO), OCR EN COURS, ANGLAIS 19,4/25,6 M |
+173:| 23:19 | `1da205d7` | DONNÉES — FICHES DU CORPUS DOCUMENTS ET DU CORPUS OCR (EN COURS, CHIFFRES FIXÉS À LA CLÔTURE) |
+179:| 23:36 | `7e819b56` | DONNÉES — LE GENRE SE MESURE : ENCYCLOPÉDIE 103-147 CAR/LIGNE, LIVRES 32-37 ; LIGNES DUPLIQUÉES 8,7-24 %, OCR 4,8 % |
+185:| 23:53 | `7abe12ea` | DONNÉES — ROADMAP ET ÉTAT : LES DIX CORPUS, LE PDF, LES DOCUMENTS (8 KO 2,07 %), L'OCR ET LES GENRES |
+199:(le parcours prendra ~2 h 30). L'**OCR** : la détection des scannés sur les 2 785 PDF est longue
+203:**Les documents et l'OCR lancés.** `extrait_pdf.py` tourne sur les **7 496 PDF de
+204:`Documents`** (personnel, usage local) ; `ocr_pdf.py` (nouveau) océrise les **scans** avec le
+217:non diffusé. L'OCR des 159 scannés viendra du pipeline R4.4.
+325:dit quoi utiliser, quoi extraire (avec l'OCR R4.4 pour les scans), quoi mettre en quarantaine
+359 journal/2026-11-01/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; tail -4 /tmp/portes-final.log; ps -p 2459980 -o stat,etime= 2>/dev/null || echo \"portes finies\"", "description": "Check gates progress", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet" … [1 caractères tronqués]`
+
+  ```
+05:27
+=== PASSE COMPLÈTE DES PORTES (81 portes, borne 1800 s) ===
+    journaux : /tmp/portes-1102-05h27
+STAT            
+S          00:23
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 180; date '+%H:%M'; tail -6 /tmp/portes-final.log; ps -p 2459980 -o stat,etime= 2>/dev/null || echo \"portes finies\"", "description": "Wait 3 min then check gates", "timeoutMs": 300000, "workdir": "/home/stephane/Data13TB/stepha … [19 caractères tronqués]`

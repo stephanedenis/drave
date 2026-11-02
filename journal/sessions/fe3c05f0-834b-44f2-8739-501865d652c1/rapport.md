@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 36.8 h |
+| Durée | 36.9 h |
 | Tours | 372 |
-| Messages | 2228 |
-| Appels d'outils | 1478 |
+| Messages | 2232 |
+| Appels d'outils | 1482 |
 | Fichiers touchés | 26 |
-| Commandes | 1311 |
+| Commandes | 1315 |
 | Sous-agents | 0 |
 | Commits | 83 |
 | Compactages de contexte | 4 |
@@ -8729,7 +8729,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 372 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - job_output
 - job_kill
@@ -8745,7 +8745,11 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Commit genres refresh with retry
 - bash — Check state diff vs HEAD
 - bash — Read full pre-commit hook
-- … et 2 autres
+- … et 6 autres
+
+**Synthèse produite :**
+
+⏵ Round 361 : genres rafraîchis et committés (`166896b4`) ; je lance la passe complète des portes
 
 ## 3. Travail accompli
 
@@ -8822,7 +8826,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1271 autres
+- … et 1275 autres
 
 ## 4. Mesures et résultats marquants
 
