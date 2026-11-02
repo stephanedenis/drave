@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-pensee-gold-linguistique.md`](rapport-pensee-gold-linguistique.md) | **L/R0.7** — le gold 180 : POS 0,751, syntagmes exacts 0,194/tête 0,560, pragmatique 1,0/1,0/0,994/0,889 ; neuronal réel refusé |
+| [`rapport-pensee-gold-linguistique.md`](rapport-pensee-gold-linguistique.md) | **L/R0.7** — le gold 180 : POS 0,751, exact 0,194/tête 0,560, **attachement top-1 0,294/top-k 0,338**, pragmatique 1,0/1,0/0,994/0,889 ; neuronal réel refusé |
 | [`rapport-pensee-banc.md`](rapport-pensee-banc.md) | **B13** — le banc anytime : A* but en 32 nœuds, AUC 0,528/0,624 contre 0,246/0,116 à l'aléatoire, **10/10** |
 | [`rapport-pensee-drvf.md`](rapport-pensee-drvf.md) | **B13** — le DRVF `thought` : 23 597 octets, 93 événements, rejeu identique, corruption refusée, **9/9** |
 | [`rapport-pensee-ac3-alphabeta.md`](rapport-pensee-ac3-alphabeta.md) | **B13** — AC-3 et alpha-bêta : **8/8**, 1 495 nœuds/296 coupes contre 18 730 au minimax |

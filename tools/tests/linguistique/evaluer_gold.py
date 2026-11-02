@@ -67,6 +67,7 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
     conf = defaultdict(Counter)
     acte_ok = neg_ok = mod_ok = ds_ok = 0
     fractions = []
+    att_n = att_labels = att_top1 = att_topk = att_exact = 0
     for phrase in phrases:
         a = bloc.analyser(phrase["texte"], phrase["langue"])
         fractions.append(a.fraction_semantique)
@@ -92,6 +93,23 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
         ttp += len(pred_tete & gold_tete)
         tfp += len(pred_tete - gold_tete)
         tfn += len(gold_tete - pred_tete)
+        labels = {(e.type, e.debut, e.fin): e for e in a.etiquettes if e.niveau == "syntagme"}
+        for s in phrase["segments"]:
+            if not s.get("cible"):
+                continue
+            att_n += 1
+            e = labels.get((s["type"], s["debut"], s["fin"]))
+            if e is None:
+                continue
+            att_labels += 1
+            att = (e.meta or {}).get("attachement") or {}
+            cible = (att.get("cible") or "").strip()
+            if cible == s["cible"]:
+                att_exact += 1
+            if cible and (s["cible"] in cible or cible in s["cible"]):
+                att_top1 += 1
+            if any(s["cible"] in nom for nom in (e.candidats or [])):
+                att_topk += 1
         pr, g = _pragma(a), phrase["pragma"]
         acte_ok += int(pr["acte"] == g.get("acte", "assertion"))
         neg_ok += int(pr["negation"] == bool(g.get("negation", False)))
@@ -110,6 +128,12 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
                         "modalite": round(mod_ok / max(1, n), 4),
                         "double_sens": round(ds_ok / max(1, n), 4)},
         "fraction_semantique": round(sum(fractions) / max(1, n), 4) if fractions else 0.0,
+        "attachement": {"cibles": att_n, "labels": att_labels,
+                        "top1": att_top1, "topk": att_topk, "exact": att_exact,
+                        "top1_taux": round(att_top1 / max(1, att_n), 4),
+                        "topk_taux": round(att_topk / max(1, att_n), 4),
+                        "exact_taux": round(att_exact / max(1, att_n), 4),
+                        "couverture": round(att_labels / max(1, att_n), 4)},
     }
 
 
@@ -138,6 +162,13 @@ def main() -> int:
         except Exception as e:
             reel = {"statut": "refus", "detail": type(e).__name__ + ": " + str(e)[:160]}
     resultats["reel"] = reel
+    # contrôle négatif : une cible tirée au hasard parmi les cibles du gold
+    import random as _r
+    cibles = [s["cible"] for p in phrases for s in p["segments"] if s.get("cible")]
+    rng = _r.Random(0)
+    hasard_ok = sum(1 for c in cibles if c in rng.choice(cibles))
+    resultats["attachement_hasard"] = {"cibles": len(cibles),
+                                       "top1_taux": round(hasard_ok / max(1, len(cibles)), 4)}
     resultats["gold"] = {"phrases": len(phrases),
                          "hand": len(sources["hand"]),
                          "synthetique": len(sources["synthetique"]),
@@ -155,6 +186,9 @@ def main() -> int:
         "acte": h_all["pragmatique"]["acte"] >= 0.70,
         "cascade_pos": c_all["pos"]["exactitude"] >= h_all["pos"]["exactitude"],
         "cascade_syntagme": c_all["syntagme"]["f1"] >= h_all["syntagme"]["f1"],
+        "attachement_topk": h_all["attachement"]["topk_taux"] >= 0.30,
+        "attachement_hasard": (h_all["attachement"]["top1_taux"]
+                               > 5 * resultats["attachement_hasard"]["top1_taux"]),
         "reel_non_requis": True,
     }
     resultats["ok"] = all(resultats["verdict"].values())

@@ -68,7 +68,18 @@
     "modalite": 0.9944,
     "double_sens": 0.8889
    },
-   "fraction_semantique": 0.6381
+   "fraction_semantique": 0.6381,
+   "attachement": {
+    "cibles": 68,
+    "labels": 23,
+    "top1": 20,
+    "topk": 23,
+    "exact": 0,
+    "top1_taux": 0.2941,
+    "topk_taux": 0.3382,
+    "exact_taux": 0.0,
+    "couverture": 0.3382
+   }
   },
   "hand": {
    "bloc": "heuristique",
@@ -134,7 +145,18 @@
     "modalite": 0.95,
     "double_sens": 0.9
    },
-   "fraction_semantique": 0.469
+   "fraction_semantique": 0.469,
+   "attachement": {
+    "cibles": 13,
+    "labels": 5,
+    "top1": 2,
+    "topk": 5,
+    "exact": 0,
+    "top1_taux": 0.1538,
+    "topk_taux": 0.3846,
+    "exact_taux": 0.0,
+    "couverture": 0.3846
+   }
   },
   "synthetique": {
    "bloc": "heuristique",
@@ -199,7 +221,18 @@
     "modalite": 1.0,
     "double_sens": 0.8875
    },
-   "fraction_semantique": 0.6592
+   "fraction_semantique": 0.6592,
+   "attachement": {
+    "cibles": 55,
+    "labels": 18,
+    "top1": 18,
+    "topk": 18,
+    "exact": 0,
+    "top1_taux": 0.3273,
+    "topk_taux": 0.3273,
+    "exact_taux": 0.0,
+    "couverture": 0.3273
+   }
   }
  },
  "mock_neuronal": {
@@ -267,7 +300,18 @@
     "modalite": 0.8833,
     "double_sens": 0.9222
    },
-   "fraction_semantique": 0.6706
+   "fraction_semantique": 0.6706,
+   "attachement": {
+    "cibles": 68,
+    "labels": 23,
+    "top1": 0,
+    "topk": 0,
+    "exact": 0,
+    "top1_taux": 0.0,
+    "topk_taux": 0.0,
+    "exact_taux": 0.0,
+    "couverture": 0.3382
+   }
   },
   "hand": {
    "bloc": "mock_neuronal",
@@ -330,7 +374,18 @@
     "modalite": 0.9,
     "double_sens": 0.9
    },
-   "fraction_semantique": 0.525
+   "fraction_semantique": 0.525,
+   "attachement": {
+    "cibles": 13,
+    "labels": 3,
+    "top1": 0,
+    "topk": 0,
+    "exact": 0,
+    "top1_taux": 0.0,
+    "topk_taux": 0.0,
+    "exact_taux": 0.0,
+    "couverture": 0.2308
+   }
   },
   "synthetique": {
    "bloc": "mock_neuronal",
@@ -395,7 +450,18 @@
     "modalite": 0.8812,
     "double_sens": 0.925
    },
-   "fraction_semantique": 0.6888
+   "fraction_semantique": 0.6888,
+   "attachement": {
+    "cibles": 55,
+    "labels": 20,
+    "top1": 0,
+    "topk": 0,
+    "exact": 0,
+    "top1_taux": 0.0,
+    "topk_taux": 0.0,
+    "exact_taux": 0.0,
+    "couverture": 0.3636
+   }
   }
  },
  "parallele": {
@@ -466,7 +532,18 @@
     "modalite": 0.9944,
     "double_sens": 0.8889
    },
-   "fraction_semantique": 0.6706
+   "fraction_semantique": 0.6706,
+   "attachement": {
+    "cibles": 68,
+    "labels": 23,
+    "top1": 20,
+    "topk": 23,
+    "exact": 0,
+    "top1_taux": 0.2941,
+    "topk_taux": 0.3382,
+    "exact_taux": 0.0,
+    "couverture": 0.3382
+   }
   },
   "hand": {
    "bloc": "parallele",
@@ -532,7 +609,18 @@
     "modalite": 0.95,
     "double_sens": 0.9
    },
-   "fraction_semantique": 0.525
+   "fraction_semantique": 0.525,
+   "attachement": {
+    "cibles": 13,
+    "labels": 5,
+    "top1": 2,
+    "topk": 5,
+    "exact": 0,
+    "top1_taux": 0.1538,
+    "topk_taux": 0.3846,
+    "exact_taux": 0.0,
+    "couverture": 0.3846
+   }
   },
   "synthetique": {
    "bloc": "parallele",
@@ -597,7 +685,18 @@
     "modalite": 1.0,
     "double_sens": 0.8875
    },
-   "fraction_semantique": 0.6888
+   "fraction_semantique": 0.6888,
+   "attachement": {
+    "cibles": 55,
+    "labels": 18,
+    "top1": 18,
+    "topk": 18,
+    "exact": 0,
+    "top1_taux": 0.3273,
+    "topk_taux": 0.3273,
+    "exact_taux": 0.0,
+    "couverture": 0.3273
+   }
   }
  },
  "cascade": {
@@ -668,7 +767,18 @@
     "modalite": 0.9944,
     "double_sens": 0.8889
    },
-   "fraction_semantique": 0.6706
+   "fraction_semantique": 0.6706,
+   "attachement": {
+    "cibles": 68,
+    "labels": 23,
+    "top1": 20,
+    "topk": 23,
+    "exact": 0,
+    "top1_taux": 0.2941,
+    "topk_taux": 0.3382,
+    "exact_taux": 0.0,
+    "couverture": 0.3382
+   }
   },
   "hand": {
    "bloc": "cascade",
@@ -734,7 +844,18 @@
     "modalite": 0.95,
     "double_sens": 0.9
    },
-   "fraction_semantique": 0.525
+   "fraction_semantique": 0.525,
+   "attachement": {
+    "cibles": 13,
+    "labels": 5,
+    "top1": 2,
+    "topk": 5,
+    "exact": 0,
+    "top1_taux": 0.1538,
+    "topk_taux": 0.3846,
+    "exact_taux": 0.0,
+    "couverture": 0.3846
+   }
   },
   "synthetique": {
    "bloc": "cascade",
@@ -799,13 +920,28 @@
     "modalite": 1.0,
     "double_sens": 0.8875
    },
-   "fraction_semantique": 0.6888
+   "fraction_semantique": 0.6888,
+   "attachement": {
+    "cibles": 55,
+    "labels": 18,
+    "top1": 18,
+    "topk": 18,
+    "exact": 0,
+    "top1_taux": 0.3273,
+    "topk_taux": 0.3273,
+    "exact_taux": 0.0,
+    "couverture": 0.3273
+   }
   },
   "appels_neuronal": 360
  },
  "reel": {
   "statut": "refus",
   "detail": "RefusNeuronal: Command '['llama-cli', '-m', '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/Qwen2.5-0.5B-Q4_0.gguf', '-p', 'Tu es un étiqueteur linguistique. Réponds U"
+ },
+ "attachement_hasard": {
+  "cibles": 68,
+  "top1_taux": 0.0147
  },
  "gold": {
   "phrases": 180,
@@ -822,6 +958,8 @@
   "acte": true,
   "cascade_pos": true,
   "cascade_syntagme": true,
+  "attachement_topk": true,
+  "attachement_hasard": true,
   "reel_non_requis": true
  },
  "ok": true

@@ -11492,3 +11492,171 @@ def analyser(texte: str, max_candidats: int = 4) -> list[dict]:
 … [4502 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# gold.py : cibles d'attachement\np=pathlib.Path('tools/tests/linguistique/gold.py'); t=p.read_text()\nsubs = {\n '(\"GP\", \"de la voisine\", \"possession\")': '(\"GP\", \"de la voisine\", \"possess … [5380 caractères tronqués]`
+
+  ```
+gold cibles ok
+20 phrases, 105 tokens → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold.json
+[stderr]
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_synthetique.py", line 200, in <module>
+    sortie.write_text(json.dumps(construire(), ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+                                 ~~~~~~~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_synthetique.py", line 168, in construire
+    d = p.phrase(f"s{len(phrases) + 1:03d}")
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_synthetique.py", line 153, in phrase
+    for typ, a, b in segs:
+        ^^^^^^^^^
+ValueError: too many values to unpack (expected 3)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_synthetique.py'); t=p.read_text()\nt=t.replace('''        for typ, a, b in segs:\n            if b <= a:\n                continue\n            segments. … [725 caractères tronqués]`
+
+  ```
+ok
+gold synthétique écrit → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_synthetique.json
+EXIT=0
+hand cibles 13 synth cibles 55 synth phrases 160
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# bloc : porter l'attachement dans le meta\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''                                                meta={\"role\": s.get(\"role\ … [3672 caractères tronqués]`
+
+  ```
+ok
+COMPILE=0
+EXIT=0
+heuristique all cibles 68 top1 0.2941 topk 0.3382 exact 0.0 couv 0.3382
+heuristique hand cibles 13 top1 0.1538 topk 0.3846 exact 0.0 couv 0.3846
+heuristique synthetique cibles 55 top1 0.3273 topk 0.3273 exact 0.0 couv 0.3273
+mock_neuronal all cibles 68 top1 0.0 topk 0.0 exact 0.0 couv 0.3382
+mock_neuronal hand cibles 13 top1 0.0 topk 0.0 exact 0.0 couv 0.2308
+mock_neuronal synthetique cibles 55 top1 0.0 topk 0.0 exact 0.0 couv 0.3636
+parallele all cibles 68 top1 0.2941 topk 0.3382 exact 0.0 couv 0.3382
+parallele hand cibles 13 top1 0.1538 topk 0.3846 exact 0.0 couv 0.3846
+parallele synthetique cibles 55 top1 0.3273 topk 0.3273 exact 0.0 couv 0.3273
+cascade all cibles 68 top1 0.2941 topk 0.3382 exact 0.0 couv 0.3382
+cascade hand cibles 13 top1 0.1538 topk 0.3846 exact 0.0 couv 0.3846
+cascade synthetique cibles 55 top1 0.3273 topk 0.3273 exact 0.0 couv 0.3273
+hasard {'cibles': 68, 'top1_taux': 0.0147}
+ok True reel refus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''    def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:''',\n'''    def _cibles_s(self, texte: str) -> di … [3718 caractères tronqués]`
+
+  ```
+bloc ok
+COMPILE=0
+EXIT=0
+heuristique all cibles 68 couv 0.3382 top1 0.2941 topk 0.3382 exact 0.0
+heuristique hand cibles 13 couv 0.3846 top1 0.1538 topk 0.3846 exact 0.0
+heuristique synthetique cibles 55 couv 0.3273 top1 0.3273 topk 0.3273 exact 0.0
+mock_neuronal all cibles 68 couv 0.3382 top1 0.0 topk 0.0 exact 0.0
+mock_neuronal hand cibles 13 couv 0.2308 top1 0.0 topk 0.0 exact 0.0
+mock_neuronal synthetique cibles 55 couv 0.3636 top1 0.0 topk 0.0 exact 0.0
+hasard {'cibles': 68, 'top1_taux': 0.0147} ok True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''                for s in c.get(\"segments\", []):\n                    att = c.get(\"attachement\") or {}\n               … [1276 caractères tronqués]`
+
+  ```
+ok
+EXIT=0
+heuristique all cibles 68 couv 0.3382 top1 0.2941 topk 0.3382 top1/couv 0.87 exact 0.0
+heuristique hand cibles 13 couv 0.3846 top1 0.1538 topk 0.3846 top1/couv 0.4 exact 0.0
+heuristique synthetique cibles 55 couv 0.3273 top1 0.3273 topk 0.3273 top1/couv 1.0 exact 0.0
+mock_neuronal all cibles 68 couv 0.3382 top1 0.0 topk 0.0 top1/couv 0.0 exact 0.0
+mock_neuronal hand cibles 13 couv 0.2308 top1 0.0 topk 0.0 top1/couv 0.0 exact 0.0
+mock_neuronal synthetique cibles 55 couv 0.3636 top1 0.0 topk 0.0 top1/couv 0.0 exact 0.0
+hasard {'cibles': 68, 'top1_taux': 0.0147} ok True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/evaluer_gold.py'); t=p.read_text()\nt=t.replace('''        \"cascade_pos\": c_all[\"pos\"][\"exactitude\"] >= h_all[\"pos\"][\"exactitude\"],\n        \"casca … [945 caractères tronqués]`
+
+  ```
+ok
+EXIT=0
+{'pos_hand': True, 'pos_synthetique': True, 'syntagme_hand': True, 'syntagme_synthetique': True, 'tete': True, 'acte': True, 'cascade_pos': True, 'cascade_syntagme': True, 'attachement_topk': True, 'attachement_hasard': True, 'reel_non_requis': True} True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# --- rapport : insérer l'attachement et renuméroter\np=pathlib.Path('reports/rapport-pensee-gold-linguistique.md'); t=p.read_text()\nt=t.replace(\"\"\"- **cascade 0,671** : elle appelle le neuronal  … [6521 caractères tronqués]`
+
+  ```
+rapport/docs ok
+15:## 1. Le gold étendu
+26:## 2. Les résultats
+50:## 3. L'attachement
+77:## 4. Le vrai neuronal : refusé, pas simulé
+83:## 5. Les seuils (pré-enregistrés pour la porte)
+99:## 6. Ce que ce gold ne dit pas
+115:## 7. La suite
+125:## 8. Fichiers
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib,re\n# en-cours\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"\"\"- **Gold L 180** : **20 réels + 160 synthétiques** ; POS **0,751** (fermé 0,939/ouvert 0,621),\n  syntag … [4847 caractères tronqués]`
+
+  ```
+état ok
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 118 portes, le disque en a 81
+     · compteurs : la ligne « documents » manque dans en-cours.md
+     · compteurs : la ligne « fichiers / JSON » manque dans en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | head -2; sed -n '/## Les chiffres de l.état/,/## Les chantiers/p' docs/pilotage/en-cours.md | head -14", "description": "Lire les compteurs réels et le tableau corrompu"}`
+
+  ```
+revue de documentation · 392 fiche(s) · 490 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 3 anomalie(s) :
+## Les chiffres de l'état
+
+> **Source unique.** Ces valeurs sont vérifiées par `tools/revue_documentation.py`.
+
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **118** (76 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **392** / **·** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **JSON** (hors archive et README) | `docs/**/*.md` |
+| dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
+
+## Les chantiers et leurs bloquants
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"| portes | **118** (76 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |\",\n         … [819 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 392 fiche(s) · 490 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+}
+✅ porte bloc linguistique verte
+PORTE=0
+  ✅ T7 banc anytime        AUC A* 0.5283 vs aléatoire 0.2458 ; but A* 32, aléatoire None ; regret A* 0.0
+  10/10 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/bloc_linguistique.py tools/tests/linguistique/gold.py tools/tests/linguistique/gold.json tools/tests/linguistique/gold_synthetique.py tools/tests/linguistique/gold_synthetique.json tools/tests/linguistique/evaluer_gold. … [584 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                          |  21 +--
+ docs/pilotage/plan-travail.md                      |   2 +-
+ docs/pilotage/roadmap.md                           |   2 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |  12 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-gold-linguistique.json              | 162 ++++++++++++++++++--
+ reports/rapport-pensee-gold-linguistique.md        |  56 +++++--
+ tools/bloc_linguistique.py                         |  29 +++-
+ tools/tests/linguistique/evaluer_gold.py           |  34 +++++
+ tools/tests/linguistique/gold.json                 |  39 +++--
+ tools/tests/linguistique/gold.py                   |  35 +++--
+ tools/tests/linguistique/gold_synthetique.json     | 165 ++++++++++++++-------
+ tools/tests/linguistique/gold_synthetique.py       |  28 ++--
+ 15 files changed, 458 insertions(+), 138 deletions(-)
+[still running after 60000ms; moved to background job bash-407]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-407", "timeout_ms": 240000, "wait": true}`

@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 26.6 h |
-| Tours | 14 |
-| Messages | 900 |
-| Appels d'outils | 896 |
+| Durée | 26.7 h |
+| Tours | 15 |
+| Messages | 908 |
+| Appels d'outils | 902 |
 | Fichiers touchés | 18 |
-| Commandes | 823 |
+| Commandes | 829 |
 | Sous-agents | 0 |
-| Commits | 48 |
+| Commits | 49 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -55,6 +55,8 @@
 **Tour 13** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 **Tour 14** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
+
+**Tour 15** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [749 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -736,6 +738,46 @@ Au fil des fins de run : **manifeste → contamination (les deux unités + les j
 - bash — Update report and state for five languages
 - bash — Commit five language corpora with retry loop
 
+**Synthèse produite :**
+
+⏵ Round 2 : cinq corpus en texte intégral mesurés, committés (fr, ar, pt, zh, ja)
+
+**Round 2/1000 — la moitié des langues est faite.** Les runs de l'arabe, du portugais, du chinois et du japonais ont fini ; les manifestes, les contaminations et la fiche sont committés (`1a39470d`).
+
+\## Les cinq corpus mesurés
+
+| langue | articles | caractères | octets | fuite 8 Ko | éval | résidus `{{`/`[[` |
+|---|---:|---:|---:|---:|---|---|
+| fr | 2 388 219 | 8,025 G | 8,34 Go | **0** | XNLI 0/40, UDHR 2/24 (citée) | 1/0 |
+| ar | 1 000 310 | 1,994 G | 3,57 Go | **0** | XNLI 0/40 | 1/161 |
+| pt | 970 793 | 3,104 G | 3,21 Go | **0** | UDHR 2/40 (citée) | 1/296 |
+| zh | 643 122 | 1,045 G | 2,63 Go | **0** | XNLI 0/40 | 14/0 |
+| ja | 1 271 107 | 2,809 G | 7,33 Go | **0** | UDHR 1/23 (citée) | 2/62 |
+
+**Total : 6,27 M articles, 16,98 G caractères, 25,1 Go.** Le **8 Ko est à zéro partout** — aucune unité d'entraînement ne traverse les splits.
+
+\## Ce que les mesures disent
+
+- **L'arabe** a **28,9 % de lignes dupliquées** entre splits, mais **0 au tronçon de 8 Ko** : ce sont les formules, les références et les phrases coraniques qui se répètent d'un article à l'autre. L'unité d'entraînement (8 Ko) est propre ; la fiche explique la différence.
+- **L'UDHR est citée** dans Wikipédia pour le français (2/24), le portugais (2/40) et le japonais (1/23) : ce n'est pas un jeu tenu à l'écart pour ces langues. Le **XNLI** est à 0 pour le français, l'arabe et le chinois.
+- **Les liens résiduels** : 161 lignes sur 20 000 en arabe, 296 en portugais, 62 en japonais — les légendes et notes complexes. C'est une limite nommée ; une passe finale les enlèvera.
+- **Le japonais pèse 7,33 Go** (2,81 G caractères, 3 octets par caractère) — le plus gros après le français.
+
+\## La suite
+
+Les cinq derniers runs courent : **it** (bientôt), **de, ru, es** (~30-60 min), **en** (le plus long, ~2-3 h). Puis le **catalogue complet des dix** (la table des dix langues, les totaux), l'**extraction PDF/OCR** (livres, CEGEP, collections) et la **préparation R1.1/R1.2** avec A2.6/A8.3. Le goal reste actif ; je reprends au prochain round avec les manifestes suivants.
+
+### Tour 15 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check remaining runs and manifests
+- bash — Read Italian manifest and run final contamination
+- bash — Add Italian to report and state
+- bash — Inspect current counters block
+- bash — Parse review counts and fix corrupted counters
+- bash — Commit Italian and repaired counters
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -803,7 +845,7 @@ Au fil des fins de run : **manifeste → contamination (les deux unités + les j
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 783 autres
+- … et 789 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -999,4 +1041,5 @@ Au fil des fins de run : **manifeste → contamination (les deux unités + les j
 - ÉTAT — COMPTEURS 389/479, JOURNAL DU CONTRÔLE 8 KO ET DE L'UDHR 2/24" 2>&1 | tail -1 git reset -q; git log --oneline -1
 - ÉTAT — COMPTEURS SYNCHRONISÉS, JOURNAL DU CONTRÔLE 8 KO ET DE L'UDHR 2/24" 2>/tmp/commit.err; then echo "commit OK (essai $i)"; break; else echo "course HEAD (e
 - DONNÉES — CINQ CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA) : 6,27 M ARTICLES, 25,1 GO, 8 KO 0, UDHR CITÉE" 2>/tmp/commit.err; then echo "commit OK (essai $i)"
+- DONNÉES — SIX CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT) : 7,83 M ARTICLES, 30,4 GO, COMPTEURS RÉPARÉS" 2>/tmp/commit.err; then echo "commit OK (essai $i
 

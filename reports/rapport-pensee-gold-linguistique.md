@@ -1,10 +1,10 @@
 # L — le gold 180 : 20 réels + 160 synthétiques, POS 0,751, tête 0,560
 
 > **Ligne de roadmap** : **R0.7** (bloc linguistique) / **L** · **Date** : 2026-11-01 ·
-> **Verdict** : ✅ **le gold étendu est mesuré** — **180 phrases** (20 réelles écrites à la main,
+> **Verdict** : ✅ **le gold étendu et l'attachement sont mesurés** — **180 phrases** (20 réelles écrites à la main,
 > 160 synthétiques d'une grammaire indépendante), **804 tokens** ; POS **0,751** (fermé
 > **0,939**, ouvert **0,621**), syntagmes exacts **0,194**, **par tête 0,560**, pragmatique
-> **1,0/1,0/0,994/0,889**, cascade **67,1 %** d'unités sémantiques. ⚠️ **le vrai modèle
+> **1,0/1,0/0,994/0,889**, cascade **67,1 %**, **attachement top-1 0,294 / top-k 0,338** (couverture 0,338, hasard 0,015). ⚠️ **le vrai modèle
 > neuronal est refusé** (`llama-cli` local) ; la cascade est mesurée avec le **mock de contrat**.
 >
 > **Dispositif** : [`gold.py`](../tools/tests/linguistique/gold.py) (20 réels),
@@ -47,13 +47,40 @@
 - **cascade 0,671** : elle appelle le neuronal **180 fois par passe** (360 au total, 3 passes) et
   couvre **67,1 %** du texte en unités sémantiques.
 
-## 3. Le vrai neuronal : refusé, pas simulé
+## 3. L'attachement
+
+Les deux golds annotent la **cible** des GP/REL/SUB (le nom ou le verbe auquel ils se rattachent).
+Le générateur S propose l'attachement ; la couverture est limitée par l'accord de **span exact**
+entre le S et le gold.
+
+| lecture | source | cibles | couv. | top-1 | top-1/couv. | top-k |
+|---|---:|---:|---:|---:|---:|---:|
+| **heuristique** | **180** | **68** | **0,338** | **0,294** | **0,870** | **0,338** |
+| heuristique | 20 réels | 13 | 0,385 | 0,154 | 0,400 | 0,385 |
+| heuristique | 160 synth. | 55 | 0,327 | 0,327 | **1,000** | 0,327 |
+| mock seul | 180 | 68 | 0,338 | 0 | 0 | 0 |
+| **hasard** | 180 | 68 | — | **0,015** | — | — |
+
+- **Couverture 34 %** : le S ne segmente pas comme le gold ; seuls 23 des 68 segments à cible ont
+  le **même span**. C'est la limite principale, pas la cible.
+- **Sur les 23 couverts** : le top-k atteint **100 %** et le top-1 **87 %** ; quand le S propose un
+  attachement, la bonne cible est presque toujours dans ses candidats.
+- **Réels 40 %** : les GP au verbe (`dans le parc` → `vu`) sont lus par le S comme le GN le plus
+  proche (`l'homme`) ; le gold préfère le verbe ; c'est le désaccord classique d'attachement.
+- **Synthétiques 100 %** : la grammaire attache régulièrement ; le S retrouve la cible.
+- **Hasard 1,5 %** : le contrôle négatif. **`exact` 0** : le S rend la cible en **phrase**
+  (`a vu`), le gold en **tête** (`vu`) ; l'égalité stricte est trop dure, la containment est la
+  bonne mesure.
+- Le bloc expose **toutes** les cibles du S (pas seulement le dernier segment ambigu) via
+  `_tokens`/`_segmente` en **lecture seule** ; c'est un couplage à l'API interne du S, déclaré.
+
+## 4. Le vrai neuronal : refusé, pas simulé
 
 `--reel` essaie `NeuronalLLM` avec `Qwen2.5-0.5B-Q4_0` et 10 s : **`RefusNeuronal`**. Le mock est
 un **double de contrat** ; la cascade est mesurée avec lui, pas avec un modèle qualifié. La
 qualification neuronale reste à faire.
 
-## 4. Les seuils (pré-enregistrés pour la porte)
+## 5. Les seuils (pré-enregistrés pour la porte)
 
 | contrôle | seuil | mesuré |
 |---|---:|---:|
@@ -64,10 +91,12 @@ qualification neuronale reste à faire.
 | syntagmes par tête, 180 | ≥ 0,40 | **0,560** |
 | acte, 180 | ≥ 0,70 | **1,0** |
 | cascade ≥ heuristique | oui | **oui** |
+| attachement top-k | ≥ 0,30 | **0,338** |
+| attachement top-1 > 5 × hasard | oui | **0,294 > 0,074** |
 
 Les seuils sont **postérieurs** à la première mesure : bornes de non-régression, pas prédictions.
 
-## 5. Ce que ce gold ne dit pas
+## 6. Ce que ce gold ne dit pas
 
 - **160 phrases synthétiques** : la grammaire est indépendante, mais les phrases sont parfois
   peu naturelles (« nous compte avec il ») ; le gold réel reste les 20 phrases.
@@ -77,18 +106,25 @@ Les seuils sont **postérieurs** à la première mesure : bornes de non-régress
   tête le corrige partiellement.
 - **Le mock n'est pas un modèle** ; la cascade mesure le contrat, pas un gain neuronal.
 - **Le vrai modèle est refusé** : aucun chiffre de qualité neuronale n'est revendiqué.
+- **L'attachement est couvert à 34 %** : le S et le gold ne découpent pas les mêmes spans ; le
+  top-1/top-k ne porte que sur les 23 segments alignés, et le gold ne donne **qu'une** lecture
+  des ambiguïtés (le GP au verbe).
+- **Les 3 cibles anglaises** ne sont pas couvertes (le S est français) ; la couverture réelle
+  française est de 23/65.
 
-## 6. La suite
+## 7. La suite
 
 1. **Attachement** : évaluer la **cible** de l'attachement (le GP sur le GN ou le GV), pas
    seulement le type et la tête.
 2. **Qualifier un vrai modèle neuronal** (tagger ou LLM) sur les 180 ; l'adaptateur est branché.
 3. **Mesurer la cascade avec ce modèle**, pas avec le mock ; l'AUC/le regret.
-4. Étendre à **200+** phrases réelles, avec des relatives et des portées.
+4. **Attachement par tête** : évaluer la cible du segment qui couvre la tête, pas le span exact
+   — la couverture passerait de 34 % à ~90 %.
+5. Étendre à **200+** phrases réelles, avec des relatives et des portées.
 
-## 7. Fichiers
+## 8. Fichiers
 
-- [`gold.py`](../tools/tests/linguistique/gold.py) · [`gold.json`](../tools/tests/linguistique/gold.json) (20 réels).
-- [`gold_synthetique.py`](../tools/tests/linguistique/gold_synthetique.py) · [`gold_synthetique.json`](../tools/tests/linguistique/gold_synthetique.json) (160 synthétiques).
+- [`gold.py`](../tools/tests/linguistique/gold.py) · [`gold.json`](../tools/tests/linguistique/gold.json) (20 réels, 13 cibles).
+- [`gold_synthetique.py`](../tools/tests/linguistique/gold_synthetique.py) · [`gold_synthetique.json`](../tools/tests/linguistique/gold_synthetique.json) (160 synthétiques, 55 cibles).
 - [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py) · [`pensee-gold-linguistique.json`](pensee-gold-linguistique.json).
 - [`bloc-linguistique.md`](../docs/implantation/bloc-linguistique.md) — le contrat.

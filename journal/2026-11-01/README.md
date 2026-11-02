@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**69 commits** · **4 session(s)** · **9 thème(s)**
+**70 commits** · **4 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 5 | [distribue.md](distribue.md) |
 | docs | 18 | [docs.md](docs.md) |
-| memoire | 4 | [memoire.md](memoire.md) |
+| memoire | 5 | [memoire.md](memoire.md) |
 | mesures | 35 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -25,10 +25,10 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 26.8 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 27.0 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `b6a672ec-3349-4a4c-9e23-4478aa823170` | Git push to origin remote | 2026-11-01 13:28 | 0.1 h | [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 26.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
-| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 26.6 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 26.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 26.7 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -103,10 +103,18 @@
 | 18:54 | `550cd76d` | L — GOLD v0 : 20 PHRASES, POS 0,924, SYNTAGMES 0,356, PRAGMATIQUE 1,0/1,0/0,95/0,9 |
 | 18:57 | `d8d384c5` | ÉTAT — COMPTEURS SYNCHRONISÉS, JOURNAL DU CONTRÔLE 8 KO ET DE L'UDHR 2/24 |
 | 19:04 | `53dfd584` | L — GOLD 180 : POS 0,751 (0,924 RÉEL / 0,725 SYNTH), TÊTE 0,560, PRAGMATIQUE 1,0/1,0/0,99/0,89 |
+| 19:11 | `1a39470d` | DONNÉES — CINQ CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA) : 6,27 M ARTICLES, 25,1 GO, 8 KO 0, UDHR CITÉE |
 
 ## Le récit de la journée (écrit à la main)
 
 <!-- notes -->
+**Six corpus en texte intégral.** L'italien est mesuré : **1 561 411 articles**, **5,211 G
+caractères**, **5,29 Go**, **0/0/0** résidu, **8 Ko 0**, UDHR **2/23** (citée). Le total des six :
+**7,83 M articles**, **22,19 G caractères**, **30,4 Go**. Les compteurs de l'état ont été réparés
+(392 fiches, 490 JSON, 118 docs, 81 portes) : l'analyseur de la revue les avait mal lus dans le
+script de synchronisation — le bug est corrigé (le parseur lit désormais les quatre nombres par
+expression régulière).
+
 **Cinq corpus en texte intégral.** fr, ar, pt, zh, ja : **6,27 M articles**, **16,98 G
 caractères**, **25,1 Go** ; le **8 Ko est à zéro partout** ; l'UDHR est citée (fr 2/24, pt 2/40,
 ja 1/23) ; l'arabe a 28,9 % de lignes répétées (les formules et références) mais **0 au tronçon

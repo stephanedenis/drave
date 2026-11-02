@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 26.5 h |
+| Durée | 26.6 h |
 | Tours | 17 |
-| Messages | 479 |
-| Appels d'outils | 502 |
+| Messages | 488 |
+| Appels d'outils | 511 |
 | Fichiers touchés | 25 |
-| Commandes | 399 |
+| Commandes | 407 |
 | Sous-agents | 2 |
-| Commits | 25 |
+| Commits | 26 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -939,13 +939,22 @@ Le round 3 du goal est livré : le **gold 180** est mesuré, avec la **tête** c
 
 ### Tour 17 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Inspecter l'attachement S et les taggers disponibles
 - bash — Lire les cibles S et la construction des étiquettes syntagme
 - bash — Annoter les cibles d'attachement dans les deux golds
 - bash — Corriger le générateur synthétique et vérifier les cibles
 - bash — Mesurer l'attachement top-1/top-k sur les deux golds
+- bash — Exposer toutes les cibles S et remesurer l'attachement
+- bash — Corriger la cible par segment et remesurer
+- bash — Ajouter les seuils d'attachement au verdict
+- bash — Insérer la fiche d'attachement et les limites
+- bash — Mettre l'état à jour pour l'attachement
+- bash — Lire les compteurs réels et le tableau corrompu
+- bash — Réparer les compteurs et passer les portes
+- bash — Committer l'attachement mesuré et la fiche
+- job_output
 
 ## 3. Travail accompli
 
@@ -1026,7 +1035,7 @@ Le round 3 du goal est livré : le **gold 180** est mesuré, avec la **tête** c
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 359 autres
+- … et 367 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1192,4 +1201,5 @@ Le round 3 du goal est livré : le **gold 180** est mesuré, avec la **tête** c
 - B13 — LE BANC ANYTIME : A* BUT EN 32 NŒUDS, AUC 0,528/0,624 CONTRE 0,246/0,116 À L'ALÉATOIRE" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - L — GOLD v0 : 20 PHRASES, POS 0,924, SYNTAGMES 0,356, PRAGMATIQUE 1,0/1,0/0,95/0,9" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - L — GOLD 180 : POS 0,751 (0,924 RÉEL / 0,725 SYNTH), TÊTE 0,560, PRAGMATIQUE 1,0/1,0/0,99/0,89" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- L — ATTACHEMENT : TOP-1 0,294 / TOP-K 0,338 SUR 68 CIBLES (COUVERTURE 0,338), HASARD 0,015" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

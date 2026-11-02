@@ -16334,3 +16334,156 @@ fiche : 5 langues
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-01/README.md'); s=p.read_text()\npara='''**Cinq corpus en texte intégral.** fr, ar, pt, zh, ja : **6,27 M articles**, **16,98 G\ncaractères**, **25,1 Go** ; le **8 Ko es … [2549 caractères tronqués]`
+
+  ```
+[master 1a39470d] DONNÉES — CINQ CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA) : 6,27 M ARTICLES, 25,1 GO, 8 KO 0, UDHR CITÉE
+ 29 files changed, 1046 insertions(+), 59 deletions(-)
+ create mode 100644 reports/corpus-wiki-ar-texte-contamination.json
+ create mode 100644 reports/corpus-wiki-ar-texte.json
+ create mode 100644 reports/corpus-wiki-ja-texte-contamination.json
+ create mode 100644 reports/corpus-wiki-ja-texte.json
+ create mode 100644 reports/corpus-wiki-pt-texte-contamination.json
+ create mode 100644 reports/corpus-wiki-pt-texte.json
+ create mode 100644 reports/corpus-wiki-zh-texte-contamination.json
+ create mode 100644 reports/corpus-wiki-zh-texte.json
+commit OK (essai 1)
+1a39470d DONNÉES — CINQ CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA) : 6,27 M ARTICLES, 25,1 GO, 8 KO 0, UDHR CITÉE
+53dfd584 L — GOLD 180 : POS 0,751 (0,924 RÉEL / 0,725 SYNTH), TÊTE 0,560, PRAGMATIQUE 1,0/1,0/0,99/0,89
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 2 : cinq corpus en texte intégral mesurés, committés (fr, ar, pt, zh, ja)
+
+**Round 2/1000 — la moitié des langues est faite.** Les runs de l'arabe, du portugais, du chinois et du japonais ont fini ; les manifestes, les contaminations et la fiche sont committés (`1a39470d`).
+
+## Les cinq corpus mesurés
+
+| langue | articles | caractères | octets | fuite 8 Ko | éval | résidus `{{`/`[[` |
+|---|---:|---:|---:|---:|---|---|
+| fr | 2 388 219 | 8,025 G | 8,34 Go | **0** | XNLI 0/40, UDHR 2/24 (citée) | 1/0 |
+| ar | 1 000 310 | 1,994 G | 3,57 Go | **0** | XNLI 0/40 | 1/161 |
+| pt | 970 793 | 3,104 G | 3,21 Go | **0** | UDHR 2/40 (citée) | 1/296 |
+| zh | 643 122 | 1,045 G | 2,63 Go | **0** | XNLI 0/40 | 14/0 |
+| ja | 1 271 107 | 2,809 G | 7,33 Go | **0** | UDHR 1/23 (citée) | 2/62 |
+
+**Total : 6,27 M articles, 16,98 G caractères, 25,1 Go.** Le **8 Ko est à zéro partout** — aucune unité d'entraînement ne traverse les splits.
+
+## Ce que les mesures disent
+
+- **L'arabe** a **28,9 % de lignes dupliquées** entre splits, mais **0 au tronçon de 8 Ko** : ce sont les formules, les références et les phrases coraniques qui se répètent d'un article à l'autre. L'unité d'entraînement (8 Ko) est propre ; la fiche explique la différence.
+- **L'UDHR est citée** dans Wikipédia pour le français (2/24), le portugais (2/40) et le japonais (1/23) : ce n'est pas un jeu tenu à l'écart pour ces langues. Le **XNLI** est à 0 pour le français, l'arabe et le chinois.
+- **Les liens résiduels** : 161 lignes sur 20 000 en arabe, 296 en portugais, 62 en japonais — les légendes et notes complexes. C'est une limite nommée ; une passe finale les enlèvera.
+- **Le japonais pèse 7,33 Go** (2,81 G caractères, 3 octets par caractère) — le plus gros après le français.
+
+## La suite
+
+Les cinq derniers runs courent : **it** (bientôt), **de, ru, es** (~30-60 min), **en** (le plus long, ~2-3 h). Puis le **catalogue complet des dix** (la table des dix langues, les totaux), l'**extraction PDF/OCR** (livres, CEGEP, collections) et la **préparation R1.1/R1.2** avec A2.6/A8.3. Le goal reste actif ; je reprends au prochain round avec les manifestes suivants.
+
+
+## Tour 15
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 3/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; echo \"=== processus\"; ps -eo pid,etime,pcpu,cmd | grep \"corpus_wikipedia_texte.py --langue\" | grep -v grep | awk '{print $1,$2,$3,$NF}'; echo \"=== manifestes\"; ls reports/corpus-wiki-*-texte.json 2>/dev/null; echo  … [264 caractères tronqués]`
+
+  ```
+19:13
+=== processus
+1494795 42:02 98.4 reports/corpus-wiki-en-texte.json
+1494796 42:02 98.7 reports/corpus-wiki-de-texte.json
+1494797 42:02 98.4 reports/corpus-wiki-ru-texte.json
+1494798 42:02 98.0 reports/corpus-wiki-es-texte.json
+=== manifestes
+reports/corpus-wiki-ar-texte.json
+reports/corpus-wiki-fr-texte.json
+reports/corpus-wiki-it-texte.json
+reports/corpus-wiki-ja-texte.json
+reports/corpus-wiki-pt-texte.json
+reports/corpus-wiki-zh-texte.json
+=== logs
+it: }
+
+de:   [de] 3800000 lus · 1855495 gardés · 7.51 G caractères
+
+ru:   [ru] 4000000 lus · 1305539 gardés · 4.44 G caractères
+
+es:   [es] 4600000 lus · 1740199 gardés · 6.27 G caractères
+
+en:   [en] 2000000 lus · 861118 gardés · 6.26 G caractères
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/corpus-wiki-it-texte.json').read_text())\nfor k in ('articles_lus','articles_gardes','articles_rediriges','caracteres_gardes','mots_estimes','troncons','octets', … [906 caractères tronqués]`
+
+  ```
+articles_lus 4098658
+articles_gardes 1561411
+articles_rediriges 1120115
+caracteres_gardes 5210818583
+mots_estimes 840454610
+troncons 1801652
+octets {'train': 4766825191, 'val': 261531889, 'test': 259774399}
+residus {'modele': 0, 'lien': 0, 'balise': 0, 'lignes_echantillon': 20000}
+}
+lignes {'val.txt': 0.061701, 'test.txt': 0.061687}
+8 Ko {'val.txt': 0.0, 'test.txt': 0.0}
+éval [('it-udhr.txt', 2, 23)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-corpus-wiki-texte.md'); s=p.read_text()\ns=s.replace(\"Les quatre premiers autres corpus\\n> (ar, pt, zh, ja) sont mesurés\",\n            \"Les cinq premiers autres cor … [2937 caractères tronqués]`
+
+  ```
+fiche : 6 langues
+  T0 max : 3992 mots (budget 4 000)
+     · compteurs : la ligne « fichiers / JSON » manque dans en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '/## Les chiffres de l.état/,/## Les chantiers/p' docs/pilotage/en-cours.md", "description": "Inspect current counters block", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+## Les chiffres de l'état
+
+> **Source unique.** Ces valeurs sont vérifiées par `tools/revue_documentation.py`.
+
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **118** (76 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **392** / **·** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **JSON** (hors archive et README) | `docs/**/*.md` |
+| dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
+
+## Les chantiers et leurs bloquants
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/revue_documentation.py 2>&1 | head -2; python3 - <<'PY'\nimport pathlib,re,subprocess\nsortie=subprocess.run(['python3','tools/revue_documentation.py'],capture_output=True,text=True).stdout\nm=re.search(r\"(\\d+) fiche\\( … [940 caractères tronqués]`
+
+  ```
+revue de documentation · 392 fiche(s) · 490 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 3 anomalie(s) :
+parsé: ('392', '490', '118', '81')
+## Les chiffres de l'état
+
+> **Source unique.** Ces valeurs sont vérifiées par `tools/revue_documentation.py`.
+
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **392** / **490** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
+| dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
+
+## Les chantiers et leurs bloquants
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-01/README.md'); s=p.read_text()\npara='''**Six corpus en texte intégral.** L'italien est mesuré : **1 561 411 articles**, **5,211 G\ncaractères**, **5,29 Go**, **0/0/0** … [1737 caractères tronqués]`

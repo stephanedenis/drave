@@ -507,6 +507,23 @@ class Heuristique:
         except Exception:
             return None
 
+    def _cibles_s(self, texte: str) -> dict:
+        """Toutes les cibles du générateur S (pas seulement le dernier segment ambigu).
+
+        Lecture seule de l'API interne du S : `_tokens`/`_segmente` rendent les `Segment` avec
+        `cible_nom`/`cible_gp`/`cible_verbe`. Le défaut retenu est la cible la plus proche
+        (GP, puis GN, puis GV), comme le premier candidat de `analyser`.
+        """
+        if not self.segmenter_s:
+            return {}
+        try:
+            import generateur
+            base = generateur._segmente(texte, generateur._tokens(texte))
+            return {(s.debut, s.fin, s.type): (s.cible_gp or s.cible_nom or s.cible_verbe)
+                    for s in base}
+        except Exception:
+            return {}
+
     def _syntagmes_simple(self, texte: str, langue: str) -> list[dict]:
         mots = self._mots(texte)
         lex = POS_FERME.get(langue, POS_FERME["fr"])
@@ -627,17 +644,25 @@ class Heuristique:
 
         # 5. syntagmes : le générateur S (candidats) ou un chunker simple
         cands = self._syntagmes_s(texte)
+        cibles_s = self._cibles_s(texte) if cands else {}
         if cands:
             for c in cands[:1]:
                 noms = [x.get("nom", "") for x in cands]
                 for s in c.get("segments", []):
+                    att = c.get("attachement") or {}
+                    if att.get("segment") == s.get("texte"):
+                        cible = att.get("cible")
+                    else:
+                        cible = cibles_s.get((s.get("debut"), s.get("fin"), s.get("type")))
+                    meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}
+                    if cible:
+                        meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
                     etiquettes.append(Etiquette("syntagme", s.get("type", "GN"),
                                                 s.get("texte", ""), s.get("debut", 0),
                                                 s.get("fin", 0), self.nom,
                                                 0.55 if len(cands) == 1 else 0.4,
                                                 candidats=noms, langue=lg, script=script,
-                                                meta={"role": s.get("role", ""),
-                                                      "niveau": s.get("niveau", 0)}))
+                                                meta=meta))
         else:
             for s in self._syntagmes_simple(texte, lg):
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],

@@ -100,7 +100,8 @@
      "texte": "de la voisine",
      "role": "possession",
      "debut": 8,
-     "fin": 21
+     "fin": 21,
+     "cible": "chat"
     },
     {
      "type": "GV",
@@ -195,7 +196,8 @@
      "texte": "dans le parc",
      "role": "lieu",
      "debut": 22,
-     "fin": 34
+     "fin": 34,
+     "cible": "vu"
     }
    ],
    "pragma": {
@@ -270,7 +272,8 @@
      "texte": "pour attraper le bus",
      "role": "but",
      "debut": 11,
-     "fin": 31
+     "fin": 31,
+     "cible": "couru"
     }
    ],
    "pragma": {
@@ -339,7 +342,8 @@
      "texte": "qu'elle viendrait",
      "role": "contenu",
      "debut": 11,
-     "fin": 28
+     "fin": 28,
+     "cible": "dit"
     }
    ],
    "pragma": {
@@ -407,7 +411,8 @@
      "texte": "du voisin",
      "role": "possession",
      "debut": 9,
-     "fin": 18
+     "fin": 18,
+     "cible": "chien"
     },
     {
      "type": "GV",
@@ -490,7 +495,8 @@
      "texte": "dans le jardin",
      "role": "lieu",
      "debut": 19,
-     "fin": 33
+     "fin": 33,
+     "cible": "jouent"
     }
    ],
    "pragma": {
@@ -636,7 +642,8 @@
      "texte": "ici",
      "role": "lieu",
      "debut": 6,
-     "fin": 9
+     "fin": 9,
+     "cible": "Viens"
     }
    ],
    "pragma": {
@@ -704,7 +711,8 @@
      "texte": "que j'ai lu",
      "role": "qualité",
      "debut": 9,
-     "fin": 20
+     "fin": 20,
+     "cible": "livre"
     },
     {
      "type": "GV",
@@ -780,7 +788,8 @@
      "texte": "à manger",
      "role": "but",
      "debut": 19,
-     "fin": 27
+     "fin": 27,
+     "cible": "prêt"
     }
    ],
    "pragma": {
@@ -888,7 +897,8 @@
      "texte": "avec le télescope",
      "role": "moyen",
      "debut": 16,
-     "fin": 33
+     "fin": 33,
+     "cible": "vu"
     }
    ],
    "pragma": {
@@ -1020,7 +1030,8 @@
      "texte": "in the park",
      "role": "lieu",
      "debut": 22,
-     "fin": 33
+     "fin": 33,
+     "cible": "saw"
     }
    ],
    "pragma": {
@@ -1095,7 +1106,8 @@
      "texte": "that she would come",
      "role": "contenu",
      "debut": 9,
-     "fin": 28
+     "fin": 28,
+     "cible": "said"
     }
    ],
    "pragma": {
@@ -1261,7 +1273,8 @@
      "texte": "to eat",
      "role": "but",
      "debut": 18,
-     "fin": 24
+     "fin": 24,
+     "cible": "ready"
     }
    ],
    "pragma": {

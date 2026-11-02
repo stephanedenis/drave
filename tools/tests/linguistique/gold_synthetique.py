@@ -93,25 +93,27 @@ class P:
         if mode == "sv":
             gn, _ = self.gn(); tokens += gn; s = len(tokens) - len(gn); segs.append(("GN", s, len(tokens)))
             gv, gps = self.gv(); tokens += gv; v = s + len(gn); segs.append(("GV", v, len(tokens)))
+            v_txt = next((t for t, p in gv if p == "VERB"), gv[-1][0])
             for prep, g in gps:
                 i = v + [t[0] for t in gv].index(prep) + 1
-                segs.append(("GP", i, i + len(g)))
+                segs.append(("GP", i, i + len(g), v_txt))
         elif mode == "sv_gp":
             gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
             v = self.verbe(); tokens.append((v, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))
             prep = self.rng.choice(PREP); gn2, _ = self.gn(); tokens.append((prep, "PREP"))
-            i = len(tokens); tokens += gn2; segs.append(("GP", i - 1, len(tokens)))
+            i = len(tokens); tokens += gn2; segs.append(("GP", i - 1, len(tokens), v))
         elif mode == "rel":
             gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
-            i = len(tokens); tokens.append(("qui", "PRON")); v = self.verbe(); tokens.append((v, "VERB"))
-            segs.append(("REL", i, len(tokens)))
+            i = len(tokens); nom = gn[-1][0]; tokens.append(("qui", "PRON"))
+            v = self.verbe(); tokens.append((v, "VERB"))
+            segs.append(("REL", i, len(tokens), nom))
             v2 = self.verbe(); tokens.append((v2, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))
         elif mode == "sub":
             gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
             v = self.verbe(); tokens.append((v, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))
             i = len(tokens); tokens.append(("que", "CONJ"))
             gn2, _ = self.gn(); tokens += gn2; v2 = self.verbe(); tokens.append((v2, "VERB"))
-            segs.append(("SUB", i, len(tokens)))
+            segs.append(("SUB", i, len(tokens), v))
         elif mode == "question":
             gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
             v = self.verbe(); tokens.append((v, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))
@@ -148,10 +150,11 @@ class P:
         ponct = "?" if pragma["acte"] == "question" else ("!" if pragma["acte"] == "exclamation" else "")
         texte = " ".join(t for t, _ in mots) + ponct
         # segments : les indices portent sur les tokens hors ponctuation
-        for typ, a, b in segs:
+        for item in segs:
+            typ, a, b = item[:3]
             if b <= a:
                 continue
-            segments.append((typ, a, b))
+            segments.append(item)
         return {"id": pid, "langue": "fr", "texte": texte, "tokens": mots,
                 "segments_idx": segments, "pragma": pragma, "source": "synthetique"}
 
@@ -175,11 +178,16 @@ def construire(n=160, graine=42) -> dict:
             mots.append({"texte": t, "pos": pos, "debut": i, "fin": i + len(t)})
             curseur = i + len(t)
         segments = []
-        for typ, a, b in d.pop("segments_idx"):
+        for item in d.pop("segments_idx"):
+            typ, a, b = item[:3]
+            cible = item[3] if len(item) > 3 else None
             debut = mots[a]["debut"]
             fin = mots[b - 1]["fin"]
-            segments.append({"type": typ, "texte": d["texte"][debut:fin], "role": typ.lower(),
-                             "debut": debut, "fin": fin})
+            seg = {"type": typ, "texte": d["texte"][debut:fin], "role": typ.lower(),
+                   "debut": debut, "fin": fin}
+            if cible:
+                seg["cible"] = cible
+            segments.append(seg)
         d["mots"] = mots
         d["segments"] = segments
         phrases.append(d)

@@ -14246,3 +14246,55 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-829", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for g in 1 2 3; do echo \"-- W-g$g\"; tail -1 work/n2j/W-g$g.log 2>/dev/null; done; ls work/n2j/W-g*.pt 2>/dev/null", "description": "Check the distillation progress"}`
+
+  ```
+19:14
+-- W-g1
+pas 11250 · seq 128 · perte 22.0216 · PPL 128/4 3.8749 · 784 s
+-- W-g2
+pas 11500 · seq 128 · perte 21.0524 · PPL 128/4 3.9002 · 791 s
+-- W-g3
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2k/extrait_en.py <<'PY'\nimport sqlite3, pathlib\nsrc = \"/home/stephane/Data13TB/stephane/data/wikipedia/db/enwiki_v14.db\"\ncon = sqlite3.connect(f\"file:{src}?mode=ro\", uri=True)\ncur = con.cursor()\nn = cur.execute(\ … [907 caractères tronqués]`
+
+  ```
+en 1522216
+[still running after 60000ms; moved to background job bash-831]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-831", "timeout_ms": 300000, "wait": true}`
+
+  ```
+19:16
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat work/n2k/extrait_en.log; ls -la data/wiki_en/ | head -3; date '+%H:%M'; tail -1 work/n2j/W-g1.log; tail -1 work/n2j/W-g2.log", "description": "Check the English extraction"}`
+
+  ```
+19:16
+pas 12750 · seq 128 · perte 21.9341 · PPL 128/4 3.8479 · 887 s
+pas 13000 · seq 128 · perte 22.4631 · PPL 128/4 3.9007 · 894 s
+[stderr]
+ls: cannot access 'data/wiki_en/': No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la work/n2k/extrait_en.py; timeout 600 python3 work/n2k/extrait_en.py 2>&1 | tail -5; ls -la data/wiki_en/ 2>/dev/null | head -2", "description": "Run the English extraction directly"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 822  1 nov 19:14 work/n2k/extrait_en.py
+[still running after 60000ms; moved to background job bash-833]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-833", "timeout_ms": 600000, "wait": true}`
