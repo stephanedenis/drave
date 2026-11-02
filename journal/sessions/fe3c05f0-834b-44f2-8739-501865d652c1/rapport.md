@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 30.5 h |
-| Tours | 61 |
-| Messages | 1134 |
-| Appels d'outils | 1021 |
+| Durée | 30.6 h |
+| Tours | 68 |
+| Messages | 1158 |
+| Appels d'outils | 1030 |
 | Fichiers touchés | 18 |
-| Commandes | 942 |
+| Commandes | 951 |
 | Sous-agents | 0 |
 | Commits | 61 |
 | Compactages de contexte | 3 |
@@ -149,6 +149,20 @@
 **Tour 60** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 61** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 62** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 63** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 64** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 65** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 66** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 67** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 68** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1965,6 +1979,145 @@ Le processus des documents est reparti : son `rchar` est passé de 1 578,9 Go à
 
 ### Tour 61 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
+*1 appels d'outils.* Actions notables :
+
+- bash — Check document child process and manifest
+
+**Synthèse produite :**
+
+⏵ Round 49 : pdftotext sur f163025456.pdf depuis 1 min 44 — le délai de 120 s va le couper
+
+**Round 49/1000 — le PDF lourd va être abandonné par le délai, comme prévu.**
+
+- **Les documents** : `pdftotext` travaille depuis **1 min 44** sur `f163025456.pdf` ; le délai de 120 s par PDF va le couper dans quelques secondes, et le parcours passera au suivant (le compteur « courts/erreurs » l'enregistrera). Le train reste à **763,6 Mo** (23 h 04), 2 558 documents gardés, 812,6 M caractères.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours.
+- **Les manifestes** (`corpus-pdf-documents.json`, `ocr-pdf.json`) ne sont pas encore écrits.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : le garde-fou de 120 s fonctionne ; les PDF lourds coûtent du temps mais ne bloquent pas le parcours. Le goal reste actif ; le prochain round vérifie le passage au PDF suivant et les manifestes.
+
+### Tour 62 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check document child and OCR log lines
+
+**Synthèse produite :**
+
+⏵ Round 50 : le parcours a sauté le PDF lourd et enchaîne sur f167368456.pdf
+
+**Round 50/1000 — le garde-fou a fonctionné et le parcours continue.**
+
+- **Les documents** : `pdftotext` a été coupé par le délai sur `f163025456.pdf`, et `pdfinfo` travaille maintenant sur **`f167368456.pdf`** — le parcours a bien passé au PDF suivant, sans se bloquer. Le train est à **763,8 Mo** (23 h 07), 2 558 documents gardés, 812,6 M caractères.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre.
+- **Les manifestes** (`corpus-pdf-documents.json`, `ocr-pdf.json`) ne sont pas encore écrits.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les documents avancent malgré les PDF lourds, l'OCR est le poste lent. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+### Tour 63 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check document child process and manifest
+
+**Synthèse produite :**
+
+⏵ Round 51 : les documents enchaînent les PDF (f167561632_Íå…), train à 763,9 Mo
+
+**Round 51/1000 — le parcours des documents continue, sans blocage.**
+
+- **Les documents** : `pdftotext` travaille sur **`f167561632_Íå_î÷åíûå_ðàîèíå.pdf`** (un PDF au nom en cyrillique mal décodé) ; le train est à **763,9 Mo** (23 h 07), 2 558 documents gardés, 812,6 M caractères. Le parcours enchaîne les PDF, les lourds sont coupés par le délai.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre.
+- **Les manifestes** (`corpus-pdf-documents.json`, `ocr-pdf.json`) ne sont pas encore écrits.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les documents avancent, l'OCR est le poste lent ; les deux sont sains. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+### Tour 64 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check document child process and manifests
+
+**Synthèse produite :**
+
+⏵ Round 52 : les documents enchaînent (f167639024_Una_mica_tanto_breve), train à 764,7 Mo
+
+**Round 52/1000 — le parcours des documents continue.**
+
+- **Les documents** : `pdftotext` travaille sur **`f167639024_Una_mica_tanto_breve.pdf`** ; le train est à **764,7 Mo** (23 h 07), 2 558 documents gardés, 812,6 M caractères. Le parcours enchaîne les PDF, les lourds sont coupés par le délai.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre.
+- **Les manifestes** (`corpus-pdf-documents.json`, `ocr-pdf.json`) ne sont pas encore écrits.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les documents avancent, l'OCR est le poste lent ; les deux sont sains. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+### Tour 65 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check document child process and manifests
+
+**Synthèse produite :**
+
+⏵ Round 53 : les documents accélèrent (770,4 Mo à 23 h 08, +5,7 Mo), OCR à 4 livres
+
+**Round 53/1000 — les documents ont retrouvé du débit.**
+
+- **Les documents** : `pdftotext` travaille sur **`f168625696_The_amsldoc_and_amsdtx_document_classes.pdf`** ; le train est à **770,4 Mo** (23 h 08, **+5,7 Mo** depuis 23 h 07 — le meilleur débit de la soirée), 2 558 documents gardés, 812,6 M caractères.
+- **L'OCR** : quatre livres océrisés (2,5 Mo), la détection des scannés toujours en cours, sans nouveau livre.
+- **Les manifestes** (`corpus-pdf-documents.json`, `ocr-pdf.json`) ne sont pas encore écrits.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les documents avancent bien quand les PDF sont des documents techniques (LaTeX) plutôt que des scans ; l'OCR est le poste lent. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches.
+
+### Tour 66 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check document child process and manifests
+- bash — Inspect OCR process open files and children
+
+**Synthèse produite :**
+
+⏵ Round 54 : l'OCR océrise la page 241 (tesseract actif), les documents à 776,7 Mo
+
+**Round 54/1000 — les deux parcours sont vivants, et l'OCR travaille vraiment.**
+
+`lsof` sur le processus OCR montre un enfant **`tesseract /tmp/ocr-pdf-jz5l8two/p-241.png`** : il océrise la **page 241** d'un livre (l'image extraite du PDF), avec le train OCR à **2 550 157 octets** et les val/test encore vides (le split attend la fin). Ce n'est donc pas un blocage : c'est un livre long en cours.
+
+Côté documents, le train est à **776,7 Mo** (23 h 08, +6,5 Mo) et `pdftotext` travaille sur `f168863976_Nie_za_krótkie_wprowadzenie.pdf` ; le parcours enchaîne les PDF à bon rythme.
+
+**Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**La suite** : le livre OCR en cours (page 241) finira, les documents continuent ; dès leurs manifestes, j'écris les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné). Le goal reste actif.
+
+### Tour 67 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check document and OCR children and status
+
+**Synthèse produite :**
+
+⏵ Round 55 : les documents passent 6 000/7 496 (845,7 M car, train 780 Mo), l'OCR est à la page 247
+
+**Round 55/1000 — les documents accélèrent nettement ; l'OCR est sur un livre long.**
+
+- **Les documents** : le journal vient d'afficher **6 000 PDF · 2 992 gardés · 845,7 M caractères** ; le train est à **780,0 Mo** (23 h 08) et `pdftotext` travaille sur **`f168962400_Valgrind_Documentation.pdf`**. Il reste ~1 500 PDF, soit ~30-45 min à ce rythme.
+- **L'OCR** : `tesseract` océrise la **page 247** du livre en cours ; le train OCR est à **2 550 157 octets** (22 h 42, inchangé depuis — le livre est long et le texte n'est écrit qu'à la fin de chaque document). C'est le poste le plus lent, mais il vit.
+- **Les manifestes** (`corpus-pdf-documents.json`, `ocr-pdf.json`) ne sont pas encore écrits.
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo) et l'**A2.6/A8.3** restent mesurés et committés ; l'état, la roadmap et le plan sont à jour.
+
+**Le constat** : les documents devraient finir avant 8 h ; l'OCR dépend de la longueur des livres. Le goal reste actif ; le prochain round vérifie leurs manifestes et écrit les fiches (OCR brut, WER non mesurée, droits réservés ; Documents personnels, licences, natif/scanné).
+
+### Tour 68 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check document and OCR progress
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2032,7 +2185,7 @@ Le processus des documents est reparti : son `rchar` est passé de 1 578,9 Go à
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 902 autres
+- … et 911 autres
 
 ## 4. Mesures et résultats marquants
 

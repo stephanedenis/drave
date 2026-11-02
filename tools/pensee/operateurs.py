@@ -867,6 +867,65 @@ LABYRINTHE_PORTE_MINUTE = Probleme(
 )
 
 
+class PolitiqueAppriseAleatoire(PolitiqueApprise):
+    """La Q-table de la porte **aléatoire** : à chaque pas, la porte saute avec p = 0,2."""
+
+    nom = "aleatoire"
+
+    def _cle(self, e: Etat) -> tuple:
+        return _xy_pmob(e)[0], _xy_pmob(e)[1], _open_pmob(e), _d_pmob(e)
+
+    def _pas(self, cle, action, ouvre: bool):
+        x, y, o, d = cle
+        door = PORTES_MOBILE[d]
+        dx = {"droite": 1, "gauche": -1}.get(action, 0)
+        dy = {"bas": 1, "haut": -1}.get(action, 0)
+        nx, ny = x + dx, y + dy
+        if ouvre and not o and (nx, ny) == door:
+            o = True
+        if not _libre_pmob(nx, ny, o, d):
+            return cle, 0.0
+        d2 = 1 - d if self.rng.random() < 0.2 else d
+        gain = 0.1 if (o and not cle[2]) else -0.01
+        return (nx, ny, o, d2), gain
+
+    def apprendre(self) -> None:
+        for _ in range(self.episodes):
+            cle = (0, 0, False, 0)
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain = self._pas(cle, a, True)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+    def propose(self, etat, but):
+        cle = self._cle(etat)
+        return max(self.ACTIONS, key=lambda a: self._q(cle, a))
+
+
+def seule_aleatoire(p: PolitiqueAppriseAleatoire, max_pas: int = 200) -> tuple[bool, int]:
+    """La politique seule sur la porte aléatoire (le hasard est dans `_pas`)."""
+    cle, pas = (0, 0, False, 0), 0
+    for _ in range(max_pas):
+        if cle[:2] == P_BUT:
+            return True, pas
+        e = _etat_pmob(cle[0], cle[1], cle[2], cle[3])
+        a = p.propose(e, P_BUT)
+        if a is None:
+            return False, pas
+        cle, _ = p._pas(cle, a, True)
+        pas += 1
+    return False, pas
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

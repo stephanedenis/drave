@@ -17999,3 +17999,117 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/graines.py tools/pensee/autotest.py reports/rapport-pensee-phase-graines.md reports/pensee-phase-graines.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en … [500 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-655]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-655", "timeout_ms": 600000, "wait": true}`
+
+  ```
+20 files changed, 759 insertions(+), 43 deletions(-)
+ create mode 100644 reports/pensee-phase-graines.json
+ create mode 100644 reports/rapport-pensee-phase-graines.md
+COMMIT OK 1
+f9cc2718 B13 — LA PHASE SUR 5 GRAINES : 5/5 BUTS (10–14 PAS), 376–422 ÉTATS-Q ; 41/41
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Phase sur 5 graines : 5/5 buts (10–14 pas), 376–422 états-Q ; 41/41
+
+Le round 42 du goal est livré : la **phase** (3 pas puis 2) tient sur **5 graines**. Commit **`f9cc2718`**.
+
+## Les 5 graines
+
+`PolitiqueApprisePhase` entraînée (1000 épisodes) sur 5 graines, exécutée seule ; la porte alterne avec une période qui change (3 puis 2, cycle de 10).
+
+| graine | états-Q | but | pas |
+|---:|---:|---|---:|
+| 0 | 376 | **oui** | 10 |
+| 1 | 408 | **oui** | 10 |
+| 2 | 422 | **oui** | 10 |
+| 3 | 385 | **oui** | 10 |
+| 4 | 399 | **oui** | 14 |
+
+**Ce que ça dit** :
+
+- **5/5 buts** : la phase (3 puis 2) est apprise sur toutes les graines ; la politique n'est pas un accident de la graine 0.
+- **Un détour sur une graine** (14 pas contre 10) : l'exploration de la graine 4 laisse un chemin plus long ; le but est atteint quand même.
+- **La taille varie** (376–422 états) sans casser le résultat : la structure `t % 10` suffit.
+- **La négative reste** : la politique minute (T21/T28) ne connaît pas l'horloge ; la politique bouge (T34) ne connaît qu'une période.
+
+## L'état
+
+- Fiche : [`rapport-pensee-phase-graines.md`](../../reports/rapport-pensee-phase-graines.md) ; JSON [`pensee-phase-graines.json`](../../reports/pensee-phase-graines.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T38 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **41/41 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **431 fiches / 529 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Période aléatoire** : le rythme change sans préavis.
+2. **Plus de phases** : 3, 2, 4, 2 ; la table grandit-elle ?
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la période **aléatoire**.
+
+
+## Tour 56
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 43/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; cat > /tmp/paleat.py <<'PY'\nclass PolitiqueAppriseAleatoire(PolitiqueApprise):\n    \"\"\"La Q-table de la porte **aléatoire** : à chaque pas, la porte saute avec p = 0,2.\"\"\"\n\n    nom = \"aleatoire\ … [2873 caractères tronqués]`
+
+  ```
+f9cc2718 B13 — LA PHASE SUR 5 GRAINES : 5/5 BUTS (10–14 PAS), 376–422 ÉTATS-Q ; 41/41
+ok
+q 182
+20 runs: 20 /20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T38 la phase sur 5 graines        5/5 buts (10–14 pas), la même politique\\n\",\n\"  T38 la phase sur 5 graines        5/5 … [1234 caractères tronqués]`
+
+  ```
+ok
+  ✅ T37 période qui change phase : A* 28 nœuds/but, seule but/10 pas (376 états-Q)
+  ✅ T38 phase sur 5 graines phase graines : 5/5 buts, pas [10, 10, 10, 10, 14]
+  ✅ T39 porte aléatoire    aléatoire : 20/20 buts, 182 états-Q
+  42/42 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-aleatoire.md <<'MD'\n# B13 — la porte aléatoire : elle saute à 20 % par pas, la politique réussit 20/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n>  … [6274 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 432 fiche(s) · 530 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [300 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-aleatoire.md reports/pensee-aleatoire.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cour … [490 caractères tronqués]`

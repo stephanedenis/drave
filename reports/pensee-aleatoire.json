@@ -1,0 +1,18 @@
+{
+ "date": "2026-11-01",
+ "ligne": "B13",
+ "portes": "42/42",
+ "p_saut": 0.2,
+ "politique": {
+  "episodes": 2000,
+  "graine": 0,
+  "etats_q": 182,
+  "runs": 20,
+  "buts": 20
+ },
+ "limites": [
+  "20 exécutions",
+  "saut après le pas",
+  "toy"
+ ]
+}

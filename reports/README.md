@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-aleatoire.md`](rapport-pensee-aleatoire.md) | **B13** — la porte aléatoire : saut 20 %, 20/20 buts, 182 états-Q, **42/42** |
 | [`rapport-pensee-phase-graines.md`](rapport-pensee-phase-graines.md) | **B13** — la phase sur 5 graines : 5/5 buts, 10–14 pas, 376–422 états-Q, **41/41** |
 | [`rapport-pensee-phase.md`](rapport-pensee-phase.md) | **B13** — la période qui change : 3 puis 2 pas, A* 28 nœuds, politique but/10, **40/40** |
 | [`rapport-pensee-periode.md`](rapport-pensee-periode.md) | **B13** — la période variable : 2–5 pas, 4/4 buts, 10 pas, **39/39** |

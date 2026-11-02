@@ -632,6 +632,19 @@ def t38_phase_graines() -> tuple[bool, str]:
         f"phase graines : {buts}/5 buts, pas {[l['pas'] for l in lignes]}")
 
 
+def t39_aleatoire() -> tuple[bool, str]:
+    """La porte aléatoire : elle saute à 20 % par pas ; la politique réussit 20/20."""
+    from .operateurs import PolitiqueAppriseAleatoire, seule_aleatoire
+    p = PolitiqueAppriseAleatoire(episodes=2000, graine=0)
+    p.apprendre()
+    ok = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, _ = seule_aleatoire(p)
+        ok += b
+    return ok == 20, f"aléatoire : {ok}/20 buts, {len(p.q)} états-Q"
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -669,7 +682,8 @@ def main() -> int:
               ("T35 porte qui bouge, 5 graines", t35_bouge_graines()),
               ("T36 période variable", t36_periode()),
               ("T37 période qui change", t37_phase()),
-              ("T38 phase sur 5 graines", t38_phase_graines())]
+              ("T38 phase sur 5 graines", t38_phase_graines()),
+              ("T39 porte aléatoire", t39_aleatoire())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
