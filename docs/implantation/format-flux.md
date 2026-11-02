@@ -1,12 +1,12 @@
-# Le format de flux (DRVF) — spécification
+# Le format de flux ([DRVF](../theorie/glossaire/entrees/drvf.md)) — spécification
 
-> **Ce que ce document est.** La **spécification** du format de flux : une trace, un rejeu, un
+> **Ce que ce document est.** La **spécification** du format de flux : une [trace](../theorie/glossaire/entrees/trace.md), un [rejeu](../theorie/glossaire/entrees/rejeu.md), un
 > transport et une analyse dans les mêmes octets. **Chargement :** T1 — lire ce résumé, puis la
 > section utile ; le protocole réseau est détaillé plus bas.
 
 Ce format sert **quatre choses à la fois**, et c'est délibéré :
 
-1. la **trace** d'exécution (`--trace-flux`) : ce qui s'est passé, couche par
+1. la **trace** d'exécution (`--trace-flux`) : ce qui s'est passé, [couche](../theorie/glossaire/entrees/couche.md) par
    couche ;
 2. le **rejeu** (`--flux-forcer`) : on réinjecte les activations enregistrées et
    le calcul repart de là ;
@@ -40,14 +40,14 @@ fin       sentinelle   u16          0xFFFF (optionnelle : la fin de fichier suff
 ```
 
 Taille : `14 + 6 × n_actifs` en v1, `14 + 3 × n_actifs` en v2. Mesuré sur une
-trace **dense** : **6,02 octets par neurone actif** en v1, **3,01** en v2 ; sur une
+trace **dense** : **6,02 octets par [neurone](../theorie/glossaire/entrees/neurone.md) actif** en v1, **3,01** en v2 ; sur une
 trace creuse (39,9 % d'activité) : 6,04 et 3,04 — deux centièmes de plus, parce que
 l'en-tête de liste de 14 octets pèse alors sur trois fois moins de neurones.
 
-### Version 2 : les indices par écarts
+### [Version](../theorie/glossaire/entrees/version.md) 2 : les indices par écarts
 
-La liste est triée, donc l'écart au neurone précédent tient sur **un octet** dans
-99,9997 % des cas (22 échappements sur 8 790 000 mesurés). Trois octets par
+La liste est triée, donc l'[écart](../theorie/glossaire/entrees/ecart.md) au neurone précédent tient sur **un octet** dans
+99,9997 % des [cas](../theorie/glossaire/entrees/cas.md) (22 échappements sur 8 790 000 mesurés). Trois octets par
 neurone actif au lieu de six, et c'est du RANGEMENT, pas de la perte :
 
 | | version 1 | version 2 |
@@ -56,7 +56,7 @@ neurone actif au lieu de six, et c'est du RANGEMENT, pas de la perte :
 | rejeu (`--flux-forcer`) | 19,3885 | **19,3885 — identique** |
 | listes · neurones actifs | 24 576 · 22 008 776 | identiques (relus par Python) |
 
-### Version 3 : valeurs i8 et échelle f16 par bloc (`DRAVE_TRACE_BLOCS=1`)
+### Version 3 : valeurs [i8](../theorie/glossaire/entrees/i8-i32.md) et échelle f16 par bloc (`DRAVE_TRACE_BLOCS=1`)
 
 Encore une échelle par **bloc de 32 canaux**, mais en f16, et des valeurs sur un
 octet. C'est **avec perte**, donc la v3 n'est pas le défaut :
@@ -74,19 +74,19 @@ v3 n'a plus) : il le dit au lieu de compter des listes manquantes en silence.
 Le lecteur lit **les trois versions** (1, 2 et 3) ; une version inconnue est refusée en la
 nommant. Le rejeu annonce désormais ce qu'il a servi — `24 576 listes servies,
 0 manquantes` — parce qu'une trace dont les clés ne correspondent plus se
-rejouait en silence avec une perplexité fausse.
+rejouait en silence avec une [perplexité](../theorie/glossaire/entrees/perplexite.md) fausse.
 
 ## Le point qui a coûté un bug
 
-`jeton` est un **compteur global**, pas la position dans la fenêtre de contexte.
+`jeton` est un **compteur global**, pas la [position](../theorie/glossaire/entrees/position.md) dans la fenêtre de [contexte](../theorie/glossaire/entrees/contexte.md).
 Corollaire à connaître : avec `--depuis` (fenêtres qui se recouvrent), un même
-jeton traité dans deux fenêtres consomme DEUX clés — une trace ne se rejoue donc
+[jeton](../theorie/glossaire/entrees/jeton.md) traité dans deux fenêtres consomme DEUX clés — une trace ne se rejoue donc
 qu'avec la même configuration de fenêtres. C'est dit ici parce que c'est le seul
 cas où la clé n'est pas une simple fonction du jeton.
 Avec la position, deux fenêtres réécrivaient les mêmes clés `(couche, position)`
 et le rejeu rejouait la mauvaise : perplexité **356 694** au lieu de 17,43. Le
 format sur le disque n'a pas changé ; c'est la sémantique du champ qui est
-maintenant explicite — et c'est exactement le genre de précision qu'une
+maintenant explicite — et c'est exactement le [genre](../theorie/glossaire/entrees/genre.md) de précision qu'une
 spécification doit porter.
 
 ## Transport (phase 3, TCP) — protocole v6
@@ -94,18 +94,18 @@ spécification doit porter.
 ![L'en-tête du format DRVF](../schemas/format-flux.svg)
 
 Le champ `n` vaut la **dimension** (mode 0), le nombre d'**actifs** (modes 1 et 2) ou le nombre d'**ÉTATS**
-(modes 3 et 4). `np = 0` pour les modèles sans « pre portée ». Le corps suit : `np u8`, puis `np × hc f32`,
-puis le mode (0 f32 dense, 1 listes quantifiées, 2 listes à échelle par bloc, 3 LOT dense, 4 LOT en listes).
+(modes 3 et 4). `np = 0` pour les modèles sans « pre portée ». Le [corps](../theorie/glossaire/entrees/corps.md) suit : `np u8`, puis `np × hc f32`,
+puis le mode (0 f32 dense, 1 listes quantifiées, 2 listes à échelle par bloc, 3 [LOT](../theorie/glossaire/entrees/lot.md) dense, 4 LOT en listes).
 
 
 **Corrigé le 02/10 (sprint 13) : les modes 3 et 4 n'écrivaient PAS ce préfixe.**
 Le chemin « un jeton » (modes 0-2) l'écrivait, les deux émetteurs de lots non —
 alors que le décodeur, lui, le lit pour **tous** les modes : le premier octet du
-premier état passait pour le compte `np`, et le corps se décalait de `1 + 4·np`
-octets. Mesuré (relecture adverse, trame d'avant correctif rejouée contre un vrai
+premier [état](../theorie/glossaire/entrees/etat.md) passait pour le compte `np`, et le corps se décalait de `1 + 4·np`
+octets. Mesuré ([relecture](../theorie/glossaire/entrees/relecture.md) adverse, trame d'avant correctif rejouée contre un vrai
 nœud) : le premier octet d'un état f32 étant presque toujours non nul, le décodeur
 attendait des octets qui ne venaient pas et **restait bloqué dans `read_exact`** —
-aucun délai de lecture en production, donc un interblocage, et le nœud ne le dit
+aucun délai de [lecture](../theorie/glossaire/entrees/lecture.md) en production, donc un interblocage, et le nœud ne le dit
 qu'à la fermeture du client. Un seul encodeur les sert désormais
 (`prefixe_premix`), et le mode 3 vérifie à **0,00e0** sur deux nœuds réels
 (Qwen2.5-0.5B Q8_0, 24 jetons, `--lot 4`) ; le mode 4 donne 4,45e-3, du même ordre
@@ -120,9 +120,9 @@ est qu'il ne coûte pas plus de 1,5 fois celui-ci **à 256 jetons** (5,6× à
 20 jetons seulement — `reports/rapport-mode4-lot-listes.md`). Un mode inconnu est refusé
 **avant** toute lecture de corps (il l'était après, donc désynchronisé).
 
-Le **mode 3 est le préremplissage réparti** : `n` états d'un coup, la position
+Le **mode 3 est le [préremplissage](../theorie/glossaire/entrees/preremplissage.md) réparti** : `n` états d'un coup, la position
 étant celle du premier jeton du lot. La dimension ne voyage pas — chaque nœud la
-connaît par son modèle, et les deux doivent charger le **même GGUF**. Mesuré :
+connaît par son modèle, et les deux doivent charger le **même [GGUF](../theorie/glossaire/entrees/gguf.md)**. Mesuré :
 256 jetons en **4 lots** de 64 (écart **0,00e0** avec la référence locale découpée
 de la même façon), ou en **1 seul lot de 917 583 octets** — un aller-retour pour
 tout un préremplissage, au lieu d'un par jeton. Réserve honnête : le lot voyage en
@@ -144,7 +144,7 @@ avec un message qui nomme les deux versions en présence :
 ```
 
 Le passage de la version 2 à la 3 n'est pas cosmétique : un pair en version 2 qui
-recevrait un lot lirait `n × 4` octets d'un corps qui en fait `n × dimension × 4`,
+recevrait un lot lirait `n × 4` octets d'un corps qui en [fait](../theorie/glossaire/entrees/fait-mesure-projete-deduit.md) `n × dimension × 4`,
 se désynchroniserait, puis dirait « mode inconnu » — un refus exact mais tardif et
 muet sur la cause.
 
@@ -156,17 +156,17 @@ Qwen2.5-0.5B ; le mode liste coûte 79 + 4 × (nombre d'actifs) et le mode blocs
 mode blocs gagne même à pleine activité depuis que ses indices sont des écarts.
 
 Les chiffres mesurés de `reports/rapport-transport-liste.md` datent d'un en-tête
-de **39 octets** (protocole v3, avant les top-k) : ajouter 40 octets par flux pour
+de **39 octets** (protocole v3, avant les [top-k](../theorie/glossaire/entrees/top-k.md)) : ajouter 40 octets par flux pour
 avoir les valeurs d'aujourd'hui — négligeable devant 3 663, mais écrit ici pour
 que personne ne compare deux tableaux de deux époques.
 
-### Qui applique la norme finale (règle, pas détail)
+### Qui applique la [norme](../theorie/glossaire/entrees/norme.md) finale (règle, pas détail)
 
 Un flux qui circule est un **résidu brut**. La norme finale n'appartient qu'au
-nœud qui possède la tête de sortie, et elle s'applique **une fois**. Le nœud
+nœud qui possède la [tête](../theorie/glossaire/entrees/tete.md) de sortie, et elle s'applique **une fois**. Le nœud
 moteur le déclare par un drapeau explicite (`flux_brut`) plutôt que de le déduire
 de sa plage de couches : « ma plage va jusqu'à la dernière couche » et « je dois
-normer » sont deux choses différentes, et les confondre a coûté la fidélité du
+normer » sont deux choses différentes, et les confondre a coûté la [fidélité](../theorie/glossaire/entrees/fidelite.md) du
 découpage (798,3 au lieu de 18,2).
 
 ## Invariants vérifiés
@@ -175,7 +175,7 @@ découpage (798,3 au lieu de 18,2).
 |---|---|
 | deux implémentations indépendantes lisent le même fichier | Rust (`--trace-flux`) et Python (`tools/flux_codec.py`) : aller-retour **identique** en v1 (132 396 736 octets) et en v2 (24 576 listes, 22 008 776 actifs des deux côtés) |
 | un rejeu redonne le même résultat | `--flux-forcer` : perplexité **19,3885** avec et sans rejeu (chemin par jeton), **17,4294** (chemin par lots) |
-| la fidélité de l'encodage est chiffrée | `DRAVE_FLUX_VERIF=1` : écart relatif **1,5e-5**, soit la quantification 16 bits |
+| la fidélité de l'encodage est chiffrée | `DRAVE_FLUX_VERIF=1` : [écart relatif](../theorie/glossaire/entrees/ecart-relatif-rms-ecart-max.md) **1,5e-5**, soit la [quantification](../theorie/glossaire/entrees/quantification.md) 16 bits |
 | la taille suit l'activité | densité ÷2,3 → trace ÷2,5 (132 Mo → 53 Mo) |
 | une version inconnue est refusée | v1/v2/v3 lues, toute autre refusée en la nommant ; le rejeu ANNONCE ses comptes (`N servies, M manquantes`) |
 | le découpage ne change pas le résultat | deux processus, 12 couches chacun : écart local/réparti **0,00e0** (144,8289 = 144,8289), 39 puis 199 flux (le dernier jeton n'est pas envoyé) |

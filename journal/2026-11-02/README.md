@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**135 commits** · **3 session(s)** · **9 thème(s)**
+**136 commits** · **3 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 6 | [apprentissage.md](apprentissage.md) |
 | attention | 6 | [attention.md](attention.md) |
-| distribue | 6 | [distribue.md](distribue.md) |
+| distribue | 7 | [distribue.md](distribue.md) |
 | docs | 17 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 76 | [mesures.md](mesures.md) |
@@ -168,6 +168,7 @@
 | 12:45 | `546411f6` | GLOSSAIRE — FAMILLE 13 (CORPUS ET MESURE DOCUMENTAIRE, 19 ENTRÉES) ET DOCWATCH ANNOTE LES TERMES AU RENDU : 335 ENTRÉES |
 | 12:50 | `ac8f334f` | ÉTAT — 119 DOCS, T0 SOUS 4 000, LE GLOSSAIRE (335 ENTRÉES) ET DOCWATCH SONT COMMITTÉS |
 | 12:53 | `866fcaa7` | B13 — LES QUESTIONS NÉGATIVES : 19/29, LA RÈGLE DE SURFACE NE S'INVERSE PAS ; 130/130 |
+| 12:55 | `52c530ce` | ÉTAT — T0 DANS LE BUDGET (3996 MOTS) APRÈS LE GOLD 417 |
 
 ## Le récit de la journée (écrit à la main)
 

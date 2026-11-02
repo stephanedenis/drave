@@ -31513,3 +31513,96 @@ ok
 The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
   ```
 
+- **job_output** `{"job_id": "bash-1210", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[master 52c530ce] ÉTAT — T0 DANS LE BUDGET (3996 MOTS) APRÈS LE GOLD 417
+ 19 files changed, 99 insertions(+), 38 deletions(-)
+COMMIT OK 1
+52c530ce ÉTAT — T0 DANS LE BUDGET (3996 MOTS) APRÈS LE GOLD 417
+lun 02 nov 2026 12:56:41 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Questions négatives : 19/29, la règle de surface ne s'inverse pas ; 130/130
+
+Le round 131 est livré : dix **questions négatives** entrent dans le gold et font tomber la réponse dirigée de **19/19 à 19/29** — le piège est mesuré. Commits **`866fcaa7`** (le round) et **`52c530ce`** (l'état, T0 dans le budget).
+
+## Les 29 questions
+
+| sous-ensemble | questions | **dirigée juste** |
+|---|---:|---:|
+| affirmatives (oui/yes) | 19 | **19/19** |
+| **négatives (si)** | **10** | **0/10** |
+| **tout** | **29** | **19/29 (0,6552)** |
+
+**Ce que ça dit** :
+
+- **La règle de surface ne suffit plus** : `repondre_dirigee` répond `non` dès qu'elle voit une négation ; or une question négative française attend `si`, pas `non`.
+- **Le piège est mesuré** : 19/19 était un plafond facile (toutes les références étaient `oui`/`yes`) ; 19/29 est la **vraie** mesure, et elle est plus honnête.
+- **La langue compte deux fois** : `si` n'existe pas en anglais (`Don't you come?` → `yes`), et la réponse dépend de la **langue de la question**.
+- **La négative est explicite** : la même règle qui faisait 19/19 fait 0/10 sur les négatives.
+
+## L'état
+
+- Fiche : [`rapport-pensee-negatives.md`](../../reports/rapport-pensee-negatives.md) ; JSON [`pensee-negatives.json`](../../reports/pensee-negatives.json) ; T127 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **130/130 portes** — les **16 portes** qui codaient les anciens nombres ont été mises à jour (le gold est passé à **417 réels / 597 phrases** : POS 0,7444, syntagme 0,1979, tête 0,46, etc.).
+- `revue` **539 fiches / 626 JSON / 119 docs / 81 portes** — ✅ ; `en-cours` T0 **3 996 mots** (dans le budget).
+- L'horloge réelle est **12 h 56 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+## La suite
+
+1. **La règle du `si`** : répondre `si` aux négatives françaises, `yes` aux anglaises négatives — puis re-mesurer (attendu 29/29, mais c'est encore une règle de surface).
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **la règle du `si`** — la dernière règle de surface avant de nommer la frontière.
+
+
+## Tour 146
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 132/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/miroir.py'); t=p.read_text()\nt=t.replace('''    nie = any(e.niveau == \"phrase\" and e.type == \"négation\" for e in a.etiquettes)\n    lg = getattr(a, \"lan … [751 caractères tronqués]`
+
+  ```
+{'questions': 29, 'justes': 25.0, 'taux': 0.8621}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nfrom tools.tests.linguistique.miroir import repondre_dirigee, juge_egal\nh=bl.Heur … [493 caractères tronqués]`
+
+  ```
+s043 | Hugo écoute? | ref oui | dirigée yes | langue und | neg []
+s062 | Emma écoute? | ref oui | dirigée yes | langue und | neg []
+s098 | Hugo compte? | ref oui | dirigée yes | langue und | neg []
+s104 | Paul observe? | ref oui | dirigée yes | langue und | neg []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/miroir.py'); t=p.read_text()\nt=t.replace('''    lg = getattr(a, \"langue\", \"fr\")\n    if nie:''','''    lg = getattr(a, \"langue\", \"fr\")\n    if lg not … [403 caractères tronqués]`
+
+  ```
+{'questions': 29, 'justes': 29.0, 'taux': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-si.md <<'MD'\n# B13 — la règle du `si` : 29/29, la dernière règle de surface\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **131/131 portes** … [6122 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 540 fiche(s) · 627 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2811 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+

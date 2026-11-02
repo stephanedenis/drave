@@ -1,21 +1,21 @@
-# La lecture rapide — ce que Drave doit construire pour lire comme un humain
+# La [lecture rapide](../theorie/glossaire/entrees/lecture-rapide.md) — ce que [Drave](../theorie/glossaire/entrees/drave.md) doit construire pour lire comme un humain
 
 > **Ce que ce document est.** L'analyse des **techniques de lecture rapide** humaines et de ce qui manque à Drave
-> pour les rendre utilisables sur les différents types de documents. Ce n'est **pas** une fiche de résultat : les
+> pour les rendre utilisables sur les différents types de documents. Ce n'est **pas** une [fiche de résultat](../theorie/glossaire/entrees/fiche-de-resultat.md) : les
 > chiffres cités sont ceux des fiches [`reports/`](../../reports/) ; le plan qui en découle est le **programme R**
 > de [`roadmap.md`](../pilotage/roadmap.md) ; les fiches de fonctionnalité sont dans
 > [`backlog/index.md`](../pilotage/backlog/index.md). **Chargement** : à lire quand la question est « que veut dire
-> lire vite pour Drave ? » — pas pour l'état courant.
+> lire vite pour Drave ? » — pas pour l'[état](../theorie/glossaire/entrees/etat.md) courant.
 
 ## En trois idées
 
 1. **La lecture rapide humaine n'est pas une vitesse, c'est une allocation** : survoler, balayer, lire
    sélectivement, revenir — selon le but et le type de document, avec une perte de compréhension contrôlée.
-2. **Drave a l'économie de cette allocation, pas sa sémantique** : le calcul suit l'activité (FFN creux, sortie
+2. **Drave a l'économie de cette allocation, pas sa sémantique** : le calcul suit l'activité ([FFN](../theorie/glossaire/entrees/ffn.md) creux, sortie
    précoce), mais rien ne décide **quoi** lire, **dans quel ordre**, **à quelle profondeur**, **pour quel but**.
-3. **Il manque un lecteur, pas une technique** : un graphe de document, une politique de lecture, une fenêtre
-   hiérarchique, une mémoire de travail, une restitution — et un banc qui mesure la compréhension **par unité de
-   calcul**, avec un contrôle négatif.
+3. **Il manque un lecteur, pas une technique** : un [graphe de document](../theorie/glossaire/entrees/graphe-de-document.md), une politique de [lecture](../theorie/glossaire/entrees/lecture.md), une fenêtre
+   hiérarchique, une mémoire de travail, une restitution — et un [banc](../theorie/glossaire/entrees/banc.md) qui mesure la compréhension **par [unité](../theorie/glossaire/entrees/unite.md) de
+   calcul**, avec un [contrôle négatif](../theorie/glossaire/entrees/controle-negatif.md).
 
 ---
 
@@ -27,13 +27,13 @@ n'a pas été compris ; la **vision périphérique** est floue ; les programmes 
 **écrémer** ([APS, *So Much to Read, So Little Time*](https://www.psychologicalscience.org/publications/speed_reading.html)).
 Le levier réel est donc :
 
-- **le but** : on ne lit pas un roman, un contrat et un tableau de bord avec la même attention ;
+- **le but** : on ne lit pas un roman, un [contrat](../theorie/glossaire/entrees/contrat.md) et un [tableau](../theorie/glossaire/entrees/tableau.md) de bord avec la même [attention](../theorie/glossaire/entrees/attention.md) ;
 - **la structure** : titres, tableaux, figures, références, code — le document n'est pas un flux linéaire ;
-- **l'allocation** : décider de survoler, balayer, lire, relire, arrêter ;
-- **la mémoire** : garder le gist, les entités, les faits, et savoir **où** revenir ;
+- **l'allocation** : décider de survoler, balayer, lire, [relire](../theorie/glossaire/entrees/relire-relecture-adverse-relecture-deleguee.md), arrêter ;
+- **la mémoire** : garder le [gist](../theorie/glossaire/entrees/gist.md), les entités, les faits, et savoir **où** revenir ;
 - **la restitution** : répondre, résumer, extraire, citer — sinon « lire » n'est pas prouvé.
 
-La bonne métrique n'est donc **pas le débit** mais **la compréhension par unité de calcul** : une courbe
+La bonne métrique n'est donc **pas le [débit](../theorie/glossaire/entrees/debit-latence-aller-retour-ttft.md)** mais **la compréhension par unité de calcul** : une courbe
 vitesse-compréhension, avec un **contrôle négatif** (ce qu'on perd quand on saute). Un lecteur rapide qui ne sait
 pas dire ce qu'il a sauté n'est pas un lecteur, c'est un filtre.
 
@@ -41,16 +41,16 @@ pas dire ce qu'il a sauté n'est pas un lecteur, c'est un filtre.
 
 | niveau | ce que c'est | état de Drave |
 |---|---|---|
-| **L0 — flux** | octets, perplexité, génération | ✅ acquis |
-| **L1 — saut de calcul** | sortie précoce, parcimonie, chemin court | ✅ mesuré |
-| **L2 — document** | régions typées, structure, layout, provenance | ❌ absent |
-| **L3 — politique** | survol, écrémage, balayage, sélectif, relecture | ❌ absent |
+| **L0 — flux** | octets, [perplexité](../theorie/glossaire/entrees/perplexite.md), génération | ✅ acquis |
+| **[L1](../theorie/glossaire/entrees/l1-l2-ligne-de-cache-banque-memoire.md) — saut de calcul** | sortie précoce, [parcimonie](../theorie/glossaire/entrees/parcimonie.md), chemin court | ✅ mesuré |
+| **L2 — document** | régions typées, structure, [layout](../theorie/glossaire/entrees/layout.md), provenance | ❌ absent |
+| **L3 — politique** | survol, écrémage, balayage, sélectif, [relecture](../theorie/glossaire/entrees/relecture.md) | ❌ absent |
 | **L4 — mémoire** | gist, entités, faits, épisodique | ❌ négatif (N5) |
 | **L5 — restitution** | réponse, résumé, extraction, citation | ❌ absent |
 | **L6 — banc** | courbe vitesse-compréhension par type | ❌ absent |
 
 **Drave est à L1. La lecture rapide humaine est un pilotage L2–L4, prouvé par un banc L5–L6.** C'est pourquoi
-ajouter une « tête d'écrémage » au modèle actuel ne composerait pas : il n'y a ni document à survoler, ni politique
+ajouter une « [tête](../theorie/glossaire/entrees/tete.md) d'écrémage » au modèle actuel ne composerait pas : il n'y a ni document à survoler, ni politique
 pour choisir, ni sortie pour prouver la compréhension.
 
 ## 3. Les chiffres qui bornent le diagnostic
@@ -59,19 +59,19 @@ Tous sont mesurés et cités dans les fiches ; ils disent où le lecteur se bloq
 
 | contrainte | mesure | conséquence |
 |---|---|---|
-| **Contexte natif** | 129 octets, PPL **2,6998** ; 130 → **2,7149** ; 2 000 octets → PPL **54,04** | ~25 mots ; une page est 23× trop longue ; 130/136/160/256 sont **négatifs** |
+| **[Contexte](../theorie/glossaire/entrees/contexte.md) natif** | 129 octets, PPL **2,6998** ; 130 → **2,7149** ; 2 000 octets → PPL **54,04** | ~25 mots ; une page est 23× trop longue ; 130/136/160/256 sont **négatifs** |
 | **Long contexte** | 18/18 aiguilles à 12 288 jetons | c'est **Qwen2.5-0.5B**, pas `drave-n0` — ne pas s'en prévaloir pour le natif |
-| **Tokenisation** | octets, pas de BPE | séquences 3–4× plus longues ; l'empan utile fond encore |
+| **Tokenisation** | octets, pas de [BPE](../theorie/glossaire/entrees/bpe.md) | séquences 3–4× plus longues ; l'empan utile fond encore |
 | **Sortie précoce** | 4 blocs **5,978 ms** vs 6 blocs **7,871 ms** (−24,05 %), coût **−1,61 point** | c'est un saut de **calcul**, pas un saut de **contenu** : la décision est la confiance du prochain octet, pas la pertinence |
 | **Têtes précoces** | **57,6 / 61,6 / 62,1 %** vs **62,7 %** ; témoin **0,39 %** | ce sont des lectures rapides de jetons, pas des stratégies |
 | **Mémoire** | signal courant R² **0,992** ; à 8 pas **−0,681** ; l'entraînement l'aggrave (**−1,091 → −2,773**) | pas de gist, pas de relecture, pas de cohérence multi-sections |
-| **Sémantique** | `z` : rappel **0,426** vs hasard **0,167** ; chrF reconstruction **12,7**, plancher **39,6** | le sens est au-dessus du hasard, mais **ne se restitue pas** |
-| **Usage** | SFT **24/24 vus, 0/4 tenus** ; génération cohérente **12 octets** | pas d'assistant, pas de résumé, pas d'extraction |
+| **Sémantique** | `z` : rappel **0,426** vs hasard **0,167** ; [chrF](../theorie/glossaire/entrees/chrf.md) reconstruction **12,7**, plancher **39,6** | le sens est au-dessus du hasard, mais **ne se restitue pas** |
+| **Usage** | [SFT](../theorie/glossaire/entrees/sft.md) **24/24 vus, 0/4 tenus** ; génération cohérente **12 octets** | pas d'assistant, pas de résumé, pas d'extraction |
 | **Encodeurs** | `bge-m3` lisible, **inexécutable** (M4) | pas de recherche par similarité, pas de balayage neuronal |
-| **Architecture** | le plan des douze capacités n'est pas réalisé ; des briques isolées existent (délai, récurrence, périphérie signal) | les briques existent, pas le lecteur |
+| **Architecture** | le plan des douze capacités n'est pas réalisé ; des briques isolées existent (délai, [récurrence](../theorie/glossaire/entrees/recurrence.md), périphérie signal) | les briques existent, pas le lecteur |
 
 À l'inverse, ce qui existe déjà et qui est rare : **prélecture/tampons** (6,22 Go lus, 3,40 s contre 9,52 Go /
-5,97 s à la demande), **cache KV 19,25×**, **codec classique 100 %**, **trace et rejeu exacts**. Ce sont les bons
+5,97 s à la demande), **cache [KV](../theorie/glossaire/entrees/kv.md) 19,25×**, **codec classique 100 %**, **[trace](../theorie/glossaire/entrees/trace.md) et [rejeu](../theorie/glossaire/entrees/rejeu.md) exacts**. Ce sont les bons
 matériaux ; il manque le plan.
 
 ## 4. Les 14 techniques et leur état
@@ -79,19 +79,19 @@ matériaux ; il manque le plan.
 | # | technique humaine | ce qu'elle exige | état | manque |
 |---|---|---|---|---|
 | 1 | **Survol** (TOC, titres, figures, conclusion) | structure, passe globale, gist | ❌ | graphe de document + état de résumé |
-| 2 | **Écrémage** (gist, sauter les détails) | saillance, saut au niveau du passage | 🟡 sortie précoce au jeton | politique de saut conditionnée par la pertinence |
+| 2 | **Écrémage** (gist, sauter les détails) | saillance, saut au niveau du passage | 🟡 sortie précoce au [jeton](../theorie/glossaire/entrees/jeton.md) | politique de saut conditionnée par la pertinence |
 | 3 | **Balayage** (chercher un nom, un chiffre) | requête, index/pattern | 🟡 regex/BM25 possibles ; pas d'encodeur | bloc de recherche + requête |
 | 4 | **Lecture sélective** (ne lire que l'utile) | but, pertinence, connaissance préalable | ❌ | conditionnement au but + scoreur |
-| 5 | **Empan / chunking** | unités mots/phrases, spans larges | 🟡 octets, pas de BPE, 129 octets | tokeniseur + attention multi-échelle |
+| 5 | **Empan / chunking** | unités mots/phrases, spans larges | 🟡 octets, pas de BPE, 129 octets | [tokeniseur](../theorie/glossaire/entrees/tokeniseur.md) + attention [multi-échelle](../theorie/glossaire/entrees/multi-echelle.md) |
 | 6 | **Guidage / méta** (rythme, moins de régressions) | politique de fixation | ❌ | contrôleur d'actions |
-| 7 | **Relecture / régression** | retour arrière, mémoire épisodique | ❌ N5 négatif | tampon épisodique + déclencheur |
+| 7 | **Relecture / [régression](../theorie/glossaire/entrees/regression.md)** | retour arrière, mémoire épisodique | ❌ N5 négatif | tampon épisodique + déclencheur |
 | 8 | **Vision périphérique** | prélecture parafovéale | 🟡 prélecture I/O, pas modèle | tête de prévisualisation |
 | 9 | **Subvocalisation** | contourner le décodage sériel | 🟡 calcul parallèle, génération sérielle | métrique de temps de lecture (faux manque) |
 | 10 | **Lecture active** (SQ3R, annoter, résumer) | question, restitution, auto-test | ❌ pas de SFT | boucle de restitution |
-| 11 | **Lecture structurelle** (tableaux, code, maths) | 2D, AST, symbolique | ❌ | parseurs classiques + blocs |
-| 12 | **Lecture croisée** (comparer, citer) | retrieval, provenance, agent | ❌ M4, pas d'agent | index + provenance + boucle d'outils |
+| 11 | **Lecture structurelle** (tableaux, code, maths) | 2D, [AST](../theorie/glossaire/entrees/ast.md), symbolique | ❌ | parseurs classiques + blocs |
+| 12 | **Lecture croisée** (comparer, citer) | [retrieval](../theorie/glossaire/entrees/retrieval.md), provenance, agent | ❌ M4, pas d'agent | index + provenance + boucle d'outils |
 | 13 | **Multilingue** (glose, traduction) | traduction, cognats | 🟡 `z` 0,426 ; chrF sous le plancher | qualité du décodeur |
-| 14 | **Multimodal** (scans, figures, layout) | OCR, vision, layout | ❌ | encodeur visuel |
+| 14 | **Multimodal** (scans, figures, layout) | [OCR](../theorie/glossaire/entrees/ocr.md), vision, layout | ❌ | encodeur visuel |
 
 **Lecture de la matrice** : 0 technique opérationnelle au niveau document ; 6 ont un **substrat** mesuré (2, 3, 5,
 8, 9, 13) ; 8 sont **absentes**. Le substrat est bon ; c'est l'assemblage qui manque.
@@ -101,13 +101,13 @@ matériaux ; il manque le plan.
 ### 5.1 Le document (L2)
 
 - **Bloque** : le modèle ne voit qu'un flux d'octets. Aucun moyen de dire « lis le titre, saute la section 3,
-  compare les colonnes 2 et 4 ». Les parseurs existent (DOCX/HTML pour les corpus, découpage en chapitres de
+  compare les colonnes 2 et 4 ». Les parseurs existent (DOCX/HTML pour les [corpus](../theorie/glossaire/entrees/corpus.md), découpage en chapitres de
   [`aligneur_litteraire.py`](../../tools/aligneur_litteraire.py)) mais **hors bus**, ad hoc, sans modèle commun.
 - **Bloc minimal** : un bloc classique `document` qui émet des **régions typées** (titre, section, paragraphe,
   tableau, code, maths, figure) avec offsets et provenance. Parseurs PDF/HTML/DOCX/Markdown/EPUB ; tables en
   lignes/colonnes/cellules ; code en AST ; maths en LaTeX/MathML. **Aucun entraînement.**
 - **Débloque** : survol, balayage, sélectif, structurel, croisé.
-- **Porte** : un document de 50 pages se découpe en régions avec provenance exacte ; « où est le tableau X » se
+- **[Porte](../theorie/glossaire/entrees/porte.md)** : un document de 50 pages se découpe en régions avec provenance exacte ; « où est le tableau X » se
   résout sans modèle ; le rejeu de la découpe est identique.
 
 ### 5.2 La fenêtre et la hiérarchie (L2)
@@ -115,8 +115,8 @@ matériaux ; il manque le plan.
 - **Bloque** : 129 octets. Les tentatives 130/136/160/256 sont toutes négatives ; à 2 000 octets la PPL est
   **54**, donc le modèle ne généralise pas, il **surapprend sa longueur**. Le test 18/18 à 12 288 jetons est un
   modèle externe.
-- **Bloc minimal** : deux voies, à mesurer : (a) entraînement sur séquences longues avec curriculum et états de
-  résumé ; (b) lecteur par morceaux avec un **état de section** (span → paragraphe → section → document), qui
+- **Bloc minimal** : deux voies, à mesurer : (a) entraînement sur séquences longues avec [curriculum](../theorie/glossaire/entrees/curriculum.md) et états de
+  résumé ; (b) lecteur par morceaux avec un **état de section** ([span](../theorie/glossaire/entrees/span.md) → paragraphe → section → document), qui
   n'exige pas que l'attention voie tout. BPE si N4.1 le justifie.
 - **Débloque** : survol, écrémage, cohérence de section.
 - **Porte** : PPL à 1 000 octets dans un facteur 1,5 de celle à 129 ; aiguille **native** ≥ 15/18 à 4 000 octets ;
@@ -145,11 +145,11 @@ matériaux ; il manque le plan.
   (offsets) pour la relecture ; KV cache avec éviction ; tampon en entrée.
 - **Débloque** : cohérence, relecture, citation, réponse à une question dont l'indice est loin.
 - **Porte** : répondre à une question dont la réponse est en section 2 après avoir lu la section 5, **avec
-  citation** ; contrôle : la même question sans le document (closed-book) doit échouer.
+  citation** ; contrôle : la même question sans le document ([closed-book](../theorie/glossaire/entrees/closed-book.md)) doit échouer.
 
 ### 5.5 La restitution et le banc (L5–L6)
 
-- **Bloque** : le modèle natif est mesuré en **perplexité** — une mesure de fluidité, pas de fidélité. La règle du
+- **Bloque** : le modèle natif est mesuré en **perplexité** — une mesure de fluidité, pas de [fidélité](../theorie/glossaire/entrees/fidelite.md). La règle du
   miroir du dépôt le dit : toute mesure d'entrée se double d'une mesure de sortie. Ici, la sortie n'existe pas :
   24/24 vus, **0/4 tenus**, 12 octets cohérents. « Rapide » n'est pas défini sans une tâche et un critère de
   compréhension.
@@ -166,10 +166,10 @@ matériaux ; il manque le plan.
 | type | technique clé | premier bloqueur | bloc minimal |
 |---|---|---|---|
 | **Prose / récit** | écrémage, relecture, mémoire des entités | 129 octets, pas d'épisodique | contexte hiérarchique + gist |
-| **Exposé / technique** | survol, structurel, résumé | pas de graphe de document | parseur de sections + état de section |
+| **Exposé / technique** | survol, structurel, résumé | pas de graphe de document | [parseur](../theorie/glossaire/entrees/parseur.md) de sections + état de section |
 | **Tableaux** | balayage, comparaison, extraction | pas de modèle de table | parseur 2D + opérations classiques (SQL) |
 | **Code** | lecture structurelle, exécution | pas d'AST ni d'exécuteur | parseur AST + interpréteur bloc |
-| **Maths** | notation, définitions, preuve | pas de parseur symbolique | LaTeX/MathML + CAS bloc |
+| **Maths** | notation, définitions, preuve | pas de parseur symbolique | LaTeX/MathML + [CAS](../theorie/glossaire/entrees/cas.md) bloc |
 | **Juridique / admin** | sélectif, références croisées, exactitude | pas d'index ni de retrieval | index + graphe de citations |
 | **Presse** | pyramide inversée, saillance | pas de graphe de document | structure + scoreur de saillance |
 | **Formulaires** | extraction de champs | pas de sortie structurée | schéma + IE + SFT |
@@ -186,7 +186,7 @@ le moteur existant et un modèle externe, sans toucher à `drave-n0`.
 avec spans gold. Graphe de document classique ; contrôleur à quatre modes (intégral, écrémage, balayage, sélectif) ;
 même modèle ; trace rejouée.
 
-**Mesures** : exactitude (exact/F1), exactitude de citation (le span cité est-il le bon ?), événements/paires,
+**Mesures** : exactitude (exact/[F1](../theorie/glossaire/entrees/f1.md)), exactitude de citation (le span cité est-il le bon ?), événements/paires,
 octets lus, secondes ; ratio à la lecture intégrale.
 
 **Contrôles négatifs** : régions aléatoires au même budget ; sections mélangées ; questions dont la réponse est dans le
@@ -204,7 +204,7 @@ attendre N5. Sinon, le blocage est bien dans le modèle (contexte, mémoire), et
 
 **Ce qui ne manque pas** :
 
-- le **coût proportionnel à l'activité** (FFN creux, top-2, k-WTA, sortie précoce) — c'est la condition économique
+- le **coût proportionnel à l'activité** (FFN creux, top-2, [k-WTA](../theorie/glossaire/entrees/k-wta.md), sortie précoce) — c'est la condition économique
   de l'écrémage ;
 - les **blocs hybrides** — un parseur, un AST, un index, un solveur sont des blocs de première classe ;
 - la **trace et le rejeu** — aucun autre système ne peut prouver aussi bien *ce qu'il a sauté* ;
@@ -216,7 +216,7 @@ attendre N5. Sinon, le blocage est bien dans le modèle (contexte, mémoire), et
 
 - **courir après 1 000 mots/minute** : la revue scientifique dit que c'est une illusion ; la cible est
   l'allocation, pas le débit ;
-- **ajouter des paramètres** : à 20 000 pas, le student 21,63 M fait **3,381** contre **3,123** pour 11,47 M ; la
+- **ajouter des paramètres** : à 20 000 pas, le student 21,63 M [fait](../theorie/glossaire/entrees/fait-mesure-projete-deduit.md) **3,381** contre **3,123** pour 11,47 M ; la
   capacité à budget égal donne −8,1 %, mais le prior domine — la structure d'abord ;
 - **construire un encodeur visuel avant le texte structuré** : la plupart des documents sont du texte structuré ;
   les parseurs classiques sont moins chers et mesurables ;
@@ -250,7 +250,7 @@ dans [`en-cours.md`](../pilotage/en-cours.md).
 
 - **Si un modèle natif à 129 octets + un contrôleur classique répond aux questions de document**, alors le contexte
   n'est pas le premier blocage : le contrôleur suffit pour la v0, et R1 peut attendre.
-- **Si `z` restitue au-dessus du plancher** (chrF > 39,6) sur des articles tenus à l'écart, alors le gist peut être
+- **Si `z` restitue au-dessus du plancher** (chrF > 39,6) sur des articles tenus à l'[écart](../theorie/glossaire/entrees/ecart.md), alors le gist peut être
   `z`-basé, et R2.1 change de forme.
 - **Si la sortie précoce conditionnée par la pertinence** donne une meilleure courbe que la confiance du prochain
   octet, alors la « tête de survol » est le premier changement de modèle qui vaut.
@@ -259,7 +259,7 @@ dans [`en-cours.md`](../pilotage/en-cours.md).
 
 ---
 
-*Sources principales : [`docs/pilotage/roadmap.md`](../pilotage/roadmap.md) (programme R, états A/B/N) ;
+*Sources principales : [`docs/pilotage/roadmap.md`](../pilotage/roadmap.md) (programme R, états [A/B](../theorie/glossaire/entrees/a-b.md)/N) ;
 [`docs/pilotage/manques.md`](../pilotage/manques.md) (M4, M6, N5, architecture) ;
 [`docs/pilotage/en-cours.md`](../pilotage/en-cours.md) (têtes précoces, réflexe) ;
 [`docs/theorie/protocole-semantique.md`](protocole-semantique.md) (`z`, chrF) ;

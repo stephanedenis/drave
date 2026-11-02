@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,6 +14,7 @@
 | 05:44 | `a880c538` | ÉTAT — LE BUDGET REVIENT À 4000 MOTS (N2.z SUR DEUX GRAINES) | `en-cours.md`, `README.md`, `apprentissage.md` (+14) |
 | 09:39 | `4d8c9905` | B13 — LA CORÉFÉRENCE À 68 LIENS : LE RÔLE PASSE DEVANT (52/51), GOLD 372 ; 111/111 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+28) |
 | 09:52 | `41c7d1f1` | B13 — LA CORÉFÉRENCE À 103 LIENS : 86/103, CIBLE 100 ATTEINTE, GOLD 407 ; 112/112 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+24) |
+| 12:55 | `52c530ce` | ÉTAT — T0 DANS LE BUDGET (3996 MOTS) APRÈS LE GOLD 417 | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |
 
 ## Chiffres du jour
 
