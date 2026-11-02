@@ -4,11 +4,12 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 00:08 | `1a94456f` | N2.r — LE 34,3 M DISTILLÉ : 3,69, LE MEILLEUR MODÈLE DE LA NUIT, ET LA COURBE PLATE | `en-cours.md`, `roadmap.md`, `README.md` (+13) |
+| 00:56 | `c0fd470b` | JOURNAL — LA NUIT N2, SECONDE MOITIÉ : LES LOIS (CAPACITÉ, DISTILLATION, MULTILINGUE, CANAL) | `nuit-n2.md`, `README.md`, `apprentissage.md` (+14) |
 
 ## Sessions actives ce jour
 

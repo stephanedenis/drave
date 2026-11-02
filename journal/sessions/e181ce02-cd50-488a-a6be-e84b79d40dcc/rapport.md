@@ -9,8 +9,8 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 32.3 h |
 | Tours | 80 |
-| Messages | 1097 |
-| Appels d'outils | 988 |
+| Messages | 1098 |
+| Appels d'outils | 989 |
 | Fichiers touchés | 25 |
 | Commandes | 802 |
 | Sous-agents | 2 |
@@ -4248,7 +4248,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste l'**observation ut
 
 ### Tour 80 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Tester l'information rare 10 %
 - bash — Ajouter la porte T63 (information rare)

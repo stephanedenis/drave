@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**23 commits** · **3 session(s)** · **7 thème(s)**
+**24 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| apprentissage | 1 | [apprentissage.md](apprentissage.md) |
+| apprentissage | 2 | [apprentissage.md](apprentissage.md) |
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
@@ -54,6 +54,7 @@
 | 00:48 | `881b7a12` | B13 — LE RÉGIME INTRA-ÉPISODE : BASCULE À CHAQUE LOOK, v FINAL 0,48, 20/20, 8,0 PAS ; 64/64 |
 | 00:52 | `64b4b14d` | B13 — LA FIABILITÉ ASYMÉTRIQUE : 0,9/0,5, v FINAL 0,44, 20/20, 8,0 PAS ; 65/65 |
 | 00:55 | `2bf24422` | ÉTAT — PASSE COMPLÈTE DES PORTES DU 02/11 00 h 03 : 77 VERTES, 4 ROUGES (LES CONNUES) |
+| 00:56 | `c0fd470b` | JOURNAL — LA NUIT N2, SECONDE MOITIÉ : LES LOIS (CAPACITÉ, DISTILLATION, MULTILINGUE, CANAL) |
 
 ## Le récit de la journée (écrit à la main)
 
