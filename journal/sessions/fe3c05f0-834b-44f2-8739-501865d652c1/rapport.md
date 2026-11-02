@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 28.6 h |
-| Tours | 26 |
-| Messages | 999 |
-| Appels d'outils | 968 |
+| Durée | 28.8 h |
+| Tours | 27 |
+| Messages | 1002 |
+| Appels d'outils | 969 |
 | Fichiers touchés | 18 |
-| Commandes | 891 |
+| Commandes | 892 |
 | Sous-agents | 0 |
 | Commits | 60 |
 | Compactages de contexte | 2 |
@@ -79,6 +79,8 @@
 **Tour 25** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 **Tour 26** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
+
+**Tour 27** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [750 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1163,6 +1165,34 @@ Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des di
 - bash — Check English manifest and launched check
 - bash — Wait for English manifest and launch check
 
+**Synthèse produite :**
+
+⏵ Round 14 : l'anglais à 23,0/25,6 M pages (90 %), le contrôle partira au manifeste
+
+**Round 14/1000 — l'anglais est dans ses dernières pages ; l'attente est armée.**
+
+\## L'anglais
+
+**23,0 M pages sur 25,6 M** (90 %), 5,63 M articles, 20,79 G caractères. Le run est dans les pages courtes (redirections, listes) : le manifeste est attendu d'une minute à l'autre. La boucle d'attente (job de fond) surveille le fichier et lancera **le contrôle 8 Ko** dès qu'il apparaît — les deux unités, le XNLI anglais et le wikitext2.
+
+\## Les documents
+
+**2 000 PDF sur 7 496**, **421 Mo**, 413,9 M caractères. Le parcours continue (~50 PDF/min) ; le manifeste à la fin.
+
+\## L'OCR
+
+La détection des scannés sur les 2 785 PDF est toujours en cours ; le premier livre océrisé reste le seul document du pilote pour l'instant. C'est le poste le plus lent de la campagne, et le moins prioritaire — l'anglais et les documents d'abord.
+
+\## La suite
+
+Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des dix** ; les **manifestes OCR et Documents** → leurs fiches ; les **159 scans**. Le goal reste actif ; le prochain round devrait annoncer le 10e corpus et le lancement du contrôle final.
+
+### Tour 27 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check English manifest, check process, and documents
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1230,7 +1260,7 @@ Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des di
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 851 autres
+- … et 852 autres
 
 ## 4. Mesures et résultats marquants
 

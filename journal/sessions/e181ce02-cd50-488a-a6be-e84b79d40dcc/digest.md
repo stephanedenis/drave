@@ -15173,3 +15173,111 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [949 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+[still running after 60000ms; moved to background job bash-551]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-551", "timeout_ms": 600000, "wait": true}`
+
+  ```
+17 files changed, 389 insertions(+), 24 deletions(-)
+ create mode 100644 reports/pensee-mlp.json
+ create mode 100644 reports/rapport-pensee-mlp.md
+COMMIT OK 1
+cd19396b B13 — LE MLP : 60 POIDS, L'IMITATION ÉCHOUE ENCORE SEULE ; 27/27
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ MLP : 60 poids, l'imitation échoue encore seule ; 27/27
+
+Le round 28 du goal est livré : le **MLP** (2→8→4) ne suffit pas non plus — l'imitation d'un professeur incomplet hérite de ses limites. Commit **`cd19396b`**.
+
+## Le MLP
+
+Forward `(x/4, y/4)` → 8 tanh → 4 softmax ; cross-entropy et rétropropagation **manuelles** (pas de torch dans l'environnement), 500 époques, lr 0,10, imitation du professeur (la Q-table de la porte minute) sur les 23 états hors but. Puis exécution **seule**, sans A*.
+
+| politique | poids | buts seuls | pas | A* + sonde (T19) |
+|---|---:|---:|---:|---:|
+| **MLP** | **60** | **0** | **200** | 28 nœuds |
+| réseau linéaire (T23) | 12 | 0 | 200 | 28 nœuds |
+
+**Ce que ça dit** :
+
+- **Le MLP échoue encore** : la couche cachée et la rétropropagation ne suffisent pas à reproduire la politique du professeur ; la politique seule tourne.
+- **Le professeur est lui-même incomplet** (T21 : la Q-table seule échoue) : l'imitation d'un professeur incomplet ne peut pas dépasser le professeur.
+- **L'A* reste nécessaire** : c'est lui qui explore et atteint le but (T19).
+- **La négative est explicite** : 0 but, 200 pas, 60 poids.
+
+## L'état
+
+- Fiche : [`rapport-pensee-mlp.md`](../../reports/rapport-pensee-mlp.md) ; JSON [`pensee-mlp.json`](../../reports/pensee-mlp.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T24 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **27/27 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **414 fiches / 513 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+## La suite
+
+1. **Professeur complet** : d'abord une Q-table qui réussit seule (T21), puis imitation.
+2. **Apprentissage par renforcement** : le MLP apprend par essais, pas par imitation.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque le professeur complet.
+
+
+## Tour 42
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 29/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''class PolitiqueMLP(Politique):''',\n'''class PolitiqueAppriseComplete(PolitiqueAppriseShapin … [865 caractères tronqués]`
+
+  ```
+cd19396b B13 — LE MLP : 60 POIDS, L'IMITATION ÉCHOUE ENCORE SEULE ; 27/27
+ok
+500 q 56 seule (False, 8)
+1000 q 56 seule (False, 8)
+2000 q 56 seule (False, 8)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T24 le MLP                         60 poids, l'imitation échoue encore seule\\n\",\n\"  T24 le MLP                         … [1231 caractères tronqués]`
+
+  ```
+ok
+  ✅ T23 réseau linéaire    réseau : 12 poids, seule échec/200 pas
+  ✅ T24 MLP                MLP : 60 poids, seule échec/200 pas
+  ✅ T25 professeur complet professeur complet : 56 états-Q, seule échec/8 pas
+  28/28 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-professeur.md <<'MD'\n# B13 — le professeur complet : 56 états-Q, il échoue encore seul\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **28/28 portes** … [5855 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 415 fiche(s) · 514 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [997 caractères tronqués]`

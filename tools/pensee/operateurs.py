@@ -361,6 +361,18 @@ class PolitiqueReseau(Politique):
         return 12
 
 
+class PolitiqueAppriseComplete(PolitiqueAppriseShaping):
+    """La Q-table **complète** : shaping + récompense +1 au but, entraînée sur la porte minute."""
+
+    nom = "complete"
+
+    def _pas(self, cle, action, ouvre: bool):
+        ncle, gain = super()._pas(cle, action, ouvre)
+        if ncle[:2] == P_BUT:
+            gain += 1.0
+        return ncle, gain
+
+
 class PolitiqueMLP(Politique):
     """Un **MLP** (2 → 8 → 4, tanh), entraîné par imitation du professeur (porte minute).
 
@@ -968,7 +980,7 @@ class DRVM:
 __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "PolitiqueAveugle",
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
-           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise", "PolitiqueAppriseMinute", "PolitiqueAppriseShaping", "PolitiqueReseau", "PolitiqueMLP",
+           "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise", "PolitiqueAppriseMinute", "PolitiqueAppriseShaping", "PolitiqueReseau", "PolitiqueMLP", "PolitiqueAppriseComplete",
            "LABYRINTHE_PORTE", "REGISTRE_P", "LABYRINTHE_PORTE_STO", "REGISTRE_PSTO",
            "LABYRINTHE_PORTE_FERME", "REGISTRE_PF",
            "LABYRINTHE_PORTE_MINUTE", "REGISTRE_PM",

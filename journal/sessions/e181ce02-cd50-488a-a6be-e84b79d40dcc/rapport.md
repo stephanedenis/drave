@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 28.6 h |
-| Tours | 41 |
-| Messages | 709 |
-| Appels d'outils | 684 |
+| Durée | 28.7 h |
+| Tours | 42 |
+| Messages | 716 |
+| Appels d'outils | 689 |
 | Fichiers touchés | 25 |
-| Commandes | 551 |
+| Commandes | 555 |
 | Sous-agents | 2 |
-| Commits | 56 |
+| Commits | 57 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -113,6 +113,8 @@
 **Tour 40** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 41** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 42** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2191,6 +2193,54 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Passer les portes et committer le MLP
 - job_output
 
+**Synthèse produite :**
+
+⏵ MLP : 60 poids, l'imitation échoue encore seule ; 27/27
+
+Le round 28 du goal est livré : le **MLP** (2→8→4) ne suffit pas non plus — l'imitation d'un professeur incomplet hérite de ses limites. Commit **`cd19396b`**.
+
+\## Le MLP
+
+Forward `(x/4, y/4)` → 8 tanh → 4 softmax ; cross-entropy et rétropropagation **manuelles** (pas de torch dans l'environnement), 500 époques, lr 0,10, imitation du professeur (la Q-table de la porte minute) sur les 23 états hors but. Puis exécution **seule**, sans A*.
+
+| politique | poids | buts seuls | pas | A* + sonde (T19) |
+|---|---:|---:|---:|---:|
+| **MLP** | **60** | **0** | **200** | 28 nœuds |
+| réseau linéaire (T23) | 12 | 0 | 200 | 28 nœuds |
+
+**Ce que ça dit** :
+
+- **Le MLP échoue encore** : la couche cachée et la rétropropagation ne suffisent pas à reproduire la politique du professeur ; la politique seule tourne.
+- **Le professeur est lui-même incomplet** (T21 : la Q-table seule échoue) : l'imitation d'un professeur incomplet ne peut pas dépasser le professeur.
+- **L'A* reste nécessaire** : c'est lui qui explore et atteint le but (T19).
+- **La négative est explicite** : 0 but, 200 pas, 60 poids.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-mlp.md`](../../reports/rapport-pensee-mlp.md) ; JSON [`pensee-mlp.json`](../../reports/pensee-mlp.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T24 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **27/27 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **414 fiches / 513 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+\## La suite
+
+1. **Professeur complet** : d'abord une Q-table qui réussit seule (T21), puis imitation.
+2. **Apprentissage par renforcement** : le MLP apprend par essais, pas par imitation.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque le professeur complet.
+
+### Tour 42 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Ajouter le professeur complet et tester
+- bash — Ajouter la porte T25 (professeur complet)
+- bash — Écrire la fiche du professeur complet
+- bash — Passer les portes et committer le professeur complet
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -2270,7 +2320,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 511 autres
+- … et 515 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2473,4 +2523,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LE REWARD SHAPING : 56 ÉTATS-Q, LA POLITIQUE SEULE ÉCHOUE ENCORE ; 25/25" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "REWARD SHAPING"; then ec
 - B13 — LE RÉSEAU LINÉAIRE : 12 POIDS, L'IMITATION ÉCHOUE SEULE ; 26/26" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RÉSEAU LINÉAIRE"; then echo "COMM
 - B13 — LE MLP : 60 POIDS, L'IMITATION ÉCHOUE ENCORE SEULE ; 27/27" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LE MLP"; then echo "COMMIT OK $i"; bre
+- B13 — LE PROFESSEUR COMPLET : 56 ÉTATS-Q, IL ÉCHOUE ENCORE SEUL ; 28/28" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PROFESSEUR COMPLET"; then echo 
 
