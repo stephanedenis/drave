@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 31.2 h |
+| Durée | 31.3 h |
 | Tours | 67 |
-| Messages | 974 |
-| Appels d'outils | 891 |
+| Messages | 977 |
+| Appels d'outils | 894 |
 | Fichiers touchés | 25 |
-| Commandes | 721 |
+| Commandes | 723 |
 | Sous-agents | 2 |
-| Commits | 84 |
+| Commits | 85 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3565,7 +3565,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round apprend la **vraisemblan
 
 ### Tour 67 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Tester la vraisemblance apprise
 - bash — Ajouter la porte T50 (vraisemblance apprise)
@@ -3576,6 +3576,8 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round apprend la **vraisemblan
 - bash — Trim final pour T0
 - bash — Committer la vraisemblance apprise
 - job_output
+- bash — Faire un vrai diff d'état et vérifier le hook
+- bash — Committer la vraisemblance apprise (2e essai)
 
 ## 3. Travail accompli
 
@@ -3656,7 +3658,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round apprend la **vraisemblan
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 681 autres
+- … et 683 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3887,5 +3889,6 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round apprend la **vraisemblan
 - B13 — TROIS LOOKS : 20/20 À 4000 ÉPISODES, 9,2 PAS, 0,1 % D'ERREUR ; 50/50" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "TROIS LOOKS"; then echo "COM
 - B13 — LA CROYANCE BAYÉSIENNE : UN SEUL LOOK, 20/20 DÈS 2000 ÉPISODES, 9,4 PAS ; 51/51" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "CROYANCE BAYÉSIEN
 - B13 — LE BAYÉSIEN À DEUX LOOKS : 20/20, 8,0 PAS, 0,99 DE CONFIANCE ; 52/52" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BAYÉSIEN À DEUX LOOKS"; then
+- B13 — LA VRAISEMBLANCE APPRISE : v = 0,899, 20/20, 8,6 PAS ; 53/53" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VRAISEMBLANCE APPRISE"; then echo "C
 - B13 — LA VRAISEMBLANCE APPRISE : v = 0,899, 20/20, 8,6 PAS ; 53/53" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VRAISEMBLANCE APPRISE"; then echo "C
 

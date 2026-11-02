@@ -19476,3 +19476,49 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-721", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 7abe12eab6a507deeb89effd03bda435e1dc1315 but expected 72f4395513bcbf2164169bb179bed364fec58897
+retry 1
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 79a961a4e7cbab01120b750fe531350c3e0cda3a but expected 7abe12eab6a507deeb89effd03bda435e1dc1315
+retry 2
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 3
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 4
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 5
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 6
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+retry 7
+79a961a4 ÉTAT — T0 REVENU SOUS 4 000 MOTS
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Mis à jour\" docs/pilotage/en-cours.md | head -2; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-01, 23 h 59 HNE\", \"**Mis à jour  … [333 caractères tronqués]`
+
+  ```
+3:**Mis à jour : 2026-11-01, 23 h 59 HNE (heure locale, EST).**
+ok
+  ✅ index : aucun fait stagé sans état
+EXIT=0
+  revue de documentation · 448 fiche(s) · 544 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-bayes-appris.md reports/pensee-bayes-appris.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/e … [506 caractères tronqués]`

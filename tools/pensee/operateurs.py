@@ -1318,6 +1318,38 @@ def seule_bayes2(p: PolitiqueAppriseBayes2, max_pas: int = 200) -> tuple[bool, i
     return seule_observatrice(p, max_pas)
 
 
+class PolitiqueAppriseBayesAppris(PolitiqueAppriseBayes):
+    """Le bayésien qui **apprend la vraisemblance** : v = taux de looks corrects observé."""
+
+    nom = "bayes_appris"
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, p_saut: float = 0.2,
+                 p_erreur: float = 0.1):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma,
+                         eps=eps, p_saut=p_saut, p_erreur=p_erreur)
+        self.n_obs = 0
+        self.n_correct = 0
+        self.v = 0.5            # au départ : l'observation ne dit rien
+
+    def _pas(self, cle, action, d: int):
+        x, y, o, b = cle
+        if action == "observer":
+            vu = d if self.rng.random() >= self.p_erreur else 1 - d
+            self.n_obs += 1
+            self.n_correct += int(vu == d)
+            self.v = max(0.01, min(0.99, self.n_correct / max(1, self.n_obs)))
+            p = _BAYES_P[min(b, 9)]
+            v = self.v if vu == 0 else 1.0 - self.v
+            p2 = p * v / (p * v + (1 - p) * (1 - v))
+            return (x, y, o, _bayes_bucket(p2)), -0.1, d
+        return super()._pas(cle, action, d)
+
+
+def seule_bayes_appris(p: PolitiqueAppriseBayesAppris, max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

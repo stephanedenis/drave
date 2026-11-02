@@ -15,13 +15,13 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-bayes-appris.md`](rapport-pensee-bayes-appris.md) | **B13** — la vraisemblance apprise : v=0,899, 20/20, 8,6 pas, **53/53** |
 | [`rapport-pensee-bayes2.md`](rapport-pensee-bayes2.md) | **B13** — le bayésien à deux looks : 20/20, 8,0 pas, 0,99 de confiance, **52/52** |
 | [`rapport-pensee-bayes.md`](rapport-pensee-bayes.md) | **B13** — la croyance bayésienne : un look, 20/20 dès 2000 épisodes, 9,4 pas, **51/51** |
 | [`rapport-pensee-votante3.md`](rapport-pensee-votante3.md) | **B13** — trois looks : 20/20 à 4000 épisodes, 9,2 pas, **50/50** |
 | [`rapport-pensee-votante.md`](rapport-pensee-votante.md) | **B13** — l'observation votante : 2 looks, 20/20 buts, 1 % d'erreur, **49/49** |
 | [`rapport-pensee-bruitee.md`](rapport-pensee-bruitee.md) | **B13** — l'observation bruitée : 0/20 buts, 10 % d'erreur casse la politique, **48/48** |
 | [`rapport-pensee-observatrice.md`](rapport-pensee-observatrice.md) | **B13** — l'action observer : 20/20 buts, 8,3 pas, le geste qui révèle, **47/47** |
-| [`rapport-pensee-curieuse.md`](rapport-pensee-curieuse.md) | **B13** — la curiosité : 0/20 buts, le bonus de certitude ne suffit pas, **46/46** |
 | [`rapport-pensee-croyance.md`](rapport-pensee-croyance.md) | **B13** — la croyance : 0/20 buts, la distribution seule ne suffit pas, **45/45** |
 | [`rapport-pensee-partielle.md`](rapport-pensee-partielle.md) | **B13** — l'observation partielle : 0/20 buts, la mémoire d'un pas ne suffit pas, **44/44** |
 | [`rapport-pensee-hasard.md`](rapport-pensee-hasard.md) | **B13** — le hasard variable : 20–60 %, 20/20 à chaque taux, 8 pas, **43/43** |

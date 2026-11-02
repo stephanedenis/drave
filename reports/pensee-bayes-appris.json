@@ -1,0 +1,30 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "53/53",
+ "v_vrai": 0.9,
+ "v_initial": 0.5,
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 660,
+  "v_appris": 0.899,
+  "runs": 20,
+  "buts": 20,
+  "pas_moyen": 8.6
+ },
+ "contraste": {
+  "v_connu": {
+   "buts": 20,
+   "pas": 9.4
+  },
+  "sans_mise_a_jour": {
+   "buts": 0
+  }
+ },
+ "limites": [
+  "v stationnaire",
+  "un look par observation",
+  "toy"
+ ]
+}

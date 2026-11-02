@@ -21492,3 +21492,148 @@ Untracked files:
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md')\ns = p.read_text()\ns = s.replace(\" ; fiches [`wiki`](../../reports/rapport-corpus-wiki-texte.md), [`documents`](../../reports/rapport-corpus-documents.md … [892 caractères tronqués]`
+
+  ```
+T0 max : 3999 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master 79a961a4] ÉTAT — T0 REVENU SOUS 4 000 MOTS
+ 18 files changed, 76 insertions(+), 30 deletions(-)
+commit OK
+79a961a4 ÉTAT — T0 REVENU SOUS 4 000 MOTS
+23:57
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 78 : roadmap et état à jour (ligne D refondue, T0 à 3 999), commits 7abe12ea et 79a961a4
+
+**Round 78/1000 — la roadmap et l'état sont à jour, et le budget repasse sous les 4 000 mots.**
+
+- **La ligne D de la roadmap** est refondue (commit `7abe12ea`) : **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (1 927 doc., 322 Mo), **documents** (3 384 doc., 872 M car., **8 Ko 2,07 %**), **OCR** (7 livres, 4,2 M), **genres** mesurés ; prochaine action : l'OCR complet et la préparation R1.1/R1.2.
+- **L'état** (D/R/A) porte les mêmes chiffres, avec les fiches `wiki` et `documents`.
+- **Le T0** était monté à 4 017 mots après l'édition ; j'ai retiré un lien de fiche et il est revenu à **3 999** (commit `79a961a4`), la revue passe.
+
+**L'OCR** est sur son 8e livre (*Sprenger 2025, inflammationcycling*), le train à 4,19 Mo ; les val/test viendront à sa clôture. **Les documents** sont clos (commit `5c27a3fb`) ; **les dix corpus Wikipédia**, le **corpus PDF**, **A2.6/A8.3** et la **comparaison des genres** restent mesurés et committés.
+
+**La suite** : l'OCR (ses 8 livres puis les 159 scans) ; la préparation R1.1/R1.2. Le goal reste actif.
+
+
+## Tour 91
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 79/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_ocr/train.txt; tail -1 /tmp/ocr-pilote.log; ps --ppid 1616198 -o pid,stat,etime,cmd 2>/dev/null | head -2; ls reports/ocr-pdf.json 2>&1", "description": "Check OCR progress and manifest", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+23:57
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+    PID STAT     ELAPSED CMD
+1957423 R          09:31 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/004 CS Linux/004.0 CS General/004.0 Sprenger 2025, inflammationcycling.pdf /tmp/ocr-pdf-3cx_a7f4/p
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 79 : le 8e livre OCR (inflammationcycling) est long à rendre (9 min 31)
+
+**Round 79/1000 — l'OCR est sur un PDF lourd.**
+
+- **L'OCR** : train **4 193 550 octets** (23 h 48) ; `pdftoppm` rend le 8e livre (*Sprenger 2025, inflammationcycling*) depuis **9 min 31** — un PDF de nombreuses pages à 300 dpi. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3** et la **comparaison des genres** restent mesurés et committés ; la roadmap (ligne D refondue) et l'état sont à jour (commits `7abe12ea`, `79a961a4`).
+
+**Le constat** : l'OCR est sur un livre lourd ; le rendu des pages prend du temps. Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
+
+
+## Tour 92
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 80/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_ocr/train.txt; tail -1 /tmp/ocr-pilote.log; ps --ppid 1616198 -o pid,stat,etime,cmd 2>/dev/null | head -2; ls reports/ocr-pdf.json 2>&1", "description": "Check OCR progress and manifest", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+23:57
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+    PID STAT     ELAPSED CMD
+1957423 R          09:54 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/004 CS Linux/004.0 CS General/004.0 Sprenger 2025, inflammationcycling.pdf /tmp/ocr-pdf-3cx_a7f4/p
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 80 : le 8e livre OCR (inflammationcycling) rend toujours ses pages (9 min 54)
+
+**Round 80/1000 — l'OCR est sur un PDF lourd, le rendu continue.**
+
+- **L'OCR** : train **4 193 550 octets** (23 h 48) ; `pdftoppm` rend le 8e livre (*Sprenger 2025, inflammationcycling*) depuis **9 min 54** — un PDF de nombreuses pages à 300 dpi. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3** et la **comparaison des genres** restent mesurés et committés ; la roadmap et l'état sont à jour.
+
+**Le constat** : l'OCR est sur un livre long ; le rendu des pages prend du temps, mais il avance. Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
+
+
+## Tour 93
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 81/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_ocr/train.txt; tail -1 /tmp/ocr-pilote.log; ps --ppid 1616198 -o pid,stat,etime,cmd 2>/dev/null | head -2; ls reports/ocr-pdf.json 2>&1; ls /tmp/ocr-pdf-3cx_a7f4/ 2>/dev/null | wc -l", "description": " … [118 caractères tronqués]`
+
+  ```
+23:58
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+    PID STAT     ELAPSED CMD
+1957423 R          10:15 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/004 CS Linux/004.0 CS General/004.0 Sprenger 2025, inflammationcycling.pdf /tmp/ocr-pdf-3cx_a7f4/p
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+412
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 81 : le 8e livre OCR (inflammationcycling) a 412 pages — le rendu est long
+
+**Round 81/1000 — l'OCR est sur un très gros livre.**
+
+- **L'OCR** : train **4 193 550 octets** (23 h 48) ; `pdftoppm` rend le 8e livre (*Sprenger 2025, inflammationcycling*) depuis **10 min 15** — et le dossier temporaire contient déjà **412 pages PNG** : c'est un livre de plusieurs centaines de pages à 300 dpi. L'océrisation suivra, page à page. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (commit `5c27a3fb`) — 7 459 PDF, 3 384 documents, 872 M caractères, 8 Ko 2,07 % (test).
+- **Les dix corpus Wikipédia** (20,53 M articles, 67,73 G caractères, 81,2 Go, 8 Ko 0), le **corpus PDF** (1 927 documents, 322 Mo), **A2.6/A8.3** et la **comparaison des genres** restent mesurés et committés ; la roadmap et l'état sont à jour.
+
+**Le constat** : le 8e livre est un gros volume (412+ pages) ; il faudra du temps pour l'océriser. Le goal reste actif ; le prochain round vérifie l'OCR et le manifeste.
+
+
+## Tour 94
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 82/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
