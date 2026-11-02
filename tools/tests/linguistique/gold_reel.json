@@ -20990,7 +20990,10 @@
     }
    ],
    "pragma": {
-    "acte": "assertion"
+    "acte": "assertion",
+    "coref": {
+     "il": "chat"
+    }
    },
    "source": "reel"
   },
@@ -21074,7 +21077,10 @@
     }
    ],
    "pragma": {
-    "acte": "assertion"
+    "acte": "assertion",
+    "coref": {
+     "elle": "marie"
+    }
    },
    "source": "reel"
   },
@@ -21637,7 +21643,10 @@
     }
    ],
    "pragma": {
-    "acte": "assertion"
+    "acte": "assertion",
+    "coref": {
+     "it": "cat"
+    }
    },
    "source": "reel"
   },
@@ -21715,7 +21724,10 @@
     }
    ],
    "pragma": {
-    "acte": "assertion"
+    "acte": "assertion",
+    "coref": {
+     "she": "marie"
+    }
    },
    "source": "reel"
   },

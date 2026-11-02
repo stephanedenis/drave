@@ -1,0 +1,14 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "95/95",
+ "phrases_avec_coref": 4,
+ "liens": 4,
+ "justes": 4,
+ "taux": 1.0,
+ "limites": [
+  "4 liens seulement",
+  "cas faciles",
+  "règle naïve"
+ ]
+}

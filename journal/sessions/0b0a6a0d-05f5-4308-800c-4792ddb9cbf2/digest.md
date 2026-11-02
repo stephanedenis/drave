@@ -18178,3 +18178,40 @@ commit ok (1)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> journal/2026-11-01/nuit-n2.md <<'EOF'\n\n## Le meilleur modèle de la nuit\n\nC'est le **34,3 M avec canal de structure** (N2.z) : **3,5131** en domaine, **3,4836** à 256,\n**3,6558** à 512 octets. Le canal seul bat la distilla … [2639 caractères tronqués]`
+
+  ```
+ok
+     · compteurs : en-cours.md dit 587 JSON, le disque en a 588
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-1080]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1080", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+74324954 JOURNAL — LE MEILLEUR MODÈLE DE LA NUIT : LE CANAL À 34,3 M (3,51 / 3,66 À 512)
+05:19
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. ~/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal -- … [431 caractères tronqués]`
+
+  ```
+g2 2447131
+05:19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=\"etat registre document tableaux sessions budget\" DELAI=300 nohup bash tools/toutes-les-portes.sh > /tmp/portes-doc-fin.out 2>&1 & echo \"portes-doc $!\"; sleep 40; tail -4 /tmp/portes-doc-fin.out; date '+%H:%M'", "descripti … [41 caractères tronqués]`
+
+  ```
+portes-doc 2447402
+=== PASSE COMPLÈTE DES PORTES (7 portes, borne 300 s) ===
+    journaux : /tmp/portes-1102-05h19
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+05:20
+  ```
+
+- **bash** `{"command": "sleep 90; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/portes-doc-fin.out; awk '$2 != 0' /tmp/portes-1102-05h19/registre.txt 2>/dev/null | head -3; date '+%H:%M'; tail -1 work/n2j/base-34m-canal-g2.log", "description": "Read the final documentation gates verdict"}`

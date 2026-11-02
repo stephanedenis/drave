@@ -33674,3 +33674,80 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nold = \"**genres** mesurés ; fiche\"\nnew = \"**genres** mesurés (OCR **38,5** car/ligne) ; fiche\"\nassert old in  … [649 caractères tronqués]`
+
+  ```
+ok
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 78b551fc1206b09c330072466060b4d7f31b2095 but expected 1030600ee796429ec1c3234529634e0548dac950
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 743249547fb62aef2d8f5e67d1a45b4a3374753d but expected 78b551fc1206b09c330072466060b4d7f31b2095
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+ok=0
+74324954 JOURNAL — LE MEILLEUR MODÈLE DE LA NUIT : LE CANAL À 34,3 M (3,51 / 3,66 À 512)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add reports/corpus-genres.json reports/rapport-genres.md docs/pilotage/en-cours.md; git diff --cached --name-only; echo ---; git diff --cached docs/pilotage/en-cours.md | he … [205 caractères tronqués]`
+
+  ```
+reports/corpus-genres.json
+reports/rapport-genres.md
+---
+---
+  ❌ commit refusé : 2 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/corpus-genres.json
+     · reports/rapport-genres.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nold = \"**Mis à jour : 2026-11-02, 03 h 35 HNE (heure locale, EST).**\"\nnew = \"**Mis à jour : 2026 … [538 caractères tronqués]`
+
+  ```
+05:20
+reports/corpus-genres.json
+reports/rapport-genres.md
+     · reports/rapport-genres.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+AssertionError: horodatage absent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '1,4p' docs/pilotage/en-cours.md | cat -A | head -4", "description": "Inspect state header exactly", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+# En ce moment$
+$
+**Mis M-CM-  jour : 2026-11-02, 05 h 18 HNE (heure locale, EST).**$
+$
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"genres\" docs/pilotage/en-cours.md | head -3; git log --oneline -3 -- docs/pilotage/en-cours.md", "description": "Check genres line and state history", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/ … [9 caractères tronqués]`
+
+  ```
+65:- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 1 784 fenêtres 8 Ko train + 115 val, 8 Ko 0 ; éval 0/40, 0/24, 0/40) ; **genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
+74324954 JOURNAL — LE MEILLEUR MODÈLE DE LA NUIT : LE CANAL À 34,3 M (3,51 / 3,66 À 512)
+78b551fc N2.y — LE CANAL ET LA DISTILLATION NE S'ADDITIONNENT PAS, MÊME À 34,3 M
+1030600e B13 — LE DISCOURS : ACTE 0,9, NÉGATION 1,0, MODALITÉ 0,9, GOLD 320 ; 94/94
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt2, n = re.subn(r\"\\*\\*Mis à jour : 2026-11-02, \\d\\d h \\d\\d HNE \\(heure locale, EST\\)\\. … [581 caractères tronqués]`
+
+  ```
+05:21
+ok
+docs/pilotage/en-cours.md
+reports/corpus-genres.json
+reports/rapport-genres.md
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; ok=0; for i in 1 2 3 4 5; do git read-tree HEAD; git add reports/corpus-genres.json reports/rapport-genres.md docs/pilotage/en-cours.md; git commit -m \"GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CA … [341 caractères tronqués]`

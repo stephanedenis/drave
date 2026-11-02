@@ -1437,6 +1437,17 @@ def t91_discours() -> tuple[bool, str]:
         f"mod {pr['modalite']}, POS {round(r['pos']['exactitude'], 4)}")
 
 
+def t92_anaphore() -> tuple[bool, str]:
+    """L'anaphore : les 4 liens du gold sont résolus (4/4)."""
+    from ..tests.linguistique.anaphore import mesurer
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 320]
+    r = mesurer(ps)
+    return r["liens"] == 4 and r["taux"] == 1.0, (
+        f"anaphore : {r['justes']}/{r['liens']} liens justes")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1527,7 +1538,8 @@ def main() -> int:
               ("T88 20 complexes", t88_complexes20()),
               ("T89 50 complexes", t89_complexes50()),
               ("T90 100 complexes", t90_complexes100()),
-              ("T91 discours", t91_discours())]
+              ("T91 discours", t91_discours()),
+              ("T92 anaphore", t92_anaphore())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

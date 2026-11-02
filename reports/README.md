@@ -15,9 +15,9 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-anaphore.md`](rapport-pensee-anaphore.md) | **B13** — l'anaphore : 4/4 liens justes, première mesure, **95/95** |
 | [`rapport-pensee-gold-discours.md`](rapport-pensee-gold-discours.md) | **B13** — le discours : acte 0,9, négation 1,0, modalité 0,9, **94/94** |
 | [`rapport-pensee-gold-complexes100.md`](rapport-pensee-gold-complexes100.md) | **B13** — les 100 complexes : POS 0,6984, syntagme 0,2677, **93/93** |
-| [`rapport-pensee-gold-200.md`](rapport-pensee-gold-200.md) | **B13** — le gold à 200 réels : POS 0,7738, **88/88** |
 | [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, **87/87** |
 | [`rapport-pensee-courbe20.md`](rapport-pensee-courbe20.md) | **B13** — la courbe sur 20 graines : 20 % à 0,35, 100 % à 0,41, **86/86** |
 | [`rapport-pensee-seuil.md`](rapport-pensee-seuil.md) | **B13** — le seuil d'oubli : ×0,5 réussit, ×0,2 échoue, seuil dans (0,2 ; 0,5], **74/74** |

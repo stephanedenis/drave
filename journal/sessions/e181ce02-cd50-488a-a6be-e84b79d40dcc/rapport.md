@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 36.6 h |
+| Durée | 36.7 h |
 | Tours | 109 |
-| Messages | 1391 |
-| Appels d'outils | 1220 |
+| Messages | 1393 |
+| Appels d'outils | 1222 |
 | Fichiers touchés | 25 |
-| Commandes | 993 |
+| Commandes | 994 |
 | Sous-agents | 2 |
-| Commits | 140 |
+| Commits | 141 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -5796,7 +5796,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round mesure la **coréférenc
 
 ### Tour 109 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'heure et l'état
 - bash — Ajouter la coréférence au gold et mesurer l'anaphore
@@ -5806,6 +5806,8 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round mesure la **coréférenc
 - bash — Annoter la coréférence (sur les 3 lignes) et mesurer
 - bash — Écrire la fiche de l'anaphore
 - bash — Trim README et passer les portes
+- bash — Committer l'anaphore
+- job_output
 
 ## 3. Travail accompli
 
@@ -5886,7 +5888,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round mesure la **coréférenc
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 953 autres
+- … et 954 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6174,4 +6176,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round mesure la **coréférenc
 - B13 — LES 50 PHRASES COMPLEXES : POS 0,7013, SYNTAGME 0,3060, GOLD 250 ; 92/92" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "50 PHRASES COMPLEXES"; t
 - B13 — LES 100 PHRASES COMPLEXES : POS 0,6984, SYNTAGME 0,2677, GOLD 300 ; 93/93" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "100 PHRASES COMPLEXES";
 - B13 — LE DISCOURS : ACTE 0,9, NÉGATION 1,0, MODALITÉ 0,9, GOLD 320 ; 94/94" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LE DISCOURS"; then echo "COM
+- B13 — L'ANAPHORE : 4/4 LIENS JUSTES, PREMIÈRE MESURE DE CORÉFÉRENCE ; 95/95" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "L'ANAPHORE"; then echo "COM
 

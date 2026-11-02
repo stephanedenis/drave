@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 36.7 h |
+| Durée | 36.8 h |
 | Tours | 372 |
-| Messages | 2218 |
-| Appels d'outils | 1468 |
+| Messages | 2224 |
+| Appels d'outils | 1474 |
 | Fichiers touchés | 26 |
-| Commandes | 1301 |
+| Commandes | 1307 |
 | Sous-agents | 0 |
-| Commits | 81 |
+| Commits | 82 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -8729,7 +8729,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 372 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - job_output
 - job_kill
@@ -8737,6 +8737,12 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Find OCR mentions in genres fiche
 - bash — Update genres fiche with 20-book OCR
 - bash — Commit genres refresh
+- bash — Debug staged state check
+- bash — Touch state timestamp and verify index
+- bash — Inspect state header exactly
+- bash — Check genres line and state history
+- bash — Update state timestamp and verify index
+- bash — Commit genres refresh with retry
 
 ## 3. Travail accompli
 
@@ -8813,7 +8819,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1261 autres
+- … et 1267 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9041,5 +9047,6 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40" 2>&1 | tail -4; then break; fi; sleep 8; done; git log --oneline
 - DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40" > /tmp/commit-ocr.log 2>&1; code=$?; tail -4 /tmp/commit-ocr.log
 - DONNÉES — L'OCR DES 20 LIVRES EST CLOS : 7 381 PAGES, 15,36 M CARACTÈRES, 8 KO 0 (VAL 115, ÉVAL 0/40)" > /tmp/commit-final.log 2>&1; code=$?; tail -4 /tmp/commi
+- GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M)" > /tmp/commit-genres.log 2>&1; code=$?; tail -3 /tmp/commit-genres.log; if [ $c
 - GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M)" > /tmp/commit-genres.log 2>&1; code=$?; tail -3 /tmp/commit-genres.log; if [ $c
 
