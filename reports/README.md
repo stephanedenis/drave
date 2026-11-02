@@ -15,9 +15,9 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-anaphore-limite.md`](rapport-pensee-anaphore-limite.md) | **B13** — le plafond du gold : 27/30, quatre règles divergent, **103/103** |
 | [`rapport-pensee-anaphore-semantique.md`](rapport-pensee-anaphore-semantique.md) | **B13** — la sémantique des verbes : 23/30, le dernier nom reste le meilleur, **102/102** |
 | [`rapport-pensee-anaphore-hybride.md`](rapport-pensee-anaphore-hybride.md) | **B13** — l'hybride : 24/30, aucune règle simple n'atteint 30/30, **101/101** |
-| [`rapport-pensee-gold-complexes100.md`](rapport-pensee-gold-complexes100.md) | **B13** — les 100 complexes : POS 0,6984, syntagme 0,2677, **93/93** |
 | [`rapport-pensee-bord-fin.md`](rapport-pensee-bord-fin.md) | **B13** — le bord fin : 73 % à 0,38, 100 % à 0,41, **87/87** |
 | [`rapport-pensee-courbe20.md`](rapport-pensee-courbe20.md) | **B13** — la courbe sur 20 graines : 20 % à 0,35, 100 % à 0,41, **86/86** |
 | [`rapport-pensee-seuil.md`](rapport-pensee-seuil.md) | **B13** — le seuil d'oubli : ×0,5 réussit, ×0,2 échoue, seuil dans (0,2 ; 0,5], **74/74** |

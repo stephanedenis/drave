@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 38.0 h |
-| Tours | 381 |
-| Messages | 2278 |
-| Appels d'outils | 1509 |
+| Durée | 38.1 h |
+| Tours | 382 |
+| Messages | 2283 |
+| Appels d'outils | 1512 |
 | Fichiers touchés | 26 |
-| Commandes | 1342 |
+| Commandes | 1344 |
 | Sous-agents | 0 |
 | Commits | 87 |
 | Compactages de contexte | 4 |
@@ -789,6 +789,8 @@
 **Tour 380** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 381** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 382** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8941,7 +8943,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 381 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Wait 5 min then check CEGEP manifest
 - bash — Read CEGEP manifest
@@ -8954,10 +8956,32 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Trim state and fix counters
 - bash — Commit state trim and counters
 - bash — Retry state commit
+- bash — Verify state committed and gates
 
 **Synthèse produite :**
 
-⏵ Round 369 : le pilote CEGEP est committé (`ccf8bac5`) — « livres, CEGEP, collections » bouclée
+⏵ Round 369 : CEGEP committé (`ccf8bac5`), état compacté et committé (`7eace7b9`), portes documentaires ✅
+
+**Round 369/1000 — la boucle « livres, CEGEP, collections » est fermée et committée.**
+
+- **Commit `ccf8bac5`** : « LE CEGEP ENTRE DANS L'OCR : 5 NOTES, 292 PAGES, 506 801 CARACTÈRES, 8 KO 0 » — le manifeste, le contrôle, la fiche, **l'option `--racine`** du script, l'état, la roadmap, le plan et le récit.
+- **Commit `7eace7b9`** : « COMPTEURS (509/597) ET EN-COURS COMPACTÉ (T0) » — l'état revient sous 4 000 mots (la revue le réclamait).
+- **La revue** ✅ (**509 fiches · 597 JSON · 118 docs · 81 portes**), **le budget** ✅, **l'état à jour** ✅ (fait = état), **l'en-cours** ✅.
+- **Le corpus OCR du CEGEP** : **5 notes, 292 pages, 506 801 caractères** (dont *AMF-AO-Annexes 12 à 15* 121 p, *programme du colloque AQPC 2016* 66 p), train 3 doc./436 ko, **val 2 doc./87 ko** ; **8 Ko : 54 fenêtres train + 11 val, 0 doublon** ; éval **0/40, 0/24, 0/40** ; 31 min de calcul.
+- **Le corpus OCR des livres** : 20 livres, 7 381 pages, 15,36 M caractères, **8 Ko 0**, éval 0/40.
+
+**Le constat** : les deux corpus OCR (livres et CEGEP) sont mesurés, ficés, committés ; le goal reste actif jusqu'à 8 h.
+
+### Tour 382 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- get_goal
+- bash — Wait 9 min then check commits and state
+
+**Synthèse produite :**
+
+⏵ Round 370 : goal actif (370/1000), livraisons toutes committées — j'attends la fenêtre de 8 h
 
 ## 3. Travail accompli
 
@@ -9034,7 +9058,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1302 autres
+- … et 1304 autres
 
 ## 4. Mesures et résultats marquants
 

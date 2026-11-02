@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 38.0 h |
-| Tours | 116 |
-| Messages | 1453 |
-| Appels d'outils | 1268 |
+| Durée | 38.1 h |
+| Tours | 117 |
+| Messages | 1459 |
+| Appels d'outils | 1272 |
 | Fichiers touchés | 25 |
-| Commandes | 1030 |
+| Commandes | 1033 |
 | Sous-agents | 2 |
-| Commits | 152 |
+| Commits | 153 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -263,6 +263,8 @@
 **Tour 115** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 116** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 117** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6177,6 +6179,53 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute la **table des r�
 - bash — Trim l'en-cours et aligner les compteurs
 - bash — Committer l'état compacté
 
+**Synthèse produite :**
+
+⏵ Sémantique des verbes : 23/30, le dernier nom reste le meilleur ; 102/102
+
+Le round 103 du goal est livré : la **table sémantique** des verbes ne bat pas la proximité — le dernier nom reste la meilleure règle (27/30). Commit **`6424bf7f`** (+ état `7eace7b9`).
+
+\## Les quatre règles
+
+| sous-ensemble | dernier nom | rôle | hybride | **sémantique** |
+|---|---:|---:|---:|---:|
+| r301–r336 (court) | **20/20** | 14/20 | 15/20 | 15/20 |
+| r337–r342 (long) | 7/10 | 9/10 | 9/10 | 8/10 |
+| **tout** | **27/30** | 23/30 | 24/30 | 23/30 |
+
+**Ce que ça dit** :
+
+- **La table ne bat pas la proximité** : l'`il` de r321 reprend `chien` (proximité), pas `chat` (agent) ; la table sémantique se trompe dans les deux sens.
+- **Les erreurs changent** : la sémantique corrige r337/r339/r341 (les longues) mais casse r321/r322/r323 (les courtes) — le désaccord est le même qu'entre rôle et proximité.
+- **Le meilleur reste le dernier nom** (27/30) : sur ce gold, la règle la plus simple gagne.
+- **La négative est explicite** : 23/30 < 27/30.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-semantique.md`](../../reports/rapport-pensee-anaphore-semantique.md) ; JSON [`pensee-anaphore-semantique.json`](../../reports/pensee-anaphore-semantique.json) ; T99 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **102/102 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **509 fiches / 597 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` compacté (**1 580 mots**), **T0 dans le budget**.
+- Note : le commit a emporté une **suppression** de `rapport-ocr-cegep.md` d'une autre session (course d'index ; le fichier est sur le disque).
+- L'horloge réelle est **06 h 39 HNE** (la deadline 08:00 est encore devant) ; l'autotest prend **~18 min**.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Le dernier nom comme référence** : 27/30 ; documenter l'écart comme **limite du gold**, pas de la règle.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round **documente la limite du gold** (les quatre règles divergent) et consolide la ligne coréférence.
+
+### Tour 117 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Écrire la fiche du plafond du gold
+- bash — Trim README et passer les portes
+- bash — Committer le plafond du gold
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -6256,7 +6305,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute la **table des r�
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 990 autres
+- … et 993 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6556,4 +6605,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute la **table des r�
 - B13 — LA SÉMANTIQUE DES VERBES : 23/30, LE DERNIER NOM RESTE LE MEILLEUR ; 102/102" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SÉMANTIQUE DES VERBE
 - B13 — LA SÉMANTIQUE DES VERBES : 23/30, LE DERNIER NOM RESTE LE MEILLEUR ; 102/102" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SÉMANTIQUE DES VERBE
 - ÉTAT — COMPTEURS (509/597) ET EN-COURS COMPACTÉ (T0)" 2>&1 | tail -2; git log -1 --format='%h %s'; date
+- B13 — LE PLAFOND DU GOLD : 27/30, QUATRE RÈGLES DIVERGENT ; 103/103" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PLAFOND DU GOLD"; then echo "COMMIT
 

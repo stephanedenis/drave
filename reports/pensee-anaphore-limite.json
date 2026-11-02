@@ -1,0 +1,33 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "103/103",
+ "regles": {
+  "dernier_nom": {
+   "court": 20,
+   "long": 7,
+   "tout": 27
+  },
+  "role": {
+   "court": 14,
+   "long": 9,
+   "tout": 23
+  },
+  "hybride": {
+   "court": 15,
+   "long": 9,
+   "tout": 24
+  },
+  "semantique": {
+   "court": 15,
+   "long": 8,
+   "tout": 23
+  }
+ },
+ "plafond": 27,
+ "limites": [
+  "30 liens",
+  "cas ambigus non arbitrés",
+  "heuristique seule"
+ ]
+}

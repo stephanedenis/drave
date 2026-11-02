@@ -34495,3 +34495,68 @@ code=128
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff HEAD --stat -- docs/pilotage/en-cours.md; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add docs/pilotage/en-cours.md; git diff --cached --name-only; git commit -m \"ÉTAT — COMPTEURS 509/597, T0 SOUS 4 000, LES … [286 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+docs/pilotage/en-cours.md
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 7eace7b98c3c7d165610628f3beb43ac85816475 but expected 6424bf7f110cf9e87afb43977ba69345bead30e2
+code=128
+7eace7b9 ÉTAT — COMPTEURS (509/597) ET EN-COURS COMPACTÉ (T0)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; sed -n '3p' docs/pilotage/en-cours.md; git show --stat --oneline 7eace7b9 | head -6; git diff HEAD --stat -- docs/pilotage/en-cours.md; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/revue_documentation. … [153 caractères tronqués]`
+
+  ```
+06:40
+**Mis à jour : 2026-11-02, 06 h 36 HNE (heure locale, EST).**
+7eace7b9 ÉTAT — COMPTEURS (509/597) ET EN-COURS COMPACTÉ (T0)
+ docs/pilotage/en-cours.md                          | 12 ++++-----
+ journal/2026-11-02/README.md                       |  7 ++---
+ journal/2026-11-02/apprentissage.md                |  2 +-
+ journal/2026-11-02/attention.md                    |  2 +-
+ journal/2026-11-02/distribue.md                    |  2 +-
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 509 fiche(s) · 597 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 369 : CEGEP committé (`ccf8bac5`), état compacté et committé (`7eace7b9`), portes documentaires ✅
+
+**Round 369/1000 — la boucle « livres, CEGEP, collections » est fermée et committée.**
+
+- **Commit `ccf8bac5`** : « LE CEGEP ENTRE DANS L'OCR : 5 NOTES, 292 PAGES, 506 801 CARACTÈRES, 8 KO 0 » — le manifeste, le contrôle, la fiche, **l'option `--racine`** du script, l'état, la roadmap, le plan et le récit.
+- **Commit `7eace7b9`** : « COMPTEURS (509/597) ET EN-COURS COMPACTÉ (T0) » — l'état revient sous 4 000 mots (la revue le réclamait).
+- **La revue** ✅ (**509 fiches · 597 JSON · 118 docs · 81 portes**), **le budget** ✅, **l'état à jour** ✅ (fait = état), **l'en-cours** ✅.
+- **Le corpus OCR du CEGEP** : **5 notes, 292 pages, 506 801 caractères** (dont *AMF-AO-Annexes 12 à 15* 121 p, *programme du colloque AQPC 2016* 66 p), train 3 doc./436 ko, **val 2 doc./87 ko** ; **8 Ko : 54 fenêtres train + 11 val, 0 doublon** ; éval **0/40, 0/24, 0/40** ; 31 min de calcul.
+- **Le corpus OCR des livres** : 20 livres, 7 381 pages, 15,36 M caractères, **8 Ko 0**, éval 0/40.
+
+**Le constat** : les deux corpus OCR (livres et CEGEP) sont mesurés, ficés, committés ; le goal reste actif jusqu'à 8 h.
+
+
+## Tour 382
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 370/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-2631cfd8-8a48-409f-b5f8-1b65c4f77b59","revision":1,"objective":"Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions.","phase":"active","roundsStarted":370,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 370 : goal actif (370/1000), livraisons toutes committées — j'attends la fenêtre de 8 h
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 540; date '+%H:%M'; git log --oneline -6; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2", "description": "Wait 9 min then check commits and state", "timeoutMs": 600000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qt … [7 caractères tronqués]`

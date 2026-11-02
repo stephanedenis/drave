@@ -18772,3 +18772,40 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1101", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1095 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c "✅" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt 2>/dev/null | head -4; tail -1 /tmp/portes-fin.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-1097 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; grep -c "✅" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt 2>/dev/null | head -4; tail -1 /tmp/portes-fin.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 /tmp/porte-greffe.out 2>/dev/null; tail -2 /tmp/porte-indice.out 2>/dev/null; grep -c \"✅\" /tmp/portes-fin.out; awk '$2 != 0' /tmp/portes-fin/registre.txt | head -5; tail -1 /tmp/portes-fin.out", "description" … [26 caractères tronqués]`
+
+  ```
+06:43
+  poids 1    : [220, 16, 17, 18, 19, 20, 21, 22]
+  poids 2    : [1863, 48, 41, 43, 198, 16141, 374, 25]
+    capture d'état    : position(s) [1469] écrite(s) dans /tmp/tmp.cdMHSHqhzU/etatA.*
+=== 3. la mémoire interroge A, avec puis sans l'indice extérieur ===
+35
+porte-greffe 124 700
+porte-homeostasie 2 0
+porte-indice 124 700
+  porte-m5-brouillon     ✅                           0 s    ✅ brouillon déclaré (cibles [37,38,39]) et porté : 75 tenseurs, 41 263 M poids
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -3 /tmp/porte-greffe.out 2>/dev/null; echo \"=== indice ===\"; tail -3 /tmp/porte-indice.out 2>/dev/null; echo \"=== passe ===\"; grep -c \"✅\" /tmp/portes-fin.out; tail -1 /tmp/portes-fin.out", "descri … [51 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1103]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1103", "timeout_ms": 900000, "wait": true}`
