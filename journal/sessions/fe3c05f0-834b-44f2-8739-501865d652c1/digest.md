@@ -29650,3 +29650,144 @@ ls: cannot access 'reports/ocr-pdf.json': No such file or directory
 [exit code: 2]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; head -12 /tmp/ocr-pilote.log; echo ---; grep -c \"p ·\" /tmp/ocr-pilote.log; echo ---; nproc; free -g | head -2", "description": "Inspect OCR log head and book count", "timeoutMs": 120000, "workdir": "/home/stephane/Data … [30 caractères tronqués]`
+
+  ```
+01:17
+  Biblio_large · 001.0 3dprintingandreprap.pdf · 134 p · 159776 car
+  Biblio_large · 001.0 Bioinformatics for beginners genes · 225 p · 923245 car
+  Biblio_large · 001.0 metapatterns.pdf · 373 p · 654488 car
+  Biblio_large · 004.0 Brown 2015, Gene Cloning and DNA A · 376 p · 798077 car
+  Biblio_large · 004.0 Inconnu(e) 2009, Dictionnaire des  · 249 p · 1202859 car
+  Biblio_large · 004.0 Inconnu(e) 2011, La maison de A à  · 178 p · 362368 car
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+  Biblio_large · 004.0 Sprenger 2025, inflammationcycling · 1264 p · 3571780 car
+---
+8
+---
+40
+               total        used        free      shared  buff/cache   available
+Mem:             125          22          35           6          75         103
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pdfinfo \"/home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/004 CS Linux/004.65 Web/004.65 CSS- The Missing Manual, 4th Edition.pdf\" 2>/dev/null | grep -E \"Pages|Page size\"; ls -la \"/home/stephane/Data13TB/stephane/Bib … [199 caractères tronqués]`
+
+  ```
+Pages:           718
+Page size:       504 x 661.464 pts
+total 257864
+drwxr-xr-x. 1 stephane stephane      366 18 avr  2026 .
+drwxr-xr-x. 1 stephane stephane       52 18 avr  2026 ..
+-rw-r--r--. 1 stephane stephane 52991497  9 avr  2026 004.65 api lifecycle.pdf
+-rw-r--r--. 1 stephane stephane 62221292  5 jui  2025 004.65 CSS- The Missing Manual, 4th Edition.pdf
+-rw-r--r--. 1 stephane stephane 84316405 17 jun  2025 004.65 Pautasso 2025, Unethical Software Engineering.pdf
+-rw-r--r--. 1 stephane stephane 64515944  5 jui  2025 004.65 Peterson 2013, Learning Responsive Web Design.pdf
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"manifeste\\|json.dump\\|def main\\|max_doc\" tools/ocr_pdf.py | head -30", "description": "Inspect OCR manifest writing logic", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+96:def main() -> int:
+108:    ap.add_argument("--manifeste", type=pathlib.Path, default=RACINE / "reports/ocr-pdf.json")
+127:            if args.max_doc and stats["ocrises"] >= args.max_doc:
+178:    args.manifeste.parent.mkdir(parents=True, exist_ok=True)
+179:    args.manifeste.write_text(json.dumps({
+190:    print(json.dumps({k: stats[k] for k in ("scannes", "ocrises", "pages_ocr", "caracteres",
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-pdf.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-pdf.md</path>
+<type>file</type>
+<content>
+1: # Le corpus OCR — les livres scannés, 6 livres, 3,8 M caractères
+2: 
+3: **Date** : 2026-11-01 · **Ligne** : Données · **Session** : fe3c05f0
+4: **Statut** : en cours (6 livres océrisés au 1/11 23 h 12) ; les chiffres finaux seront ajoutés à la clôture.
+5: 
+6: ## 1. Ce que c'est
+7: 
+8: Le corpus des **livres scannés** : les PDF sans couche texte, océrisés page à page par `tesseract`. C'est le complément des documents natifs : là où `pdftotext` ne trouve rien, l'OCR lit l'image.
+9: 
+10: ## 2. Le chiffre (au 1/11 23 h 12)
+11: 
+12: | grandeur | valeur |
+13: |---|---:|
+14: | livres océrisés | 6 |
+15: | caractères | 3,8 M |
+16: | train / val / test | 3,8 Mo / … / … |
+17: | pages / livre | 225 à 376 |
+18: | langues | fra+eng |
+19: | WER | **non mesurée** |
+20: 
+21: ## 3. Le dispositif
+22: 
+23: `tools/ocr_pdf.py` : `pdftoppm -r 300 -gray -png` (300 dpi, gris) puis `tesseract -l fra+eng --psm 3` par page ; tesseract 5.5.3 installé sans root (`work/ocr/root/usr/bin/tesseract`) ; sortie `data/corpus_ocr/` ; manifeste `reports/ocr-pdf.json` (à la fin).
+24: 
+25: ## 4. Le contrô
+… [986 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ocr_pdf.py", "offset": 96, "limit": 100}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ocr_pdf.py</path>
+<type>file</type>
+<content>
+96: def main() -> int:
+97:     ap = argparse.ArgumentParser(description=__doc__)
+98:     ap.add_argument("--max-doc", type=int, default=0)
+99:     ap.add_argument("--dpi", type=int, default=300)
+100:     ap.add_argument("--langues", default="fra+eng")
+101:     ap.add_argument("--max-pages", type=int, default=0)
+102:     ap.add_argument("--min-chars", type=int, default=300)
+103:     ap.add_argument("--chunk", type=int, default=8192)
+104:     ap.add_argument("--val", type=float, default=0.05)
+105:     ap.add_argument("--test", type=float, default=0.05)
+106:     ap.add_argument("--graine", type=int, default=1)
+107:     ap.add_argument("--sortie", type=pathlib.Path, default=RACINE / "data/corpus_ocr")
+108:     ap.add_argument("--manifeste", type=pathlib.Path, default=RACINE / "reports/ocr-pdf.json")
+109:     args = ap.parse_args()
+110:     if not TESS.exists():
+111:         sys.exit("tesseract absent : lancer tools/installer_ocr.sh")
+112:     args.sortie.mkdir(parents=True, exist_ok=True)
+113:     seuil_val, seuil_test = int(args.val * 1000), int((args.val + args.test) * 1000)
+114:
+… [4542 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ocr_pdf.py", "limit": 95}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ocr_pdf.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """ocr_pdf.py — l'OCR des PDF **scannés** (R4.4 appliqué aux documents réels).
+3: 
+4: POURQUOI. `extrait_pdf.py` extrait le texte natif ; les PDF sans couche texte (les scans) sont
+5: comptés et écartés. Ce script les **océrise** avec le tesseract installé sans root par
+6: `installer_ocr.sh` (5.5.3, fra+eng) : `pdftoppm` rend les pages, `tesseract` les lit.
+7: 
+8: Ce qu'il ne fait pas (encore) : le prétraitement d'image de R4.4 (`nettoyer_scan.py` : rotation,
+9: contraste, colonnes) — le pilote mesure l'OCR **brut** ; la WER réelle n'a pas de vérité terrain
+10: (seule la parité R4.4 sur scans simulés la donne), donc la fiche donne le débit, les caractères et
+11: un échantillon, pas une WER inventée.
+12: 
+13: Usage :
+14:   python3 tools/ocr_pdf.py --max-doc 20          # pilote (les 20 premiers scannés)
+15:   python3 tools/ocr_pdf.py                       # tous les scannés des racines
+16: """
+17: from __future__ import annotations
+18: 
+19: import argparse
+20: import hashlib
+21: import json
+22: import os
+23: import pathlib
+24: import shutil
+25: impor
+… [2858 caractères tronqués]
+  ```
+

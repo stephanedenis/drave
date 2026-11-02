@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 32.7 h |
-| Tours | 295 |
-| Messages | 1907 |
-| Appels d'outils | 1311 |
-| Fichiers touchés | 25 |
-| Commandes | 1154 |
+| Durée | 32.8 h |
+| Tours | 296 |
+| Messages | 1914 |
+| Appels d'outils | 1316 |
+| Fichiers touchés | 26 |
+| Commandes | 1156 |
 | Sous-agents | 0 |
 | Commits | 74 |
 | Compactages de contexte | 4 |
@@ -617,6 +617,8 @@
 **Tour 294** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 295** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 296** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -6920,7 +6922,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 295 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Check OCR end and manifest
 - bash — Wait for OCR manifest
@@ -6929,6 +6931,25 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Check page count of 9th OCR book
 - bash — Inspect OCR manifest writing logic
 - read
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/finaliser_ocr.py`
+- bash — Test OCR log parsing
+- bash — Start OCR finisher at 06:45 cutoff
+
+**Synthèse produite :**
+
+⏵ Round 283 : 8 livres océrisés (2 815 p, 7,69 M car.), finisher de clôture armé
+
+**Round 283/1000 — le pilote OCR a livré 8 livres, et sa clôture est garantie.**
+
+- **Le journal de l'OCR** donne **8 livres** : **2 815 pages**, **7 688 789 caractères** (3dprinting 159 776 ; Bioinformatics 923 245 ; metapatterns 654 488 ; Brown 798 077 ; Dictionnaire 1 202 859 ; La maison 362 368 ; Product Manual 16 196 ; **Sprenger 1 264 p, 3 571 780**). Le train est à **7 776 329 octets**.
+- **Le 9e livre** (CSS — The Missing Manual, **718 p**) est en cours de rendu/OCR.
+- **Le finisher** (`work/finaliser_ocr.py`, PID 2275241) attend le manifeste de l'outil ou le **cutoff 06:45** ; s'il le faut, il arrête proprement l'OCR et **reconstruit le manifeste** depuis le journal, avec la note d'interruption — la fiche OCR aura ses chiffres.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès `reports/ocr-pdf.json`.
+- **La revue** ✅ (468 fiches, 560 JSON) et le **budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : la livraison OCR est chiffrée et sa clôture est automatisée ; le goal reste actif.
+
+### Tour 296 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -6961,6 +6982,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-r1-preparation.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/finaliser_ocr.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -7004,7 +7026,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1114 autres
+- … et 1116 autres
 
 ## 4. Mesures et résultats marquants
 

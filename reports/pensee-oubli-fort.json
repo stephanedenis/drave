@@ -1,0 +1,29 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "72/72",
+ "oubli": "× 0,5 tous les 10 épisodes",
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 586,
+  "v_final": 0.38,
+  "runs": 20,
+  "buts": 20,
+  "pas_moyen": 8.0
+ },
+ "contraste": {
+  "oubli_leger": {
+   "v_final": 0.56,
+   "pas": 10.0
+  },
+  "sans_oubli": {
+   "pas": 8.0
+  }
+ },
+ "limites": [
+  "oubli uniforme",
+  "× 0,5 pas la limite",
+  "toy"
+ ]
+}
