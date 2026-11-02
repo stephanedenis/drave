@@ -31905,3 +31905,25 @@ charger_gele ajouté
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"from ..tests.linguistique.evaluer_gold import charger\" tools/pensee/autotest.py; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nn=t.count(\"from ..tests.linguistique.evaluer_ … [418 caractères tronqués]`
+
+  ```
+21
+imports basculés 21
+  ✅ T128 règle du si       si : 29/34 (25/29 sans le repli)
+  ✅ T129 pièges            pièges : 29/34 (0/5 sur les pièges)
+  132/132 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-gold-gele.md <<'MD'\n# B13 — le gold gelé : les portes ne cassent plus quand le gold grandit\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **133/133 p … [6095 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 543 fiche(s) · 629 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · reports/README.md : 2809 mots > budget 2800 (T1)
+     · T0 : 4003 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"le **contexte** (T130 : gold gelé 602, 21 portes basculées ; l'accord explicite dans la phrase précédente) ;\",\n           … [972 caractères tronqués]`

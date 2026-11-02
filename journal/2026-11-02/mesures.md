@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (77)
+## Commits du jour (78)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -85,6 +85,7 @@
 | 12:45 | `546411f6` | GLOSSAIRE — FAMILLE 13 (CORPUS ET MESURE DOCUMENTAIRE, 19 ENTRÉES) ET DOCWATCH ANNOTE LES TERMES AU RENDU : 335 ENTRÉES | `en-cours.md`, `glossaire.md`, `13-le-corpus-et-la-mesure-documentaire.md` (+41) |
 | 12:53 | `866fcaa7` | B13 — LES QUESTIONS NÉGATIVES : 19/29, LA RÈGLE DE SURFACE NE S'INVERSE PAS ; 130/130 | `moteur-de-pensee.md`, `en-cours.md`, `roadmap.md` (+49) |
 | 13:07 | `5b7a3e99` | B13 — LA RÈGLE DU SI : 29/29, LA DERNIÈRE RÈGLE DE SURFACE ; 131/131 | `README.md`, `format-flux.md`, `moteur-de-pensee.md` (+32) |
+| 13:31 | `2c394fbc` | N2.ac — LE MÉLANGE DES DEUX CORPUS : LA LARGEUR SANS PERDRE LE FRANÇAIS | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |
 
 ## Chiffres du jour
 
@@ -94,7 +95,7 @@
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 45.2 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 45.3 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 44.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 44.8 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
@@ -109,6 +110,7 @@
 - [reports/rapport-n2-corpus-1go.md](../../reports/rapport-n2-corpus-1go.md)
 - [reports/rapport-n2-echantillon.md](../../reports/rapport-n2-echantillon.md)
 - [reports/rapport-n2-fenetre-r1.md](../../reports/rapport-n2-fenetre-r1.md)
+- [reports/rapport-n2-melange.md](../../reports/rapport-n2-melange.md)
 - [reports/rapport-n2-multilingue-34m-distille.md](../../reports/rapport-n2-multilingue-34m-distille.md)
 - [reports/rapport-n2-multilingue-34m.md](../../reports/rapport-n2-multilingue-34m.md)
 - [reports/rapport-n2-pas-vs-texte.md](../../reports/rapport-n2-pas-vs-texte.md)

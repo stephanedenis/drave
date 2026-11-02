@@ -20856,3 +20856,22 @@ en-cours ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.ac** : le mélange 1 Go — 3,49 fr, 6,03 litt., 8,34 angl. (le meilleur compromis) ;\", \"**N2.ac** : le mélan … [1590 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4002 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · compteurs : en-cours.md dit 626 JSON, le disque en a 628
+[still running after 60000ms; moved to background job bash-1218]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1218", "timeout_ms": 300000, "wait": true}`
+
+  ```
+commit ok (1)
+2c394fbc N2.ac — LE MÉLANGE DES DEUX CORPUS : LA LARGEUR SANS PERDRE LE FRANÇAIS
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.ac** : le mélange 1 Go (le meilleur compromis) ;\", \"**N2.ac** : le mélange 1 Go ;\")\ns = re.sub(r\"\\| fi … [2126 caractères tronqués]`

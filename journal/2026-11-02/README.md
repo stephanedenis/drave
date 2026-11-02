@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**139 commits** · **3 session(s)** · **9 thème(s)**
+**140 commits** · **3 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 8 | [distribue.md](distribue.md) |
 | docs | 18 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
-| mesures | 77 | [mesures.md](mesures.md) |
+| mesures | 78 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 6 | [portes.md](portes.md) |
@@ -25,7 +25,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 45.2 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 45.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 44.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 44.8 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
@@ -172,6 +172,7 @@
 | 12:57 | `80c37a25` | GLOSSAIRE — LES 10 PAGES PIVOTS LIENT LA PREMIÈRE OCCURRENCE DES TERMES (269 LIENS) ; LE SCRIPT LIE PAR PAGE, PAS « PARTOUT » |
 | 13:07 | `5b7a3e99` | B13 — LA RÈGLE DU SI : 29/29, LA DERNIÈRE RÈGLE DE SURFACE ; 131/131 |
 | 13:25 | `26e4df27` | B13 — LES QUESTIONS PIÈGES : 29/34, LE SI EST UNE CONVENTION ; 132/132 |
+| 13:31 | `2c394fbc` | N2.ac — LE MÉLANGE DES DEUX CORPUS : LA LARGEUR SANS PERDRE LE FRANÇAIS |
 
 ## Le récit de la journée (écrit à la main)
 
