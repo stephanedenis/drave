@@ -1,0 +1,34 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "81/81",
+ "phase_cachee": true,
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 86,
+  "but0": {
+   "buts": 0,
+   "pas": 200
+  },
+  "but1": {
+   "buts": 20,
+   "pas": 0
+  }
+ },
+ "contraste": {
+  "T77_porte_cachee": {
+   "phase0": 20,
+   "phase1": 20
+  },
+  "T78_but_cache": {
+   "but0": 0,
+   "but1": 20
+  }
+ },
+ "limites": [
+  "deux buts",
+  "routes partiellement concurrentes",
+  "toy"
+ ]
+}

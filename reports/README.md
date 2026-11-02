@@ -15,9 +15,9 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-concurrentes.md`](rapport-pensee-concurrentes.md) | **B13** — les routes concurrentes : but caché, 0/20 et 20/20, **81/81** |
 | [`rapport-pensee-verite.md`](rapport-pensee-verite.md) | **B13** — la vérité qui change : porte cachée, 20/20 aux deux phases, **80/80** |
 | [`rapport-pensee-courbe-seuil.md`](rapport-pensee-courbe-seuil.md) | **B13** — la courbe du seuil : 0,35→0,50, 0 → 80 % → 100 %, creux à 0,45, **79/79** |
-| [`rapport-pensee-seuil-bas.md`](rapport-pensee-seuil-bas.md) | **B13** — le seuil bas : gradué (~0,40), ×0,36 20/25, ×0,40 25/25, **78/78** |
 | [`rapport-pensee-seuil-bord.md`](rapport-pensee-seuil-bord.md) | **B13** — le bord du seuil : ×0,42/×0,44 50/50, bord > 0,44, **77/77** |
 | [`rapport-pensee-seuil-fin.md`](rapport-pensee-seuil-fin.md) | **B13** — le seuil fin : ×0,4 réussit, ×0,45 échoue, non monotone, **75/75** |
 | [`rapport-pensee-seuil.md`](rapport-pensee-seuil.md) | **B13** — le seuil d'oubli : ×0,5 réussit, ×0,2 échoue, seuil dans (0,2 ; 0,5], **74/74** |

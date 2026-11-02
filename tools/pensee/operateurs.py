@@ -2090,6 +2090,76 @@ def seule_verite(p: PolitiqueAppriseVerite, phase: int, max_pas: int = 200) -> t
     return False, pas
 
 
+GOALS_VERITE2 = ((4, 4), (4, 0))
+
+
+class PolitiqueAppriseVerite2(PolitiqueApprise):
+    """La Q-table à **but qui change** : le but est (4,4) puis (4,0), sans être dans l'état.
+
+    Les deux routes partagent l'état ; la Q-table ne peut pas les distinguer — c'est le test
+    des **routes concurrentes**.
+    """
+
+    nom = "verite2"
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, phase: int = 0):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma, eps=eps)
+        self.phase = phase
+
+    def _pas(self, cle, action, ouvre: bool):
+        x, y, o = cle
+        dx = {"droite": 1, "gauche": -1}.get(action, 0)
+        dy = {"bas": 1, "haut": -1}.get(action, 0)
+        nx, ny = x + dx, y + dy
+        if ouvre and not o and (nx, ny) == PORTE and (x, y) == (3, 2) and action == "bas":
+            o = True
+        if not _libre_p(nx, ny, o):
+            return cle, 0.0
+        return (nx, ny, o), (0.1 if (o and not cle[2]) else -0.01)
+
+    def _but(self, cle) -> bool:
+        return (cle[0], cle[1]) == GOALS_VERITE2[self.phase]
+
+    def apprendre(self) -> None:
+        for i in range(self.episodes):
+            self.phase = 0 if i < self.episodes // 2 else 1
+            cle = (0, 0, False)
+            for _ in range(120):
+                if self._but(cle):
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain = self._pas(cle, a, True)
+                but = 1.0 if self._but(ncle) else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+    def propose(self, etat, but):
+        cle = self._cle(etat)
+        return max(self.ACTIONS, key=lambda a: self._q(cle, a))
+
+
+def seule_verite2(p: PolitiqueAppriseVerite2, phase: int,
+                  max_pas: int = 200) -> tuple[bool, int]:
+    p.phase = phase
+    cle, pas = (0, 0, False), 0
+    for _ in range(max_pas):
+        if p._but(cle):
+            return True, pas
+        e = _etat_p(cle[0], cle[1], cle[2])
+        a = p.propose(e, None)
+        if a is None:
+            return False, pas
+        cle, _ = p._pas(cle, a, True)
+        pas += 1
+    return False, pas
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

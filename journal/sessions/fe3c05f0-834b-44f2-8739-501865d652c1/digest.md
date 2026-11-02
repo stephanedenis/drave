@@ -32195,3 +32195,57 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 360; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 6 min then check OCR progress", "timeoutMs": 420000, " … [60 caractères tronqués]`
+
+  ```
+02:27
+  Biblio_large · 004.65 Peterson 2013, Learning Responsiv · 412 p · 721702 car
+  Biblio_large · 004.65 api lifecycle.pdf · 115 p · 120690 car
+2329597 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 360; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af "tesseract.*ocr-pdf" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+-rw-r--r--. 1 stephane stephane 10298087  2 nov 02:20 data/corpus_ocr/train.txt
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; pgrep -af \"pdftoppm\" | head -1; ps -p 1616198 -o stat,etime= 2>/dev/null", "description": "Check 13th book start", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+02:28
+2328217 pdftoppm -r 300 -gray -png /home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/005 Logiciels/005.11 Algorithmes/005.11 Inconnu(e) 2022, Raff 2022, Inside Deep Learning Math, Algorithms, Models.pdf /tmp/ocr-pdf-bkz4vllc/p
+STAT            
+S       05:42:29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pdfinfo \"/home/stephane/Data13TB/stephane/Biblio_large/000 Informatique/005 Logiciels/005.11 Algorithmes/005.11 Inconnu(e) 2022, Raff 2022, Inside Deep Learning Math, Algorithms, Models.pdf\" 2>/dev/null | grep -E \"^Pages\"; ls \"/ho … [239 caractères tronqués]`
+
+  ```
+Pages:           602
+005.11 Inconnu(e) 2022, Raff 2022, Inside Deep Learning Math, Algorithms, Models.pdf
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 335 : 12e livre TERMINÉ — api lifecycle 115 p, 120 690 car. ; le 13e fait 602 p
+
+**Round 335/1000 — le 12e livre est clos ; le 13e entre.**
+
+- **L'api lifecycle** : **115 pages, 120 690 caractères** ; le **train** passe à **10 298 087 octets**.
+- **Le corpus OCR : 12 livres, 4 157 pages, 10 192 074 caractères**.
+- **Le 13e livre** : **Raff 2022, Inside Deep Learning** — **602 pages**, en rendu `pdftoppm` ; il occupera l'OCR ~25 min (fin vers **02 h 50**).
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **le contrôle OCR** est committé (`07e87a6f` : 1 244 fenêtres, éval 0/40).
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : 12 livres, 10,19 M caractères ; le goal reste actif.
+
+
+## Tour 348
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 336/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 360; date '+%H:%M'; tail -1 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 6 min then check OCR progress", "timeoutMs": 420000, " … [60 caractères tronqués]`

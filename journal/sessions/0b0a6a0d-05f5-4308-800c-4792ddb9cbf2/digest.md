@@ -17268,3 +17268,24 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1022", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/base-en-34m.pt 2>/dev/null && echo OK; tail -1 work/n2k/base-en-34m.log", "description": "Check the English 34M base"}`
+
+  ```
+02:30
+pas 14800 · perte 1.5755 · PPL val 4.876 · 784 s
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/base-en-34m.pt 2>/dev/null && echo OK; tail -1 work/n2k/base-en-34m.log; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 600 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2k/base-en-34m.pt --dec … [162 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1024]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1024", "timeout_ms": 600000, "wait": true}`
