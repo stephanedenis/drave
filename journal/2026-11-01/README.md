@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**125 commits** · **4 session(s)** · **10 thème(s)**
+**126 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | apprentissage | 3 | [apprentissage.md](apprentissage.md) |
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 15 | [distribue.md](distribue.md) |
+| distribue | 16 | [distribue.md](distribue.md) |
 | docs | 32 | [docs.md](docs.md) |
 | memoire | 10 | [memoire.md](memoire.md) |
 | mesures | 51 | [mesures.md](mesures.md) |
@@ -164,6 +164,7 @@
 | 22:52 | `75a03e15` | B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37 |
 | 22:55 | `06462a3d` | B13 — LA PORTE QUI BOUGE SUR 5 GRAINES : 5/5 BUTS EN 10 PAS, 230–253 ÉTATS-Q ; 38/38 |
 | 22:58 | `f9d693a6` | B13 — LA PÉRIODE VARIABLE : 2–5 PAS, 4/4 BUTS, 10 PAS, LA MÊME POLITIQUE ; 39/39 |
+| 23:02 | `c7f4b8d7` | B13 — LA PÉRIODE QUI CHANGE : 3 PUIS 2 PAS, A* 28 NŒUDS, POLITIQUE BUT/10, 376 ÉTATS-Q ; 40/40 |
 
 ## Le récit de la journée (écrit à la main)
 

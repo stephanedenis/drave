@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -23,6 +23,7 @@
 | 21:00 | `55b1523c` | B13 — LA Q-TABLE SUR LA PORTE MINUTE : 28 NŒUDS/BUT, SONDE 6, COÛT 62 ; 22/22 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+25) |
 | 22:36 | `efaaa945` | B13 — LA ROBUSTESSE SUR 5 GRAINES : 5/5 BRUITS, 5/5 STABLES ; 33/33 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+17) |
 | 22:52 | `75a03e15` | B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+27) |
+| 23:02 | `c7f4b8d7` | B13 — LA PÉRIODE QUI CHANGE : 3 PUIS 2 PAS, A* 28 NŒUDS, POLITIQUE BUT/10, 376 ÉTATS-Q ; 40/40 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+26) |
 
 ## Chiffres du jour
 
@@ -49,6 +50,7 @@
 - [reports/rapport-pensee-labyrinthe.md](../../reports/rapport-pensee-labyrinthe.md)
 - [reports/rapport-pensee-minute-apprise.md](../../reports/rapport-pensee-minute-apprise.md)
 - [reports/rapport-pensee-minute.md](../../reports/rapport-pensee-minute.md)
+- [reports/rapport-pensee-phase.md](../../reports/rapport-pensee-phase.md)
 - [reports/rapport-pensee-porte-apprise.md](../../reports/rapport-pensee-porte-apprise.md)
 - [reports/rapport-pensee-porte.md](../../reports/rapport-pensee-porte.md)
 - [reports/rapport-pensee-stochastique.md](../../reports/rapport-pensee-stochastique.md)

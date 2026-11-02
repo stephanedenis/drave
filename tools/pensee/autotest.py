@@ -623,6 +623,15 @@ def t37_phase() -> tuple[bool, str]:
                                f"seule but/{pas} pas ({len(p.q)} états-Q)")
 
 
+def t38_phase_graines() -> tuple[bool, str]:
+    """La période qui change sur 5 graines : 5/5 buts."""
+    from .graines import executer_phase
+    lignes = executer_phase()
+    buts = sum(1 for l in lignes if l["but"])
+    return buts == len(lignes) and len(lignes) == 5, (
+        f"phase graines : {buts}/5 buts, pas {[l['pas'] for l in lignes]}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -659,7 +668,8 @@ def main() -> int:
               ("T34 porte qui bouge", t34_bouge()),
               ("T35 porte qui bouge, 5 graines", t35_bouge_graines()),
               ("T36 période variable", t36_periode()),
-              ("T37 période qui change", t37_phase())]
+              ("T37 période qui change", t37_phase()),
+              ("T38 phase sur 5 graines", t38_phase_graines())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

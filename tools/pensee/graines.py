@@ -14,7 +14,8 @@ import pathlib
 
 from .courbe import seule, seule_sto
 from .operateurs import (PolitiqueAppriseBouge, PolitiqueAppriseMobile,
-                         PolitiqueAppriseOuverte, seule_bouge, seule_mobile)
+                         PolitiqueAppriseOuverte, PolitiqueApprisePhase,
+                         seule_bouge, seule_mobile, seule_phase)
 
 GRAINES = (0, 1, 2, 3, 4)
 
@@ -56,6 +57,17 @@ def executer_bouge() -> list[dict]:
     return lignes
 
 
+def executer_phase() -> list[dict]:
+    """La période qui change sur les 5 graines."""
+    lignes = []
+    for g in GRAINES:
+        p = PolitiqueApprisePhase(episodes=1000, graine=g)
+        p.apprendre()
+        but, pas = seule_phase(p)
+        lignes.append({"graine": g, "etats_q": len(p.q), "but": but, "pas": pas})
+    return lignes
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--json", default="")
@@ -65,6 +77,16 @@ def main() -> int:
         print(f"graine {l['graine']}  Q {l['etats_q']:3d}  "
               f"bruit {l['sto_but']}/{l['sto_pas']} pas ({l['sto_essais']} essais)  "
               f"stable {l['stable_but']}/{l['stable_pas']} pas")
+    if args.json and "phase" in args.json:
+        lignes_p = executer_phase()
+        for l in lignes_p:
+            print(f"graine {l['graine']}  Q {l['etats_q']:3d}  phase {l['but']}/{l['pas']} pas")
+        p = pathlib.Path(args.json)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps({"date": "2026-11-01", "ligne": "B13", "graines": GRAINES,
+                                 "lignes": lignes_p}, ensure_ascii=False, indent=1) + "\n",
+                    encoding="utf-8")
+        return 0
     if args.json and "bouge" in args.json:
         lignes_b = executer_bouge()
         for l in lignes_b:

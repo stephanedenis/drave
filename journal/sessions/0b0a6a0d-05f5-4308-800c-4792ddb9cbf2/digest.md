@@ -15852,3 +15852,70 @@ pas 1350 · perte 2.3900 · PPL val 20.186 · 68 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git reset -q && git add reports/rapport-n2-capacite-34m.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit -m \"N2.p — LA CAPACITÉ À 34,3 M : −0,19 PAR PALIER, ET LE VERROU DE LONGUEUR S'EFFACE\n\nSur les … [602 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-924]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-924", "timeout_ms": 300000, "wait": true}`
+
+  ```
+no changes added to commit (use "git add" and/or "git commit -a")
+f9d693a6 B13 — LA PÉRIODE VARIABLE : 2–5 PAS, 4/4 BUTS, 10 PAS, LA MÊME POLITIQUE ; 39/39
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; git log --oneline -2 -- reports/rapport-n2-capacite-34m.md; git status --short | grep -E \"n2-capacite-34m|en-cours|roadmap\" | head -4; ls reports/rapport-n2-capacite-34m.md && grep -c \"34,3 M\" docs/pilotage/ … [67 caractères tronqués]`
+
+  ```
+f9d693a6 B13 — LA PÉRIODE VARIABLE : 2–5 PAS, 4/4 BUTS, 10 PAS, LA MÊME POLITIQUE ; 39/39
+06462a3d B13 — LA PORTE QUI BOUGE SUR 5 GRAINES : 5/5 BUTS EN 10 PAS, 230–253 ÉTATS-Q ; 38/38
+75a03e15 B13 — LA PORTE QUI BOUGE : HORLOGE t % 6, A* 28 NŒUDS, POLITIQUE BUT/10, 236 ÉTATS-Q ; 37/37
+f9d693a6 B13 — LA PÉRIODE VARIABLE : 2–5 PAS, 4/4 BUTS, 10 PAS, LA MÊME POLITIQUE ; 39/39
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+reports/rapport-n2-capacite-34m.md
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"N2.o\\|N2.p\\|N2.n\" docs/pilotage/en-cours.md | head -3; sed -n '/N2.h/,+3p' docs/pilotage/en-cours.md | head -5", "description": "Read the current N2 state line"}`
+
+  ```
+89:- **N2.h/N2.i** : **3,09** / **12,93** / **33,83** ; **N2.j** (186 Mo) **7,42/12,41** ; **N2.k** (10 langues) fr **5,68**, anglais **6,30** ; **N2.j2** : 256 **4,49** ; **N2.j3** : 21,65 M **4,20** ; **N2.n** : **3,94** (base 4,42) ; **N2.o** : fr **5,41** ; **N2.p** : **4,00**, 512 **4,19** ; **N2.j4** : **3,88** (base 4,39) ; **N2.m** : **4,42** ; **N2.l** : **4,17** ; N4 **0/40**. Fiches [`n2-propre`](../../reports/rapport-n2-propre.md), [`n2-corpus-reel`](../../reports/rapport-n2-corpus-reel.md), [`n2-capacite-reelle`](../../reports/rapport-n2-capacite-reelle.md), [`n2-canal`](../../reports/rapport-n2-canal.md), [`n2-anglais`](../../reports/rapport-n2-anglais.md).
+- **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
+  avance ; **N4** en file ; **A/B** gardent les leurs.
+- **Interfaces** : `State`, `Proposal`, `Score`, `Decision`, `Trace` ; un opérateur est un bloc `state → state`.
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `reports/r44-*`, `docs/theorie/pre-traitement-linguistique.md`, `docs/schemas/heuri
+… [329 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"N2.p\" docs/pilotage/roadmap.md; grep -o \"N2.p[^;]*\" docs/pilotage/roadmap.md | head -1; date '+%H:%M'; tail -1 work/n2k/base-multi-11m-pos.log; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅|❌\"", "descripti … [46 caractères tronqués]`
+
+  ```
+1
+N2.p, 34,3 M : **4,00**, 512 octets **4,19** contre 5,67). Prochaine action : **la distillation sur le corpus réel**, puis le canal d'annotation |
+23:03
+pas 3650 · perte 2.2372 · PPL val 12.163 · 182 s
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && JOURNAUX=/tmp/portes-nuit DELAI=700 nohup bash tools/toutes-les-portes.sh > /tmp/portes-nuit.out 2>&1 & echo \"portes $!\"; sleep 20; tail -3 /tmp/portes-nuit.out; date '+%H:%M'", "description": "Launch the full gates pass in the bac … [9 caractères tronqués]`
+
+  ```
+portes 1720015
+=== PASSE COMPLÈTE DES PORTES (81 portes, borne 700 s) ===
+    journaux : /tmp/portes-nuit
+23:03
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/base-multi-11m-pos.pt 2>/dev/null && echo OK; tail -1 work/n2k/base-multi-11m-pos.log; tail -3 /tmp/portes-nuit.out", "description": "Wait for the multilingual control and the gates"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-929]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-929", "timeout_ms": 900000, "wait": true}`
