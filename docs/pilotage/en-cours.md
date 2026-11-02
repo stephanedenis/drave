@@ -25,8 +25,8 @@
 - **Reprise** : **R4.4** — note de clôture des trois limites (fax 1 bit, exposant fusionné,
   parité réelle sans questions) ; **S** est actif dans une autre TUI (export pragmatique, 11 tests).
 - **Coloration** : analyse [`pre-traitement-linguistique`](../theorie/pre-traitement-linguistique.md)
-  (5 schémas) — le CPU étiquette
-  la cascade
+  (5 schémas) — CPU étiquette
+  cascade
 - **Bloc** : **R0.7** — contrat [`bloc-linguistique`](../implantation/bloc-linguistique.md)
   (9 niveaux) ; **398 langues à 0,9687** ; fiche et porte.
 - **Moteur B13** : **AC-3/alpha-bêta (8/8)**, **DRVF (9/9)**, **banc (10/10)**, **opérateurs 11/11**, **nécessaire 12/12**, **labyrinthe 13/13** ; fiches
@@ -90,7 +90,7 @@
 |---|---|---|
 | portes | **81** (75 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 2 ajoutées depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **451** / **547** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **453** / **547** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 

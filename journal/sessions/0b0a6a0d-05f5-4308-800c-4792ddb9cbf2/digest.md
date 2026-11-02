@@ -16257,3 +16257,54 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-954", "timeout_ms": 300000, "wait": true}`
+
+  ```
+course 1
+commit ok (2)
+1a94456f N2.r — LE 34,3 M DISTILLÉ : 3,69, LE MEILLEUR MODÈLE DE LA NUIT, ET LA COURBE PLATE
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 tools/generer_natif.py", "description": "Read the generation tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""generer_natif.py — N4.1 : génération contrôlée avec `drave-n0`.
+
+Le modèle est byte-level : le prompt est encodé en UTF-8, la sortie est décodée
+en UTF-8 avec remplacement. La génération par défaut est **greedy** et
+déterministe ; `--top-k` restreint le choix sans tirage aléatoire.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+
+import torch
+import torch.nn.functional as F
+
+from tools.native_model import NativeConfig, NativeModel
+
+
+def charger(chemin: str, device: str = "cpu"):
+    ck = torch.load(chemin, map_location="cpu", weights_only=False)
+    cfg = NativeConfig(**{k: v for k, v in ck["config"].items() if k in NativeConfig.__annotations__})
+    m = NativeModel(cfg); m.load_state_dict(ck["state"]); m.to(device).eval()
+    return m, cfg
+
+
+@torch.no_grad()
+def generer(modele, prompt: str, n: int = 128, top_k: int = 0, temperature: float = 0.0):
+    ids = list(prompt.encode("utf-8"))
+    if not ids:
+        ids = [32]
+    for _ in range(n):
+        x = torch.tensor([ids[-modele.cfg.max_pos:]], dtype=torch.long,
+                         device=next(modele.parameters()).device)
+        logits = modele(x)["logits"][0, -1]
+
+… [153 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 300 ~/gpu-env/bin/python tools/generer_natif.py --modele work/n2j/W34-g1.pt --prompt \"La France est un pays\" --n 100 2>&1 | tail -3; echo \"=== autres ===\"; for p in \"Le chat de la vois … [274 caractères tronqués]`

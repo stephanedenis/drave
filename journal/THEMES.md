@@ -117,6 +117,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-28](2026-10-28/apprentissage.md) | `3,082` · `3,123` · `3,295` · `9,517` · `9,571` · `62,98 %` · `62,35 %` · `2,355` · `3,297` · `3,465` |
 | [2026-10-31](2026-10-31/apprentissage.md) | `2,9935` · `2,9927` |
 | [2026-11-01](2026-11-01/apprentissage.md) | `204 Mo` |
+| [2026-11-02](2026-11-02/apprentissage.md) | — |
 
 ### `distribue` — Régions, flux, protocoles, budgets, pannes
 
