@@ -1206,6 +1206,24 @@ def t76_courbe() -> tuple[bool, str]:
                 f"×0,50 {par[0.50]}/15")
 
 
+def t77_verite() -> tuple[bool, str]:
+    """La vérité qui change : la porte cachée saute à mi-entraînement ; 20/20 aux deux phases."""
+    from .operateurs import PolitiqueAppriseVerite, seule_verite
+    p = PolitiqueAppriseVerite(episodes=4000, graine=0)
+    p.apprendre()
+    ok0 = 0
+    ok1 = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, _ = seule_verite(p, 0)
+        ok0 += b
+        p.rng.seed(1000 + g)
+        b, _ = seule_verite(p, 1)
+        ok1 += b
+    return ok0 == 20 and ok1 == 20, (f"vérité : phase 0 {ok0}/20, "
+                                     f"phase 1 {ok1}/20")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1281,7 +1299,8 @@ def main() -> int:
               ("T73 seuil sur 5 graines", t73_seuil_graines()),
               ("T74 bord du seuil", t74_bord()),
               ("T75 seuil bas", t75_bas()),
-              ("T76 courbe complète", t76_courbe())]
+              ("T76 courbe complète", t76_courbe()),
+              ("T77 vérité qui change", t77_verite())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

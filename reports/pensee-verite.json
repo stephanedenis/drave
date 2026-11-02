@@ -1,0 +1,24 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "80/80",
+ "phase_cachee": true,
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 116,
+  "phase0": {
+   "buts": 20,
+   "pas": 8.0
+  },
+  "phase1": {
+   "buts": 20,
+   "pas": 8.0
+  }
+ },
+ "limites": [
+  "routes disjointes",
+  "une seule alternance",
+  "toy"
+ ]
+}

@@ -32156,3 +32156,42 @@ ace1717b PLAN — LA SESSION N2 A MESURÉ LA CHAÎNE RÉELLE, SA PROCHAINE ACTIO
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.dra; ok=0; for i in 1 2 3 4 5; do git read-tree HEAD; git add reports/rapport-ocr-pdf.md reports/ocr-pdf-contamination.json docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/2026-11-02/README.m … [419 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 07e87a6f] DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40
+ 20 files changed, 174 insertions(+), 56 deletions(-)
+ create mode 100644 reports/ocr-pdf-contamination.json
+ok=1
+07e87a6f DONNÉES — L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40
+ace1717b PLAN — LA SESSION N2 A MESURÉ LA CHAÎNE RÉELLE, SA PROCHAINE ACTION CHANGE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 334 : OCR DES 11 LIVRES COMMITTÉ (`07e87a6f`) — 10 M CARACTÈRES
+
+**Round 334/1000 — l'OCR des 11 livres est ficé et committé.**
+
+- **Commit `07e87a6f`** : « L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40 » — **20 fichiers**, 174 insertions.
+- **La fiche** porte **11 livres, 4 042 pages, 10 071 384 caractères**, le train **10 176 922 o**, **1 244 fenêtres 8 Ko** (74 751 lignes), les onze titres et l'éval **0/40, 0/24, 0/40**.
+- **L'état**, **la roadmap** et **le récit** disent 11 livres ; la prochaine action : « les 159 scans après les 11 livres ; le 12e — api lifecycle, 115 p — est en OCR ».
+- **Le 12e livre** (api lifecycle, 115 p) entre en rendu ; le corpus dépasse **10 M caractères**.
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅.
+- **Les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : la livraison OCR est à 11 livres, mesurée et committée ; le goal reste actif.
+
+
+## Tour 347
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 335/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 360; date '+%H:%M'; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 6 min then check OCR progress", "timeoutMs": 420000, " … [60 caractères tronqués]`

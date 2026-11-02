@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 33.7 h |
 | Tours | 94 |
-| Messages | 1226 |
-| Appels d'outils | 1089 |
+| Messages | 1229 |
+| Appels d'outils | 1092 |
 | Fichiers touchés | 25 |
-| Commandes | 880 |
+| Commandes | 881 |
 | Sous-agents | 2 |
-| Commits | 121 |
+| Commits | 122 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4986,13 +4986,15 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round lisse la courbe avec **2
 
 ### Tour 94 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Tester la vérité qui change (porte cachée)
 - bash — Ajouter la porte T77 (vérité qui change)
 - bash — Écrire la fiche de la vérité qui change
 - bash — Trim README et portes
 - bash — Committer la vérité qui change
+- job_output
+- bash — Committer la vérité qui change (2e essai)
 
 ## 3. Travail accompli
 
@@ -5073,7 +5075,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round lisse la courbe avec **2
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 840 autres
+- … et 841 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5341,5 +5343,6 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round lisse la courbe avec **2
 - B13 — LA COURBE DU SEUIL : 0,35→0,50, 0 → 80 % → 100 %, CREUX À 0,45 ; 79/79" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "COURBE DU SEUIL"; then ech
 - ÉTAT — COMPTEURS ALIGNÉS (572 JSON)" 2>&1 | tail -2; git log -1 --format='%h %s'
 - ÉTAT — COMPTEURS RÉELS (480/571)" 2>&1 | tail -2; git log -1 --format='%h %s'
+- B13 — LA VÉRITÉ QUI CHANGE : PORTE CACHÉE, 20/20 AUX DEUX PHASES ; 80/80" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VÉRITÉ QUI CHANGE"; then echo 
 - B13 — LA VÉRITÉ QUI CHANGE : PORTE CACHÉE, 20/20 AUX DEUX PHASES ; 80/80" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VÉRITÉ QUI CHANGE"; then echo 
 

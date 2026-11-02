@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 33.7 h |
-| Tours | 346 |
-| Messages | 2095 |
-| Appels d'outils | 1397 |
+| Durée | 33.8 h |
+| Tours | 347 |
+| Messages | 2098 |
+| Appels d'outils | 1398 |
 | Fichiers touchés | 26 |
-| Commandes | 1233 |
+| Commandes | 1234 |
 | Sous-agents | 0 |
 | Commits | 79 |
 | Compactages de contexte | 4 |
@@ -719,6 +719,8 @@
 **Tour 345** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 346** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 347** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8129,6 +8131,27 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - bash — Commit OCR 11 books update
 - bash — Commit OCR 11 books with correct retry
 
+**Synthèse produite :**
+
+⏵ Round 334 : OCR DES 11 LIVRES COMMITTÉ (`07e87a6f`) — 10 M CARACTÈRES
+
+**Round 334/1000 — l'OCR des 11 livres est ficé et committé.**
+
+- **Commit `07e87a6f`** : « L'OCR PASSE 10 M CARACTÈRES : 11 LIVRES, 4 042 PAGES, 1 244 FENÊTRES 8 KO, ÉVAL 0/40 » — **20 fichiers**, 174 insertions.
+- **La fiche** porte **11 livres, 4 042 pages, 10 071 384 caractères**, le train **10 176 922 o**, **1 244 fenêtres 8 Ko** (74 751 lignes), les onze titres et l'éval **0/40, 0/24, 0/40**.
+- **L'état**, **la roadmap** et **le récit** disent 11 livres ; la prochaine action : « les 159 scans après les 11 livres ; le 12e — api lifecycle, 115 p — est en OCR ».
+- **Le 12e livre** (api lifecycle, 115 p) entre en rendu ; le corpus dépasse **10 M caractères**.
+- **Le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45** ; **les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅.
+- **Les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : la livraison OCR est à 11 livres, mesurée et committée ; le goal reste actif.
+
+### Tour 347 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait 6 min then check OCR progress
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -8204,7 +8227,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1193 autres
+- … et 1194 autres
 
 ## 4. Mesures et résultats marquants
 

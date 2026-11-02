@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-verite.md`](rapport-pensee-verite.md) | **B13** — la vérité qui change : porte cachée, 20/20 aux deux phases, **80/80** |
 | [`rapport-pensee-courbe-seuil.md`](rapport-pensee-courbe-seuil.md) | **B13** — la courbe du seuil : 0,35→0,50, 0 → 80 % → 100 %, creux à 0,45, **79/79** |
 | [`rapport-pensee-seuil-bas.md`](rapport-pensee-seuil-bas.md) | **B13** — le seuil bas : gradué (~0,40), ×0,36 20/25, ×0,40 25/25, **78/78** |
 | [`rapport-pensee-seuil-bord.md`](rapport-pensee-seuil-bord.md) | **B13** — le bord du seuil : ×0,42/×0,44 50/50, bord > 0,44, **77/77** |
@@ -36,7 +37,6 @@
 | [`rapport-pensee-alternance.md`](rapport-pensee-alternance.md) | **B13** — les ruptures répétées : 0,9/0,1 alternés, v final 0,14, 20/20, **58/58** |
 | [`rapport-pensee-rupture.md`](rapport-pensee-rupture.md) | **B13** — la rupture : 90 % d'erreur, v final 0,12, 20/20, 8,0 pas, **57/57** |
 | [`rapport-pensee-derive.md`](rapport-pensee-derive.md) | **B13** — la fiabilité qui dérive : v final 0,56, 20/20, 8,0 pas, **54/54** |
-| [`rapport-pensee-hasard.md`](rapport-pensee-hasard.md) | **B13** — le hasard variable : 20–60 %, 20/20 à chaque taux, 8 pas, **43/43** |
 | [`rapport-pensee-phase-graines.md`](rapport-pensee-phase-graines.md) | **B13** — la phase sur 5 graines : 5/5 buts, 10–14 pas, 376–422 états-Q, **41/41** |
 | [`rapport-pensee-phase.md`](rapport-pensee-phase.md) | **B13** — la période qui change : 3 puis 2 pas, A* 28 nœuds, politique but/10, **40/40** |
 | [`rapport-pensee-graines.md`](rapport-pensee-graines.md) | **B13** — la robustesse sur 5 graines : 5/5 bruits, 5/5 stables, **33/33** |
