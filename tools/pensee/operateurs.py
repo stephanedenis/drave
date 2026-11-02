@@ -2293,6 +2293,23 @@ def seule_verite5(p: PolitiqueAppriseVerite5, phase: int, signal: int,
     return seule_verite4(p, phase, signal, max_pas)
 
 
+class PolitiqueAppriseVerite6(PolitiqueAppriseVerite4):
+    """La Q-table à **cycle cassé** : le but de la phase 1 coûte -1 en phase 0."""
+
+    nom = "verite6"
+
+    def _pas(self, cle, action, ouvre: bool):
+        ncle, gain = super()._pas(cle, action, ouvre)
+        if self.phase == 0 and (ncle[0], ncle[1]) == GOALS_VERITE2[1]:
+            return ncle, -1.0
+        return ncle, gain
+
+
+def seule_verite6(p: PolitiqueAppriseVerite6, phase: int, signal: int,
+                  max_pas: int = 200) -> tuple[bool, int]:
+    return seule_verite4(p, phase, signal, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

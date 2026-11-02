@@ -1,0 +1,25 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "85/85",
+ "penalite": -1.0,
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 144,
+  "but0": {
+   "buts": 0,
+   "pas": 200
+  },
+  "but1": {
+   "buts": 20,
+   "pas": 4
+  }
+ },
+ "cause": "(3,0) stale 1,517 > (3,0) bas 1,463",
+ "limites": [
+  "pénalité sur la case",
+  "alpha 0,25",
+  "toy"
+ ]
+}

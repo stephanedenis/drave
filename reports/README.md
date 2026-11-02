@@ -15,10 +15,10 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-cycle.md`](rapport-pensee-cycle.md) | **B13** — la pénalité -1 ne casse pas le cycle : 0/20, (3,0) stale, **85/85** |
 | [`rapport-pensee-vote.md`](rapport-pensee-vote.md) | **B13** — le vote de signaux : 5 looks, 0/20, le cycle est structurel, **84/84** |
 | [`rapport-pensee-phase-devine.md`](rapport-pensee-phase-devine.md) | **B13** — la phase devinée : signal 90 %, 0/20, boucle, **83/83** |
 | [`rapport-pensee-phase-etat.md`](rapport-pensee-phase-etat.md) | **B13** — la phase dans l'état : 20/20 aux deux buts, 145 Q, 6,0 pas, **82/82** |
-| [`rapport-pensee-concurrentes.md`](rapport-pensee-concurrentes.md) | **B13** — les routes concurrentes : but caché, 0/20 et 20/20, **81/81** |
 | [`rapport-pensee-verite.md`](rapport-pensee-verite.md) | **B13** — la vérité qui change : porte cachée, 20/20 aux deux phases, **80/80** |
 | [`rapport-pensee-seuil.md`](rapport-pensee-seuil.md) | **B13** — le seuil d'oubli : ×0,5 réussit, ×0,2 échoue, seuil dans (0,2 ; 0,5], **74/74** |
 | [`rapport-pensee-oubli-total.md`](rapport-pensee-oubli-total.md) | **B13** — l'oubli total : 0/20 buts, la mémoire est nécessaire, **73/73** |

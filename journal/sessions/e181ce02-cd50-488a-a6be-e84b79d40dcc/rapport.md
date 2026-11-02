@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 34.4 h |
-| Tours | 98 |
-| Messages | 1273 |
-| Appels d'outils | 1124 |
+| Durée | 34.5 h |
+| Tours | 99 |
+| Messages | 1282 |
+| Appels d'outils | 1131 |
 | Fichiers touchés | 25 |
-| Commandes | 909 |
+| Commandes | 915 |
 | Sous-agents | 2 |
-| Commits | 126 |
+| Commits | 127 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -227,6 +227,8 @@
 **Tour 97** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 98** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 99** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5209,6 +5211,57 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute le **vote de sign
 - bash — Committer le vote de signaux
 - job_output
 
+**Synthèse produite :**
+
+⏵ Vote de signaux : 5 looks, 0/20, le cycle est structurel ; 84/84
+
+Le round 85 du goal est livré : le **vote** fait tomber le bruit de 10 % à 0,1 % — et le **0/20 reste** : le problème est le **cycle**, pas le bruit. Commit **`8592fee3`**.
+
+\## Le vote
+
+Même monde que T80, mais la phase est décidée par un **vote majoritaire** de 3, 5 ou 9 looks.
+
+| looks | erreur de vote | but 0 | but 1 |
+|---|---:|---:|---:|
+| 3 | 2,8 % | **0/20** | 20/20 |
+| 5 | 0,9 % | **0/20** | 20/20 |
+| 9 | 0,1 % | **0/20** | 19/20 |
+
+**Ce que ça dit** :
+
+- **Le vote ne corrige rien** : l'erreur passe de 10 % à 0,1 %, le 0/20 reste. Le bruit n'est pas la cause.
+- **La cause est le cycle** : la trace de T80 montrait `(3,0) ↔ (4,0)` ; elle est **identique** avec 5 looks. Le `(4,0)` est un **but** en phase 1 et une **case vide** en phase 0 : sa valeur est à la fois reward et chemin, et l'argmax tourne.
+- **La Q-table est stale** : le `(3,0)`'s « droite » (1,708) n'est pas mis à jour quand le `(4,0)`'s best descend à 0,815 ; le cycle se self-entretient.
+- **La négative est explicite** : 0/20 au but 0, même à 0,1 % d'erreur.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-vote.md`](../../reports/rapport-pensee-vote.md) ; JSON [`pensee-vote.json`](../../reports/pensee-vote.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T81 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **84/84 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **486 fiches / 576 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~11 min** ; les portes tiennent avec `timeout 1200`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Casser le cycle** : reward négatif au `(4,0)` hors phase, ou la phase dans l'état.
+2. **20 graines** : lisser la courbe du seuil.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round **casse le cycle** — le reward négatif au `(4,0)` hors phase.
+
+### Tour 99 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Tester le cycle cassé (pénalité -1)
+- bash — Tracer la politique cycle cassé
+- bash — Ajouter la porte T82 (pénalité -1)
+- bash — Écrire la fiche du cycle
+- bash — Trim README et portes
+- bash — Committer la pénalité -1
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5288,7 +5341,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute le **vote de sign
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 869 autres
+- … et 875 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5562,4 +5615,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute le **vote de sign
 - B13 — LA PHASE DANS L'ÉTAT : LE CORRECTIF, 20/20 AUX DEUX BUTS, 6,0 PAS ; 82/82" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHASE DANS L'ÉTAT"; the
 - B13 — LA PHASE DEVINÉE : SIGNAL 90 %, 0/20 AU BUT 0, BOUCLE (3,0)↔(4,0) ; 83/83" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PHASE DEVINÉE"; then ec
 - B13 — LE VOTE DE SIGNAUX : 5 LOOKS, 0/20, LE CYCLE EST STRUCTUREL ; 84/84" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VOTE DE SIGNAUX"; then echo "
+- B13 — LA PÉNALITÉ -1 NE CASSE PAS LE CYCLE : 0/20, (3,0) STALE ; 85/85" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PÉNALITÉ -1"; then echo "COMMIT 
 

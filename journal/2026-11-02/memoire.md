@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,6 +13,7 @@
 | 01:20 | `204b5998` | B13 — LA MÉMOIRE TRÈS COURTE : Q × 0,5/10, 20/20, 8,0 PAS ; 72/72 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 | 01:24 | `28151434` | B13 — L'OUBLI TOTAL : 0/20 BUTS, LA MÉMOIRE EST NÉCESSAIRE ; 73/73 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+24) |
 | 02:52 | `37e024cd` | B13 — LA PHASE DEVINÉE : SIGNAL 90 %, 0/20 AU BUT 0, BOUCLE (3,0)↔(4,0) ; 83/83 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
+| 03:01 | `8592fee3` | B13 — LE VOTE DE SIGNAUX : 5 LOOKS, 0/20, LE CYCLE EST STRUCTUREL ; 84/84 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+23) |
 
 ## Chiffres du jour
 
@@ -22,9 +23,9 @@
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 34.7 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 34.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 34.4 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 34.8 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 34.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 34.6 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -34,6 +35,7 @@
 - [reports/rapport-pensee-oubli-total.md](../../reports/rapport-pensee-oubli-total.md)
 - [reports/rapport-pensee-oubli.md](../../reports/rapport-pensee-oubli.md)
 - [reports/rapport-pensee-phase-devine.md](../../reports/rapport-pensee-phase-devine.md)
+- [reports/rapport-pensee-vote.md](../../reports/rapport-pensee-vote.md)
 
 <!-- notes -->
 

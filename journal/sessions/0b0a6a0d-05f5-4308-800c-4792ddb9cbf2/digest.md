@@ -17412,3 +17412,29 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1034", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1029 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E34-g*.pt 2>/dev/null; tail -1 work/n2k/E34-g1.log 2>/dev/null; tail -1 work/n2k/E34-g2.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E34-g*.pt 2>/dev/null; tail -1 work/n2k/E34-g1.log 2>/dev/null; tail -1 work/n2k/E34-g2.log 2>/dev/null", "description": "Check the English 34M students"}`
+
+  ```
+03:07
+pas 13000 · seq 128 · perte 15.4558 · PPL 128/4 4.3348 · 1493 s
+pas 13500 · seq 128 · perte 14.3381 · PPL 128/4 4.3391 · 1489 s
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E34-g*.pt 2>/dev/null; tail -1 work/n2k/E34-g1.log 2>/dev/null; tail -1 work/n2k/E34-g2.log 2>/dev/null", "description": "Wait for the English 34M students"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1036]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1036", "timeout_ms": 900000, "wait": true}`

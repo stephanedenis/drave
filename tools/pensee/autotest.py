@@ -1300,6 +1300,26 @@ def t81_vote() -> tuple[bool, str]:
                                     f"but 1 {ok1}/20 (le cycle reste)")
 
 
+def t82_cycle() -> tuple[bool, str]:
+    """La pénalité -1 au (4,0) en phase 0 : ne casse pas le cycle (0/20)."""
+    from .operateurs import PolitiqueAppriseVerite6, seule_verite6
+    p = PolitiqueAppriseVerite6(episodes=4000, graine=0)
+    p.apprendre()
+    ok0 = 0
+    ok1 = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        s = 0 if p.rng.random() < 0.9 else 1
+        b, _ = seule_verite6(p, 0, s)
+        ok0 += b
+        p.rng.seed(1000 + g)
+        s = 1 if p.rng.random() < 0.9 else 0
+        b, _ = seule_verite6(p, 1, s)
+        ok1 += b
+    return ok0 == 0 and ok1 == 20, (f"pénalité -1 : but 0 {ok0}/20, "
+                                    f"but 1 {ok1}/20 (le cycle tient)")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1380,7 +1400,8 @@ def main() -> int:
               ("T78 routes concurrentes", t78_concurrentes()),
               ("T79 phase dans l'état", t79_phase_etat()),
               ("T80 phase devinée", t80_phase_devinee()),
-              ("T81 vote de 5 signaux", t81_vote())]
+              ("T81 vote de 5 signaux", t81_vote()),
+              ("T82 pénalité -1", t82_cycle())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

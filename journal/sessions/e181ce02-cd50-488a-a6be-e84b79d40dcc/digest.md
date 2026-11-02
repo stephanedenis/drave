@@ -24149,3 +24149,138 @@ timeout 1200 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-vote.md reports/pensee-vote.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/ … [482 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-909]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-909", "timeout_ms": 600000, "wait": true}`
+
+  ```
+26 files changed, 370 insertions(+), 66 deletions(-)
+ create mode 100644 reports/pensee-vote.json
+ create mode 100644 reports/rapport-pensee-vote.md
+COMMIT OK 1
+8592fee3 B13 — LE VOTE DE SIGNAUX : 5 LOOKS, 0/20, LE CYCLE EST STRUCTUREL ; 84/84
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vote de signaux : 5 looks, 0/20, le cycle est structurel ; 84/84
+
+Le round 85 du goal est livré : le **vote** fait tomber le bruit de 10 % à 0,1 % — et le **0/20 reste** : le problème est le **cycle**, pas le bruit. Commit **`8592fee3`**.
+
+## Le vote
+
+Même monde que T80, mais la phase est décidée par un **vote majoritaire** de 3, 5 ou 9 looks.
+
+| looks | erreur de vote | but 0 | but 1 |
+|---|---:|---:|---:|
+| 3 | 2,8 % | **0/20** | 20/20 |
+| 5 | 0,9 % | **0/20** | 20/20 |
+| 9 | 0,1 % | **0/20** | 19/20 |
+
+**Ce que ça dit** :
+
+- **Le vote ne corrige rien** : l'erreur passe de 10 % à 0,1 %, le 0/20 reste. Le bruit n'est pas la cause.
+- **La cause est le cycle** : la trace de T80 montrait `(3,0) ↔ (4,0)` ; elle est **identique** avec 5 looks. Le `(4,0)` est un **but** en phase 1 et une **case vide** en phase 0 : sa valeur est à la fois reward et chemin, et l'argmax tourne.
+- **La Q-table est stale** : le `(3,0)`'s « droite » (1,708) n'est pas mis à jour quand le `(4,0)`'s best descend à 0,815 ; le cycle se self-entretient.
+- **La négative est explicite** : 0/20 au but 0, même à 0,1 % d'erreur.
+
+## L'état
+
+- Fiche : [`rapport-pensee-vote.md`](../../reports/rapport-pensee-vote.md) ; JSON [`pensee-vote.json`](../../reports/pensee-vote.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T81 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **84/84 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **486 fiches / 576 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~11 min** ; les portes tiennent avec `timeout 1200`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Casser le cycle** : reward négatif au `(4,0)` hors phase, ou la phase dans l'état.
+2. **20 graines** : lisser la courbe du seuil.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round **casse le cycle** — le reward négatif au `(4,0)` hors phase.
+
+
+## Tour 99
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 86/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1319 caractères tronqués]`
+
+  ```
+8592fee3 B13 — LE VOTE DE SIGNAUX : 5 LOOKS, 0/20, LE CYCLE EST STRUCTUREL ; 84/84
+ok
+4000 q 144 but 0: 0 /20 but 1: 20 /20
+8000 q 137 but 0: 0 /20 but 1: 20 /20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom tools.pensee.operateurs import PolitiqueAppriseVerite6, seule_verite6, _etat_p, GOALS_VERITE2\np=PolitiqueAppriseVerite6(episodes=4000, graine=0); p.apprendre()\np.phase=0; p.signal_courant=0\ncle=(0,0,False,0) … [380 caractères tronqués]`
+
+  ```
+((0, 0, False), 'droite', {'haut': 1.393, 'bas': 1.395, 'gauche': 1.401, 'droite': 1.484})
+((1, 0, False), 'droite', {'haut': 1.487, 'bas': 1.479, 'gauche': 1.391, 'droite': 1.573})
+((2, 0, False), 'droite', {'haut': 1.574, 'bas': 1.574, 'gauche': 1.459, 'droite': 1.666})
+((3, 0, False), 'droite', {'haut': 1.66, 'bas': 1.463, 'gauche': 1.566, 'droite': 1.764})
+((4, 0, False), 'gauche', {'haut': -0.23, 'bas': -0.228, 'gauche': 0.815, 'droite': -0.227})
+((3, 0, False), 'droite', {'haut': 1.66, 'bas': 1.463, 'gauche': 1.566, 'droite': 1.764})
+((4, 0, False), 'gauche', {'haut': -0.23, 'bas': -0.228, 'gauche': 0.815, 'droite': -0.227})
+((3, 0, False), 'droite', {'haut': 1.66, 'bas': 1.463, 'gauche': 1.566, 'droite': 1.764})
+((4, 0, False), 'gauche', {'haut': -0.23, 'bas': -0.228, 'gauche': 0.815, 'droite': -0.227})
+((3, 0, False), 'droite', {'haut': 1.66, 'bas': 1.463, 'gauche': 1.566, 'droite': 1.764})
+but (4, 0, False)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T81 le vote de 5 signaux          la croyance ne casse pas le cycle : 0/20 (négatif)\\n\",\n\"  T81 le vote de 5 signaux   … [1502 caractères tronqués]`
+
+  ```
+ok
+  ✅ T80 phase devinée      phase devinée : but 0 0/20, but 1 20/20 (le bruit de 10 % casse)
+  ✅ T81 vote de 5 signaux  vote 5 looks : but 0 0/20, but 1 20/20 (le cycle reste)
+  ✅ T82 pénalité -1        pénalité -1 : but 0 0/20, but 1 20/20 (le cycle tient)
+  85/85 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-cycle.md <<'MD'\n# B13 — la pénalité -1 ne casse pas le cycle : 0/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **85/85 portes** : le but de la pha … [7383 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 487 fiche(s) · 577 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2814 mots > budget 2800 (T1)
+  en-cours · 1619 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-concurrentes.md`](rapport-pensee-concurrentes.md) | **B13** — les routes concurrentes : but caché, 0/20 et 20/20 … [638 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 487 fiche(s) · 577 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1200 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-cycle.md reports/pensee-cycle.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md doc … [473 caractères tronqués]`
