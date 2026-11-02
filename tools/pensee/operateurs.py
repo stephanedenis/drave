@@ -1350,6 +1350,63 @@ def seule_bayes_appris(p: PolitiqueAppriseBayesAppris, max_pas: int = 200) -> tu
     return seule_observatrice(p, max_pas)
 
 
+class PolitiqueAppriseBayesDerive(PolitiqueAppriseBayesAppris):
+    """Le bayésien à fiabilité **qui dérive** : v estimé sur une fenêtre glissante (50 looks)."""
+
+    nom = "bayes_derive"
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, p_saut: float = 0.2,
+                 p_erreur: float = 0.1, fenetre: int = 50):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma,
+                         eps=eps, p_saut=p_saut, p_erreur=p_erreur)
+        self.fenetre = fenetre
+        self.historique: list[int] = []
+
+    def _pas(self, cle, action, d: int):
+        x, y, o, b = cle
+        if action == "observer":
+            vu = d if self.rng.random() >= self.p_erreur else 1 - d
+            self.historique.append(int(vu == d))
+            if len(self.historique) > self.fenetre:
+                self.historique.pop(0)
+            self.v = max(0.01, min(0.99, sum(self.historique) / len(self.historique)))
+            p = _BAYES_P[min(b, 9)]
+            v = self.v if vu == 0 else 1.0 - self.v
+            p2 = p * v / (p * v + (1 - p) * (1 - v))
+            return (x, y, o, _bayes_bucket(p2)), -0.1, d
+        return super()._pas(cle, action, d)
+
+    def apprendre(self) -> None:
+        moitie = self.episodes // 2
+        ancien = self.p_erreur
+        self.p_erreur = 0.1
+        super().apprendre()
+        self.p_erreur = 0.4
+        reste = self.episodes - moitie
+        for _ in range(reste):
+            d = self.rng.randint(0, 1)
+            cle = (0, 0, False, 2)
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain, d = self._pas(cle, a, d)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+        self.p_erreur = ancien
+
+
+def seule_bayes_derive(p: PolitiqueAppriseBayesDerive, max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 

@@ -816,6 +816,23 @@ def t50_bayes_appris() -> tuple[bool, str]:
         f"{round(pas_total / 20, 1)} pas")
 
 
+def t51_derive() -> tuple[bool, str]:
+    """La fiabilité qui dérive : v final ≈ 0,56, 20/20 buts (fenêtre 50)."""
+    from .operateurs import PolitiqueAppriseBayesDerive, seule_bayes_derive
+    p = PolitiqueAppriseBayesDerive(episodes=4000, graine=0)
+    p.apprendre()
+    ok = 0
+    pas_total = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, pas = seule_bayes_derive(p)
+        ok += b
+        pas_total += pas
+    return ok == 20 and 0.4 <= p.v <= 0.7, (
+        f"dérive : {ok}/20 buts, v final {round(p.v, 3)}, "
+        f"{round(pas_total / 20, 1)} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -865,7 +882,8 @@ def main() -> int:
               ("T47 trois looks", t47_votante3()),
               ("T48 croyance bayésienne", t48_bayes()),
               ("T49 bayésien deux looks", t49_bayes2()),
-              ("T50 vraisemblance apprise", t50_bayes_appris())]
+              ("T50 vraisemblance apprise", t50_bayes_appris()),
+              ("T51 fiabilité qui dérive", t51_derive())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

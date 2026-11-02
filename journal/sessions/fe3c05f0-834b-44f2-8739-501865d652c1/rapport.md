@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 31.4 h |
 | Tours | 98 |
-| Messages | 1278 |
-| Appels d'outils | 1087 |
+| Messages | 1279 |
+| Appels d'outils | 1088 |
 | Fichiers touchés | 24 |
-| Commandes | 1001 |
+| Commandes | 1002 |
 | Sous-agents | 0 |
-| Commits | 68 |
+| Commits | 69 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -2773,12 +2773,13 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 
 ### Tour 98 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Check OCR book 8 pages and manifest
 - bash — Create journal directory for new day
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md`
 - bash — Verify journal and commit new day
+- bash — Add sessions link to journal and commit
 
 **Synthèse produite :**
 
@@ -2857,7 +2858,7 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 961 autres
+- … et 962 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3073,4 +3074,5 @@ Le manifeste est écrit et le corpus fermé : **7 459 PDF**, **803 817 pages**, 
 - DONNÉES — ROADMAP ET ÉTAT : LES DIX CORPUS, LE PDF, LES DOCUMENTS (8 KO 2,07 %), L'OCR ET LES GENRES" 2>/tmp/commit.err; then echo "commit OK"; break; else echo
 - ÉTAT — T0 REVENU SOUS 4 000 MOTS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err; sleep 8; fi done git reset -q; gi
 - JOURNAL — LE 2 NOVEMBRE : LA CLÔTURE DE LA CAMPAGNE D/R/A" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err; sleep 8;
+- JOURNAL — LE 2 NOVEMBRE : LIEN VERS L'INDEX DES SESSIONS" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err; sleep 8; 
 

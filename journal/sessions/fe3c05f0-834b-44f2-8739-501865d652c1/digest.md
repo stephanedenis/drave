@@ -21815,3 +21815,15 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/verifie_journal.py 2>&1 | tail -1\nfor i in 1 2 3; do\n  rm -f /tmp/index.dra; GIT_INDEX_FILE=/tmp/index.dra git read-tree HEAD\n  GIT_INDEX_FILE=/tmp/index.dra git add journal/2026-11-02/README.md\n  if GIT_INDEX_FILE=/t … [391 caractères tronqués]`
+
+  ```
+· lien vers l'index des sessions absent : journal/2026-11-02/README.md
+[master 08200b23] JOURNAL — LE 2 NOVEMBRE : LA CLÔTURE DE LA CAMPAGNE D/R/A
+ 10 files changed, 453 insertions(+), 29 deletions(-)
+ create mode 100644 journal/2026-11-02/README.md
+commit OK
+08200b23 JOURNAL — LE 2 NOVEMBRE : LA CLÔTURE DE LA CAMPAGNE D/R/A
+00:02
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np = pathlib.Path('journal/2026-11-02/README.md')\ns = p.read_text()\nif 'sessions' not in s:\n    s = s.replace(\"**Le jour de la clôture de la campagne D/R/A.**\",\n                  \"**Le jour de la … [720 caractères tronqués]`

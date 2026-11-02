@@ -16199,3 +16199,10 @@ pas 19500 · seq 128 · perte 16.1993 · PPL 128/4 3.6689 · 2302 s
   ```
 
 - **bash** `{"command": "sleep 180; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W34-g1.pt 2>/dev/null && echo OK; export PYTHONPATH=.; for g in 1 2; do CUDA_VISIBLE_DEVICES=$((g-1)) ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2j/W34-g$g.pt --decomposition --longueurs  … [150 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-951]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-951", "timeout_ms": 600000, "wait": true}`

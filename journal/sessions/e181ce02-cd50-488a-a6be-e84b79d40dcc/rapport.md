@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 31.4 h |
 | Tours | 68 |
-| Messages | 985 |
-| Appels d'outils | 900 |
+| Messages | 987 |
+| Appels d'outils | 902 |
 | Fichiers touchés | 25 |
-| Commandes | 729 |
+| Commandes | 730 |
 | Sous-agents | 2 |
-| Commits | 85 |
+| Commits | 86 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3621,7 +3621,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait **dériver la fiabi
 
 ### Tour 68 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Tester la fiabilité qui dérive
 - bash — Ajouter la porte T51 (fiabilité qui dérive)
@@ -3629,6 +3629,8 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait **dériver la fiabi
 - bash — Trim reports/README et portes
 - bash — Inspecter et régénérer le journal du jour
 - bash — Passer toutes les portes
+- bash — Committer la fiabilité qui dérive
+- job_output
 
 ## 3. Travail accompli
 
@@ -3709,7 +3711,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait **dériver la fiabi
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 689 autres
+- … et 690 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3942,4 +3944,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round fait **dériver la fiabi
 - B13 — LE BAYÉSIEN À DEUX LOOKS : 20/20, 8,0 PAS, 0,99 DE CONFIANCE ; 52/52" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BAYÉSIEN À DEUX LOOKS"; then
 - B13 — LA VRAISEMBLANCE APPRISE : v = 0,899, 20/20, 8,6 PAS ; 53/53" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VRAISEMBLANCE APPRISE"; then echo "C
 - B13 — LA VRAISEMBLANCE APPRISE : v = 0,899, 20/20, 8,6 PAS ; 53/53" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "VRAISEMBLANCE APPRISE"; then echo "C
+- B13 — LA FIABILITÉ QUI DÉRIVE : v FINAL 0,56, 20/20, 8,0 PAS ; 54/54" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "FIABILITÉ QUI DÉRIVE"; then echo "
 
