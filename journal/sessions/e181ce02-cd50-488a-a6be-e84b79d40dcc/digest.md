@@ -25352,3 +25352,91 @@ timeout 1800 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/pensee/autotest.py reports/rapport-pensee-gold-complexes20.md reports/pensee-gold-complexes20.json reports/READ … [573 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-960]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-960", "timeout_ms": 600000, "wait": true}`
+
+  ```
+27 files changed, 1591 insertions(+), 55 deletions(-)
+ create mode 100644 reports/pensee-gold-complexes20.json
+ create mode 100644 reports/rapport-pensee-gold-complexes20.md
+COMMIT OK 1
+09244748 B13 — LES 20 PHRASES COMPLEXES : POS 0,6829, SYNTAGME 0,2963, GOLD 220 ; 91/91
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ 20 phrases complexes : POS 0,6829, syntagme 0,2963, gold 220 ; 91/91
+
+Le round 92 du goal est livré : les phrases complexes passent de **5 à 20** — les deux effets de T87 se confirment et se modèrent. Commit **`09244748`**.
+
+## Les 20 complexes
+
+| sous-ensemble | phrases | POS | tokens | syntagme F1 | tête F1 |
+|---|---:|---:|---:|---:|---:|
+| r001–r200 | 200 | 0,7924 | 978 | 0,1838 | 0,3198 |
+| **r201–r220** | **20** | **0,6829** | 123 | **0,2963** | **0,3704** |
+
+**Ce que ça dit** :
+
+- **Le POS chute de 0,11** : les relatifs (`qui`, `que`, `dont`, `who`, `whom`, `that`), les auxiliaires (`ai`, `as`, `est`, `soit`, `is`, `are`) et les conjonctions (`quand`, `bien que`, `although`, `that`) restent hors du lexique fermé ; le POS ouvert les absorbe.
+- **Le syntagme gagne 0,11** : les segments REL/SUB sont **longs** et l'heuristique les délimite mieux que les GN courts ; l'effet de T87 (+0,30 sur 5 phrases) se **modère** à +0,11 sur 20.
+- **La tête suit** (0,3704) : le rôle des REL/SUB est porté par le nom/verbe de tête.
+- **La négative reste** : le POS du hasard (0,0147).
+
+## L'état
+
+- Fiche : [`rapport-pensee-gold-complexes20.md`](../../reports/rapport-pensee-gold-complexes20.md) ; JSON [`pensee-gold-complexes20.json`](../../reports/pensee-gold-complexes20.json) ; T88 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **220 phrases**.
+- **91/91 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **496 fiches / 583 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- **Correction d'heure** : l'horloge réelle est **04 h 36 HNE**, pas 08 h — les timestamps des fiches précédentes (07 h) étaient en avance ; `en-cours` est remis à **04 h 55**.
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **50 phrases complexes** : coordination, ellipse ; l'intervalle se resserre.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif (la deadline 08:00 est encore devant, il est ~05:00 HNE) ; le prochain round pousse le gold vers **50 phrases complexes**.
+
+
+## Tour 106
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 93/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_reel.py'); t=p.read_text()\nnew = '''    (\"r221\", \"fr\", \"Le village où je vis est petit.\",\n     [(\"Le\", \"DET\"), (\"village\", \"NOUN\"), (\"où … [12358 caractères tronqués]`
+
+  ```
+ok
+250 phrases réelles → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json
+r001-r200 200 POS 0.7924 tokens 978 syntagme F1 0.1838 tete F1 0.3198
+r201-r250 50 POS 0.7013 tokens 318 syntagme F1 0.306 tete F1 0.3731
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T88 les 20 complexes             r201-220 : POS 0,6829, syntagme 0,2963\\n\",\n\"  T88 les 20 complexes             r201-2 … [7393 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 497 fiche(s) · 584 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2806 mots > budget 2800 (T1)
+  en-cours · 1622 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-gold-complexes.md`](rapport-pensee-gold-complexes.md) | **B13** — les phrases complexes : POS 0,6471, syntagme 0 … [601 caractères tronqués]`

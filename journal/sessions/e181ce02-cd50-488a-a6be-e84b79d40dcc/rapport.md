@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 36.1 h |
-| Tours | 105 |
-| Messages | 1347 |
-| Appels d'outils | 1184 |
+| Tours | 106 |
+| Messages | 1352 |
+| Appels d'outils | 1187 |
 | Fichiers touchés | 25 |
-| Commandes | 960 |
+| Commandes | 963 |
 | Sous-agents | 2 |
 | Commits | 136 |
 | Compactages de contexte | 4 |
@@ -241,6 +241,8 @@
 **Tour 104** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 105** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 106** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5595,6 +5597,51 @@ Cinq phrases (r201–r205 : `qui parle`, `que tu as raison`, `who speaks`, `that
 - bash — Committer les 20 phrases complexes
 - job_output
 
+**Synthèse produite :**
+
+⏵ 20 phrases complexes : POS 0,6829, syntagme 0,2963, gold 220 ; 91/91
+
+Le round 92 du goal est livré : les phrases complexes passent de **5 à 20** — les deux effets de T87 se confirment et se modèrent. Commit **`09244748`**.
+
+\## Les 20 complexes
+
+| sous-ensemble | phrases | POS | tokens | syntagme F1 | tête F1 |
+|---|---:|---:|---:|---:|---:|
+| r001–r200 | 200 | 0,7924 | 978 | 0,1838 | 0,3198 |
+| **r201–r220** | **20** | **0,6829** | 123 | **0,2963** | **0,3704** |
+
+**Ce que ça dit** :
+
+- **Le POS chute de 0,11** : les relatifs (`qui`, `que`, `dont`, `who`, `whom`, `that`), les auxiliaires (`ai`, `as`, `est`, `soit`, `is`, `are`) et les conjonctions (`quand`, `bien que`, `although`, `that`) restent hors du lexique fermé ; le POS ouvert les absorbe.
+- **Le syntagme gagne 0,11** : les segments REL/SUB sont **longs** et l'heuristique les délimite mieux que les GN courts ; l'effet de T87 (+0,30 sur 5 phrases) se **modère** à +0,11 sur 20.
+- **La tête suit** (0,3704) : le rôle des REL/SUB est porté par le nom/verbe de tête.
+- **La négative reste** : le POS du hasard (0,0147).
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-complexes20.md`](../../reports/rapport-pensee-gold-complexes20.md) ; JSON [`pensee-gold-complexes20.json`](../../reports/pensee-gold-complexes20.json) ; T88 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **220 phrases**.
+- **91/91 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **496 fiches / 583 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- **Correction d'heure** : l'horloge réelle est **04 h 36 HNE**, pas 08 h — les timestamps des fiches précédentes (07 h) étaient en avance ; `en-cours` est remis à **04 h 55**.
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **50 phrases complexes** : coordination, ellipse ; l'intervalle se resserre.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif (la deadline 08:00 est encore devant, il est ~05:00 HNE) ; le prochain round pousse le gold vers **50 phrases complexes**.
+
+### Tour 106 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Ajouter 30 phrases complexes (50 au total) et mesurer
+- bash — Écrire la fiche des 50 phrases complexes
+- bash — Trim README et passer les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5674,7 +5721,7 @@ Cinq phrases (r201–r205 : `qui parle`, `que tu as raison`, `who speaks`, `that
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 920 autres
+- … et 923 autres
 
 ## 4. Mesures et résultats marquants
 

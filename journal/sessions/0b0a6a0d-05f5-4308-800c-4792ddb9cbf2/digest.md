@@ -18006,3 +18006,18 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1069", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/Z-g*.pt 2>/dev/null; tail -1 work/n2j/Z-g1.log 2>/dev/null; tail -1 work/n2j/Z-g2.log 2>/dev/null", "description": "Check the Z-g distillations"}`
+
+  ```
+04:44
+pas  6000 · seq 128 · perte 16.3373 · PPL 128/4 3.6134 · 695 s
+pas  6000 · seq 128 · perte 16.3819 · PPL 128/4 3.6017 · 672 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\na = \"Le canal est tranché (N2.x : −0,03 en domaine, +0,24 à 512) |\"\nb = (\"Le canal est tranché à 11,47 M (N2.x) mais **revit à 34, … [1287 caractères tronqués]`
