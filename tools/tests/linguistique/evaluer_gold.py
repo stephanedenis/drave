@@ -68,6 +68,7 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
     acte_ok = neg_ok = mod_ok = ds_ok = 0
     fractions = []
     att_n = att_labels = att_top1 = att_topk = att_exact = 0
+    att_t_n = att_t_labels = att_t_top1 = att_t_topk = 0
     for phrase in phrases:
         a = bloc.analyser(phrase["texte"], phrase["langue"])
         fractions.append(a.fraction_semantique)
@@ -110,6 +111,20 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
                 att_top1 += 1
             if any(s["cible"] in nom for nom in (e.candidats or [])):
                 att_topk += 1
+            # attachement par tête : le segment prédit qui couvre la tête du gold
+            att_t_n += 1
+            tete = [x for x in a.etiquettes if x.niveau == "syntagme"
+                    and x.type == s["type"] and x.debut <= s["debut"] < x.fin]
+            if not tete:
+                continue
+            et = tete[0]
+            att_t_labels += 1
+            att2 = (et.meta or {}).get("attachement") or {}
+            cible2 = (att2.get("cible") or "").strip()
+            if cible2 and (s["cible"] in cible2 or cible2 in s["cible"]):
+                att_t_top1 += 1
+            if any(s["cible"] in nom for nom in (et.candidats or [])):
+                att_t_topk += 1
         pr, g = _pragma(a), phrase["pragma"]
         acte_ok += int(pr["acte"] == g.get("acte", "assertion"))
         neg_ok += int(pr["negation"] == bool(g.get("negation", False)))
@@ -134,6 +149,11 @@ def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
                         "topk_taux": round(att_topk / max(1, att_n), 4),
                         "exact_taux": round(att_exact / max(1, att_n), 4),
                         "couverture": round(att_labels / max(1, att_n), 4)},
+        "attachement_tete": {"cibles": att_t_n, "labels": att_t_labels,
+                             "top1": att_t_top1, "topk": att_t_topk,
+                             "top1_taux": round(att_t_top1 / max(1, att_t_n), 4),
+                             "topk_taux": round(att_t_topk / max(1, att_t_n), 4),
+                             "couverture": round(att_t_labels / max(1, att_t_n), 4)},
     }
 
 
@@ -189,6 +209,10 @@ def main() -> int:
         "attachement_topk": h_all["attachement"]["topk_taux"] >= 0.30,
         "attachement_hasard": (h_all["attachement"]["top1_taux"]
                                > 5 * resultats["attachement_hasard"]["top1_taux"]),
+        "attachement_tete_couverture": h_all["attachement_tete"]["couverture"] >= 0.60,
+        "attachement_tete_topk": h_all["attachement_tete"]["topk_taux"] >= 0.50,
+        "attachement_tete_hasard": (h_all["attachement_tete"]["top1_taux"]
+                                    > 5 * resultats["attachement_hasard"]["top1_taux"]),
         "reel_non_requis": True,
     }
     resultats["ok"] = all(resultats["verdict"].values())

@@ -11660,3 +11660,139 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-407", "timeout_ms": 240000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master c5d38030] L — ATTACHEMENT : TOP-1 0,294 / TOP-K 0,338 SUR 68 CIBLES (COUVERTURE 0,338), HASARD 0,015
+ 34 files changed, 956 insertions(+), 201 deletions(-)
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Attachement mesuré : top-1 0,294, top-k 0,338, hasard 0,015 ; la couverture de 34 % est la limite
+
+Le round 4 du goal est livré : l'**attachement** des GP/REL/SUB est mesuré sur le gold 180. Commit **`c5d38030`**.
+
+## Le dispositif
+
+Les deux golds annotent désormais la **cible** d'attachement : **68 cibles** (13 dans les 20 phrases réelles, 55 dans les 160 synthétiques). Le générateur S propose un attachement ; le bloc expose **toutes** ses cibles (pas seulement le dernier segment ambigu) via `_tokens`/`_segmente` en **lecture seule** — un couplage à l'API interne du S, déclaré.
+
+## Les résultats
+
+| lecture | source | cibles | couv. | top-1 | top-1/couv. | top-k |
+|---|---:|---:|---:|---:|---:|---:|
+| **heuristique** | **180** | **68** | **0,338** | **0,294** | **0,870** | **0,338** |
+| heuristique | 20 réels | 13 | 0,385 | 0,154 | 0,400 | 0,385 |
+| heuristique | 160 synth. | 55 | 0,327 | 0,327 | **1,000** | 0,327 |
+| mock seul | 180 | 68 | 0,338 | 0 | 0 | 0 |
+| **hasard** | 180 | 68 | — | **0,015** | — | — |
+
+**Ce que ça dit** :
+
+- **La couverture (34 %) est la limite**, pas la cible : le S et le gold ne découpent pas les mêmes **spans** ; seuls 23 des 68 segments à cible sont alignés.
+- **Sur les 23 alignés** : le top-k est **100 %**, le top-1 **87 %** ; quand le S propose un attachement, la bonne cible est presque toujours dans ses candidats.
+- **Réels 40 %** : les GP au verbe (`dans le parc` → `vu`) sont lus par le S comme le GN le plus proche (`l'homme`) ; le gold préfère le verbe — le désaccord classique d'attachement.
+- **Synthétiques 100 %** : la grammaire attache régulièrement ; le S retrouve la cible.
+- **Hasard 1,5 %** : le contrôle négatif.
+- **`exact` 0** : le S rend la cible en **phrase** (`a vu`), le gold en **tête** (`vu`) ; l'égalité stricte est trop dure, la containment est la bonne mesure.
+- **Les 3 cibles anglaises** ne sont pas couvertes (le S est français) : la couverture réelle française est de 23/65.
+
+## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; cibles dans [`gold.py`](../../tools/tests/linguistique/gold.py) et [`gold_synthetique.py`](../../tools/tests/linguistique/gold_synthetique.py).
+- Porte `porte-bloc-linguistique` **verte** (gold 180 + attachement + tests + autotest 398 langues) ; `porte-pensee` **10/10**.
+- `revue` : **392 fiches / 490 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le tableau des compteurs d'`en-cours` a encore été corrompu par une écriture concurrente (portes 118, JSON `·`, lignes docs/fichiers mangées) : **réparé** avant le commit. La ligne « 9 langues » de D/R/A reste intégrée.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste actif et périmé ; la session R4.4 doit le rafraîchir.
+
+## La suite
+
+1. **Attachement par tête** : évaluer la cible du segment qui couvre la tête, pas le span exact — la couverture passerait de 34 % à ~90 %.
+2. **Qualification neuronale** : `spacy`/`stanza`/`nltk`/`transformers` sont **absents** de l'environnement ; `llama-cli` reste **refusé**. Si ça ne se débloque pas, passer aux **opérateurs hétérogènes/DRVM** de B13 sans attendre.
+3. **200+ phrases réelles** (relatives, portée, anglais).
+4. **Cascade avec un vrai modèle**, pas le mock.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque l'attachement par tête ou les opérateurs B13.
+
+
+## Tour 18
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 5/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; git status --short | head -8; python3 tools/revue_documentation.py 2>&1 | head -3; grep -n \"Gold L 180\" -A5 docs/pilotage/en-cours.md | head -8", "description": "Inspecter l'état avant l'attachement par … [7 caractères tronqués]`
+
+  ```
+c5d38030 L — ATTACHEMENT : TOP-1 0,294 / TOP-K 0,338 SUR 68 CIBLES (COUVERTURE 0,338), HASARD 0,015
+ M journal/2026-11-01/README.md
+ M journal/2026-11-01/mesures.md
+ M journal/README.md
+ M journal/THEMES.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M reports/rapport-corpus-wiki-texte.md
+ m tools/docwatch
+ M tools/entrainer_native.py
+  revue de documentation · 392 fiche(s) · 490 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+35:- **Gold L 180** : **20 réels + 160 synthétiques** ; POS **0,751** (fermé 0,939/ouvert 0,621),
+36-  syntagmes exacts **0,194**/**tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock)
+37-  **67,1 %** ; **attachement top-1 0,294/top-k 0,338 (couv. 0,338), hasard 0,015** ; vrai neuronal
+38-  **refusé** ; fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :
+39-  **attachement par tête + modèle qualifié**.
+40-- **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes** (T0 canonique, T1 rejeu,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/evaluer_gold.py'); t=p.read_text()\nt=t.replace(\"\"\"    att_n = att_labels = att_top1 = att_topk = att_exact = 0\n    for phrase in phrases:\"\"\",\n\"\"\"  … [3531 caractères tronqués]`
+
+  ```
+ok
+EXIT=0
+heuristique all span cov 0.3382 top1 0.2941 topk 0.3382 | tête cov 1.0 top1 0.8696 topk 1.0
+heuristique hand span cov 0.3846 top1 0.1538 topk 0.3846 | tête cov 1.0 top1 0.4 topk 1.0
+heuristique synthetique span cov 0.3273 top1 0.3273 topk 0.3273 | tête cov 1.0 top1 1.0 topk 1.0
+mock_neuronal all span cov 0.3382 top1 0.0 topk 0.0 | tête cov 1.0 top1 0.0 topk 0.0
+mock_neuronal hand span cov 0.2308 top1 0.0 topk 0.0 | tête cov 1.0 top1 0.0 topk 0.0
+mock_neuronal synthetique span cov 0.3636 top1 0.0 topk 0.0 | tête cov 1.0 top1 0.0 topk 0.0
+parallele all span cov 0.3382 top1 0.2941 topk 0.3382 | tête cov 1.0 top1 0.8696 topk 1.0
+parallele hand span cov 0.3846 top1 0.1538 topk 0.3846 | tête cov 1.0 top1 0.4 topk 1.0
+parallele synthetique span cov 0.3273 top1 0.3273 topk 0.3273 | tête cov 1.0 top1 1.0 topk 1.0
+cascade all span cov 0.3382 top1 0.2941 topk 0.3382 | tête cov 1.0 top1 0.8696 topk 1.0
+cascade hand span cov 0.3846 top1 0.1538 topk 0.3846 | tête cov 1.0 top1 0.4 topk 1.0
+cascade synthetique span cov 0.3273 top1 0.3273 topk 0.3273 | tête cov 1.0 top1 1.0 topk 1.0
+hasard {'cibles': 68, 'top1_taux': 0.0147} verdict {'pos_hand': True, 'pos_synthetique': True, 'syntagme_ha
+… [303 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib,re\n# rapport : attachement par tête\np=pathlib.Path('reports/rapport-pensee-gold-linguistique.md'); t=p.read_text()\nt=t.replace(\"\"\"> **1,0/1,0/0,994/0,889**, cascade **67,1 %**, **attachement top … [9294 caractères tronqués]`
+
+  ```
+état ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 392 fiche(s) · 490 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [329 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/tests/linguistique/evaluer_gold.py reports/rapport-pensee-gold-linguistique.md reports/pensee-gold-linguistique.json reports/README.md docs/implantation/bloc-linguistique.md docs/pilotage/en-cours.md docs/pilotage/roadm … [381 caractères tronqués]`

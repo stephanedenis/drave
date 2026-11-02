@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 26.6 h |
-| Tours | 17 |
-| Messages | 488 |
-| Appels d'outils | 511 |
+| Durée | 26.7 h |
+| Tours | 18 |
+| Messages | 496 |
+| Appels d'outils | 517 |
 | Fichiers touchés | 25 |
-| Commandes | 407 |
+| Commandes | 412 |
 | Sous-agents | 2 |
-| Commits | 26 |
+| Commits | 27 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -65,6 +65,8 @@
 **Tour 16** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 **Tour 17** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
+
+**Tour 18** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -956,6 +958,54 @@ Le round 3 du goal est livré : le **gold 180** est mesuré, avec la **tête** c
 - bash — Committer l'attachement mesuré et la fiche
 - job_output
 
+**Synthèse produite :**
+
+⏵ Attachement mesuré : top-1 0,294, top-k 0,338, hasard 0,015 ; la couverture de 34 % est la limite
+
+Le round 4 du goal est livré : l'**attachement** des GP/REL/SUB est mesuré sur le gold 180. Commit **`c5d38030`**.
+
+\## Le dispositif
+
+Les deux golds annotent désormais la **cible** d'attachement : **68 cibles** (13 dans les 20 phrases réelles, 55 dans les 160 synthétiques). Le générateur S propose un attachement ; le bloc expose **toutes** ses cibles (pas seulement le dernier segment ambigu) via `_tokens`/`_segmente` en **lecture seule** — un couplage à l'API interne du S, déclaré.
+
+\## Les résultats
+
+| lecture | source | cibles | couv. | top-1 | top-1/couv. | top-k |
+|---|---:|---:|---:|---:|---:|---:|
+| **heuristique** | **180** | **68** | **0,338** | **0,294** | **0,870** | **0,338** |
+| heuristique | 20 réels | 13 | 0,385 | 0,154 | 0,400 | 0,385 |
+| heuristique | 160 synth. | 55 | 0,327 | 0,327 | **1,000** | 0,327 |
+| mock seul | 180 | 68 | 0,338 | 0 | 0 | 0 |
+| **hasard** | 180 | 68 | — | **0,015** | — | — |
+
+**Ce que ça dit** :
+
+- **La couverture (34 %) est la limite**, pas la cible : le S et le gold ne découpent pas les mêmes **spans** ; seuls 23 des 68 segments à cible sont alignés.
+- **Sur les 23 alignés** : le top-k est **100 %**, le top-1 **87 %** ; quand le S propose un attachement, la bonne cible est presque toujours dans ses candidats.
+- **Réels 40 %** : les GP au verbe (`dans le parc` → `vu`) sont lus par le S comme le GN le plus proche (`l'homme`) ; le gold préfère le verbe — le désaccord classique d'attachement.
+- **Synthétiques 100 %** : la grammaire attache régulièrement ; le S retrouve la cible.
+- **Hasard 1,5 %** : le contrôle négatif.
+- **`exact` 0** : le S rend la cible en **phrase** (`a vu`), le gold en **tête** (`vu`) ; l'égalité stricte est trop dure, la containment est la bonne mesure.
+- **Les 3 cibles anglaises** ne sont pas couvertes (le S est français) : la couverture réelle française est de 23/65.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; cibles dans [`gold.py`](../../tools/tests/linguistique/gold.py) et [`gold_synthetique.py`](../../tools/tests/linguistique/gold_synthetique.py).
+- Porte `porte-bloc-linguistique` **verte** (gold 180 + attachement + tests + autotest 398 langues) ; `porte-pensee` **10/10**.
+- `revue` : **392 fiches / 490 JSON / 118 docs / 81 portes** — ✅ ; 
+… [990 caractères tronqués]
+
+### Tour 18 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Inspecter l'état avant l'attachement par tête
+- bash — Ajouter l'attachement par tête et remesurer
+- bash — Mettre à jour la fiche et l'état pour l'attachement par tête
+- bash — Passer toutes les portes après l'attachement par tête
+- bash — Committer l'attachement par tête
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1035,7 +1085,7 @@ Le round 3 du goal est livré : le **gold 180** est mesuré, avec la **tête** c
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 367 autres
+- … et 372 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1202,4 +1252,5 @@ Le round 3 du goal est livré : le **gold 180** est mesuré, avec la **tête** c
 - L — GOLD v0 : 20 PHRASES, POS 0,924, SYNTAGMES 0,356, PRAGMATIQUE 1,0/1,0/0,95/0,9" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - L — GOLD 180 : POS 0,751 (0,924 RÉEL / 0,725 SYNTH), TÊTE 0,560, PRAGMATIQUE 1,0/1,0/0,99/0,89" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - L — ATTACHEMENT : TOP-1 0,294 / TOP-K 0,338 SUR 68 CIBLES (COUVERTURE 0,338), HASARD 0,015" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- L — ATTACHEMENT PAR TÊTE : COUVERTURE 1,0, TOP-1 0,870, TOP-K 1,0 (SPAN 0,338/0,294)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

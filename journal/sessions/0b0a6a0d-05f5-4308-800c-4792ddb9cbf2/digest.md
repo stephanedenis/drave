@@ -14298,3 +14298,30 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-833", "timeout_ms": 600000, "wait": true}`
+
+  ```
+articles éligibles : 5234988
+écrit 230.6 Mo
+total 225176
+drwxr-xr-x. 1 stephane stephane        24  1 nov 19:19 .
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 tools/corpus_propre.py --source data/wiki_en/articles.txt --sortie data/wiki_en/propre --manifeste reports/corpus-wiki-en-propre.json --verif-max 100 > work/n2k/en-dedup.log 2>&1 & echo \"dedup en $!\"; date '+%H:%M'; t … [135 caractères tronqués]`
+
+  ```
+dedup en 1526442
+19:19
+pas 15250 · seq 128 · perte 21.7019 · PPL 128/4 3.8433 · 1061 s
+pas 15500 · seq 128 · perte 19.1984 · PPL 128/4 3.8570 · 1066 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/W-g*.pt work/n2j/base-placebo.pt 2>/dev/null; for g in 1 2 3; do echo \"-- W-g$g\"; tail -1 work/n2j/W-g$g.log 2>/dev/null; done; tail -1 work/n2j/base-placebo.log 2>/dev/null; cat work/n2k/en-de … [92 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-835]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-835", "timeout_ms": 500000, "wait": true}`

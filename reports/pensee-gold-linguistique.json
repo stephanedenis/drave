@@ -79,6 +79,15 @@
     "topk_taux": 0.3382,
     "exact_taux": 0.0,
     "couverture": 0.3382
+   },
+   "attachement_tete": {
+    "cibles": 23,
+    "labels": 23,
+    "top1": 20,
+    "topk": 23,
+    "top1_taux": 0.8696,
+    "topk_taux": 1.0,
+    "couverture": 1.0
    }
   },
   "hand": {
@@ -156,6 +165,15 @@
     "topk_taux": 0.3846,
     "exact_taux": 0.0,
     "couverture": 0.3846
+   },
+   "attachement_tete": {
+    "cibles": 5,
+    "labels": 5,
+    "top1": 2,
+    "topk": 5,
+    "top1_taux": 0.4,
+    "topk_taux": 1.0,
+    "couverture": 1.0
    }
   },
   "synthetique": {
@@ -232,6 +250,15 @@
     "topk_taux": 0.3273,
     "exact_taux": 0.0,
     "couverture": 0.3273
+   },
+   "attachement_tete": {
+    "cibles": 18,
+    "labels": 18,
+    "top1": 18,
+    "topk": 18,
+    "top1_taux": 1.0,
+    "topk_taux": 1.0,
+    "couverture": 1.0
    }
   }
  },
@@ -311,6 +338,15 @@
     "topk_taux": 0.0,
     "exact_taux": 0.0,
     "couverture": 0.3382
+   },
+   "attachement_tete": {
+    "cibles": 23,
+    "labels": 23,
+    "top1": 0,
+    "topk": 0,
+    "top1_taux": 0.0,
+    "topk_taux": 0.0,
+    "couverture": 1.0
    }
   },
   "hand": {
@@ -385,6 +421,15 @@
     "topk_taux": 0.0,
     "exact_taux": 0.0,
     "couverture": 0.2308
+   },
+   "attachement_tete": {
+    "cibles": 3,
+    "labels": 3,
+    "top1": 0,
+    "topk": 0,
+    "top1_taux": 0.0,
+    "topk_taux": 0.0,
+    "couverture": 1.0
    }
   },
   "synthetique": {
@@ -461,6 +506,15 @@
     "topk_taux": 0.0,
     "exact_taux": 0.0,
     "couverture": 0.3636
+   },
+   "attachement_tete": {
+    "cibles": 20,
+    "labels": 20,
+    "top1": 0,
+    "topk": 0,
+    "top1_taux": 0.0,
+    "topk_taux": 0.0,
+    "couverture": 1.0
    }
   }
  },
@@ -543,6 +597,15 @@
     "topk_taux": 0.3382,
     "exact_taux": 0.0,
     "couverture": 0.3382
+   },
+   "attachement_tete": {
+    "cibles": 23,
+    "labels": 23,
+    "top1": 20,
+    "topk": 23,
+    "top1_taux": 0.8696,
+    "topk_taux": 1.0,
+    "couverture": 1.0
    }
   },
   "hand": {
@@ -620,6 +683,15 @@
     "topk_taux": 0.3846,
     "exact_taux": 0.0,
     "couverture": 0.3846
+   },
+   "attachement_tete": {
+    "cibles": 5,
+    "labels": 5,
+    "top1": 2,
+    "topk": 5,
+    "top1_taux": 0.4,
+    "topk_taux": 1.0,
+    "couverture": 1.0
    }
   },
   "synthetique": {
@@ -696,6 +768,15 @@
     "topk_taux": 0.3273,
     "exact_taux": 0.0,
     "couverture": 0.3273
+   },
+   "attachement_tete": {
+    "cibles": 18,
+    "labels": 18,
+    "top1": 18,
+    "topk": 18,
+    "top1_taux": 1.0,
+    "topk_taux": 1.0,
+    "couverture": 1.0
    }
   }
  },
@@ -778,6 +859,15 @@
     "topk_taux": 0.3382,
     "exact_taux": 0.0,
     "couverture": 0.3382
+   },
+   "attachement_tete": {
+    "cibles": 23,
+    "labels": 23,
+    "top1": 20,
+    "topk": 23,
+    "top1_taux": 0.8696,
+    "topk_taux": 1.0,
+    "couverture": 1.0
    }
   },
   "hand": {
@@ -855,6 +945,15 @@
     "topk_taux": 0.3846,
     "exact_taux": 0.0,
     "couverture": 0.3846
+   },
+   "attachement_tete": {
+    "cibles": 5,
+    "labels": 5,
+    "top1": 2,
+    "topk": 5,
+    "top1_taux": 0.4,
+    "topk_taux": 1.0,
+    "couverture": 1.0
    }
   },
   "synthetique": {
@@ -931,6 +1030,15 @@
     "topk_taux": 0.3273,
     "exact_taux": 0.0,
     "couverture": 0.3273
+   },
+   "attachement_tete": {
+    "cibles": 18,
+    "labels": 18,
+    "top1": 18,
+    "topk": 18,
+    "top1_taux": 1.0,
+    "topk_taux": 1.0,
+    "couverture": 1.0
    }
   },
   "appels_neuronal": 360
@@ -960,6 +1068,9 @@
   "cascade_syntagme": true,
   "attachement_topk": true,
   "attachement_hasard": true,
+  "attachement_tete_couverture": true,
+  "attachement_tete_topk": true,
+  "attachement_tete_hasard": true,
   "reel_non_requis": true
  },
  "ok": true

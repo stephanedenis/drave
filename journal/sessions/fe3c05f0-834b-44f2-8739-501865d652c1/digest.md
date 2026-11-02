@@ -16487,3 +16487,52 @@ parsé: ('392', '490', '118', '81')
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-01/README.md'); s=p.read_text()\npara='''**Six corpus en texte intégral.** L'italien est mesuré : **1 561 411 articles**, **5,211 G\ncaractères**, **5,29 Go**, **0/0/0** … [1737 caractères tronqués]`
+
+  ```
+T0 max : 4000 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+course HEAD (essai 1)
+course HEAD (essai 2)
+course HEAD (essai 3)
+course HEAD (essai 4)
+c5d38030 L — ATTACHEMENT : TOP-1 0,294 / TOP-K 0,338 SUR 68 CIBLES (COUVERTURE 0,338), HASARD 0,015
+     git add docs/pilotage/en-cours.md
+=== runs
+1494795 48:53 reports/corpus-wiki-en-texte.json
+1494796 48:53 reports/corpus-wiki-de-texte.json
+1494797 48:53 reports/corpus-wiki-ru-texte.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat .git/hooks/pre-commit 2>/dev/null | head -20; echo \"=== tool fin\"; sed -n '/def main/,/return/p' tools/verifie_etat_a_jour.py | head -60; echo \"=== err\"; cat /tmp/commit.err | tail -20", "description": "Inspect pre-commit hook  … [103 caractères tronqués]`
+
+  ```
+#!/bin/sh
+# pre-commit — l'état accompagne le fait, le journal accompagne le code.
+#
+# Versionné dans tools/hooks/ et installé par tools/installe_hooks.sh : un hook qui
+# ne vit que dans .git/hooks ne survit ni au clone ni au nettoyage.
+set -u
+cd "$(git rev-parse --show-toplevel)" || exit 0
+
+# 1. Aucun fait (reports/, roadmap, backlog) ne se commite sans sa ligne d'état.
+#    C'est la garantie de fraîcheur de docs/pilotage/en-cours.md : elle ne dépend
+#    pas de la survie d'une session « principale », elle est vérifiée au commit.
+if ! python3 tools/verifie_etat_a_jour.py --index; then
+    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+    echo "     mets docs/pilotage/en-cours.md à jour, puis :"
+    echo "     git add docs/pilotage/en-cours.md"
+    exit 1
+fi
+
+# 2. Archive les traces de session DSH avant chaque commit : le journal doit
+#    accompagner le code, pas le suivre.
+=== tool fin
+def main(argv=None) -> int:
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--index", action="store_true", help="vérifie l'index (hook pre-commit)")
+    p.add_argument("--head", action="store_true", help="vérifie HEAD (défaut)")
+    p.add_argument("--autotest", acti
+… [733 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"**Mis à jour : 2026-11-01, 19 h 40 HNE (heure locale, EST).**\",\"**Mis à jour : 2026-11-01, 19 h 55 HNE (heure locale, EST). … [1082 caractères tronqués]`
