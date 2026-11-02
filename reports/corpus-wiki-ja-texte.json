@@ -1,0 +1,55 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "langue": "ja",
+ "nature": "corpus Wikipédia ja (texte intégral)",
+ "source": {
+  "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/ja/jawiki-latest-pages-articles-multistream.xml.bz2",
+  "octets": 4755404243
+ },
+ "methode": {
+  "debaliseur": "regex : commentaires, refs, tableaux, modèles (30 itérations), fichiers/catégories, liens → libellé, titres de sections, listes",
+  "filtre": "ns 0, sans redirection, texte >= 300 caractères",
+  "deduplication": "articles (BLAKE2b) + tronçons (train), première occurrence gardée",
+  "split": "hash salé (graine 1) de page_id : 5% val, 5% test"
+ },
+ "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/ja/jawiki-latest-pages-articles-multistream.xml.bz2",
+ "dump_octets": 4755404243,
+ "articles_lus": 3076894,
+ "articles_gardes": 1271107,
+ "articles_rediriges": 944361,
+ "articles_hors_ns": 632458,
+ "articles_courts": 228967,
+ "articles_doublons": 1,
+ "caracteres_gardes": 2809165016,
+ "troncons": 1365362,
+ "troncons_doublons": 1,
+ "octets": {
+  "train": 6606343958,
+  "val": 361958105,
+  "test": 361258463
+ },
+ "articles": {
+  "train": 1144519,
+  "val": 63277,
+  "test": 63311
+ },
+ "residus": {
+  "modele": 2,
+  "lien": 62,
+  "balise": 0,
+  "lignes_echantillon": 20000
+ },
+ "echantillon": "---\nアンパサンド\nフォント]]\nアンパサンド（&, ）は、並立助詞「…と…」を意味する記号である。ラテン語で「…と…」を表す接続詞 \"et\" の合字を起源とする。現代のフォントでも、Trebuchet MS など一部のフォントでは、\"et\" の合字であることが容易にわかる字形を使用している。\n\n語源\n英語で教育を行う学校でアルファベットを復唱する場合、その文字自体が単語となる文字（\"A\", \"I\", かつては \"O\" も）については、伝統的にラテン語の per se（それ自体）を用いて \"A per se A\" のように唱えられていた。また、アルファベットの最後に、27番目の文字のように \"&\" を加えることも広く行われていた。\"&\" はラテン語で et と読まれていたが、のちに英語で and と読まれるようになった。結果として、アルファベットの復唱の最後は \"X, Y, Z, and per se and\" という形になった。この最後のフレーズが繰り返されるうちに \"ampersand\" となまっていき、この言葉は1837年までには英語の一般的な語法となった。\n\nアンドレ＝マリ・アンペールがこの記号を自身の著作で使い、これが広く読まれたため、この記号が \"Ampère's and\" と呼ばれるようになったという誤った語源俗説がある。\n\n歴史\nの et の合字。]]\n\nアンパサンドの起源は1世紀の古",
+ "mots_estimes": 453091131,
+ "note_mots": "caractères / 6,2 (estimation ; le japonais et le chinois se comptent en caractères)",
+ "sha256_train": "0aebf48b036c861c9166ab1f65c9c20c2ca65946e0ff5221a5499619f8d4a7a4",
+ "sha256_val": "7879ad9082e9eb8c6748f8a16b94d1105a9e9edceccaffe7170969b05776cbeb",
+ "sha256_test": "3057941ef1413bb9fa370c5bb493eff247bdc8a259c788d9cdc6251403c0f9de",
+ "licence": "Wikipédia : CC-BY-SA 4.0 (et GFDL) — attribution et partage à l'identique ; corpus local",
+ "limites": [
+  "débaliseur regex : infobox/dates de modèles perdues, formules <math> retirées, tableaux perdus",
+  "les redirections et les espaces de noms autres que 0 sont exclus",
+  "déduplication exacte seulement (quasi-doublons non détectés)"
+ ]
+}

@@ -1,0 +1,55 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "langue": "ar",
+ "nature": "corpus Wikipédia ar (texte intégral)",
+ "source": {
+  "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/ar/arwiki-latest-pages-articles-multistream.xml.bz2",
+  "octets": 2081834983
+ },
+ "methode": {
+  "debaliseur": "regex : commentaires, refs, tableaux, modèles (30 itérations), fichiers/catégories, liens → libellé, titres de sections, listes",
+  "filtre": "ns 0, sans redirection, texte >= 300 caractères",
+  "deduplication": "articles (BLAKE2b) + tronçons (train), première occurrence gardée",
+  "split": "hash salé (graine 1) de page_id : 5% val, 5% test"
+ },
+ "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/ar/arwiki-latest-pages-articles-multistream.xml.bz2",
+ "dump_octets": 2081834983,
+ "articles_lus": 3874780,
+ "articles_gardes": 1000310,
+ "articles_rediriges": 1103236,
+ "articles_hors_ns": 1460677,
+ "articles_courts": 310534,
+ "articles_doublons": 23,
+ "caracteres_gardes": 1993855565,
+ "troncons": 1065100,
+ "troncons_doublons": 2,
+ "octets": {
+  "train": 3215542806,
+  "val": 175315288,
+  "test": 176039939
+ },
+ "articles": {
+  "train": 900657,
+  "val": 49917,
+  "test": 49736
+ },
+ "residus": {
+  "modele": 1,
+  "lien": 161,
+  "balise": 0,
+  "lignes_echantillon": 20000
+ },
+ "echantillon": "---\nماء\nيسار|تصغير|250x250بك|الماء هو المركب الكيميائي الأكثر وفرةً في الأرض.\nيسار|تصغير|250x250بك|الماء في حالاته الثلاث: السائلة والصلبة (جليد) والغازية (بخار ماء/[[سحاب).]]\nالماء مادةٌ شفافةٌ عديمة اللون والرائحة، وهو المكوّن الأساسي للجداول والبحيرات والبحار والمحيطات وكذلك للسوائل في جميع الكائنات الحيّة، وهو أكثر المركّبات الكيميائيّة انتشاراً على سطح الأرض. يتألّف جزيء الماء من ذرّة أكسجين مركزية ترتبط بها ذرّتا هيدروجين على طرفيها برابطة تساهميّة بحيث تكون صيغته الكيميائية H2O. عند الظروف القياسية من الضغط ودرجة الحرارة يكون الماء سائلاً؛ أمّا الحالة الصلبة فتتشكّل عند نقطة التجمّد، وتدعى بالج",
+ "mots_estimes": 321589607,
+ "note_mots": "caractères / 6,2 (estimation ; le japonais et le chinois se comptent en caractères)",
+ "sha256_train": "6419b9a94655229de3b011ef236728f04bcb80d1d6326841862e72c5f7024e14",
+ "sha256_val": "bfab297ba6d3d0e8db377be29044153b4acc54044ad030dae30b020d8eb01560",
+ "sha256_test": "e8f725bb7c5ceb4bacaead88895964d7d8fabbf7d59c7d2a96b0ecd04becf2bb",
+ "licence": "Wikipédia : CC-BY-SA 4.0 (et GFDL) — attribution et partage à l'identique ; corpus local",
+ "limites": [
+  "débaliseur regex : infobox/dates de modèles perdues, formules <math> retirées, tableaux perdus",
+  "les redirections et les espaces de noms autres que 0 sont exclus",
+  "déduplication exacte seulement (quasi-doublons non détectés)"
+ ]
+}

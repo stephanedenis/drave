@@ -1,10 +1,12 @@
-# Le texte intégral de Wikipédia — le pilote et le run FR
+# Le texte intégral de Wikipédia — le français et les neuf langues
 
 > **Verdict.** Le débaliseur `tools/corpus_wikipedia_texte.py` a produit le **texte intégral** du
 > français : **2 388 219 articles**, **8,025 G caractères**, **1,294 G mots** (estimés), **8,34 Go**,
 > résidus **1 / 20 000 lignes** (`{{`), **0 / 51 250** fenêtres de 8 Ko de la validation et
 > **0 / 50 730** du test retrouvées dans l'entraînement, **0 / 40** sur le XNLI et les trois jeux
-> locaux, **2 / 24** pour l'UDHR — **citée dans Wikipédia**. Le texte intégral vaut **2,18×** les résumés (3,68 Go) — et non les 7× du pilote :
+> locaux, **2 / 24** pour l'UDHR — **citée dans Wikipédia**. Les quatre premiers autres corpus
+> (ar, pt, zh, ja) sont mesurés : **8 Ko à zéro partout**, l'UDHR portugaise (2/40) et japonaise
+> (1/23) citées. Le texte intégral vaut **2,18×** les résumés (3,68 Go) — et non les 7× du pilote :
 > le pilote n'était pas représentatif.
 >
 > **Date** : 2026-11-01. **Ligne** : Données (D/R/A). **Machine** : CPU seul.
@@ -77,7 +79,32 @@ nomme la limite de ce contrôle et le contrôle 8 Ko qui le corrige.
 les **tableaux** ; les liens deviennent des libellés, les titres de sections restent. C'est de la
 **prose encyclopédique**, pas l'article complet mis en forme.
 
-## 5. Ce qui pourrait être faux
+## 5. Les neuf autres langues
+
+Même outil, même chaîne. Les cinq premiers corpus (fr, ar, pt, zh, ja) sont mesurés ; les cinq
+autres sont en cours au 1/11 19 h 30. Les cinq mesurés : **6,27 M articles**, **16,98 G
+caractères**, **25,1 Go**.
+
+| langue | articles | caractères | mots (car. / 6,2) | octets | fuite lignes | fuite 8 Ko | éval | résidus `{{`/`[[`/`<` |
+|---|---:|---:|---:|---:|---:|---:|---|---|
+| fr | 2 388 219 | 8,025 G | 1 294 M | 8,34 Go | 5,5 % | **0** | XNLI 0/40, UDHR 2/24 (citée) | 1/0/3 |
+| ar | 1 000 310 | 1,994 G | 322 M | 3,57 Go | 28,9 % | **0** | XNLI 0/40 | 1/161/0 |
+| pt | 970 793 | 3,104 G | 501 M | 3,21 Go | 4,5 % | **0** | UDHR 2/40 (citée) | 1/296/0 |
+| zh | 643 122 | 1,045 G | — (caractères) | 2,63 Go | 2,2 % | **0** | XNLI 0/40 | 14/0/0 |
+| ja | 1 271 107 | 2,809 G | 453 M | 7,33 Go | 3,7 % | **0** | UDHR 1/23 (citée) | 2/62/0 |
+| de, en, es, it, ru | en cours | | | | | | | |
+
+**Lecture.** Le **8 Ko est à zéro partout** : aucune unité d'entraînement ne traverse les splits.
+Les **lignes** dupliquées sont un diagnostic de style : 28,9 % en arabe (les formules, les
+références et les phrases coraniques se répètent d'un article à l'autre), 4,5 % en portugais, 3,7 %
+en japonais, 2,2 % en chinois — ce ne sont pas des fuites de tronçon. L'**UDHR** est citée dans Wikipédia pour le
+français et le portugais (2 fenêtres) et le japonais (1) ; le **XNLI** est à 0 pour le français,
+l'arabe et le chinois.
+Le débaliseur laisse des liens `[[…]]` résiduels en arabe (161 lignes sur 20 000) et en portugais
+(296) : les légendes et notes complexes ; c'est une limite nommée, une passe finale les enlèvera.
+
+## 6. Ce qui pourrait être faux
+
 
 - **Le pilote n'est pas un échantillon aléatoire** : les 100 000 premiers `page_id` sont les
   articles les plus anciens, deux fois plus longs en moyenne (10,45 Ko contre 3,36 Ko) ; la
@@ -90,11 +117,13 @@ les **tableaux** ; les liens deviennent des libellés, les titres de sections re
 - **Le contrôle 8 Ko** est dans `verifie_contamination.py --taille-troncon 8192` ; les
   **jeux d'évaluation** sont extraits par langue (`tools/extraire_evals_langues.py`) — l'UDHR
   reste **citée** dans Wikipédia pour le fr, l'it, le ja et le pt.
-- **La langue** : seul le français est fait ; les neuf autres suivent le même outil.
+- **Les liens résiduels** : l'arabe (161 lignes sur 20 000) et le portugais (296) gardent des
+  `[[…]]` dans les légendes et notes complexes ; la passe finale est à faire.
+- **Les langues** : quatre corpus sont mesurés (fr, ar, pt, zh) ; les six autres suivent.
 
-## 6. La suite
+## 7. La suite
 
-Les **neuf autres langues** (`--langue de`, `en`, `es`, `it`, `ja`, `pt`, `ru`, `zh`, `ar`), puis
+Les **six langues restantes** (`de`, `en`, `es`, `it`, `ja`, `ru`), puis le **catalogue complet des dix**, puis
 l'**extraction PDF native et OCR** (les 104 livres, les 2 711 PDF du CEGEP, les collections) avec
 leurs licences, puis la **préparation de R1.1/R1.2**.
 
@@ -106,4 +135,5 @@ leurs licences, puis la **préparation de R1.1/R1.2**.
 - `reports/corpus-wiki-fr-texte-contamination.json` — le contrôle du run complet.
 - `reports/corpus-wiki-fr-texte-pilote.json` — le manifeste du pilote (archivé pour comparaison).
 - `reports/corpus-wiki-fr-texte-pilote-contamination.json` — le contrôle du pilote.
+- `reports/corpus-wiki-{ar,pt,zh,ja}-texte.json` + `-contamination.json` — les quatre premiers autres corpus.
 - `data/corpus_wiki_fr_texte/` — le corpus (8,34 Go, gitignoré).

@@ -1,0 +1,43 @@
+{
+ "train": "data/corpus_wiki_pt_texte/train.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 7689702,
+  "par_split": {
+   "val.txt": {
+    "troncons": 433624,
+    "doublons": 19651,
+    "taux": 0.045318
+   },
+   "test.txt": {
+    "troncons": 428183,
+    "doublons": 20179,
+    "taux": 0.047127
+   }
+  }
+ },
+ "recouvrement_eval": [
+  {
+   "fichier": "pt-udhr.txt",
+   "fenetre": 128,
+   "fenetres": 40,
+   "trouvees": 2,
+   "taux": 0.05
+  }
+ ],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 352314,
+  "par_split": {
+   "val.txt": {
+    "troncons": 20011,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 19739,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}

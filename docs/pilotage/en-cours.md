@@ -61,9 +61,9 @@
 - **Ambition** : le français réel pour N2 ; D, carburant.
 - **Stratégie** : le dump, débaliseur mesuré, dédup, splits.
 - **Objectif final** : 10 corpus en texte intégral, mesurés et ficés.
-- **Ce qu'elle fait** : le **texte intégral FR** (**2,39 M articles**, **8,3 Go**, **0 fuite 8 Ko**, **0/40** XNLI+locaux, **UDHR 2/24 citée**) ; les **9 langues** en cours ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
+- **Ce qu'elle fait** : le **texte intégral** : fr (**2,39 M**) ; ar/pt/zh/ja (**1,00/0,97/0,64/1,27 M** ; **8 Ko 0**) ; les 5 en cours ; [`fiche`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée, S, N2 ; le hub tient l'état.
-- **Prochaine action** : les 9 langues, la contamination et les fiches, puis PDF/OCR.
+- **Prochaine action** : les 5 langues, le catalogue des dix, puis PDF/OCR.
 - **Bloquants** : aucun.
 - **Journal** : [le 01/11](../../journal/2026-11-01/README.md).
 
@@ -88,10 +88,10 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **81** (76 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
+| portes | **118** (76 vertes, 4 rouges à la passe du 31/10 19 h 42 ; 1 ajoutée depuis) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **392** / **485** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **392** / **·** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **JSON** (hors archive et README) | `docs/**/*.md` |
 | dernière passe complète | **1 h 46** (01/11 00 h 56) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants

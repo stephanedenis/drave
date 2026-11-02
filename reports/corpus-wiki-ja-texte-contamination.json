@@ -1,0 +1,43 @@
+{
+ "train": "data/corpus_wiki_ja_texte/train.txt",
+ "doublons_entre_splits": {
+  "train_troncons": 23054582,
+  "par_split": {
+   "val.txt": {
+    "troncons": 1264651,
+    "doublons": 46317,
+    "taux": 0.036624
+   },
+   "test.txt": {
+    "troncons": 1261472,
+    "doublons": 46610,
+    "taux": 0.036949
+   }
+  }
+ },
+ "recouvrement_eval": [
+  {
+   "fichier": "ja-udhr.txt",
+   "fenetre": 128,
+   "fenetres": 23,
+   "trouvees": 1,
+   "taux": 0.0435
+  }
+ ],
+ "taille_troncon": 8192,
+ "doublons_entre_splits_troncon": {
+  "train_troncons": 880804,
+  "par_split": {
+   "val.txt": {
+    "troncons": 48243,
+    "doublons": 0,
+    "taux": 0.0
+   },
+   "test.txt": {
+    "troncons": 48164,
+    "doublons": 0,
+    "taux": 0.0
+   }
+  }
+ }
+}

@@ -1,0 +1,55 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "langue": "pt",
+ "nature": "corpus Wikipédia pt (texte intégral)",
+ "source": {
+  "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/pt/ptwiki-latest-pages-articles-multistream.xml.bz2",
+  "octets": 2757644477
+ },
+ "methode": {
+  "debaliseur": "regex : commentaires, refs, tableaux, modèles (30 itérations), fichiers/catégories, liens → libellé, titres de sections, listes",
+  "filtre": "ns 0, sans redirection, texte >= 300 caractères",
+  "deduplication": "articles (BLAKE2b) + tronçons (train), première occurrence gardée",
+  "split": "hash salé (graine 1) de page_id : 5% val, 5% test"
+ },
+ "dump": "/home/stephane/Data13TB/stephane/data/wikipedia/dumps/pt/ptwiki-latest-pages-articles-multistream.xml.bz2",
+ "dump_octets": 2757644477,
+ "articles_lus": 2765460,
+ "articles_gardes": 970793,
+ "articles_rediriges": 817549,
+ "articles_hors_ns": 777334,
+ "articles_courts": 199732,
+ "articles_doublons": 52,
+ "caracteres_gardes": 3104155526,
+ "troncons": 1118201,
+ "troncons_doublons": 20,
+ "octets": {
+  "train": 2884175219,
+  "val": 163812835,
+  "test": 161585634
+ },
+ "articles": {
+  "train": 873671,
+  "val": 48564,
+  "test": 48558
+ },
+ "residus": {
+  "modele": 1,
+  "lien": 296,
+  "balise": 0,
+  "lignes_echantillon": 20000
+ },
+ "echantillon": "---\nAstronomia\nthumb|Formação estrelar na Grande Nuvem de Magalhães, uma [[galáxia irregular.]]\nthumb|Mosaico da Nebulosa do Caranguejo, remanescente de uma [[supernova.]]\nAstronomia é uma ciência natural que estuda corpos celestes (como estrelas, planetas, cometas, nebulosas, aglomerados de estrelas, galáxias) e fenômenos que se originam fora da atmosfera da Terra (como a radiação cósmica de fundo em micro-ondas). Preocupada com a evolução, a física e a química de objetos celestes, bem como a formação e o desenvolvimento do universo.\n\nA astronomia é uma das mais antigas ciências. Culturas pré-históricas dei\n---\nAmérica Latina\nAmérica Latina (; ) é uma região do continente americano que engloba os países onde são faladas, primordialmente, línguas românicas (derivadas do latim) — no caso, o espanhol, o português e o francês — visto que, historicamente, a região foi maioritariamente dominada pelos impérios coloniais europeus Espanhol e Português. A América Latina tem uma área de cerca de km², o equivalente a cerca de 3,9% da superfície da Terra (ou 14,1% de sua superfície emersa terrestre). Em 2008, a sua população foi estimada em mais de 569 milhões de pessoas. Os países do restante do continente americano tiveram um\n---\nAlbino Forjaz de Sampaio\nAlbino Maria Pereira Forjaz de Sampaio (Lisboa, 19 de Janeiro de 1884 — Lisboa, 13 de Março de 1949) foi um escritor e bibliógrafo português, autor de um dos livros mais vendidos em Portugal durante o século XX, Palavras Cínicas, lançado em 1905, que à morte do autor tinha já 46 edições.\n\nInício de carreira\nAlbino Forjaz de Sampaio começou a sua carreira literária aos 16 anos como jornalista no jornal A Lucta sob o patronato de Fialho de Almeida e Brito Camacho. O seu percurso teve duas fases distintas, um pouco como a sua escrita. Se de início a sua escrita aprendeu muito do jornalismo, o fal",
+ "mots_estimes": 500670246,
+ "note_mots": "caractères / 6,2 (estimation ; le japonais et le chinois se comptent en caractères)",
+ "sha256_train": "8af50619d843586c7b36b202fa947a4aa07c84600e53a7084fc4e4ed7b83e7e3",
+ "sha256_val": "0e366ff00b807c56af1e94a2c2c2a56816c847832aa99a1e2ea960856e413c58",
+ "sha256_test": "8d8864b852490b7e567b44d9a8c48be6493cd2d86e58ed2369419e765e340ff5",
+ "licence": "Wikipédia : CC-BY-SA 4.0 (et GFDL) — attribution et partage à l'identique ; corpus local",
+ "limites": [
+  "débaliseur regex : infobox/dates de modèles perdues, formules <math> retirées, tableaux perdus",
+  "les redirections et les espaces de noms autres que 0 sont exclus",
+  "déduplication exacte seulement (quasi-doublons non détectés)"
+ ]
+}

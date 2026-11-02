@@ -16229,3 +16229,108 @@ pt | lignes: {'val.txt': 0.045318, 'test.txt': 0.047127} | 8 Ko: {'val.txt': 0.0
 zh | lignes: {'val.txt': 0.021622, 'test.txt': 0.021707} | 8 Ko: {'val.txt': 0.0, 'test.txt': 0.0} | éval: [('zh-xnli.txt', 0, 40)]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-corpus-wiki-texte.md'); s=p.read_text()\ns=s.replace(\"# Le texte intégral de Wikipédia — le pilote et le run FR\",\n            \"# Le texte intégral de Wikipédia — le  … [4645 caractères tronqués]`
+
+  ```
+fiche : 4 langues
+  T0 max : 3994 mots (budget 4 000)
+     · compteurs : en-cours.md dit 485 JSON, le disque en a 486
+5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/corpus-wiki-it-texte.json').read_text())\nfor k in ('articles_lus','articles_gardes','articles_rediriges','caracteres_gardes','mots_estimes','octets','residus'): … [1021 caractères tronqués]`
+
+  ```
+}
+lignes {'val.txt': 0.059961, 'test.txt': 0.060224}
+8 Ko {'val.txt': 0.0, 'test.txt': 0.0}
+éval [('it-udhr.txt', 2, 23)]
+=== runs
+1494795 36:03 reports/corpus-wiki-en-texte.json
+1494796 36:03 reports/corpus-wiki-de-texte.json
+1494797 36:03 reports/corpus-wiki-ru-texte.json
+1494798 36:03 reports/corpus-wiki-es-texte.json
+1497608 33:17 reports/corpus-wiki-it-texte.json
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+  File "/usr/lib64/python3.13/pathlib/_local.py", line 546, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/pathlib/_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/pathlib/_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'reports/corpus-wiki-it-texte.json'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== log ja\"; tail -15 /tmp/run-texte-ja.log; echo \"=== tailles ja\"; ls -la data/corpus_wiki_ja_texte/ 2>/dev/null; echo \"=== runs\"; ps -eo pid,etime,cmd | grep \"corpus_wikipedia_texte.py --langue\" | grep -v grep | awk '{p … [353 caractères tronqués]`
+
+  ```
+=== log ja
+ "articles_rediriges": 944361,
+ "caracteres_gardes": 2809165016,
+ "mots_estimes": 453091131,
+ "octets": {
+  "train": 6606343958,
+  "val": 361958105,
+  "test": 361258463
+ },
+ "residus": {
+  "modele": 2,
+  "lien": 62,
+  "balise": 0,
+  "lignes_echantillon": 20000
+ }
+}
+=== tailles ja
+total 7157776
+drwxr-xr-x. 1 stephane stephane         48  1 nov 18:30 .
+drwxr-xr-x. 1 stephane stephane       2326  1 nov 18:33 ..
+-rw-r--r--. 1 stephane stephane  361258463  1 nov 19:01 test.txt
+-rw-r--r--. 1 stephane stephane 6606343958  1 nov 19:01 train.txt
+-rw-r--r--. 1 stephane stephane  361958105  1 nov 19:01 val.txt
+=== runs
+1494795 36:29 reports/corpus-wiki-en-texte.json
+1494796 36:29 reports/corpus-wiki-de-texte.json
+1494797 36:29 reports/corpus-wiki-ru-texte.json
+1494798 36:29 reports/corpus-wiki-es-texte.json
+1497608 33:43 reports/corpus-wiki-it-texte.json
+=== manifestes
+reports/corpus-wiki-ar-texte.json
+reports/corpus-wiki-fr-texte.json
+reports/corpus-wiki-ja-texte.json
+reports/corpus-wiki-pt-texte.json
+reports/corpus-wiki-zh-texte.json
+=== suppression it prématuré
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/corpus-wiki-ja-texte.json').read_text())\nfor k in ('articles_lus','articles_gardes','articles_rediriges','caracteres_gardes','mots_estimes','troncons','octets', … [907 caractères tronqués]`
+
+  ```
+articles_lus 3076894
+articles_gardes 1271107
+articles_rediriges 944361
+caracteres_gardes 2809165016
+mots_estimes 453091131
+troncons 1365362
+octets {'train': 6606343958, 'val': 361958105, 'test': 361258463}
+residus {'modele': 2, 'lien': 62, 'balise': 0, 'lignes_echantillon': 20000}
+}
+lignes {'val.txt': 0.036624, 'test.txt': 0.036949}
+8 Ko {'val.txt': 0.0, 'test.txt': 0.0}
+éval [('ja-udhr.txt', 1, 23)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-corpus-wiki-texte.md'); s=p.read_text()\ns=s.replace(\"Les trois premiers autres corpus\\n> (ar, pt, zh) sont mesurés : **8 Ko à zéro partout**, l'UDHR portugaise citée  … [3046 caractères tronqués]`
+
+  ```
+fiche : 5 langues
+  T0 max : 3992 mots (budget 4 000)
+     · compteurs : en-cours.md dit 485 JSON, le disque en a 488
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-01/README.md'); s=p.read_text()\npara='''**Cinq corpus en texte intégral.** fr, ar, pt, zh, ja : **6,27 M articles**, **16,98 G\ncaractères**, **25,1 Go** ; le **8 Ko es … [2549 caractères tronqués]`

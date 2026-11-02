@@ -7,15 +7,15 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 26.4 h |
-| Tours | 16 |
-| Messages | 468 |
-| Appels d'outils | 497 |
+| Durée | 26.5 h |
+| Tours | 17 |
+| Messages | 479 |
+| Appels d'outils | 502 |
 | Fichiers touchés | 25 |
-| Commandes | 394 |
+| Commandes | 399 |
 | Sous-agents | 2 |
 | Commits | 25 |
-| Compactages de contexte | 1 |
+| Compactages de contexte | 2 |
 
 ## Objectifs déclarés
 
@@ -63,6 +63,8 @@
 **Tour 15** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 **Tour 16** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
+
+**Tour 17** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [723 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -907,7 +909,43 @@ Le round 2 du goal est livré : le **gold v0** du bloc linguistique, mesuré. Co
 
 **Synthèse produite :**
 
-⏵ Round 3 : j'étends le gold à 180 phrases par une grammaire indépendante et je mesure par tête
+⏵ Gold 180 livré : POS 0,751, tête 0,560, cascade 67,1 % ; neuronal réel toujours refusé
+
+Le round 3 du goal est livré : le **gold 180** est mesuré, avec la **tête** comme métrique de syntagme. Commit **`53dfd584`**.
+
+\## Le gold étendu
+
+**180 phrases** = **20 réelles** écrites à la main + **160 synthétiques** d'une **grammaire indépendante** (GN, GV, GP, REL, SUB, question, exclamation, impératif, négation, modalité, double sens), **804 tokens**. Le lexique synthétique est **disjoint** des listes de l'heuristique (`renard`, `montagne`, `saute`, `calme`…) : il mesure la généralisation des classes ouvertes.
+
+| lecture | source | POS | fermé | ouvert | exact | **tête** | acte | nég. | mod. | double | fraction |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| **heuristique** | **180** | **0,751** | **0,939** | **0,621** | **0,194** | **0,560** | **1,0** | **1,0** | **0,994** | **0,889** | **0,638** |
+| heuristique | 20 réels | 0,924 | 0,912 | 0,938 | 0,356 | 0,489 | 1,0 | 1,0 | 0,950 | 0,900 | 0,469 |
+| heuristique | 160 synth. | 0,725 | 0,945 | 0,586 | 0,168 | **0,570** | 1,0 | 1,0 | 1,000 | 0,888 | 0,659 |
+| mock seul | 180 | 0,427 | 0,146 | 0,621 | 0,115 | 0,534 | 1,0 | 0,872 | 0,883 | 0,922 | 0,671 |
+| **cascade** | **180** | **0,751** | **0,939** | **0,621** | **0,194** | **0,560** | **1,0** | **1,0** | **0,994** | **0,889** | **0,671** |
+
+**Ce que ça dit** :
+
+- Les **classes fermées** tiennent (0,939) ; les **ouvertes chutent à 0,621** sur le lexique disjoint — les verbes/adjectifs inconnus tombent en NOUN. C'est le coût réel de la généralisation, mesuré.
+- **exact 0,194 vs tête 0,560** : le F1 exact bas est surtout un **désaccord de segmentation** entre le générateur S et la grammaire ; la **tête** (type au premier token) monte à **0,560**. La tête sépare la découpe de l'attachement ; l'exact reste la mesure de la découpe.
+- **pragmatique 1,0/1,0/0,994/0,889** ; la cascade **préserve** la négation (fusion par type) et couvre **67,1 %** en unités sémantiques.
+- **Le vrai neuronal est refusé** (`RefusNeuronal`, `llama-cli` 10 s) : le mock est un double de contrat ; la qualification neuronale reste à faire.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-gold-linguistique.md`](../../reports/rapport-pensee-gold-linguistique.md) ; JSON [`pensee-gold-linguistique.json`](../../reports/pensee-gold-linguistique.json) ; gold [`gold_synthetique.py`](../../tools/tests/linguistique/gold_synthetique.py) / [`.json`](../../tools/tests/linguistique/gold_synthetique
+… [1107 caractères tronqués]
+
+### Tour 17 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1003 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Inspecter l'attachement S et les taggers disponibles
+- bash — Lire les cibles S et la construction des étiquettes syntagme
+- bash — Annoter les cibles d'attachement dans les deux golds
+- bash — Corriger le générateur synthétique et vérifier les cibles
+- bash — Mesurer l'attachement top-1/top-k sur les deux golds
 
 ## 3. Travail accompli
 
@@ -988,7 +1026,7 @@ Le round 2 du goal est livré : le **gold v0** du bloc linguistique, mesuré. Co
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 354 autres
+- … et 359 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1116,7 +1154,7 @@ Le round 2 du goal est livré : le **gold v0** du bloc linguistique, mesuré. Co
 
 ## 5. Erreurs rencontrées
 
-7 sorties en erreur ou divergentes. Les premières :
+8 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -1125,6 +1163,7 @@ Le round 2 du goal est livré : le **gold v0** du bloc linguistique, mesuré. Co
 - **T12** : COMPILE=0 [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 182, in decider     _, m
 - **T12** : [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 43, in joueur_de     return next(c
 - **T12** : ok [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/jeux.py", line 182, in decider     _, meilleur
+- **T17** : gold cibles ok 20 phrases, 105 tokens → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold.json [stderr] Traceback (most recent call last):   File "/home/stephane/Data13TB/s
 
 ## 6. Commits
 

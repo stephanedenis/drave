@@ -14239,3 +14239,10 @@ pas  1500 · seq 128 · perte 32.6027 · PPL 128/4 4.1100 · 105 s
   ```
 
 - **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; for g in 1 2 3; do echo \"-- W-g$g\"; tail -1 work/n2j/W-g$g.log 2>/dev/null; done; ls work/n2j/W-g*.pt 2>/dev/null", "description": "Wait for the first two distillations"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-829]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-829", "timeout_ms": 1200000, "wait": true}`

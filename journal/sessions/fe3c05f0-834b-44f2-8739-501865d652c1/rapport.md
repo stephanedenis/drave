@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 26.5 h |
+| Durée | 26.6 h |
 | Tours | 14 |
-| Messages | 896 |
-| Appels d'outils | 892 |
+| Messages | 900 |
+| Appels d'outils | 896 |
 | Fichiers touchés | 18 |
-| Commandes | 819 |
+| Commandes | 823 |
 | Sous-agents | 0 |
-| Commits | 47 |
+| Commits | 48 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -724,13 +724,17 @@ Au fil des fins de run : **manifeste → contamination (les deux unités + les j
 
 ### Tour 14 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Check language runs and manifests
 - bash — Read finished manifests stats
 - bash — Run contamination checks for Arabic, Portuguese, Chinese
 - bash — Update report and state for four measured languages
 - bash — Read Italian manifest and run its contamination
+- bash — Diagnose Japanese run and remove premature Italian check
+- bash — Read Japanese manifest and run contamination check
+- bash — Update report and state for five languages
+- bash — Commit five language corpora with retry loop
 
 ## 3. Travail accompli
 
@@ -799,7 +803,7 @@ Au fil des fins de run : **manifeste → contamination (les deux unités + les j
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 779 autres
+- … et 783 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -994,4 +998,5 @@ Au fil des fins de run : **manifeste → contamination (les deux unités + les j
 - DONNÉES — LE CONTRÔLE 8 KO DEVIENT REPRODUCTIBLE : FR 0/51 250 ET 0/50 730, L'UDHR 2/24 (CITÉE) ; JEUX D'ÉVALUATION PAR LANGUE" 2>&1 | tail -1 git reset -q; git
 - ÉTAT — COMPTEURS 389/479, JOURNAL DU CONTRÔLE 8 KO ET DE L'UDHR 2/24" 2>&1 | tail -1 git reset -q; git log --oneline -1
 - ÉTAT — COMPTEURS SYNCHRONISÉS, JOURNAL DU CONTRÔLE 8 KO ET DE L'UDHR 2/24" 2>/tmp/commit.err; then echo "commit OK (essai $i)"; break; else echo "course HEAD (e
+- DONNÉES — CINQ CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA) : 6,27 M ARTICLES, 25,1 GO, 8 KO 0, UDHR CITÉE" 2>/tmp/commit.err; then echo "commit OK (essai $i)"
 
