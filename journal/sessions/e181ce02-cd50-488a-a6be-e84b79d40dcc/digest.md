@@ -31820,3 +31820,88 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/gold_reel.py tools/tests/linguistique/gold_reel.json tools/pensee/autotest.py reports/rapport-pensee-pieges.md reports/pensee-pieges.json reports/README.md docs/implantat … [574 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1228]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1228", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 reports/pensee-pieges.json
+ create mode 100644 reports/rapport-pensee-pieges.md
+COMMIT OK 1
+26e4df27 B13 — LES QUESTIONS PIÈGES : 29/34, LE SI EST UNE CONVENTION ; 132/132
+lun 02 nov 2026 13:26:35 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Questions pièges : 29/34, le si est une convention ; 132/132
+
+Le round 133 est livré : cinq **questions pièges** cassent la règle du `si` — **0/5**, et le total tombe à **29/34**. La frontière sémantique est atteinte. Commit **`26e4df27`**.
+
+## Les 34 questions
+
+| sous-ensemble | questions | **dirigée juste** |
+|---|---:|---:|
+| affirmatives | 19 | **19/19** |
+| négatives (accord `si`) | 10 | **10/10** |
+| **pièges (`non` attendu)** | **5** | **0/5** |
+| **tout** | **34** | **29/34 (0,8529)** |
+
+**Ce que ça dit** :
+
+- **Le `si` n'est pas une règle, c'est une convention** : `Ne viens-tu pas ?` attend `si` quand la question est rhétorique ou quand on veut l'accord, `non` quand on constate. La **surface** ne peut pas décider ; il faut le **contexte** ou le **sens**.
+- **Les 5 pièges sont la vraie mesure** : 29/29 était un plafond ; 29/34 dit ce que la règle ne sait pas faire.
+- **La langue ne suffit pas** : le piège anglais (`You don't come tomorrow?` → `no`) tombe aussi.
+- **La frontière est nette** : la séparation accord/constat est **sémantique**, pas morphologique — c'est exactement ce qu'un modèle apporte et que l'heuristique ne peut pas.
+
+## L'état
+
+- Fiche : [`rapport-pensee-pieges.md`](../../reports/rapport-pensee-pieges.md) ; JSON [`pensee-pieges.json`](../../reports/pensee-pieges.json) ; T129 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **132/132 portes** — les **17 portes** dépendantes du gold ont été mises à jour (le gold est à **422 réels / 602 phrases** : POS 0,7443, syntagme 0,1966, tête 0,4568, etc.). C'est la **troisième fois** : les portes codent des nombres absolus qui bougent quand le gold grandit. La prochaine amélioration structurelle est un **gold gelé** pour les portes.
+- `revue` **541 fiches / 628 JSON / 119 docs / 81 portes** — ✅ (l'index de synthèse a été daté).
+- L'horloge réelle est **13 h 26 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+## La suite
+
+1. **Le contexte** : une heuristique qui regarde la phrase précédente (l'accord explicite) — un début de solution sans modèle.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **le contexte** — la seule voie heuristique pour trancher accord/constat.
+
+
+## Tour 148
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 134/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib, sys\nsys.path.insert(0,'.')\nfrom tools.tests.linguistique.evaluer_gold import charger\nph = charger()\ngele = {\"gele\": \"2026-11-02\", \"phrases\": ph}\npathlib.Path('tools/tests/linguistiqu … [1024 caractères tronqués]`
+
+  ```
+gold gelé : 602 phrases
+charger_gele ajouté
+19:GOLD = pathlib.Path(__file__).with_name("gold.json")
+20:REEL = pathlib.Path(__file__).with_name("gold_reel.json")
+21:SYNTH = pathlib.Path(__file__).with_name("gold_synthetique.json")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/evaluer_gold.py'); t=p.read_text()\nt=t.replace('GELE = CHEMIN / \"gold_gele.json\"', 'GELE = pathlib.Path(__file__).with_name(\"gold_gele.json\")')\np.write_ … [210 caractères tronqués]`
+
+  ```
+602
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"from ..tests.linguistique.evaluer_gold import charger\" tools/pensee/autotest.py; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nn=t.count(\"from ..tests.linguistique.evaluer_ … [418 caractères tronqués]`

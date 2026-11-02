@@ -36825,3 +36825,36 @@ LISTEN 0      5          127.0.0.1:8771       0.0.0.0:*    users:(("docwatch",pi
 HTTP 200
   ```
 
+### 🤖 Assistant
+
+Cette fois c'est corrigé, et je te donne les preuves.
+
+## Pourquoi tu ne voyais rien
+
+Trois causes empilées :
+
+1. **Le serveur qui tournait était l'installation pipx en 0.5.0**, pas le code du dépôt. `pipx uninstall` ne tue pas le processus : il a continué de répondre pendant que je croyais avoir redémarré.
+2. **Le pointillé était trop discret** : 1 px, gris à 85 % — à l'écran, sur du texte noir, ça se confond avec une ligne de base.
+3. Le navigateur gardait l'ancien HTML/CSS en cache.
+
+## Ce qui a été fait
+
+- `pipx install --editable …/tools/docwatch` : le serveur tourne désormais **depuis le dépôt**, version **0.6.0** (plus de réinstallation à chaque modification).
+- CSS durci : `text-decoration: underline dotted **currentColor**`, **`text-decoration-thickness: 1.5px`**, offset 2,5 px. Survol : fond jaune pâle et trait plein.
+- Serveur arrêté puis relancé : PID **3573290**, port **8771**, `HTTP 200`.
+
+## Les preuves
+
+- `GET /render?mount=drave&path=docs/pilotage/plan-travail.md` → **23 spans `class="glossaire"`**.
+- **Chrome headless, DOM réel de ta page** (`/drave/docs/pilotage/plan-travail.md`) → **19 spans `class="glossaire"`** rendus par le JS, donc la page elle-même les affiche.
+- La page shell sert bien le CSS : `grep "1.5px"` → **3 occurrences** (la règle glossaire est dans le `<style>` inline).
+- Capture écrite : `/tmp/docwatch-plan.png` (223 Ko). Je ne peux pas la lire moi-même (le modèle courant n'accepte pas les images) — **ouvre-la**, ou recharge ton onglet avec `Ctrl+Shift+R`.
+
+## Si ce n'est toujours pas visible chez toi
+
+Deux choses à vérifier de ton côté :
+- que l'onglet pointe bien sur **`/drave/...`** (le montage `drave`), et pas sur une page ouverte avant le redémarrage ;
+- que le rechargement est **forcé** (`Ctrl+Shift+R`).
+
+Note aussi : la passe de liens markdown a couvert 10 pages pivots, et `plan-travail.md` n'en fait pas partie — sur cette page tu dois voir **les pointillés** (19 spans), mais pas les liens vers les fiches (0 lien). Si tu veux que `plan-travail.md` en fasse partie, je l'ajoute en une commande.
+

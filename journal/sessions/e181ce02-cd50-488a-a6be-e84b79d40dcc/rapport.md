@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 44.8 h |
-| Tours | 147 |
-| Messages | 1753 |
-| Appels d'outils | 1503 |
+| Durée | 44.9 h |
+| Tours | 148 |
+| Messages | 1760 |
+| Appels d'outils | 1508 |
 | Fichiers touchés | 25 |
-| Commandes | 1228 |
+| Commandes | 1233 |
 | Sous-agents | 2 |
 | Commits | 187 |
 | Compactages de contexte | 5 |
@@ -329,6 +329,8 @@
 **Tour 146** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 **Tour 147** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
+
+**Tour 148** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [725 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7815,6 +7817,55 @@ Je continue : prochain round, **les questions pièges** — casser la règle de 
 - bash — Committer les questions pièges
 - job_output
 
+**Synthèse produite :**
+
+⏵ Questions pièges : 29/34, le si est une convention ; 132/132
+
+Le round 133 est livré : cinq **questions pièges** cassent la règle du `si` — **0/5**, et le total tombe à **29/34**. La frontière sémantique est atteinte. Commit **`26e4df27`**.
+
+\## Les 34 questions
+
+| sous-ensemble | questions | **dirigée juste** |
+|---|---:|---:|
+| affirmatives | 19 | **19/19** |
+| négatives (accord `si`) | 10 | **10/10** |
+| **pièges (`non` attendu)** | **5** | **0/5** |
+| **tout** | **34** | **29/34 (0,8529)** |
+
+**Ce que ça dit** :
+
+- **Le `si` n'est pas une règle, c'est une convention** : `Ne viens-tu pas ?` attend `si` quand la question est rhétorique ou quand on veut l'accord, `non` quand on constate. La **surface** ne peut pas décider ; il faut le **contexte** ou le **sens**.
+- **Les 5 pièges sont la vraie mesure** : 29/29 était un plafond ; 29/34 dit ce que la règle ne sait pas faire.
+- **La langue ne suffit pas** : le piège anglais (`You don't come tomorrow?` → `no`) tombe aussi.
+- **La frontière est nette** : la séparation accord/constat est **sémantique**, pas morphologique — c'est exactement ce qu'un modèle apporte et que l'heuristique ne peut pas.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-pieges.md`](../../reports/rapport-pensee-pieges.md) ; JSON [`pensee-pieges.json`](../../reports/pensee-pieges.json) ; T129 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **132/132 portes** — les **17 portes** dépendantes du gold ont été mises à jour (le gold est à **422 réels / 602 phrases** : POS 0,7443, syntagme 0,1966, tête 0,4568, etc.). C'est la **troisième fois** : les portes codent des nombres absolus qui bougent quand le gold grandit. La prochaine amélioration structurelle est un **gold gelé** pour les portes.
+- `revue` **541 fiches / 628 JSON / 119 docs / 81 portes** — ✅ (l'index de synthèse a été daté).
+- L'horloge réelle est **13 h 26 HNE** ; le goal est actif.
+- Le **neuronal réel reste bloqué** (modèle local / poids / cascade actée).
+
+\## La suite
+
+1. **Le contexte** : une heuristique qui regarde la phrase précédente (l'accord explicite) — un début de solution sans modèle.
+2. **Le neuronal réel** : selon votre choix.
+3. **Politique DRVM/native** : quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Je continue : prochain round, **le contexte** — la seule voie heuristique pour trancher accord/constat.
+
+### Tour 148 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Créer le gold gelé et le chargeur
+- bash — Corriger le chemin du gold gelé
+- bash — Basculer les portes sur le gold gelé et relancer
+- bash — Écrire la fiche du gold gelé et la porte T130
+- bash — Trim T0/README et passer toutes les portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7894,7 +7945,7 @@ Je continue : prochain round, **les questions pièges** — casser la règle de 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1188 autres
+- … et 1193 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -20808,3 +20808,51 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1215", "timeout_ms": 700000, "wait": true}`
+
+  ```
+13:27
+work/n2w/mix-60k.pt
+OK
+ "duree_s": 3222.789800643921
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1211 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/mix-60k.log 2>/dev/null; ls work/n2w/mix-60k.pt 2>/dev/null && echo OK) finished [status: completed, exit code: 2]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; ~/gpu-env/bin/python work/n2w/eval_croise.py work/n2w/mix-60k.pt data/wiki_fr/propre > work/n2w/eval-mix60-fr.json 2>/de … [646 caractères tronqués]`
+
+  ```
+ev-mix0 3574754
+ev-mix1 3574755
+[still running after 60000ms; moved to background job bash-1216]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1213 (bash: sleep 1380; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/mix-60k.log | head -1; ls work/n2w/mix-60k.pt 2>/dev/null && echo OK) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1216", "timeout_ms": 700000, "wait": true}`
+
+  ```
+{"fichier": "mix-60k.pt", "val": "data/wiki_fr/propre", "L128": 3.4902, "L256": 3.4615, "L512": 3.5169}
+{"fichier": "mix-60k.pt", "val": "data/wiki_big/propre", "L128": 3.3565, "L256": 3.2716, "L512": 3.3685}
+{"fichier": "mix-60k.pt", "litterature": 6.0283, "anglais": 8.3352, "wikitext2": 9.0525}
+13:30
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-melange.md <<'EOF'\n# N2.ac — Le mélange des deux corpus : la largeur sans perdre le français\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : le modèle entraîné sur le\n> **mélange** (1 … [3479 caractères tronqués]`
+
+  ```
+fiche mélange écrite
+en-cours ok
+  T0 max : 4011 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · compteurs : en-cours.md dit 541 fichiers, le disque en a 542
+13:31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**N2.ac** : le mélange 1 Go — 3,49 fr, 6,03 litt., 8,34 angl. (le meilleur compromis) ;\", \"**N2.ac** : le mélan … [1590 caractères tronqués]`

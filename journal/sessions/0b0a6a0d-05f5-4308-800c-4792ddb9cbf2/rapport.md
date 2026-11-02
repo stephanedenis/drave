@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 45.0 h |
+| Durée | 45.2 h |
 | Tours | 20 |
-| Messages | 1695 |
-| Appels d'outils | 1554 |
+| Messages | 1701 |
+| Appels d'outils | 1558 |
 | Fichiers touchés | 11 |
-| Commandes | 1215 |
+| Commandes | 1218 |
 | Sous-agents | 0 |
-| Commits | 85 |
+| Commits | 86 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1062,7 +1062,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 
 ### Tour 20 — mets le dossier de pilotage à jour et continue
 
-*119 appels d'outils.* Actions notables :
+*123 appels d'outils.* Actions notables :
 
 - bash — Read the state's N2 section and timestamp
 - read
@@ -1078,7 +1078,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - bash — Find the Wikipedia extraction tool
 - bash — Read the extraction tool's options
 - bash — Look at the earlier extraction script
-- … et 60 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
@@ -1144,7 +1144,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 1175 autres
+- … et 1178 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1375,6 +1375,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg-pilotage.txt <<'EOF' PILOTAGE — LA NUIT N2 EST CLOSE : LE MEILLEUR MODÈLE EST LE 34,3 M + C
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text() a = "canal
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s
 
