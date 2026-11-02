@@ -23129,3 +23129,24 @@ a8d58b3f B13 — LA COURBE DU SEUIL : 0,35→0,50, 0 → 80 % → 100 %, CREUX �
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\ … [348 caractères tronqués]`
+
+  ```
+❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 570 JSON, le disque en a 571
+ok
+     · compteurs : en-cours.md dit 479 fichiers, le disque en a 480
+     · compteurs : en-cours.md dit 572 JSON, le disque en a 571
+[still running after 60000ms; moved to background job bash-874]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-874", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[master 3013f583] ÉTAT — COMPTEURS ALIGNÉS (572 JSON)
+ 11 files changed, 217 insertions(+), 25 deletions(-)
+3013f583 ÉTAT — COMPTEURS ALIGNÉS (572 JSON)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| fichi … [430 caractères tronqués]`

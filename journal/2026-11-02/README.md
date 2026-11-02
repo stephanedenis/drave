@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**44 commits** · **3 session(s)** · **7 thème(s)**
+**45 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | apprentissage | 3 | [apprentissage.md](apprentissage.md) |
 | attention | 2 | [attention.md](attention.md) |
 | distribue | 1 | [distribue.md](distribue.md) |
-| docs | 3 | [docs.md](docs.md) |
+| docs | 4 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
 | mesures | 28 | [mesures.md](mesures.md) |
 | portes | 3 | [portes.md](portes.md) |
@@ -24,7 +24,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 33.9 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 33.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 33.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 33.6 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -75,6 +75,7 @@
 | 01:58 | `aa49abaf` | B13 — LE SEUIL BAS : GRADUÉ (~0,40), ×0,36 20/25, ×0,40 25/25 ; 78/78 |
 | 02:06 | `50d1e6f7` | N2.v — LE MULTILINGUE 34,3 M DISTILLÉ : 5,58 → 4,79, LA DISTILLATION PAIE AVEC LA CAPACITÉ |
 | 02:09 | `a8d58b3f` | B13 — LA COURBE DU SEUIL : 0,35→0,50, 0 → 80 % → 100 %, CREUX À 0,45 ; 79/79 |
+| 02:11 | `3013f583` | ÉTAT — COMPTEURS ALIGNÉS (572 JSON) |
 
 ## Le récit de la journée (écrit à la main)
 
