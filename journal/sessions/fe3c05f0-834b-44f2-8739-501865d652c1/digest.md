@@ -31739,3 +31739,54 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 240; date '+%H:%M'; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la reports/ocr-pdf.json 2>&1; cat /tmp/jalon-css.log 2>/dev/null; tail -1 /tmp/ocr-pilote.log", "description": "Wait 4 min then check OCR progress", "timeoutMs": … [70 caractères tronqués]`
+
+  ```
+01:47
+2295929 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 240; date '+%H:%M'; pgrep -af "tesseract.*ocr-pdf" | head -1; ls -la reports/ocr-pdf.json 2>&1; cat /tmp/jalon-css.log 2>/dev/null; tail -1 /tmp/ocr-pilote.log
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  Biblio_large · 004.0 Sprenger 2025, inflammationcycling · 1264 p · 3571780 car
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; tail -3 /tmp/ocr-pilote.log; pgrep -af \"pdftoppm|tesseract\" | head -2; ps -p 1616198 -o stat,etime= 2>/dev/null; ls -la data/corpus_ocr/train.txt", "description": "Check OCR book transition", "timeoutMs": 120000, "work … [56 caractères tronqués]`
+
+  ```
+01:47
+  Biblio_large · 004.0 Inconnu(e) 2011, La maison de A à  · 178 p · 362368 car
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+  Biblio_large · 004.0 Sprenger 2025, inflammationcycling · 1264 p · 3571780 car
+2298841 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-pua534bm/p-546.png stdout -l fra+eng --psm 3
+2298852 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; tail -3 /tmp/ocr-pilote.log; pgrep -af "pdftoppm|tesseract" | head -2; ps -p 1616198 -o stat,etime= 2>/dev/null; ls -la data/corpus_ocr/train.txt
+STAT            
+S       05:02:11
+-rw-r--r--. 1 stephane stephane 7776329  2 nov 01:16 data/corpus_ocr/train.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 326 : CSS en OCR à 546/718 pages (29 pages/min)
+
+**Round 326/1000 — le 9e livre accélère (546/718 pages).**
+
+- **`tesseract`** lit la page **546/718** du CSS ; **29 pages/min** soutenues, la fin vers **01 h 55**.
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le jalon** (PID 2294564) annoncera la ligne du CSS dès qu'elle sera écrite.
+- **Le contrôle OCR** est complet : croisé **trivialement 0** (val/test vides), éval **0/40, 0/24, 0/40** — committé (`a9a511e8`).
+- **Le commit `868399c8`** aligne la roadmap, le récit et l'état sur les 8 livres.
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45** ; **les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅.
+- **Les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le CSS finit dans 6 min ; le goal reste actif.
+
+
+## Tour 339
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 327/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; cat /tmp/jalon-css.log 2>/dev/null; tail -2 /tmp/ocr-pilote.log; pgrep -af \"tesseract.*ocr-pdf\" | head -1; ls -la data/corpus_ocr/train.txt reports/ocr-pdf.json 2>&1", "description": "Wait 5 min for CSS comp … [91 caractères tronqués]`

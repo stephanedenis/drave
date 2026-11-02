@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 33.5 h |
 | Tours | 18 |
-| Messages | 1330 |
-| Appels d'outils | 1233 |
+| Messages | 1333 |
+| Appels d'outils | 1236 |
 | Fichiers touchés | 11 |
-| Commandes | 987 |
+| Commandes | 990 |
 | Sous-agents | 0 |
-| Commits | 53 |
+| Commits | 54 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*267 appels d'outils.* Actions notables :
+*270 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 176 autres
+- … et 179 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 947 autres
+- … et 950 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1230,4 +1230,5 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = s.rep
 - JOURNAL — LA NUIT N2, SECONDE MOITIÉ : LES LOIS (CAPACITÉ, DISTILLATION, MULTILINGUE, CANAL)  Les lois de la nuit : capacité × données (−0,19 par palier, la lon
 - JOURNAL — LA NUIT N2, SECONDE MOITIÉ : LES LOIS (CAPACITÉ, DISTILLATION, MULTILINGUE, CANAL)  Les lois de la nuit : capacité × données (−0,19 par palier, la lon
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() a = "
 

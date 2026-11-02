@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 33.1 h |
-| Tours | 90 |
-| Messages | 1187 |
-| Appels d'outils | 1058 |
+| Durée | 33.2 h |
+| Tours | 91 |
+| Messages | 1193 |
+| Appels d'outils | 1062 |
 | Fichiers touchés | 25 |
-| Commandes | 856 |
+| Commandes | 859 |
 | Sous-agents | 2 |
 | Commits | 114 |
 | Compactages de contexte | 3 |
@@ -211,6 +211,8 @@
 **Tour 89** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 90** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 91** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4776,6 +4778,56 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round **tranche le seuil** ave
 - bash — Trim README et portes
 - bash — Committer le seuil sur 5 graines
 
+**Synthèse produite :**
+
+⏵ Seuil sur 5 graines : ×0,35 0/25, ×0,4 25/25, seuil ~0,4 ; 76/76
+
+Le round 77 du goal est livré : le **seuil d'oubli** est **~0,4** — la non-monotonie de T72 était un effet de graine. Commit **`a2cae633`**.
+
+\## Le seuil sur 5 graines
+
+Même monde que T72 (look à l'épisode 3000), 5 facteurs × 5 graines, 5 exécutions par graine.
+
+| facteur | buts | taux |
+|---|---:|---:|
+| 0,30 | **0/25** | 0,00 |
+| 0,35 | **0/25** | 0,00 |
+| **0,40** | **25/25** | **1,00** |
+| 0,45 | **20/25** | 0,80 |
+| 0,50 | **25/25** | 1,00 |
+
+**Ce que ça dit** :
+
+- **Le seuil est ~0,4** : à 0,35 la mémoire est trop courte (0/25), à 0,4 elle suffit (25/25).
+- **× 0,45 est le bord** (20/25) : 4 graines sur 5 réussissent ; la 5ᵉ perd la porte.
+- **× 0,5 est sûr** (25/25) : la moitié de la Q survit par cycle.
+- **La non-monotonie de T72 est un effet de graine** : avec 5 graines, l'ordre 0,35 < 0,4 ≤ 0,5 est propre ; 0,45 reste le point instable.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-seuil-graines.md`](../../reports/rapport-pensee-seuil-graines.md) ; JSON [`pensee-seuil-graines.json`](../../reports/pensee-seuil-graines.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T73 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **76/76 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **475 fiches / 568 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : l'autotest prend désormais **~2 min** (25 entraînements pour T73) ; les portes tiennent avec le `timeout 600`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Bord fin** : 0,42, 0,44 ; 10 graines.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **bord** (0,42 / 0,44, 10 graines).
+
+### Tour 91 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Mesurer le bord du seuil (0,42/0,44, 10 graines)
+- bash — Ajouter la porte T74 (bord du seuil)
+- job_output
+- bash — Écrire la fiche du bord du seuil
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4855,7 +4907,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round **tranche le seuil** ave
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 816 autres
+- … et 819 autres
 
 ## 4. Mesures et résultats marquants
 

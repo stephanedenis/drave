@@ -22662,3 +22662,86 @@ timeout 600 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/graines.py tools/pensee/autotest.py reports/rapport-pensee-seuil-graines.md reports/pensee-seuil-graines.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en … [505 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-856]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-856", "timeout_ms": 600000, "wait": true}`
+
+  ```
+26 files changed, 1078 insertions(+), 57 deletions(-)
+ create mode 100644 reports/pensee-seuil-graines.json
+ create mode 100644 reports/rapport-pensee-seuil-graines.md
+COMMIT OK 1
+a2cae633 B13 — LE SEUIL SUR 5 GRAINES : ×0,35 0/25, ×0,4 25/25, SEUIL ~0,4 ; 76/76
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Seuil sur 5 graines : ×0,35 0/25, ×0,4 25/25, seuil ~0,4 ; 76/76
+
+Le round 77 du goal est livré : le **seuil d'oubli** est **~0,4** — la non-monotonie de T72 était un effet de graine. Commit **`a2cae633`**.
+
+## Le seuil sur 5 graines
+
+Même monde que T72 (look à l'épisode 3000), 5 facteurs × 5 graines, 5 exécutions par graine.
+
+| facteur | buts | taux |
+|---|---:|---:|
+| 0,30 | **0/25** | 0,00 |
+| 0,35 | **0/25** | 0,00 |
+| **0,40** | **25/25** | **1,00** |
+| 0,45 | **20/25** | 0,80 |
+| 0,50 | **25/25** | 1,00 |
+
+**Ce que ça dit** :
+
+- **Le seuil est ~0,4** : à 0,35 la mémoire est trop courte (0/25), à 0,4 elle suffit (25/25).
+- **× 0,45 est le bord** (20/25) : 4 graines sur 5 réussissent ; la 5ᵉ perd la porte.
+- **× 0,5 est sûr** (25/25) : la moitié de la Q survit par cycle.
+- **La non-monotonie de T72 est un effet de graine** : avec 5 graines, l'ordre 0,35 < 0,4 ≤ 0,5 est propre ; 0,45 reste le point instable.
+
+## L'état
+
+- Fiche : [`rapport-pensee-seuil-graines.md`](../../reports/rapport-pensee-seuil-graines.md) ; JSON [`pensee-seuil-graines.json`](../../reports/pensee-seuil-graines.json) ; code [`graines.py`](../../tools/pensee/graines.py) ; T73 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **76/76 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **475 fiches / 568 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : l'autotest prend désormais **~2 min** (25 entraînements pour T73) ; les portes tiennent avec le `timeout 600`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Bord fin** : 0,42, 0,44 ; 10 graines.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round affine le **bord** (0,42 / 0,44, 10 graines).
+
+
+## Tour 91
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 78/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/graines.py'); t=p.read_text()\nt=t.replace('''def main() -> int:''',\n'''def executer_bord(graines: int = 10) -> list[dict]:\n    \"\"\"Le bo … [1561 caractères tronqués]`
+
+  ```
+a2cae633 B13 — LE SEUIL SUR 5 GRAINES : ×0,35 0/25, ×0,4 25/25, SEUIL ~0,4 ; 76/76
+ok
+graine 3  Q  85  bruit True/8 pas (1 essais)  stable True/9 pas
+graine 4  Q  72  bruit True/8 pas (1 essais)  stable True/8 pas
+facteur 0.42  50/50 buts
+facteur 0.44  50/50 buts
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T73 le seuil sur 5 graines       ×0,35 0/25, ×0,4 25/25, ×0,45 20/25\\n\",\n\"  T73 le seuil sur 5 graines       ×0,35 0/2 … [1141 caractères tronqués]`

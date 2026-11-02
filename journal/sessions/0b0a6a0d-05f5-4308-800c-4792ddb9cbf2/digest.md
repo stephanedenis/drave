@@ -16748,3 +16748,48 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-987", "timeout_ms": 600000, "wait": true}`
+
+  ```
+01:46
+work/n2j/T-g3.pt
+OK
+}
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-985 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/T-g3.pt work/n2k/M34-g1.pt 2>/dev/null; tail -1 work/n2j/T-g3.log 2>/dev/null; tail -1 work/n2k/M34-g1.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-987", "timeout_ms": 600000, "wait": true}`
+
+  ```
+{"fichier": "T-g3.pt", "params": 11816136, "val": 3.8869, "test": 3.9524, "litterature": 6.9899, "litterature_propre": 7.1822, "anglais": 12.1389, "wikitext2": 12.7304, "permute": 144.9367}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-professeur.md <<'EOF'\n# N2.u — Le professeur plus gros ne change presque rien en domaine, mais gagne 0,3 hors domaine\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : un professeur de * … [3756 caractères tronqués]`
+
+  ```
+fiche professeur écrite
+  T0 max : 3964 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 568 JSON, le disque en a 569
+01:48
+pas 11750 · seq 128 · perte 21.1280 · PPL 128/4 5.6126 · 1306 s
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AssertionError: puce N2 introuvable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"N2.r\\|N2.s\\|N2.t\" docs/pilotage/en-cours.md | head -2; sed -n '/N2.h/,+1p' docs/pilotage/en-cours.md | head -3", "description": "Find the current N2 bullet"}`
+
+  ```
+82:- **N2** : **N2.h** 3,09 ; **N2.j** 7,42 ; **N2.n** 3,94 ; **N2.o** 5,41 ; **N2.p** 4,00 ; **N2.q** 5,89 ; **N2.t** 5,58 ; **N2.r** 3,69 ; N4 **0/40** ; fiches
+- **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
+  avance ; **N4** en file ; **A/B** gardent les leurs.
+> `0b0a6a0d` (N2.h/N2.i, close) et `fe3c05f0` (R4.4, close ; restes nommés : fax 1 bit,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = \"**N2.r** 3,69 ; N4 **0/40** ; fiches\"\nb = \"**N2.r** 3,69 ; **N2.s** boucles ; **N2.u** prof. 30 M −0,3 OOD ; N4 **0/40** … [1483 caractères tronqués]`
