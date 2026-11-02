@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 27.4 h |
+| Durée | 27.6 h |
 | Tours | 18 |
-| Messages | 942 |
-| Appels d'outils | 930 |
+| Messages | 945 |
+| Appels d'outils | 933 |
 | Fichiers touchés | 18 |
-| Commandes | 856 |
+| Commandes | 858 |
 | Sous-agents | 0 |
 | Commits | 54 |
 | Compactages de contexte | 2 |
@@ -894,10 +894,13 @@ Le **manifeste de l'anglais** (le 10e corpus) → son contrôle 8 Ko → la **fi
 
 ### Tour 18 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1029 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Check English and PDF completion
 - bash — Wait for English corpus manifest
+- bash — Read R1 and A backlog cards
+- bash — Read A8.3 lot measurement scripts
+- job_output
 
 ## 3. Travail accompli
 
@@ -966,7 +969,7 @@ Le **manifeste de l'anglais** (le 10e corpus) → son contrôle 8 Ko → la **fi
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 816 autres
+- … et 818 autres
 
 ## 4. Mesures et résultats marquants
 

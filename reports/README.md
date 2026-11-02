@@ -17,7 +17,7 @@
 |---|---|
 | [`rapport-pensee-necessaire.md`](rapport-pensee-necessaire.md) | **B13** — le neuronal nécessaire : cadenas, sonde seule, avant 3 appels/but, aveugle 20/sans but, **12/12** |
 | [`rapport-pensee-operateurs.md`](rapport-pensee-operateurs.md) | **B13** — les opérateurs hétérogènes : 3 genres, A* 23 nœuds/4 appels/coût 48 vs aveugle 1/33, **11/11** |
-| [`rapport-pensee-gold-linguistique.md`](rapport-pensee-gold-linguistique.md) | **L/R0.7** — le gold 260 : POS 0,774, exact 0,190/tête 0,510, **attachement tête 1,0/0,954/0,909** (44 ambiguës), pragmatique 1,0/1,0/0,994/0,889 ; neuronal réel refusé |
+| [`rapport-pensee-gold-linguistique.md`](rapport-pensee-gold-linguistique.md) | **L/R0.7** — le gold 300 : POS 0,773, exact 0,190/tête 0,510, **attachement tête 1,0/0,962/0,925** (53 ambiguës), pragmatique 1,0/1,0/0,994/0,889 ; neuronal réel refusé |
 | [`rapport-pensee-banc.md`](rapport-pensee-banc.md) | **B13** — le banc anytime : A* but en 32 nœuds, AUC 0,528/0,624 contre 0,246/0,116 à l'aléatoire, **10/10** |
 | [`rapport-pensee-drvf.md`](rapport-pensee-drvf.md) | **B13** — le DRVF `thought` : 23 597 octets, 93 événements, rejeu identique, corruption refusée, **9/9** |
 | [`rapport-pensee-ac3-alphabeta.md`](rapport-pensee-ac3-alphabeta.md) | **B13** — AC-3 et alpha-bêta : **8/8**, 1 495 nœuds/296 coupes contre 18 730 au minimax |

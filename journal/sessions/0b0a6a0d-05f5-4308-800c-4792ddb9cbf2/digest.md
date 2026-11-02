@@ -14999,3 +14999,29 @@ def plan_depuis(texte: str) -> list[tuple[int, int, float]]:
     return plan
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/distiller_budget.py'); s = p.read_text()\ns = s.replace('''def lot_fr(data, n, seq, device, compteur):\n    \"\"\"n fenêtres de seq+1 octets : l'entrée est x[:, :-1], la cible … [3290 caractères tronqués]`
+
+  ```
+distiller : canal ajouté
+syntaxe ok
+[still running after 60000ms; moved to background job bash-873]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-873", "timeout_ms": 300000, "wait": true}`
+
+  ```
+"duree_s": 2.8976638317108154,
+ "positions_aleatoires": 384
+}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2k/teacher-en.log; tail -2 work/n2k/teacher-multi.log; ls work/n2k/route-en work/n2k/route-multi 2>/dev/null | head -4", "description": "Wait for the English and multilingual teachers"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-874]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-874", "timeout_ms": 900000, "wait": true}`

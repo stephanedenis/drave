@@ -17023,3 +17023,66 @@ Continue working toward the objective in this same session. Treat the current wo
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 28); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 30; done; echo \"attente $((i*30))s\"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || echo \"en: pas encore\"; ps -eo pid,etime,cmd | grep \"cor … [253 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-856]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for f in R11-contexte-hierarchique R12-curriculum-contexte A2.6-ordonnanceur A8.3-defaut; do echo \"===== $f\"; sed -n '1,30p' docs/pilotage/backlog/$f.md | head -25; done; echo \"=== tools a8\"; ls tools/ | grep -iE \"a8|choisir|lot\" … [180 caractères tronqués]`
+
+  ```
+===== R11-contexte-hierarchique
+# R11 — Contexte hiérarchique et état de section
+
+> **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R01, N1, N2
+> **Ligne de roadmap** : R1.1 · **Fiche de résultat attendue** : rapport-r11-contexte-hierarchique.md (à créer dans `reports/`)
+> **Résumé** : Lire par sections avec un état de section, sans exiger que l'attention voie toute la page.
+> **Glossaire** : [perplexité](../../theorie/glossaire/entrees/perplexite.md) · [test de l'aiguille](../../theorie/glossaire/entrees/test-de-l-aiguille.md) · [graphe de document](../../theorie/glossaire/entrees/graphe-de-document.md).
+
+## Le besoin
+
+Le natif surapprend 129 octets et échoue à 130–256. Avant d'allonger le contexte brut, il faut une hiérarchie : span → paragraphe → section → document, avec un état qui résume chaque section.
+
+**Ordre arrêté le 2026-10-29** : c'est **N2** qui porte la hiérarchie (l'état de section, 3 graines) ; R11 mesure la fenêtre qui en résulte et n'ouvre donc qu'après N2. La mesure reste ici : PPL à 1 000 octets, aiguille native, stabilité.
+
+## Le contrat
+
+| élément | contenu |
+|---|---|
+| **entrée** | des octets, des frontières de section (R01) 
+… [4226 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n '1,40p' tools/mesure_lot_disque.sh; echo \"=== prefill\"; sed -n '1,30p' tools/mesure-prefill-lot.sh; echo \"=== fiche a83c\"; head -30 reports/rapport-a83c-lot.md 2>/dev/null; echo \"=== modele\"; ls models/ 2>/dev/null | head  … [139 caractères tronqués]`
+
+  ```
+#!/bin/bash
+# mesure_lot_disque.sh — le préremplissage par LOTS, mesuré sur le DISQUE.
+#
+# POURQUOI CE SCRIPT EXISTE. Le batch 5 avait comparé `--lot 1` à `--lot 4..64`
+# sur le 30B : la première passe avait lu 10,9 Go et les suivantes ZÉRO octet. Le
+# protocole mesurait donc le cache de pages, pas le lot (§ 14 du rapport). Ce qui
+# manquait n'était pas le modèle : c'était **l'éviction**. On l'obtient sans être
+# root avec `posix_fadvise(POSIX_FADV_DONTNEED)` sur le fichier du modèle, qui
+# jette ses pages du cache — donc chaque réglage de lot repart à froid.
+#
+# CE QUI EST MESURÉ, PAR RÉGLAGE : les octets réellement lus (`File system
+# inputs`), le temps mur, le débit et la perplexité. Le lot doit diviser les
+# LECTURES ; s'il ne les divise pas, la mesure le dira.
+#
+# Usage :
+#   mesure_lot_disque.sh <modele.gguf> <ids> [--lots "1 2 4 8 16"] [--limit 192]
+#                        [--ctx 512] [--threads 20] [--journal F]
+set -u
+D=${D:-./drave-core/target/release/drave}
+MODELE=""; IDS=""; LOTS="1 2 4 8 16"; LIMIT=192; CTX=512; THREADS=20; JOURNAL=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --lots) LOTS="$2"; shift 2 ;;
+        --limit) LIMIT="$2"; shift 2 ;;
+        --ctx) CT
+… [3719 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-856", "timeout_ms": 600000, "wait": true}`

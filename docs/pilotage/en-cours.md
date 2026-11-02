@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-01, 20 h 25 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-01, 20 h 45 HNE (heure locale, EST).**
 
 > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
 > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
@@ -33,9 +33,9 @@
   [`pensee-ac3-alphabeta`](../../reports/rapport-pensee-ac3-alphabeta.md),
   [`pensee-drvf`](../../reports/rapport-pensee-drvf.md), [`pensee-banc`](../../reports/rapport-pensee-banc.md),
   [`pensee-operateurs`](../../reports/rapport-pensee-operateurs.md), [`pensee-necessaire`](../../reports/rapport-pensee-necessaire.md).
-- **Gold L 220** : **100 réels + 160 synthétiques** ; POS **0,774** (fermé 0,939/ouvert 0,621),
+- **Gold L 220** : **140 réels + 160 synthétiques** ; POS **0,773** (fermé 0,939/ouvert 0,621),
   syntagmes exacts **0,194**/**tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock)
-  **67,1 %** ; **attachement tête 1,0/0,954/0,909** (44 ambiguës), hasard 0,015 ; vrai neuronal
+  **67,1 %** ; **attachement tête 1,0/0,962/0,925** (53 ambiguës), hasard 0,015 ; vrai neuronal
   **refusé** ; fiche [`pensee-gold`](../../reports/rapport-pensee-gold-linguistique.md) ; prochain :
   **lecture du gold + modèle qualifié**.
 - **Ce qu'elle fait** : **state store v0** écrit et testé — **6/6 portes**  sur le jouet des cruches ; BFS, greedy, A* et

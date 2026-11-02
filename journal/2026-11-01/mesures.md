@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (41)
+## Commits du jour (42)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -49,10 +49,11 @@
 | 19:52 | `15c69b98` | B13 — LE NEURONAL NÉCESSAIRE : CADENAS, SONDE SEULE, AVANT 3 APPELS/BUT, AVEUGLE 20/SANS BUT (12/12) | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+21) |
 | 20:01 | `e0e71213` | N2.m — L'ANGLAIS SEUL : 4,42 SUR 204 Mo, ET LE MULTILINGUE COÛTE 1,6 PPL | `en-cours.md`, `roadmap.md`, `README.md` (+25) |
 | 20:06 | `9396fa40` | L — GOLD 220 : CIBLES DES 60 RÉELS, ATTACHEMENT TÊTE 0,972 (0,929 RÉEL), 36 AMBIGUËS | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+14) |
+| 20:10 | `5241f1f7` | L — GOLD 260 : 100 RÉELS + 160 SYNTHÉTIQUES, POS 0,774, TÊTE 0,954 (RÉEL 0,909) | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+25) |
 
 ## Chiffres du jour
 
-`0,972` · `0,929` · `204 Mo` · `0,957` · `0,800` · `0,294` · `0,338` · `0,015` · `0,751` · `0,924` · `0,725` · `0,560`
+`0,774` · `0,954` · `0,909` · `0,972` · `0,929` · `204 Mo` · `0,957` · `0,800` · `0,294` · `0,338` · `0,015` · `0,751`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -60,8 +61,8 @@
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 27.9 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `b6a672ec-3349-4a4c-9e23-4478aa823170` — Git push to origin remote (début 2026-11-01 13:28, 0.1 h) → [rapport](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) · [digest](../sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 27.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 27.4 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 27.6 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 27.6 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
