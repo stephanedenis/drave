@@ -468,6 +468,17 @@ def t25_professeur() -> tuple[bool, str]:
                                       f"seule {'but' if ok else 'échec'}/{pas} pas")
 
 
+def t26_sans_none() -> tuple[bool, str]:
+    """Sans None, la politique tourne sans atteindre le but (négatif)."""
+    from .courbe import seule_minute
+    from .operateurs import PolitiqueAppriseComplete
+    p = PolitiqueAppriseComplete(episodes=1000, graine=0)
+    p.apprendre()
+    ok, pas = seule_minute(p)
+    return (not ok) and len(p.q) > 0, (f"sans None : {len(p.q)} états-Q, "
+                                      f"seule {'but' if ok else 'échec'}/{pas} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -492,7 +503,8 @@ def main() -> int:
               ("T22 reward shaping", t22_shaping()),
               ("T23 réseau linéaire", t23_reseau()),
               ("T24 MLP", t24_mlp()),
-              ("T25 professeur complet", t25_professeur())]
+              ("T25 professeur complet", t25_professeur()),
+              ("T26 politique sans None", t26_sans_none())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

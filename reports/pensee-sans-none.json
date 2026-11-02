@@ -1,0 +1,26 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "29/29",
+ "sans_none": {
+  "episodes": 1000,
+  "graine": 0,
+  "etats_q": 56,
+  "propose": "argmax, jamais None"
+ },
+ "resultat": {
+  "seule_but": false,
+  "seule_pas": 200,
+  "a_star": {
+   "noeuds": 28,
+   "sonde": 6,
+   "but": true
+  }
+ },
+ "note": "le T25 passe de 8 à 200 pas avec ce changement ; sa négative reste vraie",
+ "limites": [
+  "Q-learning tabulaire",
+  "rustine sans critère d'arrêt",
+  "toy"
+ ]
+}

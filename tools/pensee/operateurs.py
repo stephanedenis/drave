@@ -372,6 +372,11 @@ class PolitiqueAppriseComplete(PolitiqueAppriseShaping):
             gain += 1.0
         return ncle, gain
 
+    def propose(self, etat, but):
+        """Jamais `None` : au but, la meilleure action (le `seule_minute` s'arrête seul)."""
+        cle = self._cle(etat)
+        return max(self.ACTIONS, key=lambda a: self._q(cle, a))
+
 
 class PolitiqueMLP(Politique):
     """Un **MLP** (2 → 8 → 4, tanh), entraîné par imitation du professeur (porte minute).

@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 28.8 h |
 | Tours | 27 |
-| Messages | 1002 |
-| Appels d'outils | 969 |
+| Messages | 1003 |
+| Appels d'outils | 970 |
 | Fichiers touchés | 18 |
-| Commandes | 892 |
+| Commandes | 893 |
 | Sous-agents | 0 |
 | Commits | 60 |
 | Compactages de contexte | 2 |
@@ -1189,9 +1189,10 @@ Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des di
 
 ### Tour 27 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1030 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*2 appels d'outils.* Actions notables :
 
 - bash — Check English manifest, check process, and documents
+- bash — Kill redundant watchers and launch English check
 
 ## 3. Travail accompli
 
@@ -1260,7 +1261,7 @@ Le **manifeste anglais** → son contrôle → la **fiche et le catalogue des di
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 852 autres
+- … et 853 autres
 
 ## 4. Mesures et résultats marquants
 

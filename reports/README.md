@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-sans-none.md`](rapport-pensee-sans-none.md) | **B13** — la politique sans None : 56 états-Q, elle tourne 200 pas, **29/29** |
 | [`rapport-pensee-professeur.md`](rapport-pensee-professeur.md) | **B13** — le professeur complet : 56 états-Q, il échoue seul, **28/28** |
 | [`rapport-pensee-mlp.md`](rapport-pensee-mlp.md) | **B13** — le MLP : 60 poids, l'imitation échoue seule, **27/27** |
 | [`rapport-pensee-reseau.md`](rapport-pensee-reseau.md) | **B13** — le réseau linéaire : 12 poids, l'imitation échoue seule, **26/26** |
