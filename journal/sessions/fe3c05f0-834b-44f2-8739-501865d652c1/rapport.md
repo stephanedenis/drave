@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 36.9 h |
-| Tours | 372 |
-| Messages | 2232 |
-| Appels d'outils | 1482 |
+| Durée | 37.0 h |
+| Tours | 374 |
+| Messages | 2239 |
+| Appels d'outils | 1485 |
 | Fichiers touchés | 26 |
-| Commandes | 1315 |
+| Commandes | 1318 |
 | Sous-agents | 0 |
 | Commits | 83 |
 | Compactages de contexte | 4 |
@@ -771,6 +771,10 @@
 **Tour 371** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 372** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 373** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 374** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -8749,7 +8753,41 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 **Synthèse produite :**
 
-⏵ Round 361 : genres rafraîchis et committés (`166896b4`) ; je lance la passe complète des portes
+⏵ Round 361 : genres committés, portes complètes en cours (1/81 ✅)
+
+**Round 361/1000 — les genres sont rafraîchis ; la passe complète des portes tourne.**
+
+- **Commit `166896b4`** : « GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M) » — **14 fichiers**, 317 insertions ; le `corpus-genres.json` et le `rapport-genres.md` portent l'OCR à **38,5 car/ligne** (contre 32,1 pour les 8 livres), **6,8 %** de lignes dupliquées, couverture **0,04**.
+- **La passe complète** (PID 2459980, 81 portes, borne 30 min) : `porte-adaptateur-sortie` ✅ (63 s) ; les journaux dans `/tmp/portes-1102-05h27`.
+- **L'état** : OCR 20 livres (7 381 p, 15,36 M), genres mesurés (38,5), la prochaine action « l'OCR complet (les 159 scans ; le pilote des 20 livres est clos) ».
+- **Le corpus OCR final** : 20 livres, 7 381 pages, 15 356 972 caractères ; train 19 doc./14,6 Mo, **val 1 doc./934 ko** ; **8 Ko : 1 784 fenêtres train + 115 val, 0 doublon** ; éval **0/40, 0/24, 0/40** ; 8,4 h de calcul.
+
+**Le constat** : les livraisons sont committées ; la passe des portes est le dernier contrôle ; le goal reste actif jusqu'à 8 h.
+
+### Tour 373 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check gates progress
+
+**Synthèse produite :**
+
+⏵ Round 361 : portes complètes en cours (1/81 ✅, borne 30 min)
+
+**Round 361/1000 — la passe des portes avance (1/81 ✅).**
+
+- **`porte-adaptateur-sortie`** ✅ (63 s) ; la 2e porte tourne depuis ~4 min (les portes lourdes : modèles, corpus).
+- **Le commit `166896b4`** (genres : OCR 38,5 car/ligne, 6,8 % de doublons) et **`15f2c8f6`** (OCR 20 livres, 7 381 p, 15,36 M) tiennent.
+- **L'état** : OCR 20 livres, genres mesurés, la prochaine action « l'OCR complet (les 159 scans) ».
+- **La borne** : 30 min ; les journaux dans `/tmp/portes-1102-05h27`.
+
+**Le constat** : la passe est le dernier contrôle ; le goal reste actif jusqu'à 8 h.
+
+### Tour 374 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Wait 5 min then check gates
 
 ## 3. Travail accompli
 
@@ -8826,7 +8864,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1275 autres
+- … et 1278 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -1459,6 +1459,17 @@ def t93_anaphore_pieges() -> tuple[bool, str]:
         f"anaphore : {r['justes']}/{r['liens']} liens justes")
 
 
+def t94_anaphore_corrigee() -> tuple[bool, str]:
+    """L'anaphore corrigée : 12/12 en ignorant les noms des PP."""
+    from ..tests.linguistique.anaphore import mesurer
+    from ..tests.linguistique.gold_reel import construire
+    g = construire()
+    ps = [p for p in g["phrases"] if 301 <= int(p["id"][1:]) <= 340]
+    r = mesurer(ps, ignorer_pp=True)
+    return r["liens"] == 12 and r["taux"] == 1.0, (
+        f"anaphore corrigée : {r['justes']}/{r['liens']} liens justes")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1551,7 +1562,8 @@ def main() -> int:
               ("T90 100 complexes", t90_complexes100()),
               ("T91 discours", t91_discours()),
               ("T92 anaphore", t92_anaphore()),
-              ("T93 pièges anaphore", t93_anaphore_pieges())]
+              ("T93 pièges anaphore", t93_anaphore_pieges()),
+              ("T94 anaphore corrigée", t94_anaphore_corrigee())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

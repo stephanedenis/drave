@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 36.8 h |
-| Tours | 110 |
-| Messages | 1401 |
-| Appels d'outils | 1228 |
+| Durée | 37.0 h |
+| Tours | 111 |
+| Messages | 1408 |
+| Appels d'outils | 1233 |
 | Fichiers touchés | 25 |
-| Commandes | 999 |
+| Commandes | 1003 |
 | Sous-agents | 2 |
-| Commits | 143 |
+| Commits | 144 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -251,6 +251,8 @@
 **Tour 109** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 110** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 111** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -5861,6 +5863,61 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute les **cas pièges
 - bash — Committer les pièges d'anaphore (2e essai)
 - job_output
 
+**Synthèse produite :**
+
+⏵ Pièges d'anaphore : 10/12, le PP locatif échoue, gold 328 ; 96/96
+
+Le round 97 du goal est livré : les **cas pièges** font passer l'anaphore de 4/4 à **10/12** — la règle naïve échoue sur le PP locatif. Commit **`0b31f485`**.
+
+\## Les pièges
+
+Huit phrases (r321–r328 : deux noms, pronoms sujets inversés, PP locatif) entrent dans le gold.
+
+| phrase | pronom | attendu | obtenu | verdict |
+|---|---|---|---|---|
+| r321 `Le chat voit le chien ; il dort` | `il` | `chien` | `chien` | ✅ |
+| r322 `Le chien voit le chat ; il dort` | `il` | `chat` | `chat` | ✅ |
+| r323 `Marie appelle Sophie ; elle répond` | `elle` | `sophie` | `sophie` | ✅ |
+| r324 `Le livre est sur la table ; il est rouge` | `il` | `livre` | `table` | ❌ |
+| r325 `Paul et Marie lisent ; ils rient` | `ils` | `marie` | `marie` | ✅ |
+| r326 `The cat sees the dog; it sleeps` | `it` | `dog` | `dog` | ✅ |
+| r327 `Marie calls Sophie; she answers` | `she` | `sophie` | `sophie` | ✅ |
+| r328 `The book is on the table; it is red` | `it` | `book` | `table` | ❌ |
+
+**Ce que ça dit** :
+
+- **10/12** : la règle « dernier nom » tient sur les deux noms et les pronoms inversés, mais **échoue sur le PP locatif** (`sur la table`, `on the table`) : le dernier nom est le lieu, pas l'antécédent.
+- **Le taux baisse** (1,0 → 0,8333) : c'est la **première négative** de l'anaphore ; elle est due au gold, pas au hasard.
+- **La correction est claire** : ignorer les noms dans un PP (ou pondérer par le rôle `agent`).
+- **La marge est faible** (12 liens) : l'intervalle reste large.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-anaphore-pieges.md`](../../reports/rapport-pensee-anaphore-pieges.md) ; JSON [`pensee-anaphore-pieges.json`](../../reports/pensee-anaphore-pieges.json) ; T93 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **328 phrases**.
+- **96/96 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **502 fiches / 589 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Ignorer les PP** : la règle corrigée ; remonter à 12/12.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain rou
+… [69 caractères tronqués]
+
+### Tour 111 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Corriger la règle (ignorer les PP) et mesurer
+- bash — Écrire la fiche de l'anaphore corrigée
+- bash — Trim README et passer les portes
+- bash — Committer l'anaphore corrigée
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -5940,7 +5997,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute les **cas pièges
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 959 autres
+- … et 963 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -6231,4 +6288,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round ajoute les **cas pièges
 - B13 — L'ANAPHORE : 4/4 LIENS JUSTES, PREMIÈRE MESURE DE CORÉFÉRENCE ; 95/95" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "L'ANAPHORE"; then echo "COM
 - B13 — LES PIÈGES D'ANAPHORE : 10/12, LE PP LOCATIF ÉCHOUE, GOLD 328 ; 96/96" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PIÈGES D'ANAPHORE"; then ec
 - B13 — LES PIÈGES D'ANAPHORE : 10/12, LE PP LOCATIF ÉCHOUE, GOLD 328 ; 96/96" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PIÈGES D'ANAPHORE"; then ec
+- B13 — L'ANAPHORE CORRIGÉE : 12/12 EN IGNORANT LES PP ; 97/97" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ANAPHORE CORRIGÉE"; then echo "COMMIT OK $
 

@@ -33877,3 +33877,89 @@ S          00:23
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 180; date '+%H:%M'; tail -6 /tmp/portes-final.log; ps -p 2459980 -o stat,etime= 2>/dev/null || echo \"portes finies\"", "description": "Wait 3 min then check gates", "timeoutMs": 300000, "workdir": "/home/stephane/Data13TB/stepha … [19 caractères tronqués]`
+
+  ```
+05:30
+=== PASSE COMPLÈTE DES PORTES (81 portes, borne 1800 s) ===
+    journaux : /tmp/portes-1102-05h27
+  porte-adaptateur-sortie ✅                          63 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+STAT            
+S          03:29
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 361 : genres committés, portes complètes en cours (1/81 ✅)
+
+**Round 361/1000 — les genres sont rafraîchis ; la passe complète des portes tourne.**
+
+- **Commit `166896b4`** : « GENRES — L'OCR DES 20 LIVRES PASSE À 38,5 CAR/LIGNE (6,8 % DE DOUBLONS, 14,4 M) » — **14 fichiers**, 317 insertions ; le `corpus-genres.json` et le `rapport-genres.md` portent l'OCR à **38,5 car/ligne** (contre 32,1 pour les 8 livres), **6,8 %** de lignes dupliquées, couverture **0,04**.
+- **La passe complète** (PID 2459980, 81 portes, borne 30 min) : `porte-adaptateur-sortie` ✅ (63 s) ; les journaux dans `/tmp/portes-1102-05h27`.
+- **L'état** : OCR 20 livres (7 381 p, 15,36 M), genres mesurés (38,5), la prochaine action « l'OCR complet (les 159 scans ; le pilote des 20 livres est clos) ».
+- **Le corpus OCR final** : 20 livres, 7 381 pages, 15 356 972 caractères ; train 19 doc./14,6 Mo, **val 1 doc./934 ko** ; **8 Ko : 1 784 fenêtres train + 115 val, 0 doublon** ; éval **0/40, 0/24, 0/40** ; 8,4 h de calcul.
+
+**Le constat** : les livraisons sont committées ; la passe des portes est le dernier contrôle ; le goal reste actif jusqu'à 8 h.
+
+
+## Tour 373
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 361/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; grep -c \"✅\\|❌\" /tmp/portes-final.log 2>/dev/null; tail -3 /tmp/portes-final.log; ps -p 2459980 -o stat,etime= 2>/dev/null || echo \"portes finies\"", "description": "Check gates progress", "timeoutMs": 120000, "workdi … [54 caractères tronqués]`
+
+  ```
+05:31
+1
+=== PASSE COMPLÈTE DES PORTES (81 portes, borne 1800 s) ===
+    journaux : /tmp/portes-1102-05h27
+  porte-adaptateur-sortie ✅                          63 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+STAT            
+S          03:49
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 361 : portes complètes en cours (1/81 ✅, borne 30 min)
+
+**Round 361/1000 — la passe des portes avance (1/81 ✅).**
+
+- **`porte-adaptateur-sortie`** ✅ (63 s) ; la 2e porte tourne depuis ~4 min (les portes lourdes : modèles, corpus).
+- **Le commit `166896b4`** (genres : OCR 38,5 car/ligne, 6,8 % de doublons) et **`15f2c8f6`** (OCR 20 livres, 7 381 p, 15,36 M) tiennent.
+- **L'état** : OCR 20 livres, genres mesurés, la prochaine action « l'OCR complet (les 159 scans) ».
+- **La borne** : 30 min ; les journaux dans `/tmp/portes-1102-05h27`.
+
+**Le constat** : la passe est le dernier contrôle ; le goal reste actif jusqu'à 8 h.
+
+
+## Tour 374
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 362/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; grep -c \"✅\\|❌\" /tmp/portes-final.log 2>/dev/null; tail -4 /tmp/portes-final.log; ps -p 2459980 -o stat,etime= 2>/dev/null || echo \"portes finies\"", "description": "Wait 5 min then check gates", "timeoutMs … [72 caractères tronqués]`
+
+  ```
+05:36
+13
+  porte-bus              ✅                          78 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                          96 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard        ✅                          28 s  PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne
+  porte-cerveau          ✅                           8 s    ✅ porte tenue (quatre facultés composent, chacune reste active, le tout est déterministe)
+STAT            
+S          09:08
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; grep -c \"✅\\|❌\" /tmp/portes-final.log 2>/dev/null; tail -4 /tmp/portes-final.log; ps -p 2459980 -o stat,etime= 2>/dev/null || echo \"portes finies\"", "description": "Wait 5 min then check gates", "timeoutMs … [72 caractères tronqués]`

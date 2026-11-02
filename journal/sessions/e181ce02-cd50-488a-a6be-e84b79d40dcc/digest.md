@@ -26207,3 +26207,119 @@ retry 7
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-02, 06 h 20 HNE\", t)\np.write_text(t); print( … [1019 caractères tronqués]`
+
+  ```
+ok
+  ✅ index : aucun fait stagé sans état
+EXIT=0
+  revue de documentation · 502 fiche(s) · 589 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-999]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-999", "timeout_ms": 600000, "wait": true}`
+
+  ```
+28 files changed, 1049 insertions(+), 64 deletions(-)
+ create mode 100644 reports/pensee-anaphore-pieges.json
+ create mode 100644 reports/rapport-pensee-anaphore-pieges.md
+COMMIT OK 1
+0b31f485 B13 — LES PIÈGES D'ANAPHORE : 10/12, LE PP LOCATIF ÉCHOUE, GOLD 328 ; 96/96
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Pièges d'anaphore : 10/12, le PP locatif échoue, gold 328 ; 96/96
+
+Le round 97 du goal est livré : les **cas pièges** font passer l'anaphore de 4/4 à **10/12** — la règle naïve échoue sur le PP locatif. Commit **`0b31f485`**.
+
+## Les pièges
+
+Huit phrases (r321–r328 : deux noms, pronoms sujets inversés, PP locatif) entrent dans le gold.
+
+| phrase | pronom | attendu | obtenu | verdict |
+|---|---|---|---|---|
+| r321 `Le chat voit le chien ; il dort` | `il` | `chien` | `chien` | ✅ |
+| r322 `Le chien voit le chat ; il dort` | `il` | `chat` | `chat` | ✅ |
+| r323 `Marie appelle Sophie ; elle répond` | `elle` | `sophie` | `sophie` | ✅ |
+| r324 `Le livre est sur la table ; il est rouge` | `il` | `livre` | `table` | ❌ |
+| r325 `Paul et Marie lisent ; ils rient` | `ils` | `marie` | `marie` | ✅ |
+| r326 `The cat sees the dog; it sleeps` | `it` | `dog` | `dog` | ✅ |
+| r327 `Marie calls Sophie; she answers` | `she` | `sophie` | `sophie` | ✅ |
+| r328 `The book is on the table; it is red` | `it` | `book` | `table` | ❌ |
+
+**Ce que ça dit** :
+
+- **10/12** : la règle « dernier nom » tient sur les deux noms et les pronoms inversés, mais **échoue sur le PP locatif** (`sur la table`, `on the table`) : le dernier nom est le lieu, pas l'antécédent.
+- **Le taux baisse** (1,0 → 0,8333) : c'est la **première négative** de l'anaphore ; elle est due au gold, pas au hasard.
+- **La correction est claire** : ignorer les noms dans un PP (ou pondérer par le rôle `agent`).
+- **La marge est faible** (12 liens) : l'intervalle reste large.
+
+## L'état
+
+- Fiche : [`rapport-pensee-anaphore-pieges.md`](../../reports/rapport-pensee-anaphore-pieges.md) ; JSON [`pensee-anaphore-pieges.json`](../../reports/pensee-anaphore-pieges.json) ; T93 dans [`autotest.py`](../../tools/pensee/autotest.py) ; gold **328 phrases**.
+- **96/96 portes** ; `porte-bloc-linguistique` **verte** ; `revue` **502 fiches / 589 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- L'autotest prend **~18 min** ; les portes tiennent avec `timeout 1800`.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Ignorer les PP** : la règle corrigée ; remonter à 12/12.
+2. **Le neuronal réel** : toujours bloqué ; le mock reste un contrat.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round **corrige la règle** (ignorer les noms des PP) et mesure le 12/12.
+
+
+## Tour 111
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 98/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/anaphore.py'); t=p.read_text()\nt=t.replace('''def resoudre(mots: list[dict]) -> dict[str, str]:\n    \"\"\"Résout chaque pronom anaphorique vers le dernier n … [2038 caractères tronqués]`
+
+  ```
+ok
+naïf  {'phrases': 12, 'liens': 12, 'justes': 10, 'taux': 0.8333, 'erreurs': [{'id': 'r324', 'pronom': 'il', 'attendu': 'livre', 'obtenu': 'table'}, {'id': 'r328', 'pronom': 'it', 'attendu': 'book', 'obtenu': 'table'}]}
+corrigé {'phrases': 12, 'liens': 12, 'justes': 12, 'taux': 1.0, 'erreurs': []}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T93 les pièges d'anaphore        10/12 (r324 et r328 échouent)\\n\",\n\"  T93 les pièges d'anaphore        10/12 (r324 et  … [7298 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 503 fiche(s) · 590 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · reports/README.md : 2806 mots > budget 2800 (T1)
+  en-cours · 1626 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-anaphore.md`](rapport-pensee-anaphore.md) | **B13** — l'anaphore : 4/4 liens justes, première mesure, **95/95**  … [584 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 1800 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/tests/linguistique/anaphore.py tools/pensee/autotest.py reports/rapport-pensee-anaphore-corrige.md reports/pensee-anaphore-corrige.json reports/README.md docs/implantation/moteur-de-pensee. … [506 caractères tronqués]`

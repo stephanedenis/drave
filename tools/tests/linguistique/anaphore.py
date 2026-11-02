@@ -9,19 +9,34 @@ from __future__ import annotations
 PRONOMS = {"il", "elle", "ils", "elles", "it", "he", "she", "they"}
 
 
-def resoudre(mots: list[dict]) -> dict[str, str]:
-    """Résout chaque pronom anaphorique vers le dernier nom (en minuscules)."""
+def _dans_pp(mots: list[dict], i: int) -> bool:
+    """Vrai si le nom i est dans un PP (précédé d'un DET puis d'une PREP, ou d'une PREP)."""
+    if i >= 1 and mots[i - 1]["pos"] in ("PREP", "DET"):
+        if mots[i - 1]["pos"] == "PREP":
+            return True
+        if i >= 2 and mots[i - 2]["pos"] == "PREP":
+            return True
+    return False
+
+
+def resoudre(mots: list[dict], ignorer_pp: bool = False) -> dict[str, str]:
+    """Résout chaque pronom anaphorique vers le dernier nom (en minuscules).
+
+    `ignorer_pp=True` écarte les noms des groupes prépositionnels (le PP locatif est le piège
+    de r324/r328).
+    """
     dernier, liens = None, {}
-    for mot in mots:
+    for i, mot in enumerate(mots):
         texte = mot["texte"].lower()
         if mot["pos"] == "NOUN":
-            dernier = texte
+            if not (ignorer_pp and _dans_pp(mots, i)):
+                dernier = texte
         elif texte in PRONOMS and dernier is not None:
             liens[texte] = dernier
     return liens
 
 
-def mesurer(phrases: list[dict]) -> dict:
+def mesurer(phrases: list[dict], ignorer_pp: bool = False) -> dict:
     """Compare les liens résolus aux liens du gold (`coref`)."""
     total = justes = phrases_avec = 0
     details = []
@@ -30,7 +45,7 @@ def mesurer(phrases: list[dict]) -> dict:
         if not attendu:
             continue
         phrases_avec += 1
-        obtenu = resoudre(phrase["mots"])
+        obtenu = resoudre(phrase["mots"], ignorer_pp=ignorer_pp)
         for pronom, cible in attendu.items():
             total += 1
             if obtenu.get(pronom) == cible:

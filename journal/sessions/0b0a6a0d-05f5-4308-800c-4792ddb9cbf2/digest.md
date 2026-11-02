@@ -18244,3 +18244,51 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1084", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+
+  ```
+-rw-r--r--. 1 stephane stephane 12105  1 nov 15:38 docs/pilotage/plan-travail.md
+# Le plan de travail — plusieurs sessions sur une même machine
+
+> **Ce que ce document est.** Le **pont** entre l'état ([`en-cours.md`](en-cours.md), ce qui se
+> passe maintenant) et l'ordre ([`roadmap.md`](roadmap.md), ce qu'il faut faire et dans quel
+> ordre) : **qui fait quoi, dans quel territoire, à quelle cadence, et comment on surveille les
+> fichiers qui bougent**. Il ne remplace ni l'un ni l'autre : l'état reste la source du présent,
+> la roadmap la source de l'ordre.
+>
+> **Date** : 2026-11-01. **Machine** : une seule — 40 cœurs, 125 Go de RAM, 2 GPU de 16 Go,
+> 2,0 To libres sur `Data13TB`, 34 Go sur `IA`. **Capacité** : voir
+> [`chantiers.md`](chantiers.md) § 8 (4 sessions, 4 à 6 chantiers, 2 à 4 sous-agents par session).
+>
+> **Chargement** : ce document avant d'ouvrir une session ; puis la fiche du chantier.
+
+## 1. Où ce plan se situe
+
+```
+en-cours.md          ce qui se passe maintenant (état court, une section par session active)
+plan-travail.md      qui fait quoi, où, à quelle cadence (ce document)
+roadmap.md           l'ordre des chantiers et leur état
+chantiers.md         les relations e
+… [3958 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/base-34m-canal-g2.pt 2>/dev/null && echo OK; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 900 ~/gpu-env/bin/python work/n2j/evalue_canal.py work/n2j/base-34m-canal-g2.pt 2>&1 | grep -v Loading | tail -1", "d … [40 caractères tronqués]`
+
+  ```
+05:33
+FileNotFoundError: [Errno 2] No such file or directory: 'work/n2j/base-34m-canal-g2.pt'
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2j/base-34m-canal-g2.pt 2>/dev/null && echo OK; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 timeout 900 ~/gpu-env/bin/python work/n2j/evalue_canal.py work/n2j/base-34m-canal-g2.pt 2>&1 | grep -v Loading | t … [57 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-1086]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1086", "timeout_ms": 900000, "wait": true}`

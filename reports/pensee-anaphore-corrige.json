@@ -1,0 +1,20 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "97/97",
+ "naif": {
+  "liens": 12,
+  "justes": 10,
+  "taux": 0.8333
+ },
+ "corrige": {
+  "liens": 12,
+  "justes": 12,
+  "taux": 1.0
+ },
+ "limites": [
+  "12 liens",
+  "pronoms objets non couverts",
+  "règle naïve"
+ ]
+}
