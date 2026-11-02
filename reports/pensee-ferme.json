@@ -1,0 +1,28 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "20/20",
+ "porte_ferme": {
+  "porte": [
+   3,
+   3
+  ],
+  "fermeture": "après le passage"
+ },
+ "resultat": {
+  "noeuds": 27,
+  "par_operateur": {
+   "pas": 12,
+   "saut": 10,
+   "sonde": 5
+  },
+  "cout": 57.0,
+  "appels": 7,
+  "but": true
+ },
+ "limites": [
+  "politique manhattan (règle)",
+  "coût 5 déclaré",
+  "toy"
+ ]
+}

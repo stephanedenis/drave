@@ -15171,3 +15171,10 @@ pas 11250 · seq 128 · perte 22.0881 · PPL 128/4 4.6000 · 800 s
   ```
 
 - **bash** `{"command": "sleep 720; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/E-g*.pt 2>/dev/null; ls work/n2k/route-en 2>/dev/null | head -2; for f in E-g1 E-g2 E-g3 M-g1 M-g2; do echo \"-- $f\"; tail -1 work/n2k/$f.log 2>/dev/null; done", "description": "Wait for the Eng … [25 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-886]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-886", "timeout_ms": 900000, "wait": true}`

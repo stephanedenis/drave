@@ -360,6 +360,18 @@ def t16_sto_seule() -> tuple[bool, str]:
                                      f"buts (8–10 pas)")
 
 
+def t17_ferme() -> tuple[bool, str]:
+    """La porte se referme après le passage ; le moteur doit repasser."""
+    from .operateurs import (DRVM, LABYRINTHE_PORTE_FERME, REGISTRE_PF,
+                             PolitiqueManhattan)
+    d = DRVM(REGISTRE_PF, PolitiqueManhattan())
+    d.penser(LABYRINTHE_PORTE_FERME, AStar(), Budget(200))
+    b = d.instantane()
+    ok = b["but"] and b["par_operateur"].get("sonde", 0) > 0
+    return ok, (f"porte fermée : {b['noeuds']} nœuds/but, "
+                f"sonde {b['par_operateur'].get('sonde', 0)}")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -375,7 +387,8 @@ def main() -> int:
               ("T13 courbe d'apprentissage", t13_courbe()),
               ("T14 politique seule", t14_seule()),
               ("T15 porte stochastique", t15_stochastique()),
-              ("T16 politique seule sur le bruit", t16_sto_seule())]
+              ("T16 politique seule sur le bruit", t16_sto_seule()),
+              ("T17 porte qui se referme", t17_ferme())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

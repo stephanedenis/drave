@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-ferme.md`](rapport-pensee-ferme.md) | **B13** — la porte qui se referme : 27 nœuds/but, sonde 5, coût 57, **20/20** |
 | [`rapport-pensee-sto-seule.md`](rapport-pensee-sto-seule.md) | **B13** — la politique seule sur le bruit : 8–10 pas, 1–3 essais, 15/15 buts, **19/19** |
 | [`rapport-pensee-stochastique.md`](rapport-pensee-stochastique.md) | **B13** — la porte stochastique : 80 %, 30 nœuds/but, sonde 7, **18/18** |
 | [`rapport-pensee-seule.md`](rapport-pensee-seule.md) | **B13** — la politique seule : 8 pas, 15/15 buts sans A*, **17/17** |

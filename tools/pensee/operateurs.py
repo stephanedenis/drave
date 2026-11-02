@@ -548,6 +548,61 @@ LABYRINTHE_PORTE_STO = Probleme(
 )
 
 
+# --------------------------------------------------------------------------- porte qui se referme
+
+def _deplacer_pf(e: Etat, dx: int, dy: int, profondeur: int = 1) -> list[Etat]:
+    x, y, o = _xy_p(e)[0], _xy_p(e)[1], _open_p(e)
+    nx, ny = x + dx, y + dy
+    if not _libre_p(nx, ny, o):
+        return []
+    # la porte se referme dès qu'on l'a franchie (ou qu'on la quitte)
+    o2 = False if (nx, ny) == PORTE else o
+    return [_etat_p(nx, ny, o2, e.empreinte(), e.profondeur + profondeur)]
+
+
+def pas_pf(e: Etat, _p: dict | None = None) -> list[Etat]:
+    return [c for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)) for c in _deplacer_pf(e, dx, dy)]
+
+
+def saut_pf(e: Etat, _p: dict | None = None) -> list[Etat]:
+    return [c for dx, dy in ((2, 0), (-2, 0), (0, 2), (0, -2)) for c in _deplacer_pf(e, dx, dy, 2)]
+
+
+def sonde_pf(e: Etat, _p: dict | None = None) -> list[Etat]:
+    p = POLITIQUE[0]
+    if p is None:
+        return []
+    direction = p.propose(e, P_BUT)
+    p.appels += 1
+    if not direction:
+        return []
+    x, y = _xy_p(e)
+    open_ = _open_p(e) or ((x, y) == (3, 2) and direction == "bas")
+    dx = {"droite": 1, "gauche": -1}.get(direction, 0)
+    dy = {"bas": 1, "haut": -1}.get(direction, 0)
+    nx, ny = x + dx, y + dy
+    if not _libre_p(nx, ny, open_):
+        return []
+    o2 = False if (nx, ny) == PORTE else open_
+    return [_etat_p(nx, ny, o2, e.empreinte(), e.profondeur + 1)]
+
+
+REGISTRE_PF = Registre({
+    "pas": Operateur("pas", "symbolique", 1.0, pas_pf, "un pas ; la porte se referme"),
+    "saut": Operateur("saut", "numérique", 2.0, saut_pf, "un saut ; la porte se referme"),
+    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_pf, "la politique ouvre la porte"),
+})
+
+LABYRINTHE_PORTE_FERME = Probleme(
+    nom="labyrinthe_porte_ferme",
+    initial=lambda: _etat_p(0, 0, False),
+    operateurs={n: o.applique for n, o in REGISTRE_PF.operateurs.items()},
+    but=but_p,
+    heuristique=heuristique_p,
+    score=score_p,
+)
+
+
 class DRVM:
     """Le conteneur d'exécution : registre, politique, moteur, trace, bilan."""
 
@@ -590,4 +645,5 @@ __all__ = ["BUT", "COTE", "DRVM", "GRILLE", "Operateur", "Politique", "Politique
            "PolitiqueManhattan", "REGISTRE", "Registre", "but", "heuristique", "pas", "saut",
            "score", "sonde", "CADENAS", "REGISTRE_CADENAS", "PolitiqueCadenas",
            "PolitiqueCadenasAveugle", "LABYRINTHE", "MURS", "REGISTRE_L", "PolitiqueApprise",
-           "LABYRINTHE_PORTE", "REGISTRE_P", "LABYRINTHE_PORTE_STO", "REGISTRE_PSTO"]
+           "LABYRINTHE_PORTE", "REGISTRE_P", "LABYRINTHE_PORTE_STO", "REGISTRE_PSTO",
+           "LABYRINTHE_PORTE_FERME", "REGISTRE_PF"]

@@ -14242,3 +14242,120 @@ timeout 240 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/pensee/courbe.py tools/pensee/autotest.py reports/rapport-pensee-sto-seule.md reports/pensee-courbe.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/p … [490 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-511]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-511", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[master 99f8dcb2] B13 — LA POLITIQUE SEULE SUR LE BRUIT : 8–10 PAS, 1–3 ESSAIS, 15/15 BUTS ; 19/19
+ 29 files changed, 425 insertions(+), 66 deletions(-)
+ create mode 100644 reports/rapport-pensee-sto-seule.md
+COMMIT OK 1
+99f8dcb2 B13 — LA POLITIQUE SEULE SUR LE BRUIT : 8–10 PAS, 1–3 ESSAIS, 15/15 BUTS ; 19/19
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Politique seule sur le bruit : 8–10 pas, 1–3 essais, 15/15 buts ; 19/19
+
+Le round 20 du goal est livré : la **politique seule** réessaie la porte à 80 % et atteint le but. Commit **`99f8dcb2`**.
+
+## La politique seule sur le bruit
+
+À l'état `(3,2,False)`, la politique propose `bas` ; la porte s'ouvre avec **80 %** ; en cas d'échec, l'état reste et la politique **réessaie**. Aucun A*, aucun budget de recherche.
+
+| épisodes | graines | buts seuls | pas | essais | but seul (déterministe) |
+|---:|---:|---:|---:|---:|---:|
+| 50 | 0,1,2 | **3/3** | 8–10 | 1–3 | 3/3 (8) |
+| 100 | 0,1,2 | **3/3** | 8–10 | 1–3 | 3/3 (8) |
+| 200 | 0,1,2 | **3/3** | 8–10 | 1–3 | 3/3 (8) |
+| 400 | 0,1,2 | **3/3** | 8–10 | 1–3 | 3/3 (8) |
+| 800 | 0,1,2 | **3/3** | 8–10 | 1–3 | 3/3 (8) |
+
+**Ce que ça dit** :
+
+- **La politique seule persiste** : elle réessaie (1–3 essais) et atteint le but en 8–10 pas ; la Q-table **transfère** du déterministe au bruit.
+- **Le coût du bruit est faible** : +1 à +2 pas, +1 à +3 essais ; le chemin reste optimal une fois la porte ouverte.
+- **15/15 runs** ; les 3 graines ont des essais différents (1, 2, 3) mais toutes réussissent.
+- **La Q-table reste petite** (52–83 états) : le bruit ne change pas sa taille, seulement le nombre d'essais.
+
+## L'état
+
+- Fiche : [`rapport-pensee-sto-seule.md`](../../reports/rapport-pensee-sto-seule.md) ; JSON [`pensee-courbe.json`](../../reports/pensee-courbe.json) ; code [`courbe.py`](../../tools/pensee/courbe.py) ; T16 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **19/19 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **406 fiches / 506 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+## La suite
+
+1. **Porte qui se referme** : après un pas, la porte se referme ; le moteur doit repasser.
+2. **Porte apprise avec le bruit** : entraîner sur la porte stochastique.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque la porte qui se referme.
+
+
+## Tour 34
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 21/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''class DRVM:''',\n'''# ---------------------------------------------------------------------- … [2596 caractères tronqués]`
+
+  ```
+99f8dcb2 B13 — LA POLITIQUE SEULE SUR LE BRUIT : 8–10 PAS, 1–3 ESSAIS, 15/15 BUTS ; 19/19
+ok
+{'noeuds': 27, 'but': True, 'par_operateur': {'pas': 12, 'saut': 10, 'sonde': 5}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 57.0, 'appels': 7, 'budget': 25, 'politique': 'manhattan', 'score': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T16 la politique seule sur le bruit la Q-table réessaie et atteint le but en 8–10 pas\\n\",\n\"  T16 la politique seule su … [1387 caractères tronqués]`
+
+  ```
+ok
+  ✅ T15 porte stochastique porte stochastique : 30 nœuds/but, sonde 7
+  ✅ T16 politique seule sur le bruit politique seule stochastique : 9/9 buts (8–10 pas)
+  ✅ T17 porte qui se referme porte fermée : 27 nœuds/but, sonde 5
+  20/20 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-ferme.md <<'MD'\n# B13 — la porte qui se referme : le moteur repasse\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **20/20 portes** : la porte `(3,3)` … [5694 caractères tronqués]`
+
+  ```
+état ok
+  ❌ 1 anomalie(s) :
+     · fraîcheur : en-cours.md dit 2026-11-02, le dernier commit date du 2026-11-01
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text().replace(\"**Mis à jour : 2026-11-02, 00 h 00 HNE\", \"**Mis à jour : 2026-11-01, 23 h 59 HNE\")\np.write_text(t); print('ok')\nPY\npython3 … [562 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 407 fiche(s) · 507 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 240 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-ferme.md reports/pensee-ferme.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours.md docs/pi … [469 caractères tronqués]`

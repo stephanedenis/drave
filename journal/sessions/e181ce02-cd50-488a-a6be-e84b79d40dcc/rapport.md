@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 28.2 h |
-| Tours | 33 |
-| Messages | 645 |
-| Appels d'outils | 636 |
+| Tours | 34 |
+| Messages | 653 |
+| Appels d'outils | 642 |
 | Fichiers touchés | 25 |
-| Commandes | 511 |
+| Commandes | 516 |
 | Sous-agents | 2 |
-| Commits | 48 |
+| Commits | 49 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -97,6 +97,8 @@
 **Tour 32** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 33** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 34** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1783,6 +1785,58 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - bash — Committer la politique seule sur le bruit
 - job_output
 
+**Synthèse produite :**
+
+⏵ Politique seule sur le bruit : 8–10 pas, 1–3 essais, 15/15 buts ; 19/19
+
+Le round 20 du goal est livré : la **politique seule** réessaie la porte à 80 % et atteint le but. Commit **`99f8dcb2`**.
+
+\## La politique seule sur le bruit
+
+À l'état `(3,2,False)`, la politique propose `bas` ; la porte s'ouvre avec **80 %** ; en cas d'échec, l'état reste et la politique **réessaie**. Aucun A*, aucun budget de recherche.
+
+| épisodes | graines | buts seuls | pas | essais | but seul (déterministe) |
+|---:|---:|---:|---:|---:|---:|
+| 50 | 0,1,2 | **3/3** | 8–10 | 1–3 | 3/3 (8) |
+| 100 | 0,1,2 | **3/3** | 8–10 | 1–3 | 3/3 (8) |
+| 200 | 0,1,2 | **3/3** | 8–10 | 1–3 | 3/3 (8) |
+| 400 | 0,1,2 | **3/3** | 8–10 | 1–3 | 3/3 (8) |
+| 800 | 0,1,2 | **3/3** | 8–10 | 1–3 | 3/3 (8) |
+
+**Ce que ça dit** :
+
+- **La politique seule persiste** : elle réessaie (1–3 essais) et atteint le but en 8–10 pas ; la Q-table **transfère** du déterministe au bruit.
+- **Le coût du bruit est faible** : +1 à +2 pas, +1 à +3 essais ; le chemin reste optimal une fois la porte ouverte.
+- **15/15 runs** ; les 3 graines ont des essais différents (1, 2, 3) mais toutes réussissent.
+- **La Q-table reste petite** (52–83 états) : le bruit ne change pas sa taille, seulement le nombre d'essais.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-sto-seule.md`](../../reports/rapport-pensee-sto-seule.md) ; JSON [`pensee-courbe.json`](../../reports/pensee-courbe.json) ; code [`courbe.py`](../../tools/pensee/courbe.py) ; T16 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **19/19 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **406 fiches / 506 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé.
+
+\## La suite
+
+1. **Porte qui se referme** : après un pas, la porte se referme ; le moteur doit repasser.
+2. **Porte apprise avec le bruit** : entraîner sur la porte stochastique.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque la porte qui se referme.
+
+### Tour 34 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Ajouter la porte qui se referme et la tester
+- bash — Ajouter la porte T17 et lancer l'autotest
+- bash — Écrire la fiche de la porte qui se referme
+- bash — Ajuster la date et passer les portes
+- bash — Committer la porte qui se referme
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1862,7 +1916,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 471 autres
+- … et 476 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2055,4 +2109,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round 
 - B13 — LA POLITIQUE SEULE : 8 PAS, 15/15 BUTS SANS A* ; 17/17" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "POLITIQUE SEULE"; then echo "COMMIT OK $i"
 - B13 — LA PORTE STOCHASTIQUE : 80 %, 30 NŒUDS/BUT, SONDE 7 ; 18/18" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE STOCHASTIQUE"; then echo "COMMI
 - B13 — LA POLITIQUE SEULE SUR LE BRUIT : 8–10 PAS, 1–3 ESSAIS, 15/15 BUTS ; 19/19" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SUR LE BRUIT"; then ec
+- B13 — LA PORTE QUI SE REFERME : 27 NŒUDS/BUT, SONDE 5, COÛT 57 ; 20/20" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SE REFERME"; then echo "COMMIT O
 
