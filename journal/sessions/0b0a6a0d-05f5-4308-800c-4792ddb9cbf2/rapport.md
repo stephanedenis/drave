@@ -7,14 +7,14 @@
 | Identifiant | `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:17 |
-| Durée | 32.3 h |
+| Durée | 32.4 h |
 | Tours | 18 |
-| Messages | 1294 |
-| Appels d'outils | 1201 |
+| Messages | 1297 |
+| Appels d'outils | 1204 |
 | Fichiers touchés | 11 |
-| Commandes | 966 |
+| Commandes | 968 |
 | Sous-agents | 0 |
-| Commits | 49 |
+| Commits | 50 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*235 appels d'outils.* Actions notables :
+*238 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 157 autres
+- … et 159 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 926 autres
+- … et 928 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1224,6 +1224,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - N2 → R1 — CE QUE LA NUIT DIT À LA FENÊTRE : POSITION RELATIVE, FENÊTRE ENTRAÎNÉE, CAPACITÉ  Note de passage vers la ligne R : trois faits mesurés (la position a
 - N2 → R1 — CE QUE LA NUIT DIT À LA FENÊTRE : POSITION RELATIVE, FENÊTRE ENTRAÎNÉE, CAPACITÉ  Trois faits mesurés (la position absolue est un défaut d'architectur
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/msg-r1.txt <<'EOF' N2 → R1 — CE QUE LA NUIT DIT À LA FENÊTRE : POSITION RELATIVE, FENÊTRE ENTRA
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = r
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() s = r
 

@@ -23583,3 +23583,248 @@ Continue working toward the objective in this same session. Treat the current wo
 [status: running]
   ```
 
+### 🤖 Assistant
+
+⏵ Round 124 : job d'attente du manifeste OCR toujours en cours (bash-1053)
+
+**Round 124/1000 — l'attente est automatisée.**
+
+- **Le job `bash-1053`** est en cours (pas encore de sortie) : il attend `reports/ocr-pdf.json` (60 min max) et imprimera ses chiffres dès sa sortie.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès le manifeste.
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les 1 264 pages du 8e livre. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; les lignes D (roadmap, chantiers, plan) portent les livraisons ; la revue passe, le T0 est à 3 978.
+
+**Le constat** : tout est vert ; il reste l'OCR puis la clôture à 8 h. Le goal reste actif ; le prochain round lira le manifeste dès que le job le signalera.
+
+
+## Tour 137
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 125/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 125 : je regarde le journal des mesures du 2/11 pendant que l'OCR tourne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; head -18 journal/2026-11-02/mesures.md 2>/dev/null | cut -c1-170; echo \"=== surveillant\"; ps -p 2136539 -o pid,stat,etime= 2>/dev/null; ls reports/ocr-pdf.json 2>&1", "description": "Read measures journal and watcher s … [90 caractères tronqués]`
+
+  ```
+00:37
+# 2026-11-02 — Campagnes et mesures
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
+
+## Commits du jour (8)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 00:00 | `08200b23` | JOURNAL — LE 2 NOVEMBRE : LA CLÔTURE DE LA CAMPAGNE D/R/A | `README.md`, `README.md`, `digest.md` (+7) |
+| 00:02 | `33d76946` | B13 — LA FIABILITÉ QUI DÉRIVE : v FINAL 0,56, 20/20, 8,0 PAS ; 54/54 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+16) |
+| 00:10 | `df42425a` | DONNÉES — LA PRÉPARATION R1.1/R1.2 EST FICÉE : CE QUI EST PRÊT, CE QUI ATTEND N2 | `en-cours.md`, `README.md`, `apprentissage.md` (+11) |
+| 00:12 | `713c0bbc` | B13 — LA DÉRIVE CONTINUE : 5 % → 50 %, v FINAL 0,5, 20/20, 8,6 PAS ; 56/56 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+16) |
+| 00:17 | `19da83fb` | B13 — LA RUPTURE : 90 % D'ERREUR, v FINAL 0,12, 20/20, 8,0 PAS ; 57/57 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
+| 00:24 | `896a3
+… [630 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 125 : le journal des mesures liste 8 commits du jour, surveillant OCR actif (12 min 14)
+
+**Round 125/1000 — le journal du jour est cohérent.**
+
+- **Le journal** (`journal/2026-11-02/mesures.md`) : 8 commits du jour — les miens (`08200b23`, `df42425a`) et ceux de B13 (la dérive, les ruptures, l'alternance, la bascule) ; les sessions partagent le dépôt, chacune avec sa ligne.
+- **Le surveillant OCR** (PID 2136539) tourne depuis 12 min 14 ; il lancera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` (le job `bash-1053` lira ses chiffres).
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les 1 264 pages du 8e livre. **Les documents** sont clos (`5c27a3fb`) ; **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; les lignes D (roadmap, chantiers, plan) portent les livraisons ; la revue passe, le T0 est à 3 978.
+
+**Le constat** : tout est vert ; il reste l'OCR puis la clôture à 8 h. Le goal reste actif.
+
+
+## Tour 138
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 126/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 126 : je vérifie le job d'attente (bash-1053)
+
+- **job_output** `{"job_id": "bash-1053", "wait": false}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 126 : job d'attente du manifeste OCR toujours en cours
+
+**Round 126/1000 — l'attente est automatisée.**
+
+- **Le job `bash-1053`** est en cours (pas encore de sortie) : il attend `reports/ocr-pdf.json` (60 min max) et imprimera ses chiffres dès sa sortie.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès le manifeste.
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les 1 264 pages du 8e livre. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; les lignes D (roadmap, chantiers, plan) portent les livraisons ; la revue passe, le T0 est à 3 978.
+
+**Le constat** : tout est vert ; il reste l'OCR puis la clôture à 8 h. Le goal reste actif.
+
+
+## Tour 139
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 127/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ps -p 2136539 -o pid,stat,etime= 2>/dev/null || echo \"surveillant terminé\"; ls reports/ocr-pdf.json 2>&1; tail -1 /tmp/ocr-pilote.log; ls -la data/corpus_ocr/train.txt", "description": "Check watcher and OCR status", " … [81 caractères tronqués]`
+
+  ```
+00:38
+    PID STAT            
+2136539 S          12:53
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 127 : surveillant OCR actif (12 min 53), OCR dans le 8e livre
+
+**Round 127/1000 — tout est stable.**
+
+- **Le surveillant** (PID 2136539) tourne depuis 12 min 53 ; il attend `reports/ocr-pdf.json` puis lancera le **contrôle 8 Ko**.
+- **Le job `bash-1053`** attend le manifeste et lira ses chiffres.
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les 1 264 pages du 8e livre. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; les lignes D (roadmap, chantiers, plan) portent les livraisons ; la revue passe, le T0 est à 3 978.
+
+**Le constat** : tout est vert et automatisé ; il reste l'OCR puis la clôture à 8 h. Le goal reste actif.
+
+
+## Tour 140
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 128/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 128 : je vérifie le job d'attente (bash-1053)
+
+- **job_output** `{"job_id": "bash-1053", "wait": false}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 128 : job d'attente du manifeste OCR toujours en cours
+
+**Round 128/1000 — l'attente est automatisée.**
+
+- **Le job `bash-1053`** est en cours (pas encore de sortie) : il attend `reports/ocr-pdf.json` (60 min max) et imprimera ses chiffres dès sa sortie.
+- **Le surveillant** (PID 2136539) fera le **contrôle 8 Ko** dès le manifeste.
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les 1 264 pages du 8e livre. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; les lignes D (roadmap, chantiers, plan) portent les livraisons ; la revue passe, le T0 est à 3 978.
+
+**Le constat** : tout est vert et automatisé ; il reste l'OCR puis la clôture à 8 h. Le goal reste actif.
+
+
+## Tour 141
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 129/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 129 : je lis l'ordre du jour du plan de travail pendant que l'OCR tourne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; sed -n '43,58p' docs/pilotage/plan-travail.md | cut -c1-200", "description": "Read plan agenda section", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+00:39
+**Le rôle d'intégration** (le « hub ») : tient `en-cours`, `roadmap`, `chantiers`, ce plan,
+`journal/`, `reports/INDEX.md`, `AGENTS.md`, les compteurs et la revue de documentation. Il ne
+code pas un chantier ; il **intègre** les sections des sessions, met à jour les compteurs, vérifie
+les portes et commite. Il est **un seul à la fois** (voir § 4).
+
+**Les sous-agents** : 2 à 4 par session, sur des tâches **bornées** (une mesure, un outil, une
+fiche, un audit) ; ils ne touchent ni `en-cours`, ni la roadmap, ni `AGENTS.md` ; ils rendent un
+diff que la session intègre (AGENTS § 10, `continuite.md` § 2). Le fan-out massif (`workflow`) est
+réservé aux **audits en lecture seule**.
+
+## 3. Les territoires — qui écrit quoi
+
+**Un fichier n'a qu'un écrivain à la fois.** Les réservations sont des globs ; elles se déclarent
+dans le plan de chaque session et se vérifient par `tools/sessions.py --check`.
+
+| session | réservé (écriture) | lit (sans écrire) |
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 129 : le plan de travail relu (rôle du hub, territoires), surveillant OCR actif
+
+**Round 129/1000 — le plan de travail est cohérent.**
+
+- **Le plan** (`docs/pilotage/plan-travail.md`) : le rôle d'intégration (le hub), les sous-agents, les territoires (un fichier, un écrivain), les portes — c'est le cadre dans lequel la session D/R/A travaille.
+- **Le surveillant OCR** (PID 2136539) tourne depuis ~13 min ; il lancera le **contrôle 8 Ko** dès `reports/ocr-pdf.json` (le job `bash-1053` lira ses chiffres).
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les 1 264 pages du 8e livre. **Les documents** sont clos (`5c27a3fb`) ; **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; les lignes D (roadmap, chantiers, plan) portent les livraisons ; la revue passe, le T0 est à 3 978.
+
+**Le constat** : tout est vert et automatisé ; il reste l'OCR puis la clôture à 8 h. Le goal reste actif.
+
+
+## Tour 142
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 130/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 130 : je vérifie le job d'attente (bash-1053)
+
+- **job_output** `{"job_id": "bash-1053", "wait": false}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+

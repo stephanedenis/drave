@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**16 commits** · **3 session(s)** · **7 thème(s)**
+**17 commits** · **3 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,15 +16,15 @@
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 8 | [mesures.md](mesures.md) |
+| mesures | 9 | [mesures.md](mesures.md) |
 | portes | 2 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 32.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 31.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 32.4 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 32.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `fe3c05f0-834b-44f2-8739-501865d652c1` | Lecture de en-cours.md et choix de tâche | 2026-10-31 17:35 | 32.1 h | [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -47,6 +47,7 @@
 | 00:28 | `0fbb8692` | B13 — L'ALTERNANCE ALÉATOIRE : BASCULE 1/500, v FINAL 0,12, 20/20, 8,0 PAS ; 59/59 |
 | 00:32 | `fa2d7fad` | B13 — LA BASCULE FRÉQUENTE : 1/50, v FINAL 0,78, 20/20, 8,0 PAS ; 60/60 |
 | 00:34 | `93be0a1d` | CHANTIERS — LA LIGNE D PORTE LES DIX CORPUS, LE PDF, LES DOCUMENTS ET L'OCR |
+| 00:37 | `2ff4baf9` | B13 — LA BASCULE TRÈS FRÉQUENTE : 1/10, v FINAL 0,28, 20/20, 9,4 PAS ; 61/61 |
 
 ## Le récit de la journée (écrit à la main)
 

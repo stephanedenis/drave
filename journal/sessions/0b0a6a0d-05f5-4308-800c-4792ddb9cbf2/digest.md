@@ -16428,3 +16428,35 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-965", "timeout_ms": 700000, "wait": true}`
+
+  ```
+00:38
+work/n2k/base-multi-34m.pt
+=== teacher ===
+=== multi34 ===
+}
+75
+  porte-tableaux         ✅                           1 s    ✅ la page vivante date du dernier commit (2026-11-02)
+  porte-tokenizer-kimi   ✅                           9 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 timeout 900 ~/gpu-env/bin/python work/n2k/evalue.py work/n2k/base-multi-34m.pt 2>&1 | grep -v Loading | tee work/n2k/eval-multi-34m.json", "description": "Evaluate the multilingual 34M model"}`
+
+  ```
+{"fichier": "base-multi-34m.pt", "fr": 5.5825, "en": 6.0952, "de": 6.2443, "es": 5.9133, "it": 6.0405, "pt": 6.6244, "ru": 3.8204, "ar": 3.6818, "ja": 5.5826, "zh": 8.9806}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-n2-multilingue-34m.md <<'EOF'\n# N2.t — Le multilingue à 34,3 M : 6,68 → 5,89 → 5,58, le rendement décroît\n\n> **Ligne de roadmap** : N2 · **Date** : 2026-11-02 · **Verdict** : à recette égale (positions\n> [0, … [4334 caractères tronqués]`
+
+  ```
+fiche multi34 écrite
+en-cours ok
+roadmap ok
+  T0 max : 3986 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 459 fichiers, le disque en a 460
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1389 caractères tronqués]`
