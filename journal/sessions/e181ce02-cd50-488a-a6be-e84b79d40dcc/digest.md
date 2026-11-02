@@ -13524,3 +13524,169 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifier_schemas.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/verifie_en_cours.py\" … [1008 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py         EXIT=0
+python3 tools/taille_documents.py            EXIT=0
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 120 python3 -m tools.pensee.autotest EXIT=0
+[still running after 60000ms; moved to background job bash-483]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-483", "timeout_ms": 600000, "wait": true}`
+
+  ```
+30 files changed, 575 insertions(+), 79 deletions(-)
+ create mode 100644 reports/pensee-porte.json
+ create mode 100644 reports/rapport-pensee-porte.md
+COMMIT OK 1
+5853b206 B13 — LA PORTE NEURONALE : BONNE POLITIQUE 28 NŒUDS/58 (SONDE 5), AVEUGLE 200/483 SANS BUT ; 14/14
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte neuronale : bonne politique 28 nœuds/58 (sonde 5), aveugle 200/483 sans but ; 14/14
+
+Le round 15 du goal est livré : la **porte neuronale** rend le modèle **nécessaire**, pas seulement utile. Commit **`5853b206`**.
+
+## La porte
+
+Grille **5×5**, murs `{(0,1),(1,1),(2,1),(4,1),(4,2),(1,2),(2,2),(1,3),(3,4)}`, porte `(3,3)`, départ `(0,0)`, but `(4,4)`. La porte ne s'ouvre que si la **politique** propose la direction de la porte (`bas` depuis `(3,2)`) ; les `pas`/`saut` sont bloqués par la porte fermée.
+
+| politique | nœuds | pas | saut | sonde | coût | appels | but |
+|---|---:|---:|---:|---:|---:|---:|---|
+| **manhattan** | **28** | 13 | 10 | **5** | **58** | 7 | **oui** |
+| aveugle | 200 | 100 | 39 | 61 | 483 | 66 | **non** |
+
+**Ce que ça dit** :
+
+- **Le neuronal est nécessaire** : la porte ne s'ouvre que par la **bonne** politique ; l'aveugle propose la mauvaise direction, la porte reste fermée, le but est inatteignable.
+- **L'aveugle épuise son budget** (200 nœuds) sans atteindre le but ; le coût 483 est le prix de ses 61 appels inutiles à la sonde.
+- **La bonne politique paie** 58 pour 28 nœuds, dont 5 sondes : le neuronal est **cher** et **décisif** ici.
+- **La porte est le seul chemin** : les murs `(4,2)` et `(3,4)` bouchent les contournements.
+
+## L'état
+
+- Fiche : [`rapport-pensee-porte.md`](../../reports/rapport-pensee-porte.md) ; JSON [`pensee-porte.json`](../../reports/pensee-porte.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T11 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **14/14 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **399 fiches / 500 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé ; la session R4.4 doit le rafraîchir.
+
+## La suite
+
+1. **Politique DRVM/native** : brancher un vrai modèle quand ses poids seront là ; la porte mesurera la **qualité** de la politique, pas seulement sa nécessité.
+2. **Coût mesuré** : remplacer le coût 5 par la latence réelle.
+3. **L** : 200 réels atteints ; le gold peut encore grandir.
+4. **B13** : une porte **apprise** (le modèle doit découvrir la direction) plutôt que déclarée.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque la porte apprise ou la politique DRVM/native.
+
+
+## Tour 29
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 16/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- cadenas (le ne … [3144 caractères tronqués]`
+
+  ```
+5853b206 B13 — LA PORTE NEURONALE : BONNE POLITIQUE 28 NŒUDS/58 (SONDE 5), AVEUGLE 200/483 SANS BUT ; 14/14
+ok
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 214, in __init__
+    self.rng = random.Random(graine)
+               ^^^^^^
+NameError: name 'random' is not defined. Did you forget to import 'random'?
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text().replace(\"from collections import Counter\\nfrom dataclasses import dataclass, field\", \"import random\\nfrom collections import Counter … [547 caractères tronqués]`
+
+  ```
+ok
+200 q 67 {'noeuds': 30, 'but': True, 'par_operateur': {'pas': 13, 'saut': 10, 'sonde': 7}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 68.0, 'appels': 7, 'budget': 28, 'politique': 'apprise', 'score': 1.0}
+600 q 69 {'noeuds': 30, 'but': True, 'par_operateur': {'pas': 13, 'saut': 10, 'sonde': 7}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 68.0, 'appels': 7, 'budget': 28, 'politique': 'apprise', 'score': 1.0}
+1200 q 83 {'noeuds': 30, 'but': True, 'par_operateur': {'pas': 13, 'saut': 10, 'sonde': 7}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 68.0, 'appels': 7, 'budget': 28, 'politique': 'apprise', 'score': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T11 la porte neuronale              la porte ne s'ouvre que par la bonne politique ; l'aveugle échoue\\n\",\n\"  T11 la po … [1431 caractères tronqués]`
+
+  ```
+ok
+  ✅ T10 labyrinthe non linéaire labyrinthe : bon 17 nœuds/34.0 (sonde 2) ; mauvais 15 nœuds/24.0 (sonde 0) ; buts True/True
+  ✅ T11 porte neuronale    porte : bon 28 nœuds/58.0 but ; aveugle 200 nœuds/483.0 sans but
+  ✅ T12 porte apprise      porte apprise : 67 états-Q, 30 nœuds/but, sonde 7
+  15/15 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-porte-apprise.md <<'MD'\n# B13 — la porte apprise : la Q-table trouve la porte seule\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-01 · **Verdict** : ✅\n> **15/15 portes** :  … [7085 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 400 fiche(s) · 501 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 violation(s) :
+     · T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"6 bis) ~~opérateurs/nécessaire/labyrinthe/porte/apprise~~ (**15/15**) ;\", \"6 bis) ~~opérateurs~~ (**15/15**) ;\")\nt=t.re … [690 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 violation(s) :
+     · T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 400 fiche(s) · 501 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 180 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"pragmatique **1,0/1,0/0,994/0,889**\", \"pragmatique **0,994–1,0**\")\nt=t.replace(\"**L** — 200+ réelles ; **B13** — DRVM/ … [307 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 violation(s) :
+     · T0 : 4003 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 400 fiche(s) · 501 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"opérateurs 15/15\", \"opérateurs 15\")\nt=t.replace(\"attachement tête 1,0/0,966/0,932 (59 ambiguës), hasard 0,015\", \"att … [694 caractères tronqués]`
+
+  ```
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 400 fiche(s) · 501 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 180 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-porte-apprise.md reports/pensee-porte-apprise.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en- … [498 caractères tronqués]`

@@ -17096,3 +17096,10 @@ en: pas encore
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 55); do [ -f reports/corpus-wiki-en-texte.json ] && break; sleep 20; done; echo \"attente $((i*20))s\"; ls -la reports/corpus-wiki-en-texte.json 2>/dev/null || { echo \"en: pas encore\"; tail -1 /tmp/run-texte-en.log | … [807 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-859]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\ns=s.replace(\"fr/ar/pt/zh/ja/it/ru/es/de (**12,12 M** ; **8 Ko 0**) ; en et le PDF en cours\",\n            \"les 9 (**12,12 M** ; **8 Ko 0 … [2579 caractères tronqués]`

@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 27.8 h |
-| Tours | 28 |
-| Messages | 601 |
-| Appels d'outils | 602 |
+| Tours | 29 |
+| Messages | 611 |
+| Appels d'outils | 610 |
 | Fichiers touchés | 25 |
-| Commandes | 483 |
+| Commandes | 491 |
 | Sous-agents | 2 |
-| Commits | 42 |
+| Commits | 43 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -87,6 +87,8 @@
 **Tour 27** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 28** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 29** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1516,6 +1518,58 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round
 - bash — Passer les portes et committer la porte neuronale
 - job_output
 
+**Synthèse produite :**
+
+⏵ Porte neuronale : bonne politique 28 nœuds/58 (sonde 5), aveugle 200/483 sans but ; 14/14
+
+Le round 15 du goal est livré : la **porte neuronale** rend le modèle **nécessaire**, pas seulement utile. Commit **`5853b206`**.
+
+\## La porte
+
+Grille **5×5**, murs `{(0,1),(1,1),(2,1),(4,1),(4,2),(1,2),(2,2),(1,3),(3,4)}`, porte `(3,3)`, départ `(0,0)`, but `(4,4)`. La porte ne s'ouvre que si la **politique** propose la direction de la porte (`bas` depuis `(3,2)`) ; les `pas`/`saut` sont bloqués par la porte fermée.
+
+| politique | nœuds | pas | saut | sonde | coût | appels | but |
+|---|---:|---:|---:|---:|---:|---:|---|
+| **manhattan** | **28** | 13 | 10 | **5** | **58** | 7 | **oui** |
+| aveugle | 200 | 100 | 39 | 61 | 483 | 66 | **non** |
+
+**Ce que ça dit** :
+
+- **Le neuronal est nécessaire** : la porte ne s'ouvre que par la **bonne** politique ; l'aveugle propose la mauvaise direction, la porte reste fermée, le but est inatteignable.
+- **L'aveugle épuise son budget** (200 nœuds) sans atteindre le but ; le coût 483 est le prix de ses 61 appels inutiles à la sonde.
+- **La bonne politique paie** 58 pour 28 nœuds, dont 5 sondes : le neuronal est **cher** et **décisif** ici.
+- **La porte est le seul chemin** : les murs `(4,2)` et `(3,4)` bouchent les contournements.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-porte.md`](../../reports/rapport-pensee-porte.md) ; JSON [`pensee-porte.json`](../../reports/pensee-porte.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T11 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **14/14 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **399 fiches / 500 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+- `sessions.py` : le plan R4.4 `fe3c05f0` reste périmé ; la session R4.4 doit le rafraîchir.
+
+\## La suite
+
+1. **Politique DRVM/native** : brancher un vrai modèle quand ses poids seront là ; la porte mesurera la **qualité** de la politique, pas seulement sa nécessité.
+2. **Coût mesuré** : remplacer le coût 5 par la latence réelle.
+3. **L** : 200 réels atteints ; le gold peut encore grandir.
+4. **B13** : une porte **apprise** (le modèle doit découvrir la direction) plutôt que déclarée.
+
+Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round attaque la porte apprise ou la politique D
+… [11 caractères tronqués]
+
+### Tour 29 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Ajouter la politique apprise par Q-learning et la tester
+- bash — Importer random et tester la politique apprise
+- bash — Ajouter la porte T12 et lancer l'autotest
+- bash — Écrire la fiche de la porte apprise et l'état
+- bash — Rentrer dans T0 et passer les portes
+- bash — Trim final pour T0
+- bash — Trim final et portes
+- bash — Committer la porte apprise
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1595,7 +1649,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 443 autres
+- … et 451 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1723,7 +1777,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round
 
 ## 5. Erreurs rencontrées
 
-11 sorties en erreur ou divergentes. Les premières :
+12 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -1736,6 +1790,7 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round
 - **T19** : COMPILE=0 [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 213, in penser    
 - **T19** : ok [stderr] Traceback (most recent call last):   File "<stdin>", line 5, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 231, in instantane     b[
 - **T21** : 35bf5588 DONNÉES — NEUF CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES, DE) : 14,51 M ARTICLES, 59,0 GO, 8 KO 0 === HEAD has ? ===  docs/pilotage/en-cours.md                          | 22 ++
+- **T29** : 5853b206 B13 — LA PORTE NEURONALE : BONNE POLITIQUE 28 NŒUDS/58 (SONDE 5), AVEUGLE 200/483 SANS BUT ; 14/14 ok [stderr] Traceback (most recent call last):   File "<stdin>", line 4, in <module>   File 
 
 ## 6. Commits
 
@@ -1781,4 +1836,5 @@ Le goal `goal-7beacaeb` reste actif jusqu'à **8 h demain** ; le prochain round
 - L — GOLD 360 : 200 RÉELS + 160 SYNTHÉTIQUES, POS 0,772, TÊTE 0,966 (RÉEL 0,946)" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "GOLD 360"; then echo "C
 - B13 — LE LABYRINTHE NON LINÉAIRE : BONNE POLITIQUE 17 NŒUDS/34 (SONDE 2), AVEUGLE 15/24 (SONDE 0) ; 13/13" 2>&1 | tail -3   if git log -1 --format='%s' | grep -
 - B13 — LA PORTE NEURONALE : BONNE POLITIQUE 28 NŒUDS/58 (SONDE 5), AVEUGLE 200/483 SANS BUT ; 14/14" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORT
+- B13 — LA PORTE APPRISE : Q-TABLE 67 ÉTATS, 30 NŒUDS/BUT (SONDE 7), 200 ÉPISODES ; 15/15" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE APPRISE";
 
