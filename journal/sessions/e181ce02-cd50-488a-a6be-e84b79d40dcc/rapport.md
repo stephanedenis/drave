@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 32.8 h |
+| Durée | 32.9 h |
 | Tours | 88 |
-| Messages | 1163 |
-| Appels d'outils | 1038 |
+| Messages | 1165 |
+| Appels d'outils | 1040 |
 | Fichiers touchés | 25 |
-| Commandes | 843 |
+| Commandes | 844 |
 | Sous-agents | 2 |
-| Commits | 109 |
+| Commits | 110 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4658,7 +4658,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil d'ou
 
 ### Tour 88 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Tester le seuil d'oubli 0,2 / 0,1 / 0,05
 - bash — Ajouter la porte T71 (seuil d'oubli)
@@ -4666,6 +4666,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil d'ou
 - bash — Trim README et portes
 - bash — Committer le seuil d'oubli
 - job_output
+- bash — Committer le seuil d'oubli (2e essai)
 
 ## 3. Travail accompli
 
@@ -4746,7 +4747,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil d'ou
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 803 autres
+- … et 804 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -5002,5 +5003,6 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round localise le **seuil d'ou
 - B13 — LA MÉMOIRE COURTE : Q × 0,9/10, 20/20, 10,0 PAS ; 71/71" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MÉMOIRE COURTE"; then echo "COMMIT OK $i"
 - B13 — LA MÉMOIRE TRÈS COURTE : Q × 0,5/10, 20/20, 8,0 PAS ; 72/72" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "MÉMOIRE TRÈS COURTE"; then echo "COMM
 - B13 — L'OUBLI TOTAL : 0/20 BUTS, LA MÉMOIRE EST NÉCESSAIRE ; 73/73" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "OUBLI TOTAL"; then echo "COMMIT OK $
+- B13 — LE SEUIL D'OUBLI : ×0,5 RÉUSSIT, ×0,2 ÉCHOUE, SEUIL DANS (0,2 ; 0,5] ; 74/74" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL D'OUBLI"; then
 - B13 — LE SEUIL D'OUBLI : ×0,5 RÉUSSIT, ×0,2 ÉCHOUE, SEUIL DANS (0,2 ; 0,5] ; 74/74" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "SEUIL D'OUBLI"; then
 

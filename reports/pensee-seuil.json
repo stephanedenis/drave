@@ -1,0 +1,37 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "74/74",
+ "seuil": "dans (0,2 ; 0,5]",
+ "lignes": [
+  {
+   "facteur": 0.5,
+   "buts": 20,
+   "etats_q": 586,
+   "pas": 8.0
+  },
+  {
+   "facteur": 0.2,
+   "buts": 0,
+   "etats_q": 646,
+   "pas": 200
+  },
+  {
+   "facteur": 0.1,
+   "buts": 0,
+   "etats_q": 647,
+   "pas": 200
+  },
+  {
+   "facteur": 0.05,
+   "buts": 0,
+   "etats_q": 649,
+   "pas": 200
+  }
+ ],
+ "limites": [
+  "seuil exact non localisé",
+  "oubli uniforme",
+  "toy"
+ ]
+}

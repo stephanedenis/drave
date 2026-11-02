@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-seuil.md`](rapport-pensee-seuil.md) | **B13** — le seuil d'oubli : ×0,5 réussit, ×0,2 échoue, seuil dans (0,2 ; 0,5], **74/74** |
 | [`rapport-pensee-oubli-total.md`](rapport-pensee-oubli-total.md) | **B13** — l'oubli total : 0/20 buts, la mémoire est nécessaire, **73/73** |
 | [`rapport-pensee-oubli-fort.md`](rapport-pensee-oubli-fort.md) | **B13** — la mémoire très courte : Q × 0,5/10, 20/20, 8,0 pas, **72/72** |
 | [`rapport-pensee-oubli.md`](rapport-pensee-oubli.md) | **B13** — la mémoire courte : Q × 0,9/10, 20/20, 10,0 pas, **71/71** |
@@ -30,7 +31,6 @@
 | [`rapport-pensee-chaotique.md`](rapport-pensee-chaotique.md) | **B13** — l'alternance aléatoire : bascule 1/500, v final 0,12, 20/20, **59/59** |
 | [`rapport-pensee-alternance.md`](rapport-pensee-alternance.md) | **B13** — les ruptures répétées : 0,9/0,1 alternés, v final 0,14, 20/20, **58/58** |
 | [`rapport-pensee-rupture.md`](rapport-pensee-rupture.md) | **B13** — la rupture : 90 % d'erreur, v final 0,12, 20/20, 8,0 pas, **57/57** |
-| [`rapport-pensee-adaptive.md`](rapport-pensee-adaptive.md) | **B13** — la fenêtre adaptative : v final 0,8, 20/20, 8,0 pas, **55/55** |
 | [`rapport-pensee-derive.md`](rapport-pensee-derive.md) | **B13** — la fiabilité qui dérive : v final 0,56, 20/20, 8,0 pas, **54/54** |
 | [`rapport-pensee-bayes.md`](rapport-pensee-bayes.md) | **B13** — la croyance bayésienne : un look, 20/20 dès 2000 épisodes, 9,4 pas, **51/51** |
 | [`rapport-pensee-hasard.md`](rapport-pensee-hasard.md) | **B13** — le hasard variable : 20–60 %, 20/20 à chaque taux, 8 pas, **43/43** |

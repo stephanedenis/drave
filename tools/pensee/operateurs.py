@@ -1987,6 +1987,46 @@ def seule_bayes_oubli_total(p: PolitiqueAppriseBayesOubliTotal,
     return seule_observatrice(p, max_pas)
 
 
+class PolitiqueAppriseBayesOubliSeuil(PolitiqueAppriseBayesOubli):
+    """Le bayésien à **facteur d'oubli paramétrable** : Q × facteur tous les 10 épisodes."""
+
+    nom = "bayes_oubli_seuil"
+
+    def __init__(self, episodes: int = 600, graine: int = 0, alpha: float = 0.25,
+                 gamma: float = 0.95, eps: float = 0.25, p_saut: float = 0.2,
+                 p_erreur: float = 0.1, facteur: float = 0.2):
+        super().__init__(episodes=episodes, graine=graine, alpha=alpha, gamma=gamma,
+                         eps=eps, p_saut=p_saut, p_erreur=p_erreur)
+        self.facteur = facteur
+
+    def apprendre(self) -> None:
+        for i in range(self.episodes):
+            if i % 10 == 0:
+                for k in self.q:
+                    self.q[k] *= self.facteur
+            self.p_erreur = 0.1 if i == 3000 else 0.5
+            d = self.rng.randint(0, 1)
+            cle = (0, 0, False, 2)
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain, d = self._pas(cle, a, d)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+
+def seule_bayes_oubli_seuil(p: PolitiqueAppriseBayesOubliSeuil,
+                            max_pas: int = 200) -> tuple[bool, int]:
+    return seule_observatrice(p, max_pas)
+
+
 # --------------------------------------------------------------------------- période qui change
 
 
