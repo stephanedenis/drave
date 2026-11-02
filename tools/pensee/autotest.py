@@ -915,6 +915,22 @@ def t56_chaotique() -> tuple[bool, str]:
                       f"{round(pas_total / 20, 1)} pas")
 
 
+def t57_frequent() -> tuple[bool, str]:
+    """La bascule fréquente : 1/50, 20/20 buts, v final ≈ 0,78."""
+    from .operateurs import PolitiqueAppriseBayesFrequent, seule_bayes_frequent
+    p = PolitiqueAppriseBayesFrequent(episodes=8000, graine=0)
+    p.apprendre()
+    ok = 0
+    pas_total = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, pas = seule_bayes_frequent(p)
+        ok += b
+        pas_total += pas
+    return ok == 20, (f"frequent : {ok}/20 buts, v final {round(p.v, 3)}, "
+                      f"{round(pas_total / 20, 1)} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -970,7 +986,8 @@ def main() -> int:
               ("T53 dérive continue", t53_glisse()),
               ("T54 rupture", t54_rupture()),
               ("T55 ruptures répétées", t55_alternance()),
-              ("T56 alternance aléatoire", t56_chaotique())]
+              ("T56 alternance aléatoire", t56_chaotique()),
+              ("T57 bascule fréquente", t57_frequent())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

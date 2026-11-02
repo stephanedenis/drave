@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-frequent.md`](rapport-pensee-frequent.md) | **B13** — la bascule fréquente : 1/50, v final 0,78, 20/20, 8,0 pas, **60/60** |
 | [`rapport-pensee-chaotique.md`](rapport-pensee-chaotique.md) | **B13** — l'alternance aléatoire : bascule 1/500, v final 0,12, 20/20, **59/59** |
 | [`rapport-pensee-alternance.md`](rapport-pensee-alternance.md) | **B13** — les ruptures répétées : 0,9/0,1 alternés, v final 0,14, 20/20, **58/58** |
 | [`rapport-pensee-rupture.md`](rapport-pensee-rupture.md) | **B13** — la rupture : 90 % d'erreur, v final 0,12, 20/20, 8,0 pas, **57/57** |
@@ -33,7 +34,6 @@
 | [`rapport-pensee-phase-graines.md`](rapport-pensee-phase-graines.md) | **B13** — la phase sur 5 graines : 5/5 buts, 10–14 pas, 376–422 états-Q, **41/41** |
 | [`rapport-pensee-phase.md`](rapport-pensee-phase.md) | **B13** — la période qui change : 3 puis 2 pas, A* 28 nœuds, politique but/10, **40/40** |
 | [`rapport-pensee-periode.md`](rapport-pensee-periode.md) | **B13** — la période variable : 2–5 pas, 4/4 buts, 10 pas, **39/39** |
-| [`rapport-pensee-bouge-graines.md`](rapport-pensee-bouge-graines.md) | **B13** — la porte qui bouge sur 5 graines : 5/5 buts en 10 pas, 230–253 états-Q, **38/38** |
 | [`rapport-pensee-bouge.md`](rapport-pensee-bouge.md) | **B13** — la porte qui bouge : horloge `t % 6`, A* 28 nœuds, politique but/10, **37/37** |
 | [`rapport-pensee-bruit.md`](rapport-pensee-bruit.md) | **B13** — le bruit variable : 50–95 %, 6/6 buts, effort 3 → 1 essai, **36/36** |
 | [`rapport-pensee-mobile.md`](rapport-pensee-mobile.md) | **B13** — la porte mobile : 2 positions, A* 2/2, politique seule but/8, 170 états-Q, **34/34** |

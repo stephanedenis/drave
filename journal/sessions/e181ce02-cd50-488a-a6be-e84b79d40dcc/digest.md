@@ -20411,3 +20411,119 @@ timeout 300 python3 -m tools.pensee.autotest EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-chaotique.md reports/pensee-chaotique.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cour … [510 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-763]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-763", "timeout_ms": 600000, "wait": true}`
+
+  ```
+create mode 100644 journal/2026-11-02/portes.md
+ create mode 100644 reports/pensee-chaotique.json
+ create mode 100644 reports/rapport-pensee-chaotique.md
+COMMIT OK 1
+0fbb8692 B13 — L'ALTERNANCE ALÉATOIRE : BASCULE 1/500, v FINAL 0,12, 20/20, 8,0 PAS ; 59/59
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Alternance aléatoire : bascule 1/500, v final 0,12, 20/20, 8,0 pas ; 59/59
+
+Le round 60 du goal est livré : même une **alternance aléatoire** de fiabilité (bascule 1/500) est absorbée. Commit **`0fbb8692`**.
+
+## L'alternance aléatoire
+
+Même monde que T55, mais la bascule est **aléatoire** : à chaque épisode, p = 1/500 de changer de régime (0,1 ↔ 0,9) ; le nombre de bascules varie.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| 4000 | 20/20 | 0,08 | 742 | 8,6 |
+| **8000** | **20/20** | **0,12** | 820 | 8,0 |
+| alternance régulière (T55) | 20/20 | 0,14 | 797 | 8,0 |
+
+**Ce que ça dit** :
+
+- **Le hasard ne casse rien** : 20/20 aux deux durées ; la fenêtre adaptative suit des bascules imprévisibles.
+- **v suit le dernier régime** (0,12) ; il ne moyenne pas les deux.
+- **Le coût est faible** (8,0 pas à 8000 ; 8,6 à 4000) : la politique s'adapte sans détour.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+## L'état
+
+- Fiche : [`rapport-pensee-chaotique.md`](../../reports/rapport-pensee-chaotique.md) ; JSON [`pensee-chaotique.json`](../../reports/pensee-chaotique.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T56 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **59/59 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **457 fiches / 550 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Bascule fréquente** : 1/50 ; mesurer la dégradation.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round rend la bascule **fréquente** (1/50) pour mesurer la limite.
+
+
+## Tour 74
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 61/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [1999 caractères tronqués]`
+
+  ```
+0fbb8692 B13 — L'ALTERNANCE ALÉATOIRE : BASCULE 1/500, v FINAL 0,12, 20/20, 8,0 PAS ; 59/59
+ok
+4000 q 783 v final 0.32 20 runs: 20 /20 pas moyen 8.0
+8000 q 826 v final 0.78 20 runs: 20 /20 pas moyen 8.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T56 l'alternance aléatoire       bascule 1/500 : 20/20 buts, v final ≈ 0,12\\n\",\n\"  T56 l'alternance aléatoire       ba … [1343 caractères tronqués]`
+
+  ```
+ok
+  ✅ T55 ruptures répétées  alternance : 20/20 buts, v final 0.14, 8.0 pas
+  ✅ T56 alternance aléatoire chaotique : 20/20 buts, v final 0.12, 8.0 pas
+  ✅ T57 bascule fréquente  frequent : 20/20 buts, v final 0.78, 8.0 pas
+  60/60 portes tenues
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-frequent.md <<'MD'\n# B13 — la bascule fréquente : 1/50, 20/20\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **60/60 portes** : la fiabilité bascule * … [6484 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 458 fiche(s) · 551 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2809 mots > budget 2800 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-bouge-graines.md`](rapport-pensee-bouge-graines.md) | **B13** — la porte qui bouge sur 5 graines : 5/5 buts en 1 … [637 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 458 fiche(s) · 551 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+timeout 300 python3 -m tools.pensee.autotest EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/operateurs.py tools/pensee/autotest.py reports/rapport-pensee-frequent.md reports/pensee-frequent.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en-cours. … [492 caractères tronqués]`

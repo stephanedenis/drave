@@ -16421,3 +16421,10 @@ pas 11950 · perte 2.2457 · PPL val 8.206 · 623 s
   ```
 
 - **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/base-multi-34m.pt work/n2j/route-480 2>/dev/null; echo \"=== teacher ===\"; tail -2 work/n2j/teacher-480.log; echo \"=== multi34 ===\"; tail -1 work/n2k/base-multi-34m.log; grep -c \"✅\" /tmp/por … [108 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-965]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-965", "timeout_ms": 700000, "wait": true}`

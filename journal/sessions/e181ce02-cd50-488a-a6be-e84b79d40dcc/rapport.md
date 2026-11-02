@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 31.8 h |
-| Tours | 73 |
-| Messages | 1037 |
-| Appels d'outils | 942 |
+| Durée | 31.9 h |
+| Tours | 74 |
+| Messages | 1045 |
+| Appels d'outils | 948 |
 | Fichiers touchés | 25 |
-| Commandes | 763 |
+| Commandes | 768 |
 | Sous-agents | 2 |
-| Commits | 93 |
+| Commits | 94 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -177,6 +177,8 @@
 **Tour 72** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 73** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 74** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3896,6 +3898,55 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round rend l'alternance **alé
 - bash — Committer l'alternance aléatoire
 - job_output
 
+**Synthèse produite :**
+
+⏵ Alternance aléatoire : bascule 1/500, v final 0,12, 20/20, 8,0 pas ; 59/59
+
+Le round 60 du goal est livré : même une **alternance aléatoire** de fiabilité (bascule 1/500) est absorbée. Commit **`0fbb8692`**.
+
+\## L'alternance aléatoire
+
+Même monde que T55, mais la bascule est **aléatoire** : à chaque épisode, p = 1/500 de changer de régime (0,1 ↔ 0,9) ; le nombre de bascules varie.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| 4000 | 20/20 | 0,08 | 742 | 8,6 |
+| **8000** | **20/20** | **0,12** | 820 | 8,0 |
+| alternance régulière (T55) | 20/20 | 0,14 | 797 | 8,0 |
+
+**Ce que ça dit** :
+
+- **Le hasard ne casse rien** : 20/20 aux deux durées ; la fenêtre adaptative suit des bascules imprévisibles.
+- **v suit le dernier régime** (0,12) ; il ne moyenne pas les deux.
+- **Le coût est faible** (8,0 pas à 8000 ; 8,6 à 4000) : la politique s'adapte sans détour.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-chaotique.md`](../../reports/rapport-pensee-chaotique.md) ; JSON [`pensee-chaotique.json`](../../reports/pensee-chaotique.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T56 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **59/59 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **457 fiches / 550 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Bascule fréquente** : 1/50 ; mesurer la dégradation.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round rend la bascule **fréquente** (1/50) pour mesurer la limite.
+
+### Tour 74 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Tester la bascule fréquente
+- bash — Ajouter la porte T57 (bascule fréquente)
+- bash — Écrire la fiche de la bascule fréquente
+- bash — Trim README et portes
+- bash — Committer la bascule fréquente
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3975,7 +4026,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round rend l'alternance **alé
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 723 autres
+- … et 728 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4216,4 +4267,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round rend l'alternance **alé
 - B13 — LES RUPTURES RÉPÉTÉES : 0,9/0,1 ALTERNÉS, v FINAL 0,14, 20/20, 8,0 PAS ; 58/58" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RUPTURES RÉPÉTÉES"
 - B13 — LES RUPTURES RÉPÉTÉES : 0,9/0,1 ALTERNÉS, v FINAL 0,14, 20/20, 8,0 PAS ; 58/58" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RUPTURES RÉPÉTÉES"
 - B13 — L'ALTERNANCE ALÉATOIRE : BASCULE 1/500, v FINAL 0,12, 20/20, 8,0 PAS ; 59/59" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "ALTERNANCE ALÉATOIRE
+- B13 — LA BASCULE FRÉQUENTE : 1/50, v FINAL 0,78, 20/20, 8,0 PAS ; 60/60" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BASCULE FRÉQUENTE"; then echo "
 
