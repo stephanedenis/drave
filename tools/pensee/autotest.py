@@ -995,6 +995,23 @@ def t61_intra() -> tuple[bool, str]:
                       f"{round(pas_total / 20, 1)} pas")
 
 
+def t62_asym() -> tuple[bool, str]:
+    """La fiabilité asymétrique : 0,9 / 0,5, 20/20 buts, v final ≈ 0,44."""
+    from .operateurs import PolitiqueAppriseBayesAsym, seule_bayes_asym
+    p = PolitiqueAppriseBayesAsym(episodes=4000, graine=0)
+    p.apprendre()
+    ok = 0
+    pas_total = 0
+    for g in range(20):
+        p.rng.seed(1000 + g)
+        b, pas = seule_bayes_asym(p)
+        ok += b
+        pas_total += pas
+    return ok == 20 and 0.35 <= p.v <= 0.65, (
+        f"asym : {ok}/20 buts, v final {round(p.v, 3)}, "
+        f"{round(pas_total / 20, 1)} pas")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1055,7 +1072,8 @@ def main() -> int:
               ("T58 bascule très fréquente", t58_rapide()),
               ("T59 bascule limite", t59_limite()),
               ("T60 régime aléatoire", t60_hasard2()),
-              ("T61 régime intra-épisode", t61_intra())]
+              ("T61 régime intra-épisode", t61_intra()),
+              ("T62 fiabilité asymétrique", t62_asym())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

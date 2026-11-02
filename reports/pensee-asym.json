@@ -1,0 +1,32 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "65/65",
+ "regimes": [
+  0.9,
+  0.5
+ ],
+ "politique": {
+  "episodes": 4000,
+  "graine": 0,
+  "etats_q": 679,
+  "v_final": 0.44,
+  "runs": 20,
+  "buts": 20,
+  "pas_moyen": 8.0
+ },
+ "contraste": {
+  "intra_symetrique": {
+   "v_final": 0.48,
+   "pas": 8.0
+  },
+  "sans_mise_a_jour": {
+   "buts": 0
+  }
+ },
+ "limites": [
+  "deux régimes",
+  "moitié du temps utile",
+  "toy"
+ ]
+}

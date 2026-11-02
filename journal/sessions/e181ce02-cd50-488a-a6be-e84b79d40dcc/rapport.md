@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 32.2 h |
-| Tours | 78 |
-| Messages | 1080 |
-| Appels d'outils | 975 |
+| Tours | 79 |
+| Messages | 1088 |
+| Appels d'outils | 981 |
 | Fichiers touchés | 25 |
-| Commandes | 791 |
+| Commandes | 796 |
 | Sous-agents | 2 |
-| Commits | 98 |
+| Commits | 99 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -187,6 +187,8 @@
 **Tour 77** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 78** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 79** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4155,6 +4157,55 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **régime intra
 - bash — Committer le régime intra-épisode
 - job_output
 
+**Synthèse produite :**
+
+⏵ Régime intra-épisode : bascule à chaque look, v final 0,48, 20/20, 8,0 pas ; 64/64
+
+Le round 65 du goal est livré : même le **régime intra-épisode** (bascule à chaque look) est absorbé — l'information est dans le signe inconnu. Commit **`881b7a12`**.
+
+\## Le régime intra-épisode
+
+Même monde que T60, mais la fiabilité bascule **à chaque look** : l'observation est fiable (0,9) ou antiprédictive (0,1), au hasard, sans que l'agent le sache.
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| **4000** | **20/20** | **0,48** | 516 | 8,0 |
+| 8000 | 20/20 | 0,8 | 570 | 8,0 |
+| régime par épisode (T60) | 20/20 | 0,42 | 632 | 8,0 |
+
+**Ce que ça dit** :
+
+- **L'information est dans le signe inconnu** : que l'observation soit fiable ou antiprédictive, elle porte la même information (0,8 de log-odds) ; le filtre s'en sert sans savoir lequel.
+- **v = 0,48** : la fenêtre ne peut pas trancher (le régime change à chaque look) ; elle reste à la moyenne, et cela suffit.
+- **Le coût est nul** (8,0 pas) : même au plafond du hasard, la politique ne perd rien.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-intra.md`](../../reports/rapport-pensee-intra.md) ; JSON [`pensee-intra.json`](../../reports/pensee-intra.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T61 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **64/64 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **463 fiches / 555 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Fiabilité asymétrique** : 0,9 / 0,5 ; le filtre doit la distinguer.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round teste la **fiabilité asymétrique** (0,9 / 0,5) — le cas où le filtre doit distinguer.
+
+### Tour 79 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Tester la fiabilité asymétrique
+- bash — Ajouter la porte T62 (fiabilité asymétrique)
+- bash — Écrire la fiche de la fiabilité asymétrique
+- bash — Trim README et portes
+- bash — Committer la fiabilité asymétrique
+- job_output
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4234,7 +4285,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **régime intra
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 751 autres
+- … et 756 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4480,4 +4531,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round teste le **régime intra
 - B13 — LA BASCULE LIMITE : 1/5, v FINAL 0,44, 20/20, 8,6 PAS ; 62/62" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "BASCULE LIMITE"; then echo "COMMIT 
 - B13 — LE RÉGIME ALÉATOIRE : 1/2, v FINAL 0,42, 20/20, 8,0 PAS ; 63/63" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "RÉGIME ALÉATOIRE"; then echo "COM
 - B13 — LE RÉGIME INTRA-ÉPISODE : BASCULE À CHAQUE LOOK, v FINAL 0,48, 20/20, 8,0 PAS ; 64/64" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "INTRA-ÉPISO
+- B13 — LA FIABILITÉ ASYMÉTRIQUE : 0,9/0,5, v FINAL 0,44, 20/20, 8,0 PAS ; 65/65" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "FIABILITÉ ASYMÉTRIQUE"; 
 
