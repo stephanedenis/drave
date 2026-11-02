@@ -20510,3 +20510,66 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-1195", "timeout_ms": 600000, "wait": true}`
+
+  ```
+12:11
+work/n2w/big-60k.pt
+work/n2w/fr-60k.pt
+ "duree_s": 3240.010351896286
+}
+ "duree_s": 3107.539427280426
+}
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1191 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null; ls work/n2w/fr-60k.pt work/n2w/big-60k.pt 2>/dev/null) finished [status: completed, exit code: 2]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-1193 (bash: sleep 1080; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/fr-60k.log 2>/dev/null; tail -1 work/n2w/big-60k.log 2>/dev/null; ls work/n2w/fr-60k.pt work/n2w/big-60k.pt 2>/dev/null) finished [status: completed, exit code: 2]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=.; nohup bash -c 'cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && export PYTHONPATH=. CUDA_VISIBLE_DEVICES=0; ~/gpu-env/bin/python work/n2w/eval_croise.py work/n2w/fr-60k.pt data/wiki_fr/propre > work/n2w/eval … [802 caractères tronqués]`
+
+  ```
+ev0 3527664
+ev1 3527665
+[still running after 60000ms; moved to background job bash-1196]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1196", "timeout_ms": 600000, "wait": true}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 104  2 nov 12:12 work/n2w/eval-big60-big.json
+-rw-r--r--. 1 stephane stephane 103  2 nov 12:11 work/n2w/eval-big60-fr.json
+-rw-r--r--. 1 stephane stephane 104  2 nov 12:12 work/n2w/eval-fr60-big.json
+-rw-r--r--. 1 stephane stephane 103  2 nov 12:11 work/n2w/eval-fr60-fr.json
+{"fichier": "fr-60k.pt", "val": "data/wiki_fr/propre", "L128": 3.4365, "L256": 3.3705, "L512": 3.5449}
+{"fichier": "big-60k.pt", "val": "data/wiki_fr/propre", "L128": 3.5877, "L256": 3.528, "L512": 3.6225}
+12:13
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat work/n2w/eval-fr60-big.json; cat work/n2w/eval-big60-big.json; echo; grep -o '\"PPL val [0-9.]*' work/n2w/fr-60k.log | tail -1; grep -o '\"PPL val [0-9.]*' work/n2w/big-60k.log | tail -1", "description": "Read the cross-eval on t … [19 caractères tronqués]`
+
+  ```
+{"fichier": "fr-60k.pt", "val": "data/wiki_big/propre", "L128": 3.7237, "L256": 3.6801, "L512": 3.8908}
+{"fichier": "big-60k.pt", "val": "data/wiki_big/propre", "L128": 3.3301, "L256": 3.2645, "L512": 3.399}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"litterature\\|anglais\\|wikitext\" tools/eval_n2_propre.py | head -8", "description": "Find the OOD evaluation sets"}`
+
+  ```
+10:  litterature       : `data/corpus_fr_litterature.txt` (Verne, public domain) — jamais vu ;
+11:  anglais           : `data/corpus_en.txt` (Wikipédia) — jamais vu ;
+12:  wikitext2         : `data/wikitext2_test.txt` — jamais vu ;
+124:    lit = charger_bytes(RACINE / "data/corpus_fr_litterature.txt")
+127:    wt = charger_bytes(RACINE / "data/wikitext2_test.txt")
+134:         "litterature": round(ppl_protocole(m, lit, 128, 16, a.chunk, 1_000_000,
+136:         "litterature_propre": round(ppl_protocole(m, litt_propre, 128, 16, a.chunk, 3_000_000,
+138:         "anglais": round(ppl_protocole(m, ang, 128, 16, a.chunk, 5_000_000,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n2w/eval_ood_canal.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"eval_ood_canal.py — la PPL hors domaine avec le canal (littérature, anglais, wikitext2).\"\"\"\nimport json, pathlib, sys\nimport torch\nsys.path.insert(0, '.')\n … [1414 caractères tronqués]`

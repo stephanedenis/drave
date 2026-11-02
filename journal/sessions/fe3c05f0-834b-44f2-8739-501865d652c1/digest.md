@@ -35554,3 +35554,51 @@ arrêt confirmé
 ⏵ Alerte : le run de reprise (`--deja 41`) a réécrit le corpus CEGEP en mode `w` — les 2 Algorithms restent, les 10 notes sont à re-océriser ; je fiche la leçon
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_ocr_cegep/; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('reports/rapport-ocr-cegep.md'); t = p.read_text(encoding='utf-8')\nold = \"> **Note** : le manifeste a été reconstruit après l'arrêt  … [1705 caractères tronqués]`
+
+  ```
+12:07
+total 696
+drwxr-xr-x. 1 stephane stephane     48  2 nov 05:52 .
+drwxr-xr-x. 1 stephane stephane   2468  2 nov 09:12 ..
+-rw-r--r--. 1 stephane stephane      0  2 nov 11:36 test.txt
+-rw-r--r--. 1 stephane stephane 708991  2 nov 11:58 train.txt
+-rw-r--r--. 1 stephane stephane      0  2 nov 11:36 val.txt
+ok
+[master a041333c] DONNÉES — LE RUN DE REPRISE A ÉCRASÉ LE CORPUS CEGEP : LES 2 ALGORITHMS RESTENT, LES 10 NOTES SONT À RE-OCÉRISER (LEÇON : SORTIE SÉPARÉE)
+ 21 files changed, 446 insertions(+), 57 deletions(-)
+ create mode 100644 reports/rapport-ocr-cegep.md
+code=0
+a041333c DONNÉES — LE RUN DE REPRISE A ÉCRASÉ LE CORPUS CEGEP : LES 2 ALGORITHMS RESTENT, LES 10 NOTES SONT À RE-OCÉRISER (LEÇON : SORTIE SÉPARÉE)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; nohup python3 tools/ocr_pdf.py --racine CEGEP --max-pages 500 --max-doc 10 --sortie data/corpus_ocr_cegep --manifeste reports/ocr-pdf-cegep.json > /tmp/ocr-cegep-reprise.log 2>&1 & echo \"reprise 10 notes job $!\"; sleep … [213 caractères tronqués]`
+
+  ```
+12:09
+reprise 10 notes job 3526736
+    PID STAT            
+3526736 S          00:15
+  ```
+
+### 🤖 Assistant
+
+⏵ Re-OCR des 10 notes CEGEP lancé (PID 3526736, ~2 h) ; goal 3 h clos à 12 h 20
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-reprise.log 2>/dev/null; tail -2 /tmp/ocr-cegep-reprise.log; ps -p 3526736 -o pid,etime= 2>/dev/null || echo \"reprise finie\"; ls -la data/corpus_ocr_cegep/train.txt; python3  … [178 caractères tronqués]`
+
+  ```
+12:14
+1
+  CEGEP · Exercices de synthèse Excel 2010 Fonctio · 43 p · 81675 car
+    PID            
+3526736       05:26
+-rw-r--r--. 1 stephane stephane 0  2 nov 12:09 data/corpus_ocr_cegep/train.txt
+  état · dernier fait a041333c · dernier état a041333c
+  ✅ aucun fait commité après le dernier état
+  ```
+
+### 🤖 Assistant
+
+⏵ 12 h 14 : le re-OCR repart (1re note, train réinitialisé comme prévu), état vert
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 300; date '+%H:%M'; grep -c \" car$\" /tmp/ocr-cegep-reprise.log 2>/dev/null; tail -2 /tmp/ocr-cegep-reprise.log; ps -p 3526736 -o pid,etime= 2>/dev/null || echo \"reprise finie\"; ls -la data/corpus_ocr_cegep/train.txt", "descri … [127 caractères tronqués]`

@@ -64,11 +64,7 @@ def ocr(pdf: pathlib.Path, dpi: int, langues: str, max_pages: int) -> tuple[str,
         if max_pages:
             cmd += ["-f", "1", "-l", str(max_pages)]
         cmd += [str(pdf), str(tmp / "p")]
-        try:
-            subprocess.run(cmd, capture_output=True, timeout=1800)
-        except subprocess.TimeoutExpired:
-            print(f"  ! timeout pdftoppm : {pdf.name} (ignoré)", flush=True)
-            return "", 0
+        subprocess.run(cmd, capture_output=True, timeout=1800)
         textes = []
         for png in sorted(tmp.glob("p-*.png")):
             r = subprocess.run([str(TESS), str(png), "stdout", "-l", langues, "--psm", "3"],
@@ -100,8 +96,6 @@ def troncons(t: str, taille: int):
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--max-doc", type=int, default=0)
-    ap.add_argument("--racine", default="", help="restreindre à une racine : Biblio_large, CEGEP")
-    ap.add_argument("--deja", type=int, default=0, help="sauter les N premiers PDF examinés (reprise)")
     ap.add_argument("--dpi", type=int, default=300)
     ap.add_argument("--langues", default="fra+eng")
     ap.add_argument("--max-pages", type=int, default=0)
@@ -125,8 +119,6 @@ def main() -> int:
              "echantillon": "", "racines": []}
     t0 = time.time()
     for lib, racine, lic in RACINES:
-        if args.racine and lib != args.racine:
-            continue
         if not racine.exists():
             continue
         pdfs = sorted(racine.rglob("*.pdf"))
@@ -138,8 +130,6 @@ def main() -> int:
             if not npages:
                 continue
             stats["pdfs"] += 1
-            if args.deja and stats["pdfs"] <= args.deja:
-                continue
             t = natif(pdf)
             if len(t.strip()) / max(npages, 1) >= 50:
                 continue  # il a du texte natif : déjà dans le corpus PDF

@@ -7,12 +7,12 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 43.5 h |
+| Durée | 43.7 h |
 | Tours | 387 |
-| Messages | 2352 |
-| Appels d'outils | 1567 |
+| Messages | 2355 |
+| Appels d'outils | 1570 |
 | Fichiers touchés | 26 |
-| Commandes | 1393 |
+| Commandes | 1396 |
 | Sous-agents | 0 |
 | Commits | 95 |
 | Compactages de contexte | 4 |
@@ -9153,7 +9153,7 @@ Je laisse donc le goal actif jusqu'à 12 h 20 en surveillance légère, et je ma
 
 ### Tour 387 — <goal_round> Objective: "Continuer le mandat D/R/A pendant 3 heures (jusqu'à ~12 h 20 EST le 2026-11-02) : mener le lot  … [1044 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Add deja option and relaunch at 42nd PDF
 - bash — Check Encyclopedia 500-page run
@@ -9161,10 +9161,13 @@ Je laisse donc le goal actif jusqu'à 12 h 20 en surveillance légère, et je ma
 - bash — Check Encyclopedia OCR near cutoff
 - bash — Stop CEGEP run at cutoff
 - bash — Document corpus overwrite lesson and commit
+- bash — Restart CEGEP 10 notes re-OCR
+- bash — Check re-OCR progress and state
+- bash — Check re-OCR and reach window end
 
 **Synthèse produite :**
 
-⏵ Alerte : le run de reprise (`--deja 41`) a réécrit le corpus CEGEP en mode `w` — les 2 Algorithms restent, les 10 notes sont à re-océriser ; je fiche la leçon
+⏵ 12 h 14 : le re-OCR repart (1re note, train réinitialisé comme prévu), état vert
 
 ## 3. Travail accompli
 
@@ -9241,7 +9244,7 @@ Je laisse donc le goal actif jusqu'à 12 h 20 en surveillance légère, et je ma
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1353 autres
+- … et 1356 autres
 
 ## 4. Mesures et résultats marquants
 

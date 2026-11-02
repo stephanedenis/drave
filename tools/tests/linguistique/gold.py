@@ -55,7 +55,7 @@ PHRASES = [
      [("GN", "Le canard", "agent"), ("GV", "est prêt", "prédicat"), ("GP", "à manger", "but", ["prêt", "canard"])], {"acte": "assertion", "double_sens": True}),
     ("g013", "fr", "Peux-tu venir ?",
      [("Peux-tu", "VERB"), ("venir", "VERB")],
-     [("GV", "Peux-tu venir", "prédicat")], {"acte": "question"}),
+     [("GV", "Peux-tu venir", "prédicat")], {"acte": "question", "reponse": "oui"}),
     ("g014", "fr", "J'ai vu l'homme avec le télescope.",
      [("J'ai", "PRON"), ("vu", "VERB"), ("l'homme", "DET"), ("avec", "PREP"), ("le", "DET"), ("télescope", "NOUN")],
      [("GN", "J'ai", "agent"), ("GV", "vu", "prédicat"), ("GN", "l'homme", "patient"),

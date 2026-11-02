@@ -443,7 +443,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -2436,7 +2437,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -2639,7 +2641,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -3642,7 +3645,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -4350,7 +4354,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -4606,7 +4611,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -4846,7 +4852,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -5581,7 +5588,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -5718,7 +5726,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -5760,7 +5769,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -6016,7 +6026,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -7582,7 +7593,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -7630,7 +7642,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [
@@ -9155,7 +9168,8 @@
     "acte": "question",
     "negation": false,
     "modalite": false,
-    "double_sens": false
+    "double_sens": false,
+    "reponse": "oui"
    },
    "source": "synthetique",
    "mots": [

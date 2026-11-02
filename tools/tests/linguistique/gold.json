@@ -855,7 +855,8 @@
     }
    ],
    "pragma": {
-    "acte": "question"
+    "acte": "question",
+    "reponse": "oui"
    }
   },
   {

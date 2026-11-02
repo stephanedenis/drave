@@ -595,7 +595,8 @@
     }
    ],
    "pragma": {
-    "acte": "question"
+    "acte": "question",
+    "reponse": "oui"
    },
    "source": "reel"
   },
@@ -1838,7 +1839,8 @@
     }
    ],
    "pragma": {
-    "acte": "question"
+    "acte": "question",
+    "reponse": "yes"
    },
    "source": "reel"
   },
@@ -20822,7 +20824,8 @@
     }
    ],
    "pragma": {
-    "acte": "question"
+    "acte": "question",
+    "reponse": "oui"
    },
    "source": "reel"
   },
@@ -21475,7 +21478,8 @@
     }
    ],
    "pragma": {
-    "acte": "question"
+    "acte": "question",
+    "reponse": "yes"
    },
    "source": "reel"
   },

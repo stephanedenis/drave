@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-pensee-juge.md`](rapport-pensee-juge.md) | **B13** — le juge des réponses : couverture 0/19, la référence manque, **126/126** |
+| [`rapport-pensee-reponses.md`](rapport-pensee-reponses.md) | **B13** — les 19 réponses de référence : couverture 1,0, **127/127** |
 | [`rapport-pensee-miroir-resume.md`](rapport-pensee-miroir-resume.md) | **B13** — la restitution sémantique : résumé 0,7834 / 0,7472, **122/122** |
 | [`rapport-pensee-miroir.md`](rapport-pensee-miroir.md) | **B13** — le miroir entrée/sortie : surface 1,0, mots 0,2095, **119/119** |
 | [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |

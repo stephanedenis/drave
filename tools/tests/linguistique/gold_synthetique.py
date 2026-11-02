@@ -117,7 +117,7 @@ class P:
         elif mode == "question":
             gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
             v = self.verbe(); tokens.append((v, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))
-            pragma["acte"] = "question"; tokens.append(("?", "PONCT"))
+            pragma["acte"] = "question"; pragma["reponse"] = "oui"; tokens.append(("?", "PONCT"))
         elif mode == "exclamation":
             gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
             v = self.verbe(); tokens.append((v, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))

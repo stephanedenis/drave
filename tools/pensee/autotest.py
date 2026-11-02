@@ -1868,14 +1868,24 @@ def t122_extraction() -> tuple[bool, str]:
 
 
 def t123_juge() -> tuple[bool, str]:
-    """Le juge : couverture 0/19, la référence manque."""
+    """Le juge : couverture 19/19, mais il ne juge pas le vide (0.0)."""
     from ..tests.linguistique.evaluer_gold import charger
     from ..tests.linguistique.juge import couverture, juge
     ph = charger()
     c = couverture(ph)
-    return (c["questions"] == 19 and c["avec_reference"] == 0
-            and juge(None, None) == 0.0), (
-        f"juge : couverture {c['avec_reference']}/{c['questions']} (référence absente)")
+    return (c["questions"] == 19 and c["avec_reference"] == 19
+            and juge(None, None) == 0.0 and juge("oui", "oui") == 1.0
+            and juge("oui", "non") == 0.0), (
+        f"juge : couverture {c['avec_reference']}/{c['questions']}, le vide vaut 0.0")
+
+
+def t124_reponses() -> tuple[bool, str]:
+    """Les 19 réponses de référence : couverture 19/19."""
+    from ..tests.linguistique.evaluer_gold import charger
+    from ..tests.linguistique.juge import couverture
+    c = couverture(charger())
+    return c["questions"] == 19 and c["avec_reference"] == 19, (
+        f"références : {c['avec_reference']}/{c['questions']} (couverture {c['taux']})")
 
 
 def main() -> int:
@@ -2000,7 +2010,8 @@ def main() -> int:
               ("T120 réponse", t120_miroir_reponse()),
               ("T121 réponse contenu", t121_reponse_contenu()),
               ("T122 extraction", t122_extraction()),
-              ("T123 juge", t123_juge())]
+              ("T123 juge", t123_juge()),
+              ("T124 réponses", t124_reponses())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")

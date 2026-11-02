@@ -1,0 +1,20 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "127/127",
+ "couverture": {
+  "questions": 19,
+  "avec_reference": 19,
+  "taux": 1.0
+ },
+ "juge": {
+  "oui_oui": 1.0,
+  "oui_non": 0.0,
+  "none_none": 0.0
+ },
+ "limites": [
+  "réponses fermées",
+  "chaîne exacte",
+  "heuristique seule"
+ ]
+}
