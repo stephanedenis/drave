@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,6 +18,7 @@
 | 19:49 | `35bf5588` | DONNÉES — NEUF CORPUS EN TEXTE INTÉGRAL (FR, AR, PT, ZH, JA, IT, RU, ES, DE) : 14,51 M ARTICLES, 59,0 GO, 8 KO 0 | `en-cours.md`, `README.md`, `attention.md` (+22) |
 | 19:57 | `c989dd86` | DONNÉES — LE CATALOGUE DU TEXTE INTÉGRAL (9 LANGUES, 14,51 M ARTICLES, 59,0 GO) DEPUIS LES MANIFESTES | `en-cours.md`, `README.md`, `apprentissage.md` (+20) |
 | 22:49 | `3b670a2c` | DONNÉES — LES DIX CORPUS EN TEXTE INTÉGRAL : 20,53 M ARTICLES, 67,73 G CARACTÈRES, 81,2 GO (ANGLAIS CLOS À 99,2 %, LIMITE MÉMOIRE NOMMÉE) | `en-cours.md`, `README.md`, `apprentissage.md` (+21) |
+| 23:15 | `84bf1b97` | B13 — L'OBSERVATION PARTIELLE : 0/20 BUTS, LA MÉMOIRE D'UN PAS NE SUFFIT PAS ; 44/44 | `en-cours.md`, `roadmap.md`, `README.md` (+21) |
 
 ## Chiffres du jour
 
@@ -39,6 +40,7 @@
 - [reports/rapport-corpus-wiki-fr.md](../../reports/rapport-corpus-wiki-fr.md)
 - [reports/rapport-corpus-wiki-texte.md](../../reports/rapport-corpus-wiki-texte.md)
 - [reports/rapport-corpus-wikipedia.md](../../reports/rapport-corpus-wikipedia.md)
+- [reports/rapport-n2-multilingue-capacite.md](../../reports/rapport-n2-multilingue-capacite.md)
 - [reports/rapport-pensee-gold-linguistique.md](../../reports/rapport-pensee-gold-linguistique.md)
 
 <!-- notes -->

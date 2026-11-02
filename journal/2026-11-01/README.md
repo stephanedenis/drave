@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**129 commits** · **4 session(s)** · **10 thème(s)**
+**130 commits** · **4 session(s)** · **10 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 16 | [distribue.md](distribue.md) |
 | docs | 33 | [docs.md](docs.md) |
-| memoire | 10 | [memoire.md](memoire.md) |
+| memoire | 11 | [memoire.md](memoire.md) |
 | mesures | 52 | [mesures.md](mesures.md) |
 | modele | 4 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -168,6 +168,7 @@
 | 23:05 | `f9cc2718` | B13 — LA PHASE SUR 5 GRAINES : 5/5 BUTS (10–14 PAS), 376–422 ÉTATS-Q ; 41/41 |
 | 23:08 | `f0681eb9` | B13 — LA PORTE ALÉATOIRE : SAUT À 20 % PAR PAS, 20/20 BUTS, 182 ÉTATS-Q ; 42/42 |
 | 23:12 | `d1fde4db` | B13 — LE HASARD VARIABLE : 20–60 %, 20/20 À CHAQUE TAUX, 8 PAS ; 43/43 |
+| 23:15 | `84bf1b97` | B13 — L'OBSERVATION PARTIELLE : 0/20 BUTS, LA MÉMOIRE D'UN PAS NE SUFFIT PAS ; 44/44 |
 
 ## Le récit de la journée (écrit à la main)
 

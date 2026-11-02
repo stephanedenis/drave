@@ -18353,3 +18353,83 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-670", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[master 84bf1b97] B13 — L'OBSERVATION PARTIELLE : 0/20 BUTS, LA MÉMOIRE D'UN PAS NE SUFFIT PAS ; 44/44
+ 24 files changed, 431 insertions(+), 77 deletions(-)
+ create mode 100644 reports/rapport-n2-multilingue-capacite.md
+COMMIT OK 1
+84bf1b97 B13 — L'OBSERVATION PARTIELLE : 0/20 BUTS, LA MÉMOIRE D'UN PAS NE SUFFIT PAS ; 44/44
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Observation partielle : 0/20 buts, la mémoire d'un pas ne suffit pas ; 44/44
+
+Le round 45 du goal est livré : c'est la **négative** qui compte — sans observation complète, la mémoire d'un pas ne suffit pas. Commit **`84bf1b97`**.
+
+## L'observation partielle
+
+Le monde est le même que T39 (porte à `(3,3)`/`(1,3)`, saut à 20 %), mais l'agent ne voit la porte que s'il est **adjacent** (Manhattan ≤ 1) ; sinon l'observation vaut « inconnue ». L'état de la politique est `(x, y, open, vu)` où `vu` est la **dernière porte vue**.
+
+| dispositif | buts | états-Q | pas |
+|---|---:|---:|---:|
+| **partielle** | **0/20** | 115 | 200 |
+| complète (T39/T40) | **20/20** | 182 | 8 |
+
+**Ce que ça dit** :
+
+- **La mémoire d'un pas ne suffit pas** : le dernier `d` vu ne dit pas où est la porte maintenant ; la politique croit une porte qui a bougé (20 % par pas).
+- **L'observation complète était la clé** : la réaction (T39/T40) marchait parce que l'état voyait la porte ; sans elle, la Q-table n'a pas de **modèle du monde**.
+- **115 états seulement** : la politique a appris des choses, mais pas la croyance ; elle tourne.
+- **La négative est explicite** : 0/20, 200 pas, 115 états-Q.
+
+## L'état
+
+- Fiche : [`rapport-pensee-partielle.md`](../../reports/rapport-pensee-partielle.md) ; JSON [`pensee-partielle.json`](../../reports/pensee-partielle.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T41 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **44/44 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **434 fiches / 532 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le commit a aussi emporté `rapport-n2-multilingue-capacite.md` d'une autre session (course d'index) ; leur contenu est commité.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Croyance** : l'état porte une **distribution** sur `d`, pas le dernier vu.
+2. **Exploration active** : la politique doit aller voir la porte avant de viser.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **croyance** (la distribution sur la porte).
+
+
+## Tour 59
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 46/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; cat > /tmp/pcroy.py <<'PY'\ndef _belief_bucket(p: float) -> int:\n    return 0 if p < 0.25 else 1 if p < 0.5 else 2 if p < 0.75 else 3\n\n\n_BELIEF_P = (0.1, 0.35, 0.65, 0.9)\n\n\nclass PolitiqueAppriseCr … [3724 caractères tronqués]`
+
+  ```
+84bf1b97 B13 — L'OBSERVATION PARTIELLE : 0/20 BUTS, LA MÉMOIRE D'UN PAS NE SUFFIT PAS ; 44/44
+ok
+q 154
+20 runs: 0 /20 pas moyen 200.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T41 l'observation partielle       0/20 buts : la mémoire ne suffit pas (négatif)\\n\",\n\"  T41 l'observation partielle    … [1303 caractères tronqués]`
+
+  ```
+ok
+  ✅ T40 hasard variable    hasard 20–60 % : [(0.2, 20), (0.4, 20), (0.6, 20)] (20 exécutions par taux)
+  ✅ T41 observation partielle partielle : 0/20 buts (la mémoire ne suffit pas), 115 états-Q
+  ✅ T42 croyance           croyance : 0/20 buts (154 états-Q), la croyance seule ne suffit pas
+  45/45 portes tenues
+EXIT=0
+  ```
+

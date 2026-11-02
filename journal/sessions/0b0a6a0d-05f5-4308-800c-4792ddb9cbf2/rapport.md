@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 31.0 h |
 | Tours | 18 |
-| Messages | 1246 |
-| Appels d'outils | 1157 |
+| Messages | 1250 |
+| Appels d'outils | 1160 |
 | Fichiers touchés | 11 |
-| Commandes | 935 |
+| Commandes | 936 |
 | Sous-agents | 0 |
-| Commits | 43 |
+| Commits | 44 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -947,7 +947,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 
 ### Tour 18 — suis le plan, continue jusqu'à 8h demain matin
 
-*191 appels d'outils.* Actions notables :
+*194 appels d'outils.* Actions notables :
 
 - create_goal
 - get_goal
@@ -963,7 +963,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - bash — Check the canal files and the teacher
 - bash — Check the processes and output files
 - bash — Run the canal computation directly on the validation file
-- … et 127 autres
+- … et 128 autres
 
 **Synthèse produite :**
 
@@ -1029,7 +1029,7 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - **T1** Compute historical-protocol PPL for archived checkpoints
 - **T1** Read model forward and VDC helpers
 - **T1** Fix window shapes in campaign script
-- … et 895 autres
+- … et 896 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1219,5 +1219,6 @@ Sur 3,24 Mo, N2.h5 ne gagnait que **−0,06** et rien hors domaine. Sur 186 Mo, 
 - JOURNAL — LA NUIT N2 : DU CORPUS PROPRE AU CORPUS RÉEL  Récit de la session N2 : le mètre honnête (3,09), les leviers (diversité, positions, capacité, canal), l
 - N2.p — LA CAPACITÉ À 34,3 M : −0,19 PAR PALIER, ET LE VERROU DE LONGUEUR S'EFFACE  Sur les 186 Mo du corpus réel, la base passe de 4,3893 (11,47 M) à 4,2013 (21
 - N2.p — LA CAPACITÉ À 34,3 M : −0,19 PAR PALIER, ET LE VERROU DE LONGUEUR S'EFFACE  Sur les 186 Mo du corpus réel, la base passe de 4,3893 (11,47 M) à 4,2013 (21
+- N2.q — LA CAPACITÉ MULTILINGUE : À RECETTE ÉGALE, 21,65 M GAGNE 0,79  À recette égale (20 000 pas, positions [0, 384]), le modèle 21,65 M bat le 11,47 M sur les
 - N2.q — LA CAPACITÉ MULTILINGUE : À RECETTE ÉGALE, 21,65 M GAGNE 0,79  À recette égale (20 000 pas, positions [0, 384]), le modèle 21,65 M bat le 11,47 M sur les
 

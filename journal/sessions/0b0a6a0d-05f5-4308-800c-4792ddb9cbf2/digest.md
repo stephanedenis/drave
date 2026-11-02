@@ -15973,3 +15973,35 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n           \"| fichiers / JSON de  … [1038 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-935]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-935", "timeout_ms": 300000, "wait": true}`
+
+  ```
+porte-consolidation    ✅                          71 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+  porte-coupe            ✅                         143 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+[stderr]
+fatal: cannot lock ref 'HEAD': is at 84bf1b97c370653920a7c557373c8f02853998b3 but expected d1fde4dbc438a9c579903eda1f7a5deb8615e048
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git reset -q 2>/dev/null; export GIT_INDEX_FILE=/tmp/index.n2; git read-tree HEAD && git add reports/rapport-n2-multilingue-capacite.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md && git commit -q -m \"N2.q — LA CAPACITÉ MULTI … [797 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-936]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-929 (bash: sleep 900; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; ls work/n2k/base-multi-11m-pos.pt 2>/dev/null && echo OK; tail -1 work/n2k/base-multi-11m-pos.log; tail -3 /tmp/portes-nuit.out) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-936", "timeout_ms": 300000, "wait": true}`

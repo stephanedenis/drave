@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 30.6 h |
-| Tours | 58 |
-| Messages | 896 |
-| Appels d'outils | 831 |
+| Tours | 59 |
+| Messages | 904 |
+| Appels d'outils | 837 |
 | Fichiers touchés | 25 |
-| Commandes | 670 |
+| Commandes | 676 |
 | Sous-agents | 2 |
-| Commits | 75 |
+| Commits | 76 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -147,6 +147,8 @@
 **Tour 57** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 58** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 59** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3108,6 +3110,55 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque l'**observation 
 - bash — Committer l'observation partielle
 - job_output
 
+**Synthèse produite :**
+
+⏵ Observation partielle : 0/20 buts, la mémoire d'un pas ne suffit pas ; 44/44
+
+Le round 45 du goal est livré : c'est la **négative** qui compte — sans observation complète, la mémoire d'un pas ne suffit pas. Commit **`84bf1b97`**.
+
+\## L'observation partielle
+
+Le monde est le même que T39 (porte à `(3,3)`/`(1,3)`, saut à 20 %), mais l'agent ne voit la porte que s'il est **adjacent** (Manhattan ≤ 1) ; sinon l'observation vaut « inconnue ». L'état de la politique est `(x, y, open, vu)` où `vu` est la **dernière porte vue**.
+
+| dispositif | buts | états-Q | pas |
+|---|---:|---:|---:|
+| **partielle** | **0/20** | 115 | 200 |
+| complète (T39/T40) | **20/20** | 182 | 8 |
+
+**Ce que ça dit** :
+
+- **La mémoire d'un pas ne suffit pas** : le dernier `d` vu ne dit pas où est la porte maintenant ; la politique croit une porte qui a bougé (20 % par pas).
+- **L'observation complète était la clé** : la réaction (T39/T40) marchait parce que l'état voyait la porte ; sans elle, la Q-table n'a pas de **modèle du monde**.
+- **115 états seulement** : la politique a appris des choses, mais pas la croyance ; elle tourne.
+- **La négative est explicite** : 0/20, 200 pas, 115 états-Q.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-partielle.md`](../../reports/rapport-pensee-partielle.md) ; JSON [`pensee-partielle.json`](../../reports/pensee-partielle.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T41 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **44/44 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **434 fiches / 532 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Le commit a aussi emporté `rapport-n2-multilingue-capacite.md` d'une autre session (course d'index) ; leur contenu est commité.
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Croyance** : l'état porte une **distribution** sur `d`, pas le dernier vu.
+2. **Exploration active** : la politique doit aller voir la porte avant de viser.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round attaque la **croyance** (la distribution sur la porte).
+
+### Tour 59 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Ajouter la politique à croyance et la tester
+- bash — Ajouter la porte T42 (croyance)
+- bash — Écrire la fiche de la croyance
+- bash — Réparer les compteurs et le budget T0
+- bash — Trim final et portes
+- bash — Committer la croyance
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3187,7 +3238,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque l'**observation 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 630 autres
+- … et 636 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3409,4 +3460,5 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round attaque l'**observation 
 - B13 — LA PORTE ALÉATOIRE : SAUT À 20 % PAR PAS, 20/20 BUTS, 182 ÉTATS-Q ; 42/42" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "PORTE ALÉATOIRE"; then 
 - B13 — LE HASARD VARIABLE : 20–60 %, 20/20 À CHAQUE TAUX, 8 PAS ; 43/43" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "HASARD VARIABLE"; then echo "COM
 - B13 — L'OBSERVATION PARTIELLE : 0/20 BUTS, LA MÉMOIRE D'UN PAS NE SUFFIT PAS ; 44/44" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "OBSERVATION PARTIE
+- B13 — LA CROYANCE : 0/20 BUTS, LA DISTRIBUTION SEULE NE SUFFIT PAS ; 45/45" 2>&1 | tail -3   if git log -1 --format='%s' | grep -q "LA CROYANCE"; then echo "COM
 
