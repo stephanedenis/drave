@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (74)
+## Commits du jour (75)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -82,6 +82,7 @@
 | 12:21 | `2b3eeba9` | N2.ab — PLUS DE PAS PAIE ; PLUS DE TEXTE PAIE EN LARGEUR, PAS EN FRANÇAIS | `en-cours.md`, `README.md`, `apprentissage.md` (+17) |
 | 12:25 | `9105c184` | B13 — LE JUGE CONTRE LE BLOC : 0/19 ET 0/19, LA PREMIÈRE MESURE DE CORRECTION ; 128/128 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+21) |
 | 12:33 | `646c04c5` | B13 — LA RÉPONSE DIRIGÉE : 19/19, LA PREMIÈRE RÉPONSE JUSTE (17/19 AVANT LA LANGUE) ; 129/129 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+21) |
+| 12:45 | `546411f6` | GLOSSAIRE — FAMILLE 13 (CORPUS ET MESURE DOCUMENTAIRE, 19 ENTRÉES) ET DOCWATCH ANNOTE LES TERMES AU RENDU : 335 ENTRÉES | `en-cours.md`, `glossaire.md`, `13-le-corpus-et-la-mesure-documentaire.md` (+41) |
 
 ## Chiffres du jour
 

@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 44.2 h |
 | Tours | 388 |
-| Messages | 2384 |
-| Appels d'outils | 1596 |
+| Messages | 2391 |
+| Appels d'outils | 1603 |
 | Fichiers touchés | 28 |
-| Commandes | 1414 |
+| Commandes | 1421 |
 | Sous-agents | 0 |
-| Commits | 96 |
+| Commits | 97 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -9201,7 +9201,7 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 
 ### Tour 388 — fais une passe dans docs pour enrichir le glossaire et une autre passe ajouter les hyperliens vers le glossaire partout  … [228 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Inspect glossary, docwatch and existing links
 - read
@@ -9217,7 +9217,7 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 - bash — Add CSS and glossary tests, run them
 - bash — Run glossary tests with src on path
 - bash — Regenerate glossary index and verify cards
-- … et 8 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
@@ -9300,7 +9300,7 @@ Tests docwatch ✅ (4/4) — le hook glossaire fonctionne. Je régénère `index
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1374 autres
+- … et 1381 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9544,4 +9544,5 @@ Tests docwatch ✅ (4/4) — le hook glossaire fonctionne. Je régénère `index
 - ÉTAT — T0 SOUS 4 000 APRÈS LE CEGEP 10 NOTES" > /tmp/commit-t0.log 2>&1; code=$?; tail -2 /tmp/commit-t0.log; echo "code=$code"; git log --oneline -1
 - DONNÉES — LE RUN DE REPRISE A ÉCRASÉ LE CORPUS CEGEP : LES 2 ALGORITHMS RESTENT, LES 10 NOTES SONT À RE-OCÉRISER (LEÇON : SORTIE SÉPARÉE)" > /tmp/commit-lecon.l
 - GLOSSAIRE — FAMILLE 13 (CORPUS ET MESURE DOCUMENTAIRE, 19 ENTRÉES) ET DOCWATCH ANNOTE LES TERMES AU RENDU : 335 ENTRÉES" > /tmp/commit-glossaire.log 2>&1; code=
+- ÉTAT — 119 DOCS, T0 SOUS 4 000, LE GLOSSAIRE (335 ENTRÉES) ET DOCWATCH SONT COMMITTÉS" > /tmp/commit-etat-gloss.log 2>&1; code=$?; tail -2 /tmp/commit-etat-glos
 

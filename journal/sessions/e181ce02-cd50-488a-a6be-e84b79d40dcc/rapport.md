@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 44.1 h |
 | Tours | 145 |
-| Messages | 1722 |
-| Appels d'outils | 1476 |
+| Messages | 1724 |
+| Appels d'outils | 1478 |
 | Fichiers touchés | 25 |
-| Commandes | 1205 |
+| Commandes | 1207 |
 | Sous-agents | 2 |
 | Commits | 182 |
 | Compactages de contexte | 5 |
@@ -7689,7 +7689,7 @@ Je continue : prochain round, **les questions négatives** — le piège qui sé
 
 ### Tour 145 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Ajouter 10 questions négatives et mesurer
 - bash — Corriger l'ordre des segments des questions négatives
@@ -7699,6 +7699,8 @@ Je continue : prochain round, **les questions négatives** — le piège qui sé
 - bash — Écrire la fiche des questions négatives et la porte T127
 - bash — Trim README et passer toutes les portes
 - bash — Lister les portes rouges après l'ajout du gold
+- bash — Mettre à jour les 16 portes aux nouveaux nombres
+- bash — Corriger T126 et relancer l'autotest
 
 ## 3. Travail accompli
 
@@ -7779,7 +7781,7 @@ Je continue : prochain round, **les questions négatives** — le piège qui sé
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1165 autres
+- … et 1167 autres
 
 ## 4. Mesures et résultats marquants
 

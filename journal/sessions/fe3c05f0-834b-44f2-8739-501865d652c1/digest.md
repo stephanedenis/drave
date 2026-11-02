@@ -36201,3 +36201,118 @@ A  tests/test_glossaire.py
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); t = p.read_text(encoding='utf-8')\nold = \"**genres** mesurés (OCR **38,5** car/ligne) ; fiche [`wiki`](../../reports/rapport-corpus-wi … [1309 caractères tronqués]`
+
+  ```
+12:45
+ok
+docs/pilotage/en-cours.md
+docs/theorie/glossaire.md
+docs/theorie/glossaire/13-le-corpus-et-la-mesure-documentaire.md
+docs/theorie/glossaire/README.md
+docs/theorie/glossaire/entrees/blake2b.md
+docs/theorie/glossaire/entrees/catalogue.md
+docs/theorie/glossaire/entrees/cegep.md
+docs/theorie/glossaire/entrees/contamination.md
+docs/theorie/glossaire/entrees/corpus.md
+docs/theorie/glossaire/entrees/dump.md
+docs/theorie/glossaire/entrees/fiche-de-resultat.md
+docs/theorie/glossaire/entrees/fonds.md
+ create mode 100644 docs/theorie/glossaire/entrees/tesseract.md
+ create mode 100644 docs/theorie/glossaire/entrees/troncon.md
+ create mode 100644 docs/theorie/glossaire/entrees/warc.md
+code=0
+546411f6 GLOSSAIRE — FAMILLE 13 (CORPUS ET MESURE DOCUMENTAIRE, 19 ENTRÉES) ET DOCWATCH ANNOTE LES TERMES AU RENDU : 335 ENTRÉES
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib, re, json, collections\ng = json.load(open('docs/theorie/glossaire/index.json'))\ntermes = {}\nfor e in g['entrees']:\n    t = re.split(r'[·;,(]', e['terme'])[0].strip()\n    if 2 <= len( … [781 caractères tronqués]`
+
+  ```
+12:47
+ 372  docs/implantation/contexte-long.md
+ 288  docs/pilotage/roadmap.md
+ 277  docs/implantation/diehl-cook.md
+ 264  docs/theorie/modele-natif.md
+ 191  docs/implantation/numa-segregation.md
+ 179  docs/theorie/lecture-rapide.md
+ 170  docs/implantation/convertisseur.md
+ 155  docs/pilotage/chantiers.md
+ 144  docs/theorie/pre-traitement-linguistique.md
+ 144  docs/pilotage/programme-r.md
+ 128  docs/implantation/moteur-de-pensee.md
+ 102  docs/implantation/format-flux.md
+ 101  docs/implantation/encodeur-visuel.md
+  97  docs/theorie/architecture-native.md
+  97  docs/pilotage/plan-travail.md
+  91  docs/pilotage/en-cours.md
+  88  docs/pilotage/backlog/dependances.md
+  86  docs/implantation/bloc-linguistique.md
+  83  docs/pilotage/references-non-regression.md
+  82  docs/pilotage/backlog/index.md
+  81  docs/implantation/configuration-nvme-raid-amd.md
+  80  docs/theorie/pensee-iterative.md
+  61  docs/theorie/jeux-symboliques.md
+  60  docs/theorie/synthese/index.md
+  58  docs/implantation/banc-lecture.md
+pages >=5 : 107
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 tools/revue_documentation.py 2>&1 | tail -4; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2", "description": "Run documentation review after glossary work",  … [82 caractères tronqués]`
+
+  ```
+12:48
+  revue de documentation · 539 fiche(s) · 626 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 118 documents, le disque en a 119
+  ❌ 1 violation(s) :
+     · T0 : 4013 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  état · dernier fait 646c04c5 · dernier état 546411f6
+  ✅ aucun fait commité après le dernier état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; grep -n \"118\" docs/pilotage/en-cours.md | head -3; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); t = p.read_text(encoding='utf-8')\nt = t.replace('**glossaire** 335 entrées (famil … [818 caractères tronqués]`
+
+  ```
+12:48
+92:| documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
+n1 0
+70:- **Données** : inventaire local (Wikipédia **132 Go**, documents **~228 Go**, DRM et vidéos exclus) ; **corpus par langue** (10) : **21,6 M articles**, **31,4 G caractères**, **38,8 Go**, **0 fuite** — fiches [`inventaire-donnees`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md).
+92:| documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
+  ❌ 1 violation(s) :
+     · T0 : 4008 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); t = p.read_text(encoding='utf-8')\nold = \"| documents de `docs/` | **118** (hors archive et README) |\"\nnew = \"| documents de `docs/` |  … [870 caractères tronqués]`
+
+  ```
+12:49
+  ❌ 1 violation(s) :
+     · T0 : 4008 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 118 documents, le disque en a 119
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; grep -n \"OCR CEGEP\\|documents de \\`docs/\\`\\|glossaire\" docs/pilotage/en-cours.md | head -5; sed -n '3p' docs/pilotage/en-cours.md", "description": "Inspect current state lines", "timeoutMs": 180000, "workdir": "/ho … [46 caractères tronqués]`
+
+  ```
+12:49
+60:- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 8 Ko 0 ; éval 0/40) ; **OCR CEGEP** (10 notes, 1 596 p, 2,52 M car. mesurés — **corpus sur disque à re-océriser**, le run de reprise l'a écrasé) ; **genres** mesurés (OCR **38,5** car/ligne) ; **glossaire** 335 entrées (famille 13) ; docwatch les annote au rendu ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
+92:| documents de `docs/` | **118** (hors archive et README) | `docs/**/*.md` |
+**Mis à jour : 2026-11-02, 12 h 50 HNE (heure locale, EST).**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); t = p.read_text(encoding='utf-8')\nold = \"**OCR CEGEP** (10 notes, 1 596 p, 2,52 M car. mesurés — **corpus sur disque à re-océriser**, le  … [622 caractères tronqués]`
+
+  ```
+12:49
+ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 539 fiche(s) · 626 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add docs/pilotage/en-cours.md; git commit -m \"ÉTAT — 119 DOCS, T0 SOUS 4 000, LE GLOSSAIRE (335 ENTRÉES) ET DOCWATCH SONT COMMITTÉS\" > /tmp/commit-etat-glos … [233 caractères tronqués]`

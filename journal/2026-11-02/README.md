@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**132 commits** · **3 session(s)** · **9 thème(s)**
+**133 commits** · **3 session(s)** · **9 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | distribue | 6 | [distribue.md](distribue.md) |
 | docs | 16 | [docs.md](docs.md) |
 | memoire | 11 | [memoire.md](memoire.md) |
-| mesures | 74 | [mesures.md](mesures.md) |
+| mesures | 75 | [mesures.md](mesures.md) |
 | modele | 6 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 6 | [portes.md](portes.md) |
@@ -165,6 +165,7 @@
 | 12:23 | `2e767b1b` | ÉTAT ET ROADMAP — N2.aa/N2.ab : LE COMPUTE PAIE, LE CORPUS EST UN ÉCHANGE |
 | 12:25 | `9105c184` | B13 — LE JUGE CONTRE LE BLOC : 0/19 ET 0/19, LA PREMIÈRE MESURE DE CORRECTION ; 128/128 |
 | 12:33 | `646c04c5` | B13 — LA RÉPONSE DIRIGÉE : 19/19, LA PREMIÈRE RÉPONSE JUSTE (17/19 AVANT LA LANGUE) ; 129/129 |
+| 12:45 | `546411f6` | GLOSSAIRE — FAMILLE 13 (CORPUS ET MESURE DOCUMENTAIRE, 19 ENTRÉES) ET DOCWATCH ANNOTE LES TERMES AU RENDU : 335 ENTRÉES |
 
 ## Le récit de la journée (écrit à la main)
 
