@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-seuil-graines.md`](rapport-pensee-seuil-graines.md) | **B13** — le seuil sur 5 graines : ×0,35 0/25, ×0,4 25/25, seuil ~0,4, **76/76** |
 | [`rapport-pensee-seuil-fin.md`](rapport-pensee-seuil-fin.md) | **B13** — le seuil fin : ×0,4 réussit, ×0,45 échoue, non monotone, **75/75** |
 | [`rapport-pensee-seuil.md`](rapport-pensee-seuil.md) | **B13** — le seuil d'oubli : ×0,5 réussit, ×0,2 échoue, seuil dans (0,2 ; 0,5], **74/74** |
 | [`rapport-pensee-oubli-total.md`](rapport-pensee-oubli-total.md) | **B13** — l'oubli total : 0/20 buts, la mémoire est nécessaire, **73/73** |
@@ -33,7 +34,6 @@
 | [`rapport-pensee-alternance.md`](rapport-pensee-alternance.md) | **B13** — les ruptures répétées : 0,9/0,1 alternés, v final 0,14, 20/20, **58/58** |
 | [`rapport-pensee-rupture.md`](rapport-pensee-rupture.md) | **B13** — la rupture : 90 % d'erreur, v final 0,12, 20/20, 8,0 pas, **57/57** |
 | [`rapport-pensee-derive.md`](rapport-pensee-derive.md) | **B13** — la fiabilité qui dérive : v final 0,56, 20/20, 8,0 pas, **54/54** |
-| [`rapport-pensee-bayes.md`](rapport-pensee-bayes.md) | **B13** — la croyance bayésienne : un look, 20/20 dès 2000 épisodes, 9,4 pas, **51/51** |
 | [`rapport-pensee-hasard.md`](rapport-pensee-hasard.md) | **B13** — le hasard variable : 20–60 %, 20/20 à chaque taux, 8 pas, **43/43** |
 | [`rapport-pensee-aleatoire.md`](rapport-pensee-aleatoire.md) | **B13** — la porte aléatoire : saut 20 %, 20/20 buts, 182 états-Q, **42/42** |
 | [`rapport-pensee-phase-graines.md`](rapport-pensee-phase-graines.md) | **B13** — la phase sur 5 graines : 5/5 buts, 10–14 pas, 376–422 états-Q, **41/41** |

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (22)
+## Commits du jour (23)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -30,17 +30,18 @@
 | 01:28 | `6eff8d8d` | DONNÉES — L'OCR DES 8 LIVRES EST FICÉ : 2 815 PAGES, 7,69 M CARACTÈRES, 8 KO 0 (VAL/TEST VIDES, LE CSS SUIT) | `en-cours.md`, `README.md`, `apprentissage.md` (+16) |
 | 01:30 | `b82ac41e` | B13 — LE SEUIL D'OUBLI : ×0,5 RÉUSSIT, ×0,2 ÉCHOUE, SEUIL DANS (0,2 ; 0,5] ; 74/74 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
 | 01:37 | `a9a511e8` | DONNÉES — LE CONTRÔLE OCR CONTRE LES ÉVALUATIONS EST MESURÉ : 0/40, 0/24, 0/40 | `en-cours.md`, `README.md`, `attention.md` (+10) |
+| 01:39 | `4d81e21e` | B13 — LE SEUIL FIN : ×0,4 RÉUSSIT, ×0,45 ÉCHOUE (NON MONOTONE) ; 75/75 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+21) |
 
 ## Chiffres du jour
 
-`×0,5` · `×0,2` · `0,1 %` · `1 %` · `10 %` · `90 %` · `5 %` · `50 %`
+`×0,4` · `×0,45` · `×0,5` · `×0,2` · `0,1 %` · `1 %` · `10 %` · `90 %` · `5 %` · `50 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 33.3 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 33.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 33.5 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 33.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 33.1 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
@@ -62,6 +63,7 @@
 - [reports/rapport-pensee-rapide.md](../../reports/rapport-pensee-rapide.md)
 - [reports/rapport-pensee-rare.md](../../reports/rapport-pensee-rare.md)
 - [reports/rapport-pensee-rupture.md](../../reports/rapport-pensee-rupture.md)
+- [reports/rapport-pensee-seuil-fin.md](../../reports/rapport-pensee-seuil-fin.md)
 - [reports/rapport-pensee-seuil.md](../../reports/rapport-pensee-seuil.md)
 - [reports/rapport-pensee-tres-rare.md](../../reports/rapport-pensee-tres-rare.md)
 - [reports/rapport-pensee-ultra-rare.md](../../reports/rapport-pensee-ultra-rare.md)

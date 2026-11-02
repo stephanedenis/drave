@@ -13,8 +13,9 @@ import json
 import pathlib
 
 from .courbe import seule, seule_sto
-from .operateurs import (PolitiqueAppriseBouge, PolitiqueAppriseMobile,
-                         PolitiqueAppriseOuverte, PolitiqueApprisePhase,
+from .operateurs import (PolitiqueAppriseBayesOubliSeuil, PolitiqueAppriseBouge,
+                         PolitiqueAppriseMobile, PolitiqueAppriseOuverte,
+                         PolitiqueApprisePhase, seule_bayes_oubli_seuil,
                          seule_bouge, seule_mobile, seule_phase)
 
 GRAINES = (0, 1, 2, 3, 4)
@@ -68,6 +69,24 @@ def executer_phase() -> list[dict]:
     return lignes
 
 
+def executer_seuil() -> list[dict]:
+    """Le seuil d'oubli sur 5 graines : le taux de buts par facteur."""
+    lignes = []
+    for fac in (0.3, 0.35, 0.4, 0.45, 0.5):
+        buts, runs = 0, 0
+        for g in GRAINES:
+            p = PolitiqueAppriseBayesOubliSeuil(episodes=4000, graine=g, facteur=fac)
+            p.apprendre()
+            for h in range(5):
+                p.rng.seed(2000 + h)
+                b, _ = seule_bayes_oubli_seuil(p)
+                buts += b
+                runs += 1
+        lignes.append({"facteur": fac, "buts": buts, "runs": runs,
+                       "taux": round(buts / runs, 3)})
+    return lignes
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--json", default="")
@@ -77,6 +96,16 @@ def main() -> int:
         print(f"graine {l['graine']}  Q {l['etats_q']:3d}  "
               f"bruit {l['sto_but']}/{l['sto_pas']} pas ({l['sto_essais']} essais)  "
               f"stable {l['stable_but']}/{l['stable_pas']} pas")
+    if args.json and "seuil" in args.json:
+        lignes_s = executer_seuil()
+        for l in lignes_s:
+            print(f"facteur {l['facteur']}  {l['buts']}/{l['runs']} buts")
+        p = pathlib.Path(args.json)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps({"date": "2026-11-02", "ligne": "B13",
+                                 "graines": GRAINES, "lignes": lignes_s},
+                                ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        return 0
     if args.json and "phase" in args.json:
         lignes_p = executer_phase()
         for l in lignes_p:

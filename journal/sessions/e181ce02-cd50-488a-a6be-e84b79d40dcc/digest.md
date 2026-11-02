@@ -22512,3 +22512,153 @@ a9a511e8 DONNÉES — LE CONTRÔLE OCR CONTRE LES ÉVALUATIONS EST MESURÉ : 0/4
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-02, 04 h 15 HNE\", t)\np.write_text(t); print( … [934 caractères tronqués]`
+
+  ```
+ok
+  ✅ index : aucun fait stagé sans état
+EXIT=0
+  revue de documentation · 474 fiche(s) · 567 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-851]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-851", "timeout_ms": 600000, "wait": true}`
+
+  ```
+delete mode 100644 reports/ocr-pdf-contamination.json
+ create mode 100644 reports/pensee-seuil-fin.json
+ create mode 100644 reports/rapport-pensee-seuil-fin.md
+COMMIT OK 1
+4d81e21e B13 — LE SEUIL FIN : ×0,4 RÉUSSIT, ×0,45 ÉCHOUE (NON MONOTONE) ; 75/75
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Seuil fin : ×0,4 réussit, ×0,45 échoue (non monotone) ; 75/75
+
+Le round 76 du goal est livré : le **seuil d'oubli** n'est **pas net** — × 0,4 réussit, × 0,45 échoue : la graine décide. Commit **`4d81e21e`**.
+
+## Le balayage fin
+
+Même monde que T71 (look à l'épisode 3000), facteur balayé de 0,3 à 0,45.
+
+| facteur | buts | états-Q | pas |
+|---|---:|---:|---:|
+| 0,3 | **0/20** | 694 | 200 |
+| 0,35 | **0/20** | 627 | 200 |
+| **0,4** | **20/20** | 644 | 10,0 |
+| 0,45 | **0/20** | 617 | 200 |
+
+**Ce que ça dit** :
+
+- **Le seuil n'est pas monotone** : × 0,4 réussit, × 0,45 échoue ; le résultat dépend de la **graine** (une seule graine testée) autant que du facteur.
+- **La limite est floue** : ce n'est pas un seuil net ; la Q-table est sensible au chemin.
+- **× 0,4 réussit** (1 point sur 5 du balayage) : la politique tient à ce facteur, pas au voisin.
+- **La négative est explicite** : 0/20 à × 0,3, × 0,35 et × 0,45.
+
+## L'état
+
+- Fiche : [`rapport-pensee-seuil-fin.md`](../../reports/rapport-pensee-seuil-fin.md) ; JSON [`pensee-seuil-fin.json`](../../reports/pensee-seuil-fin.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T72 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **75/75 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **474 fiches / 567 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget.
+- Note : le commit a emporté une **suppression** de `reports/ocr-pdf-contamination.json` d'une autre session (course d'index ; le fichier est sur le disque).
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **5 graines par facteur** : trancher le seuil (le prochain round).
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round **tranche le seuil** avec 5 graines par facteur.
+
+
+## Tour 90
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 77/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/graines.py'); t=p.read_text()\nt=t.replace(\"from .operateurs import (PolitiqueAppriseBouge, PolitiqueAppriseMobile,\\n                       … [2067 caractères tronqués]`
+
+  ```
+4d81e21e B13 — LE SEUIL FIN : ×0,4 RÉUSSIT, ×0,45 ÉCHOUE (NON MONOTONE) ; 75/75
+ok
+graine 2  Q  61  bruit True/10 pas (3 essais)  stable True/8 pas
+graine 3  Q  85  bruit True/8 pas (1 essais)  stable True/9 pas
+graine 4  Q  72  bruit True/8 pas (1 essais)  stable True/8 pas
+facteur 0.3  0/25 buts
+facteur 0.35  0/25 buts
+facteur 0.4  25/25 buts
+facteur 0.45  20/25 buts
+facteur 0.5  25/25 buts
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace(\"  T72 le seuil fin                 ×0,4 → 20/20 ; ×0,45 → 0/20 (non monotone)\\n\",\n\"  T72 le seuil fin                 ×0 … [1206 caractères tronqués]`
+
+  ```
+ok
+[still running after 60000ms; moved to background job bash-853]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-853", "timeout_ms": 600000, "wait": true}`
+
+  ```
+✅ T71 seuil d'oubli      seuil : ×0,2 → 0/20 buts (×0,5 réussit), 646 états-Q
+  ✅ T72 seuil fin          seuil fin : ×0,4 → 20/20 buts ; ×0,45 → 0/20 (non monotone, graine unique)
+  ✅ T73 seuil sur 5 graines seuil 5 graines : ×0,35 0/25, ×0,4 25/25, ×0,45 20/25
+  76/76 portes tenues
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-seuil-graines.md <<'MD'\n# B13 — le seuil sur 5 graines : le seuil est ~0,4\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 · **Verdict** : ✅\n> **76/76 portes** : le facteu … [6969 caractères tronqués]`
+
+  ```
+état ok
+  revue de documentation · 475 fiche(s) · 568 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ❌ 1 violation(s) :
+     · reports/README.md : 2818 mots > budget 2800 (T1)
+  en-cours · 1590 mots · 7 sections · 2 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pensee-bayes.md`](rapport-pensee-bayes.md) | **B13** — la croyance bayésienne : un look, 20/20 dès 2000 épisodes, 9,4 p … [617 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 475 fiche(s) · 568 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+bash tools/porte-tableaux.sh                 EXIT=0
+python3 tools/verifier_schemas.py            EXIT=0
+python3 tools/verifie_journal.py             EXIT=0
+python3 tools/verifie_en_cours.py            EXIT=0
+python3 tools/sessions.py --check            EXIT=0
+bash tools/porte-bloc-linguistique.sh        EXIT=0
+[still running after 60000ms; moved to background job bash-855]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-855", "timeout_ms": 600000, "wait": true}`
+
+  ```
+timeout 600 python3 -m tools.pensee.autotest EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6 7; do\n  git add tools/pensee/graines.py tools/pensee/autotest.py reports/rapport-pensee-seuil-graines.md reports/pensee-seuil-graines.json reports/README.md docs/implantation/moteur-de-pensee.md docs/pilotage/en … [505 caractères tronqués]`

@@ -1,0 +1,38 @@
+{
+ "date": "2026-11-02",
+ "ligne": "B13",
+ "portes": "76/76",
+ "seuil": "~0,4 (5 graines)",
+ "lignes": [
+  {
+   "facteur": 0.3,
+   "buts": 0,
+   "runs": 25
+  },
+  {
+   "facteur": 0.35,
+   "buts": 0,
+   "runs": 25
+  },
+  {
+   "facteur": 0.4,
+   "buts": 25,
+   "runs": 25
+  },
+  {
+   "facteur": 0.45,
+   "buts": 20,
+   "runs": 25
+  },
+  {
+   "facteur": 0.5,
+   "buts": 25,
+   "runs": 25
+  }
+ ],
+ "limites": [
+  "5 graines",
+  "bord 0,45 instable",
+  "toy"
+ ]
+}

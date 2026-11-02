@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
 | Durée | 33.1 h |
-| Tours | 329 |
-| Messages | 2031 |
-| Appels d'outils | 1367 |
+| Tours | 338 |
+| Messages | 2060 |
+| Appels d'outils | 1378 |
 | Fichiers touchés | 26 |
-| Commandes | 1203 |
+| Commandes | 1214 |
 | Sous-agents | 0 |
 | Commits | 77 |
 | Compactages de contexte | 4 |
@@ -685,6 +685,24 @@
 **Tour 328** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 **Tour 329** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 330** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 331** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 332** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 333** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 334** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 335** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 336** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 337** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
+
+**Tour 338** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1. … [751 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -7719,6 +7737,208 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 329 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
+*1 appels d'outils.* Actions notables :
+
+- bash — Check CSS OCR and milestone
+
+**Synthèse produite :**
+
+⏵ Round 317 : CSS en OCR à 371/718 pages
+
+**Round 317/1000 — le 9e livre avance (371/718 pages).**
+
+- **`tesseract`** lit la page **371/718** du CSS ; il finira vers **02 h 00-02 h 05**.
+- **Le jalon** (PID 2294564) annoncera la ligne du CSS dès qu'elle sera écrite.
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le contrôle OCR** est complet : croisé **trivialement 0** (val/test vides), éval **0/40, 0/24, 0/40** — committé (`a9a511e8`).
+- **Le commit `868399c8`** aligne la roadmap, le récit et l'état sur les 8 livres.
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45**.
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le CSS avance ; le goal reste actif.
+
+### Tour 330 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check CSS OCR and milestone
+
+**Synthèse produite :**
+
+⏵ Round 318 : CSS en OCR à 382/718 pages
+
+**Round 318/1000 — le 9e livre avance (382/718 pages).**
+
+- **`tesseract`** lit la page **382/718** du CSS ; il finira vers **02 h 00**.
+- **Le jalon** (PID 2294564) annoncera la ligne du CSS dès qu'elle sera écrite.
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le contrôle OCR** est complet : croisé **trivialement 0** (val/test vides), éval **0/40, 0/24, 0/40** — committé (`a9a511e8`).
+- **Le commit `868399c8`** aligne la roadmap, le récit et l'état sur les 8 livres.
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45**.
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le CSS avance ; le goal reste actif.
+
+### Tour 331 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check CSS OCR progress
+
+**Synthèse produite :**
+
+⏵ Round 319 : CSS en OCR à 388/718 pages
+
+**Round 319/1000 — le 9e livre avance (388/718 pages).**
+
+- **`tesseract`** lit la page **388/718** du CSS ; il finira vers **02 h 00**.
+- **Le jalon** (PID 2294564) annoncera la ligne du CSS dès qu'elle sera écrite.
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le contrôle OCR** est complet : croisé **trivialement 0** (val/test vides), éval **0/40, 0/24, 0/40** — committé (`a9a511e8`).
+- **Le commit `868399c8`** aligne la roadmap, le récit et l'état sur les 8 livres.
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45**.
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le CSS avance ; le goal reste actif.
+
+### Tour 332 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check CSS OCR and total runtime
+
+**Synthèse produite :**
+
+⏵ Round 320 : CSS en OCR à 392/718, l'OCR à 4 h 56
+
+**Round 320/1000 — le 9e livre avance (392/718 pages), l'OCR tourne depuis 4 h 56.**
+
+- **`tesseract`** lit la page **392/718** du CSS ; il finira vers **02 h 00**.
+- **Le processus OCR** (PID 1616198) tourne depuis **4 h 56 min 30 s** ; **le train** est à **7 776 329 octets** (les 8 livres).
+- **Le jalon** (PID 2294564) annoncera la ligne du CSS dès qu'elle sera écrite.
+- **Le contrôle OCR** est complet : croisé **trivialement 0** (val/test vides), éval **0/40, 0/24, 0/40** — committé (`a9a511e8`).
+- **Le commit `868399c8`** aligne la roadmap, le récit et l'état sur les 8 livres.
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45**.
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le CSS avance ; le goal reste actif.
+
+### Tour 333 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check CSS OCR and milestone
+
+**Synthèse produite :**
+
+⏵ Round 321 : CSS en OCR à 399/718 pages
+
+**Round 321/1000 — le 9e livre avance (399/718 pages).**
+
+- **`tesseract`** lit la page **399/718** du CSS ; il finira vers **02 h 00**.
+- **Le jalon** (PID 2294564) annoncera la ligne du CSS dès qu'elle sera écrite.
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le contrôle OCR** est complet : croisé **trivialement 0** (val/test vides), éval **0/40, 0/24, 0/40** — committé (`a9a511e8`).
+- **Le commit `868399c8`** aligne la roadmap, le récit et l'état sur les 8 livres.
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45**.
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le CSS avance ; le goal reste actif.
+
+### Tour 334 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check CSS page and milestone log
+- bash — Check CSS OCR page
+
+**Synthèse produite :**
+
+⏵ Round 322 : CSS en OCR à 410/718 pages
+
+**Round 322/1000 — le 9e livre avance (410/718 pages).**
+
+- **`tesseract`** lit la page **410/718** du CSS ; il finira vers **02 h 00**.
+- **Le jalon** (PID 2294564) annoncera la ligne du CSS dès qu'elle sera écrite.
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le contrôle OCR** est complet : croisé **trivialement 0** (val/test vides), éval **0/40, 0/24, 0/40** — committé (`a9a511e8`).
+- **Le commit `868399c8`** aligne la roadmap, le récit et l'état sur les 8 livres.
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45**.
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le CSS avance ; le goal reste actif.
+
+### Tour 335 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check next books page counts
+
+**Synthèse produite :**
+
+⏵ Round 323 : projection des prochains livres (115, 97, 412 pages)
+
+**Round 323/1000 — les trois livres suivants sont dimensionnés.**
+
+- **`004.65 api lifecycle` : 115 p**, **`Pautasso 2025` : 97 p**, **`Peterson 2013` : 412 p** — après le CSS (718 p, ~410 faites), les 10e et 11e livres seront rapides (~10-15 min chacun), le 12e plus long (~40-60 min).
+- **Le jalon** (PID 2294564) annoncera la ligne du CSS dès qu'elle sera écrite ; **le finisher** (PID 2275241) couvre le manifeste et le **cutoff 06:45**.
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le contrôle OCR** est complet : croisé **trivialement 0** (val/test vides), éval **0/40, 0/24, 0/40** — committé (`a9a511e8`).
+- **Le commit `868399c8`** aligne la roadmap, le récit et l'état sur les 8 livres.
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : d'ici 06:45, l'OCR peut ajouter plusieurs livres ; le goal reste actif.
+
+### Tour 336 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check CSS OCR and milestone
+
+**Synthèse produite :**
+
+⏵ Round 324 : CSS en OCR à 423/718 pages
+
+**Round 324/1000 — le 9e livre avance (423/718 pages).**
+
+- **`tesseract`** lit la page **423/718** du CSS ; il finira vers **02 h 00**.
+- **Le jalon** (PID 2294564) annoncera la ligne du CSS dès qu'elle sera écrite.
+- **Les suivants** : api lifecycle 115 p, Pautasso 97 p, Peterson 412 p — l'OCR enchaînera jusque 20 livres ou le **cutoff 06:45** (finisher PID 2275241).
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le contrôle OCR** est complet : croisé **trivialement 0** (val/test vides), éval **0/40, 0/24, 0/40** — committé (`a9a511e8`).
+- **Le commit `868399c8`** aligne la roadmap, le récit et l'état sur les 8 livres.
+- **Les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅ ; **les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le CSS avance ; le goal reste actif.
+
+### Tour 337 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check CSS page, train size and milestone
+
+**Synthèse produite :**
+
+⏵ Round 325 : CSS en OCR à 429/718 pages
+
+**Round 325/1000 — le 9e livre avance (429/718 pages).**
+
+- **`tesseract`** lit la page **429/718** du CSS ; il finira vers **02 h 00**.
+- **Le train** est à **7 776 329 octets** (les 8 livres) ; le CSS s'ajoutera à la fin.
+- **Le jalon** (PID 2294564) annoncera la ligne du CSS dès qu'elle sera écrite.
+- **Le contrôle OCR** est complet : croisé **trivialement 0** (val/test vides), éval **0/40, 0/24, 0/40** — committé (`a9a511e8`).
+- **Le commit `868399c8`** aligne la roadmap, le récit et l'état sur les 8 livres.
+- **Le finisher** (PID 2275241) attend le manifeste ou le **cutoff 06:45** ; **les portes d'état** ✅ ; **la revue** ✅ ; **le budget de docs** ✅.
+- **Les documents** sont **clos** (`5c27a3fb`), **les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), **A2.6/A8.3**, **genres** et **R1.1/R1.2** restent mesurés et committés.
+
+**Le constat** : le CSS avance ; le goal reste actif.
+
+### Tour 338 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait 4 min then check OCR progress
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -7794,7 +8014,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1163 autres
+- … et 1174 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -7922,7 +8142,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ## 5. Erreurs rencontrées
 
-92 sorties en erreur ou divergentes. Les premières :
+95 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : R41-bloc-tableaux.md R42-bloc-code.md R43-bloc-maths.md R44-encodeur-visuel.md --- [exit code: 2]
 - **T1** : [{'type': 'titre', 'texte': 'A /RES/80/1', 'prov': {'page': 1, 'y': 42.6}}, {'type': 'section', 'texte': 'Nations Unies', 'prov': {'page': 1, 'y': 48.2}}, {'type': 'section', 'texte': 'Assemblée génér

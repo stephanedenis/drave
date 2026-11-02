@@ -1167,6 +1167,16 @@ def t72_seuil_fin() -> tuple[bool, str]:
                       f"(non monotone, graine unique)")
 
 
+def t73_seuil_graines() -> tuple[bool, str]:
+    """Le seuil sur 5 graines : × 0,35 échoue (0/25), × 0,4 réussit (25/25)."""
+    from .graines import executer_seuil
+    lignes = executer_seuil()
+    par = {l["facteur"]: l for l in lignes}
+    ok = par[0.4]["buts"] == 25 and par[0.35]["buts"] == 0
+    return ok, (f"seuil 5 graines : ×0,35 {par[0.35]['buts']}/25, "
+                f"×0,4 {par[0.4]['buts']}/25, ×0,45 {par[0.45]['buts']}/25")
+
+
 def main() -> int:
     portes = [("T0 store canonique", t0_store()), ("T1 rejeu", t1_rejeu()),
               ("T1 graine", t1_graine()), ("T1 DRVF thought", t1_drvf()),
@@ -1238,7 +1248,8 @@ def main() -> int:
               ("T69 mémoire très courte", t69_oubli_fort()),
               ("T70 oubli total", t70_oubli_total()),
               ("T71 seuil d'oubli", t71_seuil()),
-              ("T72 seuil fin", t72_seuil_fin())]
+              ("T72 seuil fin", t72_seuil_fin()),
+              ("T73 seuil sur 5 graines", t73_seuil_graines())]
     échecs = 0
     for nom, (ok, msg) in portes:
         print(f"  {'✅' if ok else '❌'} {nom:22s} {msg}")
