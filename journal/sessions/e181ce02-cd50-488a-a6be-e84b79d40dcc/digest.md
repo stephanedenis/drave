@@ -20288,3 +20288,78 @@ retry 7
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-02, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-02, 00 h 55 HNE\", t)\np.write_text(t); print( … [967 caractères tronqués]`
+
+  ```
+ok
+  ✅ index : aucun fait stagé sans état
+EXIT=0
+  revue de documentation · 456 fiche(s) · 549 JSON · 118 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-758]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-758", "timeout_ms": 600000, "wait": true}`
+
+  ```
+22 files changed, 420 insertions(+), 37 deletions(-)
+ create mode 100644 reports/pensee-alternance.json
+ create mode 100644 reports/rapport-pensee-alternance.md
+COMMIT OK 1
+896a3df0 B13 — LES RUPTURES RÉPÉTÉES : 0,9/0,1 ALTERNÉS, v FINAL 0,14, 20/20, 8,0 PAS ; 58/58
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Ruptures répétées : 0,9/0,1 alternés, v final 0,14, 20/20, 8,0 pas ; 58/58
+
+Le round 59 du goal est livré : les **ruptures répétées** (0,9/0,1 toutes les 1000 épisodes) sont absorbées par la fenêtre adaptative. Commit **`896a3df0`**.
+
+## Les ruptures répétées
+
+Même monde que T54, mais l'erreur **alterne** : 0,1 (épisodes 0–999), 0,9 (1000–1999), 0,1 (2000–2999), 0,9 (3000–3999)…
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| 4000 | 20/20 | 0,1 | 727 | 8,0 |
+| **8000** | **20/20** | **0,14** | 797 | 8,0 |
+| rupture unique (T54) | 20/20 | 0,12 | 780 | 8,0 |
+
+**Ce que ça dit** :
+
+- **Les ruptures répétées sont absorbées** : la même fenêtre adaptative suit les alternances ; v finit sur le dernier régime (0,14), pas sur une moyenne.
+- **Le but est atteint** (20/20, 8,0 pas) : l'alternance ne casse pas la politique.
+- **Le coût est nul** (8,0 pas) : chaque régime est exploité, même antiprédictif.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+## L'état
+
+- Fiche : [`rapport-pensee-alternance.md`](../../reports/rapport-pensee-alternance.md) ; JSON [`pensee-alternance.json`](../../reports/pensee-alternance.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T55 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **58/58 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **456 fiches / 549 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget (bloc Moteur compacté).
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+## La suite
+
+1. **Alternance aléatoire** : la fiabilité change sans préavis.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round rend l'alternance **aléatoire** (la fiabilité change sans préavis).
+
+
+## Tour 73
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/N2 ; si une ligne est bloquée, prendre la suivante de la file sans attendre. Chaque round doit produire un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit."
+Round: 60/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text()\nt=t.replace('''# --------------------------------------------------------------------------- période qui ch … [2015 caractères tronqués]`

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,6 +13,7 @@
 | 00:10 | `df42425a` | DONNÉES — LA PRÉPARATION R1.1/R1.2 EST FICÉE : CE QUI EST PRÊT, CE QUI ATTEND N2 | `en-cours.md`, `README.md`, `apprentissage.md` (+11) |
 | 00:12 | `713c0bbc` | B13 — LA DÉRIVE CONTINUE : 5 % → 50 %, v FINAL 0,5, 20/20, 8,6 PAS ; 56/56 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+16) |
 | 00:17 | `19da83fb` | B13 — LA RUPTURE : 90 % D'ERREUR, v FINAL 0,12, 20/20, 8,0 PAS ; 57/57 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+22) |
+| 00:24 | `896a3df0` | B13 — LES RUPTURES RÉPÉTÉES : 0,9/0,1 ALTERNÉS, v FINAL 0,14, 20/20, 8,0 PAS ; 58/58 | `moteur-de-pensee.md`, `chantiers.md`, `en-cours.md` (+19) |
 
 ## Chiffres du jour
 
@@ -24,12 +25,13 @@
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 32.0 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 31.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
-- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 31.8 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
+- `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 31.9 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-n2-echantillon.md](../../reports/rapport-n2-echantillon.md)
+- [reports/rapport-pensee-alternance.md](../../reports/rapport-pensee-alternance.md)
 - [reports/rapport-pensee-derive.md](../../reports/rapport-pensee-derive.md)
 - [reports/rapport-pensee-glisse.md](../../reports/rapport-pensee-glisse.md)
 - [reports/rapport-pensee-rupture.md](../../reports/rapport-pensee-rupture.md)

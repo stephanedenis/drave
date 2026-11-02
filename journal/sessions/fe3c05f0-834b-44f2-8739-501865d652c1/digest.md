@@ -22722,3 +22722,106 @@ Round: 104/1000
 Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
 </goal_round>
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; ls -la data/corpus_ocr/train.txt; tail -1 /tmp/ocr-pilote.log; ps --ppid 1616198 -o pid,stat,etime,cmd 2>/dev/null | head -2; ls reports/ocr-pdf.json 2>&1", "description": "Check OCR progress and manifest", "timeoutMs":  … [69 caractères tronqués]`
+
+  ```
+00:25
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+    PID STAT     ELAPSED CMD
+2134450 Rl         00:01 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/ocr/root/usr/bin/tesseract /tmp/ocr-pdf-3cx_a7f4/p-0175.png stdout -l fra+eng --psm 3
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+[exit code: 2]
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+### 🤖 Assistant
+
+⏵ Round 104 : je lance un surveillant en arrière-plan pour le manifeste OCR (plus de polling)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; nohup bash -c 'for i in $(seq 1 720); do [ -f reports/ocr-pdf.json ] && break; sleep 30; done; if [ -f reports/ocr-pdf.json ]; then python3 tools/verifie_contamination.py --train data/corpus_ocr/train.txt --val data/corpus_ocr/val.txt  … [343 caractères tronqués]`
+
+  ```
+surveillant OCR 2136539
+00:25
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 104 : surveillant OCR lancé en arrière-plan — il fera le contrôle 8 Ko dès le manifeste
+
+**Round 104/1000 — le polling est remplacé par un surveillant.**
+
+J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `reports/ocr-pdf.json` (le manifeste OCR), en vérifiant toutes les 30 s pendant 6 h, puis **lance automatiquement le contrôle 8 Ko** sur les train/val/test OCR (`reports/ocr-pdf-contamination.json`). Plus besoin de re-poller : le travail se fera tout seul.
+
+- **L'OCR** : `tesseract` océrise la page **p-0175** du 8e livre (*Sprenger 2025, inflammationcycling*, **1 264 pages**) ; le train reste à **4 193 550 octets**. Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; l'état, la roadmap et le journal du 2/11 sont à jour.
+
+**La suite** : le manifeste OCR (à la fin du 8e livre) → le contrôle 8 Ko automatique → la fiche OCR figée et committée ; puis la clôture à 8 h. Le goal reste actif.
+
+
+## Tour 117
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 105/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; echo \"=== surveillant\"; ps -p 2136539 -o pid,stat,etime= 2>/dev/null || echo \"surveillant terminé\"; echo \"=== manifeste\"; ls -la reports/ocr-pdf.json reports/ocr-pdf-contamination.json 2>&1 | tail -2; echo \"=== OC … [198 caractères tronqués]`
+
+  ```
+00:26
+=== surveillant
+    PID STAT            
+2136539 S          00:22
+=== manifeste
+ls: cannot access 'reports/ocr-pdf.json': No such file or directory
+ls: cannot access 'reports/ocr-pdf-contamination.json': No such file or directory
+=== OCR
+  Biblio_large · 004.0 Inconnu(e) 2025, Product Manual(F7 · 16 p · 16196 car
+-rw-r--r--. 1 stephane stephane 4193550  1 nov 23:48 data/corpus_ocr/train.txt
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 105 : le surveillant OCR tourne (00:22), le manifeste n'est pas encore là
+
+**Round 105/1000 — le surveillant est actif, l'OCR travaille.**
+
+- **Le surveillant** (PID 2136539) tourne depuis 22 s : il attend `reports/ocr-pdf.json` toutes les 30 s (pendant 6 h) et lancera le **contrôle 8 Ko** dès son apparition.
+- **L'OCR** : train **4 193 550 octets** ; `tesseract` avance dans les **1 264 pages** du 8e livre (*Sprenger 2025, inflammationcycling*). Les val/test restent à 0 (écrits à la clôture).
+- **Les documents** : **clos** (`5c27a3fb`). **Les dix corpus** (20,53 M art., 67,73 G car., 81,2 Go, 8 Ko 0), le **PDF**, **A2.6/A8.3**, les **genres** et la **préparation R1.1/R1.2** (`df42425a`) restent mesurés et committés ; l'état, la roadmap et le journal du 2/11 sont à jour.
+
+**Le constat** : la chaîne OCR est automatisée (le surveillant fera le contrôle seul). Le goal reste actif ; le prochain round vérifiera le manifeste et le contrôle.
+
+
+## Tour 118
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 jusqu'au 2026-11-02 08:00 EST : produire les 10 corpus Wikipédia en texte intégral (les 9 langues restantes : mesures, manifestes, contamination, fiche et catalogue), l'extraction PDF/OCR des documents locaux (livres, CEGEP, collections) avec leurs licences, puis la préparation R1.1/R1.2 et les mesures A2.6/A8.3. Chaque livraison doit être mesurée, ficée, committée, avec l'état (en-cours), la roadmap et le plan à jour, sans toucher aux GPU de N2 ni aux fichiers des autres sessions."
+Round: 106/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 106 : je vérifie la ligne D/R/A du plan de travail
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; sed -n '41p' docs/pilotage/plan-travail.md | cut -c1-400", "description": "Read D/R/A plan line", "timeoutMs": 120000, "workdir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+00:26
+| **D/R/A — les données, le lecteur, le moteur** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | le texte intégral des 10 corpus, l'extraction PDF/OCR, la prépa R1 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/plan-travail.md')\ns = p.read_text()\nold = \"| **D/R/A — les données, le lecteur, le moteur** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de … [1321 caractères tronqués]`

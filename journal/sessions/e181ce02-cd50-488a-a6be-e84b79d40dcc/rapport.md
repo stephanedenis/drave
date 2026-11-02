@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 31.8 h |
-| Tours | 72 |
-| Messages | 1029 |
-| Appels d'outils | 936 |
+| Tours | 73 |
+| Messages | 1035 |
+| Appels d'outils | 940 |
 | Fichiers touchés | 25 |
-| Commandes | 758 |
+| Commandes | 762 |
 | Sous-agents | 2 |
 | Commits | 92 |
 | Compactages de contexte | 3 |
@@ -175,6 +175,8 @@
 **Tour 71** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 **Tour 72** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
+
+**Tour 73** — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le DRVF `thought` (encodage, rejeu, diff) et le banc anytime (AUC, regret) de B13 ; puis le gold POS/syntagme/pragmatique et la qualification neuronale de L (cascade mesurée) ; tenir en-cours/roadmap/chantiers/plan, les portes et les commits ; ne pas écrire dans les territoires S/D/ … [724 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3845,6 +3847,53 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round enchaîne les **ruptures
 - job_output
 - bash — Committer les ruptures répétées (2e essai)
 
+**Synthèse produite :**
+
+⏵ Ruptures répétées : 0,9/0,1 alternés, v final 0,14, 20/20, 8,0 pas ; 58/58
+
+Le round 59 du goal est livré : les **ruptures répétées** (0,9/0,1 toutes les 1000 épisodes) sont absorbées par la fenêtre adaptative. Commit **`896a3df0`**.
+
+\## Les ruptures répétées
+
+Même monde que T54, mais l'erreur **alterne** : 0,1 (épisodes 0–999), 0,9 (1000–1999), 0,1 (2000–2999), 0,9 (3000–3999)…
+
+| épisodes | buts | v final | états-Q | pas |
+|---:|---|---:|---:|---:|
+| 4000 | 20/20 | 0,1 | 727 | 8,0 |
+| **8000** | **20/20** | **0,14** | 797 | 8,0 |
+| rupture unique (T54) | 20/20 | 0,12 | 780 | 8,0 |
+
+**Ce que ça dit** :
+
+- **Les ruptures répétées sont absorbées** : la même fenêtre adaptative suit les alternances ; v finit sur le dernier régime (0,14), pas sur une moyenne.
+- **Le but est atteint** (20/20, 8,0 pas) : l'alternance ne casse pas la politique.
+- **Le coût est nul** (8,0 pas) : chaque régime est exploité, même antiprédictif.
+- **La négative reste** : sans mise à jour (T45), 0/20.
+
+\## L'état
+
+- Fiche : [`rapport-pensee-alternance.md`](../../reports/rapport-pensee-alternance.md) ; JSON [`pensee-alternance.json`](../../reports/pensee-alternance.json) ; code [`operateurs.py`](../../tools/pensee/operateurs.py) ; T55 dans [`autotest.py`](../../tools/pensee/autotest.py).
+- **58/58 portes** ; `porte-bloc-linguistique` **verte** (gold 360 + tests + 398 langues) ; `revue` **456 fiches / 549 JSON / 118 docs / 81 portes** — ✅ ; `en-cours` 2 sessions, T0 dans le budget (bloc Moteur compacté).
+- Le **vrai modèle neuronal** reste **bloqué** : `llama-cli` refusé, taggers absents, **aucun poids `drave-n0`** pour une politique DRVM réelle.
+
+\## La suite
+
+1. **Alternance aléatoire** : la fiabilité change sans préavis.
+2. **Vérité qui change** : la porte change de loi, pas seulement le bruit.
+3. **Politique DRVM/native** : un vrai modèle quand les poids seront là.
+4. **L** : 200 réels atteints ; le gold peut encore grandir.
+
+Le goal `goal-7beacaeb` reste actif ; le prochain round rend l'alternance **aléatoire** (la fiabilité change sans préavis).
+
+### Tour 73 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1004 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Tester l'alternance aléatoire
+- bash — Ajouter la porte T56 (alternance aléatoire)
+- bash — Écrire la fiche de l'alternance aléatoire
+- bash — Trim README et portes
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -3924,7 +3973,7 @@ Le goal `goal-7beacaeb` reste actif ; le prochain round enchaîne les **ruptures
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 718 autres
+- … et 722 autres
 
 ## 4. Mesures et résultats marquants
 

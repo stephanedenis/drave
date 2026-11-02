@@ -7,14 +7,14 @@
 | Identifiant | `fe3c05f0-834b-44f2-8739-501865d652c1` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:35 |
-| Durée | 31.8 h |
+| Durée | 31.9 h |
 | Tours | 118 |
-| Messages | 1355 |
-| Appels d'outils | 1119 |
+| Messages | 1356 |
+| Appels d'outils | 1120 |
 | Fichiers touchés | 25 |
-| Commandes | 1032 |
+| Commandes | 1033 |
 | Sous-agents | 0 |
-| Commits | 72 |
+| Commits | 73 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -3192,9 +3192,10 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 
 ### Tour 118 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md et faire avancer le mandat D/R/A de la session fe3c05f0 ju … [1031 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*2 appels d'outils.* Actions notables :
 
 - bash — Read D/R/A plan line
+- bash — Update plan D/R/A line and commit
 
 **Synthèse produite :**
 
@@ -3274,7 +3275,7 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 992 autres
+- … et 993 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3494,4 +3495,5 @@ J'ai lancé un **surveillant en arrière-plan** (PID 2136539) : il attend `repor
 - DONNÉES — LA PRÉPARATION R1.1/R1.2 EST FICÉE : CE QUI EST PRÊT, CE QUI ATTEND N2" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /t
 - ÉTAT — OCR 8 LIVRES, PROCHAINE ACTION : L'OCR COMPLET ET LA CLÔTURE" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err
 - ÉTAT — T0 REVENU SOUS 4 000" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /tmp/commit.err; sleep 8; fi done git reset -q; git log
+- PLAN — LA LIGNE D/R/A PORTE SES LIVRAISONS : DIX CORPUS FAITS, PDF/OCR, PRÉPA R1" 2>/tmp/commit.err; then echo "commit OK"; break; else echo "refus"; tail -2 /t
 
