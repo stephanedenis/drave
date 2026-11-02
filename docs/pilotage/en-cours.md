@@ -37,7 +37,7 @@
 - **Ce que font les autres** : **N2.h** et **R4.4** sont **closes** ; **S** (le banc de structures)
   avance ; **N4** en file ; **A/B** gardent les leurs.
 - **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`, `docs/theorie/pre-traitement-linguistique.md`, `tools/bloc_linguistique.py`, `tools/tests/linguistique/`, `docs/implantation/bloc-linguistique.md`, `journal/sessions/e181ce02-…/`.
-- **Prochaine action** : **L** — la **règle du `si`** (T127 : 19/29 ; répondre `si` aux négatives françaises, `yes` aux anglaises), et le gold à 417 réels ;
+- **Prochaine action** : **L** — la **règle du `si`** (T127 : 19/29 ; répondre `si` aux négatives françaises, `yes` aux anglaises) ;
   **B13** — DRVM/native **bloqué**, la cascade mesurée reste la lecture.
 - **Bloquants** : **neuronal réel bloqué** — `llama-cli` refuse/timeout, aucun tagger (`spacy`,
   `stanza`, `nltk`, `transformers`), aucun poids `drave-n0` ; le mock reste un contrat. Trois
@@ -57,7 +57,7 @@
 - **Ambition** : le français réel.
 - **Stratégie** : le dump, débaliseur.
 - **Objectif final** : 10 corpus, ficés.
-- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 8 Ko 0 ; éval 0/40) ; **OCR CEGEP** (10 notes, 2,52 M car. — **à re-océriser**) ; **genres** mesurés (OCR **38,5** car/ligne) ; **glossaire** 335 entrées (famille 13) ; docwatch les annote au rendu ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
+- **Ce qu'elle fait** : le **texte intégral** : les **10** (**20,53 M** ; 8 Ko 0) ; **PDF** (1 927 doc., 322 Mo) ; **Documents** (3 384 doc., 872 M car. ; 8 Ko 2,07 %) ; **OCR** 20 livres (7 381 p, 15,36 M car. ; 8 Ko 0 ; éval 0/40) ; **OCR CEGEP** (10 notes, 2,52 M car., à re-océriser) ; **genres** mesurés (OCR **38,5** car/ligne) ; **glossaire** 335 entrées (famille 13) ; docwatch les annote au rendu ; fiche [`wiki`](../../reports/rapport-corpus-wiki-texte.md).
 - **Ce que font les autres** : Pensée, S, N2.
 - **Journal** : [le 02/11](../../journal/2026-11-02/README.md) (la nuit D/R/A).
 - **Prochaine action** : l'**OCR complet** — le **fonds CEGEP** (~127 scans ; le 11e PDF exige `--max-pages`) ; la clôture.

@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:35 |
 | Durée | 44.3 h |
 | Tours | 388 |
-| Messages | 2398 |
-| Appels d'outils | 1610 |
+| Messages | 2399 |
+| Appels d'outils | 1611 |
 | Fichiers touchés | 29 |
-| Commandes | 1427 |
+| Commandes | 1428 |
 | Sous-agents | 0 |
-| Commits | 98 |
+| Commits | 99 |
 | Compactages de contexte | 4 |
 
 ## Objectifs déclarés
@@ -9201,7 +9201,7 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 
 ### Tour 388 — fais une passe dans docs pour enrichir le glossaire et une autre passe ajouter les hyperliens vers le glossaire partout  … [228 caractères tronqués]
 
-*39 appels d'outils.* Actions notables :
+*40 appels d'outils.* Actions notables :
 
 - bash — Inspect glossary, docwatch and existing links
 - read
@@ -9217,7 +9217,7 @@ La fenêtre de 3 h est close (12 h 20) ; le goal est marqué **complete**.
 - bash — Add CSS and glossary tests, run them
 - bash — Run glossary tests with src on path
 - bash — Regenerate glossary index and verify cards
-- … et 22 autres
+- … et 23 autres
 
 **Synthèse produite :**
 
@@ -9301,7 +9301,7 @@ Le dry-run montre 1 796 liens sur 108 pages — c'est précisément le « partou
 - **T1** List tesseract language RPMs in noarch
 - **T1** Read bench harness start
 - **T1** Inspect reader controller interface
-- … et 1387 autres
+- … et 1388 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -9547,4 +9547,5 @@ Le dry-run montre 1 796 liens sur 108 pages — c'est précisément le « partou
 - GLOSSAIRE — FAMILLE 13 (CORPUS ET MESURE DOCUMENTAIRE, 19 ENTRÉES) ET DOCWATCH ANNOTE LES TERMES AU RENDU : 335 ENTRÉES" > /tmp/commit-glossaire.log 2>&1; code=
 - ÉTAT — 119 DOCS, T0 SOUS 4 000, LE GLOSSAIRE (335 ENTRÉES) ET DOCWATCH SONT COMMITTÉS" > /tmp/commit-etat-gloss.log 2>&1; code=$?; tail -2 /tmp/commit-etat-glos
 - GLOSSAIRE — LES 10 PAGES PIVOTS LIENT LA PREMIÈRE OCCURRENCE DES TERMES (269 LIENS) ; LE SCRIPT LIE PAR PAGE, PAS « PARTOUT »" > /tmp/commit-liens.log 2>&1; cod
+- GLOSSAIRE — LES 10 PAGES PIVOTS LIENT LA PREMIÈRE OCCURRENCE DES TERMES (269 LIENS) ; LE SCRIPT LIE PAR PAGE, PAS « PARTOUT »" > /tmp/commit-liens2.log 2>&1; co
 

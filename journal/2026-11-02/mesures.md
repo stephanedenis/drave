@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (75)
+## Commits du jour (76)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -83,6 +83,7 @@
 | 12:25 | `9105c184` | B13 — LE JUGE CONTRE LE BLOC : 0/19 ET 0/19, LA PREMIÈRE MESURE DE CORRECTION ; 128/128 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+21) |
 | 12:33 | `646c04c5` | B13 — LA RÉPONSE DIRIGÉE : 19/19, LA PREMIÈRE RÉPONSE JUSTE (17/19 AVANT LA LANGUE) ; 129/129 | `moteur-de-pensee.md`, `en-cours.md`, `README.md` (+21) |
 | 12:45 | `546411f6` | GLOSSAIRE — FAMILLE 13 (CORPUS ET MESURE DOCUMENTAIRE, 19 ENTRÉES) ET DOCWATCH ANNOTE LES TERMES AU RENDU : 335 ENTRÉES | `en-cours.md`, `glossaire.md`, `13-le-corpus-et-la-mesure-documentaire.md` (+41) |
+| 12:53 | `866fcaa7` | B13 — LES QUESTIONS NÉGATIVES : 19/29, LA RÈGLE DE SURFACE NE S'INVERSE PAS ; 130/130 | `moteur-de-pensee.md`, `en-cours.md`, `roadmap.md` (+49) |
 
 ## Chiffres du jour
 
@@ -93,7 +94,7 @@
 ## Sessions actives ce jour
 
 - `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` — Continue session work (début 2026-10-31 17:17, 44.6 h) → [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 44.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 44.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `fe3c05f0-834b-44f2-8739-501865d652c1` — Lecture de en-cours.md et choix de tâche (début 2026-10-31 17:35, 44.3 h) → [rapport](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/rapport.md) · [digest](../sessions/fe3c05f0-834b-44f2-8739-501865d652c1/digest.md)
 
 ## Mesures et rapports touchés
@@ -155,6 +156,7 @@
 - [reports/rapport-pensee-miroir-pos.md](../../reports/rapport-pensee-miroir-pos.md)
 - [reports/rapport-pensee-miroir-reponse.md](../../reports/rapport-pensee-miroir-reponse.md)
 - [reports/rapport-pensee-miroir.md](../../reports/rapport-pensee-miroir.md)
+- [reports/rapport-pensee-negatives.md](../../reports/rapport-pensee-negatives.md)
 - [reports/rapport-pensee-rapide.md](../../reports/rapport-pensee-rapide.md)
 - [reports/rapport-pensee-rare.md](../../reports/rapport-pensee-rare.md)
 - [reports/rapport-pensee-reponse-dirigee.md](../../reports/rapport-pensee-reponse-dirigee.md)

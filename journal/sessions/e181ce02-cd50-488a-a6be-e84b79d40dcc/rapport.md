@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 44.2 h |
+| Durée | 44.3 h |
 | Tours | 145 |
-| Messages | 1727 |
-| Appels d'outils | 1481 |
+| Messages | 1729 |
+| Appels d'outils | 1483 |
 | Fichiers touchés | 25 |
-| Commandes | 1209 |
+| Commandes | 1210 |
 | Sous-agents | 2 |
-| Commits | 184 |
+| Commits | 185 |
 | Compactages de contexte | 5 |
 
 ## Objectifs déclarés
@@ -7689,7 +7689,7 @@ Je continue : prochain round, **les questions négatives** — le piège qui sé
 
 ### Tour 145 — <goal_round> Objective: "Suivre docs/pilotage/plan-travail.md jusqu'au 2026-11-02 08:00 EST (session L/B13) : livrer le  … [1005 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Ajouter 10 questions négatives et mesurer
 - bash — Corriger l'ordre des segments des questions négatives
@@ -7704,6 +7704,7 @@ Je continue : prochain round, **les questions négatives** — le piège qui sé
 - bash — Committer les questions négatives
 - bash — Mettre l'état à jour et committer
 - job_output
+- bash — Rétablir le budget T0 et committer
 
 ## 3. Travail accompli
 
@@ -7784,7 +7785,7 @@ Je continue : prochain round, **les questions négatives** — le piège qui sé
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1169 autres
+- … et 1170 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -8116,4 +8117,5 @@ Je continue : prochain round, **les questions négatives** — le piège qui sé
 - B13 — LA RÉPONSE DIRIGÉE : 19/19, LA PREMIÈRE RÉPONSE JUSTE (17/19 AVANT LA LANGUE) ; 129/129" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "RÉPONSE D
 - B13 — LES QUESTIONS NÉGATIVES : 19/29, LA RÈGLE DE SURFACE NE S'INVERSE PAS ; 130/130" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "QUESTIONS NÉGATIV
 - B13 — LES QUESTIONS NÉGATIVES : 19/29, LA RÈGLE DE SURFACE NE S'INVERSE PAS ; 130/130" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "QUESTIONS NÉGATIV
+- ÉTAT — T0 DANS LE BUDGET (3996 MOTS) APRÈS LE GOLD 417" 2>&1 | tail -2   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COMMIT OK $i"; br
 

@@ -9,8 +9,8 @@
 | Début | 2026-10-31 17:17 |
 | Durée | 44.6 h |
 | Tours | 20 |
-| Messages | 1686 |
-| Appels d'outils | 1547 |
+| Messages | 1687 |
+| Appels d'outils | 1548 |
 | Fichiers touchés | 11 |
 | Commandes | 1211 |
 | Sous-agents | 0 |
@@ -1062,7 +1062,7 @@ La loi de la nuit : **la structure se paie avec la capacité** (−0,22 à 11 M,
 
 ### Tour 20 — mets le dossier de pilotage à jour et continue
 
-*112 appels d'outils.* Actions notables :
+*113 appels d'outils.* Actions notables :
 
 - bash — Read the state's N2 section and timestamp
 - read

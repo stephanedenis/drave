@@ -20748,3 +20748,11 @@ pas 27600 · perte 1.5659 · PPL val 3.815 · 1479 s
 1, 1 MiB, 0 %
   ```
 
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -1 work/n2w/mix-60k.log 2>/dev/null; ls work/n2w/mix-60k.pt 2>/dev/null && echo OK", "description": "Wait for the mix training"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-1211]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-1211", "timeout_ms": 1500000, "wait": true}`

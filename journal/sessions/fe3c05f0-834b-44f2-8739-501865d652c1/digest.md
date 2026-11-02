@@ -36417,3 +36417,17 @@ python3: can't open file '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; export GIT_INDEX_FILE=/tmp/index.dra; git read-tree HEAD; git add tools/liens_glossaire.py docs/theorie/vision.md docs/methode/resultats.md docs/methode/contexte.md docs/methode/portes.md docs/theorie/lecture-rapide.md d … [583 caractères tronqués]`
+
+  ```
+12:54
+ docs/theorie/synthese/index.md   |  38 +++++-----
+ docs/theorie/vision.md           |  40 +++++-----
+ tools/liens_glossaire.py         | 155 +++++++++++++++++++++++++++++++++++++++
+ 12 files changed, 370 insertions(+), 215 deletions(-)
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 866fcaa79dcb92edc95c4207dccea1f3dbebba44 but expected ac8f334f6f352cb93276ebd815c12b90f1efe710
+code=128
+866fcaa7 B13 — LES QUESTIONS NÉGATIVES : 19/29, LA RÈGLE DE SURFACE NE S'INVERSE PAS ; 130/130
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date '+%H:%M'; export GIT_INDEX_FILE=/tmp/index.dra; ok=0; for i in 1 2 3 4 5; do git read-tree HEAD; git add tools/liens_glossaire.py docs/theorie/vision.md docs/methode/resultats.md docs/methode/contexte.md docs/methode/portes.md doc … [622 caractères tronqués]`
