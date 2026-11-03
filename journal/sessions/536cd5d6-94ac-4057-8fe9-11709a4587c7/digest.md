@@ -9898,3 +9898,40 @@ started background job bash-248
   ```
 
 - **job_output** `{"job_id": "bash-248", "timeout_ms": 600000, "wait": true}`
+
+  ```
+veille 10 min
+00:26:22
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 40 : fin de l'attente ; relevé de l'état (sessions, revue, registre, git).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; git log --oneline -2; echo \"== sessions ==\"; python3 tools/sessions.py --status 2>&1 | grep -E 'actif|mandat long' | head -6; echo \"== revue/taille ==\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -2; … [225 caractères tronqués]`
+
+  ```
+00:26:31
+589508b2 NUIT — L'ÉTAT PASSE AU 03/11 : LA FRAÎCHEUR SUIT LE DISQUE (574 FICHES, 660 JSON)
+8133ee1e ÉTAT — LE COMPTEUR FICHIERS SUIT LE DISQUE (574) APRÈS LA NOUVELLE FICHE
+== sessions ==
+    0733c5bb-f90b-4f58 · actif    ·   2 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 227 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 116 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 164 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (227 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (116 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+== revue/taille ==
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 660 JSON, le disque en a 661
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur
+… [133 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'état dit 660 JSON, le disque en a 661 ; je corrige le compteur et je recommite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '660' docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nassert t.count('660')==1, t.count('660')\np.write_text(t.replace('660','661'))\nprint('660 -> 66 … [410 caractères tronqués]`

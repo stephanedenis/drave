@@ -11733,3 +11733,40 @@ pas de lock
   ```
 
 - **bash** `{"command": "git commit --only -m \"NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE\" -m \"État au 03/11 00 h 20 : cascade vrai modèle (POS 0,9415 / syntagmes 0,6130 / tête 0,7574 / acte 1,0) ; fenêtre B13 solvable (BFS 228) mais non discrim … [562 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 3026dc6a] NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE
+ 17 files changed, 2017 insertions(+), 77 deletions(-)
+3026dc6a NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE
+     · compteurs : en-cours.md dit 660 JSON, le disque en a 661
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "ls -t reports/*.json | head -2; git status --short reports/pensee-porte-fenetre-500.json reports/pensee-porte-fenetre.json 2>/dev/null; git log --oneline -2; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; ls reports/*.json | wc -l", "description": "Identify the new JSON and its  … [10 caractères tronqués]`
+
+  ```
+reports/pensee-gold-reel-cascade.json
+reports/pensee-gold-cascade-200.json
+?? reports/pensee-porte-fenetre-500.json
+3026dc6a NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE
+589508b2 NUIT — L'ÉTAT PASSE AU 03/11 : LA FRAÎCHEUR SUIT LE DISQUE (574 FICHES, 660 JSON)
+114:| fichiers / JSON de résultats | **574** / **661** | `reports/*.md` / `reports/*.json` |
+661
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -2; bash tools/porte-tableaux.sh 2>&1 | tail -2; cat >> work/veille/nuit.md <<'EOF'\n\n## 00 h 30 — la roadmap passe au 03/11\n\n … [507 caractères tronqués]`
+
+  ```
+❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 574 fichiers, le disque en a 575
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (116 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (164 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+  ✅ 2769 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-03)
+log-ok
+  ```
+

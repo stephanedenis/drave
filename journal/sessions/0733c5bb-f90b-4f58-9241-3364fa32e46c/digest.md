@@ -6293,3 +6293,32 @@ The command keeps running in the background. You will be notified when it finish
 [status: running]
   ```
 
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; tail -1 work/n2ac/rope2048-12.5k.log; tail -1 work/n2ac/mix1024-30k.log", "description": "Direct status check"}`
+
+  ```
+00:24:49
+rope2048-1.25k fini 22:22:47
+pas   7150 · perte 1.0764 · PPL val 2.531 · 7250 s
+pas   3400 · perte 1.0565 · PPL val 2.586 · 1547 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Rafraîchissement du mandat (heartbeat, état d'avancement de la nuit)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re, datetime\np = pathlib.Path(\"journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\", f\"- **Heartbeat** : {datetime.date … [1104 caractères tronqués]`
+
+  ```
+plan à jour
+00:25
+pas   3450 · perte 0.9518 · PPL val 2.588 · 1570 s
+  ```
+
+- **bash** `{"command": "sleep 3300; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK; tail -1 work/n2ac/mix1024-30k.log", "description": "Wait for 2048 12.5k checkpoint"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-292]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-292", "timeout_ms": 3300000, "wait": true}`

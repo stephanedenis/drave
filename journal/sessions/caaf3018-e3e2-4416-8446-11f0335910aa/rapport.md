@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 8.0 h |
+| Durée | 8.2 h |
 | Tours | 26 |
-| Messages | 352 |
-| Appels d'outils | 354 |
+| Messages | 359 |
+| Appels d'outils | 362 |
 | Fichiers touchés | 6 |
-| Commandes | 266 |
+| Commandes | 272 |
 | Sous-agents | 0 |
 | Commits | 11 |
 | Compactages de contexte | 0 |
@@ -516,17 +516,24 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 26 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Check S session liveness and work
 - bash — Peek at S current activity in digest
 - bash — Confirm S recent commit
 - bash — Check S process, claim, and strict status
 - job_output
+- bash — Extract state numbers and report verdicts for audit
+- bash — Trace unusual state numbers to reports
+- bash — Verify counters vs disk
+- job_kill
+- bash — Rewrite watch to log to file
+- bash — Launch file-based night watch
+- bash — Silent 10-hour timer for alternation
 
 **Synthèse produite :**
 
-⏵ 00 h 14 : l'état est passé au 03/11. Veille.
+⏵ Dispositif en place : veille fichier (`bash-271`) + minuteur muet (`bash-272`), en alternance.
 
 ## 3. Travail accompli
 
@@ -583,7 +590,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 226 autres
+- … et 232 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -672,6 +679,9 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T23** `# A8.0 — la PPL de référence est épinglée (0,1 %). Le modèle est régénéré par la`
 - **T23** `[still running after 60000ms; moved to background job bash-252]`
 - **T26** `» après un adjectif, en fin de phrase). - **Contrôles** : baseline **94/131** (0,718), règles coupées **96/131** (0,733), rôles mélangés **0,109** [0,00 ; 0,23]. - **Corpus réel** re-mesuré : 65,5 % d`
+- **T26** `> de types 54/55** (98,2 %), les **rôles 131/131** (100 %), les **compléments 47/47**, et couvre`
+- **T26** `| **global** | **55** | **54/55** (98,2 %) | **1 466/1 475** (99,4 %) | **131/131** (100 %) | **47/47** |`
+- **T26** `> **Date** : 2026-11-02/03 · **Verdict** : à **octets constants** (20,5 Mo vus), entraîner sur des`
 
 ## 5. Erreurs rencontrées
 

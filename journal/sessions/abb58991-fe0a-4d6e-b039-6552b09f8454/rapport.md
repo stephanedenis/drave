@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
 | Durée | 8.2 h |
-| Tours | 148 |
-| Messages | 989 |
-| Appels d'outils | 811 |
+| Tours | 149 |
+| Messages | 995 |
+| Appels d'outils | 815 |
 | Fichiers touchés | 48 |
-| Commandes | 640 |
+| Commandes | 644 |
 | Sous-agents | 0 |
-| Commits | 57 |
+| Commits | 60 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -319,6 +319,8 @@
 **Tour 147** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 148** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 149** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3651,7 +3653,39 @@ La suite : attendre la fin, comparer 432 vs 180, fiche/commit ; puis la fonction
 
 **Synthèse produite :**
 
-⏵ Round 146 : cascade 432 terminée — **POS 0,9065 / syntagmes 0,4598 / tête 0,5633 / acte 0,9954** ; verdict **false**, 429 appels sur 432 ; le « reel » ne porte pas `source` hand/synth
+⏵ Round 146 : la cascade **432 phrases réelles** est finie — **POS 0,9065 / syntagmes 0,4598 / tête 0,5633 / acte 0,9954**, verdict **false**, 429/432 appels, 57 min
+
+**Résultat réel (432 phrases, 2 375 tokens)** :
+
+| lecture | POS | syntagmes | tête | acte |
+|---|---:|---:|---:|---:|
+| **cascade complète** | **0,9065** | **0,4598** | **0,5633** | **0,9954** |
+| neuronal seul | 0,8392 | 0,4618 | 0,5639 | 0,0 |
+| heuristique seule | 0,7394 | 0,2521 | 0,4520 | 0,9954 |
+
+- La cascade **bat le neuronal seul** (POS +0,0673) et **double l'heuristique** (syntagmes 0,4598 vs 0,2521).
+- **Mais le verdict est false** : `pos_all`, `syntagme_exact_all`, `syntagme_tete_all`, `fraction` échouent — le **gold réel est bien plus dur** que le gold hand+synth (0,6130/0,7574).
+- `acte` 0,9954 ; `aucun_refus` vrai ; 429 appels (3 phrases vides du générateur) ; `ablation_pos`/`ablation_syntagmes` vrais.
+- Durée **57 min 42** (3 462 s), latence médiane 7,8 s.
+
+**Contrôle négatif** : le neuronal seul a `acte = 0,0` et `fraction = 0,0` ; la cascade les restaure (0,9954 / 0,5165) — c'est bien la politique qui fait le travail, pas le bloc.
+
+**Ce qui pourrait rendre ce résultat faux** : le gold réel n'a pas de `source` hand/synth (hand=0, synth=0) ; 3 phrases vides ; un seul passage.
+
+Je rédige la fiche et je commite.
+
+### Tour 149 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Write real-gold 432 fiche
+- bash — Commit real-gold 432 cascade fact
+- bash — Retry commit after index lock
+- bash — Wait for lock then commit real-gold fact
+
+**Synthèse produite :**
+
+⏵ Round 147 : le hub tient le lock (`git commit --only` en-cours, 21 s) ; j'attends sa fin puis je refais le mien
 
 ## 3. Travail accompli
 
@@ -3750,7 +3784,7 @@ La suite : attendre la fin, comparer 432 vs 180, fiche/commit ; puis la fonction
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 600 autres
+- … et 604 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -3909,4 +3943,7 @@ La suite : attendre la fin, comparer 432 vs 180, fiche/commit ; puis la fonction
 - ÉTAT — COMPTEUR 571/659 : LA FENÊTRE NON DISCRIMINANTE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES" 2>&1 | tail -6; echo "EXIT=${PIPESTATU
 - ÉTAT — COMPTEUR 573/660 : LA CASCADE VRAI MODÈLE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
+- L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE" 2>&1 | tail -5; echo "EXIT=${PIPE
+- L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE" 2>&1 | tail -5; echo "EXIT=${PIPE
+- L/B13 — LE GOLD RÉEL 432 : LA CASCADE TIENT (POS 0,9065 ; SYNTAGMES 0,4598 ; TÊTE 0,5633 ; ACTE 0,9954), LE VERDICT EST FALSE" 2>&1 | tail -5; echo "EXIT=${PIPE
 

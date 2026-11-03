@@ -6512,3 +6512,72 @@ PID 31786 tient S (1 fd) :    07:41:27
 ⏵ 00 h 14 : l'état est passé au 03/11. Veille.
 
 - **job_output** `{"job_id": "bash-262", "timeout_ms": 600000, "wait": true}`
+
+  ```
+00:24 · 589508b2 NUIT — L'ÉTAT PASSE AU 03/11 : LA FRAÎCHEUR SUIT LE · actifs=8 ·   ✅ état court, structuré, multi-session
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+### 🤖 Assistant
+
+⏵ Je change de mode : au lieu de sonder le veilleur, je fais l'**audit factuel** des chiffres de l'état contre les fiches.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; echo \"=== en-cours : chiffres ===\"; grep -oE \"\\*\\*[0-9]+(,[0-9]+)?(/[0-9]+)?\\*\\*\" docs/pilotage/en-cours.md | sort | uniq -c | sort -rn | head -20; echo \"=== fiches clés ===\"; for f in reports/rapport-s-analyseur … [302 caractères tronqués]`
+
+  ```
+00:26
+=== en-cours : chiffres ===
+      5 **55**
+      3 **355**
+      3 **200**
+      2 **432**
+      2 **140/140**
+      2 **0**
+      1 **96/131**
+      1 **94/131**
+      1 **82**
+      1 **8**
+      1 **661**
+      1 **574**
+      1 **5/5**
+      1 **54/55**
+      1 **2,9955**
+      1 **2,9950**
+      1 **2,6256**
+      1 **131/131**
+      1 **119**
+      1 **0,109**
+=== fiches clés ===
+--- reports/rapport-s-analyseur-roles.md
+> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur un gold de **55 phrases**
+> de types 54/55** (98,2 %), les **rôles 131/131** (100 %), les **compléments 47/47**, et couvre
+| **global** | **55** | **54/55** (98,2 %) | **1 466/1 475** (99,4 %) | **131/131** (100 %) | **47/47** |
+--- reports/rapport-s-corpus-reel.md
+# S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange)
+> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur **50 000 lignes** et
+> **littérature propre** (17 M car.), l'analyseur trouve un **GN et un GV** dans **65,5 %** des
+--- reports/rapport-n2-fenetre.md
+> **Date** : 2026-11-02/03 · **Verdict** : à **octets constants** (20,5 Mo vus), entraîner sur des
+
+… [450 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"2,9955\\|2,6256\\|5/5\\|0,109\\|94/131\\|96/131\" docs/pilotage/en-cours.md | cut -c1-170; echo \"=== sources ===\"; grep -rl \"2,9955\\|2,6256\" reports/*.md 2>/dev/null | head -3; grep -rn \"2,6256\" reports/*.md 2>/dev/nul … [84 caractères tronqués]`
+
+  ```
+45:- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel*
+62:  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde) ; **fenêtre** — **non discriminante** (oracle BFS 228, aveugle 215 : tout passe) ; mobile/b
+64:  [sto 5/5](../../reports/rapport-pensee-porte-sto-graines.md),
+96:  **1 024 est le point d'équilibre** ; à 20 000 pas : **2,9955** à 128, **2,6256** à 1 000 —
+126:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : gold réel 432 (0,9065/0,4598/0,5633/0,9
+=== sources ===
+reports/rapport-n2-porte-propre.md
+reports/rapport-n2-r12-2048.md
+reports/rapport-n2-porte-propre.md:13:domaine wiki à 128 octets, **2,6256** à 1 000 et **2,5429** à 4 000. La question de cette fiche :
+reports/rapport-n2-r12-2048.md:9:> octets, **2,6256** à 1 000, **2,5429** à 4 000 — à **0,13** et **0,04** de 2,5 en domaine
+  ```
+

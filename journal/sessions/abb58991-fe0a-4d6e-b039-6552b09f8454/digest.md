@@ -20228,3 +20228,176 @@ JSON pas encore écrit
 load average: 26,49, 26,49, 26,31
   ```
 
+### 🤖 Assistant
+
+⏵ Round 145 : cascade 432 à 57 min 01, load 26,5 ; JSON pas encore écrit ; le job continue
+
+**Suivi** :
+
+- `qualifier_cascade.py --gold-reel` : **57 min 01**.
+- Load : **26,49** ; serveur sain ; N2 intact ; JSON pas encore écrit.
+- HEAD `16f3eeb0` ; T0 3 995 ; revue 573/660 verte.
+
+La suite : attendre la fin, comparer 432 vs 180, fiche/commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 148
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 146/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 146 : cascade 432 en cours ; je vérifie l'état du job
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ps -eo pid,etime,cmd | grep \"qualifier_cascade\" | grep -v grep | head -1; ls -l reports/pensee-gold-reel-cascade.json 2>/dev/null || echo 'JSON pas encore écrit'; uptime | sed 's/.*load/load/'", "description": "Check real-gold casc … [27 caractères tronqués]`
+
+  ```
+00:25:22
+ 749212       57:39 bash -c cd /home/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/qualifier_cascade.py --endpoint http://127.0.0.1:18082 --gold-reel --sortie reports/pensee-gold-reel-cascade.json 2>&1 | tail -40
+JSON pas encore écrit
+load average: 23,57, 25,88, 26,12
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 146 : cascade 432 à 57 min 39, load 23,6 ; JSON pas encore écrit ; le job continue
+
+**Suivi** :
+
+- `qualifier_cascade.py --gold-reel` : **57 min 39**.
+- Load : **23,57** ; serveur sain ; N2 intact ; JSON pas encore écrit.
+- HEAD `16f3eeb0` ; T0 3 995 ; revue 573/660 verte.
+
+La suite : attendre la fin, comparer 432 vs 180, fiche/commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### 👤 Utilisateur
+
+background job bash-565 (bash: cd /home/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/qualifier_cascade.py --endpoint http://127.0.0.1:18082 --gold-reel --sortie reports/pensee-gold-reel-cascade.json 2>&1 | tail -40) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Round 146 : la cascade **432 phrases réelles est finie** (exit 0) ; je lis le résultat et le JSON
+
+- **job_output** `{"job_id": "bash-565"}`
+
+  ```
+0.0,
+   0.0
+  ]
+ },
+ "cascade_complete": {
+  "all": [
+   0.9065,
+   0.4598,
+   0.5633,
+   0.9954
+  ],
+  "hand": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "synth": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "defaut": {
+  "all": 0.4506,
+  "hand": 0.0,
+  "synth": 0.0
+ },
+ "refus": 0,
+ "appels": {
+  "pos": 429,
+  "syntagmes": 429
+ },
+ "latence": {
+  "moyenne": 8.034,
+  "mediane": 7.777
+ }
+}
+écrit : reports/pensee-gold-reel-cascade.json
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-gold-reel-cascade.json'))\nprint('date', d.get('date'), 'verdict', d.get('verdict'))\nprint('gold', {k:d['gold'][k] for k in ('phrases','tokens') if k in d['gold']})\nm=d.get('mesures',{} … [370 caractères tronqués]`
+
+  ```
+date 2026-11-03 00:25 EST verdict False
+gold {'phrases': 432, 'tokens': 2375}
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+KeyError: 'pos'
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 146 : cascade 432 terminée — **POS 0,9065 / syntagmes 0,4598 / tête 0,5633 / acte 0,9954** ; verdict **false**, 429 appels sur 432 ; le « reel » ne porte pas `source` hand/synth
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-gold-reel-cascade.json'))\nprint('verdict', d['verdict'], 'gold', d['gold'])\nprint('seuils', json.dumps(d['seuils'],ensure_ascii=False))\nfor nom in ('neuronal','heuristique','cascade_co … [385 caractères tronqués]`
+
+  ```
+verdict False gold {'phrases': 432, 'tokens': 2375, 'hand': 0, 'synth': 0}
+seuils {"pos_all": false, "syntagme_exact_all": false, "syntagme_tete_all": false, "acte": true, "fraction": false, "ablation_pos": true, "ablation_syntagmes": true, "policy": true, "aucun_refus": true}
+neuronal {'pos': {'exactitude': 0.8392, 'exactitude_ferme': 0.7642, 'exactitude_ouvert': 0.918, 'tokens': 2375, 'confusions': {'ADJ': {'ADJ': 73, 'VERB': 1, 'AUX': 1, 'PUNCT': 2}, 'ADV': {'ADJ': 17, 'ADV': 31, 'INTJ': 8, 'NUM': 1, 'NOUN': 7, 'AUX': 16, 'VERB': 8, 'PREP': 1, 'PUNCT': 3, '?': 1}, 'AUX': {'VERB': 28, 'AUX': 78, '?': 3, 'NOUN': 3, 'PRON': 2, 'ADJ': 2}, 'CONJ': {'PREP': 7, 'CONJ': 44, 'ADV': 6, '?': 13, 'AUX': 1, 'INTJ': 7, 'PUNCT': 2}, 'DET': {'DET': 386, 'PRON': 21, 'NUM': 2, 'ADJ': 1, 'PREP': 6, 'AUX': 1, '?': 5}, 'NOUN': {'NOUN': 472, 'ADJ': 2, 'NUM': 2, '?': 5, 'DET': 3, 'AUX': 1, 'PRON': 11, 'INTJ': 1, 'VERB': 1}, 'NUM': {'NUM': 2}, 'PONCT': {'?': 25}, 'PREP': {'PREP': 70, 'ADV': 3, 'ADJ': 3, 'DET': 1, 'NOUN': 1, 'AUX': 1, 'VERB': 2}, 'PRON': {'PRON': 319, 'PREP': 21, 'CONJ': 22, 'NOUN': 6, '?': 33, 'AUX': 6, 'PUNCT': 4, 'VERB': 6, 'INTJ': 1, 'DET': 5}, 'VERB': {'VERB': 518, 'NOUN': 4, 'AUX'
+… [2856 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 146 : la cascade **432 phrases réelles** est finie — **POS 0,9065 / syntagmes 0,4598 / tête 0,5633 / acte 0,9954**, verdict **false**, 429/432 appels, 57 min
+
+**Résultat réel (432 phrases, 2 375 tokens)** :
+
+| lecture | POS | syntagmes | tête | acte |
+|---|---:|---:|---:|---:|
+| **cascade complète** | **0,9065** | **0,4598** | **0,5633** | **0,9954** |
+| neuronal seul | 0,8392 | 0,4618 | 0,5639 | 0,0 |
+| heuristique seule | 0,7394 | 0,2521 | 0,4520 | 0,9954 |
+
+- La cascade **bat le neuronal seul** (POS +0,0673) et **double l'heuristique** (syntagmes 0,4598 vs 0,2521).
+- **Mais le verdict est false** : `pos_all`, `syntagme_exact_all`, `syntagme_tete_all`, `fraction` échouent — le **gold réel est bien plus dur** que le gold hand+synth (0,6130/0,7574).
+- `acte` 0,9954 ; `aucun_refus` vrai ; 429 appels (3 phrases vides du générateur) ; `ablation_pos`/`ablation_syntagmes` vrais.
+- Durée **57 min 42** (3 462 s), latence médiane 7,8 s.
+
+**Contrôle négatif** : le neuronal seul a `acte = 0,0` et `fraction = 0,0` ; la cascade les restaure (0,9954 / 0,5165) — c'est bien la politique qui fait le travail, pas le bloc.
+
+**Ce qui pourrait rendre ce résultat faux** : le gold réel n'a pas de `source` hand/synth (hand=0, synth=0) ; 3 phrases vides ; un seul passage.
+
+Je rédige la fiche et je commite.
+
+
+## Tour 149
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 147/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 147 : j'écris la fiche du **gold réel 432** (cascade 0,9065 / 0,4598 / 0,5633 / 0,9954, verdict false, contrôle négatif neuronal) puis je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\nd=json.load(open('reports/pensee-gold-reel-cascade.json'))\nc=d['mesures']['cascade_complete']\nfiche=pathlib.Path('reports/rapport-pensee-cascade-reel-432.md')\nfiche.write_text(f'''# B13 — le gold réel 432 : l … [3986 caractères tronqués]`
+
+  ```
+fiche écrite 3898
+  ```
+
