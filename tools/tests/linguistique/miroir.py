@@ -320,16 +320,26 @@ def trouver_suivante(question: dict, phrases: list[dict], bloc=None) -> dict | N
 
 
 def fidelite_lien_avant(phrases: list[dict], bloc=None) -> dict:
-    """Le taux de paires (question, assertion suivante) retrouvées par le lien avant."""
+    """Le taux de paires (question, assertion suivante) retrouvées par le lien avant.
+
+    Les paires **croisées** (question et assertion de langues différentes) sont écartées :
+    r412 « Ne lis-tu pas ? » (fr) → r427 « You come tomorrow. » (en) n'est pas une paire
+    que le lien de surface peut — ni doit — résoudre. Le compte des écartées est rendu.
+    """
     paires = [(f"r{408 + k}", f"r{423 + k}") for k in range(5)]
     par_id = {p["id"]: p for p in phrases}
-    justes = 0
+    justes = 0; croisees = 0; mesures = 0
     for qid, pid in paires:
         if qid not in par_id or pid not in par_id:
             continue
+        if par_id[qid].get("langue") != par_id[pid].get("langue"):
+            croisees += 1
+            continue
+        mesures += 1
         tr = trouver_suivante(par_id[qid], phrases, bloc)
         justes += bool(tr and tr["id"] == pid)
-    return {"paires": len(paires), "justes": justes, "taux": round(justes / max(1, len(paires)), 4)}
+    return {"paires": mesures, "justes": justes, "croisees_ecartees": croisees,
+            "taux": round(justes / max(1, mesures), 4)}
 
 
 def _normaliser_egal(a: str, b: str) -> bool:

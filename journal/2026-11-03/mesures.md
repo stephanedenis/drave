@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (9)
+## Commits du jour (10)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -17,6 +17,7 @@
 | 13:56 | `229c5bf1` | L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005 | `en-cours.md`, `README.md`, `attention.md` (+21) |
 | 13:59 | `727c4860` | S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ | `en-cours.md`, `roadmap.md`, `README.md` (+11) |
 | 14:02 | `4f1de240` | L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE | `en-cours.md`, `roadmap.md`, `README.md` (+21) |
+| 14:05 | `48d79ff3` | L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ | `en-cours.md`, `README.md`, `attention.md` (+16) |
 
 ## Chiffres du jour
 
@@ -29,7 +30,7 @@
 - `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 21.9 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
 - `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 21.8 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
 - `536cd5d6-94ac-4057-8fe9-11709a4587c7` — Étude des sessions et du pilotage (début 2026-11-02 15:33, 22.4 h) → [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md)
-- `abb58991-fe0a-4d6e-b039-6552b09f8454` — Reprise session L/B13 et mise à jour plan (début 2026-11-02 16:15, 21.8 h) → [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md)
+- `abb58991-fe0a-4d6e-b039-6552b09f8454` — Reprise session L/B13 et mise à jour plan (début 2026-11-02 16:15, 21.9 h) → [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md)
 - `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` — Reprise session L/B13 et vérification stricte (début 2026-11-02 16:16, 12.5 h) → [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md)
 - `caaf3018-e3e2-4416-8446-11f0335910aa` — Reprise du hub et passe de portes (début 2026-11-02 16:16, 21.5 h) → [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md)
 

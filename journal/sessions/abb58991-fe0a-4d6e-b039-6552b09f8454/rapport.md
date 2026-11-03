@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 21.8 h |
+| Durée | 21.9 h |
 | Tours | 166 |
-| Messages | 1163 |
-| Appels d'outils | 949 |
+| Messages | 1164 |
+| Appels d'outils | 950 |
 | Fichiers touchés | 48 |
-| Commandes | 769 |
+| Commandes | 770 |
 | Sous-agents | 0 |
-| Commits | 99 |
+| Commits | 100 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4270,16 +4270,17 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 166 — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour r … [763 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Fix verifier args and re-run parity
 - bash — Exclude cross-lingual pair and measure
 - bash — Commit verifier argument fix
 - bash — Add state line and commit verifier fix
+- bash — Commit cross-pair exclusion correction
 
 **Synthèse produite :**
 
-⏵ Le hook exige la ligne d'état pour ce fait aussi ; j'ajoute `--drvm` à la ligne de parité et je commite
+⏵ Banc de parité commité (`48d79ff3`) ; je corrige maintenant le lien (paire croisée écartée → 9/9) dans la fiche, le JSON, l'en-cours et le README
 
 ## 3. Travail accompli
 
@@ -4378,7 +4379,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 729 autres
+- … et 730 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4584,4 +4585,5 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}
 - L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s
 - L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s
+- L/B13 — LE LIEN SANS LA PAIRE CROISÉE : 5/5 ARRIÈRE + 4/4 AVANT = 9/9 (1,0)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 

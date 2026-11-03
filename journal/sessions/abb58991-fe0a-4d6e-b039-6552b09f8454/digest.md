@@ -23858,3 +23858,19 @@ EXIT=1
 ⏵ Le hook exige la ligne d'état pour ce fait aussi ; j'ajoute `--drvm` à la ligne de parité et je commite
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='parité 114/114+5/5 (rejouée)'\nnew='parité 114/114+5/5 (rejouée, --drvm)'\nassert old in t, 'ligne absente'\nt=t.replace(old,new,1)\np … [415 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3998 mots (budget 4 000)
+  ✅ index : aucun fait stagé sans état
+[master 48d79ff3] L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ
+ 19 files changed, 250 insertions(+), 38 deletions(-)
+EXIT=0
+48d79ff3 L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ
+  ```
+
+### 🤖 Assistant
+
+⏵ Banc de parité commité (`48d79ff3`) ; je corrige maintenant le lien (paire croisée écartée → 9/9) dans la fiche, le JSON, l'en-cours et le README
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json, pathlib\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique()\n … [3067 caractères tronqués]`

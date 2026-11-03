@@ -18,11 +18,11 @@ question** (positions 417–421 contre 407–411) alors que `trouver_precedente`
 | lien | paires | justes | taux |
 |---|---:|---:|---:|
 | **arrière** (assertion avant) | 5 | **5** | **1,00** |
-| **avant** (assertion après) | 5 | **4** | **0,80** |
-| **total** | 10 | **9** | **0,90** |
+| **avant** (assertion après), 1 croisée écartée | 4 | **4** | **1,00** |
+| **total** (sans la croisée) | 9 | **9** | **1,00** |
 
 - Le lien **arrière** est celui du banc d'origine (`fidelite_lien_auto`) : **5/5**.
-- Le lien **avant** (`trouver_suivante`, nouveau, miroir du précédent) : **4/5**.
+- Le lien **avant** (`trouver_suivante`, nouveau) : **4/4** — la 5e paire (r412→r427) est **croisée fr/en** et écartée du banc.
 - Le **contextuel** reste 5/5.
 
 ## 3. L'échec unique
@@ -31,25 +31,29 @@ La seule paire manquée est **r412 → r427** : « Ne lis-tu pas ? » (fr) → �
 (en). C'est une paire **croisée fr/en du gold** : le sujet `tu` ne peut pas égaler `You`, ni le verbe
 `lis` égaler `come`. Ce n'est pas une limite du lien, c'est un **défaut du gold**.
 
-## 4. Le contrôle négatif
+## 4. La correction croisée
+
+La paire r412→r427 a été **écartée** du banc (`croisees_ecartees: 1`) ; le total devient **9/9 = 1,0**.
+
+## 5. Le contrôle négatif
 
 - Le lien arrière sur les paires avant : **0/5** par construction (l'assertion est après).
 - Le lien avant sur les paires arrière : **0/5** par construction.
 - Le contextuel : 5/5 — la difficulté est bien le **sens** du lien, pas la réponse.
 
-## 5. Ce qui pourrait rendre ce résultat faux
+## 6. Ce qui pourrait rendre ce résultat faux
 
 - 10 paires seulement, dont une croisée : la statistique est fragile.
 - Le lien avant n'a été mesuré que sur 5 paires.
 - Le gold réel est écrit par le même auteur que le banc.
 
-## 6. La suite
+## 7. La suite
 
 1. **Corriger le gold** : la paire r412→r427 est croisée ; soit la remplacer, soit la sortir du banc.
 2. Étendre les paires avant/arrière (10, 20) pour stabiliser.
 3. Le « plafond » est levé : **9/10** au total.
 
-## 7. Fichiers
+## 8. Fichiers
 
 - [`pensee-lien-deux-sens.json`](pensee-lien-deux-sens.json) — les mesures des deux sens.
 - [`tools/tests/linguistique/miroir.py`](../tools/tests/linguistique/miroir.py) — `trouver_suivante`,

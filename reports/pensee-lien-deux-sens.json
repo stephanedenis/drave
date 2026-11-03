@@ -75,5 +75,31 @@
     "avant_sur_arriere": "0/5 par construction (assertion avant la question)",
     "contextuel": "5/5 — la difficulté est le sens du lien, pas la réponse"
   },
-  "conclusion": "le lien de surface ne plafonne pas à 5/10 : il fait 5/5 en arrière et 4/5 en avant (9/10 au total) ; la 10e paire est un défaut du gold (croisée fr/en)"
+  "conclusion": "le lien de surface ne plafonne pas à 5/10 : il fait 5/5 en arrière et 4/5 en avant (9/10 au total) ; la 10e paire est un défaut du gold (croisée fr/en)",
+  "correction_croisee": {
+    "date": "2026-11-03 14:00 EST",
+    "changement": "la paire r412→r427 est croisée fr/en : elle est écartée du banc (comptée à part)",
+    "mesures": {
+      "arriere": {
+        "paires": 5,
+        "justes": 5,
+        "taux": 1.0
+      },
+      "avant": {
+        "paires": 4,
+        "justes": 4,
+        "croisees_ecartees": 1,
+        "taux": 1.0
+      },
+      "total": {
+        "paires": 9,
+        "justes": 9,
+        "taux": 1.0
+      }
+    },
+    "controle_negatif": {
+      "arriere_sur_avant": "0/4 par construction",
+      "avant_sur_arriere": "0/5 par construction"
+    }
+  }
 }
