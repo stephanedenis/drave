@@ -9375,3 +9375,75 @@ A  reports/rapport-n2-fenetre.md
   ```
 
 - **bash** `{"command": "for i in $(seq 1 40); do kill -0 697849 2>/dev/null || break; sleep 3; done; ps -p 697849 >/dev/null && echo \"commit en cours\" || echo \"commit fini\"; git log --oneline -2; echo \"--- N2 suivi ---\"; git ls-files --error-unmatch reports/n2-fenetre.json >/dev/null 2>&1 && echo oui ||  … [183 caractères tronqués]`
+
+  ```
+commit fini
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+--- N2 suivi ---
+oui
+--- tableaux ---
+  ✅ 2747 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+22:05:34
+  ```
+
+- **bash** `{"command": "git status --short | head -15; echo \"--- commit en cours ? ---\"; ps -eo pid,etime,args | grep -E \"git commit|session_report|archive\" | grep -v grep | head -2; echo \"--- hooks log ? ---\"; tail -5 .git/hooks/pre-commit 2>/dev/null; ls -l .git/index.lock 2>/dev/null || echo \"pas de  … [61 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+MM journal/2026-11-02/modele.md
+MM journal/2026-11-02/moteur.md
+MM journal/2026-11-02/outils.md
+MM journal/2026-11-02/portes.md
+MM journal/README.md
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/agrege_fenetre.py
+--- commit en cours ? ---
+ 698626       01:18 timeout 300 git commit --only -m ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2 -m Le JSON n2-fenetre.json existe (21 h 56) ; porte-tableaux : 2 747 liens, 1 577 fichiers, verte à 21 h 57. Les quatre rouges connues restent seules ; prochaine passe 82 portes. T0 ramené sous 4 000. -- docs/pilotage/en-cours.md
+ 698627       01:18 git commit --only -m ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2 -m Le JSON n2-fenetre.json existe (21 h 56) ; porte-tableaux : 2 747 liens, 1 577 fichiers, verte à 21 h 57. Les quatre rouges connues re
+… [501 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for i in $(seq 1 40); do kill -0 698627 2>/dev/null || break; sleep 3; done; ps -p 698627 >/dev/null && echo \"commit en cours\" || echo \"commit fini\"; git log --oneline -3; echo \"--- N2 staged ? ---\"; git status --short reports/n2-fenetre.json reports/rapport-n2-fenetre.md docs/pil … [195 caractères tronqués]`
+
+  ```
+commit fini
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+--- N2 staged ? ---
+A  reports/n2-fenetre.json
+A  reports/rapport-n2-fenetre.md
+  ```
+
+- **bash** `{"command": "grep -n \"fenêtre\\|2,9950\\|3,1588\\|2,7607\\|FENÊTRE\" docs/pilotage/en-cours.md | head -6; echo \"--- N2 staged ---\"; git status --short | head -8; echo \"--- run ---\"; tail -1 work/n2ac/rope1024-20k.log", "description": "Check the N2 fenêtre state line and staged files"}`
+
+  ```
+61:  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde) ; **fenêtre** — l'oracle/le 7B échouent (problème à réparer) ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
+64:  [fenêtre](../../reports/rapport-pensee-porte-fenetre.md),
+68:- **Prochaine action** : **gold 200+** ; **porte stochastique/fenêtre** ; **porte B13** attend S.
+72:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+75:- **Rôle** : **N2** — la fenêtre à **1 024** et la fenêtre sur la **production**.
+80:- **Ce qu'elle fait** : la **loi de la fenêtre** et la **production** (N2.ac + RoPE 512/1 024) ;
+--- N2 staged ---
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+--- run ---
+pas  14200 · perte 1.0014 · PPL val 2.603 · 6522 s
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; git status --short reports/n2-fenetre.json | grep -q '^A' || break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; gi … [187 caractères tronqués]`

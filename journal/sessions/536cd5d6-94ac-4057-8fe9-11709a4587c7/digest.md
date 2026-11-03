@@ -8722,3 +8722,150 @@ Changes not staged for commit:
 ⏵ Le T0 est à 4 059 (au-dessus) et le commit a échoué ; je retire deux puces closes (Données, R1) et je recommite la ligne d'état.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\n# retirer les deux puces closes, en gardant les autres\nfor prefix in (\"- **Données** :\", \"- **R1 — la fenêtre native** :\"):\n    … [849 caractères tronqués]`
+
+  ```
+T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+
+[master e5417f21] ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+ 34 files changed, 975 insertions(+), 109 deletions(-)
+ create mode 100644 journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/agrege_fenetre.py
+ create mode 100644 journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/chaine_1024.sh
+ create mode 100644 journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/chaine_2048.sh
+ create mode 100755 journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/chaine_2048_mix.sh
+ create mode 100755 journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/chaine_2048_wiki.sh
+ create mode 100644 journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/chaine_production.sh
+ create mode 100644 journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/eval_production.py
+[commit 0]
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+AssertionError: - **R1 — la fenêtre native** 
+… [40 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 15 : le JSON N2 est arrivé, `porte-tableaux` est **verte**, la 5e rouge de la passe est close.
+
+- **`porte-tableaux`** : 2 747 liens, 1 577 fichiers, **verte à 21 h 57** (le JSON `n2-fenetre.json` est là).
+- **Références** : la rouge de passage est documentée rejouée verte (commit `52f827a2`).
+- **État** : ligne « dernière passe » mise à jour (4 connues + `porte-tableaux` rejouée verte) ; **T0 3 996/4 000** ; commit `e5417f21`.
+- **N2** : fiche + JSON encore untracked ; le N2 les commitera ; les quatre sessions sont actives.
+- **Passe** : 76/5, dont 4 rouges connues ; prochaine **82**.
+
+**Reste** : commit N2 de la fiche/JSON ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 24
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 16/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 16 : je vérifie si N2 a committé sa fiche/JSON et si l'INDEX/README suivent.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; echo \"== N2 untracked ? ==\"; git status --short reports/rapport-n2-fenetre.md reports/n2-fenetre.json; echo \"== git ==\"; git log --oneline -2; echo \"== README/INDEX ==\"; wc -w reports/README.md; grep -c '^| \\[' rep … [271 caractères tronqués]`
+
+  ```
+22:06:46
+== N2 untracked ? ==
+A  reports/n2-fenetre.json
+A  reports/rapport-n2-fenetre.md
+== git ==
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+== README/INDEX ==
+2762 reports/README.md
+567
+== revue ==
+  revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+== sessions ==
+    0733c5bb-f90b-4f58 · actif    ·   4 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    ·  87 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·  24 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·  24 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 16 : N2 a stagé sa fiche + son JSON ; revue 570/656 verte ; le hub est en veille.
+
+- **N2** : `rapport-n2-fenetre.md` + `n2-fenetre.json` **stagés** (`A`), commit N2 imminent ; heartbeat 4 min.
+- **Sessions** : S 87 + claim, hub 24, B13 24 ; quatre actives ; `porte-sessions` verte.
+- **Revue** : 570/656/82 ✅ ; README **2 762** ; INDEX **567** ; T0 **3 996/4 000**.
+- **Passe** : 76/5 ; la 5e rouge (`porte-tableaux`) est close ; prochaine **82**.
+
+**Reste** : commit N2 ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 25
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 17/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 17 : vérification de veille (commit N2, INDEX/README, sessions, registre).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; echo \"== N2 ==\"; git status --short reports/rapport-n2-fenetre.md reports/n2-fenetre.json; echo \"== git ==\"; git log --oneline -2; echo \"== revue/taille ==\"; timeout 300 python3 tools/revue_documentation.py 2>&1 | t … [335 caractères tronqués]`
+
+  ```
+22:07:16
+== N2 ==
+A  reports/n2-fenetre.json
+A  reports/rapport-n2-fenetre.md
+== git ==
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+== revue/taille ==
+  revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+== sessions ==
+    0733c5bb-f90b-4f58 · actif    ·   4 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    ·  87 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·  24 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·  24 min · Pensée, R4.4
+… [251 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 17 : état inchangé et vert ; N2 a ses deux fichiers stagés, son commit suivra ; veille.
+
+- **N2** : fiche + JSON **stagés** (`A`), heartbeat 4 min ; le commit N2 est la dernière pièce attendue.
+- **Sessions** : S 87 + claim, hub 24, B13 24 ; quatre actives ; `porte-sessions` verte.
+- **Revue** 570/656/82 ✅ ; **T0 3 996/4 000** ✅ ; registre ✅ (IA 33 Gio).
+- **Passe** : 76/5 ; la 5e rouge (`porte-tableaux`) est close ; prochaine **82**.
+
+**Reste** : commit N2 ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 26
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 18/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

@@ -74,11 +74,11 @@
 - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
 - **Rôle** : **N2** — la fenêtre à **1 024** et la fenêtre sur la **production**.
 - **Plan** : 256/512/1 024, production, 2 048 ; fiche par fait.
-- **Ambition** : que la longueur cesse de reculer.
-- **Stratégie** : budgets contrôlés, mêmes bancs, contrôles joints.
+- **Ambition** : la longueur d'abord.
+- **Stratégie** : budgets contrôlés, mêmes bancs.
 - **Objectif final** : une production qui tient à 1 000 octets.
-- **Ce qu'elle fait** : la **loi de la fenêtre** et la **production** (N2.ac + RoPE 512/1 024) ;
-  **2 048** en cours.
+- **Ce qu'elle fait** : la **loi de la fenêtre** et la **production** (N2.ac + RoPE 512/1 024,
+  saturation à 1 024 : 2,5846) ; **2 048** en cours.
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
 - **Prochaine action** : **2 048**, puis un point de compute.
 - **Bloquants** : aucun.

@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 5.8 h |
+| Durée | 5.9 h |
 | Tours | 15 |
-| Messages | 537 |
-| Appels d'outils | 632 |
+| Messages | 545 |
+| Appels d'outils | 640 |
 | Fichiers touchés | 47 |
-| Commandes | 469 |
+| Commandes | 477 |
 | Sous-agents | 0 |
-| Commits | 37 |
+| Commits | 42 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -631,7 +631,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 
 ### Tour 15 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*30 appels d'outils.* Actions notables :
+*38 appels d'outils.* Actions notables :
 
 - bash — Add porte_fenetre prompt and test
 - write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_fenetre_drvm.py`
@@ -647,11 +647,11 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - bash — Wait, rebase en-cours on hub, commit window
 - bash — Clear stale lock and commit window
 - bash — Wait for hub git timeout and commit
-- … et 16 autres
+- … et 24 autres
 
 **Synthèse produite :**
 
-⏵ Le hub commite l'en-cours en série (chaque commit ~1 min 30) ; j'attends 4 minutes pour laisser la série finir
+⏵ Le hook est vert (EXIT=0) ; seul le commit bute sur le lock du hub. J'attends 90 s et je commite
 
 ## 3. Travail accompli
 
@@ -749,7 +749,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 429 autres
+- … et 437 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -885,4 +885,9 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT2=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT2=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT2=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT2=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT2=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -10; echo "EXIT2=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}"
 

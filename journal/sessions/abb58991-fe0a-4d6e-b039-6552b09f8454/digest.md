@@ -13424,3 +13424,165 @@ Another git process seems to be running in this repository, or the lock file may
 ⏵ Le hub commite l'en-cours en série (chaque commit ~1 min 30) ; j'attends 4 minutes pour laisser la série finir
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 240; date '+%H:%M:%S'; ps -eo pid,etime,cmd | grep -E \"git (commit|add|reset|read-tree)\" | grep -v grep | head -2; ls .git/index.lock 2>/dev/null || echo 'libre'; git log -1 --format='%h %s' | head -1; if ! ps -eo cmd | grep -E \"git (commit|a … [350 caractères tronqués]`
+
+  ```
+22:05:49
+ 698626       01:19 timeout 300 git commit --only -m ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2 -m Le JSON n2-fenetre.json existe (21 h 56) ; porte-tableaux : 2 747 liens, 1 577 fichiers, verte à 21 h 57. Les quatre rouges connues restent seules ; prochaine passe 82 portes. T0 ramené sous 4 000. -- docs/pilotage/en-cours.md
+ 698627       01:19 git commit --only -m ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2 -m Le JSON n2-fenetre.json existe (21 h 56) ; porte-tableaux : 2 747 liens, 1 577 fichiers, verte à 21 h 57. Les quatre rouges connues restent seules ; prochaine passe 82 portes. T0 ramené sous 4 000. -- docs/pilotage/en-cours.md
+.git/index.lock
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+docs/pilotage/en-cours.md
+  ✅ index : aucun fait stagé sans état
+EXIT=0
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ L'en-cours est enfin stagé et le hook passe (EXIT=0) ; j'attends 60 s la fin du commit hub et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 60; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'libre'; git diff --cached --name-only | grep -c .; python3 tools/verifie_etat_a_jour.py --index; git commit -m \"B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉP … [143 caractères tronqués]`
+
+  ```
+22:06:59
+libre
+32
+  ❌ commit refusé : 6 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/n2-fenetre.json
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-n2-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+     · reports/README.md
+     · reports/n2-fenetre.json
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-n2-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub a pris l'en-cours dans son commit ; je le ré-ajoute (avec mon changement) et je commite (le lot inclura le JSON N2 stagé par lui)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md; git diff --cached --name-only | grep en-cours || echo 'pas en-cours'; python3 tools/verifie_etat_a_jour.py --index; echo \"EXIT=$?\"; git commit -m \"B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À … [144 caractères tronqués]`
+
+  ```
+pas en-cours
+  ❌ commit refusé : 6 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/n2-fenetre.json
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-n2-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+EXIT=1
+     · reports/README.md
+     · reports/n2-fenetre.json
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-n2-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT2=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub a committé mon en-cours (avec la ligne fenêtre) ; j'y mets un vrai changement d'heure pour le faire entrer dans l'index, puis je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nn=t.replace('21 h 57 HNE','22 h 07 HNE').replace('21 h 45 HNE','22 h 07 HNE').replace('21 h 43 HNE','22 h 07 HNE')\nprint('changed', n!=t)\ … [436 caractères tronqués]`
+
+  ```
+changed False
+pas en-cours
+  ❌ commit refusé : 6 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/n2-fenetre.json
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-n2-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+EXIT=1
+     · reports/README.md
+     · reports/n2-fenetre.json
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-n2-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT2=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Je regarde le haut réel de l'en-cours pour faire un changement qui tienne
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && head -12 docs/pilotage/en-cours.md; echo '---'; git status --short docs/pilotage/en-cours.md; git diff --stat docs/pilotage/en-cours.md", "description": "Inspect en-cours head and status"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-02, 21 h 58 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+> [`plan-travail.md`](plan-travail.md) § 9.
+
+## Sessions en cours
+---
+M  docs/pilotage/en-cours.md
+  ```
+
+### 🤖 Assistant
+
+⏵ L'en-cours est marqué `M ` (stagé) mais le hook ne le voit pas ; je liste l'index réel pour comprendre
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git diff --cached --name-only | head -40; echo '---diff en-cours---'; git diff --cached -- docs/pilotage/en-cours.md | head -20; echo '---ls-files---'; git ls-files -s docs/pilotage/en-cours.md", "description": "List real index content"}`
+
+  ```
+docs/pilotage/en-cours.md
+docs/pilotage/roadmap.md
+journal/2026-11-02/README.md
+journal/2026-11-02/apprentissage.md
+journal/2026-11-02/attention.md
+journal/2026-11-02/distribue.md
+journal/2026-11-02/docs.md
+journal/2026-11-02/memoire.md
+journal/2026-11-02/mesures.md
+journal/2026-11-02/modele.md
+journal/2026-11-02/moteur.md
+journal/2026-11-02/outils.md
+journal/2026-11-02/portes.md
+journal/README.md
+journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md
+journal/sessions/MANIFEST.md
+journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md
+journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md
+journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md
+journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md
+reports/README.md
+reports/n2-fenetre.json
+reports/pensee-porte-fenetre.json
+reports/rapport-n2-fenetre.md
+reports/rapport-pen
+… [1401 caractères tronqués]
+  ```
+

@@ -1,0 +1,304 @@
+{
+ "loi_fenetre_256": {
+  "fichier": "rope-20k.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.3696,
+  "L192": 3.3217,
+  "L256": 3.3217,
+  "L384": 3.33,
+  "L512": 3.2892,
+  "L1000": 3.2545
+ },
+ "loi_fenetre_512": {
+  "fichier": "rope512-5k.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.3399,
+  "L192": 3.2747,
+  "L256": 3.2271,
+  "L384": 3.17,
+  "L512": 3.099,
+  "L1000": 3.0107
+ },
+ "loi_fenetre_1024": {
+  "fichier": "rope1024-2.5k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.3878,
+    "256": 3.2542,
+    "512": 3.1098,
+    "1000": 2.995,
+    "2000": 2.9449
+   },
+   "val_big": {
+    "128": 3.7164,
+    "256": 3.5606,
+    "512": 3.4157,
+    "1000": 3.3064,
+    "2000": 3.2826
+   }
+  },
+  "permute_fr": 215.1536,
+  "litterature": 6.1179,
+  "anglais": 9.6864,
+  "wikitext2": 10.5612,
+  "corpus_propre": 8.1879
+ },
+ "meme_texte_256": {
+  "fichier": "rope-20k.pt",
+  "positions": "rope",
+  "cible": 128,
+  "contextes": [
+   256,
+   512,
+   1000,
+   2000
+  ],
+  "ppl": {
+   "256": 3.0663,
+   "512": 3.1392,
+   "1000": 3.1413,
+   "2000": 3.1411
+  }
+ },
+ "meme_texte_512": {
+  "fichier": "rope512-5k.pt",
+  "positions": "rope",
+  "cible": 128,
+  "contextes": [
+   256,
+   512,
+   1000,
+   2000
+  ],
+  "ppl": {
+   "256": 2.9068,
+   "512": 2.8119,
+   "1000": 2.8073,
+   "2000": 2.8076
+  }
+ },
+ "meme_texte_1024": {
+  "fichier": "rope1024-2.5k.pt",
+  "positions": "rope",
+  "cible": 128,
+  "contextes": [
+   256,
+   512,
+   1024,
+   2000
+  ],
+  "ppl": {
+   "256": 2.9197,
+   "512": 2.8125,
+   "1024": 2.7847,
+   "2000": 2.7837
+  }
+ },
+ "production_n2ac": {
+  "fichier": "mix-60k.pt",
+  "params": 34301224,
+  "val_fr_L128": 3.4902,
+  "val_fr_L256": 3.4615,
+  "val_fr_L512": 3.5169,
+  "val_fr_permute": 215.5638,
+  "val_big_L128": 3.3565,
+  "val_big_L256": 3.2716,
+  "val_big_L512": 3.3685,
+  "val_big_permute": 226.8678,
+  "corpus_propre_val": 9.2731,
+  "litterature": 6.0283,
+  "anglais": 8.3352,
+  "wikitext2": 9.0525
+ },
+ "production_200k": {
+  "fichier": "mix-200k.pt",
+  "params": 34301224,
+  "val_fr_L128": 3.1591,
+  "val_fr_L256": 3.2047,
+  "val_fr_L512": 3.6577,
+  "val_fr_permute": 181.9082,
+  "val_big_L128": 3.0035,
+  "val_big_L256": 3.0298,
+  "val_big_L512": 3.4878,
+  "val_big_permute": 199.8597,
+  "corpus_propre_val": 9.1262,
+  "litterature": 5.6056,
+  "anglais": 7.277,
+  "wikitext2": 8.0018
+ },
+ "production_512": {
+  "fichier": "mix512-15k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.1588,
+    "256": 3.043,
+    "512": 2.9096,
+    "1000": 2.8018,
+    "2000": 2.7607
+   },
+   "val_big": {
+    "128": 2.999,
+    "256": 2.8672,
+    "512": 2.7514,
+    "1000": 2.6697,
+    "2000": 2.6495
+   }
+  },
+  "permute_fr": 193.4335,
+  "litterature": 5.5247,
+  "anglais": 7.0507,
+  "wikitext2": 7.9023,
+  "corpus_propre": 9.2894
+ },
+ "production_512_meme_texte": {
+  "fichier": "mix512-15k.pt",
+  "positions": "rope",
+  "cible": 128,
+  "contextes": [
+   256,
+   512,
+   1000,
+   2000
+  ],
+  "ppl": {
+   "256": 2.7321,
+   "512": 2.6357,
+   "1000": 2.6268,
+   "2000": 2.6275
+  }
+ },
+ "production_1024": {
+  "fichier": "mix1024-7.5k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.1489,
+    "256": 3.0488,
+    "512": 2.9103,
+    "1000": 2.7858,
+    "2000": 2.7342
+   },
+   "val_big": {
+    "128": 3.0548,
+    "256": 2.8966,
+    "512": 2.7659,
+    "1000": 2.661,
+    "2000": 2.6258
+   }
+  },
+  "permute_fr": 197.5268,
+  "litterature": 5.5173,
+  "anglais": 7.1904,
+  "wikitext2": 7.9521,
+  "corpus_propre": 9.7158
+ },
+ "production_1024_meme_texte": {
+  "fichier": "mix1024-7.5k.pt",
+  "positions": "rope",
+  "cible": 128,
+  "contextes": [
+   256,
+   512,
+   1024,
+   2000
+  ],
+  "ppl": {
+   "256": 2.7401,
+   "512": 2.6277,
+   "1024": 2.5846,
+   "2000": 2.5868
+  }
+ },
+ "miroir_1024": {
+  "fichier": "rope1024-2.5k.pt",
+  "positions": "rope",
+  "fenetre": 1024,
+  "contexte": 512,
+  "code": "K7Q2M9XA4B1Z8W3C",
+  "distances": {
+   "16": 0.0078,
+   "64": 0.0,
+   "128": 0.0,
+   "200": 0.0,
+   "240": 0.0,
+   "255": 0.0,
+   "300": 0.0156,
+   "400": 0.0
+  }
+ },
+ "miroir_production_512": {
+  "fichier": "mix512-15k.pt",
+  "positions": "rope",
+  "fenetre": 512,
+  "contexte": 512,
+  "code": "K7Q2M9XA4B1Z8W3C",
+  "distances": {
+   "16": 0.0078,
+   "64": 0.0078,
+   "128": 0.0,
+   "200": 0.0,
+   "240": 0.0,
+   "255": 0.0078,
+   "300": 0.0,
+   "400": 0.0
+  }
+ },
+ "miroir_256": {
+  "fichier": "rope-20k.pt",
+  "positions": "rope",
+  "fenetre": 256,
+  "contexte": 512,
+  "code": "K7Q2M9XA4B1Z8W3C",
+  "distances": {
+   "16": 0.0078,
+   "64": 0.0,
+   "128": 0.0,
+   "200": 0.0,
+   "240": 0.0,
+   "255": 0.0,
+   "300": 0.0,
+   "400": 0.0
+  }
+ },
+ "miroir_512": {
+  "fichier": "rope512-5k.pt",
+  "positions": "rope",
+  "fenetre": 512,
+  "contexte": 512,
+  "code": "K7Q2M9XA4B1Z8W3C",
+  "distances": {
+   "16": 0.0,
+   "64": 0.0,
+   "128": 0.0,
+   "200": 0.0,
+   "240": 0.0,
+   "255": 0.0,
+   "300": 0.0078,
+   "400": 0.0
+  }
+ },
+ "dispositif": {
+  "modele": "drave-n0 34,3 M (384/512), RoPE",
+  "recette": "lot 8, lr 3e-4, graine 1, canal ; seq = fenêtre",
+  "runs": {
+   "R1.1": "wiki_fr, 128/256, 20 000 pas, 20,5 Mo, init base-wiki-45m",
+   "R1.2-512": "wiki_fr, 512/512, 5 000 pas, 20,5 Mo, init base-wiki-45m",
+   "R1.2-1024": "wiki_fr, 1 024/1 024, 2 500 pas, 20,5 Mo, init base-wiki-45m",
+   "R1.2-1024-long": "wiki_fr, 1 024/1 024, +17 500 pas (20 000), 164 Mo",
+   "prod-512": "wiki_mix, 512/512, 15 000 pas, 61,4 Mo, init mix-60k (N2.ac)",
+   "prod-1024": "wiki_mix, 1 024/1 024, 7 500 pas, 61,4 Mo, init mix-60k (N2.ac)"
+  },
+  "controles": [
+   "même texte à contexte 256/512/1 000/2 000 (eval_fenetre)",
+   "miroir de copie à distance (miroir_copie)",
+   "témoins repassés dans le même mètre : N2.ac et 200 k redonnent leurs fiches"
+  ]
+ }
+}

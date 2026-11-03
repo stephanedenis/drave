@@ -5434,3 +5434,161 @@ ok
 ⏵ Commit du fait « fenêtre » (loi + production)
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/*.py work/n2ac/*.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ && python3 -c \"\nimport pathlib,re,datetime\np=pathlib.Path('journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md')\nt=p.read_text()\nt=re.sub(r'- \ … [2511 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-236]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-236", "timeout_ms": 180000, "wait": true}`
+
+  ```
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Conflit de verrou git avec le hub : vérification et re-commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log --oneline -3; echo \"=== queue ===\"; ls -la .git/index.lock 2>/dev/null; git status --short | grep -v \"^??\" | head -6", "description": "Check commit status after lock conflict"}`
+
+  ```
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+212c23d7 NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS
+=== queue ===
+-rw-r--r--. 1 stephane stephane 359200  2 nov 22:04 .git/index.lock
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 20); do [ -f .git/index.lock ] || break; sleep 3; done; ls .git/index.lock 2>/dev/null && echo \"LOCK ENCORE\" || echo \"lock libre\"; date '+%H:%M:%S'; git log --oneline -2; git status --short | grep -v \"^??\" | head -8", "descripti … [34 caractères tronqués]`
+
+  ```
+lock libre
+22:06:09
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+52f827a2 RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git show --stat --oneline e5417f21 | head -20; echo \"=== mes fichiers suivis ? ===\"; git ls-files reports/rapport-n2-fenetre.md reports/n2-fenetre.json; git log --oneline -1 -- reports/rapport-n2-fenetre.md", "description": "Inspect hub commit conte … [5 caractères tronqués]`
+
+  ```
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+ docs/pilotage/en-cours.md                          |  34 ++--
+ journal/2026-11-02/README.md                       |  11 +-
+ journal/2026-11-02/apprentissage.md                |   6 +-
+ journal/2026-11-02/attention.md                    |   6 +-
+ journal/2026-11-02/distribue.md                    |   6 +-
+ journal/2026-11-02/docs.md                         |   6 +-
+ journal/2026-11-02/memoire.md                      |   6 +-
+ journal/2026-11-02/mesures.md                      |   6 +-
+ journal/2026-11-02/modele.md                       |   6 +-
+ journal/2026-11-02/moteur.md                       |   6 +-
+ journal/2026-11-02/outils.md                       |   6 +-
+ journal/2026-11-02/portes.md                       |   9 +-
+ journal/README.md                                  |  10 +-
+ .../code/agrege_fenetre.py                         |  72 ++++++++
+ .../code/chaine_1024.sh                            |  27 +++
+ .../code/chaine_2048.sh                            |  33 ++++
+ .../code/chaine_2048_mix.sh                        |  12 ++
+ .../code/chaine_2048_wiki.sh                   
+… [158 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Complément : contrôle « même texte » de la production 1 024, puis commit du chiffre
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_fenetre.py work/n2ac/mix1024-7.5k.pt --rope --contextes 256,512,1024,2000 --sortie work/n2ac/queue-mix1024.json 2>&1 | tail -5; echo \"--- runs ---\"; date '+%H:%M:%S'; tail -1 wo … [126 caractères tronqués]`
+
+  ```
+contexte  256 · PPL des 128 derniers octets 2.7401
+  contexte  512 · PPL des 128 derniers octets 2.6277
+  contexte 1024 · PPL des 128 derniers octets 2.5846
+  contexte 2000 · PPL des 128 derniers octets 2.5868
+{"fichier": "mix1024-7.5k.pt", "positions": "rope", "cible": 128, "contextes": [256, 512, 1024, 2000], "ppl": {"256": 2.7401, "512": 2.6277, "1024": 2.5846, "2000": 2.5868}}
+--- runs ---
+22:06:57
+pas  14250 · perte 1.0091 · PPL val 2.599 · 6545 s
+pas    300 · perte 1.1788 · PPL val 3.192 · 303 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-fenetre.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"4. le contrôle « même texte » du modèle 512 sature **à 512** (2,7321 → 2,6357 → 2,6268 →\n   2,6275) : il utilise … [684 caractères tronqués]`
+
+  ```
+fiche complétée
+  reports/n2-fenetre.json · 16 source(s)
+570
+656
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nmd = len(list(pathlib.Path(\"reports\").glob(\"*.md\")))\njs = len(list(pathlib.Path(\"reports\").glob(\"*.json\")))\nt = re.su … [1983 caractères tronqués]`
+
+  ```
+compteurs 570 656
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+[stderr]
+  ❌ commit refusé : 6 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/n2-fenetre.json
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-n2-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Édition nette de l'état (le chiffre du contrôle, sans dépasser T0)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"- **Ambition** : que la longueur cesse de reculer.\", \"- **Ambition** : la longueur d'abord.\")\nt = t.replace(\"- … [803 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3997 mots (budget 4 000)
+  en-cours · 1623 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -q -- reports/rapport-n2-fenetre.md reports/n2-fenetre.json docs/pilotage/en-cours.md -F - <<'MSG'\nFENÊTRE — LE CHIFFRE DU FAIT : 256 → 1 024 DONNE 3,2545 → 3,0107 → 2,9950 À 1 000 OCTETS ; LA PRODUCTION AFFINÉE BAT 200 000 PAS\n\nLe conte … [1537 caractères tronqués]`
+
+  ```
+e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux REJOUÉE VERTE AVEC LE JSON N2
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+[stderr]
+error: pathspec '-F' did not match any file(s) known to git
+error: pathspec '-' did not match any file(s) known to git
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -q -F - -- reports/rapport-n2-fenetre.md reports/n2-fenetre.json docs/pilotage/en-cours.md <<'MSG'\nFENÊTRE — LE CHIFFRE DU FAIT : 256 → 1 024 DONNE 3,2545 → 3,0107 → 2,9950 À 1 000 OCTETS ; LA PRODUCTION AFFINÉE BAT 200 000 PAS\n\nLe conte … [1487 caractères tronqués]`

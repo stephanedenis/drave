@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 5.8 h |
 | Tours | 18 |
-| Messages | 578 |
-| Appels d'outils | 590 |
+| Messages | 582 |
+| Appels d'outils | 594 |
 | Fichiers touchés | 24 |
-| Commandes | 399 |
+| Commandes | 403 |
 | Sous-agents | 0 |
-| Commits | 25 |
+| Commits | 27 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -553,12 +553,16 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 
 ### Tour 18 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Check events and N2 status
 - bash — Wait for the N2 commit or a new commit
 - bash — Check N2 staging and commit status
 - bash — Wait for the N2 fenêtre commit and verify
+- bash — Inspect the failed N2 commit state
+- bash — Wait for the hub commit and check the N2 staged state
+- bash — Check the N2 fenêtre state line and staged files
+- bash — Wait for the N2 fact commit
 
 **Synthèse produite :**
 
@@ -637,7 +641,7 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 359 autres
+- … et 363 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -797,4 +801,6 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 - NUIT — LE COMPTEUR SUIT LE JSON N2 (570/656) ; PORTE-TABLEAUX REPASSE VERTE" -m "reports/n2-fenetre.json (21 h 56) referme le lien qui faisait échouer porte-tab
 - ps -eo pid,etime,args | grep -E "git commit|git add|git reset" | grep -v grep | head -3; ls -l .git/index.lock 2>/dev/null; date "+%H:%M:%S"
 - git status --short reports/n2-fenetre.json reports/rapport-n2-fenetre.md 2>/dev/null; ps -eo pid,etime,args | grep -E "git commit" | grep -v grep | head -2; git
+- git status --short | head -15; echo "--- commit en cours ? ---"; ps -eo pid,etime,args | grep -E "git commit|session_report|archive" | grep -v grep | head -2; e
+- for i in $(seq 1 40); do kill -0 698627 2>/dev/null || break; sleep 3; done; ps -p 698627 >/dev/null && echo "commit en cours" || echo "commit fini"; git log --
 
