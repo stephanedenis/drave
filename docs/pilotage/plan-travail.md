@@ -98,7 +98,8 @@ de `git reset` sur les fichiers d'une autre session.
 
 **La mesure.** Les portes lourdes (`porte-ocr-scans`, `toutes-les-portes`) tournent **une à la
 fois** ; les portes légères (doc, état, journal) à chaque commit. Le banc R03 est en lecture ;
-deux mesures sur le même corpus se sérialisent.
+deux mesures sur le même corpus se sérialisent. La passe complète réserve `machine` (§ 10) :
+aucune autre réservation lourde ne tourne pendant ce temps.
 
 **Le checkpoint d'intégration** : au moins une fois par jour, le hub relit les plans, met à jour
 la roadmap et l'état, vérifie les compteurs et la revue, et note dans le journal ce qui a bougé.
@@ -108,7 +109,8 @@ la roadmap et l'état, vérifie les compteurs et la revue, et note dans le journ
 - **GPU** : N2 seul sur un GPU ; le second GPU reste libre pour une évaluation ou un sous-agent
   (16 Go chacun : le 32 B et le professeur n'y tiennent pas).
 - **CPU** : 2 à 3 gros travaux à la fois (un entraînement 8–16 cœurs, un OCR 1–2, une extraction
-  PDF 4–8) ; 40 cœurs, mais la contention disque/compression est réelle.
+  PDF 4–8) ; 40 cœurs, mais la contention disque/compression est réelle. Les fils se réservent
+  par socket (§ 10) : `cpu0` pour les GPU, `cpu1` pour le CPU seul.
 - **Disque** : `Data13TB` a 2,0 To ; `IA` est à **34 Go libres** — **aucun nouveau gros modèle**
   sans supprimer (le DeepSeek 341 Go et les artefacts 122 Go sont les postes à revoir). Les
   `work/` de session restent dans `work/<session>/`, jamais à la racine.
@@ -128,6 +130,7 @@ la roadmap et l'état, vérifie les compteurs et la revue, et note dans le journ
 | `python3 tools/revue_documentation.py` | classement, liens, compteurs, fraîcheur | avant chaque commit de clôture |
 | `python3 tools/verifie_journal.py` | les jours, les sessions, les liens | au checkpoint |
 | `python3 tools/taille_documents.py` | les budgets de contexte (T0 ≤ 4 000) | avant chaque commit de clôture |
+| `python3 tools/ressources.py --check` / `--actual` | le registre des ressources (GPU, CPU, RAM, NVMe, HDD) et les processus non déclarés | à chaque checkpoint et avant une passe |
 
 **Ce que « surveiller » veut dire ici** : le dépôt est **un seul arbre de travail** ; deux
 sessions qui écrivent le même fichier se marchent dessus sans le voir. Les réservations et
@@ -214,8 +217,107 @@ depuis la racine du dépôt.
   (`GIT_INDEX_FILE=/tmp/index.<session>`) est la ceinture.
 - **Committer avant de rebooter** : le reboot du 02/11 a laissé 67 fichiers non committés.
 - **Les portes lourdes une à une** ; les GPU sont partagés.
+- **Une ressource se réserve** : `python3 tools/ressources.py --claim ...` (§ 10) ; un GPU, un
+  NVMe ou une passe globale ne se partagent pas par accident.
 - **Le sous-module `docwatch`** se commit dans son dépôt, puis le pointeur dans le superprojet.
 
 **Quand une session finit.** Elle passe `État : terminé`, écrit sa `cloture.md` si le rapport
 automatique ne dit pas ce qui est livré, et le hub la sort d'`en-cours` vers
 `journal/sessions/`.
+
+
+## 10. La coordination des ressources — le registre et le protocole
+
+**Pourquoi.** Le pilotage réservait les **fichiers** (`sessions.py`) et surveillait les fichiers
+en mouvement (`surveille_sessions.py`), mais pas la **machine** : deux sessions pouvaient lancer
+deux entraînements sur le même GPU, ou saturer le même NVMe, sans le voir. Le registre
+[`tools/ressources.py`](../../tools/ressources.py) rend les ressources explicites, les réserve
+et met en file ce qui ne tient pas.
+
+> **Consigne de nuit (02/11 20 h → 03/11 08 h).** Une session écrit `en-cours` à la fois ; tout
+> job lourd **réserve** (`--claim`) et **libère** (`--release`) ; `--actual` à chaque checkpoint
+> dénonce les usages non déclarés ; les tâches légères (portes doc, liens, compteurs, journal,
+> backlog) remplissent les ressources libres ; la passe complète réserve `machine`. Chaque axe
+> garde une **prochaine action** : aucun axe ne s'arrête pendant qu'un autre tourne.
+
+### 10.1 Le modèle
+
+| ressource | capacité | NUMA | règle |
+|---|---|---:|---|
+| `gpu0` | 1 job exclusif, 16 Gio | 0 | carte du haut (plafonnée 180 W par `hauru-thermal`) |
+| `gpu1` | 1 job exclusif, 16 Gio | 0 | carte du bas ; libre pour une éval |
+| `cpu0` | 16 fils utiles (20, réserve 4) | 0 | 0-9,20-29 ; **fils des GPU** |
+| `cpu1` | 16 fils utiles (20, réserve 4) | 1 | 10-19,30-39 ; **CPU seul, hub** |
+| `ram` | 109 Gio utiles (125, réserve 16) | — | un job > 80 Gio est machine-exclusif |
+| `nvme_system` | 1 IO lourde, 705 Gio libres | — | `/`, `/home`, `/FastNVMe` (attention : `FastNVMe` est sur le système, pas le RAID) |
+| `nvme_raid` | 1 IO lourde, **33 Gio libres** | — | `/home/stephane/IA` (RAID0 4×238 G) — presque plein |
+| `hdd_data13tb` | 1 IO lourde, 1,9 Tio | — | `/home/stephane/Data13TB` (corpus, OCR) |
+| `machine` | 1 job exclusif | — | passe complète des portes / mesure globale |
+
+### 10.2 La règle NUMA
+
+Les deux GPU sont sur le **node 0** (`nvidia-smi topo -m`) ; le node 1 est libre pour le CPU seul.
+
+```bash
+# job GPU : fils et mémoire sur le node 0
+numactl --cpunodebind=0 --membind=0 <commande>
+CUDA_VISIBLE_DEVICES=0 <commande>        # ou 1, ou 0,1
+
+# job CPU seul : node 1
+numactl --cpunodebind=1 --membind=1 <commande>
+```
+
+Un job GPU qui réserve `cpu1` est signalé : ses fils doivent aller sur `cpu0`.
+
+### 10.3 Le protocole
+
+Avant une étape lourde (entraînement, OCR, extraction, passe de portes, gros téléchargement) :
+
+```bash
+python3 tools/ressources.py --claim --session <id> --job <nom> \
+  --res "gpu0=exclusive,cpu0=12,ram=60,nvme_raid=heavy:20" --prio 1 --eta 240
+```
+
+- **✅ accordé** : la ressource est libre, le job peut démarrer.
+- **⏸ différé** : le claim est **mis en file** ; la session prend une autre tâche (la file est
+  admise automatiquement à la libération). C'est la règle « jamais en attente » : on ne bloque
+  pas, on change de tâche.
+- Après le job : `python3 tools/ressources.py --release --session <id> [--job <nom>]`.
+- À chaque checkpoint : `--status` (qui tient quoi), `--check` (cohérence), `--suggest` (ce qui
+  est libre), `--actual` (le réel : processus GPU non déclarés, top CPU, espace disque).
+
+### 10.4 L'allocation type
+
+| session | ressources | lancement |
+|---|---|---|
+| **N2** | `gpu0` excl., `cpu0` 12, `ram` 60, `nvme_raid` heavy:20 | node 0 |
+| **L/B13** | `cpu1` 8, `ram` 16 | node 1 |
+| **S** | `cpu1` 4, `ram` 8 | node 1 |
+| **D/R/A** | `cpu1` 2, `ram` 16, `hdd_data13tb` heavy | node 1 (OCR) |
+| **hub** | `cpu1` 2, `ram` 4 | node 1 |
+| **passe complète** | `machine` exclusive | — (rendez-vous) |
+
+`cpu1` = 8 + 4 + 2 + 2 = **16 fils** (le maximum utile) ; `ram` = 104 Gio ; `gpu1` reste libre
+pour une éval. La passe complète **réserve `machine`** : elle attend que les sessions libèrent
+leurs claims ; le hub annonce la fenêtre, les sessions `release`, la file admet `machine`.
+
+### 10.5 Le stockage
+
+- `IA` (RAID) est à **33 Gio** : un claim `nvme_raid=heavy:20` vérifie l'espace ; un claim de
+  40 Gio est refusé. Les nouveaux gros corpus/checkpoints vont sur `hdd_data13tb` (1,9 Tio) ou
+  `nvme_system` (705 Gio), pas sur `IA`.
+- **Une seule IO lourde par dispositif.** Une IO lourde sur `nvme_system` est déconseillée
+  (OS, dépôt, bureau) ; l'outil l'avertit.
+- `FastNVMe` est un sous-volume du NVMe système, **pas** du RAID : ne pas s'y tromper.
+
+### 10.6 Le registre et la vérification
+
+- Le registre vit dans `work/ressources.json` (ignoré par git) ; la politique est ici ; le code
+  est [`tools/ressources.py`](../../tools/ressources.py) (`--autotest` : 9 cas).
+- `--actual` compare le registre au réel : un GPU utilisé sans claim est signalé (aujourd'hui
+  `llama-server` et les processus N2 sont **non déclarés**).
+- **Application dure** (à venir) : `systemd-run` avec `AllowedCPUs`, `IOWeight`, `MemoryMax` et
+  `CUDA_VISIBLE_DEVICES`, ou des slices par ressource. Le registre est **consultatif** ; il
+  n'empêche pas un job, il rend le conflit visible.
+- Une **porte** `porte-ressources.sh` (`--check --strict`) pourra être ajoutée après validation :
+  elle ferait passer le compte de 81 à 82 portes, et les compteurs de l'état suivraient.

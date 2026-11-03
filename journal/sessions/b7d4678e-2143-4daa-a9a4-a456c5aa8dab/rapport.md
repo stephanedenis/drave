@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 3.8 h |
+| Durée | 3.9 h |
 | Tours | 5 |
-| Messages | 375 |
-| Appels d'outils | 405 |
+| Messages | 379 |
+| Appels d'outils | 409 |
 | Fichiers touchés | 18 |
-| Commandes | 246 |
+| Commandes | 250 |
 | Sous-agents | 0 |
-| Commits | 13 |
+| Commits | 15 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -153,7 +153,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 5 — regarde ce que font les autres sessions et prends des tâches légères toute la nuit (jusqu'à 8h demain) passe le mot sur  … [145 caractères tronqués]
 
-*31 appels d'outils.* Actions notables :
+*35 appels d'outils.* Actions notables :
 
 - bash — Survey sessions and repository state
 - bash — Survey CPU, GPU and processes
@@ -169,7 +169,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - bash — Wait for N2 night mandate commit
 - bash — Check for an existing night coordination note
 - create_goal
-- … et 15 autres
+- … et 19 autres
 
 **Synthèse produite :**
 
@@ -242,7 +242,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 206 autres
+- … et 210 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -346,6 +346,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T5** `0, 99 %, 5766 MiB`
 - **T5** `**147 scans détectés** (91 uniques, 2 053 p), **60 documents, 1 982 p, 4,41 M car.**, 8 Ko 0 ;`
 - **T5** `| `nvme_raid` | 1 IO lourde, **33 Gio libres** | — | `/home/stephane/IA` (RAID0 4×238 G) — presque plein |`
+- **T5** `335941       01:22 git commit -m S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP) ET LA BANQUE 200/355 ; N2 — LE MANDAT DE NUIT ET L'OUTIL RESSOURCES -m S — mesure_corpus.py sur 50 000 lignes et 20 79`
 
 ## 5. Erreurs rencontrées
 
@@ -368,4 +369,6 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - date "+%H:%M:%S"; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md docs/pilotage/plan-travail.md docs/pilotage/roadmap.md tools/ressources.py; ps -eo pid,
 - date "+%H:%M:%S"; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/sessions.py --check --strict
 - ps -eo pid,etime,args | grep -E "git commit|session_report|journal_auto|archive_sessions" | grep -v grep | head -4; echo "--- index ---"; git diff --cached --st
+- NUIT — LA COORDINATION DES RESSOURCES EST PUBLIÉE : REGISTRE (9 CAS), CLAIMS ET CONSIGNE ; GPU0 NON DÉCLARÉ" -m "tools/ressources.py : registre consultatif des 
+- for i in $(seq 1 60); do N=$(pgrep -fc "git commit" 2>/dev/null || true); [ "${N:-0}" -eq 0 ] && break; sleep 3; done; echo "git commits restants: $(pgrep -fc '
 

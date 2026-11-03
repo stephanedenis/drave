@@ -7,14 +7,14 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 4.5 h |
+| Durée | 4.6 h |
 | Tours | 7 |
-| Messages | 156 |
-| Appels d'outils | 204 |
+| Messages | 159 |
+| Appels d'outils | 207 |
 | Fichiers touchés | 13 |
-| Commandes | 164 |
+| Commandes | 167 |
 | Sous-agents | 0 |
-| Commits | 9 |
+| Commits | 10 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -449,7 +449,7 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 
 ### Tour 7 — dans le pilotage, pourrait-on coordonner les charges de la machine pour éviter les attentes inutiles et surtout les simu … [102 caractères tronqués]
 
-*21 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Inspect CPU sockets, NUMA nodes and GPU affinity
 - bash — Inspect NVMe, RAID and mount points
@@ -465,11 +465,11 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 - read
 - bash — Append resource coordination policy to plan-travail
 - bash — Read exact plan-travail lines to edit
-- … et 6 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Je vérifie l'état git et les affinités réelles des deux jobs avant de committer la politique.
+⏵ Je commite le registre et la politique, sans toucher aux fichiers déjà indexés par les autres sessions.
 
 ## 3. Travail accompli
 
@@ -533,7 +533,7 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 124 autres
+- … et 127 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -683,4 +683,5 @@ Désinstallation : `sudo system/thermal/uninstall.sh` depuis le dépôt.
 - ÉTAT — T0 REVENU SOUS 4 000 (3 998) APRÈS LE RUNBOOK"; echo "[exit $?]"; git log --oneline -1
 - ÉTAT — HORODATAGE RÉEL (16 h 09) APRÈS LA REPRISE ; LE FUTUR N'EST PAS UNE HEURE"; echo "[exit $?]"; echo "== status ==" && git status --short && echo "(fin)" &
 - feat(thermal): plafonne le GPU 0 à 180 W et documente les ventilateurs Dell sans BIOS" -m "Le GPU 0 throttle à 87 °C (SW Thermal Slowdown) alors que le GPU 1 re
+- PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE" -m "Le pilotage réservait les fichiers, pas la machine. tools/ressources.py ajoute
 

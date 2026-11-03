@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 3.8 h |
-| Tours | 8 |
-| Messages | 392 |
-| Appels d'outils | 496 |
+| Durée | 3.9 h |
+| Tours | 9 |
+| Messages | 395 |
+| Appels d'outils | 497 |
 | Fichiers touchés | 32 |
-| Commandes | 365 |
+| Commandes | 366 |
 | Sous-agents | 0 |
 | Commits | 9 |
 | Compactages de contexte | 1 |
@@ -39,6 +39,8 @@
 **Tour 7** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 **Tour 8** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
+
+**Tour 9** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -319,7 +321,7 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 
 ### Tour 8 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*22 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Inspect minute door problem and state helpers
 - bash — Read PolitiqueLLM and minute tests
@@ -335,11 +337,32 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 - bash — Extract minute results from JSON
 - write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-minute.md`
 - bash — Apply minute door state and check budgets
-- … et 8 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Commit de la porte minute (l'état inclut les sessions N2/S concurrentes ; leurs fiches/plan/tools restent chez eux)
+⏵ Round 6 : la porte minute s'ouvre par la règle (26 nœuds) ; le T0 est à 3 997 et les sessions sont vertes
+
+**Fait de la nuit** — commit **`67ec9cd4`** : la porte minute.
+
+| politique | but | nœuds | sonde | appels | latence |
+|---|---|---:|---:|---:|---:|
+| oracle (Manhattan) | ✅ | 27 | 5 | 7 | 0 |
+| aveugle | ❌ | 200 | 61 | 66 | 0 |
+| hasard | ✅ | 43 | 7 | 14 | 0 |
+| **LLM, prompt `porte`** | ✅ | **26** | **4** | **7** | **6,40 s** |
+| **LLM, prompt `labyrinthe`** | ❌ | 200 | 3 | 95 | **101,6 s** |
+
+- La règle dans le prompt ouvre la porte minute (**26 nœuds, 4 sonde, 7 appels, 6,4 s**) ; le même modèle, sans la porte, échoue (**200 nœuds, 3 sonde, 101,6 s**). L'oracle 27/5 ; l'aveugle échoue ; le hasard ouvre par chance (43/7), limite nommée.
+- Les deux seuils propres (aveugle et labyrinthe) sont verts ; le script rend `verdict: true`.
+
+**État** : T0 **3 997/4 000**, `en-cours` **1 623 mots** (4 sessions), revue **562/648**, tableaux/journal/état verts, **`sessions --check --strict` : EXIT=0** (N2/S/hub rafraîchis). Le dépôt a intégré l'état N2/S concurrent ; le S écrit encore (sous-module + `rapport-s-corpus-reel`, non committés).
+
+Nuit committée : POS `7ef0199c` · syntagmes `df899b90` · cascade `01838589` · DRVM `9250b1c3` · porte `aeace14b` · pragmatique `4a85604d` · T0 `7d5bd08d` · B13 `9f1f4869` · **minute `67ec9cd4`** ; le hub/N2 : `a902abea`, `e12c39c1`, `e2227509`, `c0196b55`.
+
+La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **stochastique**, le **gold 200+**, et la **porte B13** (le S met à jour ses quatre attendus). Le goal reste **actif**.
+
+### Tour 9 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -422,7 +445,7 @@ La suite : le **gold 200+**, la **porte qui bouge**, et les corrections **S** (4
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 325 autres
+- … et 326 autres
 
 ## 4. Mesures et résultats marquants
 

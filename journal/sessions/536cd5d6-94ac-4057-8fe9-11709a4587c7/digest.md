@@ -5791,3 +5791,66 @@ pid 110066's current affinity list: 0-39
   ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
   ```
 
+### 🤖 Assistant
+
+⏵ Je mets à jour la note « réel » du plan, puis je déclare les quatre charges dans le registre.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/plan-travail.md'); t=p.read_text()\nt=t.replace(\"aujourd'hui\\n  `llama-server` et les processus N2 sont **non déclarés**.\",\n            \"les processus en cours (`ll … [945 caractères tronqués]`
+
+  ```
+plan-travail maj
+== claims réels ==
+  ✅ accordé : 0733c5bb / r12-1024
+  ✅ accordé : 536cd5d6 / portes
+     ⚠ GPU sur NUMA 0 : les fils du GPU devraient être réservés sur cpu0
+  ✅ accordé : 29ad180d / analyseur
+  ✅ accordé : e181ce02 / b13-gold
+
+== check ==
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ⚠ 536cd5d6 : GPU sur NUMA 0 avec des fils sur cpu1
+[exit 0]
+
+== statut ==
+  gpu1           gpu              1        1        0  16 Gio VRAM · NUMA 0
+  cpu0           cpu             16       12        4  réserve 4 fils
+  cpu1           cpu             16       16        0  réserve 4 fils
+  ram            ram            109       92       17  réserve 16 Gio
+  nvme_system    io               1        0        1  705 Gio libres · 0 Gio réservés
+  nvme_raid      io               1        0        1  33 Gio libres · 0 Gio réservés
+  hdd_data13tb   io               1        0        1  1943 Gio libres · 0 Gio réservés
+  machine        global           1        0        1  passe complète
+
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 536cd5d6 / portes : gpu1=exclusive, cpu1=8, r
+… [142 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je valide l'outil et la revue, puis je commite uniquement mes deux fichiers (l'index contient d'autres sessions).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/ressources.py --autotest; echo \"[autotest $?]\"; echo; timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -12; echo \"[revue ${PIPESTATUS[0]}]\"; echo; python3 tools/taille_documents.py 2>&1 | grep -E 'T0 max … [170 caractères tronqués]`
+
+  ```
+✅ autotest : 9 cas (claim, conflit, file, admission, check)
+[autotest 0]
+
+  revue de documentation · 562 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[revue 0]
+
+  T0 max : 3997 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+
+  en-cours · 1623 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Je commite le registre et la politique, sans toucher aux fichiers déjà indexés par les autres sessions.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/ressources.py docs/pilotage/plan-travail.md && timeout 300 git commit --only -m \"PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE\" -m \"Le pilotage réservait les fichiers, pas la machine. t … [1242 caractères tronqués]`

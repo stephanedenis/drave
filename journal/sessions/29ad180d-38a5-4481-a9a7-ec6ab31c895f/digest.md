@@ -4819,3 +4819,109 @@ Created file
 </content>
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('candidats_corpus.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"def construire(phrases: list[str], max_candidats: int = 4) -> dict:\",\n              \" … [1483 caractères tronqués]`
+
+  ```
+✅ 200 phrases, 355 candidats → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/phrases_generees.json
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/phrases-corpus-manifest.json · sha256 43957a3b9ad2422b…
+-rw-r--r--. 1 stephane stephane    366  2 nov 20:04 donnees/phrases-corpus-manifest.json
+-rw-r--r--. 1 stephane stephane 527440  2 nov 20:04 donnees/phrases_generees.json
+200 phrases 355 candidats
+c001 Au lecteur Cette version électronique reproduit dans son intégralité la version originale.
+['GP', 'GP']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('candidats_corpus.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"def construire(phrases: list[str], max_candidats: int = 4,\\n               source: path … [1663 caractères tronqués]`
+
+  ```
+source rel fix
+----------------------------------------------------------------------
+Ran 46 tests in 3.701s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('README.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"**45 tests** :\", \"**46 tests** :\")\nt = t.replace(\"mesure corpus (filtre,\\nstats, mélange dét … [1386 caractères tronqués]`
+
+  ```
+README banque candidats
+201:## La banque de candidats réels
+211:(`donnees/phrases-corpus-manifest.json`). **200 phrases, 355 candidats** ; l'humain valide dans
+253:**46 tests** : phrases et alignement des spans, validation + export, statut invalide refusé,
+260:stats, mélange déterministe) ; banque de candidats (filtre, IDs, spans).
+277:  technique) — la langue et l'unité comptent. La **banque de candidats réels** (200 phrases,
+278:  355 candidats, manifeste SHA-256) attend la validation humaine.
+ M README.md
+?? candidats_corpus.py
+?? donnees/phrases-corpus-manifest.json
+?? donnees/phrases_generees.json
+?? tests/test_candidats_corpus.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git add candidats_corpus.py donnees/phrases_generees.json donnees/phrases-corpus-manifest.json tests/test_candidats_corpus.py README.md && git diff --cached --stat && git commit -m \"S — LA BANQUE DE CANDIDATS RÉELS  … [522 caractères tronqués]`
+
+  ```
+README.md                            |    21 +-
+ candidats_corpus.py                  |   109 +
+ donnees/phrases-corpus-manifest.json |    10 +
+ donnees/phrases_generees.json        | 24423 +++++++++++++++++++++++++++++++++
+ tests/test_candidats_corpus.py       |    23 +
+ 5 files changed, 24583 insertions(+), 3 deletions(-)
+[master 97641d5] S — LA BANQUE DE CANDIDATS RÉELS : 200 PHRASES, 355 CANDIDATS, MANIFESTE SHA-256
+ 5 files changed, 24583 insertions(+), 3 deletions(-)
+ create mode 100644 candidats_corpus.py
+ create mode 100644 donnees/phrases-corpus-manifest.json
+ create mode 100644 donnees/phrases_generees.json
+ create mode 100644 tests/test_candidats_corpus.py
+To /home/stephane/Data13TB/stephane/GitHub/drave-structures
+   140feb6..97641d5  master -> master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\n# fiche corpus\np = Path('reports/rapport-s-corpus-reel.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"Le corpus réel **n'est pas exporté** : la prochaine étape est une **banque d … [3730 caractères tronqués]`
+
+  ```
+fiches/état/roadmap banque
+  revue de documentation · 562 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1623 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -14; echo \"=== staged ===\"; git diff --cached --stat | tail -5; echo \"=== ahead ===\"; git rev-list --count origin/master..HEAD", "description": "Check index before main corpus/bank commit"}`
+
+  ```
+M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M reports/rapport-s-analyseur-roles.md
+ M tools/structures
+?? reports/rapport-s-corpus-reel.md
+?? tools/ressources.py
+=== staged ===
+=== ahead ===
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; git ls-remote --heads origin | head -1; echo \"=== INDEX corpus ? ===\"; git show HEAD:reports/INDEX.md | grep -c \"rapport-s-corpus-reel\"; echo \"=== commit S corpus/banque ===\"; git add reports/rapport-s-cor … [208 caractères tronqués]`
+
+  ```
+67ec9cd4 B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)
+c0196b55 N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)
+c0196b551ac06cdbfc7e6f018a4a6924aceff6eb	refs/heads/master
+=== INDEX corpus ? ===
+1
+=== commit S corpus/banque ===
+ docs/pilotage/en-cours.md            |   8 +-
+ docs/pilotage/plan-travail.md        | 106 ++++++-
+ docs/pilotage/roadmap.md             |   2 +-
+ reports/rapport-s-analyseur-roles.md |   2 +-
+ reports/rapport-s-corpus-reel.md     |  96 ++++++
+ tools/ressources.py                  | 562 +++++++++++++++++++++++++++++++++++
+ tools/structures                     |   2 +-
+ 7 files changed, 769 insertions(+), 9 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP) ET LA BANQUE 200/355 ; N2 — LE MANDAT DE NUIT ET L'OUTIL RESSOURCES\" -m \"S — mesure_corpus.py sur 50 000 lignes et 20 799 phrases CEGEP, 50 000 lignes/phrases propres … [709 caractères tronqués]`

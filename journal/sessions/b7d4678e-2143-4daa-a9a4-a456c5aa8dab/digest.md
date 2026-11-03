@@ -6141,3 +6141,68 @@ A  tools/tests/qualifier_porte_minute_drvm.py
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 45); do sleep 2; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; echo \"avant $(git rev-parse --short $OLD) · après $(git rev-parse --short HEAD)\"; git log --oneline -2; echo \"--- status ---\"; git status --short | head - … [78 caractères tronqués]`
+
+  ```
+avant c0196b55 · après c0196b55
+c0196b55 N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)
+a902abea PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+--- status ---
+M  docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+M  docs/pilotage/roadmap.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+ M journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"git commit|session_report|journal_auto|archive_sessions\" | grep -v grep | head -4; echo \"--- index ---\"; git diff --cached --stat | tail -8; echo \"--- date ---\"; date \"+%H:%M:%S\"", "description": "Check for an in-flight commit and staged content" … [1 caractères tronqués]`
+
+  ```
+333140       01:03 bash -c cd /home/stephane/GitHub/Qtrinet && git commit -m "B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"; git log -3 --format='%h %ad %s' --date=format:'%H:%M:%S'; git status --short | head -10
+ 333153       01:02 git commit -m B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)
+ 333174       01:02 python3 tools/archive_sessions.py --quiet
+ 333722       00:37 /usr/bin/python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/session_report.py --repo /home/stephane/Data13TB/stephane/GitHub/Qtrinet --quiet
+--- index ---
+ docs/pilotage/en-cours.md                  |  43 ++++----
+ docs/pilotage/roadmap.md                   |   8 +-
+ reports/INDEX.md                           |   5 +-
+ reports/README.md                          |   2 +-
+ reports/pensee-porte-minute.json           | 155 +++++++++++++++++++++++++++++
+ reports/rapport-pensee-porte-minute.md     | 100 +++++++++++++++++++
+ tools/tests/qualifier_porte_minute_drvm.py | 126 +++++++++++++++++++++++
+ 7 files changed, 409 insertions(+), 30 deletions(-)
+--- 
+… [17 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for i in $(seq 1 40); do kill -0 333140 2>/dev/null || break; sleep 2; done; ps -p 333140 >/dev/null && echo \"commit en cours\" || echo \"commit fini\"; git log --oneline -2; git status --short | head -8; date \"+%H:%M:%S\"", "description": "Wait for the Pensée commit"}`
+
+  ```
+commit fini
+67ec9cd4 B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)
+c0196b55 N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M reports/rapport-s-analyseur-roles.md
+ M tools/structures
+?? reports/rapport-s-corpus-reel.md
+?? tools/ressources.py
+20:06:07
+  ```
+
+- **bash** `{"command": "git diff --check docs/pilotage/plan-travail.md; git add docs/pilotage/plan-travail.md tools/ressources.py && git diff --cached --stat", "description": "Stage the resource protocol and night consigne"}`
+
+  ```
+docs/pilotage/plan-travail.md | 106 +++++++-
+ tools/ressources.py           | 562 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 666 insertions(+), 2 deletions(-)
+  ```
+
+- **bash** `{"command": "git commit -m \"NUIT — LA COORDINATION DES RESSOURCES EST PUBLIÉE : REGISTRE (9 CAS), CLAIMS ET CONSIGNE ; GPU0 NON DÉCLARÉ\" -m \"tools/ressources.py : registre consultatif des GPU/CPU/RAM/NVMe/HDD et protocole claim/release/file/actual/check (autotest 9 cas). plan-travail § 10 : modèl … [583 caractères tronqués]`

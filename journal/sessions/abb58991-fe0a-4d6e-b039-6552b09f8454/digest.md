@@ -9989,3 +9989,78 @@ CHECK=0
 ⏵ Commit de la porte minute (l'état inclut les sessions N2/S concurrentes ; leurs fiches/plan/tools restent chez eux)
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -m \"B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)\" 2>&1 | tail -8; echo \"EXIT=${PIPESTATUS[0]}\"; git log -3 --format='%h %ad %s' --date=format:'%H:%M:%S'; git status --short | hea … [70 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 67ec9cd4] B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)
+ 32 files changed, 1520 insertions(+), 127 deletions(-)
+ create mode 100644 reports/pensee-porte-minute.json
+ create mode 100644 reports/rapport-pensee-porte-minute.md
+ create mode 100644 tools/tests/qualifier_porte_minute_drvm.py
+EXIT=0
+67ec9cd4 20:04:24 B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)
+c0196b55 19:59:16 N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)
+a902abea 19:49:32 PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M reports/rapport-s-analyseur-roles.md
+ M tools/structures
+?? reports/rapport-s-corpus-reel.md
+?? tools/ressources.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit `67ec9cd4` ; la session S écrit maintenant (sous-module/fiche) ; je contrôle l'état HEAD
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; python3 tools/verifie_etat_a_jour.py --head; python3 tools/taille_documents.py 2>&1 | grep -E \"T0|violation\" | head -2; python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -2; echo '== … [227 caractères tronqués]`
+
+  ```
+20:06:28
+  état · dernier fait 67ec9cd4 · dernier état 67ec9cd4
+  ✅ aucun fait commité après le dernier état
+  T0 max : 3997 mots (budget 4 000)
+  en-cours · 1623 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 562 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== SESSIONS ===
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 6 : la porte minute s'ouvre par la règle (26 nœuds) ; le T0 est à 3 997 et les sessions sont vertes
+
+**Fait de la nuit** — commit **`67ec9cd4`** : la porte minute.
+
+| politique | but | nœuds | sonde | appels | latence |
+|---|---|---:|---:|---:|---:|
+| oracle (Manhattan) | ✅ | 27 | 5 | 7 | 0 |
+| aveugle | ❌ | 200 | 61 | 66 | 0 |
+| hasard | ✅ | 43 | 7 | 14 | 0 |
+| **LLM, prompt `porte`** | ✅ | **26** | **4** | **7** | **6,40 s** |
+| **LLM, prompt `labyrinthe`** | ❌ | 200 | 3 | 95 | **101,6 s** |
+
+- La règle dans le prompt ouvre la porte minute (**26 nœuds, 4 sonde, 7 appels, 6,4 s**) ; le même modèle, sans la porte, échoue (**200 nœuds, 3 sonde, 101,6 s**). L'oracle 27/5 ; l'aveugle échoue ; le hasard ouvre par chance (43/7), limite nommée.
+- Les deux seuils propres (aveugle et labyrinthe) sont verts ; le script rend `verdict: true`.
+
+**État** : T0 **3 997/4 000**, `en-cours` **1 623 mots** (4 sessions), revue **562/648**, tableaux/journal/état verts, **`sessions --check --strict` : EXIT=0** (N2/S/hub rafraîchis). Le dépôt a intégré l'état N2/S concurrent ; le S écrit encore (sous-module + `rapport-s-corpus-reel`, non committés).
+
+Nuit committée : POS `7ef0199c` · syntagmes `df899b90` · cascade `01838589` · DRVM `9250b1c3` · porte `aeace14b` · pragmatique `4a85604d` · T0 `7d5bd08d` · B13 `9f1f4869` · **minute `67ec9cd4`** ; le hub/N2 : `a902abea`, `e12c39c1`, `e2227509`, `c0196b55`.
+
+La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **stochastique**, le **gold 200+**, et la **porte B13** (le S met à jour ses quatre attendus). Le goal reste **actif**.
+
+
+## Tour 9
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 7/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

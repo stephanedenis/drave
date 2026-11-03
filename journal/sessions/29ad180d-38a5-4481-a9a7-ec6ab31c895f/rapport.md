@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 3.8 h |
+| Durée | 3.9 h |
 | Tours | 6 |
-| Messages | 230 |
-| Appels d'outils | 241 |
+| Messages | 234 |
+| Appels d'outils | 245 |
 | Fichiers touchés | 13 |
-| Commandes | 173 |
+| Commandes | 177 |
 | Sous-agents | 0 |
-| Commits | 10 |
+| Commits | 11 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -223,7 +223,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 ### Tour 6 — attends-tu aprèes quelque-chose? on a des ressources qui peuvent en prendre un peu plus
 
-*25 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Inspect CEGEP OCR corpus for real-text measurement
 - bash — Assess OCR text quality and plausible sentence count
@@ -239,7 +239,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - bash — Commit and push corpus measurement submodule
 - bash — Check main state, gate pass, and fiche status
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-corpus-reel.md`
-- … et 11 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
@@ -307,7 +307,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 133 autres
+- … et 137 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -382,4 +382,5 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - S — LA FRONTIÈRE DU GN S'ARRÊTE DEVANT LE VERBE : 47/47 TYPES, 117/117 RÔLES ; GOLD 47" -m "Le générateur gagne un lexique de verbes finis (frontière GN) et le 
 - S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)" -m "mesure_corpus.py : 50 000 lignes et 20 799 phrases CEGEP, 50
 - S — LA BANQUE DE CANDIDATS RÉELS : 200 PHRASES, 355 CANDIDATS, MANIFESTE SHA-256" -m "candidats_corpus.py : 200 phrases de la littérature propre (filtre 40-200 
+- S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP) ET LA BANQUE 200/355 ; N2 — LE MANDAT DE NUIT ET L'OUTIL RESSOURCES" -m "S — mesure_corpus.py sur 50 000 lignes
 
