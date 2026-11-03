@@ -14521,3 +14521,24 @@ journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md
 ⏵ `536` est propre ; il reste les deux fichiers `d629` (une très longue ligne). Je les nettoie par filtrage de lignes et je commite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfor f in (\"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md\",\n          \"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md\"):\n    p = pathlib.Path(f); t = p.read_t … [984 caractères tronqués]`
+
+  ```
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md 64996 -> 64994 lignes
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md 12362 -> 12359 lignes
+
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md
+(vide = propre)
+
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+
+[commit 128]
+c66a2eef JOURNAUX D629 — LES LIGNES DE LA BOUCLE DE GÉNÉRATION SONT RETIRÉES
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: repository has been updated, but unable to write
+new index file. Check that disk is not full and quota is
+not exceeded, and then "git restore --staged :/" to recover.
+  ```
+

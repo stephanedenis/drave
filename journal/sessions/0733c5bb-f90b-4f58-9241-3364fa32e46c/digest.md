@@ -7857,3 +7857,20 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-379", "timeout_ms": 2700000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-*-512z.pt 2>/dev/null; tail -c 70 work/n2ac/mix1024-60k.log", "description": "Poll capacity runs"}`
+
+  ```
+13:53:33
+propre-1147m-512z fini 13:49:38
+work/n2ac/propre-1147m-512z.pt
+l 2.471 · 757 s
+pas   1750 · perte 0.9239 · PPL val 2.463 · 780 s
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-*-512z.pt 2>/dev/null; tail -c 60 work/n2ac/mix1024-60k.log", "description": "Wait for 21.65M capacity run"}`

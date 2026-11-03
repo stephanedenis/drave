@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 21.6 h |
+| Durée | 21.7 h |
 | Tours | 9 |
-| Messages | 275 |
-| Appels d'outils | 279 |
-| Fichiers touchés | 13 |
-| Commandes | 205 |
+| Messages | 283 |
+| Appels d'outils | 287 |
+| Fichiers touchés | 14 |
+| Commandes | 211 |
 | Sous-agents | 0 |
-| Commits | 15 |
+| Commits | 16 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -340,9 +340,17 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 
 ### Tour 9 — pour ce qui est de la validation de la banque, après moins de 20%, j'arrête car j'ai trop de doutes sur l'arvre syntaxiq … [105 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Inspect partial human validations and notes
+- bash — Stop bank server and export partial validated bank
+- bash — Check server and export partial bank
+- bash — Measure current tree depth and unresolved referents
+- bash — Commit partial human bank and tree/referent measure
+- bash — Copy partial bank manifest and check counts
+- bash — Read current S state/roadmap/INDEX
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-banque-partielle.md`
+- read
 
 **Synthèse produite :**
 
@@ -367,6 +375,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_mesure_corpus.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-corpus-reel.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/candidats_corpus.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-banque-partielle.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -410,7 +419,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 165 autres
+- … et 171 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -483,6 +492,10 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - **T7** `98:- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **47**, **46 tests** ; corpus **47**`
 - **T7** `34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v3** : frontière GN-devant-verbe, gold **47** phrases ; analyseur **47/47** types, **117/117** rôles`
 - **T7** `- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **47**, **46 tests** ; corpus **47** st`
+- **T9** `- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélang`
+- **T9** `34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v4** : règle de contexte des homographes, gold **55** phrases ; analyseur **54/55** types, **131/131`
+- **T9** `563:| [rapport-s-analyseur.md](rapport-s-analyseur.md) | S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture |`
+- **T9** `564:| [rapport-s-corpus-reel.md](rapport-s-corpus-reel.md) | S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange) |`
 
 ## 5. Erreurs rencontrées
 
@@ -515,4 +528,5 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55" -m "Le GN ne s'arrête plus devant « ferme »/« fait » quand le suivant est un aux
 - S — BANQUE : LE MANIFESTE REPREND LA DATE DU RESCAN (SHA 43957a3b INCHANGÉ)" -m "La banque de 200 phrases / 355 candidats est identique (sha256 43957a3b…) ; seu
 - S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55 (SHA 76accf9d)" -m "Le GN ne s'arrête plus devant « ferme »/« fait » quand le sui
+- S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES / 65 PHRASES ; L'ARRÊT HUMAIN EST MESURÉ (ARBRE 1, RÉFÉRENTS 0)" -m "La validation humaine s'arrête : arbre 
 

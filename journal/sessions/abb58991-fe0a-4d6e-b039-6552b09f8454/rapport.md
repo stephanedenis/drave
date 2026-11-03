@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 21.5 h |
+| Durée | 21.6 h |
 | Tours | 164 |
-| Messages | 1141 |
-| Appels d'outils | 932 |
+| Messages | 1144 |
+| Appels d'outils | 934 |
 | Fichiers touchés | 48 |
-| Commandes | 753 |
+| Commandes | 754 |
 | Sous-agents | 0 |
-| Commits | 93 |
+| Commits | 94 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -4184,7 +4184,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 164 — continue
 
-*25 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and inspect state
@@ -4200,11 +4200,11 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - bash — Check Rust binary and copy fresh DRVM
 - bash — Replay native parity with fresh DRVM
 - bash — Write replayed native parity JSON
-- … et 11 autres
+- … et 12 autres
 
 **Synthèse produite :**
 
-⏵ Le hub a encore committé (`1c9f58dc`) et le lock traîne ; j'attends plus longtemps, je retire le lock et je commite
+⏵ Le `HEAD` a bougé pendant le commit (hub : `c66a2eef`) ; les fichiers sont restés stagés — je relance le commit immédiatement
 
 ## 3. Travail accompli
 
@@ -4303,7 +4303,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 713 autres
+- … et 714 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4392,6 +4392,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T15** `45:- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mél`
 - **T162** `reports/INDEX.md:550:| [rapport-r44-ocr-pilote.md](rapport-r44-ocr-pilote.md) | R4.4 — l'OCR lit dix pages à 4,48 % de WER, parité 90 %, et la page « photo » tombe à 26,7 % |`
 - **T162** `reports/inventaire-donnees-entrainement.md:90:   **R4.4** (90–97 % de parité, ~3 s/page) — c'est précisément ce pour quoi elle a été construite.`
+- **T164** `[still running after 400000ms; moved to background job bash-753]`
 
 ## 5. Erreurs rencontrées
 
@@ -4498,6 +4499,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -
+- L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -

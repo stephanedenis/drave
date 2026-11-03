@@ -5714,3 +5714,82 @@ p006 p006-c1 resolu |
 p002 p002-c2 compatible | il est préférable de dire l'homme au téléscope
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && pkill -f \"serveur.py --port 8765\" 2>/dev/null; sleep 1; pgrep -f \"serveur.py --port 8765\" >/dev/null && echo \"serveur encore là\" || echo \"serveur arrêté\"; echo \"=== export banque partielle ===\"; python3 exp … [266 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && pgrep -af \"[s]erveur.py --port 8765\" || echo \"serveur arrêté\"; echo \"=== export banque partielle ===\"; python3 exporter_corpus.py --mode banque; echo \"=== vérif ===\"; python3 verifier_corpus.py ../../data/str … [156 caractères tronqués]`
+
+  ```
+serveur arrêté
+=== export banque partielle ===
+  ✅ 81 ligne(s) sur 65 phrase(s) · mode banque → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-validee.jsonl
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-validee-manifest.json
+     sha256 : 2d27b712269735d01ad091303f76bfba34cf491d7775c84c2cc63ad460297525
+=== vérif ===
+  ✅ ../../data/structures/banque-validee.jsonl · empreinte, comptes, spans et restitution vérifiés
+81 ../../data/structures/banque-validee.jsonl
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && cat > mesure_arbre.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"mesure_arbre.py — la profondeur actuelle de l'arbre et les référents non résolus de la banque.\n\nLe retour humain du 03/11 : « il manque trop souvent de pr … [3174 caractères tronqués]`
+
+  ```
+207 phrases · 369 candidats · 2414 segments
+  profondeur max par candidat : {'0': 10, '1': 277, '2': 82}
+  niveaux des segments : {'0': 1444, '1': 888, '2': 82}
+  référents : 170 phrases, 371 formes, 0 antécédent proposé
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-arbre.json
+{
+ "phrases": 207,
+ "candidats": 369,
+ "segments": 2414,
+ "profondeur_max": {
+  "0": 10,
+  "1": 277,
+  "2": 82
+ },
+ "niveaux": {
+  "0": 1444,
+  "1": 888,
+  "2": 82
+ },
+ "phrases_avec_referent": 170,
+ "referents": 371,
+ "formes": {
+  "y": 109,
+  "en": 67,
+  "se": 44,
+  "me": 19,
+  "il": 18,
+  "son": 18,
+  "elle": 9,
+  "je": 9,
+  "vous": 9,
+  "lui": 8,
+  "sa": 8,
+  "on": 5,
+  "nous": 5,
+  "tu": 5,
+  "ses": 4,
+  "leurs": 4,
+  "te": 4,
+  "vos": 4,
+  "ils": 3,
+  "moi": 3,
+  "nos": 3,
+  "cela": 2,
+  "votre": 2,
+  "mon": 2,
+  "notre": 2,
+  "leur": 2,
+  "j'ai": 1,
+  "j'avais": 1,
+  "j'aurais": 1
+ },
+ "note": "niveau = profondeur d'indentation du segment ; profondeur_max = maximum par candidat ; référents = pronoms/possessifs, aucun antécédent proposé par l'outil."
+}
+  ```
+
