@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 17.1 h |
 | Tours | 28 |
-| Messages | 508 |
-| Appels d'outils | 507 |
+| Messages | 513 |
+| Appels d'outils | 512 |
 | Fichiers touchés | 6 |
-| Commandes | 367 |
+| Commandes | 371 |
 | Sous-agents | 0 |
-| Commits | 21 |
+| Commits | 22 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -592,7 +592,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 28 — continue, la validation va attendre un autre jour.
 
-*58 appels d'outils.* Actions notables :
+*63 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and check morning state
@@ -608,11 +608,11 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Append morning resumption to journal
 - bash — Check claims and hub plan
 - bash — Clean stale claims and claim day job
-- … et 36 autres
+- … et 40 autres
 
 **Synthèse produite :**
 
-⏵ Verrou git : un autre commit est en cours. J'attends et je recommite.
+⏵ Clé API absente (aucune variable, aucun fichier) : avec les serveurs locaux interdits, c'est un **blocage à consigner**. Je l'ajoute à l'état en tenant le budget.
 
 ## 3. Travail accompli
 
@@ -669,7 +669,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 327 autres
+- … et 331 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -797,11 +797,12 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ## 5. Erreurs rencontrées
 
-3 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 21, in <module> AssertionError: (0, '> **État au 02/11 16 h 09.** B13 est à **140/140** (gold 432') [exit code: 1]
 - **T7** : 20:32 portes=54 porte-homeostasie 2 0 porte-indice 1 1027 porte-melange 1 123  porte-n3-service 0 5 2fad8e8d B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'
 - **T19** : === aperçu en-tête === [stderr] Traceback (most recent call last):   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/maj_references.py", line 36, in <module>     > **{h} h {m:02d}** (journa
+- **T28** : 18:- `DEEPSEEK_API_KEY` (ou `DSH_API_KEY`) : la clé, lue dans l'environnement ; 27:    DEEPSEEK_API_KEY=... python3 tools/llm/deepseek.py --prompt ... --json 74:    """La clé, sans jamais l'écrire : v
 
 ## 6. Commits
 
@@ -826,4 +827,5 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/methode/portes.md"); t = p.read_text(encoding="utf-8"
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-r11.txt <<'EOF' ÉTAT — LA RÈGLE 11 EST DITE JUSQUE DANS LES BLOQUANTS DE PENSÉE  Les serveurs
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -F work/msg-r11.txt -- docs/pilotage/en-cours.md 2>&1 | tail -4
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
 

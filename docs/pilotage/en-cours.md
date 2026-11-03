@@ -19,7 +19,7 @@
 > **Serveurs locaux arrêtés (03/11 09 h)** : `llama-server` (Qwen2.5-7B, port 18082) tué ; unités
 > `llama-cpp`/`embed`/`vision` masquées, `ollama` désactivé ; les **professeurs** passent par l'**API
 > DeepSeek** (`tools/llm/enseignant.py`) ; `hauru-gpu-guard` (timer 30 s) et `porte-ressources`
-> (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave (la N4 a tourné sur GPU0).
+> (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave ; **clé API absente** (à fournir).
 >
 > **Bilan de 08 h (03/11)** : passe **04 h 10 — 82 portes, 77/5** (4 connues + `porte-sessions`
 > rejouée verte) ; **82e `porte-ressources`** validée. **N2 et S en pause** (00 h 25 / 20 h 40 ;

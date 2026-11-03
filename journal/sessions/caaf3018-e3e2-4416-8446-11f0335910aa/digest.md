@@ -9011,3 +9011,76 @@ lock libre
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -F work/msg-r11.txt -- docs/pilotage/en-cours.md 2>&1 | tail -4", "description": "Commit rule-11 Pensée blocker"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-367]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-367", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master dcbc8b0b] ÉTAT — LA RÈGLE 11 EST DITE JUSQUE DANS LES BLOQUANTS DE PENSÉE
+ 9 files changed, 279 insertions(+), 20 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La règle 11 déplace les professeurs sur l'API : je vérifie que la clé est disponible (sans l'afficher).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"API_KEY\\|environ\\|getenv\\|deepseek\" tools/llm/enseignant.py | head -8; echo \"--- clé présente ? ---\"; python3 -c \"\nimport os\nks=[k for k in os.environ if 'DEEPSEEK' in k.upper() or 'API_KEY' in k.upper()]\nprint('var … [223 caractères tronqués]`
+
+  ```
+16:        --sortie data/deepseek/enseignant.jsonl --limite 5 --dry-run
+17:    DEEPSEEK_API_KEY=... python3 tools/llm/enseignant.py \
+18:        --prompts tools/llm/prompts_publics.jsonl --sortie data/deepseek/enseignant.jsonl
+29:    from .deepseek import DeepSeek, ErreurDeepSeek
+31:    from deepseek import DeepSeek, ErreurDeepSeek
+114:    ap.add_argument("--sortie", default="data/deepseek/enseignant.jsonl")
+--- clé présente ? ---
+variables env: aucune
+valeur non affichée: []
+  ```
+
+### 🤖 Assistant
+
+⏵ `DEEPSEEK_API_KEY` absente : avec les serveurs locaux interdits, les professeurs sont bloqués. Je vérifie s'il existe une autre source (cache, fichier de clé).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"API_KEY\\|api_key\\|environ\\|getenv\\|fichier\\|\\.env\\|config\" tools/llm/deepseek.py | head -10; echo \"--- cache corpus ---\"; ls -la data/deepseek/ 2>/dev/null | head -5; echo \"--- fichiers de clé possibles ---\"; ls - … [206 caractères tronqués]`
+
+  ```
+18:- `DEEPSEEK_API_KEY` (ou `DSH_API_KEY`) : la clé, lue dans l'environnement ;
+27:    DEEPSEEK_API_KEY=... python3 tools/llm/deepseek.py --prompt ... --json
+74:    """La clé, sans jamais l'écrire : variable d'environnement ou fichier 0600.
+76:    `DEEPSEEK_API_KEY` / `DSH_API_KEY` d'abord ; sinon `DEEPSEEK_KEY_FILE` /
+77:    `DSH_KEY_FILE` (un fichier dont la première ligne est la clé). Le fichier
+80:    for var in ("DEEPSEEK_API_KEY", "DSH_API_KEY"):
+81:        v = os.environ.get(var)
+85:        chemin = os.environ.get(var)
+132:        self.base_url = (base_url or os.environ.get("DEEPSEEK_BASE_URL")
+133:                         or os.environ.get("DSH_BASE_URL")
+--- cache corpus ---
+total 5016
+drwxr-xr-x. 1 stephane stephane     574 26 oct 15:08 .
+drwxr-xr-x. 1 stephane stephane    2664  2 nov 18:33 ..
+drwxr-xr-x. 1 stephane stephane  125718 26 oct 15:07 cache
+drwxr-xr-x. 1 stephane stephane      50 26 oct 11:25 distillation
+--- fichiers de clé possibles ---
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Clé API absente (aucune variable, aucun fichier) : avec les serveurs locaux interdits, c'est un **blocage à consigner**. Je l'ajoute à l'état en tenant le budget.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"les GPU sont réservés à Drave (la N4 a tourné sur GPU0).\",\n \"les GPU sont réservés à Drave ; **clé  … [386 caractères tronqués]`
+
+  ```
+en-cours mots: 1629
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3999 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\"); t = p.read_text(encoding=\"utf-8\")\najout = \"\"\"\n## 09 h 30 — règle 11 : serveurs locaux interdits, mais **clé API absente**\n\n- `llama-server`  … [1595 caractères tronqués]`

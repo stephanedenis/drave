@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**45 commits** · **5 session(s)** · **7 thème(s)**
+**46 commits** · **5 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 15 | [distribue.md](distribue.md) |
-| docs | 15 | [docs.md](docs.md) |
+| docs | 16 | [docs.md](docs.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -78,6 +78,7 @@
 | 09:15 | `ca800b52` | BUDGET — AGENTS SOUS 1 200, T0 SOUS 4 000 ; L'ÉTAT PORTE LES SERVEURS LOCAUX ARRÊTÉS |
 | 09:17 | `1c9a37dd` | BUDGET — AGENTS À 1 196 MOTS, T0 À 3 979 |
 | 09:19 | `277dd870` | BUDGET — AGENTS À 1 198 MOTS, TOUT SOUS BUDGET |
+| 09:20 | `dcbc8b0b` | ÉTAT — LA RÈGLE 11 EST DITE JUSQUE DANS LES BLOQUANTS DE PENSÉE |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -173,4 +174,13 @@ plus rafraîchi. GPU au repos.
   réalité `rang4-lora.pt-<bras>.pt` (trois fichiers) ; la porte attend un fichier unique. Vérifié
   en régénérant (3 min 35). La suggestion dit maintenant `--bras lora --sauver /tmp/n4/rang4`
   (`aba77b17`) ; la porte reste tolérée rouge (/tmp effacé au reboot).
+
+## 09 h 30 — règle 11 : serveurs locaux interdits, mais **clé API absente**
+
+- `llama-server` tué, unités `llama-cpp`/`embed`/`vision` masquées, `ollama` désactivé ; le garde-fou
+  `hauru-gpu-guard` (timer 30 s) et `porte-ressources` (contrôle GPU) verrouillent la règle.
+- **Blocage nommé** : `DEEPSEEK_API_KEY` / `DSH_API_KEY` **absentes** de l'environnement, aucun
+  `DEEPSEEK_KEY_FILE`. Le cache du 26/10 (`data/deepseek/cache`) couvre les prompts déjà vus ;
+  les **nouveaux appels professeur** sont bloqués jusqu'à ce qu'une clé soit fournie (env ou
+  fichier 0600). Consolidé dans `en-cours` ; les chantiers sans professeur continuent.
 <!-- /notes -->
