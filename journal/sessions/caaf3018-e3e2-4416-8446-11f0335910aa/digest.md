@@ -6012,3 +6012,92 @@ started background job bash-247
   ```
 
 - **job_output** `{"job_id": "bash-247", "timeout_ms": 620000, "wait": true}`
+
+  ```
+22:21
+7d9d3ecd NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE
+1cbaff53 NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE
+55dcb1c4 B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B
+--- sessions ---
+    0733c5bb-f90b-4f58 · actif    ·  19 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 102 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·  39 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·  39 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+--- état ---
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3997 mots (budget 4 000)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La 82ᵉ porte a été emportée par un commit B13 puis restaurée. Je lis la leçon consignée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git show --stat --oneline 7d9d3ecd | head -8; git show --stat --oneline 1cbaff53 | head -6; echo \"--- leçon ---\"; git show 7d9d3ecd | grep -E \"^\\+\" | grep -iE \"index|porte|altern|resync\" | head -6", "description": "Read index ra … [18 caractères tronqués]`
+
+  ```
+7d9d3ecd NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE
+ docs/pilotage/plan-travail.md                      |   6 +-
+ journal/2026-11-02/README.md                       |   7 +-
+ journal/2026-11-02/apprentissage.md                |   2 +-
+ journal/2026-11-02/attention.md                    |   2 +-
+ journal/2026-11-02/distribue.md                    |   2 +-
+ journal/2026-11-02/docs.md                         |   2 +-
+ journal/2026-11-02/memoire.md                      |   2 +-
+1cbaff53 NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE
+ journal/2026-11-02/README.md                       |  7 +-
+ journal/2026-11-02/apprentissage.md                |  2 +-
+ journal/2026-11-02/attention.md                    |  7 +-
+ journal/2026-11-02/distribue.md                    |  2 +-
+ journal/2026-11-02/docs.md                         |  2 +-
+--- leçon ---
++  (`GIT_INDEX_FILE=/tmp/index.<session>`) est la ceinture. **Après un commit à index alterné,
++  resynchroniser l'index principal** (`git read-tree HEAD`, sans toucher à l'arbre) : sinon
++  l'index principal ignore les fichiers ajoutés et un `git add -A` d'une autre session les
++  **su
+… [271 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la restauration de la 82ᵉ porte et du compteur
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -l tools/porte-ressources.sh | cut -c1-50; bash tools/porte-ressources.sh >/dev/null 2>&1; echo \"gate=$?\"; echo \"nb portes: $(ls tools/porte-*.sh | wc -l)\"; grep -n \"portes |\" docs/pilotage/en-cours.md | cut -c1-120", "descrip … [45 caractères tronqués]`
+
+  ```
+-rwxr-xr-x. 1 stephane stephane 1413  2 nov 20:32 
+gate=0
+nb portes: 82
+112:| portes | **82** (81 à la passe du 02/11 06 h : 76/5 ; **82e `porte-ressources`**, à valider) | `tools/porte-*.sh`
+  ```
+
+### 🤖 Assistant
+
+⏵ Le compteur dit encore « 82ᵉ porte à valider » alors qu'elle est verte et comptée. Je vérifie les lignes avant correction.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 108,118p docs/pilotage/en-cours.md; stat -c '%y' docs/pilotage/en-cours.md | cut -c12-19; git status --short docs/pilotage/en-cours.md", "description": "Read counters table and en-cours state"}`
+
+  ```
+> Vérifié par `tools/revue_documentation.py`.
+
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **82** (81 à la passe du 02/11 06 h : 76/5 ; **82e `porte-ressources`**, à valider) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **570** / **656** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
+| dernière passe | **02/11 19 h 32** (81, 76/5 ; 4 connues + `porte-tableaux` de passage) | `docs/pilotage/references-non-regression.md` |
+
+## Les chantiers et leurs bloquants
+22:10:56
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"| portes | **82** (81 à la passe du 02/11 06 h : 76/5 ; **82e `porte-ressources`**, à valider) | `tool … [807 caractères tronqués]`
+
+  ```
+compteurs alignés sur la 82e porte validée
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-etat.txt <<'EOF'\nÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉRENCE\n\nLe compteur disait encore « 82e porte-ressources, à valider » et datait la\nréférence de la passe du 06 h. Elle est v … [414 caractères tronqués]`

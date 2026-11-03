@@ -5620,3 +5620,52 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-246", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; tail -1 work/n2ac/rope2048-12.5k.log 2>/dev/null; tail -1 work/n2ac/rope1024-20k.log", "description": "Direct check on 2048 run"}`
+
+  ```
+22:20:28
+FileNotFoundError: [Errno 2] No such file or directory: 'work/n2ac/rope2048-1.25k.pt'
+pas  16100 · perte 0.9909 · PPL val 2.580 · 7377 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && tail -20 work/n2ac/rope2048-1.25k.log; ls -la work/n2ac/rope2048* 2>/dev/null", "description": "Inspect 2048 first-phase failure"}`
+
+  ```
+pas    150 · perte 1.2658 · PPL val 3.424 · 152 s
+pas    200 · perte 1.2689 · PPL val 3.307 · 202 s
+pas    250 · perte 1.2406 · PPL val 3.252 · 253 s
+pas    300 · perte 1.1788 · PPL val 3.192 · 303 s
+pas    350 · perte 1.2372 · PPL val 3.150 · 354 s
+pas    400 · perte 1.2026 · PPL val 3.129 · 404 s
+pas    450 · perte 1.2551 · PPL val 3.088 · 455 s
+pas    500 · perte 1.2046 · PPL val 3.067 · 505 s
+pas    550 · perte 1.2947 · PPL val 3.047 · 556 s
+pas    600 · perte 1.1946 · PPL val 3.041 · 607 s
+pas    650 · perte 1.1785 · PPL val 3.023 · 657 s
+pas    700 · perte 1.1725 · PPL val 3.011 · 708 s
+pas    750 · perte 1.3282 · PPL val 2.996 · 758 s
+pas    800 · perte 1.2096 · PPL val 2.975 · 809 s
+pas    850 · perte 1.1863 · PPL val 2.958 · 859 s
+pas    900 · perte 1.1578 · PPL val 2.951 · 910 s
+pas    950 · perte 1.1225 · PPL val 2.932 · 960 s
+pas   1000 · perte 1.1084 · PPL val 2.921 · 1011 s
+pas   1050 · perte 1.1679 · PPL val 2.904 · 1062 s
+pas   1100 · perte 1.1145 · PPL val 2.906 · 1112 s
+-rw-r--r--. 1 stephane stephane 1603  2 nov 22:20 work/n2ac/rope2048-1.25k.log
+-rw-r--r--. 1 stephane stephane  974  2 nov 21:58 work/n2ac/rope2048-12.5k.log
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2ac/rope2048-1.25k.log; ls work/n2ac/rope2048-1.25k.pt 2>/dev/null && echo OK; tail -1 work/n2ac/rope1024-20k.log", "description": "Wait for 2048 equal-bytes checkpoint"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-249]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-249", "timeout_ms": 600000, "wait": true}`

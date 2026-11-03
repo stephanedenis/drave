@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 6.0 h |
-| Tours | 20 |
-| Messages | 566 |
-| Appels d'outils | 651 |
+| Durée | 6.1 h |
+| Tours | 24 |
+| Messages | 581 |
+| Appels d'outils | 658 |
 | Fichiers touchés | 47 |
-| Commandes | 488 |
+| Commandes | 495 |
 | Sous-agents | 0 |
 | Commits | 46 |
 | Compactages de contexte | 2 |
@@ -63,6 +63,14 @@
 **Tour 19** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 **Tour 20** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 21** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 22** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 23** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 24** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -788,6 +796,114 @@ La suite : oracle 4 opérateurs → mesure oracle + 7B → contre-fiche → comm
 
 ### Tour 20 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
+*1 appels d'outils.* Actions notables :
+
+- bash — Test four-operator oracle on window
+
+**Synthèse produite :**
+
+⏵ Round 18 : même avec un oracle 4 opérateurs, l'A* échoue à l'identique (200/271/65) — le défaut est dans l'A*/DRVM, pas dans la politique
+
+**Résultat du test** :
+
+- `PolitiqueManhattan` : 200 nœuds, coût 271, 65 appels, `pas` 67 / `saut` 67 / `attendre` 65 / `sonde` 1, **sans but**.
+- `PolitiqueSaut` (même direction, `saut` inclus) : **exactement le même** résultat (200/271/65, mêmes compteurs).
+- Le BFS, lui, atteint `(4,4)` en **4 sauts**.
+
+**Conclusion** : ni le problème ni la politique ne sont seuls en cause — c'est **l'A\* (ou le DRVM)** qui n'explore pas la branche `saut` : le même profil d'exploration pour deux politiques différentes, c'est le signe que la `sonde`/les opérateurs ne sont pas proposés comme attendu, ou que le store ne pousse pas les enfants `saut`. La correction est dans `moteur.py`/`DRVM`, pas dans `operateurs.py`.
+
+**Ce que je fais au prochain round** :
+1. Instrumenter `DRVM.penser` : compter les enfants poussés par opérateur (pas/saut/attendre/sonde) et vérifier que l'A* voit le `saut`.
+2. Corriger (pousser les enfants de tous les opérateurs, ou la `Proposition` de l'A*).
+3. Remesurer l'oracle (doit faire 4 sauts), puis le 7B ; corriger la fiche ; commit.
+
+**État** : HEAD `55dcb1c4` ; en-cours 22 h 10 ; T0 sous 4 000 ; revue 570/655. Pas de commit ce round (le diagnostic infirme la fiche « problème cassé » — il faudra une contre-fiche).
+
+La suite : instrumenter/corriger **A\*+DRVM** (fenêtre), puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 21 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Read DRVM and Moteur loop
+- bash — Read Strategie proposer
+- bash — Compare BFS Greedy AStar on window
+
+**Synthèse produite :**
+
+⏵ Round 19 : BFS, Greedy et A* échouent **tous** à 200 nœuds sur la fenêtre, alors que le BFS Python pur atteint le but en 4 sauts ; le défaut est donc dans le **store/moteur** (les enfants `saut` ne sont pas poussés/explorés)
+
+**Résultats comparés (fenêtre, 200 nœuds)** :
+
+| stratégie | but | nœuds | appels | pas | saut | attendre | sonde |
+|---|---|---:|---:|---:|---:|---:|---:|
+| BFS (moteur) | ❌ | 200 | 40 | 75 | 58 | 40 | 27 |
+| Greedy | ❌ | 200 | 65 | 67 | 67 | 65 | 1 |
+| A* | ❌ | 200 | 65 | 67 | 67 | 65 | 1 |
+| BFS Python pur | ✅ | 45 états | — | — | 4 sauts | — | — |
+
+- Les trois stratégies du **moteur** échouent, alors que la même mécanique `pas_pw`/`saut_pw`/`attendre`/`sonde_pw` réussit en BFS Python pur : le défaut est dans le **`Store`/`Moteur`** (états `t % 3` fusionnés ? files non poussées ? empreintes identiques ?), pas dans la politique ni dans le problème.
+- Prochain test ciblé : compter les **empreintes uniques** des enfants `saut` (le `Etat` stocke `t % 3`, ce qui peut créer des collisions et couper l'exploration), et vérifier `Store.push`/`Store.edge` sur `(4,4,1)`.
+
+**État** : HEAD `55dcb1c4` ; en-cours 22 h 10 ; T0 sous 4 000 ; revue 570/655. Toujours pas de commit (le diagnostic infirme la fiche « problème cassé » ; la contre-fiche viendra avec la correction du store).
+
+La suite : **test des empreintes/collisions** dans `Store`, correction, remesure oracle + 7B, contre-fiche, commit. Puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 22 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+**Synthèse produite :**
+
+⏵ Round 20 : trois stratégies du moteur échouent sur la fenêtre, le BFS Python pur réussit — le défaut est dans `Store`/`Moteur` (empreintes/fusion), pas dans la politique
+
+**Constat consolidé** :
+
+- `BFS`, `Greedy`, `AStar` du moteur : **tous** ❌ à 200 nœuds sur `LABYRINTHE_PORTE_FENETRE`.
+- Le même problème, réimplémenté en BFS Python pur avec les **mêmes** fonctions `pas_pw`/`saut_pw`/`attendre`, atteint `(4,4)` en **4 sauts**.
+- `_etat_pw` stocke `t % 3` et `Etat(f"w{x}:{y}:{t % 3}")` : deux états de même position et même `t % 3` sont fusionnés. Le `Store` peut donc perdre la distinction `t` réel vs `t % 3`, ou les empreintes d'enfants `saut` collisionnent — ce qui couperait l'exploration exactement comme observé.
+- `Strategie.proposer` (base) propose bien les 4 opérateurs et `Moteur.boucle` pousse chaque enfant : la proposition n'est pas le défaut.
+
+**Prochain test (round 21)** : compter les empreintes uniques dans `Store` après quelques pas de la fenêtre, vérifier si `(4,4,1)` est atteint dans `store.etats`, et instrumenter `Store.push`/`edge`. Puis corriger (clé d'état avec `t` réel, ou empreinte sans collision), remesurer oracle + 7B, contre-fiche, commit.
+
+**État** : HEAD `55dcb1c4` ; en-cours 22 h 10 ; T0 sous 4 000 ; revue 570/655. Toujours aucun commit (le diagnostic prime ; la contre-fiche viendra avec la correction).
+
+La suite : `Store`/`Etat` (fenêtre), puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 23 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Inspect store keys on window
+
+**Synthèse produite :**
+
+⏵ Round 21 : le `Store` ne contient que **18 états** après 200 nœuds et `(4,4,1)` n'y est jamais — les empreintes sont des hachages (sha256) et la fusion/les collisions coupent l'exploration
+
+**Mesure** :
+
+- Après un BFS de 200 nœuds sur `LABYRINTHE_PORTE_FENETRE` : `store.etats = 18`, `ouverts = 12`, `noeuds = 18` — alors que la trace compte 200 pas.
+- `(4,4,1)` **absent** du store ; aucun état `w4:4:*` ni `w3:3:*` (les clés sont des SHA-256 hex, pas les libellés `w{x}:{y}:{t%3}`).
+- Autrement dit : l'A* ne voit qu'une **poignée** d'états, tous les autres sont fusionnés/écrasés ; il tourne en rond sur 18 états jusqu'au budget. C'est la cause du blocage, pas la politique ni le problème.
+
+**Correction à faire (round 22)** :
+1. Lire `Etat.empreinte` / `Store.put` / `Store.push` et vérifier que l'empreinte inclut **tous** les candidats (`x`, `y`, `t` réel et pas seulement `t % 3`).
+2. Corriger : clé d'état sur les candidats complets (ou `t` réel dans `_etat_pw`), et vérifier `store.etats` ≈ nombre de pas.
+3. Remesurer l'oracle (doit faire 4 sauts) puis le 7B ; **contre-fiche** (la fiche « problème cassé » est fausse) ; commit.
+
+**État** : HEAD `55dcb1c4` ; en-cours 22 h 10 ; T0 sous 4 000 ; revue 570/655. Aucun commit ce round (le diagnostic est la matière de la contre-fiche à venir).
+
+La suite : corriger `Etat`/`Store` (fenêtre), remesurer oracle + 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 24 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Read Etat and Store definitions
+- bash — Read Etat empreinte and canonique
+
+**Synthèse produite :**
+
+⏵ Round 22 : je lis `Etat`/`empreinte` dans `coeur.py` — l'empreinte est le SHA-256 du canonique, il faut vérifier que `t % 3` n'écrase pas `t` réel dans le canonique
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -884,7 +1000,7 @@ La suite : oracle 4 opérateurs → mesure oracle + 7B → contre-fiche → comm
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 448 autres
+- … et 455 autres
 
 ## 4. Mesures et résultats marquants
 

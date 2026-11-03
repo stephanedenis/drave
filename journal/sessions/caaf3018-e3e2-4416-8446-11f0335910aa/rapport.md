@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.9 h |
+| Durée | 6.1 h |
 | Tours | 23 |
-| Messages | 313 |
-| Appels d'outils | 322 |
+| Messages | 319 |
+| Appels d'outils | 328 |
 | Fichiers touchés | 6 |
-| Commandes | 247 |
+| Commandes | 252 |
 | Sous-agents | 0 |
-| Commits | 10 |
+| Commits | 11 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -457,7 +457,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*60 appels d'outils.* Actions notables :
+*66 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
@@ -473,11 +473,11 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - bash — Check section 1 row and section 2 table header
 - bash — Build and dry-run section 1/2 patcher
 - bash — Apply references sections and verify
-- … et 30 autres
+- … et 35 autres
 
 **Synthèse produite :**
 
-⏵ Cadence de nuit : 10 min, puis point
+⏵ Le compteur dit encore « 82ᵉ porte à valider » alors qu'elle est verte et comptée. Je vérifie les lignes avant correction.
 
 ## 3. Travail accompli
 
@@ -534,7 +534,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 207 autres
+- … et 212 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -621,6 +621,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T23** `[still running after 60000ms; moved to background job bash-242]`
 - **T23** `# porte. On exige donc l'égalité de perplexité à 0,1 % près.`
 - **T23** `# A8.0 — la PPL de référence est épinglée (0,1 %). Le modèle est régénéré par la`
+- **T23** `[still running after 60000ms; moved to background job bash-252]`
 
 ## 5. Erreurs rencontrées
 
@@ -642,4 +643,5 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE  La suggestion « il vient du balayage : \`tools/n4_dessin_b.py ...\` » était écrite entre guillemets D
 - RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)  Le JSON n2-fenetre.json est apparu à 21 h 56 ; la veille automatique a rejoué 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-refs.txt <<'EOF' RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-etat.txt <<'EOF' ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉ
 

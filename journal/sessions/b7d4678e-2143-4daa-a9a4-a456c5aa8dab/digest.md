@@ -9715,3 +9715,69 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-trav
   ```
 
 - **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; git add docs/pilotage/plan-travail.md; git diff --cached --stat; git commit -m \"NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE … [413 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+ docs/pilotage/plan-travail.md | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+  ✅ index : aucun fait stagé sans état
+[master 7d9d3ecd] NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE
+ 18 files changed, 472 insertions(+), 36 deletions(-)
+  ```
+
+- **bash** `{"command": "git ls-tree HEAD tools/porte-ressources.sh; cat >> work/veille/nuit.md <<'EOF'\n\n## 22 h 15 — l'index alterné se resynchronise\n\n- La 82e porte a été **re-supprimée dans l'index principal** (course d'index : `D` staged) ; le\n  fichier restait sur le disque. `git restore --staged` + * … [605 caractères tronqués]`
+
+  ```
+100755 blob 497941c0598562b67f4508faa050624ee724206b	tools/porte-ressources.sh
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+82
+7d9d3ecd NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 15 : course d’index attrapée, 82e porte protégée, leçon publiée
+
+**Ce que j'ai fait**
+- La 82e porte (`tools/porte-ressources.sh`) était **re-supprimée dans l'index principal** par la course d'index (`D` staged) — le fichier restait sur le disque. `git restore --staged` + **`git read-tree HEAD`** : l'index principal est resynchronisé, le fichier reste **suivi** (vérifié dans `HEAD`, mode 755).
+- **Leçon publiée** dans `plan-travail` § 8 (commit `7d9d3ecd`) : après un commit à **index alterné**, faire `git read-tree HEAD` (sans toucher à l'arbre) ; sinon un `git add -A` d'une autre session **supprime** les fichiers ajoutés — mesuré cette nuit sur les 82 portes. C'est exactement le « passe le mot » de coordination demandé.
+- **État** : revue ✅ **570 fiches / 656 JSON / 82 portes** (le compte est de nouveau vrai dans l'arbre), en-cours ✅, T0 3 983, T1 2 428, porte stricte ✅.
+- **Run long N2** : **15 350 / 20 000 pas, PPL val 2,582** — la cible 2,5 reste à 0,08.
+
+La veille continue : intégration des commits du hub, suivi du run long et du JSON N2, puis le checkpoint de 8 h. Rien de bloquant.
+
+
+## Tour 21
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 16/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 16 : veille — intégrité, événements et run long
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -3; echo \"--- porte ---\"; git status --short tools/porte-ressources.sh; git ls-tree HEAD tools/porte-ressources.sh | head -1; echo \"--- run ---\"; tail -1 work/n2ac/rope1024-20k.log; echo \"--- status ---\"; git status --short | head -4; python3  … [100 caractères tronqués]`
+
+  ```
+22:17:59
+7d9d3ecd NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE
+1cbaff53 NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE
+55dcb1c4 B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B
+--- porte ---
+100755 blob 497941c0598562b67f4508faa050624ee724206b	tools/porte-ressources.sh
+--- run ---
+pas  15750 · perte 0.9590 · PPL val 2.583 · 7222 s
+--- status ---
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null; git status --short too … [88 caractères tronqués]`

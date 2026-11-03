@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
 | Durée | 6.0 h |
-| Tours | 20 |
-| Messages | 601 |
-| Appels d'outils | 609 |
+| Tours | 21 |
+| Messages | 606 |
+| Appels d'outils | 612 |
 | Fichiers touchés | 24 |
-| Commandes | 416 |
+| Commandes | 419 |
 | Sous-agents | 0 |
 | Commits | 31 |
 | Compactages de contexte | 0 |
@@ -65,6 +65,8 @@
 **Tour 19** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 20** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 21** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -609,7 +611,7 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 
 ### Tour 20 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Check gate integrity and events
 - bash — Check the lock and unstage the gate deletion
@@ -618,10 +620,30 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 - read
 - edit `docs/pilotage/plan-travail.md`
 - bash — Commit the index hygiene lesson
+- bash — Verify the gate and log the index lesson
 
 **Synthèse produite :**
 
-⏵ Round 15 : veille — intégrité de la 82e porte et événements
+⏵ Round 15 : course d’index attrapée, 82e porte protégée, leçon publiée
+
+**Ce que j'ai fait**
+- La 82e porte (`tools/porte-ressources.sh`) était **re-supprimée dans l'index principal** par la course d'index (`D` staged) — le fichier restait sur le disque. `git restore --staged` + **`git read-tree HEAD`** : l'index principal est resynchronisé, le fichier reste **suivi** (vérifié dans `HEAD`, mode 755).
+- **Leçon publiée** dans `plan-travail` § 8 (commit `7d9d3ecd`) : après un commit à **index alterné**, faire `git read-tree HEAD` (sans toucher à l'arbre) ; sinon un `git add -A` d'une autre session **supprime** les fichiers ajoutés — mesuré cette nuit sur les 82 portes. C'est exactement le « passe le mot » de coordination demandé.
+- **État** : revue ✅ **570 fiches / 656 JSON / 82 portes** (le compte est de nouveau vrai dans l'arbre), en-cours ✅, T0 3 983, T1 2 428, porte stricte ✅.
+- **Run long N2** : **15 350 / 20 000 pas, PPL val 2,582** — la cible 2,5 reste à 0,08.
+
+La veille continue : intégration des commits du hub, suivi du run long et du JSON N2, puis le checkpoint de 8 h. Rien de bloquant.
+
+### Tour 21 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check gate integrity, events and run
+- bash — Wait for the next commit
+
+**Synthèse produite :**
+
+⏵ Round 16 : veille — intégrité, événements et run long
 
 ## 3. Travail accompli
 
@@ -696,7 +718,7 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 376 autres
+- … et 379 autres
 
 ## 4. Mesures et résultats marquants
 

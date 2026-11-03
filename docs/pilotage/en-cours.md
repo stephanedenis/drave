@@ -109,11 +109,11 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **82** (81 à la passe du 02/11 06 h : 76/5 ; **82e `porte-ressources`**, à valider) | `tools/porte-*.sh` |
+| portes | **82** (passe du 02/11 19 h 32 : **81, 76/5** ; **82e `porte-ressources`** verte, comptée à la suivante) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **570** / **656** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
-| dernière passe | **02/11 19 h 32** (81, 76/5 ; 4 connues + `porte-tableaux` de passage) | `docs/pilotage/references-non-regression.md` |
+| dernière passe | **02/11 19 h 32** (81, 76/5 ; 4 connues + `porte-tableaux` **rejouée verte**) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
 

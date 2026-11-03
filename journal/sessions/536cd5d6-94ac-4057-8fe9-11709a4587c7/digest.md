@@ -9113,3 +9113,114 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **job_output** `{"job_id": "bash-222", "timeout_ms": 600000, "wait": true}`
+
+  ```
+veille 10 min
+22:20:34
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 27 : fin de l'attente de 10 min ; je relève l'état (N2, sessions, revue).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%T'; git log --oneline -2; echo \"== N2 ==\"; git status --short reports/rapport-n2-fenetre.md reports/n2-fenetre.json; echo \"== sessions ==\"; python3 tools/sessions.py --status 2>&1 | grep -E 'actif|mandat long' | head -5;  … [309 caractères tronqués]`
+
+  ```
+22:20:38
+7d9d3ecd NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE
+1cbaff53 NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE
+== N2 ==
+== sessions ==
+    0733c5bb-f90b-4f58 · actif    ·  18 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 101 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·  38 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·  38 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (101 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+== revue/taille ==
+  revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  T0 max : 3997 mots (budget 4 000)
+  ✅ tous les documents
+… [401 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 27 : N2 a committé sa fiche/JSON ; la 82e porte est restaurée ; l'état est vert.
+
+- **N2** : fiche + JSON **committés** (plus de `A`/`??`), heartbeat 18 min.
+- **82e porte** : `porte-ressources.sh` **restaurée** (un commit B13 l'avait emportée) ; l'index alterné resynchronisé (`7d9d3ecd`).
+- **Sessions** : N2 18, S 101 + claim, hub 38, B13 38 ; quatre actives ; `porte-sessions` verte.
+- **Revue** 570/656/82 ✅ ; **T0 3 997/4 000** ✅ ; registre : N2 deux GPU, S, B13.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 36
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 28/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 28 : je vérifie la 82e porte restaurée et je relance l'attente de 10 min.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== porte-ressources ==\" && bash tools/porte-ressources.sh 2>&1 | tail -3; echo \"[exit ${PIPESTATUS[0]}]\"; echo; echo \"== porte-sessions ==\" && bash tools/porte-sessions.sh 2>&1 | tail -2; echo \"[exit ${PIPESTATUS[0]}]\"; … [168 caractères tronqués]`
+
+  ```
+== porte-ressources ==
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ✅ registre cohérent ; les avertissements de stockage/NUMA sont affichés, pas fatals
+✅ porte ressources verte : autotest 9 cas et registre cohérent
+[exit 0]
+
+== porte-sessions ==
+  ⚠ mandat long (101 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+[exit 0]
+
+== git ==
+7d9d3ecd NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE
+1cbaff53 NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE
+ M journal/README.md
+  ```
+
+- **bash** `{"command": "sleep 600; echo \"veille 10 min\"; date '+%T'", "description": "Ten-minute night watch pause, second", "run_in_background": true}`
+
+  ```
+started background job bash-225
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 28 : 82e porte et porte sessions vertes ; N2 committé ; nouvelle attente de 10 min (`bash-225`).
+
+- **`porte-ressources`** : verte (9 cas, registre cohérent ; `IA` 33 Gio en avertissement).
+- **`porte-sessions`** : verte (S 101 + claim en « mandat long »).
+- **N2** : fiche + JSON **committés** ; la 82e porte est **restaurée** (`1cbaff53`) et l'index resynchronisé (`7d9d3ecd`).
+- **Revue** 570/656/82 ✅ ; **T0 3 997/4 000** ✅.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 37
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 29/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **job_output** `{"job_id": "bash-225", "timeout_ms": 600000, "wait": true}`
