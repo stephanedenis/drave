@@ -9,12 +9,12 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 8.9 h |
 | Tours | 47 |
-| Messages | 342 |
-| Appels d'outils | 327 |
+| Messages | 343 |
+| Appels d'outils | 328 |
 | Fichiers touchés | 13 |
-| Commandes | 250 |
+| Commandes | 251 |
 | Sous-agents | 0 |
-| Commits | 28 |
+| Commits | 29 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1354,16 +1354,17 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 47 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [978 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Ten-minute night watch pause, twelfth
 - job_output
 - bash — Post-wait state check after 00:26
 - bash — Fix JSON counter 661 and commit
+- bash — Fix file counter 575 and commit
 
 **Synthèse produite :**
 
-⏵ L'état dit 660 JSON, le disque en a 661 ; je corrige le compteur et je recommite.
+⏵ Le JSON est à 661, mais une fiche a été ajoutée entre-temps (574→575) ; je corrige le compteur fichier.
 
 ## 3. Travail accompli
 
@@ -1427,7 +1428,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 210 autres
+- … et 211 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1598,4 +1599,5 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13" -- docs/pilotage/en-cours.md; echo "[commit $?]"; git log --oneline -1
 - ÉTAT — LE COMPTEUR FICHIERS SUIT LE DISQUE (574) APRÈS LA NOUVELLE FICHE" -- docs/pilotage/en-cours.md; echo "[commit $?]"
 - ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (661)" -- docs/pilotage/en-cours.md; echo "[commit $?]"; git log --oneline -1
+- ÉTAT — LE COMPTEUR FICHIERS SUIT LE DISQUE (575)" -- docs/pilotage/en-cours.md; echo "[commit $?]"
 

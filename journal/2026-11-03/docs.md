@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 00:02 | `8133ee1e` | ÉTAT — LE COMPTEUR FICHIERS SUIT LE DISQUE (574) APRÈS LA NOUVELLE FICHE | `en-cours.md`, `README.md`, `README.md` (+11) |
 | 00:05 | `589508b2` | NUIT — L'ÉTAT PASSE AU 03/11 : LA FRAÎCHEUR SUIT LE DISQUE (574 FICHES, 660 JSON) | `en-cours.md`, `README.md`, `docs.md` (+10) |
+| 00:26 | `534f9d6d` | ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (661) | `en-cours.md`, `README.md`, `attention.md` (+14) |
 
 ## Sessions actives ce jour
 

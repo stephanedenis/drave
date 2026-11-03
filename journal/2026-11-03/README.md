@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**3 commits** · **5 session(s)** · **2 thème(s)**
+**4 commits** · **5 session(s)** · **2 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
-| docs | 2 | [docs.md](docs.md) |
+| docs | 3 | [docs.md](docs.md) |
 
 ## Sessions DSH
 
@@ -31,6 +31,7 @@
 | 00:02 | `8133ee1e` | ÉTAT — LE COMPTEUR FICHIERS SUIT LE DISQUE (574) APRÈS LA NOUVELLE FICHE |
 | 00:05 | `589508b2` | NUIT — L'ÉTAT PASSE AU 03/11 : LA FRAÎCHEUR SUIT LE DISQUE (574 FICHES, 660 JSON) |
 | 00:24 | `3026dc6a` | NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE |
+| 00:26 | `534f9d6d` | ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (661) |
 
 ## Le récit de la journée (écrit à la main)
 

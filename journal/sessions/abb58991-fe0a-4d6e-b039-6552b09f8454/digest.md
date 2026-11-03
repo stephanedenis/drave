@@ -20401,3 +20401,76 @@ Continue working toward the objective in this same session. Treat the current wo
 fiche écrite 3898
   ```
 
+### 🤖 Assistant
+
+⏵ Round 147 : fiche écrite ; j'aligne l'index, l'en-cours (gold réel 432) et le README, puis je commite le fait
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace('**B13 : cascade 0,9415/0,6130/0,7574/1,0 (180) ; porte 140/140 ; sto 5/5**',\n            '**B13 : gold réel 432 (0,9065/0,459 … [1183 caractères tronqués]`
+
+  ```
+ok
+  572 fiches → reports/INDEX.md
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 574 fichiers, le disque en a 575
+  T0 max : 3997 mots (budget 4 000)
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT=128
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 147 : `.git/index.lock` concurrent (hub) ; j'attends et je refais le commit avec les bons compteurs (575/661)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ps -eo pid,etime,cmd | grep -E \"git (add|commit)\" | grep -v grep | head -3; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace('| fichiers / JSON de résultats | **574** / **661 … [603 caractères tronqués]`
+
+  ```
+774331       00:21 timeout 300 git commit --only -m ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (661) -- docs/pilotage/en-cours.md
+ 774332       00:21 git commit --only -m ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (661) -- docs/pilotage/en-cours.md
+ok
+.git/index.lock
+LOCK
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT=128
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 147 : le hub tient le lock (`git commit --only` en-cours, 21 s) ; j'attends sa fin puis je refais le mien
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in 1 2 3 4 5 6; do sleep 20; if ! pgrep -f \"git commit\" >/dev/null 2>&1 && [ ! -f .git/index.lock ]; then echo \"libre après $((i*20))s\"; break; fi; echo \"attente $((i*20))s\"; done; git add reports/rapport-pensee-cascade-reel-432.md reports … [404 caractères tronqués]`
+
+  ```
+attente 20s
+attente 40s
+attente 60s
+attente 80s
+attente 100s
+attente 120s
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT=128
+534f9d6d ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (661)
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 147 : le hub a fini (`534f9d6d`) mais le lock est resté ; aucun `git` ne tourne — je le retire et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ps -eo pid,cmd | grep -E \"git (add|commit|index)\" | grep -v grep | head -3 || true; ls -l .git/index.lock 2>/dev/null; rm -f .git/index.lock; git add reports/rapport-pensee-cascade-reel-432.md reports/pensee-gold-reel-cascade.json reports/README.md  … [343 caractères tronqués]`

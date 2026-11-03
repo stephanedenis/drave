@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
 | Durée | 8.2 h |
-| Tours | 45 |
-| Messages | 754 |
-| Appels d'outils | 707 |
+| Tours | 46 |
+| Messages | 758 |
+| Appels d'outils | 709 |
 | Fichiers touchés | 24 |
-| Commandes | 497 |
+| Commandes | 499 |
 | Sous-agents | 0 |
 | Commits | 36 |
 | Compactages de contexte | 1 |
@@ -115,6 +115,8 @@
 **Tour 44** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 45** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 46** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1133,14 +1135,31 @@ La veille continue : vérification du journal après chaque régénération, int
 
 ### Tour 45 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*3 appels d'outils.* Actions notables :
 
 - bash — Check the hub commit and runs
 - bash — Wait for the hub commit
+- bash — Verify the counter commit and log
 
 **Synthèse produite :**
 
-⏵ Round 40 : veille — commit hub et runs
+⏵ Round 40 : compteur 661 aligné, tout est vert
+
+- **Hub** : `534f9d6d` — le compteur JSON suit le disque (**661**) ; revue ✅ **575 / 661 / 82**, en-cours ✅, T0 sous 4 000, T1 2 428, journal ✅, porte stricte ✅.
+- **Runs N2** : `713516` (2 h 05) et `758133` (34 min) continuent ; GPU occupés et déclarés (claims N2 + veille).
+- Rien à corriger : le hub tient l'état au fil de ses commits, je vérifie et consigne.
+
+La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 46 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait for the next commit
+
+**Synthèse produite :**
+
+⏵ Round 41 : veille — j’attends le prochain commit
 
 ## 3. Travail accompli
 
@@ -1215,7 +1234,7 @@ La veille continue : vérification du journal après chaque régénération, int
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 457 autres
+- … et 459 autres
 
 ## 4. Mesures et résultats marquants
 

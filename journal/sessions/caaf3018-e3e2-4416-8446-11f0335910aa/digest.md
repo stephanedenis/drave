@@ -6581,3 +6581,50 @@ reports/rapport-n2-porte-propre.md:13:domaine wiki à 128 octets, **2,6256** à 
 reports/rapport-n2-r12-2048.md:9:> octets, **2,6256** à 1 000, **2,5429** à 4 000 — à **0,13** et **0,04** de 2,5 en domaine
   ```
 
+### 🤖 Assistant
+
+⏵ Audit des chiffres : tout ce qui est dans l'état trace à une fiche (N2 est même descendu à 2,6256 à 1 000). Je vérifie les compteurs.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md | cut -c1-110; echo \"disque: $(ls reports/*.md | wc -l) fiches, $(ls reports/*.json | wc -l) JSON\"; python3 tools/revue_documentation.py 2>&1 | tail -2", "description … [29 caractères tronqués]`
+
+  ```
+00:27
+114:| fichiers / JSON de résultats | **574** / **661** | `reports/*.md` / `reports/*.json` |
+disque: 575 fiches, 661 JSON
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 574 fichiers, le disque en a 575
+  ```
+
+### 🤖 Assistant
+
+⏵ Je change le dispositif : veille qui écrit dans un fichier + minuteur silencieux, en alternance (pas de sondage répété).
+
+- **job_kill** `{"job_id": "bash-262", "reason": "Passer à une veille fichier + minuteur silencieux en alternance"}`
+
+  ```
+requested cancellation of job bash-262
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/veille_nuit.sh <<'EOF'\n#!/bin/bash\n# veille_nuit.sh — un point compact toutes les 10 min, écrit dans work/veille-nuit.log.\ncd \"$(dirname \"$0\")/..\"\nmkdir -p work\nfor i in $(seq 1 60); do\n    sleep 600\n    etat=$(py … [421 caractères tronqués]`
+
+  ```
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; bash work/veille_nuit.sh", "description": "Launch file-based night watch", "run_in_background": true}`
+
+  ```
+started background job bash-271
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 36000; echo \"minuteur 10 h terminé\"", "description": "Silent 10-hour timer for alternation", "run_in_background": true}`
+
+  ```
+started background job bash-272
+  ```
+
+### 🤖 Assistant
+
+⏵ Dispositif en place : veille fichier (`bash-271`) + minuteur muet (`bash-272`), en alternance.
+
+- **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`

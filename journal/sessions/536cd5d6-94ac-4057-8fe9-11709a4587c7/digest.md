@@ -9935,3 +9935,26 @@ veille 10 min
 ⏵ L'état dit 660 JSON, le disque en a 661 ; je corrige le compteur et je recommite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '660' docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nassert t.count('660')==1, t.count('660')\np.write_text(t.replace('660','661'))\nprint('660 -> 66 … [410 caractères tronqués]`
+
+  ```
+114:| fichiers / JSON de résultats | **574** / **660** | `reports/*.md` / `reports/*.json` |
+660 -> 661
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 574 fichiers, le disque en a 575
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+
+[master 534f9d6d] ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (661)
+ 17 files changed, 555 insertions(+), 51 deletions(-)
+ create mode 100644 journal/2026-11-03/attention.md
+[commit 0]
+534f9d6d ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (661)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Le JSON est à 661, mais une fiche a été ajoutée entre-temps (574→575) ; je corrige le compteur fichier.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '574' docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nassert t.count('574')==1, t.count('574')\np.write_text(t.replace('574','575'))\nprint('574 -> 57 … [392 caractères tronqués]`
