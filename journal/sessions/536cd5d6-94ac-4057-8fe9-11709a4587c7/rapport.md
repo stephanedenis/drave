@@ -7,14 +7,14 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 16.8 h |
+| Durée | 16.9 h |
 | Tours | 72 |
-| Messages | 476 |
-| Appels d'outils | 419 |
+| Messages | 481 |
+| Appels d'outils | 424 |
 | Fichiers touchés | 15 |
-| Commandes | 306 |
+| Commandes | 311 |
 | Sous-agents | 0 |
-| Commits | 33 |
+| Commits | 37 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1848,7 +1848,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 72 — est que le dossier de pilotage est à jour avec les bons états des sessions dsh en cours
 
-*18 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Audit pilotage vs active DSH session plans
 - read
@@ -1864,11 +1864,11 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - bash — Write 08h bilan, trim state, verify and commit
 - bash — Read the remaining document budget violation
 - bash — Resolve porte-sessions red and trim references
-- … et 1 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ Le bilan est committé (`b6c8246b`) ; une violation de budget reste dans `taille_documents` ; je la lis et la corrige.
+⏵ Le hook exige une **modification** d'`en-cours` avec la roadmap ; je mets l'horodatage à jour et je recommite.
 
 ## 3. Travail accompli
 
@@ -1934,7 +1934,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 266 autres
+- … et 271 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2110,4 +2110,8 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - BILAN DE 08 H — N2 ET S EN PAUSE, LA PASSE 82/77/5 EST LA RÉFÉRENCE, L'ÉTAT EST AU 03/11 08 H 08" -m "N2 (00 h 25) et S (20 h 40) sont arrêtés : plans en pause,
 - RÉFÉRENCES — porte-sessions REJOUÉE VERTE APRÈS LA MISE EN PAUSE DE N2/S ; TROIS PASSES ANCIENNES SORTENT" -m "La 5e rouge de la passe du 04 h 10 était de coord
 - ÉTAT — LA 5e ROUGE DE LA PASSE 04 H 10 EST CLOSE (porte-sessions rejouée verte après la pause N2/S)" -- docs/pilotage/en-cours.md; echo "[commit $?]"; git log -
+- ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08" -- docs/pilotage/roadmap.md; echo "[commit $?]"
+- ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08" -- docs/pilotage/roadmap.md; echo "[commit $?]"; git log --oneline -1
+- ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08" -m "L'état et la roadmap disent la même chose : N2 (00 h 25) et S (20 h 40) sont en pause 
+- ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08" -m "L'état et la roadmap disent la même chose : N2 (00 h 25) et S (20 h 40) sont en pause 
 

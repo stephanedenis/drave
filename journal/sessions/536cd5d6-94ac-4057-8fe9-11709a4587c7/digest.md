@@ -11724,3 +11724,129 @@ références : porte-sessions rejouée, trois passes anciennes sorties
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"| dernière passe | **03/11 04 h 10** (82, 77/5 ; 4 connues + `porte-sessions` coord., machine au repos) | `docs/pilotage/references … [1058 caractères tronqués]`
+
+  ```
+ligne dernière passe mise à jour
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 3993 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+
+[master f73a73f1] ÉTAT — LA 5e ROUGE DE LA PASSE 04 H 10 EST CLOSE (porte-sessions rejouée verte après la pause N2/S)
+ 12 files changed, 42 insertions(+), 20 deletions(-)
+[commit 0]
+f73a73f1 ÉTAT — LA 5e ROUGE DE LA PASSE 04 H 10 EST CLOSE (porte-sessions rejouée verte après la pause N2/S)
+
+== roadmap / plan-travail ==
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== heads ==\" && head -6 docs/pilotage/roadmap.md && echo \"---\" && head -6 docs/pilotage/chantiers.md && echo \"---\" && head -6 docs/pilotage/plan-travail.md; echo; echo \"== dates ==\" && grep -n -i 'mise à jour\\|dernière … [380 caractères tronqués]`
+
+  ```
+== heads ==
+# La roadmap de [Drave](../theorie/glossaire/entrees/drave.md) — un seul plan, quatre chantiers
+
+> **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+> L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date. Les chiffres, les séries et les
+> contrôles vivent dans [`reports/`](../../reports/) ; ici : l'[état](../theorie/glossaire/entrees/etat.md), la prochaine action, et ce qui bloque.
+>
+---
+# Les chantiers — la vision à jour et leurs relations
+
+> **Ce que ce document est.** La **vue d'ensemble des chantiers** : ce que les demandes des
+> 48 dernières heures ont déplacé, l'inventaire élargi (A, B, N, R, **S**, **L**, **D**, B13),
+> leurs **relations** (ce que chacun attend et ce qu'il fournit) et les **tensions** à trancher.
+> Il ne remplace ni la [roadmap](roadmap.md) (l'ordre et les états), ni l'[en-cours](en-cours.md)
+---
+# Le plan de travail — plusieurs sessions sur une même machine
+
+> **Ce que ce document est.** Le **pont** entre l'état ([`en-cours.md`](en-cours.md), ce qui se
+> passe maintenant) et l'ordre ([`roadmap.md`](roadmap.md), ce qu'il faut faire et dans quel
+> ordre) : **
+… [7024 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\ndef sub(t, old, new, n=1):\n    c=t.count(old); assert c==n, f\"{c} != {n}: {old[:80]!r}\"; return t.replace(old,new)\nt=sub(t, \"La derni … [1423 caractères tronqués]`
+
+  ```
+== plan-travail ==
+1:# Le plan de travail — plusieurs sessions sur une même machine
+11:> [`chantiers.md`](chantiers.md) § 8 (4 sessions, 4 à 6 chantiers, 2 à 4 sous-agents par session).
+28:qu'avec un plan (`journal/sessions/<id>/plan.md`) et un territoire réservé.
+30:## 2. Les quatre sessions et le rôle d'intégration
+32:Quatre sessions **de mandat** et **un rôle d'intégration** (porté par la session de pilotage ou
+45:code pas un chantier ; il **intègre** les sections des sessions, met à jour les compteurs, vérifie
+50:diff que la session intègre (AGENTS § 10, `continuite.md` § 2). Le fan-out massif (`workflow`) est
+56:dans le plan de chaque session et se vérifient par `tools/sessions.py --check`.
+
+== chantiers ==
+92:**État au 02/11 21 h 14.** B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432**, coréférence **116 liens** ; **N2.ac**
+
+  T0 max : 3993 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+On branch master
+Your branch is ahead of 'origin/master' by 68 commits.
+  (use "git push" to publish your local commits)
+
+Changes
+… [19315 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'édition roadmap a échoué (« gold 200+ » apparaît deux fois) ; je cible la première occurrence et je recommite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\ndef sub(t, old, new, n=1):\n    c=t.count(old); assert c==n, f\"{c} != {n}: {old[:80]!r}\"; return t.replace(old,new)\nt=sub(t, \"La derni … [1201 caractères tronqués]`
+
+  ```
+roadmap mise à jour
+  T0 max : 3993 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+[commit 1]
+f73a73f1 ÉTAT — LA 5e ROUGE DE LA PASSE 04 H 10 EST CLOSE (porte-sessions rejouée verte après la pause N2/S)
+[stderr]
+  ❌ commit refusé : 1 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md && timeout 300 git commit --only -m \"ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08\" -m \"L'état et la roadmap disent la même chose : N2 (00 h 25) et  … [716 caractères tronqués]`
+
+  ```
+[commit 1]
+f73a73f1 ÉTAT — LA 5e ROUGE DE LA PASSE 04 H 10 EST CLOSE (porte-sessions rejouée verte après la pause N2/S)
+
+== vérifs finales ==
+  ⚠ mandat long (593 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (641 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+[check 0]
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+  T0 max : 3993 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[stderr]
+  ❌ commit refusé : 1 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hook exige une **modification** d'`en-cours` avec la roadmap ; je mets l'horodatage à jour et je recommite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && h=$(date '+%H h %M'); sed -i \"s/^\\*\\*Mis à jour : 2026-11-03, 08 h 08 HNE/**Mis à jour : 2026-11-03, ${h} HNE/\" docs/pilotage/en-cours.md; grep -n 'Mis à jour' docs/pilotage/en-cours.md | head -1; git add docs/pilotage/en-cours.m … [516 caractères tronqués]`
