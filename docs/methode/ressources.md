@@ -21,6 +21,11 @@ Les GPU ne se partagent pas bien : **une mesure qui charge 28 Go de VRAM bloque 
 Séquence : les portes d'abord, les mesures ensuite ; deux petits modèles peuvent cohabiter sur les deux cartes, un
 gros modèle prend les deux.
 
+Le **registre** [`tools/ressources.py`](../../tools/ressources.py) rend les réservations explicites
+(`--claim`, `--release`, `--status`, `--actual` : un GPU utilisé sans claim est signalé) ; le protocole
+complet — ressources, NUMA, allocation type, stockage — est le § 10 de
+[`plan-travail.md`](../pilotage/plan-travail.md).
+
 ## La composition mesurée (26/10)
 
 - **CPU** : 2 sockets × 10 cœurs × 2 SMT = **40 threads logiques** ; les frères SMT sont

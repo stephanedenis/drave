@@ -10328,3 +10328,42 @@ sys	0m0,074s
 [status: completed, exit code: 0]
   ```
 
+### 🤖 Assistant
+
+⏵ La porte mobile est **non discriminante** : l'aveugle (26/2) et le labyrinthe (29/5) passent aussi, comme le LLM (28/4) ; j'extrais le bilan
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-porte-mobile.json'))\nprint('date',d['date'],'verdict',d['verdict'])\nprint('seuils',json.dumps(d['seuils'],indent=1))\nprint('apprise',d['apprise'])\nfor lab in ('0','1'):\n    print('== … [335 caractères tronqués]`
+
+  ```
+date 2026-11-02 20:18 EST verdict False
+seuils {
+ "oracle_0": true,
+ "oracle_1": true,
+ "aveugle_0_non": true,
+ "aveugle_1_non": false,
+ "llm_0": false,
+ "llm_1": true,
+ "llm_sonde_0": true,
+ "llm_sonde_1": true,
+ "labyrinthe_1_non": false,
+ "llm_mieux_labyrinthe_1": false,
+ "apprise_0": true,
+ "apprise_1": true,
+ "aucune_erreur_llm": true,
+ "latence_mesuree": true
+}
+apprise {'episodes': 1000, 'etats_q': 170, 'seule_0': {'but': True, 'pas': 8}, 'seule_1': {'but': True, 'pas': 8}}
+== lab 0
+  oracle             but True n 29 c 60.0 app 7 sonde 5 lat 0.0 err 0 dur 0.005
+  aveugle            but False n 200 c 483.0 app 66 sonde 61 lat 0.0 err 0 dur 0.034
+  hasard             but True n 45 c 88.0 app 14 sonde 7 lat 0.0 err 0 dur 0.008
+  llm_porte_mobile   but False n 200 c 265.0 app 95 sonde 3 lat 228.842 err 0 dur 228.903
+  llm_labyrinthe     but False n 200 c 265.0 app 95 sonde 3 lat 143.981 err 0 dur 144.057
+== lab 1
+  oracle             but True n 29 c 59.0 app 7 sonde 5 lat 0.0 err 0 dur 0.005
+  aveugle            but True n 26 c 44.0 app 7 sonde 2 lat 0.0 err 0 dur 0.004
+  hasard             but True n 28 c 54.0 app 7 sonde 4 lat 0.0 err 0 dur 0.005
+  llm_porte_mobile   but True n
+… [672 caractères tronqués]
+  ```
+

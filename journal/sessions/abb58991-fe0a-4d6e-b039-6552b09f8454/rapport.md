@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 4.0 h |
+| Durée | 4.1 h |
 | Tours | 9 |
-| Messages | 404 |
-| Appels d'outils | 508 |
-| Fichiers touchés | 34 |
-| Commandes | 371 |
+| Messages | 406 |
+| Appels d'outils | 510 |
+| Fichiers touchés | 35 |
+| Commandes | 372 |
 | Sous-agents | 0 |
 | Commits | 9 |
 | Compactages de contexte | 1 |
@@ -364,7 +364,7 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 
 ### Tour 9 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Read politique tests and current S state
 - read
@@ -376,10 +376,12 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 - bash — Check concurrent commits and staged state
 - bash — Check S commit files, B13 state, T0 at HEAD
 - job_output
+- bash — Extract mobile results from JSON
+- write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-mobile.md`
 
 **Synthèse produite :**
 
-⏵ J'attends la mesure mobile (2 portes × 5 politiques) ; l'état HEAD est à 3 997/4 000
+⏵ Fiche mobile : le 7B échoue à (3,3), passe à (1,3) comme l'aveugle et le labyrinthe ; test non discriminant
 
 ## 3. Travail accompli
 
@@ -421,6 +423,7 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-minute.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py` | 0 | 1 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_mobile_drvm.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-mobile.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -464,7 +467,7 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 331 autres
+- … et 332 autres
 
 ## 4. Mesures et résultats marquants
 

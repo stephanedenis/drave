@@ -7,7 +7,9 @@
 > (`reports/`) ni le récit (`journal/`).
 >
 > **Machine** : une seule ; plusieurs sessions travaillent en parallèle sur le même arbre de
-> travail. Les territoires et la surveillance sont dans [`plan-travail.md`](plan-travail.md).
+> travail. Les territoires et la surveillance sont dans [`plan-travail.md`](plan-travail.md) ; le
+> registre des ressources machine (GPU, CPU, RAM, IO) et son protocole sont au **§ 10** du même
+> plan, outillé par `tools/ressources.py`.
 
 ## L'ordre de lecture
 
@@ -49,6 +51,7 @@ Les sessions **proposent** leur section et leur fait ; le hub **intègre** et co
 | `tools/surveille_sessions.py` | les **fichiers en mouvement** (`git status`) par session, les orphelins, les conflits |
 | `tools/verifie_etat_a_jour.py` | aucun fait commité sans état |
 | `tools/revue_documentation.py` | classement, liens, compteurs, fraîcheur |
+| `tools/ressources.py` | les ressources machine (GPU, CPU, RAM, IO) : réservations, file, usage réel |
 | `tools/taille_documents.py` | les budgets de contexte (T0 ≤ 4 000) |
 | `tools/verifie_journal.py` | les jours, les sessions, les liens |
 | `tools/carte_chantiers.py` | la carte `docs/schemas/chantiers-vision.svg` |

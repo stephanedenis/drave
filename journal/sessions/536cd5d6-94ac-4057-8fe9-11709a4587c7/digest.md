@@ -5992,3 +5992,32 @@ d'état « Ressources » quand il reprend l'écriture de `en-cours`.
 
 il se passe beaucoup de choses en même temps. coordonne bien tes activités et les autres sessions en utilisant les mécanismes en place. tu comprendras probablement à la lecture du pilotage que je veux que toutes les sessions soient productives jusqu'à demain matin. je repasse vers 8h pour voir où vous en êtes.
 
+### 🤖 Assistant
+
+⏵ Je lis les mandats de la nuit, l'état des jobs et le registre avant de poser le goal de coordination.
+
+- **get_goal** `{}`
+
+  ```
+{"goal":null}
+  ```
+
+- **job_list** `{}`
+
+  ```
+(no background jobs)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== passes de portes en cours ==\" && ls -dt work/portes-* 2>/dev/null | head -3; for d in $(ls -dt work/portes-* 2>/dev/null | head -2); do echo \"--- $d\"; tail -8 \"$d/registre.txt\" 2>/dev/null; done; echo; echo \"== proces … [213 caractères tronqués]`
+
+  ```
+== passes de portes en cours ==
+
+== processus portes ==
+ 384759       02:04 1224 drave           ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 1470 --episodique-k 64 --episodique-expansion 16384 --episodique-decorreler --episodique-normaliser --episodique-aiguille 669 --episodique-textes /tmp/tmp.sWuzfGFXjc/A.txt --ctx 2048 --threads 12 --episodique-indice /tmp/tmp.sWuzfGFXjc/etatB.1439
+ 164359       47:46  0.0 bash            bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=1,0 JOURNAUX=work/portes/passe-1102-19h32 bash tools/toutes-les-portes.sh; echo "EXIT=$?"; echo "=== REGISTRE (code != 0) ==="; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo "=== BILAN ==="; tail -1 work/portes/passe-1102-19h32/registre.txt
+ 164366       47:46  0.0 bash            bash tools/toutes-les-portes.sh
+ 343577       10:36  0.0 bash            bash tools/porte-indice.sh
+ 343576       10:36  0.0 timeout         timeout 1800 bash tools/porte-indice.sh
+  ```
+

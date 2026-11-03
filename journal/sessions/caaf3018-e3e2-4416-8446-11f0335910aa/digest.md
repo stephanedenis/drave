@@ -3376,3 +3376,212 @@ fi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.hub-nuit; git read-tree HEAD; git add docs/methode/portes.md; git commit -m \"PORTES — LE REGISTRE EST DANS \\`work/\\`, PAS DANS \\`/tmp\\` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE\n\nLe doc annon … [651 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-134]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-134", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 76862005] PORTES — LE REGISTRE EST DANS `work/`, PAS DANS `/tmp` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE
+ 21 files changed, 977 insertions(+), 44 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La passe avance ; je vérifie les compteurs de l'état et l'identité de la « ligne sans fiche » du backlog
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; grep -n \"fichiers / JSON\\|dernière passe\\|portes |\" docs/pilotage/en-cours.md; echo \"=== passe ===\"; wc -l < work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; ls -t work/por … [95 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 20:20:02 EST
+111:| portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
+113:| fichiers / JSON de résultats | **562** / **648** | `reports/*.md` / `reports/*.json` |
+115:| dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
+=== passe ===
+30
+porte-homeostasie 2 0
+work/portes/passe-1102-19h32/porte-indice.log
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; timeout 120 python3 tools/verifie_backlog.py --verbose 2>&1 | grep -i \"sans fiche\\|ligne\" | head -6; echo \"---\"; grep -rn \"sans fiche\" docs/pilotage/backlog/index.md docs/pilotage/backlog/*.md 2>/dev/null | head -5", "descriptio … [42 caractères tronqués]`
+
+  ```
+---
+docs/pilotage/backlog/dependances.md:9:> **Relevé du 2026-10-31.** 37 fiches, 1 ligne ouverte **sans fiche**, 43 arêtes dures,
+docs/pilotage/backlog/dependances.md:41:ou sans fiche. La marge de gauche est un rail : les arêtes longues y descendent pour ne traverser
+docs/pilotage/backlog/dependances.md:56:ne demande aucun travail ; « sans fiche » = une ligne ouverte de la roadmap qui n'a pas encore de
+docs/pilotage/backlog/dependances.md:90:| **N5** | sans fiche | N2 (dure), N4 (dure) | — | — | — |
+docs/pilotage/backlog/dependances.md:128:2. **Un déblocage sans fiche.** `B10.3` dépendait de `B10.2`, qui est un **négatif**, pas un
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture des prochaines actions des trois sessions actives pour la coordination de nuit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for s in 0733c5bb-f90b-4f58-9241-3364fa32e46c 29ad180d-38a5-4481-a9a7-ec6ab31c895f e181ce02-cd50-488a-a6be-e84b79d40dcc; do echo \"=== $s ===\"; grep -E \"Prochaine action|État|Heartbeat\" -A2 journal/sessions/$s/plan.md | head -10; do … [69 caractères tronqués]`
+
+  ```
+=== 0733c5bb-f90b-4f58-9241-3364fa32e46c ===
+- **Heartbeat** : 2026-11-02 19:56 HAE
+- **Objectif final** : trancher la question ouverte de N2 — **les 200 000 pas sur le mélange
+  1 Go font-ils passer sous 2,5 sans perdre le français ?** — puis **R1.1/R1.2** : un schéma
+--
+- **Prochaine action** : la **fiche + état + commit** du run de 200 k, le contrôle depuis zéro, puis
+  la **clôture**.
+- **État** : actif
+=== 29ad180d-38a5-4481-a9a7-ec6ab31c895f ===
+- **Heartbeat** : 2026-11-02 19:50 EST
+- **Prochaine action** : **validation humaine de la banque** (le mode `banque` est à 0 verdict) ;
+  puis la **frontière du GN sans auxiliaire** (h033) et un **gold plus large** (voix, causatives).
+- **État** : actif
+
+- **Plan** : 1) ~~plan de session et réservation~~ ; 2) ~~analyseur rôles/subordonnées~~ (gold 39
+--
+- **Prochaine action (après le cycle)** : la **validation humaine** de la banque (le mode `banque`
+  est vide tant qu'elle n'existe pas), la frontière du GN sans auxiliaire (h033), un gold plus
+  large (voix, causatives).
+=== e181ce02-cd50-488a-a6be-e84b79d40dcc ===
+- **Heartbeat** : 2026-11-02 19:50 EST
+- **Prochaine action** : la **porte minute** est ouverte par la règle (**26 nœuds
+… [409 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction du fil de nuit (rapport du matin en préparation) et suivi de `porte-indice`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; tail -3 work/portes/passe-1102-19h32/porte-indice.log; echo \"---\"; ps -eo pid,etime,pcpu,args | grep -E \"porte-indice|bloc_indice|indice\" | grep -v grep | cut -c1-140", "description": "Check indice gate progress"}`
+
+  ```
+lun 02 nov 2026 20:20:23 EST
+    capture d'état    : position(s) [1439] écrite(s) dans /tmp/tmp.sWuzfGFXjc/etatB.*
+    capture d'état    : position(s) [1469] écrite(s) dans /tmp/tmp.sWuzfGFXjc/etatA.*
+=== 3. la mémoire interroge A, avec puis sans l'indice extérieur ===
+---
+ 343576       11:20  0.0 timeout 1800 bash tools/porte-indice.sh
+ 343577       11:20  0.0 bash tools/porte-indice.sh
+ 384759       02:49 1076 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --episodique-essai 1470 --episodique-k 64 --episodi
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"ressources.py\\|§ 10\\|§10\" docs/pilotage/README.md docs/methode/ressources.md AGENTS.md 2>/dev/null | head -8; echo \"---\"; grep -n \"ressources\" docs/pilotage/README.md | head -5", "description": "Check resources tool is … [24 caractères tronqués]`
+
+  ```
+---
+  ```
+
+### 🤖 Assistant
+
+⏵ Le nouveau `tools/ressources.py` n'est référencé nulle part dans le routage. Petite tâche utile : l'y inscrire.
+
+- **read** `{"file_path": "docs/pilotage/README.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/README.md</path>
+<type>file</type>
+<content>
+1: # Le dossier pilotage — carte et ordre de lecture
+2: 
+3: > **Ce que ce dossier est.** Le **pilotage** du projet : l'état courant, l'ordre des chantiers,
+4: > le plan de travail multi-sessions, les relations entre chantiers, les contrats du backlog, les
+5: > manques et les références de non-régression. **Ce n'est pas** la documentation de conception
+6: > (celle-ci est dans `docs/theorie/`, `docs/implantation/`, `docs/methode/`) ni les résultats
+7: > (`reports/`) ni le récit (`journal/`).
+8: >
+9: > **Machine** : une seule ; plusieurs sessions travaillent en parallèle sur le même arbre de
+10: > travail. Les territoires et la surveillance sont dans [`plan-travail.md`](plan-travail.md).
+11: 
+12: ## L'ordre de lecture
+13: 
+14: | ordre | document | ce qu'il répond | quand le lire |
+15: |---|---|---|---|
+16: | 1 | [`en-cours.md`](en-cours.md) | que se passe-t-il **maintenant** ? | au début de chaque session |
+17: | 2 | [`plan-travail.md`](plan-travail.md) | **qui** fait quoi, où, à quelle cadence ? | avant d'ouvrir une session |
+18: | 3 | [`roadmap.md`](roadmap.md) | dans que
+… [3256 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"GPUs\\|GPU\\|machine\\|portes lourdes\\|ressources\" docs/methode/ressources.md | head -12; echo \"=== fin du doc ===\"; tail -20 docs/methode/ressources.md", "description": "Read resources method doc tail"}`
+
+  ```
+6:## La machine (Hauru)
+18:## La règle des ressources
+20:Les GPU ne se partagent pas bien : **une mesure qui charge 28 Go de VRAM bloque toute porte ou tout autre modèle**.
+29:- **GPU** : 2 × RTX 5000 16 Go. Deux petits `route` (10–32 M) entraînés **en parallèle**, un par
+30:  carte, avec `OMP_NUM_THREADS=4` chacun : **18–25 %** d'utilisation GPU, **560–680 Mo** par
+36:  deux bases), 65–78 % de GPU, seq 256, lot 8/rang, un fil CPU par rang.
+38:  Pendant une porte CPU, les deux GPU sont **libres** : on peut y lancer **deux entraînements**, pas
+40:- **Règle** : les portes d'abord ; ensuite deux entraînements GPU en parallèle, données et docs sur
+44:## La répartition du 26/10 — le langage hors GPU
+46:Décision : **le langage sort des GPU**. Les 2 × RTX 5000 et les CPU servent au **modèle natif**
+52:- **GPU** : `entrainer_moteur.py` (CUDA), `drave-core`, les portes blanches ; 16 Go par carte,
+75:Tu as beaucoup de ressources et de temps, mais **l'humain n'est pas toujours disponible et son temps de vie est
+=== fin du doc ===
+
+**La règle du jamais-en-attente** : si une ligne de la roadmap est bloquée (un corpus introuvable, un compte, du
+matériel), on prend la **suivante** dans l'ordre — 
+… [1184 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "docs/methode/ressources.md", "limit": 14, "offset": 16}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/ressources.md</path>
+<type>file</type>
+<content>
+16:   local (`/home/stephane/IA/venv-drave`) sert pour les mesures récentes.
+17: 
+18: ## La règle des ressources
+19: 
+20: Les GPU ne se partagent pas bien : **une mesure qui charge 28 Go de VRAM bloque toute porte ou tout autre modèle**.
+21: Séquence : les portes d'abord, les mesures ensuite ; deux petits modèles peuvent cohabiter sur les deux cartes, un
+22: gros modèle prend les deux.
+23: 
+24: ## La composition mesurée (26/10)
+25: 
+26: - **CPU** : 2 sockets × 10 cœurs × 2 SMT = **40 threads logiques** ; les frères SMT sont
+27:   `0/20 … 9/29` et `10/30 … 19/39`. Pour un travail CPU soutenu, viser **20 threads physiques**
+28:   (`0-9`, `10-19`) et éviter de saturer les deux frères d'un même cœur.
+29: - **GPU** : 2 × RTX 5000 16 Go. Deux petits `route` (10–32 M) entraînés **en parallèle**, un par
+
+(Showing lines 16-29 of 89. Use offset=30 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "docs/methode/ressources.md", "new_string": "Les GPU ne se partagent pas bien : **une mesure qui charge 28 Go de VRAM bloque toute porte ou tout autre modèle**.\nSéquence : les portes d'abord, les mesures ensuite ; deux petits modèles peuvent cohabiter sur les deux cartes, un\ngros mod … [630 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/ressources.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/README.md", "new_string": "> **Machine** : une seule ; plusieurs sessions travaillent en parallèle sur le même arbre de\n> travail. Les territoires et la surveillance sont dans [`plan-travail.md`](plan-travail.md) ; le\n> registre des ressources machine (GPU, CPU, RAM, I … [295 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/README.md", "new_string": "| `tools/revue_documentation.py` | classement, liens, compteurs, fraîcheur |\n| `tools/ressources.py` | les ressources machine (GPU, CPU, RAM, IO) : réservations, file, usage réel |", "old_string": "| `tools/revue_documentation.py` | classement … [33 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | grep -E \"ressources.md|T0 max\"; date; echo \"=== passe ===\"; wc -l < work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/ … [129 caractères tronqués]`
+
+  ```
+❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 648 JSON, le disque en a 649
+  T0 max : 3997 mots (budget 4 000)
+lun 02 nov 2026 20:20:45 EST
+=== passe ===
+30
+porte-homeostasie 2 0
+porte-homeostasie 2 0
+porte-horloge 0 27
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; export GIT_INDEX_FILE=/tmp/index.hub-nuit; git read-tree HEAD; git add docs/pilotage/README.md docs/methode/ressources.md; git commit -m \"DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE\n\ntools/ressources.py (écrit cette nuit … [359 caractères tronqués]`

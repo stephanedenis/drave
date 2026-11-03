@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 4.0 h |
+| Durée | 4.1 h |
 | Tours | 4 |
-| Messages | 145 |
-| Appels d'outils | 182 |
-| Fichiers touchés | 3 |
-| Commandes | 134 |
+| Messages | 154 |
+| Appels d'outils | 196 |
+| Fichiers touchés | 5 |
+| Commandes | 142 |
 | Sous-agents | 0 |
-| Commits | 4 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -140,7 +140,7 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 
 ### Tour 4 — Es-tu en attente active d'une tache et ressource? tu doi pouvoir prendre de petites tâches indépendantes si tu cherches  … [196 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*46 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create night goal and snapshot pass and sessions
@@ -156,11 +156,11 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - bash — Check backlog graph and actual resource usage
 - bash — Check reports index freshness
 - bash — Check for live edits by other writer
-- … et 17 autres
+- … et 28 autres
 
 **Synthèse produite :**
 
-⏵ Vérification et commit de la correction de `portes.md`
+⏵ Le nouveau `tools/ressources.py` n'est référencé nulle part dans le routage. Petite tâche utile : l'y inscrire.
 
 ## 3. Travail accompli
 
@@ -171,6 +171,8 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 | `docs/pilotage/en-cours.md` | 0 | 12 |
 | `tools/sessions.py` | 0 | 5 |
 | `docs/methode/portes.md` | 0 | 3 |
+| `docs/methode/ressources.md` | 0 | 1 |
+| `docs/pilotage/README.md` | 0 | 2 |
 
 ### Commandes exécutées (échantillon)
 
@@ -214,7 +216,7 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 94 autres
+- … et 102 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -265,6 +267,9 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - **T4** `> le CEGEP OCR, il est au **plancher du mélange** : **8,5 %** contre **9,1 %**. Le corpus CEGEP`
 - **T4** `> que le corpus n'est pas. L'unité compte : la ligne coupe les phrases (3,6 % contre 51,0 %).`
 - **T4** `[still running after 60000ms; moved to background job bash-134]`
+- **T4** `30:  carte, avec `OMP_NUM_THREADS=4` chacun : **18–25 %** d'utilisation GPU, **560–680 Mo** par`
+- **T4** `36:  deux bases), 65–78 % de GPU, seq 256, lot 8/rang, un fil CPU par rang.`
+- **T4** `[still running after 60000ms; moved to background job bash-142]`
 
 ## 5. Erreurs rencontrées
 
@@ -278,4 +283,5 @@ Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le
 - PASSE — REPORTÉE SUR MESURE (DEUX GPU À N2, CHARGE 24) ; SOUS-PASSE DOCUMENTAIRE 7/8  La passe complète n'est pas lancée : à 16 h 32, GPU 0 à 92 % (N2 200 k pas
 - ÉTAT — COMPTEURS AU DISQUE (551 FICHES / 638 JSON) ; HEARTBEAT 16 h 40  Les quatre sessions actives écrivent : les compteurs bougent sous le hub. Mis à jour sur
 - PORTES — LE REGISTRE EST DANS \`work/\`, PAS DANS \`/tmp\` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE  Le doc annonçait /tmp/portes-<date> : le script écrit 
+- DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE  tools/ressources.py (écrit cette nuit avec le protocole § 10) n'était référencé ni dans docs/pilotage/R
 

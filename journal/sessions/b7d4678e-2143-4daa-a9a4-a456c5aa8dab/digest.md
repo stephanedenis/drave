@@ -6622,3 +6622,27 @@ ls:
 … [25 caractères tronqués]
   ```
 
+- **bash** `{"command": "mkdir -p work/veille; (while kill -0 164366 2>/dev/null; do sleep 30; done; date \"+%H:%M:%S\" > work/veille/passe-finie.txt; echo \"passe finie\" >> work/veille/passe-finie.txt) ", "description": "Watch for the gate pass completion", "run_in_background": true}`
+
+  ```
+started background job bash-266
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-porte-mobile.json'))\nprint({k:d[k] for k in list(d)[:12] if k in d})\nPY\necho \"--- pass ---\"; wc -l work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt", "description": "Read Pen … [37 caractères tronqués]`
+
+  ```
+{'date': '2026-11-02 20:18 EST', 'modele': '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf', 'endpoint': 'http://127.0.0.1:18082', 'probleme': {'nom': 'labyrinthe_porte_mobile', 'portes': [[3, 3], [1, 3]], 'but': [4, 4], 'regle': 'depuis une case voisine, la sonde ouvre la porte si la politique vise sa direction', 'budget': 200}, 'politique': {'classe': 'PolitiqueLLM', 'jeux': ['porte_mobile', 'labyrinthe'], 'contrainte': 'grammaire GBNF, quatre directions'}, 'mesures': {'0': {'oracle': {'noeuds': 29, 'but': True, 'par_operateur': {'pas': 13, 'saut': 11, 'sonde': 5}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 60.0, 'appels': 7, 'budget': 27, 'politique': 'manhattan', 'score': 1.0, 'latence_s': 0.0, 'erreurs': 0, 'duree_s': 0.005}, 'aveugle': {'noeuds': 200, 'but': False, 'par_operateur': {'pas': 100, 'saut': 39, 'sonde': 61}, 'genres': ['neuronal', 'numérique', 'symbolique'], 'cout': 483.0, 'appels': 66, 'budget': 200, 'politique': 'aveugle', 'score': 0.25, 'latence_s': 0.0, 'erreurs': 0, 'duree_s': 0.034}, 'hasard': {'noeuds': 45, 'but': True, 'par_operateur': {'pas': 23, 'saut': 15, 'sonde': 7}, 'genres': ['ne
+… [3236 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Veille de nuit — 02/11 20 h → 03/11 8 h\n\n> Journal de bord de la veille (non commité, `work/`). Les faits vont dans `reports/`,\n> l'état dans `docs/pilotage/en-cours.md`, le récit dans `journal/2026-11-02/`.\n\n## 20 h 20 — checkpoint d'ouverture\n\n- **Sessions** : hub → **passe c … [1097 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/veille/nuit.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **job_output** `{"job_id": "bash-266", "timeout_ms": 600000, "wait": true}`
