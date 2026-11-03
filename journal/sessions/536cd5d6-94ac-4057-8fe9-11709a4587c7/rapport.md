@@ -7,12 +7,12 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 7.4 h |
-| Tours | 39 |
-| Messages | 300 |
-| Appels d'outils | 301 |
+| Durée | 7.8 h |
+| Tours | 42 |
+| Messages | 314 |
+| Appels d'outils | 309 |
 | Fichiers touchés | 13 |
-| Commandes | 232 |
+| Commandes | 237 |
 | Sous-agents | 0 |
 | Commits | 26 |
 | Compactages de contexte | 1 |
@@ -101,6 +101,12 @@
 **Tour 38** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [698 caractères tronqués]
 
 **Tour 39** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [698 caractères tronqués]
+
+**Tour 40** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [698 caractères tronqués]
+
+**Tour 41** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [698 caractères tronqués]
+
+**Tour 42** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [698 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1199,7 +1205,57 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 **Synthèse produite :**
 
-⏵ L'état dit 658 JSON, le disque en a 659 (fiche B13) ; je corrige le compteur et je recommite.
+⏵ Round 32 : compteur JSON corrigé (659) ; revue 571/659/82 verte ; T0 3 998 ; veille.
+
+- **B13** : deux commits (fenêtre non discriminante : BFS 228, aveugle 215, 7B 238 ; `store.push` FIFO, 37 états).
+- **Sessions** : N2 52 + claim, S 135 + claim, hub 24 + claim `veille`, B13 72 + claim ; quatre actives.
+- **Revue** 571/659/82 ✅ ; **T0 3 998/4 000** ✅ ; registre OK.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+### Tour 40 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [978 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Ten-minute night watch pause, fifth
+- job_output
+- bash — Post-wait state check after 23:07
+
+**Synthèse produite :**
+
+⏵ Round 33 : veille ; état stable (revue 571/659/82, T0 3 998, registre OK ; quatre sessions avec claims).
+
+- **Sessions** : N2 64 + claim, S 147 + claim, hub 36 + claim `veille`, B13 84 + claim ; quatre actives ; `porte-sessions` verte.
+- **Git** : `698c3980` (compteur 659) ; pas de nouveau commit depuis.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+### Tour 41 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [978 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Ten-minute night watch pause, sixth
+- job_output
+- bash — Post-wait state check after 23:18
+
+**Synthèse produite :**
+
+⏵ Round 34 : veille ; état inchangé (revue 571/659, T0 3 998, claims OK, quatre sessions actives).
+
+- **Sessions** : N2 75 + claim, S 158 + claim, hub 47 + claim `veille`, B13 95 + claim.
+- **Git** : `698c3980` ; pas de nouveau commit.
+- **Passe** : 76/5 ; la 5e rouge est close ; prochaine **82**.
+
+**Reste** : veille ; **bilan 08 h**. Goal actif.
+
+### Tour 42 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [978 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Ten-minute night watch pause, seventh
+- job_output
 
 ## 3. Travail accompli
 
@@ -1263,7 +1319,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 192 autres
+- … et 197 autres
 
 ## 4. Mesures et résultats marquants
 

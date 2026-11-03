@@ -5955,3 +5955,116 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-267", "timeout_ms": 3400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2ac/mix2048-3.75k.log; ls work/n2ac/mix2048-3.75k.pt 2>/dev/null && echo OK; tail -1 work/n2ac/rope2048-12.5k.log", "description": "Direct check of production 2048 run"}`
+
+  ```
+22:55:38
+pas    650 · perte 1.1227 · PPL val 2.796 · 725 s
+pas   1900 · perte 1.1648 · PPL val 2.720 · 1925 s
+  ```
+
+- **job_kill** `{"job_id": "bash-267", "reason": "attente trop longue, je poll directement"}`
+
+  ```
+requested cancellation of job bash-267
+  ```
+
+- **bash** `{"command": "sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_mix.out; ls work/n2ac/mix2048-3.75k.pt 2>/dev/null && echo OK; tail -1 work/n2ac/rope2048-12.5k.log", "description": "Wait 50 min for production 2048"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-269]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-269", "timeout_ms": 3000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2ac/mix2048-3.75k.log; ls work/n2ac/mix2048-3.75k.pt 2>/dev/null && echo OK", "description": "Check production 2048 progress"}`
+
+  ```
+23:06:53
+pas   1300 · perte 1.0420 · PPL val 2.720 · 1436 s
+[exit code: 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation de l'attaque de la porte 2,5 sur le corpus propre (avec la fenêtre)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && head -3 tools/canal_structure.py | tail -1; for f in train val; do PYTHONPATH=. python3 tools/canal_structure.py --entree data/corpus_propre/$f.txt --sortie data/corpus_propre/$f.canal 2>&1 | tail -1; done; ls -la data/corpus_propre/", "description":  … [38 caractères tronqués]`
+
+  ```
+3244858 octets de canal · data/corpus_propre/train.canal
+180224 octets de canal · data/corpus_propre/val.canal
+total 7188
+drwxr-xr-x. 1 stephane stephane     102  2 nov 23:07 .
+drwxr-xr-x. 1 stephane stephane    2664  2 nov 18:33 ..
+-rw-r--r--. 1 stephane stephane  320314 31 oct 22:21 dev.txt
+-rw-r--r--. 1 stephane stephane  180224 31 oct 22:20 test.txt
+-rw-r--r--. 1 stephane stephane 3244858  2 nov 23:07 train.canal
+-rw-r--r--. 1 stephane stephane 3244858 31 oct 22:20 train.txt
+-rw-r--r--. 1 stephane stephane  180224  2 nov 23:07 val.canal
+-rw-r--r--. 1 stephane stephane  180224 31 oct 22:20 val.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_porte.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_porte.sh — la porte < 2,5 sur le corpus propre, avec et sans fenêtre.\n#\n# Corpus : data/corpus_propre (train 3,24 Mo, val 180 Ko, 0 % de fuite — N2.h).\n# Deux bras à OCTETS ÉGAU … [2047 caractères tronqués]`
+
+  ```
+préparé
+23:08:05
+pas   1350 · perte 1.0921 · PPL val 2.716 · 1490 s
+  ```
+
+- **bash** `{"command": "sleep 2700; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_mix.out; ls work/n2ac/mix2048-3.75k.pt 2>/dev/null && echo OK; tail -1 work/n2ac/rope2048-12.5k.log", "description": "Wait for production 2048 checkpoint"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-273]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-273", "timeout_ms": 2700000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_mix.out; ls work/n2ac/mix2048-3.75k.pt* 2>/dev/null | head -3; tail -1 work/n2ac/mix2048-3.75k.log", "description": "Direct check of 2048 production"}`
+
+  ```
+23:19:34
+pas   2000 · perte 1.0258 · PPL val 2.687 · 2204 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche production (parties sans chiffres)
+
+- **write** `{"content": "# N2 — La production à fenêtre entraînée (512 / 1 024 / 2 048) et le compute qui va avec\n\n> **Ligne de roadmap** : N2 (le modèle de production) · **Date** : 2026-11-03 · **Verdict** :\n> en construction — les trois runs de la nuit (production à 2 048, compute à 1 024, contrôle) sont\n … [3273 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-n2-production-fenetre.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 2400; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_mix.out; ls work/n2ac/mix2048-3.75k.pt 2>/dev/null && echo OK; tail -1 work/n2ac/rope2048-12.5k.log", "description": "Wait for 2048 production completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-275]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-275", "timeout_ms": 2400000, "wait": true}`

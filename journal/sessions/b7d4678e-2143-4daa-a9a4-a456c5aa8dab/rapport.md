@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 6.6 h |
-| Tours | 26 |
-| Messages | 638 |
-| Appels d'outils | 634 |
+| Durée | 7.1 h |
+| Tours | 29 |
+| Messages | 660 |
+| Appels d'outils | 649 |
 | Fichiers touchés | 24 |
-| Commandes | 441 |
+| Commandes | 453 |
 | Sous-agents | 0 |
-| Commits | 32 |
+| Commits | 33 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -77,6 +77,12 @@
 **Tour 25** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 26** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 27** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 28** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 29** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -743,16 +749,77 @@ La veille continue : intégration des commits, suivi des sessions et des runs, p
 
 ### Tour 26 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Check events, runs and journal
 - bash — Wait for the next commit
 - bash — Verify state and log the non-discriminant gate
 - bash — Wait for the Pensée commit and counters
+- bash — Check the table row integrity
+- read
+- edit `docs/pilotage/en-cours.md`
+- bash — Verify the table fix
+- bash — Commit the table cell fix
+- bash — Check the en-cours row and git state
+- bash — Verify the table and log the resolution
 
 **Synthèse produite :**
 
-⏵ Round 21 : veille — événements et état
+⏵ Round 21 : tableau des invariants réparé, porte-tableaux verte
+
+- **Pensée** : `19038f08` — la **fenêtre B13 est non discriminante** : oracle BFS **228**, aveugle **215**, 7B **238** — tout le monde passe ; le problème est solvable mais la porte ne sépare pas les politiques (résultat négatif, à réparer côté banc). Le run 500 (`pensee-porte-fenetre-500.json`) est en cours de fiche.
+- **Tableau des invariants** : l'édition du compteur **571 / 659** avait laissé la ligne à **2 cellules** au lieu de 3 — `porte-tableaux` refusait le tableau entier. La cellule de contrôle est présente dans l'arbre **et dans `HEAD`** ; **2 751 liens** résolvent, porte-tableaux **verte** (la tentative de commit était un no-op : c'était déjà dans le commit du hub).
+- **État** : revue ✅ **571 fiches / 659 JSON / 82 portes**, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue : suivi des runs N2 et des sessions, intégration des commits, puis le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 27 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check events and state
+- bash — Wait for the next commit
+- job_output
+- bash — Check if the latest facts are in the state docs
+
+**Synthèse produite :**
+
+⏵ Round 22 : phase de calcul calme, l’état porte déjà les derniers faits
+
+- **Pas de commit depuis 22 h 56** : les deux runs N2 occupent les GPU (46 min et 30 min) ; la **fiche 500** de la fenêtre B13 est en cours (`pensee-porte-fenetre-500.json` non committé, `store.py` en modification).
+- **L'état est déjà à jour** : `en-cours` porte la **loi de la fenêtre jusqu'à 2 048** (1 000 octets : **2,9950** à 1 024) et la **fenêtre B13 non discriminante** (oracle BFS 228, aveugle 215 — tout passe). Rien à corriger.
+- **Claims** : N2 `gpu0`/`gpu1` (échéances 23 h 56 / 00 h 35), hub `veille` 600 min, S et Pensée `cpu1` — registre cohérent.
+- **État** : revue ✅ 571/659/82, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue : elle attend la fin des runs et les prochains commits, puis tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 28 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check events, runs and state
+- bash — Log the quiet phase and wait for a commit
+
+**Synthèse produite :**
+
+⏵ Round 23 : phase calme, aucun commit depuis 22 h 56, état vert
+
+- Les **deux runs N2** continuent (≈55 et 39 min) et la **fiche 500** de Pensée est en cours ; aucun commit depuis `698c3980` (22 h 56).
+- **Audits** : revue ✅ **571 / 659 / 82**, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅, journal ✅, backlog ✅, schémas ✅ — rien à corriger.
+- **Ressources** : les deux GPU occupés et déclarés (claims N2 et veille), registre cohérent (`nvme_raid` 33 Gio en limite connue).
+
+La veille reste en attente active : elle reprendra à chaque commit (N2/Pensée/hub) pour intégrer l'état, et tiendra le **checkpoint de 8 h** avec le brouillon `work/veille/bilan-08h.md`. Rien de bloquant.
+
+### Tour 29 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check events and runs
+- bash — Wait for the next commit
+
+**Synthèse produite :**
+
+⏵ Round 24 : veille — événements et runs
 
 ## 3. Travail accompli
 
@@ -769,7 +836,7 @@ La veille continue : intégration des commits, suivi des sessions et des runs, p
 | `work/ocr/fait_fiche.py` | 1 | 1 |
 | `work/ocr/ajoute_micro.py` | 1 | 0 |
 | `reports/rapport-ocr-cegep.md` | 0 | 2 |
-| `docs/pilotage/en-cours.md` | 0 | 24 |
+| `docs/pilotage/en-cours.md` | 0 | 25 |
 | `docs/pilotage/roadmap.md` | 0 | 10 |
 | `docs/pilotage/chantiers.md` | 0 | 6 |
 | `docs/pilotage/plan-travail.md` | 0 | 8 |
@@ -827,7 +894,7 @@ La veille continue : intégration des commits, suivi des sessions et des runs, p
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 401 autres
+- … et 413 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -994,4 +1061,5 @@ La veille continue : intégration des commits, suivi des sessions et des runs, p
 - ps -eo pid,etime,args | grep -E "git commit|git add|git reset" | grep -v grep | head -2; ls .git/index.lock 2>/dev/null || echo "pas de lock"; git read-tree HEA
 - NUIT — L'INDEX ALTERNÉ SE RESYNCHRONISE : LA LEÇON DE LA 82e PORTE EMPORTÉE" -m "Après un commit à index alterné, l'index principal ignore les fichiers ajoutés 
 - ps -eo pid,etime,args | grep -E "git commit|git add" | grep -v grep | head -2; ls .git/index.lock 2>/dev/null || echo "pas de lock"; git status --short docs/pil
+- NUIT — LA LIGNE DES COMPTEURS RETROUVE SA CELLULE DE CONTRÔLE ; PORTE-TABLEAUX REPASSE VERTE" -m "L'édition du compteur JSON (571/659) avait perdu la troisième 
 

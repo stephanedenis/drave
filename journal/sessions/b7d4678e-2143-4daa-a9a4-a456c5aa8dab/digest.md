@@ -10215,3 +10215,405 @@ log-ok
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; python3 tools/r … [117 caractères tronqués]`
+
+  ```
+22:56:49
+HEAD 698c3980
+698c3980 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13
+19038f08 B13 — LA FENÊTRE EST NON DISCRIMINANTE : L'ORACLE BFS 228, L'AVEUGLE 215, LE 7B 238 — TOUT LE MONDE PASSE
+114:| fichiers / JSON de résultats | **571** / **659** |
+  revue de documentation · 571 fiche(s) · 659 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "sed -n '108,118p' docs/pilotage/en-cours.md; echo \"--- tableaux ---\"; bash tools/porte-tableaux.sh 2>&1 | tail -3", "description": "Check the table row integrity"}`
+
+  ```
+> Vérifié par `tools/revue_documentation.py`.
+
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **82** (passe 19 h 32 : **81, 76/5** ; **82e `porte-ressources`** verte, comptée à la suivante) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **571** / **659** |
+| documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
+| dernière passe | **02/11 19 h 32** (81, 76/5 ; 4 connues + `porte-tableaux` verte) | `docs/pilotage/references-non-regression.md` |
+
+## Les chantiers et leurs bloquants
+--- tableaux ---
+  ❌ 1 tableau(x) ne rendront pas (mistune refuse le tableau ENTIER) :
+     docs/pilotage/en-cours.md:114 — 2 cellules ≠ 3 attendues
+  1578 fichier(s) examiné(s)
+  ```
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "limit": 4, "offset": 112}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+112: | portes | **82** (passe 19 h 32 : **81, 76/5** ; **82e `porte-ressources`** verte, comptée à la suivante) | `tools/porte-*.sh` |
+113: | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+114: | fichiers / JSON de résultats | **571** / **659** |
+115: | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
+
+(Showing lines 112-115 of 156. Use offset=116 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "| fichiers / JSON de résultats | **571** / **659** | `reports/*.md` / `reports/*.json` |", "old_string": "| fichiers / JSON de résultats | **571** / **659** |"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; ls .git/index.lock 2>/dev/null || echo \"pas de lock\"", "description": "Verify the table … [6 caractères tronqués]`
+
+  ```
+✅ 2751 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+pas de lock
+  ```
+
+- **bash** `{"command": "git commit --only -m \"NUIT — LA LIGNE DES COMPTEURS RETROUVE SA CELLULE DE CONTRÔLE ; PORTE-TABLEAUX REPASSE VERTE\" -m \"L'édition du compteur JSON (571/659) avait perdu la troisième cellule du tableau d'invariants (2 cellules au lieu de 3) : mistune refusait le tableau entier, porte- … [203 caractères tronqués]`
+
+  ```
+(use "git add <file>..." to include in what will be committed)
+	reports/pensee-porte-fenetre-500.json
+
+no changes added to commit (use "git add" and/or "git commit -a")
+  ```
+
+- **bash** `{"command": "git status --short docs/pilotage/en-cours.md; sed -n '114p' docs/pilotage/en-cours.md; git show HEAD:docs/pilotage/en-cours.md | sed -n '114p'; git log --oneline -2; git status --short | head -5", "description": "Check the en-cours row and git state"}`
+
+  ```
+| fichiers / JSON de résultats | **571** / **659** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **571** / **659** | `reports/*.md` / `reports/*.json` |
+698c3980 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13
+19038f08 B13 — LA FENÊTRE EST NON DISCRIMINANTE : L'ORACLE BFS 228, L'AVEUGLE 215, LE 7B 238 — TOUT LE MONDE PASSE
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; cat >> work/veille/nuit.md <<'EOF'\n\n## 22 h 57 — le tableau des invariants repasse vert\n\n- L'édition du compteur JSON (**571 / 659**) a … [476 caractères tronqués]`
+
+  ```
+✅ 2751 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+  revue de documentation · 571 fiche(s) · 659 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+log-ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 21 : tableau des invariants réparé, porte-tableaux verte
+
+- **Pensée** : `19038f08` — la **fenêtre B13 est non discriminante** : oracle BFS **228**, aveugle **215**, 7B **238** — tout le monde passe ; le problème est solvable mais la porte ne sépare pas les politiques (résultat négatif, à réparer côté banc). Le run 500 (`pensee-porte-fenetre-500.json`) est en cours de fiche.
+- **Tableau des invariants** : l'édition du compteur **571 / 659** avait laissé la ligne à **2 cellules** au lieu de 3 — `porte-tableaux` refusait le tableau entier. La cellule de contrôle est présente dans l'arbre **et dans `HEAD`** ; **2 751 liens** résolvent, porte-tableaux **verte** (la tentative de commit était un no-op : c'était déjà dans le commit du hub).
+- **État** : revue ✅ **571 fiches / 659 JSON / 82 portes**, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue : suivi des runs N2 et des sessions, intégration des commits, puis le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 27
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 22/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 22 : veille — je vérifie les événements puis j’attends
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -2; git status --short | head -4; echo \"--- runs ---\"; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-70; echo \"--- checks ---\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours. … [119 caractères tronqués]`
+
+  ```
+22:59:17
+698c3980 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13
+19038f08 B13 — LA FENÊTRE EST NON DISCRIMINANTE : L'ORACLE BFS 228, L'AVEUGLE 215, LE 7B 238 — TOUT LE MONDE PASSE
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+--- runs ---
+ 713516       36:29 /home/stephane/gpu-env/bin/python work/n2ac/entrai
+ 722257       20:16 /home/stephane/gpu-env/bin/python work/n2ac/entrai
+--- checks ---
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ⚠ mandat long (76 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [133 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-448]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-448", "timeout_ms": 60000, "wait": true}`
+
+  ```
+23:09:22
+HEAD 698c3980
+698c3980 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13
+19038f08 B13 — LA FENÊTRE EST NON DISCRIMINANTE : L'ORACLE BFS 228, L'AVEUGLE 215, LE 7B 238 — TOUT LE MONDE PASSE
+ 713516       46:35 /home/stephane/gpu-env/bin/python work/n2ac/entrai
+ 722257       30:21 /home/stephane/gpu-env/bin/python work/n2ac/entrai
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M tools/pensee/store.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/pensee-porte-fenetre-500.json
+[status: completed, exit code: 0]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 16 h 09 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
+6: > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
+7: > [`reports/`](../../reports/). Histoire : [`journal/`](../../journal/). Plan : [`roadmap.md`](roadmap.md).
+8: >
+9: > **Reprise après le reboot du 02/11 15 h 06** : les deux sessions sont **en pause**, leurs cycles
+10: > sont committés, les GPU sont sains ; reprise par `dsh --profile dsh-tui --resume <id>` ; runbook
+11: > dans [`plan-travail.md`](plan-travail.md) § 9.
+12: 
+13: ## Sessions en cours
+14: 
+15: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+16: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+17: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+18: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/AGENTS.md</path>
+<type>file</type>
+<content>
+1: # Directives de l'agent — Drave
+2: 
+3: > **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+4: 
+5: > **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+6: > **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+7: > (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+8: > [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+9: 
+10: ## 1. La vision (l'essentiel)
+11: 
+12: **Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+13: réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et mo
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 18 h 25 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+6: > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+7: > [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+8: >
+9: > **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
+10: > et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; les GPU sont
+11: > sains ; reprise par `dsh --profile dsh-tui --resume <id>` ; runbook dans
+12: > [`plan-travail.md`](plan-travail.md) § 9.
+13: 
+14: ## Sessions en cours
+15: 
+16: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+17: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+18: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+19: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 19 h 31 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+6: > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+7: > [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+8: >
+9: > **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
+10: > et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; **D/R/A est
+11: > close à 18 h 45** (OCR du fonds CEGEP) ; les GPU sont sains ; reprise par
+12: > `dsh --profile dsh-tui --resume <id>` ; runbook dans
+13: > [`plan-travail.md`](plan-travail.md) § 9.
+14: 
+15: ## Sessions en cours
+16: 
+17: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+18: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+19: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+20: > le hook pre-commit refuse un fait sans
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+20: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+21: 
+22: ### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+23: 
+24: - **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
+25: - **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
+26: - **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration,
+27:   portes** (GPU 1).
+28: - **Ambition** : un état reprenable, des mandats qui disent la vérité.
+29: - **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
+30: - **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
+31: - **Ce qu'elle fait** : intégration ; **porte stricte** ; sous-passe doc. **7/8** ; **passe de
+32:   portes en cours** (`porte-bus`, 19 h 37).
+33: - **Ce que font les autres** : **N2**, **S**, **Pensée** ; **D/R/A close**.
+34: - **Prochaine action** : finir
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+docs/pilotage/en-cours.md:137:**N4** — la consigne ; **B10.3** — le `z` ; **B13** — 138/140 ; **R0.7** — le tagger ; **D** — OCR clos (8 `.PDF`).
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bo
+… [3958 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-448 (bash: OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ "$NEW" != "$OLD" ] && break; done; date "+%H:%M:%S"; echo "HEAD $(git rev-parse --short HEAD)"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-70; git status --short | grep -E "^\?\?|^ M" | head -4) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "echo \"=== fenêtre 2048 ===\"; grep -n \"2 048\\|2,048\\|2048\" docs/pilotage/roadmap.md docs/pilotage/en-cours.md | head -4; echo \"=== fenêtre B13 ===\"; grep -n \"228\\|215\\|238\\|non discriminant\\|solvable\" docs/pilotage/en-cours.md docs/pilotage/roadmap.md | head -6", "descripti … [55 caractères tronqués]`
+
+  ```
+=== fenêtre 2048 ===
+docs/pilotage/en-cours.md:76:- **Plan** : loi, production, 2 048 ; fiche par fait.
+docs/pilotage/en-cours.md:80:- **Ce qu'elle fait** : la **loi de la fenêtre** jusqu'à 2 048 et la **production** (N2.ac +
+docs/pilotage/en-cours.md:83:- **Prochaine action** : **2 048**, puis un point de compute.
+docs/pilotage/en-cours.md:94:- **R1 — la fenêtre native** : loi mesurée jusqu'à **2 048** (1 000 octets : **2,9950** à 1 024) ;
+=== fenêtre B13 ===
+docs/pilotage/en-cours.md:61:  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde) ; **fenêtre** — **non discriminante** (oracle BFS 228, aveugle 215 : tout passe) ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 22 : phase de calcul calme, l’état porte déjà les derniers faits
+
+- **Pas de commit depuis 22 h 56** : les deux runs N2 occupent les GPU (46 min et 30 min) ; la **fiche 500** de la fenêtre B13 est en cours (`pensee-porte-fenetre-500.json` non committé, `store.py` en modification).
+- **L'état est déjà à jour** : `en-cours` porte la **loi de la fenêtre jusqu'à 2 048** (1 000 octets : **2,9950** à 1 024) et la **fenêtre B13 non discriminante** (oracle BFS 228, aveugle 215 — tout passe). Rien à corriger.
+- **Claims** : N2 `gpu0`/`gpu1` (échéances 23 h 56 / 00 h 35), hub `veille` 600 min, S et Pensée `cpu1` — registre cohérent.
+- **État** : revue ✅ 571/659/82, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue : elle attend la fin des runs et les prochains commits, puis tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 28
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 23/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 23 : veille — événements et runs
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-70; git status --short | grep -E \"^\\?\\?|^ M\" | head -4; python3 tools/revue_documentation.py 2>&1 | tail -1", "description": "Check events, runs and state"}`
+
+  ```
+23:10:25
+698c3980 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13
+19038f08 B13 — LA FENÊTRE EST NON DISCRIMINANTE : L'ORACLE BFS 228, L'AVEUGLE 215, LE 7B 238 — TOUT LE MONDE PASSE
+ 713516       47:38 /home/stephane/gpu-env/bin/python work/n2ac/entrai
+ 722257       31:24 /home/stephane/gpu-env/bin/python work/n2ac/entrai
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M tools/pensee/store.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/pensee-porte-fenetre-500.json
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 23 h 10 — les runs continuent, rien à corriger\n\n- Deux runs N2 (47 min, 31 min) occupent les GPU ; la fiche 500 de Pensée est en cours ; pas de\n  commit depuis 22 h 56.\n- Audits : revue **571 / 659 / 82** ✅, en-cours ✅, T0 sous 4 000, T1 2 42 … [377 caractères tronqués]`
+
+  ```
+23:18:52
+HEAD 698c3980
+698c3980 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13
+19038f08 B13 — LA FENÊTRE EST NON DISCRIMINANTE : L'ORACLE BFS 228, L'AVEUGLE 215, LE 7B 238 — TOUT LE MONDE PASSE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 23 : phase calme, aucun commit depuis 22 h 56, état vert
+
+- Les **deux runs N2** continuent (≈55 et 39 min) et la **fiche 500** de Pensée est en cours ; aucun commit depuis `698c3980` (22 h 56).
+- **Audits** : revue ✅ **571 / 659 / 82**, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅, journal ✅, backlog ✅, schémas ✅ — rien à corriger.
+- **Ressources** : les deux GPU occupés et déclarés (claims N2 et veille), registre cohérent (`nvme_raid` 33 Gio en limite connue).
+
+La veille reste en attente active : elle reprendra à chaque commit (N2/Pensée/hub) pour intégrer l'état, et tiendra le **checkpoint de 8 h** avec le brouillon `work/veille/bilan-08h.md`. Rien de bloquant.
+
+
+## Tour 29
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 24/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 24 : veille — événements et runs
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -1; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-65; ls -l reports/pensee-porte-fenetre-500.json 2>/dev/null | awk '{print $5, $6, $7, $8}'; git status --short | grep -cE \"^\\?\\?|^ M\"", "description": "Check even … [13 caractères tronqués]`
+
+  ```
+23:19:21
+698c3980 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13
+ 713516       56:34 /home/stephane/gpu-env/bin/python work/n2ac/e
+ 722257       40:20 /home/stephane/gpu-env/bin/python work/n2ac/e
+3742 2 nov 22:39
+4
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [77 caractères tronqués]`

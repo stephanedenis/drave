@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 6.7 h |
-| Tours | 49 |
-| Messages | 666 |
-| Appels d'outils | 693 |
-| Fichiers touchés | 47 |
-| Commandes | 528 |
+| Durée | 7.1 h |
+| Tours | 73 |
+| Messages | 753 |
+| Appels d'outils | 730 |
+| Fichiers touchés | 48 |
+| Commandes | 560 |
 | Sous-agents | 0 |
-| Commits | 53 |
+| Commits | 56 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -121,6 +121,54 @@
 **Tour 48** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 **Tour 49** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 50** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 51** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 52** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 53** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 54** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 55** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 56** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 57** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 58** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 59** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 60** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 61** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 62** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 63** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 64** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 65** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 66** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 67** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 68** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 69** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 70** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 71** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 72** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 73** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1564,15 +1612,521 @@ La suite : corriger le compteur JSON (658→659) et committer ; puis le **gold 2
 
 ### Tour 49 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Fix JSON counter and commit state
 - bash — Find and fix JSON counter line
 - bash — Fix counter to 571 and commit
+- bash — Wait and commit counter state
 
 **Synthèse produite :**
 
-⏵ Round 47 : la ligne réelle était `571 / 659` (j'avais mis 568 par erreur) ; je remets 571, vérifie la revue et commite
+⏵ Round 47 : revue verte (571/659), T0 3 994 ; le lock du hub bloque toujours le commit d'état — je laisse l'état corrigé en arbre et je passe au fait suivant
+
+**Bilan du round 47** :
+
+- **Revue verte** : 571 fiches / 659 JSON / 119 docs / 82 portes — le compteur est aligné.
+- **T0 3 994/4 000** ; en-cours à 23 h 15.
+- Le commit d'état (`ÉTAT — COMPTEUR 571/659`) est **bloqué** par `.git/index.lock` (le hub commite en série) ; la correction est dans l'arbre et sera committée dès que le lock tombe.
+- Rien d'autre n'a changé : la fenêtre non discriminante est déjà committée (`19038f08`).
+
+**État** : HEAD `19038f08` ; T0 3 994 ; revue 571/659 verte ; en-cours 23 h 15 ; lock hub actif.
+
+La suite : dès que le lock tombe, committer l'état ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 50 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Retry state commit and check lock
+
+**Synthèse produite :**
+
+⏵ Round 48 : le hub a committé l'en-cours (`698c3980`, compteur 659 + cellule de contrôle du tableau restaurée) ; le lock reste actif, l'état est déjà sur le disque
+
+**Bilan du round 48** :
+
+- `git log -1` : **`698c3980` ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13** — le hub a committé l'en-cours avec le compteur **571/659** et a restauré la **troisième cellule** du tableau d'invariants (ma correction l'avait perdue, `porte-tableaux` était rouge sur `en-cours.md:114`).
+- La revue est verte (571/659) et le T0 3 994.
+- Mon commit d'état local est **redondant** : le hub a fait le même travail. Le lock reste actif (le hub enchaîne).
+
+**État** : HEAD `698c3980` ; T0 3 994 ; revue 571/659 verte ; en-cours 23 h 15 ; lock hub actif.
+
+La suite : laisser le hub finir sa série, puis reprendre le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 51 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check gold 200 state and files
+- bash — Read gold-200 JSON
+
+**Synthèse produite :**
+
+⏵ Round 49 : le **gold 200+** est déjà mesuré (`pensee-gold-200.json`) — 200 phrases réelles, 1 782 tokens, POS 0,7738, syntagmes 0,1941, pragma 1,0, 88/88 portes
+
+**Le gold 200+ existe** :
+
+| mesure | valeur |
+|---|---:|
+| phrases réelles | **200** |
+| tokens | 1 782 |
+| POS `all` / fermé / ouvert | 0,7738 / **0,9512** / 0,6297 |
+| syntagmes F1 / tête | 0,1941 / 0,4274 |
+| pragma acte / modalité | **1,0** / 0,9947 |
+| portes | 88/88 |
+
+- Limites déclarées : « 20 phrases, registre simple, heuristique seule » — la fiche est donc **partielle** (l'échantillon de 20).
+- Le **gold 432** (le vrai corpus) reste la mesure de référence ; le 200+ est un **sous-ensemble** déjà qualifié.
+- Le delta POS (0,0023) montre que le gold 200 est **stable**.
+
+**État** : HEAD `698c3980` ; T0 3 994 ; revue 571/659 verte ; lock hub actif (l'état est déjà sur le disque).
+
+La suite : **gold 200+ avec le vrai modèle** (la cascade mesurée sur les 200 phrases, pas seulement l'heuristique) — c'est ce qui manque au fait ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 52 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check gold 200 cascade tooling
+- bash — Final state checks before closing night
+
+**Synthèse produite :**
+
+⏵ Round 50 : bilan de la nuit — état vert (T0 3 998, revue 571/659, sessions EXIT=0) ; le gold 200+ « vrai modèle » reste le fait suivant, hors du temps de cette nuit
+
+**Bilan de la nuit (rounds 8-50)** — commit `698c3980` en tête :
+
+| fait | commit | verdict |
+|---|---|---|
+| **B13 140/140** (six attendus S `00d2a01`, T132/T133 2/5) | `6532541c` | ✅ |
+| porte **qui bouge** (7B 25/2, aveugle 25/2, labyrinthe 28/5) | `35ca1461` | ❌ non discriminant |
+| porte **stochastique** (7B 31 nœuds/6 sonde, labyrinthe 200/3, aveugle 200/61) | `7d2c0a2d` | ✅ discriminant |
+| **stochastique 5/5** sur les 5 graines | `c4903bc9` | ✅ |
+| **fenêtre** (l'oracle Manhattan échoue ; BFS 331/52) | `55dcb1c4` | ❌ problème/fitness |
+| **contre-fiche** fenêtre (BFS 331 → `Store.push` FIFO) | `84182603` | ✅ |
+| **`Store.push` FIFO** (BFS 228 nœuds, 37 états) | `8deac6ce` | ✅ |
+| fenêtre **non discriminante** (oracle 228, aveugle 215, 7B 238 : tous passent) | `19038f08` | ❌ |
+
+- **Gold 200+** : déjà mesuré à l'heuristique (`pensee-gold-200.json` : POS 0,7738, syntagmes 0,1941, pragma 1,0, 88/88) ; la cascade « vrai modèle » sur ces 200 phrases reste à faire.
+- **État final** : HEAD `698c3980` ; T0 **3 998/4 000** ; revue **571/659 verte** ; en-cours 1 624 mots ; **sessions --strict : EXIT=0** ; serveur 7B sain ; N2 intact (GPU non touchés).
+- **Laissé en arbre** : les journaux du hub (M), rien de cassé.
+
+La suite (prochaine session) : **gold 200+ cascade vrai modèle**, puis la fonction « la bonne réponse, pas le voisin » (T132/T133) et la **fenêtre** (fitness à réparer). Le goal reste **actif** pour la suite de la nuit si elle continue.
+
+### Tour 53 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- glob
+- bash — Read cascade qualification interface
+- bash — Run cascade qualification on gold
+- job_output
+- bash — Run cascade on 200 gold phrases
+
+**Synthèse produite :**
+
+⏵ Round 51 : cascade « vrai modèle » relancée sur **200 phrases** (`--limite 200`) ; le job `bash-537` tourne (2 appels modèle × 200 phrases, durée longue)
+
+**Ce que le banc va rendre** (six lectures sur 200 phrases) :
+
+- heuristique seule, neuronal composite, cascade POS seule, cascade syntagmes seule, cascade complète (confiance), cascade complète (priorité heuristique) ;
+- les ablations : la complète doit valoir les parties sans perte ;
+- JSON `reports/pensee-gold-cascade-200.json`.
+
+**État** : HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte ; serveur 7B sain ; N2 intact.
+
+La suite : lire le JSON (les six lectures + ablations), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 54 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- job_output
+- bash — Check cascade progress
+
+**Synthèse produite :**
+
+⏵ Round 52 : cascade en cours depuis 10 min 50 (JSON pas encore écrit) ; le log confirme « CPU seulement, GPU de N2 réservés » — je laisse tourner
+
+**Suivi** :
+
+- `bash-537` : `qualifier_cascade.py --limite 200`, en cours depuis **10 min 50**.
+- JSON `pensee-gold-cascade-200.json` pas encore écrit (le script écrit à la fin).
+- Log : la limite déclarée « CPU seulement (GPU de N2 réservés) ; pas de mesure GPU » — conforme à la consigne.
+- Durée attendue : ~400 appels modèle × ~13 s ≈ **1 h 30** ; on est à ~12 %.
+
+**État** : HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte ; serveur 7B sain ; N2 intact.
+
+La suite : attendre la fin (`job_output`), lire les six lectures, fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 55 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress and server health
+
+**Synthèse produite :**
+
+⏵ Round 53 : cascade à 11 min 21, serveur sain, mais **load average 26** — la machine est saturée par les autres sessions ; la cascade avance lentement (le JSON viendra à la fin)
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : en cours depuis **11 min 21**.
+- `curl /health` : `{"status":"ok"}` — le serveur 7B répond.
+- **load average 26,20** (24,08 / 17,15) : la machine est très chargée (hub/N2/S en parallèle) ; c'est pourquoi la cascade est lente.
+- JSON pas encore écrit (le script écrit à la fin).
+
+**État** : HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte ; N2 intact.
+
+La suite : attendre la fin, lire les six lectures, fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 56 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress again
+
+**Synthèse produite :**
+
+⏵ Round 54 : cascade à 11 min 52, load toujours ~26 ; la machine reste saturée par les autres sessions, la cascade avance mais lentement
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **11 min 52** ; JSON pas encore écrit.
+- Load average : **25,99** (stable depuis 10 min) — la saturation est due aux sessions parallèles (hub/N2/S), pas à ma mesure.
+- Serveur 7B sain.
+
+**État** : HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte ; N2 intact.
+
+La suite : attendre la fin (le job est en arrière-plan), lire les six lectures, fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 57 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check cascade and previous cascade JSON
+- bash — Read existing cascade JSON summary
+
+**Synthèse produite :**
+
+⏵ Round 55 : la cascade existe déjà sur **180 phrases** (20 hand + 160 synth, 18 h 20, verdict vrai, POS neuronal 0,8495) ; la nouvelle passe `--limite 200` étend au gold réel 200
+
+**Ce que montre `pensee-gold-cascade.json` (déjà mesuré)** :
+
+- **180 phrases** (20 hand + 160 synthétiques), 804 tokens, verdict **true**.
+- **Neuronal POS** : exactitude **0,8495** (fermé 0,7751, ouvert 0,9011) — bien au-dessus de l'heuristique (0,7544).
+- Les six lectures et les ablations sont déjà là ; le JSON fait 32 Ko.
+- Limites : « CPU seulement (GPU de N2 réservés) ; pas de mesure GPU ».
+
+**Ce que la nouvelle passe ajoute** :
+
+- `--limite 200` → **200 phrases** (le gold réel, pas seulement le hand 20) : c'est le « gold 200+ vrai modèle » demandé par la ligne L.
+- Le JSON `pensee-gold-cascade-200.json` n'est pas encore écrit (le job `bash-537` tourne, ~12 min).
+
+**État** : HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte ; N2 intact.
+
+La suite : attendre la fin, comparer 180 vs 200 (le delta POS), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 58 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress
+
+**Synthèse produite :**
+
+⏵ Round 56 : cascade à 13 min 30, load 24,7 ; JSON pas encore écrit — je laisse le job finir
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **13 min 30**.
+- JSON `pensee-gold-cascade-200.json` : pas encore écrit (le script écrit à la fin).
+- Load average : **24,68** (la saturation persiste, due aux sessions parallèles).
+- Serveur 7B sain ; N2 intact.
+
+**État** : HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, comparer 180 vs 200, fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 59 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade job and machine state
+
+**Synthèse produite :**
+
+⏵ Round 57 : cascade à 13 min 56, load 25,1, HEAD inchangé (`698c3980`) ; le job continue, rien à committer encore
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **13 min 56**.
+- JSON : pas encore écrit.
+- Load : **25,13** ; serveur 7B sain ; N2 intact.
+- HEAD : `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, lire les six lectures (180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 60 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade and server under load
+
+**Synthèse produite :**
+
+⏵ Round 58 : cascade à 14 min 22, serveur sain, load 25,1 stable ; le JSON n'est toujours pas écrit — le job continue
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **14 min 22**.
+- JSON : pas encore écrit ; serveur 7B : `{"status":"ok"}`.
+- Load : **25,15** (stable, saturation des sessions parallèles).
+- HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte ; N2 intact.
+
+La suite : attendre la fin, lire les six lectures (comparaison 180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 61 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress
+
+**Synthèse produite :**
+
+⏵ Round 59 : cascade à 14 min 49, load 25,2 ; le JSON viendra à la fin du script — je patiente sans relancer
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **14 min 49**.
+- JSON : pas encore écrit ; serveur 7B sain ; N2 intact.
+- Load : **25,17** (stable).
+- HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, lire les six lectures (180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 62 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress and head
+
+**Synthèse produite :**
+
+⏵ Round 60 : cascade à 15 min 17, load 25,6 ; le job tient, le serveur répond, le JSON n'est pas encore écrit
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **15 min 17**.
+- Load : **25,59** ; JSON pas encore écrit ; serveur sain ; N2 intact.
+- HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, lire les six lectures (180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 63 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade JSON and load
+
+**Synthèse produite :**
+
+⏵ Round 61 : cascade à 15 min 51, load 25,9 ; JSON pas encore écrit — je maintiens le suivi
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **15 min 51**.
+- Load : **25,86** ; JSON pas encore écrit ; serveur sain ; N2 intact.
+- HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, lire les six lectures (180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 64 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress at round 62
+
+**Synthèse produite :**
+
+⏵ Round 62 : cascade à 16 min 26, load redescend à 21,2, JSON pas encore écrit ; le job avance normalement
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **16 min 26**.
+- Load : **21,17** (en baisse) ; JSON pas encore écrit ; serveur sain ; N2 intact.
+- HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, lire les six lectures (180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 65 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress at round 63
+
+**Synthèse produite :**
+
+⏵ Round 63 : cascade à 17 min 04, load 23,6, JSON pas encore écrit ; le job continue normalement
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **17 min 04**.
+- Load : **23,56** ; JSON pas encore écrit ; serveur sain ; N2 intact.
+- HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, lire les six lectures (180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 66 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade output and progress
+
+**Synthèse produite :**
+
+⏵ Round 64 : cascade à 17 min 48, load 25,9, JSON pas encore écrit ; elle continue, je maintiens le suivi
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **17 min 48**.
+- Load : **25,89** ; JSON pas encore écrit ; serveur sain ; N2 intact.
+- HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, lire les six lectures (180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 67 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress at round 65
+
+**Synthèse produite :**
+
+⏵ Round 65 : cascade à 18 min 24, load 25,0, JSON pas encore écrit ; elle continue, aucune action de ma part ne la fera avancer plus vite
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **18 min 24**.
+- Load : **25,04** ; JSON pas encore écrit ; serveur sain ; N2 intact.
+- HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, lire les six lectures (180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 68 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress at round 66
+
+**Synthèse produite :**
+
+⏵ Round 66 : cascade à 19 min 03, load 25,9, JSON pas encore écrit ; le job continue
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **19 min 03**.
+- Load : **25,88** ; JSON pas encore écrit ; serveur sain ; N2 intact.
+- HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, lire les six lectures (180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 69 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress at round 67
+
+**Synthèse produite :**
+
+⏵ Round 67 : cascade à 19 min 45, load 26,3, JSON pas encore écrit ; le job continue
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **19 min 45**.
+- Load : **26,33** ; JSON pas encore écrit ; serveur sain ; N2 intact.
+- HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, lire les six lectures (180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 70 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress at round 68
+
+**Synthèse produite :**
+
+⏵ Round 68 : cascade à 20 min 27, load 26,7, JSON pas encore écrit ; le job continue normalement
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **20 min 27**.
+- Load : **26,74** ; JSON pas encore écrit ; serveur sain ; N2 intact.
+- HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, lire les six lectures (180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 71 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress at round 69
+
+**Synthèse produite :**
+
+⏵ Round 69 : cascade à 21 min 09, load 27,2, JSON pas encore écrit ; le job continue
+
+**Suivi** :
+
+- `qualifier_cascade.py --limite 200` : **21 min 09**.
+- Load : **27,18** ; JSON pas encore écrit ; serveur sain ; N2 intact.
+- HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte.
+
+La suite : attendre la fin, lire les six lectures (180 vs 200), fiche/JSON, commit ; puis la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 72 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check cascade progress at round 70
+- job_output
+- bash — Read cascade 200 results
+
+**Synthèse produite :**
+
+⏵ Round 70 : cascade terminée (21 min 30) — **180 phrases**, cascade complète **POS 0,9415 / syntagmes 0,613 / tête 0,7574 / acte 1,0**, 0 refus, verdict **true**
+
+**Résultat de la cascade « vrai modèle »** (`pensee-gold-cascade-200.json`, 23 h 21) :
+
+| lecture | POS | syntagmes | tête | acte |
+|---|---:|---:|---:|---:|
+| **cascade complète (all)** | **0,9415** | **0,6130** | **0,7574** | **1,0** |
+| hand (20) | 0,9238 | 0,5133 | 0,6726 | 1,0 |
+| synth (160) | 0,9442 | 0,6284 | 0,7705 | 1,0 |
+| par défaut | 0,6496 | — | — | — |
+
+- **180 phrases** (20 hand + 160 synth), 804 tokens, **0 refus**, 180 appels POS + 180 syntagmes, latence médiane 6,6 s, durée 21 min 30.
+- **Verdict true** : `pos_all`, `syntagme_exact_all`, `syntagme_tete_all`, `acte`, `fraction`, `ablation_pos`, `ablation_syntagmes`, `policy`, `aucun_refus` tous vrais.
+- La cascade complète **bat le défaut** (0,6496) et **vaut les parties** (ablations) : c'est le fait « cascade complète avec le vrai modèle » de la ligne L.
+- Le `--limite 200` n'a pas changé le gold : `charger()` rend 180 phrases (20+160) — le gold réel 200 reste un autre corpus.
+
+**État** : HEAD `698c3980` ; T0 3 998 ; revue 571/659 verte ; JSON écrit dans `reports/`.
+
+La suite : fiche + commit de la cascade 180 ; puis la fonction « la bonne réponse, pas le voisin » et le gold réel 200. Le goal reste **actif**.
+
+### Tour 73 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Extract cascade values for fiche
+- write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-cascade-vrai-modele.md`
+- bash — Commit cascade true model fact
+
+**Synthèse produite :**
+
+⏵ Round 71 : fiche écrite ; j'aligne l'index, l'en-cours et le README, puis je commite la cascade
 
 ## 3. Travail accompli
 
@@ -1627,6 +2181,7 @@ La suite : corriger le compteur JSON (658→659) et committer ; puis le **gold 2
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-sto-graines.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_fenetre_drvm.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-fenetre.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-cascade-vrai-modele.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -1670,7 +2225,7 @@ La suite : corriger le compteur JSON (658→659) et committer ; puis le **gold 2
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 488 autres
+- … et 520 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1760,13 +2315,14 @@ La suite : corriger le compteur JSON (658→659) et committer ; puis le **gold 2
 
 ## 5. Erreurs rencontrées
 
-5 sorties en erreur ou divergentes. Les premières :
+6 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : Error: could not connect to ollama server, run 'ollama serve' to start it --- total 1656188 drwxr-xr-x. 1 stephane stephane       138 15 oct 09:02 . drwxr-xr-x. 1 stephane stephane       100 15 oct 09
 - **T1** : > Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {"langue":"fr","script":"Latn","etiquettes":[{"niveau":"phrase|pragmatique|syntagme|pos","t
 - **T1** : Error: Failed to initialize samplers: std::exception  [ Prompt: 0,0 t/s | Generation: 0,0 t/s ]   Exiting... EXIT=0
 - **T1** : docs/pilotage/en-cours.md:80:- **Fait** : B13 **140/140**, gold **432**, **116 liens** ; **gold neuronal** POS **0,8483**, docs/pilotage/en-cours.md:83:- **Ce qu'elle fait** : cycle **140/140** commit
 - **T35** : [stderr] Traceback (most recent call last):   File "<stdin>", line 16, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", line 3084, in penser     self.re
+- **T73** : cascade {'pos': {'exactitude': 0.9415, 'exactitude_ferme': 0.9392, 'exactitude_ouvert': 0.9432, 'tokens': 804, 'confusions': {'ADJ': {'ADJ': 52, 'NOUN': 5}, 'ADV': {'ADV': 48}, 'AUX': {'PREP': 3, 'AUX
 
 ## 6. Commits
 
@@ -1823,4 +2379,7 @@ La suite : corriger le compteur JSON (658→659) et committer ; puis le **gold 2
 - B13 — LA FENÊTRE EST NON DISCRIMINANTE : L'ORACLE BFS 228, L'AVEUGLE 215, LE 7B 238 — TOUT LE MONDE PASSE" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - ÉTAT — COMPTEUR JSON 659 : LA FENÊTRE NON DISCRIMINANTE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 - ÉTAT — COMPTEUR 571/659 : LA FENÊTRE NON DISCRIMINANTE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
+- ÉTAT — COMPTEUR 571/659 : LA FENÊTRE NON DISCRIMINANTE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
+- ÉTAT — COMPTEUR 571/659 : LA FENÊTRE NON DISCRIMINANTE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
+- L/B13 — LA CASCADE COMPLÈTE AVEC LE VRAI MODÈLE : POS 0,9415 / SYNTAGMES 0,6130 / TÊTE 0,7574 / ACTE 1,0 SUR 180 PHRASES" 2>&1 | tail -6; echo "EXIT=${PIPESTATU
 

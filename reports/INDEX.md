@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **568 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **570 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -241,6 +241,7 @@
 | [rapport-n2-multilingue-distille.md](rapport-n2-multilingue-distille.md) | N2.o — La distillation multilingue : dix langues s'améliorent, la dilution reste |
 | [rapport-n2-multilingue.md](rapport-n2-multilingue.md) | N2.k — Dix langues : la base multilingue paie **0,60 bit/octet** en français et en gagne **0,8 à 3,2** ailleurs |
 | [rapport-n2-pas-vs-texte.md](rapport-n2-pas-vs-texte.md) | N2.ab — Plus de pas paie ; plus de texte paie en largeur, pas en français |
+| [rapport-n2-production-fenetre.md](rapport-n2-production-fenetre.md) | N2 — La production à fenêtre entraînée (512 / 1 024 / 2 048) et le compute qui va avec |
 | [rapport-n2-professeur.md](rapport-n2-professeur.md) | N2.u — Le professeur plus gros ne change presque rien en domaine, mais gagne 0,3 hors domaine |
 | [rapport-n2-propre.md](rapport-n2-propre.md) | N2.h1 — Le corpus propre : la validation n'était pas tenue à l'écart, et la porte honnête vaut 3,09 |
 | [rapport-n2-r11.md](rapport-n2-r11.md) | R1.1/R1.2 — Les positions relatives ôtent l'explosion, la fenêtre entraînée donne la lecture |
@@ -372,6 +373,7 @@
 | [rapport-pensee-bruitee.md](rapport-pensee-bruitee.md) | B13 — l'observation bruitée : 10 % d'erreur casse la politique |
 | [rapport-pensee-cascade-tete.md](rapport-pensee-cascade-tete.md) | B13 — la tête de la cascade : la correction dégrade (0,419 contre 0,441) |
 | [rapport-pensee-cascade-union.md](rapport-pensee-cascade-union.md) | B13 — la cascade avec l'union : F1 0,2170, tête 0,4410, 1 601 appels |
+| [rapport-pensee-cascade-vrai-modele.md](rapport-pensee-cascade-vrai-modele.md) | B13 — la cascade complète avec le vrai modèle : POS 0,9415 / syntagmes 0,6130 / tête 0,7574 / acte 1,0 sur 180 phrases |
 | [rapport-pensee-chaotique.md](rapport-pensee-chaotique.md) | B13 — l'alternance aléatoire : 20/20, v = 0,12 |
 | [rapport-pensee-concurrentes.md](rapport-pensee-concurrentes.md) | B13 — les routes concurrentes : 0/20 au but 0, 20/20 au but 1 |
 | [rapport-pensee-contexte.md](rapport-pensee-contexte.md) | B13 — la réponse contextuelle : 5/5, la phrase précédente tranche |

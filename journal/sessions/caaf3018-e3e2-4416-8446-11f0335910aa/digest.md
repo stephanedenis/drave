@@ -6226,3 +6226,36 @@ started background job bash-257
   ```
 
 - **job_output** `{"job_id": "bash-257", "timeout_ms": 615000, "wait": true}`
+
+  ```
+23:04
+698c3980 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (659) APRÈS LA FICHE B13
+19038f08 B13 — LA FENÊTRE EST NON DISCRIMINANTE : L'ORACLE BFS 228, L'AVEUGLE 215, LE 7B 238 — TOUT LE MONDE PASSE
+--- sessions ---
+  ⏰ 0733c5bb-f90b-4f58 · actif    ·  61 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 144 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·  33 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    ·  81 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+--- état ---
+  ✅ état court, structuré, multi-session et reprenable
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Nuit calme (Pensée publie, l'état suit). Cadence de 40 min pour économiser le contexte.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 2400; date +%H:%M; git log --oneline -3; echo \"--- sessions ---\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif\" | head -4; echo \"--- état ---\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/rev … [110 caractères tronqués]`
+
+  ```
+started background job bash-258
+  ```
+
+- **job_output** `{"job_id": "bash-258", "timeout_ms": 615000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-258", "timeout_ms": 615000, "wait": true}`
