@@ -7881,3 +7881,26 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-381", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-*-512z.pt 2>/dev/null; tail -c 60 work/n2ac/mix1024-60k.log", "description": "Poll capacity progress"}`
+
+  ```
+14:04:41
+propre-1147m-512z fini 13:49:38
+work/n2ac/propre-1147m-512z.pt
+427 s
+pas   3250 · perte 0.9384 · PPL val 2.476 · 1449 s
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; tail -c 60 work/n2ac/prepropre-2165m-512z.log 2>/dev/null; tail -c 60 work/n2ac/propre-2165m-512z.log 2>/dev/null; tail -c 60 work/n2ac/propre-3430m-512z.log 2>/dev/null", "description": "Wait … [36 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-383]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+

@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
 | Durée | 21.8 h |
-| Tours | 165 |
-| Messages | 1156 |
-| Appels d'outils | 944 |
+| Tours | 166 |
+| Messages | 1163 |
+| Appels d'outils | 949 |
 | Fichiers touchés | 48 |
-| Commandes | 764 |
+| Commandes | 769 |
 | Sous-agents | 0 |
-| Commits | 97 |
+| Commits | 99 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -357,6 +357,8 @@
 **Tour 164** — continue
 
 **Tour 165** — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)." Round: 1/1000  Continue working toward the objective in this … [483 caractères tronqués]
+
+**Tour 166** — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)." Round: 2/1000  Continue working toward the objective in this … [483 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4230,7 +4232,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 165 — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour r … [763 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Check gold pair order for link bench
 - bash — Verify original link bench definition
@@ -4238,10 +4240,46 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - bash — Write two-direction link correction fiche
 - bash — Commit two-direction link correction
 - bash — Read current en-cours line and HEAD
+- bash — Verify final state after correction
 
 **Synthèse produite :**
 
-⏵ La ligne réelle est `voisin 5/5, parité …` ; je corrige en `voisin 5/5 arr.+av.`, je passe le compteur à 591/680 et je commite
+⏵ Round 1 : **contre-fiche majeure** — le « plafond 5/10 » du lien était un artefact de banc ; le vrai résultat est **9/10** (5/5 en arrière, 4/5 en avant, 1 paire croisée du gold)
+
+**Le fait** (commit `4f1de240`) :
+
+- **L'erreur corrigée** : mes fiches précédentes concluaient « le lien de surface plafonne à 5/10 ». C'était faux. Sur les 10 paires, **5 ont l'assertion avant la question** (r418–r422 → r423–r427, positions 417–421 < 427–431) et **5 ont l'assertion après** (r408–r412 → r423–r427, positions 417–421 > 407–411). Le `trouver_precedente` ne regarde que **derrière** : les 5 paires « avant » étaient **hors de sa portée par construction**.
+- **Les deux sens mesurés** :
+
+| lien | paires | justes | taux |
+|---|---:|---:|---:|
+| arrière (assertion avant) | 5 | **5** | 1,00 |
+| **avant** (assertion après, nouveau `trouver_suivante`) | 5 | **4** | 0,80 |
+| **total** | 10 | **9** | **0,90** |
+| contextuel (contrôle) | 5 | 5 | 1,00 |
+
+- **L'échec unique** : r412 → r427 est une paire **croisée fr/en du gold** (« Ne lis-tu pas ? » → « **You come tomorrow.** ») : sujet `tu` ≠ `You`, verbe `lis` ≠ `come`. Ce n'est pas une limite du lien, c'est un **défaut du gold**.
+- **Contrôle négatif** : le lien arrière fait 0/5 sur les paires avant, le lien avant 0/5 sur les arrière — la difficulté est bien le **sens**, pas la réponse.
+- Fiche `reports/rapport-pensee-lien-deux-sens.md` ; JSON `reports/pensee-lien-deux-sens.json` ; `miroir.py` (`trouver_suivante`, `fidelite_lien_avant`).
+
+**Vérifié** : T0 **3 997** ; revue verte (**591 fiches / 680 JSON**) ; hook ✅ (`dernier fait 4f1de240 = dernier état`) ; mesures rejouées (arrière 5/5, avant 4/5).
+
+**État non committé** (autres sessions, je n'y touche pas) : `docs/pilotage/roadmap.md`, `tools/pensee/store.py`, `tools/structures`, `tools/tests/qualifier_porte_fenetre_drvm.py`, et trois rapports N2/S non suivis.
+
+**Reste au goal** : corriger `verifier_parite_native.py` (DRVM en argument) et décider du sort de la paire croisée r412→r427 (corriger le gold ou la sortir du banc). Le goal reste **actif**.
+
+### Tour 166 — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour r … [763 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Fix verifier args and re-run parity
+- bash — Exclude cross-lingual pair and measure
+- bash — Commit verifier argument fix
+- bash — Add state line and commit verifier fix
+
+**Synthèse produite :**
+
+⏵ Le hook exige la ligne d'état pour ce fait aussi ; j'ajoute `--drvm` à la ligne de parité et je commite
 
 ## 3. Travail accompli
 
@@ -4340,7 +4378,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 724 autres
+- … et 729 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4544,4 +4582,6 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"; git show 
 - L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}
 - L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}
+- L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s
+- L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s
 

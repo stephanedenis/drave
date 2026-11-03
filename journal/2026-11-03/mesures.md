@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,6 +16,7 @@
 | 08:50 | `19eacae6` | N2 — LES SIX FICHIERS DE LA NUIT COMMITTÉS PAR LE HUB APRÈS LA PAUSE | `en-cours.md`, `README.md`, `attention.md` (+18) |
 | 13:56 | `229c5bf1` | L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005 | `en-cours.md`, `README.md`, `attention.md` (+21) |
 | 13:59 | `727c4860` | S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ | `en-cours.md`, `roadmap.md`, `README.md` (+11) |
+| 14:02 | `4f1de240` | L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE | `en-cours.md`, `roadmap.md`, `README.md` (+21) |
 
 ## Chiffres du jour
 
@@ -25,7 +26,7 @@
 
 ## Sessions actives ce jour
 
-- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 21.7 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
+- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 21.9 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
 - `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 21.8 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
 - `536cd5d6-94ac-4057-8fe9-11709a4587c7` — Étude des sessions et du pilotage (début 2026-11-02 15:33, 22.4 h) → [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md)
 - `abb58991-fe0a-4d6e-b039-6552b09f8454` — Reprise session L/B13 et mise à jour plan (début 2026-11-02 16:15, 21.8 h) → [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md)
@@ -41,6 +42,7 @@
 - [reports/rapport-n2-production-fenetre.md](../../reports/rapport-n2-production-fenetre.md)
 - [reports/rapport-n2-r12-2048.md](../../reports/rapport-n2-r12-2048.md)
 - [reports/rapport-pensee-cascade-reel-432.md](../../reports/rapport-pensee-cascade-reel-432.md)
+- [reports/rapport-pensee-lien-deux-sens.md](../../reports/rapport-pensee-lien-deux-sens.md)
 - [reports/rapport-pensee-parite-drvm-native-rejoue.md](../../reports/rapport-pensee-parite-drvm-native-rejoue.md)
 - [reports/rapport-pensee-seuils-gold-reel.md](../../reports/rapport-pensee-seuils-gold-reel.md)
 - [reports/rapport-s-banque-partielle.md](../../reports/rapport-s-banque-partielle.md)

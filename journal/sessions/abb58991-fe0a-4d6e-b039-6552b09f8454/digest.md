@@ -23727,3 +23727,134 @@ AssertionError: ligne absente
 ⏵ La ligne réelle est `voisin 5/5, parité …` ; je corrige en `voisin 5/5 arr.+av.`, je passe le compteur à 591/680 et je commite
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='voisin 5/5, parité 114/114+5/5 (rejouée)'\nnew='voisin 5/5 arr.+av., parité 114/114+5/5 (rejouée)'\nassert old in t, 'ligne absente'\n … [1163 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3997 mots (budget 4 000)
+  588 fiches → reports/INDEX.md
+  revue de documentation · 591 fiche(s) · 680 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/pensee-lien-deux-sens.json
+ create mode 100644 reports/rapport-pensee-lien-deux-sens.md
+ delete mode 100644 reports/rapport-s-banque-partielle.md
+ delete mode 100644 reports/s-banque-validee.json
+EXIT=0
+4f1de240 L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE
+  ```
+
+### 🤖 Assistant
+
+⏵ Contre-fiche committée (`4f1de240`) : le « plafond 5/10 » était un artefact, 9/10 au total avec 1 paire croisée du gold ; je vérifie l'état final
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep T0 | head -1; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2; git log -1 --format='%h %s'; echo '--- non committés ---'; git status --porcelain | h … [446 caractères tronqués]`
+
+  ```
+T0 max : 3997 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  état · dernier fait 4f1de240 · dernier état 4f1de240
+  ✅ aucun fait commité après le dernier état
+4f1de240 L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE
+--- non committés ---
+ M docs/pilotage/roadmap.md
+ M tools/pensee/store.py
+ M tools/structures
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/pensee-porte-fenetre-500.json
+?? reports/rapport-s-banque-partielle.md
+?? reports/s-banque-validee.json
+---
+arriere {'paires': 5, 'justes': 5, 'taux': 1.0}
+avant   {'paires': 5, 'justes': 4, 'taux': 0.8}
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 1 : **contre-fiche majeure** — le « plafond 5/10 » du lien était un artefact de banc ; le vrai résultat est **9/10** (5/5 en arrière, 4/5 en avant, 1 paire croisée du gold)
+
+**Le fait** (commit `4f1de240`) :
+
+- **L'erreur corrigée** : mes fiches précédentes concluaient « le lien de surface plafonne à 5/10 ». C'était faux. Sur les 10 paires, **5 ont l'assertion avant la question** (r418–r422 → r423–r427, positions 417–421 < 427–431) et **5 ont l'assertion après** (r408–r412 → r423–r427, positions 417–421 > 407–411). Le `trouver_precedente` ne regarde que **derrière** : les 5 paires « avant » étaient **hors de sa portée par construction**.
+- **Les deux sens mesurés** :
+
+| lien | paires | justes | taux |
+|---|---:|---:|---:|
+| arrière (assertion avant) | 5 | **5** | 1,00 |
+| **avant** (assertion après, nouveau `trouver_suivante`) | 5 | **4** | 0,80 |
+| **total** | 10 | **9** | **0,90** |
+| contextuel (contrôle) | 5 | 5 | 1,00 |
+
+- **L'échec unique** : r412 → r427 est une paire **croisée fr/en du gold** (« Ne lis-tu pas ? » → « **You come tomorrow.** ») : sujet `tu` ≠ `You`, verbe `lis` ≠ `come`. Ce n'est pas une limite du lien, c'est un **défaut du gold**.
+- **Contrôle négatif** : le lien arrière fait 0/5 sur les paires avant, le lien avant 0/5 sur les arrière — la difficulté est bien le **sens**, pas la réponse.
+- Fiche `reports/rapport-pensee-lien-deux-sens.md` ; JSON `reports/pensee-lien-deux-sens.json` ; `miroir.py` (`trouver_suivante`, `fidelite_lien_avant`).
+
+**Vérifié** : T0 **3 997** ; revue verte (**591 fiches / 680 JSON**) ; hook ✅ (`dernier fait 4f1de240 = dernier état`) ; mesures rejouées (arrière 5/5, avant 4/5).
+
+**État non committé** (autres sessions, je n'y touche pas) : `docs/pilotage/roadmap.md`, `tools/pensee/store.py`, `tools/structures`, `tools/tests/qualifier_porte_fenetre_drvm.py`, et trois rapports N2/S non suivis.
+
+**Reste au goal** : corriger `verifier_parite_native.py` (DRVM en argument) et décider du sort de la paire croisée r412→r427 (corriger le gold ou la sortir du banc). Le goal reste **actif**.
+
+
+## Tour 166
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 2 : je corrige d'abord le banc de parité native (DRVM en argument, fin du chemin codé en dur), puis je traite la paire croisée du gold
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/verifier_parite_native.py'); t=p.read_text(encoding='utf-8')\nold='''import json\nimport pathlib\nimport re\nimport subprocess\n\nimport torch'''\nnew='''import argparse\nimport json\nimport path … [2465 caractères tronqués]`
+
+  ```
+ok
+COMPILE_OK
+'Demain, nous irons' · top1 True · top5 True · écart max 0.00003
+'def addition(a, b):' · top1 True · top5 True · écart max 0.00004
+'Once upon a time' · top1 True · top5 True · écart max 0.00005
+{
+ "top1": 5,
+ "top5": 5,
+ "n": 5
+}
+  ```
+
+### 🤖 Assistant
+
+⏵ Le banc corrigé rend 5/5 avec `--drvm` ; maintenant j'exclus la paire croisée fr/en du lien avant et je mesure 4/4 → total 9/9
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/miroir.py'); t=p.read_text(encoding='utf-8')\nold='''def fidelite_lien_avant(phrases: list[dict], bloc=None) -> dict:\n    \"\"\"Le taux de paires (question, assertion suivante … [2124 caractères tronqués]`
+
+  ```
+ok
+arriere {'paires': 5, 'justes': 5, 'taux': 1.0}
+avant   {'paires': 4, 'justes': 4, 'croisees_ecartees': 1, 'taux': 1.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ Lien : **5/5 arrière + 4/4 avant (1 croisée écartée) = 9/9** ; je commite d'abord le banc de parité corrigé, puis la correction du lien
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-parite-drvm-native-rejoue.json'); d=json.loads(p.read_text(encoding='utf-8'))\nd['banc_corrige']={'date':'2026-11-03 13:55 EST',\n 'changement':\"verifier_parite_native.py prend -- … [1316 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3997 mots (budget 4 000)
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT=1
+4f1de240 L/B13 — CONTRE-FICHE : LE « PLAFOND 5/10 » ÉTAIT UN ARTEFACT — 5/5 EN ARRIÈRE, 4/5 EN AVANT (9/10), 1 PAIRE CROISÉE
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hook exige la ligne d'état pour ce fait aussi ; j'ajoute `--drvm` à la ligne de parité et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='parité 114/114+5/5 (rejouée)'\nnew='parité 114/114+5/5 (rejouée, --drvm)'\nassert old in t, 'ligne absente'\nt=t.replace(old,new,1)\np … [415 caractères tronqués]`

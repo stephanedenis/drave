@@ -60,5 +60,11 @@
     "le checkpoint et le DRVM vivent dans /tmp : à régénérer avant tout rejeu (44,9 s CPU)",
     "5 prompts fixes : parité de logits, pas de perplexité",
     "le script code en dur /tmp/n0-native.drvm (à corriger pour un usage général)"
-  ]
+  ],
+  "banc_corrige": {
+    "date": "2026-11-03 13:55 EST",
+    "changement": "verifier_parite_native.py prend --checkpoint, --drvm, --binaire, --sortie (défaut /tmp/drave-n0-pont.drvm) ; fin du chemin /tmp/n0-native.drvm codé en dur",
+    "mesure": "5/5 top-1, 5/5 top-5, écart max 0,00005 (rejoué avec --drvm)",
+    "controle_negatif": "sans --drvm explicite, le défaut pointe le checkpoint frais ; le chemin codé en dur a été supprimé"
+  }
 }

@@ -6,6 +6,7 @@ PyTorch. Aucun tirage aléatoire : liste de prompts fixe.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import pathlib
 import re
@@ -38,19 +39,26 @@ def rust(chemin, drvm, p, k=5):
 
 
 def main() -> None:
-    ck = torch.load("/tmp/drave-n0-pont.pt", map_location="cpu", weights_only=False)
+    ap = argparse.ArgumentParser(description="parité Rust natif ↔ Python sur 5 prompts fixes")
+    ap.add_argument("--checkpoint", default="/tmp/drave-n0-pont.pt")
+    ap.add_argument("--drvm", default="/tmp/drave-n0-pont.drvm")
+    ap.add_argument("--binaire", default="./drave-core/target/release/drave")
+    ap.add_argument("--sortie", default="reports/native-parite.json")
+    a = ap.parse_args()
+    ck = torch.load(a.checkpoint, map_location="cpu", weights_only=False)
     cfg = NativeConfig(**{k: v for k, v in ck["config"].items() if k in NativeConfig.__annotations__})
     m = NativeModel(cfg); m.load_state_dict(ck["state"]); m.eval()
+    a_binaire, a_drvm, sortie = a.binaire, a.drvm, a.sortie
     res = []
     for p in PROMPTS:
-        a = reference(m, p); b = rust("./drave-core/target/release/drave", "/tmp/n0-native.drvm", p)
+        a = reference(m, p); b = rust(a_binaire, a_drvm, p)
         ok_top1 = a[0][0] == b[0][0] if b else False
         ok_top5 = [x[0] for x in a] == [x[0] for x in b]
         ecart = max((abs(a[i][1] - b[i][1]) for i in range(min(len(a), len(b)))), default=999.0)
         res.append({"prompt": p, "top1_identique": ok_top1, "top5_identique": ok_top5,
                     "ecart_max": ecart, "python": a, "rust": b})
         print(f"{p!r} · top1 {ok_top1} · top5 {ok_top5} · écart max {ecart:.5f}")
-    pathlib.Path("reports/native-parite.json").write_text(json.dumps(
+    pathlib.Path(sortie).write_text(json.dumps(
         {"prompts": res, "top1": sum(r["top1_identique"] for r in res),
          "top5": sum(r["top5_identique"] for r in res), "n": len(res)}, ensure_ascii=False, indent=1) + "\n")
     print(json.dumps({"top1": sum(r["top1_identique"] for r in res),

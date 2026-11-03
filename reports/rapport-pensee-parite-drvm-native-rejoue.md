@@ -38,7 +38,8 @@
 
 - Le checkpoint et le DRVM vivent dans `/tmp` : à régénérer avant tout rejeu (44,9 s CPU).
 - 5 prompts fixes : parité de **logits**, pas de perplexité.
-- Le script **code en dur** `/tmp/n0-native.drvm` : à corriger pour un usage général.
+- ~~Le script code en dur `/tmp/n0-native.drvm`~~ : **corrigé** — `--checkpoint`, `--drvm`,
+  `--binaire`, `--sortie` (défaut `/tmp/drave-n0-pont.drvm`).
 - La régénération repart de la graine 1 et de 200 pas : ce n'est pas le checkpoint exact de la
   veille, c'est un checkpoint **équivalent par construction** (même recette).
 
