@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**56 commits** · **6 session(s)** · **8 thème(s)**
+**57 commits** · **6 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| attention | 4 | [attention.md](attention.md) |
+| attention | 5 | [attention.md](attention.md) |
 | distribue | 18 | [distribue.md](distribue.md) |
 | docs | 16 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
@@ -91,6 +91,7 @@
 | 11:43 | `61bafd18` | BUDGET — RÉFÉRENCES SOUS 2 500 ET T0 SOUS 4 000 (PASSE 31/10 SORTIE, QUESTIONS RESSERRÉES) |
 | 13:18 | `07ec290b` | PASSE — 82 PORTES SUR MACHINE AU REPOS : 80 VERTES, 2 ROUGES (LES CONNUES) |
 | 13:29 | `68c1ecc1` | ÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 2,4373) |
+| 13:31 | `4387f98a` | ÉTAT / ROADMAP / JOURNAL — LA FENÊTRE SOUS 2,5 ET L'API À LATENCE /35, DATÉS 13 H 30 |
 
 ## Le récit de la journée (écrit à la main)
 

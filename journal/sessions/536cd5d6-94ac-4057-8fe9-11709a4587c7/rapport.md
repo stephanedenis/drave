@@ -7,9 +7,9 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 20.2 h |
-| Tours | 76 |
-| Messages | 553 |
+| Durée | 22.0 h |
+| Tours | 77 |
+| Messages | 554 |
 | Appels d'outils | 489 |
 | Fichiers touchés | 16 |
 | Commandes | 358 |
@@ -177,6 +177,8 @@
 **Tour 75** — prépare la clé en fichier
 
 **Tour 76** — elancer les mesures B13 via l'API tout de suite
+
+**Tour 77** — continue
 
 ## 2. Déroulé, étape par étape
 
@@ -2068,6 +2070,8 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 - **GPU** : libres, aucun serveur local, garde-fou actif.
 
 **Conclusion pour la B13** : le professeur en ligne reproduit les verdicts du 7B sur la porte-minute et la politique ; il est bien plus rapide et ne touche pas aux GPU. La fiche B13 peut désormais citer `deepseek-chat` comme professeur de référence, avec la réserve du changement de modèle (les chiffres ne sont comparables qu'entre passes API). Veux-tu que je rédige la fiche de synthèse `rapport-pensee-gold-api.md` (méthode, contrôle négatif, ce qui pourrait la rendre fausse) et que je la commite ?
+
+### Tour 77 — continue
 
 ## 3. Travail accompli
 

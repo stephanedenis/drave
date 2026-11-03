@@ -23229,3 +23229,58 @@ EXIT=0
 json 1913 {'top1': 5, 'top5': 5, 'n': 5, 'ecart_max': 5.009231567409955e-05}
   ```
 
+### 🤖 Assistant
+
+⏵ Fiche et JSON de la parité rejouée ; j'aligne en-cours/README/INDEX et je commite le fait reproductible
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfiche=pathlib.Path('reports/rapport-pensee-parite-drvm-native-rejoue.md')\nfiche.write_text('''# B13 — la parité DRVM/native **rejouée** : checkpoint régénéré en CPU, 5/5 prompts, écart 0,00005\n\n> **Ligne de roadmap … [3247 caractères tronqués]`
+
+  ```
+fiche 2845
+  T0 max : 3999 mots (budget 4 000)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 65, in <module>
+AssertionError
+  ```
+
+### 🤖 Assistant
+
+⏵ La fiche est écrite (T0 3 999) mais la ligne d'état a été réécrite par une autre session ; je lis la ligne réelle et je corrige
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"parité\\|parite\" docs/pilotage/en-cours.md | head -4; echo '---'; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Read current en-cours parity line"}`
+
+  ```
+69:  cascade **0,9415 / 0,6130 / 0,7575 / 1,0** (180) ; **réel 432 : 0,9065/0,4598/0,5633/0,9954 (0,90/0,45/0,55/0,50 → true) ; cache ; voisin 5/5, parité 114/114+5/5 ;
+---
+119:| fichiers / JSON de résultats | **587** / **677** | `reports/*.md` / `reports/*.json` |
+  ```
+
+### 🤖 Assistant
+
+⏵ La ligne d'état dit `parité 114/114+5/5` ; j'ajoute « rejouée CPU », je passe le compteur à 588/678 et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='parité 114/114+5/5 ;'\nnew='parité 114/114+5/5 rejouée CPU ;'\nassert old in t\nt=t.replace(old,new,1)\nt=t.replace('| fichiers / JSON … [1146 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4001 mots (budget 4 000)
+  585 fiches → reports/INDEX.md
+  revue de documentation · 588 fiche(s) · 678 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT=128
+68c1ecc1 ÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 2,4373)
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 repassé à 4 001 et lock du hub ; je raccourcis la ligne, j'attends le lock et je refais le commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='parité 114/114+5/5 rejouée CPU ;'\nnew='parité 114/114+5/5 (rejouée) ;'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encod … [734 caractères tronqués]`

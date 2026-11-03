@@ -1,7 +1,7 @@
 # N2 — Distillation native (50 000 séquences)
 
 > **Statut** : en cours · **Priorité** : P1 · **Programme** : N · **Dépend de** : N1
-> **Ligne de roadmap** : N2 · **Fiche de résultat attendue** : rapport-n2-distillation.md (à créer dans `reports/`)
+> **Ligne de roadmap** : N2 · **Fiches de résultat** : `rapport-n2-200k`, `rapport-n2-r11`, `rapport-n2-fenetre`, `rapport-n2-production-fenetre`
 > **Résumé** : Faire tenir le natif sans professeur, sur 50 000 séquences, avec la porte < 2,5 de PPL.
 > **Glossaire** : [distillation](../../theorie/glossaire/entrees/distillation.md) · [professeur / élève](../../theorie/glossaire/entrees/professeur-eleve.md) · [perplexité](../../theorie/glossaire/entrees/perplexite.md) · [BPE](../../theorie/glossaire/entrees/bpe.md).
 
@@ -9,7 +9,7 @@
 
 Le student plafonne à 2,708 et la porte < 2,5 n'est pas atteinte. Les 130–256 de contexte sont négatifs ; il faut décider si le levier est la donnée, la capacité ou la hiérarchie.
 
-**Le levier retenu le 2026-10-29 est la hiérarchie** (l'état de section), et c'est **N2 qui la porte** : R11 en mesurera la fenêtre. Les longueurs brutes ne sont plus essayées — cinq négatifs suffisent.
+La **hiérarchie** (l'état de section) a été **écartée** : R11 ne la retient pas. Le levier mesuré le **03/11** est la **fenêtre entraînée** (RoPE) — 1 024 est la recette de production.
 
 ## L'état
 
@@ -19,10 +19,16 @@ chaîne propre vaut **3,09** en domaine et **16,7** sur de la littérature jamai
 N2 est un **spécialiste du dépôt**. La diversité française (moitié dépôt, moitié littérature)
 ramène la littérature à **3,86** pour **+0,17** en domaine.
 
+Depuis, deux mesures : le run de **200 000 pas** (1,02 Go) donne **3,1591 / 5,6056 / 7,2770 /
+8,0018** (val_fr / littérature / anglais / wikitext2) ; la **fenêtre entraînée 1 024** donne
+**2,4759 / 2,4373** au **grand corpus** — **sous 2,5** — et **2,7856** sur le **corpus propre**.
+512 paie hors domaine, **2 048 ne paie pas** ; le compute ne remplace pas la fenêtre.
+
 ## La porte
 
 PPL < 2,5 sur le **corpus propre**, tenu à l'écart par construction, avec le contrôle par
-permutation et le même budget de calcul. L'élève honnête est à **3,09** : la porte est à **0,59**.
+permutation et le même budget de calcul. L'élève honnête est passé de **3,09** à **2,7856** sur le
+corpus propre (**0,29** de la porte) et **2,4759 / 2,4373** au grand corpus — **sous 2,5**.
 
 ## Contrôles négatifs
 
@@ -32,10 +38,10 @@ permutation et le même budget de calcul. L'élève honnête est à **3,09** : l
 
 ## Prochaine action
 
-**Le corpus est le levier, pas le budget.** Sur le mètre propre, la diversité française
-divise la PPL hors dépôt par 4,3 (16,7 → 3,86) pour +0,17 en domaine, et le verrou de longueur
-tombe avec des positions aléatoires. Prochaine action : **plus de texte français unique** (le
-corpus propre fait 3,2 Mo d'entraînement) et la **capacité** sur ce mètre ; puis la longueur.
+**La fenêtre est la recette ; il reste la porte propre.** Prochaine action : la **porte propre**
+(0,29 manquant à 2,7856) — données ou capacité — puis **R1.2 à 1 024** entraînée et **N4**. Les
+200 k pas seuls ne suffisent pas (3,16) ; la longueur reste le levier de la largeur (positions
+aléatoires : 256 octets de 14,11 à 3,25).
 
 ## Voir aussi
 

@@ -154,7 +154,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `c25f97d1` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.2 h | 1 | 104 | 1 | 0 | [rapport](sessions/c25f97d1-9a4d-41da-b983-004f793afe43/rapport.md) |
 | `c3d0f0bd` | Chantier inactif à examiner | 2026-10-29 14:37 | 18.7 h | 5 | 551 | 26 | 32 | [rapport](sessions/c3d0f0bd-e344-4600-a023-0ed50d25b48b/rapport.md) |
 | `c776b71f` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:36 | 0.1 h | 1 | 54 | 0 | 0 | [rapport](sessions/c776b71f-525a-4bad-b83c-eff1c2d204ff/rapport.md) |
-| `caaf3018` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 21.3 h | 33 | 576 | 6 | 28 | [rapport](sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) |
+| `caaf3018` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 21.3 h | 33 | 583 | 6 | 29 | [rapport](sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) |
 | `cf0456ab` | Mécanisme de mise à jour pair douteux | 2026-10-29 15:51 | 21.6 h | 8 | 343 | 27 | 11 | [rapport](sessions/cf0456ab-e3f0-4f81-a4f5-bec4b3455f9f/rapport.md) |
 | `d04ed7a2` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 60 | 0 | 0 | [rapport](sessions/d04ed7a2-0988-4dfd-83c5-644695dc2f8f/rapport.md) |
 | `d093c795` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 40 | 0 | 0 | [rapport](sessions/d093c795-b4c9-4270-bea8-e2673f86057b/rapport.md) |

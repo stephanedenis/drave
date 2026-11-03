@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 11:22 | `e1c1064d` | NUIT — LA FENÊTRE EST LA RECETTE DE PRODUCTION : 2,9943 À 128 ET SOUS 2,5 AU GRAND CORPUS ; LA PORTE PROPRE RESTE À 2,7856 ; LA FENÊTRE PAIE À TOUTES LES CAPACITÉS | `en-cours.md`, `README.md`, `attention.md` (+29) |
 | 11:24 | `bfd51b90` | NUIT — CLÔTURE : LA FENÊTRE EST MESURÉE DE 128 À 2 048, LA PRODUCTION PASSE SOUS 2,5 AU GRAND CORPUS, LA PORTE PROPRE RESTE À 0,29 | `en-cours.md`, `README.md`, `attention.md` (+11) |
 | 13:29 | `68c1ecc1` | ÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 2,4373) | `chantiers.md`, `en-cours.md`, `roadmap.md` (+15) |
+| 13:31 | `4387f98a` | ÉTAT / ROADMAP / JOURNAL — LA FENÊTRE SOUS 2,5 ET L'API À LATENCE /35, DATÉS 13 H 30 | `en-cours.md`, `roadmap.md`, `README.md` (+15) |
 
 ## Chiffres du jour
 

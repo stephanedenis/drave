@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 21.3 h |
 | Tours | 33 |
-| Messages | 584 |
-| Appels d'outils | 576 |
+| Messages | 591 |
+| Appels d'outils | 583 |
 | Fichiers touchés | 6 |
-| Commandes | 419 |
+| Commandes | 424 |
 | Sous-agents | 0 |
-| Commits | 28 |
+| Commits | 29 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -756,7 +756,7 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 
 ### Tour 33 — continue
 
-*14 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Check N2 under-2.5 integration in state and roadmap
 - bash — Check pilotage mtimes and stale lines
@@ -771,10 +771,12 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - bash — Read roadmap state paragraph and B13 line
 - bash — Update dates and add API/under-2.5 facts
 - bash — Commit API and under-2.5 facts with dates
+- bash — Inspect backlog N2 status and frontier
+- … et 5 autres
 
 **Synthèse produite :**
 
-⏵ Je date l'état au 13 h 30 et j'ajoute les deux faits (API /35, fenêtre sous 2,5) à la roadmap.
+⏵ T0 est à 4 000 pile ; je touche l'état par l'horodatage (neutre) et je commite la fiche avec sa ligne d'état.
 
 ## 3. Travail accompli
 
@@ -831,7 +833,7 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 379 autres
+- … et 384 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -996,4 +998,5 @@ Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'�
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-n2-sous25.txt <<'EOF' ÉTAT / ROADMAP / CHANTIERS — LA FENÊTRE 1 024 PASSE SOUS 2,5 (2,4759 / 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md"); t = p.read_text(encoding="utf
 

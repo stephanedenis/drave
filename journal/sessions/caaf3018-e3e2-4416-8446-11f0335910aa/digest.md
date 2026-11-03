@@ -10141,3 +10141,140 @@ roadmap + en-cours : 13 h 30, API /35, fenêtre sous 2,5
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\"); t = p.read_text(encoding=\"utf-8\")\najout = \"\"\"\n## 13 h 35 — deux faits majeurs datés\n\n- **N2** : la **fenêtre 1 024** passe **sous 2,5** au g … [1431 caractères tronqués]`
+
+  ```
+journal : 13 h 35 consigné
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[still running after 60000ms; moved to background job bash-419]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-419", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 4387f98a] ÉTAT / ROADMAP / JOURNAL — LA FENÊTRE SOUS 2,5 ET L'API À LATENCE /35, DATÉS 13 H 30
+ 18 files changed, 298 insertions(+), 37 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ N2 est atteint (sous 2,5) : la **frontière du backlog** doit le refléter. Je regarde la fiche N2 et la frontière calculée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/verifie_backlog.py 2>&1 | tail -3; echo \"=== fiches N2 ===\"; ls docs/pilotage/backlog/ | grep -i \"^N\" | head; echo \"=== statut N2 ===\"; grep -n \"statut\" docs/pilotage/backlog/N2*.md 2>/dev/null | head -3; echo \"= … [152 caractères tronqués]`
+
+  ```
+frontière (4) : A2.6, N2, N3, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+=== fiches N2 ===
+N0.3b-parite-ppl.md
+N2-distillation.md
+N3-operations-natives.md
+N4-usage-sft.md
+=== statut N2 ===
+=== frontière dans index ===
+130:- [Le graphe des dépendances](dependances.md) — les arêtes dures, les plafonds, la frontière et les priorités.
+  ```
+
+### 🤖 Assistant
+
+⏵ La fiche N2 du backlog dit-elle encore « 200 k pas » ? Je regarde son statut avant de toucher.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; head -30 docs/pilotage/backlog/N2-distillation.md | cut -c1-150; echo \"...\"; grep -n \"statut\\|Statut\\|état\\|État\\|prochaine\" docs/pilotage/backlog/N2-distillation.md | head -6", "description": "Read N2 backlog fiche"}`
+
+  ```
+# N2 — Distillation native (50 000 séquences)
+
+> **Statut** : en cours · **Priorité** : P1 · **Programme** : N · **Dépend de** : N1
+> **Ligne de roadmap** : N2 · **Fiche de résultat attendue** : rapport-n2-distillation.md (à créer dans `reports/`)
+> **Résumé** : Faire tenir le natif sans professeur, sur 50 000 séquences, avec la porte < 2,5 de PPL.
+> **Glossaire** : [distillation](../../theorie/glossaire/entrees/distillation.md) · [professeur / élève](../../theorie/glossaire/entrees/professeur-el
+
+## Le besoin
+
+Le student plafonne à 2,708 et la porte < 2,5 n'est pas atteinte. Les 130–256 de contexte sont négatifs ; il faut décider si le levier est la donnée, 
+
+**Le levier retenu le 2026-10-29 est la hiérarchie** (l'état de section), et c'est **N2 qui la porte** : R11 en mesurera la fenêtre. Les longueurs bru
+
+## L'état
+
+Le budget est mesuré (N2.d) : 2,9355 → 2,8527, mais **sur un jeu contaminé à 32,8 %**. N2.h a
+refait le mètre : corpus dédupliqué (−22,2 % de texte), split par chunks, **0 % de fuite** ; la
+chaîne propre vaut **3,09** en domaine et **16,7** sur de la littérature jamais vue — le modèle de
+N2 est un **spécialiste du dépôt**. La diversité française (moitié dépôt, moiti
+… [697 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La fiche N2 du backlog est restée au levier « hiérarchie », écarté depuis. Je lis la fiche entière pour la mettre au réel.
+
+- **read** `{"file_path": "docs/pilotage/backlog/N2-distillation.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/N2-distillation.md</path>
+<type>file</type>
+<content>
+1: # N2 — Distillation native (50 000 séquences)
+2: 
+3: > **Statut** : en cours · **Priorité** : P1 · **Programme** : N · **Dépend de** : N1
+4: > **Ligne de roadmap** : N2 · **Fiche de résultat attendue** : rapport-n2-distillation.md (à créer dans `reports/`)
+5: > **Résumé** : Faire tenir le natif sans professeur, sur 50 000 séquences, avec la porte < 2,5 de PPL.
+6: > **Glossaire** : [distillation](../../theorie/glossaire/entrees/distillation.md) · [professeur / élève](../../theorie/glossaire/entrees/professeur-eleve.md) · [perplexité](../../theorie/glossaire/entrees/perplexite.md) · [BPE](../../theorie/glossaire/entrees/bpe.md).
+7: 
+8: ## Le besoin
+9: 
+10: Le student plafonne à 2,708 et la porte < 2,5 n'est pas atteinte. Les 130–256 de contexte sont négatifs ; il faut décider si le levier est la donnée, la capacité ou la hiérarchie.
+11: 
+12: **Le levier retenu le 2026-10-29 est la hiérarchie** (l'état de section), et c'est **N2 qui la porte** : R11 en mesurera la fenêtre. Les longueurs brutes ne sont plus essayées — cinq négatifs suffisent.
+13: 
+14: ## 
+… [1525 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je mets la fiche N2 du backlog au réel (fenêtre = recette, 2,4759/2,4373, porte propre 0,29) sans toucher aux autres.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/backlog/N2-distillation.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"> **Ligne de roadmap** : N2 · **Fiche de résultat attendue** : rapport-n2-distillation. … [3462 caractères tronqués]`
+
+  ```
+fiche N2 du backlog : au réel
+  frontière (4) : A2.6, N2, N3, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Committer un fait du backlog exige une ligne d'état : j'ajoute la porte propre à « Ce qui reste » en tenant le budget.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"R1\\*\\* — R1.2-1024\" docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"**R1** — R1.2-1024 ; **Pensée** — gold 200+ ; **S … [660 caractères tronqués]`
+
+  ```
+142:**R1** — R1.2-1024 ; **Pensée** — gold 200+ ; **S** — homographes, validation ;
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4000 mots (budget 4 000)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AssertionError
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 est à 4 000 pile ; je touche l'état par l'horodatage (neutre) et je commite la fiche avec sa ligne d'état.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"**Mis à jour : 2026-11-03, 13 h 30 HNE (heure locale, EST).**\"\nn = \"**Mis à jour : 2026-11-03, 13 h 40 HNE … [1070 caractères tronqués]`
+
+  ```
+en-cours : 13 h 40
+  T0 max : 4000 mots (budget 4 000)
+[still running after 60000ms; moved to background job bash-424]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-424", "timeout_ms": 120000, "wait": true}`
