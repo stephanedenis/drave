@@ -14389,3 +14389,81 @@ MM journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/di
 ⏵ La boucle a laissé des traces dans **3 fichiers de journal de session** (dont le rapport de cette session, régénéré par le hook), pas dans les fiches. Je nettoie, je complète les deux écritures manquantes et je commite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nfiles = [\n \"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md\",\n \"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md\",\n \"journal/sessions/536cd5d6-94ac-4057-8f … [3131 caractères tronqués]`
+
+  ```
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md 3828763 -> 3828763
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md 737853 -> 737853
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md 151549 -> 151363
+
+== reste-t-il des traces ? ==
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md
+journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md
+(vide = propre)
+
+== en-cours : lien fiche ==
+en-cours : fiche liée
+
+== journal : ligne 11 h 40 ==
+journal : ligne ajoutée
+
+  T0 max : 3997 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  revue de documentation · 589 fiche(s) · 678 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+[commit 128]
+1c9f58dc B13 — FICHE DU GOLD NEURONAL SUR L'API (MÊMES VERDICTS, LATENCE /35) + JOURNAL DE SESSION NETTOYÉ
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: repository has been updated, but unable to write
+new index 
+… [107 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit a échoué sur « unable to write new index file » (disque ?) et le nettoyage de `d629d7d7` n'a rien retiré. Je vérifie l'espace disque et l'état de l'index.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== disques ==\" && df -h / /home /home/stephane/Data13TB 2>&1 | tail -4; echo; echo \"== .git ==\" && du -sh .git 2>/dev/null; ls -lh .git/index .git/index.lock 2>&1; echo; echo \"== journal d629 ==\" && du -sh journal/session … [406 caractères tronqués]`
+
+  ```
+== disques ==
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/nvme2n1p2           828G  121G  706G  15% /
+/dev/nvme2n1p2           828G  121G  706G  15% /home
+/dev/mapper/system-root   11T  9,0T  2,0T  83% /home/stephane/Data13TB
+
+== .git ==
+143M	.git
+ls: cannot access '.git/index.lock': No such file or directory
+-rw-r--r--. 1 stephane stephane 357K  3 nov 13:45 .git/index
+
+== journal d629 ==
+24M	journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf
+3
+
+== git status ==
+MM journal/2026-11-03/README.md
+MM journal/2026-11-03/attention.md
+MM journal/2026-11-03/distribue.md
+MM journal/2026-11-03/docs.md
+MM journal/2026-11-03/memoire.md
+MM journal/2026-11-03/mesures.md
+MM journal/2026-11-03/modele.md
+MM journal/2026-11-03/moteur.md
+
+== retour arrière index ==
+ M reports/native-parite.json
+ M tools/pensee/store.py
+ ? tools/structures
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? reports/pensee-parite-drvm-native-rejoue.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Disque sain (706 G libres) ; l'échec était une collision d'index concurrente. Il reste 3 lignes dégénérées dans le journal `d629` ; je les retire et je recommite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nfor f in (\"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/digest.md\",\n          \"journal/sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md\"):\n    p = pathlib.Path(f); t = p.re … [1733 caractères tronqués]`

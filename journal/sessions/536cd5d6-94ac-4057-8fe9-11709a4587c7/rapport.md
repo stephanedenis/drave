@@ -9,12 +9,12 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 22.2 h |
 | Tours | 78 |
-| Messages | 562 |
-| Appels d'outils | 495 |
+| Messages | 564 |
+| Appels d'outils | 497 |
 | Fichiers touchés | 17 |
-| Commandes | 363 |
+| Commandes | 365 |
 | Sous-agents | 0 |
-| Commits | 46 |
+| Commits | 47 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2088,14 +2088,16 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 
 ### Tour 78 — l'écran est rempli de "**the **the **the **the **the **the" que se passe-t-il?
 
-*2 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Check files for degeneration traces and current state
 - bash — Clean degenerate journal lines, complete fiche integration, commit
+- bash — Check disk space, git index and d629 journal
+- bash — Remove remaining degenerate lines and retry commit
 
 **Synthèse produite :**
 
-⏵ La boucle a laissé des traces dans **3 fichiers de journal de session** (dont le rapport de cette session, régénéré par le hook), pas dans les fiches. Je nettoie, je complète les deux écritures manquantes et je commite.
+⏵ Disque sain (706 G libres) ; l'échec était une collision d'index concurrente. Il reste 3 lignes dégénérées dans le journal `d629` ; je les retire et je recommite.
 
 ## 3. Travail accompli
 
@@ -2163,7 +2165,7 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 323 autres
+- … et 325 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2353,4 +2355,5 @@ Deux mesureurs B13 ont tourné avec **`PolitiqueLLM` branché sur `https://api.d
 - BUDGET — LIGNE B13 RESSERRÉE, T0 DE RETOUR SOUS 4 000" -- docs/pilotage/en-cours.md; echo "[commit $?]"
 - BUDGET — RÉFÉRENCES SOUS 2 500 ET T0 SOUS 4 000 (PASSE 31/10 SORTIE, QUESTIONS RESSERRÉES)" -- docs/pilotage/references-non-regression.md docs/pilotage/en-cours
 - B13 — FICHE DU GOLD NEURONAL SUR L'API (MÊMES VERDICTS, LATENCE /35) + JOURNAL DE SESSION NETTOYÉ" -m "La fiche rapporte-pensee-gold-api.md documente le disposi
+- B13 — FICHE DU GOLD NEURONAL SUR L'API (MÊMES VERDICTS, LATENCE /35) + JOURNAUX DE SESSION NETTOYÉS" -m "La fiche rapporte-pensee-gold-api.md documente le dispo
 
