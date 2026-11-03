@@ -6667,3 +6667,21 @@ e670b4c7 NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D
 ⏵ 00 h 47 : fiche du gold réel 432 passée à TRUE, revue verte. Alternance reprise.
 
 - **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; tail -1 work/veille-nuit.log", "description": "Read watch line at 00h57"}`
+
+  ```
+00:57
+00:57 · 6132480c ÉTAT — T0 4 000 : LIGNE DU CACHE RACCOURCIE · actifs=7 ·   ✅ état court, structuré, multi-s
+  ```
+
+### 🤖 Assistant
+
+⏵ 00 h 57 : T0 ramené à 4 000, état vert. Alternance.
+
+- **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`

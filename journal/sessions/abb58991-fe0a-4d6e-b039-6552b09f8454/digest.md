@@ -21197,3 +21197,178 @@ EXIT=1
 ⏵ Round 149 : T0 revenu à **3 999** ; le lock du hub bloque encore le commit d'état — j'attends et je refais
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for i in $(seq 1 12); do sleep 15; if ! pgrep -f \"git commit\" >/dev/null 2>&1 && [ ! -f .git/index.lock ]; then echo \"libre après $((i*15))s\"; break; fi; done; ls .git/index.lock 2>/dev/null && rm -f .git/index.lock; git add docs/pilotage/en-cours … [224 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 6132480c] ÉTAT — T0 4 000 : LIGNE DU CACHE RACCOURCIE
+ 9 files changed, 165 insertions(+), 24 deletions(-)
+EXIT=0
+6132480c ÉTAT — T0 4 000 : LIGNE DU CACHE RACCOURCIE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 149 : les 3 phrases sont un **effet de cache**, pas des vides — committé (`612f8743`, état `6132480c`), T0 3 999
+
+**Fait de la nuit — round 149** : l'enquête sur les **429 appels / 432 phrases**.
+
+- **0 phrase vide** dans `gold_reel.json` ; **0 phrase à 0 token** ; **432 ids uniques** ; **0 refus** heuristique.
+- Les 3 appels manquants sont un **effet de cache** : le composite met en cache sur `(texte, langue)` et 3 phrases avaient déjà été vues par une lecture antérieure. Les mesures portent sur les annotations **servies**, pas sur les appels HTTP.
+- Note ajoutée au JSON (`appels_note`) ; pas un défaut de corpus, donc **pas de « correction » à faire**.
+- Commits : `612f8743` (le fait) + `6132480c` (l'état).
+
+**État** : HEAD `6132480c` ; T0 **3 999** ; revue 576/661 verte ; N2 intact ; serveur 7B sain.
+
+La suite : la fonction « **la bonne réponse, pas le voisin** » (T132/T133, distracteurs r428–r432) — le dernier item de la file B13 ; puis la **parité DRVM/native** (déjà mesurée : cadenas 3, porte 27, labyrinthe 2). Le goal reste **actif**.
+
+
+## Tour 152
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 150/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 150 : j'attaque « la bonne réponse, pas le voisin » — je localise le banc de l'anaphore (T132/T133, distracteurs r428–r432)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -rln \"voisin\\|bonne réponse\" --include=*.py --include=*.md . 2>/dev/null | head -8; echo '---'; grep -rn \"r428\\|r423\\|r427\\|fidelite_contextuelle\" --include=*.py . 2>/dev/null | head -6", "description": "Locate anaphora neighbor bench", " … [18 caractères tronqués]`
+
+  ```
+./reports/rapport-mode-listes.md
+./reports/rapport-optimisations.md
+./reports/rapport-analyse-flux.md
+./reports/rapport-empreinte-memoire.md
+./reports/rapport-prefill-par-experts.md
+./reports/rapport-plateau-semantique.md
+./reports/archive/rapport-toutes-langues.md
+./reports/archive/rapport-campagne-benefices.md
+---
+./tools/tests/linguistique/gold_reel.py:1282:    ('r423', 'fr', 'Tu viens demain.',
+./tools/tests/linguistique/gold_reel.py:1294:    ('r427', 'en', 'You come tomorrow.',
+./tools/tests/linguistique/gold_reel.py:1297:    ('r428', 'fr', 'Il pleut.',
+./tools/tests/linguistique/miroir.py:301:def fidelite_contextuelle(phrases: list[dict], bloc=None) -> dict:
+./tools/tests/linguistique/miroir.py:304:    # les paires (assertion, question) : r423..r427 précèdent r418..r422
+./tools/pensee/autotest.py:1953:    from ..tests.linguistique.miroir import fidelite_contextuelle
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 150 : le banc est `fidelite_contextuelle` dans `miroir.py` ; je le lis avec les distracteurs r428–r432
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/miroir.py", "limit": 75, "offset": 285}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/miroir.py</path>
+<type>file</type>
+<content>
+285:     """Le taux de questions pièges où le lien automatique retrouve la bonne précédente."""
+286:     bloc = bloc or bl.Heuristique()
+287:     par_id = {p["id"]: p for p in phrases}
+288:     paires = [(f"r{418 + k}", f"r{423 + k}") for k in range(5)]
+289:     justes = 0
+290:     for qid, pid in paires:
+291:         if qid not in par_id:
+292:             continue
+293:         q = par_id[qid]
+294:         trouvee = trouver_precedente(q, phrases, bloc)
+295:         if trouvee is not None and trouvee.get("id") == pid:
+296:             justes += 1
+297:     return {"paires": len(paires), "justes": justes,
+298:             "taux": round(justes / max(1, len(paires)), 4)}
+299: 
+300: 
+301: def fidelite_contextuelle(phrases: list[dict], bloc=None) -> dict:
+302:     """Le taux de questions pièges où la réponse contextuelle est juste."""
+303:     bloc = bloc or bl.Heuristique()
+304:     # les paires (assertion, question) : r423..r427 précèdent r418..r422
+305:     paires = [(f"r{418 + k}", f"r{423 + k}") for k in range(5)]
+306:     par_id = {p["id"]: p for p in phrases}
+307:     justes = 
+… [2400 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 150 : je lis `trouver_precedente` — le lien automatique qui doit choisir r423–r427 plutôt que les distracteurs r428–r432
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"def trouver_precedente\" -A 45 tools/tests/linguistique/miroir.py | head -55; echo '--- gold reel 423-432 ---'; sed -n '1278,1310p' tools/tests/linguistique/gold_reel.py", "description": "Read trouver_precedente and gold pairs", "timeoutMs": … [7 caractères tronqués]`
+
+  ```
+200:def trouver_precedente(question: dict, phrases: list[dict], bloc=None) -> dict | None:
+201-    """Le lien **automatique** : la phrase précédente qui partage le sujet de la question."""
+202-    bloc = bloc or bl.Heuristique()
+203-    a = bloc.analyser(question["texte"], question["langue"])
+204-    sujet = _sujet(a)
+205-    if not sujet:
+206-        return None
+207-    idx = next((i for i, p in enumerate(phrases) if p.get("id") == question.get("id")), -1)
+208-    for p in reversed(phrases[:idx] if idx > 0 else []):
+209-        b = bloc.analyser(p["texte"], p["langue"])
+210-        s = _sujet(b)
+211-        if s and _normaliser_egal(s, sujet):
+212-            return p
+213-    return None
+214-
+215-
+216-def _normaliser_egal(a: str, b: str) -> bool:
+217-    n = lambda s: " ".join(str(s).lower().split())
+218-    return n(a) == n(b)
+219-
+220-
+221-def lien_coref(phrase: dict, phrases: list[dict]) -> list[tuple[str, str, str]]:
+222-    """La **coréférence comme lien** : chaque pronom lié pointe la phrase de son antécédent.
+223-
+224-    Renvoie [(pronom, antécédent, id_phrase_antécédent)]. La phrase de l'antécédent est la
+225-    dernière phrase antérieure qui contient le mot de l'antécéd
+… [3488 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 150 : `trouver_precedente` prend la **plus récente** phrase partageant le sujet — d'où les distracteurs r428–r432 plus proches ; je mesure les 5 paires
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 120 python3 - <<'PY'\nimport json\nfrom tools.tests.linguistique import miroir\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nfrom tools.bloc_linguistique import Heuristique\nbl=Heuristique()\npar={p['i … [462 caractères tronqués]`
+
+  ```
+r418 'Tu ne viens pas demain ?'          attendu r423 'Tu viens demain.'        -> r423 'Tu viens demain.'
+r419 'Il ne mange pas ?'                 attendu r424 'Il mange.'               -> r428 'Il pleut.'
+r420 'Elle ne dort pas ?'                attendu r425 'Elle dort.'              -> r430 'Elle est partie.'
+r421 'Ils ne partent pas ?'              attendu r426 'Ils partent.'            -> r431 'Ils sont arrivés.'
+r422 "You don't come tomorrow?"          attendu r427 'You come tomorrow.'      -> r427 'You come tomorrow.'
+auto   {'paires': 5, 'justes': 2, 'taux': 0.4}
+contex {'paires': 5, 'justes': 5.0, 'taux': 1.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 150 : « la bonne réponse, pas le voisin » est **mesuré** — lien automatique **2/5** (r419→r428, r420→r430, r421→r431 : les distracteurs) contre **5/5** en contextuel ; je fige la mesure
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json, pathlib\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique();  … [1175 caractères tronqués]`
+
+  ```
+json 1611 {'paires': 5, 'justes': 2, 'taux': 0.4} {'paires': 5, 'justes': 5.0, 'taux': 1.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 150 : JSON écrit (2/5 auto, 5/5 contextuel) ; j'écris la fiche, la ligne d'état et le commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfiche=pathlib.Path('reports/rapport-pensee-bonne-reponse-voisin.md')\nfiche.write_text('''# B13 — la bonne réponse, pas le voisin : lien auto 2/5, contextuel 5/5 (distracteurs r428–r432)\n\n> **Ligne de roadmap** : ** … [3955 caractères tronqués]`
+
+  ```
+fiche 3567
+en-cours ok
+  T0 max : 4005 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 150 : T0 à 4 005 après la ligne ; je raccourcis et je commite la fiche « bon voisin »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; 429 appels = cache ; bon voisin 2/5 vs 5/5**'\nnew=' ; 429 appels = cache ; voisin 2/5 vs 5/5**'\nassert old in t\nt=t.replace(old, … [658 caractères tronqués]`

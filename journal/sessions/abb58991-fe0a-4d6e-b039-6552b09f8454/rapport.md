@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 8.6 h |
-| Tours | 151 |
-| Messages | 1031 |
-| Appels d'outils | 847 |
+| Durée | 8.7 h |
+| Tours | 152 |
+| Messages | 1040 |
+| Appels d'outils | 854 |
 | Fichiers touchés | 48 |
-| Commandes | 674 |
+| Commandes | 680 |
 | Sous-agents | 0 |
-| Commits | 72 |
+| Commits | 73 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -325,6 +325,8 @@
 **Tour 150** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 151** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 152** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3768,7 +3770,34 @@ La suite : **corriger les 3 phrases vides** du générateur, puis la fonction «
 
 **Synthèse produite :**
 
-⏵ Round 149 : T0 revenu à **3 999** ; le lock du hub bloque encore le commit d'état — j'attends et je refais
+⏵ Round 149 : les 3 phrases sont un **effet de cache**, pas des vides — committé (`612f8743`, état `6132480c`), T0 3 999
+
+**Fait de la nuit — round 149** : l'enquête sur les **429 appels / 432 phrases**.
+
+- **0 phrase vide** dans `gold_reel.json` ; **0 phrase à 0 token** ; **432 ids uniques** ; **0 refus** heuristique.
+- Les 3 appels manquants sont un **effet de cache** : le composite met en cache sur `(texte, langue)` et 3 phrases avaient déjà été vues par une lecture antérieure. Les mesures portent sur les annotations **servies**, pas sur les appels HTTP.
+- Note ajoutée au JSON (`appels_note`) ; pas un défaut de corpus, donc **pas de « correction » à faire**.
+- Commits : `612f8743` (le fait) + `6132480c` (l'état).
+
+**État** : HEAD `6132480c` ; T0 **3 999** ; revue 576/661 verte ; N2 intact ; serveur 7B sain.
+
+La suite : la fonction « **la bonne réponse, pas le voisin** » (T132/T133, distracteurs r428–r432) — le dernier item de la file B13 ; puis la **parité DRVM/native** (déjà mesurée : cadenas 3, porte 27, labyrinthe 2). Le goal reste **actif**.
+
+### Tour 152 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Locate anaphora neighbor bench
+- read
+- bash — Read trouver_precedente and gold pairs
+- bash — Measure anaphora neighbor bench
+- bash — Write neighbor-answer measurement JSON
+- bash — Write neighbor fiche and state line
+- bash — Commit neighbor-answer fact
+
+**Synthèse produite :**
+
+⏵ Round 150 : T0 à 4 005 après la ligne ; je raccourcis et je commite la fiche « bon voisin »
 
 ## 3. Travail accompli
 
@@ -3867,7 +3896,7 @@ La suite : **corriger les 3 phrases vides** du générateur, puis la fonction «
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 634 autres
+- … et 640 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4041,4 +4070,5 @@ La suite : **corriger les 3 phrases vides** du générateur, puis la fonction «
 - L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
 - ÉTAT — T0 4 000 : LIGNE DU CACHE RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - ÉTAT — T0 4 000 : LIGNE DU CACHE RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
+- L/B13 — LA BONNE RÉPONSE, PAS LE VOISIN : LIEN AUTO 2/5, CONTEXTUEL 5/5 (DISTRACTEURS r428–r432)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --for
 

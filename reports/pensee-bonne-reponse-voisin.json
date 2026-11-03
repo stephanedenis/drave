@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-03 00:45 EST",
+  "gold": "gold_reel.json",
+  "paires": 5,
+  "lien_auto": {
+    "paires": 5,
+    "justes": 2,
+    "taux": 0.4
+  },
+  "contextuel": {
+    "paires": 5,
+    "justes": 5.0,
+    "taux": 1.0
+  },
+  "detail": [
+    {
+      "question": "r418",
+      "texte": "Tu ne viens pas demain ?",
+      "attendu": "r423",
+      "texte_attendu": "Tu viens demain.",
+      "trouve": "r423",
+      "texte_trouve": "Tu viens demain.",
+      "juste": true
+    },
+    {
+      "question": "r419",
+      "texte": "Il ne mange pas ?",
+      "attendu": "r424",
+      "texte_attendu": "Il mange.",
+      "trouve": "r428",
+      "texte_trouve": "Il pleut.",
+      "juste": false
+    },
+    {
+      "question": "r420",
+      "texte": "Elle ne dort pas ?",
+      "attendu": "r425",
+      "texte_attendu": "Elle dort.",
+      "trouve": "r430",
+      "texte_trouve": "Elle est partie.",
+      "juste": false
+    },
+    {
+      "question": "r421",
+      "texte": "Ils ne partent pas ?",
+      "attendu": "r426",
+      "texte_attendu": "Ils partent.",
+      "trouve": "r431",
+      "texte_trouve": "Ils sont arrivés.",
+      "juste": false
+    },
+    {
+      "question": "r422",
+      "texte": "You don't come tomorrow?",
+      "attendu": "r427",
+      "texte_attendu": "You come tomorrow.",
+      "trouve": "r427",
+      "texte_trouve": "You come tomorrow.",
+      "juste": true
+    }
+  ],
+  "controle_negatif": {
+    "auto_sans_contexte": "2/5 ; les 3 erreurs choisissent le voisin le plus proche (r428/r430/r431)",
+    "contextuel_avec_antecedent": "5/5 ; la réponse contextuelle retrouve r423-r427"
+  }
+}

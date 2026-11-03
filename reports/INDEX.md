@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **573 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **574 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -367,12 +367,13 @@
 | [rapport-pensee-bayes-appris.md](rapport-pensee-bayes-appris.md) | B13 — la vraisemblance apprise : v = 0,899, 20/20 |
 | [rapport-pensee-bayes.md](rapport-pensee-bayes.md) | B13 — la croyance bayésienne : un seul look, 20/20 |
 | [rapport-pensee-bayes2.md](rapport-pensee-bayes2.md) | B13 — le bayésien à deux looks : 8,0 pas, 0,99 de confiance |
+| [rapport-pensee-bonne-reponse-voisin.md](rapport-pensee-bonne-reponse-voisin.md) | B13 — la bonne réponse, pas le voisin : lien auto 2/5, contextuel 5/5 (distracteurs r428–r432) |
 | [rapport-pensee-bord-fin.md](rapport-pensee-bord-fin.md) | B13 — le bord fin : 0,41 est le seuil robuste |
 | [rapport-pensee-bouge-graines.md](rapport-pensee-bouge-graines.md) | B13 — la porte qui bouge sur 5 graines : 5/5 buts en 10 pas |
 | [rapport-pensee-bouge.md](rapport-pensee-bouge.md) | B13 — la porte qui bouge : l'horloge dans l'état |
 | [rapport-pensee-bruit.md](rapport-pensee-bruit.md) | B13 — le bruit variable : la politique tient de 50 % à 95 % |
 | [rapport-pensee-bruitee.md](rapport-pensee-bruitee.md) | B13 — l'observation bruitée : 10 % d'erreur casse la politique |
-| [rapport-pensee-cascade-reel-432.md](rapport-pensee-cascade-reel-432.md) | B13 — le gold réel 432 : la cascade tient (POS 0,9065 ; syntagmes 0,4598 ; tête 0,5633 ; acte 0,9954), le verdict est false |
+| [rapport-pensee-cascade-reel-432.md](rapport-pensee-cascade-reel-432.md) | B13 — le gold réel 432 : la cascade tient (POS 0,9065 ; syntagmes 0,4598 ; tête 0,5633 ; acte 0,9954), le verdict est true (seuils du contrat) |
 | [rapport-pensee-cascade-tete.md](rapport-pensee-cascade-tete.md) | B13 — la tête de la cascade : la correction dégrade (0,419 contre 0,441) |
 | [rapport-pensee-cascade-union.md](rapport-pensee-cascade-union.md) | B13 — la cascade avec l'union : F1 0,2170, tête 0,4410, 1 601 appels |
 | [rapport-pensee-cascade-vrai-modele.md](rapport-pensee-cascade-vrai-modele.md) | B13 — la cascade complète avec le vrai modèle : POS 0,9415 / syntagmes 0,6130 / tête 0,7574 / acte 1,0 sur 180 phrases |
