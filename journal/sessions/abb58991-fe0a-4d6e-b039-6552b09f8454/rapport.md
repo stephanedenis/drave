@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 9.0 h |
-| Tours | 156 |
-| Messages | 1069 |
-| Appels d'outils | 875 |
+| Durée | 9.1 h |
+| Tours | 157 |
+| Messages | 1076 |
+| Appels d'outils | 880 |
 | Fichiers touchés | 48 |
-| Commandes | 701 |
+| Commandes | 706 |
 | Sous-agents | 0 |
-| Commits | 80 |
+| Commits | 81 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -335,6 +335,8 @@
 **Tour 155** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 156** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 157** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3934,7 +3936,39 @@ La suite : **réparer `_verbe`** pour la forme inversée (premier segment du tok
 
 **Synthèse produite :**
 
-⏵ Round 154 : `_verbe` réparé et committé (`3917780c`) ; T0 à 4 001 — je raccourcis d'un mot et je commite l'état
+⏵ Round 154 : `_verbe` réparé et committé (`3917780c`, état `7f48be65`) — paires toujours **5/10**, T0 4 000
+
+**Fait de la nuit — round 154** : `_verbe` réparé pour l'inversion.
+
+| question | `_verbe` avant | `_verbe` après |
+|---|---|---|
+| « Ne mange-t-il pas ? » | None | **mange** |
+| « Ne viens-tu pas demain ? » | None | **viens** |
+| « Ne dort-elle pas ? » | None | **dort** |
+
+- **La réparation marche** (le verbe est le 1ᵉʳ segment du token `mange-t-il`).
+- **Mais les 10 paires restent 5/10** : r409 choisit **r344 « Le chat mange ; il dort. »** (sujet `il` + verbe `mange`, mais ce n'est pas la paire), r408 choisit r304 (une question), r410–r412 restent `None`.
+- **Le problème a changé de place** : ce n'est plus le sujet ni le verbe, c'est le **repli sujet-seul** (qui retient une phrase au bon sujet mais sans la paire) et l'absence de critère **assertion ↔ question**.
+- **Contrôle négatif** : r418–r422 5/5, r408–r412 0/5 — la réparation ne change pas le résultat, donc la limite est ailleurs.
+- Fiche `rapport-pensee-lien-verbe.md` ; JSON `pensee-lien-verbe.json`.
+
+**État** : HEAD `7f48be65` ; T0 **4 000** ; revue **581/666** verte ; N2 intact ; serveur 7B sain.
+
+La suite : ajouter le critère **acte** (assertion ↔ question) dans `trouver_precedente`, re-mesurer les 10 paires ; puis la **parité DRVM/native**. Le goal reste **actif**.
+
+### Tour 157 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Find acte accessor in miroir and bloc
+- bash — Add acte criterion and measure 10 pairs
+- bash — Freeze acte criterion measurement
+- bash — Write acte criterion fiche and state
+- bash — Commit acte criterion fact
+
+**Synthèse produite :**
+
+⏵ Round 155 : T0 à 4 001 ; je raccourcis, j'aligne index/README et je commite le critère acte
 
 ## 3. Travail accompli
 
@@ -4033,7 +4067,7 @@ La suite : **réparer `_verbe`** pour la forme inversée (premier segment du tok
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 661 autres
+- … et 666 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4216,4 +4250,5 @@ La suite : **réparer `_verbe`** pour la forme inversée (premier segment du tok
 - L/B13 — LA FORME INVERSÉE : _SUJET RÉPARÉ, _VERBE AVEUGLE, LES 10 PAIRES RESTENT 5/10" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s'
 - L/B13 — _VERBE RÉPARÉ POUR L'INVERSION : LES PAIRES RESTENT 5/10, LE REPLI SUJET-SEUL TROMPE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format=
 - ÉTAT — T0 4 000 : LIGNE DU VERBE INVERSÉ RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
+- L/B13 — LE CRITÈRE ACTE : QUESTION → ASSERTION, LES 10 PAIRES RESTENT 5/10, LE SUJET INVERSÉ N'EST PAS NORMALISÉ" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; 
 

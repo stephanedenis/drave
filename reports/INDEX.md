@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **578 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **579 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -413,6 +413,7 @@
 | [rapport-pensee-juge.md](rapport-pensee-juge.md) | B13 — le juge des réponses : sa couverture est 0/19 |
 | [rapport-pensee-labyrinthe.md](rapport-pensee-labyrinthe.md) | B13 — le labyrinthe non linéaire : la bonne politique utilise la sonde, l'aveugle l'ignore |
 | [rapport-pensee-lien-10-paires.md](rapport-pensee-lien-10-paires.md) | B13 — les 10 paires : 5/10, la forme inversée est la limite (r408–r412) |
+| [rapport-pensee-lien-acte.md](rapport-pensee-lien-acte.md) | B13 — le critère acte : les 10 paires restent 5/10, la normalisation du sujet inversé manque |
 | [rapport-pensee-lien-auto-fixe.md](rapport-pensee-lien-auto-fixe.md) | B13 — le lien automatique réparé : 5/5 après le réordonnancement |
 | [rapport-pensee-lien-auto.md](rapport-pensee-lien-auto.md) | B13 — le lien automatique : 0/5, le sujet ne suffit pas |
 | [rapport-pensee-lien-coref.md](rapport-pensee-lien-coref.md) | B13 — la coréférence comme lien : 62/116, la moitié des antécédents retrouvés |

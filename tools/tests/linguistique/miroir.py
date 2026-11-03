@@ -204,6 +204,12 @@ def _sujet(a: bl.Annotation) -> str | None:
     return None
 
 
+def _acte(a: bl.Annotation) -> str:
+    """L'acte pragmatique de l'annotation (assertion par défaut)."""
+    return next((e.valeur for e in a.etiquettes
+                 if e.niveau == "pragmatique" and e.type == "acte"), "assertion")
+
+
 def _verbe(a: bl.Annotation) -> str | None:
     """Le premier verbe de surface de l'annotation (le prédicat de la paire).
 
@@ -233,16 +239,22 @@ def trouver_precedente(question: dict, phrases: list[dict], bloc=None) -> dict |
     if not sujet:
         return None
     idx = next((i for i, p in enumerate(phrases) if p.get("id") == question.get("id")), -1)
+    # Une question se lie à une **assertion**, jamais à une autre question : c'est ce qui
+    # distingue « Viens-tu demain ? » (r304) de « Tu viens demain. » (r423).
+    acte_q = _acte(a)
     repli = None
     for p in reversed(phrases[:idx] if idx > 0 else []):
         b = bloc.analyser(p["texte"], p["langue"])
         s = _sujet(b)
-        if s and _normaliser_egal(s, sujet):
-            v = _verbe(b)
-            if verbe and v and _normaliser_egal(v, verbe):
-                return p
-            if repli is None:
-                repli = p
+        if not (s and _normaliser_egal(s, sujet)):
+            continue
+        if acte_q == "question" and _acte(b) != "assertion":
+            continue
+        v = _verbe(b)
+        if verbe and v and _normaliser_egal(v, verbe):
+            return p
+        if repli is None:
+            repli = p
     return repli
 
 

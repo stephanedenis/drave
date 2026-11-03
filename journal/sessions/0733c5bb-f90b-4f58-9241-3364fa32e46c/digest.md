@@ -6480,3 +6480,31 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-304", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-292 (bash: sleep 3300; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK; tail -1 work/n2ac/mix1024-30k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK2048; tail -c 120 work/n2ac/mix1024-30k.log", "description": "Poll after sleep"}`
+
+  ```
+01:21:25
+rope2048-1.25k fini 22:22:47
+9 · 4893 s
+pas  11000 · perte 0.9591 · PPL val 2.532 · 4915 s
+pas  11050 · perte 1.0209 · PPL val 2.530 · 4937 s
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK2048; grep -E \"ppl_val|duree_s\" work/n2ac/rope2048-12.5k.pt.json 2>/dev/null", "description": "Wait for 2048 long finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-306]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-306", "timeout_ms": 420000, "wait": true}`

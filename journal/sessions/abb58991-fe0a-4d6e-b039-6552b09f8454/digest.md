@@ -21893,3 +21893,135 @@ EXIT=0
 ⏵ Round 154 : `_verbe` réparé et committé (`3917780c`) ; T0 à 4 001 — je raccourcis d'un mot et je commite l'état
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10 (verbe)'\nnew=' ; voisin 5/5, inversé 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encod … [506 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ index : aucun fait stagé sans état
+[master 7f48be65] ÉTAT — T0 4 000 : LIGNE DU VERBE INVERSÉ RACCOURCIE
+ 15 files changed, 171 insertions(+), 43 deletions(-)
+EXIT=0
+7f48be65 ÉTAT — T0 4 000 : LIGNE DU VERBE INVERSÉ RACCOURCIE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 154 : `_verbe` réparé et committé (`3917780c`, état `7f48be65`) — paires toujours **5/10**, T0 4 000
+
+**Fait de la nuit — round 154** : `_verbe` réparé pour l'inversion.
+
+| question | `_verbe` avant | `_verbe` après |
+|---|---|---|
+| « Ne mange-t-il pas ? » | None | **mange** |
+| « Ne viens-tu pas demain ? » | None | **viens** |
+| « Ne dort-elle pas ? » | None | **dort** |
+
+- **La réparation marche** (le verbe est le 1ᵉʳ segment du token `mange-t-il`).
+- **Mais les 10 paires restent 5/10** : r409 choisit **r344 « Le chat mange ; il dort. »** (sujet `il` + verbe `mange`, mais ce n'est pas la paire), r408 choisit r304 (une question), r410–r412 restent `None`.
+- **Le problème a changé de place** : ce n'est plus le sujet ni le verbe, c'est le **repli sujet-seul** (qui retient une phrase au bon sujet mais sans la paire) et l'absence de critère **assertion ↔ question**.
+- **Contrôle négatif** : r418–r422 5/5, r408–r412 0/5 — la réparation ne change pas le résultat, donc la limite est ailleurs.
+- Fiche `rapport-pensee-lien-verbe.md` ; JSON `pensee-lien-verbe.json`.
+
+**État** : HEAD `7f48be65` ; T0 **4 000** ; revue **581/666** verte ; N2 intact ; serveur 7B sain.
+
+La suite : ajouter le critère **acte** (assertion ↔ question) dans `trouver_precedente`, re-mesurer les 10 paires ; puis la **parité DRVM/native**. Le goal reste **actif**.
+
+
+## Tour 157
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 155/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 155 : dernier levier du lien — ajouter le critère **acte** (une question ne doit pas se lier à une question) avant la proximité ; je regarde comment l'acte est exposé
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"def repondre_contextuel\\|def repondre_dirigee\\|def _acte\\|acte\" tools/tests/linguistique/miroir.py | head -12; echo '---'; grep -n \"def acte\\|acte\" tools/bloc_linguistique.py | head -8", "description": "Find acte accessor in miroir an … [28 caractères tronqués]`
+
+  ```
+90:    """La **réponse** : selon l'acte, une reformulation minimale (pas une répétition)."""
+91:    acte = next((e.valeur for e in a.etiquettes
+92:                 if e.niveau == "pragmatique" and e.type == "acte"), "assertion")
+93:    if acte == "question":
+95:    if acte == "ordre":
+101:    """1.0 si la réponse correspond à l'acte détecté (une classe, pas le texte)."""
+102:    acte = next((e.valeur for e in a.etiquettes
+103:                 if e.niveau == "pragmatique" and e.type == "acte"), "assertion")
+105:    return 1.0 if ((acte == "question" and rep.startswith("réponse"))
+106:                   or (acte == "ordre" and rep == "ordre reçu")
+107:                   or (acte == "assertion" and rep == "assertion notée")) else 0.0
+145:def repondre_dirigee(a: bl.Annotation) -> str | None:
+---
+640:            acte = ("question" if typ == "interrogative" else
+643:            etiquettes.append(Etiquette("pragmatique", "acte", acte, d, f, self.nom, 0.45,
+732:                          cout={"octets": len(texte.encode()), "caracteres": len(texte),
+786:            acte = ("question" if typ == "interrogative" else
+788:            etiquettes.append(Etiquette("pragmatique", "acte", acte, d, f
+… [305 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 155 : l'acte est disponible (`pragmatique/acte`) ; j'exige que l'antécédent soit une **assertion** quand la question est une question, avant tout repli
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/miroir.py'); t=p.read_text(encoding='utf-8')\nold='''def _verbe(a: bl.Annotation) -> str | None:'''\nnew='''def _acte(a: bl.Annotation) -> str:\n    \"\"\"L'acte pragmatique de … [2443 caractères tronqués]`
+
+  ```
+ok
+r408  'Ne viens-tu pas demain ?'     -> -     ''                         attendu r423 NON
+r409  'Ne mange-t-il pas ?'          -> r344  'Le chat mange ; il dort.' attendu r424 NON
+r410  'Ne dort-elle pas ?'           -> -     ''                         attendu r425 NON
+r411  'Ne partent-ils pas ?'         -> -     ''                         attendu r426 NON
+r412  'Ne lis-tu pas ?'              -> -     ''                         attendu r427 NON
+r418  'Tu ne viens pas demain ?'     -> r423  'Tu viens demain.'         attendu r423 OK
+r419  'Il ne mange pas ?'            -> r424  'Il mange.'                attendu r424 OK
+r420  'Elle ne dort pas ?'           -> r425  'Elle dort.'               attendu r425 OK
+r421  'Ils ne partent pas ?'         -> r426  'Ils partent.'             attendu r426 OK
+r422  "You don't come tomorrow?"     -> r427  'You come tomorrow.'       attendu r427 OK
+justes 5 / 10
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 155 : le critère **acte** est posé (question → assertion) ; les paires restent **5/10** : r408 tombe à `None` (le sujet « viens-tu » ne matche pas « Tu ») et r409 garde r344 — je fige ce fait
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json, pathlib\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique();  … [1684 caractères tronqués]`
+
+  ```
+sujets/actes :
+  r408 Ne viens-tu pas demain ? | sujet viens-tu | verbe viens | acte question
+     attendu r423 Tu viens demain. | sujet Tu | verbe viens | acte assertion
+  r409 Ne mange-t-il pas ? | sujet il | verbe mange | acte question
+     attendu r424 Il mange. | sujet Il | verbe mange | acte assertion
+  r410 Ne dort-elle pas ? | sujet dort-elle | verbe dort | acte question
+     attendu r425 Elle dort. | sujet Elle | verbe dort | acte assertion
+  r411 Ne partent-ils pas ? | sujet partent-ils | verbe partent | acte question
+     attendu r426 Ils partent. | sujet Ils | verbe partent | acte assertion
+  r412 Ne lis-tu pas ? | sujet lis-tu | verbe lis | acte question
+     attendu r427 You come tomorrow. | sujet You | verbe come | acte assertion
+json 2359 justes 5
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 155 : critère acte mesuré — les 10 paires restent **5/10** ; le vrai blocage est la **normalisation du sujet inversé** (« viens-tu » vs « Tu ») ; je fige ce fait
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfiche=pathlib.Path('reports/rapport-pensee-lien-acte.md')\nfiche.write_text('''# B13 — le critère acte : les 10 paires restent 5/10, la normalisation du sujet inversé manque\n\n> **Ligne de roadmap** : **L/B13** · **D … [3011 caractères tronqués]`
+
+  ```
+fiche 2598
+ok
+  T0 max : 4001 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 155 : T0 à 4 001 ; je raccourcis, j'aligne index/README et je commite le critère acte
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10, acte'\nnew=' ; voisin 5/5, inversé 5/10'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encodin … [950 caractères tronqués]`

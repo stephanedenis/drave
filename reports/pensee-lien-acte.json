@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-03 01:40 EST",
+  "apres_critere_acte": {
+    "paires": 10,
+    "justes": 5,
+    "taux": 0.5
+  },
+  "detail": [
+    {
+      "question": "r408",
+      "texte": "Ne viens-tu pas demain ?",
+      "attendu": "r423",
+      "trouve": null,
+      "texte_trouve": null,
+      "juste": false
+    },
+    {
+      "question": "r409",
+      "texte": "Ne mange-t-il pas ?",
+      "attendu": "r424",
+      "trouve": "r344",
+      "texte_trouve": "Le chat mange ; il dort.",
+      "juste": false
+    },
+    {
+      "question": "r410",
+      "texte": "Ne dort-elle pas ?",
+      "attendu": "r425",
+      "trouve": null,
+      "texte_trouve": null,
+      "juste": false
+    },
+    {
+      "question": "r411",
+      "texte": "Ne partent-ils pas ?",
+      "attendu": "r426",
+      "trouve": null,
+      "texte_trouve": null,
+      "juste": false
+    },
+    {
+      "question": "r412",
+      "texte": "Ne lis-tu pas ?",
+      "attendu": "r427",
+      "trouve": null,
+      "texte_trouve": null,
+      "juste": false
+    },
+    {
+      "question": "r418",
+      "texte": "Tu ne viens pas demain ?",
+      "attendu": "r423",
+      "trouve": "r423",
+      "texte_trouve": "Tu viens demain.",
+      "juste": true
+    },
+    {
+      "question": "r419",
+      "texte": "Il ne mange pas ?",
+      "attendu": "r424",
+      "trouve": "r424",
+      "texte_trouve": "Il mange.",
+      "juste": true
+    },
+    {
+      "question": "r420",
+      "texte": "Elle ne dort pas ?",
+      "attendu": "r425",
+      "trouve": "r425",
+      "texte_trouve": "Elle dort.",
+      "juste": true
+    },
+    {
+      "question": "r421",
+      "texte": "Ils ne partent pas ?",
+      "attendu": "r426",
+      "trouve": "r426",
+      "texte_trouve": "Ils partent.",
+      "juste": true
+    },
+    {
+      "question": "r422",
+      "texte": "You don't come tomorrow?",
+      "attendu": "r427",
+      "trouve": "r427",
+      "texte_trouve": "You come tomorrow.",
+      "juste": true
+    }
+  ],
+  "constat": "r408 tombe à None (sujet « viens-tu » ≠ « Tu ») ; r409 garde r344 (sujet il + verbe mange) ; r410-r412 None",
+  "limite": "le sujet inversé n'est pas normalisé (« viens-tu » vs « Tu ») et la paire thématique de r418-r422 reste la seule qui marche",
+  "controle_negatif": {
+    "r418-r422": "5/5",
+    "r408-r412": "0/5 — la normalisation du sujet inversé manque"
+  }
+}
