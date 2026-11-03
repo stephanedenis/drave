@@ -1,0 +1,112 @@
+{
+  "date": "2026-11-02 21:33 EST",
+  "modele": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf",
+  "endpoint": "http://127.0.0.1:18082",
+  "probleme": {
+    "nom": "labyrinthe_porte_sto",
+    "porte": [
+      3,
+      3
+    ],
+    "but": [
+      4,
+      4
+    ],
+    "regle": "depuis (3,2), la sonde ouvre avec 80 % ; en cas d'échec, réessayer",
+    "budget": 200,
+    "graines": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "politique": {
+    "classe": "PolitiqueLLM",
+    "jeu": "porte_sto"
+  },
+  "llm": [
+    {
+      "graine": 0,
+      "but": true,
+      "noeuds": 31,
+      "sonde": 6,
+      "appels": 8,
+      "latence_s": 13.085,
+      "erreurs": 0
+    },
+    {
+      "graine": 1,
+      "but": true,
+      "noeuds": 28,
+      "sonde": 5,
+      "appels": 7,
+      "latence_s": 25.919,
+      "erreurs": 0
+    },
+    {
+      "graine": 2,
+      "but": true,
+      "noeuds": 34,
+      "sonde": 7,
+      "appels": 9,
+      "latence_s": 39.395,
+      "erreurs": 0
+    },
+    {
+      "graine": 3,
+      "but": true,
+      "noeuds": 28,
+      "sonde": 5,
+      "appels": 7,
+      "latence_s": 52.139,
+      "erreurs": 0
+    },
+    {
+      "graine": 4,
+      "but": true,
+      "noeuds": 28,
+      "sonde": 5,
+      "appels": 7,
+      "latence_s": 64.947,
+      "erreurs": 0
+    }
+  ],
+  "labyrinthe": [
+    {
+      "graine": 0,
+      "but": false,
+      "noeuds": 200,
+      "sonde": 3,
+      "latence_s": 182.668
+    }
+  ],
+  "controles": {
+    "oracle": {
+      "but": true,
+      "noeuds": 31,
+      "sonde": 6
+    },
+    "aveugle": {
+      "but": false,
+      "noeuds": 200,
+      "sonde": 61
+    }
+  },
+  "seuils": {
+    "llm_5": true,
+    "labyrinthe_non": true,
+    "aveugle_non": true,
+    "oracle_but": true,
+    "aucune_erreur_llm": true,
+    "latence_mesuree": true
+  },
+  "verdict": true,
+  "limites": [
+    "Cette fois le tirage est fixé (random.seed(0..4)) : le 5/5 est reproductible.",
+    "Le labyrinthe (sans la règle) ne passe pas ; l'aveugle non plus ; le hasard n'est pas rejoué (la chance de la porte 80 % est nommée).",
+    "La latence inclut la file du serveur ; CPU seulement ; température 0.",
+    "Le 7B peut passer par chance une graine ; le 5/5 et les contrôles sont la mesure."
+  ]
+}

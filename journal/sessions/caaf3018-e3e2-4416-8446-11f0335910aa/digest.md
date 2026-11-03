@@ -5670,3 +5670,33 @@ CODE=2
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -m \"PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE\n\nLa suggestion « il vient du balayage : \\`tools/n4_dessin_b.py ...\\` » était écrite\nentre guillemets DOUBLES : les backticks étaient une substitution … [491 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-229]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-229", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 89e0c2c5] PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE
+ 11 files changed, 636 insertions(+), 33 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'automatise le rejeu de `porte-tableaux` dès que le JSON N2 apparaîtra (veille 3 h en tâche de fond)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/veille_tableaux.sh <<'EOF'\n#!/bin/bash\n# veille_tableaux.sh — rejoue porte-tableaux dès que le JSON manquant de N2 apparaît.\nset -u\ncd \"$(dirname \"$0\")/..\"\nfor i in $(seq 1 360); do\n    if [ -s reports/n2-fenetre.j … [536 caractères tronqués]`
+
+  ```
+started background job bash-230
+  ```
+
+### 🤖 Assistant
+
+⏵ Veille armée ; je bloque 10 min dessus pour donner du temps aux sessions
+
+- **job_output** `{"job_id": "bash-230", "timeout_ms": 600000, "wait": true}`

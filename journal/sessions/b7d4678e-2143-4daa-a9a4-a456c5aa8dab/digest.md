@@ -8349,3 +8349,132 @@ Continue working toward the objective in this same session. Treat the current wo
 ⏵ Round 6 : je relève l’état (N2, sessions, registre) avant d’agir
 
 - **bash** `{"command": "date \"+%H:%M:%S\"; echo \"--- HEAD ---\"; git log --oneline -4; echo \"--- status ---\"; git status --short | head -8; echo \"--- N2 fiche ---\"; git status --short reports/rapport-n2-fenetre.md reports/n2-fenetre.json 2>/dev/null; ls -l reports/n2-fenetre.json 2>/dev/null || echo \"js … [188 caractères tronqués]`
+
+  ```
+21:35:18
+--- HEAD ---
+d2374554 PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE
+0713f4e6 NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+7d2c0a2d B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+--- status ---
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+ M journal/sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md
+M  reports/INDEX.md
+M  reports/README.md
+--- N2 fiche ---
+?? reports/rapport-n2-fenetre.md
+json absent
+--- runs ---
+ 383833    01:18:40 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki
+ 490049       41:10 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki
+ 670594       00:27 bash -c cd /home/stephane/GitHub/Qtrinet && git reset -q; git add tools/tests/qu
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -2; echo \"--- ressources ---\"; python3 tools/ressources.py --check 2>&1 | tai … [59 caractères tronqués]`
+
+  ```
+revue de documentation · 569 fiche(s) · 654 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (55 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (56 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+--- ressources ---
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ```
+
+- **bash** `{"command": "for i in $(seq 1 30); do kill -0 670594 2>/dev/null || break; sleep 2; done; sleep 2; ps -p 670594 >/dev/null && echo \"encore\" || echo \"fini\"; git log --oneline -2; git status --short | head -10; date \"+%H:%M:%S\"", "description": "Wait for the staged commit and check status"}`
+
+  ```
+fini
+d2374554 PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE
+0713f4e6 NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+ M journal/2026-11-02/README.md
+ M journal/2026-11-02/portes.md
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+ M journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md
+ M journal/sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md
+21:36:30
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 6 : l’index partagé bouge, l’état reste vert ; N2 toujours en vol
+
+**Ce que j'observe**
+- **HEAD** : `d2374554` (le hub a daté la passe du 19 h 32 et annoncé la 82e porte). Depuis, une session (Pensée, sto graines) a lancé `git reset` + `git add` de ses fichiers : l'**index partagé** a bougé, `en-cours`/`roadmap` sont restés stagés, `INDEX`/`README` ont été déstagés. Je n'y touche pas — l'état utile est dans l'arbre, et la règle « pas de `git reset` sur les fichiers d'une autre session » est justement ce que le plan-travail § 8 interdit ; le hub re-stabilisera.
+- **N2** : la **fiche fenêtre** (`rapport-n2-fenetre.md`, 21 h 05) est toujours **non committée**, `n2-fenetre.json` absent ; les deux runs tournent (1 h 19 et 41 min). `porte-tableaux` reste le **seul rouge non structurel** de la passe.
+
+**État vérifié** : revue ✅ **569 fiches / 654 JSON / 82 portes**, en-cours ✅ (1 622 mots), T0 ✅, T1 ✅ (2 428 mots), porte stricte ✅ (avertissements de claims longs), registre des ressources ✅ (seul `nvme_raid` 33 Gio).
+
+**Ressources** : claims N2 `gpu0`+`gpu1`, hub `cpu1` 2, S/Pensée `cpu1` 4+4 ; `cpu0` 16/16, `ram` 70/109. Les deux GPU tournent (85/75 °C, ~176/227 W).
+
+La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et l'intégration du hub, puis le checkpoint de 8 h. Rien à signaler de bloquant.
+
+
+## Tour 12
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 7/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 7 : je relève l’état et cherche la prochaine tâche légère utile
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; echo \"--- HEAD ---\"; git log --oneline -3; echo \"--- status ---\"; git status --short | head -8; echo \"--- N2 ---\"; ls -l reports/n2-fenetre.json 2>/dev/null || echo \"json absent\"; git status --short reports/rapport-n2-fenetre.md 2>/dev/null; echo \"--- rappor … [135 caractères tronqués]`
+
+  ```
+21:36:52
+--- HEAD ---
+89e0c2c5 PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE
+d2374554 PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE
+0713f4e6 NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+--- status ---
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/portes.md
+MM journal/README.md
+MM journal/sessions/MANIFEST.md
+MM journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+MM journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md
+--- N2 ---
+json absent
+?? reports/rapport-n2-fenetre.md
+--- rapports récents ---
+-rw-r--r--. 1 stephane stephane   76586  2 nov 21:34 reports/INDEX.md
+-rw-r--r--. 1 stephane stephane   23129  2 nov 21:34 reports/README.md
+-rw-------. 1 stephane stephane    4733  2 nov 21:33 reports/rapport-pensee-porte-sto-graines.md
+-rw-r--r--. 1 stephane stephane    2290  2 nov 21:33 reports/pensee-porte-sto-graines.json
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -2; python3 tools/ressources.py --check 2>&1 | tail -2", "description": "State  … [21 caractères tronqués]`
+
+  ```
+revue de documentation · 569 fiche(s) · 654 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (57 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (58 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ```
+

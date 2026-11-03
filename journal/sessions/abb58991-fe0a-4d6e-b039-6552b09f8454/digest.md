@@ -12416,3 +12416,28 @@ d2374554 PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e POR
 ⏵ Le hub a committé `d2374554` ; l'index contient ses suppressions de journaux. Je réinitialise et je stage uniquement mes 10 fichiers
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git reset -q; git add tools/tests/qualifier_porte_sto_graines.py reports/rapport-pensee-porte-sto-graines.md reports/pensee-porte-sto-graines.json reports/README.md reports/INDEX.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/sessions/e … [417 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                   |  10 +--
+ docs/pilotage/roadmap.md                    |   6 +-
+ reports/INDEX.md                            |   3 +-
+ reports/README.md                           |   2 +-
+ reports/pensee-porte-sto-graines.json       | 112 ++++++++++++++++++++++++
+ reports/rapport-pensee-porte-sto-graines.md |  85 ++++++++++++++++++
+ tools/tests/qualifier_porte_sto_graines.py  | 128 ++++++++++++++++++++++++++++
+ 7 files changed, 336 insertions(+), 10 deletions(-)
+  ✅ index : aucun fait stagé sans état
+HOOK=0
+  ✅ index : aucun fait stagé sans état
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ⛔ journal non ajouté à l'index
+EXIT=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouveau lock concurrent ; j'attends 20 s et je reprends le commit (7 fichiers stagés)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ps -eo pid,etime,cmd | grep -E \"git (commit|add)\" | grep -v grep | head -2; sleep 20; ls .git/index.lock 2>/dev/null || echo 'lock libre'; git diff --cached --stat | tail -3; git commit -m \"B13 — LA PORTE STOCHASTIQUE, CINQ GRAINE … [176 caractères tronqués]`

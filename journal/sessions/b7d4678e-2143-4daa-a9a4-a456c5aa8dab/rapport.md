@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.3 h |
-| Tours | 11 |
-| Messages | 510 |
-| Appels d'outils | 536 |
-| Fichiers touchés | 22 |
-| Commandes | 352 |
+| Durée | 5.4 h |
+| Tours | 13 |
+| Messages | 519 |
+| Appels d'outils | 542 |
+| Fichiers touchés | 23 |
+| Commandes | 357 |
 | Sous-agents | 0 |
 | Commits | 20 |
 | Compactages de contexte | 0 |
@@ -47,6 +47,10 @@
 **Tour 10** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
 
 **Tour 11** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
+
+**Tour 12** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
+
+**Tour 13** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -375,7 +379,50 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 **Synthèse produite :**
 
-⏵ Round 6 : je relève l’état (N2, sessions, registre) avant d’agir
+⏵ Round 6 : l’index partagé bouge, l’état reste vert ; N2 toujours en vol
+
+**Ce que j'observe**
+- **HEAD** : `d2374554` (le hub a daté la passe du 19 h 32 et annoncé la 82e porte). Depuis, une session (Pensée, sto graines) a lancé `git reset` + `git add` de ses fichiers : l'**index partagé** a bougé, `en-cours`/`roadmap` sont restés stagés, `INDEX`/`README` ont été déstagés. Je n'y touche pas — l'état utile est dans l'arbre, et la règle « pas de `git reset` sur les fichiers d'une autre session » est justement ce que le plan-travail § 8 interdit ; le hub re-stabilisera.
+- **N2** : la **fiche fenêtre** (`rapport-n2-fenetre.md`, 21 h 05) est toujours **non committée**, `n2-fenetre.json` absent ; les deux runs tournent (1 h 19 et 41 min). `porte-tableaux` reste le **seul rouge non structurel** de la passe.
+
+**État vérifié** : revue ✅ **569 fiches / 654 JSON / 82 portes**, en-cours ✅ (1 622 mots), T0 ✅, T1 ✅ (2 428 mots), porte stricte ✅ (avertissements de claims longs), registre des ressources ✅ (seul `nvme_raid` 33 Gio).
+
+**Ressources** : claims N2 `gpu0`+`gpu1`, hub `cpu1` 2, S/Pensée `cpu1` 4+4 ; `cpu0` 16/16, `ram` 70/109. Les deux GPU tournent (85/75 °C, ~176/227 W).
+
+La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et l'intégration du hub, puis le checkpoint de 8 h. Rien à signaler de bloquant.
+
+### Tour 12 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Check state, N2 fiche and newest reports
+- bash — State checks and registry
+- write `work/veille/bilan-08h.md`
+- bash — Log the homeostasie fix and bilan template
+
+**Synthèse produite :**
+
+⏵ Round 7 : bilan de 8 h préparé, état stable, N2 toujours en vol
+
+**Ce qui a été fait**
+- **`work/veille/bilan-08h.md`** : brouillon du bilan de 8 h — les faits de la nuit (passe **76/5**, B13 **140/140**, N2 200 k + R1.2-1024 **3,0529**, S **v4**, D/R/A OCR) et la liste de ce qu'il reste à figer (`git log`, compteurs, sessions, claims, prochaines actions par axe).
+- **`89e0c2c5`** : `porte-homeostasie` — son message n'exécute plus sa commande ; la rouge reste environnementale (`/tmp/n4` absent), pas une régression.
+- **N2** : fiche fenêtre toujours non committée, `n2-fenetre.json` absent (runs 1 h 20 / 42 min) — c'est le seul rouge non structurel (`porte-tableaux`).
+
+**État vérifié** : revue ✅ **569 fiches / 654 JSON / 82 portes**, en-cours ✅, T0 ✅, T1 ✅ (2 428 mots), porte stricte ✅ (avertissements de claims longs), registre des ressources ✅ (seul `nvme_raid` 33 Gio).
+
+**Ressources** : N2 `gpu0`+`gpu1`, hub `cpu1` 2, S et Pensée `cpu1` 4+4 ; `cpu0` 16/16, `ram` 70/109 ; les deux GPU tournent. Rien de bloquant : la veille continue jusqu'au checkpoint de 8 h, en intégrant les commits N2/hub au fil de l'eau.
+
+### Tour 13 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check new commits, N2 fiche and runs
+- bash — Wait for a session commit or the N2 JSON
+
+**Synthèse produite :**
+
+⏵ Round 8 : je vérifie les nouveaux commits puis j’attends un événement de session
 
 ## 3. Travail accompli
 
@@ -405,6 +452,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 | `tools/porte-ressources.sh` | 1 | 0 |
 | `docs/pilotage/references-non-regression.md` | 0 | 2 |
 | `docs/methode/portes.md` | 0 | 1 |
+| `work/veille/bilan-08h.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -448,7 +496,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 312 autres
+- … et 317 autres
 
 ## 4. Mesures et résultats marquants
 

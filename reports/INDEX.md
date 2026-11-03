@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **565 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **566 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -445,6 +445,7 @@
 | [rapport-pensee-porte-llm.md](rapport-pensee-porte-llm.md) | B13 — la porte DRVM : la règle dans le prompt l'ouvre (27 nœuds, 4 sonde) |
 | [rapport-pensee-porte-minute.md](rapport-pensee-porte-minute.md) | B13 — la porte minute : la règle l'ouvre (26 nœuds, 4 sonde, 6,4 s) ; le prompt labyrinthe échoue (200, 3, 101,6 s) |
 | [rapport-pensee-porte-mobile.md](rapport-pensee-porte-mobile.md) | B13 — la porte mobile : le 7B échoue à (3,3) (200 nœuds, 3 sonde) et passe à (1,3) comme l'aveugle (26/2) et le labyrinthe (29/5) ; test non discriminant |
+| [rapport-pensee-porte-sto-graines.md](rapport-pensee-porte-sto-graines.md) | B13 — la porte stochastique, cinq graines : le 7B passe 5/5 (28–34 nœuds, 5–7 sonde) ; le labyrinthe 0/1, l'aveugle 0/1 |
 | [rapport-pensee-porte-sto.md](rapport-pensee-porte-sto.md) | B13 — la porte stochastique : le 7B l'ouvre (31 nœuds, 6 sonde, 13,0 s) ; sans la règle, 200/3/182,6 s ; le hasard par chance |
 | [rapport-pensee-porte.md](rapport-pensee-porte.md) | B13 — la porte neuronale : la bonne politique ouvre, l'aveugle échoue |
 | [rapport-pensee-pragmatique-neuronale.md](rapport-pensee-pragmatique-neuronale.md) | B13 — la pragmatique neuronale : parfaite sur les 20 réelles (dev), sous le majoritaire sur les 160 synthétiques (test) |
