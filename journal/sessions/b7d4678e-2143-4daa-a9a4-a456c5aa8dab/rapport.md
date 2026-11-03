@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 5.9 h |
 | Tours | 19 |
-| Messages | 588 |
-| Appels d'outils | 598 |
+| Messages | 591 |
+| Appels d'outils | 601 |
 | Fichiers touchés | 24 |
-| Commandes | 407 |
+| Commandes | 410 |
 | Sous-agents | 0 |
-| Commits | 27 |
+| Commits | 28 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -582,10 +582,13 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 
 ### Tour 19 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Check events and the long run
 - bash — Wait for the next commit
+- bash — Investigate the resource gate tracking
+- bash — Compare the restored gate with the committed original
+- bash — Restore the resource gate in git
 
 **Synthèse produite :**
 
@@ -664,7 +667,7 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 367 autres
+- … et 370 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -826,4 +829,5 @@ La veille continue : j'attends le commit N2 (fiche + JSON) qui fermera le compte
 - git status --short reports/n2-fenetre.json reports/rapport-n2-fenetre.md 2>/dev/null; ps -eo pid,etime,args | grep -E "git commit" | grep -v grep | head -2; git
 - git status --short | head -15; echo "--- commit en cours ? ---"; ps -eo pid,etime,args | grep -E "git commit|session_report|archive" | grep -v grep | head -2; e
 - for i in $(seq 1 40); do kill -0 698627 2>/dev/null || break; sleep 3; done; ps -p 698627 >/dev/null && echo "commit en cours" || echo "commit fini"; git log --
+- NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE" -m "Le commit concurrent efdbbf40 (B13 138/140) a supprimé tools/porte-ressources
 

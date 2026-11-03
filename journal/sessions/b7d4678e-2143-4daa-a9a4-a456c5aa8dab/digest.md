@@ -9533,3 +9533,43 @@ suivi
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null; git status --short | h … [72 caractères tronqués]`
+
+  ```
+22:12:39
+HEAD 55dcb1c4
+55dcb1c4 B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B
+4527f661 FENÊTRE — LE CHIFFRE DU FAIT : 256 → 1 024 DONNE 3,2545 → 3,0107 → 2,9950 À 1 000 OCTETS ; LA PRODUCTION AFFINÉE BAT 200 000 PAS
+pas  15050 · perte 1.0179 · PPL val 2.594 · 6912 s
+?? tools/porte-ressources.sh
+  ```
+
+- **bash** `{"command": "git log --all --oneline -- tools/porte-ressources.sh | head -4; echo \"--- HEAD tree ---\"; git ls-tree HEAD tools/porte-ressources.sh; echo \"--- index ---\"; git ls-files tools/porte-ressources.sh; echo \"--- existe ---\"; ls -l tools/porte-ressources.sh; echo \"--- show 42db ---\"; g … [116 caractères tronqués]`
+
+  ```
+efdbbf40 B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT
+42db89f6 NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS
+--- HEAD tree ---
+--- index ---
+--- existe ---
+-rwx--x--x. 1 stephane stephane 1413  2 nov 20:32 tools/porte-ressources.sh
+--- show 42db ---
+ tools/porte-ressources.sh                          |  28 ++
+  ```
+
+- **bash** `{"command": "git show 42db89f6:tools/porte-ressources.sh > /tmp/porte-ressources-orig.sh 2>/dev/null; diff -q /tmp/porte-ressources-orig.sh tools/porte-ressources.sh && echo \"identique\" || echo \"différent\"; head -5 tools/porte-ressources.sh; echo \"--- test ---\"; bash tools/porte-ressources.sh  … [144 caractères tronqués]`
+
+  ```
+identique
+#!/bin/bash
+# porte-ressources.sh — le registre des ressources tient : autotest et cohérence.
+#
+# POURQUOI CETTE PORTE EXISTE. Le registre `tools/ressources.py` est consultatif : il n'empêche
+# pas un job de tourner, il rend le conflit visible. Une porte doit vérifier ce qui est
+--- test ---
+  ✅ registre cohérent ; les avertissements de stockage/NUMA sont affichés, pas fatals
+✅ porte ressources verte : autotest 9 cas et registre cohérent
+--- comptage ---
+82
+  ```
+
+- **bash** `{"command": "chmod 755 tools/porte-ressources.sh; export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add tools/porte-ressources.sh; git diff --cached --stat; git commit -m \"NUIT — LA 82e PORTE RESSOURCES EST RESTAURÉE : LE COMMIT B13 L'AVAIT EMPORTÉE\" -m \"Le commit concurrent efdbbf … [409 caractères tronqués]`

@@ -5927,3 +5927,88 @@ e5417f21 ÉTAT — LA CINQUIÈME ROUGE DE LA PASSE EST CLOSE : porte-tableaux RE
 [status: completed, exit code: 0]
   ```
 
+### 🤖 Assistant
+
+⏵ Tâche indépendante : `porte-reparti-moteur` échoue sur une PPL épinglée (9,1748) non reproduite (8,7434) alors que l'écart entier/réparti est nul. Je regarde l'épinglage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"9.1748\\|8.7434\\|REF\\|ref\" tools/porte-reparti-moteur.sh | head -12; echo \"---\"; sed -n 1,30p tools/porte-reparti-moteur.sh", "description": "Inspect reparti-moteur pinned reference"}`
+
+  ```
+49:# Il vivait dans /tmp, donc un redémarrage le faisait disparaître et la porte refusait ; elle
+66:REF=$(timeout 300 "$D" "$MODELE" --ppl "$IDS" --limit "$LIMITE" --ctx "$CTX" --threads 8 2>&1 \
+68:[ -n "$REF" ] || { echo "  la référence n'a pas rendu de perplexité"; exit 1; }
+69:echo "  perplexité entière : $REF"
+102:VERDICT=$(/home/stephane/gpu-env/bin/python - "$REF" "$DEUX" <<'PY'
+108:attendu = 9.1748
+110:    print(f"REF {a} != {attendu}")
+---
+#!/bin/bash
+# Porte de RÉPARTITION du modèle entraîné ici : deux nœuds, deux plages de couches.
+#
+# Ce qu'elle vérifie, et pourquoi elle est distincte de `tools/porte-flux.sh` :
+# celle-ci tourne sur Qwen2.5-0.5B, un modèle venu d'ailleurs. Ici c'est NOTRE
+# modèle (Qwen3-MoE entraîné sur le corpus d'octets), et la question n'est pas
+# « le transport est-il fidèle » mais « le modèle qu'on a produit est-il
+# découpable sans changer un chiffre ». Un modèle dont le routage d'experts ou
+# les normes dépendraient d'un état global ne passerait pas.
+#
+#   tools/porte-reparti-moteur.sh
+#   MODELE=/tmp/moteur_dense.gguf COUCHES=2 tools/porte-reparti-moteur.sh
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+MODELE=${MODELE
+… [750 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 98,125p tools/porte-reparti-moteur.sh", "description": "Read reparti-moteur verdict logic"}`
+
+  ```
+# Le critère : la perplexité répartie doit être celle du modèle entier. Sur un
+# flux EXACT (mode dense f32) l'écart est nul ; sur un flux quantifié il est une
+# perte assumée du codec, et c'est l'écart de flux — pas la perplexité — qui la
+# porte. On exige donc l'égalité de perplexité à 0,1 % près.
+VERDICT=$(/home/stephane/gpu-env/bin/python - "$REF" "$DEUX" <<'PY'
+import sys
+a, b = float(sys.argv[1]), float(sys.argv[2])
+rel = abs(a - b) / a
+# A8.0 — la PPL de référence est épinglée (0,1 %). Le modèle est régénéré par la
+# porte ; la valeur est celle du modèle route seed 1 sur cette machine.
+attendu = 9.1748
+if abs(a - attendu) > 1e-3 * attendu:
+    print(f"REF {a} != {attendu}")
+    sys.exit(2)
+print(f"{rel*100:.4f}")
+sys.exit(0 if rel < 0.001 else 1)
+PY
+)
+if [ $? -eq 0 ]; then
+    echo "PORTE TENUE : le découpage ne change pas la perplexité (écart relatif $VERDICT %)"
+    exit 0
+fi
+echo "PORTE NON TENUE : écart relatif $VERDICT % entre entier et réparti"
+exit 1
+  ```
+
+### 🤖 Assistant
+
+⏵ Je laisse l'épinglage `reparti-moteur` à trancher (le changer masquerait une dérive non expliquée) et je note le fait du soir.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat >> work/hub-nuit.md <<'EOF'\n\n## 22 h 11 — la fenêtre N2 et la clôture de la 5e rouge\n\n- **N2** a mesuré la fenêtre : **256 → 1 024** donne **3,2545 → 3,0107 → 2,9950** à 1 000 octets ;\n  la production affinée **bat 200 000 pas … [528 caractères tronqués]`
+
+  ```
+ok
+22:11
+  ```
+
+### 🤖 Assistant
+
+⏵ Cadence de nuit : 10 min, puis point
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 600; date +%H:%M; git log --oneline -3; echo \"--- sessions ---\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif\" | head -4; echo \"--- état ---\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/tail … [114 caractères tronqués]`
+
+  ```
+started background job bash-247
+  ```
+
+- **job_output** `{"job_id": "bash-247", "timeout_ms": 620000, "wait": true}`

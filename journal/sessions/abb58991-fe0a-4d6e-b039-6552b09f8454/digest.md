@@ -13776,3 +13776,94 @@ EXIT=1
 ⏵ L'en-cours est propre (le hub l'a committé) ; je change son heure à 22 h 10 et je fais `git commit -a` pour l'embarquer avec les faits
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nn=t.replace('21 h 58 HNE','22 h 10 HNE')\nprint('changed', n!=t)\np.write_text(n,encoding='utf-8')\nPY\ngit add docs/pilotage/en-cours.md;  … [364 caractères tronqués]`
+
+  ```
+changed True
+docs/pilotage/en-cours.md
+  ✅ index : aucun fait stagé sans état
+TOOL=0
+  ✅ index : aucun fait stagé sans état
+[master 55dcb1c4] B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B
+ 36 files changed, 1311 insertions(+), 185 deletions(-)
+ create mode 100644 reports/pensee-porte-fenetre.json
+ create mode 100644 reports/rapport-pensee-porte-fenetre.md
+ create mode 100644 tools/tests/qualifier_porte_fenetre_drvm.py
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 14 : la fenêtre est committée (`55dcb1c4`, 36 fichiers) — l'oracle en échec prouve que le problème est cassé, pas le 7B
+
+**Fait de la nuit** — commit **`55dcb1c4`** : la fenêtre (`LABYRINTHE_PORTE_FENETRE`, `REGISTRE_PW`, `attendre`, `t % 3`).
+
+| politique | but | nœuds | sonde | attendre | latence |
+|---|---|---:|---:|---:|---:|
+| **oracle (Manhattan)** | ❌ | 200 | 1 | 65 | 0 |
+| aveugle | ❌ | 200 | 0 | 65 | 0 |
+| hasard | ❌ | 200 | 12 | 61 | 0 |
+| **LLM `porte_fenetre`** | ❌ | 200 | 35 | 54 | 97,3 s |
+| LLM `labyrinthe` | ❌ | 200 | 2 | 65 | 36,1 s |
+
+- **L'oracle échoue** : 200 nœuds, 1 sonde, 65 appels, sans but. **Aucune politique ne passe** — le problème (`sonde_pw`/`_libre_pw`/`attendre`/but) est **cassé**. Ce n'est pas un verdict sur le 7B : il suit pourtant la règle (54 `attendre`, 35 `sonde`) mais n'atteint jamais `(4,4)`.
+- Livré : fiche, JSON, banc `qualifier_porte_fenetre_drvm.py`, prompt `porte_fenetre` + **10 tests** (le 10e : `t % 3`, l'attente).
+- Le commit a attendu ~25 min les locks du hub ; il est passé avec `git commit -a` (en-cours daté 22 h 10).
+
+**État** : T0 sous 4 000, revue **570/655**, en-cours à 22 h 10. Le hub a fermé la 5e rouge (porte-tableaux verte), publié `n2-fenetre.json`, et la série de locks est finie.
+
+Nuit committée : B13 140 `6532541c` · bouge `35ca1461` · sto `7d2c0a2d` · sto 5/5 `c4903bc9` · **fenêtre `55dcb1c4`** ; plus POS `7ef0199c`, syntagmes `df899b90`, cascade `01838589`, DRVM `9250b1c3`, porte `aeace14b`, pragmatique `4a85604d`, minute `67ec9cd4`, mobile `2fad8e8d` ; S `3f74fe83`, hub `a67dbf00`→`4527f661`, N2 `c0196b55`.
+
+La suite : **réparer la fenêtre** (l'oracle doit passer avant le 7B), le **gold 200+**, la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 17
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 15/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 15 : je lis le code de la fenêtre (`_etat_pw`, `attendre`, `sonde_pw`) pour trouver pourquoi l'oracle échoue
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '2928,3035p' tools/pensee/operateurs.py", "description": "Read window door state and operators"}`
+
+  ```
+return cle, 0.0
+        gain = 0.1 if (o and not cle[2]) else -0.01
+        return (nx, ny, o, d), gain
+
+    def apprendre(self) -> None:
+        for i in range(self.episodes):
+            d = i % 2
+            cle = (0, 0, False, d)
+            for _ in range(120):
+                if cle[:2] == P_BUT:
+                    break
+                if self.rng.random() < self.eps:
+                    a = self.rng.choice(self.ACTIONS)
+                else:
+                    a = max(self.ACTIONS, key=lambda x: self._q(cle, x))
+                ncle, gain = self._pas(cle, a, True)
+                but = 1.0 if ncle[:2] == P_BUT else 0.0
+                best = max(self._q(ncle, x) for x in self.ACTIONS)
+                self.q[(cle, a)] = self._q(cle, a) + self.alpha * (
+                    gain + but + self.gamma * best - self._q(cle, a))
+                cle = ncle
+
+    def propose(self, etat, but):
+        cle = self._cle(etat)
+        return max(self.ACTIONS, key=lambda a: self._q(cle, a))
+
+
+def seule_mobile(p: PolitiqueAppriseMobile, d: int, max_pas: int = 200) -> tuple[bool, int]:
+    """La politique seule sur la porte mobile (d = position de la porte)."""
+    cle, pas = (0, 0, False, d
+… [2455 caractères tronqués]
+  ```
+

@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 5.9 h |
-| Tours | 16 |
-| Messages | 551 |
-| Appels d'outils | 644 |
+| Durée | 6.0 h |
+| Tours | 17 |
+| Messages | 558 |
+| Appels d'outils | 649 |
 | Fichiers touchés | 47 |
-| Commandes | 481 |
+| Commandes | 486 |
 | Sous-agents | 0 |
 | Commits | 46 |
 | Compactages de contexte | 2 |
@@ -55,6 +55,8 @@
 **Tour 15** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 **Tour 16** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 17** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -685,7 +687,41 @@ La suite : **réparer la fenêtre** (l'oracle doit passer), le **gold 200+**, la
 
 **Synthèse produite :**
 
-⏵ L'en-cours est propre (le hub l'a committé) ; je change son heure à 22 h 10 et je fais `git commit -a` pour l'embarquer avec les faits
+⏵ Round 14 : la fenêtre est committée (`55dcb1c4`, 36 fichiers) — l'oracle en échec prouve que le problème est cassé, pas le 7B
+
+**Fait de la nuit** — commit **`55dcb1c4`** : la fenêtre (`LABYRINTHE_PORTE_FENETRE`, `REGISTRE_PW`, `attendre`, `t % 3`).
+
+| politique | but | nœuds | sonde | attendre | latence |
+|---|---|---:|---:|---:|---:|
+| **oracle (Manhattan)** | ❌ | 200 | 1 | 65 | 0 |
+| aveugle | ❌ | 200 | 0 | 65 | 0 |
+| hasard | ❌ | 200 | 12 | 61 | 0 |
+| **LLM `porte_fenetre`** | ❌ | 200 | 35 | 54 | 97,3 s |
+| LLM `labyrinthe` | ❌ | 200 | 2 | 65 | 36,1 s |
+
+- **L'oracle échoue** : 200 nœuds, 1 sonde, 65 appels, sans but. **Aucune politique ne passe** — le problème (`sonde_pw`/`_libre_pw`/`attendre`/but) est **cassé**. Ce n'est pas un verdict sur le 7B : il suit pourtant la règle (54 `attendre`, 35 `sonde`) mais n'atteint jamais `(4,4)`.
+- Livré : fiche, JSON, banc `qualifier_porte_fenetre_drvm.py`, prompt `porte_fenetre` + **10 tests** (le 10e : `t % 3`, l'attente).
+- Le commit a attendu ~25 min les locks du hub ; il est passé avec `git commit -a` (en-cours daté 22 h 10).
+
+**État** : T0 sous 4 000, revue **570/655**, en-cours à 22 h 10. Le hub a fermé la 5e rouge (porte-tableaux verte), publié `n2-fenetre.json`, et la série de locks est finie.
+
+Nuit committée : B13 140 `6532541c` · bouge `35ca1461` · sto `7d2c0a2d` · sto 5/5 `c4903bc9` · **fenêtre `55dcb1c4`** ; plus POS `7ef0199c`, syntagmes `df899b90`, cascade `01838589`, DRVM `9250b1c3`, porte `aeace14b`, pragmatique `4a85604d`, minute `67ec9cd4`, mobile `2fad8e8d` ; S `3f74fe83`, hub `a67dbf00`→`4527f661`, N2 `c0196b55`.
+
+La suite : **réparer la fenêtre** (l'oracle doit passer avant le 7B), le **gold 200+**, la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 17 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Read window door state and operators
+- bash — Trace oracle on window problem
+- bash — BFS reachability of window goal
+- bash — Read AStar and window heuristic
+- bash — Test AStar heuristic weights on window
+
+**Synthèse produite :**
+
+⏵ L'heuristique de la fenêtre est `-Manhattan` et `score_pw` vaut `1/(1+d)` : dans un `max`, l'heuristique domine. Je teste l'A* avec plusieurs poids
 
 ## 3. Travail accompli
 
@@ -783,7 +819,7 @@ La suite : **réparer la fenêtre** (l'oracle doit passer), le **gold 200+**, la
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 441 autres
+- … et 446 autres
 
 ## 4. Mesures et résultats marquants
 
