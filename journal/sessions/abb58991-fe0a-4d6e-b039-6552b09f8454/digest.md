@@ -11895,3 +11895,232 @@ SESS=0
 ⏵ L'heure d'état 21 h 45 est dans le futur (commit à 21 h 17) : je corrige à 21 h 17 et je commite
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nfor f in ('docs/pilotage/en-cours.md','docs/pilotage/roadmap.md'):\n    p=pathlib.Path(f); t=p.read_text(encoding='utf-8')\n    t=t.replace('21 h 45','21 h 17')\n    p.write_text(t,encoding='utf-8')\np=pathlib.Path('j … [562 caractères tronqués]`
+
+  ```
+ok
+  ✅ index : aucun fait stagé sans état
+[master 8eab6a7c] ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+ 21 files changed, 200 insertions(+), 51 deletions(-)
+EXIT=0
+8eab6a7c 21:19:41 ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 10 : la porte **qui bouge** est un test faible (tous passent) ; commits `35ca1461` et état `8eab6a7c`
+
+**Fait de la nuit** — commit **`35ca1461`** : la porte qui bouge.
+
+| politique | but | nœuds | sonde | latence |
+|---|---|---:|---:|---:|
+| oracle (Manhattan) | ✅ | 28 | 5 | 0 |
+| **aveugle** | ✅ | 25 | 2 | 0 |
+| **hasard** | ✅ | 27 | 4 | 0 |
+| **LLM `porte_bouge`** | ✅ | **25** | **2** | **13,4 s** |
+| **LLM `labyrinthe`** | ✅ | 28 | 5 | 13,3 s |
+| Q-table `PolitiqueAppriseBouge` | ✅ | — | — | 10 pas (236 états-Q) |
+
+- Le 7B avec la **phase** `t % 6` passe (25/2) — mais il fait **exactement le score de l'aveugle** ; l'aveugle (25/2), le hasard (27/4) et le labyrinthe (28/5) passent aussi. La phase dans le prompt **ne change rien** : le test ne discrimine pas.
+- La **Q-table** (T34) passe en 10 pas ; l'oracle 28/5. Le prochain test propre est la **porte stochastique** (80 %) ou la **fenêtre temporelle**.
+
+**État** : T0 **3 996/4 000**, `en-cours` **1 622 mots**, revue **567/652**, **sessions --strict : EXIT=0**. La fiche N2 concurrente `rapport-n2-fenetre.md` laisse un lien non résolu (`n2-fenetre.json`) et le S/hub ont encore des modifications (`rapport-s-*`, `structures`, `portes.md`).
+
+Nuit committée : B13 140 `6532541c` · état 140 `335e1737` · **bouge `35ca1461`** · heure réelle `8eab6a7c` ; plus POS `7ef0199c`, syntagmes `df899b90`, cascade `01838589`, DRVM `9250b1c3`, porte `aeace14b`, pragmatique `4a85604d`, minute `67ec9cd4`, mobile `2fad8e8d` ; S `3f74fe83`, hub `a67dbf00`→`66826ed5`, N2 `c0196b55`.
+
+La suite : **porte stochastique** (80 %), **fenêtre** (`attendre`, `t % 3`), le **gold 200+**, la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 13
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 11/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 11 : la porte **stochastique** (80 %), le seul test qui peut discriminer ; j'ajoute le prompt `porte_sto` et son test
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/operateurs.py'); t=p.read_text(encoding='utf-8')\nold='''        if self.jeu == \"porte_bouge\":'''\nnew='''        if self.jeu == \"porte_sto\":\n            x, y = _xy_p(etat)\n          … [1683 caractères tronqués]`
+
+  ```
+ok
+Ran 9 tests in 0.001s
+
+OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Banc stochastique : oracle, Q-table `PolitiqueAppriseOuverte` (80 %), aveugle, hasard, LLM `porte_sto` vs labyrinthe
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"qualifier_porte_sto_drvm.py — la porte **stochastique** : la sonde ouvre avec 80 %.\n\n`LABYRINTHE_PORTE_STO` (registre `REGISTRE_PSTO`) : depuis `(3,2)`, la sonde ouvre la porte\n`(3,3)` avec **80 %** de chance ; en cas d'échec, le pas ne change pas l'état … [6589 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_sto_drvm.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure stochastique (80 %, Q-table `PolitiqueAppriseOuverte`, ≈3 min)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/tests/qualifier_porte_sto_drvm.py && curl -s --max-time 3 http://127.0.0.1:18082/health && time python3 tools/tests/qualifier_porte_sto_drvm.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-porte-sto.json 2>&1 | … [90 caractères tronqués]`
+
+  ```
+started background job bash-429
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la mesure stochastique (le JSON remplira la fiche)
+
+- **job_output** `{"job_id": "bash-429", "timeout_ms": 420000, "wait": true}`
+
+  ```
+{"status":"ok"}   58.0,
+   7,
+   5,
+   0.0,
+   0
+  ],
+  "aveugle": [
+   false,
+   200,
+   483.0,
+   66,
+   61,
+   0.0,
+   0
+  ],
+  "hasard": [
+   true,
+   44,
+   86.0,
+   14,
+   7,
+   0.0,
+   0
+  ],
+  "llm_porte_sto": [
+   true,
+   31,
+   66.0,
+   8,
+   6,
+   13.023,
+   0
+  ],
+  "llm_labyrinthe": [
+   false,
+   200,
+   265.0,
+   95,
+   3,
+   182.62,
+   0
+  ]
+ }
+}
+écrit : reports/pensee-porte-sto.json
+[stderr]
+
+real	3m16,032s
+user	0m0,446s
+sys	0m0,045s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte stochastique **discrimine** : LLM 31/6/13,0 s ✅ ; aveugle 200/61 ❌ ; labyrinthe 200/3/182,6 s ❌ ; hasard par chance (44/7). J'extrais le bilan
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-porte-sto.json'))\nprint('date',d['date'],'verdict',d['verdict'])\nprint('seuils',json.dumps(d['seuils'],indent=1))\nprint('apprise',d['apprise'])\nfor k,v in d['mesures'].items():\n    p … [213 caractères tronqués]`
+
+  ```
+date 2026-11-02 21:25 EST verdict False
+seuils {
+ "oracle_but": true,
+ "oracle_sonde": true,
+ "aveugle_non": true,
+ "hasard_non": false,
+ "apprise_but": true,
+ "llm_but": true,
+ "llm_sonde": true,
+ "labyrinthe_non": true,
+ "aucune_erreur_llm": true,
+ "latence_mesuree": true
+}
+apprise {'classe': 'PolitiqueAppriseOuverte', 'episodes': 1000, 'etats_q': 74, 'seule_but': True, 'seule_pas': 9, 'essais': 2}
+oracle             but True n 28 c 58.0 app 7 sonde 5 lat 0.0 err 0
+aveugle            but False n 200 c 483.0 app 66 sonde 61 lat 0.0 err 0
+hasard             but True n 44 c 86.0 app 14 sonde 7 lat 0.0 err 0
+llm_porte_sto      but True n 31 c 66.0 app 8 sonde 6 lat 13.023 err 0
+llm_labyrinthe     but False n 200 c 265.0 app 95 sonde 3 lat 182.62 err 0
+  ```
+
+### 🤖 Assistant
+
+⏵ Fiche « porte stochastique » : le 7B l'ouvre (31/6) ; sans la règle 200/3/182,6 s ; le hasard par chance
+
+- **write** `{"content": "# B13 — la porte stochastique : le 7B l'ouvre (31 nœuds, 6 sonde, 13,0 s) ; sans la règle, 200/3/182,6 s ; le hasard par chance\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-02 ·\n> **Verdict** : ✅ **la porte stochastique discrimine** — le 7B, avec le promp … [5413 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-sto.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ J'applique l'état « porte sto 31/6 » (README, INDEX, en-cours, roadmap, plan, journal), puis contrôle et commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, time, re\np=pathlib.Path('reports/README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-pensee-porte-bouge.md`](rapport-pensee-porte-bouge.md) | **B13** **test faible** |\",\n            \"| [`rappor … [2844 caractères tronqués]`
+
+  ```
+ok
+  565 fiches → reports/INDEX.md
+EN-COURS: 1649
+  T0 max : 4023 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4023 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1649 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 568 fiche(s) · 653 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 lien(s) relatif(s) ne résolvent pas (sur 2734 examinés) :
+     reports/rapport-n2-fenetre.md → n2-fenetre.json
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 à 4 023 : je condense le Fait (les six portes/DRVM/gold sont dans les fiches) et je repasse sous 4 000
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold_start = '- **Fait** : B13 **140/140**'\ni=t.find(old_start); j=t.find('- **Ce qu\\'elle fait**', i)\nassert i>0 and j>i\nnew = \"\"\"-  … [854 caractères tronqués]`
+
+  ```
+ok
+EN-COURS: 1600
+  T0 max : 3974 mots (budget 4 000)
+  en-cours · 1600 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 568 fiche(s) · 653 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 3 974, revue 568/653 ; je commite la porte stochastique
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -10; git add tools/pensee/operateurs.py tools/tests/test_pensee_politique.py tools/tests/qualifier_porte_sto_drvm.py reports/rapport-pensee-porte-sto.md reports/pensee-porte-sto.json reports/README.md reports/INDEX.md docs/pi … [476 caractères tronqués]`

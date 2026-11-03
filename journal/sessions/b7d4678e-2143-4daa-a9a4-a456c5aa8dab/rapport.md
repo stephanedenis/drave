@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.0 h |
+| Durée | 5.2 h |
 | Tours | 8 |
-| Messages | 456 |
-| Appels d'outils | 485 |
+| Messages | 478 |
+| Appels d'outils | 507 |
 | Fichiers touchés | 22 |
-| Commandes | 305 |
+| Commandes | 323 |
 | Sous-agents | 0 |
 | Commits | 19 |
 | Compactages de contexte | 0 |
@@ -268,7 +268,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 8 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*35 appels d'outils.* Actions notables :
 
 - bash — Check pass completion and commits
 - bash — Check running jobs and claims
@@ -281,6 +281,10 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - bash — Inspect the broken n2-fenetre link
 - bash — Log the transient red
 - bash — Check pass near completion
+- bash — Check N2 JSON and vision gate
+- bash — Check state after B13 commits
+- bash — Read the final pass verdict
+- … et 17 autres
 
 **Synthèse produite :**
 
@@ -301,7 +305,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 | `work/ocr/fait_fiche.py` | 1 | 1 |
 | `work/ocr/ajoute_micro.py` | 1 | 0 |
 | `reports/rapport-ocr-cegep.md` | 0 | 2 |
-| `docs/pilotage/en-cours.md` | 0 | 22 |
+| `docs/pilotage/en-cours.md` | 0 | 23 |
 | `docs/pilotage/roadmap.md` | 0 | 10 |
 | `docs/pilotage/chantiers.md` | 0 | 6 |
 | `docs/pilotage/plan-travail.md` | 0 | 7 |
@@ -357,7 +361,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 265 autres
+- … et 283 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -470,6 +474,11 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T8** `1, 99 %, 5398 MiB, 76, 215.30 W, 0x0000000000000004`
 - **T8** `/dev/md0        938G  895G   34G  97% /home/stephane/IA`
 - **T8** `/dev/nvme2n1p2  828G  121G  706G  15% /`
+- **T8** `docs/pilotage/en-cours.md:43:- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : `
+- **T8** `docs/pilotage/en-cours.md:98:- **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **`
+- **T8** `docs/pilotage/roadmap.md:34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v4** : règle de contexte des homographes, gold **55** phrases ; analyseur *`
+- **T8** `- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélang`
+- **T8** `- **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** st`
 
 ## 5. Erreurs rencontrées
 

@@ -51,6 +51,13 @@ class TestPolitiqueLLM(unittest.TestCase):
         self.assertIn("(1,3)", invite)
         self.assertIn("phase", invite)
 
+    def test_porte_sto(self):
+        p = PolitiqueLLM("faux", jeu="porte_sto", transport=lambda *_: "bas")
+        self.assertEqual(p.propose(LABYRINTHE_PORTE.initial(), P_BUT), "bas")
+        invite = p._invite(LABYRINTHE_PORTE.initial(), P_BUT)
+        self.assertIn("80 %", invite)
+        self.assertIn("réessaie", invite)
+
     def test_labyrinthe(self):
         p = PolitiqueLLM("faux", transport=lambda *_: "droite")
         self.assertEqual(p.propose(LABYRINTHE.initial(), L_BUT), "droite")

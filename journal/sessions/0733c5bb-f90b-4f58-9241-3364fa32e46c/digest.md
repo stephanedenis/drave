@@ -5091,3 +5091,28 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-216", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2ac/mix1024-7.5k.log; tail -1 work/n2ac/rope1024-20k.log; ls work/n2ac/mix1024-7.5k.pt 2>/dev/null && echo OK", "description": "Direct status check"}`
+
+  ```
+21:26:35
+pas   3950 · perte 0.9907 · PPL val 2.701 · 1684 s
+pas   8950 · perte 1.0638 · PPL val 2.673 · 4136 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ps -eo pid,etime,cmd --no-headers | grep -E \"[t]outes-les-portes\" | cut -c1-60; git log --oneline -4; echo \"=== portes récentes ===\"; ls -t /tmp/portes* 2>/dev/null | head -2; tail -3 work/portes/*/registre.txt 2>/dev/null | tail -5", "description … [49 caractères tronqués]`
+
+  ```
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+335e1737 ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5)
+6532541c B13 — LA PORTE EST À 140/140 : LES SIX ATTENDUS S 00d2a01 FIXÉS ; T132/T133 ALIGNÉS SUR 2/5 (DISTRACTEURS r428–r432)
+=== portes récentes ===
+  ```
+

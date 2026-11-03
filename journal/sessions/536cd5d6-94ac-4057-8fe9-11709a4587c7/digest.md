@@ -6989,3 +6989,384 @@ ls: cannot access 'reports/n2-fenetre.json': No such file or directory
   ```
 
 - **job_output** `{"job_id": "bash-172", "timeout_ms": 600000, "wait": true}`
+
+  ```
+=== PASSE FINIE 2026-11-02T21:23:42-05:00 ===
+porte-topologie 0 100
+porte-trace 0 28
+porte-vision 0 602
+--- 76 vertes, 5 rouges ---
+--- verdict (code != 0)
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+porte-reparti-moteur 1 51
+porte-tableaux 1 1
+--- 76 vertes, 5 rouges ---
+=== FIN ===
+[status: completed, exit code: 0]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 15 h 20 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
+6: > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
+7: > [`reports/`](../../reports/). Histoire : [`journal/`](../../journal/). Plan : [`roadmap.md`](roadmap.md).
+8: 
+9: ## Sessions en cours
+10: 
+11: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+12: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+13: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+14: > le hook pre-commit refuse un fait sans ligne d'état ; une session qui trouve l'état en retard
+15: > le corrige.
+16: 
+17: ### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+18: 
+19: - **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+20: -
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+=== journal/sessions ===
+00221850-90de-4287-90ee-324a35e504cd
+04ed1834-b0f8-42a1-aa21-75a75c19647e
+0b0a6a0d-05f5-4308-800c-4792ddb9cbf2
+0b2c86eb-7a8d-4eed-a3dd-fb165f1a8630
+0b69f616-5c75-4c34-b97a-ae05564812af
+0c631fa9-58cb-4d77-a7e0-fc77e5b3f93f
+0f3b6070-57ce-4642-b9ec-3b3956f75978
+11b2d312-9a7e-4a4e-814f-ed0384ed9d4d
+13446299-79d8-497c-ba83-673c176a4637
+15d4e6f4-b2ba-44c7-8c0e-03c141280f9b
+15fd322f-7e9e-48c0-a970-f36335eb622a
+163d631a-6528-4324-b7b3-6487d24feeb5
+1820cf6b-c8a4-411c-894c-31195b9ff7a8
+18b8879c-f211-43b8-9908-cf65e509b21d
+18c3f6d0-5bb1-45bb-9f94-ab0e7812218d
+1966e052-ebc6-4f4b-b7f9-6d1c6cb4b445
+1f9394fb-6435-4928-9a03-2b258e5a28c5
+22bcae27-254b-47b2-acda-87467dab060c
+22e518ee-81b8-4081-ae1b-f0d7a777a1d7
+235066f5-307a-4285-a882-14bc2d06cb7b
+27c99b10-c57e-4599-a23a-f7b1a54c17a1
+2c2a6595-b208-446e-bbd1-d0f49eca45e8
+2f51f17f-f47c-49d5-958f-cafecd3fe01e
+2fd56aa5-7b9b-40b0-9470-05c74b032d55
+31f26a6e-65f5-480d-be32-36b9f425b3dd
+34e1d4be-3708-4065-ae77-eca21f86e857
+3d5618a0-4e3a-45bb-943d-a72c753fb7da
+3de141c0-089b-4ceb-8a2e-bd6d83044a5f
+42059fde-f06f-4e2c-9a23-8292d887fb6e
+482522d1-31f1-43eb-ae9c-a681336404f7
+48ec07ab-ec9d-4297-a7bf-d84974667e61
+49721012-99c1-4d9c-967a-eee4
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md</path>
+<type>file</type>
+<content>
+1: # La roadmap de [Drave](../theorie/glossaire/entrees/drave.md) — un seul plan, quatre chantiers
+2: 
+3: > **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+4: > L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date. Les chiffres, les séries et les
+5: > contrôles vivent dans [`reports/`](../../reports/) ; ici : l'[état](../theorie/glossaire/entrees/etat.md), la prochaine action, et ce qui bloque.
+6: >
+7: > **Détail et histoire** : l'ancien plan [A/B](../theorie/glossaire/entrees/a-b.md) est archivé dans
+8: > [`roadmap-detail-2026-10-29.md`](../archive/roadmap-detail-2026-10-29.md), le détail N dans
+9: > [`roadmap-native-2026-10-29.md`](../archive/roadmap-native-2026-10-29.md). Les **fiches de fonctionnalité** sont
+10: > dans [`backlog/index.md`](backlog/index.md) ; le **graphe des dépendances** est dans
+11: > [`backlog/dependances.md`](backlog/dependances.md). La **page vivante** est [`en-cours.md`](en-cours.md).
+12: 
+13: ## Comment lire cette roadmap
+14: 
+15: - **Les états** : ✅ m
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/MANIFEST.md</path>
+<type>file</type>
+<content>
+1: # Sessions DSH archivées
+2: 
+3: Régénéré par `tools/archive_sessions.py`. Le digest est versionnable ; la
+4: trace brute (`session*.jsonl.zstd`) reste sur disque et n'est pas suivie par git.
+5: 
+6: | Session | Début | Trace | Digest | Tours | Messages | Outils | Erreurs | Compactages |
+7: |---|---|---|---|---|---|---|---|---|
+8: | `00221850` | 2026-10-27 11:34 | 2.6 Mo | 558 Ko | 6 | 469 | 529 | 7 | 0 |
+9: | `04ed1834` | 2026-10-08 09:18 | 0.3 Mo | 67 Ko | 1 | 27 | 42 | 0 | 0 |
+10: | `0b0a6a0d` | 2026-10-31 17:17 | 6.4 Mo | 1148 Ko | 20 | 1709 | 1565 | 5 | 4 |
+11: | `0b2c86eb` | 2026-10-27 10:29 | 0.9 Mo | 148 Ko | 1 | 123 | 128 | 0 | 0 |
+12: | `0b69f616` | 2026-10-30 21:46 | 0.8 Mo | 197 Ko | 1 | 180 | 200 | 0 | 0 |
+13: | `0c631fa9` | 2026-10-27 14:55 | 0.2 Mo | 33 Ko | 1 | 16 | 15 | 0 | 0 |
+14: | `0f3b6070` | 2026-10-31 18:02 | 0.0 Mo | 12 Ko | 1 | 4 | 0 | 0 | 0 |
+15: | `11b2d312` | 2026-10-01 02:50 | 0.5 Mo | 82 Ko | 1 | 42 | 60 | 0 | 0 |
+16: | `13446299` | 2026-10-01 00:54 | 0.5 Mo | 84 Ko | 1 | 50 | 68 | 0 | 0 |
+17: | `15d4e6f4` | 2026-10-22 08:28 | 0.1 Mo |
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plan-travail.md</path>
+<type>file</type>
+<content>
+1: # Le plan de travail — plusieurs sessions sur une même machine
+2: 
+3: > **Ce que ce document est.** Le **pont** entre l'état ([`en-cours.md`](en-cours.md), ce qui se
+4: > passe maintenant) et l'ordre ([`roadmap.md`](roadmap.md), ce qu'il faut faire et dans quel
+5: > ordre) : **qui fait quoi, dans quel territoire, à quelle cadence, et comment on surveille les
+6: > fichiers qui bougent**. Il ne remplace ni l'un ni l'autre : l'état reste la source du présent,
+7: > la roadmap la source de l'ordre.
+8: >
+9: > **Date** : 2026-11-01. **Machine** : une seule — 40 cœurs, 125 Go de RAM, 2 GPU de 16 Go,
+10: > 2,0 To libres sur `Data13TB`, 34 Go sur `IA`. **Capacité** : voir
+11: > [`chantiers.md`](chantiers.md) § 8 (4 sessions, 4 à 6 chantiers, 2 à 4 sous-agents par session).
+12: >
+13: > **Chargement** : ce document avant d'ouvrir une session ; puis la fiche du chantier.
+14: 
+15: ## 1. Où ce plan se situe
+16: 
+17: ```
+18: en-cours.md          ce qui se passe maintenant (état court, une section par session active)
+19: plan-travail.md      qui fait quoi, où, à quelle cadence (
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/chantiers.md</path>
+<type>file</type>
+<content>
+1: # Les chantiers — la vision à jour et leurs relations
+2: 
+3: > **Ce que ce document est.** La **vue d'ensemble des chantiers** : ce que les demandes des
+4: > 48 dernières heures ont déplacé, l'inventaire élargi (A, B, N, R, **S**, **L**, **D**, B13),
+5: > leurs **relations** (ce que chacun attend et ce qu'il fournit) et les **tensions** à trancher.
+6: > Il ne remplace ni la [roadmap](roadmap.md) (l'ordre et les états), ni l'[en-cours](en-cours.md)
+7: > (l'état courant), ni le [backlog](backlog/index.md) (les contrats par fonctionnalité) : il dit
+8: > **comment les morceaux tiennent ensemble**.
+9: >
+10: > **Date** : 2026-11-01. **Méthode** : relecture des messages humains des sessions des 48 h
+11: > (`0b69f616`, `22e518ee`, `0b0a6a0d`, `fe3c05f0`, `e181ce02`, les sessions de QA visuelle),
+12: > des plans et rapports de session, et des documents de vision, roadmap, programme R et backlog.
+13: >
+14: > **Chargement** : ce document (une fois), puis la roadmap pour l'ordre. Ne pas charger le
+15: > backlog entier.
+16: 
+17: ## 1. Ce que les 48 heures ont demandé
+18: 
+19: L
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/manques.md</path>
+<type>file</type>
+<content>
+1: # Registre des manques
+2: 
+3: > **Dernière vérification : 2026-10-27.**
+4: 
+5: > **Résumé —** Le registre des manques mesurés (M1–M9, N1–N5, architecture) ; chaque ligne porte la
+6: > mesure qui l'établit et ce qu'elle bloque. **Chargement :** document daté ; **ne pas charger par
+7: > défaut**. Lire ce résumé, puis la section utile.
+8: 
+9: > **Document daté.** Plan, note ou étude d'un chantier : il porte sa date et son état en tête. La
+10: > **feuille de route courante** est [`roadmap.md`](roadmap.md) ; l'**état** est
+11: > [`en-cours.md`](en-cours.md).
+12: 
+13: > 9 octobre 2026 (**dernière vérification : 2026-10-27**). Ce que le dépôt **ne sait pas faire**,
+14: > consigné comme manque — pas comme résultat. Chaque ligne porte la mesure qui l'établit, ce
+15: > qu'elle bloque, et où c'est documenté. Rien ici n'est une feuille de route : la feuille de route
+16: > courante est [`roadmap.md`](roadmap.md) ; le plan d'origine est archivé
+17: > (`docs/archive/plan-cerveau-complet.md`).
+18: 
+19: ---
+20: 
+21: ## 1. Les manques du MOTEUR
+22: 
+23: | # | manque | ce qui l'établit
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/index.md</path>
+<type>file</type>
+<content>
+1: # Le backlog des fonctionnalités — index
+2: 
+3: > **Ce que ce dossier est.** Une **fiche par fonctionnalité** à documenter et à implémenter : le programme
+4: > **R (le lecteur)** et les lignes ouvertes des programmes A, B et N. Une fiche n'est **pas** un résultat :
+5: > elle porte le besoin, le contrat, la porte, les contrôles négatifs et ce qui pourrait la rendre fausse. Le
+6: > résultat, quand il existe, vit dans `reports/`.
+7: >
+8: > **La roadmap** est [`../roadmap.md`](../roadmap.md) ; l'**analyse** qui a ouvert le programme R est
+9: > [`../../theorie/lecture-rapide.md`](../../theorie/lecture-rapide.md) ; l'**état courant** est
+10: > [`../en-cours.md`](../en-cours.md). **Chargement** : une fiche à la fois, jamais le dossier entier. **37 fiches** : 20 pour R, 17 pour les lignes
+11: > ouvertes A/B/N ; le **graphe** des dépendances est dans [`dependances.md`](dependances.md).
+12: 
+13: ## Comment utiliser une fiche
+14: 
+15: 1. **Lire le besoin et le contrat** — c'est ce qui dit si la fonctionnalité est prête à être codée.
+16: 2. **Vérifier la porte et les contr
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+== numstat ==
+20	20	docs/README.md
+1	1	docs/implantation/bloc-linguistique.md
+25	25	docs/implantation/format-flux.md
+3	2	docs/implantation/moteur-de-pensee.md
+6	6	docs/methode/contexte.md
+7	7	docs/methode/portes.md
+13	13	docs/methode/resultats.md
+3	3	docs/pilotage/en-cours.md
+10	10	docs/theorie/carte.md
+3	2	docs/theorie/glossaire.md
+6	3	docs/theorie/glossaire/README.md
+153	1	docs/theorie/glossaire/index.json
+41	41	docs/theorie/lecture-rapide.md
+20	20	docs/theorie/vision.md
+2	2	journal/README.md
+3	3	journal/sessions/MANIFEST.md
+108	0	journal/sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/digest.md
+19	8	journal/sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md
+116	0	journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+56	5	journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+1	1	reports/README.md
+11	11	reports/corpus-genres.json
+8	8	reports/native-generation.json
+4	4	reports/rapport-genres.md
+26	14	reports/rapport-ocr-pdf.md
+20	9	tools/distiller_budget.py
+1	1	tools/docwatch
+8	1	tools/generer_natif.py
+2	1	tools/glossaire_cartes.py
+11	1	tools/ocr_pdf.py
+12	1	tools/pensee/autotest.py
+296	0	tools/tests/linguistique/gold_reel.json
+15	0	tools/tests/linguistique
+… [3956 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/verifie_etat_a_jour.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """verifie_etat_a_jour.py — aucun fait commité sans sa ligne d'état.
+3: 
+4: POURQUOI CET OUTIL EXISTE. `en-cours` est la seule source de l'état, et le contrat
+5: disait « seul le principal écrit ». Ce n'est pas une garantie : l'identité se déduit
+6: d'une variable d'environnement absente — un « pair » est autodéclaré — et si la
+7: principale s'arrête, l'état se fige. Surtout, rien ne comparait les commits : la
+8: revue ne regardait que la DATE, donc deux commits du même jour passaient. Le 29/10,
+9: A8.0 (15 h 51) a été commité après le dernier état (15 h 34) sans aucune alerte.
+10: 
+11: La garantie est au commit, pas dans la discipline d'un écrivain :
+12:   --index  (hook pre-commit) : un commit qui prépare un fait (reports/, roadmap,
+13:            backlog) sans toucher `en-cours` est REFUSÉ ;
+14:   --head   : si un fait a été commité après le dernier commit d'`en-cours`, l'état
+15:            est en retard — la session qui le voit le corrige, sans attendre.
+16: 
+17: Le journal est du récit dérivé (le hook l'archive) : il n'exige pas de
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+== top ==
+total 152276
+drwxr-xr-x. 1 stephane stephane      2130 31 oct 17:05 .
+drwxr-xr-x. 1 stephane stephane      2496  1 nov 10:47 ..
+-rw-------. 1 stephane stephane     26574 31 oct 17:05 AGENTS.md
+drwxr-xr-x. 1 stephane stephane        44 27 jan  2026 archive
+drwxr-xr-x. 1 stephane stephane       122 27 jan  2026 backup-pre-nvme-20251203
+drwxr-xr-x. 1 stephane stephane        30 27 jan  2026 benchmark-results-20251203_124603
+drwxr-xr-x. 1 stephane stephane        62 27 jan  2026 benchmark-results-20251203_125007
+-rwxr-xr-x. 1 stephane stephane      2619 17 fév  2026 COMMANDES_RETRAIT_4TB.sh
+drwxr-xr-x. 1 stephane stephane        26 27 jan  2026 config
+-rw-r--r--. 1 stephane stephane      1318 26 fév  2026 CONSOLIDATION_NEXTPHASE.md
+-rw-r--r--. 1 stephane stephane      6331 16 fév  2026 CONSOLIDATION_QUALITY_REPORT.md
+-rw-r--r--. 1 stephane stephane      7294 17 fév  2026 CONSOLIDATION_SSD_USB_REPORT.md
+-rw-r--r--. 1 stephane stephane     15266 17 fév  2026 CONSOLIDATION_WORKFLOW.md
+drwxr-xr-x. 1 stephane stephane      8508 21 oct 13:15 docs
+-rwxr-xr-x. 1 stephane stephane      5136 17 fév  2026 EFFACEMENT_HDD_4TB.sh
+-rwxr-xr-x. 1 stephane stephane      4677 17 fév  2026 EFFAC
+… [3957 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 19 h 55 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+6: > plan plus bas (**La carte**).
+7: >
+8: > **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+9: > (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+10: > [`plan-travail.md`](plan-travail.md) § 9.
+11: 
+12: ## Sessions en cours
+13: 
+14: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+15: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+16: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+17: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+18: 
+19: ### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+20: 
+21: - **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-
+… [3959 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe finie : 76 vertes / 5 rouges, dont `porte-tableaux` sur la fiche N2 en cours ; `porte-sessions` est verte. J'intègre le verdict.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== references blocs ==\" && grep -n 'Dernière passe\\|Passe précédente\\|Passe du\\|Historique des passes' docs/pilotage/references-non-regression.md | head -12; echo; echo \"== en-cours lignes ==\" && grep -n 'dernière passe\ … [307 caractères tronqués]`
+
+  ```
+== references blocs ==
+3:> **Dernière passe complète — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**,
+11:> **Passe précédente — 2026-11-02 à 06 h :** 81 portes, 76 vertes, 5 rouges (`/tmp/portes-…`,
+14:> **Passe précédente — 2026-11-01 à 00 h 56 :** **80 portes, 76 vertes, 4 rouges, 1 h 46**
+19:> **Passe précédente — 2026-10-31 à 19 h 42 :** **79 portes, 75 vertes, 4 rouges, 1 h 39**
+22:> **Passe précédente — 2026-10-31 à 12 h 54 :** 78 portes, 73 vertes, 5 rouges ; `porte-jeux`
+25:> **Passe précédente — 2026-10-29 à 22 h 09 :** 62 portes, 60 vertes, 2 rouges, 1 h 46 ;
+34:> **Passe précédente — 2026-10-27 à 14 h 33** (**49 portes, 47 vertes, 2 rouges**, **1 h 48 min**) — la passe
+39:> **Passe précédente — 2026-10-26 à 14 h 30** (**49 portes, 2 rouges**, **1 h 34**) — clôture de **B9** :
+46:> **Historique des passes** : les passes antérieures au 26/10 14 h 30, dont celle du
+
+== en-cours lignes ==
+111:| portes | **82** (81 à la passe du 02/11 06 h : 76/5 ; **82e `porte-ressources`**, à valider) | `tools/porte-*.sh` |
+115:| dernière passe | **02/11 19 h 32** (81 portes, 76 vertes, 5 rouges ; 4 connues + `porte-tableaux` de passage) | `docs/pilotage/references-non-regress
+… [516 caractères tronqués]
+  ```
+

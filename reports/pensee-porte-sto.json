@@ -1,0 +1,165 @@
+{
+  "date": "2026-11-02 21:25 EST",
+  "modele": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf",
+  "endpoint": "http://127.0.0.1:18082",
+  "probleme": {
+    "nom": "labyrinthe_porte_sto",
+    "porte": [
+      3,
+      3
+    ],
+    "but": [
+      4,
+      4
+    ],
+    "regle": "depuis (3,2), la sonde ouvre avec 80 % ; en cas d'échec, réessayer",
+    "budget": 200
+  },
+  "politique": {
+    "classe": "PolitiqueLLM",
+    "jeux": [
+      "porte_sto",
+      "labyrinthe"
+    ],
+    "contrainte": "grammaire GBNF, quatre directions"
+  },
+  "apprise": {
+    "classe": "PolitiqueAppriseOuverte",
+    "episodes": 1000,
+    "etats_q": 74,
+    "seule_but": true,
+    "seule_pas": 9,
+    "essais": 2
+  },
+  "mesures": {
+    "oracle": {
+      "noeuds": 28,
+      "but": true,
+      "par_operateur": {
+        "pas": 13,
+        "saut": 10,
+        "sonde": 5
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 58.0,
+      "appels": 7,
+      "budget": 26,
+      "politique": "manhattan",
+      "score": 1.0,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.003
+    },
+    "aveugle": {
+      "noeuds": 200,
+      "but": false,
+      "par_operateur": {
+        "pas": 100,
+        "saut": 39,
+        "sonde": 61
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 483.0,
+      "appels": 66,
+      "budget": 200,
+      "politique": "aveugle",
+      "score": 0.25,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.022
+    },
+    "hasard": {
+      "noeuds": 44,
+      "but": true,
+      "par_operateur": {
+        "pas": 23,
+        "saut": 14,
+        "sonde": 7
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 86.0,
+      "appels": 14,
+      "budget": 43,
+      "politique": "hasard",
+      "score": 1.0,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.005
+    },
+    "llm_porte_sto": {
+      "noeuds": 31,
+      "but": true,
+      "par_operateur": {
+        "pas": 14,
+        "saut": 11,
+        "sonde": 6
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 66.0,
+      "appels": 8,
+      "budget": 29,
+      "politique": "llm",
+      "score": 1.0,
+      "latence_s": 13.023,
+      "erreurs": 0,
+      "duree_s": 13.028
+    },
+    "llm_labyrinthe": {
+      "noeuds": 200,
+      "but": false,
+      "par_operateur": {
+        "pas": 144,
+        "saut": 53,
+        "sonde": 3
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 265.0,
+      "appels": 95,
+      "budget": 200,
+      "politique": "llm",
+      "score": 0.25,
+      "latence_s": 182.62,
+      "erreurs": 0,
+      "duree_s": 182.675
+    }
+  },
+  "seuils": {
+    "oracle_but": true,
+    "oracle_sonde": true,
+    "aveugle_non": true,
+    "hasard_non": false,
+    "apprise_but": true,
+    "llm_but": true,
+    "llm_sonde": true,
+    "labyrinthe_non": true,
+    "aucune_erreur_llm": true,
+    "latence_mesuree": true
+  },
+  "verdict": false,
+  "limites": [
+    "La porte s'ouvre à 80 % ; le hasard/la chance peut passer un essai ; le contrôle propre est l'aveugle et le labyrinthe.",
+    "La Q-table `PolitiqueAppriseOuverte` (T33, 1000 épisodes) est la référence sans A* ; elle est mesurée à 80 %.",
+    "L'A* explore et réessaie ; le nombre de nœuds dépend du tirage aléatoire.",
+    "La latence inclut la file du serveur ; CPU seulement ; une graine, température 0."
+  ]
+}

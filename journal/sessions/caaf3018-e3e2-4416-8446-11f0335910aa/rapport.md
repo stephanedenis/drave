@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.1 h |
+| Durée | 5.2 h |
 | Tours | 23 |
-| Messages | 265 |
-| Appels d'outils | 275 |
+| Messages | 272 |
+| Appels d'outils | 281 |
 | Fichiers touchés | 6 |
-| Commandes | 210 |
+| Commandes | 215 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -457,7 +457,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
@@ -467,10 +467,15 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - bash — Read tables gate failure details
 - bash — Diagnose broken N2 link
 - bash — Wait for pass end and N2 JSON
+- bash — Check N2 link artifact and references freshness
+- bash — Check N2 plan state and references diff
+- bash — Re-run strict sessions check at 21h28
+- bash — Check section 1 row and section 2 table header
+- bash — Build and dry-run section 1/2 patcher
 
 **Synthèse produite :**
 
-⏵ `porte-tableaux` a vu une fiche N2 **en cours d'écriture** (liée à un JSON pas encore produit) : rouge de chantier en vol, pas régression. J'attends le JSON.
+⏵ L'autre écrivain a ajouté la tolérance « mandat long sous claim » — d'où la porte verte. Je mets à jour le §2 (tableau des repères) et le §1.
 
 ## 3. Travail accompli
 
@@ -527,7 +532,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 170 autres
+- … et 175 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -602,6 +607,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T14** `--- 2. les colonnes (10 pages × 2 versions × 3 familles)`
 - **T17** `✅ propre · test : WER ≤ 6% (mesuré 3.0%)`
 - **T18** `--- 3. les tableaux (10 pages × 3 familles)`
+- **T23** `-> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé`
 
 ## 5. Erreurs rencontrées
 

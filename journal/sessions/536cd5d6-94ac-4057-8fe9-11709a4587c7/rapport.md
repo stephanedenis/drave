@@ -7,12 +7,12 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 5.7 h |
+| Durée | 5.9 h |
 | Tours | 10 |
-| Messages | 189 |
-| Appels d'outils | 250 |
+| Messages | 191 |
+| Appels d'outils | 253 |
 | Fichiers touchés | 13 |
-| Commandes | 188 |
+| Commandes | 191 |
 | Sous-agents | 0 |
 | Commits | 12 |
 | Compactages de contexte | 0 |
@@ -615,16 +615,19 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 
 ### Tour 10 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [977 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - job_output
 - bash — Inspect pass completion, git state, sessions and claims
 - bash — Inspect gate tableaux log and modified docs
 - bash — Check N2 fiche JSON link and pass status
+- bash — Locate pass blocks, state rows and gate counts
+- bash — Verify review, budgets, git and N2 fiche JSON
+- bash — Release pass claim, claim integration and check ledger
 
 **Synthèse produite :**
 
-⏵ La rouge `porte-tableaux` vient de la fiche N2 en cours (`rapport-n2-fenetre.md` → JSON absent) ; je vérifie et j'attends la fin de la passe.
+⏵ La passe est déjà intégrée par l'autre session (références 19 h 32, en-cours 82). Je vérifie la revue, les budgets, le registre et la fiche N2.
 
 ## 3. Travail accompli
 
@@ -688,7 +691,7 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 148 autres
+- … et 151 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -816,7 +819,7 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 
 ## 5. Erreurs rencontrées
 
-9 sorties en erreur ou divergentes. Les premières :
+10 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ===== b6a672ec digest (head) ===== # Session DSH — relecture  - identifiant : `b6a672ec-3349-4a4c-9e23-4478aa823170` - dossier : `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` - créée : 2026-11-01 
 - **T1** : == uptime == [stderr] uptime: invalid option -- 's' Try 'uptime --help' for more information. [exit code: 1]
@@ -827,6 +830,7 @@ Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une au
 - **T7** : [stderr] Traceback (most recent call last):   File "<stdin>", line 8, in <module>   File "<stdin>", line 5, in sub AssertionError: 0 != 1: 'Les portes lourdes (`porte-ocr-scans`, `toutes-les-portes`) 
 - **T7** : 20:00 [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module>   File "<stdin>", line 5, in sub AssertionError: 0 != 1: '**Mis à jour : 2026-11-02, 16 h 09 HNE (heure locale, 
 - **T8** : plan-travail 10.7 ajouté [stderr] Traceback (most recent call last):   File "<stdin>", line 40, in <module>   File "<stdin>", line 37, in sub AssertionError: 0 != 1: '**Mis à jour : 2026-11-02, 19 h 5
+- **T10** : == revue ==   revue de documentation · 568 fiche(s) · 653 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)   ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulai
 
 ## 6. Commits
 

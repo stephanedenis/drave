@@ -5267,3 +5267,14 @@ ls: cannot access 'reports/n2-fenetre.json': No such file or directory
 --- json ailleurs ---
   ```
 
+### 🤖 Assistant
+
+⏵ `porte-tableaux` a vu une fiche N2 **en cours d'écriture** (liée à un JSON pas encore produit) : rouge de chantier en vol, pas régression. J'attends le JSON.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 420; date +%H:%M:%S; echo \"=== passe ===\"; wc -l < work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt | tr '\\n' ' '; echo; echo \"=== json n2 ===\"; ls -la reports/n2-fenetre.jso … [140 caractères tronqués]`
+
+  ```
+started background job bash-210
+  ```
+
+- **job_output** `{"job_id": "bash-210", "timeout_ms": 440000, "wait": true}`

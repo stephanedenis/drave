@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 5.1 h |
-| Tours | 12 |
-| Messages | 476 |
-| Appels d'outils | 581 |
-| Fichiers touchés | 41 |
-| Commandes | 427 |
+| Durée | 5.2 h |
+| Tours | 13 |
+| Messages | 487 |
+| Appels d'outils | 590 |
+| Fichiers touchés | 43 |
+| Commandes | 433 |
 | Sous-agents | 0 |
-| Commits | 16 |
+| Commits | 17 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -47,6 +47,8 @@
 **Tour 11** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 **Tour 12** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 13** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -518,7 +520,45 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 
 **Synthèse produite :**
 
-⏵ L'heure d'état 21 h 45 est dans le futur (commit à 21 h 17) : je corrige à 21 h 17 et je commite
+⏵ Round 10 : la porte **qui bouge** est un test faible (tous passent) ; commits `35ca1461` et état `8eab6a7c`
+
+**Fait de la nuit** — commit **`35ca1461`** : la porte qui bouge.
+
+| politique | but | nœuds | sonde | latence |
+|---|---|---:|---:|---:|
+| oracle (Manhattan) | ✅ | 28 | 5 | 0 |
+| **aveugle** | ✅ | 25 | 2 | 0 |
+| **hasard** | ✅ | 27 | 4 | 0 |
+| **LLM `porte_bouge`** | ✅ | **25** | **2** | **13,4 s** |
+| **LLM `labyrinthe`** | ✅ | 28 | 5 | 13,3 s |
+| Q-table `PolitiqueAppriseBouge` | ✅ | — | — | 10 pas (236 états-Q) |
+
+- Le 7B avec la **phase** `t % 6` passe (25/2) — mais il fait **exactement le score de l'aveugle** ; l'aveugle (25/2), le hasard (27/4) et le labyrinthe (28/5) passent aussi. La phase dans le prompt **ne change rien** : le test ne discrimine pas.
+- La **Q-table** (T34) passe en 10 pas ; l'oracle 28/5. Le prochain test propre est la **porte stochastique** (80 %) ou la **fenêtre temporelle**.
+
+**État** : T0 **3 996/4 000**, `en-cours` **1 622 mots**, revue **567/652**, **sessions --strict : EXIT=0**. La fiche N2 concurrente `rapport-n2-fenetre.md` laisse un lien non résolu (`n2-fenetre.json`) et le S/hub ont encore des modifications (`rapport-s-*`, `structures`, `portes.md`).
+
+Nuit committée : B13 140 `6532541c` · état 140 `335e1737` · **bouge `35ca1461`** · heure réelle `8eab6a7c` ; plus POS `7ef0199c`, syntagmes `df899b90`, cascade `01838589`, DRVM `9250b1c3`, porte `aeace14b`, pragmatique `4a85604d`, minute `67ec9cd4`, mobile `2fad8e8d` ; S `3f74fe83`, hub `a67dbf00`→`66826ed5`, N2 `c0196b55`.
+
+La suite : **porte stochastique** (80 %), **fenêtre** (`attendre`, `t % 3`), le **gold 200+**, la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 13 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Add porte_sto prompt and test
+- write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_sto_drvm.py`
+- bash — Run stochastic door qualification
+- job_output
+- bash — Extract stochastic results
+- write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-sto.md`
+- bash — Apply stochastic state and checks
+- bash — Trim Fait and check T0
+- bash — Commit stochastic door fact
+
+**Synthèse produite :**
+
+⏵ T0 3 974, revue 568/653 ; je commite la porte stochastique
 
 ## 3. Travail accompli
 
@@ -567,6 +607,8 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 | `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/miroir.py` | 0 | 1 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_bouge_drvm.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-bouge.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_sto_drvm.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-sto.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -610,7 +652,7 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 387 autres
+- … et 393 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -724,4 +766,5 @@ La suite : la **porte stochastique/fenêtre**, le **gold 200+**, la fonction « 
 - ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT" 2>&1 | tail -6; echo 
 - ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %ad %s' --date=fo
+- B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

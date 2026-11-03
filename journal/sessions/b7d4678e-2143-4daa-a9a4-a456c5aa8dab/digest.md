@@ -7500,3 +7500,250 @@ porte-tableaux 1 1
   ```
 
 - **job_output** `{"job_id": "bash-266", "timeout_ms": 300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; ls -l reports/n2-fenetre.json 2>/dev/null || echo \"json absent\"; git log --oneline -2; git status --short | head -6; echo \"--- vision ---\"; tail -3 work/portes/passe-1102-19h32/porte-vision.log 2>/dev/null", "description": "Check N2 JSON and vision gate"}`
+
+  ```
+21:23:02
+json absent
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+ M docs/methode/portes.md
+ M reports/rapport-s-analyseur-roles.md
+ M reports/rapport-s-corpus-reel.md
+ M reports/s-banque-structures.json
+ M tools/pensee/operateurs.py
+ M tools/structures
+--- vision ---
+porte de la vision — mmproj-Qwen2-VL-2B-Instruct-Q8_0.gguf
+  ✅ 1. un modèle sans tour de vision est refusé en le disant
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -3; python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/sessions.py --check --strict 2>&1 | tail -2", "description": "Check state after B13 commits"}`
+
+  ```
+revue de documentation · 567 fiche(s) · 652 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1622 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (87 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ```
+
+- **job_output** `{"job_id": "bash-266", "timeout_ms": 300000, "wait": true}`
+
+  ```
+(no new output)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cat work/veille/passe-finie.txt; echo \"--- fin registre ---\"; tail -4 work/portes/passe-1102-19h32/registre.txt; echo \"--- rouges ---\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo \"--- lignes ---\"; wc -l work/portes/passe-1102-19h32/registre.txt; echo \"--- n2 js … [145 caractères tronqués]`
+
+  ```
+21:24:02
+passe finie
+--- fin registre ---
+porte-topologie 0 100
+porte-trace 0 28
+porte-vision 0 602
+--- 76 vertes, 5 rouges ---
+--- rouges ---
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+porte-reparti-moteur 1 51
+porte-tableaux 1 1
+--- 76 vertes, 5 rouges ---
+--- lignes ---
+82 work/portes/passe-1102-19h32/registre.txt
+--- n2 json ---
+json absent
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+  ```
+
+- **read** `{"file_path": "docs/pilotage/references-non-regression.md", "limit": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md</path>
+<type>file</type>
+<content>
+1: # Références de non-régression
+2: 
+3: > **Dernière passe complète — 2026-11-02 à 06 h :** **81 portes, 76 vertes, 5 rouges** (journaux
+4: > `/tmp/portes-…`, **effacés au reboot de 15 h 06** : ce fichier est le registre). Les 4 rouges
+5: > connues : `porte-indice`, `porte-melange`, `porte-homeostasie`, `porte-reparti-moteur` ; la 5e,
+6: > **`porte-greffe`** à 700 s, **rejouée verte à 1200 s** (un délai, pas une régression). La passe
+7: > du 02/11 00 h 03 : 81 portes, 77 vertes, 4 rouges. Journaux durables : `work/portes/`.
+8: 
+9: > **Passe précédente — 2026-11-01 à 00 h 56 :** **80 portes, 76 vertes, 4 rouges, 1 h 46**
+10: > (journaux `/tmp/portes-1101-n2h`). Mêmes rouges que la passe du 31/10 : `porte-indice` (921 s),
+11: > `porte-melange` (112 s), `porte-homeostasie` (environnementale) et `porte-reparti-moteur`.
+12: > Aucune régression ; `porte-vision` et `porte-ocr-scans` sont vertes.
+13: 
+14: > **Passe précédente — 2026-10-31 à 19 h 42 :** **79 portes, 75 vertes, 4 rouges, 1 h 39**
+15: > (journaux `/tmp/portes-1031-n2d`) : mêmes rouges ; `porte-o
+… [1206 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md')\nt=p.read_text(encoding='utf-8')\n\nold_06 = \"\"\"> **Dernière passe complète — 2026-11-02 à 06 h :** **81 portes, 76 vertes, 5 rouges** (journaux\n> `/tmp/portes-…`, **effacés au reboot de 1 … [2291 caractères tronqués]`
+
+  ```
+references mises à jour
+
+  ❌ 1 violation(s) :
+     · docs/pilotage/references-non-regression.md : 2503 mots > budget 2500 (T1)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md')\nt=p.read_text(encoding='utf-8')\na=\"\"\"Rouges : les 4 connues\n> (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env.,\n> `porte-reparti-moteur` 51 s) + **`porte-tab … [818 caractères tronqués]`
+
+  ```
+trim ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 567 fiche(s) · 652 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "grep -n \"dernière passe\" docs/pilotage/en-cours.md; ls -l --time-style=+%H:%M docs/pilotage/en-cours.md", "description": "Read the last pass row"}`
+
+  ```
+115:| dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
+-rw-r--r--. 1 stephane stephane 12024 21:19 docs/pilotage/en-cours.md
+  ```
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "limit": 6, "offset": 112}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+112: | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+113: | fichiers / JSON de résultats | **567** / **652** | `reports/*.md` / `reports/*.json` |
+114: | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
+115: | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
+116: 
+117: ## Les chantiers et leurs bloquants
+
+(Showing lines 112-117 of 155. Use offset=118 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "| dernière passe | **02/11 19 h 32** (81 portes, 76 vertes, 5 rouges ; 4 connues + `porte-tableaux` de passage) | `docs/pilotage/references-non-regression.md` |", "old_string": "| dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilo … [38 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -1", "description": "Verify state before pass-verdict commit"}`
+
+  ```
+✅ état court, structuré, multi-session et reprenable
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ⚠ mandat long (46 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ```
+
+- **bash** `{"command": "grep -n \"47/47\\|117/117\\|gold 47\\|54/55\\|131/131\\|gold 55\" docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md | head -12; echo \"--- S section ---\"; sed -n '/### Session `29ad180d/,/### Session `e181ce02/p' docs/pilotage/e … [73 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md:39:- **Plan** : 1–4) ~~plan, analyseur (gold 55), export, tests 47~~ ; 5–6) ~~fiche, pointeur, état~~.
+docs/pilotage/en-cours.md:43:- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %** propre (9,1 %) ; banque **200** phrases / **355** candidats ; **47 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
+docs/pilotage/en-cours.md:98:- **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; **banque validée à 0**.
+docs/pilotage/roadmap.md:34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v4** : règle de contexte des homographes, gold **55** phrases ; an
+… [3001 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\n# roadmap : paragraphe d'état\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text(encoding='utf-8')\na=\"**S** : **47/47** types, **117/117** rôles, **47/47** compléments,\\ngold **47** ; **D/R/A** close\"\nb=\"**S** : **54/55** types, **131/131* … [2209 caractères tronqués]`
+
+  ```
+roadmap ok
+chantiers ok
+plan-travail ok
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1", "description": "Check budgets after S update"}`
+
+  ```
+❌ 1 violation(s) :
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 652 JSON, le disque en a 653
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "ls -lt reports/*.json | head -3; ls -l reports/n2-fenetre.json 2>/dev/null; echo \"--- n2 fiche ---\"; git status --short reports/rapport-n2-fenetre.md reports/n2-fenetre.json; echo \"--- porte-tableaux test ---\"; bash tools/porte-tableaux.sh 2>&1 | tail -4", "description": "Check new  … [24 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane    3648  2 nov 21:25 reports/pensee-porte-sto.json
+-rw-r--r--. 1 stephane stephane    3788  2 nov 21:16 reports/pensee-porte-bouge.json
+-rw-r--r--. 1 stephane stephane    3224  2 nov 21:06 reports/b13-porte-140.json
+--- n2 fiche ---
+?? reports/rapport-n2-fenetre.md
+--- porte-tableaux test ---
+  ✅ 1573 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ❌ 1 lien(s) relatif(s) ne résolvent pas (sur 2726 examinés) :
+     reports/rapport-n2-fenetre.md → n2-fenetre.json
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "ls -l reports/rapport-b13-porte-140.md 2>/dev/null || echo \"fiche 140 absente\"; python3 - <<'PY'\nimport json\ntry:\n    d=json.load(open('reports/b13-porte-140.json'))\n    print({k:d.get(k) for k in ('date','verdict','portes','total','rouges','nom') if k in d})\nexcept Exception as  … [255 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 5789  2 nov 21:06 reports/rapport-b13-porte-140.md
+{'date': '2026-11-02 21:25 EST', 'verdict': True}
+--- en-cours B13 ---
+58:- **Fait** : B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432** ; **gold
+102:- **Pensée — B13** : **140/140**, gold **432**, **116 liens** ; minute 26, mobile/bouge **faibles** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
+125:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 140/140 ; minute 26, mobile/bouge faibles** ; **B10.3 bloquée** |
+137:**N4** — la consigne ; **B10.3** — le `z` ; **B13** — 138/140 ; **R0.7** — le tagger ; **D** — OCR clos (8 `.PDF`).
+  ```
+
+- **bash** `{"command": "grep -rn \"138/140\" docs/pilotage/*.md | head -12; echo \"=== T132 ===\"; grep -rn \"T132/T133\" docs/pilotage/*.md | head -8", "description": "Find stale B13 138/140 references"}`
+
+  ```
+docs/pilotage/en-cours.md:137:**N4** — la consigne ; **B10.3** — le `z` ; **B13** — 138/140 ; **R0.7** — le tagger ; **D** — OCR clos (8 `.PDF`).
+docs/pilotage/roadmap.md:31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **[professeur](../theorie/glossaire/entrees/professeur.md)** + **sans None** + **correction** + **audit** + **ouverte** + **graines** + **mobile** + **mobile graines** + **bruit** + **bouge** + **bo
+… [10603 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\n# en-cours : 138 -> 140, compteur 653, trims\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nrepls=[\n (\"**B13** — 138/140\", \"**B13** — 140/140\"),\n (\"| fichiers / JSON de résultats | **567** / **652** |\", \"| fichie … [1058 caractères tronqués]`
+
+  ```
+absent: | fichiers / JSON de résultats | **567** / **652**
+absent: 8–9) **intégration, portes** (GPU 1).
+roadmap 138: 2
+ok
+  ❌ 1 violation(s) :
+     · T0 : 4016 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 568 fiche(s) · 653 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "grep -n \"R1 — la fenêtre\\|Ce qui reste\\|Pensée — B13\\|Ce qu'elle fait\" docs/pilotage/en-cours.md | head; sed -n '/## Ce qui est en cours/,/## Les chiffres/p' docs/pilotage/en-cours.md | head -30", "description": "Read current en-cours summary blocks"}`
+
+  ```
+28:- **Ce qu'elle fait** : intégration ; **porte stricte** ; sous-passe doc. **7/8** ; **passe de
+44:- **Ce qu'elle fait** : **`00d2a01`** ; corpus **55** (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats, **0** validée.
+63:- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; reprise **16 h 16**.
+77:- **Ce qu'elle fait** : R1.2-1024 lancée à 19 h 57 (GPU 0) ; les portes gardent le GPU 1.
+92:- **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 octets (table absolue **8,2024**),
+99:- **Pensée — B13** : **140/140**, gold **432**, **116 liens** ; minute 26, mobile/bouge **faibles** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
+131:## Ce qui reste
+## Ce qui est en cours
+
+- **R0 — lecteur v0** : R0.1–R0.3 **mesurés** ; **R0.4/R0.5 closes (négatifs)** ; R0.6 **12/20** au pilote, **7/7** à la porte.
+- **R4.1–R4.4** : **mesurés** (R4.4 : 4/5 ≥ **90 %**) ; **typoglycémie** ×17,8 intérieur, ×62,7 tout ; [`r44-scans`](../../reports/rapport-r44-scans.md), [`typoglycemie`](../../reports/rapport-typoglycemie.md).
+- **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 sc
+… [1495 caractères tronqués]
+  ```
+
