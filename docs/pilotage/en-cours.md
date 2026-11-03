@@ -104,7 +104,7 @@
 - **S — les structures** : analyseur **54/55**, **131/131** rôles ; corpus **55** ; banque partielle **142/71**, **81/65** ; arbre **99 ≥3**, référents **294/371**, page **`/paragraphes`** ; prochaine : valider.
 - **N2 — en pause** : la **fenêtre 1 024** est la recette de production (2,56–2,99 ; sous 2,5 au grand corpus) ; le compute à 128 donne 3,1591/8,2262.
 - **Pensée — B13 (actif)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5.
-- **L — le bloc langue** : contrat écrit ; **frontière : script 1,0 ; langue 0,137 (libellés) / 0,9687 (texte long)**.
+- **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; **quatre modes : neuronal 0,931/0,823/0,878, cascade 0,928/0,802/0,857 (fusion à réparer)**.
 
 ## Les chiffres de l'état
 
@@ -114,7 +114,7 @@
 |---|---|---|
 | portes | **82** (passe du **03/11 11 h 30** : **82, 80/2**) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **595** / **683** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **596** / **684** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2** ; les 2 connues, machine au repos) | `docs/pilotage/references-non-regression.md` |
 

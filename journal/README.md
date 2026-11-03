@@ -13,7 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-11-03** | [2026-11-03/README.md](2026-11-03/README.md) | [apprentissage](2026-11-03/apprentissage.md) · [attention](2026-11-03/attention.md) · [distribue](2026-11-03/distribue.md) · [docs](2026-11-03/docs.md) · [memoire](2026-11-03/memoire.md) · [mesures](2026-11-03/mesures.md) · [modele](2026-11-03/modele.md) · [moteur](2026-11-03/moteur.md) · [portes](2026-11-03/portes.md) |
+| **2026-11-03** | [2026-11-03/README.md](2026-11-03/README.md) | [apprentissage](2026-11-03/apprentissage.md) · [attention](2026-11-03/attention.md) · [distribue](2026-11-03/distribue.md) · [docs](2026-11-03/docs.md) · [memoire](2026-11-03/memoire.md) · [mesures](2026-11-03/mesures.md) · [modele](2026-11-03/modele.md) · [moteur](2026-11-03/moteur.md) · [outils](2026-11-03/outils.md) · [portes](2026-11-03/portes.md) |
 | **2026-11-02** | [2026-11-02/README.md](2026-11-02/README.md) | [apprentissage](2026-11-02/apprentissage.md) · [attention](2026-11-02/attention.md) · [distribue](2026-11-02/distribue.md) · [docs](2026-11-02/docs.md) · [memoire](2026-11-02/memoire.md) · [mesures](2026-11-02/mesures.md) · [modele](2026-11-02/modele.md) · [moteur](2026-11-02/moteur.md) · [outils](2026-11-02/outils.md) · [portes](2026-11-02/portes.md) |
 | **2026-11-01** | [2026-11-01/README.md](2026-11-01/README.md) | [apprentissage](2026-11-01/apprentissage.md) · [attention](2026-11-01/attention.md) · [distribue](2026-11-01/distribue.md) · [docs](2026-11-01/docs.md) · [memoire](2026-11-01/memoire.md) · [mesures](2026-11-01/mesures.md) · [modele](2026-11-01/modele.md) · [moteur](2026-11-01/moteur.md) · [nuit-n2](2026-11-01/nuit-n2.md) · [outils](2026-11-01/outils.md) · [portes](2026-11-01/portes.md) |
 | **2026-10-31** | [2026-10-31/README.md](2026-10-31/README.md) | [apprentissage](2026-10-31/apprentissage.md) · [distribue](2026-10-31/distribue.md) · [docs](2026-10-31/docs.md) · [memoire](2026-10-31/memoire.md) · [mesures](2026-10-31/mesures.md) · [modele](2026-10-31/modele.md) · [moteur](2026-10-31/moteur.md) · [portes](2026-10-31/portes.md) |
@@ -66,7 +66,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 |---|---|---|---|---|---|---|---|---|
 | `00221850` | Outillage de présentation de documentation | 2026-10-27 11:34 | 4.9 h | 6 | 529 | 38 | 25 | [rapport](sessions/00221850-90de-4287-90ee-324a35e504cd/rapport.md) |
 | `04ed1834` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 42 | 0 | 0 | [rapport](sessions/04ed1834-b0f8-42a1-aa21-75a75c19647e/rapport.md) |
-| `0733c5bb` | Session N2 : plan et réservations | 2026-11-02 16:14 | 24.5 h | 6 | 592 | 27 | 18 | [rapport](sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) |
+| `0733c5bb` | Session N2 : plan et réservations | 2026-11-02 16:14 | 24.7 h | 6 | 595 | 27 | 18 | [rapport](sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) |
 | `0b0a6a0d` | Continue session work | 2026-10-31 17:17 | 45.3 h | 20 | 1565 | 11 | 88 | [rapport](sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) |
 | `0b2c86eb` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 10:29 | 1.5 h | 1 | 128 | 5 | 0 | [rapport](sessions/0b2c86eb-7a8d-4eed-a3dd-fb165f1a8630/rapport.md) |
 | `0b69f616` | Continue AI coding session | 2026-10-30 21:46 | 0.3 h | 1 | 200 | 6 | 0 | [rapport](sessions/0b69f616-5c75-4c34-b97a-ae05564812af/rapport.md) |
@@ -141,7 +141,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `a4eaa4c8` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 38 | 0 | 0 | [rapport](sessions/a4eaa4c8-11e2-4ca3-bcb1-b28919cb601a/rapport.md) |
 | `a9e308b7` | Tu travailles dans le dépôt | 2026-10-08 09:19 | 0.1 h | 1 | 20 | 0 | 0 | [rapport](sessions/a9e308b7-5d50-4bb3-8e31-4c8e6f261a6d/rapport.md) |
 | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
-| `abb58991` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 24.5 h | 171 | 996 | 49 | 104 | [rapport](sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) |
+| `abb58991` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 24.7 h | 172 | 1002 | 49 | 105 | [rapport](sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) |
 | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
 | `b6a672ec` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | 2 | 59 | 0 | 0 | [rapport](sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) |
 | `b7d4678e` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 12.5 h | 82 | 821 | 25 | 40 | [rapport](sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) |

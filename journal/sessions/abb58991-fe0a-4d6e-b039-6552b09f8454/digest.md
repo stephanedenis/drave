@@ -25148,3 +25148,136 @@ fiche ok
 ⏵ J'ajoute la face « texte long » à l'en-cours et à la roadmap L, puis je commite le fait complété
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='- **L — le bloc langue** : contrat écrit ; **frontière 71 langues : script 1,0, langue 0,137 (baseline 0,032)**.'\nnew='- **L — le blo … [1253 caractères tronqués]`
+
+  ```
+T0 max : 3986 mots (budget 4 000)
+  592 fiches → reports/INDEX.md
+  revue de documentation · 595 fiche(s) · 683 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ index : aucun fait stagé sans état
+[master 81697bc2] L — LA FRONTIÈRE (2) : LA LANGUE SUR TEXTE LONG FAIT 0,9687 (UDHR, 398 LANGUES), PERMUTÉ 0,0022
+ 21 files changed, 662 insertions(+), 46 deletions(-)
+ create mode 100644 journal/2026-11-03/outils.md
+EXIT=0
+81697bc2 L — LA FRONTIÈRE (2) : LA LANGUE SUR TEXTE LONG FAIT 0,9687 (UDHR, 398 LANGUES), PERMUTÉ 0,0022
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 11, in <module>
+AssertionError: roadmap L absent
+  ```
+
+### 🤖 Assistant
+
+⏵ Le texte long est committé (`81697bc2`) ; la roadmap L n'a pas été mise à jour (chaîne modifiée par le hub) — je vérifie et je regarde le job quatre modes
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; grep -n \"L — le bloc langue\" docs/pilotage/roadmap.md | head -2; echo '---'; ps -eo pid,etime,pcpu,cmd | grep qualifier_quatre_modes | grep -v grep | head -1; ls data/deepseek/cache/*.json 2>/dev/null | wc -l; ls -l reports/pensee- … [140 caractères tronqués]`
+
+  ```
+16:48:26
+35:| **L — le bloc langue** | surface, heuristique CPU + neuronal, [contrat](../theorie/glossaire/entrees/contrat.md), cascade, pragmatique | 🔬 **R0.7** : 9 niveaux, **398 langues à 0,9687**, script 1,0000 ; analyse heuristique (5 schémas) ; **contrat de substitution écrit** ([`contrat-bloc-langue.md`](../theorie/contrat-bloc-langue.md)) | la **mesure 71 langues** (la frontière) ; la porte des quatre modes |
+---
+2419491       03:44  0.0 bash -c cd /home/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=$HOME/.config/drave/deepseek.key PYTHONPATH=. timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie reports/pensee-quatre-modes.json 2>&1 | tail -12
+1192
+JSON pas encore écrit
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 2 : la face « texte long » de la frontière est mesurée et committée (`81697bc2`) ; la passe quatre modes continue (`bash-803`, ~1 192 appels en cache)
+
+**Fait — la frontière, deuxième face** (commit `81697bc2`, fiche `reports/rapport-pensee-frontiere-71.md`, JSON `reports/pensee-frontiere-71.json`).
+
+| régime | langue | script | contrôle |
+|---|---:|---:|---|
+| **libellés courts** (lexique jeux, 71 langues) | **0,137** | **1,0** | baseline 0,032 |
+| **texte long** (UDHR, 398 langues, 447 articles) | **0,9687** | **1,0** | **permuté 0,0022** (≈ 1/398) |
+
+- **La longueur du texte est le levier** : le même détecteur de trigrammes fait 0,137 sur des libellés de deux ou trois mots et **0,9687** sur des articles.
+- **Contrôle négatif** : les profils **permutés** tombent à **0,0022**, exactement le hasard → le 0,9687 n'est pas un artefact de construction.
+- Le **script** est à 1,0 dans les deux régimes (le CPU tient le graphème).
+- L'`autotest` du bloc (`tools/bloc_linguistique.py --autotest`) passe aussi ses contrôles de substitution, parallèle, cascade, vide, langue inconnue et rejeu (`ok: true`).
+
+**Ce qui tourne** : `bash-803` — la porte des **quatre modes** sur les 432 phrases (heuristique, neuronal API, parallèle, cascade) ; ~1 192 appels en cache, durée estimée ~15 min, sortie `reports/pensee-quatre-modes.json`.
+
+**État** : HEAD `81697bc2` ; T0 **3 986** ; revue verte (**595 fiches / 683 JSON / 120 docs**) ; N2 intact ; aucun serveur local.
+
+**Prochaine étape** : collecter `bash-803`, écrire `rapport-pensee-quatre-modes.md` (le tableau des quatre modes, refus, coût API), **mettre la ligne L de la roadmap à jour** (la frontière mesurée, prochaine action = la porte) et committer. Le goal reste **actif**.
+
+
+## Tour 172
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de serveur local (règle 11)."
+Round: 3/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 3 : je collecte la passe quatre modes (`bash-803`) et je vérifie le JSON
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ps -eo pid,etime,pcpu,cmd | grep qualifier_quatre_modes | grep -v grep | head -1; ls data/deepseek/cache/*.json 2>/dev/null | wc -l; ls -l reports/pensee-quatre-modes.json 2>/dev/null || echo 'JSON pas encore écrit'", "description":  … [53 caractères tronqués]`
+
+  ```
+16:48:48
+2419491       04:06  0.0 bash -c cd /home/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=$HOME/.config/drave/deepseek.key PYTHONPATH=. timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie reports/pensee-quatre-modes.json 2>&1 | tail -12
+1217
+JSON pas encore écrit
+  ```
+
+### 🤖 Assistant
+
+⏵ Le job tourne encore (~10 min) ; je l'attends explicitement puisqu'il débloque le fait suivant
+
+- **job_output** `{"job_id": "bash-803", "timeout_ms": 600000, "wait": true}`
+
+  ```
+heuristique · 0.3 s
+neuronal · 795.8 s
+parallele · 0.5 s
+cascade · 0.5 s
+heuristique {'pos': 0.7394, 'syntagme': 0.2524, 'tete': 0.4516, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+neuronal {'pos': 0.9309, 'syntagme': 0.8226, 'tete': 0.8784, 'pragmatique': {'acte': 0.0, 'negation': 0.9907, 'modalite': 0.9815, 'double_sens': 0.9954}, 'fraction_semantique': 0.0}
+parallele {'pos': 0.928, 'syntagme': 0.802, 'tete': 0.857, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+cascade {'pos': 0.928, 'syntagme': 0.802, 'tete': 0.857, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ **Quatre modes mesurés** — le neuronal API domine (POS 0,9309 ; syntagmes 0,8226 ; tête 0,8784), l'heuristique garde l'acte (0,9954), et la fusion **dégrade** (0,928/0,802/0,857) ; je lis le JSON complet
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-quatre-modes.json'))\nprint('gold', d['gold'])\nprint('seuils', d['seuils'])\nprint('refus', d['refus'], 'appels', d['appels'], 'api', d['api'])\nprint('latence', d['latence_s'], 'duree', … [474 caractères tronqués]`
+
+  ```
+gold {'phrases': 432, 'tokens': 2375, 'modalite': 'api-deepseek (deepseek-chat), aucun serveur local'}
+seuils {'heuristique': True, 'neuronal': True, 'parallele': False, 'cascade': True, 'aucun_refus': False}
+refus 1 appels {'pos': 429, 'syntagmes': 429} api {'appels': 858, 'tokens': 254341, 'latence_s': 803.7759999999992}
+latence {'moyenne': 1.855, 'mediane': 1.86} duree 797.2
+heuristique  pos 0.7394 ferme 0.8850 ouvert 0.5864 synt 0.2524 tete 0.4516 acte 0.9954 frac 0.5165
+neuronal     pos 0.9309 ferme 0.9145 ouvert 0.9482 synt 0.8226 tete 0.8784 acte 0.0000 frac 0.0000
+parallele    pos 0.9280 ferme 0.9121 ouvert 0.9447 synt 0.8020 tete 0.8570 acte 0.9954 frac 0.5165
+cascade      pos 0.9280 ferme 0.9121 ouvert 0.9447 synt 0.8020 tete 0.8570 acte 0.9954 frac 0.5165
+  ```
+
+### 🤖 Assistant
+
+⏵ Je fige la porte des quatre modes : le neuronal API est **meilleur** (0,9309/0,8226/0,8784), l'heuristique garde l'acte, la fusion **régresse** ; 858 appels, 254 k tokens, 13,3 min, 1 refus
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nd=json.loads(pathlib.Path('reports/pensee-quatre-modes.json').read_text(encoding='utf-8'))\nprint('refus_detail', d.get('refus_detail'))\nrefus=d.get('refus_detail') or []\nfiche=pathlib.Path('reports/rapport-pe … [6113 caractères tronqués]`
+
+  ```
+refus_detail ['r353']
+fiche 4633
+ok
+  T0 max : 3989 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Fiche écrite (refus = r353) ; j'aligne compteurs/index/README et je commite la porte des quatre modes
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace('| fichiers / JSON de résultats | **595** / **683** |','| fichiers / JSON de résultats | **596** / **684** |')\np.write_text(t, … [1061 caractères tronqués]`

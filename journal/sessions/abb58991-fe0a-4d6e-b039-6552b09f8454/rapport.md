@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 24.5 h |
-| Tours | 171 |
-| Messages | 1220 |
-| Appels d'outils | 996 |
+| Durée | 24.7 h |
+| Tours | 172 |
+| Messages | 1228 |
+| Appels d'outils | 1002 |
 | Fichiers touchés | 49 |
-| Commandes | 812 |
+| Commandes | 817 |
 | Sous-agents | 0 |
-| Commits | 104 |
+| Commits | 105 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -373,6 +373,8 @@
 **Tour 170** — <goal_round> Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de ser … [567 caractères tronqués]
 
 **Tour 171** — <goal_round> Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de ser … [567 caractères tronqués]
+
+**Tour 172** — <goal_round> Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de ser … [567 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4467,7 +4469,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 171 — <goal_round> Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 7 … [847 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Check four-mode job progress at round 2
 - bash — Locate UDHR data and profile loader
@@ -4477,10 +4479,43 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - bash — Run UDHR long-text autotest
 - bash — Add long-text section to frontier fiche and JSON
 - bash — Commit long-text frontier complement
+- bash — Check roadmap L line and four-mode job
 
 **Synthèse produite :**
 
-⏵ J'ajoute la face « texte long » à l'en-cours et à la roadmap L, puis je commite le fait complété
+⏵ Round 2 : la face « texte long » de la frontière est mesurée et committée (`81697bc2`) ; la passe quatre modes continue (`bash-803`, ~1 192 appels en cache)
+
+**Fait — la frontière, deuxième face** (commit `81697bc2`, fiche `reports/rapport-pensee-frontiere-71.md`, JSON `reports/pensee-frontiere-71.json`).
+
+| régime | langue | script | contrôle |
+|---|---:|---:|---|
+| **libellés courts** (lexique jeux, 71 langues) | **0,137** | **1,0** | baseline 0,032 |
+| **texte long** (UDHR, 398 langues, 447 articles) | **0,9687** | **1,0** | **permuté 0,0022** (≈ 1/398) |
+
+- **La longueur du texte est le levier** : le même détecteur de trigrammes fait 0,137 sur des libellés de deux ou trois mots et **0,9687** sur des articles.
+- **Contrôle négatif** : les profils **permutés** tombent à **0,0022**, exactement le hasard → le 0,9687 n'est pas un artefact de construction.
+- Le **script** est à 1,0 dans les deux régimes (le CPU tient le graphème).
+- L'`autotest` du bloc (`tools/bloc_linguistique.py --autotest`) passe aussi ses contrôles de substitution, parallèle, cascade, vide, langue inconnue et rejeu (`ok: true`).
+
+**Ce qui tourne** : `bash-803` — la porte des **quatre modes** sur les 432 phrases (heuristique, neuronal API, parallèle, cascade) ; ~1 192 appels en cache, durée estimée ~15 min, sortie `reports/pensee-quatre-modes.json`.
+
+**État** : HEAD `81697bc2` ; T0 **3 986** ; revue verte (**595 fiches / 683 JSON / 120 docs**) ; N2 intact ; aucun serveur local.
+
+**Prochaine étape** : collecter `bash-803`, écrire `rapport-pensee-quatre-modes.md` (le tableau des quatre modes, refus, coût API), **mettre la ligne L de la roadmap à jour** (la frontière mesurée, prochaine action = la porte) et committer. Le goal reste **actif**.
+
+### Tour 172 — <goal_round> Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 7 … [847 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Check four-mode job completion
+- job_output
+- bash — Read full four-mode JSON details
+- bash — Write four-mode fiche and update state/roadmap
+- bash — Commit four-mode gate fact
+
+**Synthèse produite :**
+
+⏵ Fiche écrite (refus = r353) ; j'aligne compteurs/index/README et je commite la porte des quatre modes
 
 ## 3. Travail accompli
 
@@ -4580,7 +4615,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 772 autres
+- … et 777 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4805,4 +4840,5 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L — LE CONTRAT DE SUBSTITUTION DU BLOC LANGUE EST ÉCRIT (9 NIVEAUX, 4 MODES, REFUS, TRACE, PORTE)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --fo
 - L — LA FRONTIÈRE SUR LES 71 LANGUES : SCRIPT 71/71 (1,0), LANGUE 0,137 CONTRE 0,032" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' |
 - L — LA FRONTIÈRE (2) : LA LANGUE SUR TEXTE LONG FAIT 0,9687 (UDHR, 398 LANGUES), PERMUTÉ 0,0022" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --form
+- L — LA PORTE DES QUATRE MODES : LE NEURONAL API DOMINE (0,9309 / 0,8226 / 0,8784), LA FUSION DÉGRADE (0,928 / 0,802 / 0,857), 1 REFUS (r353)" 2>&1 | tail -4; ec
 

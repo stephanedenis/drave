@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **592 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **593 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -473,6 +473,7 @@
 | [rapport-pensee-porte.md](rapport-pensee-porte.md) | B13 — la porte neuronale : la bonne politique ouvre, l'aveugle échoue |
 | [rapport-pensee-pragmatique-neuronale.md](rapport-pensee-pragmatique-neuronale.md) | B13 — la pragmatique neuronale : parfaite sur les 20 réelles (dev), sous le majoritaire sur les 160 synthétiques (test) |
 | [rapport-pensee-professeur.md](rapport-pensee-professeur.md) | B13 — le professeur complet : 56 états-Q, il échoue encore seul |
+| [rapport-pensee-quatre-modes.md](rapport-pensee-quatre-modes.md) | L — la porte des quatre modes sur le gold 432 : le neuronal API domine (0,9309 / 0,8226 / 0,8784), la fusion dégrade (0,928 / 0,802 / 0,857) |
 | [rapport-pensee-rapide.md](rapport-pensee-rapide.md) | B13 — la bascule très fréquente : 1/10, 20/20 |
 | [rapport-pensee-rare.md](rapport-pensee-rare.md) | B13 — l'information rare : utile 10 % du temps, 20/20 |
 | [rapport-pensee-reponse-contenu.md](rapport-pensee-reponse-contenu.md) | B13 — la réponse au contenu : 0/19, la frontière du modèle |

@@ -8727,3 +8727,28 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-438", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-425 (bash: sleep 3300; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a0.9.pt 2>/dev/null; tail -c 50 work/n2ac/mix1024-60k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/prod60k.out 2>/dev/null; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; grep -E \"ppl_val\" work/n2ac/mix1024-60k.pt.json 2>/dev/null; tail -c 60 work/n2ac/kd-mix512-15k.log", "description": "Poll 60k checkpoint" … [1 caractères tronqués]`
+
+  ```
+16:55:31
+00 · perte 1.1210 · dure 0.9945 · douce 0.2224 · 1832 s
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/prod60k.out 2>/dev/null; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; grep -E \"ppl_val\" work/n2ac/mix1024-60k.pt.json 2>/dev/null", "description": "Wait for 60k completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-440]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-440", "timeout_ms": 1800000, "wait": true}`
