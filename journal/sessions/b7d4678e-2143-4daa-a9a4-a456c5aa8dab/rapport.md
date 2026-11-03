@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 4.5 h |
-| Tours | 6 |
-| Messages | 427 |
-| Appels d'outils | 458 |
+| Durée | 4.7 h |
+| Tours | 7 |
+| Messages | 440 |
+| Appels d'outils | 470 |
 | Fichiers touchés | 22 |
-| Commandes | 283 |
+| Commandes | 293 |
 | Sous-agents | 0 |
-| Commits | 18 |
+| Commits | 19 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -37,6 +37,8 @@
 **Tour 5** — regarde ce que font les autres sessions et prends des tâches légères toute la nuit (jusqu'à 8h demain) passe le mot sur le fait que les sessions doivent être bien cootrdonnnées et tenir les ressources en usage optimal pour que nos travaux avances dans tous les axes
 
 **Tour 6** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
+
+**Tour 7** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -192,7 +194,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 6 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*38 appels d'outils.* Actions notables :
+*40 appels d'outils.* Actions notables :
 
 - bash — Check gate pass, commits and tree
 - bash — Check running jobs and resource claims
@@ -208,11 +210,43 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - bash — Wait for hub commit and verify state
 - bash — Read the hub's night plan commit
 - bash — Read the night plan and check my note
-- … et 18 autres
+- … et 20 autres
 
 **Synthèse produite :**
 
-⏵ Round de nuit : je relève les portes, les sessions et le registre avant d’agir
+⏵ Round de nuit : 82e porte publiée, coordination outillée, passe à 66/81
+
+**Progrès concrets de ce round**
+- **82e porte `porte-ressources`** créée et **verte** (autotest 9 cas + `--check`) : le registre des ressources entre dans les portes ; la note de comptage est passée à **82** dans `en-cours` et `portes.md`, sans casser le budget T1 (`references-non-regression` ramené sous 2 500 mots). Commits `42db89f6` et `20996b87`.
+- **La coordination devient outillée** : le hub a committé `b1c0bcda` — **un mandat long avec un claim actif n'est plus périmé** ; la porte sessions lit le registre des ressources. La porte stricte affiche désormais N2 en *avertissement* (« claim actif, heartbeat non exigé »), plus en erreur.
+- **Consigne de nuit** publiée dans [`plan-travail.md`](docs/pilotage/plan-travail.md) § 10 et § 10.7 (quatre sessions, claims, bilan 08 h) ; mon récit de nuit est dans le [journal](journal/2026-11-02/README.md), et le journal de bord de veille dans `work/veille/nuit.md`.
+
+**Où en sont les autres**
+- **Hub** : passe complète à **66/81** ; seules rouges `porte-homeostasie` (environnementale connue), `porte-indice` (1 027 s) et `porte-melange` (123 s) — **aucune nouvelle rouge**.
+- **S** : `69bfddba` — le contexte tranche les homographes, **54/55 types, 131/131 rôles, gold 55** (SHA `76accf9d`).
+- **N2** : R1.2-1024 fini (**PPL val 3,0529**, 1 137 s), run suivant `seq 1024 / window 1024` ; claim `gpu0` actif.
+- **Pensée** : porte minute **26 nœuds** ; **porte mobile : verdict faux** (le LLM échoue à la position discriminante) — fiche et JSON écrits.
+
+**État vérifié** : revue ✅ **564 fiches / 650 JSON / 82 portes**, `en-cours` ✅, T0 ✅, T1 ✅, porte stricte ✅ (un seul avertissement de périmètres proches), journal ✅. Le veilleur attend la fin de la passe ; le prochain round intégrera son verdict et poursuivra les tâches légères (références, INDEX, archives, registre) jusqu'à 8 h.
+
+### Tour 7 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Check gate pass completion and commits
+- bash — Check running jobs and claims
+- bash — Check B13 gate update and state consistency
+- bash — Check portes.md note and chantiers B13 line
+- read
+- edit `docs/pilotage/chantiers.md`
+- bash — Find remaining stale B13 counts
+- bash — Bulk update stale B13 counts
+- bash — Verify state after B13 count fix
+- bash — Commit the B13 count alignment
+
+**Synthèse produite :**
+
+⏵ Round 2 : je relève l’état de la passe, des sessions et du registre
 
 ## 3. Travail accompli
 
@@ -231,7 +265,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 | `reports/rapport-ocr-cegep.md` | 0 | 2 |
 | `docs/pilotage/en-cours.md` | 0 | 22 |
 | `docs/pilotage/roadmap.md` | 0 | 10 |
-| `docs/pilotage/chantiers.md` | 0 | 5 |
+| `docs/pilotage/chantiers.md` | 0 | 6 |
 | `docs/pilotage/plan-travail.md` | 0 | 7 |
 | `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md` | 1 | 0 |
 | `journal/2026-11-02/README.md` | 0 | 4 |
@@ -285,7 +319,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 243 autres
+- … et 253 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -421,4 +455,5 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT" 2>&1 | tail -6
 - NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS" 2>&1 | tail -5
 - NUIT — LA 82e PORTE EST COMPTÉE (82) ; LE BUDGET T1 REVIENT SOUS 2 500 ; S RAFRAÎCHI" -m "en-cours : 82 portes (81 à la passe du 02/11 06 h + porte-ressources à
+- NUIT — B13 PASSE À 138/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (6 S FIXÉS ; T132/T133 RESTENT)" 2>&1 | tail -4
 

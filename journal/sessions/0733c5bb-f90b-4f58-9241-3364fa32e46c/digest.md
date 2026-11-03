@@ -4929,3 +4929,18 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-210", "timeout_ms": 240000, "wait": true}`
+
+  ```
+20:58:50
+mix512-15k fini 20:54:07
+pas     50 · perte 1.4798 · PPL val 3.901 · 21 s
+--- 1024 ---
+pas   5400 · perte 1.1373 · PPL val 2.744 · 2484 s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Évaluation du modèle de production affiné à 512 (octets constants)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/mix512-15k.pt --rope --longueurs 128,256,512,1000,2000 --sortie work/n2ac/eval-mix512-15k.json 2>&1 | tail -24", "description": "Evaluate production model  … [17 caractères tronqués]`

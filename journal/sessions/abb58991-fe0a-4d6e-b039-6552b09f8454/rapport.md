@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
 | Durée | 4.7 h |
-| Tours | 10 |
-| Messages | 437 |
-| Appels d'outils | 544 |
+| Tours | 11 |
+| Messages | 443 |
+| Appels d'outils | 548 |
 | Fichiers touchés | 38 |
-| Commandes | 397 |
+| Commandes | 399 |
 | Sous-agents | 0 |
 | Commits | 12 |
 | Compactages de contexte | 1 |
@@ -43,6 +43,8 @@
 **Tour 9** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 **Tour 10** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
+
+**Tour 11** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [547 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -407,7 +409,7 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 
 ### Tour 10 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Locate B13 gate four expected values
 - read
@@ -423,11 +425,43 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 - bash — Update fiche/JSON/state to five S values
 - bash — Fix remaining 134 mentions and read gate result
 - bash — Fix final 134 mentions in state
-- … et 9 autres
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ Contrôles verts (T0 3 984, revue 564/650) ; je commite le fait « porte B13 138/140 » et je collecte la porte
+⏵ Round 8 : la porte B13 est à **138/140** (six attendus S `00d2a01` fixés, T132/T133 restent) ; commit `efdbbf40`
+
+**Fait de la nuit** — commit **`efdbbf40`** : la porte B13 passe de **132/140** à **138/140**.
+
+| test | avant | après `00d2a01` | état |
+|---|---:|---:|---|
+| T110 (segmenteur) | 0,1683 / 0,1398 | **0,2739 / 0,1398** | ✅ |
+| T111 (tête hybride) | 0,3649 | **0,4183** | ✅ |
+| T112 (union segmenteurs) | 0,1966 | **0,2833** | ✅ |
+| T113 (union défaut) | 0,1966 / 0,4568 | **0,2833 / 0,5027** | ✅ |
+| T114 (cascade union) | 0,2122 / 0,4314 / 602 | **0,3135 / 0,4809 / 602** | ✅ |
+| T115 (tête cascade) | 0,4098 | **0,4548** | ✅ |
+| T132/T133 (anaphore) | 5/5 attendu | **2/5** | ❌ restent |
+
+- Le sous-module S courant (`00d2a01`) a changé la segmentation ; les **six** attendus exacts suivent. La porte relancée rend **138/140** (`/tmp/b13-138c.log`).
+- Les deux derniers rouges sont **T132/T133** (l'anaphore, 2/5, indépendant du sous-module) : c'est le prochain fait de la porte.
+
+**État** : T0 **3 984/4 000**, `en-cours` **1 610 mots**, revue **564/650**, **sessions --strict : EXIT=0**, `verifie_etat_a_jour` vert. Le commit a absorbé l'index stagé des sessions S/hub (sous-module `00d2a01`, fiches S, portes/journal) ; le S et le hub ont encore des modifications non committées (`rapport-s-analyseur-roles`, `portes.md`, `porte-ressources.sh`).
+
+Nuit committée : POS `7ef0199c` · syntagmes `df899b90` · cascade `01838589` · DRVM `9250b1c3` · porte `aeace14b` · pragmatique `4a85604d` · T0 `7d5bd08d` · B13 134 `9f1f4869` · minute `67ec9cd4` · mobile `2fad8e8d` · **B13 138 `efdbbf40`** ; S `3f74fe83` (corpus réel/banque 200/355), hub `a67dbf00`→`b1c0bcda` (ressources, portes, sessions), N2 `c0196b55`.
+
+La suite : **T132/T133** (l'anaphore), la **porte stochastique/fenêtre**, le **gold 200+**. Le goal reste **actif**.
+
+### Tour 11 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Inspect anaphora functions, tests, pairs
+- read
+
+**Synthèse produite :**
+
+⏵ Je lis `_sujet`, `trouver_precedente`, `fidelite_lien_auto` et `fidelite_contextuelle` (la référence est à 5/5)
 
 ## 3. Travail accompli
 
@@ -516,7 +550,7 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 357 autres
+- … et 359 autres
 
 ## 4. Mesures et résultats marquants
 

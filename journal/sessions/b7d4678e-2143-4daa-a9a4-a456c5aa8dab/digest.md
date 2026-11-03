@@ -7054,3 +7054,222 @@ MM journal/2026-11-02/apprentissage.md
   ```
 
 - **job_output** `{"job_id": "bash-266", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; wc -l work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo \"--- HEAD ---\"; git log --oneline -2; echo \"--- revue ---\"; python3 tools/revue_documentation.py 2>&1 … [151 caractères tronqués]`
+
+  ```
+20:57:56
+66 work/portes/passe-1102-19h32/registre.txt
+porte-pont 0 89
+porte-prechargement 0 175
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+--- HEAD ---
+b1c0bcda PILOTAGE — UN MANDAT LONG AVEC UN CLAIM ACTIF N'EST PAS PÉRIMÉ ; LA PORTE SESSIONS LIT LE REGISTRE
+69bfddba S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55 (SHA 76accf9d)
+--- revue ---
+  revue de documentation · 564 fiche(s) · 650 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 21 h 00 — S avance, le hub outille la porte sessions\n\n- **S** : commit `69bfddba` — le contexte tranche les homographes, **54/55 types, 131/131 rôles,\n  gold 55** (SHA `76accf9d`) ; fiche 564 / JSON 650 ; l'état suit (revue, en-cours, T0 verts … [552 caractères tronqués]`
+
+  ```
+ok
+  ⚠ mandat long (62 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round de nuit : 82e porte publiée, coordination outillée, passe à 66/81
+
+**Progrès concrets de ce round**
+- **82e porte `porte-ressources`** créée et **verte** (autotest 9 cas + `--check`) : le registre des ressources entre dans les portes ; la note de comptage est passée à **82** dans `en-cours` et `portes.md`, sans casser le budget T1 (`references-non-regression` ramené sous 2 500 mots). Commits `42db89f6` et `20996b87`.
+- **La coordination devient outillée** : le hub a committé `b1c0bcda` — **un mandat long avec un claim actif n'est plus périmé** ; la porte sessions lit le registre des ressources. La porte stricte affiche désormais N2 en *avertissement* (« claim actif, heartbeat non exigé »), plus en erreur.
+- **Consigne de nuit** publiée dans [`plan-travail.md`](docs/pilotage/plan-travail.md) § 10 et § 10.7 (quatre sessions, claims, bilan 08 h) ; mon récit de nuit est dans le [journal](journal/2026-11-02/README.md), et le journal de bord de veille dans `work/veille/nuit.md`.
+
+**Où en sont les autres**
+- **Hub** : passe complète à **66/81** ; seules rouges `porte-homeostasie` (environnementale connue), `porte-indice` (1 027 s) et `porte-melange` (123 s) — **aucune nouvelle rouge**.
+- **S** : `69bfddba` — le contexte tranche les homographes, **54/55 types, 131/131 rôles, gold 55** (SHA `76accf9d`).
+- **N2** : R1.2-1024 fini (**PPL val 3,0529**, 1 137 s), run suivant `seq 1024 / window 1024` ; claim `gpu0` actif.
+- **Pensée** : porte minute **26 nœuds** ; **porte mobile : verdict faux** (le LLM échoue à la position discriminante) — fiche et JSON écrits.
+
+**État vérifié** : revue ✅ **564 fiches / 650 JSON / 82 portes**, `en-cours` ✅, T0 ✅, T1 ✅, porte stricte ✅ (un seul avertissement de périmètres proches), journal ✅. Le veilleur attend la fin de la passe ; le prochain round intégrera son verdict et poursuivra les tâches légères (références, INDEX, archives, registre) jusqu'à 8 h.
+
+
+## Tour 7
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 2 : je relève l’état de la passe, des sessions et du registre
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; echo \"--- passe ---\"; wc -l work/portes/passe-1102-19h32/registre.txt 2>/dev/null; tail -3 work/portes/passe-1102-19h32/registre.txt 2>/dev/null; echo \"--- rouges ---\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt 2>/dev/null; echo \"--- fin ? ---\"; c … [169 caractères tronqués]`
+
+  ```
+20:58:27
+--- passe ---
+66 work/portes/passe-1102-19h32/registre.txt
+porte-poids-creux 0 317
+porte-pont 0 89
+porte-prechargement 0 175
+--- rouges ---
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+--- fin ? ---
+pas encore
+--- HEAD ---
+efdbbf40 B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT
+b1c0bcda PILOTAGE — UN MANDAT LONG AVEC UN CLAIM ACTIF N'EST PAS PÉRIMÉ ; LA PORTE SESSIONS LIT LE REGISTRE
+69bfddba S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55 (SHA 76accf9d)
+20996b87 NUIT — LA 82e PORTE EST COMPTÉE (82) ; LE BUDGET T1 REVIENT SOUS 2 500 ; S RAFRAÎCHI
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args --sort=-pcpu | grep -E \"toutes-les-portes|porte-|entrainer|llama-server|qualifier|mesure\" | grep -v grep | head -6 | cut -c1-120; echo \"--- ressources ---\"; python3 tools/ressources.py --status 2>&1 | grep -A7 \"Réservations\"; python3 tools/ressources.py  … [72 caractères tronqués]`
+
+  ```
+493592       03:56  970 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/porte-profondeur-rou
+ 110066    03:30:27  525 llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 1
+ 490049       04:20  100 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_mix/propre/tra
+ 383833       41:49  100 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre/trai
+ 164366    01:26:35  0.0 bash tools/toutes-les-portes.sh
+ 164359    01:26:35  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=1,0 JOURNAUX=w
+--- ressources ---
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 536cd5d6 / portes : gpu1=exclusive, cpu1=8, ram=8 (prio 1, 110 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ⚠ 536cd5d6 : GPU sur NUMA 0 avec des fils sur cpu1
+  ```
+
+- **bash** `{"command": "git show --stat --oneline efdbbf40 | head -12; echo \"--- B13 dans en-cours ---\"; grep -n \"134/140\\|138/140\" docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md | head -8; echo \"--- checks ---\"; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 … [155 caractères tronqués]`
+
+  ```
+efdbbf40 B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT
+ docs/methode/portes.md                             |   2 -
+ docs/pilotage/en-cours.md                          |   6 +-
+ docs/pilotage/roadmap.md                           |  11 +-
+ journal/2026-11-02/README.md                       |   9 +-
+ journal/2026-11-02/apprentissage.md                |   4 +-
+ journal/2026-11-02/attention.md                    |   4 +-
+ journal/2026-11-02/distribue.md                    |   7 +-
+ journal/2026-11-02/docs.md                         |   4 +-
+ journal/2026-11-02/memoire.md                      |   4 +-
+ journal/2026-11-02/mesures.md                      |   4 +-
+ journal/2026-11-02/modele.md                       |   4 +-
+--- B13 dans en-cours ---
+docs/pilotage/en-cours.md:58:- **Fait** : B13 **138/140** (6 S fixés ; T132/T133 restent), gold **432** ; **gold
+docs/pilotage/en-cours.md:101:- **Pensée — B13** : **138/140**, gold **432**, **116 liens** ; minute 26, mobile **test faible** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
+docs/pilotage/en-cours.md:124:| **B — l'intelligence** | **B13** | B1.5 corpus ; B
+… [6294 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"82e\\|porte-ressources\" docs/methode/portes.md | head -3; echo \"--- diff portes.md efdbbf40 ---\"; git show efdbbf40 -- docs/methode/portes.md | head -20; echo \"--- chantiers B13 ---\"; sed -n '84p' docs/pilotage/chantiers.md | cut -c1-400", "description": "Check portes.md  … [29 caractères tronqués]`
+
+  ```
+17:La **82e** porte, `porte-ressources` (autotest du registre et cohérence des claims), a été ajoutée le
+--- diff portes.md efdbbf40 ---
+commit efdbbf40480424a45d71573badcd620a3ed040ca
+Author: Stéphane <stephane@localhost>
+Date:   Mon Nov 2 20:55:55 2026 -0500
+
+    B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT
+
+diff --git a/docs/methode/portes.md b/docs/methode/portes.md
+index 754e3993..3f1ca8c5 100644
+--- a/docs/methode/portes.md
++++ b/docs/methode/portes.md
+@@ -14,8 +14,6 @@ Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêt
+ `porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **81 portes** (02/11 06 h) a donné
+ **76 vertes, 5 rouges** ; la liste et le diagnostic sont dans
+ [`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **incluse** et verte.
+-La **82e** porte, `porte-ressources` (autotest du registre et cohérence des claims), a été ajoutée le
+-02/11 au soir ; elle sera comptée à la prochaine passe (**81 → 82**).
+ 
+ ## Où est le registre (et comment lire le verdict)
+ 
+--- chantiers B13 ---
+| **B — l'intelligence** | le se
+… [312 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "docs/pilotage/chantiers.md", "limit": 4, "offset": 83}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/chantiers.md</path>
+<type>file</type>
+<content>
+83: | **A — le moteur** | un flux de blocs typés peut-il tourner, se placer, se répartir, se rejouer ? | ✅ A1–A8 ; A3.4, A5.4, A6.2 bloqués ; A2.6 partiel ; A8.3 expliqué | **A2.6** (experts, A6.2 bloqué) ; réduire le lot | — | N, B (exécution) |
+84: | **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0 + AC-3/alpha-bêta + DRVF + banc, **134/140 portes** (4 S + 2 test périmé) | B10.3 (encodeur) ; **B13** : opérateurs/DRVM | A, N1, D (corpus) | R (R5), S/L (sémantique, pragmatique) |
+85: | **N — le natif** | le modèle natif peut-il être petit, creux, honnête et général ? | 🔬 N0/N1 mesurés ; N2.h : 3,09 en domaine, 16,70 → 3,85 hors dépôt ; N4 partiel | **N2** (français réel, capacité) ; N4 (consigne) | A (moteur), D (corpus) | R1–R3, N5 |
+86: | **R — le lecteur** | un document, une question, un budget : réponse sourcée ou refus motivé ? | ✅ R0.1–R0.3 ; R0.4/R0.5 négatifs ; R4.1–R4.4 mesurés (R4.4 : 4/5 familles ≥ 90 %) | **R1.1/R1.2** (contexte natif) ; R2/R3 att
+… [160 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/chantiers.md", "new_string": "| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0 + AC-3/alpha-bêta + DRVF + banc, **138/140 portes** (6 S fixés ; T132/T133 rest … [501 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/chantiers.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "grep -rn \"134/140\" docs/pilotage/*.md docs/methode/*.md 2>/dev/null | head -8; echo \"--- état chantiers ---\"; sed -n '92,96p' docs/pilotage/chantiers.md", "description": "Find remaining stale B13 counts"}`
+
+  ```
+docs/pilotage/chantiers.md:88:| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, **398 langues à 0,9687**, **gold 432 réels + 160 synthétiques** (POS 0,7544 à 320 phrases, réel 0,7657, exact 0,194, tête 0,510), **attachement tête 1,0/0,966/0,932** ; **coréférence 116 liens, CV 0,847 ± 0,051** ; cascade **0,9415 / 0,7539 / 1,0** ; **pragmatique neuronale test 0,6375** — l'heuristique garde | **gold 200+** ; **porte B13** (134/140) ; la cascade mesurée | D (corpus), S (banque), N2 (entraînement) | R (prétraitement), B (sémantique), N2 (allègement) |
+docs/pilotage/chantiers.md:90:| **B13 — le moteur de pensée** | penser est-il une recherche tracée sur des états pluriels ? | ✅ state store v0 + AC-3/alpha-bêta + **DRVF `thought`** + **banc anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **porte** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minute seule** + **minute entraînée** + **shaping** + **réseau** + **MLP** + **professeur** + **sans None** + **correction** + **audit** + **ouve
+… [2801 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/chantiers.md')\nt=p.read_text(encoding='utf-8')\nrepls=[\n (\"**134/140 portes (T0–T137)** (4 S + 2 test périmé)\", \"**138/140 portes (T0–T137)** (6 S fixés ; T132/T133 restent)\"),\n (\"**porte B13** (134/140)\", \"**port … [1176 caractères tronqués]`
+
+  ```
+1 <- **134/140 portes (T0–T137)** (4 S + 2 test périmé)
+1 <- **porte B13** (134/140)
+1 <- **porte 134/140**
+0 <- **134/140 portes** (4 S + 2 test périmé)
+1 <- **État au 02/11 19 h 45.** B13 **134/140** (4 S + 
+plan-travail 1 <- **134/140** (4 S + 2 test périmé), gold **432**, 1
+plan-travail 1 <- **134/140** (4 S + 2 test
+   périmé)
+--- 138 ---
+docs/pilotage/chantiers.md:84:| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le 
+docs/pilotage/chantiers.md:88:| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne t
+docs/pilotage/chantiers.md:90:| **B13 — le moteur de pensée** | penser est-il une recherche tracée sur des états pluriel
+docs/pilotage/chantiers.md:92:**État au 02/11 20 h 58.** B13 **138/140** (6 S fixés ; T132/T133 restent), gold **432**, 
+docs/pilotage/plan-travail.md:39:| **L/B13 — Pensée (session `e181ce02`)** | le bloc langue (contrat heuristique + neuro
+docs/pilotage/plan-travail.md:194:3. **L/B13 — la langue et la pensée (CPU).** **Session `e181ce02` ouverte.** **138/140
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/sessions.py --check --strict 2>&1 | tail -2", "description": "Verify state after B13 count fix"}`
+
+  ```
+revue de documentation · 564 fiche(s) · 650 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (63 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ```
+
+- **bash** `{"command": "export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add docs/pilotage/chantiers.md docs/pilotage/plan-travail.md; git diff --cached --stat; git commit -m \"NUIT — B13 PASSE À 138/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (6 S FIXÉS ; T132/T133 RESTENT)\" 2>&1 | tail - … [73 caractères tronqués]`
