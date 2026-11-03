@@ -12614,3 +12614,494 @@ Current DSH file policy: danger-full-access. The DSH file sandbox does not restr
 
 Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
 
+### 🤖 Assistant
+
+⏵ Je branche `operateurs.py` sur l'adaptateur DeepSeek (le fichier et l'appelant) et je prépare le garde-fou GPU.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", "limit": 30}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", "limit": 25, "offset": 192}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py</path>
+<type>file</type>
+<content>
+1: """operateurs.py — les opérateurs **hétérogènes** de B13 et le conteneur DRVM.
+2: 
+3: Un problème peut mélanger trois genres d'opérateurs :
+4: 
+5:   - **symbolique** : une règle discrète (`pas`, les quatre voisins) ;
+6:   - **numérique** : un calcul de coût (`saut`, deux cases, coût 2) ;
+7:   - **neuronal** : une **politique** qui propose le pas (`sonde`, coût 5, un appel).
+8: 
+9: Le `DRVM` est le **conteneur d'exécution** : il tient le registre, la politique, le moteur et
+10: la trace, et rend un **bilan** (nœuds, coût par opérateur, appels au modèle, but). Le nom est
+11: celui du runtime du moteur ; il ne faut pas le confondre avec le **format DRVM** du programme N.
+12: 
+13: La politique est un **double de contrat** (`PolitiqueManhattan`) : le vrai modèle natif n'a pas
+14: de poids dans cet environnement ; la structure est prête pour un `PolitiqueDRVM`.
+15: """
+16: from __future__ import annotations
+17: 
+18: import json
+19: import math
+20: import random
+21: import re
+22: import time
+23: import urllib.request
+24: from collections import Counter
+25: from dataclasse
+… [270 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py</path>
+<type>file</type>
+<content>
+192:                 "Réponds uniquement par droite, gauche, bas ou haut. Ne propose pas un mur.")
+193: 
+194:     def _post(self, invite: str, grammaire: str) -> str:
+195:         corps = {"messages": [{"role": "user", "content": invite}], "temperature": 0,
+196:                  "max_tokens": 8, "grammar": grammaire}
+197:         requete = urllib.request.Request(
+198:             self.endpoint + "/v1/chat/completions",
+199:             data=json.dumps(corps).encode("utf-8"),
+200:             headers={"Content-Type": "application/json"})
+201:         with urllib.request.urlopen(requete, timeout=self.timeout) as reponse:
+202:             return json.loads(reponse.read().decode("utf-8"))["choices"][0]["message"]["content"]
+203: 
+204:     def propose(self, etat, but):
+205:         t0 = time.perf_counter()
+206:         try:
+207:             sortie = self.transport(self._invite(etat, but), self._grammaire())
+208:         except Exception as e:
+209:             self.erreurs += 1
+210:             self.derniere = f"erreur: {type(e).__name__}: {str(e)[:80]}"
+211:             re
+… [384 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", "new_string": "import json\nimport math\nimport os\nimport random\nimport re\nimport time\nfrom collections import Counter\nfrom dataclasses import dataclass, field\nfrom typing import Callable\n\nfrom tools. … [332 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", "new_string": "    \"\"\"La politique **DRVM/native** : le **professeur DeepSeek en ligne** décide le pas.\n\n    Le conteneur `DRVM` l'appelle comme les autres politiques ; le professeur ne rend qu'un\n    m … [2229 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", "new_string": "    def _post(self, invite: str, grammaire: str) -> str:\n        \"\"\"Appelle le **professeur DeepSeek en ligne** (jamais un serveur local).\n\n        `grammaire` est conservée pour le contr … [1039 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== import ==\" && python3 -c 'from tools.pensee.operateurs import LlamaServer, ProfesseurDeepSeek; print(\"import ok\")' 2>&1 | tail -3; echo; echo \"== tests pensee ==\" && python3 -m unittest discover -s tools/tests -t . -p  … [569 caractères tronqués]`
+
+  ```
+== import ==
+    from tools.pensee.operateurs import LlamaServer, ProfesseurDeepSeek; print("import ok")
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ImportError: cannot import name 'LlamaServer' from 'tools.pensee.operateurs' (/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py)
+
+== tests pensee ==
+                ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/unittest/loader.py", line 315, in discover
+    raise ImportError('Start directory is not importable: %r' % start_dir)
+ImportError: Start directory is not importable: '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests'
+
+== alias ? ==
+
+== porte-ressources ==
+#!/bin/bash
+# porte-ressources.sh — le registre des ressources tient : autotest et cohérence.
+#
+# POURQUOI CETTE PORTE EXISTE. Le registre `tools/ressources.py` est consultatif : il n'empêche
+# pas un job de tourner, il rend le conflit visible. Une porte doit vérifier ce qui est
+# vérifiable sans la machine : le code du registre (autotest des 9 cas : claim, conflit, file,
+# admission, check) et la cohérence du registre courant (aucune ressource sur-réservée).
+#
+# CE QU'ELLE NE VÉ
+… [1493 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== classes ==\" && grep -n '^class \\|^    nom = ' tools/pensee/operateurs.py | head -20; echo; echo \"== ligne 80-100 ==\" && sed -n '78,102p' tools/pensee/operateurs.py; echo; echo \"== test ==\" && python3 -m unittest disco … [465 caractères tronqués]`
+
+  ```
+== classes ==
+41:class Politique:
+42:    nom = "politique"
+54:class PolitiqueManhattan(Politique):
+57:    nom = "manhattan"
+70:class PolitiqueAveugle(Politique):
+73:    nom = "aveugle"
+86:class PolitiqueLLM(Politique):
+97:    nom = "llm"
+231:class PolitiqueHasard(Politique):
+234:    nom = "hasard"
+328:class Operateur:
+337:class Registre:
+367:class PolitiqueApprise(Politique):
+374:    nom = "apprise"
+430:class PolitiqueAppriseMinute(PolitiqueApprise):
+433:    nom = "apprise_minute"
+447:class PolitiqueAppriseShaping(PolitiqueAppriseMinute):
+450:    nom = "apprise_shaping"
+461:class PolitiqueReseau(Politique):
+468:    nom = "reseau"
+
+== ligne 80-100 ==
+        dx, dy = bx - x, by - y
+        if abs(dx) >= abs(dy) and dx != 0:
+            return "gauche" if dx > 0 else "droite"
+        if dy != 0:
+            return "haut" if dy > 0 else "bas"
+        return None
+
+
+class PolitiqueLLM(Politique):
+    """La politique **DRVM/native** : le **professeur DeepSeek en ligne** décide le pas.
+
+    Le conteneur `DRVM` l'appelle comme les autres politiques ; le professeur ne rend qu'un
+    mot de direction, contraint par le prompt (l'API n'a pas de grammaire GBNF). Le **coût
+    réel** (latence cu
+… [1233 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== test politique ==\" && timeout 300 python3 tools/tests/test_pensee_politique.py 2>&1 | tail -4; echo; echo \"== import PolitiqueLLM ==\" && python3 -c 'from tools.pensee.operateurs import PolitiqueLLM; p=PolitiqueLLM(transp … [446 caractères tronqués]`
+
+  ```
+== test politique ==
+----------------------------------------------------------------------
+Ran 10 tests in 0.001s
+
+OK
+
+== import PolitiqueLLM ==
+classe ok, endpoint: https://api.deepseek.com modele: deepseek-chat
+
+== porte-ressources complet ==
+fi
+echo "  ✅ registre cohérent ; les avertissements de stockage/NUMA sont affichés, pas fatals"
+echo "✅ porte ressources verte : autotest 9 cas et registre cohérent"
+exit 0
+
+== equipment hauru system ==
+/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system:
+ENVIRONNEMENT_DEVELOPPEMENT.md
+GUIDE_RECONSTRUCTION.md
+maintenance
+MICROCONTROLEURS.md
+migrations-2026
+OPTIMISATIONS_APPLIQUEES.md
+PLAN_OPTIMISATION_NVME.md
+secours
+thermal
+
+/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/maintenance:
+logs
+scrub-data13tb.sh
+
+/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/maintenance/logs:
+scrub-data13tb-20260921-164933.log
+
+/home/stephane/Data13TB/stephane/GitHub/equipment-hauru/system/migrations-2026:
+2026-07-migration-13tb
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/porte-ressources.sh'); t=p.read_text()\nold=\"\"\"echo \"  ✅ registre cohérent ; les avertissements de stockage/NUMA sont affichés, pas fatals\"\necho \"✅ porte ressources verte … [954 caractères tronqués]`
+
+  ```
+porte-ressources : contrôle GPU ajouté
+  ✅ registre cohérent ; les avertissements de stockage/NUMA sont affichés, pas fatals
+  === GPU : aucun serveur local d'inférence (llama-server, ollama) ===
+     ✅ GPU libres ou occupés par Drave ; aucun serveur local
+✅ porte ressources verte : autotest 9 cas, registre cohérent, GPU réservés à Drave
+[porte 0]
+  ```
+
+- **bash** `{"command": "set -u; GH=/home/stephane/Data13TB/stephane/GitHub/equipment-hauru; mkdir -p \"$GH/system/gpu\"; cat > \"$GH/system/gpu/hauru-gpu-guard\" <<'EOF'\n#!/bin/bash\n# hauru-gpu-guard — les GPU de Hauru sont exclusivement réservés à Drave.\n# Tout serveur local d'inférence (llama-server, olla … [1760 caractères tronqués]`
+
+  ```
+Created symlink '/home/stephane/.config/systemd/user/timers.target.wants/hauru-gpu-guard.timer' → '/home/stephane/.config/systemd/user/hauru-gpu-guard.timer'.
+active
+NEXT                        LEFT LAST                        PASSED UNIT                  ACTIVATES
+Tue 2026-11-03 09:11:53 EST  28s Tue 2026-11-03 09:11:23 EST 1s ago hauru-gpu-guard.timer hauru-gpu-guard.service
+
+== test guard ==
+[guard 0]
+
+== GPU ==
+  ```
+
+### 🤖 Assistant
+
+⏵ Garde-fou GPU permanent actif (timer 30 s) et porte ressources verte ; j'inscris la règle dans AGENTS/ressources et je retire les modèles locaux des professeurs.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '^10\\. \\*\\*Pilotage' AGENTS.md; sed -n '/^10\\. \\*\\*Pilotage/,/^## 3/p' AGENTS.md | head -8; echo \"---\"; grep -n '^## 3' AGENTS.md", "description": "Locate end of non-negotiable rules in AGENTS", "timeoutMs": 60000}`
+
+  ```
+51:10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+---
+58:## 3. Routage : lire le document de sa tâche, pas les autres
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== tailles ==\" && python3 tools/taille_documents.py 2>&1 | grep -E 'AGENTS|en-cours|T0 max'; echo; echo \"== modèles ==\" && ls -la models/qwen2.5-7b-* models/qwen2.5-3b-* 2>&1; echo; echo \"== références 0.5B ==\" && grep -r … [285 caractères tronqués]`
+
+  ```
+== tailles ==
+  T0 max : 4027 mots (budget 4 000)
+     · T0 : 4027 mots (AGENTS + en-cours + une tâche) > budget 4 000
+
+== modèles ==
+-rw-r--r--. 1 stephane stephane 2104932768  2 nov 16:22 models/qwen2.5-3b-instruct-q4_k_m.gguf
+-rw-r--r--. 1 stephane stephane 3993201344  2 nov 16:28 models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf
+-rw-r--r--. 1 stephane stephane  689872288  2 nov 16:28 models/qwen2.5-7b-instruct-q4_k_m-00002-of-00002.gguf
+
+== références 0.5B ==
+./run_real_clusters.py
+./run_value_encoding.py
+./run_8bit_perfection.py
+./run_list_mode.py
+./run_harness.py
+./tools/make_patch.py
+
+== equipment gpu ==
+total 4
+drwxr-xr-x. 1 stephane stephane  30  3 nov 09:11 .
+drwxr-xr-x. 1 stephane stephane 334  3 nov 09:11 ..
+-rwxr-xr-x. 1 stephane stephane 747  3 nov 09:11 hauru-gpu-guard
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 déjà à 4 027 (dépassement) : je lis l'état pour élaguer avant d'ajouter la règle.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '^## \\|^### \\|^- \\*\\*' docs/pilotage/en-cours.md | head -40; echo \"---\"; wc -w docs/pilotage/en-cours.md AGENTS.md; echo \"---\"; sed -n '1,24p' docs/pilotage/en-cours.md", "description": "List state sections and word c … [40 caractères tronqués]`
+
+  ```
+12:## Sessions en cours
+25:### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+27:- **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
+28:- **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
+29:- **Plan** : 1–7) ~~audit, commits, état, mandats, porte, INDEX, runbook~~ ; 8–9) **intégration,
+31:- **Ambition** : un état reprenable, des mandats qui disent la vérité.
+32:- **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
+33:- **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
+34:- **Ce qu'elle fait** : intégration ; **passe 04 h 10 — 82 portes, 77/5** (4 connues +
+36:- **Ce que font les autres** : **N2**, **S** (en pause), **Pensée**.
+37:- **Prochaine action** : le **bilan de 08 h** est écrit ; clôture ; la passe **82** stable.
+38:- **Bloquants** : aucun ; GPU à N2 (les deux), claims dans le registre.
+39:- **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
+41:### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structur
+… [4171 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '92,125p' docs/pilotage/en-cours.md", "description": "Read state synthesis section for trimming", "timeoutMs": 60000}`
+
+  ```
+- **Prochaine action** : **en pause** (dernier heartbeat 00 h 25 ; claim libéré) ; les **6
+  fichiers de la nuit sont committés par le hub** (3 fiches + 2 JSON + la mise à jour de la
+  fenêtre) ; à la reprise : contrôle depuis zéro, clôture.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+
+> **Session close** : `fe3c05f0` (D/R/A) — OCR CEGEP (91 scans, 60 documents, 1 982 p,
+> 4,41 M car.) ; [clôture](../../journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md),
+> fiche [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
+
+## Ce qui est en cours
+
+- **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
+- **N2** : **la fenêtre 1 024 est la recette de production** — 30 000 pas : **2,9943** à 128,
+  **2,6143** à 1 000, **2,5628** à 2 000 (**sous 2,5** au grand corpus) ; le compute 
+… [1051 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1) en-cours : synthèse courte (les sections portent le détail)\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"\"\"- **S — le banc de structures** : **analyseur 54/55 types, 13 … [2374 caractères tronqués]`
+
+  ```
+en-cours : synthèse resserrée
+AGENTS : règle 11 ajoutée
+
+**La règle du jamais-en-attente** : si une ligne de la roadmap est bloquée (un corpus introuvable, un compte, du
+matériel), on prend la **suivante** dans l'ordre — la file « jamais en attente » de [`docs/pilotage/roadmap.md`](../pilotage/roadmap.md).
+Un agent qui attend est un agent qui n'a pas lu la roadmap.
+
+Tu as beaucoup de ressources et de temps, mais **l'humain n'est pas toujours disponible et son temps de vie est
+très précieux**. Tu ne dois donc **jamais suspendre tous les travaux en attendant une réponse**.
+
+- Tire le maximum de chaque journée : chaque moment compte.
+- Consolide les questions en attente **à même [`docs/pilotage/en-cours.md`](../pilotage/en-cours.md)** — elles ne bloquent rien.
+- Pour les questions qui ne sont **pas** sur la vision ou la philosophie, **tente d'y répondre toi-même** plutôt
+  que d'attendre un humain si cela retarde un chantier.
+- En cas de doute, **travaille sur plusieurs hypothèses** en parallèle ; la mesure tranchera.
+- Ne t'arrête pas parce qu'une échéance est passée : *le temps imparti est un plancher, pas un plafond*
+  ([`mission.md`](mission.md)).
+
+## Ce qui reste à l'humain
+
+La *
+… [205 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+<system-reminder>
+Updated instructions from: AGENTS.md
+
+This file changed after it was loaded. Use the following content instead of the previously loaded instructions from this file.
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des alternatives ayant des architectures différentes. e.g. Blocs neuronaux là où l'intuition est un avantage, blocs computationnels classiques pour les opérations où l'informatique classique est plus fiable et performante.
+
+Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
+les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
+**distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
+volonté** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** et à ses tâches d'apprentissage ; les
+    **professeurs** passent par l'**API DeepSeek en ligne** (`tools/llm/enseignant.py`,
+    `tools/llm/deepseek.py`), jamais par un serveur local (`llama-server`, `ollama`).
+    Garde-fous : `hauru-gpu-guard` (timer 30 s) et `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/methode/ressources.md'); t=p.read_text()\nold=\"## Ce qui reste à l'humain\"\nnew=\"\"\"## Les GPU et les professeurs\n\nLes deux GPU sont **exclusivement réservés à Drave** et à … [2509 caractères tronqués]`
+
+  ```
+ressources : règle GPU/API
+modèles professeurs retirés ; restants :
+total 863324
+drwxr-xr-x. 1 stephane stephane       100  3 nov 09:12 .
+drwxr-xr-x. 1 stephane stephane       660  1 nov 10:50 ..
+-rw-r--r--. 1 stephane stephane 352972352 25 sep 17:13 Qwen2.5-0.5B-Q4_0.gguf
+-rw-r--r--. 1 stephane stephane 531068480 25 sep 16:52 Qwen2.5-0.5B-Q8_0.gguf
+drwxr-xr-x. 1 stephane stephane       138 15 oct 09:02 vision
+
+== equipment gpu ==
+total 16
+drwxr-xr-x. 1 stephane stephane 136  3 nov 09:12 .
+drwxr-xr-x. 1 stephane stephane 334  3 nov 09:11 ..
+-rwxr-xr-x. 1 stephane stephane 747  3 nov 09:11 hauru-gpu-guard
+-rw-r--r--. 1 stephane stephane 135  3 nov 09:12 hauru-gpu-guard.service
+-rw-r--r--. 1 stephane stephane 144  3 nov 09:12 hauru-gpu-guard.timer
+-rw-r--r--. 1 stephane stephane 814  3 nov 09:12 README.md
+ create mode 100755 system/gpu/hauru-gpu-guard
+ create mode 100644 system/gpu/hauru-gpu-guard.service
+ create mode 100644 system/gpu/hauru-gpu-guard.timer
+bb94b17 feat(gpu): hauru-gpu-guard — les GPU sont exclusivement réservés à Drave, les professeurs passent par l'API DeepSeek
+  ```
+
+### 🤖 Assistant
+
+⏵ Modèles professeurs retirés, garde-fou dans equipment-hauru (`bb94b17`) ; j'inscris l'état et je vérifie.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"> **Bilan de 08 h (03/11)** : la passe de **04 h 10** a rendu **82 portes, 77 vertes, 5 rouges**\"\nnew=\"> **Serveurs locaux arrêt … [2002 caractères tronqués]`

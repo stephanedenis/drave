@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**40 commits** · **5 session(s)** · **6 thème(s)**
+**41 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,14 +16,14 @@
 | docs | 15 | [docs.md](docs.md) |
 | mesures | 6 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
-| portes | 5 | [portes.md](portes.md) |
+| portes | 6 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 11.8 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
-| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 17.5 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
+| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 17.7 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
 | `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 9.5 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
 | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 12.5 h | [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md) |
 | `caaf3018-e3e2-4416-8446-11f0335910aa` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 16.9 h | [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md) |
@@ -72,6 +72,7 @@
 | 08:56 | `550ca5f2` | PORTE REPARTI-MOTEUR — L'ÉPINGLAGE 9,1748 ÉTAIT UN MODÈLE EN CACHE ; RÉ-ÉTALONNÉE À 8,7434 (VERTE) |
 | 09:02 | `aba77b17` | PORTE HOMEOSTASIE — LA SUGGESTION DE RÉGÉNÉRATION ÉTAIT FAUSSE (BRAS ET SUFFIXE) |
 | 09:04 | `5454ac59` | JOURNAL — LES DEUX PORTES RÉPARÉES DU MATIN (REPARTI VERTE, HOMEOSTASIE DOCUMENTÉE) |
+| 09:06 | `842654cc` | PORTES — DEPUIS LE RÉ-ÉTALONNAGE, TROIS ROUGES CONNUES AU LIEU DE QUATRE |
 
 ## Le récit de la journée (écrit à la main)
 

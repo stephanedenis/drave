@@ -24,5 +24,12 @@ if ! python3 tools/ressources.py --check; then
     exit 1
 fi
 echo "  ✅ registre cohérent ; les avertissements de stockage/NUMA sont affichés, pas fatals"
-echo "✅ porte ressources verte : autotest 9 cas et registre cohérent"
+echo "  === GPU : aucun serveur local d'inférence (llama-server, ollama) ==="
+if nvidia-smi --query-compute-apps=pid,process_name --format=csv,noheader 2>/dev/null \
+        | grep -Eiq 'llama-server|ollama|llama-cpp'; then
+    echo "  ❌ un serveur local occupe un GPU — les GPU sont exclusivement réservés à Drave"
+    exit 1
+fi
+echo "     ✅ GPU libres ou occupés par Drave ; aucun serveur local"
+echo "✅ porte ressources verte : autotest 9 cas, registre cohérent, GPU réservés à Drave"
 exit 0

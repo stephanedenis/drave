@@ -7,14 +7,14 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 17.5 h |
+| Durée | 17.7 h |
 | Tours | 74 |
-| Messages | 497 |
-| Appels d'outils | 435 |
-| Fichiers touchés | 15 |
-| Commandes | 319 |
+| Messages | 510 |
+| Appels d'outils | 452 |
+| Fichiers touchés | 16 |
+| Commandes | 331 |
 | Sous-agents | 0 |
-| Commits | 37 |
+| Commits | 39 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -1942,7 +1942,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 74 — llama-server ne doit pas être utilisé. enquête et corrige à la source. On doit utiliser l'api DeepSeek en ligne pour nos … [101 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - bash — Investigate llama-server process, port, GPU and services
 - bash — Search llama, deepseek and professor references in code
@@ -1952,10 +1952,17 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - read
 - bash — Read DeepSeek adapter interface and operateurs tests
 - bash — Inspect DeepSeek API, LlamaServer callers and model usage
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py`
+- bash — Test operateurs import, inspect gate and equipment repo
+- bash — Find class name, run pensee tests, check git status
+- bash — Run politique test, verify class and inspect gate/system tree
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Je lis l'interface publique de l'adaptateur DeepSeek et les appelants de `LlamaServer` pour brancher l'API sans casser les tests.
+⏵ Modèles professeurs retirés, garde-fou dans equipment-hauru (`bb94b17`) ; j'inscris l'état et je vérifie.
 
 ## 3. Travail accompli
 
@@ -1978,6 +1985,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/ressources.py` | 1 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py` | 0 | 3 |
 
 ### Commandes exécutées (échantillon)
 
@@ -2021,7 +2029,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 279 autres
+- … et 291 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2202,4 +2210,6 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08" -- docs/pilotage/roadmap.md; echo "[commit $?]"; git log --oneline -1
 - ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08" -m "L'état et la roadmap disent la même chose : N2 (00 h 25) et S (20 h 40) sont en pause 
 - ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08" -m "L'état et la roadmap disent la même chose : N2 (00 h 25) et S (20 h 40) sont en pause 
+- feat(gpu): hauru-gpu-guard — les GPU sont exclusivement réservés à Drave, les professeurs passent par l'API DeepSeek" 2>&1 | tail -3; git log --oneline -1
+- GPU — SERVEURS LOCAUX INTERDITS : llama-server TUÉ, PROFESSEURS SUR L'API DEEPSEEK, GARDE-FOU PERMANENT" -m "PolitiqueLLM passe de llama-server (18082) à l'API 
 

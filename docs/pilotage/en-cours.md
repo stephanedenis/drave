@@ -16,6 +16,11 @@
 > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
 > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
 >
+> **Serveurs locaux arrêtés (03/11 09 h)** : `llama-server` (Qwen2.5-7B, port 18082) tué ; unités
+> `llama-cpp`/`embed`/`vision` masquées, `ollama` désactivé ; les **professeurs** passent par l'**API
+> DeepSeek** (`tools/llm/enseignant.py`) ; `hauru-gpu-guard` (timer 30 s) et `porte-ressources`
+> (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave (la N4 a tourné sur GPU0).
+>
 > **Bilan de 08 h (03/11)** : la passe de **04 h 10** a rendu **82 portes, 77 vertes, 5 rouges**
 > (4 connues + `porte-sessions` de coordination, machine au repos) ; la **82e `porte-ressources`**
 > est validée. **N2 et S sont en pause** (derniers heartbeats 00 h 25 / 20 h 40 ; claims libérés) ;
@@ -101,14 +106,9 @@
 
 ## Ce qui est en cours
 
-- **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
-- **N2** : **la fenêtre 1 024 est la recette de production** — 30 000 pas : **2,9943** à 128,
-  **2,6143** à 1 000, **2,5628** à 2 000 (**sous 2,5** au grand corpus) ; le compute à fenêtre 128
-  (200 k pas) donne 3,1591 et 8,2262 —
-  [`production`](../../reports/rapport-n2-production-fenetre.md),
-  [`n2-200k`](../../reports/rapport-n2-200k.md).
-- **Pensée — B13** : **140/140**, gold **432**, **116 liens** ; minute 26, mobile/bouge **faibles** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
-  [`anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
+- **S — en pause** : analyseur **54/55**, **131/131** rôles, **47/47** compléments ; corpus **55** (SHA `76accf9d…`) ; banque **200/355**, **0** validée.
+- **N2 — en pause** : la **fenêtre 1 024** est la recette de production (2,56–2,99 ; sous 2,5 au grand corpus) ; le compute à 128 donne 3,1591/8,2262.
+- **Pensée — B13 (actif)** : **140/140**, gold **432 réel true** (0,9954), **DRVM/native 114/114 + 5/5**, T132/T133 2/5.
 
 ## Les chiffres de l'état
 
@@ -152,8 +152,6 @@ externes** et la **prochaine action**.
   reste **1 024 octets**.
 - **N2** : les **200 k pas** font-ils passer **< 2,5** sans perdre le français ? → **non** :
   3,1591 ; le français tient et la largeur progresse ; 2,5 est à **1,3–2,7 M pas**.
-- **N4** : une **consigne courte** tient-elle hors du vu ? → **N4** tranche (0/4 tenus).
-- **B10.3** : chrF **> 39,6** ? → l'attention croisée tranche.
 - **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche.
 
 ## La carte

@@ -55,6 +55,12 @@ volonté** des événements.
     sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
     → [`docs/methode/continuite.md`](docs/methode/continuite.md)
 
+11. **Les GPU sont exclusivement réservés à Drave** et à ses tâches d'apprentissage ; les
+    **professeurs** passent par l'**API DeepSeek en ligne** (`tools/llm/enseignant.py`,
+    `tools/llm/deepseek.py`), jamais par un serveur local (`llama-server`, `ollama`).
+    Garde-fous : `hauru-gpu-guard` (timer 30 s) et `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
 ## 3. Routage : lire le document de sa tâche, pas les autres
 
 | si la tâche est… | lire |

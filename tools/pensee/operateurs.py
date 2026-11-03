@@ -17,13 +17,15 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import random
 import re
 import time
-import urllib.request
 from collections import Counter
 from dataclasses import dataclass, field
 from typing import Callable
+
+from tools.llm.deepseek import DeepSeek
 
 from .coeur import Candidat, Decision, Etat
 from .moteur import AStar, BFS, Greedy, Moteur, Probleme
@@ -82,22 +84,26 @@ class PolitiqueAveugle(Politique):
 
 
 class PolitiqueLLM(Politique):
-    """La politique **DRVM/native** : un modèle local décide le pas.
+    """La politique **DRVM/native** : le **professeur DeepSeek en ligne** décide le pas.
 
-    Le conteneur `DRVM` l'appelle comme les autres politiques ; le modèle ne rend qu'un mot
-    de direction, contraint par une grammaire GBNF. Le **coût réel** (latence cumulée) est
-    mesuré à côté du coût symbolique du registre. `transport` est injectable pour tester le
-    contrat sans modèle ; en production, il interroge `llama-server` en CPU.
+    Le conteneur `DRVM` l'appelle comme les autres politiques ; le professeur ne rend qu'un
+    mot de direction, contraint par le prompt (l'API n'a pas de grammaire GBNF). Le **coût
+    réel** (latence cumulée) est mesuré à côté du coût symbolique du registre. `transport`
+    est injectable pour tester le contrat sans réseau ; en production, il appelle l'API
+    DeepSeek (`DEEPSEEK_API_KEY` ou `DSH_API_KEY`, `https://api.deepseek.com`). **Aucun
+    serveur local n'est utilisé** : les GPU sont exclusivement réservés à Drave.
     """
 
     nom = "llm"
 
-    def __init__(self, modele: str, endpoint: str = "http://127.0.0.1:18082",
+    def __init__(self, modele: str = "deepseek-chat", endpoint: str | None = None,
                  jeu: str = "labyrinthe", variante: str = "regle", timeout: int = 120,
-                 transport=None):
+                 transport=None, cle: str | None = None):
         super().__init__()
-        self.modele = str(modele)
-        self.endpoint = endpoint.rstrip("/")
+        self.modele = str(modele) if modele else "deepseek-chat"
+        self.endpoint = (endpoint or os.environ.get("DEEPSEEK_BASE_URL")
+                         or "https://api.deepseek.com").rstrip("/")
+        self.cle = cle
         self.jeu = jeu
         self.variante = variante
         self.timeout = timeout
@@ -192,14 +198,15 @@ class PolitiqueLLM(Politique):
                 "Réponds uniquement par droite, gauche, bas ou haut. Ne propose pas un mur.")
 
     def _post(self, invite: str, grammaire: str) -> str:
-        corps = {"messages": [{"role": "user", "content": invite}], "temperature": 0,
-                 "max_tokens": 8, "grammar": grammaire}
-        requete = urllib.request.Request(
-            self.endpoint + "/v1/chat/completions",
-            data=json.dumps(corps).encode("utf-8"),
-            headers={"Content-Type": "application/json"})
-        with urllib.request.urlopen(requete, timeout=self.timeout) as reponse:
-            return json.loads(reponse.read().decode("utf-8"))["choices"][0]["message"]["content"]
+        """Appelle le **professeur DeepSeek en ligne** (jamais un serveur local).
+
+        `grammaire` est conservée pour le contrat, mais l'API n'accepte pas de GBNF : la
+        contrainte de sortie est portée par le prompt (`_invite`) et par la relecture que
+        fait `propose`.
+        """
+        client = DeepSeek(cle=self.cle, base_url=self.endpoint, modele=self.modele,
+                          timeout=float(self.timeout))
+        return client.demande(invite, temperature=0, max_tokens=8, cache=True).contenu
 
     def propose(self, etat, but):
         t0 = time.perf_counter()

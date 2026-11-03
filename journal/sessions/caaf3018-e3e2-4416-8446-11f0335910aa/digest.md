@@ -8420,3 +8420,25 @@ docs/pilotage/en-cours.md:34:- **Ce qu'elle fait** : intégration ; **passe 04 h
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/methode/portes.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"**77 vertes, 5 rouges** (les 4 connues + `porte-sessions`, mandats N2/S périmés — coordination) ;\"\nn = \"**77  … [998 caractères tronqués]`
+
+  ```
+portes.md : reparti verte notée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-353]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-353", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 842654cc] PORTES — DEPUIS LE RÉ-ÉTALONNAGE, TROIS ROUGES CONNUES AU LIEU DE QUATRE
+ 14 files changed, 332 insertions(+), 24 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Matinée intégrée (passe 82, N2 committée, reparti verte). Je reprends la veille en cadence de 30 min.
+
+- **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`

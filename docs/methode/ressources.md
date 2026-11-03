@@ -88,6 +88,14 @@ très précieux**. Tu ne dois donc **jamais suspendre tous les travaux en attend
 - Ne t'arrête pas parce qu'une échéance est passée : *le temps imparti est un plancher, pas un plafond*
   ([`mission.md`](mission.md)).
 
+## Les GPU et les professeurs
+
+Les deux GPU sont **exclusivement réservés à Drave** et à ses tâches d'apprentissage. Les **professeurs**
+(annotation, distillation, corpus) passent par l'**API DeepSeek en ligne** — `tools/llm/enseignant.py`
+et `tools/llm/deepseek.py` ; la clé vient de `DEEPSEEK_API_KEY` ou `DEEPSEEK_KEY_FILE`. Aucun serveur
+local (`llama-server`, `ollama`) ne doit tourner : `hauru-gpu-guard` (timer 30 s) les arrête, et
+`porte-ressources` échoue si l'un occupe un GPU.
+
 ## Ce qui reste à l'humain
 
 La **vision** de l'**étage**, la **philosophie** du projet, et les arbitrages qui engagent le sens de la mission. Ils

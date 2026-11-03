@@ -9,8 +9,8 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 16.9 h |
 | Tours | 28 |
-| Messages | 489 |
-| Appels d'outils | 491 |
+| Messages | 490 |
+| Appels d'outils | 492 |
 | Fichiers touchés | 6 |
 | Commandes | 353 |
 | Sous-agents | 0 |
@@ -592,7 +592,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 28 — continue, la validation va attendre un autre jour.
 
-*42 appels d'outils.* Actions notables :
+*43 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and check morning state
@@ -612,7 +612,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 **Synthèse produite :**
 
-⏵ Deux portes réparées. Je consigne dans le journal et fais le point de la matinée.
+⏵ Matinée intégrée (passe 82, N2 committée, reparti verte). Je reprends la veille en cadence de 30 min.
 
 ## 3. Travail accompli
 
