@@ -1,0 +1,155 @@
+{
+  "date": "2026-11-03 11:39 EST",
+  "modele": "deepseek-chat",
+  "endpoint": "https://api.deepseek.com",
+  "probleme": {
+    "nom": "labyrinthe_porte_minute",
+    "porte": [
+      3,
+      3
+    ],
+    "but": [
+      4,
+      4
+    ],
+    "regle": "la sonde ouvre la porte un tour et passe dans le même pas",
+    "budget": 200
+  },
+  "politique": {
+    "classe": "PolitiqueLLM",
+    "jeux": [
+      "porte",
+      "labyrinthe"
+    ],
+    "contrainte": "grammaire GBNF, quatre directions"
+  },
+  "mesures": {
+    "oracle": {
+      "noeuds": 25,
+      "but": true,
+      "par_operateur": {
+        "pas": 12,
+        "saut": 9,
+        "sonde": 4
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 50.0,
+      "appels": 6,
+      "budget": 24,
+      "politique": "manhattan",
+      "score": 1.0,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.003
+    },
+    "aveugle": {
+      "noeuds": 200,
+      "but": false,
+      "par_operateur": {
+        "pas": 100,
+        "saut": 39,
+        "sonde": 61
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 483.0,
+      "appels": 66,
+      "budget": 200,
+      "politique": "aveugle",
+      "score": 0.25,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.025
+    },
+    "hasard": {
+      "noeuds": 42,
+      "but": true,
+      "par_operateur": {
+        "pas": 22,
+        "saut": 13,
+        "sonde": 7
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 83.0,
+      "appels": 13,
+      "budget": 41,
+      "politique": "hasard",
+      "score": 1.0,
+      "latence_s": 0.0,
+      "erreurs": 0,
+      "duree_s": 0.006
+    },
+    "llm_porte": {
+      "noeuds": 24,
+      "but": true,
+      "par_operateur": {
+        "pas": 12,
+        "saut": 9,
+        "sonde": 3
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 45.0,
+      "appels": 6,
+      "budget": 23,
+      "politique": "llm",
+      "score": 1.0,
+      "latence_s": 5.544,
+      "erreurs": 0,
+      "duree_s": 5.55
+    },
+    "llm_labyrinthe": {
+      "noeuds": 200,
+      "but": false,
+      "par_operateur": {
+        "pas": 118,
+        "saut": 45,
+        "sonde": 37
+      },
+      "genres": [
+        "neuronal",
+        "numérique",
+        "symbolique"
+      ],
+      "cout": 393.0,
+      "appels": 78,
+      "budget": 200,
+      "politique": "llm",
+      "score": 0.25,
+      "latence_s": 2.869,
+      "erreurs": 0,
+      "duree_s": 2.929
+    }
+  },
+  "seuils": {
+    "oracle_but": true,
+    "oracle_sonde": true,
+    "aveugle_non": true,
+    "llm_but": true,
+    "llm_sonde": true,
+    "llm_mieux_que_labyrinthe": true,
+    "aucune_erreur_llm": true,
+    "latence_mesuree": true
+  },
+  "verdict": true,
+  "limites": [
+    "Le hasard ouvre la porte par chance (43 nœuds, 7 sonde) ; l'aveugle et le prompt labyrinthe échouent (200 nœuds, 3 sonde) : le contrôle propre est l'aveugle et le labyrinthe.",
+    "La minute discrimine la règle ; le test suivant est la porte **mobile** (deux positions) ou **stochastique**.",
+    "La latence inclut la file du serveur ; CPU seulement.",
+    "Une seule graine de serveur, température 0, grammaire."
+  ]
+}

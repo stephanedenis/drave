@@ -50,12 +50,13 @@ def main() -> int:
     ap.add_argument("--demarrer", action="store_true")
     ap.add_argument("--sortie", default=str(RACINE / "reports/pensee-porte-minute.json"))
     args = ap.parse_args()
-    modele = pathlib.Path(args.modele)
-    if not modele.exists():
-        raise SystemExit(f"modèle absent : {modele}")
     endpoint = args.endpoint or f"http://127.0.0.1:{args.port}"
+    est_api = not endpoint.startswith(("http://127.0.0.1", "http://localhost"))
+    modele = args.modele if est_api else pathlib.Path(args.modele)
+    if not est_api and not modele.exists():
+        raise SystemExit(f"modèle absent : {modele}")
     proc = None
-    if not _sante(endpoint):
+    if not est_api and not _sante(endpoint):
         if not args.demarrer:
             raise SystemExit(f"serveur absent sur {endpoint} — relancer avec --demarrer")
         proc = demarrer_serveur(modele, args.port, pathlib.Path("/tmp/qualifier-porte-minute-serveur.log"))

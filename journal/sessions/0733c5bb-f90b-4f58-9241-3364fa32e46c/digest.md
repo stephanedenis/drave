@@ -7595,3 +7595,45 @@ e15
 … [360 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Cycle de nuit clos : je rends les résultats, l'état et les commits
+
+Le cycle de nuit est terminé et committé. Il a débordé du créneau (la session a été suspendue vers 04 h et reprise à 11 h 20) : je l'ai clos à 11 h 32, GPU libres.
+
+## Ce que font les autres sessions
+
+- **Hub / pilotage** : passe de portes terminée — `porte-homeostasie` **verte** (elle régénère son LoRA au lieu d'échouer, 10 min) ; **règle 11 ajoutée à AGENTS** (GPU réservés à Drave, professeurs par l'API DeepSeek, jamais de serveur local) avec un **blocage nommé** : la clé API DeepSeek est absente ; discipline de budget (AGENTS 1 196–1 198 mots, T0 sous 4 000).
+- **L/B13 (Pensée)** : **gold réel 432** — POS 0,9065, syntagmes 0,4598, tête 0,5633, acte 0,9954, **verdict FALSE** ; la « fenêtre » (labyrinthe) est **non discriminante** (BFS 228, aveugle 215, 7B 238 : tout le monde passe) ; **parité DRVM/native 114/114 poids, 5/5 prompts**, mais le point de contrôle est volatil.
+- **S (structures)** : analyseur **54/55 types, 131/131 rôles, 47/47 compléments** ; corpus réel 8,5 % CEGEP / 65,5 % propre ; banque 200 phrases / 355 candidats.
+- **D/R/A** : close (OCR CEGEP 91 scans uniques, 60 documents, 1 982 p).
+
+## Mes quatre faits de la nuit
+
+**1. La loi de la fenêtre** (à octets constants, 20,5 Mo) : à 1 000 octets, 3,2545 (fenêtre 256) → 3,0107 (512) → **2,9950** (1 024) → 3,0202 (2 048). Le **point d'équilibre est 1 024** à ce budget — et il **se déplace avec le budget** (à 246 Mo, 2 048 donne 2,5114 à 4 000 octets). Le contrôle « même texte » montre que **chaque modèle sature exactement à sa fenêtre** (256 se dégrade au-delà ; 1 024 = 2 000 au millième).
+
+**2. La fenêtre est la recette de production** : N2.ac affiné avec RoPE + fenêtre entraînée **écrase N2.ac et le run de 200 k pas** à octets ajoutés constants. Poussé à **30 000 pas à 1 024 (307 Mo)** : **2,9943** en domaine à 128, 2,6143 à 1 000, 2,5628 à 2 000, et **2,4759 / 2,4373 sur la validation du grand corpus — sous 2,5**, une première. Contrôle depuis zéro : la **fenêtre fait la longueur**, l'**initialisation fait le niveau** (−0,16).
+
+**3. La porte < 2,5 sur le corpus propre** : **non atteinte** — 2,7856 en val (0,29 manquant), 2,8566 en test — mais la fenêtre est le **seul bras dont la courbe descend** (2,9726 → 2,7856 contre 2,9027 → 3,1107 pour la fenêtre 128), et les deux bras battent la chaîne honnête de N2.h (3,0904). Le corpus (3,24 Mo) est épuisé : la suite est la **capacité**, pas les pas.
+
+**4. La fenêtre paie à toutes les capacités** : à 11,47 M, −2,7 à 512 octets ; à 21,65 M, −2,8. Ce n'est pas un luxe de gros modèle.
+
+Contrôles joints : permutation (175–216), miroir de copie **toujours muet** (0,0078 — la PPL n'est pas la lecture), et **coût d'inférence mesuré** : 22 306 → 19 405 octets/s de 256 à 2 048, soit **−13 %**, pas ×4.
+
+## Ma ligne d'état (dans `en-cours`)
+
+> **R1 — la fenêtre native** : loi mesurée jusqu'à **2 048** (2,5114 à 4 000) ; **la porte 2,5 sur le corpus propre n'est pas atteinte** (2,7856 val, 0,29 manquant) mais la fenêtre est le **seul bras descendant** et elle paie à **11,47 M comme à 21,65 M** (−2,7 à 512 octets).
+>
+> **N2** : **la fenêtre 1 024 est la recette de production** — 30 000 pas : **2,9943** à 128, **2,6143** à 1 000, **2,5628** à 2 000 (**sous 2,5** au grand corpus) ; même recette **depuis zéro** (61 Mo) : **3,3184** — la fenêtre fait la longueur, l'init le niveau.
+
+## Commits
+
+- **`4527f661`** — chiffre de la fenêtre (256 → 1 024, production affinée).
+- **`c7ef9bc4`** — fenêtre 2 048 et point d'équilibre.
+- **`e1c1064d`** — la nuit : production, porte propre, capacité.
+- **`bfd51b90`** — clôture.
+
+Fiches : [`rapport-n2-fenetre`](reports/rapport-n2-fenetre.md), [`rapport-n2-r12-2048`](reports/rapport-n2-r12-2048.md), [`rapport-n2-production-fenetre`](reports/rapport-n2-production-fenetre.md), [`rapport-n2-porte-propre`](reports/rapport-n2-porte-propre.md) ; récit `journal/sessions/0733c5bb…/cloture.md` § Nuit.
+
+**Portes** : revue de documentation verte, état à jour, en-cours et journal verts, T0 à 3 998. Une seule rouge, **hors de mon périmètre** : `docs/pilotage/references-non-regression.md` à 2 518 mots (budget 2 500) — au hub de couper.
+

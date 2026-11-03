@@ -1,0 +1,297 @@
+{
+  "date": "2026-11-03 11:39 EST",
+  "modele": "deepseek-chat",
+  "endpoint": "https://api.deepseek.com",
+  "politique": {
+    "classe": "PolitiqueLLM",
+    "jeu": "cadenas/labyrinthe",
+    "contrainte": "grammaire GBNF, un mot de direction"
+  },
+  "mesures": {
+    "cadenas": {
+      "oracle": {
+        "noeuds": 3,
+        "but": true,
+        "par_operateur": {
+          "sonde": 3
+        },
+        "genres": [
+          "neuronal"
+        ],
+        "cout": 3.0,
+        "appels": 3,
+        "budget": 2,
+        "politique": "cadenas_avant",
+        "score": 1.0,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.0
+      },
+      "aveugle": {
+        "noeuds": 20,
+        "but": false,
+        "par_operateur": {
+          "sonde": 20
+        },
+        "genres": [
+          "neuronal"
+        ],
+        "cout": 20.0,
+        "appels": 20,
+        "budget": 20,
+        "politique": "cadenas_arriere",
+        "score": 0.3333333333333333,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.001
+      },
+      "hasard": {
+        "noeuds": 0,
+        "but": false,
+        "par_operateur": {},
+        "genres": [
+          "neuronal"
+        ],
+        "cout": 0,
+        "appels": 1,
+        "budget": 0,
+        "politique": "hasard",
+        "score": 0.25,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.0
+      },
+      "minimal": {
+        "noeuds": 0,
+        "but": false,
+        "par_operateur": {},
+        "genres": [
+          "neuronal"
+        ],
+        "cout": 0,
+        "appels": 1,
+        "budget": 0,
+        "politique": "llm",
+        "score": 0.25,
+        "latence_s": 1.029,
+        "erreurs": 0,
+        "duree_s": 1.029
+      },
+      "regle": {
+        "noeuds": 3,
+        "but": true,
+        "par_operateur": {
+          "sonde": 3
+        },
+        "genres": [
+          "neuronal"
+        ],
+        "cout": 3.0,
+        "appels": 3,
+        "budget": 2,
+        "politique": "llm",
+        "score": 1.0,
+        "latence_s": 2.906,
+        "erreurs": 0,
+        "duree_s": 2.907
+      }
+    },
+    "labyrinthe": {
+      "oracle": {
+        "noeuds": 16,
+        "but": true,
+        "par_operateur": {
+          "pas": 6,
+          "saut": 9,
+          "sonde": 1
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 29.0,
+        "appels": 3,
+        "budget": 15,
+        "politique": "manhattan",
+        "score": 1.0,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.002
+      },
+      "aveugle": {
+        "noeuds": 15,
+        "but": true,
+        "par_operateur": {
+          "pas": 6,
+          "saut": 9
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 24.0,
+        "appels": 3,
+        "budget": 14,
+        "politique": "aveugle",
+        "score": 1.0,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.002
+      },
+      "hasard": {
+        "noeuds": 15,
+        "but": true,
+        "par_operateur": {
+          "pas": 6,
+          "saut": 9
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 24.0,
+        "appels": 3,
+        "budget": 14,
+        "politique": "hasard",
+        "score": 1.0,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.002
+      },
+      "llm": {
+        "noeuds": 15,
+        "but": true,
+        "par_operateur": {
+          "pas": 6,
+          "saut": 9
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 24.0,
+        "appels": 3,
+        "budget": 14,
+        "politique": "llm",
+        "score": 1.0,
+        "latence_s": 1.73,
+        "erreurs": 0,
+        "duree_s": 1.733
+      }
+    },
+    "porte": {
+      "oracle": {
+        "noeuds": 26,
+        "but": true,
+        "par_operateur": {
+          "pas": 13,
+          "saut": 9,
+          "sonde": 4
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 51.0,
+        "appels": 6,
+        "budget": 25,
+        "politique": "manhattan",
+        "score": 1.0,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.005
+      },
+      "aveugle": {
+        "noeuds": 200,
+        "but": false,
+        "par_operateur": {
+          "pas": 100,
+          "saut": 39,
+          "sonde": 61
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 483.0,
+        "appels": 66,
+        "budget": 200,
+        "politique": "aveugle",
+        "score": 0.25,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.038
+      },
+      "hasard": {
+        "noeuds": 43,
+        "but": true,
+        "par_operateur": {
+          "pas": 23,
+          "saut": 13,
+          "sonde": 7
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 84.0,
+        "appels": 13,
+        "budget": 42,
+        "politique": "hasard",
+        "score": 1.0,
+        "latence_s": 0.0,
+        "erreurs": 0,
+        "duree_s": 0.008
+      },
+      "llm": {
+        "noeuds": 200,
+        "but": false,
+        "par_operateur": {
+          "pas": 145,
+          "saut": 54,
+          "sonde": 1
+        },
+        "genres": [
+          "neuronal",
+          "numérique",
+          "symbolique"
+        ],
+        "cout": 258.0,
+        "appels": 96,
+        "budget": 200,
+        "politique": "llm",
+        "score": 0.25,
+        "latence_s": 2.61,
+        "erreurs": 0,
+        "duree_s": 2.647
+      }
+    }
+  },
+  "seuils": {
+    "cadenas_oracle": true,
+    "cadenas_aveugle_non": true,
+    "cadenas_minimal_non": true,
+    "cadenas_regle": true,
+    "cadenas_regle_appels": true,
+    "labyrinthe_oracle": true,
+    "labyrinthe_llm_sonde": false,
+    "porte_oracle": true,
+    "aucune_erreur_llm": true,
+    "latence_mesuree": true
+  },
+  "verdict": false,
+  "limites": [
+    "Le labyrinthe a des opérateurs pas/saut : le but seul ne prouve pas la politique ; on lit les appels à la sonde.",
+    "Le prompt minimal du cadenas échoue (`arriere` à la position 0) : la variante `regle` est celle qui qualifie ; le modèle n'infère pas la sémantique d'avant.",
+    "La porte n'est pas décrite dans le prompt : le modèle ne peut pas deviner sa règle.",
+    "Le coût du registre est symbolique (1 ou 5) ; la latence réelle est à côté.",
+    "CPU seulement (GPU de N2 réservés) ; une seule graine de serveur."
+  ]
+}

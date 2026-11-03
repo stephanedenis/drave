@@ -7,14 +7,14 @@
 | Identifiant | `536cd5d6-94ac-4057-8fe9-11709a4587c7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
-| Durée | 19.8 h |
+| Durée | 20.1 h |
 | Tours | 76 |
-| Messages | 544 |
-| Appels d'outils | 481 |
+| Messages | 550 |
+| Appels d'outils | 487 |
 | Fichiers touchés | 16 |
-| Commandes | 352 |
+| Commandes | 356 |
 | Sous-agents | 0 |
-| Commits | 42 |
+| Commits | 43 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2029,7 +2029,7 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 
 ### Tour 76 — elancer les mesures B13 via l'API tout de suite
 
-*13 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Locate B13 gold and minute measurement scripts
 - bash — Read B13 measure CLI options
@@ -2041,10 +2041,14 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 - bash — Rerun porte-minute measure via API after patch
 - bash — Compare 7B and API B13 measure results
 - bash — Reproduce exact model call from measures
+- bash — Rerun politique measure with deepseek-chat
+- bash — Rerun porte-minute with deepseek-chat
+- bash — Compare API and 7B measure results
+- bash — Commit API measures and state update
 
 **Synthèse produite :**
 
-⏵ Les JSON API montrent **96 erreurs sur 96 appels** : le pas unitaire marchait, donc quelque chose diffère dans les mesureurs. Je reproduis l'appel exact.
+⏵ Verdict identique entre 7B et API, API bien plus rapide ; je commite les deux JSON et le correctif des mesureurs.
 
 ## 3. Travail accompli
 
@@ -2111,7 +2115,7 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 312 autres
+- … et 316 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2297,4 +2301,5 @@ Que préfères-tu : **relancer les mesures B13 via l'API** tout de suite, ou **a
 - BUDGET — AGENTS SOUS 1 200, T0 SOUS 4 000 ; L'ÉTAT PORTE LES SERVEURS LOCAUX ARRÊTÉS" -- AGENTS.md docs/pilotage/en-cours.md; echo "[commit $?]"; git log --onel
 - BUDGET — AGENTS À 1 196 MOTS, T0 À 3 979" -- AGENTS.md; echo "[commit $?]"; git log --oneline -1; echo; echo "== GPU et guard ==" && nvidia-smi --query-compute-
 - BUDGET — AGENTS À 1 198 MOTS, TOUT SOUS BUDGET" -- AGENTS.md; echo "[commit $?]"; git log --oneline -1
+- B13 — GOLD NEURONAL REJOUÉ SUR L'API DEEPSEEK : MÊMES VERDICTS QUE LE 7B, LATENCE /35" -m "PolitiqueLLM en mode API (deepseek-chat) : porte-minute llm_porte 1,0
 

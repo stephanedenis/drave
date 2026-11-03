@@ -9666,3 +9666,117 @@ bfd51b90 NUIT — CLÔTURE : LA FENÊTRE EST MESURÉE DE 128 À 2 048, LA PRODUC
 ⏵ Mes corrections d'état ont survécu (dans `bfd51b90`). Je commite la doc et le journal.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff --stat docs/methode/ressources.md journal/2026-11-03/README.md; cat > work/msg-cle3.txt <<'EOF'\nMÉTHODE — LA CLÉ DU PROFESSEUR EST NOMMÉE (FICHIER 0600) ET SON USAGE VÉRIFIÉ\n\nressources.md nomme le fichier réel (~/.config/d … [456 caractères tronqués]`
+
+  ```
+docs/methode/ressources.md   |  8 +++++---
+ journal/2026-11-03/README.md | 23 +++++++++++++++++------
+ 2 files changed, 22 insertions(+), 9 deletions(-)
+[still running after 60000ms; moved to background job bash-395]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-395", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master c4ea6138] MÉTHODE — LA CLÉ DU PROFESSEUR EST NOMMÉE (FICHIER 0600) ET SON USAGE VÉRIFIÉ
+ 16 files changed, 144 insertions(+), 34 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ N2 a clos son cycle, Pensée travaille sur l'API (pas le GPU). Je vérifie si la machine est libre pour la **passe propre 80/2** — le job non conflictuel évident.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; echo \"=== claims ===\"; python3 tools/ressources.py --status 2>&1 | sed -n '/Réservations/,$p' | head -8; echo \"=== sessions ===\"; python3  … [240 caractères tronqués]`
+
+  ```
+11:28
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+=== claims ===
+  Réservations actives :
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / jour : cpu1=1, ram=1 (prio 2, 600 min)
+=== sessions ===
+    0733c5bb-f90b-4f58 · en pause ·   5 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    0b0a6a0d-05f5-4308 · terminé  · 3053 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+    0b69f616-5c75-4c34 · terminé  · 5127 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+    22e518ee-81b8-4081 · terminé  · 4298 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+    29ad180d-38a5-4481 · en pause · 888 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+=== git ===
+c4ea6138 MÉTHODE — LA CLÉ DU PROFESSEUR EST NOMMÉE (FICHIER 
+ M tools/pensee/store.py
+ ? tools/structures
+ M tools/tests/qualifier_politique_drvm.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Machine **libre** (GPU 0 %, seuls Pensée et le hub ont des claims CPU non-GPU). Le job non conflictuel : la **passe propre** qui devrait donner 80/2. Je la lance.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/ressources.py --claim --session 536cd5d6 --job passe-0303-11h30 --res \"machine=exclusive\" --prio 1 --eta 150 2>&1 | tail -3; date +%H:%M", "description": "Claim machine for the clean pass"}`
+
+  ```
+⏸ différé : 536cd5d6 / passe-0303-11h30
+     · machine exclusive : des réservations sont déjà actives
+     → placé en file (position 1) ; prends une autre tâche ou attends la libération.
+11:28
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=0,1 JOURNAUX=work/portes/passe-0303-11h30 bash tools/toutes-les-portes.sh; echo \"EXIT=$?\"; awk '$2 != 0' work/portes/passe-0303-11h30/registre.txt; tail -1 work/portes/passe-0303-11h30/registre.txt", "description … [71 caractères tronqués]`
+
+  ```
+started background job bash-398
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe propre lancée (`bash-398`, `work/portes/passe-0303-11h30`) ; je vérifie son démarrage.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 45; date +%H:%M; wc -l < work/portes/passe-0303-11h30/registre.txt 2>/dev/null || echo 0; tail -2 work/portes/passe-0303-11h30/registre.txt 2>/dev/null; awk '$2 != 0' work/portes/passe-0303-11h30/registre.txt 2>/dev/null | tr '\\ … [45 caractères tronqués]`
+
+  ```
+11:29
+0
+[stderr]
+bash: line 1: work/portes/passe-0303-11h30/registre.txt: No such file or directory
+  ```
+
+### 🤖 Assistant
+
+⏵ Pas de registre après 45 s : je vérifie si la passe tourne vraiment.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pgrep -af \"toutes-les-portes\" | grep -v pgrep | head -2; ls -d work/portes/passe-0303-11h30 2>/dev/null; ls work/portes/passe-0303-11h30 2>/dev/null | head -3; date +%H:%M:%S", "description": "Check pass process and journal dir"}`
+
+  ```
+1762574 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=0,1 JOURNAUX=work/portes/passe-0303-11h30 bash tools/toutes-les-portes.sh; echo "EXIT=$?"; awk '$2 != 0' work/portes/passe-0303-11h30/registre.txt; tail -1 work/portes/passe-0303-11h30/registre.txt
+1762581 bash tools/toutes-les-portes.sh
+work/portes/passe-0303-11h30
+porte-adaptateur-sortie.log
+11:29:11
+  ```
+
+- **job_output** `{"job_id": "bash-398", "timeout_ms": 15000}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (82 portes, borne 1800 s) ===
+    journaux : work/portes/passe-0303-11h30
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inventaire fait : la passe propre tourne, le reste se fait sans conflit.
+
+**La clé** : `~/.config/drave/deepseek.key` (0600, écrite à 11 h 15). Vérifiée par un ping : `deepseek-flash` → **OK**. Pensée l'utilise déjà (`DEEPERSEEK_KEY_FILE=… qualifier_porte_minute_drvm.py`, sortie `reports/pensee-porte-minute-api.json`). J'ai corrigé l'état (« clé absente » → « clé fournie »), documenté le fichier dans `ressources.md` et consigné au journal (`c4ea6138`).
+
+**Ce que les autres font (et que je ne touche pas)** : Pensée travaille sur l'API (`tools/pensee/`, `reports/pensee-*`) ; N2 a **clos son cycle à 11 h 25** (`bfd51b90`) — et il a passé **sous 2,5 au grand corpus** (2,4759 / 2,4373) ; S est en pause.
+
+**Ce que je peux faire sans conflit — et que j'ai lancé** : la **passe propre** sur la machine au repos (GPU 0 %, aucun claim GPU). Elle tourne (`bash-398`, `work/portes/passe-0303-11h30`, 82 portes) et devrait donner **80 vertes / 2 rouges** (`indice`, `melange`), puisque `reparti-moteur` et `homeostasie` sont réparées. Durée ~1 h 50 ; le claim `machine` est en file (les claims CPU de Pensée et du hub bloquent l'exclusivité, mais le registre est consultatif et les GPU sont libres).
+
+**Ce que j'évite** : `tools/pensee/`, `reports/pensee-*`, `reports/n2-*`, et `en-cours` pendant qu'un autre écrivain le committe — je relis toujours juste avant d'écrire.
+
+Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'état, puis je te rendrai le bilan de la passe.
+

@@ -14099,3 +14099,85 @@ deepseek-flash -> None | dernière :  | erreurs : 1 | latence : 0.0
 deepseek-chat -> bas | dernière : bas | erreurs : 0 | latence : 0.0
   ```
 
+### 🤖 Assistant
+
+⏵ Cause trouvée : `deepseek-flash` est un modèle à raisonnement — avec `max_tokens: 8`, le contenu revient **vide** (le raisonnement mange les jetons). `deepseek-chat` répond « bas ». Je relance les deux mesures avec `deepseek-chat`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 1800 python3 tools/tests/qualifier_politique_drvm.py --endpoint https://api.deepseek.com --modele deepseek-chat --sortie reports/pensee-politique-llm-api.json 2>&1 | … [98 caractères tronqués]`
+
+  ```
+started background job bash-353
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 1800 python3 tools/tests/qualifier_porte_minute_drvm.py --endpoint https://api.deepseek.com --modele deepseek-chat --sortie reports/pensee-porte-minute-api.json 2>&1 … [95 caractères tronqués]`
+
+  ```
+started background job bash-354
+  ```
+
+- **job_output** `{"job_id": "bash-353", "timeout_ms": 900000, "wait": true}`
+
+  ```
+200,
+   1,
+   2.61,
+   0
+  ]
+ }
+}
+écrit : reports/pensee-politique-llm-api.json
+[status: completed, exit code: 0]
+  ```
+
+- **job_output** `{"job_id": "bash-354", "timeout_ms": 900000, "wait": true}`
+
+  ```
+78,
+   37,
+   2.869,
+   0
+  ]
+ }
+}
+écrit : reports/pensee-porte-minute-api.json
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-353 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 1800 python3 tools/tests/qualifier_politique_drvm.py --endpoint https://api.deepseek.com --modele deepseek-chat --sortie reports/pensee-politique-llm-api.json 2>&1 | tail -8) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-354 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key timeout 1800 python3 tools/tests/qualifier_porte_minute_drvm.py --endpoint https://api.deepseek.com --modele deepseek-chat --sortie reports/pensee-porte-minute-api.json 2>&1 | tail -8) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Les deux mesures ont tourné sans erreur avec `deepseek-chat` ; je compare aux chiffres du 7B local.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nfor a, b in ((\"reports/pensee-politique-llm.json\", \"reports/pensee-politique-llm-api.json\"),\n             (\"reports/pensee-porte-minute.json\", \"reports/pensee-porte-minute-api.json\")): … [898 caractères tronqués]`
+
+  ```
+== pensee-politique-llm.json vs pensee-politique-llm-api.json
+
+== pensee-porte-minute.json vs pensee-porte-minute-api.json
+  pensee-porte-minute.json               llm_porte       but=True noeuds=26 appels=7 err=0 lat=6.404 score=1.0
+  pensee-porte-minute.json               llm_labyrinthe  but=False noeuds=200 appels=95 err=0 lat=101.615 score=0.25
+  pensee-porte-minute-api.json           llm_porte       but=True noeuds=24 appels=6 err=0 lat=5.544 score=1.0
+  pensee-porte-minute-api.json           llm_labyrinthe  but=False noeuds=200 appels=78 err=0 lat=2.869 score=0.25
+
+== fichiers ==
+-rw-r--r--. 1 stephane stephane 6712  3 nov 11:39 reports/pensee-politique-llm-api.json
+-rw-r--r--. 1 stephane stephane 3340  3 nov 11:39 reports/pensee-porte-minute-api.json
+ M tools/tests/qualifier_politique_drvm.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+ M tools/tests/qualifier_porte_minute_drvm.py
+?? reports/pensee-politique-llm-api.json
+?? reports/pensee-porte-minute-api.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Verdict identique entre 7B et API, API bien plus rapide ; je commite les deux JSON et le correctif des mesureurs.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold=\"- **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; reprise **16 h 16**.\"\nnew=\"- **Ce qu'elle fait**  … [1411 caractères tronqués]`

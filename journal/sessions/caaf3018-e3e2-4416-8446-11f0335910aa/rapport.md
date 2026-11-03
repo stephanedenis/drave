@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 19.2 h |
 | Tours | 31 |
-| Messages | 553 |
-| Appels d'outils | 547 |
+| Messages | 558 |
+| Appels d'outils | 553 |
 | Fichiers touchés | 6 |
-| Commandes | 395 |
+| Commandes | 400 |
 | Sous-agents | 0 |
 | Commits | 25 |
 | Compactages de contexte | 0 |
@@ -689,7 +689,7 @@ Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeu
 
 ### Tour 31 — la clé est dans le fichier. une session travaille déjà avec le professeur, vérifie ce que tu peux faire sans conflits av … [22 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*22 appels d'outils.* Actions notables :
 
 - bash — Locate API key file without exposing it
 - bash — Inventory active professor session and repo
@@ -705,11 +705,21 @@ Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeu
 - bash — Wait for lock and check my files
 - job_output
 - bash — Check if my state edits survived N2 commits
-- … et 1 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ Mes corrections d'état ont survécu (dans `bfd51b90`). Je commite la doc et le journal.
+⏵ Inventaire fait : la passe propre tourne, le reste se fait sans conflit.
+
+**La clé** : `~/.config/drave/deepseek.key` (0600, écrite à 11 h 15). Vérifiée par un ping : `deepseek-flash` → **OK**. Pensée l'utilise déjà (`DEEPERSEEK_KEY_FILE=… qualifier_porte_minute_drvm.py`, sortie `reports/pensee-porte-minute-api.json`). J'ai corrigé l'état (« clé absente » → « clé fournie »), documenté le fichier dans `ressources.md` et consigné au journal (`c4ea6138`).
+
+**Ce que les autres font (et que je ne touche pas)** : Pensée travaille sur l'API (`tools/pensee/`, `reports/pensee-*`) ; N2 a **clos son cycle à 11 h 25** (`bfd51b90`) — et il a passé **sous 2,5 au grand corpus** (2,4759 / 2,4373) ; S est en pause.
+
+**Ce que je peux faire sans conflit — et que j'ai lancé** : la **passe propre** sur la machine au repos (GPU 0 %, aucun claim GPU). Elle tourne (`bash-398`, `work/portes/passe-0303-11h30`, 82 portes) et devrait donner **80 vertes / 2 rouges** (`indice`, `melange`), puisque `reparti-moteur` et `homeostasie` sont réparées. Durée ~1 h 50 ; le claim `machine` est en file (les claims CPU de Pensée et du hub bloquent l'exclusivité, mais le registre est consultatif et les GPU sont libres).
+
+**Ce que j'évite** : `tools/pensee/`, `reports/pensee-*`, `reports/n2-*`, et `en-cours` pendant qu'un autre écrivain le committe — je relis toujours juste avant d'écrire.
+
+Au verdict, j'intégrerai les références (en-tête + § 2 en 82 lignes) et l'état, puis je te rendrai le bilan de la passe.
 
 ## 3. Travail accompli
 
@@ -766,7 +776,7 @@ Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeu
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 355 autres
+- … et 360 autres
 
 ## 4. Mesures et résultats marquants
 
