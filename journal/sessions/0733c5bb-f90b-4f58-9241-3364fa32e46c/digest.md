@@ -6405,3 +6405,10 @@ pas   6500 · perte 0.9646 · PPL val 2.564 · 2921 s
   ```
 
 - **bash** `{"command": "sleep 2700; echo \"---\"; date '+%H:%M:%S'", "description": "Sleep 45 minutes"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-299]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-299", "timeout_ms": 2700000, "wait": true}`

@@ -12,7 +12,7 @@
 > absolus échouent** — 432 phrases, 2 375 tokens, POS **0,9065** (fermé 0,8973, ouvert 0,9162),
 > syntagmes F1 **0,4598** (tp 627, fp 655, fn 818), tête F1 **0,5633** (tp 768, fp 514, fn 677),
 > pragmatique acte **0,9954** / négation 0,9676 / modalité 0,9861 / double sens 0,9676, fraction
-> **0,5165**. **429 appels** POS + 429 syntagmes (3 phrases vides), **0 refus**, 57 min 42.
+> **0,5165**. **429 appels** POS + 429 syntagmes (**429 appels pour 432 ids : effet de cache**), **0 refus**, **0 token vide**, 57 min 42.
 > `pos_all`, `syntagme_exact_all`, `syntagme_tete_all` et `fraction` sont **faux** — c'est le fait.
 
 ## 1. Ce qui était mesuré
@@ -54,7 +54,8 @@ régression : c'est le **premier chiffre honnête** sur le corpus réel. Les seu
 
 ## 5. Ce qui pourrait rendre ce résultat faux
 
-- **3 phrases vides** (429 appels pour 432 phrases) : le générateur a produit des vides.
+- **429 appels pour 432 ids** : **effet de cache** (mêmes phrases réutilisées), **0 refus**,
+  **0 token vide** — le générateur n'a **pas** produit de vides (`612f8743`).
 - **Pas de `source` hand/synth** : `hand = 0`, `synth = 0` ; le découpage hand/synth est nul.
 - **Un seul passage**, température 0, grammaire GBNF.
 - **CPU seulement** (GPU de N2 réservés) : latence médiane 7,8 s.

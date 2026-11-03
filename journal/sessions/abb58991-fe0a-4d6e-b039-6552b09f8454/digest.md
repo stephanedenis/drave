@@ -21164,3 +21164,19 @@ bbee22c4 NUIT — LA FICHE DU GOLD RÉEL 432 PASSE À TRUE AVEC LES SEUILS DU CO
 ⏵ Round 149 : le hub a committé (`bbee22c4`) ; mon commit du JSON est refusé faute de ligne d'état — je mets la ligne du cache et je commite
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='(seuils 0,90/0,45/0,55/0,50 → true)**'\nnew='(seuils 0,90/0,45/0,55/0,50 → true) ; 429 appels = cache, pas de phrases vides**'\nassert … [518 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4003 mots (budget 4 000)
+  ✅ index : aucun fait stagé sans état
+[master 612f8743] L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids)
+ 16 files changed, 256 insertions(+), 55 deletions(-)
+EXIT=0
+612f8743 L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 149 : commit `612f8743` fait, mais **T0 à 4 003** (3 mots de trop) ; je raccourcis la ligne d'état et je commite l'état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; 429 appels = cache, pas de phrases vides**'\nnew=' ; 429 appels = cache**'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t … [403 caractères tronqués]`

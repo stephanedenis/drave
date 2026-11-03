@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 8.5 h |
+| Durée | 8.6 h |
 | Tours | 51 |
-| Messages | 794 |
-| Appels d'outils | 735 |
+| Messages | 799 |
+| Appels d'outils | 742 |
 | Fichiers touchés | 25 |
-| Commandes | 521 |
+| Commandes | 524 |
 | Sous-agents | 0 |
-| Commits | 38 |
+| Commits | 39 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1264,9 +1264,15 @@ La veille continue : suivi de la réécriture de la fiche, des runs N2 et du **c
 
 ### Tour 51 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Wait for the next commit
+- bash — Verify and log the cache-effect correction
+- read
+- edit `reports/rapport-pensee-cascade-reel-432.md`
+- edit `reports/rapport-pensee-cascade-reel-432.md`
+- bash — Update the time and verify before the commit
+- bash — Commit the cache correction
 
 **Synthèse produite :**
 
@@ -1302,7 +1308,7 @@ La veille continue : suivi de la réécriture de la fiche, des runs N2 et du **c
 | `docs/methode/portes.md` | 0 | 1 |
 | `work/veille/bilan-08h.md` | 1 | 0 |
 | `journal/2026-11-03/README.md` | 0 | 1 |
-| `reports/rapport-pensee-cascade-reel-432.md` | 0 | 1 |
+| `reports/rapport-pensee-cascade-reel-432.md` | 0 | 3 |
 
 ### Commandes exécutées (échantillon)
 
@@ -1346,7 +1352,7 @@ La veille continue : suivi de la réécriture de la fiche, des runs N2 et du **c
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 481 autres
+- … et 484 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1520,4 +1526,5 @@ La veille continue : suivi de la réécriture de la fiche, des runs N2 et du **c
 - NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE" -m "État au 03/11 00 h 20 : cascade vrai modèle (POS
 - NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D'ACTE) MAIS LE VERDICT EST FALSE" -m "Sur le gold réel 432, la cascade donne POS 0,9065 / synt
 - NUIT — LA FICHE DU GOLD RÉEL 432 PASSE À TRUE AVEC LES SEUILS DU CONTRAT (0,90/0,45/0,55/0,50)" -m "Le JSON et l'état disaient true (seuils_contrat.gold_reel_43
+- NUIT — LA FICHE DU GOLD RÉEL DIT LE CACHE : 429 APPELS POUR 432 IDS, 0 REFUS, 0 VIDE" -m "La fiche gardait « 3 phrases vides » ; 612f8743 a mesuré 432 ids, 0 re
 
