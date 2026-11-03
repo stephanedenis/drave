@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 25.3 h |
+| Durée | 25.5 h |
 | Tours | 6 |
-| Messages | 655 |
-| Appels d'outils | 615 |
+| Messages | 663 |
+| Appels d'outils | 622 |
 | Fichiers touchés | 27 |
-| Commandes | 457 |
+| Commandes | 461 |
 | Sous-agents | 0 |
 | Commits | 20 |
 | Compactages de contexte | 0 |
@@ -165,7 +165,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 
 ### Tour 6 — continue
 
-*121 appels d'outils.* Actions notables :
+*128 appels d'outils.* Actions notables :
 
 - bash — Check current repo and hardware state
 - get_goal
@@ -181,7 +181,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - bash — Commit state and check runs
 - bash — Check disk space and git index state
 - bash — Check inodes and git index health
-- … et 80 autres
+- … et 84 autres
 
 **Synthèse produite :**
 
@@ -263,7 +263,7 @@ Le cycle de nuit est terminé et committé. Il a débordé du créneau (la sessi
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 417 autres
+- … et 421 autres
 
 ## 4. Mesures et résultats marquants
 

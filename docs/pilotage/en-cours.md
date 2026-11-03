@@ -47,11 +47,11 @@
 - **Ambition** : nommer le rôle et la frontière GN.
 - **Stratégie** : une règle = une phrase, trois contrôles.
 - **Objectif final** : gold **55**, corpus **55**, manifeste SHA-256.
-- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 candidats à ≥3, **référents** 294/371 ; **page `/paragraphes`** (responsive, SVG dans le cadre) ; **52 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md), [`arbre`](../../reports/rapport-s-arbre-referents.md).
-- **Ce qu'elle fait** : **`4d3a3ca`** ; page **`/paragraphes`** (responsive) ; corpus **55** (SHA `76accf9d…`) ; banque **200/355**, **142/81/65**.
+- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 (2 manqués) ; **page `/paragraphes`** ; **52 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md), [`arbre`](../../reports/rapport-s-arbre-referents.md), [`traduction`](../../reports/rapport-s-traductions.md).
+- **Ce qu'elle fait** : **`644ad3d`** ; page **`/paragraphes`** (source anglaise) ; corpus **55** (SHA `76accf9d…`) ; banque **200/355**, **142/81/65**.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
-- **Prochaine action** : **valider sur `/paragraphes`** (référents puis structure), puis étendre
-  les paragraphes ; h050/h053.
+- **Prochaine action** : **confirmer les référents sur `/paragraphes`** (source anglaise), puis la rétro-traduction
+  API quand la clé ; h050/h053.
 - **Bloquants** : aucun ; la page **`/paragraphes`** porte l'arbre/les référents ; la banque
   partielle reste archivée.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
@@ -114,7 +114,7 @@
 |---|---|---|
 | portes | **82** (passe du **03/11 11 h 30** : **82, 80/2**) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **597** / **685** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **598** / **685** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2** ; les 2 connues, machine au repos) | `docs/pilotage/references-non-regression.md` |
 

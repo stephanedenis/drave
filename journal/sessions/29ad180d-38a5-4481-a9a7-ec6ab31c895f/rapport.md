@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 25.0 h |
-| Tours | 12 |
-| Messages | 360 |
-| Appels d'outils | 353 |
-| Fichiers touchés | 15 |
-| Commandes | 269 |
+| Durée | 25.6 h |
+| Tours | 13 |
+| Messages | 376 |
+| Appels d'outils | 368 |
+| Fichiers touchés | 16 |
+| Commandes | 282 |
 | Sous-agents | 0 |
-| Commits | 24 |
+| Commits | 26 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -42,6 +42,8 @@
 **Tour 11** — quel page web utiliser pour la suite?
 
 **Tour 12** — les svg sortent du cadre, prévoir scrollbar et largeur de page adapté à la largeur d'écran ou fenêtre
+
+**Tour 13** — tu peux aussi valider le sens (et indirectement les référents de syntaxe) en utilisant des traductions.
 
 ## 2. Déroulé, étape par étape
 
@@ -477,6 +479,30 @@ La page est **responsive**. Le header, la légende et le main sont bornés à 1 
 
 Le serveur a été relancé (pid 2430607) et la page répond 200 ; recharge `http://127.0.0.1:8765/paragraphes` (un Ctrl+F5 si le CSS est resté en cache). Les 52 tests passent, le sous-module est poussé en `4d3a3ca` et le principal en `ef530713`. La fiche et le SVG, de nouveau retirés par un commit L, ont été rétablis au passage. Il reste à valider les trois paragraphes sur cette page.
 
+### Tour 13 — tu peux aussi valider le sens (et indirectement les référents de syntaxe) en utilisant des traductions.
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Inspect S LLM client and API key
+- web_fetch
+- bash — Add English sources to paragraphs, page, test
+- bash — Expose English source in API and rerun tests
+- bash — Restart server and verify English source in API/page
+- bash — Print referent forms for translation table
+- bash — Fix a003 context to name Alice and verify referents
+- bash — Default personal referents to Alice, test a003
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-traductions.md`
+- bash — Commit translation validation and push submodule
+- bash — Check main state before translation commit
+- bash — Inspect L deletions and S files to restore
+- bash — Read S state and HEAD index lines
+- bash — Update state for translation and run checks
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ La traduction comme contrôle du sens et des référents : je récupère la source anglaise d'Alice et je la confronte aux trois paragraphes.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -498,6 +524,7 @@ Le serveur a été relancé (pid 2430607) et la page répond 200 ; recharge `htt
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/candidats_corpus.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-banque-partielle.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-arbre-referents.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-traductions.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -541,7 +568,7 @@ Le serveur a été relancé (pid 2430607) et la page répond 200 ; recharge `htt
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 229 autres
+- … et 242 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -624,6 +651,8 @@ Le serveur a été relancé (pid 2430607) et la page répond 200 ; recharge `htt
 - **T12** `'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 %d" width="1020" height="%d" '`
 - **T12** `55:pointillées** à Alice. Le SVG a un `viewBox` (1020 × 550), un `<title>`, un `<desc>`, des liens`
 - **T12** `50:- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 candidats à ≥3, **référents** 294/371 ; **page `/paragraphes`** ; `
+- **T13** `50:- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 candidats à ≥3, **référents** 294/371 ; **page `/paragraphes`** (r`
+- **T13** `- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 candidats à ≥3, **référents** 294/371 ; **page `/paragraphes`** (resp`
 
 ## 5. Erreurs rencontrées
 
@@ -667,4 +696,6 @@ Le serveur a été relancé (pid 2430607) et la page répond 200 ; recharge `htt
 - S — LA PAGE /PARAGRAPHES : ARBRE, RÉFÉRENTS, VERDICT ; LE BANC PEUT REPRENDRE" -m "Le serveur sert /paragraphes : les trois paragraphes complets (contexte, cibl
 - S — LES SVG RESTENT DANS LEUR CADRE : VIEWBOX CALCULÉ, PAGE RESPONSIVE, DÉFILEMENT ; 52 TESTS" -m "Le viewBox est calculé depuis le niveau le plus large, les je
 - S — LES SVG RESTENT DANS LEUR CADRE : VIEWBOX CALCULÉ, PAGE RESPONSIVE, DÉFILEMENT ; 52 TESTS" -m "Le viewBox est calculé depuis le niveau le plus large, les je
+- S — LA TRADUCTION CONTRÔLE LE SENS : 14/14 RÉFÉRENTS ANAPHORIQUES CONFIRMÉS PAR L'ANGLAIS, « LES » → « IT » RETROUVÉ" -m "Les trois paragraphes français sont co
+- S — LA TRADUCTION CONTRÔLE LE SENS : 14/14 RÉFÉRENTS ANAPHORIQUES CONFIRMÉS, « LES » → « IT » RETROUVÉ ; SOURCE ANGLAISE DANS LA PAGE" -m "Les trois paragraphes
 

@@ -8965,3 +8965,62 @@ compteurs 597 685
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"la **fenêtre 1 024** est la recette de production (2,56–2,99 ; sous 2,5 au grand corpus)\",\n              \"la **f … [1686 caractères tronqués]`
+
+  ```
+état : chiffres du run long
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-457]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-457", "timeout_ms": 180000, "wait": true}`
+
+  ```
+36195516 RUN LONG — 60 000 PAS À FENÊTRE 1 024 : 2,9121 EN DOMAINE, 2,5276 À 1 000, ET 2,3911 / 2,3522 AU GRAND CORPUS
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-442 (bash: sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/prod60k.out 2>/dev/null; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -c 70 work/n2ac/kd-mix512-15k.log; python3 tools/taille_documents.py 2>&1 | grep T0", "description": "Check KD production progress"}`
+
+  ```
+17:31:52
+ s
+pas  9200 · perte 1.0693 · dure 0.9936 · douce 0.1779 · 4014 s
+  T0 max : 3994 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "sleep 2400; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdprod.out 2>/dev/null; ls work/n2ac/kd-mix512-15k.pt 2>/dev/null && echo OKKD", "description": "Wait for production distillation"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-459]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-459", "timeout_ms": 2400000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kdprod.out 2>/dev/null; ls work/n2ac/kd-mix512-15k.pt 2>/dev/null && echo OKKD; tail -c 60 work/n2ac/kd-mix512-15k.log", "description": "Poll production distillation"}`
+
+  ```
+17:43:03
+50 · perte 1.1042 · dure 1.0531 · douce 0.1596 · 4691 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re, datetime\np = pathlib.Path(\"journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\", f\"- **Heartbeat** : {datetime.date … [526 caractères tronqués]`
+
+  ```
+plan rafraîchi
+[still running after 60000ms; moved to background job bash-461]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-461", "timeout_ms": 1800000, "wait": true}`

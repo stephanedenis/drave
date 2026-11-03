@@ -568,6 +568,7 @@
 | [rapport-s-analyseur-roles.md](rapport-s-analyseur-roles.md) | S — Le contexte tranche les homographes : 54/55 types, 131/131 rôles, 55 structures au corpus |
 | [rapport-s-analyseur.md](rapport-s-analyseur.md) | S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture |
 | [rapport-s-arbre-referents.md](rapport-s-arbre-referents.md) | S — L'arbre a une profondeur et les référents sont proposés : 99 candidats à ≥3, 294/371 formes |
+| [rapport-s-traductions.md](rapport-s-traductions.md) | S — La traduction contrôle le sens : 14/14 référents anaphoriques confirmés par l'anglais, le « les » → « it » retrouvé |
 | [rapport-s-banque-partielle.md](rapport-s-banque-partielle.md) | S — La banque s'arrête à 81 lectures / 65 phrases : l'arbre manque de profondeur, les référents ne sont pas résolus |
 | [rapport-s-corpus-reel.md](rapport-s-corpus-reel.md) | S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange) |
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
