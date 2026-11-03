@@ -8536,3 +8536,40 @@ Continue working toward the objective in this same session. Treat the current wo
 ⏵ J'ajoute la checklist du bilan de 08 h à l'entrée de journal du 03/11, puis je commite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> journal/2026-11-03/README.md <<'EOF'\n\n## 08 h 00 — le bilan (à remplir au réveil)\n\n1. **Sessions** : `python3 tools/sessions.py --status` ; `--check --strict` (les claims couvrent les mandats longs) ; `surveille_sessions.p … [1014 caractères tronqués]`
+
+  ```
+✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  T0 max : 3990 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+
+[master e126e5b1] JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+ 24 files changed, 690 insertions(+), 98 deletions(-)
+[commit 0]
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 14 : la checklist du bilan de 08 h est dans le journal du 03/11 et committée (`e126e5b1`).
+
+- **Journal 03/11** : état de 21 h 49 + « Sessions DSH » + **checklist de 08 h** ; `verifie_journal` ✅ ; T0 3 990/4 000 ✅.
+- **N2** : `n2-fenetre.json` absent ; `porte-tableaux` rouge de passage ; N2 120 + 2 claims (GPU0/GPU1).
+- **Sessions** : S 76 + claim, B13 13, hub en veille ; quatre actives ; `porte-sessions` verte.
+- **Passe** : 76/5 intégrée ; prochaine **82**.
+
+**Reste** : JSON N2 → `porte-tableaux` ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 23
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 15/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

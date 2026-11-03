@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 5.7 h |
 | Tours | 23 |
-| Messages | 303 |
-| Appels d'outils | 312 |
+| Messages | 306 |
+| Appels d'outils | 315 |
 | Fichiers touchés | 6 |
-| Commandes | 240 |
+| Commandes | 242 |
 | Sous-agents | 0 |
-| Commits | 9 |
+| Commits | 10 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -457,7 +457,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*50 appels d'outils.* Actions notables :
+*53 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
@@ -473,7 +473,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - bash — Check section 1 row and section 2 table header
 - bash — Build and dry-run section 1/2 patcher
 - bash — Apply references sections and verify
-- … et 24 autres
+- … et 26 autres
 
 **Synthèse produite :**
 
@@ -534,7 +534,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 200 autres
+- … et 202 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -618,6 +618,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T23** `❌ le LoRA de référence est absent : /tmp/n4/rang4-lora.pt`
 - **T23** `(il vient du balayage : `python3 tools/n4_dessin_b.py --objectif plein --train 10 --rang 4 --sauver …`)`
 - **T23** `[still running after 60000ms; moved to background job bash-229]`
+- **T23** `[still running after 60000ms; moved to background job bash-242]`
 
 ## 5. Erreurs rencontrées
 
@@ -638,4 +639,5 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE  Le doc disait encore « la passe du 02/11 06 h » ; la passe complète du soir 
 - PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE  La suggestion « il vient du balayage : \`tools/n4_dessin_b.py ...\` » était écrite entre guillemets D
 - RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)  Le JSON n2-fenetre.json est apparu à 21 h 56 ; la veille automatique a rejoué 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-refs.txt <<'EOF' RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H
 

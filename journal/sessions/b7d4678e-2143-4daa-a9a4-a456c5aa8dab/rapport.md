@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 5.7 h |
 | Tours | 17 |
-| Messages | 563 |
-| Appels d'outils | 578 |
+| Messages | 567 |
+| Appels d'outils | 582 |
 | Fichiers touchés | 24 |
-| Commandes | 388 |
+| Commandes | 392 |
 | Sous-agents | 0 |
-| Commits | 22 |
+| Commits | 24 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -522,13 +522,17 @@ La veille continue : N2 (fiche/JSON et PPL), intégration des commits du hub, pu
 
 ### Tour 17 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Check events, N2 fiche and journal
 - bash — Wait for a new commit or the N2 JSON
 - bash — Verify the tableaux gate and N2 JSON
 - bash — Log the N2 JSON and tableaux green, check counters
 - bash — Wait for the N2 commit and verify counters
+- bash — Update the JSON counter to 656
+- bash — Commit the counter follow-up
+- bash — Identify the git lock holder
+- bash — Wait for the references commit and check files
 
 **Synthèse produite :**
 
@@ -607,7 +611,7 @@ La veille continue : N2 (fiche/JSON et PPL), intégration des commits du hub, pu
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 348 autres
+- … et 352 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -764,4 +768,6 @@ La veille continue : N2 (fiche/JSON et PPL), intégration des commits du hub, pu
 - NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS" -m "references-non-regression : la passe du 02/11 19 h 32 (81 portes,
 - NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE" -m "La section hub d'en-cours disait encore la passe en cours ; elle est close (8
 - NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS" 2>&1 | tail -4
+- NUIT — LE COMPTEUR SUIT LE JSON N2 (570/656) ; PORTE-TABLEAUX REPASSE VERTE" -m "reports/n2-fenetre.json (21 h 56) referme le lien qui faisait échouer porte-tab
+- ps -eo pid,etime,args | grep -E "git commit|git add|git reset" | grep -v grep | head -3; ls -l .git/index.lock 2>/dev/null; date "+%H:%M:%S"
 

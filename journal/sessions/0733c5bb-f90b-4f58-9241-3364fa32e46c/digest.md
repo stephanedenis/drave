@@ -5222,3 +5222,19 @@ placeholders restants : 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && nohup bash work/n2ac/chaine_2048_wiki.sh 1 > work/n2ac/chaine_2048_wiki.out 2>&1 & echo \"2048 wiki lancé pid $!\"; sleep 40; date '+%H:%M:%S'; tail -2 work/n2ac/rope2048-1.25k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu  … [71 caractères tronqués]`
+
+  ```
+2048 wiki lancé pid 691258
+21:57:38
+0, 5646 MiB, 100 %
+1, 122 MiB, 0 %
+  ```
+
+- **bash** `{"command": "sleep 180; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -2 work/n2ac/rope2048-1.25k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; ps -eo pid,rss,cmd --no-headers | grep \"[e]ntrainer_rope\" | cut -c1-90", "description": "V … [36 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-225]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-225", "timeout_ms": 180000, "wait": true}`

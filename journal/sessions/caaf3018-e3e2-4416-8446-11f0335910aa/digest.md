@@ -5816,3 +5816,70 @@ patché : + `porte-tableaux` (lien N2 en vol, rejouée après
      · compteurs : en-cours.md dit 655 JSON, le disque en a 656
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/references-non-regression.md\"); t = p.read_text(encoding=\"utf-8\")\no = \"**rouge de passage** (rejouer après le commit N2)\"\nn = \"**rouge de passage**, **rejouée v … [524 caractères tronqués]`
+
+  ```
+en-tête : rejeu vert consigné
+> `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien
+> `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) —
+> **rouge de passage**, **rejouée verte à 21 h 57** le 02/11 (2 747 liens, 1 577 fichiers),
+> dès que le JSON a existé ; aucune régression structurelle.
+--- compteurs ---
+110:| fichiers / JSON de résultats | **570** / **655** | `reports/*.md` / `reports/*.json` |
+21:54:06
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 655 JSON, le disque en a 656
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff docs/pilotage/en-cours.md | head -20; echo \"...\"; git diff --stat docs/pilotage/en-cours.md", "description": "Inspect en-cours pending diff"}`
+
+  ```
+...
+  ```
+
+### 🤖 Assistant
+
+⏵ Le compteur est juste pour le dépôt (le JSON N2 est encore non committé) ; je commite le rejeu dans les références.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -m \"RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)\n\nLe JSON n2-fenetre.json est apparu à 21 h 56 ; la veille automatique a rejoué la\nporte : 1 577 fichiers, 2 747 liens relatifs,  … [436 caractères tronqués]`
+
+  ```
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+[stderr]
+bash: line 1: porte-tableaux: command not found
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux accrocs : verrou git (autre commit en cours) et backticks exécutés dans le message. Je réessaie proprement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 40; ls .git/index.lock 2>/dev/null && echo \"lock encore\" || echo \"lock libre\"; git log --oneline -2; git status --short | grep -v journal | head -4", "description": "Wait for git lock and check log"}`
+
+  ```
+.git/index.lock
+lock encore
+212c23d7 NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS
+0bffb215 JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49, LES SESSIONS ET LE POINT DE REPRISE DE 08 H
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/references-non-regression.md
+M  docs/pilotage/roadmap.md
+M  reports/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 12); do [ -e .git/index.lock ] || break; sleep 10; done; date +%H:%M:%S; [ -e .git/index.lock ] && echo \"lock encore\" || echo \"lock libre\"; git log --oneline -2; git status --short | grep -v journal | head -5", "de … [52 caractères tronqués]`
+
+  ```
+21:59:12
+lock libre
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+212c23d7 NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/references-non-regression.md
+M  docs/pilotage/roadmap.md
+M  reports/README.md
+A  reports/pensee-porte-fenetre.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-refs.txt <<'EOF'\nRÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)\n\nLe JSON n2-fenetre.json est apparu à 21 h 56 ; la veille automatique a rejoué la\nporte : 1 577 fichiers, 2 747 liens  … [506 caractères tronqués]`

@@ -9210,3 +9210,26 @@ revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) 
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; git log --oneline -2; echo \"--- compteurs ---\"; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; python3 tools/revue_documentatio … [286 caractères tronqués]`
+
+  ```
+21:59:13
+e126e5b1 JOURNAL — LA CHECKLIST DU BILAN DE 08 H EST POSÉE
+212c23d7 NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS
+--- compteurs ---
+110:| fichiers / JSON de résultats | **570** / **655** | `reports/*.md` / `reports/*.json` |
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 655 JSON, le disque en a 656
+--- N2 suivi ---
+JSON non suivi
+pas  13250 · perte 0.9411 · PPL val 2.601 · 6102 s
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\na=\"| fichiers / JSON de résultats | **570** / **655** |\"\nb=\"| fichiers / JSON de résultats | **570** / **656** |\"\nassert a in t\np.write_text(t.replace(a,b),encoding='ut … [182 caractères tronqués]`
+
+  ```
+compteur 656
+  revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ M docs/pilotage/en-cours.md
+  ```
+

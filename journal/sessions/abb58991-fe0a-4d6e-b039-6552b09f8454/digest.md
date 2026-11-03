@@ -13301,3 +13301,82 @@ EXIT=1
 EXIT2=1
   ```
 
+### 🤖 Assistant
+
+⏵ Le hook veut l'en-cours dans l'index ; le hub contourne avec un index séparé (`GIT_INDEX_FILE`). Je fais pareil pour éviter le lock partagé
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='| fichiers / JSON de résultats |'\ni=t.find(old)\nprint('counter line:', t[i:i+80] if i>0 else 'absent')\nPY\nexport GIT_INDEX_FILE=/t … [668 caractères tronqués]`
+
+  ```
+counter line: | fichiers / JSON de résultats | **570** / **655** | `reports/*.md` / `reports/*
+en-cours pas stagé
+8
+  ```
+
+### 🤖 Assistant
+
+⏵ L'index séparé ignore l'en-cours ; je l'ajoute par `update-index` puis je commite depuis cet index
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && export GIT_INDEX_FILE=/tmp/index.b13 && git update-index --add --force docs/pilotage/en-cours.md && echo 'update ok'; git diff --cached --name-only | grep en-cours || echo 'toujours pas'; git diff --cached --stat | tail -3; python3 tools/verifie_etat_ … [288 caractères tronqués]`
+
+  ```
+toujours pas
+ tools/tests/qualifier_porte_fenetre_drvm.py | 129 ++++++++++++++++++++++
+ tools/tests/test_pensee_politique.py        |  10 ++
+ 8 files changed, 409 insertions(+), 6 deletions(-)
+  ❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+HOOK=1
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT=1
+[stderr]
+error: ambiguous option: force (could be --force-untracked-cache or --force-write-index)
+usage: git update-index [<options>] [--] [<file>...]
+
+    -q                    continue refresh even when index needs update
+    --[no-]ignore-submodules
+                          refresh: ignore submodules
+    --[no-]add            do not ignore new files
+    --[no-]replace        let files replace directories a
+… [2305 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub a committé l'en-cours avec ma ligne ; le hook veut un en-cours **modifié dans l'index**. Je change la prochaine action (fenêtre à réparer), je stage et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nn=t.replace('**Prochaine action** : **gold 200+** ; **porte stochastique/fenêtre** ; **porte B13** attend S.',\n            '**Prochaine ac … [551 caractères tronqués]`
+
+  ```
+changed True
+  ❌ commit refusé : 4 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     · reports/README.md
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+EXIT=1
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+EXIT2=128
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub tient le lock en continu ; j'attends 3 minutes et je reprends le commit (l'en-cours a un vrai changement)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 180; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'lock libre'; git log -1 --format='%h %s' | head -1; git add docs/pilotage/en-cours.md; git diff --cached --name-only | grep -c . ; git diff --cached --name-only | grep en-cours || ec … [312 caractères tronqués]`

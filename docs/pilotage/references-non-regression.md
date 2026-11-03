@@ -5,7 +5,8 @@
 > (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env.,
 > `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien
 > `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) —
-> **rouge de passage** (rejouer après le commit N2) ; aucune régression structurelle.
+> **rouge de passage**, **rejouée verte à 21 h 57** le 02/11 (2 747 liens, 1 577 fichiers),
+> dès que le JSON a existé ; aucune régression structurelle.
 > La 82e porte (`porte-ressources`) n'était pas dans cette passe : la suivante comptera **82**.
 
 > **Passe précédente — 2026-11-02 à 06 h :** 81 portes, 76 vertes, 5 rouges (`/tmp/portes-…`,
@@ -52,7 +53,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
-| toutes les portes | `tools/toutes-les-portes.sh` | **81 portes** ; dernière passe **76 vertes, 5 rouges** (02/11 19 h 32) : les 4 connues + `porte-tableaux` (lien N2 en vol, rejouée après son commit) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
+| toutes les portes | `tools/toutes-les-portes.sh` | **81 portes** ; dernière passe **76 vertes, 5 rouges** (02/11 19 h 32) : les 4 connues + `porte-tableaux` (lien N2 en vol, **rejouée verte à 21 h 57**) · ⚠ **ne jamais lire une porte à travers un `tail`** : sa dernière ligne suit l'échec, et le code de sortie est celui du tuyau |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 > **16/10 — l'audit des 46 portes** (deux vrais défauts corrigés, des faux positifs
