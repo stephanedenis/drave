@@ -11,11 +11,11 @@ bash tools/toutes-les-portes.sh
 Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêter à la première rouge** (on veut le
 [tableau](../theorie/glossaire/entrees/tableau.md), pas la première tuile), et borne **chaque** [porte](../theorie/glossaire/entrees/porte.md) à `DELAI=1800` s. Durée observée d'une passe complète :
 **1 h 30 – 2 h** sur Hauru (**81 portes** ; certaines entraînent de petits modèles, d'autres utilisent les [GPU](../theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md) ;
-`porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **81 portes** (02/11 19 h 32, **1 h 52**) a donné
-**76 vertes, 5 rouges** (les 4 connues + `porte-tableaux`, lien N2 en vol, rejouée après son commit) ; la liste et le diagnostic sont dans
+`porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **82 portes** (03/11 04 h 10, **machine au repos**, **1 h 40**) a donné
+**77 vertes, 5 rouges** (les 4 connues + `porte-sessions`, mandats N2/S périmés — coordination) ; la liste et le diagnostic sont dans
 [`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **incluse** et verte.
-La **82e** porte, `porte-ressources` (autotest du registre et cohérence des claims), a été ajoutée le
-02/11 au soir ; elle sera comptée à la prochaine passe (**81 → 82**).
+La **82e** porte, `porte-ressources` (autotest du registre et cohérence des claims), est **comptée**
+depuis cette passe (**81 → 82**).
 
 ## Où est le registre (et comment lire le verdict)
 

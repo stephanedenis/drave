@@ -13735,3 +13735,610 @@ pas  22100 · perte 0.9868 · PPL val 2.470 · 9831 s
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -2 work/n2ac/mix1024-30k.log 2>/dev/null; ps -eo pid,etime,args | … [140 caractères tronqués]`
+
+  ```
+02:47:37
+HEAD 18493fb9
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+ "duree_s": 10011.087698459625
+}
+ 855949       10:52 /home/stephane/gpu-env/bin/python w
+  ```
+
+- **bash** `{"command": "tail -18 work/n2ac/mix1024-30k.log 2>/dev/null | head -14; echo \"--- json récent ---\"; ls -t reports/*.json | head -3; ls -t work/n2ac/*.json | head -3; echo \"--- état ---\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1", "desc … [59 caractères tronqués]`
+
+  ```
+"corpus": "data/wiki_mix/propre/train.txt",
+ "octets": 1017487092,
+ "pas": 22500,
+ "seq": 1024,
+ "lot": 8,
+ "lr": 0.0003,
+ "graine": 1,
+ "window": 1024,
+ "positions": "rope",
+ "init": "work/n2ac/mix1024-7.5k.pt",
+ "perte_finale": 1.0423645973205566,
+ "ppl_val": 2.482785829458267,
+ "jetons_val": 65536,
+ "tetes": true,
+--- json récent ---
+reports/n2-porte-propre.json
+reports/pensee-parite-drvm-native.json
+reports/n2-r12-2048.json
+work/n2ac/mix1024-30k.pt.json
+work/n2ac/eval-propre128-test.json
+work/n2ac/eval-propre128-val.json
+--- état ---
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 02 h 47 — le run est fini : PPL val finale 2,4828 (< 2,5)\n\n- **`mix1024-30k`** terminé (22 500 pas, 2 h 47, perte 1,0424) : **PPL val finale 2,4828 < 2,5**\n  — la cible est **atteinte et tenue** (2,494 → 2,475 → 2,470 → **2,483**). La producti … [473 caractères tronqués]`
+
+  ```
+log-ok
+02:47:50
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 69 : le run est fini — PPL val finale 2,4828, la cible < 2,5 est tenue
+
+- **Le résultat de la nuit** : `mix1024-30k` **terminé** (22 500 pas, 2 h 47, perte 1,0424) — **PPL val finale 2,4828 < 2,5**. La cible que le run de **200 k** n'atteignait pas (**3,16**) est **atteinte et tenue** par la **production 1 024 prolongée** sur le mélange ; elle bat aussi le run 2 048 (2,6609). Trajectoire : 2,494 → 2,475 → 2,470 → **2,483**.
+- **Nouveaux JSON** : `reports/n2-porte-propre.json` (corpus propre) et `reports/pensee-parite-drvm-native.json` (parité) ; le hub a aligné le compteur à **673**.
+- **État** : revue ✅, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅ ; le run `propre128-32k` a cédé la place à un nouveau run (11 min), GPU déclarés.
+- **À suivre** : la fiche/le commit N2 du résultat (cible atteinte), puis le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 75
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 70/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 70 : veille — attente du commit N2 du 2,4828
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; git status --short | head -4; ps -eo pid,etime,args | grep entrainer_r … [105 caractères tronqués]`
+
+  ```
+02:57:31
+HEAD 18493fb9
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+ M docs/pilotage/en-cours.md
+MM journal/2026-11-03/README.md
+MM journal/2026-11-03/attention.md
+MM journal/2026-11-03/distribue.md
+ 855949       20:46 /home/stephane/gpu-env/bin/python w
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; grep -n \"2,4828\\|2 4828\\|2,48\" docs/pilotage/en-cours.md docs/pilo … [196 caractères tronqués]`
+
+  ```
+03:07:06
+HEAD 18493fb9
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+ 855949       30:21 /home/stephane/gpu-env/bin/python w
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 70 : le 2,4828 attend son commit N2, état stable
+
+- **Aucun nouveau commit** depuis `18493fb9` ; le **2,4828** n'est pas encore dans l'`en-cours`/`roadmap` (le hub a l'`en-cours` en cours d'édition). La fiche/le commit N2 du run final est attendu.
+- **Run en cours** : `855949` (30 min), le seul processus GPU actif ; les claims N2 + veille tiennent.
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille suit le commit N2 et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 76
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 71/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "python3 tools/sessions.py --status 2>&1 | grep -A2 \"0733c5bb\" | head -4; echo \"--- run 855949 ---\"; ps -p 855949 -o args= 2>/dev/null | cut -c1-160; echo \"--- N2 section ---\"; sed -n '/### Session `0733c5bb/,/### Session/p' docs/pilotage/en-cours.md | grep -E \"Ce qu'elle fait|Pro … [83 caractères tronqués]`
+
+  ```
+⏰ 0733c5bb-f90b-4f58 · actif    · 162 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → la **fiche + état + commit** du run de 200 k, le contrôle depuis zéro, puis la **clôture**.
+    0b0a6a0d-05f5-4308 · terminé  · 2552 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+--
+--- run 855949 ---
+/home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --seq 512 --windo
+--- N2 section ---
+- **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la
+- **Prochaine action** : le contrôle depuis zéro, puis la clôture.
+  ```
+
+- **bash** `{"command": "ps -p 855949 -o args= 2>/dev/null | tr ' ' '\\n' | grep -A1 -E \"init|pas|sortie\" | head -8; echo \"--- log ---\"; ls -t work/n2ac/*.log | head -1; tail -1 $(ls -t work/n2ac/*.log | head -1) 2>/dev/null", "description": "Check whether the new run is from scratch"}`
+
+  ```
+--init
+work/n2ac/init-figee.pt
+--pas
+15000
+--sortie
+work/n2ac/mix512-zero-15k.pt
+--- log ---
+work/n2ac/mix512-zero-15k.log
+pas   8300 · perte 1.1732 · PPL val 3.053 · 1632 s
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 03 h 08 — le contrôle depuis zéro (init figée) est en cours\n\n- Le run `855949` est **`mix512-zero-15k`** : init **`init-figee.pt`** (figée), seq 512,\n  **15 000 pas** sur le mélange ; **PPL val 3,053** à 8 300 pas.\n- C'est le **contrôle négat … [528 caractères tronqués]`
+
+  ```
+log-ok
+03:07:40
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 71 : le contrôle depuis zéro est en cours — le pendant négatif du 2,4828
+
+- **N2** : le run `855949` est **`mix512-zero-15k`** — init **`init-figee.pt`** (figée), seq 512, **15 000 pas** sur le mélange ; **PPL val 3,053** à 8 300 pas. C'est le **contrôle depuis zéro** du résultat de la nuit : la production 1 024 part d'une **init entraînée**, le from-zéro d'une **init figée** — l'écart mesurera la part de l'**init/fenêtre** contre le compute. La session N2 est active (162 min) : « contrôle depuis zéro, puis clôture ».
+- **Le 2,4828** (production 1 024/30k) attend donc son contrôle avant d'être figé ; il est consigné au journal de veille et au bilan.
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅ ; GPU occupé et déclaré.
+
+La veille suit le contrôle et le commit N2, puis le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 77
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 72/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 72 : veille — je suis le contrôle depuis zéro et le commit N2
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -1 work/n2ac/mix512-zero-15k.log 2>/dev/null; ps -eo pid,etime,ar … [143 caractères tronqués]`
+
+  ```
+03:17:19
+HEAD 18493fb9
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+pas   9750 · perte 1.0870 · PPL val 3.060 · 2213 s
+ 855949       40:34 /home/stephane/gpu-env/bin/python w
+ 866683       12:47 /home/stephane/gpu-env/bin/python w
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -1 work/n2ac/mix512-zero-15k.log 2>/dev/null; ps -eo pid,etime,ar … [140 caractères tronqués]`
+
+  ```
+03:26:55
+HEAD 18493fb9
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+pas  11200 · perte 1.2115 · PPL val 2.968 · 2794 s
+ 855949       50:10 /home/stephane/gpu-env/bin/python w
+ 866684       22:23 /home/stephane/gpu-env/bin/python w
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -1 work/n2ac/mix512-zero-15k.log 2>/dev/null; ps -eo pid,etime,ar … [140 caractères tronqués]`
+
+  ```
+03:36:30
+HEAD 18493fb9
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+pas  12800 · perte 1.1939 · PPL val 2.962 · 3367 s
+ 855949       59:45 /home/stephane/gpu-env/bin/python w
+ 875470       09:38 /home/stephane/gpu-env/bin/python w
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -2 work/n2ac/mix512-zero-15k.log 2>/dev/null; ps -eo pid,etime,ar … [140 caractères tronqués]`
+
+  ```
+03:46:06
+HEAD 18493fb9
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+pas  14350 · perte 1.1237 · PPL val 2.956 · 3924 s
+pas  14400 · perte 1.1976 · PPL val 2.949 · 3942 s
+ 855949    01:09:21 /home/stephane/gpu-env/bin/python w
+ 875470       19:14 /home/stephane/gpu-env/bin/python w
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; tail -3 work/n2ac/mix512-zero-15k.log 2>/dev/null; ps -eo pid,etime,ar … [140 caractères tronqués]`
+
+  ```
+03:55:41
+HEAD 18493fb9
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+ "sha256_drvm": "29325e41b488cdf97a4184759cbf3e5a9743757f6365e808aae081b748422b93",
+ "duree_s": 4160.42013168335
+}
+ 875470       28:49 /home/stephane/gpu-env/bin/python w
+ 877615       22:39 /home/stephane/gpu-env/bin/python w
+  ```
+
+- **bash** `{"command": "grep -o '\"ppl_val\": [0-9.]*' work/n2ac/mix512-zero-15k.log | tail -1; grep -o '\"perte_finale\": [0-9.]*' work/n2ac/mix512-zero-15k.log | tail -1; cat >> work/veille/nuit.md <<'EOF'\n\n## 03 h 55 — le contrôle depuis zéro est fini\n\n- **`mix512-zero-15k`** terminé (15 000 pas, 1 h 09 … [443 caractères tronqués]`
+
+  ```
+"ppl_val": 2.900038738961314
+"perte_finale": 1.0911189317703247
+log-ok
+03:56:26
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('work/veille/nuit.md'); t=p.read_text(encoding='utf-8')\na=\"**PPL val finale ≈ 2,93** (init figée, seq\\n  512) — le from-zéro plafonne autour de 2,93-2,96, contre **2,4828** pour la production 1 024\"\nb=\"**PPL val finale 2,9000** (ini … [596 caractères tronqués]`
+
+  ```
+log corrigé
+bilan-ok
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 72 : le contrôle depuis zéro est fini — 2,9000 contre 2,4828 pour la production
+
+- **Le fait complet de la nuit** : la production 1 024 prolongée sur le mélange donne **PPL val 2,4828** ; son **contrôle depuis zéro** (`mix512-zero-15k`, init figée, seq 512, 15 000 pas, 1 h 09) donne **PPL val 2,9000**. L'écart **~0,42** mesure la part de l'**init/fenêtre** (init entraînée + 1 024) ; le reste est le compute. La production bat ainsi le run de **200 k** (3,16) et le run 2 048 (2,6609), avec son contrôle négatif.
+- **N2** : la fiche/le commit du **couple production + contrôle** sont attendus ; deux nouveaux runs tournent (`875470` 29 min, `877615` 23 min).
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+Le couple est consigné au journal de veille et au bilan de 8 h ; la veille suit le commit N2 puis le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 78
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 73/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 73 : veille — attente du commit N2 (production + contrôle)
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [105 caractères tronqués]`
+
+  ```
+04:18:39
+HEAD 18493fb9
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+ M docs/pilotage/en-cours.md
+MM journal/2026-11-03/README.md
+MM journal/2026-11-03/attention.md
+  ```
+
+- **bash** `{"command": "nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader 2>/dev/null; echo \"--- sessions actives ---\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif\" | head -5; echo \"--- claims ---\"; python3 tools/ressources.py --status 2>&1 | grep -A8 \"Réservati … [212 caractères tronqués]`
+
+  ```
+0, 0 %, 370 MiB
+1, 0 %, 482 MiB
+--- sessions actives ---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 234 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 459 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 348 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 396 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (234 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+--- claims ---
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 0733c5bb-f90b-4f58-9241-3364fa32e46c / r12-mix-512-gpu1 : gpu1=exclusive, cpu0=4, ram=10 (prio 1, 180 min)
+    · 536cd5d6 / veille : cpu1=1, ram=1 (prio 2, 600 min)
+  File d'attente :
+
+… [378 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/ressources.py --help 2>&1 | head -40; echo \"--- file ---\"; python3 tools/ressources.py --queue 2>&1 | head -10", "description": "Read the resource tool's release/queue options"}`
+
+  ```
+usage: ressources.py [-h] [--ledger LEDGER] [--status] [--claim] [--release]
+                     [--check] [--strict] [--suggest] [--actual] [--autotest]
+                     [--session SESSION] [--job JOB] [--res RES] [--prio PRIO]
+                     [--eta ETA] [--note NOTE]
+
+ressources.py — le registre des ressources de Hauru et le protocole de claim.
+
+Pourquoi. Le pilotage réservait des **fichiers** (`sessions.py`) et surveillait les
+**fichiers en mouvement** (`surveille_sessions.py`), mais pas la **machine** : deux
+sessions pouvaient lancer deux entraînements sur le même GPU, ou saturer le même
+NVMe, sans le voir. Ce registre rend les ressources explicites, les réserve et met
+en file ce qui ne tient pas — pour éviter les attentes inutiles et les simultanéités
+intenses.
+
+Capacités (Hauru, 2026-11-02) :
+  gpu0 / gpu1 : 1 job exclusif, 16 Gio de VRAM, NUMA 0 (0-9,20-29)
+  cpu0        : 20 fils (0-9,20-29), réserve 4 → 16 fils utilisables
+  cpu1        : 20 fils (10-19,30-39), réserve 4 → 16 fils utilisables
+  ram         : 125 Gio, réserve 16 → 109 Gio utilisables
+  nvme_system : 1 IO lourde, / (Fanxiang 1 To : /, /home, /FastNVMe)
+  nvme_raid   : 1 IO lourde, /home/stephane/I
+… [1288 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ps -eo pid,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-60; nvidia-smi --query-gpu=utilization.gpu,memory.used --format=csv,noheader 2>/dev/null; echo \"--- libération des claims N2 (runs finis) ---\"; python3 tools/ressources.py --release --session 0733c5bb-f90b-4f58-9 … [248 caractères tronqués]`
+
+  ```
+0 %, 370 MiB
+0 %, 242 MiB
+--- libération des claims N2 (runs finis) ---
+  ✅ libéré : 1 réservation(s) de 0733c5bb-f90b-4f58-9241-3364fa32e46c
+--- après ---
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / veille : cpu1=1, ram=1 (prio 2, 600 min)
+  File d'attente :
+    ⏸ 536cd5d6 / passe-82 : machine=exclusive (prio 1, 150 min)
+  Libre maintenant : gpu1 libre · cpu0 : 4 fils libres · cpu1 : 7 fils libres · ram : 24 Gio libres · nvme_raid : libre, 33 Gio · nvme_system : libre, 705 Gio · hdd_data13tb : libre, 1939 Gio
+  File : 1 claim(s) en attente — libère une ressource pour les admettre.
+  Règle : si la ressource voulue est prise, prends une tâche compatible plutôt que d'attendre.
+  ```
+
+- **bash** `{"command": "echo \"--- libération du claim N2 restant (run fini, GPU0 à 0 %) ---\"; python3 tools/ressources.py --release --session 0733c5bb --job r12-1024 2>&1 | tail -3; echo \"--- après ---\"; python3 tools/ressources.py --status 2>&1 | grep -A6 \"Réservations\"; python3 tools/ressources.py --ch … [75 caractères tronqués]`
+
+  ```
+--- libération du claim N2 restant (run fini, GPU0 à 0 %) ---
+  ✅ libéré : 1 réservation(s) de 0733c5bb / r12-1024
+--- après ---
+  Réservations actives :
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / veille : cpu1=1, ram=1 (prio 2, 600 min)
+  File d'attente :
+    ⏸ 536cd5d6 / passe-82 : machine=exclusive (prio 1, 150 min)
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 04 h 22 — la machine est libre, les claims N2 libérés, la passe-82 en file\n\n- **GPU0/GPU1 à 0 %** : les runs N2 sont finis. Les deux claims N2 (`r12-1024` et le proxy\n  `r12-mix-512-gpu1`) sont **libérés** par la veille (les runs sont terminés … [705 caractères tronqués]`
+
+  ```
+log-ok
+04:22:37
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 73 : machine libérée, claims N2 rendus, la passe-82 prête à tourner
+
+- **Ressources** : GPU0/GPU1 à **0 %** (les runs N2 sont finis) ; la veille a **libéré les deux claims N2** (`r12-1024` et le proxy `r12-mix-512-gpu1`) — les réservations étaient expirées, les jobs terminés. Le registre est cohérent.
+- **La file** : `passe-82` (`machine=exclusive`, prio 1, 150 min) attend son admission ; restent S (`cpu1` 4), Pensée (`cpu1` 4), veille (`cpu1` 1). **La passe complète (82 portes) peut tourner** — le hub la lancera (plan : passe au 08 h, après les clôtures) ; **si elle n'est pas lancée d'ici ~05 h 30, la veille la lancera**.
+- **N2** : la fiche/le commit du couple **2,4828 production / 2,9000 contrôle** restent attendus ; la session peut re-claim si elle relance un run.
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue : elle surveille la passe et le commit N2, puis tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 79
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 74/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "head -25 tools/toutes-les-portes.sh | grep -E \"JOURNAUX|registre|tmp|portes/\" | head -6; echo \"--- claim passe-82 ---\"; python3 tools/ressources.py --claim --session 536cd5d6-94ac-4057-8fe9-11709a4587c7 --job passe-82 --res \"machine=exclusive\" --prio 1 --eta 150 --note \"veille :  … [153 caractères tronqués]`
+
+  ```
+#   4. il garde le journal de chacune (`JOURNAUX`) et n'affiche qu'une ligne par porte ;
+--- claim passe-82 ---
+  ⏸ différé : 536cd5d6-94ac-4057-8fe9-11709a4587c7 / passe-82
+     · machine exclusive : des réservations sont déjà actives
+     → placé en file (position 2) ; prends une autre tâche ou attends la libération.
+  ```
+
+- **bash** `{"command": "python3 tools/ressources.py --actual 2>&1 | head -20; echo \"--- processus lourds ---\"; ps -eo pid,pcpu,etime,args --sort=-pcpu | head -6 | cut -c1-100; echo \"--- S dernier commit/heartbeat ---\"; git log --oneline -1 --author=\"\" 2>/dev/null | head -1; grep -m1 \"Heartbeat\" journal … [135 caractères tronqués]`
+
+  ```
+Réel · GPU
+    GPU0 (non réservé) : PID 110066 llama-server (366 MiB)
+      ⚠ GPU0 utilisé sans réservation
+    GPU1 (non réservé) : PID 110066 llama-server (118 MiB) ; PID 961927 ./drave-core/target/release/drave (120 MiB)
+      ⚠ GPU1 utilisé sans réservation
+  Réel · CPU (top 8)
+        PID COMMAND         %CPU %MEM
+     961927 drave            735  0.5
+     110066 llama-server     415  4.1
+      32123 node-MainThread 61.7  0.8
+      32694 node-MainThread 56.6  0.8
+      31175 node-MainThread 53.4  0.8
+       7293 node-MainThread 50.3  0.9
+     962477 python3         50.0  0.0
+      33009 node-MainThread 41.8  0.6
+  Réel · stockage
+    nvme_system    705 Gio libres (/)
+    nvme_raid      33 Gio libres (/home/stephane/IA)
+    hdd_data13tb   1939 Gio libres (/home/stephane/Data13TB)
+--- processus lourds ---
+    PID %CPU     ELAPSED COMMAND
+ 961927  740       00:02 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/
+ 110066  415    10:55:35 llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --hos
+  32123 61.7    12:08:04 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+  32694 56.6    12:07:19 node /home/stephane/.local/share/
+… [243 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 04 h 26 — la passe est différée, le S est silencieux depuis 20 h 40\n\n- **Passe** : le claim `machine=exclusive` de `passe-82` est **différé** — « des réservations sont\n  déjà actives » (S, Pensée, veille). La passe attend la libération ; le pl … [1027 caractères tronqués]`
+
+  ```
+log-ok
+04:24:12
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 74 : passe différée par les claims, le S silencieux depuis 20 h 40
+
+- **Passe** : le claim `machine=exclusive` de `passe-82` est **différé** — « des réservations sont déjà actives » (S, Pensée, veille). Le plan reste la **passe complète au 08 h**, après les clôtures ; les GPU sont libres des runs N2 mais le test `drave` (PID 961927, 740 % CPU, GPU1) tourne **sans claim** (test court, noté).
+- **Trouvaille de coordination** : la session **S** affiche « actif » mais son **heartbeat est à 20 h 40** et son **dernier commit à ~19 h** — **8 h de silence** ; son claim `cpu1` 4 est peut-être stale et **bloque la passe**. À trancher au bilan (pause/clôture) ; consigné au journal de veille et au bilan.
+- **N2** : les claims sont libérés, la fiche/le commit du couple **2,4828 / 2,9000** restent attendus ; la session peut re-claim.
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue : elle surveille la passe, le commit N2 et le S, puis tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 80
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 75/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "ps -p 962477 -o args= 2>/dev/null | cut -c1-140; echo \"--- processus S ? ---\"; ps -eo pid,etime,pcpu,args | grep -E \"structures|analyseur|export|banque\" | grep -v grep | head -3 | cut -c1-110; echo \"--- plan S état ---\"; grep -E \"^- \\*\\*État|Heartbeat|Prochaine\" journal/sessio … [225 caractères tronqués]`
+
+  ```
+--- processus S ? ---
+--- plan S état ---
+- **Heartbeat** : 2026-11-02 20:40 EST
+- **Prochaine action** : **validation humaine de la banque** (le mode `banque` est à 0 verdict) ;
+- **État** : actif
+--- N2 ---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 240 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → la **fiche + état + commit** du run de 200 k, le contrôle depuis zéro, puis la **clôture**.
+  ```
+
+- **bash** `{"command": "echo \"--- libération du claim S (session bloquée sur la validation humaine, aucun processus) ---\"; python3 tools/ressources.py --release --session 29ad180d --job analyseur 2>&1 | tail -3; echo \"--- après ---\"; python3 tools/ressources.py --status 2>&1 | grep -A7 \"Réservations\"; py … [216 caractères tronqués]`
+
+  ```
+--- libération du claim S (session bloquée sur la validation humaine, aucun processus) ---
+  ✅ libéré : 1 réservation(s) de 29ad180d / analyseur
+--- après ---
+  Réservations actives :
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / veille : cpu1=1, ram=1 (prio 2, 600 min)
+  File d'attente :
+    ⏸ 536cd5d6 / passe-82 : machine=exclusive (prio 1, 150 min)
+    ⏸ 536cd5d6-94ac-4057-8fe9-11709a4587c7 / passe-82 : machine=exclusive (prio 1, 150 min)
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+ 975823 timeout 900 python3 tools/cycle_sensibilite.py --topologie /tmp/porte-cycle-c2/cyc
+ 975824 python3 tools/cycle_sensibilite.py --topologie /tmp/porte-cycle-c2/cycle.json --mo
+  ```
+
+- **bash** `{"command": "echo \"--- nettoyage du doublon de file (mon re-claim) ---\"; python3 tools/ressources.py --release --session 536cd5d6-94ac-4057-8fe9-11709a4587c7 --job passe-82 2>&1 | tail -2; python3 tools/ressources.py --status 2>&1 | grep -A5 \"File d'attente\"; cat >> work/veille/nuit.md <<'EOF'\n … [872 caractères tronqués]`
+
+  ```
+--- nettoyage du doublon de file (mon re-claim) ---
+  ℹ aucune réservation active pour 536cd5d6-94ac-4057-8fe9-11709a4587c7 / passe-82
+  File d'attente :
+    ⏸ 536cd5d6 / passe-82 : machine=exclusive (prio 1, 150 min)
+    ⏸ 536cd5d6-94ac-4057-8fe9-11709a4587c7 / passe-82 : machine=exclusive (prio 1, 150 min)
+log-ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 75 : le S est bloqué sur la validation humaine — son claim libéré, le point remonté
+
+- **Trouvaille de coordination** : le **S** n'est pas en calcul — sa prochaine action est la **validation humaine de la banque** (mode `banque` à **0 verdict**), une ligne bloquée par l'humain ; d'où **8 h de silence** (heartbeat 20 h 40) et un claim `analyseur` expiré. Aucun processus S : la veille a **libéré son claim** (`cpu1` 4). Au bilan : **mettre le S en pause** ou lui donner la ligne suivante (règle « jamais en attente »).
+- **Registre** : après libération, restent **Pensée** (`cpu1` 4, `ram` 16) + **veille** (`cpu1` 1) ; la file `passe-82` (l'entrée du hub, plus mon doublon de re-claim, sans effet) attend. La passe reste **différée par le claim Pensée actif** — plan : **08 h**.
+- **Machine** : un test `cycle_sensibilite` tourne (`/tmp/porte-cycle-c2`) ; les GPU sont libres des runs N2.
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue : elle surveille la passe, le couple N2 (2,4828 / 2,9000) et le S, puis tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 81
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 76/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 76 : veille — j’attends le commit N2 et je surveille la machine
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep -E \"entrainer_rope|drave|cycle_sensibili … [158 caractères tronqués]`
+
+  ```
+04:35:00
+HEAD 18493fb9
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+1047701       00:48 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.g
+ M docs/pilotage/en-cours.md
+MM journal/2026-11-03/README.md
+MM journal/2026-11-03/attention.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 76 : pas de nouveau commit, la Pensée teste, le couple N2 attend
+
+- **Aucun nouveau commit** depuis `18493fb9` ; le **couple N2 (2,4828 production / 2,9000 contrôle)** attend sa fiche/commit ; l'`en-cours` est en cours d'édition par le hub.
+- **Pensée** : les tests `drave` (PPL 0,5B) s'enchaînent (PID 1047701, 48 s) — la session L/B13 est active ; le GPU1 est utilisé sans claim (test court, noté).
+- **Ressources** : S libéré, reste Pensée (`cpu1` 4) + veille (`cpu1` 1) ; la file `passe-82` attend — la passe reste au **08 h** (claim Pensée actif).
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue : elle suit le commit N2, la fin des tests Pensée et le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 82
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 77/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 77 : veille — attente du commit N2 et de la fin des tests Pensée
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep -E \"entrainer_rope|drave|cycle_sensibili … [136 caractères tronqués]`
+
+  ```
+04:45:01
+HEAD 18493fb9
+18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673)
+32d695ab L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL
+ M docs/pilotage/en-cours.md
+MM journal/2026-11-03/README.md
+MM journal/2026-11-03/attention.md
+  ```
+

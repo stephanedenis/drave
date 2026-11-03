@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 10.4 h |
-| Tours | 26 |
-| Messages | 385 |
-| Appels d'outils | 388 |
+| Durée | 13.6 h |
+| Tours | 27 |
+| Messages | 423 |
+| Appels d'outils | 425 |
 | Fichiers touchés | 6 |
-| Commandes | 285 |
+| Commandes | 306 |
 | Sous-agents | 0 |
-| Commits | 11 |
+| Commits | 12 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -75,6 +75,8 @@
 **Tour 25** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
 
 **Tour 26** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 27** — background job bash-290 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pgrep -fc "toutes-les-portes.sh" || true; echo "portes: $(ls tools/porte-*.sh | wc -l)"; cat >> work/hub-nuit.md <<'EOF'  ## 04 h 10 — LA FENÊTRE « MACHINE AU REPOS » S'OUVRE : PASSE 82  Les deux GPU sont **libres** (370 / 122 MiB, 0 %) et les claims des sessions sont **périmés** (N2 a fini son run de nuit, GPU inac … [674 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -516,7 +518,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 26 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*41 appels d'outils.* Actions notables :
+*64 appels d'outils.* Actions notables :
 
 - bash — Check S session liveness and work
 - bash — Peek at S current activity in digest
@@ -532,11 +534,33 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Silent 10-hour timer for alternation
 - bash — Read first watch line
 - bash — Read watch log after silent wait
-- … et 11 autres
+- … et 20 autres
 
 **Synthèse produite :**
 
-⏵ Pensée vivante (digest 02 h 17, commit 01 h 42) ; le fd manquant n'est pas une preuve. Veille.
+⏵ 05 h 10 : 59 portes, 3 rouges connues (`homeostasie`, `indice` 834 s, `melange`). Fin projetée 05 h 45.
+
+### Tour 27 — background job bash-290 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pgrep -fc "toutes-les-portes.sh" || t … [954 caractères tronqués]
+
+*14 appels d'outils.* Actions notables :
+
+- job_output
+- bash — Gather evidence of session liveness
+- bash — Check state mtimes and clean pass reds
+- bash — Generate clean-pass references patch
+- bash — Inspect current references structure
+- bash — Fix section anchor and rerun patch generation
+- bash — Fix quote prefix on previous pass line
+- bash — View generated header block
+- bash — Apply references, en-cours, portes.md updates
+- bash — Read current counters rows exactly
+- bash — Patch en-cours counters precisely
+- bash — Patch portes.md and run checks
+- bash — Commit clean pass integration
+
+**Synthèse produite :**
+
+⏵ Tout est vert ; je commite le verdict propre (références + état + `portes.md`).
 
 ## 3. Travail accompli
 
@@ -593,7 +617,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 245 autres
+- … et 266 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -686,6 +710,8 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T26** `| **global** | **55** | **54/55** (98,2 %) | **1 466/1 475** (99,4 %) | **131/131** (100 %) | **47/47** |`
 - **T26** `> **Date** : 2026-11-02/03 · **Verdict** : à **octets constants** (20,5 Mo vus), entraîner sur des`
 - **T26** `0, 5646 MiB, 99 %`
+- **T26** `0, 370 MiB, 0 %`
+- **T27** `[still running after 60000ms; moved to background job bash-306]`
 
 ## 5. Erreurs rencontrées
 
@@ -708,4 +734,5 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H 57)  Le JSON n2-fenetre.json est apparu à 21 h 56 ; la veille automatique a rejoué 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-refs.txt <<'EOF' RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-etat.txt <<'EOF' ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉ
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short | grep -v journal | head -8; cat > work/msg-passe82.txt <<'EOF' PASSE — 82 PORTES SUR MAC
 

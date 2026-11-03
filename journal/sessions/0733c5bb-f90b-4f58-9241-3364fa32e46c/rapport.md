@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 10.4 h |
-| Tours | 2 |
-| Messages | 459 |
-| Appels d'outils | 448 |
+| Durée | 11.8 h |
+| Tours | 4 |
+| Messages | 500 |
+| Appels d'outils | 481 |
 | Fichiers touchés | 25 |
-| Commandes | 330 |
+| Commandes | 356 |
 | Sous-agents | 0 |
 | Commits | 10 |
 | Compactages de contexte | 0 |
@@ -27,6 +27,10 @@
 **Tour 1** — Tu es la session N2 (le natif, GPU). Lis AGENTS.md, docs/pilotage/en-cours.md et  docs/pilotage/backlog/N2-distillation.md. Ton id est dans `printenv DSH_SESSION_ID` ; crée  journal/sessions/<id>/plan.md avec `python3 tools/sessions.py --modele` (les onze champs,  État : actif, heartbeat maintenant), puis réserve `data/`, `tools/corpus*`, `reports/n2-*`,  `work/n2*`. Prochaine action : 200 000 pas … [298 caractères tronqués]
 
 **Tour 2** — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
+
+**Tour 3** — background job bash-354 (bash: sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_prod_zero.out work/n2ac/cap2165.out work/n2ac/cap1147.out 2>/dev/null; ls work/n2ac/mix512-zero-15k.pt 2>/dev/null && echo OKZERO) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+**Tour 4** — background job bash-356 (bash: cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/mix512-zero-15k.pt --rope --longueurs 128,512,1000,2000 --sortie work/n2ac/eval-mix512-zero-15k.json 2>&1 | grep -E '"(128|512|1000|2000)"|litterature|anglais|wikitext2|permute_fr') finished [status: completed, exit code: 0]. Read its ou … [21 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -84,7 +88,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*208 appels d'outils.* Actions notables :
+*241 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -100,11 +104,15 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Condense section and fix counters
 - bash — Trim header duplication and recheck gates
 - bash — Read required session fields
-- … et 144 autres
+- … et 170 autres
 
 **Synthèse produite :**
 
-⏵ Lancement du contrôle « production depuis zéro » (GPU 1) et rédaction de la fiche porte
+⏵ Évaluation du contrôle « production depuis zéro »
+
+### Tour 3 — background job bash-354 (bash: sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_pro … [204 caractères tronqués]
+
+### Tour 4 — background job bash-356 (bash: cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/pyt … [301 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -180,7 +188,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 290 autres
+- … et 316 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -308,7 +316,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ## 5. Erreurs rencontrées
 
-17 sorties en erreur ou divergentes. Les premières :
+20 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md:20686:- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/mix-60k.
 - **T1** : (no output) [exit code: 1]

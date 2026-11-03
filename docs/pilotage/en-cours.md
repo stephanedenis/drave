@@ -73,15 +73,15 @@
 ### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
 
 - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
-- **Rôle** : **N2** — la fenêtre à **1 024** et la fenêtre sur la **production**.
-- **Plan** : loi, production, 2 048 ; fiche par fait.
+- **Rôle** : **N2** — la fenêtre et la production.
+- **Plan** : fenêtre, production, porte.
 - **Ambition** : la longueur d'abord.
 - **Stratégie** : budgets contrôlés, mêmes bancs.
-- **Objectif final** : une production qui tient au long.
-- **Ce qu'elle fait** : la **loi de la fenêtre** jusqu'à 2 048 et la **production** (N2.ac +
-  RoPE 512/1 024) ; le compute à fenêtre 1 024 en cours.
+- **Objectif final** : la production qui tient au long.
+- **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la
+  **porte propre**, le contrôle depuis zéro.
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
-- **Prochaine action** : **2 048**, puis un point de compute.
+- **Prochaine action** : le contrôle depuis zéro, puis la clôture.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
@@ -92,13 +92,16 @@
 ## Ce qui est en cours
 
 - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
-- **R1 — la fenêtre native** : loi mesurée jusqu'à **2 048** (**2,9950** à 1 024) ;
-  **1 024 est le point d'équilibre** ; à 20 000 pas : **2,6256** à 1 000 —
-  [`2048`](../../reports/rapport-n2-r12-2048.md), [`fenêtre`](../../reports/rapport-n2-fenetre.md).
+- **R1 — la fenêtre native** : loi mesurée jusqu'à **2 048** (2,5114 à 4 000) ;
+  **la porte 2,5 sur le corpus propre n'est pas atteinte**
+  (2,7856 val, 0,29 manquant) mais la fenêtre est le **seul bras descendant** —
+  [`porte`](../../reports/rapport-n2-porte-propre.md),
+  [`2048`](../../reports/rapport-n2-r12-2048.md).
 - **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
-- **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (< 2,5 non atteinte) ;
-  **la fenêtre bat le compute** : N2.ac + RoPE 512 (1 h) donne **3,1588 / 2,7607** à
-  128/512/2 000 — [`fenêtre`](../../reports/rapport-n2-fenetre.md),
+- **N2** : **la fenêtre 1 024 est la recette de production** — 30 000 pas : **2,9943** à 128,
+  **2,6143** à 1 000, **2,5628** à 2 000 (**sous 2,5** au grand corpus) ; le compute à fenêtre 128
+  (200 k pas) donne 3,1591 et 8,2262 —
+  [`production`](../../reports/rapport-n2-production-fenetre.md),
   [`n2-200k`](../../reports/rapport-n2-200k.md).
 - **Pensée — B13** : **140/140**, gold **432**, **116 liens** ; minute 26, mobile/bouge **faibles** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
   [`anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
@@ -109,11 +112,11 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **82** (passe 19 h 32 : **81, 76/5** ; **82e `porte-ressources`** verte, comptée à la suivante) | `tools/porte-*.sh` |
+| portes | **82** (passe du **03/11 04 h 10** : **82, 77/5**) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **587** / **673** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **587** / **674** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
-| dernière passe | **02/11 19 h 32** (81, 76/5 ; 4 connues + `porte-tableaux` verte) | `docs/pilotage/references-non-regression.md` |
+| dernière passe | **03/11 04 h 10** (82, 77/5 ; 4 connues + `porte-sessions` coord., machine au repos) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
 

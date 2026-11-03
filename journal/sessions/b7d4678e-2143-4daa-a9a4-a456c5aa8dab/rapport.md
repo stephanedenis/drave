@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 10.4 h |
-| Tours | 74 |
-| Messages | 896 |
-| Appels d'outils | 793 |
+| Durée | 12.5 h |
+| Tours | 82 |
+| Messages | 940 |
+| Appels d'outils | 821 |
 | Fichiers touchés | 25 |
-| Commandes | 575 |
+| Commandes | 603 |
 | Sous-agents | 0 |
 | Commits | 40 |
 | Compactages de contexte | 1 |
@@ -173,6 +173,22 @@
 **Tour 73** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 74** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 75** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 76** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 77** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 78** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 79** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 80** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 81** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 82** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1711,15 +1727,163 @@ La veille suit le final et le commit N2 (fiche/JSON), puis le **checkpoint de 8 
 
 ### Tour 74 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Wait and check the run final
 - bash — Wait for the run final or commit
 - bash — Wait for the run final and the N2 commit
+- bash — Read the run final metrics and the newest JSON
+- bash — Log the final 2.4828 result
 
 **Synthèse produite :**
 
-⏵ Round 69 : veille — je suis la fin du run et le commit N2
+⏵ Round 69 : le run est fini — PPL val finale 2,4828, la cible < 2,5 est tenue
+
+- **Le résultat de la nuit** : `mix1024-30k` **terminé** (22 500 pas, 2 h 47, perte 1,0424) — **PPL val finale 2,4828 < 2,5**. La cible que le run de **200 k** n'atteignait pas (**3,16**) est **atteinte et tenue** par la **production 1 024 prolongée** sur le mélange ; elle bat aussi le run 2 048 (2,6609). Trajectoire : 2,494 → 2,475 → 2,470 → **2,483**.
+- **Nouveaux JSON** : `reports/n2-porte-propre.json` (corpus propre) et `reports/pensee-parite-drvm-native.json` (parité) ; le hub a aligné le compteur à **673**.
+- **État** : revue ✅, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅ ; le run `propre128-32k` a cédé la place à un nouveau run (11 min), GPU déclarés.
+- **À suivre** : la fiche/le commit N2 du résultat (cible atteinte), puis le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 75 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Wait for the N2 commit
+- bash — Wait for the commit and check the 2.4828 state
+
+**Synthèse produite :**
+
+⏵ Round 70 : le 2,4828 attend son commit N2, état stable
+
+- **Aucun nouveau commit** depuis `18493fb9` ; le **2,4828** n'est pas encore dans l'`en-cours`/`roadmap` (le hub a l'`en-cours` en cours d'édition). La fiche/le commit N2 du run final est attendu.
+- **Run en cours** : `855949` (30 min), le seul processus GPU actif ; les claims N2 + veille tiennent.
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille suit le commit N2 et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 76 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check the N2 session status and section
+- bash — Check whether the new run is from scratch
+- bash — Log the from-scratch control run
+
+**Synthèse produite :**
+
+⏵ Round 71 : le contrôle depuis zéro est en cours — le pendant négatif du 2,4828
+
+- **N2** : le run `855949` est **`mix512-zero-15k`** — init **`init-figee.pt`** (figée), seq 512, **15 000 pas** sur le mélange ; **PPL val 3,053** à 8 300 pas. C'est le **contrôle depuis zéro** du résultat de la nuit : la production 1 024 part d'une **init entraînée**, le from-zéro d'une **init figée** — l'écart mesurera la part de l'**init/fenêtre** contre le compute. La session N2 est active (162 min) : « contrôle depuis zéro, puis clôture ».
+- **Le 2,4828** (production 1 024/30k) attend donc son contrôle avant d'être figé ; il est consigné au journal de veille et au bilan.
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅ ; GPU occupé et déclaré.
+
+La veille suit le contrôle et le commit N2, puis le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 77 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Wait and check the from-scratch control
+- bash — Wait for the control final or commit
+- bash — Read the control final and log it
+- bash — Correct the control number and update the bilan
+
+**Synthèse produite :**
+
+⏵ Round 72 : le contrôle depuis zéro est fini — 2,9000 contre 2,4828 pour la production
+
+- **Le fait complet de la nuit** : la production 1 024 prolongée sur le mélange donne **PPL val 2,4828** ; son **contrôle depuis zéro** (`mix512-zero-15k`, init figée, seq 512, 15 000 pas, 1 h 09) donne **PPL val 2,9000**. L'écart **~0,42** mesure la part de l'**init/fenêtre** (init entraînée + 1 024) ; le reste est le compute. La production bat ainsi le run de **200 k** (3,16) et le run 2 048 (2,6609), avec son contrôle négatif.
+- **N2** : la fiche/le commit du **couple production + contrôle** sont attendus ; deux nouveaux runs tournent (`875470` 29 min, `877615` 23 min).
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+Le couple est consigné au journal de veille et au bilan de 8 h ; la veille suit le commit N2 puis le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 78 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Wait for the N2 commit
+- bash — Check the machine's availability and the pass plan
+- bash — Read the resource tool's release/queue options
+- bash — Release the stale N2 claims and check the queue
+- bash — Release the remaining stale N2 claim
+- bash — Log the claim release and the pass queue
+
+**Synthèse produite :**
+
+⏵ Round 73 : machine libérée, claims N2 rendus, la passe-82 prête à tourner
+
+- **Ressources** : GPU0/GPU1 à **0 %** (les runs N2 sont finis) ; la veille a **libéré les deux claims N2** (`r12-1024` et le proxy `r12-mix-512-gpu1`) — les réservations étaient expirées, les jobs terminés. Le registre est cohérent.
+- **La file** : `passe-82` (`machine=exclusive`, prio 1, 150 min) attend son admission ; restent S (`cpu1` 4), Pensée (`cpu1` 4), veille (`cpu1` 1). **La passe complète (82 portes) peut tourner** — le hub la lancera (plan : passe au 08 h, après les clôtures) ; **si elle n'est pas lancée d'ici ~05 h 30, la veille la lancera**.
+- **N2** : la fiche/le commit du couple **2,4828 production / 2,9000 contrôle** restent attendus ; la session peut re-claim si elle relance un run.
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue : elle surveille la passe et le commit N2, puis tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 79 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check the pass script and claim the machine
+- bash — Check actual CPU usage and the S session's state
+- bash — Log the pass deferral and the stale S session
+
+**Synthèse produite :**
+
+⏵ Round 74 : passe différée par les claims, le S silencieux depuis 20 h 40
+
+- **Passe** : le claim `machine=exclusive` de `passe-82` est **différé** — « des réservations sont déjà actives » (S, Pensée, veille). Le plan reste la **passe complète au 08 h**, après les clôtures ; les GPU sont libres des runs N2 mais le test `drave` (PID 961927, 740 % CPU, GPU1) tourne **sans claim** (test court, noté).
+- **Trouvaille de coordination** : la session **S** affiche « actif » mais son **heartbeat est à 20 h 40** et son **dernier commit à ~19 h** — **8 h de silence** ; son claim `cpu1` 4 est peut-être stale et **bloque la passe**. À trancher au bilan (pause/clôture) ; consigné au journal de veille et au bilan.
+- **N2** : les claims sont libérés, la fiche/le commit du couple **2,4828 / 2,9000** restent attendus ; la session peut re-claim.
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue : elle surveille la passe, le commit N2 et le S, puis tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 80 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check the S session's process and state
+- bash — Release the stale S claim after checking no process
+- bash — Clean the duplicate queue and log the S finding
+
+**Synthèse produite :**
+
+⏵ Round 75 : le S est bloqué sur la validation humaine — son claim libéré, le point remonté
+
+- **Trouvaille de coordination** : le **S** n'est pas en calcul — sa prochaine action est la **validation humaine de la banque** (mode `banque` à **0 verdict**), une ligne bloquée par l'humain ; d'où **8 h de silence** (heartbeat 20 h 40) et un claim `analyseur` expiré. Aucun processus S : la veille a **libéré son claim** (`cpu1` 4). Au bilan : **mettre le S en pause** ou lui donner la ligne suivante (règle « jamais en attente »).
+- **Registre** : après libération, restent **Pensée** (`cpu1` 4, `ram` 16) + **veille** (`cpu1` 1) ; la file `passe-82` (l'entrée du hub, plus mon doublon de re-claim, sans effet) attend. La passe reste **différée par le claim Pensée actif** — plan : **08 h**.
+- **Machine** : un test `cycle_sensibilite` tourne (`/tmp/porte-cycle-c2`) ; les GPU sont libres des runs N2.
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue : elle surveille la passe, le couple N2 (2,4828 / 2,9000) et le S, puis tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 81 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait for the N2 commit and check the machine
+
+**Synthèse produite :**
+
+⏵ Round 76 : pas de nouveau commit, la Pensée teste, le couple N2 attend
+
+- **Aucun nouveau commit** depuis `18493fb9` ; le **couple N2 (2,4828 production / 2,9000 contrôle)** attend sa fiche/commit ; l'`en-cours` est en cours d'édition par le hub.
+- **Pensée** : les tests `drave` (PPL 0,5B) s'enchaînent (PID 1047701, 48 s) — la session L/B13 est active ; le GPU1 est utilisé sans claim (test court, noté).
+- **Ressources** : S libéré, reste Pensée (`cpu1` 4) + veille (`cpu1` 1) ; la file `passe-82` attend — la passe reste au **08 h** (claim Pensée actif).
+- **État** : revue ✅ 587/673/82, en-cours ✅, T0 = 4 000, T1 2 428, porte stricte ✅.
+
+La veille continue : elle suit le commit N2, la fin des tests Pensée et le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 82 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait for the N2 commit
+
+**Synthèse produite :**
+
+⏵ Round 77 : veille — attente du commit N2 et de la fin des tests Pensée
 
 ## 3. Travail accompli
 
@@ -1795,7 +1959,7 @@ La veille suit le final et le commit N2 (fiche/JSON), puis le **checkpoint de 8 
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 535 autres
+- … et 563 autres
 
 ## 4. Mesures et résultats marquants
 
