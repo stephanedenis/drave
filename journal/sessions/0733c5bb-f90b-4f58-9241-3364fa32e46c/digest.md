@@ -7546,3 +7546,52 @@ plan clos
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nmd = len(list(pathlib.Path(\"reports\").glob(\"*.md\")))\njs = len(list(pathlib.Path(\"reports\").glob(\"*.json\")))\nt = re.su … [1344 caractères tronqués]`
+
+  ```
+compteurs 587 677
+  revue de documentation · 587 fiche(s) · 677 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-366]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-366", "timeout_ms": 180000, "wait": true}`
+
+  ```
+bfd51b90 NUIT — CLÔTURE : LA FENÊTRE EST MESURÉE DE 128 À 2 048, LA PRODUCTION PASSE SOUS 2,5 AU GRAND CORPUS, LA PORTE PROPRE RESTE À 0,29
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -2; echo \"=== état à jour ===\"; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -2; echo \"=== jou … [436 caractères tronqués]`
+
+  ```
+=== revue ===
+  revue de documentation · 587 fiche(s) · 677 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== état à jour ===
+  état · dernier fait e1c1064d · dernier état bfd51b90
+  ✅ aucun fait commité après le dernier état
+=== en-cours ===
+  en-cours · 1628 mots · 7 sections · 4 session(s) · 3 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== journal ===
+  journal · 40 jour(s) · 117 session(s) · 1924 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+=== schémas ===
+     sources et images relatives.
+=== T0 ===
+  T0 max : 3998 mots (budget 4 000)
+  ❌ 1 violation(s) :
+=== GPU ===
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+=== commits ===
+bfd51b90 NUIT — CLÔTURE : LA FENÊTRE EST MESURÉE DE 128 À 2 048, LA PRODUCTION PASSE SOUS 2,5 AU GRAND CORPUS, LA PORTE PROPRE RESTE À 0,29
+e1c1064d NUIT — LA FENÊTRE EST LA RECETTE DE PRODUCTION : 2,9943 À 128 ET SOUS 2,5 AU GRAND CORPUS ; LA PORTE PROPRE RESTE À 2,7856 ; LA FENÊTRE PAIE À TOUTES LES CAPACITÉS
+da2bfc8f PORTE HOMEOSTASIE — ELLE RÉGÉNÈRE SON LORA AU LIEU D'ÉCHOUER (VERTE, 10 MIN 07)
+e15
+… [360 caractères tronqués]
+  ```
+

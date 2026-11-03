@@ -9633,3 +9633,36 @@ Another git process seems to be running in this repository, or the lock file may
 ⏵ Verrou git (Pensée committe probablement son résultat API). J'attends et je recommite.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; for i in $(seq 1 15); do [ -e .git/index.lock ] || break; sleep 8; done; date +%H:%M; [ -e .git/index.lock ] && echo \"lock encore\" || echo \"lock libre\"; git log --oneline -2; git status --short docs/pilotage/en-cours.md docs/method … [97 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-393]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-393", "timeout_ms": 120000, "wait": true}`
+
+  ```
+11:25
+lock libre
+bfd51b90 NUIT — CLÔTURE : LA FENÊTRE EST MESURÉE DE 128 À 2 048, LA PRODUCTION PASSE SOUS 2,5 AU GRAND CORPUS, LA PORTE PROPRE RESTE À 0,29
+e1c1064d NUIT — LA FENÊTRE EST LA RECETTE DE PRODUCTION : 2,9943 À 128 ET SOUS 2,5 AU GRAND CORPUS ; LA PORTE PROPRE RESTE À 2,7856 ; LA FENÊTRE PAIE À TOUTES LES CAPACITÉS
+ M docs/methode/ressources.md
+MM journal/2026-11-03/README.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -n \"clé API\\|fichiers / JSON\" docs/pilotage/en-cours.md; echo \"---\"; grep -c \"clé du professeur est fournie\" journal/2026-11-03/README.md; git log --oneline -1 -- docs/pilotage/en-cours.md", "description": "Check if my stat … [29 caractères tronqués]`
+
+  ```
+22:> (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave ; **clé API fournie** (`~/.config/drave/deepseek.key`).
+119:| fichiers / JSON de résultats | **587** / **677** | `reports/*.md` / `reports/*.json` |
+---
+1
+bfd51b90 NUIT — CLÔTURE : LA FENÊTRE EST MESURÉE DE 128 À 2 048, LA PRODUCTION PASSE SOUS 2,5 AU GRAND CORPUS, LA PORTE PROPRE RESTE À 0,29
+  ```
+
+### 🤖 Assistant
+
+⏵ Mes corrections d'état ont survécu (dans `bfd51b90`). Je commite la doc et le journal.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff --stat docs/methode/ressources.md journal/2026-11-03/README.md; cat > work/msg-cle3.txt <<'EOF'\nMÉTHODE — LA CLÉ DU PROFESSEUR EST NOMMÉE (FICHIER 0600) ET SON USAGE VÉRIFIÉ\n\nressources.md nomme le fichier réel (~/.config/d … [456 caractères tronqués]`

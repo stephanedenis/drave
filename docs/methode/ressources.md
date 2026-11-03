@@ -92,9 +92,11 @@ très précieux**. Tu ne dois donc **jamais suspendre tous les travaux en attend
 
 Les deux GPU sont **exclusivement réservés à Drave** et à ses tâches d'apprentissage. Les **professeurs**
 (annotation, distillation, corpus) passent par l'**API DeepSeek en ligne** — `tools/llm/enseignant.py`
-et `tools/llm/deepseek.py` ; la clé vient de `DEEPSEEK_API_KEY` ou `DEEPSEEK_KEY_FILE`. Aucun serveur
-local (`llama-server`, `ollama`) ne doit tourner : `hauru-gpu-guard` (timer 30 s) les arrête, et
-`porte-ressources` échoue si l'un occupe un GPU.
+et `tools/llm/deepseek.py` ; la clé vient de `DEEPSEEK_API_KEY` ou `DEEPSEEK_KEY_FILE`. Sur Hauru,
+elle est dans **`~/.config/drave/deepseek.key`** (0600, jamais commité) : les commandes qui appellent
+le professeur passent `DEEPSEEK_KEY_FILE=/home/stephane/.config/drave/deepseek.key` (vérifié le
+03/11 : ping `OK`, `deepseek-flash`). Aucun serveur local (`llama-server`, `ollama`) ne doit tourner :
+`hauru-gpu-guard` (timer 30 s) les arrête, et `porte-ressources` échoue si l'un occupe un GPU.
 
 ## Ce qui reste à l'humain
 

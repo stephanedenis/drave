@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 19.1 h |
+| Durée | 19.2 h |
 | Tours | 31 |
-| Messages | 550 |
-| Appels d'outils | 544 |
+| Messages | 553 |
+| Appels d'outils | 547 |
 | Fichiers touchés | 6 |
-| Commandes | 393 |
+| Commandes | 395 |
 | Sous-agents | 0 |
-| Commits | 24 |
+| Commits | 25 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -689,7 +689,7 @@ Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeu
 
 ### Tour 31 — la clé est dans le fichier. une session travaille déjà avec le professeur, vérifie ce que tu peux faire sans conflits av … [22 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Locate API key file without exposing it
 - bash — Inventory active professor session and repo
@@ -704,10 +704,12 @@ Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeu
 - bash — Commit key availability and documentation
 - bash — Wait for lock and check my files
 - job_output
+- bash — Check if my state edits survived N2 commits
+- … et 1 autres
 
 **Synthèse produite :**
 
-⏵ Verrou git (Pensée committe probablement son résultat API). J'attends et je recommite.
+⏵ Mes corrections d'état ont survécu (dans `bfd51b90`). Je commite la doc et le journal.
 
 ## 3. Travail accompli
 
@@ -764,7 +766,7 @@ Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeu
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 353 autres
+- … et 355 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -925,4 +927,5 @@ Deux choses t'attendent : la **clé API DeepSeek** pour débloquer les professeu
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("journal/2026-11-03/README.md"); t = p.read_text(encoding="
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff --stat docs/methode/ressources.md journal/2026-11-03/README.md; cat > work/msg-cle3.txt <<'EOF' MÉT
 

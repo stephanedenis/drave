@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 19.2 h |
 | Tours | 5 |
-| Messages | 514 |
-| Appels d'outils | 493 |
+| Messages | 516 |
+| Appels d'outils | 494 |
 | Fichiers touchés | 25 |
-| Commandes | 366 |
+| Commandes | 367 |
 | Sous-agents | 0 |
 | Commits | 12 |
 | Compactages de contexte | 0 |
@@ -118,7 +118,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 5 — continue
 
-*12 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Read zero control results and 128 arms state
 - bash — Evaluate capacity experiment arms
@@ -131,10 +131,31 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Close the night cycle in plan and récit
 - bash — Mark session closed in state
 - bash — Fix counter and commit night closure
+- bash — Final verification pass and summary
 
 **Synthèse produite :**
 
-⏵ Clôture de la nuit : plan, récit, vérifications finales
+⏵ Cycle de nuit clos : je rends les résultats, l'état et les commits
+
+Le cycle de nuit est terminé et committé. Il a débordé du créneau (la session a été suspendue vers 04 h et reprise à 11 h 20) : je l'ai clos à 11 h 32, GPU libres.
+
+\## Ce que font les autres sessions
+
+- **Hub / pilotage** : passe de portes terminée — `porte-homeostasie` **verte** (elle régénère son LoRA au lieu d'échouer, 10 min) ; **règle 11 ajoutée à AGENTS** (GPU réservés à Drave, professeurs par l'API DeepSeek, jamais de serveur local) avec un **blocage nommé** : la clé API DeepSeek est absente ; discipline de budget (AGENTS 1 196–1 198 mots, T0 sous 4 000).
+- **L/B13 (Pensée)** : **gold réel 432** — POS 0,9065, syntagmes 0,4598, tête 0,5633, acte 0,9954, **verdict FALSE** ; la « fenêtre » (labyrinthe) est **non discriminante** (BFS 228, aveugle 215, 7B 238 : tout le monde passe) ; **parité DRVM/native 114/114 poids, 5/5 prompts**, mais le point de contrôle est volatil.
+- **S (structures)** : analyseur **54/55 types, 131/131 rôles, 47/47 compléments** ; corpus réel 8,5 % CEGEP / 65,5 % propre ; banque 200 phrases / 355 candidats.
+- **D/R/A** : close (OCR CEGEP 91 scans uniques, 60 documents, 1 982 p).
+
+\## Mes quatre faits de la nuit
+
+**1. La loi de la fenêtre** (à octets constants, 20,5 Mo) : à 1 000 octets, 3,2545 (fenêtre 256) → 3,0107 (512) → **2,9950** (1 024) → 3,0202 (2 048). Le **point d'équilibre est 1 024** à ce budget — et il **se déplace avec le budget** (à 246 Mo, 2 048 donne 2,5114 à 4 000 octets). Le contrôle « même texte » montre que **chaque modèle sature exactement à sa fenêtre** (256 se dégrade au-delà ; 1 024 = 2 000 au millième).
+
+**2. La fenêtre est la recette de production** : N2.ac affiné avec RoPE + fenêtre entraînée **écrase N2.ac et le run de 200 k pas** à octets ajoutés constants. Poussé à **30 000 pas à 1 024 (307 Mo)** : **2,9943** en domaine à 128, 2,6143 à 1 000, 2,5628 à 2 000, et **2,4759 / 2,4373 sur la validation du grand corpus — sous 2,5**, une première. Contrôle depuis zéro : la **fenêtre fait la longueur**, l'**initialisation fait le niveau** (−0,16).
+
+**3. La porte < 2,5 sur le corpus propre** : **non atteinte** — 2,7856 en val (0,29 manquant), 2,8566 en test — mais la fenêtre est le **seul bras dont la courbe descend** (2,9726 → 2,7856 contre 2,9027 → 3,1107 pour la fenêtre 128), et les deux bras battent la chaîne honnête de N2.h (3,0904). Le corpus (3,24 Mo) est épuisé : la suite est la **capacité**, pas les pas.
+
+**4. La fenêtre paie à toute
+… [1692 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -210,7 +231,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 326 autres
+- … et 327 autres
 
 ## 4. Mesures et résultats marquants
 
