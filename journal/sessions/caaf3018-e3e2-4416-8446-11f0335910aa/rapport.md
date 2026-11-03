@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
 | Durée | 4.3 h |
-| Tours | 12 |
-| Messages | 212 |
-| Appels d'outils | 245 |
+| Tours | 14 |
+| Messages | 218 |
+| Appels d'outils | 247 |
 | Fichiers touchés | 6 |
-| Commandes | 186 |
+| Commandes | 188 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -47,6 +47,10 @@
 **Tour 11** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
 
 **Tour 12** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
+
+**Tour 13** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
+
+**Tour 14** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -300,7 +304,27 @@ Conséquence pour mon intégration : j'écrirai « **passe du 02/11 19 h 32 : 81
 
 **Synthèse produite :**
 
-⏵ Rythme de nuit : un point par minute (pause courte intégrée) pour économiser le contexte
+⏵ 59/81 portes (56 vertes, 3 rouges tolérées), rythme d'une minute adopté
+
+Passe à **59 portes, 56 vertes, 3 rouges tolérées** (`occupation-moteur` verte à 62 s). Prochaine lourde : `poids-creux` (354 s) puis `profondeur-routee` et `vision` — fin projetée vers 21 h 05. Je garde un point par minute pour préserver le contexte de la nuit.
+
+### Tour 13 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [932 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Paced check of pass and last commit
+
+**Synthèse produite :**
+
+⏵ 59/81, la 82ᵉ porte est committée (`42db89f6`) ; portes OCR en cours
+
+L'autre écrivain a committé la **82ᵉ porte** (`porte-ressources`) : `42db89f6`, autotest 9 cas, registre cohérent. Ma passe reste à **59 portes, 56 vertes, 3 rouges tolérées**, engagée sur les portes OCR (`ocr`, `ocr-scans`). Fin projetée ~21 h 05.
+
+### Tour 14 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Paced check of OCR gates
 
 ## 3. Travail accompli
 
@@ -357,7 +381,7 @@ Conséquence pour mon intégration : j'écrirai « **passe du 02/11 19 h 32 : 81
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 146 autres
+- … et 148 autres
 
 ## 4. Mesures et résultats marquants
 

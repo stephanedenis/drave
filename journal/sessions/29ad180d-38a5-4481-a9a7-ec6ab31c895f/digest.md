@@ -5036,3 +5036,93 @@ tiens ta liste de tâches dsh à jour et continue
 Updated todo list: 4 pending, 1 in progress, 3 completed.
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git status -sb | head -2; python3 - <<'PY'\nfrom pathlib import Path\np = Path('generateur.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"\"\"            while j < len(utiles) and utiles[j].cls in (\"DET\", … [2096 caractères tronqués]`
+
+  ```
+## master...origin/master
+règle de contexte ajoutée
+La petite ferme est belle. → La petite ferme[GN] | est belle[GV]
+Le simple fait surprend. → Le simple[GN] | fait surprend[GV]
+Le grand lit est dur. → Le grand lit[GN] | est dur[GV]
+La vieille porte est ouverte. → La vieille porte[GN] | est ouverte[GV]
+Le triste fait demeure. → Le triste[GN] | fait demeure[GV]
+Le fait divers est intéressant. → Le fait divers[GN] | est intéressant[GV]
+La ferme. → La ferme[GN]
+Le grand lit. → Le grand[GN] | lit[GV]
+La femme parle à son fils. → La femme[GN] | parle[GV] | à son fils[GP]
+Le chat fait des bonds. → Le chat[GN] | fait[GV] | des bonds[GP]
+Le chien porte la balle. → Le chien[GN] | porte[GV] | la balle[GN]
+La danse est belle. → La danse[GN] | est belle[GV]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('generateur.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"prend prends prennent prenons prenez prenais prenait prenaient\",\n              \"prend prend … [685 caractères tronqués]`
+
+  ```
+surprend ajouté
+Le simple fait surprend. → Le simple fait[GN:agent] | surprend[GV:predicat]
+La petite ferme est belle. → La petite ferme[GN:agent] | est belle[GV:predicat]
+La vieille porte est ouverte. → La vieille porte[GN:agent] | est ouverte[GV:predicat]
+Le grand lit est dur. → Le grand lit[GN:agent] | est dur[GV:predicat]
+Le triste fait demeure. → Le triste[GN:agent] | fait demeure[GV:predicat]
+Le fait divers est intéressant. → Le fait divers[GN:agent] | est intéressant[GV:predicat]
+La ferme. → La ferme[GN:agent]
+Le grand lit. → Le grand[GN:agent] | lit[GV:predicat]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json\nfrom pathlib import Path\np = Path('donnees/gold-analyseur.json')\nd = json.loads(p.read_text(encoding='utf-8'))\nd['note'] = (\"Gold de l'analyseur. split=dev : les 7 phrases du banc.  … [2154 caractères tronqués]`
+
+  ```
+55 phrases
+  gold · 55 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout    32  31/32      0.98  69/69    18/18  
+  global     55  54/55      0.99 131/131   47/47  
+  contrôle · baseline 94/131 (0.72) · règles coupées 96/131 (0.73) · rôles mélangés 0.11 [0.00, 0.23]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-analyseur.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('tests/test_generateur.py')\nt = p.read_text(encoding='utf-8')\nt = t.replace('''    def test_homographe_nominal_reste_une_limite(self):\n        # « ferme » est u … [2267 caractères tronqués]`
+
+  ```
+tests contexte
+----------------------------------------------------------------------
+Ran 47 tests in 3.685s
+
+OK
+  gold · 55 phrases · donnees/gold-analyseur.json
+  split     phr    types   couv.    rôles   compl.
+  dev         7   7/7       1.00  22/22    10/10  
+  test       16  16/16      1.00  40/40    19/19  
+  holdout    32  31/32      0.98  69/69    18/18  
+  global     55  54/55      0.99 131/131   47/47  
+  contrôle · baseline 94/131 (0.72) · règles coupées 96/131 (0.73) · rôles mélangés 0.11 [0.00, 0.23]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-analyseur.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && time python3 mesure_corpus.py --max 50000; echo \"=== banque ===\"; python3 candidats_corpus.py --max 200", "description": "Re-run corpus measure and bank with context rule", "timeoutMs": 300000}`
+
+  ```
+corpus réels · 50000 lignes CEGEP · 20799 phrases CEGEP · 59.94 s
+  lignes
+  corpus     seg/unité   GN+GV  sans GV   couv.  homogr.  unités homogr.
+  cegep           1.96   3.6%    0.5%    0.94       21              18
+  propre          4.33  51.0%   10.2%    0.89      578             575
+  melange         2.07   3.8%    0.5%    0.94       19              19
+  phrases
+  corpus     seg/unité   GN+GV  sans GV   couv.  homogr.  unités homogr.
+  cegep           3.25   8.5%    0.8%    0.94       28              28
+  propre          6.93  65.5%    8.0%    0.89     1134            1104
+  melange         4.11   9.1%    0.4%    0.93       23              23
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-corpus.json
+=== banque ===
+  ✅ 200 phrases, 355 candidats → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/phrases_generees.json
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/phrases-corpus-manifest.json · sha256 43957a3b9ad2422b…
+[stderr]
+
+real	1m0,018s
+user	0m59,918s
+sys	0m0,092s
+  ```
+

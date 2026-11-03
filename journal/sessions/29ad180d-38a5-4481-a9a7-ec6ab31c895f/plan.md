@@ -13,7 +13,7 @@
 - **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
 - **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
   `reports/s-banque-*` ; `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/`.
-- **Heartbeat** : 2026-11-02 19:50 EST
+- **Heartbeat** : 2026-11-02 20:40 EST
 - **Prochaine action** : **validation humaine de la banque** (le mode `banque` est à 0 verdict) ;
   puis la **frontière du GN sans auxiliaire** (h033) et un **gold plus large** (voix, causatives).
 - **État** : actif

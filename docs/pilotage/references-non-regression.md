@@ -1,10 +1,5 @@
 # Références de non-régression
 
-> **82e porte — 2026-11-02 20 h 30.** `porte-ressources` vérifie l'**autotest** du registre
-> (`tools/ressources.py`, 9 cas) et sa **cohérence** (aucune ressource sur-réservée) ; elle est
-> **verte** ce soir, avertissements `nvme_raid` (33 Gio) et NUMA **non fatals** — des limites
-> nommées, pas des régressions. La prochaine passe complète la comptera : **81 → 82**.
-
 > **Dernière passe complète — 2026-11-02 à 06 h :** **81 portes, 76 vertes, 5 rouges** (journaux
 > `/tmp/portes-…`, **effacés au reboot de 15 h 06** : ce fichier est le registre). Les 4 rouges
 > connues : `porte-indice`, `porte-melange`, `porte-homeostasie`, `porte-reparti-moteur` ; la 5e,

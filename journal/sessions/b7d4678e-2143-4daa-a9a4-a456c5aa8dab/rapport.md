@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 4.3 h |
 | Tours | 6 |
-| Messages | 410 |
-| Appels d'outils | 441 |
-| Fichiers touchés | 21 |
-| Commandes | 275 |
+| Messages | 423 |
+| Appels d'outils | 454 |
+| Fichiers touchés | 22 |
+| Commandes | 281 |
 | Sous-agents | 0 |
-| Commits | 17 |
+| Commits | 18 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -192,7 +192,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 6 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*21 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Check gate pass, commits and tree
 - bash — Check running jobs and resource claims
@@ -208,7 +208,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - bash — Wait for hub commit and verify state
 - bash — Read the hub's night plan commit
 - bash — Read the night plan and check my note
-- … et 7 autres
+- … et 17 autres
 
 **Synthèse produite :**
 
@@ -229,7 +229,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 | `work/ocr/fait_fiche.py` | 1 | 1 |
 | `work/ocr/ajoute_micro.py` | 1 | 0 |
 | `reports/rapport-ocr-cegep.md` | 0 | 2 |
-| `docs/pilotage/en-cours.md` | 0 | 21 |
+| `docs/pilotage/en-cours.md` | 0 | 22 |
 | `docs/pilotage/roadmap.md` | 0 | 10 |
 | `docs/pilotage/chantiers.md` | 0 | 5 |
 | `docs/pilotage/plan-travail.md` | 0 | 7 |
@@ -237,10 +237,11 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 | `journal/2026-11-02/README.md` | 0 | 4 |
 | `journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md` | 0 | 2 |
 | `journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md` | 0 | 1 |
-| `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 0 | 1 |
+| `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 0 | 2 |
 | `work/veille/nuit.md` | 1 | 0 |
 | `tools/porte-ressources.sh` | 1 | 0 |
-| `docs/pilotage/references-non-regression.md` | 0 | 1 |
+| `docs/pilotage/references-non-regression.md` | 0 | 2 |
+| `docs/methode/portes.md` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -284,7 +285,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 235 autres
+- … et 241 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -419,4 +420,5 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - for i in $(seq 1 60); do N=$(pgrep -fc "git commit" 2>/dev/null || true); [ "${N:-0}" -eq 0 ] && break; sleep 3; done; echo "git commits restants: $(pgrep -fc '
 - NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT" 2>&1 | tail -6
 - NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS" 2>&1 | tail -5
+- NUIT — LA 82e PORTE EST COMPTÉE (82) ; LE BUDGET T1 REVIENT SOUS 2 500 ; S RAFRAÎCHI" -m "en-cours : 82 portes (81 à la passe du 02/11 06 h + porte-ressources à
 

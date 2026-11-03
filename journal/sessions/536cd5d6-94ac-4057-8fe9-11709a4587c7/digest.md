@@ -6437,3 +6437,71 @@ a097f650 NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE R
 
 tiens ta liste de tâches dsh à jour et continue
 
+### 🤖 Assistant
+
+⏵ Je mets la liste à jour, je vérifie la porte sessions et le routage docs, puis je continue la surveillance.
+
+- **todo_write** `{"todos": [{"content": "Poser la consigne de nuit (plan-travail §10.7, plan hub)", "status": "completed"}, {"content": "Vérifier la porte sessions et le routage docs (nested data/, ressources.md)", "status": "in_progress"}, {"content": "Surveiller la passe complète work/portes/passe-1102-19h32", "st … [315 caractères tronqués]`
+
+  ```
+Updated todo list: 3 pending, 2 in progress, 1 completed.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== outils/docs modifiés ==\" && git status --short tools/sessions.py tools/porte-sessions.sh docs/methode/ressources.md docs/pilotage/README.md docs/README.md 2>&1; echo; echo \"== porte sessions ==\" && bash tools/porte-sessi … [418 caractères tronqués]`
+
+  ```
+== outils/docs modifiés ==
+
+== porte sessions ==
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, réservation imbriquée avertie sans refus
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+[exit 0]
+
+== autotest sessions ==
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, réservation imbriquée avertie sans refus
+
+== passe ==
+porte-n3-service-briques 0 7
+porte-n3-service 0 5
+porte-n3-seuil 0 6
+porte-n3-sparsite-compte 0 4
+porte-n3-sparsite 0 4
+
+== new doc ==
+# Ressources et philosophie de travail
+
+> Document de tâche, chargé depuis [`AGENTS.md`](../../AGENTS.md). À lire **quand on planifie une campagne** ou
+> qu'on se demande si on peut travailler en parallèle.
+
+## La machine (Hauru)
+
+- **2 × RTX 5000 en NVLink**, 16 Go chacune : dédiées au projet (la carte AMD est dédiée à l'affichage). Turing :
+  **fp16 natif, bf16 non natif** — le bf16 est *lent* (pas faux) ; préférer `float16` pour les gros modèles.
+- **RAID NVMe
+… [705 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La porte sessions passe (le cas `data/` / `data/structures/` est bien un avertissement). Je vérifie la revue et j'attends la passe.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== revue ==\" && timeout 300 python3 tools/revue_documentation.py 2>&1 | tail -8; echo \"[revue ${PIPESTATUS[0]}]\"; echo; echo \"== taille ==\" && python3 tools/taille_documents.py 2>&1 | grep -E 'T0 max|violation|✅ tous|ress … [192 caractères tronqués]`
+
+  ```
+== revue ==
+  revue de documentation · 563 fiche(s) · 649 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 81 portes, le disque en a 82
+[revue 1]
+
+== taille ==
+  T0 max : 3999 mots (budget 4 000)
+  ❌ 1 violation(s) :
+
+== journal ==
+  journal · 39 jour(s) · 117 session(s) · 1862 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **job_output** `{"job_id": "bash-172", "wait": true, "timeout_ms": 600000}`

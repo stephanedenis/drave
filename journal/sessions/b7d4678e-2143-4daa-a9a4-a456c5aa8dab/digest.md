@@ -6847,3 +6847,159 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/reference
   ```
 
 - **bash** `{"command": "export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add tools/porte-ressources.sh docs/pilotage/references-non-regression.md; git diff --cached --stat; git commit -m \"NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS\" 2>&1 |  … [87 caractères tronqués]`
+
+  ```
+docs/pilotage/references-non-regression.md |  5 +++++
+ tools/porte-ressources.sh                  | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 33 insertions(+)
+  ✅ index : aucun fait stagé sans état
+[master 42db89f6] NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS
+ 27 files changed, 1185 insertions(+), 100 deletions(-)
+ create mode 100755 tools/porte-ressources.sh
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; wc -l work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt; echo \"--- rouges ---\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo \"--- checks ---\"; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 … [213 caractères tronqués]`
+
+  ```
+20:34:41
+58 work/portes/passe-1102-19h32/registre.txt
+porte-n3-sparsite 0 4
+porte-occupation-elagage 0 72
+--- rouges ---
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+--- checks ---
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 81 portes, le disque en a 82
+  ✅ état court, structuré, multi-session et reprenable
+     · docs/pilotage/references-non-regression.md : 2555 mots > budget 2500 (T1)
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ```
+
+- **read** `{"file_path": "docs/methode/portes.md", "limit": 12, "offset": 9}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/portes.md</path>
+<type>file</type>
+<content>
+9: ```
+10: 
+11: Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêter à la première rouge** (on veut le
+12: [tableau](../theorie/glossaire/entrees/tableau.md), pas la première tuile), et borne **chaque** [porte](../theorie/glossaire/entrees/porte.md) à `DELAI=1800` s. Durée observée d'une passe complète :
+13: **1 h 30 – 2 h** sur Hauru (**81 portes** ; certaines entraînent de petits modèles, d'autres utilisent les [GPU](../theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md) ;
+14: `porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **81 portes** (02/11 06 h) a donné
+15: **76 vertes, 5 rouges** ; la liste et le diagnostic sont dans
+16: [`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **incluse** et verte.
+17: 
+18: ## Où est le registre (et comment lire le verdict)
+19: 
+20: Le registre n'est **pas** à la racine : il est écrit dans le dossier des journaux, par défaut
+
+(Showing lines 9-20 of 77. Use offset=21 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "docs/methode/portes.md", "new_string": "`porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **81 portes** (02/11 06 h) a donné\n**76 vertes, 5 rouges** ; la liste et le diagnostic sont dans\n[`references-non-regression.md`](../pilotage/references-non-regressi … [539 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/portes.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/references-non-regression.md", "new_string": "# Références de non-régression\n\n> **Dernière passe complète — 2026-11-02 à 06 h :** **81 portes, 76 vertes, 5 rouges** (journaux", "old_string": "# Références de non-régression\n\n> **82e porte — 2026-11-02 20 h 30.** `port … [430 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "grep -n \"| portes |\" docs/pilotage/en-cours.md; ls -l --time-style=+%H:%M:%S docs/pilotage/en-cours.md; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -2", "description": "Check counter line and budgets"}`
+
+  ```
+111:| portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
+-rw-r--r--. 1 stephane stephane 11945 20:25:02 docs/pilotage/en-cours.md
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 81 portes, le disque en a 82
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "limit": 8, "offset": 108}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+108: 
+109: | invariant | valeur | contrôle |
+110: |---|---|---|
+111: | portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
+112: | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+113: | fichiers / JSON de résultats | **563** / **649** | `reports/*.md` / `reports/*.json` |
+114: | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
+115: | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
+
+(Showing lines 108-115 of 155. Use offset=116 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "| portes | **82** (81 à la passe du 02/11 06 h : 76 vertes, 5 rouges ; **82e `porte-ressources`** ajoutée le 02/11 au soir, à valider) | `tools/porte-*.sh` |", "old_string": "| portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues +  … [56 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/sessions.py --check --strict 2>&1 | tail -1", "description": "Verify counters and budgets"}`
+
+  ```
+revue de documentation · 563 fiche(s) · 649 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 1 violation(s) :
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ❌ mandat périmé (45 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md')\nt=p.read_text(encoding='utf-8')\nold=\"| portes | **82** (81 à la passe du 02/11 06 h : 76 vertes, 5 rouges ; **82e `porte-ressources`** ajoutée le 02/11 au soir, à valider) | `tools/porte-*.sh` |\"\nnew=\"|  … [397 caractères tronqués]`
+
+  ```
+trim ok
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+16:- **Heartbeat** : 2026-11-02 19:50 EST
+  ```
+
+- **read** `{"file_path": "journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md", "limit": 8, "offset": 10}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md</path>
+<type>file</type>
+<content>
+10: - **Session** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f`
+11: - **Rôle** : **S — les structures** : le banc d'interprétations candidates (outil web, générateur,
+12:   pragmatique, banque), l'**analyseur** (rôles, subordonnées) et l'**export au corpus**.
+13: - **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+14: - **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
+15:   `reports/s-banque-*` ; `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/`.
+16: - **Heartbeat** : 2026-11-02 19:50 EST
+17: - **Prochaine action** : **validation humaine de la banque** (le mode `banque` est à 0 verdict) ;
+
+(Showing lines 10-17 of 63. Use offset=18 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md", "new_string": "- **Heartbeat** : 2026-11-02 20:40 EST", "old_string": "- **Heartbeat** : 2026-11-02 19:50 EST"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1", "description": "Verify all checks before commit"}`
+
+  ```
+revue de documentation · 563 fiche(s) · 649 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add docs/pilotage/en-cours.md docs/methode/portes.md docs/pilotage/references-non-regression.md journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md; git diff --cached --stat; git commit -m \"NUIT — LA 82e PORTE E … [411 caractères tronqués]`

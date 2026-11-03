@@ -10599,3 +10599,69 @@ Round: 8/1000
 Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
 </goal_round>
 
+### 🤖 Assistant
+
+⏵ Round 8 : la porte B13 — je vais fixer les quatre attendus du sous-module S `647205a` (T111, T113–T115) et relancer la porte
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; git status --short | head -4; grep -n \"0.3649\\|0.1966\\|0.2122\\|0.4098\\|0.4568\\|0.4314\" tools/pensee/autotest.py | head -10; echo '--- T111 ---'; sed -n '/def t111/,/def t112/p' tools/pensee/autotest.py | head -20; e … [144 caractères tronqués]`
+
+  ```
+42db89f6 NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS
+MM docs/pilotage/references-non-regression.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+1710:    return abs(f1 - 0.3649) < 0.001, (
+1731:    return abs(f1 - 0.1966) < 0.001, f"union : segments F1 {f1} (S 0,1683)"
+1743:    return abs(f1 - 0.1966) < 0.001 and abs(tete - 0.4568) < 0.001, (
+1757:    return (abs(f1 - 0.2122) < 0.001 and abs(tete - 0.4314) < 0.001
+1783:    return abs(f1 - 0.4098) < 0.001, (
+--- T111 ---
+def t111_hybride_seg() -> tuple[bool, str]:
+    """L'hybride frontières/têtes : tête F1 0,3732 (S 0,3552, chunker 0,4707)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger, _tete
+    ph = charger()
+    h1 = bl.Heuristique(union=False)
+    h2 = bl.Heuristique(union=False)
+    h2.segmenter_s = False
+    tp = fp = fn = 0
+    for phrase in ph:
+        a1 = h1.analyser(phrase["texte"], phrase["langue"])
+        a2 = h2.analyser(phrase["texte"], phrase["langue"])
+        gold = {(s["type"], s["debut"]) for s in phrase["segments"]}
+        seg_
+… [1018 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis les quatre assertions (T111, T113–T115) et les valeurs du sous-module S `647205a` avant de les corriger
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "limit": 95, "offset": 1700}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/pensee/autotest.py</path>
+<type>file</type>
+<content>
+1700:         a2 = h2.analyser(phrase["texte"], phrase["langue"])
+1701:         gold = {(s["type"], s["debut"]) for s in phrase["segments"]}
+1702:         seg_s = [(e.type, e.debut, e.fin) for e in a1.etiquettes if e.niveau == "syntagme"]
+1703:         seg_c = [(e.type, e.debut, e.fin) for e in a2.etiquettes if e.niveau == "syntagme"]
+1704:         pred = set()
+1705:         for (t, d, f) in seg_s:
+1706:             cand = [cd for (ct, cd, cf) in seg_c if ct == t and d <= cd < f]
+1707:             pred.add((t, cand[0] if cand else d))
+1708:         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
+1709:     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn); f1 = round(2 * p * r / max(1e-9, p + r), 4)
+1710:     return abs(f1 - 0.3649) < 0.001, (
+1711:         f"hybride : tête F1 {f1} (S 0,3552, chunker 0,4707)")
+1712: 
+1713: 
+1714: def t112_union() -> tuple[bool, str]:
+1715:     """L'union des segmenteurs : segments F1 0,2005 (S 0,1722), tête 0,4662."""
+1716:     import tools.bloc_linguistique as bl
+1717:     from ..tests.linguistique.evaluer_gold import charger_gele
+… [4029 caractères tronqués]
+  ```
+

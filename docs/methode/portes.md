@@ -14,6 +14,8 @@ Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêt
 `porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **81 portes** (02/11 06 h) a donné
 **76 vertes, 5 rouges** ; la liste et le diagnostic sont dans
 [`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **incluse** et verte.
+La **82e** porte, `porte-ressources` (autotest du registre et cohérence des claims), a été ajoutée le
+02/11 au soir ; elle sera comptée à la prochaine passe (**81 → 82**).
 
 ## Où est le registre (et comment lire le verdict)
 

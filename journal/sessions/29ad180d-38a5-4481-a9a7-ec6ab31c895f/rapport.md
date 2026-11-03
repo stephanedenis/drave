@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 4.3 h |
+| Durée | 4.4 h |
 | Tours | 7 |
-| Messages | 243 |
-| Appels d'outils | 252 |
+| Messages | 251 |
+| Appels d'outils | 260 |
 | Fichiers touchés | 13 |
-| Commandes | 183 |
+| Commandes | 191 |
 | Sous-agents | 0 |
-| Commits | 12 |
+| Commits | 14 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -269,11 +269,19 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 ### Tour 7 — tiens ta liste de tâches dsh à jour et continue
 
-*3 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - todo_write
 - bash — Add homograph context rule and test examples
 - bash — Add surprend to lexicon and retest homographs
+- bash — Add holdout4 and measure context rule
+- bash — Update tests for context rule and run
+- bash — Re-run corpus measure and bank with context rule
+- bash — Update submodule README for v4 context rule
+- bash — Export 55-line gold and read exact measures
+- bash — Commit and push v4 context rule
+- bash — Commit bank manifest timestamp
+- bash — Copy 55-line manifest and check main state
 
 ## 3. Travail accompli
 
@@ -337,7 +345,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 143 autres
+- … et 151 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -387,6 +395,13 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T6** `[master 140feb6] S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)`
 - **T6** `140feb6 S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)`
 - **T6** `[master 3f74fe83] S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS`
+- **T7** `cegep           1.96   3.6%    0.5%    0.94       21              18`
+- **T7** `propre          4.33  51.0%   10.2%    0.89      578             575`
+- **T7** `melange         2.07   3.8%    0.5%    0.94       19              19`
+- **T7** `cegep           3.25   8.5%    0.8%    0.94       28              28`
+- **T7** `propre          6.93  65.5%    8.0%    0.89     1134            1104`
+- **T7** `melange         4.11   9.1%    0.4%    0.93       23              23`
+- **T7** `166:| phrase | propre | 65,5 % | 8,0 % | 0,89 | 1 134 |`
 
 ## 5. Erreurs rencontrées
 
@@ -416,4 +431,6 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - S — LA BANQUE DE CANDIDATS RÉELS : 200 PHRASES, 355 CANDIDATS, MANIFESTE SHA-256" -m "candidats_corpus.py : 200 phrases de la littérature propre (filtre 40-200 
 - S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP) ET LA BANQUE 200/355 ; N2 — LE MANDAT DE NUIT ET L'OUTIL RESSOURCES" -m "S — mesure_corpus.py sur 50 000 lignes
 - S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS" -m "mesure_corpus.py : 50 000 lignes et 20 799 p
+- S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55" -m "Le GN ne s'arrête plus devant « ferme »/« fait » quand le suivant est un aux
+- S — BANQUE : LE MANIFESTE REPREND LA DATE DU RESCAN (SHA 43957a3b INCHANGÉ)" -m "La banque de 200 phrases / 355 candidats est identique (sha256 43957a3b…) ; seu
 

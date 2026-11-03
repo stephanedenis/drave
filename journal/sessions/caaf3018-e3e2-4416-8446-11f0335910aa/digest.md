@@ -4552,3 +4552,170 @@ porte-n3-sparsite 0 4
 > la PPL à 1 000 octets de **8,2024** à **3,2545** : la **porte R1.1** (1 000 octets dans un
   ```
 
+### 🤖 Assistant
+
+⏵ 57/81 ; chiffres N2/R1 vérifiés dans les fiches (3,1591 / 5,6056 ; 8,2024→3,2545)
+
+Les chiffres de l'état sont **confirmés par les fiches** : N2.ae 3,1591 domaine / 3,0035 grand corpus / 5,6056 littérature / 7,2770 anglais / 8,0018 wikitext2 ; R1.1 8,2024 → 3,2545. Passe à **57 portes, 54 vertes, 3 rouges tolérées** ; les prérequis des portes OCR (`work/r44/*`) sont présents.
+
+
+## Tour 10
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 6/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Avancement, gate en cours, âges des heartbeats
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M:%S; n=$(wc -l < work/portes/passe-1102-19h32/registre.txt); echo \"portes=$n\"; tail -1 work/portes/passe-1102-19h32/registre.txt; echo \"gate en cours: $(ls -t work/portes/passe-1102-19h32/*.log | head -1 | xargs basename) … [345 caractères tronqués]`
+
+  ```
+20:33:23
+portes=57
+porte-n3-sparsite 0 4
+gate en cours: porte-occupation-elagage.log
+0733c5bb hb=19:56
+29ad180d hb=19:50
+e181ce02 hb=20:24
+536cd5d6 hb=20:26
+  ```
+
+### 🤖 Assistant
+
+⏵ 57/81, `occupation-elagage` en cours ; heartbeats N2 19 h 56 et S 19 h 50 (risque de rouge de coordination)
+
+Passe à **57 portes, 54 vertes, 3 rouges tolérées**, `porte-occupation-elagage` en cours. Projection : fin vers **21 h 00–21 h 10** ; à cette heure, N2 (heartbeat 19 h 56) et S (19 h 50) auront des plans périmés (>45 min) alors que leurs digests sont actifs — `porte-sessions` rougira donc probablement, et ce sera une **rouge de coordination**, pas de code : je la nommerai et la rejouerai après rafraîchissement, sans toucher aux plans des sessions.
+
+
+## Tour 11
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 7/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Point rapide : passe, commits récents, état de l'index
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M:%S; n=$(wc -l < work/portes/passe-1102-19h32/registre.txt); echo \"portes=$n\"; tail -1 work/portes/passe-1102-19h32/registre.txt; git log --oneline -2; git status --short | head -3", "description": "Quick pass and commit c … [6 caractères tronqués]`
+
+  ```
+20:33:47
+portes=57
+porte-n3-sparsite 0 4
+2fad8e8d B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'AVEUGLE (26/2) ET LE LABYRINTHE (29/5) ; TEST NON DISCRIMINANT
+9a17d0cc PILOTAGE — LA NUIT DU 02/11 : QUATRE SESSIONS, UNE PASSE, UN REGISTRE, BILAN 08 H
+ M docs/pilotage/references-non-regression.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+  ```
+
+### 🤖 Assistant
+
+⏵ L'autre écrivain touche aux références : je lis son diff avant toute action
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git diff docs/pilotage/references-non-regression.md | head -50", "description": "Read live diff of references doc"}`
+
+  ```
+diff --git a/docs/pilotage/references-non-regression.md b/docs/pilotage/references-non-regression.md
+index 1b7a39cd..8f32952e 100644
+--- a/docs/pilotage/references-non-regression.md
++++ b/docs/pilotage/references-non-regression.md
+@@ -1,5 +1,10 @@
+ # Références de non-régression
+ 
++> **82e porte — 2026-11-02 20 h 30.** `porte-ressources` vérifie l'**autotest** du registre
++> (`tools/ressources.py`, 9 cas) et sa **cohérence** (aucune ressource sur-réservée) ; elle est
++> **verte** ce soir, avertissements `nvme_raid` (33 Gio) et NUMA **non fatals** — des limites
++> nommées, pas des régressions. La prochaine passe complète la comptera : **81 → 82**.
++
+ > **Dernière passe complète — 2026-11-02 à 06 h :** **81 portes, 76 vertes, 5 rouges** (journaux
+ > `/tmp/portes-…`, **effacés au reboot de 15 h 06** : ce fichier est le registre). Les 4 rouges
+ > connues : `porte-indice`, `porte-melange`, `porte-homeostasie`, `porte-reparti-moteur` ; la 5e,
+  ```
+
+### 🤖 Assistant
+
+⏵ L'autre écrivain ajoute une 82ᵉ porte (`porte-ressources`) pendant ma passe. Je vérifie son état.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls -l tools/porte-ressources.sh 2>/dev/null && bash tools/porte-ressources.sh; echo \"CODE=$?\"; echo \"---\"; grep -n \"portes |\" docs/pilotage/en-cours.md; date +%H:%M", "description": "Check new resources gate and state counter"}`
+
+  ```
+-rwx--x--x. 1 stephane stephane 1413  2 nov 20:32 tools/porte-ressources.sh
+=== PORTE RESSOURCES — REGISTRE, CLAIMS, COHÉRENCE ===
+  ✅ autotest : 9 cas (claim, conflit, file, admission, check)
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ⚠ 536cd5d6 : GPU sur NUMA 0 avec des fils sur cpu1
+  ✅ registre cohérent ; les avertissements de stockage/NUMA sont affichés, pas fatals
+✅ porte ressources verte : autotest 9 cas et registre cohérent
+CODE=0
+---
+111:| portes | **81** (76 vertes, 5 rouges au 02/11 06 h — 4 connues + greffe à 700 s, verte à 1200 s) | `tools/porte-*.sh` |
+20:34
+  ```
+
+### 🤖 Assistant
+
+⏵ 82ᵉ porte née pendant la passe : `porte-ressources` validée verte (9 cas + registre cohérent)
+
+`tools/porte-ressources.sh` existe depuis 20 h 32 et passe : **autotest 9/9, registre cohérent**, les avertissements `nvme_raid` (33 Gio) et NUMA étant affichés sans être fatals. Ma passe, elle, a capturé **81 portes** à 19 h 32 : elle ne comptera pas cette 82ᵉ, ce que l'autre écrivain a déjà noté dans les références (« la prochaine passe la comptera : 81 → 82 »).
+
+Conséquence pour mon intégration : j'écrirai « **passe du 02/11 19 h 32 : 81 portes** » et je laisserai la note de la 82ᵉ intacte, en repatchant le texte au-dessus de leur édition (relecture juste avant). Passe à **57 portes, 54 vertes, 3 rouges tolérées**.
+
+
+## Tour 12
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 8/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Rythme de nuit : un point par minute (pause courte intégrée) pour économiser le contexte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 50; date +%H:%M:%S; wc -l < work/portes/passe-1102-19h32/registre.txt; tail -1 work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt | wc -l", "description": "Paced status check with s … [12 caractères tronqués]`
+
+  ```
+20:35:10
+59
+porte-occupation-moteur 0 62
+3
+  ```
+
+### 🤖 Assistant
+
+⏵ 59/81 portes (56 vertes, 3 rouges tolérées), rythme d'une minute adopté
+
+Passe à **59 portes, 56 vertes, 3 rouges tolérées** (`occupation-moteur` verte à 62 s). Prochaine lourde : `poids-creux` (354 s) puis `profondeur-routee` et `vision` — fin projetée vers 21 h 05. Je garde un point par minute pour préserver le contexte de la nuit.
+
+
+## Tour 13
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 9/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 55; date +%H:%M:%S; wc -l < work/portes/passe-1102-19h32/registre.txt; tail -1 work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt | tr '\\n' ' '; echo; git log --oneline -1", "descr … [47 caractères tronqués]`
