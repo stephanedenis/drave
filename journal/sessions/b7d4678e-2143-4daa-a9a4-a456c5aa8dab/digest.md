@@ -8913,3 +8913,216 @@ MM journal/2026-11-02/distribue.md
  383833    01:34:29 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --c
   ```
 
+- **bash** `{"command": "ls -lt work/n2ac/mix1024* work/n2ac/eval-mix1024* work/n2ac/miroir-mix1024* 2>/dev/null | head -6; echo \"--- run log ---\"; ls -t work/n2ac/*.log | head -2; tail -3 $(ls -t work/n2ac/*.log | head -1) 2>/dev/null", "description": "Check the finished mix run outputs"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane      9005  2 nov 21:50 work/n2ac/mix1024-7.5k.log
+-rw-r--r--. 1 stephane stephane       525  2 nov 21:50 work/n2ac/mix1024-7.5k.pt.json
+-rw-r--r--. 1 stephane stephane 137224476  2 nov 21:50 work/n2ac/mix1024-7.5k.drvm
+-rw-r--r--. 1 stephane stephane 137248474  2 nov 21:50 work/n2ac/mix1024-7.5k.pt
+--- run log ---
+work/n2ac/rope1024-20k.log
+work/n2ac/mix1024-7.5k.log
+pas  12100 · perte 1.0960 · PPL val 2.628 · 5565 s
+pas  12150 · perte 0.9837 · PPL val 2.630 · 5587 s
+pas  12200 · perte 0.9653 · PPL val 2.617 · 5609 s
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 21 h 51 — la fenêtre 1 024 s'approche de 2,5\n\n- **`mix1024-7.5k` fini** (21 h 50) : le run de production 1 024 sur le mélange est sur le disque\n  (`work/n2ac/mix1024-7.5k.pt`, 137 Mo).\n- **`rope1024-20k` en cours** (GPU0, 1 h 34) : **pas 12 2 … [350 caractères tronqués]`
+
+  ```
+ok
+pas  12200 · perte 0.9653 · PPL val 2.617 · 5609 s
+pas  12250 · perte 1.0108 · PPL val 2.622 · 5631 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 10 : la fenêtre 1 024 s’approche de 2,5 (PPL 2,617)
+
+- **`mix1024-7.5k`** (production 1 024 sur le mélange) est **fini** à 21 h 50 : `work/n2ac/mix1024-7.5k.pt` (137 Mo) sur le disque.
+- **`rope1024-20k`** (le run long sur `wiki_fr`, GPU0) est à **12 250 / 20 000 pas, PPL val 2,622** — la cible **< 2,5** n'est plus qu'à ~0,12 ; il finira vers 23 h.
+- **N2** : la fiche fenêtre reste non committée et `n2-fenetre.json` absent ; l'agrégateur `agrege_fenetre.py` a désormais le run de production 1 024 — le commit N2 devrait suivre.
+- **État** : revue ✅ **570 fiches / 655 JSON / 82 portes**, en-cours ✅, T0 3 983, T1 2 428, stricte ✅, registre ✅ (seul `nvme_raid` 33 Gio).
+
+La veille continue : je suis la PPL du run long (franchissement de 2,5 ?), le commit N2 (fermeture de `porte-tableaux`) et le checkpoint de 8 h. Rien de bloquant.
+
+
+## Tour 16
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 11/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 11 : je vérifie les événements puis j’attends le commit N2
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -3; ls -l reports/n2-fenetre.json 2>/dev/null || echo \"json absent\"; git status --short reports/rapport-n2-fenetre.md 2>/dev/null; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null", "description": "Check events and the long run"}`
+
+  ```
+21:51:35
+a49c63dc NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE
+18e19b58 ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE
+12970a4e NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES
+json absent
+?? reports/rapport-n2-fenetre.md
+pas  12250 · perte 1.0108 · PPL val 2.622 · 5631 s
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; [ -f reports/n2-fenetre.json ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ls -l reports/n2-fenetre.json … [164 caractères tronqués]`
+
+  ```
+21:52:40
+HEAD 0bffb215
+0bffb215 JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49, LES SESSIONS ET LE POINT DE REPRISE DE 08 H
+a49c63dc NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE
+json absent
+pas  12400 · perte 0.9767 · PPL val 2.624 · 5698 s
+  ```
+
+- **bash** `{"command": "git show --stat --oneline 0bffb215 | head -8; echo \"--- checks ---\"; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -2; pyth … [106 caractères tronqués]`
+
+  ```
+0bffb215 JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49, LES SESSIONS ET LE POINT DE REPRISE DE 08 H
+ journal/2026-11-02/README.md                       |   7 +-
+ journal/2026-11-02/apprentissage.md                |   2 +-
+ journal/2026-11-02/attention.md                    |   2 +-
+ journal/2026-11-02/distribue.md                    |   2 +-
+ journal/2026-11-02/docs.md                         |   5 +-
+ journal/2026-11-02/memoire.md                      |   2 +-
+ journal/2026-11-02/mesures.md                      |   2 +-
+--- checks ---
+  revue de documentation · 570 fiche(s) · 655 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+  ⚠ mandat long (73 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+     · lien vers l'index des sessions absent : journal/2026-11-03/README.md
+  ```
+
+- **bash** `{"command": "ls -l journal/2026-11-03/; echo \"--- contenu ---\"; cat journal/2026-11-03/README.md 2>/dev/null | head -30; echo \"--- 02/11 header ---\"; head -8 journal/2026-11-02/README.md", "description": "Inspect the 03/11 journal stub"}`
+
+  ```
+total 4
+-rw-r--r--. 1 stephane stephane 2125  2 nov 21:50 README.md
+--- contenu ---
+# 2026-11-03 — le bilan de 08 h
+
+> **Nuit du 02/11 → 03/11.** Le hub tient le registre, la passe et l'état ; les quatre sessions
+> (N2, S, Pensée/B13, hub) restent productives jusqu'à 08 h. Ce fichier est le point de reprise
+> du matin : il est rempli au fil de la nuit, puis clos au bilan de 08 h.
+
+## 21 h 49 — l'état de la nuit
+
+- **Passe complète** : 76 vertes / 5 rouges (4 connues + `porte-tableaux` sur la fiche N2 en cours) ; `porte-sessions` verte par le claim ; 82e `porte-ressources` à la prochaine passe.
+- **N2** : `r12-1024` sur GPU0 et `r12-mix-512-gpu1` sur GPU1 ; fiche fenêtre 8,7 Ko, JSON `n2-fenetre.json` attendu.
+- **S** : corpus réel et banque 200/355 ; h033/gold en cours ; validation humaine à 08 h.
+- **Pensée/B13** : 140/140 ; porte minute ; gold 432.
+- **Hub** : état 82 portes, INDEX 567, README 2 762/2 800, revue 569/654, T0 3 981/4 000 ; claims tenus.
+- **Reste** : JSON N2 → `porte-tableaux` ; bilan de 08 h.
+
+## Sessions DSH
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 
+… [1371 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"index des sessions\\|sessions/README\\|lien\" tools/verifie_journal.py | head -12; python3 tools/verifie_journal.py 2>&1 | tail -4; echo \"[exit $?]\"", "description": "Inspect the journal link check"}`
+
+  ```
+7:  3. chaque `README.md` de jour porte une section « Sessions DSH » et un lien vers
+9:  4. chaque `journal/sessions/<id>/rapport.md` porte le bloc « Journaux » avec un lien vers
+10:     son jour (ou le journal), vers `en-cours.md` et vers l'index des sessions ;
+11:  5. les liens relatifs de `journal/README.md`, `journal/THEMES.md`, des `README.md` de jour
+23:# les liens markdown, sans les ancres ni les liens externes
+28:def liens(texte: str) -> list[str]:
+33:def verifier_liens(p: pathlib.Path, alertes: list[str]) -> int:
+35:    for cible in liens(p.read_text(encoding="utf-8", errors="ignore")):
+40:            alertes.append(f"lien mort : {p.relative_to(RACINE)} → {cible}")
+69:            alertes.append(f"lien vers l'index des sessions absent : {index.relative_to(RACINE)}")
+78:            alertes.append(f"lien vers en-cours absent : {r.relative_to(RACINE)}")
+80:    # 5. liens des index et des rapports de session
+  journal · 40 jour(s) · 117 session(s) · 1882 lien(s)
+  ❌ 1 anomalie(s) :
+     · lien vers l'index des sessions absent : journal/2026-11-03/README.md
+[exit 0]
+  ```
+
+- **bash** `{"command": "sed -n '55,75p' tools/verifie_journal.py", "description": "Read the sessions-index link check"}`
+
+  ```
+alertes.append(f"fichier de jour à la racine : {f.relative_to(RACINE)} "
+                           "(doit être dans un dossier)")
+
+    # 2/3. dossiers de jour et sections
+    jours = sorted(d for d in JOURNAL.iterdir() if d.is_dir() and DATE.match(d.name))
+    for d in jours:
+        index = d / "README.md"
+        if not index.exists():
+            alertes.append(f"jour sans README.md : {d.relative_to(RACINE)}")
+            continue
+        t = index.read_text(encoding="utf-8", errors="ignore")
+        if "## Sessions DSH" not in t:
+            alertes.append(f"section « Sessions DSH » absente : {index.relative_to(RACINE)}")
+        if "../README.md#sessions" not in t:
+            alertes.append(f"lien vers l'index des sessions absent : {index.relative_to(RACINE)}")
+
+    # 4. rapports de session
+    sessions = sorted((JOURNAL / "sessions").glob("*/rapport.md"))
+    for r in sessions:
+        t = r.read_text(encoding="utf-8", errors="ignore")
+        if "**Journaux :**" not in t:
+  ```
+
+- **read** `{"file_path": "journal/2026-11-03/README.md", "limit": 10}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-03/README.md</path>
+<type>file</type>
+<content>
+1: # 2026-11-03 — le bilan de 08 h
+2: 
+3: > **Nuit du 02/11 → 03/11.** Le hub tient le registre, la passe et l'état ; les quatre sessions
+4: > (N2, S, Pensée/B13, hub) restent productives jusqu'à 08 h. Ce fichier est le point de reprise
+5: > du matin : il est rempli au fil de la nuit, puis clos au bilan de 08 h.
+6: 
+7: ## 21 h 49 — l'état de la nuit
+8: 
+9: - **Passe complète** : 76 vertes / 5 rouges (4 connues + `porte-tableaux` sur la fiche N2 en cours) ; `porte-sessions` verte par le claim ; 82e `porte-ressources` à la prochaine passe.
+10: - **N2** : `r12-1024` sur GPU0 et `r12-mix-512-gpu1` sur GPU1 ; fiche fenêtre 8,7 Ko, JSON `n2-fenetre.json` attendu.
+
+(Showing lines 1-10 of 25. Use offset=11 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "journal/2026-11-03/README.md", "new_string": "# 2026-11-03 — le bilan de 08 h\n\n> **Nuit du 02/11 → 03/11.** Le hub tient le registre, la passe et l'état ; les quatre sessions\n> (N2, S, Pensée/B13, hub) restent productives jusqu'à 08 h. Ce fichier est le point de reprise\n> du matin … [481 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-03/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; echo \"--- status ---\"; git status --short | head -5", "description": "Verify the journal link fix"}`
+
+  ```
+journal · 40 jour(s) · 117 session(s) · 1884 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+--- status ---
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+  ```
+
+- **bash** `{"command": "git status --short journal/2026-11-03/README.md; export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add journal/2026-11-03/README.md; git commit -m \"NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS\" 2>&1 | tail -4", "description": "Commit the 03/11 jour … [35 caractères tronqués]`

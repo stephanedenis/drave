@@ -8281,3 +8281,108 @@ Another git process seems to be running in this repository, or the lock file may
 ⏵ J'ajoute la section « Sessions DSH » et le lien d'index au journal du 03/11, puis je réessaie le commit.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> journal/2026-11-03/README.md <<'EOF'\n\n## Sessions DSH\n\n| session | titre | début | durée | liens |\n|---|---|---|---|---|\n| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 5 … [1592 caractères tronqués]`
+
+  ```
+journal · 40 jour(s) · 117 session(s) · 1881 lien(s)
+  ❌ 1 anomalie(s) :
+     · lien vers l'index des sessions absent : journal/2026-11-03/README.md
+
+== lock ==
+ls: cannot access '.git/index.lock': No such file or directory
+[master 0bffb215] JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49, LES SESSIONS ET LE POINT DE REPRISE DE 08 H
+ 21 files changed, 408 insertions(+), 44 deletions(-)
+[commit 0]
+0bffb215 JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49, LES SESSIONS ET LE POINT DE REPRISE DE 08 H
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 9 : le journal du 03/11 est ouvert et committé (`0bffb215`) ; il reste un détail de lien d'index à corriger.
+
+- **Journal 03/11** : état de 21 h 49 (passe 76/5, N2 deux GPU, S, B13 140/140, hub), section « Sessions DSH », point de reprise de 08 h ; commit `0bffb215`.
+- **`verifie_journal`** : 40 jours, 117 sessions, 1 881 liens ; **1 anomalie** — le lien d'index des sessions n'est pas reconnu dans le nouveau fichier (format à ajuster au prochain round).
+- **En-cours** : 1 607 mots ; **T0 3 981/4 000** ; consigne de nuit dans le contrat.
+- **Registre** : N2 `r12-1024` + `r12-mix-512-gpu1`, S, B13 ; hub **sans claim** (veille) ; `--check` OK (IA 33 Gio).
+- **N2** : `n2-fenetre.json` toujours absent ; `porte-tableaux` rouge de passage ; rejeu après.
+- **Passe** : 76/5 intégrée ; prochaine **82**.
+
+**Reste** : corriger le lien d'index du journal ; JSON N2 → `porte-tableaux` ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 18
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 10/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 10 : je lis la règle exacte du lien d'index dans `verifie_journal.py` et le format du 02/11, puis je corrige.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== règle ==\" && grep -n -i 'index des sessions' tools/verifie_journal.py; echo; echo \"== fin 02/11 ==\" && tail -6 journal/2026-11-02/README.md; echo; echo \"== fin 03/11 ==\" && tail -4 journal/2026-11-03/README.md", "descr … [46 caractères tronqués]`
+
+  ```
+== règle ==
+10:     son jour (ou le journal), vers `en-cours.md` et vers l'index des sessions ;
+69:            alertes.append(f"lien vers l'index des sessions absent : {index.relative_to(RACINE)}")
+
+== fin 02/11 ==
+`LABYRINTHE_PORTE_FENETRE` (t % 3, `attendre`) : l'oracle Manhattan échoue (200 nœuds, 1 sonde),
+le 7B aussi (200/35, 97,3 s), le labyrinthe (200/2), l'aveugle (200/0), le hasard (200/12).
+Aucune politique ne passe : le problème est cassé, pas le 7B. Fiche
+[`pensee-porte-fenetre`](../../reports/rapport-pensee-porte-fenetre.md), JSON
+[`pensee-porte-fenetre.json`](../../reports/pensee-porte-fenetre.json).
+<!-- /notes -->
+
+== fin 03/11 ==
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Pensée — B13 et RSN | 2026-11-02 16:15 | 5,5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 6,2 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
+
+Index des sessions : [`journal/sessions/README.md`](../ses
+… [17 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '50,75p' tools/verifie_journal.py; echo; echo \"== lien 02/11 ==\" && grep -n 'sessions/README\\|Sessions DSH' journal/2026-11-02/README.md; echo; grep -n 'sessions/README' journal/2026-11-03/README.md", "description": "Read j … [24 caractères tronqués]`
+
+  ```
+# 1. pas de fichier de jour à la racine
+    for f in sorted(JOURNAL.glob("*.md")):
+        if f.name in ("README.md", "THEMES.md"):
+            continue
+        if re.match(r"^\d{4}-\d{2}-\d{2}", f.name):
+            alertes.append(f"fichier de jour à la racine : {f.relative_to(RACINE)} "
+                           "(doit être dans un dossier)")
+
+    # 2/3. dossiers de jour et sections
+    jours = sorted(d for d in JOURNAL.iterdir() if d.is_dir() and DATE.match(d.name))
+    for d in jours:
+        index = d / "README.md"
+        if not index.exists():
+            alertes.append(f"jour sans README.md : {d.relative_to(RACINE)}")
+            continue
+        t = index.read_text(encoding="utf-8", errors="ignore")
+        if "## Sessions DSH" not in t:
+            alertes.append(f"section « Sessions DSH » absente : {index.relative_to(RACINE)}")
+        if "../README.md#sessions" not in t:
+            alertes.append(f"lien vers l'index des sessions absent : {index.relative_to(RACINE)}")
+
+    # 4. rapports de session
+    sessions = sorted((JOURNAL / "sessions").glob("*/rapport.md"))
+    for r in sessions:
+        t = r.read_text(encoding="utf-8", errors="ignore")
+        if "**Journaux :*
+… [129 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La règle exige le lien littéral `../README.md#sessions` ; je corrige et je commite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-03/README.md'); t=p.read_text()\nold=\"Index des sessions : [`journal/sessions/README.md`](../sessions/README.md).\"\nassert t.count(old)==1\np.write_text(t.replace(ol … [552 caractères tronqués]`

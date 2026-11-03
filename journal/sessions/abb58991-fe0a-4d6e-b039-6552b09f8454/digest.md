@@ -13094,3 +13094,87 @@ EXIT=128
 … [1420 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Le hub ouvre le journal du 03/11 ; sa série continue. J'attends la fin et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 100; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'lock libre'; ps -eo pid,etime,cmd | grep -E \"git (commit|add|reset)\" | grep -v grep | head -2; git log -1 --format='%h %s' | head -1; git commit -m \"B13 — LA FENÊTRE : L'ORACLE ÉC … [177 caractères tronqués]`
+
+  ```
+21:52:51
+lock libre
+0bffb215 JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49, LES SESSIONS ET LE POINT DE REPRISE DE 08 H
+     · reports/pensee-porte-fenetre.json
+     · reports/rapport-pensee-porte-fenetre.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+EXIT=1
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hook exige la ligne d'état pour la fenêtre ; je l'ajoute dans l'en-cours du hub et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"porte sto\\|fenêtre\\|Fait\" docs/pilotage/en-cours.md | head -6; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nif 'fenêtre' not in t.split('## ')[1] if len(t.split('## '))>1  … [1442 caractères tronqués]`
+
+  ```
+45:- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %** propre (9,1 %) ; banque **200** phrases / **355** candidats ; **47 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
+60:- **Fait** : B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432** ; **gold neuronal** ;
+61:  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde) ; **fenêtre** — l'oracle/le 7B échouent (problème à réparer) ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
+64:  [fenêtre](../../reports/rapport-pensee-porte-fenetre.md),
+68:- **Prochaine action** : **gold 200+** ; **porte stochastique/fenêtre** ; **porte B13** attend S.
+72:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, la nuit : la fenêtre à 1 024
+True ok
+61:  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde) ; **fenêtre** — l'oracle/le 7B échouent (problème à réparer) ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
+64:  [fenêtre](../../reports/rapport-pensee-p
+… [420 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La ligne fenêtre est bien dans l'en-cours mais le hook refuse encore ; je lis sa règle exacte (« fait sans ligne d'état »)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -rn \"fait sans ligne\" tools/*.py tools/**/*.py 2>/dev/null | head -3; echo '---'; grep -rn \"fait sans ligne\" -B 8 -A 18 tools/verifie_etat_a_jour.py | head -40", "description": "Read state hook rule"}`
+
+  ```
+---
+  ```
+
+### 🤖 Assistant
+
+⏵ Le message ne vient pas de `verifie_etat_a_jour` ; je cherche le hook réel
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -rn \"fait sans ligne\" .git/hooks tools 2>/dev/null | head -3; echo '--- hooks ---'; ls .git/hooks/ | grep -v sample | head -6; head -30 .git/hooks/pre-commit 2>/dev/null", "description": "Find pre-commit hook rule"}`
+
+  ```
+.git/hooks/pre-commit:13:    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+tools/hooks/pre-commit:13:    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+--- hooks ---
+pre-commit
+#!/bin/sh
+# pre-commit — l'état accompagne le fait, le journal accompagne le code.
+#
+# Versionné dans tools/hooks/ et installé par tools/installe_hooks.sh : un hook qui
+# ne vit que dans .git/hooks ne survit ni au clone ni au nettoyage.
+set -u
+cd "$(git rev-parse --show-toplevel)" || exit 0
+
+# 1. Aucun fait (reports/, roadmap, backlog) ne se commite sans sa ligne d'état.
+#    C'est la garantie de fraîcheur de docs/pilotage/en-cours.md : elle ne dépend
+#    pas de la survie d'une session « principale », elle est vérifiée au commit.
+if ! python3 tools/verifie_etat_a_jour.py --index; then
+    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+    echo "     mets docs/pilotage/en-cours.md à jour, puis :"
+    echo "     git add docs/pilotage/en-cours.md"
+    exit 1
+fi
+
+# 2. Archive les traces de session DSH avant chaque commit : le journal doit
+#    accompagner le code, pas le suivre.
+python3 tools/archive_sessions.py --quiet >/dev/null || { echo "  ⛔ archivage des sessions en échec"; exit 1; }
+
+… [426 caractères tronqués]
+  ```
+

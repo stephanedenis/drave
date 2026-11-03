@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 15:33 |
 | Durée | 6.3 h |
-| Tours | 17 |
-| Messages | 227 |
-| Appels d'outils | 271 |
+| Tours | 18 |
+| Messages | 232 |
+| Appels d'outils | 274 |
 | Fichiers touchés | 13 |
-| Commandes | 206 |
+| Commandes | 209 |
 | Sous-agents | 0 |
-| Commits | 18 |
+| Commits | 19 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -57,6 +57,8 @@
 **Tour 16** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
 
 **Tour 17** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [697 caractères tronqués]
+
+**Tour 18** — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à … [698 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -790,7 +792,28 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 **Synthèse produite :**
 
-⏵ J'ajoute la section « Sessions DSH » et le lien d'index au journal du 03/11, puis je réessaie le commit.
+⏵ Round 9 : le journal du 03/11 est ouvert et committé (`0bffb215`) ; il reste un détail de lien d'index à corriger.
+
+- **Journal 03/11** : état de 21 h 49 (passe 76/5, N2 deux GPU, S, B13 140/140, hub), section « Sessions DSH », point de reprise de 08 h ; commit `0bffb215`.
+- **`verifie_journal`** : 40 jours, 117 sessions, 1 881 liens ; **1 anomalie** — le lien d'index des sessions n'est pas reconnu dans le nouveau fichier (format à ajuster au prochain round).
+- **En-cours** : 1 607 mots ; **T0 3 981/4 000** ; consigne de nuit dans le contrat.
+- **Registre** : N2 `r12-1024` + `r12-mix-512-gpu1`, S, B13 ; hub **sans claim** (veille) ; `--check` OK (IA 33 Gio).
+- **N2** : `n2-fenetre.json` toujours absent ; `porte-tableaux` rouge de passage ; rejeu après.
+- **Passe** : 76/5 intégrée ; prochaine **82**.
+
+**Reste** : corriger le lien d'index du journal ; JSON N2 → `porte-tableaux` ; veille ; **bilan 08 h**. Goal actif.
+
+### Tour 18 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [978 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Find exact journal index link rule
+- bash — Read journal link check rule
+- bash — Fix journal index link and commit
+
+**Synthèse produite :**
+
+⏵ La règle exige le lien littéral `../README.md#sessions` ; je corrige et je commite.
 
 ## 3. Travail accompli
 
@@ -854,7 +877,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 166 autres
+- … et 169 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1015,4 +1038,5 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE" -- docs/pilotage/en-cours.md; echo "[commit $?]"; echo; echo "== 
 - JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49 ET LE POINT DE REPRISE DE 08 H" -m "Quatre sessions, une passe 76/5 intégrée, un registre à quatre claims
 - JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49, LES SESSIONS ET LE POINT DE REPRISE DE 08 H" -m "Quatre sessions, une passe 76/5 intégrée, un registre à
+- JOURNAL — LE LIEN D'INDEX DU 03/11 PREND LA FORME ATTENDUE (../README.md#sessions)" -- journal/2026-11-03/README.md; echo "[commit $?]"; git log --oneline -1; e
 

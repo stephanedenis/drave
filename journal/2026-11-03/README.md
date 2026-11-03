@@ -3,6 +3,7 @@
 > **Nuit du 02/11 → 03/11.** Le hub tient le registre, la passe et l'état ; les quatre sessions
 > (N2, S, Pensée/B13, hub) restent productives jusqu'à 08 h. Ce fichier est le point de reprise
 > du matin : il est rempli au fil de la nuit, puis clos au bilan de 08 h.
+> Retour : [l'index du journal](../README.md) · [l'index des sessions](../README.md#sessions).
 
 ## 21 h 49 — l'état de la nuit
 
@@ -22,4 +23,4 @@
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Pensée — B13 et RSN | 2026-11-02 16:15 | 5,5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 6,2 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
 
-Index des sessions : [`journal/sessions/README.md`](../sessions/README.md).
+Index des sessions : [journal](../README.md#sessions).

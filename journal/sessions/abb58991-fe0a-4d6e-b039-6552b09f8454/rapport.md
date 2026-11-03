@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:15 |
 | Durée | 5.6 h |
 | Tours | 15 |
-| Messages | 523 |
-| Appels d'outils | 618 |
+| Messages | 530 |
+| Appels d'outils | 625 |
 | Fichiers touchés | 47 |
-| Commandes | 455 |
+| Commandes | 462 |
 | Sous-agents | 0 |
-| Commits | 29 |
+| Commits | 32 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -631,7 +631,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 
 ### Tour 15 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Add porte_fenetre prompt and test
 - write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_fenetre_drvm.py`
@@ -647,11 +647,11 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - bash — Wait, rebase en-cours on hub, commit window
 - bash — Clear stale lock and commit window
 - bash — Wait for hub git timeout and commit
-- … et 2 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Le hub ouvre le journal du 03/11 ; sa série continue. J'attends la fin et je commite
+⏵ Le hub a repris le lock pendant mon `git add` ; j'attends et je stage l'en-cours puis je commite
 
 ## 3. Travail accompli
 
@@ -749,7 +749,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 415 autres
+- … et 422 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -835,6 +835,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - **T12** `"sonde": Operateur("sonde", "neuronal", 5.0, sonde_p_sto, "la politique tente la porte (80 %)"),`
 - **T12** `884-    "sonde": Operateur("sonde", "neuronal", 5.0, sonde_p_sto, "la politique tente la porte (80 %)"),`
 - **T12** `return all(r[1] for r in res), (f"bruit 50–95 % : {sum(1 for r in res if r[1])}/{len(res)} "`
+- **T15** `45:- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mél`
 
 ## 5. Erreurs rencontrées
 
@@ -876,4 +877,7 @@ La suite : la **fenêtre temporelle** (`attendre`, `t % 3`), le **gold 200+**, l
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT2=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -6; echo "EXIT2=${PIPESTATUS[0]}"
 

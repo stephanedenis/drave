@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 5.6 h |
 | Tours | 16 |
-| Messages | 548 |
-| Appels d'outils | 565 |
-| Fichiers touchés | 23 |
-| Commandes | 377 |
+| Messages | 556 |
+| Appels d'outils | 573 |
+| Fichiers touchés | 24 |
+| Commandes | 383 |
 | Sous-agents | 0 |
-| Commits | 21 |
+| Commits | 22 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -495,10 +495,18 @@ La veille continue : je suis la PPL du run long (franchissement de 2,5 ?), le co
 
 ### Tour 16 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Check events and the long run
 - bash — Wait for the N2 commit or a new commit
+- bash — Check state after the 03/11 journal commit
+- bash — Inspect the 03/11 journal stub
+- bash — Inspect the journal link check
+- bash — Read the sessions-index link check
+- read
+- edit `journal/2026-11-03/README.md`
+- bash — Verify the journal link fix
+- bash — Commit the 03/11 journal link fix
 
 **Synthèse produite :**
 
@@ -533,6 +541,7 @@ La veille continue : je suis la PPL du run long (franchissement de 2,5 ?), le co
 | `docs/pilotage/references-non-regression.md` | 0 | 2 |
 | `docs/methode/portes.md` | 0 | 1 |
 | `work/veille/bilan-08h.md` | 1 | 0 |
+| `journal/2026-11-03/README.md` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -576,7 +585,7 @@ La veille continue : je suis la PPL du run long (franchissement de 2,5 ?), le co
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 337 autres
+- … et 343 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -732,4 +741,5 @@ La veille continue : je suis la PPL du run long (franchissement de 2,5 ?), le co
 - NUIT — B13 PASSE À 138/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (6 S FIXÉS ; T132/T133 RESTENT)" 2>&1 | tail -4
 - NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS" -m "references-non-regression : la passe du 02/11 19 h 32 (81 portes,
 - NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE" -m "La section hub d'en-cours disait encore la passe en cours ; elle est close (8
+- NUIT — LE JOURNAL DU 03/11 PORTE LE LIEN VERS L'INDEX DES SESSIONS" 2>&1 | tail -4
 
