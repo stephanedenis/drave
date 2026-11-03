@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 8.7 h |
 | Tours | 53 |
-| Messages | 807 |
-| Appels d'outils | 746 |
+| Messages | 810 |
+| Appels d'outils | 749 |
 | Fichiers touchés | 25 |
-| Commandes | 528 |
+| Commandes | 531 |
 | Sous-agents | 0 |
-| Commits | 39 |
+| Commits | 40 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1308,9 +1308,12 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 
 ### Tour 53 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Wait for the N2 commit
+- bash — Verify and log the T132 result
+- bash — Trim en-cours under T0
+- bash — Commit the T0 trim
 
 **Synthèse produite :**
 
@@ -1390,7 +1393,7 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 488 autres
+- … et 491 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1565,4 +1568,5 @@ La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
 - NUIT — LE GOLD RÉEL 432 DIT LA VÉRITÉ : LA CASCADE TIENT (0,9954 D'ACTE) MAIS LE VERDICT EST FALSE" -m "Sur le gold réel 432, la cascade donne POS 0,9065 / synt
 - NUIT — LA FICHE DU GOLD RÉEL 432 PASSE À TRUE AVEC LES SEUILS DU CONTRAT (0,90/0,45/0,55/0,50)" -m "Le JSON et l'état disaient true (seuils_contrat.gold_reel_43
 - NUIT — LA FICHE DU GOLD RÉEL DIT LE CACHE : 429 APPELS POUR 432 IDS, 0 REFUS, 0 VIDE" -m "La fiche gardait « 3 phrases vides » ; 612f8743 a mesuré 432 ids, 0 re
+- NUIT — T0 REVIENT SOUS 4 000 : LA LIGNE CACHE/VOISIN RESSERRÉE" -m "La ligne du gold réel + cache + voisin 2/5 dépassait T0 de 2 mots ; (seuils ...) → (…) et « 
 

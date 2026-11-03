@@ -6412,3 +6412,28 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-299", "timeout_ms": 2700000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2ac/rope2048-12.5k.pt 2>/dev/null && echo OK2048; tail -c 150 work/n2ac/rope2048-12.5k.log; tail -c 100 work/n2ac/mix1024-30k.log", "description": "Poll runs after sleep"}`
+
+  ```
+00:59:00
+� perte 0.9998 · PPL val 2.508 · 9224 s
+pas   9150 · perte 0.9969 · PPL val 2.502 · 9275 s
+pas   9200 · perte 0.9985 · PPL val 2.508 · 9326 s
+00 · perte 1.0590 · PPL val 2.552 · 3586 s
+pas   8050 · perte 1.1799 · PPL val 2.556 · 3608 s
+  ```
+
+- **bash** `{"command": "sleep 2400; echo ---; date '+%H:%M:%S'", "description": "Sleep 40 minutes"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-301]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-301", "timeout_ms": 2400000, "wait": true}`

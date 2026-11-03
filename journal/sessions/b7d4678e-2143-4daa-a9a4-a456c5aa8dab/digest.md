@@ -12646,3 +12646,40 @@ Continue working toward the objective in this same session. Treat the current wo
 ⏵ Round 48 : veille — attente du commit N2
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 38); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | … [105 caractères tronqués]`
+
+  ```
+01:00:34
+HEAD c41528b7
+c41528b7 L/B13 — LA BONNE RÉPONSE, PAS LE VOISIN : LIEN AUTO 2/5, CONTEXTUEL 5/5 (DISTRACTEURS r428–r432)
+6132480c ÉTAT — T0 4 000 : LIGNE DU CACHE RACCOURCIE
+ 713516    02:37:47 /home/stephane/gpu-env/bin/python w
+ 758133    01:06:32 /home/stephane/gpu-env/bin/python w
+ M reports/rapport-n2-fenetre.md
+ M reports/rapport-n2-r12-2048.md
+ M tools/pensee/store.py
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; echo \"--- T132/lien ---\"; grep -n \"T132\\|lien auto\\|contextuel\\|2/5\" docs/pilotage/en-cours.md | head -4; cat >> work/veille/nu … [442 caractères tronqués]`
+
+  ```
+revue de documentation · 577 fiche(s) · 662 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+--- T132/lien ---
+60:- **Fait** : B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432** ; **gold neuronal** —
+61:  cascade **0,9415 / 0,6130 / 0,7575 / 1,0** (180) ; **réel 432 : 0,9065/0,4598/0,5633/0,9954 (seuils 0,90/0,45/0,55/0,50 → true) ; 429 appels = cache ; voisin 2/5** ;
+log-ok
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nrepls=[\n (\"**réel 432 : 0,9065/0,4598/0,5633/0,9954 (seuils 0,90/0,45/0,55/0,50 → true) ; 429 appels = cache ; voisin 2/5**\",\n  \"**réel 432 : 0,9065/0,4598/0,5633/0,9954  … [398 caractères tronqués]`
+
+  ```
+trim ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "ls .git/index.lock 2>/dev/null || echo \"pas de lock\"; git status --short docs/pilotage/en-cours.md; git commit --only -m \"NUIT — T0 REVIENT SOUS 4 000 : LA LIGNE CACHE/VOISIN RESSERRÉE\" -m \"La ligne du gold réel + cache + voisin 2/5 dépassait T0 de 2 mots ; (seuils ...) → (…) et «  … [227 caractères tronqués]`

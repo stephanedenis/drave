@@ -21372,3 +21372,22 @@ en-cours ok
 ⏵ Round 150 : T0 à 4 005 après la ligne ; je raccourcis et je commite la fiche « bon voisin »
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; 429 appels = cache ; bon voisin 2/5 vs 5/5**'\nnew=' ; 429 appels = cache ; voisin 2/5 vs 5/5**'\nassert old in t\nt=t.replace(old, … [658 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4004 mots (budget 4 000)
+  574 fiches → reports/INDEX.md
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master c41528b7] L/B13 — LA BONNE RÉPONSE, PAS LE VOISIN : LIEN AUTO 2/5, CONTEXTUEL 5/5 (DISTRACTEURS r428–r432)
+ 17 files changed, 489 insertions(+), 60 deletions(-)
+ create mode 100644 reports/pensee-bonne-reponse-voisin.json
+ create mode 100644 reports/rapport-pensee-bonne-reponse-voisin.md
+EXIT=0
+c41528b7 L/B13 — LA BONNE RÉPONSE, PAS LE VOISIN : LIEN AUTO 2/5, CONTEXTUEL 5/5 (DISTRACTEURS r428–r432)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 150 : « la bonne réponse, pas le voisin » committé (`c41528b7`, 17 fichiers) ; il reste T0 à 4 004 (4 mots de trop) — je raccourcis et je commite l'état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 2/5 vs 5/5**'\nnew=' ; voisin 2/5**'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encoding='utf-8')\nprint('ok') … [368 caractères tronqués]`
