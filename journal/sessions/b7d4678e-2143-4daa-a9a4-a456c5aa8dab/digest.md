@@ -7273,3 +7273,151 @@ revue de documentation · 564 fiche(s) · 650 JSON · 119 doc(s) · 82 porte(s) 
   ```
 
 - **bash** `{"command": "export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add docs/pilotage/chantiers.md docs/pilotage/plan-travail.md; git diff --cached --stat; git commit -m \"NUIT — B13 PASSE À 138/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (6 S FIXÉS ; T132/T133 RESTENT)\" 2>&1 | tail - … [73 caractères tronqués]`
+
+  ```
+docs/pilotage/chantiers.md    | 8 ++++----
+ docs/pilotage/plan-travail.md | 5 ++---
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+  ✅ index : aucun fait stagé sans état
+[master 66826ed5] NUIT — B13 PASSE À 138/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (6 S FIXÉS ; T132/T133 RESTENT)
+ 23 files changed, 539 insertions(+), 86 deletions(-)
+  ```
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; cat work/veille/passe-finie.txt 2>/dev/null || echo \"pas encore\"; wc -l work/portes/passe-1102-19h32/registre.txt; tail -3 work/portes/passe-1102-19h32/registre.txt; echo \"--- rouges ---\"; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo \"--- HEAD - … [68 caractères tronqués]`
+
+  ```
+21:01:16
+pas encore
+66 work/portes/passe-1102-19h32/registre.txt
+porte-poids-creux 0 317
+porte-pont 0 89
+porte-prechargement 0 175
+--- rouges ---
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+--- HEAD ---
+66826ed5 NUIT — B13 PASSE À 138/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (6 S FIXÉS ; T132/T133 RESTENT)
+efdbbf40 B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 21 h 01 — B13 à 138/140 partout\n\n- **efdbbf40** (Pensée) : la porte B13 passe à **138/140** (les six attendus du sous-module S\n  `00d2a01` fixés ; T132/T133 restent le test périmé) ; en-cours et roadmap suivis.\n- **Alignement** (commit `66826 … [516 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 2 : B13 aligné à 138/140 partout, passe à 66/81, état vert
+
+**Progrès concrets**
+- **efdbbf40** (Pensée) : la porte **B13 passe à 138/140** — les six attendus du sous-module S `00d2a01` sont fixés ; T132/T133 restent le test périmé. `en-cours` et `roadmap` suivis.
+- **Alignement complet** (commit `66826ed5`) : `chantiers.md` (5 mentions) et `plan-travail.md` (2) passaient encore le **134/140** ; tout est à **138/140**, avec la bonne formule « 6 S fixés ; T132/T133 restent ». Revue, en-cours, T0 et porte stricte verts.
+- **Veille** : journal de bord `work/veille/nuit.md` tenu ; la porte sessions lit désormais le registre des ressources — un mandat long avec claim actif est un **avertissement** (« claim actif, heartbeat non exigé »), pas une erreur.
+
+**Où en est la nuit**
+- **Passe complète** : **66/81**, bloquée sur `porte-profondeur-rou…` ; seules rouges `porte-homeostasie` (environnementale), `porte-indice` (1 027 s) et `porte-melange` (123 s) — **aucune nouvelle rouge**. Le veilleur `bash-266` attend la fin.
+- **S** : `69bfddba` — **54/55 types, 131/131 rôles, gold 55** (SHA `76accf9d`).
+- **N2** : R1.2-1024 fini (**PPL val 3,0529**), runs suivants sur `gpu0` ; claim actif.
+- **Pensée** : porte minute **26 nœuds**, porte mobile **test faible** ; B13 **138/140**.
+- **Ressources** : claims N2 `gpu0`, hub `gpu1`+portes, S/Pensée `cpu1` ; `cpu1` 16/16, `ram` 92/109 ; avertissements connus (`nvme_raid` 33 Gio, NUMA du claim hub).
+
+**État vérifié** : revue ✅ **564 fiches / 650 JSON / 82 portes**, en-cours ✅, T0 ✅, T1 ✅, stricte ✅ (un seul avertissement de périmètres proches), journal ✅. La veille continue : j'intégrerai le verdict de la passe dès sa fin, puis les tâches légères (références, INDEX, archives, registre) jusqu'à 8 h.
+
+
+## Tour 8
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 3/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 3 : je vérifie la fin de la passe et l’état des sessions
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; cat work/veille/passe-finie.txt 2>/dev/null || echo \"pas encore\"; wc -l work/portes/passe-1102-19h32/registre.txt 2>/dev/null; tail -4 work/portes/passe-1102-19h32/registre.txt 2>/dev/null; echo \"--- rouges ---\"; awk '$2 != 0' work/portes/passe-1102-19h32/registr … [116 caractères tronqués]`
+
+  ```
+21:01:40
+pas encore
+66 work/portes/passe-1102-19h32/registre.txt
+porte-peripherie 0 14
+porte-poids-creux 0 317
+porte-pont 0 89
+porte-prechargement 0 175
+--- rouges ---
+porte-homeostasie 2 0
+porte-indice 1 1027
+porte-melange 1 123
+--- HEAD ---
+66826ed5 NUIT — B13 PASSE À 138/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (6 S FIXÉS ; T132/T133 RESTENT)
+efdbbf40 B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT
+b1c0bcda PILOTAGE — UN MANDAT LONG AVEC UN CLAIM ACTIF N'EST PAS PÉRIMÉ ; LA PORTE SESSIONS LIT LE REGISTRE
+69bfddba S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55 (SHA 76accf9d)
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args --sort=-pcpu | grep -E \"toutes-les-portes|porte-|entrainer|llama-server|qualifier\" | grep -v grep | head -6 | cut -c1-120; echo \"--- ressources ---\"; python3 tools/ressources.py --status 2>&1 | grep -A7 \"Réservations\"", "description": "Check running jobs … [13 caractères tronqués]`
+
+  ```
+493592       07:09  965 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/porte-profondeur-rou
+ 110066    03:33:40  517 llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 1
+ 490049       07:32  100 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_mix/propre/tra
+ 383833       45:02  100 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre/trai
+ 164366    01:29:48  0.0 bash tools/toutes-les-portes.sh
+ 164359    01:29:48  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=1,0 JOURNAUX=w
+--- ressources ---
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 536cd5d6 / portes : gpu1=exclusive, cpu1=8, ram=8 (prio 1, 110 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+  ```
+
+- **bash** `{"command": "for f in rapport-b13-porte-138 rapport-s-corpus-reel pensee-porte-mobile rapport-pensee-porte-minute; do echo -n \"$f INDEX:\"; grep -c \"$f\" reports/INDEX.md; echo -n \" README:\"; grep -c \"$f\" reports/README.md; done; echo \"--- fichiers ---\"; ls reports/ | grep -E \"b13-porte-138 … [193 caractères tronqués]`
+
+  ```
+rapport-b13-porte-138 INDEX:1
+ README:1
+rapport-s-corpus-reel INDEX:1
+ README:0
+pensee-porte-mobile INDEX:1
+ README:0
+rapport-pensee-porte-minute INDEX:1
+ README:0
+--- fichiers ---
+b13-porte-138.json
+pensee-porte-mobile.json
+rapport-b13-porte-134.md
+rapport-b13-porte-138.md
+rapport-pensee-porte-mobile.md
+--- git status INDEX ---
+  ```
+
+- **bash** `{"command": "nvidia-smi --query-gpu=index,utilization.gpu,memory.used,temperature.gpu,power.draw,clocks_throttle_reasons.active --format=csv,noheader 2>/dev/null; echo \"--- charge ---\"; uptime; echo \"--- disque ---\"; df -h /home/stephane/IA / 2>/dev/null | tail -2", "description": "Check GPU the … [21 caractères tronqués]`
+
+  ```
+0, 99 %, 6084 MiB, 86, 176.51 W, 0x0000000000000004
+1, 99 %, 5398 MiB, 76, 215.30 W, 0x0000000000000004
+--- charge ---
+ 21:01:59  up  5:55,  2 users,  load average: 17,09, 18,44, 16,39
+--- disque ---
+/dev/md0        938G  895G   34G  97% /home/stephane/IA
+/dev/nvme2n1p2  828G  121G  706G  15% /
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 21 h 02 — ressources et thermique\n\n- **GPU0** : 99 %, 86 °C, 176,5 W (plafond 180 W, throttle `0x4` = puissance) ; **GPU1** : 99 %,\n  76 °C, 215 W. Deux runs N2 (mélange + `seq 1024`), le hub (portes), `llama-server` et `drave`\n  se partagent … [370 caractères tronqués]`
+
+  ```
+ok
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ⚠ 536cd5d6 : GPU sur NUMA 0 avec des fils sur cpu1
+  ```
+
+- **job_output** `{"job_id": "bash-266", "timeout_ms": 600000, "wait": true}`

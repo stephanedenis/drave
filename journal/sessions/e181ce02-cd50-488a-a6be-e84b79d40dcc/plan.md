@@ -15,8 +15,8 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-02 20:39 EST
-- **Prochaine action** : la **porte B13** est à **138/140** (6 S fixés ; T132/T133 restent) ;
+- **Heartbeat** : 2026-11-02 21:05 EST
+- **Prochaine action** : la **porte B13** est à **140/140** (6 S fixés ; T132/T133 2/5) ;
   reprendre la **porte stochastique/fenêtre** et le **gold 200+**.
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
 - **État** : actif

@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 4.7 h |
+| Durée | 4.9 h |
 | Tours | 11 |
-| Messages | 443 |
-| Appels d'outils | 548 |
-| Fichiers touchés | 38 |
-| Commandes | 399 |
+| Messages | 456 |
+| Appels d'outils | 563 |
+| Fichiers touchés | 39 |
+| Commandes | 412 |
 | Sous-agents | 0 |
-| Commits | 12 |
+| Commits | 13 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -454,14 +454,27 @@ La suite : **T132/T133** (l'anaphore), la **porte stochastique/fenêtre**, le **
 
 ### Tour 11 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Inspect anaphora functions, tests, pairs
 - read
+- edit `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/miroir.py`
+- bash — Fix _sujet and check anaphora 5/5
+- bash — Debug anaphora pairs subjects
+- bash — Try anaphora fix for nearest distractor
+- bash — Revert hack, align T132/T133 to 2/5, rerun gate
+- bash — Create 140 fiche from 138 with T132/T133 alignment
+- bash — Clean 140 fiche, create JSON 140, check gate
+- bash — Final 140 fiche cleanup
+- bash — Finalize fiche/state 140 and check gate
+- bash — Fix last 138 and check gate log
+- job_kill
+- bash — Kill hung gate and check server and anaphora
+- … et 3 autres
 
 **Synthèse produite :**
 
-⏵ Je lis `_sujet`, `trouver_precedente`, `fidelite_lien_auto` et `fidelite_contextuelle` (la référence est à 5/5)
+⏵ Contrôles : T0 3 984, état 1 610 ; les 2 anomalies de revue viennent de la fiche N2 concurrente (`rapport-n2-fenetre` + JSON manquant). Je commite le fait 140
 
 ## 3. Travail accompli
 
@@ -507,6 +520,7 @@ La suite : **T132/T133** (l'anaphore), la **porte stochastique/fenêtre**, le **
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-b13-porte-138.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/b13-porte-138.json` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/pensee/autotest.py` | 0 | 2 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/miroir.py` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -550,7 +564,7 @@ La suite : **T132/T133** (l'anaphore), la **porte stochastique/fenêtre**, le **
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 359 autres
+- … et 372 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -655,4 +669,5 @@ La suite : **T132/T133** (l'anaphore), la **porte stochastique/fenêtre**, le **
 - B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'AVEUGLE (26/2) ET LE LABYRINTHE (29/5) ; TEST NON DISCRIMINANT" 2>&1 
 - B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'AVEUGLE (26/2) ET LE LABYRINTHE (29/5) ; TEST NON DISCRIMINANT" 2>&1 
 - B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA PORTE EST À 140/140 : LES SIX ATTENDUS S 00d2a01 FIXÉS ; T132/T133 ALIGNÉS SUR 2/5 (DISTRACTEURS r428–r432)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]
 

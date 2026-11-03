@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 4.8 h |
+| Durée | 4.9 h |
 | Tours | 2 |
-| Messages | 279 |
-| Appels d'outils | 286 |
-| Fichiers touchés | 20 |
-| Commandes | 211 |
+| Messages | 287 |
+| Appels d'outils | 294 |
+| Fichiers touchés | 22 |
+| Commandes | 216 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -84,7 +84,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*46 appels d'outils.* Actions notables :
+*54 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -100,11 +100,11 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Condense section and fix counters
 - bash — Trim header duplication and recheck gates
 - bash — Read required session fields
-- … et 23 autres
+- … et 30 autres
 
 **Synthèse produite :**
 
-⏵ Évaluation du modèle de production affiné à 512 (octets constants)
+⏵ Agrégateur JSON de la fiche fenêtre
 
 ## 3. Travail accompli
 
@@ -132,6 +132,8 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 | `/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_production.sh` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/work/n2ac/eval_production.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_2048.sh` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-n2-fenetre.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/work/n2ac/agrege_fenetre.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -175,7 +177,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 171 autres
+- … et 176 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -275,6 +277,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T2** `[still running after 60000ms; moved to background job bash-209]`
 - **T2** `[still running after 60000ms; moved to background job bash-210]`
 - **T2** `[still running after 60000ms; moved to background job bash-211]`
+- **T2** `[still running after 60000ms; moved to background job bash-216]`
 
 ## 5. Erreurs rencontrées
 

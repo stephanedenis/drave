@@ -4944,3 +4944,143 @@ pas   5400 · perte 1.1373 · PPL val 2.744 · 2484 s
 ⏵ Évaluation du modèle de production affiné à 512 (octets constants)
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_production.py work/n2ac/mix512-15k.pt --rope --longueurs 128,256,512,1000,2000 --sortie work/n2ac/eval-mix512-15k.json 2>&1 | tail -24", "description": "Evaluate production model  … [17 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-211]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-211", "timeout_ms": 300000, "wait": true}`
+
+  ```
+"params": 34301224,
+ "positions": "rope",
+ "ppl": {
+  "val_fr": {
+   "128": 3.1588,
+   "256": 3.043,
+   "512": 2.9096,
+   "1000": 2.8018,
+   "2000": 2.7607
+  },
+  "val_big": {
+   "128": 2.999,
+   "256": 2.8672,
+   "512": 2.7514,
+   "1000": 2.6697,
+   "2000": 2.6495
+  }
+ },
+ "permute_fr": 193.4335,
+ "litterature": 5.5247,
+ "anglais": 7.0507,
+ "wikitext2": 7.9023,
+ "corpus_propre": 9.2894
+}
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle « même texte » sur le modèle de production affiné
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_fenetre.py work/n2ac/mix512-15k.pt --rope --contextes 256,512,1000,2000 --sortie work/n2ac/queue-mix512.json 2>&1 | tail -5", "description": "Same-text control on production fine- … [6 caractères tronqués]`
+
+  ```
+contexte  256 · PPL des 128 derniers octets 2.7321
+  contexte  512 · PPL des 128 derniers octets 2.6357
+  contexte 1000 · PPL des 128 derniers octets 2.6268
+  contexte 2000 · PPL des 128 derniers octets 2.6275
+{"fichier": "mix512-15k.pt", "positions": "rope", "cible": 128, "contextes": [256, 512, 1000, 2000], "ppl": {"256": 2.7321, "512": 2.6357, "1000": 2.6268, "2000": 2.6275}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Miroir de copie sur les modèles à fenêtre entraînée
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for m in \"work/n2ac/rope1024-2.5k.pt\" \"work/n2ac/mix512-15k.pt\"; do echo \"=== $m ===\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/mirroir_copie.py $m --rope --sortie work/n2ac/miroir-$(basename $m .pt).json 2>&1 | tail -9 … [63 caractères tronqués]`
+
+  ```
+=== work/n2ac/rope1024-2.5k.pt ===
+  d=  16 · justesse 0.0078
+  d=  64 · justesse 0.0000
+  d= 128 · justesse 0.0000
+  d= 200 · justesse 0.0000
+  d= 240 · justesse 0.0000
+  d= 255 · justesse 0.0000
+  d= 300 · justesse 0.0156
+  d= 400 · justesse 0.0000
+{"fichier": "rope1024-2.5k.pt", "positions": "rope", "fenetre": 1024, "contexte": 512, "code": "K7Q2M9XA4B1Z8W3C", "distances": {"16": 0.0078, "64": 0.0, "128": 0.0, "200": 0.0, "240": 0.0, "255": 0.0, "300": 0.0156, "400": 0.0}}
+=== work/n2ac/mix512-15k.pt ===
+  d=  16 · justesse 0.0078
+  d=  64 · justesse 0.0078
+  d= 128 · justesse 0.0000
+  d= 200 · justesse 0.0000
+  d= 240 · justesse 0.0000
+  d= 255 · justesse 0.0078
+  d= 300 · justesse 0.0000
+  d= 400 · justesse 0.0000
+{"fichier": "mix512-15k.pt", "positions": "rope", "fenetre": 512, "contexte": 512, "code": "K7Q2M9XA4B1Z8W3C", "distances": {"16": 0.0078, "64": 0.0078, "128": 0.0, "200": 0.0, "240": 0.0, "255": 0.0078, "300": 0.0, "400": 0.0}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Compléments : N2.ac et 200 k à 2 000 octets
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for m in \"work/n2w/mix-60k.pt\" \"work/n2ac/mix-200k.pt\"; do echo \"=== $m ===\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py $m --longueurs 2000 --sortie /tmp/x.json 2>&1 | tail -2; done", "description": "Me … [47 caractères tronqués]`
+
+  ```
+=== work/n2w/mix-60k.pt ===
+  L2000 : 12.4065
+{"fichier": "mix-60k.pt", "val": "data/wiki_fr/propre", "positions": "absolues", "L2000": 12.4065}
+=== work/n2ac/mix-200k.pt ===
+  L2000 : 12.8723
+{"fichier": "mix-200k.pt", "val": "data/wiki_fr/propre", "positions": "absolues", "L2000": 12.8723}
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche : la loi de la fenêtre et la production
+
+- **write** `{"content": "# N2/R1 — La fenêtre entraînée, de 128 à 1 024 : elle gagne où elle sert, et elle bat 200 000 pas\n\n> **Lignes de roadmap** : **R1** (la fenêtre native) et **N2** (le modèle de production) ·\n> **Date** : 2026-11-02/03 · **Verdict** : à **octets constants** (20,5 Mo vus), entraîner sur … [8351 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-n2-fenetre.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_production.out; tail -1 work/n2ac/mix1024-7.5k.log; echo \"--- 1024-20k ---\"; tail -1 work/n2ac/rope1024-20k.log", "description": "Check pending runs"}`
+
+  ```
+21:05:09
+mix512-15k fini 20:54:07
+pas    950 · perte 1.1246 · PPL val 2.845 · 412 s
+--- 1024-20k ---
+pas   6100 · perte 1.0259 · PPL val 2.720 · 2851 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Agrégateur JSON de la fiche fenêtre
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"agrege_fenetre.py — assemble `reports/n2-fenetre.json` depuis les sorties de work/n2ac/.\n\nUsage :\n  python3 work/n2ac/agrege_fenetre.py [--sortie reports/n2-fenetre.json]\n\"\"\"\nfrom __future__ import annotations\n\nimport argparse\nimport json\nimport … [2743 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/agrege_fenetre.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_production.out; tail -1 work/n2ac/mix1024-7.5k.log; echo \"--- 1024-20k ---\"; tail -1 work/n2ac/rope1024-20k.log; echo \"--- portes ---\"; ps -eo pid --no-headers,cmd | grep -c \"[p]orte-\"", "descri … [39 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-216]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-216", "timeout_ms": 1500000, "wait": true}`

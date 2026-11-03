@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 4.7 h |
-| Tours | 7 |
-| Messages | 440 |
-| Appels d'outils | 470 |
+| Durée | 4.8 h |
+| Tours | 8 |
+| Messages | 449 |
+| Appels d'outils | 478 |
 | Fichiers touchés | 22 |
-| Commandes | 293 |
+| Commandes | 300 |
 | Sous-agents | 0 |
 | Commits | 19 |
 | Compactages de contexte | 0 |
@@ -39,6 +39,8 @@
 **Tour 6** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
 
 **Tour 7** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
+
+**Tour 8** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -231,7 +233,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 7 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Check gate pass completion and commits
 - bash — Check running jobs and claims
@@ -243,10 +245,41 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - bash — Bulk update stale B13 counts
 - bash — Verify state after B13 count fix
 - bash — Commit the B13 count alignment
+- bash — Check pass completion
+- bash — Log the B13 alignment checkpoint
 
 **Synthèse produite :**
 
-⏵ Round 2 : je relève l’état de la passe, des sessions et du registre
+⏵ Round 2 : B13 aligné à 138/140 partout, passe à 66/81, état vert
+
+**Progrès concrets**
+- **efdbbf40** (Pensée) : la porte **B13 passe à 138/140** — les six attendus du sous-module S `00d2a01` sont fixés ; T132/T133 restent le test périmé. `en-cours` et `roadmap` suivis.
+- **Alignement complet** (commit `66826ed5`) : `chantiers.md` (5 mentions) et `plan-travail.md` (2) passaient encore le **134/140** ; tout est à **138/140**, avec la bonne formule « 6 S fixés ; T132/T133 restent ». Revue, en-cours, T0 et porte stricte verts.
+- **Veille** : journal de bord `work/veille/nuit.md` tenu ; la porte sessions lit désormais le registre des ressources — un mandat long avec claim actif est un **avertissement** (« claim actif, heartbeat non exigé »), pas une erreur.
+
+**Où en est la nuit**
+- **Passe complète** : **66/81**, bloquée sur `porte-profondeur-rou…` ; seules rouges `porte-homeostasie` (environnementale), `porte-indice` (1 027 s) et `porte-melange` (123 s) — **aucune nouvelle rouge**. Le veilleur `bash-266` attend la fin.
+- **S** : `69bfddba` — **54/55 types, 131/131 rôles, gold 55** (SHA `76accf9d`).
+- **N2** : R1.2-1024 fini (**PPL val 3,0529**), runs suivants sur `gpu0` ; claim actif.
+- **Pensée** : porte minute **26 nœuds**, porte mobile **test faible** ; B13 **138/140**.
+- **Ressources** : claims N2 `gpu0`, hub `gpu1`+portes, S/Pensée `cpu1` ; `cpu1` 16/16, `ram` 92/109 ; avertissements connus (`nvme_raid` 33 Gio, NUMA du claim hub).
+
+**État vérifié** : revue ✅ **564 fiches / 650 JSON / 82 portes**, en-cours ✅, T0 ✅, T1 ✅, stricte ✅ (un seul avertissement de périmètres proches), journal ✅. La veille continue : j'intégrerai le verdict de la passe dès sa fin, puis les tâches légères (références, INDEX, archives, registre) jusqu'à 8 h.
+
+### Tour 8 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check pass completion and commits
+- bash — Check running jobs and claims
+- bash — Check index coverage of new reports
+- bash — Check GPU thermal, load and disk
+- bash — Log resource and thermal checkpoint
+- job_output
+
+**Synthèse produite :**
+
+⏵ Round 3 : je vérifie la fin de la passe et l’état des sessions
 
 ## 3. Travail accompli
 
@@ -319,7 +352,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 253 autres
+- … et 260 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -428,6 +461,10 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T5** `19:> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé`
 - **T5** `> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé`
 - **T6** `# 1 951 octets à 97,7 % d'activité, 1 096 à 50 % — mesuré). Un contrôle au démarrage ne`
+- **T8** `0, 99 %, 6084 MiB, 86, 176.51 W, 0x0000000000000004`
+- **T8** `1, 99 %, 5398 MiB, 76, 215.30 W, 0x0000000000000004`
+- **T8** `/dev/md0        938G  895G   34G  97% /home/stephane/IA`
+- **T8** `/dev/nvme2n1p2  828G  121G  706G  15% /`
 
 ## 5. Erreurs rencontrées
 

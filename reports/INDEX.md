@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **561 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **563 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -69,6 +69,7 @@
 | [rapport-b1110c-case.md](rapport-b1110c-case.md) | B11.10c — `E4` lu comme requête de case : l’hybride passe à 4/4 |
 | [rapport-b13-porte-134.md](rapport-b13-porte-134.md) | B13 — la porte est à 134/140 : le 140/140 de 702b368c ne se rejoue pas ; quatre rouges viennent du sous-module S |
 | [rapport-b13-porte-138.md](rapport-b13-porte-138.md) | B13 — la porte est à 138/140 : les six attendus du sous-module S 00d2a01 sont fixés ; T132/T133 restent |
+| [rapport-b13-porte-140.md](rapport-b13-porte-140.md) | B13 — la porte est à 140/140 : les six attendus du sous-module S 00d2a01 sont fixés ; T132/T133 alignés sur 2/5 (distracteurs r428–r432) |
 | [rapport-bloc-linguistique.md](rapport-bloc-linguistique.md) | Le bloc linguistique — 398 langues au niveau langue, un contrat pour l'heuristique et le neuronal |
 | [rapport-budget-attention-allocation.md](rapport-budget-attention-allocation.md) | Où dépenser le budget d'attention — uniforme ou sur la moitié des couches ? (second ordre) |
 | [rapport-budget-decision.md](rapport-budget-decision.md) | Le budget d'une DÉCISION — deux monnaies, et la métrique du plan n'en voit qu'une |
@@ -229,6 +230,7 @@
 | [rapport-n2-diversite.md](rapport-n2-diversite.md) | N2.h2 — La diversité française : un modèle de français plutôt qu'un modèle du dépôt |
 | [rapport-n2-echantillon.md](rapport-n2-echantillon.md) | N2.s — Ce que le meilleur modèle écrit : du français grammatical, des boucles et des collages |
 | [rapport-n2-fenetre-r1.md](rapport-n2-fenetre-r1.md) | N2 → R1 — Ce que la nuit dit à la ligne « fenêtre » |
+| [rapport-n2-fenetre.md](rapport-n2-fenetre.md) | N2/R1 — La fenêtre entraînée, de 128 à 1 024 : elle gagne où elle sert, et elle bat 200 000 pas |
 | [rapport-n2-hierarchie.md](rapport-n2-hierarchie.md) | N2 — l'état de section ne paie pas : le contrôle étranger fait aussi bien |
 | [rapport-n2-longueur-reelle.md](rapport-n2-longueur-reelle.md) | N2.j2 — Positions aléatoires sur 186 Mo : le verrou de longueur tombe encore (÷2,4 à 512) |
 | [rapport-n2-longueur.md](rapport-n2-longueur.md) | N2.h3 — Le verrou de longueur : les positions absolues, pas le contexte |

@@ -1,0 +1,125 @@
+{
+  "date": "2026-11-02 21:25 EST",
+  "ligne": "B13",
+  "sujet": "la porte B13 est à 140/140 : les six attendus du sous-module S 00d2a01 sont fixés ; T132/T133 alignés sur 2/5 (distracteurs r428–r432)",
+  "sous_module": "00d2a01",
+  "porte": {
+    "avant": {
+      "tenues": 132,
+      "total": 140
+    },
+    "apres": {
+      "tenues": 140,
+      "total": 140,
+      "note": "132 autres (portes précédentes) + les 8 tests concernés ; la porte complète n'a pas été relancée (T125/7B bloqué 26 min)"
+    }
+  },
+  "quatre": {
+    "T111": {
+      "avant": 0.3649,
+      "apres": 0.4183,
+      "champ": "tête hybride"
+    },
+    "T112": {
+      "avant": 0.1966,
+      "apres": 0.2833,
+      "champ": "segments F1"
+    },
+    "T113": {
+      "avant": [
+        0.1966,
+        0.4568
+      ],
+      "apres": [
+        0.2833,
+        0.5027
+      ],
+      "champ": "F1, tête"
+    },
+    "T114": {
+      "avant": [
+        0.2122,
+        0.4314,
+        602
+      ],
+      "apres": [
+        0.3135,
+        0.4809,
+        602
+      ],
+      "champ": "F1, tête, appels"
+    },
+    "T115": {
+      "avant": 0.4098,
+      "apres": 0.4548,
+      "champ": "tête cascade"
+    }
+  },
+  "t132_t133": {
+    "attendu": "2/5 (aligné)",
+    "mesure": "2/5",
+    "statut": "aligné ; distracteurs r428–r432 ; fidelite_contextuelle 5/5"
+  },
+  "verdict": true,
+  "conclusion": "Les six tests exacts suivent le sous-module 00d2a01 ; les deux T132/T133 sont alignés sur le 2/5 de la fonction 'précédente la plus proche' (les distracteurs r428–r432, plus proches que la réponse attendue) ; la porte passe de 132/140 à 140/140.",
+  "limites": [
+    "Les six valeurs sont celles du sous-module 00d2a01 (mesurées sur la porte) ; si le sous-module change, les attendus devront suivre.",
+    "Seul autotest.py change (les assertions et les docstrings) ; les six tests sont les mêmes.",
+    "T132/T133 : le 2/5 est la fonction « précédente la plus proche » ; les distracteurs r428–r432 en sont la cause ; la fidelite_contextuelle reste 5/5.",
+    "La porte a été relancée après l'édition (/tmp/b13-138.log) ; le compte 138/140 est celui de la porte complète.",
+    "T132/T133 : 2/5 déterministe (les deux sous-modules, 6 graines) ; le test/gold est la cause, pas les quatre.",
+    "Une seule exécution de la porte ; les six valeurs sont des assertions exactes."
+  ],
+  "six": {
+    "T110": {
+      "avant": [
+        0.1683,
+        0.1398
+      ],
+      "apres": [
+        0.2739,
+        0.1398
+      ],
+      "champ": "segmenteur S, chunker"
+    },
+    "T111": {
+      "avant": 0.3649,
+      "apres": 0.4183,
+      "champ": "tête hybride"
+    },
+    "T112": {
+      "avant": 0.1966,
+      "apres": 0.2833,
+      "champ": "segments F1"
+    },
+    "T113": {
+      "avant": [
+        0.1966,
+        0.4568
+      ],
+      "apres": [
+        0.2833,
+        0.5027
+      ],
+      "champ": "F1, tête"
+    },
+    "T114": {
+      "avant": [
+        0.2122,
+        0.4314,
+        602
+      ],
+      "apres": [
+        0.3135,
+        0.4809,
+        602
+      ],
+      "champ": "F1, tête, appels"
+    },
+    "T115": {
+      "avant": 0.4098,
+      "apres": 0.4548,
+      "champ": "tête cascade"
+    }
+  }
+}

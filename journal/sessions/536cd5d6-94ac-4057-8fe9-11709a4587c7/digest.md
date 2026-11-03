@@ -6804,3 +6804,42 @@ Updated todo list: 2 pending, 2 in progress, 3 completed.
   ```
 
 - **job_output** `{"job_id": "bash-172", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je teste la 82e porte `porte-ressources` (en cours d'ajout par l'autre session), puis j'attends la fin de la passe.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== porte-ressources ==\" && timeout 120 bash tools/porte-ressources.sh 2>&1 | tail -12; echo \"[porte ${PIPESTATUS[0]}]\"; echo; echo \"== passe ==\" && tail -5 work/portes/passe-1102-19h32/registre.txt 2>/dev/null; echo; echo … [170 caractères tronqués]`
+
+  ```
+== porte-ressources ==
+=== PORTE RESSOURCES — REGISTRE, CLAIMS, COHÉRENCE ===
+  ✅ autotest : 9 cas (claim, conflit, file, admission, check)
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ⚠ 536cd5d6 : GPU sur NUMA 0 avec des fils sur cpu1
+  ✅ registre cohérent ; les avertissements de stockage/NUMA sont affichés, pas fatals
+✅ porte ressources verte : autotest 9 cas et registre cohérent
+[porte 0]
+
+== passe ==
+porte-pannes 0 47
+porte-peripherie 0 14
+porte-poids-creux 0 317
+porte-pont 0 89
+porte-prechargement 0 175
+
+== status porte-ressources ==
+?? tools/porte-ressources.sh
+  ```
+
+### 🤖 Assistant
+
+⏵ La 82e porte-ressources est verte ; j'attends la fin de la passe pour intégrer son verdict.
+
+- **job_output** `{"job_id": "bash-172", "timeout_ms": 600000, "wait": true}`
