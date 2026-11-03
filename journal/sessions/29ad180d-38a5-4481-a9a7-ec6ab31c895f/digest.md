@@ -8711,3 +8711,23 @@ shared re-appliqué sur le HEAD c13efaac
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree \"$H\" && GIT_INDEX_FILE=/tmp/index.s git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/plan-travail.md reports/INDEX.md re … [1165 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md             |   2 +-
+ docs/pilotage/plan-travail.md         |   4 +-
+ docs/pilotage/roadmap.md              |   2 +-
+ reports/INDEX.md                      |   1 +
+ reports/rapport-s-analyseur-roles.md  |   5 +-
+ reports/rapport-s-banque-partielle.md | 110 ++++++++++++++++++++++++++++++++++
+ reports/rapport-s-corpus-reel.md      |  16 ++---
+ reports/rapport-s-limites-v6.md       |  78 ++++++++++++++++++++++++
+ reports/rapport-s-traductions.md      |   2 +-
+ tools/structures                      |   2 +-
+ 10 files changed, 206 insertions(+), 16 deletions(-)
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at c7c310bbde4ede17a4f55d926897239c029333fb but expected c13efaaca2ae43d0fb6ffd6e88d91c222060c5a0
+c7c310bb PILOTAGE — L'ALLOCATION DE LA NUIT EST PRÉ-ENREGISTRÉE DANS LE REGISTRE
+c13efaac PILOTAGE — LE PLAN DE LA NUIT (03/11 → 04/11) EST ÉCRIT, LES CONFLITS SONT NOMMÉS
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1; for f in docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/plan-travail.md reports/INDEX.md; do git show HEAD:$f > $f; done; python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-co … [3188 caractères tronqués]`

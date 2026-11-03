@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (23)
+## Commits du jour (24)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -31,6 +31,7 @@
 | 14:07 | `87e2e5a9` | L/B13 — LE LIEN SANS LA PAIRE CROISÉE : 5/5 ARRIÈRE + 4/4 AVANT = 9/9 (1,0) | `en-cours.md`, `README.md`, `attention.md` (+15) |
 | 14:10 | `0f9164b4` | L/B13 — LE LIEN APPRIS : PERCEPTRON DE RANG LOO 9/9, HASARD 0,10, SURFACE SEULE 2/9 | `en-cours.md`, `README.md`, `distribue.md` (+8) |
 | 16:34 | `43637b48` | L — LE CONTRAT DE SUBSTITUTION DU BLOC LANGUE EST ÉCRIT (9 NIVEAUX, 4 MODES, REFUS, TRACE, PORTE) | `en-cours.md`, `roadmap.md`, `README.md` (+23) |
+| 18:45 | `c7c310bb` | PILOTAGE — L'ALLOCATION DE LA NUIT EST PRÉ-ENREGISTRÉE DANS LE REGISTRE | `plan-travail.md`, `README.md`, `apprentissage.md` (+17) |
 
 ## Chiffres du jour
 
@@ -40,8 +41,8 @@
 
 ## Sessions actives ce jour
 
-- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 26.5 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
-- `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 26.5 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
+- `0733c5bb-f90b-4f58-9241-3364fa32e46c` — Session N2 : plan et réservations (début 2026-11-02 16:14, 26.6 h) → [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md)
+- `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — Session structures CPU analyseur rôles (début 2026-11-02 16:14, 26.6 h) → [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md)
 - `536cd5d6-94ac-4057-8fe9-11709a4587c7` — Étude des sessions et du pilotage (début 2026-11-02 15:33, 24.9 h) → [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md)
 - `abb58991-fe0a-4d6e-b039-6552b09f8454` — Reprise session L/B13 et mise à jour plan (début 2026-11-02 16:15, 25.1 h) → [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md)
 - `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` — Reprise session L/B13 et vérification stricte (début 2026-11-02 16:16, 26.4 h) → [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md)

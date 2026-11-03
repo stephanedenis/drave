@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 26.5 h |
+| Durée | 26.6 h |
 | Tours | 14 |
-| Messages | 410 |
-| Appels d'outils | 400 |
+| Messages | 413 |
+| Appels d'outils | 403 |
 | Fichiers touchés | 17 |
-| Commandes | 313 |
+| Commandes | 316 |
 | Sous-agents | 0 |
-| Commits | 29 |
+| Commits | 31 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -516,7 +516,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 
 ### Tour 14 — continue
 
-*31 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Read marker and GN homograph code
 - bash — Read subordinator sets and gold phrase format
@@ -532,7 +532,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - bash — Read v4 limit tests and measure test
 - bash — Update tests for v6 and run
 - bash — Re-run 50k corpus measure after v6 changes
-- … et 17 autres
+- … et 20 autres
 
 ## 3. Travail accompli
 
@@ -600,7 +600,7 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 273 autres
+- … et 276 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -758,4 +758,6 @@ Le sous-module est poussé en `644ad3d` et le principal en `f92c183b` ; la page 
 - S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050 (le nom après adjectif devant un verbe
 - S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050 (le nom après adjectif devant un verbe
 - S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050 (le nom après adjectif devant un verbe
+- S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050, h053 et le « si fort que » (l'intensi
+- S — LES TROIS LIMITES DE LA V4 SONT FERMÉES : h050, h053, « SI FORT QUE » ; GOLD 60, 60/60 TYPES, 142/142 RÔLES" -m "h050, h053 et le « si fort que » (l'intensi
 

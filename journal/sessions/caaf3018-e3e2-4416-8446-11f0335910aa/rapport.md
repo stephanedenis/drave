@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 26.5 h |
 | Tours | 34 |
-| Messages | 633 |
-| Appels d'outils | 623 |
+| Messages | 635 |
+| Appels d'outils | 624 |
 | Fichiers touchés | 6 |
-| Commandes | 457 |
+| Commandes | 458 |
 | Sous-agents | 0 |
 | Commits | 36 |
 | Compactages de contexte | 0 |
@@ -796,7 +796,7 @@ Je reste en veille légère : j'intégrerai les livraisons de N2/Pensée quand e
 
 ### Tour 34 — fais-moi un plan pour la nuit et aligle le dossier pilotage pour que toutes les sessions soient productives et sans conf … [4 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - bash — Inventory sessions, claims, GPU, N2 run
 - bash — Recent commits, Pensée work, plan-travail sections
@@ -812,11 +812,33 @@ Je reste en veille légère : j'intégrerai les livraisons de N2/Pensée quand e
 - bash — Read roadmap N/S/L rows and state date
 - bash — Read N row action and state paragraph
 - bash — Check mtimes and end of state paragraph
-- … et 8 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Le commit a buté sur le verrou ; je réessaie maintenant.
+⏵ Plan de nuit écrit et pilotage aligné — voici le bilan.
+
+**Le plan de la nuit (03/11 18 h 45 → 04/11 08 h) est dans [`plan-travail.md`](docs/pilotage/plan-travail.md) § 11.** Quatre rôles, chacun avec son territoire, sa ressource, son livrable et sa condition d'arrêt :
+
+| session | tâche de la nuit | ressource | livrable |
+|---|---|---|---|
+| **N2** `0733c5bb` | finir `kd2`, mesurer, committer ; **contrôle depuis zéro** + clôture ; puis **la porte propre (0,29)** | `gpu0`+`gpu1` exclusifs, `cpu0` 12, `ram` 60 | fiche + JSON + état + commit |
+| **S** `29ad180d` | **arbre réel + référents**, puis la **validation des 200 phrases**, puis `h050`/`h053` | `cpu1` 4, `ram` 8 | fiches + tests verts + commit |
+| **L/B13** `e181ce02` | **porte stochastique/fenêtre**, **gold 200+**, **T132/T133** ; professeurs par l'**API** | `cpu1` 4, `ram` 16 | fiches + commit |
+| **hub** `536cd5d6` | tenir l'**état** (un écrivain à la fois), intégrer chaque fait, **passe** si GPU libres, **bilan 08 h** | `cpu1` 1, `ram` 1 | état/roadmap/journal à jour |
+
+**Les conflits, évités par construction** : GPU à **N2 seul** (la passe attend qu'il rende les cartes, ou tourne sur `gpu1` seule) ; **un seul écrivain d'état** (le hub, les autres proposent leur ligne) ; **territoires de fichiers nommés** (S : `docs/schemas/arbre-referents.svg` + `reports/s-*` ; L : `tools/pensee/` ; N2 : `reports/n2-*` + `work/n2ac/` ; hub : pilotage/journal/backlog) ; **professeurs par l'API uniquement** (clé 0600, pas de `llama-server`) ; **claims pré-enregistrés** ; `IA` à 33 Gio → pas de nouveau gros modèle.
+
+**Ce que j'ai aligné dans le pilotage**
+- **`plan-travail.md`** : § 11 (le plan complet, les conflits, la cadence, le bilan de 08 h) et § 9 remis au 03/11 18 h 45.
+- **Registre** : allocation de la nuit **enregistrée** — `nuit-kd2` (N2, gpu0+gpu1, le run qui tournait sans claim est enfin déclaré), `nuit-arbre` (S), `nuit-l` (L), `nuit-hub` (hub) ; registre cohérent, **les mandats longs passent** (`sessions --check --strict` 0).
+- **`en-cours.md`** : section du hub au réel — **passe 11 h 30 = 82 portes, 80/2**, plan de nuit, autres sessions (N2 run kd2, S arbre, Pensée portes).
+- **Journal** : le plan consigné ; **checkpoints 22 h, 00 h, 04 h, 08 h**.
+
+**L'instant** : N2 tient les deux GPU à **100 %** (run `kd2`, fin vers 22 h 40), S et L publient, D/R/A close. Contrôles : revue ✅, `en-cours` ✅, T0 **3 995**, journal ✅, registre ✅.
+
+**Ce qui attend l'humain** : la validation de la banque S (reportée), e
+… [116 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -873,7 +895,7 @@ Je reste en veille légère : j'intégrerai les livraisons de N2/Pensée quand e
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 417 autres
+- … et 418 autres
 
 ## 4. Mesures et résultats marquants
 

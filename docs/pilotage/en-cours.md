@@ -46,7 +46,7 @@
 - **Ambition** : nommer le rôle et la frontière GN.
 - **Stratégie** : une règle = une phrase, trois contrôles.
 - **Objectif final** : gold **55**, corpus **55**, manifeste SHA-256.
-- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`** ; **55 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md), [`arbre`](../../reports/rapport-s-arbre-referents.md), [`traduction`](../../reports/rapport-s-traductions.md).
+- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`** ; **55 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md), [`arbre`](../../reports/rapport-s-arbre-referents.md), [`traduction`](../../reports/rapport-s-traductions.md), [`limites`](../../reports/rapport-s-limites-v6.md).
 - **Ce qu'elle fait** : **`230d03a`** ; page **`/paragraphes`** ; corpus **60** ; banque **200/355**, **142/81/65**.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
 - **Prochaine action** : **confirmer les référents sur `/paragraphes`** (source anglaise), puis la rétro-traduction

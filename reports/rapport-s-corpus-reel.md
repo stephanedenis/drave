@@ -29,10 +29,10 @@
 | unité | corpus | GN+GV | sans GV | couverture | homographes | unités homographes |
 |---|---|---:|---:|---:|---:|---:|
 | ligne | CEGEP | 3,6 % | 0,5 % | 0,94 | 21 | 18 |
-| ligne | propre | **51,0 %** | 10,2 % | 0,89 | 578 | 575 |
-| ligne | mélange | 3,8 % | 0,5 % | 0,94 | 19 | 19 |
+| ligne | propre | **51,0 %** | 10,3 % | 0,88 | 596 | 592 |
+| ligne | mélange | 3,8 % | 0,5 % | 0,94 | 20 | 20 |
 | phrase | CEGEP | 8,5 % | 0,8 % | 0,94 | 28 | 28 |
-| phrase | propre | **65,5 %** | 8,0 % | 0,89 | 1 134 | 1 104 |
+| phrase | propre | **65,5 %** | 8,0 % | 0,88 | 1 184 | 1 150 |
 | phrase | mélange | 9,1 % | 0,4 % | 0,93 | 23 | 23 |
 
 ## Les contrôles
@@ -64,7 +64,7 @@ alimenter la banque tel quel.
   titres, les tableaux et les formules sont exclus — le taux ne vaut pas pour eux.
 - **Le corpus propre est de la littérature** (genre unique) ; le CEGEP est un mélange
   anglais/technique/français. Le contraste mesure surtout la **langue**, pas la qualité OCR.
-- **Les homographes** dépendent du lexique de verbes : 28 sur 20 799 phrases CEGEP, 1 134 sur
+- **Les homographes** dépendent du lexique de verbes : 28 sur 20 799 phrases CEGEP, 1 184 sur
   50 000 propres ; le chiffre propre est plus haut parce qu'il y a plus de GN nominaux. C'est un
   décompte de **suspects** (GN finissant sur un mot du lexique), pas une erreur : la règle de
   contexte v4 en résout une partie par le mot suivant.
@@ -83,9 +83,9 @@ fidélité (le rôle juste).
 
 ## Fichiers
 
-- Sous-module : commits **`140feb6`** (mesure), **`97641d5`** (banque) et **`00d2a01`** (v4),
-  `mesure_corpus.py`, `candidats_corpus.py`, `donnees/mesure-corpus.json`,
-  `donnees/phrases_generees.json`, **47 tests**.
+- Sous-module : commits **`140feb6`** (mesure), **`97641d5`** (banque), **`00d2a01`** (v4) et
+  **`230d03a`** (v6), `mesure_corpus.py`, `candidats_corpus.py`, `donnees/mesure-corpus.json`,
+  `donnees/phrases_generees.json`, **55 tests**.
 - Mesure : `python3 mesure_corpus.py --max 50000` (60 s CPU) ;
   `donnees/mesure-corpus.json` (50 000 lignes, 20 799 phrases CEGEP, 50 000 propres).
 - Fiche : celle-ci ; état et roadmap S mis à jour.
@@ -95,5 +95,5 @@ fidélité (le rôle juste).
 1. **Filtrer langue et genre** (français détecté, prose), **segmenter en phrases** avant
    l'analyse ;
 2. ~~banque de candidats~~ (**200 phrases, 355 candidats**) → validation humaine ;
-3. ~~homographes/lexique~~ (règle de contexte v4) ; restent `h050` et `h053` ;
+3. ~~homographes/lexique~~ (v4) et ~~h050/h053~~ (v6) ; reste le nom après un adjectif hors lexique ;
 4. le corpus de référence (55 structures) reste le test de structure pour N2/R1.

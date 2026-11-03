@@ -10914,3 +10914,61 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-457", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master c7c310bb] PILOTAGE — L'ALLOCATION DE LA NUIT EST PRÉ-ENREGISTRÉE DANS LE REGISTRE
+ 20 files changed, 441 insertions(+), 47 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôles de clôture du pilotage avant de te rendre le plan.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -1; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; echo \"=== T0 ===\"; python3 tools/taille_documents.py 2>&1 | grep \ … [417 caractères tronqués]`
+
+  ```
+18:46
+=== revue ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== en-cours ===
+  ✅ état court, structuré, multi-session et reprenable
+=== T0 ===
+  T0 max : 3995 mots (budget 4 000)
+=== sessions ===
+code=0
+=== ressources ===
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+=== journal ===
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+=== GPU ===
+0, 100 % 1, 100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Plan de nuit écrit et pilotage aligné — voici le bilan.
+
+**Le plan de la nuit (03/11 18 h 45 → 04/11 08 h) est dans [`plan-travail.md`](docs/pilotage/plan-travail.md) § 11.** Quatre rôles, chacun avec son territoire, sa ressource, son livrable et sa condition d'arrêt :
+
+| session | tâche de la nuit | ressource | livrable |
+|---|---|---|---|
+| **N2** `0733c5bb` | finir `kd2`, mesurer, committer ; **contrôle depuis zéro** + clôture ; puis **la porte propre (0,29)** | `gpu0`+`gpu1` exclusifs, `cpu0` 12, `ram` 60 | fiche + JSON + état + commit |
+| **S** `29ad180d` | **arbre réel + référents**, puis la **validation des 200 phrases**, puis `h050`/`h053` | `cpu1` 4, `ram` 8 | fiches + tests verts + commit |
+| **L/B13** `e181ce02` | **porte stochastique/fenêtre**, **gold 200+**, **T132/T133** ; professeurs par l'**API** | `cpu1` 4, `ram` 16 | fiches + commit |
+| **hub** `536cd5d6` | tenir l'**état** (un écrivain à la fois), intégrer chaque fait, **passe** si GPU libres, **bilan 08 h** | `cpu1` 1, `ram` 1 | état/roadmap/journal à jour |
+
+**Les conflits, évités par construction** : GPU à **N2 seul** (la passe attend qu'il rende les cartes, ou tourne sur `gpu1` seule) ; **un seul écrivain d'état** (le hub, les autres proposent leur ligne) ; **territoires de fichiers nommés** (S : `docs/schemas/arbre-referents.svg` + `reports/s-*` ; L : `tools/pensee/` ; N2 : `reports/n2-*` + `work/n2ac/` ; hub : pilotage/journal/backlog) ; **professeurs par l'API uniquement** (clé 0600, pas de `llama-server`) ; **claims pré-enregistrés** ; `IA` à 33 Gio → pas de nouveau gros modèle.
+
+**Ce que j'ai aligné dans le pilotage**
+- **`plan-travail.md`** : § 11 (le plan complet, les conflits, la cadence, le bilan de 08 h) et § 9 remis au 03/11 18 h 45.
+- **Registre** : allocation de la nuit **enregistrée** — `nuit-kd2` (N2, gpu0+gpu1, le run qui tournait sans claim est enfin déclaré), `nuit-arbre` (S), `nuit-l` (L), `nuit-hub` (hub) ; registre cohérent, **les mandats longs passent** (`sessions --check --strict` 0).
+- **`en-cours.md`** : section du hub au réel — **passe 11 h 30 = 82 portes, 80/2**, plan de nuit, autres sessions (N2 run kd2, S arbre, Pensée portes).
+- **Journal** : le plan consigné ; **checkpoints 22 h, 00 h, 04 h, 08 h**.
+
+**L'instant** : N2 tient les deux GPU à **100 %** (run `kd2`, fin vers 22 h 40), S et L publient, D/R/A close. Contrôles : revue ✅, `en-cours` ✅, T0 **3 995**, journal ✅, registre ✅.
+
+**Ce qui attend l'humain** : la validation de la banque S (reportée), et rien d'autre pour que la nuit tourne — la clé API est fournie, les claims sont posés, les territoires sont écrits.
+

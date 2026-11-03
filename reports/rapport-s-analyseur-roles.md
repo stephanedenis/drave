@@ -70,6 +70,8 @@ adverbe de temps, rôles contextuels, subordonnées, passif, copule.
 - `h053` — « Le grand **lit**. » : le nom est après un adjectif, en **fin de phrase** ; le GN
   s'arrête à « Le grand », le GV « lit » apparaît, **type faux** (`[GN, GV]` au lieu de `[GN]`).
 
+**Les deux limites sont fermées en v6** (le nom après adjectif devant un verbe, et en fin de phrase) ; la v6 ajoute la vague 5, le gold de 60 phrases (60/60 types, 142/142 rôles), et corrige le « si fort que » de conséquence — voir [`rapport-s-limites-v6.md`](rapport-s-limites-v6.md).
+
 **Le protocole, sans le cacher** : `h033` (vague 2), `h046` et `h047` (vague 3) avaient échoué ;
 les règles ont été ajoutées **après** ces mesures, donc les vagues 2 et 3 ne sont plus des
 holdouts aveugles pour elles. La vague 4 (`h048–h055`) a été écrite **après** la règle de contexte
@@ -129,8 +131,7 @@ une validation humaine — le statut `reference` le dit.
 
 ## La suite (ligne S)
 
-1. **`h050`/`h053`** : un lexique de verbes plus large, ou une règle de fin de phrase ; mesurer
-   sans retoucher le gold ;
+1. ~~**`h050`/`h053`**~~ : fermées en v6 ; reste le **nom après un adjectif hors lexique** ;
 2. **Validation humaine** de la banque de 200 phrases (le mode `banque` est le contrat) ;
 3. **gold plus large** (voix, causatives, verbes à double complément) ;
 4. le corpus de référence peut être lu par **N2/R1** comme un petit test de structure.

@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 26.5 h |
+| Durée | 26.6 h |
 | Tours | 7 |
-| Messages | 707 |
-| Appels d'outils | 660 |
+| Messages | 714 |
+| Appels d'outils | 666 |
 | Fichiers touchés | 27 |
-| Commandes | 489 |
+| Commandes | 493 |
 | Sous-agents | 0 |
 | Commits | 26 |
 | Compactages de contexte | 0 |
@@ -229,7 +229,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 
 ### Tour 7 — <goal_round> Objective: "Session N2 (0733c5bb), phase du 03/11 après la nuit : (1) le run long de production à fenêtre 1 … [1192 caractères tronqués]
 
-*17 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Check overnight distillation run and repo state
 - bash — Launch 2048 same-steps run
@@ -245,6 +245,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - bash — Read hub's night plan and GPU expectations
 - bash — Check state content and T0 after hub rewrite
 - bash — Update state with current runs and commit
+- … et 4 autres
 
 **Synthèse produite :**
 
@@ -326,7 +327,7 @@ Rien entre 21,65 et 34,3 M (+0,011 à 512, −0,003 à 1 024 : le bruit). **Ni l
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 449 autres
+- … et 453 autres
 
 ## 4. Mesures et résultats marquants
 

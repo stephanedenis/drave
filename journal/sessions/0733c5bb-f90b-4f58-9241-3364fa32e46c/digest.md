@@ -9591,3 +9591,88 @@ c13efaac PILOTAGE — LE PLAN DE LA NUIT (03/11 → 04/11) EST ÉCRIT, LES CONFL
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"\"\"  [`porte`](../../reports/rapport-n2-porte-propre.md)) ; **60 000 pas à 1 024** (GPU 0) et\n  **capacité propre … [1174 caractères tronqués]`
+
+  ```
+état à jour
+  T0 max : 3995 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-489]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-489", "timeout_ms": 180000, "wait": true}`
+
+  ```
+c13efaac PILOTAGE — LE PLAN DE LA NUIT (03/11 → 04/11) EST ÉCRIT, LES CONFLITS SONT NOMMÉS
+[stderr]
+fatal: Unable to create '/home/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-489 (bash: cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'
+import pathlib
+p = pathlib.Path("docs/pilotage/en-cours.md")
+t = p.read_text(encoding="utf-8")
+t = t.replace("""  [`porte`](../../reports/rapport-n2-porte-propre.md)) ; **60 000 pas à 1 024** (GPU 0) et
+  **capacité propre** (GPU 1) ; **distillation native** : α = 0,9 gagne **0,14–0,18**.""",
+"""  [`porte`](../../reports/rapport-n2-porte-propre.md)) ; **distillation 30 k** (GPU 0, fin ~22 h 15)
+  et **complément 2 048** (GPU 1, fin ~00 h 15) ; **distillation native** : +0,10 à budget égal.""")
+t = t.replace("- **Prochaine action** : professeur 60 k distillé (fin ~22 h 15).",
+              "- **Prochaine action** : kd2, puis la clôture.")
+p.write_text(t, encoding="utf-8")
+print("état à jour")
+PY
+python3 tools/taille_documents.py 2>&1 | grep -E "T0"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; for i in $(seq 1 15); do [ -f .git/index.lock ] || break; sleep 4; done; git add docs/pilotage/en-cours.md && git commit -q -F - -- docs/pilotage/en-cours.md <<'MSG'
+ÉTAT — N2 TIENT LES DEUX CARTES : DISTILLATION 30 k (GPU 0, FIN ~22 h 15) ET COMPLÉMENT 2 048 (GPU 1, FIN ~00 h 15)
+
+Mise à jour de la ligne de session pour dire ce qui tourne réellement, en accord avec l'allocation
+de la nuit pré-enregistrée par le hub (N2 seule sur gpu0+gpu1 jusqu'à la fin du run).
+MSG
+git log --oneline -1) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -c \"distillation 30 k\" docs/pilotage/en-cours.md; git log --oneline -2 | cat; ls -la .git/index.lock 2>/dev/null | head -1; git status --short docs/pilotage/en-cours.md", "description": "Check whether state edit survived"}`
+
+  ```
+0
+c7c310bb PILOTAGE — L'ALLOCATION DE LA NUIT EST PRÉ-ENREGISTRÉE DANS LE REGISTRE
+c13efaac PILOTAGE — LE PLAN DE LA NUIT (03/11 → 04/11) EST ÉCRIT, LES CONFLITS SONT NOMMÉS
+ M docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git diff docs/pilotage/en-cours.md | head -40", "description": "Inspect current state diff"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index c89aae07..3bb037cd 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -46,7 +46,7 @@
+ - **Ambition** : nommer le rôle et la frontière GN.
+ - **Stratégie** : une règle = une phrase, trois contrôles.
+ - **Objectif final** : gold **55**, corpus **55**, manifeste SHA-256.
+-- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`** ; **55 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md), [`arbre`](../../reports/rapport-s-arbre-referents.md), [`traduction`](../../reports/rapport-s-traductions.md).
++- **Fait** : types **60/60**, rôles **142/142** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 à ≥3, **référents** 294/371, **traduction** 14/14 ; **page `/paragraphes`** ; **55 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md),
+… [527 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -c 55 work/n2ac/kd2-mix512-30k.log; tail -c 55 work/n2ac/rope2048-20k.log", "description": "Check both running jobs progress"}`
+
+  ```
+18:47:08
+ perte 1.3037 · dure 1.1016 · douce 0.3364 · 1245 s
+s
+pas    800 · perte 1.2097 · PPL val 2.971 · 812 s
+  ```
+
+- **bash** `{"command": "sleep 3500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -c 55 work/n2ac/kd2-mix512-30k.log; tail -c 55 work/n2ac/rope2048-20k.log", "description": "Wait ~1h and check runs"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-493]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-493", "timeout_ms": 3500000, "wait": true}`

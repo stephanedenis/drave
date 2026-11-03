@@ -99,7 +99,7 @@ syntaxe.
 ## Fichiers
 
 - Sous-module : `donnees/paragraphes.json` (`source_en`, `contexte_en`), `serveur.py`,
-  `static/paragraphes.html`, `static/paragraphes.js`, `tests/test_serveur.py`, **52 tests**.
+  `static/paragraphes.html`, `static/paragraphes.js`, `tests/test_serveur.py`, **55 tests** (v6).
 - Source anglaise : [Project Gutenberg #11](https://www.gutenberg.org/files/11/11-0.txt), domaine
   public ; traduction française : le corpus.
 - Fiche : celle-ci ; page : `http://127.0.0.1:8765/paragraphes` ; état, roadmap et plan mis à jour.
