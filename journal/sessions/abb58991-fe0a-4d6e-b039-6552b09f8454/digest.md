@@ -7713,3 +7713,553 @@ OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\ns=json.load(open('tools/tests/linguistique/gold_synthetique.json'))['phrases']\nps=h+s\n … [673 caractères tronqués]`
+
+  ```
+g009 Il ne dort pas. | gold {'acte': 'assertion', 'negation': True} | pred [] refus neuronal-pragmatique: HTTPError: HTTP Er
+g010 Viens ici ! | gold {'acte': 'exclamation'} | pred [] refus neuronal-pragmatique: HTTPError: HTTP Er
+g012 Le canard est prêt à manger. | gold {'acte': 'assertion', 'double_sens': True} | pred [] refus neuronal-pragmatique: HTTPError: HTTP Er
+g013 Peux-tu venir ? | gold {'acte': 'question', 'reponse': 'oui'} | pred [] refus neuronal-pragmatique: HTTPError: HTTP Er
+g017 She said that she would come yesterday. | gold {'acte': 'assertion', 'modalite': True} | pred [] refus neuronal-pragmatique: HTTPError: HTTP Er
+g018 He does not sleep. | gold {'acte': 'assertion', 'negation': True} | pred [] refus neuronal-pragmatique: HTTPError: HTTP Er
+g019 It might rain. | gold {'acte': 'assertion', 'modalite': True} | pred [] refus neuronal-pragmatique: HTTPError: HTTP Er
+g020 The duck is ready to eat. | gold {'acte': 'assertion', 'double_sens': True} | pred [] refus neuronal-pragmatique: HTTPError: HTTP Er
+  ```
+
+### 🤖 Assistant
+
+⏵ Le serveur refuse la grammaire pragmatique (HTTP 500) ; j'inspecte le GBNF
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,sys,urllib.request,urllib.error\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\ng=bl.grammaire_pragma()\nprint('GRAMMAIRE:\\n'+g)\nbody={'messages':[{'role':'user','content':'Classe : Il ne dort pas.'}],'temp … [544 caractères tronqués]`
+
+  ```
+GRAMMAIRE:
+root ::= "{"acte":" acte ","negation":" bool ","modalite":" bool ","double_sens":" bool "}"
+acte ::= ""assertion"" | ""question"" | ""exclamation"" | ""ordre""
+bool ::= "true" | "false"
+
+HTTP 400 {"error":{"code":400,"message":"Failed to initialize samplers: failed to parse grammar","type":"invalid_request_error"}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Le GBNF a perdu ses échappements ; je corrige `grammaire_pragma` (même style que POS/BIO)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1180,1250p' tools/bloc_linguistique.py", "description": "Read pragmatics grammar/prompt source"}`
+
+  ```
+ACTES = ("assertion", "question", "exclamation", "ordre")
+
+
+def grammaire_pragma() -> str:
+    """La grammaire GBNF de l'objet pragmatique : quatre champs, des valeurs fermées."""
+    return ('root ::= "{\"acte\":" acte ",\"negation\":" bool ",\"modalite\":" bool '
+            '",\"double_sens\":" bool "}"\n'
+            'acte ::= "\"assertion\"" | "\"question\"" | "\"exclamation\"" | "\"ordre\""\n'
+            'bool ::= "true" | "false"\n')
+
+
+class NeuronalLLMPragmatique:
+    """Le tagger **pragmatique** réel : acte, négation, modalité, double sens.
+
+    Le modèle local rend un objet JSON à quatre champs, contraint par la grammaire
+    `grammaire_pragma` : l'acte (`assertion`, `question`, `exclamation`, `ordre`), puis trois
+    booléens. Le bloc construit les étiquettes `pragmatique.acte`, `phrase.négation`,
+    `phrase.modalité` et `pragmatique.double_sens` ; c'est le même contrat que l'heuristique.
+    La confiance 0,6 le destine à la cascade : l'acte et le double sens passent devant
+    l'heuristique (0,45), la négation et la modalité restent à l'heuristique (0,85).
+    """
+    nom = "neuronal"
+
+    def __init__(self, modele: str | pathlib.Path, endpoint: str = "http://127.0.0.
+… [2267 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py')\nt=p.read_text(encoding='utf-8')\nold = r'''    return ('root ::= \"{\\\"acte\\\":\" acte \",\\\"negation\\\":\" bool \",\\\"modalite\\\":\" bool '\n            '\",\\\"dou … [882 caractères tronqués]`
+
+  ```
+ok
+root ::= "{\"acte\":" acte ",\"negation\":" bool ",\"modalite\":" bool ",\"double_sens\":" bool "}"
+acte ::= "\"assertion\"" | "\"question\"" | "\"exclamation\"" | "\"ordre\""
+bool ::= "true" | "false"
+  ```
+
+### 🤖 Assistant
+
+⏵ Grammaire corrigée ; test serveur et 8 phrases diverses
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,sys,urllib.request,urllib.error\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\ng=bl.grammaire_pragma()\nbody={'messages':[{'role':'user','content':'Classe : Il ne dort pas.'}],'temperature':0,'max_tokens':64 … [442 caractères tronqués]`
+
+  ```
+OK {"acte":"exclamation","negation":true,"modalite":false,"double_sens":false}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\ns=json.load(open('tools/tests/linguistique/gold_synthetique.json'))['phrases']\nps=h+s\n … [668 caractères tronqués]`
+
+  ```
+g009 Il ne dort pas. | gold {'acte': 'assertion', 'negation': True} | pred [('pragmatique', 'acte', 'assertion'), ('phrase', 'négation', '')] refus 
+g010 Viens ici ! | gold {'acte': 'exclamation'} | pred [('pragmatique', 'acte', 'ordre')] refus 
+g012 Le canard est prêt à manger. | gold {'acte': 'assertion', 'double_sens': True} | pred [('pragmatique', 'acte', 'assertion')] refus 
+g013 Peux-tu venir ? | gold {'acte': 'question', 'reponse': 'oui'} | pred [('pragmatique', 'acte', 'question'), ('phrase', 'modalité', '')] refus 
+g017 She said that she would come yesterday. | gold {'acte': 'assertion', 'modalite': True} | pred [('pragmatique', 'acte', 'exclamation'), ('phrase', 'modalité', '')] refus 
+g018 He does not sleep. | gold {'acte': 'assertion', 'negation': True} | pred [('pragmatique', 'acte', 'assertion'), ('phrase', 'négation', '')] refus 
+g019 It might rain. | gold {'acte': 'assertion', 'modalite': True} | pred [('pragmatique', 'acte', 'exclamation'), ('phrase', 'modalité', '')] refus 
+g020 The duck is ready to eat. | gold {'acte': 'assertion', 'double_sens': True} | pred [('pragmatique', 'acte', 'assertion')] refus
+  ```
+
+### 🤖 Assistant
+
+⏵ Le gold n'a que trois actes ; je retire `ordre` du prompt (convention) et reteste
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py')\nt=p.read_text(encoding='utf-8')\nt=t.replace('ACTES = (\"assertion\", \"question\", \"exclamation\", \"ordre\")',\n            'ACTES = (\"assertion\", \"question\", \"exc … [708 caractères tronqués]`
+
+  ```
+ok
+('assertion', 'question', 'exclamation')
+root ::= "{\"acte\":" acte ",\"negation\":" bool ",\"modalite\":" bool ",\"double_sens\":" bool "}"
+acte ::= "\"assertion\"" | "\"question\"" | "\"exclamation\""
+bool ::= "true" | "false"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nh=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\ns=json.load(open('tools/tests/linguistique/gold_synthetique.json'))['phrases']\nps=h+s\n … [638 caractères tronqués]`
+
+  ```
+g009 Il ne dort pas. | gold {'acte': 'assertion', 'negation': True} | pred [('pragmatique', 'acte', 'assertion'), ('phrase', 'négation', '')]
+g010 Viens ici ! | gold {'acte': 'exclamation'} | pred [('pragmatique', 'acte', 'exclamation')]
+g012 Le canard est prêt à manger. | gold {'acte': 'assertion', 'double_sens': True} | pred [('pragmatique', 'acte', 'assertion')]
+g013 Peux-tu venir ? | gold {'acte': 'question', 'reponse': 'oui'} | pred [('pragmatique', 'acte', 'question'), ('phrase', 'modalité', '')]
+g017 She said that she would come yesterday. | gold {'acte': 'assertion', 'modalite': True} | pred [('pragmatique', 'acte', 'assertion'), ('phrase', 'modalité', '')]
+g018 He does not sleep. | gold {'acte': 'assertion', 'negation': True} | pred [('pragmatique', 'acte', 'assertion'), ('phrase', 'négation', '')]
+g019 It might rain. | gold {'acte': 'assertion', 'modalite': True} | pred [('pragmatique', 'acte', 'assertion'), ('phrase', 'modalité', '')]
+g020 The duck is ready to eat. | gold {'acte': 'assertion', 'double_sens': True} | pred [('pragmatique', 'acte', 'assertion')]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du banc pragmatique (heuristique, neuronal, cascade, contrôles majoritaire/hasard/permutation)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"qualifier_pragmatique.py — qualifie le tagger pragmatique local sur le gold (180 phrases).\n\nLe tagger `NeuronalLLMPragmatique` rend l'acte (`assertion`/`question`/`exclamation`), la\nnégation, la modalité et le double sens, sous grammaire GBNF. On mesure  … [9852 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_pragmatique.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Dry-run pragmatique sur 10 phrases, puis mesure complète
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/tests/linguistique/qualifier_pragmatique.py && time python3 tools/tests/linguistique/qualifier_pragmatique.py --endpoint http://127.0.0.1:18082 --limite 10 --sortie /tmp/qualif-prag-10.json 2>&1 | tail -35", "description":  … [64 caractères tronqués]`
+
+  ```
+},
+ "controles": {
+  "majoritaire": {
+   "description": "assertion, sans négation/mod./double sens",
+   "phrases": 10,
+   "acte": 0.9,
+   "negation": 0.9,
+   "modalite": 1.0,
+   "double_sens": 1.0
+  },
+  "hasard": {
+   "description": "acte uniforme, trois booléens à 0,5 (graine 0)",
+   "phrases": 10,
+   "acte": 0.2,
+   "negation": 0.6,
+   "modalite": 0.7,
+   "double_sens": 0.6
+  },
+  "permutation": {
+   "description": "les prédictions du modèle sont permutées entre phrases",
+   "phrases": 10,
+   "acte": 0.8,
+   "negation": 0.8,
+   "modalite": 1.0,
+   "double_sens": 1.0
+  }
+ },
+ "refus": 0,
+ "appels": 10,
+ "latence": {
+  "moyenne": 3.839,
+  "mediane": 3.815
+ }
+}
+écrit : /tmp/qualif-prag-10.json
+[stderr]
+
+real	0m50,503s
+user	0m11,238s
+sys	0m0,885s
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure pragmatique complète (180 phrases, ≈12 min) en arrière-plan
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && curl -s http://127.0.0.1:18082/health && python3 tools/tests/linguistique/qualifier_pragmatique.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-gold-pragmatique.json 2>&1 | tail -50", "description": "Run full pragmatics qualification", "r … [24 caractères tronqués]`
+
+  ```
+started background job bash-303
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant le run pragmatique, je rafraîchis le plan et prépare la fiche négative
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re, time\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md')\nt=p.read_text(encoding='utf-8')\nmaintenant=time.strftime('%Y-%m-%d %H:%M %Z')\nt=re.sub(r\"- \\*\\*Heartbeat\\*\\* : [^\\n]+\ … [710 caractères tronqués]`
+
+  ```
+heartbeat 2026-11-02 18:56 EST
+ 149786       01:09 bash -c cd /home/stephane/GitHub/Qtrinet && curl -s http://127.0.0.1:18082/health && python3 tools/tests/linguistique/qualifier_pragmatique.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-gold-pragmatique.json 2>&1 | tail -50
+ 149796       01:09 python3 tools/tests/linguistique/qualifier_pragmatique.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-gold-pragmatique.json
+18:56:23
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la fin de la mesure pragmatique (≈12 min)
+
+- **job_output** `{"job_id": "bash-303", "timeout_ms": 600000, "wait": true}`
+
+  ```
+{"status":"ok"}  "negation": 1.0,
+  "modalite": 0.9944,
+  "double_sens": 0.8889
+ },
+ "neuronal": {
+  "acte": 0.6778,
+  "negation": 0.9667,
+  "modalite": 0.9667,
+  "double_sens": 0.6389
+ },
+ "cascade": {
+  "acte": 0.6778,
+  "negation": 0.9944,
+  "modalite": 0.9889,
+  "double_sens": 0.6389
+ },
+ "controles": {
+  "majoritaire": {
+   "description": "assertion, sans négation/mod./double sens",
+   "phrases": 180,
+   "acte": 0.7556,
+   "negation": 0.8722,
+   "modalite": 0.8833,
+   "double_sens": 0.9222
+  },
+  "hasard": {
+   "description": "acte uniforme, trois booléens à 0,5 (graine 0)",
+   "phrases": 180,
+   "acte": 0.3389,
+   "negation": 0.5389,
+   "modalite": 0.5,
+   "double_sens": 0.4556
+  },
+  "permutation": {
+   "description": "les prédictions du modèle sont permutées entre phrases",
+   "phrases": 180,
+   "acte": 0.4444,
+   "negation": 0.8222,
+   "modalite": 0.8111,
+   "double_sens": 0.6611
+  }
+ },
+ "refus": 0,
+ "appels": 180,
+ "latence": {
+  "moyenne": 3.836,
+  "mediane": 3.843
+ }
+}
+écrit : reports/pensee-gold-pragmatique.json
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Résultat pragmatique : le 7B est **sous** l'heuristique (acte 0,678 ; majoritaire 0,756) ; j'extrais le bilan complet
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-gold-pragmatique.json'))\nprint('date',d['date'],'verdict',d['verdict'],'refus',d['refus'],'appels',d['appels'],'dur',d['duree_totale_s'],'lat',d['latence_s'])\nprint('seuils',json.dumps( … [488 caractères tronqués]`
+
+  ```
+date 2026-11-02 19:06 EST verdict False refus 0 appels 180 dur 702.3 lat {'moyenne': 3.836, 'mediane': 3.843}
+seuils {
+ "acte_modele": false,
+ "negation_modele": false,
+ "modalite_modele": false,
+ "double_sens_modele": false,
+ "cascade_acte": false,
+ "cascade_double_sens": false,
+ "aucun_refus": true,
+ "controles_acte": true
+}
+
+== heuristique
+  all   acte 1.0000 neg 1.0000 mod 0.9944 ds 0.8889 fraction 0.6381
+  hand  acte 1.0000 neg 1.0000 mod 0.9500 ds 0.9000 fraction 0.469
+  synth acte 1.0000 neg 1.0000 mod 1.0000 ds 0.8875 fraction 0.6592
+
+== neuronal
+  all   acte 0.6778 neg 0.9667 mod 0.9667 ds 0.6389 fraction 0.0
+  hand  acte 1.0000 neg 1.0000 mod 0.9500 ds 0.9000 fraction 0.0
+  synth acte 0.6375 neg 0.9625 mod 0.9688 ds 0.6062 fraction 0.0
+
+== cascade
+  all   acte 0.6778 neg 0.9944 mod 0.9889 ds 0.6389 fraction 0.6381
+  hand  acte 1.0000 neg 1.0000 mod 0.9500 ds 0.9000 fraction 0.469
+  synth acte 0.6375 neg 0.9938 mod 0.9938 ds 0.6062 fraction 0.6592
+
+limites ["Le gold n'a que trois actes (assertion, question, exclamation) ; le prompt suit.", 'Le double sens est le point dur : les ambiguïtés « prêt à manger » sont manquées.', "La modalité a un faux positif connu (« Peux-tu ve
+… [173 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Fiche « pragmatique neuronale » : négatif net (dev 1,0 mais test 0,6375, sous le majoritaire)
+
+- **write** `{"content": "# B13 — la pragmatique neuronale : parfaite sur les 20 réelles (dev), sous le majoritaire sur les 160 synthétiques (test)\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) / **R0.7** (bloc linguistique) · **Date** : 2026-11-02 ·\n> **Verdict** : ❌ **le tagger pragmatique 7B n'est p … [7213 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-pragmatique-neuronale.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ README/index, doc et état pour le négatif pragmatique
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%Y-%m-%d %H:%M %Z'; echo \"MD=$(ls reports/*.md|wc -l) JSON=$(ls reports/*.json|wc -l)\"; grep -n \"Mis à jour\\|fichiers / JSON\" docs/pilotage/en-cours.md; git status --short | head -8", "description": "Check time, counts, and state before pr … [17 caractères tronqués]`
+
+  ```
+2026-11-02 19:08 EST
+MD=558 JSON=645
+3:**Mis à jour : 2026-11-02, 18 h 46 HNE (heure locale, EST).**
+125:| fichiers / JSON de résultats | **557** / **644** | `reports/*.md` / `reports/*.json` |
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+ M tools/bloc_linguistique.py
+ M tools/tests/linguistique/test_bloc_linguistique.py
+?? reports/pensee-gold-pragmatique.json
+?? reports/rapport-pensee-pragmatique-neuronale.md
+?? tools/tests/linguistique/qualifier_pragmatique.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-pensee-porte-llm.md`](rapport-pensee-porte-llm.md) | **B13** **27 nœuds** |\",\n            \"| [`rapport-pensee-pragmati … [282 caractères tronqués]`
+
+  ```
+readme ok
+  555 fiches → reports/INDEX.md
+2800 reports/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re, time\n# en-cours\np=pathlib.Path('docs/pilotage/en-cours.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace('**Mis à jour : 2026-11-02, 18 h 46 HNE (heure locale, EST).**','**Mis à jour : 2026-11-02, 19 h 08 HNE ( … [7813 caractères tronqués]`
+
+  ```
+ok 2026-11-02 19:08 EST
+EN-COURS: 1772
+  T0 max : 4146 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4146 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1772 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 558 fiche(s) · 645 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Le T0 a bondi à 4146 (en-cours 1772) ; j'inspecte ce qui a été ajouté en plus de mon fait
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short docs/pilotage/en-cours.md; git diff --stat docs/pilotage/en-cours.md; git diff docs/pilotage/en-cours.md | head -120", "description": "Inspect en-cours diff and concurrent additions"}`
+
+  ```
+M docs/pilotage/en-cours.md
+ docs/pilotage/en-cours.md | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 5ac7c1bb..134c447b 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-02, 18 h 46 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-02, 19 h 08 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+ > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+@@ -81,12 +81,13 @@
+ - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
+ - **Fait** : B13 **140/140**, gold **432** ; **gold neuronal** POS/syntagmes, **cascade
+   complète** 0,9415/0,7539/1,0 ; **DRVM/native** — cadenas **3 nœuds** (règle), porte **27
+-  nœuds** (règle ; 200 sans), labyrinthe **2 sonde** ;
+-  [fiche](../../reports/rapport-pensee-porte-llm.md).
+-- **Ce qu'elle fait** : **gold neuronal et politique DRVM** mesurés ; reprise **16 h 16**.
++  nœuds** (règle ; 200 sans), labyrinthe **2 sonde** ; **pragmatique neuronale*
+… [2621 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le diff d'en-cours est petit mais +202 mots ; j'inspecte les lignes ajoutées et le HEAD
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && echo \"HEAD: $(git show HEAD:docs/pilotage/en-cours.md | wc -w)  NOW: $(wc -w < docs/pilotage/en-cours.md)\"; echo '=== + LINES ==='; git diff docs/pilotage/en-cours.md | grep '^+' | grep -v '^+++' | cat; echo '=== - LINES ==='; git diff docs/pilotage … [117 caractères tronqués]`
+
+  ```
+HEAD: 1742  NOW: 1772
+=== + LINES ===
++**Mis à jour : 2026-11-02, 19 h 08 HNE (heure locale, EST).**
++  nœuds** (règle ; 200 sans), labyrinthe **2 sonde** ; **pragmatique neuronale** — **dev 1,0**
++  mais **test 0,6375** (majoritaire 0,7556), ds 0,6062 ; l'heuristique garde ;
++  [fiche](../../reports/rapport-pensee-pragmatique-neuronale.md).
++- **Ce qu'elle fait** : **gold neuronal, DRVM et pragmatique** mesurés ; reprise **16 h 16**.
++- **Prochaine action** : **gold 200+ phrases** ; **porte B13** ; **porte qui bouge**.
++- **Bloquants** : aucun pour POS/syntagmes/cascade/DRVM ; la **pragmatique neuronale** ne qualifie pas ; restent **gold 200+** et **porte B13**.
++| fichiers / JSON de résultats | **558** / **645** | `reports/*.md` / `reports/*.json` |
++| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 140/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte B13** ; **B10.3 bloquée** |
+=== - LINES ===
+-**Mis à jour : 2026-11-02, 18 h 46 HNE (heure locale, EST).**
+-  nœuds** (règle ; 200 sans), labyrinthe **2 sonde** ;
+-  [fiche](../../reports/rapport-pensee-porte-llm.md).
+-- **Ce qu'elle fait** : **gold neuronal et politique DRVM** mesurés ; rep
+… [451 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le HEAD d'en-cours pèse 1742 mots (le hub y a ajouté ~170) ; j'identifie les ajouts pour trimer sans perdre d'état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && echo \"83f78803: $(git show 83f78803:docs/pilotage/en-cours.md | wc -w)  aeace14b: $(git show HEAD:docs/pilotage/en-cours.md | wc -w)\"; echo '=== + LINES (83f->HEAD) ==='; git diff 83f78803 HEAD -- docs/pilotage/en-cours.md | grep '^+' | grep -v '^++ … [73 caractères tronqués]`
+
+  ```
+83f78803: 1566  aeace14b: 1742
+=== + LINES (83f->HEAD) ===
++**Mis à jour : 2026-11-02, 18 h 46 HNE (heure locale, EST).**
++- **Plan** : 1) ~~plan et réservations~~ ; 2) **200 000 pas** (fin ~19 h 35) ; 3) ~~banc
++  R1.1/R1.2~~ ; 4) **cinq PPL et courbe** ; 5) **fiche, JSON, état, commit**.
++- **Ce qu'elle fait** : **200 k pas** sur `data/wiki_mix/propre` (GPU 0, 16 h 17 → ~19 h 35,
++  ~57 ms/pas) ; **R1.1/R1.2 mesurées** (RoPE, fenêtre 512), deux contrôles et le « depuis zéro » ;
++  [`n2-r11`](../../reports/rapport-n2-r11.md).
++- **Prochaine action** : les **cinq PPL** et la **courbe** à la sortie des 200 k pas, puis la fiche.
++- **Bloquants** : aucun ; **GPU 0 et 1** à N2 jusqu'à ~19 h 40, la passe de portes attend.
++- **Fait** : B13 **140/140**, gold **432** ; **gold neuronal** POS/syntagmes, **cascade
++  complète** 0,9415/0,7539/1,0 ; **DRVM/native** — cadenas **3 nœuds** (règle), porte **27
++  nœuds** (règle ; 200 sans), labyrinthe **2 sonde** ;
++  [fiche](../../reports/rapport-pensee-porte-llm.md).
++- **Ce qu'elle fait** : **gold neuronal et politique DRVM** mesurés ; reprise **16 h 16**.
++- **Prochaine action** : **pragmatique** ; **gold 200+ phrases**.
++- **Bloquants** : auc
+… [1492 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le T0 est rouge (4146/4000) à cause de l'ajout N2/R1 du hub (~170 mots) ; je vérifie doc/plan puis je commite le fait en le nommant
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"NeuronalLLMPragmatique\\|pragmatique neuronale\\|reste à mesurer\" docs/implantation/bloc-linguistique.md | head; echo '---PLAN---'; grep -n \"pragmatique\\|Moteur B13\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | tail -5 … [58 caractères tronqués]`
+
+  ```
+153:- **`NeuronalLLMPragmatique`** : le **tagger de pragmatique**. Un prompt d'analyse, une grammaire
+170:0,2137 / 0,5670. La pragmatique neuronale est mesurée : parfaite sur les 20 réelles (dev) mais **sous
+190:`NeuronalLLMChunks`, `NeuronalLLMCompose`, `NeuronalLLMPragmatique`, `Parallele` ou
+---PLAN---
+43:  acte **1,0**) ; la **pragmatique neuronale** est mesurée (dev 1,0, test 0,6375 ; l'heuristique garde) ; restent **gold 200+** et **porte B13** ;
+45:- **Moteur B13** : **AC-3, alpha-bêta (8/8)**, **DRVF `thought` (9/9)**, **banc anytime
+50:  [`pensee-banc`](../../reports/rapport-pensee-banc.md) ; fait : **politique DRVM/native** (`PolitiqueLLM` — cadenas 3 nœuds avec règle, porte 27 nœuds avec la règle, 200 sans) ; prochain : **pragmatique** et **gold 200+**.
+52:  **tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock) **67,1 %** ;
+59:  **pragmatique** ; la coréférence est faite (116 liens).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"porte 27 nœuds avec la règle, 200 sans) ; prochain : **pragmatique** et **gold 200+**.\", … [567 caractères tronqués]`
+
+  ```
+ok
+50:  [`pensee-banc`](../../reports/rapport-pensee-banc.md) ; fait : **politique DRVM/native** (`PolitiqueLLM` — cadenas 3 nœuds avec règle, porte 27 nœuds avec la règle, 200 sans) ; **pragmatique neuronale** mesurée (négatif : dev 1,0, test 0,6375) ; prochain : **gold 200+** et **porte B13**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m unittest discover -s tools/tests/linguistique -p 'test_bloc_linguistique.py' 2>&1 | tail -3; bash tools/porte-tableaux.sh 2>&1 | tail -3; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -2; … [134 caractères tronqués]`
+
+  ```
+Ran 16 tests in 0.054s
+
+OK
+  ✅ 1564 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 2667 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-02)
+  revue de documentation · 558 fiche(s) · 645 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1772 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  journal · 39 jour(s) · 117 session(s) · 1854 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ Le T0 est rouge à cause de la redondance N2/R1 (~170 mots) ; je condense l'état de ~150 mots sans perdre les chiffres
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '36,60p' docs/pilotage/en-cours.md; echo '---IN PROGRESS---'; sed -n '100,125p' docs/pilotage/en-cours.md; echo '---RESTE---'; sed -n '140,175p' docs/pilotage/en-cours.md", "description": "Read en-cours N2, in-progress, and questions for trimmi … [4 caractères tronqués]`
+
+  ```
+- **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
+
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
+
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2 — le natif, GPU** : le compute sur le mélange 1 Go, puis la fenêtre native
+  (R1.1/R1.2).
+- **Plan** : 1) ~~plan et réservations~~ ; 2) **200 000 pas** (fin ~19 h 35) ; 3) ~~banc
+  R1.1/R1.2~~ ; 4) **cinq PPL et courbe** ; 5) **fiche, JSON, état, commit**.
+- **Ambition** : que N réponde « plus de pas, quelle position, quelle fenêtre ».
+- **Stratégie** : recette constante (34,3 M, canal, graine 1) ; banc GPU 1.
+- **Objectif final** : trancher **< 2,5 sans perdre le français**, puis **R1.1/R1.2**.
+- **Ce qu'elle fait** : **200 k pas** sur `data/wiki_mix/propre` (GPU 0, 16 h 17 → ~19 h 35,
+  ~57 ms/pas) ; **R1.1/R1.2 mesurées** (RoPE, fenêtre 512), deux contrôles et le « depuis zéro » ;
+  [`n2-r11`](../../reports/rapport-n2-r11.md).
+- **Ce que font les autres** : **hub**, **S**, **Pensée**, **D/R/A**.
+- **Prochaine action** : les **cinq PPL** et la **
+… [5315 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je commite le négatif pragmatique ; le T0 rouge (4146) vient de l'ajout N2/R1 du hub, je ne trime pas son état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git status --short | head -16; echo '=== ADD ==='; git add tools/bloc_linguistique.py tools/tests/linguistique/test_bloc_linguistique.py tools/tests/linguistique/qualifier_pragmatique.py reports/pensee-gold-pragmatique.json reports/rapport-pensee-prag … [467 caractères tronqués]`
+
+  ```
+M docs/implantation/bloc-linguistique.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/bloc_linguistique.py
+ M tools/tests/linguistique/test_bloc_linguistique.py
+?? reports/pensee-gold-pragmatique.json
+?? reports/rapport-pensee-pragmatique-neuronale.md
+?? tools/tests/linguistique/qualifier_pragmatique.py
+=== ADD ===
+ docs/pilotage/roadmap.md                           |  11 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |  15 +-
+ reports/INDEX.md                                   |   3 +-
+ reports/README.md                                  |   2 +-
+ reports/pensee-gold-pragmatique.json               | 177 +++++++++++++++++++
+ reports/rapport-pensee-pragmatique-neuronale.md    | 121 +++++++++++++
+ tools/bloc_linguistique.py                         | 110 ++++++++++++
+ tools/tests/linguistique/qualifier_pragmatique.py  | 195 +++++++++++++++++++++
+ tools/tests/linguistique/test_bloc_linguistique.py |  15 ++
+ 12 files changed, 657 insertions(+), 28 deletions(-)
+  ✅ index : aucun fait stagé sans état
+HOOK=0
+CHECK=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git commit -m \"B13 — LA PRAGMATIQUE NEURONALE EST SOUS L'HEURISTIQUE : TEST 0,6375 (MAJORITAIRE 0,7556), DEV 1,0 ; L'HEURISTIQUE GARDE\" 2>&1 | tail -10; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Commit the pragmatics negative fact", "timeoutM … [11 caractères tronqués]`

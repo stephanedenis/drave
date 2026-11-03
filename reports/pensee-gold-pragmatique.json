@@ -1,0 +1,177 @@
+{
+  "date": "2026-11-02 19:06 EST",
+  "modele": {
+    "nom": "qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf",
+    "fichiers": [
+      {
+        "nom": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf",
+        "octets": 3993201344,
+        "sha256": "dfce12e3862a5283ccfb88221b48480e58745165de856439950d0f22590580db"
+      },
+      {
+        "nom": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00002-of-00002.gguf",
+        "octets": 689872288,
+        "sha256": "539cf93f78e887edea1c04e2d7d8cdaca9d01dae9c9025bcb8accbe29df3d72a"
+      }
+    ],
+    "quantisation": "Q4_K_M",
+    "runtime": "version: 11017 (aca5f933b)",
+    "gpu": 0
+  },
+  "gold": {
+    "phrases": 180,
+    "hand": 20,
+    "synth": 160
+  },
+  "tagger": {
+    "classe": "NeuronalLLMPragmatique",
+    "confiance": 0.6,
+    "champs": "acte, négation, modalité, double sens",
+    "actes": [
+      "assertion",
+      "question",
+      "exclamation"
+    ]
+  },
+  "mesures": {
+    "heuristique": {
+      "all": {
+        "pragmatique": {
+          "acte": 1.0,
+          "negation": 1.0,
+          "modalite": 0.9944,
+          "double_sens": 0.8889
+        },
+        "fraction_semantique": 0.6381
+      },
+      "hand": {
+        "pragmatique": {
+          "acte": 1.0,
+          "negation": 1.0,
+          "modalite": 0.95,
+          "double_sens": 0.9
+        },
+        "fraction_semantique": 0.469
+      },
+      "synth": {
+        "pragmatique": {
+          "acte": 1.0,
+          "negation": 1.0,
+          "modalite": 1.0,
+          "double_sens": 0.8875
+        },
+        "fraction_semantique": 0.6592
+      }
+    },
+    "neuronal": {
+      "all": {
+        "pragmatique": {
+          "acte": 0.6778,
+          "negation": 0.9667,
+          "modalite": 0.9667,
+          "double_sens": 0.6389
+        },
+        "fraction_semantique": 0.0
+      },
+      "hand": {
+        "pragmatique": {
+          "acte": 1.0,
+          "negation": 1.0,
+          "modalite": 0.95,
+          "double_sens": 0.9
+        },
+        "fraction_semantique": 0.0
+      },
+      "synth": {
+        "pragmatique": {
+          "acte": 0.6375,
+          "negation": 0.9625,
+          "modalite": 0.9688,
+          "double_sens": 0.6062
+        },
+        "fraction_semantique": 0.0
+      }
+    },
+    "cascade": {
+      "all": {
+        "pragmatique": {
+          "acte": 0.6778,
+          "negation": 0.9944,
+          "modalite": 0.9889,
+          "double_sens": 0.6389
+        },
+        "fraction_semantique": 0.6381
+      },
+      "hand": {
+        "pragmatique": {
+          "acte": 1.0,
+          "negation": 1.0,
+          "modalite": 0.95,
+          "double_sens": 0.9
+        },
+        "fraction_semantique": 0.469
+      },
+      "synth": {
+        "pragmatique": {
+          "acte": 0.6375,
+          "negation": 0.9938,
+          "modalite": 0.9938,
+          "double_sens": 0.6062
+        },
+        "fraction_semantique": 0.6592
+      }
+    }
+  },
+  "controles": {
+    "majoritaire": {
+      "description": "assertion, sans négation/mod./double sens",
+      "phrases": 180,
+      "acte": 0.7556,
+      "negation": 0.8722,
+      "modalite": 0.8833,
+      "double_sens": 0.9222
+    },
+    "hasard": {
+      "description": "acte uniforme, trois booléens à 0,5 (graine 0)",
+      "phrases": 180,
+      "acte": 0.3389,
+      "negation": 0.5389,
+      "modalite": 0.5,
+      "double_sens": 0.4556
+    },
+    "permutation": {
+      "description": "les prédictions du modèle sont permutées entre phrases",
+      "phrases": 180,
+      "acte": 0.4444,
+      "negation": 0.8222,
+      "modalite": 0.8111,
+      "double_sens": 0.6611
+    }
+  },
+  "seuils": {
+    "acte_modele": false,
+    "negation_modele": false,
+    "modalite_modele": false,
+    "double_sens_modele": false,
+    "cascade_acte": false,
+    "cascade_double_sens": false,
+    "aucun_refus": true,
+    "controles_acte": true
+  },
+  "verdict": false,
+  "refus": 0,
+  "refus_detail": [],
+  "appels": 180,
+  "latence_s": {
+    "moyenne": 3.836,
+    "mediane": 3.843
+  },
+  "duree_totale_s": 702.3,
+  "limites": [
+    "Le gold n'a que trois actes (assertion, question, exclamation) ; le prompt suit.",
+    "Le double sens est le point dur : les ambiguïtés « prêt à manger » sont manquées.",
+    "La modalité a un faux positif connu (« Peux-tu venir ? ») que l'heuristique fait aussi.",
+    "Les 20 réelles ont servi au prompt ; les 160 synthétiques sont le test.",
+    "CPU seulement (GPU de N2 réservés) ; une seule graine."
+  ]
+}

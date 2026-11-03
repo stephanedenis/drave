@@ -1179,6 +1179,116 @@ class NeuronalLLMCompose:
                   "duree_s": round(a.cout.get("duree_s", 0.0) + b.cout.get("duree_s", 0.0), 6)})
 
 
+ACTES = ("assertion", "question", "exclamation")
+
+
+def grammaire_pragma() -> str:
+    """La grammaire GBNF de l'objet pragmatique : quatre champs, des valeurs fermées."""
+    texte = ('root ::= "{\\"acte\\":" acte ",\\"negation\\":" bool ",\\"modalite\\":" bool '
+             '",\\"double_sens\\":" bool "}"\n')
+    texte += 'acte ::= ' + ' | '.join('"\\"%s\\""' % a for a in ACTES) + '\n'
+    texte += 'bool ::= "true" | "false"\n'
+    return texte
+
+
+class NeuronalLLMPragmatique:
+    """Le tagger **pragmatique** réel : acte, négation, modalité, double sens.
+
+    Le modèle local rend un objet JSON à quatre champs, contraint par la grammaire
+    `grammaire_pragma` : l'acte (`assertion`, `question`, `exclamation`), puis trois
+    booléens. Le bloc construit les étiquettes `pragmatique.acte`, `phrase.négation`,
+    `phrase.modalité` et `pragmatique.double_sens` ; c'est le même contrat que l'heuristique.
+    La confiance 0,6 le destine à la cascade : l'acte et le double sens passent devant
+    l'heuristique (0,45), la négation et la modalité restent à l'heuristique (0,85).
+    """
+    nom = "neuronal"
+
+    def __init__(self, modele: str | pathlib.Path, endpoint: str = "http://127.0.0.1:18082",
+                 confiance: float = 0.6, timeout: int = 120, max_jetons: int = 64,
+                 transport=None, cache: bool = True):
+        self.modele = str(modele)
+        self.endpoint = endpoint.rstrip("/")
+        self.confiance = float(confiance)
+        self.timeout = timeout
+        self.max_jetons = max_jetons
+        self.transport = transport or self._post
+        self.cache = cache
+        self.appels = 0
+        self._cache: dict[tuple[str, str | None], Annotation] = {}
+        self._verrou = threading.Lock()
+
+    @staticmethod
+    def _invite(texte: str) -> str:
+        return ("Tu es un étiqueteur pragmatique du français. Analyse la phrase et réponds "
+                "UNIQUEMENT par un objet JSON {\"acte\":\"assertion|question|exclamation\","
+                "\"negation\":true|false,\"modalite\":true|false,\"double_sens\":true|false}. "
+                "acte = l'acte de parole ; negation = une négation explicite ; modalite = "
+                "possibilité, obligation ou incertitude ; double_sens = une ambiguïté voulue. "
+                f"Texte : {texte}")
+
+    def _post(self, invite: str, grammaire: str, max_jetons: int) -> str:
+        corps = {"messages": [{"role": "user", "content": invite}], "temperature": 0,
+                 "max_tokens": max_jetons, "grammar": grammaire}
+        requete = urllib.request.Request(
+            self.endpoint + "/v1/chat/completions",
+            data=json.dumps(corps).encode("utf-8"),
+            headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(requete, timeout=self.timeout) as reponse:
+            sortie = json.loads(reponse.read().decode("utf-8"))
+        return sortie["choices"][0]["message"]["content"]
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        t0 = time.perf_counter()
+        script = detecter_script(texte)
+        lg = langue or "und"
+        if not texte.strip():
+            return Annotation(texte=texte, langue=lg, script=script, refus="vide", source=self.nom)
+        cle = (texte, langue)
+        if self.cache and cle in self._cache:
+            return copy.deepcopy(self._cache[cle])
+        try:
+            with self._verrou:
+                self.appels += 1
+            sortie = self.transport(self._invite(texte), grammaire_pragma(), self.max_jetons)
+            debut, fin = sortie.find("{"), sortie.rfind("}")
+            if debut < 0 or fin <= debut:
+                raise ValueError(f"pas de JSON : {sortie[:120]!r}")
+            donnees = json.loads(sortie[debut:fin + 1])
+            acte = str(donnees.get("acte", "")).lower()
+            if acte not in ACTES:
+                raise ValueError(f"acte inconnu : {acte!r}")
+            negation = bool(donnees.get("negation", False))
+            modalite = bool(donnees.get("modalite", False))
+            double_sens = bool(donnees.get("double_sens", False))
+            n = len(texte)
+            etiquettes = [Etiquette("pragmatique", "acte", acte, 0, n, self.nom,
+                                    self.confiance, langue=lg, script=script)]
+            if negation:
+                etiquettes.append(Etiquette("phrase", "négation", "", 0, n, self.nom,
+                                            self.confiance, langue=lg, script=script))
+            if modalite:
+                etiquettes.append(Etiquette("phrase", "modalité", "", 0, n, self.nom,
+                                            self.confiance, langue=lg, script=script))
+            if double_sens:
+                etiquettes.append(Etiquette("pragmatique", "double_sens", "", 0, n, self.nom,
+                                            self.confiance, langue=lg, script=script))
+            annotation = Annotation(texte=texte, langue=lg, script=script, etiquettes=etiquettes,
+                                    source=self.nom,
+                                    trace=[{"etape": "neuronal-pragmatique", "modele": self.modele}],
+                                    cout={"octets": len(texte.encode()),
+                                          "duree_s": round(time.perf_counter() - t0, 6)})
+        except Exception as e:
+            annotation = Annotation(texte=texte, langue=lg, script=script, source=self.nom,
+                                    refus=f"neuronal-pragmatique: {type(e).__name__}: {str(e)[:160]}",
+                                    trace=[{"etape": "neuronal-pragmatique", "erreur": str(e)[:160]}],
+                                    cout={"octets": len(texte.encode()),
+                                          "duree_s": round(time.perf_counter() - t0, 6)})
+        if self.cache:
+            self._cache[cle] = annotation
+        return annotation
+
+
 # --------------------------------------------------------------------------- compositions
 
 

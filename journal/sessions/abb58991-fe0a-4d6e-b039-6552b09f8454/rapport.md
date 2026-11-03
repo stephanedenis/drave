@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 2.6 h |
+| Durée | 2.9 h |
 | Tours | 5 |
-| Messages | 316 |
-| Appels d'outils | 421 |
-| Fichiers touchés | 26 |
-| Commandes | 299 |
+| Messages | 335 |
+| Appels d'outils | 442 |
+| Fichiers touchés | 28 |
+| Commandes | 317 |
 | Sous-agents | 0 |
-| Commits | 5 |
+| Commits | 6 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -205,7 +205,7 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 
 ### Tour 5 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Check state and server at round 3
 - bash — Inspect gold pragmatics and heuristic tags
@@ -218,10 +218,14 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 - bash — Fix pragmatics GBNF escaping and print grammar
 - bash — Test corrected pragmatics grammar
 - bash — Test pragmatics tagger on 8 diverse sentences
+- bash — Restrict actes to the gold convention
+- bash — Retest pragmatics with gold acte set
+- write `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_pragmatique.py`
+- … et 18 autres
 
 **Synthèse produite :**
 
-⏵ Grammaire corrigée ; test serveur et 8 phrases diverses
+⏵ Je commite le négatif pragmatique ; le T0 rouge (4146) vient de l'ajout N2/R1 du hub, je ne trime pas son état
 
 ## 3. Travail accompli
 
@@ -255,6 +259,8 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-politique-llm.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_drvm.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-llm.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_pragmatique.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-pragmatique-neuronale.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -298,7 +304,7 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 259 autres
+- … et 277 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -369,6 +375,11 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 - **T3** `+| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 6`
 - **T3** `| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, **398 langues à 0,9687**, **gold 432 réels + 160`
 - **T3** `| **D — les données** (nouveau) | avec quoi entraîne-t-on, et à quel prix ? | ✅ inventaire local ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**), **PDF** (322 Mo), **d`
+- **T5** `+  ~57 ms/pas) ; **R1.1/R1.2 mesurées** (RoPE, fenêtre 512), deux contrôles et le « depuis zéro » ;`
+- **T5** `+  identiques, RoPE est **invariant** au décalage (Δ 0,0017) quand la table absolue **×4,8** ;`
+- **T5** `52:  **tête 0,560**, pragmatique **1,0/1,0/0,994/0,889** ; cascade (mock) **67,1 %** ;`
+- **T5** `~57 ms/pas) ; **R1.1/R1.2 mesurées** (RoPE, fenêtre 512), deux contrôles et le « depuis zéro » ;`
+- **T5** `identiques, RoPE est **invariant** au décalage (Δ 0,0017) quand la table absolue **×4,8** ;`
 
 ## 5. Erreurs rencontrées
 
@@ -386,4 +397,5 @@ Le goal reste **actif** : l'objectif (syntagmes, cascade, DRVM/native) est attei
 - B13 — LA CASCADE COMPLÈTE : POS 0,9415, SYNTAGMES 0,7539, ACTE 1,0 ; LES ABLATIONS SONT EXACTES" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA POLITIQUE DRVM/NATIVE : LE CADENAS S'OUVRE AVEC LA RÈGLE (3 NŒUDS), PAS SANS (0) ; PORTE NÉGATIVE" 2>&1 | tail -12; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA PORTE DRVM S'OUVRE AVEC LA RÈGLE : 27 NŒUDS, 4 SONDE (200 SANS ; PAS DE BUT)" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA PRAGMATIQUE NEURONALE EST SOUS L'HEURISTIQUE : TEST 0,6375 (MAJORITAIRE 0,7556), DEV 1,0 ; L'HEURISTIQUE GARDE" 2>&1 | tail -10; echo "EXIT=${PIPESTATU
 

@@ -3697,3 +3697,118 @@ trajectoire.py
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add reports/rapport-n2-r11.md reports/n2-r11.json docs/pilotage/en-cours.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code && git status --short | grep \"^[MA]\" | head -20  … [1909 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/agrege_r11.py
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/chaine_r1.sh
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/chaine_zero.sh
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/entrainer_rope.py
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/eval_200k.py
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/eval_fenetre.py
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/eval_longueurs.py
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/init_figee.py
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/mirroir_copie.py
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/rope_model.py
+A  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/trajectoire.py
+M  journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md
+A  reports/n2-r11.json
+A  reports/rapport-n2-r11.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-151]
+The command keeps running in the background. You will be notified when it finishes; read newe
+… [48 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-151", "timeout_ms": 180000, "wait": true}`
+
+  ```
+2cff8dba R1 — LES POSITIONS RELATIVES ÔTENT L'EXPLOSION (8,20 → 3,25 À 1 000 OCTETS), LA FENÊTRE ENTRAÎNÉE DONNE LA LECTURE (−0,244 À OCTETS CONSTANTS)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; git show --stat --oneline HEAD | head -8; echo \"--- 200k ---\"; tail -1 work/n2ac/mix-200k.log; free -g | sed -n 2p; git status --short | grep -v \"^??\" | head", "description": "Verify commit and check training"}`
+
+  ```
+18:52:24
+2cff8dba R1 — LES POSITIONS RELATIVES ÔTENT L'EXPLOSION (8,20 → 3,25 À 1 000 OCTETS), LA FENÊTRE ENTRAÎNÉE DONNE LA LECTURE (−0,244 À OCTETS CONSTANTS)
+ docs/pilotage/en-cours.md                          |  26 +-
+ journal/2026-11-02/README.md                       |   9 +-
+ journal/2026-11-02/apprentissage.md                |   4 +-
+ journal/2026-11-02/attention.md                    |   4 +-
+ journal/2026-11-02/distribue.md                    |   8 +-
+ journal/2026-11-02/docs.md                         |   4 +-
+ journal/2026-11-02/memoire.md                      |   4 +-
+--- 200k ---
+pas 156300 · perte 1.2589 · PPL val 3.156 · 8949 s
+Mem:             125          31          58           0          37          94
+ M tools/bloc_linguistique.py
+ M tools/tests/linguistique/test_bloc_linguistique.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && head -40 journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md; echo \"...\"; ls journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/", "description": "Read existing closure format"}`
+
+  ```
+# Session `fe3c05f0` — fermée le 2026-11-02 à 18 h 45
+
+> **Id DSH** : `fe3c05f0-834b-44f2-8739-501865d652c1`.
+> **Rôle** : D/R/A — les données, le lecteur, le moteur.
+> **Clôture** : le fonds CEGEP est océrisé ; R1.1/R1.2 et A2.6 passent à leurs sessions.
+
+## Ce qui a été livré
+
+- **L'OCR du fonds CEGEP** : 147 scans détectés sur le texte intégral (2 681 PDF, 2 701 p),
+  **56 doublons exacts retirés** (648 p), **91 scans uniques (2 053 p)** ; **60 documents,
+  1 982 p, 4 408 811 caractères**, **8 Ko 0** ; recouvrement éval `fr-xnli` **0/40**,
+  `fr-udhr` **0/24**, `en-xnli` **0/40**. Fiche
+  [`ocr-cegep`](../../../reports/rapport-ocr-cegep.md), manifeste
+  [`ocr-pdf-cegep.json`](../../../reports/ocr-pdf-cegep.json), contrôle
+  [`contamination`](../../../reports/ocr-pdf-cegep-contamination.json).
+- **La correction de la détection** : la règle des **deux premières pages** donnait **807
+  candidats** (179 426 p) ; le texte intégral en confirme **147** (2 701 p) — **5,5×** de
+  sur-classement. Les **10 notes** du pilote étaient **9 livres natifs** (463 à 1 706 car/p) et
+  un seul scan (*inscription AQPC*, 2 p) : le corpus du pilote est archivé et **n'entre pas**
+  dans le corpus. Détec
+… [864 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2ac/mix-200k.log; git log --oneline -2", "description": "Wait and monitor 200k run"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-154]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-154", "timeout_ms": 600000, "wait": true}`
+
+  ```
+19:02:41
+pas 166450 · perte 1.1131 · PPL val 3.108 · 9564 s
+2cff8dba R1 — LES POSITIONS RELATIVES ÔTENT L'EXPLOSION (8,20 → 3,25 À 1 000 OCTETS), LA FENÊTRE ENTRAÎNÉE DONNE LA LECTURE (−0,244 À OCTETS CONSTANTS)
+aeace14b B13 — LA PORTE DRVM S'OUVRE AVEC LA RÈGLE : 27 NŒUDS, 4 SONDE (200 SANS ; PAS DE BUT)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation du générateur de tableau comparatif (60 k vs 200 k)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"table_200k.py — le tableau 60 k vs 200 k, généré depuis les deux JSON d'évaluation.\n\nAucune valeur recopiée à la main : la fiche colle la sortie de ce script. Les gains sont\ncalculés dans le sens 60 k → 200 k (négatif = le run long fait mieux).\n\nUsage  … [1633 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/table_200k.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2ac/mix-200k.log; ls -la work/n2ac/mix-200k.pt* 2>/dev/null | head -3", "description": "Wait for 200k run to approach completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-155]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-155", "timeout_ms": 900000, "wait": true}`

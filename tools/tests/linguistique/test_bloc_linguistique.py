@@ -148,6 +148,21 @@ class TestBlocLinguistique(unittest.TestCase):
         self.assertTrue(a.refus)
         self.assertEqual(a.etiquettes, [])
 
+    def test_tagger_neuronal_pragmatique(self):
+        def transport(*_):
+            return '{"acte":"question","negation":true,"modalite":false,"double_sens":false}'
+
+        n = bl.NeuronalLLMPragmatique("faux-modele", transport=transport)
+        a = n.analyser("Viens-tu ?", "fr")
+        etiquettes = {(e.niveau, e.type): e.valeur for e in a.etiquettes}
+        self.assertEqual(etiquettes[("pragmatique", "acte")], "question")
+        self.assertIn(("phrase", "négation"), etiquettes)
+        self.assertNotIn(("phrase", "modalité"), etiquettes)
+        self.assertNotIn(("pragmatique", "double_sens"), etiquettes)
+        self.assertEqual(n.appels, 1)
+        n.analyser("Viens-tu ?", "fr")
+        self.assertEqual(n.appels, 1, "le cache doit éviter le second appel")
+
     def test_priorite_syntagme_confiance(self):
         defaut = bl.Parallele([bl.Heuristique(), bl.MockNeuronal()]).analyser(TEXTE, "fr")
         confiance = bl.Parallele([bl.Heuristique(), bl.MockNeuronal()],

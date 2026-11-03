@@ -126,7 +126,7 @@ modèle. C'est ce qui rend la **substitution** possible.
 
 ### 5.2 La version neuronale
 
-Cinq objets, un même contrat :
+Six objets, un même contrat :
 
 - **`MockNeuronal`** : le **double de contrat**. Il est déterministe, sans GPU, et rend les
   niveaux profonds (morphème, POS ouverte, syntagme, pragmatique) avec `source = neuronal`. Il
@@ -150,6 +150,11 @@ Cinq objets, un même contrat :
   Il appelle les deux taggers (chacun avec son cache), réunit leurs étiquettes et laisse la
   pragmatique à l'heuristique. C'est le bloc de la cascade complète ; un refus d'un des deux
   n'efface pas l'autre.
+- **`NeuronalLLMPragmatique`** : le **tagger de pragmatique**. Un prompt d'analyse, une grammaire
+  GBNF qui impose `{acte, negation, modalite, double_sens}` (trois actes, trois booléens) ; il
+  rend `pragmatique.acte`, `phrase.négation`, `phrase.modalité`, `pragmatique.double_sens`.
+  Mesuré sur le gold : parfait sur les **20 réelles** (dev), **sous l'heuristique** sur les
+  **160 synthétiques** (acte 0,6375, double sens 0,6062) ; l'heuristique garde la pragmatique.
 
 **Ce que le modèle local a fait ici.** Le vrai Qwen2.5-0.5B (de base) ne suit pas le format : il
 recopie le schéma du prompt et ne rend pas de POS exploitables ; le 3B-Instruct est dominé sur les
@@ -162,8 +167,9 @@ tagger de syntagmes ne rend que ce niveau. La **cascade complète** (composite +
 `confiance` + pragmatique heuristique) rend, sur les 180 : POS **0,9415**, syntagmes exacts
 **0,6088** / tête **0,7539**, acte **1,0**, fraction **0,6381** ; les **ablations** (POS seule,
 syntagmes seuls) sont exactement égales à la complète, et la politique par défaut retombe à
-0,2137 / 0,5670. La pragmatique reste à l'heuristique ; un tagger neuronal de pragmatique reste
-à mesurer. Les chiffres, les contrôles et les limites sont dans
+0,2137 / 0,5670. La pragmatique neuronale est mesurée : parfaite sur les 20 réelles (dev) mais **sous
+l'heuristique** sur les 160 synthétiques (acte 0,6375, double sens 0,6062) ; l'heuristique
+garde. Les chiffres, les contrôles et les limites sont dans
 [`rapport-pensee-gold-neuronal.md`](../../reports/rapport-pensee-gold-neuronal.md),
 [`rapport-pensee-gold-syntagmes.md`](../../reports/rapport-pensee-gold-syntagmes.md) et
 [`rapport-pensee-gold-cascade.md`](../../reports/rapport-pensee-gold-cascade.md).
@@ -181,7 +187,8 @@ annotation = bloc.analyser(texte, langue="fr")
 ```
 
 et `bloc` peut être `Heuristique`, `MockNeuronal`, `NeuronalLLM`, `NeuronalLLMPOS`,
-`NeuronalLLMChunks`, `NeuronalLLMCompose`, `Parallele` ou `Cascade`. Le
+`NeuronalLLMChunks`, `NeuronalLLMCompose`, `NeuronalLLMPragmatique`, `Parallele` ou
+`Cascade`. Le
 test `test_substitution` vérifie que `Heuristique` et `MockNeuronal` rendent **le même schéma**
 (mêmes clés, mêmes spans valides) et que seules la `source` et les valeurs changent.
 
