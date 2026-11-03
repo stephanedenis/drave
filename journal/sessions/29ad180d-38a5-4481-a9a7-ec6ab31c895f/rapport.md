@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 4.4 h |
 | Tours | 7 |
-| Messages | 251 |
-| Appels d'outils | 260 |
+| Messages | 266 |
+| Appels d'outils | 275 |
 | Fichiers touchés | 13 |
-| Commandes | 191 |
+| Commandes | 202 |
 | Sous-agents | 0 |
-| Commits | 14 |
+| Commits | 15 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -269,7 +269,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 ### Tour 7 — tiens ta liste de tâches dsh à jour et continue
 
-*11 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - todo_write
 - bash — Add homograph context rule and test examples
@@ -282,6 +282,10 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - bash — Commit and push v4 context rule
 - bash — Commit bank manifest timestamp
 - bash — Copy 55-line manifest and check main state
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md`
+- read
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md`
+- … et 11 autres
 
 ## 3. Travail accompli
 
@@ -295,7 +299,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_analyseur.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/exporter_corpus.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/verifier_corpus.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md` | 3 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md` | 5 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 7 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_corpus.py` | 2 | 0 |
@@ -345,7 +349,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 151 autres
+- … et 162 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -402,6 +406,22 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T7** `propre          6.93  65.5%    8.0%    0.89     1134            1104`
 - **T7** `melange         4.11   9.1%    0.4%    0.93       23              23`
 - **T7** `166:| phrase | propre | 65,5 % | 8,0 % | 0,89 | 1 134 |`
+- **T7** `31:| ligne | CEGEP | 3,6 % | 0,5 % | 0,94 | 18 | 15 |`
+- **T7** `32:| ligne | propre | **51,0 %** | 10,2 % | 0,89 | 553 | 550 |`
+- **T7** `33:| ligne | mélange | 3,8 % | 0,5 % | 0,94 | 18 | 18 |`
+- **T7** `35:| phrase | propre | **65,5 %** | 8,0 % | 0,89 | 1 064 | 1 035 |`
+- **T7** `| ligne | CEGEP | 3,6 % | 0,5 % | 0,94 | 18 | 15 |`
+- **T7** `| ligne | propre | **51,0 %** | 10,2 % | 0,89 | 553 | 550 |`
+- **T7** `| ligne | mélange | 3,8 % | 0,5 % | 0,94 | 18 | 18 |`
+- **T7** `| phrase | CEGEP | 8,5 % | 0,8 % | 0,94 | 25 | 25 |`
+- **T7** `| phrase | propre | **65,5 %** | 8,0 % | 0,89 | 1 064 | 1 035 |`
+- **T7** `| phrase | mélange | 9,1 % | 0,4 % | 0,93 | 22 | 22 |`
+- **T7** `- **Le filtre** sélectionne les lignes plausibles (20–300 car., ≥ 4 mots, ≥ 80 % de lettres) : les`
+- **T7** `35:| phrase | propre | **65,5 %** | 8,0 % | 0,89 | 1 134 | 1 104 |`
+- **T7** `- **Fait** : types **47/47**, rôles **117/117** ; contrôles **80/117**, **82/117**, **0,109** ; h033 corrigé, **h046/h047** nommés ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %**`
+- **T7** `98:- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **47**, **46 tests** ; corpus **47**`
+- **T7** `34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v3** : frontière GN-devant-verbe, gold **47** phrases ; analyseur **47/47** types, **117/117** rôles`
+- **T7** `- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **47**, **46 tests** ; corpus **47** st`
 
 ## 5. Erreurs rencontrées
 
@@ -433,4 +453,5 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS" -m "mesure_corpus.py : 50 000 lignes et 20 799 p
 - S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55" -m "Le GN ne s'arrête plus devant « ferme »/« fait » quand le suivant est un aux
 - S — BANQUE : LE MANIFESTE REPREND LA DATE DU RESCAN (SHA 43957a3b INCHANGÉ)" -m "La banque de 200 phrases / 355 candidats est identique (sha256 43957a3b…) ; seu
+- S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55 (SHA 76accf9d)" -m "Le GN ne s'arrête plus devant « ferme »/« fait » quand le sui
 

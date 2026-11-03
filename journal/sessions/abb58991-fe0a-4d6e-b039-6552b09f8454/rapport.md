@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 4.3 h |
+| Durée | 4.4 h |
 | Tours | 10 |
-| Messages | 418 |
-| Appels d'outils | 520 |
-| Fichiers touchés | 35 |
-| Commandes | 381 |
+| Messages | 425 |
+| Appels d'outils | 527 |
+| Fichiers touchés | 37 |
+| Commandes | 385 |
 | Sous-agents | 0 |
 | Commits | 11 |
 | Compactages de contexte | 1 |
@@ -407,14 +407,21 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 
 ### Tour 10 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Locate B13 gate four expected values
 - read
+- bash — Update four B13 expected values to S 647205a
+- bash — Run B13 gate after four values fix
+- write `/home/stephane/GitHub/Qtrinet/reports/rapport-b13-porte-138.md`
+- write `/home/stephane/GitHub/Qtrinet/reports/b13-porte-138.json`
+- bash — Apply B13 138 state updates and check budgets
+- bash — Get gate result and fix future hours
+- job_output
 
 **Synthèse produite :**
 
-⏵ Je lis les quatre assertions (T111, T113–T115) et les valeurs du sous-module S `647205a` avant de les corriger
+⏵ J'attends le verdict de la porte (log encore vide) et j'aligne l'état 134→138 resté sur la roadmap
 
 ## 3. Travail accompli
 
@@ -457,6 +464,8 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 | `/home/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py` | 0 | 1 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_mobile_drvm.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-mobile.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-b13-porte-138.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/b13-porte-138.json` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -500,7 +509,7 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 341 autres
+- … et 345 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 20 h 22 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 20 h 39 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -36,14 +36,14 @@
 
 - **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
 - **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
-- **Plan** : 1–4) ~~plan, analyseur (gold 47), export, tests 46~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Plan** : 1–4) ~~plan, analyseur (gold 55), export, tests 47~~ ; 5–6) ~~fiche, pointeur, état~~.
 - **Ambition** : nommer le rôle et la frontière GN.
 - **Stratégie** : une règle = une phrase, trois contrôles.
-- **Objectif final** : gold **47**, corpus **47**, manifeste SHA-256.
-- **Fait** : types **47/47**, rôles **117/117** ; contrôles **80/117**, **82/117**, **0,109** ; h033 corrigé, **h046/h047** nommés ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %** propre (9,1 %) ; banque **200** phrases / **355** candidats ; **46 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
-- **Ce qu'elle fait** : **`97641d5`** ; corpus **47** (SHA `f2a0d2fb…`) ; banque **200** phrases / **355** candidats, **0** validée.
+- **Objectif final** : gold **55**, corpus **55**, manifeste SHA-256.
+- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %** propre (9,1 %) ; banque **200** phrases / **355** candidats ; **47 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
+- **Ce qu'elle fait** : **`00d2a01`** ; corpus **55** (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats, **0** validée.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
-- **Prochaine action** : homographes/lexique, puis validation humaine de la banque.
+- **Prochaine action** : **h050/h053**, puis validation humaine de la banque.
 - **Bloquants** : aucun ; **banque à 0** verdict.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
 
@@ -55,12 +55,11 @@
 - **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels.
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
-- **Fait** : B13 **134/140** (4 S + 2 test périmé ; 140/140 périmé), gold **432** ; **gold
+- **Fait** : B13 **138/140** (4 S fixés ; T132/T133 restent), gold **432** ; **gold
   neuronal** POS/syntagmes, cascade **0,9415/0,7539/1,0** ; **DRVM/native** cadenas 3, porte 27,
   labyrinthe 2 ; **porte minute** — **26 nœuds** ; **porte mobile** — (3,3) **échoue**, (1,3)
-  passe (28/4) ; l'aveugle (26/2), le labyrinthe (29/5) aussi : test faible ;
-  **pragmatique** test 0,6375 ; l'heuristique garde ;
-  [B13](../../reports/rapport-b13-porte-134.md), [minute](../../reports/rapport-pensee-porte-minute.md),
+  passe (28/4) ; l'aveugle/labyrinthe aussi ; **pragmatique** 0,6375 ; l'heuristique garde ;
+  [B13](../../reports/rapport-b13-porte-138.md), [minute](../../reports/rapport-pensee-porte-minute.md),
   [mobile](../../reports/rapport-pensee-porte-mobile.md),
   [pragmatique](../../reports/rapport-pensee-pragmatique-neuronale.md).
 - **Ce qu'elle fait** : **gold neuronal, DRVM, pragmatique, portes** mesurés ; reprise **16 h 16**.
@@ -95,11 +94,11 @@
 - **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 octets (table absolue **8,2024**),
   invariant au décalage ; **R1.2** à octets constants **3,0107** (−0,244), le contexte est utilisé ;
   depuis zéro, RoPE ne suffit pas — [`n2-r11`](../../reports/rapport-n2-r11.md).
-- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **47**, **46 tests** ; corpus **47** structures (SHA `f2a0d2fb…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; **banque validée à 0**.
+- **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; **banque validée à 0**.
 - **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (**< 2,5 non atteinte** ; 2,5 à
   1,3–2,7 M pas) ; **R1.2 à 1 024** lancée pour la nuit (GPU 0) ; N4 **0/40** ;
   [`n2-200k`](../../reports/rapport-n2-200k.md), [`n2-canaux`](../../reports/rapport-n2-canal-34m.md).
-- **Pensée — B13** : **134/140**, gold **432**, **116 liens** ; minute 26, mobile **test faible** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
+- **Pensée — B13** : **138/140**, gold **432**, **116 liens** ; minute 26, mobile **test faible** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
   [`anaphore-bilan`](../../reports/rapport-pensee-anaphore-bilan.md).
 
 ## Les chiffres de l'état
@@ -110,7 +109,7 @@
 |---|---|---|
 | portes | **82** (81 à la passe du 02/11 06 h : 76/5 ; **82e `porte-ressources`**, à valider) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **563** / **649** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **564** / **650** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **02/11 06 h** (81 portes, 76/5) | `docs/pilotage/references-non-regression.md` |
 
@@ -122,7 +121,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 134/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 134/140 ; minute 26, mobile test faible** ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 134/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 138/140 ; minute 26, mobile test faible** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; **< 2,5 non atteinte** (2,5 à 1,3–2,7 M pas) ; **R1.2-1024 en cours** (GPU 0) ; N4 0/4 ; N5 gelé | **N2** : R1.2-1024, fiche ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R2/R3 attendent N5/N4 | **R1.1/R1.2 mesurées** ; la suite est **1 024 octets entraînés** (fenêtre), pas un autre schéma |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |

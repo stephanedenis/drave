@@ -4719,3 +4719,227 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 55; date +%H:%M:%S; wc -l < work/portes/passe-1102-19h32/registre.txt; tail -1 work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt | tr '\\n' ' '; echo; git log --oneline -1", "descr … [47 caractères tronqués]`
+
+  ```
+20:36:16
+59
+porte-occupation-moteur 0 62
+porte-homeostasie 2 0 porte-indice 1 1027 porte-melange 1 123 
+42db89f6 NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS
+  ```
+
+### 🤖 Assistant
+
+⏵ 59/81, la 82ᵉ porte est committée (`42db89f6`) ; portes OCR en cours
+
+L'autre écrivain a committé la **82ᵉ porte** (`porte-ressources`) : `42db89f6`, autotest 9 cas, registre cohérent. Ma passe reste à **59 portes, 56 vertes, 3 rouges tolérées**, engagée sur les portes OCR (`ocr`, `ocr-scans`). Fin projetée ~21 h 05.
+
+
+## Tour 14
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 10/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 55; date +%H:%M:%S; wc -l < work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt | wc -l", "description": "Paced check of OCR gates" … [1 caractères tronqués]`
+
+  ```
+20:37:20
+59
+porte-occupation-elagage 0 72
+porte-occupation-moteur 0 62
+3
+  ```
+
+### 🤖 Assistant
+
+⏵ Quelle porte OCR occupe la machine ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; g=$(ls -t work/portes/passe-1102-19h32/*.log | head -1); echo \"$(basename $g)\"; tail -3 \"$g\"; ps -eo pid,etime,pcpu,args | grep -E \"ocr|tesseract\" | grep -v grep | head -3 | cut -c1-120; date +%H:%M:%S", "description": "Identify  … [32 caractères tronqués]`
+
+  ```
+porte-ocr-scans.log
+
+  100 mesures en 91 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+ 440365       02:15  0.0 timeout 1800 bash tools/porte-ocr-scans.sh
+ 440370       02:15  0.0 bash tools/porte-ocr-scans.sh
+20:37:24
+  ```
+
+### 🤖 Assistant
+
+⏵ `porte-ocr-scans` tourne (100 mesures en 91 s, colonnes en cours)
+
+`porte-ocr-scans` est la porte longue du moment (2 min 15, déjà 100 mesures de scans puis les colonnes 10 pages × 2 versions × 3 familles). Passe à **59 portes, 56 vertes, 3 rouges tolérées** ; la suite (`poids-creux`, `profondeur-routee`, `vision`) portera le verdict vers 21 h 10.
+
+
+## Tour 15
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 11/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 55; date +%H:%M:%S; wc -l < work/portes/passe-1102-19h32/registre.txt; tail -1 work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt | wc -l", "description": "Paced pass check"}`
+
+  ```
+20:38:32
+59
+porte-occupation-moteur 0 62
+3
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture de la nouvelle porte `porte-ressources` (contrôle de l'instrument)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat tools/porte-ressources.sh", "description": "Read the new resources gate source"}`
+
+  ```
+#!/bin/bash
+# porte-ressources.sh — le registre des ressources tient : autotest et cohérence.
+#
+# POURQUOI CETTE PORTE EXISTE. Le registre `tools/ressources.py` est consultatif : il n'empêche
+# pas un job de tourner, il rend le conflit visible. Une porte doit vérifier ce qui est
+# vérifiable sans la machine : le code du registre (autotest des 9 cas : claim, conflit, file,
+# admission, check) et la cohérence du registre courant (aucune ressource sur-réservée).
+#
+# CE QU'ELLE NE VÉRIFIE PAS : le réel (processus GPU non déclarés, charge CPU, espace disque) —
+# c'est `--actual`, informatif, et le mapping processus→claim reste manuel. Les avertissements
+# de stockage (RAID à 33 Gio) et de NUMA (un GPU avec des fils sur cpu1) restent VISIBLES mais
+# ne font pas échouer la porte : ce sont des limites nommées, pas des régressions.
+#
+# Usage : tools/porte-ressources.sh
+set -u
+cd "$(dirname "$0")/.."
+echo "=== PORTE RESSOURCES — REGISTRE, CLAIMS, COHÉRENCE ==="
+if ! python3 tools/ressources.py --autotest; then
+    echo "  ❌ autotest du registre en échec"
+    exit 1
+fi
+if ! python3 tools/ressources.py --check; then
+    echo "  ❌ registre incohérent : une ressource est sur-réservée"
+    exit 1
+… [173 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ 82ᵉ porte relue : honnête (autotest + cohérence, avertissements non fatals, réel non vérifié et dit)
+
+`porte-ressources.sh` fait ce qu'elle annonce : autotest 9 cas + cohérence du registre, et **dit** ce qu'elle ne vérifie pas (le réel : processus GPU non déclarés, charge, disque) — les avertissements `nvme_raid` et NUMA restent visibles sans être fatals. Elle est verte. Passe toujours à **59 portes, 56 vertes, 3 rouges tolérées**, `ocr-scans` en cours.
+
+
+## Tour 16
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 12/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 40; date +%H:%M:%S; wc -l < work/portes/passe-1102-19h32/registre.txt; tail -1 work/portes/passe-1102-19h32/registre.txt; g=$(ls -t work/portes/passe-1102-19h32/*.log | head -1); echo \"$(basename $g)\"; tail -1 \"$g\" | cut -c1- … [47 caractères tronqués]`
+
+  ```
+20:39:31
+59
+porte-occupation-moteur 0 62
+porte-ocr-scans.log
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+  ```
+
+### 🤖 Assistant
+
+⏵ Constitution de la preuve « sessions vivantes / plans périmés » pour le verdict
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; { date '+preuve à %H:%M:%S'; for s in 0733c5bb-f90b-4f58-9241-3364fa32e46c 29ad180d-38a5-4481-a9a7-ec6ab31c895f e181ce02-cd50-488a-a6be-e84b79d40dcc 536cd5d6-94ac-4057-8fe9-11709a4587c7; do printf \"%s  plan=%s  digest=%s\\n\" \"${s:0: … [354 caractères tronqués]`
+
+  ```
+preuve à 20:39:37
+0733c5bb  plan=19:56   digest=20:35:52
+29ad180d  plan=20:40   digest=20:35:55
+e181ce02  plan=20:39   digest=20:36:12
+536cd5d6  plan=20:26   digest=20:35:56
+---
+59
+  ```
+
+### 🤖 Assistant
+
+⏵ S (20 h 40) et Pensée (20 h 39) ont rafraîchi ; N2 reste à 19 h 56 — preuve de vie consignée
+
+S a repris son heartbeat à **20 h 40** et Pensée à **20 h 39** (digests actifs à 20 h 35-36) : la future rouge de `porte-sessions`, si elle tombe, ne concernera plus que **N2** (plan 19 h 56, digest 20 h 35). Preuve consignée dans `work/preuve-heartbeats.txt`. Je rafraîchirai mon propre plan vers 20 h 50 pour rester sous le seuil de 45 min.
+
+
+## Tour 17
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 13/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Rafraîchissement de mon propre heartbeat (le hub est vivant) et point de passe
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; h=$(date +%H:%M); python3 - \"$h\" <<'PY'\nimport pathlib, re, sys\nh = sys.argv[1]\np = pathlib.Path(\"journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md\")\nt = p.read_text(encoding=\"utf-8\")\nt2 = re.sub(r\"- \\*\\*Heart … [337 caractères tronqués]`
+
+  ```
+heartbeat hub → 20:39
+20:39:49
+59
+porte-occupation-moteur 0 62
+  ```
+
+### 🤖 Assistant
+
+⏵ `ocr-scans` dure : est-elle vivante ou bloquée ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -4 work/portes/passe-1102-19h32/porte-ocr-scans.log; echo \"--- processus ---\"; ps -eo pid,etime,pcpu,args | grep -E \"mesurer_scans|mesurer_colonnes|porte-ocr-scans\" | grep -v grep | cut -c1-120", "description": "Check ocr-scan … [12 caractères tronqués]`
+
+  ```
+✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+
+  100 mesures en 91 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+--- processus ---
+ 440365       04:44  0.0 timeout 1800 bash tools/porte-ocr-scans.sh
+ 440370       04:44  0.0 bash tools/porte-ocr-scans.sh
+ 441742       03:12  101 python3 tools/mesurer_colonnes.py --porte
+  ```
+
+### 🤖 Assistant
+
+⏵ `ocr-scans` vivante : `mesurer_colonnes.py` tourne à 101 % (3 min), pas de blocage
+
+La porte n'est pas pendue : `mesurer_colonnes.py --porte` calcule depuis 3 min à 101 % de CPU (10 pages × 2 versions × 3 familles), après les 100 mesures de scans en 91 s. Le délai de 1 800 s ne sera pas atteint. Mon heartbeat est rafraîchi (20 h 39) ; passe à **59 portes, 56 vertes, 3 rouges tolérées**.
+
+
+## Tour 18
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h."
+Round: 14/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

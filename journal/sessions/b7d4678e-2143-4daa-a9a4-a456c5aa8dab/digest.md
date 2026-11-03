@@ -7003,3 +7003,24 @@ revue de documentation · 563 fiche(s) · 649 JSON · 119 doc(s) · 82 porte(s) 
   ```
 
 - **bash** `{"command": "export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add docs/pilotage/en-cours.md docs/methode/portes.md docs/pilotage/references-non-regression.md journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md; git diff --cached --stat; git commit -m \"NUIT — LA 82e PORTE E … [411 caractères tronqués]`
+
+  ```
+docs/methode/portes.md                                        | 2 ++
+ docs/pilotage/en-cours.md                                     | 2 +-
+ docs/pilotage/references-non-regression.md                    | 5 -----
+ journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md | 2 +-
+ 4 files changed, 4 insertions(+), 7 deletions(-)
+  ✅ index : aucun fait stagé sans état
+[master 20996b87] NUIT — LA 82e PORTE EST COMPTÉE (82) ; LE BUDGET T1 REVIENT SOUS 2 500 ; S RAFRAÎCHI
+ 27 files changed, 666 insertions(+), 66 deletions(-)
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 20 h 40 — la 82e porte et les compteurs\n\n- **Porte `porte-ressources`** ajoutée (autotest 9 cas + `--check`) : verte, avertissements\n  `nvme_raid` (33 Gio) et NUMA non fatals. La passe en cours reste à **81** ; la suivante comptera **82**.\n-  … [680 caractères tronqués]`
+
+  ```
+log mis à jour
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ⚠ 536cd5d6 : GPU sur NUMA 0 avec des fils sur cpu1
+  ```
+
+- **job_output** `{"job_id": "bash-266", "timeout_ms": 600000, "wait": true}`

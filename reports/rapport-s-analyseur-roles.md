@@ -1,27 +1,26 @@
-# S — La frontière du GN s'arrête devant le verbe : 47/47 types, 117/117 rôles, 47 structures au corpus
+# S — Le contexte tranche les homographes : 54/55 types, 131/131 rôles, 55 structures au corpus
 
-> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur un gold de **47 phrases**
-> (7 `dev`, 16 `test`, 24 `holdout` en trois vagues), la structure de base retrouve la **séquence
-> de types 47/47** (100 %), les **rôles 117/117** (100 %), les **compléments 47/47**, et couvre
-> **1 309/1 320 octets** (99,2 % ; holdout **605/616**, 98,2 %). La règle de **frontière du GN**
-> corrige l'échec `h033` (« La femme parle ») ; la **limite nommée** se déplace : les homographes
-> nominaux `h046` (« ferme ») et `h047` (« fait ») sont coupés comme des verbes, et c'est la
-> **couverture** qui le voit (0,75 et 0,77), pas le type ni le rôle. Le corpus de référence sort :
-> **47 lignes**, SHA-256 `f2a0d2fb3a9b0a9aebd562b170503f4d1a98251efdc4a3645a2523b5197227a2`.
+> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur un gold de **55 phrases**
+> (7 `dev`, 16 `test`, 32 `holdout` en quatre vagues), la structure de base retrouve la **séquence
+> de types 54/55** (98,2 %), les **rôles 131/131** (100 %), les **compléments 47/47**, et couvre
+> **1 466/1 475 octets** (99,4 % ; holdout **762/771**, 98,8 %). La **règle de contexte** corrige
+> les homographes `h046` (« ferme ») et `h047` (« fait ») : un mot du lexique de verbes est un
+> **nom** si le suivant est un auxiliaire ou un autre verbe. La **limite nommée** se déplace :
+> `h050` (« fait » suivi d'un verbe **hors lexique**) et `h053` (« lit » après un adjectif, en
+> fin de phrase). Le corpus de référence sort : **55 lignes**, SHA-256
+> `76accf9dbd60a9fcc9fe58a56eecbdbb6aec0ffd5e8dbf0c69443e4a49dd1ac6`.
 
 ## Le dispositif
 
 - **Gold** : [`tools/structures/donnees/gold-analyseur.json`](../tools/structures/donnees/gold-analyseur.json),
-  **47 phrases** : **7 `dev`** (les phrases du banc), **16 `test`** (écrites avant les règles) et
-  **24 `holdout`** en trois vagues : `h024–h031` (première règle), `h032–h039` (après la copule),
-  `h040–h047` (après la frontière GN-devant-verbe). Chaque phrase porte sa suite de segments
-  (texte, type, rôle) ; les spans se calculent par sous-chaîne, dans l'ordre.
-- **Analyseur** : [`generateur.py`](../tools/structures/generateur.py), fonction `structure()` —
-  segmentation (GN, GV, GP, REL, SUB), rôles par la préposition et son contexte, subordonnées
-  typées, passif, copule, et **frontière GN-devant-verbe**.
+  **55 phrases** : **7 `dev`**, **16 `test`**, **32 `holdout`** en quatre vagues : `h024–h031`
+  (première règle), `h032–h039` (copule), `h040–h047` (frontière GN-devant-verbe), `h048–h055`
+  (règle de contexte des homographes). Les spans se calculent par sous-chaîne, dans l'ordre.
+- **Analyseur** : [`generateur.py`](../tools/structures/generateur.py), `structure()` — rôles par
+  la préposition et son contexte, subordonnées typées, passif, copule, frontière GN-devant-verbe,
+  **contexte des homographes**.
 - **Mesure** : [`mesure_analyseur.py`](../tools/structures/mesure_analyseur.py) →
-  [`mesure-analyseur.json`](../tools/structures/donnees/mesure-analyseur.json). Trois chiffres
-  (types, couverture, rôles) et trois contrôles.
+  [`mesure-analyseur.json`](../tools/structures/donnees/mesure-analyseur.json).
 - **Export** : [`exporter_corpus.py`](../tools/structures/exporter_corpus.py) →
   `data/structures/banque.jsonl` ; vérification : [`verifier_corpus.py`](../tools/structures/verifier_corpus.py).
 
@@ -31,77 +30,68 @@
 |---|---:|---:|---:|---:|---:|
 | `dev` | 7 | **7/7** | 229/229 (100 %) | **22/22** | **10/10** |
 | `test` | 16 | **16/16** | 475/475 (100 %) | **40/40** | **19/19** |
-| `holdout` | 24 | **24/24** | 605/616 (98,2 %) | **55/55** | **18/18** |
-| **global** | **47** | **47/47** (100 %) | **1 309/1 320** (99,2 %) | **117/117** (100 %) | **47/47** |
+| `holdout` | 32 | **31/32** | 762/771 (98,8 %) | **69/69** | **18/18** |
+| **global** | **55** | **54/55** (98,2 %) | **1 466/1 475** (99,4 %) | **131/131** (100 %) | **47/47** |
 
-## La frontière du GN (la règle v3)
+## La règle de contexte (v4)
 
-Le GN s'arrête devant un **verbe conjugué fréquent** (`VERBES_FINIS`, lexique assumé) et le GV
-s'arrête devant un **adverbe de temps** :
+Un mot du lexique de verbes (`VERBES_FINIS`) n'est **pas** une frontière de GN quand le mot
+suivant montre qu'il est un **nom** :
 
-- « La femme parle à son fils. » → `GN « La femme »` · `GV « parle »` · `GP « à son fils »` ;
-- « Le train part demain. » → `GN « Le train »` · `GV « part »` · `GP « demain »` (temps) ;
-- « Le petit chat noir dort. » → `GN « Le petit chat noir »` · `GV « dort »` ;
-- « Une belle maison. » → un seul `GN` (aucun verbe).
+- `La petite **ferme** est belle.` → `GN « La petite ferme »` · `GV « est belle »` (le suivant
+  « est » est un auxiliaire) ;
+- `Le simple **fait** surprend.` → `GN « Le simple fait »` · `GV « surprend »` (le suivant
+  « surprend » est un verbe) ;
+- mais `La femme **parle** à son fils.` → `GN « La femme »` · `GV « parle »` (le suivant « à »
+  n'est ni auxiliaire ni verbe) ;
+- et `Le chat **fait** des bonds.` → `GN « Le chat »` · `GV « fait »` (le suivant « des » est un
+  déterminant).
 
-Les règles de rôle de la v2 restent : possession/thème, instrument/attribut, but/lieu,
-agent/moyen, passif, copule, subordonnées (temps, cause, concession, hypothèse, but, manière,
-contenu).
+Les règles de la v3 restent : frontière du GN devant un verbe conjugué, GV arrêté devant un
+adverbe de temps, rôles contextuels, subordonnées, passif, copule.
 
 ## Les contrôles négatifs
 
 | contrôle | ce qu'il fait | résultat |
 |---|---|---:|
-| **baseline** | rôle constant par type (GN=agent, GV=predicat, GP=lieu, SUB=contenu, REL=qualite) | **80/117** (0,684) |
-| **règles coupées** | `structure(roles=False)` : mêmes segments, rôles par défaut | **82/117** (0,701) |
+| **baseline** | rôle constant par type (GN=agent, GV=predicat, GP=lieu, SUB=contenu, REL=qualite) | **94/131** (0,718) |
+| **règles coupées** | `structure(roles=False)` : mêmes segments, rôles par défaut | **96/131** (0,733) |
 | **rôles mélangés** | 200 permutations des rôles attendus des compléments | **0,109** [0,00 ; 0,23] |
 | **span corrompu** | `verifier_corpus.py --autotest` : un segment faux doit être refusé | **refusé** |
 | **empreinte fausse** | SHA-256 du manifeste ≠ fichier | **refusé** |
 
-Les trois contrôles de rôle sont nécessaires : sans la baseline et les règles coupées, 117/117
-pourrait être le score d'un étiqueteur qui répète un rôle ; sans les rôles mélangés, il pourrait
-être le score de la distribution. **117/117 contre 80/117 et 0,109** : ce sont les règles qui
-lisent les mots.
+**131/131 contre 94/131 et 0,109** : ce sont les règles qui lisent les mots, pas un rôle répété.
 
-## L'échec nommé, et le protocole qui le rend honnête
+## Les limites nommées, et le protocole
 
-**`h033` est corrigé** : « La femme parle à son fils. » rend maintenant `GN « La femme »` ·
-`GV « parle »` · `GP « à son fils »` (types 3/3, couverture 1,0). La règle est un **lexique de
-verbes finis**, pas un étiqueteur.
+- `h050` — « Le triste **fait** demeure. » : le mot suivant (`demeure`) n'est **pas** dans le
+  lexique de verbes, donc la règle ne voit pas le nom ; le GN s'arrête à « Le triste »,
+  **couverture 0,80**, types `[GN, GV]` (comme l'attendu) ;
+- `h053` — « Le grand **lit**. » : le nom est après un adjectif, en **fin de phrase** ; le GN
+  s'arrête à « Le grand », le GV « lit » apparaît, **type faux** (`[GN, GV]` au lieu de `[GN]`).
 
-**La nouvelle limite est nommée** : les homographes nominaux.
-
-- `h046` — « La petite **ferme** est belle. » → le GN s'arrête à « La petite », le GV commence à
-  « ferme » : types `[GN, GV]` (comme l'attendu), rôles 2/2, mais **couverture 0,75** ;
-- `h047` — « Le simple **fait** surprend. » → même coupe, **couverture 0,77**.
-
-C'est un cas où le **type et le rôle sont aveugles** à la frontière : seule la couverture la voit.
-La leçon vaut pour la mesure : un score de types à 100 % ne dit pas que les spans sont justes.
-
-**Le protocole du gold, sans le cacher** : `h033` avait échoué dans la vague 2 ; la règle de
-verbe a été ajoutée **après** cette mesure, donc la vague 2 n'est plus un holdout aveugle pour
-cette règle. La vague 3 (`h040–h047`) a été écrite **après** la règle et mesurée **une fois** ;
-les deux homographes n'ont pas été retouchés après la mesure. Les attendus n'ont jamais été
-modifiés après coup.
+**Le protocole, sans le cacher** : `h033` (vague 2), `h046` et `h047` (vague 3) avaient échoué ;
+les règles ont été ajoutées **après** ces mesures, donc les vagues 2 et 3 ne sont plus des
+holdouts aveugles pour elles. La vague 4 (`h048–h055`) a été écrite **après** la règle de contexte
+et mesurée **une fois** ; les deux limites n'ont pas été retouchées après la mesure. Les attendus
+n'ont jamais été modifiés après coup.
 
 ## Le corpus exporté
 
 | mode | sortie | lignes | statut | SHA-256 |
 |---|---|---:|---|---|
-| **gold** (défaut) | `data/structures/banque.jsonl` | **47** | `reference` | `f2a0d2fb…7227a2` |
+| **gold** (défaut) | `data/structures/banque.jsonl` | **55** | `reference` | `76accf9d…49dd1ac6` |
 | référence | `data/structures/banque-reference.jsonl` | 7 | `reference` | `77d7a014…42bf86` |
 | banque validée | `data/structures/banque-validee.jsonl` | **0** | — | vide |
 
 Le manifeste du corpus principal est copié dans
-[`reports/s-banque-structures.json`](s-banque-structures.json) : mode, 47 phrases, 47 structures,
+[`reports/s-banque-structures.json`](s-banque-structures.json) : mode, 55 phrases, 55 structures,
 source et sortie **relatives**, SHA-256. `verifier_corpus.py` recalcule l'empreinte, les comptes,
-les spans et la **restitution** (segments + trous = texte) : **47/47**.
+les spans et la **restitution** : **55/55**.
 
-**Le zéro de la banque validée est un fait, pas un oubli** : `donnees/validations.jsonl` n'existe
-pas — aucun verdict humain n'a été enregistré. Le mode `banque` lit le schéma `statut` du serveur
-(`resolu`, `compatible`, `double_sens` ; le dernier verdict gagne ; `exclu` ne sort pas) et garde
-`verdict: ok` pour les anciens journaux. L'export de **référence** est livré ; la **validation
-humaine** reste à faire et c'est elle qui remplira `banque-validee.jsonl`.
+**Le zéro de la banque validée est un fait** : `donnees/validations.jsonl` n'existe pas. La
+**banque de candidats réels** (200 phrases, 355 candidats, manifeste `43957a3b…`) est prête
+pour la validation humaine ; le mode `banque` la lira quand elle existera.
 
 ## Le miroir entrée/sortie
 
@@ -111,40 +101,36 @@ humaine** reste à faire et c'est elle qui remplira `banque-validee.jsonl`.
   et la **restitution** ; `verifier_corpus.py --autotest` corrompt un span et exige l'échec.
 
 La **fluidité n'est pas la fidélité** : le corpus se relit et se restitue, mais il n'est **pas**
-une validation humaine — le statut `reference` le dit, et le mode `banque` reste à zéro.
+une validation humaine — le statut `reference` le dit.
 
 ## Ce qui pourrait le rendre faux
 
-- **Le lexique de verbes est une liste** : les verbes absents ne coupent pas le GN ; les
-  homographes nominaux (`ferme`, `fait`, `lit`, `porte`, `danse`) le coupent à tort. La vague 3
-  en montre deux ; c'est la limite de l'heuristique, pas un accident.
-- **Le gold est de la même main que les règles** : les 16 `test` ont été écrits avant, mais par
-  le même agent ; la vague 3 limite le biais, elle ne l'annule pas. Un gold écrit par un humain
-  aveugle aux règles manquerait probablement les mêmes frontières autrement.
-- **47 phrases, 1 320 octets** : c'est un instrument de cohérence, pas de généralité. Les rôles
-  hors inventaire (`origine`, causatives, double complément) ne sont pas mesurés.
-- **L'appariement par recouvrement maximal** peut cacher une frontière fausse : `h046`/`h047` le
-  montrent (types et rôles justes, couverture basse). La couverture est le garde-fou, pas le
-  score de type.
+- **La règle de contexte dépend du mot suivant** : un verbe hors lexique (`demeure`) ou un nom en
+  fin de phrase après un adjectif (`le grand lit`) la trompent ; la vague 4 en montre deux.
+- **Le lexique de verbes est une liste** : les verbes absents ne coupent pas le GN ; le contexte
+  ne les connaît pas.
+- **Le gold est de la même main que les règles** : les 16 `test` sont antérieurs, mais la vague 4
+  est écrite par le même agent ; elle limite le biais, elle ne l'annule pas.
+- **55 phrases, 1 475 octets** : instrument de cohérence, pas de généralité ; les rôles hors
+  inventaire ne sont pas mesurés.
+- **L'appariement par recouvrement maximal** peut cacher une frontière fausse : `h050` le montre
+  (types et rôles justes, couverture basse). La couverture est le garde-fou.
 - **Le mode `banque` n'a aucun verdict** : le corpus livré est une **référence**, pas une banque
-  validée. Le confondre avec une vérité humaine serait l'erreur.
+  validée.
 
 ## Fichiers
 
-- Sous-module : commit **`90e507b`** (committé **dans son dépôt** avant le pointeur), **46 tests** aujourd'hui.
+- Sous-module : commits **`1445e1d`** (v4) et **`00d2a01`** (manifeste de la banque), **47 tests**.
 - Gold : `tools/structures/donnees/gold-analyseur.json` ; mesure :
   `tools/structures/donnees/mesure-analyseur.json` ; code : `generateur.py`,
   `mesure_analyseur.py`, `exporter_corpus.py`, `verifier_corpus.py`.
-- Corpus : `data/structures/banque.jsonl` (47 lignes, non versionné comme tout `data/`) ;
+- Corpus : `data/structures/banque.jsonl` (55 lignes, non versionné comme tout `data/`) ;
   manifeste committé : `reports/s-banque-structures.json`.
 
 ## La suite (ligne S)
 
-1. **Homographes et lexique** : distinguer le verbe du nom (`ferme`, `fait`, `lit`, `porte`) par
-   le contexte — ou assumer la liste et la documenter ;
-2. **Validation humaine** de la banque (le mode `banque` est le contrat ; 0 tant qu'elle n'existe
-   pas) ;
-3. **gold plus large** (voix, causatives, verbes à double complément) avant de créditer
-   l'analyseur d'autre chose que de la cohérence ;
-4. le corpus de référence peut être lu par **N2/R1** comme un petit test de structure, pas comme
-   un corpus d'entraînement massif.
+1. **`h050`/`h053`** : un lexique de verbes plus large, ou une règle de fin de phrase ; mesurer
+   sans retoucher le gold ;
+2. **Validation humaine** de la banque de 200 phrases (le mode `banque` est le contrat) ;
+3. **gold plus large** (voix, causatives, verbes à double complément) ;
+4. le corpus de référence peut être lu par **N2/R1** comme un petit test de structure.

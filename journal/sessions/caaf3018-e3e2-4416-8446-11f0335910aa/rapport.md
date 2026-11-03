@@ -7,12 +7,12 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 4.3 h |
-| Tours | 14 |
-| Messages | 218 |
-| Appels d'outils | 247 |
+| Durée | 4.4 h |
+| Tours | 19 |
+| Messages | 236 |
+| Appels d'outils | 255 |
 | Fichiers touchés | 6 |
-| Commandes | 188 |
+| Commandes | 196 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -51,6 +51,16 @@
 **Tour 13** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [652 caractères tronqués]
 
 **Tour 14** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 15** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 16** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 17** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 18** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
+
+**Tour 19** — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas … [653 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -322,9 +332,69 @@ L'autre écrivain a committé la **82ᵉ porte** (`porte-ressources`) : `42db89f
 
 ### Tour 14 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*2 appels d'outils.* Actions notables :
 
 - bash — Paced check of OCR gates
+- bash — Identify running OCR gate and processes
+
+**Synthèse produite :**
+
+⏵ `porte-ocr-scans` tourne (100 mesures en 91 s, colonnes en cours)
+
+`porte-ocr-scans` est la porte longue du moment (2 min 15, déjà 100 mesures de scans puis les colonnes 10 pages × 2 versions × 3 familles). Passe à **59 portes, 56 vertes, 3 rouges tolérées** ; la suite (`poids-creux`, `profondeur-routee`, `vision`) portera le verdict vers 21 h 10.
+
+### Tour 15 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Paced pass check
+- bash — Read the new resources gate source
+
+**Synthèse produite :**
+
+⏵ 82ᵉ porte relue : honnête (autotest + cohérence, avertissements non fatals, réel non vérifié et dit)
+
+`porte-ressources.sh` fait ce qu'elle annonce : autotest 9 cas + cohérence du registre, et **dit** ce qu'elle ne vérifie pas (le réel : processus GPU non déclarés, charge, disque) — les avertissements `nvme_raid` et NUMA restent visibles sans être fatals. Elle est verte. Passe toujours à **59 portes, 56 vertes, 3 rouges tolérées**, `ocr-scans` en cours.
+
+### Tour 16 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check OCR gate progress
+- bash — Capture liveness evidence for coordination red
+
+**Synthèse produite :**
+
+⏵ S (20 h 40) et Pensée (20 h 39) ont rafraîchi ; N2 reste à 19 h 56 — preuve de vie consignée
+
+S a repris son heartbeat à **20 h 40** et Pensée à **20 h 39** (digests actifs à 20 h 35-36) : la future rouge de `porte-sessions`, si elle tombe, ne concernera plus que **N2** (plan 19 h 56, digest 20 h 35). Preuve consignée dans `work/preuve-heartbeats.txt`. Je rafraîchirai mon propre plan vers 20 h 50 pour rester sous le seuil de 45 min.
+
+### Tour 17 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Refresh hub heartbeat and check pass
+- bash — Check ocr-scans liveness
+
+**Synthèse produite :**
+
+⏵ `ocr-scans` vivante : `mesurer_colonnes.py` tourne à 101 % (3 min), pas de blocage
+
+La porte n'est pas pendue : `mesurer_colonnes.py --porte` calcule depuis 3 min à 101 % de CPU (10 pages × 2 versions × 3 familles), après les 100 mesures de scans en 91 s. Le délai de 1 800 s ne sera pas atteint. Mon heartbeat est rafraîchi (20 h 39) ; passe à **59 portes, 56 vertes, 3 rouges tolérées**.
+
+### Tour 18 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Paced check of ocr-scans
+
+**Synthèse produite :**
+
+⏵ `ocr-scans` avance (étape 3/3, tableaux) ; passe à 59 portes
+
+`porte-ocr-scans` passe à l'étape 3 (tableaux, 10 pages × 3 familles) — elle se terminera avant la borne. Restent ensuite `poids-creux`, `profondeur-routee` et `vision` (± 25 min), verdict vers **21 h 10-21 h 15**.
+
+### Tour 19 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -381,7 +451,7 @@ L'autre écrivain a committé la **82ᵉ porte** (`porte-ressources`) : `42db89f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 148 autres
+- … et 156 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -453,6 +523,9 @@ L'autre écrivain a committé la **82ᵉ porte** (`porte-ressources`) : `42db89f
 - **T5** `| `porte-mistral.sh` | 26 s | ✅ | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher 0.9, top-1 |`
 - **T6** `3f74fe83 20:08 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS`
 - **T8** `✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon e`
+- **T14** `--- 2. les colonnes (10 pages × 2 versions × 3 familles)`
+- **T17** `✅ propre · test : WER ≤ 6% (mesuré 3.0%)`
+- **T18** `--- 3. les tableaux (10 pages × 3 familles)`
 
 ## 5. Erreurs rencontrées
 

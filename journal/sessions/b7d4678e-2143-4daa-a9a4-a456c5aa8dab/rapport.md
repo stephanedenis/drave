@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 4.3 h |
+| Durée | 4.4 h |
 | Tours | 6 |
-| Messages | 423 |
-| Appels d'outils | 454 |
+| Messages | 425 |
+| Appels d'outils | 456 |
 | Fichiers touchés | 22 |
-| Commandes | 281 |
+| Commandes | 282 |
 | Sous-agents | 0 |
 | Commits | 18 |
 | Compactages de contexte | 0 |
@@ -192,7 +192,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 6 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*34 appels d'outils.* Actions notables :
+*36 appels d'outils.* Actions notables :
 
 - bash — Check gate pass, commits and tree
 - bash — Check running jobs and resource claims
@@ -208,7 +208,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - bash — Wait for hub commit and verify state
 - bash — Read the hub's night plan commit
 - bash — Read the night plan and check my note
-- … et 17 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
@@ -285,7 +285,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 241 autres
+- … et 242 autres
 
 ## 4. Mesures et résultats marquants
 

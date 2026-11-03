@@ -14,7 +14,7 @@
   `reports/README.md`, `reports/INDEX.md`, `AGENTS.md`, `tools/sessions.py`,
   `tools/porte-sessions.sh`, `tools/index_reports.py`, `tools/surveille_sessions.py`,
   `journal/sessions/536cd5d6-…/`.
-- **Heartbeat** : 2026-11-02 20:26 EST
+- **Heartbeat** : 2026-11-02 20:39 EST
 - **Prochaine action** : la **passe complète** (`work/portes/passe-1102-19h32`, à
   `porte-indice`, 10 min, rouge connue) ; à son verdict, **intégrer les lignes B13/N2/S**, le
   registre et l'INDEX ; puis **bilan 08 h**.

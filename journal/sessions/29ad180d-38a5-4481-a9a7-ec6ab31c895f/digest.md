@@ -5126,3 +5126,343 @@ user	0m59,918s
 sys	0m0,092s
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np = Path('README.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"- **frontière du GN** : le GN s'arrête devant un **verbe conjugué** fréquent (« La femme parle » → … [5830 caractères tronqués]`
+
+  ```
+README v4
+132:Le **gold** (`donnees/gold-analyseur.json`) porte **55 phrases** en trois découpages :
+166:| phrase | propre | 65,5 % | 8,0 % | 0,89 | 1 134 |
+256:**47 tests** : phrases et alignement des spans, validation + export, statut invalide refusé,
+273:- **v4** : **règle de contexte** des homographes (un mot du lexique de verbes est un nom si le
+274:  suivant est un auxiliaire ou un verbe) ; le **gold de 55 phrases** (7 dev, 16 test, 32 holdout
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 exporter_corpus.py --mode gold && python3 verifier_corpus.py ../../data/structures/banque.jsonl && python3 - <<'PY'\nimport json\nr=json.load(open('donnees/mesure-analyseur.json'))\nfor k in ('dev','test','ho … [474 caractères tronqués]`
+
+  ```
+✅ 55 ligne(s) sur 55 phrase(s) · mode gold → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque.jsonl
+     manifeste : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/structures/banque-manifest.json
+     sha256 : 76accf9dbd60a9fcc9fe58a56eecbdbb6aec0ffd5e8dbf0c69443e4a49dd1ac6
+  ✅ ../../data/structures/banque.jsonl · empreinte, comptes, spans et restitution vérifiés
+dev 7 7 229 229 22 10
+test 16 16 475 475 40 19
+holdout 31 32 762 771 69 18
+global 54 55 1466 1475 131 47 0.9939
+controles {'baseline_role_constant': {'justes': 94, 'total': 131, 'taux': 0.7176}, 'regles_coupees': {'justes': 96, 'total': 131, 'taux': 0.7328}, 'roles_melanges': {'tirages': 200, 'moyenne': 0.1086, 'min': 0.0, 'max': 0.234}}
+{
+ "version": 2,
+ "mode": "gold",
+ "date": "2026-11-02T20:36:15",
+ "source": "tools/structures/donnees/gold-analyseur.json",
+ "sortie": "data/structures/banque.jsonl",
+ "phrases": 55,
+ "candidats_acceptes": 55,
+ "sha256": "76accf9dbd60a9fcc9fe58a56eecbdbb6aec0ffd5e8dbf0c69443e4a49dd1ac6",
+ "note": "structures de référence, sans jugement humain — `statut: reference` ; spans vérifiés."
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git status --short; git add generateur.py donnees/gold-analyseur.json donnees/mesure-analyseur.json donnees/mesure-corpus.json tests/test_generateur.py README.md && git diff --cached --stat && git commit -m \"S — LE  … [759 caractères tronqués]`
+
+  ```
+M README.md
+ M donnees/gold-analyseur.json
+ M donnees/mesure-analyseur.json
+ M donnees/mesure-corpus.json
+ M donnees/phrases-corpus-manifest.json
+ M generateur.py
+ M tests/test_generateur.py
+ README.md                     |  50 +++++-----
+ donnees/gold-analyseur.json   | 128 ++++++++++++++++++++++++-
+ donnees/mesure-analyseur.json | 217 ++++++++++++++++++++++++++++++++++++------
+ donnees/mesure-corpus.json    |  48 +++++-----
+ generateur.py                 |  12 ++-
+ tests/test_generateur.py      |  25 +++--
+ 6 files changed, 394 insertions(+), 86 deletions(-)
+[master 1445e1d] S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55
+ 6 files changed, 394 insertions(+), 86 deletions(-)
+To /home/stephane/Data13TB/stephane/GitHub/drave-structures
+   97641d5..1445e1d  master -> master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git add donnees/phrases-corpus-manifest.json && git commit -m \"S — BANQUE : LE MANIFESTE REPREND LA DATE DU RESCAN (SHA 43957a3b INCHANGÉ)\" -m \"La banque de 200 phrases / 355 candidats est identique (sha256 43957a … [194 caractères tronqués]`
+
+  ```
+[master 00d2a01] S — BANQUE : LE MANIFESTE REPREND LA DATE DU RESCAN (SHA 43957a3b INCHANGÉ)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+To /home/stephane/Data13TB/stephane/GitHub/drave-structures
+   1445e1d..00d2a01  master -> master
+## master...origin/master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp data/structures/banque-manifest.json reports/s-banque-structures.json && python3 -m json.tool reports/s-banque-structures.json | head -12; echo \"=== main state ===\"; git log --oneline -2; git status --short | head -8", "descript … [51 caractères tronqués]`
+
+  ```
+{
+    "version": 2,
+    "mode": "gold",
+    "date": "2026-11-02T20:36:15",
+    "source": "tools/structures/donnees/gold-analyseur.json",
+    "sortie": "data/structures/banque.jsonl",
+    "phrases": 55,
+    "candidats_acceptes": 55,
+    "sha256": "76accf9dbd60a9fcc9fe58a56eecbdbb6aec0ffd5e8dbf0c69443e4a49dd1ac6",
+    "note": "structures de r\u00e9f\u00e9rence, sans jugement humain \u2014 `statut: reference` ; spans v\u00e9rifi\u00e9s."
+}
+=== main state ===
+42db89f6 NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS
+2fad8e8d B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'AVEUGLE (26/2) ET LE LABYRINTHE (29/5) ; TEST NON DISCRIMINANT
+ M docs/methode/portes.md
+ M docs/pilotage/en-cours.md
+M  docs/pilotage/references-non-regression.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+  ```
+
+- **write** `{"content": "# S — Le contexte tranche les homographes : 54/55 types, 131/131 rôles, 55 structures au corpus\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur un gold de **55 phrases**\n> (7 `dev`, 16 `test`, 32 `holdout` en quatre vagues), la structure de base retrouve la ** … [7886 caractères tronqués]`
+
+  ```
+Error: cannot write "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md", "limit": 10}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md</path>
+<type>file</type>
+<content>
+1: # S — La frontière du GN s'arrête devant le verbe : 47/47 types, 117/117 rôles, 47 structures au corpus
+2: 
+3: > **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur un gold de **47 phrases**
+4: > (7 `dev`, 16 `test`, 24 `holdout` en trois vagues), la structure de base retrouve la **séquence
+5: > de types 47/47** (100 %), les **rôles 117/117** (100 %), les **compléments 47/47**, et couvre
+6: > **1 309/1 320 octets** (99,2 % ; holdout **605/616**, 98,2 %). La règle de **frontière du GN**
+7: > corrige l'échec `h033` (« La femme parle ») ; la **limite nommée** se déplace : les homographes
+8: > nominaux `h046` (« ferme ») et `h047` (« fait ») sont coupés comme des verbes, et c'est la
+9: > **couverture** qui le voit (0,75 et 0,77), pas le type ni le rôle. Le corpus de référence sort :
+10: > **47 lignes**, SHA-256 `f2a0d2fb3a9b0a9aebd562b170503f4d1a98251efdc4a3645a2523b5197227a2`.
+
+(Showing lines 1-10 of 150. Use offset=11 to continue.)
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md", "offset": 11, "limit": 140}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md</path>
+<type>file</type>
+<content>
+11: 
+12: ## Le dispositif
+13: 
+14: - **Gold** : [`tools/structures/donnees/gold-analyseur.json`](../tools/structures/donnees/gold-analyseur.json),
+15:   **47 phrases** : **7 `dev`** (les phrases du banc), **16 `test`** (écrites avant les règles) et
+16:   **24 `holdout`** en trois vagues : `h024–h031` (première règle), `h032–h039` (après la copule),
+17:   `h040–h047` (après la frontière GN-devant-verbe). Chaque phrase porte sa suite de segments
+18:   (texte, type, rôle) ; les spans se calculent par sous-chaîne, dans l'ordre.
+19: - **Analyseur** : [`generateur.py`](../tools/structures/generateur.py), fonction `structure()` —
+20:   segmentation (GN, GV, GP, REL, SUB), rôles par la préposition et son contexte, subordonnées
+21:   typées, passif, copule, et **frontière GN-devant-verbe**.
+22: - **Mesure** : [`mesure_analyseur.py`](../tools/structures/mesure_analyseur.py) →
+23:   [`mesure-analyseur.json`](../tools/structures/donnees/mesure-analyseur.json). Trois chiffres
+24:   (types, couverture, rôles) et trois contrôles.
+25: - **Export** : [`exporter_corpus.py`](.
+… [7777 caractères tronqués]
+  ```
+
+- **write** `{"content": "# S — Le contexte tranche les homographes : 54/55 types, 131/131 rôles, 55 structures au corpus\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur un gold de **55 phrases**\n> (7 `dev`, 16 `test`, 32 `holdout` en quatre vagues), la structure de base retrouve la ** … [7898 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"homographes\\|46 tests\\|140feb6\\|47 structures\\|1 064\\|25 sur\\|18 |\\|553\\|f2a0d2fb\\|Homographes\" reports/rapport-s-corpus-reel.md", "description": "Locate corpus fiche numbers to update"}`
+
+  ```
+21:  **sans GV**, **couverture** des octets par les segments, **homographes nominaux** (GN dont le
+29:| unité | corpus | GN+GV | sans GV | couverture | homographes | unités homographes |
+31:| ligne | CEGEP | 3,6 % | 0,5 % | 0,94 | 18 | 15 |
+32:| ligne | propre | **51,0 %** | 10,2 % | 0,89 | 553 | 550 |
+33:| ligne | mélange | 3,8 % | 0,5 % | 0,94 | 18 | 18 |
+35:| phrase | propre | **65,5 %** | 8,0 % | 0,89 | 1 064 | 1 035 |
+67:- **Les homographes** dépendent du lexique de verbes : 25 sur 20 799 phrases CEGEP, 1 064 sur
+75:- **sortie** : le **corpus de référence** de 47 structures (`data/structures/banque.jsonl`,
+76:  SHA `f2a0d2fb…`) et son `verifier_corpus.py` — l'analyseur lit, le corpus se restitue.
+84:- Sous-module : commits **`140feb6`** (mesure) et **`97641d5`** (banque), `mesure_corpus.py`,
+85:  `candidats_corpus.py`, `donnees/mesure-corpus.json`, `donnees/phrases_generees.json`, **46 tests**.
+95:3. **homographes/lexique** (ferme, fait, lit) : le contexte tranche ;
+96:4. le corpus de référence (47 structures) reste le test de structure pour N2/R1.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '29,37p' reports/rapport-s-corpus-reel.md; sed -n '63,70p' reports/rapport-s-corpus-reel.md; sed -n '82,97p' reports/rapport-s-corpus-reel.md", "description": "Read corpus fiche table and notes"}`
+
+  ```
+| unité | corpus | GN+GV | sans GV | couverture | homographes | unités homographes |
+|---|---|---:|---:|---:|---:|---:|
+| ligne | CEGEP | 3,6 % | 0,5 % | 0,94 | 18 | 15 |
+| ligne | propre | **51,0 %** | 10,2 % | 0,89 | 553 | 550 |
+| ligne | mélange | 3,8 % | 0,5 % | 0,94 | 18 | 18 |
+| phrase | CEGEP | 8,5 % | 0,8 % | 0,94 | 25 | 25 |
+| phrase | propre | **65,5 %** | 8,0 % | 0,89 | 1 064 | 1 035 |
+| phrase | mélange | 9,1 % | 0,4 % | 0,93 | 22 | 22 |
+
+- **Le filtre** sélectionne les lignes plausibles (20–300 car., ≥ 4 mots, ≥ 80 % de lettres) : les
+  titres, les tableaux et les formules sont exclus — le taux ne vaut pas pour eux.
+- **Le corpus propre est de la littérature** (genre unique) ; le CEGEP est un mélange
+  anglais/technique/français. Le contraste mesure surtout la **langue**, pas la qualité OCR.
+- **Les homographes** dépendent du lexique de verbes : 25 sur 20 799 phrases CEGEP, 1 064 sur
+  50 000 propres ; le chiffre propre est plus haut parce qu'il y a plus de GN nominaux.
+- **Le mélange** garde les mots et la ponctuation : il teste l'ordre, pas le vocabulaire ; un
+  analyseur qui ne lit que les déterminants aurait le même plancher.
+## Fichiers
+
+- Sous-module : commits **
+… [731 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path('reports/rapport-s-corpus-reel.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"| ligne | CEGEP | 3,6 % | 0,5 % | 0,94 | 18 | 15 |\", \"| ligne | CEGEP | 3,6 % | 0,5 % | 0, … [2733 caractères tronqués]`
+
+  ```
+fiche corpus v4
+35:| phrase | propre | **65,5 %** | 8,0 % | 0,89 | 1 134 | 1 104 |
+67:- **Les homographes** dépendent du lexique de verbes : 28 sur 20 799 phrases CEGEP, 1 134 sur
+78:  SHA `76accf9d…`) et son `verifier_corpus.py` — l'analyseur lit, le corpus se restitue.
+88:  `donnees/phrases_generees.json`, **47 tests**.
+98:3. ~~homographes/lexique~~ (règle de contexte v4) ; restent `h050` et `h053` ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/### Session `29ad180d/,/### Session `e181ce02/p' docs/pilotage/en-cours.md | head -20; echo \"=== S bullet ===\"; grep -n \"S — le banc de structures\" docs/pilotage/en-cours.md; echo \"=== roadmap ===\"; grep -n \"S — les s … [203 caractères tronqués]`
+
+  ```
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+
+- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+- **Plan** : 1–4) ~~plan, analyseur (gold 47), export, tests 46~~ ; 5–6) ~~fiche, pointeur, état~~.
+- **Ambition** : nommer le rôle et la frontière GN.
+- **Stratégie** : une règle = une phrase, trois contrôles.
+- **Objectif final** : gold **47**, corpus **47**, manifeste SHA-256.
+- **Fait** : types **47/47**, rôles **117/117** ; contrôles **80/117**, **82/117**, **0,109** ; h033 corrigé, **h046/h047** nommés ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %** propre (9,1 %) ; banque **200** phrases / **355** candidats ; **46 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
+- **Ce qu'elle fait** : **`97641d5`** ; corpus **47** (SHA `f2a0d2fb…`) ; banque **200** phrases / **355** candidats, **0** validée.
+- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+- **P
+… [1519 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np = Path('docs/pilotage/en-cours.md')\nt = p.read_text(encoding='utf-8')\nt = t.replace(\"- **Plan** : 1–4) ~~plan, analyseur (gold 47), export, tests 46~~ ; 5–6) ~~fiche, pointeur, état~~. … [4688 caractères tronqués]`
+
+  ```
+état/roadmap/INDEX v4
+  en-cours · 1621 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  avertissements :
+     · 15 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 597 l. rapport-e5-distillation.md, 546 l. rapport-empreinte-memoire.md, 491 l. rapport-passe-k3-disque.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  revue de documentation · 564 fiche(s) · 649 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 563 fichiers, le disque en a 564
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md')\nt=p.read_text(encoding='utf-8').replace(\"| fichiers / JSON de résultats | **563** / **648** |\", \"| fichiers / JSON de résultats | **564** / **649** | … [316 caractères tronqués]`
+
+  ```
+❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 563 fichiers, le disque en a 564
+     · compteurs : en-cours.md dit 649 JSON, le disque en a 650
+=== status ===
+MM docs/methode/portes.md
+MM docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+MM journal/2026-11-02/modele.md
+MM journal/2026-11-02/moteur.md
+MM journal/2026-11-02/outils.md
+MM journal/2026-11-02/portes.md
+=== log ===
+20996b87 NUIT — LA 82e PORTE EST COMPTÉE (82) ; LE BUDGET T1 REVIENT SOUS 2 500 ; S RAFRAÎCHI
+42db89f6 NUIT — LA 82e PORTE : RESSOURCES (AUTOTEST 9 CAS, REGISTRE COHÉRENT) ; AVERTISSEMENTS NON FATALS
+=== ahead ===
+7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline 20996b87 | grep -E \"S|analyseur|corpus|banque|structures|INDEX|en-cours|roadmap\" | head -12; echo \"=== S fiche HEAD ===\"; git show HEAD:reports/rapport-s-analyseur-roles.md | head -3; echo \"=== pointer  … [301 caractères tronqués]`
+
+  ```
+20996b87 NUIT — LA 82e PORTE EST COMPTÉE (82) ; LE BUDGET T1 REVIENT SOUS 2 500 ; S RAFRAÎCHI
+ docs/pilotage/en-cours.md                          |   2 +-
+ journal/sessions/MANIFEST.md                       |  12 +-
+=== S fiche HEAD ===
+# S — La frontière du GN s'arrête devant le verbe : 47/47 types, 117/117 rôles, 47 structures au corpus
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur un gold de **47 phrases**
+=== pointer HEAD ===
+160000 commit 97641d538ce0a8816a55104fa5d3847e4e6cecfe	tools/structures
+=== en-cours compteurs ===
+113:| fichiers / JSON de résultats | **563** / **649** | `reports/*.md` / `reports/*.json` |
+=== S lines HEAD ===
+- **Fait** : types **47/47**, rôles **117/117** ; contrôles **80/117**, **82/117**, **0,109** ; h033 corrigé, **h046/h047** nommés ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %** propre (9,1 %) ; banque **200** phrases / **355** candidats ; **46 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
+- **S — le banc de structures** : **analyseur 47/47 types, 117/117 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (
+… [274 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -E \"rapport-s|s-banque|structures|INDEX|en-cours|roadmap|plan-travail|references\"; echo \"=== staged stat ===\"; git diff --cached --stat | tail -8; echo \"=== index lock ===\"; ls .git/index.lock 2>/dev/n … [82 caractères tronqués]`
+
+  ```
+MM docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/rapport-s-analyseur-roles.md
+ M reports/rapport-s-corpus-reel.md
+ M reports/s-banque-structures.json
+ M tools/structures
+=== staged stat ===
+ .../abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md | 146 ------
+ .../rapport.md                                     |  48 +-
+ .../b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md | 326 ------------
+ .../rapport.md                                     |  29 +-
+ .../caaf3018-e3e2-4416-8446-11f0335910aa/digest.md | 566 ---------------------
+ .../rapport.md                                     | 157 +-----
+ tools/porte-ressources.sh                          |  28 -
+ 29 files changed, 105 insertions(+), 1790 deletions(-)
+=== index lock ===
+pas de verrou
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md')\nt=p.read_text(encoding='utf-8')\nimport re\nt=re.sub(r\"\\| fichiers / JSON de résultats \\| \\*\\*\\d+\\*\\* / \\*\\*\\d+\\*\\* \\|\",\n         \"| fi … [316 caractères tronqués]`
+
+  ```
+['| fichiers / JSON de résultats | **564** / **650** | `reports/*.md` / `reports/*.json` |']
+  revue de documentation · 564 fiche(s) · 650 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && H=$(git rev-parse HEAD); rm -f /tmp/index.s; GIT_INDEX_FILE=/tmp/index.s git read-tree \"$H\" && GIT_INDEX_FILE=/tmp/index.s git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md reports/INDEX.md reports/rapport-s-analyseur-role … [193 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md            |  27 +++---
+ docs/pilotage/roadmap.md             |   8 +-
+ reports/INDEX.md                     |   5 +-
+ reports/rapport-s-analyseur-roles.md | 158 ++++++++++++++++-------------------
+ reports/rapport-s-corpus-reel.md     |  31 +++----
+ reports/s-banque-structures.json     |   8 +-
+ tools/structures                     |   2 +-
+ 7 files changed, 114 insertions(+), 125 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && GIT_INDEX_FILE=/tmp/index.s git commit -m \"S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55 (SHA 76accf9d)\" -m \"Le GN ne s'arrête plus devant « ferme »/« fait » quand le suivant est un auxiliaire ou u … [633 caractères tronqués]`
