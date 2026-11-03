@@ -7,14 +7,14 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 24.4 h |
-| Tours | 11 |
-| Messages | 346 |
-| Appels d'outils | 341 |
+| Durée | 24.9 h |
+| Tours | 12 |
+| Messages | 358 |
+| Appels d'outils | 352 |
 | Fichiers touchés | 15 |
-| Commandes | 257 |
+| Commandes | 268 |
 | Sous-agents | 0 |
-| Commits | 22 |
+| Commits | 24 |
 | Compactages de contexte | 1 |
 
 ## 1. Ce qui a été demandé
@@ -40,6 +40,8 @@
 **Tour 10** — vas-y avec des paragraphes complets et un arbre svg avec liaisons référents-référés
 
 **Tour 11** — quel page web utiliser pour la suite?
+
+**Tour 12** — les svg sortent du cadre, prévoir scrollbar et largeur de page adapté à la largeur d'écran ou fenêtre
 
 ## 2. Déroulé, étape par étape
 
@@ -448,6 +450,22 @@ Le serveur a été relancé après l'ajout de la page et les 51 tests passent. L
 
 Il reste à valider les trois paragraphes sur cette page ; ensuite j'étendrai l'échantillon de paragraphes complets, puis nous reprendrons l'export complet de la banque. Les limites `h050`/`h053` restent après. Si le serveur s'arrête, il se relance avec `cd tools/structures && python3 serveur.py` puis la même adresse.
 
+### Tour 12 — les svg sortent du cadre, prévoir scrollbar et largeur de page adapté à la largeur d'écran ou fenêtre
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Measure SVG content bounds and CSS widths
+- bash — Read CSS layout and SVG layout code
+- bash — Read SVG layout block to rewrite
+- bash — Dynamic SVG viewBox and check all three fit
+- bash — Responsive CSS, natural SVG with scroll, frame test
+- bash — Restart server, verify SVGs and responsive page
+- bash — Locate README/fiche/state lines to update
+- bash — Commit responsive SVG fix and push submodule
+- bash — Update fiche/state for responsive frame fix
+- bash — Inspect L deletions, counters, pointer
+- bash — Commit responsive frame fix and restore S files
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -512,7 +530,7 @@ Il reste à valider les trois paragraphes sur cette page ; ensuite j'étendrai l
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 217 autres
+- … et 228 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -590,6 +608,11 @@ Il reste à valider les trois paragraphes sur cette page ; ensuite j'étendrai l
 - **T9** `563:| [rapport-s-analyseur.md](rapport-s-analyseur.md) | S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture |`
 - **T9** `564:| [rapport-s-corpus-reel.md](rapport-s-corpus-reel.md) | S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange) |`
 - **T10** `- **Fait** : types **54/55**, rôles **131/131** ; h050/h053 nommées ; **corpus réel** 8,5 %/65,5 % (mélange 9,1 %) ; **banque partielle** : **142** verdicts/71 phrases, **81** lectures/65, arrêt humai`
+- **T12** `67:.ctx { width: 100%; background: #0d1117; color: var(--texte); border: 1px dashed var(--bord);`
+- **T12** `72:        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 %d" width="1020" height="%d" '`
+- **T12** `'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 %d" width="1020" height="%d" '`
+- **T12** `55:pointillées** à Alice. Le SVG a un `viewBox` (1020 × 550), un `<title>`, un `<desc>`, des liens`
+- **T12** `50:- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 candidats à ≥3, **référents** 294/371 ; **page `/paragraphes`** ; `
 
 ## 5. Erreurs rencontrées
 
@@ -631,4 +654,6 @@ Il reste à valider les trois paragraphes sur cette page ; ensuite j'étendrai l
 - S — ARBRE ET RÉFÉRENTS : 99 CANDIDATS À ≥3, 294/371 FORMES, SVG ALICE" -m "construire_arbre() donne un père et une profondeur réelle : 359 candidats, 37 de prof
 - S — LA PAGE /PARAGRAPHES : ARBRE, RÉFÉRENTS ET VERDICT ; 51 TESTS" -m "Le serveur sert /paragraphes : les trois paragraphes complets (contexte, cible, antécéden
 - S — LA PAGE /PARAGRAPHES : ARBRE, RÉFÉRENTS, VERDICT ; LE BANC PEUT REPRENDRE" -m "Le serveur sert /paragraphes : les trois paragraphes complets (contexte, cibl
+- S — LES SVG RESTENT DANS LEUR CADRE : VIEWBOX CALCULÉ, PAGE RESPONSIVE, DÉFILEMENT ; 52 TESTS" -m "Le viewBox est calculé depuis le niveau le plus large, les je
+- S — LES SVG RESTENT DANS LEUR CADRE : VIEWBOX CALCULÉ, PAGE RESPONSIVE, DÉFILEMENT ; 52 TESTS" -m "Le viewBox est calculé depuis le niveau le plus large, les je
 

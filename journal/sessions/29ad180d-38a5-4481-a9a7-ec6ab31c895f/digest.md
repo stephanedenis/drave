@@ -7542,3 +7542,190 @@ Le serveur a été relancé après l'ajout de la page et les 51 tests passent. L
 
 Il reste à valider les trois paragraphes sur cette page ; ensuite j'étendrai l'échantillon de paragraphes complets, puis nous reprendrons l'export complet de la banque. Les limites `h050`/`h053` restent après. Si le serveur s'arrête, il se relance avec `cd tools/structures && python3 serveur.py` puis la même adresse.
 
+
+## Tour 12
+
+### 👤 Utilisateur
+
+les svg sortent du cadre, prévoir scrollbar et largeur de page adapté à la largeur d'écran ou fenêtre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json, urllib.request, re\nd=json.load(urllib.request.urlopen(\"http://127.0.0.1:8765/api/paragraphes\"))\nfor p in d[\"paragraphes\"]:\n    svg=p[\"svg\"]; vb=re.search(r'viewBox=\"0 0 (\\d+( … [634 caractères tronqués]`
+
+  ```
+a001 viewBox ('1020', '550') max rect 960.0 max text x 875.0 min rect 345.0
+a002 viewBox ('1020', '550') max rect 990.0 max text x 895.0 min rect 130.0
+a003 viewBox ('1020', '438') max rect 1097.5 max text x 1002.5 min rect 22.5
+=== style.css largeur ===
+6:* { box-sizing: border-box; }
+7:body { margin: 0; background: var(--fond); color: var(--texte);
+11:h1 { margin: 0; font-size: 26px; letter-spacing: .5px; color: #fff; }
+13:.sous { margin: 6px 0 0; color: var(--doux); max-width: 46ch; }
+25:.sep { margin: 0 10px; }
+27:main { padding: 24px 32px 8px; display: grid; gap: 20px; max-width: 1180px; }
+28:.carte { background: var(--panneau); border: 1px solid var(--bord); border-radius: 12px; overflow: hidden; }
+29:.carte > h2 { margin: 0; padding: 16px 20px 4px; font-size: 17px; font-weight: 600; color: #fff; }
+37:.phrase { font-size: 16px; line-height: 1.7; margin: 6px 0 10px; }
+42:.blocs { margin: 4px 0 10px; font-size: 13px; }
+45:.lecture { color: var(--doux); font-size: 13px; margin: 6px 0 10px; }
+46:.attachement { color: var(--doux); font-size: 12px; margin: 0 0 8px; }
+56:input.note { flex: 1 1 220px; min-width: 160px; background: #0d1117; color: var(--texte);
+67:.ctx { width: 100%; 
+… [73 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '1,35p' static/style.css; echo \"=== arbre_svg layout ===\"; grep -n \"pos\\[\\|dx, y0\\|cx\\|ctx_x\\|largeur\\|viewBox\\|min-width\\|width:\" arbre_svg.py | head -20; grep -n \"max_n\\|par_niveau\\|pos =\" ar … [66 caractères tronqués]`
+
+  ```
+:root {
+  --fond: #0d1117; --panneau: #161b22; --bord: #30363d; --texte: #c9d1d9; --doux: #8b949e;
+  --gn: #79c0ff; --gv: #7ee787; --gp: #e3b341; --rel: #d2a8ff; --sub: #56d4dd; --phrase: #a5d6ff;
+  --ok: #3fb950; --non: #f85149; --partiel: #d29922; --lien: #58a6ff;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fond); color: var(--texte);
+  font: 15px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+header { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; justify-content: space-between;
+  padding: 28px 32px 18px; border-bottom: 1px solid var(--bord); }
+h1 { margin: 0; font-size: 26px; letter-spacing: .5px; color: #fff; }
+h1::before { content: "{} "; color: var(--gv); }
+.sous { margin: 6px 0 0; color: var(--doux); max-width: 46ch; }
+.stats { display: flex; gap: 22px; align-items: center; }
+.stats div { display: flex; flex-direction: column; align-items: flex-end; }
+.stats strong { font-size: 22px; color: #fff; }
+.stats span { color: var(--doux); font-size: 12px; }
+.export { color: var(--lien); text-decoration: none; border: 1px solid var(--bord);
+  padding: 7px 12px; border-radius: 8px; font-size: 13px; }
+.export:hover { border
+… [2823 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '54,140p' arbre_svg.py", "description": "Read SVG layout block to rewrite"}`
+
+  ```
+"par profondeur, et les flèches pointillées des pronoms vers Alice, "
+                          "l'antécédent du contexte.",
+              liens: tuple[str, ...] = LIENS) -> str:
+    segs = generateur.structure(cible)
+    refs = generateur.referents(cible, contexte)
+    if not segs:
+        raise ValueError("phrase vide")
+    par_niveau: dict[int, list[int]] = {}
+    for i, s in enumerate(segs):
+        par_niveau.setdefault(s["profondeur"], []).append(i)
+    pos: dict[int, tuple[float, float]] = {}
+    dx, y0, dy = 215.0, 64.0, 112.0
+    for d, indices in par_niveau.items():
+        for k, i in enumerate(indices):
+            pos[i] = (40 + 330 + (k - (len(indices) - 1) / 2) * dx, y0 + d * dy)
+    max_y = max(y for _, y in pos.values())
+    hauteur = max_y + 150
+    morceaux = [
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 %d" width="1020" height="%d" '
+        'role="img">' % (hauteur, hauteur),
+        f'<title>{_esc(titre)}</title><desc>{_esc(desc)}</desc>',
+        '<defs>'
+        '<marker id="fleche" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" '
+        'markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5a6672"/></marker>'
+   
+… [3139 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('arbre_svg.py'); t=p.read_text(encoding='utf-8')\nt=t.replace('''    par_niveau: dict[int, list[int]] = {}\n    for i, s in enumerate(segs):\n        par_niveau.setd … [3336 caractères tronqués]`
+
+  ```
+layout SVG dynamique
+  ✅ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/arbre-referents.svg · 4780 octets
+a001 viewBox 1020x550 minx 40 maxx 948 maxy 448 OK
+a002 viewBox 1398x550 minx 40 maxx 1378 maxy 448 OK
+a003 viewBox 1613x550 minx 40 maxx 1593 maxy 336 OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('static/style.css'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"* { box-sizing: border-box; }\",\n            \"* { box-sizing: border-box; }\\nhtml, body { widt … [4846 caractères tronqués]`
+
+  ```
+CSS responsive, SVG naturel + scroll, test du cadre
+Ran 52 tests in 4.234s
+
+OK
+  ✅ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/schemas/arbre-referents.svg · 4780 octets
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && kill 2414252 2>/dev/null; sleep 1; pgrep -af \"[s]erveur.py --port 8765\" || echo \"ancien serveur arrêté\"; nohup python3 serveur.py --port 8765 > /tmp/structures-serveur.log 2>&1 & echo \"pid $!\"; sleep 2; python3 … [978 caractères tronqués]`
+
+  ```
+2430596 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && kill 2414252 2>/dev/null; sleep 1; pgrep -af "[s]erveur.py --port 8765" || echo "ancien serveur arrêté"; nohup python3 serveur.py --port 8765 > /tmp/structures-serveur.log 2>&1 & echo "pid $!"; sleep 2; python3 - <<'PY' import json, urllib.request, re d=json.load(urllib.request.urlopen("http://127.0.0.1:8765/api/paragraphes")) for p in d["paragraphes"]:     svg=p["svg"]; vb=re.search(r'viewBox="0 0 ([\d.]+) ([\d.]+)"', svg); W,H=float(vb.group(1)),float(vb.group(2))     rects=[(float(m.group(1)),float(m.group(2)),float(m.group(3)),float(m.group(4))) for m in re.finditer(r'<rect x="([\d.-]+)" y="([\d.-]+)" width="([\d.]+)" height="([\d.]+)"', svg)]     print(p["id"], f"{W:g}x{H:g}", "maxx", f"{max(x+w for x,y,w,h in rects):g}", "maxy", f"{max(y+h for x,y,w,h in rects):g}", "OK" if all(0<=x and x+w<=W+0.01 and y+h<=H+0.01 for x,y,w,h in rects) else "DEBORDE") PY curl -s http://127.0.0.1:8765/paragraphes | grep -c "l'arbre défile"; curl -s -o /dev/null -w "style.css %{http_code}\n" http://127.0.0.1:8765/static/style.css; tail -2 /tmp/structures-serveur.log
+pid 2430607
+a001 1020x550 maxx 948 maxy 448
+… [192 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"51 tests\\|50 tests\\|Le serveur les affiche\\|La page est\" README.md; echo \"=== fiche ===\"; grep -n \"Cinquante\\|51 tests\\|Le SVG a un viewBox\\|1020\" ../../reports/rapport-s-arbre-referents.md; echo … [168 caractères tronqués]`
+
+  ```
+198:qui serviront de banque (cible + contexte + antécédent). Le serveur les affiche : `python3 serveur.py`
+293:**51 tests** : phrases et alignement des spans, validation + export, statut invalide refusé,
+=== fiche ===
+55:pointillées** à Alice. Le SVG a un `viewBox` (1020 × 550), un `<title>`, un `<desc>`, des liens
+65:`viewBox`, `title`, `desc`, classe `ref`) et par `verifier_schemas.py`. Cinquante et un tests couvrent
+92:  `donnees/paragraphes.json`, `static/paragraphes.html`, `static/paragraphes.js`, **51 tests**.
+=== état ===
+50:- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 candidats à ≥3, **référents** 294/371 ; **page `/paragraphes`** ; **51 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md), [`banque`](../../reports/rapport-s-banque-partielle.md), [`arbre`](../../reports/rapport-s-arbre-referents.md).
+51:- **Ce qu'elle fait** : **`0422a8c`** ; page **`/paragraphes`** ; corpus **55** (SHA `76accf9d…`) ; banque **200/355**, **142/81/65**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nfrom pathlib import Path\np=Path('README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"`donnees/paragraphes-validations.jsonl`) ; le banc de phrases reste `/`.\",\n            \"`donnees/para … [1613 caractères tronqués]`
+
+  ```
+README responsive
+[master 4d3a3ca] S — LES SVG RESTENT DANS LEUR CADRE : VIEWBOX CALCULÉ, PAGE RESPONSIVE, DÉFILEMENT ; 52 TESTS
+ 5 files changed, 57 insertions(+), 18 deletions(-)
+To /home/stephane/Data13TB/stephane/GitHub/drave-structures
+   0422a8c..4d3a3ca  master -> master
+4d3a3ca
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-s-arbre-referents.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"pointillées** à Alice. Le SVG a un `viewBox` (1020 × 550), un `<title>`, un `<desc>`, des lien … [3470 caractères tronqués]`
+
+  ```
+fiche/état/plan : cadre responsive
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 684 JSON, le disque en a 685
+  en-cours · 1625 mots · 7 sections · 4 session(s) · 4 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== status ===
+ M docs/pilotage/en-cours.md
+ M journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md
+ M tools/structures
+?? docs/schemas/arbre-referents.svg
+?? reports/rapport-s-arbre-referents.md
+bfc6084a L — LA PORTE DES QUATRE MODES : LE NEURONAL API DOMINE (0,9309 / 0,8226 / 0,8784), LA FUSION DÉGRADE (0,928 / 0,802 / 0,857), 1 REFUS (r353)
+81697bc2 L — LA FRONTIÈRE (2) : LA LANGUE SUR TEXTE LONG FAIT 0,9687 (UDHR, 398 LANGUES), PERMUTÉ 0,0022
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline bfc6084a | grep -E \"arbre|schemas/README|reports/INDEX\" ; echo \"=== lignes index ===\"; grep -c \"arbre-referents\" docs/schemas/README.md reports/INDEX.md 2>/dev/null; echo \"=== comptes ===\"; ls report … [339 caractères tronqués]`
+
+  ```
+reports/INDEX.md                                   |   3 +-
+=== lignes index ===
+docs/schemas/README.md:1
+reports/INDEX.md:1
+=== comptes ===
+596
+685
+117:| fichiers / JSON de résultats | **596** / **684** | `reports/*.md` / `reports/*.json` |
+=== branche ===
+## master...origin/master [ahead 3]
+ M docs/pilotage/en-cours.md
+bfc6084a L — LA PORTE DES QUATRE MODES : LE NEURONAL API DOMINE (0,9309 / 0,8226 / 0,8784), LA FUSION DÉGRADE (0,928 / 0,802 / 0,857), 1 REFUS (r353)
+81697bc2 L — LA FRONTIÈRE (2) : LA LANGUE SUR TEXTE LONG FAIT 0,9687 (UDHR, 398 LANGUES), PERMUTÉ 0,0022
+206dae21 L — LA FRONTIÈRE SUR LES 71 LANGUES : SCRIPT 71/71 (1,0), LANGUE 0,137 CONTRE 0,032
+=== pointeur ===
+160000 commit 00d2a015d2f7448db8324a4b25796312abffa83d	tools/structures
+4d3a3ca
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| fichiers / JSON de résultats | **596** / **684** |\", \"| fichiers / JSON de résultats | **596** / **68 … [1316 caractères tronqués]`

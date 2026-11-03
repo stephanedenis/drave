@@ -7,15 +7,15 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 24.7 h |
-| Tours | 172 |
-| Messages | 1228 |
-| Appels d'outils | 1002 |
+| Durée | 25.0 h |
+| Tours | 173 |
+| Messages | 1244 |
+| Appels d'outils | 1013 |
 | Fichiers touchés | 49 |
-| Commandes | 817 |
+| Commandes | 825 |
 | Sous-agents | 0 |
 | Commits | 105 |
-| Compactages de contexte | 3 |
+| Compactages de contexte | 4 |
 
 ## Objectifs déclarés
 
@@ -29,6 +29,10 @@
 … [13 caractères tronqués]
 - **create** — Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + 
 … [97 caractères tronqués]
+- **complete** — Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + 
+… [97 caractères tronqués]
+- **create** — Réparer la fusion du bloc langue (L) : la porte des quatre modes a montré que parallèle et cascade (0,928 / 0,802 / 0,857) régressent sous le neuronal seul (0,9309 / 0,8226 / 0,8784). Donner la priorité par niveau (neuronal pour POS/syntagmes/tête, heuristique pour la pragmatique), re-mesurer sur le
+… [115 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -375,6 +379,8 @@
 **Tour 171** — <goal_round> Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de ser … [567 caractères tronqués]
 
 **Tour 172** — <goal_round> Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de ser … [567 caractères tronqués]
+
+**Tour 173** — continue avec réparer la fusion
 
 ## 2. Déroulé, étape par étape
 
@@ -4505,17 +4511,59 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 172 — <goal_round> Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 7 … [847 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Check four-mode job completion
 - job_output
 - bash — Read full four-mode JSON details
 - bash — Write four-mode fiche and update state/roadmap
 - bash — Commit four-mode gate fact
+- bash — Final state verification for L goal
+- get_goal
+- update_goal
 
 **Synthèse produite :**
 
-⏵ Fiche écrite (refus = r353) ; j'aligne compteurs/index/README et je commite la porte des quatre modes
+⏵ Goal L clos : frontière 71 langues + texte long + porte des quatre modes, trois faits mesurés, ficheés et committés
+
+**Objectif atteint.** Le chantier **L — le bloc langue** a livré le contrat, la frontière sur les 71 langues et la porte des quatre modes sur le gold 432. Trois faits, chacun avec mesure, contrôle négatif, fiche et commit.
+
+**1. La frontière sur les 71 langues** (commit `206dae21`, fiche `reports/rapport-pensee-frontiere-71.md`).
+- Sur le lexique multilingue des jeux (**71 langues, 35 concepts, 1 487 labels**) : **script 71/71 = 1,0** en 0,11 ms/langue ; **langue 203/1 486 = 0,137** contre une **classe majoritaire à 0,032**.
+- Lecture : le CPU **tient** le graphème ; il ne tient **pas** la langue sur des libellés de deux ou trois mots — 4,3× le hasard ne fait pas un détecteur (0,57 ms/label pour 86 % d'erreurs).
+
+**2. Le texte long (UDHR)** (commit `81697bc2`, même fiche complétée).
+- **398 langues profilées, 447 articles de test** : **langue 0,9687**, script 1,0, **contrôle permuté 0,0022** (≈ 1/398), 3,56 s.
+- Lecture : **la longueur du texte est le levier** — 0,137 sur des libellés, 0,9687 sur des articles ; le contrôle permuté tombant au hasard, le score n'est pas un artefact.
+
+**3. La porte des quatre modes sur le gold 432** (commit `bfc6084a`, fiche `reports/rapport-pensee-quatre-modes.md`, JSON `reports/pensee-quatre-modes.json`).
+- **Neuronal (API DeepSeek)** : POS **0,9309**, syntagmes **0,8226**, tête **0,8784** — le meilleur sur les niveaux linguistiques.
+- **Heuristique** : acte **0,9954** (le neuronal ne rend pas la pragmatique : **0,0**).
+- **Parallèle et cascade** : **0,928 / 0,802 / 0,857** — **la fusion régresse** sous le neuronal seul, alors qu'elle devrait au moins le valoir. C'est le **défaut de la politique `confiance`**, pas des blocs.
+- **Coût** : 858 appels API, **254 341 tokens**, latence médiane 1,86 s, 797 s ; **1 refus** (`r353`). Seuils : **3/5** (`parallele` et `aucun_refus` échouent — les deux échecs sont informatifs).
+
+**Vérifié** : T0 **3 989** mots ; revue verte (**596 fiches / 684 JSON / 120 docs**) ; `verifie_en_cours` ✅ ; `verifie_journal` ✅ ; hook état ✅ (`dernier fait = dernier état bfc6084a`) ; **règle 11 respectée** (API DeepSeek, clé hors dépôt, aucun `llama-server`/`ollama`, aucun GPU N2).
+
+**À relire / faire ensuite.**
+- **Réparer la fusion** : priorité **par niveau** (le neuronal pour POS/syntagmes/tête, l'heuristique pour la pragmatique), pas par confiance globale — c'est la prochaine action de
+… [710 caractères tronqués]
+
+### Tour 173 — continue avec réparer la fusion
+
+*8 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Read the fusion implementation
+- bash — Read overlap removal and evaluator duplicate handling
+- bash — Implement per-level fusion priority
+- bash — Run four-mode gate with per-level fusion
+- bash — Skip overlap removal in per-level fusion and re-run
+- bash — Debug fusion label differences
+- bash — Strict per-level fusion and re-measure
+
+**Synthèse produite :**
+
+⏵ Le repli (l'heuristique quand le neuronal ne segmente pas) ajoute 46 phrases de faux syntagmes ; je passe la fusion par niveau en **strict** (la source choisie par niveau, sans repli) et je re-mesure
 
 ## 3. Travail accompli
 
@@ -4615,7 +4663,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 777 autres
+- … et 785 autres
 
 ## 4. Mesures et résultats marquants
 

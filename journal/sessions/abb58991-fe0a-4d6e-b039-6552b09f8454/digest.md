@@ -25281,3 +25281,305 @@ ok
 ⏵ Fiche écrite (refus = r353) ; j'aligne compteurs/index/README et je commite la porte des quatre modes
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace('| fichiers / JSON de résultats | **595** / **683** |','| fichiers / JSON de résultats | **596** / **684** |')\np.write_text(t, … [1061 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3989 mots (budget 4 000)
+  593 fiches → reports/INDEX.md
+  revue de documentation · 596 fiche(s) · 684 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 24 files changed, 1225 insertions(+), 52 deletions(-)
+ create mode 100644 reports/pensee-quatre-modes.json
+ create mode 100644 reports/rapport-pensee-quatre-modes.md
+ create mode 100644 tools/tests/linguistique/qualifier_quatre_modes.py
+EXIT=0
+bfc6084a L — LA PORTE DES QUATRE MODES : LE NEURONAL API DOMINE (0,9309 / 0,8226 / 0,8784), LA FUSION DÉGRADE (0,928 / 0,802 / 0,857), 1 REFUS (r353)
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux items du goal L sont faits (frontière 71 langues + texte long + porte des quatre modes) ; je vérifie l'état et je clôture
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/verifie_journal.py 2>&1 | tail -1; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | grep T0 | head -1; python3 tools/revue_documentation.py 2> … [187 caractères tronqués]`
+
+  ```
+✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  état · dernier fait bfc6084a · dernier état bfc6084a
+  ✅ aucun fait commité après le dernier état
+  T0 max : 3989 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---
+bfc6084a L — LA PORTE DES QUATRE MODES : LE NEURONAL API DOMINE (0,9309 / 0,8226 / 0,8784), LA FUSION DÉGRADE (0,928 / 0,802 / 0,857), 1 REFUS (r353)
+81697bc2 L — LA FRONTIÈRE (2) : LA LANGUE SUR TEXTE LONG FAIT 0,9687 (UDHR, 398 LANGUES), PERMUTÉ 0,0022
+206dae21 L — LA FRONTIÈRE SUR LES 71 LANGUES : SCRIPT 71/71 (1,0), LANGUE 0,137 CONTRE 0,032
+08418b55 S — LA PAGE /PARAGRAPHES : ARBRE, RÉFÉRENTS, VERDICT ; LE BANC PEUT REPRENDRE
+--- non committés ---
+ M docs/schemas/README.md
+ M tools/pensee/store.py
+ M tools/structures
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+?? docs/schemas/arbre-referents.svg
+?? reports/pensee-porte-fenetre-500.json
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-71199637-ae7f-453f-9253-fa2d7f879154","revision":1,"objective":"Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de serveur local (règle 11).","phase":"active","roundsStarted":3,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-71199637-ae7f-453f-9253-fa2d7f879154", "revision": 1}`
+
+> **Objectif** (complete) : Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de serveur local (règle 11).
+
+
+  ```
+{"goal":{"id":"goal-71199637-ae7f-453f-9253-fa2d7f879154","revision":2,"objective":"Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de serveur local (règle 11).","phase":"complete","roundsStarted":3,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de serveur local (règle 11)."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Goal L clos : frontière 71 langues + texte long + porte des quatre modes, trois faits mesurés, ficheés et committés
+
+**Objectif atteint.** Le chantier **L — le bloc langue** a livré le contrat, la frontière sur les 71 langues et la porte des quatre modes sur le gold 432. Trois faits, chacun avec mesure, contrôle négatif, fiche et commit.
+
+**1. La frontière sur les 71 langues** (commit `206dae21`, fiche `reports/rapport-pensee-frontiere-71.md`).
+- Sur le lexique multilingue des jeux (**71 langues, 35 concepts, 1 487 labels**) : **script 71/71 = 1,0** en 0,11 ms/langue ; **langue 203/1 486 = 0,137** contre une **classe majoritaire à 0,032**.
+- Lecture : le CPU **tient** le graphème ; il ne tient **pas** la langue sur des libellés de deux ou trois mots — 4,3× le hasard ne fait pas un détecteur (0,57 ms/label pour 86 % d'erreurs).
+
+**2. Le texte long (UDHR)** (commit `81697bc2`, même fiche complétée).
+- **398 langues profilées, 447 articles de test** : **langue 0,9687**, script 1,0, **contrôle permuté 0,0022** (≈ 1/398), 3,56 s.
+- Lecture : **la longueur du texte est le levier** — 0,137 sur des libellés, 0,9687 sur des articles ; le contrôle permuté tombant au hasard, le score n'est pas un artefact.
+
+**3. La porte des quatre modes sur le gold 432** (commit `bfc6084a`, fiche `reports/rapport-pensee-quatre-modes.md`, JSON `reports/pensee-quatre-modes.json`).
+- **Neuronal (API DeepSeek)** : POS **0,9309**, syntagmes **0,8226**, tête **0,8784** — le meilleur sur les niveaux linguistiques.
+- **Heuristique** : acte **0,9954** (le neuronal ne rend pas la pragmatique : **0,0**).
+- **Parallèle et cascade** : **0,928 / 0,802 / 0,857** — **la fusion régresse** sous le neuronal seul, alors qu'elle devrait au moins le valoir. C'est le **défaut de la politique `confiance`**, pas des blocs.
+- **Coût** : 858 appels API, **254 341 tokens**, latence médiane 1,86 s, 797 s ; **1 refus** (`r353`). Seuils : **3/5** (`parallele` et `aucun_refus` échouent — les deux échecs sont informatifs).
+
+**Vérifié** : T0 **3 989** mots ; revue verte (**596 fiches / 684 JSON / 120 docs**) ; `verifie_en_cours` ✅ ; `verifie_journal` ✅ ; hook état ✅ (`dernier fait = dernier état bfc6084a`) ; **règle 11 respectée** (API DeepSeek, clé hors dépôt, aucun `llama-server`/`ollama`, aucun GPU N2).
+
+**À relire / faire ensuite.**
+- **Réparer la fusion** : priorité **par niveau** (le neuronal pour POS/syntagmes/tête, l'heuristique pour la pragmatique), pas par confiance globale — c'est la prochaine action de L.
+- **Nommer le refus `r353`** (la phrase, la raison) et le traiter.
+- **La pragmatique neuronale** reste à 0,0 : le composite ne la porte pas ; le contrat le dit.
+- **Concurrence git** : mes commits ont emporté des fichiers déjà stagés par les autres sessions (journal `outils.md`, suppressions `arbre-referents`) ; le `arbre-referents.svg` est réapparu non suivi. À vérifier avec S et le hub.
+- **Fichiers non committés d'autres sessions** : `docs/schemas/README.md`, `tools/pensee/store.py`, `tools/structures`, `tools/tests/qualifier_porte_fenetre_drvm.py`, `reports/pensee-porte-fenetre-500.json`.
+
+Le goal est **clos** ; j'attends ta prochaine instruction (réparer la fusion serait la suite naturelle).
+
+
+## Tour 173
+
+### 👤 Utilisateur
+
+continue avec réparer la fusion
+
+### 🤖 Assistant
+
+⏵ Je crée le goal « réparer la fusion » et j'inspecte `_fusion` pour concevoir la priorité par niveau
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "Réparer la fusion du bloc langue (L) : la porte des quatre modes a montré que parallèle et cascade (0,928 / 0,802 / 0,857) régressent sous le neuronal seul (0,9309 / 0,8226 / 0,8784). Donner la priorité par niveau (neuronal pour POS/syntagmes/tête, heuristique … [157 caractères tronqués]`
+
+> **Objectif** (create) : Réparer la fusion du bloc langue (L) : la porte des quatre modes a montré que parallèle et cascade (0,928 / 0,802 / 0,857) régressent sous le neuronal seul (0,9309 / 0,8226 / 0,8784). Donner la priorité par niveau (neuronal pour POS/syntagmes/tête, heuristique pour la pragmatique), re-mesurer sur le gold 432, fiche + contrôle négatif + en-cours + commit explicite ; pas de GPU N2, pas de serveur local (règle 11).
+
+
+  ```
+{"goal":{"id":"goal-0af1b8bf-ee48-490a-913d-93b89f281f14","revision":1,"objective":"Réparer la fusion du bloc langue (L) : la porte des quatre modes a montré que parallèle et cascade (0,928 / 0,802 / 0,857) régressent sous le neuronal seul (0,9309 / 0,8226 / 0,8784). Donner la priorité par niveau (neuronal pour POS/syntagmes/tête, heuristique pour la pragmatique), re-mesurer sur le gold 432, fiche + contrôle négatif + en-cours + commit explicite ; pas de GPU N2, pas de serveur local (règle 11).","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"def _fusion\" -A 70 tools/bloc_linguistique.py | head -85", "description": "Read the fusion implementation", "timeoutMs": 60000}`
+
+  ```
+736:def _fusionner(spans: Sequence[Span]) -> list[Span]:
+737-    spans = sorted(set(spans), key=lambda s: (s.debut, s.fin))
+738-    sortie: list[Span] = []
+739-    for s in spans:
+740-        if not sortie or s.debut > sortie[-1].fin:
+741-            sortie.append(s)
+742-        else:
+743-            sortie[-1] = Span(sortie[-1].debut, max(sortie[-1].fin, s.fin))
+744-    return sortie
+745-
+746-
+747-# --------------------------------------------------------------------------- neuronal
+748-
+749-
+750-class MockNeuronal:
+751-    """Le neuronal **de contrat** : même sortie, source `neuronal`, déterministe, sans GPU.
+752-
+753-    Il ne prétend pas être un modèle : il prouve que le contrat accepte une autre implémentation,
+754-    que le parallèle fusionne et que la cascade n'appelle le neuronal que sur le résidu.
+755-    """
+756-
+757-    nom = "neuronal"
+758-
+759-    def __init__(self, profils: dict[str, dict] | None = None):
+760-        self.profils = profils
+761-
+762-    def analyser(self, texte: str, langue: str | None = None,
+763-                 contexte: str | None = None) -> Annotation:
+764-        t0 = time.perf_counter()
+765-        lg = detecter_langue(texte, self.profils, lang
+… [3577 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis `_supprimer_chevauchements` et la façon dont l'évaluateur compte les doublons POS/syntagmes — c'est là que la fusion perd
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"def _supprimer_chevauchements\" -A 60 tools/bloc_linguistique.py | head -70; echo '=== evaluer POS doublons ==='; grep -n \"def evaluer_bloc\" -A 40 tools/tests/linguistique/evaluer_gold.py | head -50", "description": "Read overlap removal a … [53 caractères tronqués]`
+
+  ```
+1295:def _supprimer_chevauchements(etiquettes: list[Etiquette],
+1296-                              priorite_syntagme: str = "heuristique") -> list[Etiquette]:
+1297-    """Les alternatives se suppriment **par type** quand les types sont complémentaires.
+1298-
+1299-    `pos` et `syntagme` sont des alternatives de **span** : on garde la plus confiante.
+1300-    Pour le **syntagme**, la politique par défaut (`heuristique`) garde la segmentation de
+1301-    l'heuristique ; `confiance` laisse la plus confiante gagner (le tagger neuronal à 0,6
+1302-    passe devant l'heuristique à 0,4). `phrase` (type/négation/modalité), `pragmatique` (acte/double_sens/contexte), `discours`
+1303-    (paragraphe/connecteur) et `document` (titre/paragraphe) portent des types **complémentaires**
+1304-    sur le même span : les supprimer ensemble effacerait la négation au profit du type."""
+1305-    modes = {"pos": "span", "syntagme": "span", "phrase": "type", "pragmatique": "type",
+1306-             "discours": "type", "document": "type"}
+1307-    gardees: list[Etiquette] = [e for e in etiquettes if e.niveau not in modes]
+1308-    for niveau, mode in modes.items():
+1309-        groupes = {}
+1310-        for 
+… [4807 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La fusion perd parce que `_supprimer_chevauchements` fait concourir les deux sources **par confiance** ; j'ajoute le choix **par niveau** (neuronal pour POS/syntagmes, heuristique pour phrase/pragmatique)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text(encoding='utf-8')\n# 1. _fusion : le choix par niveau\nold='''def _fusion(a: Annotation, b: Annotation, source: str,\n            priorite_syntagme: str = \" … [4884 caractères tronqués]`
+
+  ```
+ok
+COMPILE_OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Banc mis à jour avec les deux fusions (ancienne et par niveau) ; je relance sur les 432 (l'API est en cache, donc rapide)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/qualifier_quatre_modes.py'); t=p.read_text(encoding='utf-8')\nold='''from tools.bloc_linguistique import (Cascade, Heuristique, NeuronalLLMChunks,\n                             … [2651 caractères tronqués]`
+
+  ```
+ok
+COMPILE_OK
+heuristique · 0.2 s
+neuronal · 0.3 s
+parallele · 0.4 s
+cascade · 0.4 s
+parallele_niveau · 0.4 s
+cascade_niveau · 0.4 s
+heuristique {'pos': 0.7394, 'syntagme': 0.2524, 'tete': 0.4516, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+neuronal {'pos': 0.9309, 'syntagme': 0.8226, 'tete': 0.8784, 'pragmatique': {'acte': 0.0, 'negation': 0.9907, 'modalite': 0.9815, 'double_sens': 0.9954}, 'fraction_semantique': 0.0}
+parallele {'pos': 0.928, 'syntagme': 0.802, 'tete': 0.857, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+cascade {'pos': 0.928, 'syntagme': 0.802, 'tete': 0.857, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+parallele_niveau {'pos': 0.9331, 'syntagme': 0.8073, 'tete': 0.8627, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+cascade_niveau {'pos': 0.9331, 'syntagme': 0.8073, 'tete': 0.8627, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite
+… [65 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La fusion par niveau améliore la POS (0,9331) mais la `_supprimer_chevauchements` écrase encore des syntagmes du neuronal (0,8073 < 0,8226) ; je la retire quand la source est déjà choisie par niveau
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text(encoding='utf-8')\nold='''        etiquettes = [e for e in meilleures.values() if e.source == choisis.get(e.niveau)]\n    else:\n        etiquettes = list(me … [1090 caractères tronqués]`
+
+  ```
+ok
+COMPILE_OK
+parallele_niveau · 0.4 s
+cascade_niveau · 0.4 s
+heuristique {'pos': 0.7394, 'syntagme': 0.2524, 'tete': 0.4516, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+neuronal {'pos': 0.9309, 'syntagme': 0.8226, 'tete': 0.8784, 'pragmatique': {'acte': 0.0, 'negation': 0.9907, 'modalite': 0.9815, 'double_sens': 0.9954}, 'fraction_semantique': 0.0}
+parallele {'pos': 0.928, 'syntagme': 0.802, 'tete': 0.857, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+cascade {'pos': 0.928, 'syntagme': 0.802, 'tete': 0.857, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+parallele_niveau {'pos': 0.9331, 'syntagme': 0.8069, 'tete': 0.8704, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+cascade_niveau {'pos': 0.9331, 'syntagme': 0.8069, 'tete': 0.8704, 'pragmatique': {'acte': 0.9954, 'negation': 0.9676, 'modalite': 0.9861, 'double_sens': 0.9676}, 'fraction_semantique': 0.5165}
+  ```
+
+
+  ```
+total 192
+drwxr-xr-x. 1 stephane stephane   260  3 nov 08:24 .
+drwxr-xr-x. 1 stephane stephane   124 31 oct 18:00 ..
+drwxr-xr-x. 1 stephane stephane  1686 31 oct 12:50 backlog
+-rw-r--r--. 1 stephane stephane 24647  3 nov 13:29 chantiers.md
+-rw-r--r--. 1 stephane stephane 11838  3 nov 16:26 en-cours.md
+-rw-r--r--. 1 stephane stephane 12411 28 oct 09:17 manques.md
+-rw-r--r--. 1 stephane stephane 24555  2 nov 22:15 plan-travail.md
+-rw-r--r--. 1 stephane stephane 22138  1 nov 13:46 programme-r.md
+-rw-r--r--. 1 stephane stephane  4380  2 nov 20:20 README.md
+-rw-r--r--. 1 stephane stephane 13855  3 nov 13:18 references-non-regression.md
+-rw-r--r--. 1 stephane stephane 46170  3 nov 16:26 roadmap.md
+-rw-r--r--. 1 stephane stephane 14336 28 oct 09:17 utilisation.md
+=== roadmap (extrait) ===
+# La roadmap de [Drave](../theorie/glossaire/entrees/drave.md) — un seul plan, quatre chantiers
+
+> **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+> L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date. Les chiffres, les séries et les
+> contrôles vivent dans [`reports/`](../../reports/) ; ici : l'[état](../theorie
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-03, 13 h 45 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit**, et de nouveau le **03/11 13 h 38** pour le **run long à 1 024** ; runbook :
+> [`plan-travail.md`](plan-travail.md) § 9.
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+>
+> **Serveurs locaux arrêtés (03/11 09 h)** : `llama-server` (Qwen2.5-7B, port 18082) tué ; unités
+> `llama-cpp`/`embed`/`vision` masquées, `ollama` désactivé ; les **professeurs** passent par l'**API
+> DeepSeek** (`tools/llm/enseignant.py`) ; `hauru-gpu-guard` (timer 30 s) et `porte-ressources`
+> (contrôle GPU) ve
+… [3957 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La fusion par niveau laisse encore 0,8069 (< 0,8226) ; je débogue sur une phrase : les étiquettes syntagmes du neuronal sont-elles perdues ou réordonnées ?
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=$HOME/.config/drave/deepseek.key PYTHONPATH=. timeout 300 python3 - <<'PY'\nimport json, sys; sys.path.insert(0,'.')\nfrom tools.bloc_linguistique import (PRIORITE_NIVEAU, Heuristique, NeuronalLLMPOS,\n                                … [1423 caractères tronqués]`
+
+  ```
+phrases 432
+r023 We love music.
+  syn diff b-f [] f-b [('GV', 0, 13)]
+  pos diff []
+r029 I do not understand.
+  syn diff b-f [] f-b [('GV', 0, 19)]
+  pos diff []
+r030 You come tomorrow?
+  syn diff b-f [] f-b [('GV', 0, 17)]
+  pos diff []
+phrases avec différence 46
+  ```
+

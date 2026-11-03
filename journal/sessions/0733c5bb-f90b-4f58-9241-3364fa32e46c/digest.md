@@ -8752,3 +8752,24 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-440", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/prod60k.out 2>/dev/null; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; grep -E \"ppl_val|duree_s\" work/n2ac/mix1024-60k.pt.json 2>/dev/null; tail -c 60 work/n2ac/kd-mix512-15k.log", "description": "Poll 60k che … [15 caractères tronqués]`
+
+  ```
+17:06:39
+50 · perte 0.9340 · dure 0.8329 · douce 0.1781 · 2508 s
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/prod60k.out 2>/dev/null; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60", "description": "Wait for 60k finish"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-442]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-442", "timeout_ms": 1500000, "wait": true}`
