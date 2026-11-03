@@ -7528,3 +7528,321 @@ rapport-pensee-porte-minute      0
   ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
   ```
 
+### 🤖 Assistant
+
+⏵ Round 3 : INDEX régénéré (565 fiches), README à 2 800/2 800 ; la fiche N2/JSON reste le point ouvert.
+
+- **todo_write** `{"todos": [{"content": "Poser la consigne de nuit (plan-travail §10.7, plan hub)", "status": "completed"}, {"content": "Vérifier la porte sessions et le routage docs", "status": "completed"}, {"content": "Intégrer claim/heartbeat dans sessions.py (mandat long vs mort)", "status": "completed"}, {"con … [556 caractères tronqués]`
+
+  ```
+Updated todo list: 1 pending, 2 in progress, 5 completed.
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- User asked to study “l'état de toutes les sessions et le pilotage” → audit all sessions and pilotage.
+- Then: “vas-y et donne moi des instructions pour que je démarre ou récupère d'autre sessions dans d'autres terminaux” → commit/reconcile, give multi-terminal runbook.
+- Then GPU thermal: “GPU 0 à 87 de3grés et fan à 88%. peut-on améliorer sa ventilation au dela de 88%”.
+- Then: “jai fait le zypper continue toi-même. tu peux me demander le mdp en popup pour les sudo”.
+- Then: “oui un service permanent. consigne toutes ces modifications dans le repo GitHub equipment-hauru” → permanent systemd service + document in `equipment-hauru`.
+- Then: “peut-on controller les fan de dell sans avoir à modifier le bios”.
+- Then: “dans le pilotage, pourrait-on coordonner les charges de la machine pour éviter les attentes inutiles et surtout les simultanéités trèes intences sur chaque ressources? (Gpu0, Gpu1, Cpu0, CPU1 NVMe Raid et NVMe 1tb standard”.
+- Latest: “il se passe beaucoup de choses en même temps. coordonne bien tes activités et les autres sessions en utilisant les mécanismes en place. tu comprendras probablement à la lecture du pilotage que je veux que toutes les sessions soient productives jusqu'à demain matin. je repasse vers 8h pour voir où vous en êtes.” → keep all sessions productive until 08:00 2026-11-03, use existing mechanisms, report at 08:00.
+
+## Key Technical Concepts
+- Qtrinet/Drave repo: event-flow AI, sessions/plans/état/pilotage, gates, journal, backlog, resource-aware scheduling.
+- DSH sessions: `$DSH_SESSION_ID`, `dsh --profile dsh-tui`, `dsh --profile dsh-tui --resume <id>`; current hub session `536cd5d6-94ac-4057-8fe9-11709a4587c7`.
+- Hauru machine: Dell Precision Tower 7910, 2× Xeon E5-2687W v3 (40 threads), 2 NUMA nodes: `cpu0`=0-9,20-29; `cpu1`=10-19,30-39; 125 Gio RAM; 2× Quadro RTX 5000 (16 Gio, NVLink, both NUMA 0); openSUSE Tumbleweed, kernel `7.2.6-1-default`, NVIDIA `580.196.07`.
+- Storage: `nvme2n1` 931.5G Fanxiang S660 → `/`, `/home`, `/home/stephane/FastNVMe`; RAID0 `md0` 4×238.5G Patriot → `/home/stephane/IA` 937.4G, **33 Gio free**; `sda` 10.9T HDD → `/home/stephane/Data13TB` 1.9T free.
+- GPU thermal: GPU0 max op 89°C, slowdown 93°C, shutdown 96°C, target 83°C, power 230W (min 125W); `SW Thermal Slowdown` active at 86-87°C.
+- NVML fan control: `nvmlDeviceSetFanControlPolicy`, `nvmlDeviceSetFanSpeed_v2`; root via `pkexec`; `nvidia-settings` attrs `GPUFanControlState`, `GPUTargetFanSpeed` (33-100), `GPUCurrentFanSpeedRPM`.
+- Dell fans: `dell_smm` hwmon exposes `pwm1..4`, `pwmN_enable` (1=manual, 2=auto), `fanN_input`; pwm1/2=Processor Fan, pwm3/4=Other Fan; **manual mode saturates at max for any value ≥80/255**.
+- Resource ledger: `tools/ressources.py`, `work/ressources.json`, claims/queue, `--status/--claim/--release/--check/--suggest/--actual/--autotest` (9 cases).
+- systemd service `hauru-thermal.service` (oneshot, enabled, active) applies 180W GPU0 cap + `OTHER_FAN_PWM=auto`.
+- Git concurrency: Qtrinet has other sessions’ staged changes; use `git commit --only -- <paths>` to avoid committing others’ index; hook archives journal.
+
+## Files and Code
+- `docs/pilotage/en-cours.md`: live state, 4 sessions currently: hub `536cd5d6`, S `29ad180d-38a5-4481-a9a7-ec6ab31c895f`, Pensée `e181ce02-cd50-488a-a6be-e84b79d40dcc`, N2 `0733c5bb-f90b-4f58-9241-3364fa32e46c`; D/R/A `fe3c05f0` closed 18:45; 1,623 mots; T0 3,997/4,000; staged by another session; do not overwrite.
+- `docs/pilotage/plan-travail.md`: added §10 resource coordination (matrix, NUMA rule, protocol, allocation, storage, limits); 3,349 words; unbudgeted.
+- `tools/ressources.py`: new resource ledger, committed `a67dbf00` on Qtrinet `master`; 755.
+- `equipment-hauru/system/thermal/`: `README.md`, `MESURES-2026-11-02.md`, `hauru-thermal`, `hauru-thermal.service`, `hauru-thermal.default`, `install.sh`, `uninstall.sh`; committed `f5883f9` and pushed `0bedb54..f5883f9` to private `git@github.com:stephanedenis/equipmen
+… [5929 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- User asked to study “l'état de toutes les sessions et le pilotage” → audit all sessions and pilotage.
+- Then: “vas-y et donne moi des instructions pour que je démarre ou récupère d'autre sessions dans d'autres terminaux” → commit/reconcile, give multi-terminal runbook.
+- Then GPU thermal: “GPU 0 à 87 de3grés et fan à 88%. peut-on améliorer sa ventilation au dela de 88%”.
+- Then: “jai fait le zypper continue toi-même. tu peux me demander le mdp en popup pour les sudo”.
+- Then: “oui un service permanent. consigne toutes ces modifications dans le repo GitHub equipment-hauru” → permanent systemd service + document in `equipment-hauru`.
+- Then: “peut-on controller les fan de dell sans avoir à modifier le bios”.
+- Then: “dans le pilotage, pourrait-on coordonner les charges de la machine pour éviter les attentes inutiles et surtout les simultanéités trèes intences sur chaque ressources? (Gpu0, Gpu1, Cpu0, CPU1 NVMe Raid et NVMe 1tb standard”.
+- Latest: “il se passe beaucoup de choses en même temps. coordonne bien tes activités et les autres sessions en utilisant les mécanismes en place. tu comprendras probablement à la lecture du pilotage que je veux que toutes les sessions soient productives jusqu'à demain matin. je repasse vers 8h pour voir où vous en êtes.” → keep all sessions productive until 08:00 2026-11-03, use existing mechanisms, report at 08:00.
+
+## Key Technical Concepts
+- Qtrinet/Drave repo: event-flow AI, sessions/plans/état/pilotage, gates, journal, backlog, resource-aware scheduling.
+- DSH sessions: `$DSH_SESSION_ID`, `dsh --profile dsh-tui`, `dsh --profile dsh-tui --resume <id>`; current hub session `536cd5d6-94ac-4057-8fe9-11709a4587c7`.
+- Hauru machine: Dell Precision Tower 7910, 2× Xeon E5-2687W v3 (40 threads), 2 NUMA nodes: `cpu0`=0-9,20-29; `cpu1`=10-19,30-39; 125 Gio RAM; 2× Quadro RTX 5000 (16 Gio, NVLink, both NUMA 0); openSUSE Tumbleweed, kernel `7.2.6-1-default`, NVIDIA `580.196.07`.
+- Storage: `nvme2n1` 931.5G Fanxiang S660 → `/`, `/home`, `/home/stephane/FastNVMe`; RAID0 `md0` 4×238.5G Patriot → `/home/stephane/IA` 937.4G, **33 Gio free**; `sda` 10.9T HDD → `/home/stephane/Data13TB` 1.9T free.
+- GPU thermal: GPU0 max op 89°C, slowdown 93°C, shutdown 96°C, target 83°C, power 230W (min 125W); `SW Thermal Slowdown` active at 86-87°C.
+- NVML fan control: `nvmlDeviceSetFanControlPolicy`, `nvmlDeviceSetFanSpeed_v2`; root via `pkexec`; `nvidia-settings` attrs `GPUFanControlState`, `GPUTargetFanSpeed` (33-100), `GPUCurrentFanSpeedRPM`.
+- Dell fans: `dell_smm` hwmon exposes `pwm1..4`, `pwmN_enable` (1=manual, 2=auto), `fanN_input`; pwm1/2=Processor Fan, pwm3/4=Other Fan; **manual mode saturates at max for any value ≥80/255**.
+- Resource ledger: `tools/ressources.py`, `work/ressources.json`, claims/queue, `--status/--claim/--release/--check/--suggest/--actual/--autotest` (9 cases).
+- systemd service `hauru-thermal.service` (oneshot, enabled, active) applies 180W GPU0 cap + `OTHER_FAN_PWM=auto`.
+- Git concurrency: Qtrinet has other sessions’ staged changes; use `git commit --only -- <paths>` to avoid committing others’ index; hook archives journal.
+
+## Files and Code
+- `docs/pilotage/en-cours.md`: live state, 4 sessions currently: hub `536cd5d6`, S `29ad180d-38a5-4481-a9a7-ec6ab31c895f`, Pensée `e181ce02-cd50-488a-a6be-e84b79d40dcc`, N2 `0733c5bb-f90b-4f58-9241-3364fa32e46c`; D/R/A `fe3c05f0` closed 18:45; 1,623 mots; T0 3,997/4,000; staged by another session; do not overwrite.
+- `docs/pilotage/plan-travail.md`: added §10 resource coordination (matrix, NUMA rule, protocol, allocation, storage, limits); 3,349 words; unbudgeted.
+- `tools/ressources.py`: new resource ledger, committed `a67dbf00` on Qtrinet `master`; 755.
+- `equipment-hauru/system/thermal/`: `README.md`, `MESURES-2026-11-02.md`, `hauru-thermal`, `hauru-thermal.service`, `hauru-thermal.default`, `install.sh`, `uninstall.sh`; committed `f5883f9` and pushed `0bedb54..f5883f9` to private `git@github.com:stephanedenis/equipment-hauru.git`.
+- `equipment-hauru/README.md`: added “Thermique GPU et ventilateurs Dell” section.
+- `/usr/local/bin/hauru-thermal`, `/etc/systemd/system/hauru-thermal.service`, `/etc/default/hauru-thermal`: installed; config `GPU_POWER_LIMIT=180`, `GPU_POWER_LIMIT_DEFAULT=230`, `OTHER_FAN_PWM=auto`.
+- `/var/log/hauru-thermal.log`: service log.
+- `journal/sessions/536cd5d6.../plan.md`: hub plan; heartbeat 19:50 at last check; needs night update.
+- `journal/sessions/0733c5bb.../plan.md`: N2 night mandate; 200k run done, PPL val_fr 3.16, litt 5.61, anglais 7.28, wikitext2 8.00; R1.2/RoPE measured; next fiche/commit/contrôle depuis zéro/clôture.
+- `journal/sessions/29ad180d.../plan.md`: S; next human validation of banque (blocked by user), then GN h033/gold; analyzer 38/39 types, 99/100 roles, 40 tests.
+- `journal/sessions/e181ce02.../plan.md`: Pensée/B13; gold/DRVM/pragmatique; next gold 200+ phrases, mobile/stochastic gates; B13 waits S.
+- `work/portes/passe-1102-19h32/`: running full gate pass, started 19:32, `CUDA_VISIBLE_DEVICES=1,0`, PID 164366, at `porte-indice` for 10:36; logs/registre here.
+- `work/ressources.json`: live claims: N2 gpu0/cpu0 12/ram 60; hub gpu1/cpu1 8/ram 8; S cpu1 4/ram 8; Pensée cpu1 4/ram 16; CPU1=16, RAM=92; `--check` passes with warnings IA 33G and hub GPU/cpu1 cross-NUMA.
+
+## Errors and Fixes
+- Initial audit found 67 uncommitted files, stale mandates, duplicate `fe3c05f0` in state, B13 counts 111/123/140, N2.ac missing, gate logs in `/tmp` wiped by reboot; fixed by commits, state rewrite, `--strict` gate, durable `work/portes`, `INDEX.md` regeneration.
+- `sessions.py --check` exited 0 on stale heartbeats; fixed by adding `en pause` state and making `porte-sessions.sh` use `--check --strict`.
+- `nvidia-settings` absent; installed by user via zypper; user authority needed → `pkexec` popup works.
+- GPU fan 100% via NVML: worked (99-100%, 3617 RPM) but temp unchanged 86-87°C, throttle stayed active; restored auto.
+- 180W cap: temp 83-85°C, throttle inactive, clocks 1680-1725 MHz, fan 80-89% → effective; kept.
+- Dell Other Fan max: 2150→5155/4736 RPM; GPU unchanged 84-85°C, CPU 70-77→67°C; restored auto; manual PWM is binary (80-160 all max).
+- `plan-travail` Python replacement assertion failed initially due to exact text mismatch; re-read exact lines and reapplied successfully.
+- `git commit --only` unexpectedly included journal files (23 files) but **did not** include other sessions’ staged `en-cours`/`roadmap`/reports; acceptable, journal derived by hook.
+
+## Pending Jobs
+- Goal `goal-63a3e56f-d66e-4e43-8974-db1c692b5e45` active, max 1000 rounds, objective: coordinate hub + N2/S/Pensée productively until 03/11 08:00, keep resource ledger, monitor gate pass, integrate state/roadmap/journal, report at 08:00.
+- Full gate pass running since 19:32 (PID 164366), currently `porte-indice`; monitor `work/portes/passe-1102-19h32/registre.txt`, integrate verdict/counters/references when done.
+- Night block not yet added to `plan-travail` §10.7 nor `en-cours`; hub plan not yet updated for night.
+- Resource claims seeded; sessions may not yet read/release them; `llama-server` (683% CPU, both GPUs) and N2 python (affinity 0-39) unpinned; current gate `drave` was seen on GPU0 while GPU1 idle.
+- Possible next hub work: integrate pass, update references/counters, roadmap diet (giant B13/N2 cells), add `porte-ressources.sh` (81→82) after validation, regenerate INDEX.
+
+## Current Work
+- Just created the night goal and read N2/S plans; about to add the night coordination block to `plan-travail` §10.7, update hub plan heartbeat/roles, possibly add a short “Nuit” line to `en-cours` if safe (T0 only 3 words headroom; en-cours staged by another session).
+- Gate pass is in progress; resource ledger reflects four active sessions; actual GPU0 shared by N2 + gates, GPU1 mostly idle.
+- Qtrinet HEAD `a67dbf00` (resource tool + plan-travail §10) on `master`; other sessions’ staged files remain in index.
+
+## Next Step
+- Append `### 10.7 La nuit du 02/11 → 03/11 (08 h)` to `docs/pilotage/plan-travail.md` with the four claims, gate-pass exception (`machine` for next full pass), no-wait rules, 08:00 checkpoint; update hub plan heartbeat/night role; then monitor the pass and sessions, committing only owned paths (`git commit --only`).
+
+## Critical Context
+- User wants **all sessions productive until 08:00**, no waiting, use existing mechanisms: `en-cours`, `plan-travail`, `tools/ressources.py`, `sessions.py`, `surveille_sessions.py`, journal, gates.
+- Current active sessions: hub 536, S 29ad180d, Pensée e181ce02, N2 0733c5bb; D/R/A closed.
+- Claims: N2 `gpu0=exclusive,cpu0=12,ram=60`; hub `gpu1=exclusive,cpu1=8,ram=8`; S `cpu1=4,ram=8`; Pensée `cpu1=4,ram=16`; CPU1 16/16, RAM 92/109; GPU0+GPU1 claimed.
+- Full gate pass is already running with both GPUs (`CUDA_VISIBLE_DEVICES=1,0`) while N2 uses GPU0 → slowdown assumed; next full pass must claim `machine` and wait for N2/S/Pensée release; partial gates can use `gpu1` + `cpu1`.
+- Rule: GPU jobs on `cpu0` via `numactl --cpunodebind=0 --membind=0` + `CUDA_VISIBLE_DEVICES`; CPU-only on `cpu1` via `numactl --cpunodebind=1 --membind=1`; gates are CPU-first, hub claim cpu1+gpu1 warns cross-NUMA.
+- Storage: `IA` 33 Gio free → no heavy writes; `hdd_data13tb` 1.9T / `nvme_system` 705G; `FastNVMe` is on system NVMe, not RAID; one heavy IO per device.
+- `en-cours` is 1,623 words, T0 3,997/4,000; adding text requires trimming; it is staged by another session, so avoid overwriting and use `git commit --only` for owned paths.
+- `llama-server` is a shared service (118/366 MiB, 683% CPU) — declare/bound as background, not an exclusive GPU claim.
+- 180W GPU0 cap + `hauru-thermal.service` active; GPU0 at 84-85°C, throttle inactive; GPU1 ~28°C idle at last check.
+- User returns ~08:00; final deliverable then: per-session/productivity bilan, resource ledger status, gate-pass verdict, remaining tasks.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. Bref, révolutionner l'IA avec une approche par bus d'événements où chaque bloc fonctionnel est optimisable, comparable et substituable par des alternatives ayant des architectures différentes. e.g. Blocs neuronaux là où l'intuition est un avantage, blocs computationnels classiques pour les opérations où l'informatique classique est plus fiable et performante.
+
+Le projet est né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de
+les **combiner**, de les **décomposer en couches et grappes de neurones** exécutables par du matériel divers, voire
+**distribué en réseau**, de les **diagnostiquer et faire évoluer** en étudiant leurs **flux**, et de **rejouer à
+volonté** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Round 3 : INDEX 565, README 2 800/2 800 ; la fiche N2/JSON reste le point ouvert.
+
+**Fait ce round**
+
+- **`reports/INDEX.md` régénéré** : **565 fiches** (les 3 nouvelles N2/S/B13 incluses) ; `reports/README.md` à **2 800/2 800** (budget pile) — l'ajout curaté des 3 fiches attend le commit N2 et devra retirer 3 entrées anciennes.
+- **Revue** : 568 fiches, 653 JSON, 119 docs, **82 portes** ✅ ; **T0 3 961/4 000** ✅.
+- **N2** : fiche `rapport-n2-fenetre.md` (8,7 Ko) toujours sans `n2-fenetre.json` ; **`porte-tableaux` reste rouge de passage** ; le N2 tourne (93 min + claim, mandat long) ; rejeu après le JSON.
+- **Sessions/claims** : N2 93 + claim, S 49 + claim, hub 50 + claim, B13 3 ; B13 **140/140** ; `porte-sessions` verte — les claims couvrent les heartbeats longs.
+- **Passe** : 76/5 intégrée (références 19 h 32, en-cours **82**, docs 82e) ; prochaine passe **82**.
+
+**Reste** : JSON N2 → `porte-tableaux` ; README curaté ; veille des sessions ; **bilan 08 h**. Goal actif.
+
+
+## Tour 12
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 4/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 🤖 Assistant
+
+⏵ Round 4 : j'inspecte l'état réel (N2/JSON, INDEX/README, claims, en-cours) avant d'agir.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== heure ==\" && date '+%T' && echo \"== N2 JSON ==\" && ls -l reports/n2-fenetre.json 2>&1; echo \"== README/INDEX ==\" && wc -w reports/README.md && grep -c '^| \\[' reports/INDEX.md; echo \"== git ==\" && git log --oneline  … [494 caractères tronqués]`
+
+  ```
+== heure ==
+21:32:01
+== N2 JSON ==
+ls: cannot access 'reports/n2-fenetre.json': No such file or directory
+== README/INDEX ==
+2800 reports/README.md
+565
+== git ==
+7d2c0a2d B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+335e1737 ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5)
+M  docs/methode/portes.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+MM docs/pilotage/references-non-regression.md
+ M journal/2026-11-02/README.md
+ M journal/2026-11-02/distribue.md
+ M journal/README.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+ M journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    ·  96 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif   
+… [842 caractères tronqués]
+  ```
+

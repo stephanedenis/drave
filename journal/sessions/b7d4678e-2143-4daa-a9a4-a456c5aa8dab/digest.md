@@ -7959,3 +7959,114 @@ MM docs/pilotage/references-non-regression.md
   ```
 
 - **bash** `{"command": "git commit --only -m \"NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS\" -m \"references-non-regression : la passe du 02/11 19 h 32 (81 portes, 76 vertes, 5 rouges, 1 h 52) remplace la dernière ; les 4 rouges connues + porte-tableaux (lien N2 en … [591 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 0713f4e6] NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+ 28 files changed, 1124 insertions(+), 207 deletions(-)
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -2; echo \"--- N2 fiche ---\"; git status --short reports/rapport-n2-fenetre.md … [158 caractères tronqués]`
+
+  ```
+revue de documentation · 568 fiche(s) · 653 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (52 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (53 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+--- N2 fiche ---
+?? reports/rapport-n2-fenetre.md
+json absent
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 21 h 30 — la passe est au registre\n\n- **Verdict** : **81 portes, 76 vertes, 5 rouges, 1 h 52** (`work/portes/passe-1102-19h32`).\n  Rouges : `porte-homeostasie` (env.), `porte-indice` (1 027 s), `porte-melange` (123 s),\n  `porte-reparti-moteur … [973 caractères tronqués]`
+
+  ```
+ok
+0713f4e6 NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+7d2c0a2d B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 3 : la passe est intégrée au registre (76/5), B13 à 140/140 partout, T1 revenu à 2 428 mots
+
+**Le fait majeur : la passe complète est finie et enregistrée.**
+- **81 portes, 76 vertes, 5 rouges, 1 h 52** (`work/portes/passe-1102-19h32`). Rouges : les 4 connues (`porte-homeostasie` environnementale, `porte-indice` 1 027 s, `porte-melange` 123 s, `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) — un **rouge de passage** : `reports/rapport-n2-fenetre.md` (écrit à 21 h 05, non committé) renvoie à `n2-fenetre.json`, absent. **Aucune régression structurelle** ; `porte-greffe` et `porte-vision` (602 s) vertes.
+- `references-non-regression.md` porte la nouvelle passe ; le récit d'audit du 16/10 (798 mots) et les sous-passes du 10/29 (164 mots) ont déménagé dans `reports/historique-passes-portes.md` — **T1 revient à 2 428 mots** (sous 2 500).
+
+**État aligné et committé (`0713f4e6`)**
+- **B13 à 140/140** partout (en-cours, roadmap, chantiers, plan-travail) — T132/T133 2/5.
+- **S v4** : 54/55 types, 131/131 rôles, 47/47 compléments, gold 55, corpus 55 (`76accf9d…`), 47 tests ; banque 200/355.
+- `en-cours` : dernière passe **19 h 32**, compteurs **568 fiches / 653 JSON**, **82 portes** (81 dans la passe + `porte-ressources` à la suivante).
+- Revue ✅, en-cours ✅, T0 ✅, T1 ✅, porte stricte ✅ (seuls avertissements : mandats longs avec **claim actif**).
+
+**Ce qui reste cette nuit**
+- Le commit **N2** de la fiche fenêtre + son JSON refermera `porte-tableaux` ; c'est le seul rouge non structurel.
+- La 82e porte sera comptée à la prochaine passe (81 → 82).
+- La veille continue : suivi des sessions (N2, S, Pensée, hub), alignement des compteurs/état, et checkpoint de 8 h. Le journal de bord est à jour dans `work/veille/nuit.md`.
+
+
+## Tour 9
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 4/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 4 : je vérifie le commit N2, les sessions et le registre
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; echo \"--- HEAD ---\"; git log --oneline -5; echo \"--- status ---\"; git status --short | head -12; echo \"--- N2 fiche ---\"; git status --short reports/rapport-n2-fenetre.md reports/n2-fenetre.json 2>/dev/null; ls -l reports/n2-fenetre.json 2>/dev/null || echo \"j … [65 caractères tronqués]`
+
+  ```
+21:32:44
+--- HEAD ---
+0713f4e6 NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+7d2c0a2d B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+335e1737 ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET PLAN-TRAVAIL ALIGNÉS (T132/T133 2/5)
+--- status ---
+M  docs/methode/portes.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+MM journal/2026-11-02/memoire.md
+MM journal/2026-11-02/mesures.md
+MM journal/2026-11-02/modele.md
+MM journal/2026-11-02/moteur.md
+MM journal/2026-11-02/outils.md
+MM journal/2026-11-02/portes.md
+--- N2 fiche ---
+?? reports/rapport-n2-fenetre.md
+json absent
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args --sort=-pcpu | grep -E \"entrainer|llama-server|qualifier|porte-|toutes-les\" | grep -v grep | head -5 | cut -c1-120; echo \"--- ressources ---\"; python3 tools/ressources.py --status 2>&1 | grep -A7 \"Réservations\"; python3 tools/ressources.py --check 2>&1 | … [67 caractères tronqués]`
+
+  ```
+110066    04:04:44  464 llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf --host 127.0.0.1 --port 1
+ 383833    01:16:06  100 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_fr/propre/trai
+ 490049       38:37  100 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki_mix/propre/tra
+ 665482       03:30  0.1 python3 tools/tests/qualifier_porte_sto_graines.py --endpoint http://127.0.0.1:18082 --sortie r
+ 665464       03:31  0.0 bash -c cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/tests/qualifier_porte_s
+--- ressources ---
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / integration : cpu1=2, ram=4 (prio 1, 60 min)
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -2; echo \"--- tableaux ---\"; bash tools/porte-tableaux.sh 2>&1 | tail -3", "d … [49 caractères tronqués]`

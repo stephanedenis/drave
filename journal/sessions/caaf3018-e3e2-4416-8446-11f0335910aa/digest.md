@@ -5534,3 +5534,55 @@ Another git process seems to be running in this repository, or the lock file may
 ⏵ Course git : l'autre écrivain tient `index.lock`. J'attends et je recomite sans toucher à son index.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M:%S; ls -l .git/index.lock 2>/dev/null; pgrep -af \"git (commit|add|merge)\" | grep -v pgrep | head -3; sleep 20; ls -l .git/index.lock 2>/dev/null || echo \"lock libéré\"; git status --short | grep -v journal | head -5", "d … [41 caractères tronqués]`
+
+  ```
+21:30:29
+-rw-r--r--. 1 stephane stephane 357253  2 nov 21:30 .git/index.lock
+666427 bash -c git commit --only -m "NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS" -m "references-non-regression : la passe du 02/11 19 h 32 (81 portes, 76 vertes, 5 rouges, 1 h 52) remplace la dernière ; les 4 rouges connues + porte-tableaux (lien N2 en vol, rouge de passage) ; la 82e porte n'était pas dans cette passe. Le récit 16/10 (798 mots) et les sous-passes 10/29 (164 mots) déménagent dans reports/historique-passes-portes.md : T1 revient à 2 428 mots. en-cours : dernière passe, compteurs 568/653, B13 140/140 ; chantiers et plan-travail alignés S v4 et B13 140/140." -- docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md docs/pilotage/chantiers.md docs/pilotage/plan-travail.md reports/historique-passes-portes.md 2>&1 | tail -6
+666436 git commit --only -m NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS -m references-non-regression : la passe du 02/11 19 h 32 (81 portes, 76 vertes, 5 rouges, 1 h 52) remplace la dernière ; les 4 rouges connues + porte-tableaux (lien N2 en vol, rouge de passage) ; la 8
+… [691 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ L'autre écrivain committe les références avec mes §1/§2 (worktree) ; j'attends la fin puis je commite `portes.md`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 45; date +%H:%M:%S; ls .git/index.lock 2>/dev/null || echo \"lock libre\"; git log --oneline -2; echo \"=== ma table est-elle dans HEAD ? ===\"; git show HEAD:docs/pilotage/references-non-regression.md 2>/dev/null | grep -c \"^|  … [130 caractères tronqués]`
+
+  ```
+21:31:45
+.git/index.lock
+7d2c0a2d B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+=== ma table est-elle dans HEAD ? ===
+35
+M  docs/methode/portes.md
+ M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+MM docs/pilotage/references-non-regression.md
+ M reports/historique-passes-portes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sleep 50; date +%H:%M:%S; ls .git/index.lock 2>/dev/null || echo \"lock libre\"; git log --oneline -2; echo \"=== table dans HEAD ? ===\"; git show HEAD:docs/pilotage/references-non-regression.md 2>/dev/null | grep -c \"^| \\`porte-\"; … [174 caractères tronqués]`
+
+  ```
+21:32:41
+lock libre
+0713f4e6 NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+7d2c0a2d B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+=== table dans HEAD ? ===
+81
+=== en-tête HEAD ===
+> **Dernière passe complète — 2026-11-02 à 19 h 32 :** **81 portes, 76 vertes, 5 rouges**,
+> **1 h 52** (journaux durables `work/portes/passe-1102-19h32`). Rouges : 4 connues
+> (`porte-indice` **1 027 s**, `porte-melange` 123 s, `porte-homeostasie` env.,
+> `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) : lien
+> `reports/rapport-n2-fenetre.md` → `n2-fenetre.json` cassé (fiche N2 en cours) —
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit de nuit inclut mon tableau (81 lignes). Je commite `portes.md`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git commit --only -m \"PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE\n\nLe doc disait encore « la passe du 02/11 06 h » ; la passe complète du soir a\nrendu 76 vertes / 5 rouges en 1 h 52 (4 connues … [245 caractères tronqués]`

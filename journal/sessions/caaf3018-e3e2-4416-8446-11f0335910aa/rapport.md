@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 5.3 h |
 | Tours | 23 |
-| Messages | 281 |
-| Appels d'outils | 290 |
+| Messages | 284 |
+| Appels d'outils | 293 |
 | Fichiers touchés | 6 |
-| Commandes | 223 |
+| Commandes | 225 |
 | Sous-agents | 0 |
-| Commits | 6 |
+| Commits | 7 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -457,7 +457,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 
 ### Tour 23 — <goal_round> Objective: "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque  … [933 caractères tronqués]
 
-*28 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - bash — Quick pass check before pacing test
 - bash — Five-minute timer with pass status
@@ -473,11 +473,11 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - bash — Check section 1 row and section 2 table header
 - bash — Build and dry-run section 1/2 patcher
 - bash — Apply references sections and verify
-- … et 7 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ L'autre écrivain committe les références avec mes §1/§2 (worktree) ; j'attends la fin puis je commite `portes.md`.
+⏵ Le commit de nuit inclut mon tableau (81 lignes). Je commite `portes.md`.
 
 ## 3. Travail accompli
 
@@ -534,7 +534,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 183 autres
+- … et 185 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -611,6 +611,7 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - **T18** `--- 3. les tableaux (10 pages × 3 familles)`
 - **T23** `-> connues**. `porte-homeostasie` (exit 2) : **environnementale** — `/tmp/n4/rang4-lora.pt` effacé`
 - **T23** `[still running after 60000ms; moved to background job bash-221]`
+- **T23** `[still running after 60000ms; moved to background job bash-225]`
 
 ## 5. Erreurs rencontrées
 
@@ -628,4 +629,5 @@ La porte OCR longue est passée : **verte en 448 s**. Passe à **60 portes, 57 v
 - PORTES — LE REGISTRE EST DANS \`work/\`, PAS DANS \`/tmp\` ; LA PASSE PEUT TOURNER SUR UN SEUL GPU LIBRE  Le doc annonçait /tmp/portes-<date> : le script écrit 
 - DOCS — LE REGISTRE DES RESSOURCES ENTRE DANS LE ROUTAGE  tools/ressources.py (écrit cette nuit avec le protocole § 10) n'était référencé ni dans docs/pilotage/R
 - RÉFÉRENCES — LE TABLEAU DES REPÈRES PASSE À LA PASSE DU 02/11 19 H 32 (81 PORTES, 76/5)  Les 81 lignes du § 2 sont réécrites depuis les journaux durables work/p
+- PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE  Le doc disait encore « la passe du 02/11 06 h » ; la passe complète du soir 
 

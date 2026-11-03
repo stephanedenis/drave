@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.2 h |
-| Tours | 8 |
-| Messages | 488 |
-| Appels d'outils | 517 |
+| Durée | 5.3 h |
+| Tours | 9 |
+| Messages | 498 |
+| Appels d'outils | 526 |
 | Fichiers touchés | 22 |
-| Commandes | 333 |
+| Commandes | 342 |
 | Sous-agents | 0 |
 | Commits | 20 |
 | Compactages de contexte | 0 |
@@ -41,6 +41,8 @@
 **Tour 7** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
 
 **Tour 8** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
+
+**Tour 9** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -268,7 +270,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 
 ### Tour 8 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
 
-*45 appels d'outils.* Actions notables :
+*47 appels d'outils.* Actions notables :
 
 - bash — Check pass completion and commits
 - bash — Check running jobs and claims
@@ -284,11 +286,42 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - bash — Check N2 JSON and vision gate
 - bash — Check state after B13 commits
 - bash — Read the final pass verdict
-- … et 27 autres
+- … et 29 autres
 
 **Synthèse produite :**
 
-⏵ Round 3 : je vérifie la fin de la passe et l’état des sessions
+⏵ Round 3 : la passe est intégrée au registre (76/5), B13 à 140/140 partout, T1 revenu à 2 428 mots
+
+**Le fait majeur : la passe complète est finie et enregistrée.**
+- **81 portes, 76 vertes, 5 rouges, 1 h 52** (`work/portes/passe-1102-19h32`). Rouges : les 4 connues (`porte-homeostasie` environnementale, `porte-indice` 1 027 s, `porte-melange` 123 s, `porte-reparti-moteur` 51 s) + **`porte-tableaux`** (1 s) — un **rouge de passage** : `reports/rapport-n2-fenetre.md` (écrit à 21 h 05, non committé) renvoie à `n2-fenetre.json`, absent. **Aucune régression structurelle** ; `porte-greffe` et `porte-vision` (602 s) vertes.
+- `references-non-regression.md` porte la nouvelle passe ; le récit d'audit du 16/10 (798 mots) et les sous-passes du 10/29 (164 mots) ont déménagé dans `reports/historique-passes-portes.md` — **T1 revient à 2 428 mots** (sous 2 500).
+
+**État aligné et committé (`0713f4e6`)**
+- **B13 à 140/140** partout (en-cours, roadmap, chantiers, plan-travail) — T132/T133 2/5.
+- **S v4** : 54/55 types, 131/131 rôles, 47/47 compléments, gold 55, corpus 55 (`76accf9d…`), 47 tests ; banque 200/355.
+- `en-cours` : dernière passe **19 h 32**, compteurs **568 fiches / 653 JSON**, **82 portes** (81 dans la passe + `porte-ressources` à la suivante).
+- Revue ✅, en-cours ✅, T0 ✅, T1 ✅, porte stricte ✅ (seuls avertissements : mandats longs avec **claim actif**).
+
+**Ce qui reste cette nuit**
+- Le commit **N2** de la fiche fenêtre + son JSON refermera `porte-tableaux` ; c'est le seul rouge non structurel.
+- La 82e porte sera comptée à la prochaine passe (81 → 82).
+- La veille continue : suivi des sessions (N2, S, Pensée, hub), alignement des compteurs/état, et checkpoint de 8 h. Le journal de bord est à jour dans `work/veille/nuit.md`.
+
+### Tour 9 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Check commits, tree and N2 fiche
+- bash — Check running jobs and resource claims
+- bash — Check state and the tableaux gate
+- bash — Inspect the N2 fiche link context and data files
+- bash — Inspect the N2 aggregate script and inputs
+- bash — Check GPU usage and free resources
+- bash — Register the observed GPU1 run with a claim
+
+**Synthèse produite :**
+
+⏵ Round 4 : je vérifie le commit N2, les sessions et le registre
 
 ## 3. Travail accompli
 
@@ -361,7 +394,7 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 293 autres
+- … et 302 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -483,6 +516,9 @@ La session **L/B13** (`e181ce02`) est bien restée `actif` (heartbeat 18 h 22) e
 - **T8** `> 449/449 au niveau 4, 11/11 paires, permutation 12/275, livre 10/10, go 9×9 10/10 contre 3/10). Les **deux`
 - **T8** `> est **verte** (504 s, ×0 exact, activité monotone, dominance reproduite). Les références sont stables :`
 - **T8** `> `porte-flux` **60,8135**, `porte-pont` **+2,81 % / +25,35 %**, `porte-coupe` **+0,52 % → +17,09 %**,`
+- **T9** `"R1.1": "wiki_fr, 128/256, 20 000 pas, 20,5 Mo, init base-wiki-45m",`
+- **T9** `"R1.2-512": "wiki_fr, 512/512, 5 000 pas, 20,5 Mo, init base-wiki-45m",`
+- … (tronqué)
 
 ## 5. Erreurs rencontrées
 

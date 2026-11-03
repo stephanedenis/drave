@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 5.2 h |
+| Durée | 5.3 h |
 | Tours | 14 |
-| Messages | 493 |
-| Appels d'outils | 594 |
-| Fichiers touchés | 44 |
-| Commandes | 435 |
+| Messages | 495 |
+| Appels d'outils | 596 |
+| Fichiers touchés | 45 |
+| Commandes | 436 |
 | Sous-agents | 0 |
 | Commits | 17 |
 | Compactages de contexte | 1 |
@@ -586,15 +586,17 @@ La suite : **cinq graines** sur la porte stochastique (5/5 ?), la **fenêtre** (
 
 ### Tour 14 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_sto_graines.py`
 - bash — Run stochastic door five seeds
 - job_output
+- bash — Extract five-seed results
+- write `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-sto-graines.md`
 
 **Synthèse produite :**
 
-⏵ J'attends les cinq graines (le JSON remplira la fiche)
+⏵ Fiche « cinq graines » : le 7B passe 5/5 (28–34 nœuds, 5–7 sonde) ; contrôles 0/1 et oracle
 
 ## 3. Travail accompli
 
@@ -646,6 +648,7 @@ La suite : **cinq graines** sur la porte stochastique (5/5 ?), la **fenêtre** (
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_sto_drvm.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-sto.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_sto_graines.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-sto-graines.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -689,7 +692,7 @@ La suite : **cinq graines** sur la porte stochastique (5/5 ?), la **fenêtre** (
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 395 autres
+- … et 396 autres
 
 ## 4. Mesures et résultats marquants
 
