@@ -316,5 +316,18 @@
     "POS non mesuré : le gold POS est FR/EN, les 71 langues n'en ont pas",
     "libellés courts (quelques mots) : la détection de langue y est défavorisée",
     "les écritures de chaque langue sont une table (à relire)"
-  ]
+  ],
+  "texte_long_udhr": {
+    "source": "data/udhr/articles.jsonl",
+    "langues_profil": 398,
+    "articles_test": 447,
+    "accuracy": 0.9687,
+    "accuracy_script": 1.0,
+    "duree_s": 3.558,
+    "controle_permute": {
+      "accuracy": 0.0022,
+      "attendu": "proche du hasard (1/398 = 0,0025)"
+    },
+    "role": "la longueur est le levier : 0,9687 sur des articles, 0,137 sur des libellés de 2-3 mots"
+  }
 }

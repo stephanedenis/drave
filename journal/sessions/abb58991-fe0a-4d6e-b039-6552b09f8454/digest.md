@@ -24699,3 +24699,452 @@ AssertionError: bullet L absent
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='''> **Bilan de 08 h (03/11)** : passe **04 h 10 — 82 portes, 77/5** (4 connues + `porte-sessions`\n> rejouée verte) ; **82e `porte-res … [1514 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3984 mots (budget 4 000)
+  592 fiches → reports/INDEX.md
+  revue de documentation · 595 fiche(s) · 683 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/pensee-frontiere-71.json
+ create mode 100644 reports/rapport-pensee-frontiere-71.md
+ delete mode 100644 reports/rapport-s-arbre-referents.md
+ create mode 100644 tools/tests/linguistique/qualifier_frontiere_71.py
+EXIT=0
+206dae21 L — LA FRONTIÈRE SUR LES 71 LANGUES : SCRIPT 71/71 (1,0), LANGUE 0,137 CONTRE 0,032
+  ```
+
+### 🤖 Assistant
+
+⏵ Chantier L : la **frontière sur les 71 langues** est mesurée et committée (`206dae21`) — script 71/71, langue 0,137 contre 0,032 ; voici le point
+
+**Fait** (commit `206dae21`, fiche `reports/rapport-pensee-frontiere-71.md`, JSON `reports/pensee-frontiere-71.json`, banc `qualifier_frontiere_71.py`).
+
+- **Donnée** : le lexique multilingue des jeux — **71 langues**, **35 concepts**, **1 487 labels** Wikidata (CC0), libellés courts.
+- **Graphème (script)** : `detecter_script` contre les écritures connues de chaque langue → **71/71 = 1,0**, en **0,11 ms par langue**. Le CPU **tient** ce niveau.
+- **Multilingue (langue)** : profils de trigrammes (200), **leave-one-out**, sans indice → **203/1 486 = 0,137** contre une **classe majoritaire à 0,032** (`en`). C'est **4,3× le hasard**, mais **pas un détecteur** : le contrôle « une heuristique rapide mais fausse coûte plus qu'un appel réseau » s'applique (0,57 ms/label pour 86 % d'erreurs).
+- **La frontière est nette** : le CPU est **sûr** sur le script ; il ne l'est **pas** sur la langue à partir de libellés courts — c'est le résidu pour le réseau ou l'`indice`.
+- **Limites nommées** : POS non mesuré (gold FR/EN seulement) ; libellés courts ; table des écritures à relire ; 35 concepts ≠ corpus.
+
+**État** : T0 **3 984** ; revue verte (**595 fiches / 683 JSON / 120 docs**) ; HEAD `206dae21` ; hook état ✅ ; CPU seulement, aucun serveur local (règle 11), N2 intact.
+
+**Prochaine action de L** : la **porte des quatre modes** sur le gold 432 (heuristique, neuronal, parallèle, cascade — le même tableau, une ligne par mode), puis la langue sur **texte long** (la mesure dirait si le détecteur devient utilisable quand le texte s'allonge).
+
+**À relire** : comme au commit précédent, mon commit a emporté une **suppression déjà stagée par la session S** (`reports/rapport-s-arbre-referents.md`). Je ne l'ai pas décidée — à vérifier avec S avant de la considérer propre.
+
+
+## Tour 170
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de serveur local (règle 11)."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 1 : la porte des quatre modes sur le gold 432 — je repère le transport API DeepSeek et le banc existant (pas de serveur local, règle 11)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1,40p' tools/llm/enseignant.py; echo '=== bench API existant ==='; grep -rln \"enseignant\\|deepseek\" tools/tests/ tools/*.py 2>/dev/null | head -8; echo '=== fiche gold API ==='; head -30 reports/rapport-pensee-gold-api.md 2>/dev/null", "des … [79 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""enseignant.py — construire le corpus du professeur DeepSeek.
+
+Le corpus est un **JSONL** : chaque ligne porte le prompt, la réponse du professeur,
+l'usage (tokens), la latence et le cache. Il ne contient **aucune clé**. Les
+réponses peuvent ensuite servir à entraîner/distiller l'élève natif `route`
+(autorisation explicite de la licence DeepSeek).
+
+Le script est **reprenable** : une ligne déjà présente n'est pas redemandée. Le
+mode `--dry-run` ne fait aucune requête : il écrit des réponses factices, que
+`distillation.py` ignore — un dry-run ne doit jamais devenir un corpus
+d'entraînement.
+
+Usage :
+    python3 tools/llm/enseignant.py --prompts tools/llm/prompts_publics.jsonl \
+        --sortie data/deepseek/enseignant.jsonl --limite 5 --dry-run
+    DEEPSEEK_API_KEY=... python3 tools/llm/enseignant.py \
+        --prompts tools/llm/prompts_publics.jsonl --sortie data/deepseek/enseignant.jsonl
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import sys
+import time
+
+if __package__:
+    from .deepseek import DeepSeek, ErreurDeepSeek
+else:  # exécution directe : python3 tools/llm/enseignant.py
+    from deepseek import DeepSeek, Er
+… [2382 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis `NeuronalLLM` (le transport injectable) et le client `DeepSeek` pour brancher les taggers sur l'API sans serveur local
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '804,875p' tools/bloc_linguistique.py; echo '=== deepseek client ==='; grep -n \"class DeepSeek\\|def chat\\|def __init__\" tools/llm/deepseek.py | head -8; sed -n '1,40p' tools/llm/deepseek.py", "description": "Read NeuronalLLM transport and D … [36 caractères tronqués]`
+
+  ```
+class NeuronalLLM:
+    """L'adaptateur réel : un prompt JSON, un modèle local, le même contrat.
+
+    On ne simule pas un modèle absent : si `llama-cli` ou le fichier manque, l'adaptateur lève
+    `RefusNeuronal`. Le `MockNeuronal` sert aux tests de contrat, pas à la qualité.
+    """
+
+    nom = "neuronal"
+
+    def __init__(self, modele: str | pathlib.Path, llama_cli: str = "llama-cli",
+                 max_jetons: int = 256, timeout: int = 120):
+        self.modele = str(modele)
+        self.llama_cli = llama_cli
+        self.max_jetons = max_jetons
+        self.timeout = timeout
+
+    def _prompt(self, texte: str, langue: str | None, contexte: str | None) -> str:
+        return (
+            "Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, "
+            "sans texte autour. Schéma : {\"langue\":\"fr\",\"script\":\"Latn\","
+            "\"etiquettes\":[{\"niveau\":\"phrase|pragmatique|syntagme|pos\","
+            "\"type\":\"...\",\"valeur\":\"...\",\"debut\":0,\"fin\":0,\"confiance\":0.8}]}. "
+            "Niveaux attendus : phrase.type, pragmatique.acte, syntagme (GN/GV/GP/REL/SUB). "
+            f"Langue indiquée : {langue or 'inconnue'}. Contexte : {
+… [4344 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie l'interface `DeepSeek.chat` et le `transport` injectable des taggers pour brancher l'API proprement
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '126,200p' tools/llm/deepseek.py; echo '=== NeuronalLLMPOS init ==='; sed -n '883,935p' tools/bloc_linguistique.py | head -40", "description": "Read DeepSeek chat and tagger transport init", "timeoutMs": 60000}`
+
+  ```
+class DeepSeek:
+    def __init__(self, cle: str | None = None, base_url: str | None = None,
+                 modele: str | None = None, cache_dir: str | pathlib.Path | None = None,
+                 transport=None, sleep=time.sleep, timeout: float = 120.0,
+                 essais: int = 3) -> None:
+        self.cle = cle if cle is not None else _cle_env()
+        self.base_url = (base_url or os.environ.get("DEEPSEEK_BASE_URL")
+                         or os.environ.get("DSH_BASE_URL")
+                         or BASE_DEFAUT).rstrip("/")
+        self.modele = (modele or os.environ.get("DEEPSEEK_MODEL")
+                       or os.environ.get("DSH_MODEL") or MODELE_DEFAUT)
+        self.cache_dir = pathlib.Path(cache_dir or os.environ.get("DEEPSEEK_CACHE")
+                                      or CACHE_DEFAUT)
+        self.transport = transport or _http
+        self.sleep = sleep
+        self.timeout = timeout
+        self.essais = max(1, essais)
+
+    # ------------------------------------------------------------------
+    def disponible(self) -> bool:
+        return bool(self.cle)
+
+    def _url(self) -> str:
+        return f"{self.base_url}/chat/completions"
+
+    def _lire_cache(self
+… [4501 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le transport API est simple (`DeepSeek.demande`) ; je vérifie la clé et je teste un appel court avant d'écrire le banc des quatre modes
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"def _cle_env\" -A 12 tools/llm/deepseek.py | head -16; echo '=== clé ==='; ls -l ~/.config/drave/deepseek.key 2>/dev/null || echo 'fichier absent'; PYTHONPATH=. timeout 60 ~/gpu-env/bin/python - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfr … [205 caractères tronqués]`
+
+  ```
+73:def _cle_env() -> str:
+74-    """La clé, sans jamais l'écrire : variable d'environnement ou fichier 0600.
+75-
+76-    `DEEPSEEK_API_KEY` / `DSH_API_KEY` d'abord ; sinon `DEEPSEEK_KEY_FILE` /
+77-    `DSH_KEY_FILE` (un fichier dont la première ligne est la clé). Le fichier
+78-    doit être hors du dépôt et lisible par l'utilisateur seul.
+79-    """
+80-    for var in ("DEEPSEEK_API_KEY", "DSH_API_KEY"):
+81-        v = os.environ.get(var)
+82-        if v:
+83-            return v.strip()
+84-    for var in ("DEEPSEEK_KEY_FILE", "DSH_KEY_FILE"):
+85-        chemin = os.environ.get(var)
+=== clé ===
+-rw-------. 1 stephane stephane 36  3 nov 11:15 /home/stephane/.config/drave/deepseek.key
+disponible False modele deepseek-chat base https://api.deepseek.com
+  ```
+
+### 🤖 Assistant
+
+⏵ La clé existe mais `DeepSeek` lit `DEEPSEEK_KEY_FILE` ; je l'exporte et je teste un appel court réel
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=$HOME/.config/drave/deepseek.key PYTHONPATH=. timeout 120 python3 - <<'PY'\nimport sys, time; sys.path.insert(0,'.')\nfrom tools.llm.deepseek import DeepSeek\nd=DeepSeek()\nprint('disponible', d.disponible())\nt0=time.time()\nr=d.dem … [245 caractères tronqués]`
+
+  ```
+disponible True
+contenu {"ok":true} | latence 1.22 s | cache False
+  ```
+
+### 🤖 Assistant
+
+⏵ L'API répond (1,2 s) ; j'écris le banc **quatre modes** sur le gold 432 — heuristique, neuronal (API), parallèle, cascade — avec coût et refus
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > tools/tests/linguistique/qualifier_quatre_modes.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"qualifier_quatre_modes.py — la porte des quatre modes du contrat de L sur le gold 432.\n\nLes quatre modes du contrat (`docs/theorie/contrat-bloc-langue.md` … [5892 caractères tronqués]`
+
+  ```
+COMPILE_OK
+heuristique · 0.0 s
+neuronal · 5.4 s
+parallele · 0.0 s
+cascade · 0.0 s
+heuristique {'pos': 0.8571, 'syntagme': 0.7368, 'tete': 0.8235, 'pragmatique': {'acte': 1.0, 'negation': 1.0, 'modalite': 1.0, 'double_sens': 1.0}, 'fraction_semantique': 0.5967}
+neuronal {'pos': 1.0, 'syntagme': 1.0, 'tete': 1.0, 'pragmatique': {'acte': 0.0, 'negation': 1.0, 'modalite': 1.0, 'double_sens': 1.0}, 'fraction_semantique': 0.0}
+parallele {'pos': 1.0, 'syntagme': 1.0, 'tete': 1.0, 'pragmatique': {'acte': 1.0, 'negation': 1.0, 'modalite': 1.0, 'double_sens': 1.0}, 'fraction_semantique': 0.5967}
+cascade {'pos': 1.0, 'syntagme': 1.0, 'tete': 1.0, 'pragmatique': {'acte': 1.0, 'negation': 1.0, 'modalite': 1.0, 'double_sens': 1.0}, 'fraction_semantique': 0.5967}
+  ```
+
+### 🤖 Assistant
+
+⏵ Le banc des quatre modes fonctionne (3 phrases, API 5,4 s) ; je lance la passe complète sur les **432 phrases** en arrière-plan
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=$HOME/.config/drave/deepseek.key PYTHONPATH=. timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie reports/pensee-quatre-modes.json 2>&1 | tail -12", "description": "Run four-mode gate on 432 real phrases" … [28 caractères tronqués]`
+
+  ```
+started background job bash-803
+  ```
+
+### 🤖 Assistant
+
+⏵ La passe 432 tourne (`bash-803`) ; je surveille la progression via le cache API, sans relancer
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ps -eo pid,etime,pcpu,cmd | grep qualifier_quatre_modes | grep -v grep | head -1; ls data/deepseek/cache/*.json 2>/dev/null | wc -l; ls -l reports/pensee-quatre-modes.json 2>/dev/null || echo 'JSON pas encore écrit'", "description":  … [51 caractères tronqués]`
+
+  ```
+16:44:50
+2419491       00:08  1.1 bash -c cd /home/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=$HOME/.config/drave/deepseek.key PYTHONPATH=. timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie reports/pensee-quatre-modes.json 2>&1 | tail -12
+960
+JSON pas encore écrit
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 1 : le banc **quatre modes** est écrit et testé (3 phrases : API 5,4 s, parallèle/cascade servis par le cache) ; la passe **432** tourne (`bash-803`)
+
+**Ce qui est fait**
+
+- **Le banc** `tools/tests/linguistique/qualifier_quatre_modes.py` mesure les **quatre modes du contrat de L** sur le même gold réel 432 : `Heuristique`, `NeuronalLLMCompose` (POS + chunks), `Parallele`, `Cascade(seuil 0,6)`.
+- **Règle 11 respectée** : le neuronal passe par l'**API DeepSeek** (`DEEPSEEK_KEY_FILE=~/.config/drave/deepseek.key`, `deepseek-chat`), **aucun serveur local**, aucun GPU N2. La clé reste hors dépôt.
+- **Test court validé** (3 phrases) : heuristique 0,0 s ; neuronal 5,4 s (6 appels API) ; parallèle et cascade 0,0 s — le cache du composite les sert. Les quatre modes rendent le même `Annotation`.
+
+**Ce qui tourne**
+
+- `bash-803` : la passe complète sur les **432 phrases** (864 appels API au plus, cache `data/deepseek/cache`), sortie `reports/pensee-quatre-modes.json` ; durée estimée 15–45 min.
+- Le banc mesure aussi le **coût** (appels POS/syntagmes, tokens API, latence, durée) et les **refus** — la frontière du contrat.
+
+**État** : HEAD `206dae21` avant ce round ; T0 3 984 ; revue verte ; N2 intact ; pas de serveur local.
+
+**Prochaine étape** : collecter `bash-803`, écrire la fiche `rapport-pensee-quatre-modes.md` (le tableau des quatre modes + refus + coût), mettre à jour l'en-cours/roadmap L et committer. Le goal reste **actif**.
+
+
+## Tour 171
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de serveur local (règle 11)."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 2 : je vérifie l'avancement de la passe quatre modes (`bash-803`) et le cache API
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ps -eo pid,etime,pcpu,cmd | grep qualifier_quatre_modes | grep -v grep | head -1; ls data/deepseek/cache/*.json 2>/dev/null | wc -l; ls -l reports/pensee-quatre-modes.json 2>/dev/null || echo 'JSON pas encore écrit'", "description":  … [62 caractères tronqués]`
+
+  ```
+16:45:07
+2419491       00:25  0.3 bash -c cd /home/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=$HOME/.config/drave/deepseek.key PYTHONPATH=. timeout 5400 python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie reports/pensee-quatre-modes.json 2>&1 | tail -12
+977
+JSON pas encore écrit
+  ```
+
+### 🤖 Assistant
+
+⏵ Le job avance (~1 appel/s) ; en parallèle, je prépare l'autre face de la frontière — la langue sur **texte long** (profils UDHR), sans toucher au job
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -rn \"charger_profils_udhr\" tools/ | head -4; echo '=== données UDHR ==='; find . -iname \"*udhr*\" -not -path \"./.git/*\" 2>/dev/null | head -6; sed -n '156,190p' tools/bloc_linguistique.py", "description": "Locate UDHR data and profile loader … [22 caractères tronqués]`
+
+  ```
+tools/bloc_linguistique.py:156:def charger_profils_udhr(chemin: pathlib.Path, train=(0, 14), test=(15, 30),
+tools/bloc_linguistique.py:1454:    profils, tests = charger_profils_udhr(udhr, test=(15, 15), min_test=1)
+tools/bloc_linguistique.py:1554:        profils, _ = charger_profils_udhr(pathlib.Path(args.profils))
+=== données UDHR ===
+./reports/restitution-udhr.json
+./reports/restitution-udhr-flux.json
+./reports/traduction-udhr-propre-7b.json
+./reports/traduction-udhr-propre-7b-fraeng.json
+./reports/traduction-udhr-propre-3b-fraeng.json
+./reports/contamination-udhr-A.json
+def charger_profils_udhr(chemin: pathlib.Path, train=(0, 14), test=(15, 30),
+                         min_train: int = 5, min_test: int = 3,
+                         top: int = 200) -> tuple[dict[str, dict], list[tuple[str, str, str]]]:
+    """Construit des profils de trigrammes par langue et un jeu de test tenu à l'écart.
+
+    Le corpus UDHR est **parallèle** : les articles 0–14 servent de profil, les articles 15–30
+    de test. Un profil est une donnée, pas un prompt : il se versionne et se rejoue.
+    """
+    par_langue: dict[str, list[tuple[int, str, str]]] = collections.defaultdict(list)
+    for ligne in che
+… [1249 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je cherche le corpus UDHR réel (chemin utilisé par le chargeur) pour la mesure « texte long »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1440,1470p' tools/bloc_linguistique.py; echo '=== chemins possibles ==='; find /home/stephane/Data13TB/stephane -maxdepth 4 -iname \"*udhr*\" -not -path \"*/.git/*\" 2>/dev/null | head -8; ls data/ | grep -i \"udhr\\|langue\\|multilingue\" | h … [69 caractères tronqués]`
+
+  ```
+def _resume_annotation(a: Annotation) -> dict:
+    par = a.par_niveau()
+    return {"langue": a.langue, "script": a.script, "source": a.source, "refus": a.refus,
+            "niveaux": {n: len(es) for n, es in sorted(par.items())},
+            "couverture": a.couverture(),
+            "fraction_semantique": round(a.fraction_semantique, 4),
+            "etiquettes": len(a.etiquettes)}
+
+
+def autotest(udhr: pathlib.Path, sortie: pathlib.Path | None = None) -> dict:
+    """Mesure la langue, le script, la substitution, le parallèle, la cascade et l'activation."""
+    rapport: dict = {"date": time.strftime("%Y-%m-%dT%H:%M:%S"), "niveaux": list(NIVEAUX)}
+    profils, tests = charger_profils_udhr(udhr, test=(15, 15), min_test=1)
+    t0 = time.perf_counter()
+    justes = 0
+    scripts_justes = 0
+    par_langue: dict[str, list[int]] = collections.defaultdict(lambda: [0, 0])
+    for langue, texte, script in tests:
+        detectee, conf, _ = detecter_langue(texte, profils)
+        par_langue[langue][0] += 1
+        if detectee == langue:
+            justes += 1
+            par_langue[langue][1] += 1
+        if detecter_script(texte) == script or (detecter_script(texte) == "Hani" and script in
+… [949 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le corpus UDHR est dans `data/udhr` et le bloc a un `autotest` complet (langue, script, substitution, parallèle, cascade) ; je l'inspecte et je le lance pour la face « texte long »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls -l data/udhr/ | head -6; sed -n '1470,1520p' tools/bloc_linguistique.py; echo '=== porte autotest ? ==='; grep -rln \"bloc_linguistique.*autotest\\|autotest(udhr\" tools/ | head -4", "description": "Inspect UDHR data and autotest outputs", "timeout … [11 caractères tronqués]`
+
+  ```
+total 19588
+-rw-r--r--. 1 stephane stephane 7661342 17 oct 23:14 articles.jsonl
+-rw-r--r--. 1 stephane stephane 6481755 17 oct 23:14 articles_propres.jsonl
+-rw-r--r--. 1 stephane stephane    8286 17 oct 23:49 _eng.txt
+drwxr-xr-x. 1 stephane stephane    1206 27 oct 22:33 familles
+-rw-r--r--. 1 stephane stephane    9734 17 oct 23:49 _fra.txt
+        "accuracy": round(justes / max(1, len(tests)), 4),
+        "accuracy_script": round(scripts_justes / max(1, len(tests)), 4),
+        "duree_s": round(duree, 3),
+        "langues": {k: v for k, v in sorted(par_langue.items()) if v[0] >= 3},
+    }
+    # contrôle négatif : labels de profils permutés
+    noms = sorted(profils)
+    permutes = {noms[i]: profils[noms[(i + 1) % len(noms)]].copy() for i in range(len(noms))}
+    justes_permutes = 0
+    for langue, texte, _ in tests:
+        detectee, _, _ = detecter_langue(texte, permutes)
+        justes_permutes += int(detectee == langue)
+    rapport["controle_permute"] = {"accuracy": round(justes_permutes / max(1, len(tests)), 4),
+                                   "attendu": "proche du hasard"}
+
+    # niveaux, substitution, parallèle, cascade, activation sur les échantillons
+    h = Heuristique(
+… [1718 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le `autotest` du bloc est la porte L (langue longue UDHR + permuté + substitution) ; je lis la porte pour lancer avec le bon corpus
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat tools/porte-bloc-linguistique.sh; echo '=== CLI autotest ==='; sed -n '1540,1575p' tools/bloc_linguistique.py", "description": "Read bloc gate and autotest CLI", "timeoutMs": 60000}`
+
+  ```
+#!/usr/bin/env bash
+# Porte du bloc linguistique — tests de contrat + mesure UDHR (langue/script).
+set -u
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+echo "=== PORTE BLOC LINGUISTIQUE ==="
+python3 -m unittest discover -s tools/tests/linguistique -p 'test_bloc_linguistique.py' || { echo "❌ tests"; exit 1; }
+python3 tools/bloc_linguistique.py --autotest --udhr data/udhr/articles.jsonl --sortie /tmp/bloc-linguistique-porte.json || { echo "❌ autotest"; exit 1; }
+python3 tools/tests/linguistique/gold.py >/dev/null || { echo "❌ gold"; exit 1; }
+python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold-porte.json >/dev/null || { echo "❌ évaluation gold"; exit 1; }
+echo "✅ porte bloc linguistique verte"
+=== CLI autotest ===
+
+
+# --------------------------------------------------------------------------- CLI
+
+
+def _annotation_depuis_args(args) -> Annotation:
+    if args.texte:
+        texte = args.texte
+    elif args.fichier:
+        texte = pathlib.Path(args.fichier).read_text(encoding="utf-8")
+    else:
+        texte = sys.stdin.read()
+    profils = None
+    if args.profils:
+        profils, _ = charger_profils_udhr(pathlib.Path(args.profils))
+    h = Heuristique(pro
+… [892 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance l'`autotest` UDHR (texte long, ~400 langues) pour la face « texte long » de la frontière — CPU, en parallèle du job API
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 900 python3 tools/bloc_linguistique.py --autotest --udhr data/udhr/articles.jsonl --sortie /tmp/bloc-long.json 2>&1 | tail -8; python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('/tmp/bloc-long.json')\nif p.exists():\n    d=js … [321 caractères tronqués]`
+
+  ```
+"parallele": true,
+  "activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+langue {'langues_profil': 398, 'articles_test': 447, 'accuracy': 0.9687, 'accuracy_script': 1.0, 'duree_s': 3.558}
+permute {'accuracy': 0.0022, 'attendu': 'proche du hasard'}
+  ```
+
+### 🤖 Assistant
+
+⏵ **Texte long (UDHR) : langue 0,9687 sur 447 articles de 398 langues, permuté 0,0022** — la longueur est le levier ; je complète la fiche de frontière et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"frontière 71 langues\" docs/pilotage/en-cours.md; echo '---'; PYTHONPATH=. python3 - <<'PY'\nimport json, pathlib\n# 1. le JSON de la frontière : ajouter le texte long\np=pathlib.Path('reports/pensee-frontiere-71.json'); d=json.loads(p.read_ … [1842 caractères tronqués]`
+
+  ```
+107:- **L — le bloc langue** : contrat écrit ; **frontière 71 langues : script 1,0, langue 0,137 (baseline 0,032)**.
+---
+json ok
+fiche ok
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la face « texte long » à l'en-cours et à la roadmap L, puis je commite le fait complété
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='- **L — le bloc langue** : contrat écrit ; **frontière 71 langues : script 1,0, langue 0,137 (baseline 0,032)**.'\nnew='- **L — le blo … [1253 caractères tronqués]`

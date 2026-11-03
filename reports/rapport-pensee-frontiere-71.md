@@ -44,7 +44,27 @@
   **coûte plus** qu'un appel réseau qui tranche. C'est exactement le contrôle du contrat.
 - **Le script** : 0,11 ms/langue pour 1,0 — le CPU est **sûr** là où il est fort.
 
-## 4. Ce qui pourrait rendre ce résultat faux
+## 4. Le texte long (UDHR) : la longueur est le levier
+
+Sur le corpus **UDHR** (`data/udhr/articles.jsonl`, articles 0–14 en profil, article 15 en test) :
+
+| mesure | valeur |
+|---|---:|
+| langues profilées | **398** |
+| articles de test | **447** |
+| **langue (accuracy)** | **0,9687** |
+| script (accuracy) | **1,0** |
+| **contrôle permuté** (profils mélangés) | **0,0022** (≈ 1/398) |
+| durée | 3,56 s |
+
+- **La langue sur texte long est fiable** (0,9687) ; le contrôle permuté tombe au hasard (0,0022),
+  donc le score n'est pas un artefact.
+- **Le contraste est net** : 0,9687 sur des articles, **0,137** sur des libellés de deux ou trois
+  mots. La frontière n'est pas « le CPU sait / ne sait pas » : elle est **une question de longueur
+  du texte**.
+- Le **script** est à 1,0 dans les deux régimes.
+
+## 5. Ce qui pourrait rendre ce résultat faux
 
 - Les **écritures** de chaque langue sont une table (à relire) ; les langues à écriture mixte
   (`sr`, `az`, `uz`, `bs`) acceptent deux scripts.
@@ -52,7 +72,7 @@
 - Le lexique est un **sous-ensemble** (35 concepts) des langues, pas un corpus.
 - Un seul passage, sans indice.
 
-## 5. La suite de L
+## 6. La suite de L
 
 1. **La porte des quatre modes** sur le gold 432 : heuristique, neuronal, parallèle, cascade —
    le même tableau, une ligne par mode.
@@ -60,7 +80,7 @@
    détecteur est utilisable quand le texte est long.
 3. **Le POS multilingue** : il demande un gold par langue ; il n'existe pas encore.
 
-## 6. Fichiers
+## 7. Fichiers
 
 - [`pensee-frontiere-71.json`](pensee-frontiere-71.json) — la mesure et le détail par langue.
 - [`tools/tests/linguistique/qualifier_frontiere_71.py`](../tools/tests/linguistique/qualifier_frontiere_71.py) —

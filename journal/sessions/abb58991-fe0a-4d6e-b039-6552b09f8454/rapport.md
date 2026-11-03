@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 24.4 h |
-| Tours | 169 |
-| Messages | 1200 |
-| Appels d'outils | 980 |
+| Durée | 24.5 h |
+| Tours | 171 |
+| Messages | 1220 |
+| Appels d'outils | 996 |
 | Fichiers touchés | 49 |
-| Commandes | 796 |
+| Commandes | 812 |
 | Sous-agents | 0 |
-| Commits | 103 |
+| Commits | 104 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -369,6 +369,10 @@
 **Tour 168** — consulte le dossier pilotage pour prendre un chantier
 
 **Tour 169** — continue
+
+**Tour 170** — <goal_round> Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de ser … [567 caractères tronqués]
+
+**Tour 171** — <goal_round> Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 71 langues du dépôt (couverture × précision par unité de calcul, contrôle négatif « heuristique fausse »), puis la porte des quatre modes sur le gold 432 ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite) ; pas de GPU N2, pas de ser … [567 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4413,7 +4417,70 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 **Synthèse produite :**
 
-⏵ J'ajoute la ligne L et je compacte le bilan de 08 h pour rester sous 4 000 (T0 3 994)
+⏵ Chantier L : la **frontière sur les 71 langues** est mesurée et committée (`206dae21`) — script 71/71, langue 0,137 contre 0,032 ; voici le point
+
+**Fait** (commit `206dae21`, fiche `reports/rapport-pensee-frontiere-71.md`, JSON `reports/pensee-frontiere-71.json`, banc `qualifier_frontiere_71.py`).
+
+- **Donnée** : le lexique multilingue des jeux — **71 langues**, **35 concepts**, **1 487 labels** Wikidata (CC0), libellés courts.
+- **Graphème (script)** : `detecter_script` contre les écritures connues de chaque langue → **71/71 = 1,0**, en **0,11 ms par langue**. Le CPU **tient** ce niveau.
+- **Multilingue (langue)** : profils de trigrammes (200), **leave-one-out**, sans indice → **203/1 486 = 0,137** contre une **classe majoritaire à 0,032** (`en`). C'est **4,3× le hasard**, mais **pas un détecteur** : le contrôle « une heuristique rapide mais fausse coûte plus qu'un appel réseau » s'applique (0,57 ms/label pour 86 % d'erreurs).
+- **La frontière est nette** : le CPU est **sûr** sur le script ; il ne l'est **pas** sur la langue à partir de libellés courts — c'est le résidu pour le réseau ou l'`indice`.
+- **Limites nommées** : POS non mesuré (gold FR/EN seulement) ; libellés courts ; table des écritures à relire ; 35 concepts ≠ corpus.
+
+**État** : T0 **3 984** ; revue verte (**595 fiches / 683 JSON / 120 docs**) ; HEAD `206dae21` ; hook état ✅ ; CPU seulement, aucun serveur local (règle 11), N2 intact.
+
+**Prochaine action de L** : la **porte des quatre modes** sur le gold 432 (heuristique, neuronal, parallèle, cascade — le même tableau, une ligne par mode), puis la langue sur **texte long** (la mesure dirait si le détecteur devient utilisable quand le texte s'allonge).
+
+**À relire** : comme au commit précédent, mon commit a emporté une **suppression déjà stagée par la session S** (`reports/rapport-s-arbre-referents.md`). Je ne l'ai pas décidée — à vérifier avec S avant de la considérer propre.
+
+### Tour 170 — <goal_round> Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 7 … [847 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Inspect DeepSeek teacher client and API bench
+- bash — Read NeuronalLLM transport and DeepSeek client
+- bash — Read DeepSeek chat and tagger transport init
+- bash — Check DeepSeek key availability
+- bash — Test a short real DeepSeek call
+- bash — Build four-mode bench and test on 3 phrases
+- bash — Run four-mode gate on 432 real phrases
+- bash — Check four-mode run progress
+
+**Synthèse produite :**
+
+⏵ Round 1 : le banc **quatre modes** est écrit et testé (3 phrases : API 5,4 s, parallèle/cascade servis par le cache) ; la passe **432** tourne (`bash-803`)
+
+**Ce qui est fait**
+
+- **Le banc** `tools/tests/linguistique/qualifier_quatre_modes.py` mesure les **quatre modes du contrat de L** sur le même gold réel 432 : `Heuristique`, `NeuronalLLMCompose` (POS + chunks), `Parallele`, `Cascade(seuil 0,6)`.
+- **Règle 11 respectée** : le neuronal passe par l'**API DeepSeek** (`DEEPSEEK_KEY_FILE=~/.config/drave/deepseek.key`, `deepseek-chat`), **aucun serveur local**, aucun GPU N2. La clé reste hors dépôt.
+- **Test court validé** (3 phrases) : heuristique 0,0 s ; neuronal 5,4 s (6 appels API) ; parallèle et cascade 0,0 s — le cache du composite les sert. Les quatre modes rendent le même `Annotation`.
+
+**Ce qui tourne**
+
+- `bash-803` : la passe complète sur les **432 phrases** (864 appels API au plus, cache `data/deepseek/cache`), sortie `reports/pensee-quatre-modes.json` ; durée estimée 15–45 min.
+- Le banc mesure aussi le **coût** (appels POS/syntagmes, tokens API, latence, durée) et les **refus** — la frontière du contrat.
+
+**État** : HEAD `206dae21` avant ce round ; T0 3 984 ; revue verte ; N2 intact ; pas de serveur local.
+
+**Prochaine étape** : collecter `bash-803`, écrire la fiche `rapport-pensee-quatre-modes.md` (le tableau des quatre modes + refus + coût), mettre à jour l'en-cours/roadmap L et committer. Le goal reste **actif**.
+
+### Tour 171 — <goal_round> Objective: "Poursuivre le chantier L — le bloc langue : mesurer la frontière heuristique/neuronal sur les 7 … [847 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Check four-mode job progress at round 2
+- bash — Locate UDHR data and profile loader
+- bash — Find UDHR corpus path
+- bash — Inspect UDHR data and autotest outputs
+- bash — Read bloc gate and autotest CLI
+- bash — Run UDHR long-text autotest
+- bash — Add long-text section to frontier fiche and JSON
+- bash — Commit long-text frontier complement
+
+**Synthèse produite :**
+
+⏵ J'ajoute la face « texte long » à l'en-cours et à la roadmap L, puis je commite le fait complété
 
 ## 3. Travail accompli
 
@@ -4513,7 +4580,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 756 autres
+- … et 772 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4737,4 +4804,5 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L/B13 — LE LIEN APPRIS : PERCEPTRON DE RANG LOO 9/9, HASARD 0,10, SURFACE SEULE 2/9" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' |
 - L — LE CONTRAT DE SUBSTITUTION DU BLOC LANGUE EST ÉCRIT (9 NIVEAUX, 4 MODES, REFUS, TRACE, PORTE)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --fo
 - L — LA FRONTIÈRE SUR LES 71 LANGUES : SCRIPT 71/71 (1,0), LANGUE 0,137 CONTRE 0,032" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' |
+- L — LA FRONTIÈRE (2) : LA LANGUE SUR TEXTE LONG FAIT 0,9687 (UDHR, 398 LANGUES), PERMUTÉ 0,0022" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --form
 
