@@ -6053,3 +6053,457 @@ Updated todo list: 3 pending, 1 in progress, 2 completed.
 2. **Référents** : proposer les antécédents des pronoms/possessifs (GN, sujet, tête de GP), les faire **résoudre avant** le verdict de structure, et les enregistrer avec le verdict.
 3. Ensuite seulement, **reprise de la validation** des 200 phrases sur l'outil corrigé, puis export de la banque complète ; `h050`/`h053` restent les limites de l'analyseur, après.
 
+
+## Tour 10
+
+### 👤 Utilisateur
+
+vas-y avec des paragraphes complets et un arbre svg avec liaisons référents-référés
+
+### 🤖 Assistant
+
+⏵ Je passe à l'arbre réel et aux référents : paragraphes complets, arbre SVG avec liens référents-référés, mesures et fiche.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\nt=pathlib.Path('data/corpus_fr_litterature.txt').read_text(encoding='utf-8',errors='replace')\nparas=re.split(r\"\\n\\s*\\n\", t)\nbon=[]\nfor p in paras:\n    p=' '.join(p.split())\n    if not ( … [506 caractères tronqués]`
+
+  ```
+6474 paragraphes candidats
+--- 0 238 car 2 phrases
+Puis, muettes, prêtant l'oreille Au conte de l'enfant rêveur, Qui va de merveille en merveille Causant avec l'oiseau causeur; Leur esprit suit la fantaisie Où se laisse aller le conteur. Et la vérité tôt oublie Pour se confier à l'erreur.
+--- 1 237 car 2 phrases
+Le conteur (espoir chimérique!) Cherche, se sentant épuisé, A briser le pouvoir magique Du charme qu'il a composé, Et "Tantôt" voudrait de ce rêve Finir le récit commencé: "Non, non, c'est tantôt! pas de trêve!" Est le jugement prononcé.
+--- 2 262 car 2 phrases
+Douce Alice, acceptez l'offrande De ces gais récits enfantins, Et tressez-en une guirlande, Comme on voit faire aux pèlerins De ces fleurs qu'ils ont recueillies, Et que plus tard, dans l'avenir, Bien qu'elles soient, hélas! flétries, Ils chérissent en souvenir.
+--- 3 247 car 3 phrases
+"Certes," dit Alice, "après une chute pareille je ne me moquerai pas mal de dégringoler l'escalier! Comme ils vont me trouver brave chez nous! Je tomberais du haut des toits que je ne ferais pas entendre une plainte." (Ce qui était bien probable.)
+--- 4 490 car 3 phrases
+Comme cela n'avançait à rien de passer son temps à attendre à la 
+… [1916 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"class Segment\\|__slots__\\|def dict\\|def _segmente\\|les cibles d'attachement\\|def analyser\\|copie = Segment\\|def structure\\|ROLES_DEFAUT\" generateur.py", "description": "Locate generator tree insert … [12 caractères tronqués]`
+
+  ```
+119:    __slots__ = ("texte", "debut", "fin", "espace", "cls")
+254:class Segment:
+255:    __slots__ = ("debut", "fin", "type", "role", "niveau", "texte", "cible_nom", "cible_gp", "cible_verbe")
+264:    def dict(self):
+276:def _segmente(texte: str, toks: list[Token]) -> list[Segment]:
+395:    # les cibles d'attachement : GN, tête du GP et GV les plus proches à gauche
+425:def analyser(texte: str, max_candidats: int = 4) -> list[dict]:
+451:            copie = Segment(x.debut, x.fin, x.texte, x.type, x.role, x.niveau)
+476:ROLES_DEFAUT = {"GP": "complement", "SUB": "contenu", "REL": "qualite"}
+479:def structure(texte: str, roles: bool = True) -> list[dict]:
+489:        if not roles and s.type in ROLES_DEFAUT:
+490:            d["role"] = ROLES_DEFAUT[s.type]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/AGENTS.md</path>
+<type>file</type>
+<content>
+1: # Directives de l'agent — Drave
+2: 
+3: > **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+4: 
+5: > **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+6: > **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+7: > (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+8: > [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+9: 
+10: ## 1. La vision (l'essentiel)
+11: 
+12: **Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+13: réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le projet a pour principe que la structure bat la taille. Construire le moteur et mo
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 16 h 09 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire.** Une sous-section par **session active**, une ligne par **chantier**
+6: > avec son **bloquant**. Méthode : [`methode/`](../methode/) (contexte, continuité). Résultats :
+7: > [`reports/`](../../reports/). Histoire : [`journal/`](../../journal/). Plan : [`roadmap.md`](roadmap.md).
+8: >
+9: > **Reprise après le reboot du 02/11 15 h 06** : les deux sessions sont **en pause**, leurs cycles
+10: > sont committés, les GPU sont sains ; reprise par `dsh --profile dsh-tui --resume <id>` ; runbook
+11: > dans [`plan-travail.md`](plan-travail.md) § 9.
+12: 
+13: ## Sessions en cours
+14: 
+15: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+16: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+17: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+18: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/jeux-symboliques.md</path>
+<type>file</type>
+<content>
+1: # Les jeux symboliques — de la surface au sens, puis à la pensée
+2: 
+3: > **Ce que ce document est.** Le **bloc de langue et de jeux** du bus : comment une surface (une notation, une
+4: > phrase, un diagramme) devient une **représentation sémantique neutre (RSN-jeu)**, et comment la **pensée**
+5: > raisonne ensuite sur cette RSN sans relire la surface. Le bloc est **hybride** : la surface et la RSN sont des
+6: > opérations classiques, la pensée peut appeler un solveur exact ou un modèle selon le jeu. Les **chiffres** et les
+7: > contrôles sont dans [`rapport-jeux-symboliques.md`](../../reports/rapport-jeux-symboliques.md) ;
+8: > la **théorie** dans [`synthese/07`](synthese/07-modeles-alternatifs-entree-sortie.md) et
+9: > [`synthese/08`](synthese/08-les-operations.md).
+10: 
+11: ## Le problème
+12: 
+13: Un même état de jeu a **beaucoup de surfaces** :
+14: 
+15: - aux échecs, la position de départ est une **FEN**, un **diagramme**, une suite de coups **SAN**
+16:   (`1. e4 e5`), **UCI** (`e2e4`), française (`Cf3`, « le cavalier de g1 va en f3 ») ou anglaise
+17:   (
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/README.md</path>
+<type>file</type>
+<content>
+1: # Structures — le banc d'interprétations candidates
+2: 
+3: > **Ce que c'est.** Un outil **pour humain** : il affiche, pour une phrase, plusieurs **structures
+4: > d'interprétation candidates** (attachements, rôles, portées), permet de les **valider**, de
+5: > demander l'avis d'un **grand modèle** (DeepSeek), et d'**exporter une banque** de structures
+6: > validées — un corpus d'entraînement pour le projet Drave.
+7: 
+8: > **Ce que ce n'est pas.** Pas un analyseur syntaxique : les candidats sont **générés par une
+9: > heuristique** (`generateur.py`) ou fournis par le fichier de données ; l'outil les fait valider,
+10: > il ne prétend pas les avoir compris.
+11: 
+12: ## Lancer
+13: 
+14: ```bash
+15: python3 serveur.py                 # http://127.0.0.1:8765
+16: python3 serveur.py --port 9000 --hote 0.0.0.0   # sur le réseau local
+17: ```
+18: 
+19: Aucune dépendance : la bibliothèque standard suffit (serveur HTTP, JSON, `urllib`).
+20: 
+21: ## Le niveau pragmatique
+22: 
+23: Une phrase hors contexte est **ambiguë** — même pour un humain. Et en contexte, l'ambiguïté peut
+24: ê
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+#!/usr/bin/env python3
+"""sessions.py — plans de session : qui fait quoi, avant d'écrire `en-cours`.
+
+Chaque session active expose son mandat dans `journal/sessions/<id>/plan.md` :
+périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
+sessions consultent `--status` avant de claim, et `--check --strict` refuse les
+mandats incomplets, les identifiants dupliqués, les périmètres qui se recouvrent
+et les heartbeats périmés (le `--check` seul les signale). `en-cours` reste la
+seule source de l'état : ce plan est le **contrat de travail** qui le précède.
+Une session arrêtée (reboot, panne) passe à `État : en pause` : elle reste dans
+l'état, son heartbeat n'est plus exigé, et la reprise la remet `actif`.
+"""
+from __future__ import annotations
+
+import argparse
+import re
+import sys
+import tempfile
+from datetime import datetime
+from pathlib import Path
+
+RACINE = Path(__file__).resolve().parents[1]
+SESSIONS = "journal/sessions"
+ETAT = "docs/pilotage/en-cours.md"
+CHAMPS = ("session", "rôle", "périmètre", "fichiers réservés", "heartbeat",
+          "prochaine action", "état")
+ACTIFS = {"actif", "active", "en cours", "bloqué", "bloquee", "bloqué(e)"}
+PAUSE = {"en pause", "pa
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+lun 02 nov 2026 16:16:36 EST
+=== plan-travail §3 ===
+| **S — les structures (à ouvrir)** | les structures d'interprétation candidates, la validation humaine/LLM, la banque | S, la pragmatique, l'export | **CPU**, 2–4 cœurs | l'analyseur plus riche (rôles, subordonnées), l'export vers le corpus. **Aucune session DSH ; sous-module `tools/structures`.** |
+| **D/R/A — en pause** | les corpus (texte intégral, PDF/OCR, licences, stubs), la préparation de R1.1/R1.2, A2.6/A8.3 | D, R1, A2.6/A8.3 | **CPU/IO**, 4–16 cœurs | 10 corpus, PDF, OCR 20 livres + 10 notes CEGEP, glossaire 355 entrées : **fait et committé**. Reprise : `fe3c05f0` (`--resume`), OCR ~127 scans, clôture. |
+
+**Le rôle d'intégration** (le « hub ») : tient `en-cours`, `roadmap`, `chantiers`, ce plan,
+`journal/`, `reports/INDEX.md`, `AGENTS.md`, les compteurs et la revue de documentation. Il ne
+code pas un chantier ; il **intègre** les sections des sessions, met à jour les compteurs, vérifie
+les portes et commite. Il est **un seul à la fois** (voir § 4).
+
+**Les sous-agents** : 2 à 4 par session, sur des tâches **bornées** (une mesure, un outil, une
+fiche, un audit) ; ils ne touchent ni `en-cours`, ni la roadmap, ni `AGENTS.m
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """generateur.py — une phrase brute → des structures candidates (v0 heuristique).
+3: 
+4: Ce n'est pas un analyseur syntaxique : c'est un **générateur de candidats** à faire valider par
+5: un humain. Il segmente (GN, GV, GP, REL, SUB), devine des rôles par la préposition, puis produit
+6: plusieurs candidats en variant l'**attachement** de chaque segment ambigu (GN le plus proche ou
+7: GV le plus proche).
+8: 
+9:     python3 generateur.py "Le chat de la voisine qui dort sur le toit se réveille."
+10:     python3 generateur.py --json "..."     # la structure complète
+11: """
+12: from __future__ import annotations
+13: 
+14: import json
+15: import re
+16: import unicodedata
+17: 
+18: DET = set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses "
+19:           "notre nos votre vos leur leurs quel quelle quels quelles".split())
+20: PREP = set("a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis "
+21:            "pendant durant contre malgre selon pres loin devant derriere apres avant".split())
+22: REL
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+=== validations n2-analyse ===
+{"phrase_id": "p001", "candidat_id": "p001-c1", "statut": "double_sens", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:20:57"}
+{"phrase_id": "p002", "candidat_id": "p002-c1", "statut": "double_sens", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:21:23"}
+{"phrase_id": "p003", "candidat_id": "p003-c1", "statut": "resolu", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:22:09"}
+{"phrase_id": "p002", "candidat_id": "p002-c2", "statut": "double_sens", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:22:29"}
+{"phrase_id": "p003", "candidat_id": "p003-c2", "statut": "exclu", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:22:40"}
+{"phrase_id": "p004", "candidat_id": "p004-c1", "statut": "resolu", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:22:51"}
+{"phrase_id": "p004", "candidat_id": "p004-c2", "statut": "resolu", "note": "", "contexte": "", "auteur": "humain", "horodatage": "2026-11-01T11:23:01"}
+{"phrase_id": "p001", "candidat_id": "p001-c1", "statut": "resolu", "note": "", "con
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/serveur.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """serveur.py — le banc de structures : API + interface web, sans dépendance.
+3: 
+4: Le serveur expose les phrases et leurs interprétations candidates, enregistre les verdicts
+5: humains (`donnees/validations.jsonl`), interroge un grand modèle (`donnees/llm.jsonl`) et exporte
+6: la banque validée (`/api/export`).
+7: 
+8:     python3 serveur.py                 # http://127.0.0.1:8765
+9:     python3 serveur.py --port 9000 --hote 0.0.0.0
+10: """
+11: from __future__ import annotations
+12: 
+13: import argparse
+14: import json
+15: import pathlib
+16: import threading
+17: import time
+18: from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+19: from urllib.parse import urlparse
+20: 
+21: import generateur
+22: import llm
+23: 
+24: RACINE = pathlib.Path(__file__).resolve().parent
+25: STATIQUE = RACINE / "static"
+26: # Le niveau pragmatique : un sens n'est pas « vrai » hors contexte, il est **résolu** par lui,
+27: # **compatible** avec lui, **exclu** par lui — ou **double**, quand l'ambiguïté est voulue.
+28: STATUTS = {"resolu", "compatib
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+14:## Sessions en cours
+21:### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+39:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2, le natif : 200 000 pas et la fenêtre
+58:### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures : l'analyseur et l'export
+61:- **Rôle** : **S — les structures** : le banc d'interprétations candidates, l'**analyseur** (rôles,
+70:- **Fichiers réservés** : `tools/structures/`, `data/structures/`, `reports/rapport-s-*`,
+72:- **Objectif final** : un gold de 20 phrases, une mesure reproductible, `data/structures/banque.jsonl`
+79:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3
+104:### Session `fe3c05f0-834b-44f2-8739-501865d652c1` — D/R/A : les données, le lecteur, le moteur
+129:- **S — le banc de structures** : outil web (`tools/structures`), générateur, pragmatique (niveaux 0–4), export ; analyseur **7/7** séquences, **93,9 %** de couverture, **19 tests** ; [`analyseur`](../../reports/rapport-s-analyseur.md) ;
+=== git diff en-cours ===
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 587cf563..62c61a67 100644
+--- a/docs/pilotage/e
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-02, 16 h 40 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active**. Méthode :
+6: > [`methode/`](../methode/) ; résultats : [`reports/`](../../reports/) ; histoire :
+7: > [`journal/`](../../journal/) ; plan : [`roadmap.md`](roadmap.md).
+8: >
+9: > **Reprise après le reboot du 02/11 15 h 06** : les **quatre** sessions ont rouvert entre 16 h 14
+10: > et 16 h 21 — N2 `0733c5bb`, S `29ad180d`, Pensée `e181ce02`, D/R/A `fe3c05f0` ; les GPU sont
+11: > sains ; reprise par `dsh --profile dsh-tui --resume <id>` ; runbook dans
+12: > [`plan-travail.md`](plan-travail.md) § 9.
+13: 
+14: ## Sessions en cours
+15: 
+16: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+17: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+18: > `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+19: > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md</path>
+<type>file</type>
+<content>
+1: # La roadmap de [Drave](../theorie/glossaire/entrees/drave.md) — un seul plan, quatre chantiers
+2: 
+3: > **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+4: > L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date. Les chiffres, les séries et les
+5: > contrôles vivent dans [`reports/`](../../reports/) ; ici : l'[état](../theorie/glossaire/entrees/etat.md), la prochaine action, et ce qui bloque.
+6: >
+7: > **Détail et histoire** : l'ancien plan [A/B](../theorie/glossaire/entrees/a-b.md) est archivé dans
+8: > [`roadmap-detail-2026-10-29.md`](../archive/roadmap-detail-2026-10-29.md), le détail N dans
+9: > [`roadmap-native-2026-10-29.md`](../archive/roadmap-native-2026-10-29.md). Les **fiches de fonctionnalité** sont
+10: > dans [`backlog/index.md`](backlog/index.md) ; le **graphe des dépendances** est dans
+11: > [`backlog/dependances.md`](backlog/dependances.md). La **page vivante** est [`en-cours.md`](en-cours.md).
+12: 
+13: ## Comment lire cette roadmap
+14: 
+15: - **Les états** : ✅ m
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 5c3cc9c3..7c0dd925 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -79,10 +79,17 @@
+ - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
+ - **Fait** : B13 **140/140**, gold **432**, coréférence **116 liens** ; **R0.7** — 9 niveaux,
+   **398 langues à 0,9687** ; **R4.4** — trois limites nommées.
+-- **Ce qu'elle fait** : le cycle **140/140** est committé ; reprise à **16 h 16**.
++- **Gold neuronal** : **tagger 7B local** (Qwen2.5-7B-Instruct Q4_K_M, CPU) — POS **0,8483**
++  seul ; **cascade à 0,6 : 0,9440** (20 réelles **0,9238**, 160 synthétiques **0,9471**),
++  **0 refus**, 180 appels ; [`pensee-gold-neuronal`](../../reports/rapport-pensee-gold-neuronal.md),
++  [JSON](../../reports/pensee-gold-neuronal.json).
++- **Ce qu'elle fait** : le cycle **140/140** est committé ; le **gold neuronal POS** est mesuré
++  et qualifié ; reprise à **16 h 16**.
+ - **Ce que font les autres** : **N2**, **S**, **D/R/A**, **hub**.
+-- **Prochaine action** : **gold neuronal** (modèle local) ; **DRVM/native** bloqué.
+-- **Bloquants** : **neuronal réel bloqué** (`llama-cl
+… [3956 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n2-r11.md</path>
+<type>file</type>
+<content>
+1: # R1.1 — Les positions relatives : la courbe de longueur s'aplatit, la table absolue explose
+2: 
+3: > **Ligne de roadmap** : R1 · **Date** : 2026-11-02 · **Verdict** : remplacer la position
+4: > apprise **absolue** par un **RoPE** fait passer la PPL à 1 000 octets de **8,2024** à
+5: > **3,2545** sur la même recette (34,3 M, canal, 20 000 pas, même initialisation, même graine).
+6: > La **porte R1.1** — « PPL à 1 000 octets dans un facteur **1,5** de celle à 129 » — est tenue :
+7: > **0,97×** (RoPE) contre **2,33×** (absolues) ; et la PPL à 128 ne se dégrade pas, elle
+8: > **s'améliore de 0,14** (3,5131 → 3,3696). Le mécanisme est contrôlé : à **texte et
+9: > prédécesseurs identiques**, changer le décalage absolu ne change rien pour RoPE (3,1645 →
+10: > 3,1662) et multiplie la PPL absolue par **4,8** (3,8468 → 18,6055), parce que les lignes 512+
+11: > de la table de positions n'ont **jamais été entraînées**.
+12: 
+13: ## La question
+14: 
+15: La note de passage [`rapport-n2-fenetre-r1`](rapport-n2-fenetre-r1.md) laisse R1.1 avec une
+16: prédiction : le gain des **positi
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-analyseur-roles.md</path>
+<type>file</type>
+<content>
+11: 
+12: ## Le dispositif
+13: 
+14: - **Gold** : [`tools/structures/donnees/gold-analyseur.json`](../tools/structures/donnees/gold-analyseur.json),
+15:   **47 phrases** : **7 `dev`** (les phrases du banc), **16 `test`** (écrites avant les règles) et
+16:   **24 `holdout`** en trois vagues : `h024–h031` (première règle), `h032–h039` (après la copule),
+17:   `h040–h047` (après la frontière GN-devant-verbe). Chaque phrase porte sa suite de segments
+18:   (texte, type, rôle) ; les spans se calculent par sous-chaîne, dans l'ordre.
+19: - **Analyseur** : [`generateur.py`](../tools/structures/generateur.py), fonction `structure()` —
+20:   segmentation (GN, GV, GP, REL, SUB), rôles par la préposition et son contexte, subordonnées
+21:   typées, passif, copule, et **frontière GN-devant-verbe**.
+22: - **Mesure** : [`mesure_analyseur.py`](../tools/structures/mesure_analyseur.py) →
+23:   [`mesure-analyseur.json`](../tools/structures/donnees/mesure-analyseur.json). Trois chiffres
+24:   (types, couverture, rôles) et trois contrôles.
+25: - **Export** : [`exporter_corpus.py`](.
+… [3959 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py", "limit": 45, "offset": 252}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py</path>
+<type>file</type>
+<content>
+252: 
+253: 
+254: class Segment:
+255:     __slots__ = ("debut", "fin", "type", "role", "niveau", "texte", "cible_nom", "cible_gp", "cible_verbe")
+256: 
+257:     def __init__(self, debut, fin, texte, typ, role, niveau=0):
+258:         self.debut, self.fin, self.texte = debut, fin, texte
+259:         self.type, self.role, self.niveau = typ, role, niveau
+260:         self.cible_nom = None   # le GN le plus proche à gauche
+261:         self.cible_gp = None    # la tête du GP le plus proche à gauche
+262:         self.cible_verbe = None  # le GV le plus proche à gauche
+263: 
+264:     def dict(self):
+265:         return {"debut": self.debut, "fin": self.fin, "texte": self.texte,
+266:                 "type": self.type, "role": self.role, "niveau": self.niveau}
+267: 
+268: 
+269: def _consomme(toks, i, classes):
+270:     j = i
+271:     while j < len(toks) and toks[j].cls in classes:
+272:         j += 1
+273:     return j
+274: 
+275: 
+276: def _segmente(texte: str, toks: list[Token]) -> list[Segment]:
+277:     utiles = [t for t in toks if t.cls != "ESPACE"]
+278:     segs: list[S
+… [927 caractères tronqués]
+  ```
+

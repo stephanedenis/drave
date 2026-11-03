@@ -1,0 +1,72 @@
+{
+ "entrainement_a05": {
+  "modele": "drave-n0-rope-kd",
+  "professeur": "work/n2ac/rope1024-20k.pt",
+  "pas": 8000,
+  "seq": 512,
+  "window": 512,
+  "alpha": 0.5,
+  "T": 2.0,
+  "dim": 224,
+  "expert_hidden": 288,
+  "graine": 1,
+  "perte_finale": 1.9879329204559326,
+  "duree_s": 3189.7239668369293,
+  "corpus": "data/wiki_fr/propre/train.txt"
+ },
+ "entrainement_a09": {
+  "modele": "drave-n0-rope-kd",
+  "professeur": "work/n2ac/rope1024-20k.pt",
+  "pas": 8000,
+  "seq": 512,
+  "window": 512,
+  "alpha": 0.9,
+  "T": 2.0,
+  "dim": 224,
+  "expert_hidden": 288,
+  "graine": 1,
+  "perte_finale": 1.4917984008789062,
+  "duree_s": 2072.4656710624695,
+  "corpus": "data/wiki_fr/propre/train.txt"
+ },
+ "eval_a05": {
+  "fichier": "kd-1147m-512-a0.5.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.5861,
+  "L512": 3.433,
+  "L1024": 3.3819
+ },
+ "eval_a09": {
+  "fichier": "kd-1147m-512-a0.9.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.509,
+  "L512": 3.2835,
+  "L1024": 3.1863
+ },
+ "reference_dure": {
+  "fichier": "cap-1147m-512.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.6452,
+  "L512": 3.4493,
+  "L1024": 3.3628
+ },
+ "dispositif": {
+  "professeur": "work/n2ac/rope1024-20k.pt (34,3 M, RoPE, fenêtre 1 024, 2,6256 à 1 000 octets)",
+  "eleve": "drave-n0 RoPE 11,47 M (224/288), fenêtre 512, init aléatoire graine 1 (identique au bras dur)",
+  "perte": "(1−α)·CE + α·T²·KL(professeur_T ‖ élève_T), T = 2, têtes précoces supervisées (parité)",
+  "budget": "8 000 pas × 8 × 512 = 33 Mo, data/wiki_fr/propre, mêmes fenêtres Van der Corput",
+  "bras": [
+   "α = 0 (dur, référence cap-1147m-512)",
+   "α = 0,5",
+   "α = 0,9"
+  ],
+  "cout": {
+   "dur_ms_par_pas": 208,
+   "a09_ms_par_pas": 259,
+   "ratio": 1.25
+  }
+ }
+}

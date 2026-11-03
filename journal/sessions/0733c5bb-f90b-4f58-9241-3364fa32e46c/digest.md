@@ -8110,3 +8110,530 @@ T0 max : 3997 mots (budget 4 000)
   ```
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"| **N — le natif** | **N2, N3, N4** | N2 : **fenêtre 1 024 — 2,4759 / 2,4373 au grand corpus (sous 2,5)** ; porte pro … [1887 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3995 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-398]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-398", "timeout_ms": 180000, "wait": true}`
+
+  ```
+ad070205 PORTE PROPRE — LA CAPACITÉ SATURE : 2,8960 (11,47 M) → 2,8688 (21,65 M) → 2,8662 (34,3 M) À 1 024 OCTETS
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle « 2 048 à octets constants » (10 000 pas, 164 Mo) sur GPU 1
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_2048_10k.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_2048_10k.sh — le point 2 048 aux MÊMES OCTETS que le run 1 024 / 20 000 pas (164 Mo).\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet || exit 1\nexport PYTHONPATH=.  … [820 caractères tronqués]`
+
+  ```
+2048-10k lancé pid 2368166
+14:42:04
+0, 5280 MiB, 99 %
+1, 1 MiB, 0 %
+670 s
+pas   8300 · perte 0.9286 · PPL val 2.435 · 3693 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"fenêtre\\|2,4759\\|2.4759\" docs/pilotage/backlog/N2-distillation.md | head -8; echo \"=== roadmap N ===\"; grep -n \"la fenêtre\" docs/pilotage/roadmap.md | head -3 | cut -c1-200", "description": "Check hub updates to backlog and roadmap"}`
+
+  ```
+12:La **hiérarchie** (l'état de section) a été **écartée** : R11 ne la retient pas. Le levier mesuré le **03/11** est la **fenêtre entraînée** (RoPE) — 1 024 est la recette de production.
+23:8,0018** (val_fr / littérature / anglais / wikitext2) ; la **fenêtre entraînée 1 024** donne
+24:**2,4759 / 2,4373** au **grand corpus** — **sous 2,5** — et **2,7856** sur le **corpus propre**.
+25:512 paie hors domaine, **2 048 ne paie pas** ; le compute ne remplace pas la fenêtre.
+31:corpus propre (**0,29** de la porte) et **2,4759 / 2,4373** au grand corpus — **sous 2,5**.
+41:**La fenêtre est la recette ; il reste la porte propre.** Prochaine action : la **porte propre**
+49:- [Programme R, R1](../roadmap.md#r1--la-fenêtre-native)
+=== roadmap N ===
+45:l'heuristique garde. **N2** : la **loi de la fenêtre** à octets constants donne **3,2545 → 3,0107
+72:2. **N2 — la fenêtre est la recette** (clôturée le 03/11) : **N2.ac** (1,02 Go, 60 k pas) donnait
+80:5. **R11/R12 — la fenêtre** : après N2 ; PPL à 1 000 octets et aiguille native.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && head -40 tools/distiller_budget.py; echo \"...\"; grep -n \"def main\\|teacher\\|professeur\\|argparse\" tools/distiller_budget.py | head -12", "description": "Inspect distillation tool for a long-professor path"}`
+
+  ```
+#!/usr/bin/env python3
+"""distiller_budget.py — N2 : le budget, les données et le curriculum de longueur.
+
+Le dispositif de N2 est reconstruit (professeur byte-level 23,57 M, élève
+`drave-n0` 11,47 M) et conservé dans
+`/home/stephane/Data13TB/stephane/backups/n2/2026-10-31/`. La distillation de la
+veille ne voyait que **20,48 Mo** d'un seul corpus, sur 5 000 pas. Ce script
+rejoue le **budget complet** — 20 000 pas × 16 × 128 = **41 Mo** — et permet de
+comparer, à budget strictement égal :
+
+  --corpus fr     : `data/corpus_fr_train.txt` (français seul) ;
+  --corpus multi  : le manifeste `reports/native-corpus-multi.json` (quatre
+                    sources : français, UDHR, anglais, littérature mixte),
+                    reconstruit à l'identique (quotas + ordre de van der Corput).
+
+Un **plan** de stages `seq:pas:lr` enchaîne les longueurs et les taux
+d'apprentissage dans un même run (le curriculum 129 de N2.33 est le dernier
+stage : `129:10000:5e-6`, lot 15).
+
+Chaque run est évalué sous les protocoles qui ont produit les chiffres
+historiques, pour que la comparaison soit licite :
+
+  ppl_128_lot16  : 8 lots × 16 fenêtres de 128 — **le protocole de 2,7078** (N2.19) ;
+  ppl_129_lot15
+… [1039 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"enseignant\" tools/distiller_budget.py | head -14; echo \"---\"; sed -n '/def charge_enseignant\\|enseignant =/,+12p' tools/distiller_budget.py | head -30", "description": "Read teacher loading in distiller"}`
+
+  ```
+32:      --enseignant .../route-teacher-20k --init .../drave-n0-base-20k.pt \
+142:    ap.add_argument("--enseignant", default=str(ARTEFACTS / "route-teacher-20k"))
+178:    prof = AutoModelForCausalLM.from_pretrained(a.enseignant, dtype=torch.float32).to(a.device).eval()
+---
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture d'un distillateur natif → natif (professeur long, élève à fenêtre courte)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"distiller_natif.py — distillation natif → natif : le professeur long, l'élève court.\n\nLe dépôt distillait depuis un professeur **HuggingFace** (`tools/distiller_budget.py`). Ici le\nprofesseur est un `drave-n0` **RoPE à fenêtre longue** (par exemple `rope … [5006 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/work/n2ac/distiller_natif.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 👤 Utilisateur
+
+background job bash-389 (bash: sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/cappropre.out; ls work/n2ac/propre-3430m-512z.pt 2>/dev/null && echo OK34) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 200 env PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/distiller_natif.py --pas 60 --seq 256 --window 256 --dim 224 --expert-hidden 288 --alpha 0.5 --sortie /tmp/kd_test.pt 2>&1 | tail -6", "description": "Smoke-test the na … [16 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2ac/distiller_natif.py:94: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  derniere = float(perte)
+pas     1 · perte 8.8584 · dure 5.5778 · douce 12.1391 · 1 s
+pas    50 · perte 4.1620 · dure 2.9368 · douce 5.3872 · 10 s
+{"modele": "drave-n0-rope-kd", "professeur": "work/n2ac/rope1024-20k.pt", "pas": 60, "seq": 256, "window": 256, "alpha": 0.5, "T": 2.0, "dim": 224, "expert_hidden": 288, "graine": 1, "perte_finale": 3.686920642852783, "duree_s": 11.68295431137085, "corpus": "data/wiki_fr/propre/train.txt"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && head -5 work/n2ac/cap-1147m-512.log | tail -2; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"work/n2ac/distiller_natif.py\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"        dure = F.cross_entropy(logits_e.reshape(-1, 256), y.reshape … [1214 caractères tronqués]`
+
+  ```
+pas      1 · perte 5.8480 · PPL val 227.571 · 1 s
+pas     50 · perte 2.6714 · PPL val 17.742 · 11 s
+têtes précoces ajoutées
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && timeout 200 env PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/distiller_natif.py --pas 3 --seq 512 --window 512 --dim 224 --expert-hidden 288 --alpha 0 --sortie /tmp/kd0.pt 2>&1 | grep -E \"^pas|dure\" | head -3", "description": " … [44 caractères tronqués]`
+
+  ```
+pas     1 · perte 10.0897 · dure 5.5782 · douce 12.2935 · 1 s
+{"modele": "drave-n0-rope-kd", "professeur": "work/n2ac/rope1024-20k.pt", "pas": 3, "seq": 512, "window": 512, "alpha": 0.0, "T": 2.0, "dim": 224, "expert_hidden": 288, "graine": 1, "perte_finale": 9.140658378601074, "duree_s": 2.125225067138672, "corpus": "data/wiki_fr/propre/train.txt"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de l'ordre d'initialisation (l'élève doit précéder le professeur)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"work/n2ac/distiller_natif.py\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"    torch.manual_seed(a.graine)\n    data = charger(a.corpus)\n    canal_data = charger_canal(a.canal)\n    n_val  … [1787 caractères tronqués]`
+
+  ```
+ordre corrigé
+pas     1 · perte 10.0250 · dure 5.5694 · douce 12.2536 · 1 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Distillation native lancée (deux alphas) sur le GPU 1
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_kd.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_kd.sh — distillation native : le professeur long (1 024) dans un élève 11,47 M à 512.\n# Deux alphas, même init aléatoire (graine 1), mêmes 8 000 pas et mêmes octets que le bras « dur … [1021 caractères tronqués]`
+
+  ```
+KD lancé pid 2369864
+[still running after 60000ms; moved to background job bash-407]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-407", "timeout_ms": 180000, "wait": true}`
+
+  ```
+14:46:55
+  derniere = float(perte)
+pas     1 · perte 13.3671 · dure 5.5694 · douce 12.2536 · 1 s
+ 211 s
+pas    250 · perte 1.2406 · PPL val 3.248 · 262 s
+959 s
+pas   8950 · perte 1.0057 · PPL val 2.440 · 3981 s
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-407 (bash: cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_kd.sh <<'EOF'
+#!/usr/bin/env bash
+# chaine_kd.sh — distillation native : le professeur long (1 024) dans un élève 11,47 M à 512.
+# Deux alphas, même init aléatoire (graine 1), mêmes 8 000 pas et mêmes octets que le bras « dur »
+# de référence (cap-1147m-512).
+set -u
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet || exit 1
+export PYTHONPATH=. CUDA_VISIBLE_DEVICES=${1:-1}
+for A in 0.5 0.9; do
+  ~/gpu-env/bin/python work/n2ac/distiller_natif.py \
+    --professeur work/n2ac/rope1024-20k.pt \
+    --corpus data/wiki_fr/propre/train.txt --canal data/wiki_fr/propre/train.canal \
+    --seq 512 --window 512 --lot 8 --lr 3e-4 --graine 1 --dim 224 --expert-hidden 288 \
+    --pas 8000 --alpha $A --T 2 \
+    --sortie work/n2ac/kd-1147m-512-a$A.pt --drvm work/n2ac/kd-1147m-512-a$A.drvm \
+    > work/n2ac/kd-1147m-512-a$A.log 2>&1
+  echo "kd a=$A fini $(date '+%H:%M:%S')"
+done
+EOF
+chmod +x work/n2ac/chaine_kd.sh
+nohup bash work/n2ac/chaine_kd.sh 1 > work/n2ac/kd.out 2>&1 & echo "KD lancé pid $!"
+sleep 60; date '+%H:%M:%S'; tail -2 work/n2ac/kd-1147m-512-a0.5.log 2>/dev/null; tail -c 60 work/n2ac/rope2048-10k.log 2>/dev/null; tail -c 60 work/n2ac/mix1024-60k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 2100; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 60 work/n2ac/rope2048-10k.log", "description": "Wait for first KD run"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-408]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-408", "timeout_ms": 2100000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 60 work/n2ac/kd-1147m-512-a0.5.log 2>/dev/null; tail -c 60 work/n2ac/rope2048-10k.log", "description": "Poll KD progress"}`
+
+  ```
+14:58:06
+200 · perte 2.7758 · dure 1.6558 · douce 1.2849 · 688 s
+ 809 s
+pas    550 · perte 1.2933 · PPL val 3.048 · 919 s
+  ```
+
+- **bash** `{"command": "sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 50 work/n2ac/kd-1147m-512-a0.5.log 2>/dev/null", "description": "Wait for KD alpha=0.5 completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-410]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-410", "timeout_ms": 3000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 60 work/n2ac/kd-1147m-512-a0.5.log 2>/dev/null; tail -c 60 work/n2ac/mix1024-60k.log", "description": "Poll KD and production runs"}`
+
+  ```
+15:09:18
+50 · perte 2.2005 · dure 1.3726 · douce 0.7889 · 1347 s
+312 s
+pas  12000 · perte 0.9596 · PPL val 2.436 · 5334 s
+  ```
+
+- **bash** `{"command": "sleep 2700; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null", "description": "Wait for KD alpha 0.5 result"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-412]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-412", "timeout_ms": 2700000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 60 work/n2ac/kd-1147m-512-a0.5.log 2>/dev/null; tail -c 50 work/n2ac/kd-1147m-512-a0.9.log 2>/dev/null", "description": "Poll KD runs"}`
+
+  ```
+15:20:31
+00 · perte 2.3896 · dure 1.5389 · douce 0.7618 · 2006 s
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && tail -c 70 work/n2ac/rope2048-10k.log; ps -eo pid,etime,cmd --no-headers | grep \"[e]ntrainer_rope\\|[d]istiller_natif\" | cut -c1-80", "description": "Check 2048 progress and processes"}`
+
+  ```
+2.909 · 2123 s
+pas   1150 · perte 1.1891 · PPL val 2.894 · 2233 s
+2320304    01:43:53 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.p
+2368168       39:01 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.p
+2369866       34:40 /home/stephane/gpu-env/bin/python work/n2ac/distiller_natif.
+  ```
+
+### 🤖 Assistant
+
+⏵ Arbitrage : j'arrête le 2 048 à octets constants (trop lent sous contention) pour laisser la distillation
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && kill 2368168 2>/dev/null; sleep 5; ps -p 2368168 >/dev/null && echo \"2048 encore là\" || echo \"2048 arrêté\"; sleep 120; date '+%H:%M:%S'; tail -c 60 work/n2ac/kd-1147m-512-a0.5.log; tail -c 50 work/n2ac/mix1024-60k.log", "description": "Kill slow 2 … [32 caractères tronqués]`
+
+  ```
+2048 arrêté
+[still running after 60000ms; moved to background job bash-415]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-415", "timeout_ms": 180000, "wait": true}`
+
+  ```
+15:22:46
+50 · perte 2.0200 · dure 1.3051 · douce 0.6344 · 2169 s
+ 13800 · perte 0.9933 · PPL val 2.432 · 6133 s
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-408 (bash: sleep 2100; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 60 work/n2ac/rope2048-10k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 50 work/n2ac/kd-1147m-512-a0.9.log 2>/dev/null", "description": "Wait for KD alpha 0.5 completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-416]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-416", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 60 work/n2ac/kd-1147m-512-a0.5.log", "description": "Poll KD completion"}`
+
+  ```
+15:33:54
+00 · perte 2.2283 · dure 1.4693 · douce 0.6213 · 2828 s
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 50 work/n2ac/mix1024-60k.log", "description": "Wait for KD alpha 0.5"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-418]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-418", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-416 (bash: sleep 900; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 50 work/n2ac/kd-1147m-512-a0.9.log 2>/dev/null) finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 60 work/n2ac/kd-1147m-512-a0.5.log; tail -c 50 work/n2ac/mix1024-60k.log", "description": "Poll KD and production"}`
+
+  ```
+15:45:08
+kd a=0.5 fini 15:39:47
+work/n2ac/kd-1147m-512-a0.5.pt
+9.7239668369293, "corpus": "data/wiki_fr/propre/train.txt"}
+ 16850 · perte 0.8711 · PPL val 2.414 · 7487 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Évaluation de l'élève distillé (α = 0,5) contre le bras « dur »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/kd-1147m-512-a0.5.pt --rope --longueurs 128,512,1024 --sortie work/n2ac/eval-kd-1147m-a0.5.json 2>&1 | tail -4; echo \"=== référence dure ===\"; PYTHONPATH= … [231 caractères tronqués]`
+
+  ```
+L128 : 3.5861
+  L512 : 3.433
+  L1024 : 3.3819
+{"fichier": "kd-1147m-512-a0.5.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L128": 3.5861, "L512": 3.433, "L1024": 3.3819}
+=== référence dure ===
+  L128 : 3.6452
+  L512 : 3.4493
+  L1024 : 3.3628
+{"fichier": "cap-1147m-512.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L128": 3.6452, "L512": 3.4493, "L1024": 3.3628}
+  ```
+
+- **bash** `{"command": "sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a0.9.pt 2>/dev/null; tail -c 50 work/n2ac/mix1024-60k.log", "description": "Wait for KD alpha 0.9"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-421]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-421", "timeout_ms": 3000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-410 (bash: sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 50 work/n2ac/kd-1147m-512-a0.5.log 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-412 (bash: sleep 2700; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 60 work/n2ac/mix1024-60k.log", "description": "Direct poll of KD 0.9 and production"}`
+
+  ```
+15:56:48
+kd a=0.5 fini 15:39:47
+work/n2ac/kd-1147m-512-a0.5.pt
+156 s
+pas  18400 · perte 1.0575 · PPL val 2.422 · 8179 s
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche distillation native (α = 0,5 mesuré, 0,9 en cours)
+
+- **write** `{"content": "# N2 — La distillation native : le professeur long dans un élève à fenêtre courte\n\n> **Ligne de roadmap** : N2 (la distillation) · **Date** : 2026-11-03 · **Verdict** :\n> le premier distillateur **natif → natif** du dépôt (professeur `drave-n0` RoPE à fenêtre\n> 1 024, élève 11,47 M  … [4734 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-n2-distillation-native.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat work/n2ac/kd-1147m-512-a0.5.pt.json 2>/dev/null; echo \"---\"; python3 -c \"\nimport json\nd=json.load(open('work/n2ac/cap-1147m-512.pt.json'))\nprint('bras dur : duree', round(d['duree_s']), 's pour', d['pas'], 'pas →', round(d['duree_s']/d['pas' … [299 caractères tronqués]`
+
+  ```
+{
+ "modele": "drave-n0-rope-kd",
+ "professeur": "work/n2ac/rope1024-20k.pt",
+ "pas": 8000,
+ "seq": 512,
+ "window": 512,
+ "alpha": 0.5,
+ "T": 2.0,
+ "dim": 224,
+ "expert_hidden": 288,
+ "graine": 1,
+ "perte_finale": 1.9879329204559326,
+ "duree_s": 3189.7239668369293,
+ "corpus": "data/wiki_fr/propre/train.txt"
+}
+---
+bras dur : duree 1666 s pour 8000 pas → 208 ms/pas
+KD a=0,5 : duree 3190 s → 399 ms/pas ; ratio 1.91
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-distillation-native.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"2. **À temps de calcul égal, la distillation perd.** Le professeur est évalué à chaque pas : le pas\n … [1144 caractères tronqués]`
+
+  ```
+coût corrigé ; placeholders : 4
+  ```
+
+- **bash** `{"command": "sleep 3300; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a0.9.pt 2>/dev/null; tail -c 50 work/n2ac/mix1024-60k.log", "description": "Wait for KD 0.9 and production 60k"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-425]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-425", "timeout_ms": 3300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-418 (bash: sleep 1800; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a*.pt 2>/dev/null; tail -c 50 work/n2ac/mix1024-60k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a0.9.pt work/n2ac/mix1024-60k.pt 2>/dev/null; tail -c 50 work/n2ac/mix1024-60k.log", "description": "Poll KD 0.9 and 60k production"}`
+
+  ```
+16:08:27
+kd a=0.5 fini 15:39:47
+ 19950 · perte 0.8356 · PPL val 2.408 · 8867 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && tail -2 work/n2ac/kd-1147m-512-a0.9.log 2>/dev/null; ls -la work/n2ac/kd-1147m-512-a0.9.log 2>/dev/null; ps -eo pid,etime,cmd --no-headers | grep \"[d]istiller_natif\" | cut -c1-80", "description": "Check KD 0.9 run state"}`
+
+  ```
+pas  6400 · perte 1.5883 · dure 1.1946 · douce 0.5177 · 1659 s
+pas  6450 · perte 1.5212 · dure 1.2689 · douce 0.4050 · 1672 s
+-rw-r--r--. 1 stephane stephane 9028  3 nov 16:08 work/n2ac/kd-1147m-512-a0.9.log
+2388649       28:43 /home/stephane/gpu-env/bin/python work/n2ac/distiller_natif.
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/kd.out; ls work/n2ac/kd-1147m-512-a0.9.pt 2>/dev/null && echo OK09", "description": "Wait for KD 0.9 completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-428]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-428", "timeout_ms": 600000, "wait": true}`
+
+  ```
+16:18:34
+kd a=0.5 fini 15:39:47
+kd a=0.9 fini 16:15:01
+work/n2ac/kd-1147m-512-a0.9.pt
+OK09
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Évaluation de l'élève α = 0,9 et clôture de la fiche distillation
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/kd-1147m-512-a0.9.pt --rope --longueurs 128,512,1024 --sortie work/n2ac/eval-kd-1147m-a0.9.json 2>&1 | tail -4; python3 -c \"\nimport json\nprint('duree a=0 … [134 caractères tronqués]`
+
+  ```
+L128 : 3.509
+  L512 : 3.2835
+  L1024 : 3.1863
+{"fichier": "kd-1147m-512-a0.9.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L128": 3.509, "L512": 3.2835, "L1024": 3.1863}
+duree a=0.9 : 2072 s
+  ```
+
+### 🤖 Assistant
+
+⏵ α = 0,9 change la conclusion : la distillation native paie (−0,18 à 1 024)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-distillation-native.md\")\nt = p.read_text(encoding=\"utf-8\")\n# verdict\ni = t.index(\"> **Ligne de roadmap**\")\nj = t.index(\"## La question\")\nt = t[:i] + \"\"\"> **Ligne de … [3811 caractères tronqués]`
+
+  ```
+fiche réécrite ; placeholders : 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nd = {\n \"entrainement_a05\": json.loads(pathlib.Path(\"work/n2ac/kd-1147m-512-a0.5.pt.json\").read_text()),\n \"entrainement_a09\": json.loads(pathlib.Path(\"work/n2ac/kd-1147m-512-a0.9.pt.json\").read_text()), … [1923 caractères tronqués]`
+
+  ```
+reports/n2-distillation-native.json
+compteurs 593 682
+  T0 max : 3999 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cp work/n2ac/distiller_natif.py work/n2ac/chaine_kd.sh journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ && python3 tools/revue_documentation.py 2>&1 | tail -2; for i in $(seq 1 20); do [ -f .git/index.lock ] || break; sleep 4; done; git add … [1924 caractères tronqués]`

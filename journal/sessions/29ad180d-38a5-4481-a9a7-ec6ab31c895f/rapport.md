@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 21.8 h |
-| Tours | 9 |
-| Messages | 295 |
-| Appels d'outils | 298 |
+| Durée | 24.1 h |
+| Tours | 10 |
+| Messages | 304 |
+| Appels d'outils | 306 |
 | Fichiers touchés | 14 |
-| Commandes | 221 |
+| Commandes | 226 |
 | Sous-agents | 0 |
 | Commits | 18 |
 | Compactages de contexte | 0 |
@@ -36,6 +36,8 @@
 **Tour 8** — prochaine étape?
 
 **Tour 9** — pour ce qui est de la validation de la banque, après moins de 20%, j'arrête car j'ai trop de doutes sur l'arvre syntaxique car il manque trop souvent de profondeur et les référents ne semblent pas résolus avant que je tranche
+
+**Tour 10** — vas-y avec des paragraphes complets et un arbre svg avec liaisons référents-référés
 
 ## 2. Déroulé, étape par étape
 
@@ -381,6 +383,22 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 2. **Référents** : proposer les antécédents des pronoms/possessifs (GN, sujet, tête de GP), les faire **résoudre avant** le verdict de structure, et les enregistrer avec le verdict.
 3. Ensuite seulement, **reprise de la validation** des 200 phrases sur l'outil corrigé, puis export de la banque complète ; `h050`/`h053` restent les limites de l'analyseur, après.
 
+### Tour 10 — vas-y avec des paragraphes complets et un arbre svg avec liaisons référents-référés
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Find a real paragraph with referents
+- bash — Locate generator tree insertion points
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py`
+- bash — Add tree construction and inspect depths
+- bash — Add referent proposal and test on Alice paragraph
+- bash — Filter verb-like proper nouns and inspect target tree
+
+**Synthèse produite :**
+
+⏵ Je passe à l'arbre réel et aux référents : paragraphes complets, arbre SVG avec liens référents-référés, mesures et fiche.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -389,7 +407,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 |---|---|---|
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md` | 3 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/gold-analyseur.json` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py` | 0 | 7 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py` | 0 | 8 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/mesure_analyseur.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/exporter_corpus.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/verifier_corpus.py` | 1 | 0 |
@@ -444,7 +462,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 181 autres
+- … et 186 autres
 
 ## 4. Mesures et résultats marquants
 

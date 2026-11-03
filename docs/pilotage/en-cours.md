@@ -90,7 +90,7 @@
 - **Ce qu'elle fait** : la nuit est committée (4 fiches : [`fenêtre`](../../reports/rapport-n2-fenetre.md),
   [`2 048`](../../reports/rapport-n2-r12-2048.md), [`production`](../../reports/rapport-n2-production-fenetre.md),
   [`porte`](../../reports/rapport-n2-porte-propre.md)) ; **60 000 pas à 1 024** (GPU 0) et
-  **capacité propre** (GPU 1) lancés à 13 h 37.
+  **capacité propre** (GPU 1) ; **distillation native** : α = 0,9 gagne **0,14–0,18**.
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
 - **Prochaine action** : les mesures du run long et de la capacité, puis fiche et commit.
 - **Bloquants** : aucun.
@@ -114,7 +114,7 @@
 |---|---|---|
 | portes | **82** (passe du **03/11 11 h 30** : **82, 80/2**) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **592** / **681** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **593** / **682** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2** ; les 2 connues, machine au repos) | `docs/pilotage/references-non-regression.md` |
 
