@@ -9888,3 +9888,170 @@ f9a40785 HUB — LE PLAN PASSE À LA VEILLE : 82e PORTE VALIDÉE, CLAIM veille (
  journal/2026-11-02/distribue.md                    |   8 +-
   ```
 
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 22 h 33 — le run long finit (PPL val 2,6609) ; la veille a son claim\n\n- `rope1024-20k` **fini** : PPL de validation finale **2,6609** (le minimum intermédiaire était\n  ~2,576 à 16 600 pas) — la cible < 2,5 n'est pas atteinte ; la courbe sera à … [684 caractères tronqués]`
+
+  ```
+revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+     · T0 : 4005 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ⚠ mandat long (114 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (51 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ```
+
+- **bash** `{"command": "grep -n \"| portes |\\|dernière passe\" docs/pilotage/en-cours.md; python3 tools/verifie_en_cours.py 2>&1 | tail -1", "description": "Read the portes rows for the T0 trim"}`
+
+  ```
+112:| portes | **82** (passe du 02/11 19 h 32 : **81, 76/5** ; **82e `porte-ressources`** verte, comptée à la suivante) | `tools/porte-*.sh` |
+116:| dernière passe | **02/11 19 h 32** (81, 76/5 ; 4 connues + `porte-tableaux` **rejouée verte**) | `docs/pilotage/references-non-regression.md` |
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nrepls=[\n (\"**82** (passe du 02/11 19 h 32 : **81, 76/5**\", \"**82** (passe 19 h 32 : **81, 76/5**\"),\n (\"4 connues + `porte-tableaux` **rejouée verte**\", \"4 connues + ` … [615 caractères tronqués]`
+
+  ```
+trims ok
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"git commit|git add\" | grep -v grep | head -2; ls .git/index.lock 2>/dev/null || echo \"pas de lock\"; git status --short docs/pilotage/en-cours.md", "description": "Check the lock before committing the trims"}`
+
+  ```
+719275       00:37 bash -c cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8') t=t.replace('**fenêtre** — l\'oracle/le 7B échouent (problème à réparer) ;',             '**fenêtre** — **solvable** (BFS 331 nœuds, 52 états) ; l\'oracle Manhattan échoue par fitness ;') t=t.replace('**fenêtre (réparer le problème)**','**fenêtre (banc 7B budget 500, oracle BFS)**') t=t.replace('22 h 10 HNE','22 h 25 HNE') p.write_text(t,encoding='utf-8') print('état ok') PY git add tools/pensee/operateurs.py tools/pensee/moteur.py reports/rapport-pensee-porte-fenetre.md reports/pensee-porte-fenetre.json reports/README.md reports/INDEX.md docs/pilotage/en-cours.md; git diff --cached --stat | tail -8; python3 tools/verifie_etat_a_jour.py --index; echo "HOOK=$?"; git commit -m "B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
+ 719296       00:37 git commit -m B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE
+pas de lock
+MM do
+… [23 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for i in $(seq 1 40); do kill -0 719296 2>/dev/null || break; sleep 3; done; ps -p 719296 >/dev/null && echo \"commit en cours\" || echo \"commit fini\"; git log --oneline -2; echo \"--- T0/état ---\"; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2 … [177 caractères tronqués]`
+
+  ```
+commit fini
+84182603 B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE
+f9a40785 HUB — LE PLAN PASSE À LA VEILLE : 82e PORTE VALIDÉE, CLAIM veille (cpu1 1, RAM 1), BILAN 08 H
+--- T0/état ---
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 570 fiche(s) · 656 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+22:35:26
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 22 h 35 — la fenêtre B13 est solvable (contre-fiche) ; T0 sous 4 000\n\n- **`84182603`** (Pensée) : **contre-fiche** — le **BFS atteint le but en 331 nœuds, 52 états** ;\n  l'oracle Manhattan échoue par **fitness**, pas par la carte : le problème … [559 caractères tronqués]`
+
+  ```
+ok
+84182603 B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 17 : le run long finit (PPL 2,6609), la fenêtre B13 est solvable, T0 sous 4 000
+
+- **N2** : le run long `rope1024-20k` est **fini** — **PPL val finale 2,6609** (minimum intermédiaire ~2,576 à 16 600 pas) ; la cible **< 2,5 n'est pas atteinte**, la courbe sera lue dans la fiche.
+- **Pensée** : `84182603` — **contre-fiche de la fenêtre** : le **BFS atteint le but en 331 nœuds, 52 états** ; l'oracle Manhattan échoue par **fitness**, pas par la carte → le problème est **solvable**, c'est le banc 7B (budget 500, oracle BFS) qui est à réparer.
+- **Hub** : `f9a40785` — le plan passe à la **veille** avec un claim `veille` (`cpu1` 1, `ram` 1) et le bilan de 8 h ; la 82e porte est validée et comptée.
+- **État** : T0 **sous 4 000**, revue ✅ **570 fiches / 656 JSON / 82 portes**, en-cours ✅, T1 2 428, porte stricte ✅, registre ✅ (seul `nvme_raid` 33 Gio).
+
+La veille continue : intégration des commits, suivi des sessions, puis le **checkpoint de 8 h** (le brouillon `work/veille/bilan-08h.md` porte déjà les faits). Rien de bloquant.
+
+
+## Tour 23
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 18/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 18 : je vérifie les claims des runs finis et libère ce qui est à moi
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; echo \"--- gpu ---\"; nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader 2>/dev/null; echo \"--- runs ---\"; ps -eo pid,etime,args | grep -E \"entrainer_rope|drave|llama-server\" | grep -v grep | head -5 | cut -c1-90; echo \"--- claims --- … [222 caractères tronqués]`
+
+  ```
+22:35:48
+--- gpu ---
+0, 100 %, 10600 MiB
+1, 100 %, 10068 MiB
+--- runs ---
+ 110066    05:07:48 llama-server -m models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf 
+ 713516       13:01 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus
+--- claims ---
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 0733c5bb-f90b-4f58-9241-3364fa32e46c / r12-mix-512-gpu1 : gpu1=exclusive, cpu0=4, ram=10 (prio 1, 180 min)
+    · 536cd5d6 / veille : cpu1=1, ram=1 (prio 2, 600 min)
+--- actual ---
+  Réel · GPU
+    GPU0 (réservé) : PID 110066 llama-server (366 MiB) ; PID 720242 /home/stephane/gpu-env/bin/python (10230 MiB)
+    GPU1 (réservé) : PID 110066 llama-server (118 MiB) ; PID 713516 /home/stephane/gpu-env/bin/python (9946 MiB)
+  ```
+
+- **bash** `{"command": "cat >> work/veille/nuit.md <<'EOF'\n\n## 22 h 36 — les deux GPU tournent, les claims couvrent les nouveaux runs\n\n- **GPU0** : `llama-server` + un run N2 (PID 720242, 10,2 Go) sous le claim `r12-1024`.\n- **GPU1** : `llama-server` + un run N2 (PID 713516, 9,9 Go) sous le claim\n  `r12- … [481 caractères tronqués]`
+
+  ```
+ok
+  ✅ registre cohérent : aucune ressource sur-réservée.
+  ⚠ nvme_raid : 33 Gio libres seulement
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+84182603 B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 18 : les deux GPU tournent et sont déclarés, aucun claim à libérer
+
+- **GPU0** : `llama-server` + un run N2 (PID 720242, 10,2 Go) sous le claim `r12-1024`.
+- **GPU1** : `llama-server` + un run N2 (PID 713516, 9,9 Go) sous le claim `r12-mix-512-gpu1` **posé par la veille** — il couvre l'usage réel (le run a changé, la réservation protège la carte pour N2).
+- **Registre cohérent** : aucune ressource sur-réservée ; les claims du hub (`veille`), de S et de Pensée tiennent ; seul avertissement `nvme_raid` 33 Gio.
+- **État** : revue ✅ 570/656/82, en-cours ✅, T0 sous 4 000, porte stricte ✅.
+
+La veille continue : suivi des deux runs N2 et des sessions, intégration des commits, puis le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 24
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 19/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 19 : veille — je vérifie les événements puis j’attends
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -3; git status --short | head -4; echo \"--- runs ---\"; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-80; echo \"--- checks ---\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/sessions.py --che … [69 caractères tronqués]`
+
+  ```
+22:36:11
+84182603 B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE
+f9a40785 HUB — LE PLAN PASSE À LA VEILLE : 82e PORTE VALIDÉE, CLAIM veille (cpu1 1, RAM 1), BILAN 08 H
+ba815f43 ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉRENCE
+ M docs/pilotage/en-cours.md
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+--- runs ---
+ 713516       13:24 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.p
+--- checks ---
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ⚠ mandat long (53 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -3; git status --short | head -4; ps -eo pid,etime,args | grep entrainer_r … [107 caractères tronqués]`

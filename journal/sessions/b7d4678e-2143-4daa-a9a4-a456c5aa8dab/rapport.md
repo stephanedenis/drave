@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
 | Durée | 6.3 h |
-| Tours | 22 |
-| Messages | 617 |
-| Appels d'outils | 621 |
+| Tours | 24 |
+| Messages | 626 |
+| Appels d'outils | 626 |
 | Fichiers touchés | 24 |
-| Commandes | 428 |
+| Commandes | 433 |
 | Sous-agents | 0 |
 | Commits | 32 |
 | Compactages de contexte | 0 |
@@ -69,6 +69,10 @@
 **Tour 21** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 22** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 23** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 24** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -656,7 +660,7 @@ La veille continue : fin du run long, intégration des commits du hub, puis le c
 
 ### Tour 22 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Check the long run and events
 - bash — Wait for the next commit or run finish
@@ -666,10 +670,47 @@ La veille continue : fin du run long, intégration des commits du hub, puis le c
 - bash — Trim en-cours under T0
 - bash — Check the lock before committing the trims
 - bash — Wait for the contre-fiche commit and verify state
+- bash — Log the contre-fiche and T0
 
 **Synthèse produite :**
 
-⏵ Round 17 : veille — fin du run long et événements
+⏵ Round 17 : le run long finit (PPL 2,6609), la fenêtre B13 est solvable, T0 sous 4 000
+
+- **N2** : le run long `rope1024-20k` est **fini** — **PPL val finale 2,6609** (minimum intermédiaire ~2,576 à 16 600 pas) ; la cible **< 2,5 n'est pas atteinte**, la courbe sera lue dans la fiche.
+- **Pensée** : `84182603` — **contre-fiche de la fenêtre** : le **BFS atteint le but en 331 nœuds, 52 états** ; l'oracle Manhattan échoue par **fitness**, pas par la carte → le problème est **solvable**, c'est le banc 7B (budget 500, oracle BFS) qui est à réparer.
+- **Hub** : `f9a40785` — le plan passe à la **veille** avec un claim `veille` (`cpu1` 1, `ram` 1) et le bilan de 8 h ; la 82e porte est validée et comptée.
+- **État** : T0 **sous 4 000**, revue ✅ **570 fiches / 656 JSON / 82 portes**, en-cours ✅, T1 2 428, porte stricte ✅, registre ✅ (seul `nvme_raid` 33 Gio).
+
+La veille continue : intégration des commits, suivi des sessions, puis le **checkpoint de 8 h** (le brouillon `work/veille/bilan-08h.md` porte déjà les faits). Rien de bloquant.
+
+### Tour 23 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check finished runs and claims
+- bash — Log the GPU runs and claims
+
+**Synthèse produite :**
+
+⏵ Round 18 : les deux GPU tournent et sont déclarés, aucun claim à libérer
+
+- **GPU0** : `llama-server` + un run N2 (PID 720242, 10,2 Go) sous le claim `r12-1024`.
+- **GPU1** : `llama-server` + un run N2 (PID 713516, 9,9 Go) sous le claim `r12-mix-512-gpu1` **posé par la veille** — il couvre l'usage réel (le run a changé, la réservation protège la carte pour N2).
+- **Registre cohérent** : aucune ressource sur-réservée ; les claims du hub (`veille`), de S et de Pensée tiennent ; seul avertissement `nvme_raid` 33 Gio.
+- **État** : revue ✅ 570/656/82, en-cours ✅, T0 sous 4 000, porte stricte ✅.
+
+La veille continue : suivi des deux runs N2 et des sessions, intégration des commits, puis le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 24 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check events and state
+- bash — Wait for the next commit
+
+**Synthèse produite :**
+
+⏵ Round 19 : veille — je vérifie les événements puis j’attends
 
 ## 3. Travail accompli
 
@@ -744,7 +785,7 @@ La veille continue : fin du run long, intégration des commits du hub, puis le c
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 388 autres
+- … et 393 autres
 
 ## 4. Mesures et résultats marquants
 

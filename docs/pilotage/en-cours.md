@@ -28,8 +28,8 @@
 - **Stratégie** : committer par flux (`git add` explicite), nommer ce qui reste.
 - **Objectif final** : sédimentation à zéro, quatre mandats explicites, runbook.
 - **Ce qu'elle fait** : intégration ; **passe close — 81 portes, 76 vertes, 5 rouges, 1 h 52** ;
-  INDEX/README ; **bilan de 8 h en préparation**.
-- **Ce que font les autres** : **N2**, **S**, **Pensée** ; **D/R/A close**.
+  INDEX/README ; **bilan de 8 h**.
+- **Ce que font les autres** : **N2**, **S**, **Pensée**.
 - **Prochaine action** : intégrer les lignes B13/N2/S ; tenir le **bilan de 8 h**.
 - **Bloquants** : aucun ; GPU à N2 (les deux), claims dans le registre.
 - **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
@@ -73,12 +73,12 @@
 
 - **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
 - **Rôle** : **N2** — la fenêtre à **1 024** et la fenêtre sur la **production**.
-- **Plan** : 256/512/1 024, production, 2 048 ; fiche par fait.
+- **Plan** : loi, production, 2 048 ; fiche par fait.
 - **Ambition** : la longueur d'abord.
 - **Stratégie** : budgets contrôlés, mêmes bancs.
-- **Objectif final** : une production qui tient à 1 000 octets.
-- **Ce qu'elle fait** : la **loi de la fenêtre** et la **production** (N2.ac + RoPE 512/1 024,
-  saturation à 1 024 : 2,5846) ; **2 048** en cours.
+- **Objectif final** : une production qui tient au long.
+- **Ce qu'elle fait** : la **loi de la fenêtre** jusqu'à 2 048 et la **production** (N2.ac +
+  RoPE 512/1 024) ; le compute à fenêtre 1 024 en cours.
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
 - **Prochaine action** : **2 048**, puis un point de compute.
 - **Bloquants** : aucun.
@@ -91,13 +91,13 @@
 ## Ce qui est en cours
 
 - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
-- **R1 — la fenêtre native** : **R1.1** RoPE **3,2545** à 1 000 (absolue **8,2024**) ; **R1.2** :
-  la loi à octets constants — 1 000 octets 3,2545 → 3,0107 → **2,9950** (256/512/1 024) —
-  [`fenêtre`](../../reports/rapport-n2-fenetre.md),
-  [`n2-r11`](../../reports/rapport-n2-r11.md).
+- **R1 — la fenêtre native** : loi mesurée jusqu'à **2 048** (1 000 octets : **2,9950** à 1 024) ;
+  **1 024 est le point d'équilibre** à octets constants ; à 20 000 pas elle donne **2,9955** à
+  128 et **2,6256** à 1 000 —
+  [`2048`](../../reports/rapport-n2-r12-2048.md), [`fenêtre`](../../reports/rapport-n2-fenetre.md).
 - **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; banque à **0**.
-- **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (< 2,5 non atteinte ; 1,3–2,7 M pas) ;
-  **la fenêtre bat le compute** : N2.ac + RoPE 512 (1 h) donne **3,1588 / 2,9096 / 2,7607** à
+- **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (< 2,5 non atteinte) ;
+  **la fenêtre bat le compute** : N2.ac + RoPE 512 (1 h) donne **3,1588 / 2,7607** à
   128/512/2 000 — [`fenêtre`](../../reports/rapport-n2-fenetre.md),
   [`n2-200k`](../../reports/rapport-n2-200k.md).
 - **Pensée — B13** : **140/140**, gold **432**, **116 liens** ; minute 26, mobile/bouge **faibles** ; [`vrais-absents`](../../reports/rapport-pensee-vrais-absents.md),
@@ -109,11 +109,11 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **82** (passe du 02/11 19 h 32 : **81, 76/5** ; **82e `porte-ressources`** verte, comptée à la suivante) | `tools/porte-*.sh` |
+| portes | **82** (passe 19 h 32 : **81, 76/5** ; **82e `porte-ressources`** verte, comptée à la suivante) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **570** / **656** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **571** / **658** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **119** (hors archive et README) | `docs/**/*.md` |
-| dernière passe | **02/11 19 h 32** (81, 76/5 ; 4 connues + `porte-tableaux` **rejouée verte**) | `docs/pilotage/references-non-regression.md` |
+| dernière passe | **02/11 19 h 32** (81, 76/5 ; 4 connues + `porte-tableaux` verte) | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
 

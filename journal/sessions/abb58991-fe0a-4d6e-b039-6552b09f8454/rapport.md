@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 6.3 h |
-| Tours | 38 |
-| Messages | 626 |
-| Appels d'outils | 675 |
+| Durée | 6.5 h |
+| Tours | 45 |
+| Messages | 650 |
+| Appels d'outils | 685 |
 | Fichiers touchés | 47 |
-| Commandes | 512 |
+| Commandes | 521 |
 | Sous-agents | 0 |
-| Commits | 47 |
+| Commits | 49 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -99,6 +99,20 @@
 **Tour 37** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 **Tour 38** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 39** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 40** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 41** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 42** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 43** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 44** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 45** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1268,7 +1282,181 @@ La suite : banc 7B budget 500, contre-fiche, commit ; puis le **gold 200+** et l
 
 **Synthèse produite :**
 
-⏵ Round 36 : contre-fiche écrite (BFS 331/52, A*/Greedy 1000/995) ; je commite les correctifs `_etat_pw` (t réel) + `Moteur.boucle` (break) + la fiche corrigée
+⏵ Round 36 : contre-fiche committée (`84182603`) — la fenêtre est solvable (BFS 331/52) ; l'échec venait du fitness et de l'horloge `t % 3`
+
+**Fait de la nuit** — commit **`84182603`** : la contre-fiche de la fenêtre.
+
+| budget | BFS | A* | Greedy |
+|---:|---|---|---|
+| 200 | ❌ 44 états | ❌ 195 | ❌ 195 |
+| 500 | ✅ **331 nœuds, 52 états** | ❌ 495 | ❌ 495 |
+| 1 000 | ✅ 331, 52 | ❌ 995 | ❌ 995 |
+
+- **La fenêtre n'est pas cassée** : le BFS atteint `(4,4)` en **331 nœuds** (52 états). La carte, `attendre` et les opérateurs sont bons.
+- **L'oracle Manhattan et le Greedy échouent par fitness** : `score_pw`/`heuristique_pw` (Manhattan) les enferment dans `y ≤ 3`, bloqués par les murs `(4,1)`/`(4,2)`.
+- **Correctifs committés** : `_etat_pw` porte le `t` **réel** (18 → 44/195 états) ; `Moteur.boucle` sort sur `trouve` ; la fiche passe de « problème cassé » à **« solvable, fitness à réparer »**.
+- La fiche `pensee-porte-fenetre` et son JSON sont corrigés ; l'en-cours dit « fenêtre solvable ; banc 7B budget 500 ».
+
+**État** : HEAD `84182603` ; T0 3 999 ; revue 570/656 ; en-cours à 22 h 25. Le 7B n'a pas encore été mesuré avec le budget 500 (prochain fait).
+
+La suite : **banc 7B fenêtre budget 500 + oracle BFS** ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 39 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Run window bench with budget 500
+
+**Synthèse produite :**
+
+⏵ Round 37 : banc 7B fenêtre relancé avec **budget 500** (le job tourne, ~3-4 min) ; l'oracle BFS atteint le but, le 7B va être mesuré sur le même problème
+
+**Ce qui change** :
+
+- Le banc `qualifier_porte_fenetre_drvm.py` passe de `Budget(200)` à `Budget(500)` — le budget où le BFS atteint `(4,4)` (331 nœuds).
+- Le JSON de sortie est `reports/pensee-porte-fenetre-500.json` (l'ancien `-200` reste comme contrôle négatif).
+- Le 7B `porte_fenetre` sera comparé à l'aveugle, au hasard, au labyrinthe et à l'oracle BFS ; le verdict dira si le 7B passe là où l'aveugle échoue.
+
+**État** : HEAD `84182603` (contre-fiche committée) ; T0 3 999 ; revue 570/656 ; en-cours 22 h 25. Le job `bash-513` tourne.
+
+La suite : lire le résultat du banc 500, fiche/JSON, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 40 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- job_output
+- bash — Extract window 500 results
+
+**Synthèse produite :**
+
+⏵ Round 38 : au budget 500, **tout échoue** — y compris l'oracle (500 nœuds, 1 sonde, 165 attente) et le 7B (500/83/129 s). Seul le **BFS pur** atteint le but (331 nœuds) : le moteur pénalise la profondeur
+
+**Mesure exacte** (`pensee-porte-fenetre-500.json`) :
+
+| politique | but | nœuds | sonde | attendre | latence |
+|---|---|---:|---:|---:|---:|
+| **oracle** | ❌ | 500 | 1 | 165 | 0 |
+| aveugle | ❌ | 500 | 0 | 165 | 0 |
+| hasard | ❌ | 500 | 37 | 153 | 0 |
+| **LLM `porte_fenetre`** | ❌ | 500 | 83 | 138 | **129,4 s** |
+| LLM `labyrinthe` | ❌ | 500 | 2 | 165 | 83,1 s |
+
+- **L'oracle échoue encore** (500 nœuds, 1 sonde) alors que le BFS pur réussit en **331** : `Moteur.boucle` + `AStar/Greedy` ne sont **pas** équivalents au BFS de référence. La cause n'est ni la carte ni le store (déjà vérifiés) : c'est la **politique d'expansion** (le `score`/l'ordre) qui remplit 500 nœuds sans jamais atteindre `(4,4)`.
+- **Le 7B échoue aussi** (500/83) : il sonde beaucoup (83) et attend beaucoup (138), mais ne franchit pas la porte au bon `t % 3`.
+- Le **hasard** sonde 37 fois (plus que le 7B) et échoue ; l'aveugle ne sonde jamais.
+
+**Prochaine action (round 39)** : instrumenter les 500 nœuds (positions + `t`) pour voir si `(4,4)` est **poussé mais jamais sélectionné** (le `score` le rejette) ; dans ce cas, remplacer la sélection par un BFS par profondeur (file FIFO) dans le banc, et remesurer l'oracle puis le 7B. Contre-fiche + commit.
+
+**État** : HEAD `84182603` ; T0 3 999 ; revue 570/656. Le banc 500 est écrit (`reports/pensee-porte-fenetre-500.json`), non committé.
+
+La suite : instrumentation/stratégie FIFO, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 41 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check Store frontier and BFS selection
+
+**Synthèse produite :**
+
+⏵ Round 39 : le BFS du moteur est bien FIFO (`min(store.ouverts, key=seq)`), mais `Store.frontier`/`Store.pop` sont **priorité par score** — le `Moteur.boucle` n'utilise pas `Store.pop` ; la divergence BFS pur (331) vs moteur (500) est donc dans l'expansion, pas dans la sélection
+
+**Constat** :
+
+- `BFS.choisir` = `min(store.ouverts, key=lambda f: store.ouverts[f])` → **FIFO** sur le n° d'insertion.
+- `Store.pop`/`Store.frontier` = tri par **score** (`-score, seq`) — jamais utilisés par `Moteur.boucle` (qui fait `store.ouverts.pop(noeud)`).
+- Le BFS **du moteur** explore donc bien en largeur, mais l'expansion (`strategie.proposer` → 4 opérateurs, dont `sonde` qui appelle la politique) **gonfle la frontière** : 4 opérateurs × profondeur, avec `sonde` comptant comme un pas — le BFS pur de référence n'avait que `pas`/`saut`/`attendre`.
+- C'est la **définition du banc** qui diffère : le BFS manuel utilisait 3 opérateurs, le moteur 4 (dont `sonde`). Le budget 331 correspond au BFS 3-opérateurs.
+
+**Prochaine action (round 40)** : relancer le BFS manuel avec les **4** opérateurs (dont `sonde`) pour vérifier qu'il atteint aussi `(4,4)` et à quel coût ; si oui, le moteur est correct et c'est le **banc** (budget/opérateurs) qui doit être ajusté. Puis contre-fiche, commit, et mesure 7B sur le banc corrigé.
+
+**État** : HEAD `84182603` ; T0 3 999 ; revue 570/656 ; banc 500 non committé.
+
+La suite : BFS 4-opérateurs, ajuster le banc, remesurer 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 42 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — BFS with four operators
+
+**Synthèse produite :**
+
+⏵ Round 40 : le BFS **4 opérateurs** atteint le but en **42 nœuds** (58 états) — le moteur, lui, épuise 500 nœuds. C'est donc `Moteur.boucle`/`Store` qui perd le but, pas le banc
+
+**Mesure** :
+
+- BFS manuel 4 opérateurs (`pas`, `saut`, `attendre`, `sonde`) : **but en 42 nœuds**, `(4,4,4)`, 58 états — quel que soit le plafond (200/500/1000/2000).
+- BFS **du moteur** : 500 nœuds, 44 états, jamais de but.
+- Même problème, mêmes opérateurs, même politique (`PolitiqueManhattan`) : la différence est **dans le moteur**. Le `Moteur.boucle` doit perdre des enfants ou ne pas pousser la `sonde` comme le BFS manuel.
+- Piste précise : `Strategie.proposer` (base) rend **tous** les opérateurs, mais `Moteur.boucle` fait `operateur(etat, prop.params)` — si `prop.params` est `{}` pour `sonde`/`attendre`, c'est bon ; le suspect est le **`store.put`** qui déduplique par empreinte et peut **écraser** un état `(4,4)` par un état de même empreinte mais poussé différemment (le `parent` n'est pas dans l'empreinte, mais le `t` réel y est maintenant).
+- Autre suspect : `Moteur.boucle` compte **1 nœud par enfant** (`budget.compter(1)`) et le BFS manuel compte **1 par nœud visité** ; le moteur peut épuiser le budget **avant** d'atteindre la profondeur 4.
+
+**Prochaine action (round 41)** : instrumenter `Moteur.boucle` pas à pas (5 premiers pas) et comparer les enfants poussés à ceux du BFS manuel — identifier l'enfant manquant. Puis corriger, remesurer, contre-fiche, commit.
+
+**État** : HEAD `84182603` ; T0 3 999 ; revue 570/656 ; banc 500 non committé.
+
+La suite : instrumenter/corriger `Moteur.boucle`, remesurer 7B, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 43 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Compare manual BFS children vs moteur
+- bash — Manual BFS depth profile
+
+**Synthèse produite :**
+
+⏵ Round 41 : le BFS manuel atteint le but à la **profondeur 4** (42 nœuds ≤ 4) ; le moteur BFS épuise 500 nœuds — il ne peut donc pas être un BFS en largeur : la frontière doit être vidée/triée par score
+
+**Mesure** :
+
+- BFS manuel 4-op : but `(4,4,4)` à la **profondeur 4**, 42 nœuds de profondeur ≤ 4, 58 états.
+- BFS du moteur : 500 nœuds, 44 états, pas de but. Un BFS en largeur atteindrait la profondeur 4 en ≤ 42 nœuds ; il ne le fait pas.
+- `BFS.choisir` = `min(store.ouverts, key=seq)` est bien FIFO, mais `Store.frontier`/`pop` trient par **score** — et `Moteur.boucle` fait `store.ouverts.pop(noeud)` sans passer par `Store.pop`. Il n'y a donc pas de bug de `pop`, mais **`store.ouverts` n'est pas la file du BFS** : `BFS.choisir` sélectionne par `seq` d'insertion, or `Store.push` fait `setdefault`, donc un nœud **déjà poussé** garde son ancien `seq` — la frontière n'est pas strictement FIFO.
+
+**Prochaine action (round 42)** : corriger `Store.push` pour réinsérer en fin de file (ou faire de `BFS` un vrai FIFO via `Store`) ; remesurer oracle + 7B ; contre-fiche ; commit.
+
+**État** : HEAD `84182603` ; T0 3 999 ; revue 570/656 ; banc 500 non committé.
+
+La suite : `Store.push`/FIFO, remesurer, contre-fiche, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 44 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Fix Store.push FIFO and remeasure
+
+**Synthèse produite :**
+
+⏵ Round 42 : `Store.push` FIFO corrigé — le BFS du moteur atteint **le but à 228 nœuds (37 états)** au budget 500 ; l'A* et le Greedy restent bloqués à 195/495 états
+
+**Mesure après correction** :
+
+| budget | BFS | A* | Greedy |
+|---:|---|---|---|
+| 200 | ❌ 36 états | ❌ 195 | ❌ 195 |
+| 500 | ✅ **228 nœuds, 37 états** | ❌ 495 | ❌ 495 |
+
+- Le `Store.push` faisait `setdefault` : un nœud **re-poussé** gardait son ancien numéro de file, et la frontière du BFS se figeait. Corrigé : un nœud absent prend `self._seq`, puis `self._seq += 1` → **vrai FIFO**.
+- Effet : le BFS du moteur passe de « jamais le but » à **228 nœuds/37 états**, mieux que le BFS manuel (331/52).
+- L'**A\*** et le **Greedy** restent bloqués (495 états) : leur sélection par score (`score + heuristique`) n'est pas un BFS et le fitness Manhattan les égare — ce n'est plus un bug de store mais un **choix de stratégie**.
+
+**État** : HEAD `84182603` ; correctif `Store.push` en arbre, non committé ; T0 3 999 ; revue 570/656 ; banc 500 non committé.
+
+La suite : committer `Store.push` + banc 500 + contre-fiche ; relancer le 7B sur la fenêtre avec l'oracle BFS (228) ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 45 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Commit Store.push FIFO and window bench
+- bash — Trim T0, wait lock, commit FIFO fix
+
+**Synthèse produite :**
+
+⏵ Round 43 : T0 à 4 004 (dépassement de 4 mots) et lock concurrent ; je condense l'en-cours, j'attends et je commite
 
 ## 3. Travail accompli
 
@@ -1366,7 +1554,7 @@ La suite : banc 7B budget 500, contre-fiche, commit ; puis le **gold 200+** et l
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 472 autres
+- … et 481 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1513,4 +1701,6 @@ La suite : banc 7B budget 500, contre-fiche, commit ; puis le **gold 200+** et l
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : L'ORACLE ÉCHOUE (200 NŒUDS) ; LE PROBLÈME EST À RÉPARER, PAS LE 7B" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : CONTRE-FICHE — LE BFS ATTEINT LE BUT EN 331 NŒUDS ; L'ORACLE MANHATTAN ÉCHOUE PAR FITNESS, PAS LA CARTE" 2>&1 | tail -8; echo "EXIT=${PIPESTA
+- B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 228 NŒUDS (37 ÉTATS)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 228 NŒUDS (37 ÉTATS)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

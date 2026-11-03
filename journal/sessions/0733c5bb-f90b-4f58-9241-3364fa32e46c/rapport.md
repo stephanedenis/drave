@@ -7,14 +7,14 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 6.3 h |
+| Durée | 6.5 h |
 | Tours | 2 |
-| Messages | 335 |
-| Appels d'outils | 340 |
-| Fichiers touchés | 22 |
-| Commandes | 250 |
+| Messages | 352 |
+| Appels d'outils | 356 |
+| Fichiers touchés | 23 |
+| Commandes | 265 |
 | Sous-agents | 0 |
-| Commits | 9 |
+| Commits | 10 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -84,7 +84,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*100 appels d'outils.* Actions notables :
+*116 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -100,11 +100,11 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Condense section and fix counters
 - bash — Trim header duplication and recheck gates
 - bash — Read required session fields
-- … et 63 autres
+- … et 79 autres
 
 **Synthèse produite :**
 
-⏵ Évaluations : 1 024 à 20 k pas (contrôle) et 2 048 à octets constants
+⏵ Commit du fait « fenêtre 2 048 » et point d'équilibre
 
 ## 3. Travail accompli
 
@@ -134,6 +134,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 | `/home/stephane/GitHub/Qtrinet/work/n2ac/chaine_2048.sh` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-n2-fenetre.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/work/n2ac/agrege_fenetre.py` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/reports/rapport-n2-r12-2048.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -177,7 +178,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 210 autres
+- … et 225 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -289,10 +290,17 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T2** `[still running after 60000ms; moved to background job bash-246]`
 - **T2** `[still running after 60000ms; moved to background job bash-249]`
 - **T2** `[still running after 60000ms; moved to background job bash-250]`
+- **T2** `0, 370 MiB, 0 %`
+- **T2** `1, 10068 MiB, 100 %`
+- **T2** `1024 (2,5k pas, 20,5 Mo) {'128': 3.3878, '256': 3.2542, '512': 3.1098, '1000': 2.995, '2000': 2.9449}`
+- **T2** `1024 (20k pas, 164 Mo) {'128': 2.9955, '256': 2.8513, '512': 2.7201, '1000': 2.6256, '2000': 2.5757, '4000': 2.5429}`
+- **T2** `2048 (1,25k pas, 20,5 Mo) {'128': 3.4179, '256': 3.2924, '512': 3.145, '1000': 3.0202, '2000': 2.963, '4000': 2.9265}`
+- **T2** `> **octets constants** (20,5 Mo vus sur `data/wiki_fr`), la fenêtre entraînée paie jusqu'à`
+- **T2** `[still running after 60000ms; moved to background job bash-265]`
 
 ## 5. Erreurs rencontrées
 
-8 sorties en erreur ou divergentes. Les premières :
+9 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : journal/sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md:20686:- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date '+%H:%M'; tail -2 work/n2w/mix-60k.
 - **T1** : (no output) [exit code: 1]
@@ -302,6 +310,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** : 560 647 [stderr] Traceback (most recent call last):   File "<stdin>", line 21, in <module> AssertionError [exit code: 1]
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 23, in <module> AssertionError [exit code: 1]
 - **T2** : 21:26:35 pas   3950 · perte 0.9907 · PPL val 2.701 · 1684 s pas   8950 · perte 1.0638 · PPL val 2.673 · 4136 s [exit code: 2]
+- **T2** : fiche corrigée 0 [exit code: 1]
 
 ## 6. Commits
 
@@ -314,4 +323,5 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib, re p = pathlib.Path("docs/pilotage/en-cours.md") t = p.read_text(encoding="utf-8") md = len
 - cd /home/stephane/GitHub/Qtrinet && git commit -q -- reports/rapport-n2-fenetre.md reports/n2-fenetre.json docs/pilotage/en-cours.md -F - <<'MSG' FENÊTRE — LE C
 - cd /home/stephane/GitHub/Qtrinet && git commit -q -F - -- reports/rapport-n2-fenetre.md reports/n2-fenetre.json docs/pilotage/en-cours.md <<'MSG' FENÊTRE — LE C
+- cd /home/stephane/GitHub/Qtrinet && git add reports/rapport-n2-r12-2048.md reports/n2-r12-2048.json docs/pilotage/en-cours.md && git commit -q -F - -- reports/r
 

@@ -1,0 +1,198 @@
+{
+ "loi_256": {
+  "fichier": "rope-20k.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.3696,
+  "L192": 3.3217,
+  "L256": 3.3217,
+  "L384": 3.33,
+  "L512": 3.2892,
+  "L1000": 3.2545
+ },
+ "loi_512": {
+  "fichier": "rope512-5k.pt",
+  "val": "data/wiki_fr/propre",
+  "positions": "rope",
+  "L128": 3.3399,
+  "L192": 3.2747,
+  "L256": 3.2271,
+  "L384": 3.17,
+  "L512": 3.099,
+  "L1000": 3.0107
+ },
+ "loi_1024": {
+  "fichier": "rope1024-2.5k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.3878,
+    "256": 3.2542,
+    "512": 3.1098,
+    "1000": 2.995,
+    "2000": 2.9449
+   },
+   "val_big": {
+    "128": 3.7164,
+    "256": 3.5606,
+    "512": 3.4157,
+    "1000": 3.3064,
+    "2000": 3.2826
+   }
+  },
+  "permute_fr": 215.1536,
+  "litterature": 6.1179,
+  "anglais": 9.6864,
+  "wikitext2": 10.5612,
+  "corpus_propre": 8.1879
+ },
+ "loi_2048": {
+  "fichier": "rope2048-1.25k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 3.4179,
+    "256": 3.2924,
+    "512": 3.145,
+    "1000": 3.0202,
+    "2000": 2.963,
+    "4000": 2.9265
+   },
+   "val_big": {
+    "128": 3.743,
+    "256": 3.5804,
+    "512": 3.4323,
+    "1000": 3.314,
+    "2000": 3.2733,
+    "4000": 3.2839
+   }
+  },
+  "permute_fr": 204.4441,
+  "litterature": 6.1698,
+  "anglais": 9.8786,
+  "wikitext2": 11.0329,
+  "corpus_propre": 8.3437
+ },
+ "loi_1024_20k": {
+  "fichier": "rope1024-20k.pt",
+  "params": 34301224,
+  "positions": "rope",
+  "ppl": {
+   "val_fr": {
+    "128": 2.9955,
+    "256": 2.8513,
+    "512": 2.7201,
+    "1000": 2.6256,
+    "2000": 2.5757,
+    "4000": 2.5429
+   },
+   "val_big": {
+    "128": 3.3086,
+    "256": 3.1437,
+    "512": 3.015,
+    "1000": 2.9055,
+    "2000": 2.8726,
+    "4000": 2.8828
+   }
+  },
+  "permute_fr": 195.3449,
+  "litterature": 5.6071,
+  "anglais": 7.8817,
+  "wikitext2": 8.7751,
+  "corpus_propre": 7.7208
+ },
+ "meme_texte_1024": {
+  "fichier": "rope1024-2.5k.pt",
+  "positions": "rope",
+  "cible": 128,
+  "contextes": [
+   256,
+   512,
+   1024,
+   2000
+  ],
+  "ppl": {
+   "256": 2.9197,
+   "512": 2.8125,
+   "1024": 2.7847,
+   "2000": 2.7837
+  }
+ },
+ "miroir_1024": {
+  "fichier": "rope1024-2.5k.pt",
+  "positions": "rope",
+  "fenetre": 1024,
+  "contexte": 512,
+  "code": "K7Q2M9XA4B1Z8W3C",
+  "distances": {
+   "16": 0.0078,
+   "64": 0.0,
+   "128": 0.0,
+   "200": 0.0,
+   "240": 0.0,
+   "255": 0.0,
+   "300": 0.0156,
+   "400": 0.0
+  }
+ },
+ "entrainement_2048": {
+  "modele": "drave-n0-rope",
+  "parametres": 34301224,
+  "corpus": "data/wiki_fr/propre/train.txt",
+  "octets": 186089472,
+  "pas": 1250,
+  "seq": 2048,
+  "lot": 8,
+  "lr": 0.0003,
+  "graine": 1,
+  "window": 2048,
+  "positions": "rope",
+  "init": "work/n2j/base-wiki-45m.pt",
+  "perte_finale": 1.1469416618347168,
+  "ppl_val": 3.020669409373622,
+  "jetons_val": 131072,
+  "tetes": true,
+  "drvm": "work/n2ac/rope2048-1.25k.drvm",
+  "sha256_drvm": "efbcbd4b18bc91ae9192372fd2a1fa64af0aeeaa2400c6eee478851d06076c69",
+  "duree_s": 1267.606616973877
+ },
+ "entrainement_1024_20k": {
+  "modele": "drave-n0-rope",
+  "parametres": 34301224,
+  "corpus": "data/wiki_fr/propre/train.txt",
+  "octets": 186089472,
+  "pas": 17500,
+  "seq": 1024,
+  "lot": 8,
+  "lr": 0.0003,
+  "graine": 1,
+  "window": 1024,
+  "positions": "rope",
+  "init": "work/n2ac/rope1024-2.5k.pt",
+  "perte_finale": 1.0205986499786377,
+  "ppl_val": 2.66090749837826,
+  "jetons_val": 65536,
+  "tetes": true,
+  "drvm": "work/n2ac/rope1024-20k.drvm",
+  "sha256_drvm": "76628995a51cd54d52d564112f557bacfbea5f6119947c7b20f710e060f4e9af",
+  "duree_s": 8000.274173498154
+ },
+ "dispositif": {
+  "modele": "drave-n0 34,3 M (384/512), RoPE, seq = fenêtre",
+  "corpus": "data/wiki_fr/propre/train.txt (186 Mo) + canal",
+  "budget": "20,5 Mo vus pour la loi (20 000 / 5 000 / 2 500 / 1 250 pas) ; 164 Mo pour le run à 20 000 pas",
+  "controles": [
+   "même texte 256/512/1 024/2 000",
+   "permutation des octets",
+   "miroir de copie (muet)"
+  ],
+  "limites": [
+   "un lancement par point",
+   "pas d'optimisation non contrôlés à octets constants",
+   "2 048 n'a que 1 250 pas",
+   "le run à 20 000 pas multiplie aussi les octets (×8)"
+  ]
+ }
+}

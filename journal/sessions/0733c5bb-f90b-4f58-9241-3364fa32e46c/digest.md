@@ -5692,3 +5692,228 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-250", "timeout_ms": 600000, "wait": true}`
+
+  ```
+"128": 2.9955,
+   "256": 2.8513,
+   "512": 2.7201,
+   "1000": 2.6256,
+   "2000": 2.5757,
+   "4000": 2.5429
+   "128": 3.3086,
+   "256": 3.1437,
+   "512": 3.015,
+   "1000": 2.9055,
+   "2000": 2.8726,
+   "4000": 2.8828
+ "permute_fr": 195.3449,
+ "litterature": 5.6071,
+ "anglais": 7.8817,
+ "wikitext2": 8.7751,
+ "corpus_propre": 7.7208
+=== work/n2ac/rope2048-1.25k.pt ===
+   "128": 3.4179,
+   "256": 3.2924,
+   "512": 3.145,
+   "1000": 3.0202,
+   "2000": 2.963,
+   "4000": 2.9265
+   "128": 3.743,
+   "256": 3.5804,
+   "512": 3.4323,
+   "1000": 3.314,
+   "2000": 3.2733,
+   "4000": 3.2839
+ "permute_fr": 204.4441,
+ "litterature": 6.1698,
+ "anglais": 9.8786,
+ "wikitext2": 11.0329,
+ "corpus_propre": 8.3437
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-246 (bash: sleep 1500; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; tail -1 work/n2ac/rope2048-12.5k.log 2>/dev/null; tail -1 work/n2ac/rope1024-20k.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Lancement production 2 048 et rédaction de la fiche « fenêtre 2 048 et le point d'équilibre »
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && nohup bash work/n2ac/chaine_2048_mix.sh 0 > work/n2ac/chaine_2048_mix.out 2>&1 & echo \"mix2048 lancé pid $!\"; sleep 30; date '+%H:%M:%S'; tail -1 work/n2ac/mix2048-3.75k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --for … [63 caractères tronqués]`
+
+  ```
+mix2048 lancé pid 722254
+22:39:30
+0, 370 MiB, 0 %
+1, 10068 MiB, 100 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\ndef lire(p):\n    return json.loads(pathlib.Path(p).read_text())\na = lire(\"work/n2ac/eval-rope1024-2.5k.json\")\nb = lire(\"work/n2ac/eval-rope1024-20k.json\")\nc = lire(\"work/n2ac/eval-rope2048-1.25k.json\") … [254 caractères tronqués]`
+
+  ```
+1024 (2,5k pas, 20,5 Mo) {'128': 3.3878, '256': 3.2542, '512': 3.1098, '1000': 2.995, '2000': 2.9449}
+1024 (20k pas, 164 Mo) {'128': 2.9955, '256': 2.8513, '512': 2.7201, '1000': 2.6256, '2000': 2.5757, '4000': 2.5429}
+2048 (1,25k pas, 20,5 Mo) {'128': 3.4179, '256': 3.2924, '512': 3.145, '1000': 3.0202, '2000': 2.963, '4000': 2.9265}
+  ```
+
+### 🤖 Assistant
+
+⏵ Préparation : production à 1 024 avec 30 k pas (le compute avec la fenêtre)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/chaine_prod1024_long.sh <<'EOF'\n#!/usr/bin/env bash\n# chaine_prod1024_long.sh — le compute AVEC la fenêtre : la production à 1 024, 30 000 pas.\n#\n# Part de mix1024-7.5k (déjà 7 500 pas à 1 024) et ajoute 22 500 pas → 368 Mo vus au  … [849 caractères tronqués]`
+
+  ```
+préparé
+22:39:51
+  ```
+
+### 🤖 Assistant
+
+⏵ Compléments à 4 000 octets pour les fenêtres 256 et 512
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && for m in \"work/n2ac/rope-20k.pt\" \"work/n2ac/rope512-5k.pt\"; do echo \"=== $m ===\"; PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py $m --rope --longueurs 4000 --sortie /tmp/x.json 2>&1 | tail -2; done", "descri … [62 caractères tronqués]`
+
+  ```
+=== work/n2ac/rope-20k.pt ===
+  L4000 : 3.2305
+{"fichier": "rope-20k.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L4000": 3.2305}
+=== work/n2ac/rope512-5k.pt ===
+  L4000 : 2.9447
+{"fichier": "rope512-5k.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L4000": 2.9447}
+  ```
+
+- **write** `{"content": "# R1.2 — La fenêtre 2 048 et le point d'équilibre : à octets constants, 1 024 gagne ; à pas constants, plus de données gagnent\n\n> **Ligne de roadmap** : R1 (la fenêtre native) · **Date** : 2026-11-03 · **Verdict** : à\n> **octets constants** (20,5 Mo vus sur `data/wiki_fr`), la fenêtr … [6881 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/reports/rapport-n2-r12-2048.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/rope1024-2.5k.pt --rope --longueurs 4000 --sortie /tmp/x.json 2>&1 | tail -2; python3 -c \"\nimport json\nfor f in ('work/n2ac/rope1024-2.5k.pt.json','work/ … [275 caractères tronqués]`
+
+  ```
+L4000 : 2.9108
+{"fichier": "rope1024-2.5k.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L4000": 2.9108}
+rope1024-2.5k.pt.json pas 2500 duree 1137 s ppl_val 3.0529
+rope1024-20k.pt.json pas 17500 duree 8000 s ppl_val 2.6609
+rope2048-1.25k.pt.json pas 1250 duree 1268 s ppl_val 3.0207
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction des chiffres et des comparaisons (même corpus) dans la fiche
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-r12-2048.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"| **1 024 (2 500 pas)** | 3,3878 | 3,1098 | **2,9950** | **2,9449** | **2,9417** |\",\n              \"| **1 0 … [3312 caractères tronqués]`
+
+  ```
+fiche corrigée
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-r12-2048.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"**2,048 ne la bat pas** (2,9630) : à budget d'octets fixé, doubler encore la fenêtre divise les\n> **pas** par d … [1295 caractères tronqués]`
+
+  ```
+# R1.2 — La fenêtre 2 048 et le point d'équilibre : à octets constants, 1 024 gagne ; à pas constants, plus de données gagnent
+
+> **Ligne de roadmap** : R1 (la fenêtre native) · **Date** : 2026-11-03 · **Verdict** : à
+> **octets constants** (20,5 Mo vus sur `data/wiki_fr`), la fenêtre entraînée paie jusqu'à
+> **1 024** — à 2 000 octets, 3,2459 (fenêtre 256) → 2,9728 (512) → **2,9449** (1 024) — et
+> **2 048 ne la bat pas** (2,9630) : à budget d'octets fixé, doubler encore la fenêtre divise les
+> **pas** par deux (1 250 contre 2 500) et le gain s'annule. À **pas constants** (20 000), la même
+> recette à fenêtre **1 024** voit **8× plus d'octets** et **écrase** tout : **2,9955** à 128
+> octets, **2,6256** à 1 000, **2,5429** à 4 000 — le meilleur modèle natif mesuré à ce jour, et
+> il est à **0,10** de la porte 2,5 en domaine. La fenêtre et le compute ne s'opposent pas : la
+> fenêtre **rend chaque octet plus utile**, et c'est le produit des deux qui compte.
+
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"reports/rapport-n2-r12-2048.md\")\nt = p.read_text(encoding=\"utf-8\")\nvieux = \"\"\"— le meilleur modèle natif mesuré à ce jour, et\n> il est à **0,10** de la porte 2,5 en domaine. La fenêtre et l … [641 caractères tronqués]`
+
+  ```
+verdict corrigé
+> recette à fenêtre **1 024** voit **8× plus d'octets** et **écrase** tout : **2,9955** à 128
+> octets, **2,6256** à 1 000, **2,5429** à 4 000 — à **0,13** et **0,04** de 2,5 en domaine
+> (`val_fr`, pas le corpus propre : ce n'est pas la porte, c'en est le voisinage). La fenêtre et
+> le compute ne s'opposent pas : la fenêtre **rend chaque octet plus utile**, et c'est le produit
+> des deux qui compte.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nsrc = {\n \"loi_256\": \"work/n2ac/courbe-rope.json\",\n \"loi_512\": \"work/n2ac/courbe-rope512-5k.json\",\n \"loi_1024\": \"work/n2ac/eval-rope1024-2.5k.json\",\n \"loi_2048\": \"work/n2ac/eval-rope2048-1.25k. … [1358 caractères tronqués]`
+
+  ```
+reports/n2-r12-2048.json · 9 source(s)
+22:41:54
+pas   1050 · perte 1.1062 · PPL val 2.760 · 1064 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls -la work/n2ac/rope2048-12.5k.log 2>/dev/null; cat work/n2ac/chaine_2048_wiki.out; ps -eo pid,etime,cmd --no-headers | grep \"[e]ntrainer_rope\" | cut -c1-100", "description": "Check 2048 phase 2 status"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 1550  2 nov 22:41 work/n2ac/rope2048-12.5k.log
+rope2048-1.25k fini 22:22:47
+ 713516       19:11 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki
+ 721419       05:39 bash -c OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git 
+ 722257       02:57 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus data/wiki
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && tail -3 work/n2ac/rope2048-12.5k.log; echo \"---\"; grep -c \"pas \" work/n2ac/rope2048-12.5k.log", "description": "Read 2048 phase 2 log tail"}`
+
+  ```
+pas    950 · perte 1.0629 · PPL val 2.774 · 963 s
+pas   1000 · perte 1.0498 · PPL val 2.766 · 1014 s
+pas   1050 · perte 1.1062 · PPL val 2.760 · 1064 s
+---
+22
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à l'état du fait « fenêtre 2 048 » (net-neutre pour T0)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\ni = t.index(\"- **R1 — la fenêtre native**\")\nj = t.index(\"\\n- **S — le banc\", i)\nt = t[:i] + \"\"\"- **R1 — la fenêtre na … [1230 caractères tronqués]`
+
+  ```
+compteurs 571 658
+  T0 max : 4020 mots (budget 4 000)
+     · T0 : 4020 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1646 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"\"\"- **R1 — la fenêtre native** : loi mesurée jusqu'à **2 048** — à 1 000 octets 3,2545 → 3,0107\n  → **2,9950** → … [1202 caractères tronqués]`
+
+  ```
+compacté
+  T0 max : 4010 mots (budget 4 000)
+  ❌ 1 violation(s) :
+     · T0 : 4010 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  en-cours · 1636 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 571 fiche(s) · 658 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\")\nt = p.read_text(encoding=\"utf-8\")\nt = t.replace(\"- **Plan** : 256/512/1 024, production, 2 048 ; fiche par fait.\", \"- **Plan** : loi, production, 2 048 ; fiche pa … [552 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  en-cours · 1626 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit du fait « fenêtre 2 048 » et point d'équilibre
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add reports/rapport-n2-r12-2048.md reports/n2-r12-2048.json docs/pilotage/en-cours.md && git commit -q -F - -- reports/rapport-n2-r12-2048.md reports/n2-r12-2048.json docs/pilotage/en-cours.md <<'MSG'\nFENÊTRE 2 048 — À OCTETS CONSTANTS LE GAIN S' … [1877 caractères tronqués]`

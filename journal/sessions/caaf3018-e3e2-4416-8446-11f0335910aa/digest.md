@@ -6127,3 +6127,68 @@ started background job bash-253
   ```
 
 - **job_output** `{"job_id": "bash-253", "timeout_ms": 1250000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 🤖 Assistant
+
+⏵ Borne d'attente = 10 min ; point et reprise de la cadence
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; git log --oneline -2; python3 tools/sessions.py --status 2>&1 | grep -E \"actif\" | head -4; ls reports/n2-fenetre.json >/dev/null 2>&1 && echo \"json ok\"", "description": "Check status after capped wait"}`
+
+  ```
+22:34
+f9a40785 HUB — LE PLAN PASSE À LA VEILLE : 82e PORTE VALIDÉE, CLAIM veille (cpu1 1, RAM 1), BILAN 08 H
+ba815f43 ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉRENCE
+    0733c5bb-f90b-4f58 · actif    ·  31 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 114 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·   3 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    ·  51 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+json ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Le hub est passé en mode « veille » (autre processus). Je lis le plan pour aligner ma nuit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 1,40p journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md | grep -E \"Heartbeat|Prochaine|veille|État|Plan\" -A1 | head -20", "description": "Read hub plan veille state"}`
+
+  ```
+# Plan de session — le hub, la reprise après reboot
+
+--
+  `tools/porte-sessions.sh`, `tools/index_reports.py`, `tools/surveille_sessions.py`,
+  `journal/sessions/536cd5d6-…/`.
+- **Heartbeat** : 2026-11-02 22:31 EST
+- **Prochaine action** : la 82e porte est **validée** (`ba815f43`), le README/INDEX et la passe
+  sont à jour ; la **veille** des quatre sessions et le **bilan 08 h** (claim `veille`).
+- **Ressources** : `gpu1`, `cpu1` 8 fils, `ram` 8 Gio ; registre `work/ressources.json`.
+--
+- **État** : actif
+- **Plan** : 1) ~~audit des 111 sessions et du pilotage~~ ; 2) ~~plan de session~~ ; 3) **commits par
+  flux** ; 4) **état cohérent** (140/140, gold 432, N2.ac, reboot) ; 5) **mandats** (N2, S, clôture
+  ```
+
+### 🤖 Assistant
+
+⏵ Hygiène des claims : la passe est finie, son claim doit être libéré.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/ressources.py --status 2>&1 | sed -n '/Réservations/,$p' | head -8", "description": "Check active resource claims"}`
+
+  ```
+Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 0733c5bb-f90b-4f58-9241-3364fa32e46c / r12-mix-512-gpu1 : gpu1=exclusive, cpu0=4, ram=10 (prio 1, 180 min)
+    · 536cd5d6 / veille : cpu1=1, ram=1 (prio 2, 600 min)
+  ```
+
+### 🤖 Assistant
+
+⏵ Claims propres (la passe a expiré d'elle-même). J'attends la fin du minuteur de 20 min.
+
+- **job_output** `{"job_id": "bash-253", "timeout_ms": 620000, "wait": true}`
