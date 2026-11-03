@@ -9,12 +9,12 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 6.3 h |
 | Tours | 17 |
-| Messages | 225 |
-| Appels d'outils | 269 |
+| Messages | 227 |
+| Appels d'outils | 271 |
 | Fichiers touchés | 13 |
-| Commandes | 204 |
+| Commandes | 206 |
 | Sous-agents | 0 |
-| Commits | 17 |
+| Commits | 18 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -781,14 +781,16 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 17 — <goal_round> Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) p … [977 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Check state and journal day for 03/11
 - bash — Create 03/11 journal entry and commit
+- bash — Read the Sessions DSH section format
+- bash — Complete journal sections and retry commit
 
 **Synthèse produite :**
 
-⏵ J'ouvre l'entrée de journal du 03/11 avec l'état de la nuit et le point de reprise de 08 h.
+⏵ J'ajoute la section « Sessions DSH » et le lien d'index au journal du 03/11, puis je réessaie le commit.
 
 ## 3. Travail accompli
 
@@ -852,7 +854,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 164 autres
+- … et 166 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1012,4 +1014,5 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES" -m "en-cours : ligne de nuit (claims, release/claim, pas d'attente, 
 - ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE" -- docs/pilotage/en-cours.md; echo "[commit $?]"; echo; echo "== 
 - JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49 ET LE POINT DE REPRISE DE 08 H" -m "Quatre sessions, une passe 76/5 intégrée, un registre à quatre claims
+- JOURNAL — LA NUIT DU 03/11 S'OUVRE : L'ÉTAT DE 21 H 49, LES SESSIONS ET LE POINT DE REPRISE DE 08 H" -m "Quatre sessions, une passe 76/5 intégrée, un registre à
 

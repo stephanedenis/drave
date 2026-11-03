@@ -12,3 +12,14 @@
 - **Pensée/B13** : 140/140 ; porte minute ; gold 432.
 - **Hub** : état 82 portes, INDEX 567, README 2 762/2 800, revue 569/654, T0 3 981/4 000 ; claims tenus.
 - **Reste** : JSON N2 → `porte-tableaux` ; bilan de 08 h.
+
+## Sessions DSH
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 5,4 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
+| `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 4,4 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Pensée — B13 et RSN | 2026-11-02 16:15 | 5,5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 6,2 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
+
+Index des sessions : [`journal/sessions/README.md`](../sessions/README.md).

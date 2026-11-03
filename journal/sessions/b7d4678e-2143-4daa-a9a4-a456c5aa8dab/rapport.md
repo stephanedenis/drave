@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 5.5 h |
-| Tours | 13 |
-| Messages | 534 |
-| Appels d'outils | 557 |
+| Durée | 5.6 h |
+| Tours | 16 |
+| Messages | 548 |
+| Appels d'outils | 565 |
 | Fichiers touchés | 23 |
-| Commandes | 369 |
+| Commandes | 377 |
 | Sous-agents | 0 |
 | Commits | 21 |
 | Compactages de contexte | 0 |
@@ -51,6 +51,12 @@
 **Tour 12** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
 
 **Tour 13** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
+
+**Tour 14** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [731 caractères tronqués]
+
+**Tour 15** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 16** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -435,7 +441,68 @@ La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et
 
 **Synthèse produite :**
 
-⏵ Round 8 : je vérifie les nouveaux commits puis j’attends un événement de session
+⏵ Round 8 : l’état dit la passe close, le hub enchaîne les intégrations
+
+**Commits de la fenêtre**
+- `c4903bc9` — **B13 porte stochastique, 5 graines : 5/5** (labyrinthe 0/1, aveugle 0/1).
+- `decd4cd8` — **INDEX** : les trois fiches de la nuit entrent dans le README curaté (N2 fenêtre, S corpus, B13 porte minute).
+- `12970a4e` — **l'état porte la consigne de nuit** (claims, release/claim, bilan 8 h), plan du hub rafraîchi.
+- `18e19b58` — **T0 revenu à 3 983 mots**, consigne conservée.
+- `89e0c2c5` — `porte-homeostasie` : son message n'exécute plus sa commande (hygiène de porte ; la rouge reste environnementale).
+- **`a49c63dc`** (ma veille) : la section hub d'`en-cours` disait encore la passe « en cours » — elle est **close (81, 76/5, 1 h 52)**, prochaine action « intégrer B13/N2/S et tenir le bilan de 8 h ».
+
+**État vérifié** : revue ✅ **570 fiches / 655 JSON / 82 portes**, en-cours ✅, **T0 3 983/4 000**, T1 ✅ (2 428 mots), porte stricte ✅ (avertissements de claims longs), registre ✅ (seul `nvme_raid` 33 Gio).
+
+**Ce qui reste ouvert** : la **fiche fenêtre N2** et son `n2-fenetre.json` (runs 1 h 30 / 53 min) — le seul rouge non structurel (`porte-tableaux`). Le brouillon du **bilan de 8 h** est prêt dans `work/veille/bilan-08h.md`. La veille continue.
+
+### Tour 14 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1011 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check commits, N2 fiche and runs
+- bash — Gather the night's commits, sessions and claims
+- bash — Snapshot the night for the 8h bilan
+
+**Synthèse produite :**
+
+⏵ Round 9 : instantané de la nuit figé pour le bilan de 8 h
+
+- **25 commits depuis 20 h** : ressources (registre, 82e porte, consigne, T0, INDEX), B13 (minute, bouge, sto, 140/140, homeostasie), S (corpus réel, homographes → v4), N2 (R1.1/R1.2, 200 k, mandat de nuit), passe (registre 76/5, portes datées). L'instantané est dans `work/veille/bilan-08h.md` (flux + hashes clés).
+- **Sessions** : N2 actif (claim `gpu0`+`gpu1`), S actif (claim `cpu1` 4), hub actif (`integration`), Pensée active (`b13-gold`), D/R/A close.
+- **N2** : fiche fenêtre toujours non committée, `n2-fenetre.json` absent ; runs 1 h 34 / 56 min — seul rouge non structurel (`porte-tableaux`).
+- **État** : revue ✅ **570 fiches / 655 JSON / 82 portes**, en-cours ✅, T0 **3 983/4 000**, T1 2 428, porte stricte ✅, registre ✅ (seul `nvme_raid` 33 Gio).
+
+La veille continue : j'intègre les commits au fil de l'eau (le hub tient le rythme) et je tiendrai le **checkpoint de 8 h** avec le brouillon déjà prêt. Rien de bloquant.
+
+### Tour 15 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check events and N2 status
+- bash — Check the finished mix run outputs
+- bash — Log the N2 window progress
+
+**Synthèse produite :**
+
+⏵ Round 10 : la fenêtre 1 024 s’approche de 2,5 (PPL 2,617)
+
+- **`mix1024-7.5k`** (production 1 024 sur le mélange) est **fini** à 21 h 50 : `work/n2ac/mix1024-7.5k.pt` (137 Mo) sur le disque.
+- **`rope1024-20k`** (le run long sur `wiki_fr`, GPU0) est à **12 250 / 20 000 pas, PPL val 2,622** — la cible **< 2,5** n'est plus qu'à ~0,12 ; il finira vers 23 h.
+- **N2** : la fiche fenêtre reste non committée et `n2-fenetre.json` absent ; l'agrégateur `agrege_fenetre.py` a désormais le run de production 1 024 — le commit N2 devrait suivre.
+- **État** : revue ✅ **570 fiches / 655 JSON / 82 portes**, en-cours ✅, T0 3 983, T1 2 428, stricte ✅, registre ✅ (seul `nvme_raid` 33 Gio).
+
+La veille continue : je suis la PPL du run long (franchissement de 2,5 ?), le commit N2 (fermeture de `porte-tableaux`) et le checkpoint de 8 h. Rien de bloquant.
+
+### Tour 16 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check events and the long run
+- bash — Wait for the N2 commit or a new commit
+
+**Synthèse produite :**
+
+⏵ Round 11 : je vérifie les événements puis j’attends le commit N2
 
 ## 3. Travail accompli
 
@@ -509,7 +576,7 @@ La veille continue : j'attends les commits N2 (fermeture de `porte-tableaux`) et
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 329 autres
+- … et 337 autres
 
 ## 4. Mesures et résultats marquants
 

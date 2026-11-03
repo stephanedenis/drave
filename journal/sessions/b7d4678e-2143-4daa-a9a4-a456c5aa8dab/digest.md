@@ -8771,3 +8771,145 @@ index a05aa31d..9e07021c 100644
   ```
 
 - **bash** `{"command": "git status --short | head -6; git commit --only -m \"NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE\" -m \"La section hub d'en-cours disait encore la passe en cours ; elle est close (81 portes, 76 vertes, 5 rouges, 1 h 52). Prochaine action : intégrer B13/ … [186 caractères tronqués]`
+
+  ```
+M docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+  ✅ index : aucun fait stagé sans état
+[master a49c63dc] NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE
+ 23 files changed, 574 insertions(+), 74 deletions(-)
+ create mode 100644 journal/2026-11-03/README.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 8 : l’état dit la passe close, le hub enchaîne les intégrations
+
+**Commits de la fenêtre**
+- `c4903bc9` — **B13 porte stochastique, 5 graines : 5/5** (labyrinthe 0/1, aveugle 0/1).
+- `decd4cd8` — **INDEX** : les trois fiches de la nuit entrent dans le README curaté (N2 fenêtre, S corpus, B13 porte minute).
+- `12970a4e` — **l'état porte la consigne de nuit** (claims, release/claim, bilan 8 h), plan du hub rafraîchi.
+- `18e19b58` — **T0 revenu à 3 983 mots**, consigne conservée.
+- `89e0c2c5` — `porte-homeostasie` : son message n'exécute plus sa commande (hygiène de porte ; la rouge reste environnementale).
+- **`a49c63dc`** (ma veille) : la section hub d'`en-cours` disait encore la passe « en cours » — elle est **close (81, 76/5, 1 h 52)**, prochaine action « intégrer B13/N2/S et tenir le bilan de 8 h ».
+
+**État vérifié** : revue ✅ **570 fiches / 655 JSON / 82 portes**, en-cours ✅, **T0 3 983/4 000**, T1 ✅ (2 428 mots), porte stricte ✅ (avertissements de claims longs), registre ✅ (seul `nvme_raid` 33 Gio).
+
+**Ce qui reste ouvert** : la **fiche fenêtre N2** et son `n2-fenetre.json` (runs 1 h 30 / 53 min) — le seul rouge non structurel (`porte-tableaux`). Le brouillon du **bilan de 8 h** est prêt dans `work/veille/bilan-08h.md`. La veille continue.
+
+
+## Tour 14
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 9/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 9 : je relève les nouveaux commits et l’état N2
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -4; echo \"--- N2 ---\"; ls -l reports/n2-fenetre.json 2>/dev/null || echo \"json absent\"; git status --short reports/rapport-n2-fenetre.md 2>/dev/null; echo \"--- runs ---\"; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | c … [117 caractères tronqués]`
+
+  ```
+21:50:35
+a49c63dc NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE
+18e19b58 ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE
+12970a4e NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES
+decd4cd8 INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT
+--- N2 ---
+json absent
+?? reports/rapport-n2-fenetre.md
+--- runs ---
+ 383833    01:33:57 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus
+ 490049       56:27 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --corpus
+--- status ---
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+MM journal/2026-11-02/docs.md
+  ```
+
+- **bash** `{"command": "git log --oneline --since=\"2026-11-02 20:00\" | head -30; echo \"--- sessions ---\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif|terminé\" | head -6; echo \"--- ressources ---\"; python3 tools/ressources.py --status 2>&1 | grep -c \"·\"; python3 tools/ressources.py --chec … [84 caractères tronqués]`
+
+  ```
+a49c63dc NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE
+18e19b58 ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE
+12970a4e NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES
+decd4cd8 INDEX — LES TROIS FICHES DE LA NUIT (N2 FENÊTRE, S CORPUS, B13 PORTE MINUTE) ENTRENT DANS LE README CURATÉ ; CINQ ENTRÉES HISTORIQUES SORTENT
+c4903bc9 B13 — LA PORTE STOCHASTIQUE, CINQ GRAINES : LE 7B PASSE 5/5 ; LE LABYRINTHE 0/1, L'AVEUGLE 0/1
+89e0c2c5 PORTE HOMEOSTASIE — LE MESSAGE N'EXÉCUTE PLUS SA COMMANDE
+d2374554 PORTES — LA DERNIÈRE PASSE EST DATÉE 19 H 32 (1 H 52) ET LA 82e PORTE EST ANNONCÉE
+0713f4e6 NUIT — LA PASSE DU 19 h 32 EST AU REGISTRE (76/5) ; B13 140/140 PARTOUT ; T1 À 2 428 MOTS
+7d2c0a2d B13 — LA PORTE STOCHASTIQUE DISCRIMINE : LE 7B L'OUVRE (31 NŒUDS, 6 SONDE) ; SANS LA RÈGLE, 200/3/182,6 S
+8eab6a7c ÉTAT — HEURE RÉELLE : LA PORTE QUI BOUGE EST DATÉE 21 H 17, PAS 21 H 45
+35ca1461 B13 — LA PORTE QUI BOUGE : LE 7B LA PASSE (25 NŒUDS, 2 SONDE) MAIS L'AVEUGLE (25/2) ET LE LABYRINTHE (28/5) AUSSI ; TEST NON DISCRIMINANT
+335e1737 ÉTAT — B13 À 140/140 PARTOUT : CHANTIERS ET P
+… [2627 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat >> work/veille/bilan-08h.md <<'EOF'\n\n## Snapshot au 21 h 50 (à re-geler à 8 h)\n\n- **25 commits** depuis 20 h. Les flux : **ressources** (`a67dbf00` registre, `42db89f6` 82e porte,\n  `20996b87` compteurs, `76862005`/`2bbd45e2` portes/routage, `b1c0bcda` porte sessions→registre,\ … [982 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+a49c63dc NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 9 : instantané de la nuit figé pour le bilan de 8 h
+
+- **25 commits depuis 20 h** : ressources (registre, 82e porte, consigne, T0, INDEX), B13 (minute, bouge, sto, 140/140, homeostasie), S (corpus réel, homographes → v4), N2 (R1.1/R1.2, 200 k, mandat de nuit), passe (registre 76/5, portes datées). L'instantané est dans `work/veille/bilan-08h.md` (flux + hashes clés).
+- **Sessions** : N2 actif (claim `gpu0`+`gpu1`), S actif (claim `cpu1` 4), hub actif (`integration`), Pensée active (`b13-gold`), D/R/A close.
+- **N2** : fiche fenêtre toujours non committée, `n2-fenetre.json` absent ; runs 1 h 34 / 56 min — seul rouge non structurel (`porte-tableaux`).
+- **État** : revue ✅ **570 fiches / 655 JSON / 82 portes**, en-cours ✅, T0 **3 983/4 000**, T1 2 428, porte stricte ✅, registre ✅ (seul `nvme_raid` 33 Gio).
+
+La veille continue : j'intègre les commits au fil de l'eau (le hub tient le rythme) et je tiendrai le **checkpoint de 8 h** avec le brouillon déjà prêt. Rien de bloquant.
+
+
+## Tour 15
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 10/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 10 : je relève les nouveaux événements (commits, N2, registre)
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -3; echo \"--- N2 ---\"; ls -l reports/n2-fenetre.json 2>/dev/null || echo \"json absent\"; git status --short reports/rapport-n2-fenetre.md 2>/dev/null; echo \"--- status ---\"; git status --short | head -5; echo \"--- runs ---\"; ps -eo pid,etime, … [111 caractères tronqués]`
+
+  ```
+21:51:07
+a49c63dc NUIT — L'ÉTAT DIT LA PASSE CLOSE : LE HUB INTÈGRE, LE BILAN DE 8 H SE PRÉPARE
+18e19b58 ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE
+12970a4e NUIT — L'ÉTAT PORTE LA CONSIGNE, LE PLAN DU HUB SE RAFRAÎCHIT, L'INDEX SUIT LES 565 FICHES
+--- N2 ---
+json absent
+?? reports/rapport-n2-fenetre.md
+--- status ---
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+--- runs ---
+ 383833    01:34:29 /home/stephane/gpu-env/bin/python work/n2ac/entrainer_rope.py --c
+  ```
+

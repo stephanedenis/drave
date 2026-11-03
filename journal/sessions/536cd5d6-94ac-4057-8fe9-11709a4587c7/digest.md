@@ -8177,3 +8177,107 @@ Round: 8/1000
 Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
 </goal_round>
 
+### 🤖 Assistant
+
+⏵ Round 8 : veille ; le registre, l'état et la passe tiennent, le N2 tourne sur les deux GPU.
+
+- **En-cours** : 1 607 mots ; **T0 3 981/4 000** ; la consigne de nuit est dans le contrat ; plan hub à 21 h 43 ; commits `12970a4e` et `18e19b58`.
+- **Registre** : hub `integration` libéré ; restent N2 `r12-1024` (`gpu0`/`cpu0` 12), **N2 `r12-mix-512-gpu1`** (`gpu1`/`cpu0` 4), S (`cpu1` 4), B13 (`cpu1` 4) ; `--check` OK (IA 33 Gio).
+- **N2** : deux jobs sur les deux GPU ; `n2-fenetre.json` toujours absent ; `porte-tableaux` rouge de passage ; rejeu après.
+- **Sessions** : N2 108 + 2 claims, S 64 + claim, hub en veille, B13 1 ; quatre actives ; `porte-sessions` verte.
+- **Passe** : 76/5 intégrée (références 19 h 32, en-cours 82, docs 82e) ; prochaine **82**.
+
+**Reste** : JSON N2 → `porte-tableaux` ; veille ; **bilan 08 h**. Goal actif.
+
+
+## Tour 17
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Coordonner le hub et les sessions actives (N2 0733c5bb, S 29ad180d, Pensée e181ce02, hub 536) pour qu'elles restent productives jusqu'au 03/11 08:00 : tenir le registre des ressources (tools/ressources.py, work/ressources.json), surveiller la passe complète des portes (work/portes/passe-1102-19h32), intégrer les résultats dans l'état/roadmap/journal, et produire un bilan à 08:00. Règle : aucune session en attente ; à la fin d'un job, release puis claim du suivant ; si une action attend l'humain, prendre la ligne suivante."
+Round: 9/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 9 : je prépare l'entrée de journal du 03/11 pour le bilan de 08 h et je vérifie l'état.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== heure ==\" && date '+%F %T' && echo \"== N2 JSON ==\" && ls -l reports/n2-fenetre.json 2>&1; echo \"== journal 03/11 ==\" && ls -l journal/2026-11-03/ 2>&1 | head -3; echo \"== git ==\" && git status --short | head -6; echo … [259 caractères tronqués]`
+
+  ```
+== heure ==
+2026-11-02 21:49:32
+== N2 JSON ==
+ls: cannot access 'reports/n2-fenetre.json': No such file or directory
+== journal 03/11 ==
+ls: cannot access 'journal/2026-11-03/': No such file or directory
+== git ==
+ M docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+MM journal/2026-11-02/README.md
+MM journal/2026-11-02/apprentissage.md
+MM journal/2026-11-02/attention.md
+MM journal/2026-11-02/distribue.md
+== sessions ==
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 114 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    ·  70 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·   7 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    e181ce02-cd50-488a · actif    ·   7 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (114 min) : 0733c5bb-f90b-4f58-9241-3364fa32e46c — claim actif, heartbeat non exigé
+== claims ==
+  Réservations actives :
+    · 0733c5bb / r12
+… [290 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ouvre l'entrée de journal du 03/11 avec l'état de la nuit et le point de reprise de 08 h.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p journal/2026-11-03 && cat > journal/2026-11-03/README.md <<'EOF'\n# 2026-11-03 — le bilan de 08 h\n\n> **Nuit du 02/11 → 03/11.** Le hub tient le registre, la passe et l'état ; les quatre sessions\n> (N2, S, Pensée/B13, hub) … [1479 caractères tronqués]`
+
+  ```
+== journal ==
+     · section « Sessions DSH » absente : journal/2026-11-03/README.md
+     · lien vers l'index des sessions absent : journal/2026-11-03/README.md
+
+== revue ==
+  revue de documentation · 570 fiche(s) · 655 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+== commit ==
+[commit 128]
+18e19b58 ÉTAT — LE T0 REVIENT À 3 983 MOTS : LA LIGNE INDEX REDONDANTE SORT, LA CONSIGNE DE NUIT RESTE
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+  ```
+
+### 🤖 Assistant
+
+⏵ Le journal exige la section « Sessions DSH » et le lien vers l'index ; j'ajoute, puis je réessaie le commit (index verrouillé par une autre session).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'Sessions DSH' -A 8 journal/2026-11-02/README.md | head -12", "description": "Read the Sessions DSH section format"}`
+
+  ```
+25:## Sessions DSH
+26-
+27-| session | titre | début | durée | liens |
+28-|---|---|---|---|---|
+29-| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 5.4 h | [rapport](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md) · [digest](../sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md) |
+30-| `0b0a6a0d-05f5-4308-800c-4792ddb9cbf2` | Continue session work | 2026-10-31 17:17 | 45.3 h | [rapport](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/rapport.md) · [digest](../sessions/0b0a6a0d-05f5-4308-800c-4792ddb9cbf2/digest.md) |
+31-| `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 4.4 h | [rapport](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md) · [digest](../sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md) |
+32-| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 6.2 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
+33-| `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-0
+… [161 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la section « Sessions DSH » et le lien d'index au journal du 03/11, puis je réessaie le commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> journal/2026-11-03/README.md <<'EOF'\n\n## Sessions DSH\n\n| session | titre | début | durée | liens |\n|---|---|---|---|---|\n| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 5 … [1592 caractères tronqués]`
