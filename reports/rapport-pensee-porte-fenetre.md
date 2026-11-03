@@ -100,3 +100,43 @@ La conclusion « le problème est cassé » était **fausse**. Mesures :
   enferment dans `y ≤ 3` (les murs `(4,1)/(4,2)` bloquent la colonne 4).
 - **Correctifs** : `_etat_pw` porte le `t` **réel** (18→44/195 états) ; `Moteur.boucle` sort sur
   `trouve` dans `for prop`. Le banc 7B doit être relancé avec **budget 500** et un guide BFS.
+
+
+## 9. Store.push FIFO (round 42-43)
+
+`Store.push` faisait `self.ouverts.setdefault(empreinte, len(self.ouverts))` : un nœud **re-poussé**
+gardait son ancien numéro de file, donc la frontière du BFS **se figeait** sur les premiers
+nœuds et le but n'était jamais atteint. Corrigé : un nœud absent prend `self._seq`, puis
+`self._seq += 1` (vrai FIFO).
+
+| budget | BFS avant | BFS après |
+|---:|---|---|
+| 200 | ❌ 44 états | ❌ 36 états |
+| 500 | ❌ 44 états | ✅ **228 nœuds, 37 états** |
+
+L'A* et le Greedy restent bloqués à 495 états : leur sélection par score n'est pas un BFS, et
+le fitness Manhattan les égare — c'est un choix de stratégie, plus un bug de store.
+
+**Le 7B reste à mesurer** sur la fenêtre avec l'oracle BFS corrigé (228 nœuds) : le banc 500
+(`pensee-porte-fenetre-500.json`) donne le 7B ❌ (500/83/129 s) mais l'oracle ❌ aussi, donc il
+doit être rejoué avec `Store.push` corrigé.
+
+
+## 10. Test non discriminant (round 45-46)
+
+Avec `Store.push` FIFO et l'oracle **BFS** (budget 500), **tout le monde passe** :
+
+| politique | but | nœuds | sonde | attendre |
+|---|---|---:|---:|---:|
+| oracle (BFS) | ✅ | 228 | — | — |
+| **aveugle** | ✅ | 215 | 11 | 49 |
+| **hasard** | ✅ | 227 | 23 | 49 |
+| **LLM `porte_fenetre`** | ✅ | 238 | 34 | 49 |
+| LLM `labyrinthe` | ✅ | 234 | 30 | 49 |
+
+- L'aveugle fait **mieux** que le 7B (215 vs 238) ; le labyrinthe (234) et le hasard (227) aussi.
+- Le prompt `porte_fenetre` (t % 3, attends) **n'apporte rien** : la fenêtre, une fois `Store.push`
+  réparé et le budget à 500, est un problème d'exploration que même l'aveugle résout.
+- **Verdict** : la fenêtre n'est **pas discriminante** — comme la porte mobile et la porte qui bouge.
+  Les tests qui discriminent restent : la **porte** (27 nœuds), la **minute** (26), la
+  **stochastique** (5/5, labyrinthe 0/1).

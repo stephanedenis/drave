@@ -15597,3 +15597,202 @@ Another git process seems to be running in this repository, or the lock file may
 ⏵ Round 43 : T0 revenu à 4 000 pile ; le lock concurrent persiste ; j'attends 90 s et je reprends le commit
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sleep 90; date '+%H:%M:%S'; ls .git/index.lock 2>/dev/null || echo 'lock libre'; ps -eo pid,etime,cmd | grep -E \"git (commit|add)\" | grep -v grep | head -2; git commit -m \"B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 2 … [134 caractères tronqués]`
+
+  ```
+22:45:55
+lock libre
+  ✅ index : aucun fait stagé sans état
+[master 8deac6ce] B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 228 NŒUDS (37 ÉTATS)
+ 24 files changed, 400 insertions(+), 85 deletions(-)
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 43 : commit `8deac6ce` — `Store.push` FIFO committé ; le BFS du moteur atteint le but en 228 nœuds (37 états)
+
+**Fait de la nuit** — commit **`8deac6ce`** : le store FIFO + le banc fenêtre 500 + la contre-fiche.
+
+| budget | BFS avant | BFS après |
+|---:|---|---|
+| 200 | ❌ 44 états | ❌ 36 états |
+| 500 | ❌ 44 états | ✅ **228 nœuds, 37 états** |
+
+- **Cause** : `Store.push` faisait `setdefault` — un nœud re-poussé gardait son ancien numéro de file, donc la frontière du BFS **se figeait** et le but n'était jamais atteint. Corrigé : `self.ouverts[empreinte] = self._seq; self._seq += 1`.
+- **Effet** : le BFS du moteur passe de « jamais le but » à **228 nœuds/37 états** (mieux que le BFS manuel 331/52).
+- L'**A\*** et le **Greedy** restent bloqués (495 états) : c'est un **choix de stratégie** (fitness Manhattan), plus un bug de store.
+- Livré : `store.py` corrigé, `pensee-porte-fenetre.md` (§ 9 Store.push FIFO), JSON corrigé, banc 500 JSON, en-cours à jour (T0 4 000 pile).
+
+**État** : HEAD `8deac6ce` ; T0 **4 000/4 000** ; revue **571/658** ; en-cours 22 h 45. Le 7B reste à mesurer sur la fenêtre avec l'oracle BFS corrigé (228) : le banc 500 actuel donne 7B ❌ (500/83/129 s) mais l'oracle ❌ aussi → à rejouer.
+
+La suite : **banc 7B fenêtre avec l'oracle BFS corrigé** ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 46
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 44/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 44 : je bascule l'oracle du banc fenêtre sur le **BFS** corrigé (228 nœuds) et je relance le 7B au budget 500 pour un verdict propre
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/qualifier_porte_fenetre_drvm.py'); t=p.read_text(encoding='utf-8')\nt=t.replace('from tools.pensee.operateurs import (DRVM, LABYRINTHE_PORTE_FENETRE, REGISTRE_PW,  # noqa: E402\\n           … [1002 caractères tronqués]`
+
+  ```
+started background job bash-523
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 44 : banc fenêtre relancé avec l'**oracle BFS** corrigé (228 nœuds) au budget 500 ; le job tourne (~3-4 min), le verdict 7B sera propre
+
+**Ce qui change** :
+
+- L'oracle du banc passe de `AStar + PolitiqueManhattan` à **`BFS`** (celui qui atteint `(4,4)` en 228 nœuds après `Store.push` FIFO).
+- Budget 500 conservé ; sortie `reports/pensee-porte-fenetre-bfs.json`.
+- Le 7B, l'aveugle, le hasard et le labyrinthe seront comparés à un oracle qui **passe** enfin — c'est la condition d'un verdict valide.
+
+**État** : HEAD `8deac6ce` (FIFO committé) ; T0 4 000 pile ; revue 571/658. Le job `bash-523` tourne.
+
+La suite : lire le résultat, fiche/JSON, commit ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 47
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 45/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 45 : je lis le banc fenêtre avec l'oracle BFS
+
+- **job_output** `{"job_id": "bash-523", "timeout_ms": 420000, "wait": true}`
+
+  ```
+oracle BFS
+{"status":"ok"}   0
+  ],
+  "aveugle": [
+   true,
+   215,
+   328.0,
+   49,
+   11,
+   49,
+   0.0,
+   0
+  ],
+  "hasard": [
+   true,
+   227,
+   388.0,
+   49,
+   23,
+   49,
+   0.0,
+   0
+  ],
+  "llm_porte_fenetre": [
+   true,
+   238,
+   443.0,
+   49,
+   34,
+   49,
+   94.036,
+   0
+  ],
+  "llm_labyrinthe": [
+   true,
+   234,
+   423.0,
+   49,
+   30,
+   49,
+   90.084,
+   0
+  ]
+ }
+}
+écrit : reports/pensee-porte-fenetre-bfs.json
+[stderr]
+
+real	3m4,522s
+user	0m0,451s
+sys	0m0,037s
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 45 : avec l'oracle BFS, **tout le monde passe** — aveugle 215 nœuds (11 sonde), hasard 227 (23), 7B 238 (34), labyrinthe 234 (30), oracle ❌/✅ à confirmer. La fenêtre n'est donc pas discriminante
+
+**Résultats** (`pensee-porte-fenetre-bfs.json`) :
+
+| politique | but | nœuds | sonde | attendre | latence |
+|---|---|---:|---:|---:|---:|
+| oracle (BFS) | ? (à extraire) | — | — | — | — |
+| **aveugle** | ✅ | 215 | 11 | 49 | 0 |
+| **hasard** | ✅ | 227 | 23 | 49 | 0 |
+| **LLM `porte_fenetre`** | ✅ | 238 | 34 | 49 | 94,0 s |
+| LLM `labyrinthe` | ✅ | 234 | 30 | 49 | 90,1 s |
+
+- **Tout le monde passe** : l'aveugle, le hasard, le 7B et le labyrinthe atteignent `(4,4)`. Le test de fenêtre **ne discrimine pas** (comme la porte mobile et la porte qui bouge).
+- Le 7B sonde 34 fois (vs 11 pour l'aveugle, 23 pour le hasard) : il **réessaie** plus, mais ça ne change pas le verdict.
+- La leçon : avec `Store.push` FIFO + budget 500, la fenêtre est un **problème de exploration** que même l'aveugle résout en 215 nœuds — le prompt n'apporte rien.
+
+**État** : HEAD `8deac6ce` ; T0 4 000 ; revue 571/658 ; le nouveau JSON `pensee-porte-fenetre-bfs.json` n'est pas committé.
+
+La suite : **constater et committer** le « test non discriminant » de la fenêtre (fiche/JSON), puis passer au **gold 200+** et à la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 48
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 46/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 46 : je constate et commite le « test non discriminant » de la fenêtre (tout le monde passe avec le BFS corrigé) — fiche, JSON, en-cours, commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nd=json.load(open('reports/pensee-porte-fenetre-bfs.json'))\nprint('oracle', d['mesures']['oracle']['but'], d['mesures']['oracle']['noeuds'])\nprint('seuils', json.dumps(d['seuils'],indent=1))\nPY", "description" … [58 caractères tronqués]`
+
+  ```
+oracle True 228
+seuils {
+ "oracle_but": true,
+ "oracle_sonde": true,
+ "aveugle_non": false,
+ "hasard_non": false,
+ "llm_but": true,
+ "llm_sonde": true,
+ "labyrinthe_non": false,
+ "aucune_erreur_llm": true,
+ "latence_mesuree": true
+}
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 46 : l'oracle BFS passe (228 nœuds) mais l'aveugle (215), le hasard (227), le 7B (238) et le labyrinthe (234) passent **aussi** — la fenêtre est **non discriminante**. Je l'écris et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('reports/rapport-pensee-porte-fenetre.md'); t=p.read_text(encoding='utf-8')\nt += \"\"\"\n\n## 10. Test non discriminant (round 45-46)\n\nAvec `Store.push` FIFO et l'oracle **BFS** (budget 500), * … [2443 caractères tronqués]`

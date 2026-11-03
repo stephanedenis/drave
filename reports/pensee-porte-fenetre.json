@@ -180,5 +180,46 @@
       "etats": 995
     },
     "verdict": "la fenêtre est solvable ; le fitness (score+heuristique) est le défaut"
+  },
+  "store_push_fifo": {
+    "date": "2026-11-02 22:55",
+    "avant": {
+      "bfs_500": "44 états, pas de but"
+    },
+    "apres": {
+      "bfs_500": {
+        "but": true,
+        "noeuds": 228,
+        "etats": 37
+      }
+    },
+    "cause": "setdefault figeait la file du BFS"
+  },
+  "test_non_discriminant": {
+    "date": "2026-11-02 23:10",
+    "oracle_bfs": {
+      "but": true,
+      "noeuds": 228
+    },
+    "aveugle": {
+      "but": true,
+      "noeuds": 215,
+      "sonde": 11
+    },
+    "hasard": {
+      "but": true,
+      "noeuds": 227
+    },
+    "llm": {
+      "but": true,
+      "noeuds": 238,
+      "sonde": 34,
+      "latence": 94.036
+    },
+    "labyrinthe": {
+      "but": true,
+      "noeuds": 234
+    },
+    "verdict": "la fenêtre ne discrimine pas : même l'aveugle passe"
   }
 }

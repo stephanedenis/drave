@@ -141,10 +141,10 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `a4eaa4c8` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.0 h | 1 | 38 | 0 | 0 | [rapport](sessions/a4eaa4c8-11e2-4ca3-bcb1-b28919cb601a/rapport.md) |
 | `a9e308b7` | Tu travailles dans le dépôt | 2026-10-08 09:19 | 0.1 h | 1 | 20 | 0 | 0 | [rapport](sessions/a9e308b7-5d50-4bb3-8e31-4c8e6f261a6d/rapport.md) |
 | `aa5f9fc5` | Tu es vérificateur de documentation | 2026-09-30 15:07 | 0.2 h | 1 | 100 | 1 | 0 | [rapport](sessions/aa5f9fc5-9450-4118-b65f-e8b99a28519d/rapport.md) |
-| `abb58991` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 6.5 h | 45 | 686 | 47 | 50 | [rapport](sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) |
+| `abb58991` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 6.6 h | 48 | 690 | 47 | 51 | [rapport](sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) |
 | `b13a6032` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 43 | 0 | 0 | [rapport](sessions/b13a6032-4f62-4e86-aa1f-03864a455c83/rapport.md) |
 | `b6a672ec` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | 2 | 59 | 0 | 0 | [rapport](sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) |
-| `b7d4678e` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 6.5 h | 25 | 629 | 24 | 32 | [rapport](sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) |
+| `b7d4678e` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 6.5 h | 26 | 632 | 24 | 32 | [rapport](sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) |
 | `b80df26d` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:52 | 0.3 h | 1 | 43 | 2 | 0 | [rapport](sessions/b80df26d-3dc3-49ea-98b8-fa5a7e0c4cdf/rapport.md) |
 | `bbc0b8e2` | Avis sur le dépôt GitHub Strata | 2026-10-12 08:44 | 0.2 h | 2 | 52 | 2 | 3 | [rapport](sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/rapport.md) |
 | `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 222.5 h | 205 | 9050 | 220 | 706 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |

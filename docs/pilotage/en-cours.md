@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-02, 22 h 25 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-02, 23 h 10 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -58,7 +58,7 @@
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
 - **Fait** : B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432** ; **gold neuronal** ;
-  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde) ; **fenêtre** — **solvable** (BFS 331 nœuds, 52 états) ; l'oracle Manhattan échoue par fitness ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
+  **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde) ; **fenêtre** — **non discriminante** (oracle BFS 228, aveugle 215 : tout passe) ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
   [B13](../../reports/rapport-b13-porte-140.md), [sto](../../reports/rapport-pensee-porte-sto.md),
   [sto 5/5](../../reports/rapport-pensee-porte-sto-graines.md),
   [fenêtre](../../reports/rapport-pensee-porte-fenetre.md),

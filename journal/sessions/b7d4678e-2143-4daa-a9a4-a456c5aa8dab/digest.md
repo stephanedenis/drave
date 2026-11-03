@@ -10123,3 +10123,70 @@ MM journal/2026-11-02/apprentissage.md
   ```
 
 - **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; git status --short | head -3; ps -eo pid,etime,args | grep entrainer_r … [107 caractères tronqués]`
+
+  ```
+22:47:43
+HEAD 8deac6ce
+8deac6ce B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 228 NŒUDS (37 ÉTATS)
+c7ef9bc4 FENÊTRE 2 048 — À OCTETS CONSTANTS LE GAIN S'ARRÊTE À 1 024 (2,9950 À 1 000 OCTETS) ; À 20 000 PAS ELLE DONNE 2,9955 À 128 ET 2,6256 À 1 000
+ M docs/pilotage/en-cours.md
+ M reports/INDEX.md
+ M reports/pensee-porte-fenetre.json
+ 713516       24:56 /home/stephane/gpu-env/bin/python work/n2ac/entrai
+ 722257       08:43 /home/stephane/gpu-env/bin/python work/n2ac/entrai
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/sessions.py --check --strict 2>&1 | tail -2; cat >> work/veille/nuit.md <<'EOF'\n\n## 22 h 47 — la fenêtre B13 : BFS 228 … [445 caractères tronqués]`
+
+  ```
+revue de documentation · 571 fiche(s) · 658 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ⚠ mandat long (128 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — claim actif, heartbeat non exigé
+  ⚠ mandat long (65 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+log-ok
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 20 : le BFS de la fenêtre B13 descend à 228 nœuds, état vert
+
+- **Pensée** : `8deac6ce` — `store.push` en **FIFO** : le **BFS du moteur atteint le but en 228 nœuds (37 états)**, contre 331/52 dans la contre-fiche — le problème de la fenêtre est **solvable par le moteur** et la file l'améliore.
+- **N2** : le fait **fenêtre 2 048** est au registre (`c7ef9bc4` : le gain s'arrête à 1 024 ; à 20 000 pas, 2,9955 à 128 et 2,6256 à 1 000) ; deux runs tournent (25 et 9 min), les deux GPU sont occupés et déclarés.
+- **État** : revue ✅ **571 fiches / 658 JSON / 82 portes**, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅ (claims longs en avertissement).
+
+La veille continue : intégration des commits, suivi des sessions et des runs, puis le **checkpoint de 8 h**. Rien de bloquant.
+
+
+## Tour 26
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes documentaires et d'état, liens, journal, backlog, INDEX, archives, schémas), lancer la passe complète des portes quand la machine est libre, et consigner chaque résultat (fiche/état/commit)."
+Round: 21/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 21 : veille — événements et état
+
+- **bash** `{"command": "date \"+%H:%M:%S\"; git log --oneline -2; git status --short | head -3; ps -eo pid,etime,args | grep entrainer_rope | grep -v grep | head -2 | cut -c1-70; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_journal.py 2>&1 | tail -1", "description": "Check events, … [19 caractères tronqués]`
+
+  ```
+22:48:02
+8deac6ce B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 228 NŒUDS (37 ÉTATS)
+c7ef9bc4 FENÊTRE 2 048 — À OCTETS CONSTANTS LE GAIN S'ARRÊTE À 1 024 (2,9950 À 1 000 OCTETS) ; À 20 000 PAS ELLE DONNE 2,9955 À 128 ET 2,6256 À 1 000
+ M docs/pilotage/en-cours.md
+ M reports/INDEX.md
+ M reports/pensee-porte-fenetre.json
+ 713516       25:15 /home/stephane/gpu-env/bin/python work/n2ac/entrai
+ 722257       09:01 /home/stephane/gpu-env/bin/python work/n2ac/entrai
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "OLD=$(git rev-parse HEAD); for i in $(seq 1 40); do sleep 15; NEW=$(git rev-parse HEAD); [ \"$NEW\" != \"$OLD\" ] && break; done; date \"+%H:%M:%S\"; echo \"HEAD $(git rev-parse --short HEAD)\"; git log --oneline -2; git status --short | head -3; ps -eo pid,etime,args | grep entrainer_r … [107 caractères tronqués]`

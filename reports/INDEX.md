@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **567 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **568 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -244,6 +244,7 @@
 | [rapport-n2-professeur.md](rapport-n2-professeur.md) | N2.u — Le professeur plus gros ne change presque rien en domaine, mais gagne 0,3 hors domaine |
 | [rapport-n2-propre.md](rapport-n2-propre.md) | N2.h1 — Le corpus propre : la validation n'était pas tenue à l'écart, et la porte honnête vaut 3,09 |
 | [rapport-n2-r11.md](rapport-n2-r11.md) | R1.1/R1.2 — Les positions relatives ôtent l'explosion, la fenêtre entraînée donne la lecture |
+| [rapport-n2-r12-2048.md](rapport-n2-r12-2048.md) | R1.2 — La fenêtre 2 048 et le point d'équilibre : à octets constants, 1 024 gagne ; à pas constants, plus de données gagnent |
 | [rapport-n3.1-etat.md](rapport-n3.1-etat.md) | N3.1 — l’état des opérations natives : une porte composée serait prématurée |
 | [rapport-n3.2a-service.md](rapport-n3.2a-service.md) | N3.2a — le service natif répond, et il est déterministe |
 | [rapport-n3.2b0-profondeur.md](rapport-n3.2b0-profondeur.md) | N3.2b0 — la profondeur de service est branchée, et le service lisait mal les requêtes |
