@@ -8676,3 +8676,20 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-434", "timeout_ms": 3000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; tail -c 60 work/n2ac/mix1024-60k.log; tail -c 70 work/n2ac/kd-mix512-15k.log 2>/dev/null", "description": "Poll 60k and KD production"}`
+
+  ```
+16:33:06
+31 s
+pas  23300 · perte 0.9945 · PPL val 2.407 · 10353 s
+7 s
+pas  1100 · perte 1.2491 · dure 1.0523 · douce 0.3154 · 479 s
+  ```
+
+- **bash** `{"command": "sleep 2700; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; ls work/n2ac/mix1024-60k.pt 2>/dev/null && echo OK60; cat work/n2ac/prod60k.out 2>/dev/null; tail -c 60 work/n2ac/mix1024-60k.log", "description": "Wait for 60k production completion"}`

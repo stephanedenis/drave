@@ -18,7 +18,6 @@
 | [modules-cerveau-langage.svg](modules-cerveau-langage.svg) | M1 hub → code RSN → bus → M2–M7, M4 → M8 | [les modules](../theorie/modules-cerveau-langage.md) |
 | [protocole-semantique.svg](protocole-semantique.svg) | surface L1 → encodeur → z → décodeur + L2 → surface L2 | [le protocole](../theorie/protocole-semantique.md) |
 | [jeux-symboliques.svg](jeux-symboliques.svg) | surface → RSN-jeu → décision, l'étage 2 ne voit jamais la surface | [les jeux](../theorie/jeux-symboliques.md) |
-| [arbre-referents.svg](arbre-referents.svg) | l'arbre syntaxique d'une phrase d'Alice et les liens référents-référés en pointillés | [la fiche S](../../reports/rapport-s-arbre-referents.md) |
 | [format-flux.svg](format-flux.svg) | l'en-tête DRVF de 79 octets et le contrat d'activation | [le format](../implantation/format-flux.md) |
 | [backlog-dependances.svg](backlog-dependances.svg) | le graphe des dépendances du backlog A/B/N/R, par couche | [le graphe](../pilotage/backlog/dependances.md) |
 

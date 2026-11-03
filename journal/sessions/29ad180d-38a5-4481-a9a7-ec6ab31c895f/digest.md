@@ -7119,3 +7119,200 @@ MM journal/2026-11-03/README.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && GIT_INDEX_FILE=/tmp/index.s git commit -m \"S — ARBRE ET RÉFÉRENTS : 99 CANDIDATS À ≥3, 294/371 FORMES, SVG ALICE\" -m \"construire_arbre() donne un père et une profondeur réelle : 359 candidats, 37 de profondeur max 1, 221 de 2, 99  … [437 caractères tronqués]`
+
+  ```
+create mode 100644 docs/schemas/arbre-referents.svg
+ create mode 100644 journal/2026-11-03/apprentissage.md
+ create mode 100644 reports/rapport-s-arbre-referents.md
+2b3595c1 S — ARBRE ET RÉFÉRENTS : 99 CANDIDATS À ≥3, 294/371 FORMES, SVG ALICE
+1b9a412a JOURNAL D629 — DERNIÈRE LIGNE DE LA BOUCLE RETIRÉE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push origin master 2>&1 | tail -3; echo \"exit=${PIPESTATUS[0]}\"; git ls-remote --heads origin | head -1; git -C tools/structures ls-remote --heads origin | head -1; git ls-tree HEAD tools/structures; echo \"=== SVG ===\"; git s … [119 caractères tronqués]`
+
+  ```
+To github.com:stephanedenis/drave.git
+   727c4860..2b3595c1  master -> master
+exit=0
+2b3595c180d0ec7a90164b2f38c279f68a00b336	refs/heads/master
+b18dbac7d91849bb944eaca81881962eb0f88e79	refs/heads/master
+160000 commit b18dbac7d91849bb944eaca81881962eb0f88e79	tools/structures
+=== SVG ===
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 550" width="1020" height="550" role="img">
+<title>Arbre syntaxique et liens référents-référés</title><desc>L&#x27;arbre d&#x27;une phrase d&#x27;Alice : le GV racine, les GN, GP, REL et SUB par profondeur, et les flèches pointillées des pronoms vers Alice, l&#x27;antécédent du contexte.</desc>
+  ```
+
+- **present** `{"files": [{"path": "docs/schemas/arbre-referents.svg", "description": "L'arbre syntaxique du paragraphe d'Alice : profondeur réelle et flèches pointillées des référents (Elle/elle/lui → Alice)."}, {"path": "reports/rapport-s-arbre-referents.md", "description": "La fiche en paragraphes complets : la … [62 caractères tronqués]`
+
+  ```
+Presented docs/schemas/arbre-referents.svg
+Presented reports/rapport-s-arbre-referents.md
+  ```
+
+### 🤖 Assistant
+
+⏵ L'arbre SVG est prêt, avec ses liens référents-référés, et la fiche est écrite en paragraphes complets.
+
+L'arbre demandé est dans [`docs/schemas/arbre-referents.svg`](docs/schemas/arbre-referents.svg) : il part d'un vrai paragraphe d'Alice, place les segments par profondeur réelle (le GV « Elle avait » en racine, puis le GP, le GV « se donner », le GP, la SUB et le GV « quelquefois elle se grondait »), et relie en pointillés les pronoms « Elle », « elle » et « lui » à leur antécédent « Alice », qui vit dans la phrase de contexte. Le fichier a un `viewBox`, un `<title>`, un `<desc>`, des liens relatifs, et il est inscrit dans l'index des schémas ; la vérification `verifier_schemas.py` passe sur les 67 SVG. La fiche [`reports/rapport-s-arbre-referents.md`](reports/rapport-s-arbre-referents.md) raconte le problème, l'arbre, les référents, le SVG, les contrôles et les limites en paragraphes complets, et `donnees/paragraphes.json` porte trois paragraphes réels (cible + contexte + antécédent) comme unité de la banque suivante.
+
+Les chiffres avant/après sont nets. Avant l'arbre, 277 candidats sur 369 s'arrêtaient à une profondeur de 1 ; maintenant, sur 359 candidats, 37 seulement restent à 1, 221 sont à 2 et 99 atteignent 3 ou plus. Pour les référents, l'outil ne proposait aucun antécédent sur 371 formes ; il en propose maintenant pour 294 (79,2 %), et les 77 qui restent sans candidat sont précisément ceux qui demandent le contexte d'un paragraphe — « Elle avait pour habitude… » ne trouve Alice que dans la phrase précédente. Le paragraphe d'Alice sert de contrôle positif : sans contexte, « Elle » n'a aucun candidat ; avec le contexte, il propose Alice, et « elle » et « lui » la retrouvent.
+
+Les limites sont nommées dans la fiche : l'arbre est une heuristique d'attachement, les référents sont des candidats et non une résolution (« habitude » et « conseils » sont proposés à tort, le pronom objet « les » est classé DET et manqué), les trois paragraphes sont peu nombreux, et la banque partielle reste une trace. Cinquante tests couvrent l'arbre, les référents et le SVG ; la revue de documentation, le budget T0 et l'état passent. Le sous-module est poussé en `b18dbac` et le principal en `2b3595c1`, avec le pointeur à jour.
+
+La suite est l'UI du serveur : afficher le contexte, l'arbre et les référents dans la page de validation, et faire résoudre les référents avant le verdict de structure, puis étendre la banque de paragraphes complets et reprendre la validation. Les limites `h050`/`h053` restent ensuite.
+
+
+## Tour 11
+
+### 👤 Utilisateur
+
+quel page web utiliser pour la suite?
+
+### 🤖 Assistant
+
+⏵ Je vérifie les pages du serveur pour répondre précisément, et j'ouvre la page de validation des paragraphes avec l'arbre et les référents.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"def do_GET\\|def do_POST\\|/api/\\|Path(\\|STATIQUE\\|class Donnees\\|class Phrase\\|def charger\\|paragraphes\\|contexte\" serveur.py | head -40; echo \"=== static ===\"; ls static/; echo \"=== routes html … [197 caractères tronqués]`
+
+  ```
+6:la banque validée (`/api/export`).
+24:RACINE = pathlib.Path(__file__).resolve().parent
+25:STATIQUE = RACINE / "static"
+26:# Le niveau pragmatique : un sens n'est pas « vrai » hors contexte, il est **résolu** par lui,
+29:# Les niveaux de contexte : il en faut parfois plus d'un pour trancher.
+30:NIVEAUX = {0: "sans contexte", 1: "phrase d'avant", 2: "paragraphe", 3: "section / document",
+37:class Donnees:
+41:        self.dossier = pathlib.Path(dossier)
+55:                contexte: str = "", niveau: int = 0, auteur: str = "humain") -> dict:
+65:                 "note": note[:500], "contexte": contexte[:4000], "niveau": niveau,
+73:        """Le plus petit niveau de contexte où une lecture a été *tranchée* (résolue ou exclue).
+75:        C'est la mesure de « combien de contexte il faut » : 0 = la phrase seule suffit,
+87:    def evaluer(self, phrase_id: str, fournisseur: str = "baseline", contexte: str = "",
+92:        r = llm.evaluer(phrase["texte"], phrase["candidats"], fournisseur, contexte, niveau)
+126:        """La banque : une ligne par **lecture conservée**, avec son contexte et son statut.
+142:                "phrase": p["texte"], "contexte": v.get("contexte", ""),
+143:         
+… [1402 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '1,70p' serveur.py; echo \"=== GET/POST ===\"; sed -n '176,240p' serveur.py; echo \"=== phrase dict ===\"; grep -n \"def phrases\\|def phrase\\|phrases_generees\\|phrases.json\\|phrases = \\|self.phrases\" ser … [72 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""serveur.py — le banc de structures : API + interface web, sans dépendance.
+
+Le serveur expose les phrases et leurs interprétations candidates, enregistre les verdicts
+humains (`donnees/validations.jsonl`), interroge un grand modèle (`donnees/llm.jsonl`) et exporte
+la banque validée (`/api/export`).
+
+    python3 serveur.py                 # http://127.0.0.1:8765
+    python3 serveur.py --port 9000 --hote 0.0.0.0
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import threading
+import time
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import urlparse
+
+import generateur
+import llm
+
+RACINE = pathlib.Path(__file__).resolve().parent
+STATIQUE = RACINE / "static"
+# Le niveau pragmatique : un sens n'est pas « vrai » hors contexte, il est **résolu** par lui,
+# **compatible** avec lui, **exclu** par lui — ou **double**, quand l'ambiguïté est voulue.
+STATUTS = {"resolu", "compatible", "exclu", "double_sens"}
+# Les niveaux de contexte : il en faut parfois plus d'un pour trancher.
+NIVEAUX = {0: "sans contexte", 1: "phrase d'avant", 2: "paragraphe", 3: "section / document",
+           4: "genre / re
+… [5674 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '440,485p' generateur.py; echo \"=== app.js rendering ===\"; sed -n '1,100p' static/app.js", "description": "Read analyser output and UI rendering"}`
+
+  ```
+if g.type == "GV" and s.cible_verbe is None:
+                s.cible_verbe = g.texte
+    construire_arbre(segs)
+    return segs
+
+
+ROLES_AMBIGUS = {"pour": ["cause"]}
+
+
+def _role_attache(role: str, genre: str) -> str | None:
+    """Le rôle change avec l'attachement : instrument/attribut, possession/thème."""
+    if role == "instrument" and genre == "GN":
+        return "attribut"
+    if role == "possession" and genre == "GV":
+        return "theme"
+    if role == "theme" and genre == "GN":
+        return "possession"
+    return None
+
+
+def analyser(texte: str, max_candidats: int = 4) -> list[dict]:
+    """Rend des structures candidates : un segment ambigu varie à la fois."""
+    toks = _tokens(texte)
+    base = _segmente(texte, toks)
+    ambigus = [s for s in base if s.type in ("GP", "REL")
+               and (s.cible_nom or s.cible_gp or s.cible_verbe)]
+    s = ambigus[-1] if ambigus else None
+    variantes = []  # (role, cible, niveau)
+    if s is not None:
+        if s.cible_gp:
+            variantes.append((_role_attache(s.role, "GP"), ("GP", s.cible_gp), 2))
+        if s.cible_nom:
+            variantes.append((_role_attache(s.role, "GN"), ("GN", s.cible_nom), 1))
+        if s.c
+… [5406 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '1,80p' tests/test_serveur.py; echo \"...\"; grep -n \"class \\|def test\" tests/test_serveur.py", "description": "Read server tests to extend"}`
+
+  ```
+"""Tests du banc de structures — sans dépendance : unittest + urllib."""
+import json
+import pathlib
+import shutil
+import tempfile
+import threading
+import unittest
+import urllib.request
+from http.server import ThreadingHTTPServer
+
+import serveur
+
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+
+
+class Banc:
+    def __enter__(self):
+        self.dossier = pathlib.Path(tempfile.mkdtemp())
+        shutil.copy(RACINE / "donnees" / "phrases.json", self.dossier / "phrases.json")
+        self.serveur = ThreadingHTTPServer(("127.0.0.1", 0), serveur.Serveur)
+        self.serveur.donnees = serveur.Donnees(self.dossier)
+        self.port = self.serveur.server_address[1]
+        self.fil = threading.Thread(target=self.serveur.serve_forever, daemon=True)
+        self.fil.start()
+        return self
+
+    def __exit__(self, *a):
+        self.serveur.shutdown()
+        self.serveur.server_close()
+        shutil.rmtree(self.dossier, ignore_errors=True)
+
+    def get(self, chemin):
+        with urllib.request.urlopen(f"http://127.0.0.1:{self.port}{chemin}") as r:
+            return r.status, r.read()
+
+    def post(self, chemin, objet):
+        corps = json.dumps(objet).encode()
+        req = u
+… [2463 caractères tronqués]
+  ```
+

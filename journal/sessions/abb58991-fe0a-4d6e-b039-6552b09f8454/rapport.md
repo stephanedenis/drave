@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 22.0 h |
-| Tours | 167 |
-| Messages | 1174 |
-| Appels d'outils | 956 |
-| Fichiers touchés | 48 |
-| Commandes | 774 |
+| Durée | 24.3 h |
+| Tours | 168 |
+| Messages | 1189 |
+| Appels d'outils | 970 |
+| Fichiers touchés | 49 |
+| Commandes | 787 |
 | Sous-agents | 0 |
-| Commits | 101 |
+| Commits | 102 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -363,6 +363,8 @@
 **Tour 166** — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)." Round: 2/1000  Continue working toward the objective in this … [483 caractères tronqués]
 
 **Tour 167** — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)." Round: 3/1000  Continue working toward the objective in this … [483 caractères tronqués]
+
+**Tour 168** — consulte le dossier pilotage pour prendre un chantier
 
 ## 2. Déroulé, étape par étape
 
@@ -4348,6 +4350,29 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **Fichiers non committés d'autres sessions** : `docs/pilotage/roadmap.md`, `tools/pensee/store.py`, `tools/structures`, `tools/tests/qualifier_porte_fenetre_drvm.py`, et trois rapports non suivis (`pensee-porte-fenetre-500.json`, `rapport-s-banque-partielle.md`, `s-banque-validee.json`). J
 … [618 caractères tronqués]
 
+### Tour 168 — consulte le dossier pilotage pour prendre un chantier
+
+*14 appels d'outils.* Actions notables :
+
+- bash — List pilotage and read roadmap head
+- bash — Read current state en-cours
+- bash — Locate L contract and 71-language details
+- bash — Read L contract section and queue
+- bash — Locate bloc langue docs and language data
+- bash — Read linguistic preprocessing doc and substitution schema
+- bash — Read bloc classes, levels and annotation fields
+- bash — Read levels, protocol, modes, language detection
+- bash — Read language detection and lexicon data
+- write `/home/stephane/GitHub/Qtrinet/docs/theorie/contrat-bloc-langue.md`
+- bash — Check T0 composition and en-cours section
+- bash — Read bilan line and roadmap L line
+- bash — Update roadmap, en-cours and check budget
+- bash — Fix counter and commit L contract
+
+**Synthèse produite :**
+
+⏵ T0 à 3 986 ✅ ; la revue signale le compteur de documents (119 → 120, le contrat) ; je corrige et je commite
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -4402,6 +4427,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_fenetre_drvm.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-fenetre.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-cascade-vrai-modele.md` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/docs/theorie/contrat-bloc-langue.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -4445,7 +4471,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 734 autres
+- … et 747 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4535,6 +4561,20 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T162** `reports/INDEX.md:550:| [rapport-r44-ocr-pilote.md](rapport-r44-ocr-pilote.md) | R4.4 — l'OCR lit dix pages à 4,48 % de WER, parité 90 %, et la page « photo » tombe à 26,7 % |`
 - **T162** `reports/inventaire-donnees-entrainement.md:90:   **R4.4** (90–97 % de parité, ~3 s/page) — c'est précisément ce pour quoi elle a été construite.`
 - **T164** `[still running after 400000ms; moved to background job bash-753]`
+- **T168** `**100 scans simulés** : la photo passe de **55,9 %** à **6,7 %** de [WER](../theorie/glossaire/entrees/wer.md) (test **5,7 %**) et la`
+- **T168** `**préservation** du lecteur atteint **90–97 %** sur **4 familles sur 5** (propre **96,7 %** ;`
+- **T168** `fax **56,7 %**, la limite d'information) ; les **colonnes** tombent de **89,4 %** à **0,5 %**,`
+- **T168** `les **tableaux** donnent **92,6 %** de cellules exactes, et **trois vrais scans** s'accordent à`
+- **T168** `**7,10 %** et **88,4 %** de mots, l'**ordre des colonnes** prouvé (**15,3 %** contre **98,0 %**`
+- **T168** `611 ms. La restitution depuis un document lu est **R31**.`
+- **T168** `- **Fait** : types **54/55**, rôles **131/131** ; **corpus réel** 8,5 %/65,5 % ; **banque partielle** 142/71, 81/65 ; **arbre** 99 candidats à ≥3, **référents** 294/371 ; **50 tests** ; [`analyseur`](`
+- **T168** `docs/archive/roadmap-detail-2026-10-29.md:253:| B7.3 | **Les contrôles** : permutation des libellés, notation, détection | ✅ mesuré | permutation **12/275** items forts restants (**4,4 %**) ; notation`
+- **T168** `docs/archive/roadmap-detail-2026-10-29.md:337:| B11.4 | **Données synthétiques / distillation du codec** | ✅ **mesuré** | 10 556 surfaces synthétiques, 71 langues, **aucune surface réelle** à l'entraî`
+- **T168** `docs/archive/roadmap-detail-2026-10-29.md:377:| B15.1 | **M1 sur 66 langues** | ✅ **invariance** | **528/528** avec contexte, **70,8 %** sans ; **26/26** variantes et **15/15** interlangues invariante`
+- **T168** `docs/archive/roadmap-detail-2026-10-29.md:452:  (**71 langues**, 449/449, 11/11 paires, permutation 12/275) et B8 (livre 10/10, go 9×9 **10/10** contre 3/10,`
+- **T168** `docs/pilotage/programme-r.md:194:des **71 langues / 449/449** existe, mais le décodeur est **négatif** et le `z` ne lit que ~7 %`
+- **T168** `6. **Les limites nommées de R4.4.** Fax 1 bit (56,7 % de parité), exposant fusionné, tableaux photo`
+- **T168** `la photo de **55,9 % à 6,7 %** de WER et les colonnes de **89,4 % à 0,5 %** ; le réseau n'y est`
 
 ## 5. Erreurs rencontrées
 
@@ -4653,4 +4693,5 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - L/B13 — LE BANC DE PARITÉ NATIVE PREND --DRVM (FIN DU CHEMIN CODÉ EN DUR) : 5/5 REJOUÉ" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s
 - L/B13 — LE LIEN SANS LA PAIRE CROISÉE : 5/5 ARRIÈRE + 4/4 AVANT = 9/9 (1,0)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LE LIEN APPRIS : PERCEPTRON DE RANG LOO 9/9, HASARD 0,10, SURFACE SEULE 2/9" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' |
+- L — LE CONTRAT DE SUBSTITUTION DU BLOC LANGUE EST ÉCRIT (9 NIVEAUX, 4 MODES, REFUS, TRACE, PORTE)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --fo
 

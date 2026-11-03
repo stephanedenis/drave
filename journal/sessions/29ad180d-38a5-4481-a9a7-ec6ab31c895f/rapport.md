@@ -7,12 +7,12 @@
 | Identifiant | `29ad180d-38a5-4481-a9a7-ec6ab31c895f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 24.2 h |
-| Tours | 10 |
-| Messages | 326 |
-| Appels d'outils | 324 |
+| Durée | 24.3 h |
+| Tours | 11 |
+| Messages | 336 |
+| Appels d'outils | 332 |
 | Fichiers touchés | 15 |
-| Commandes | 241 |
+| Commandes | 248 |
 | Sous-agents | 0 |
 | Commits | 20 |
 | Compactages de contexte | 1 |
@@ -38,6 +38,8 @@
 **Tour 9** — pour ce qui est de la validation de la banque, après moins de 20%, j'arrête car j'ai trop de doutes sur l'arvre syntaxique car il manque trop souvent de profondeur et les référents ne semblent pas résolus avant que je tranche
 
 **Tour 10** — vas-y avec des paragraphes complets et un arbre svg avec liaisons référents-référés
+
+**Tour 11** — quel page web utiliser pour la suite?
 
 ## 2. Déroulé, étape par étape
 
@@ -385,7 +387,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 
 ### Tour 10 — vas-y avec des paragraphes complets et un arbre svg avec liaisons référents-référés
 
-*26 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Find a real paragraph with referents
 - bash — Locate generator tree insertion points
@@ -401,11 +403,35 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - bash — Render SVG with inkscape
 - read_image
 - bash — Measure new tree depth and referent proposal coverage
-- … et 10 autres
+- … et 12 autres
 
 **Synthèse produite :**
 
-⏵ Je passe à l'arbre réel et aux référents : paragraphes complets, arbre SVG avec liens référents-référés, mesures et fiche.
+⏵ L'arbre SVG est prêt, avec ses liens référents-référés, et la fiche est écrite en paragraphes complets.
+
+L'arbre demandé est dans [`docs/schemas/arbre-referents.svg`](docs/schemas/arbre-referents.svg) : il part d'un vrai paragraphe d'Alice, place les segments par profondeur réelle (le GV « Elle avait » en racine, puis le GP, le GV « se donner », le GP, la SUB et le GV « quelquefois elle se grondait »), et relie en pointillés les pronoms « Elle », « elle » et « lui » à leur antécédent « Alice », qui vit dans la phrase de contexte. Le fichier a un `viewBox`, un `<title>`, un `<desc>`, des liens relatifs, et il est inscrit dans l'index des schémas ; la vérification `verifier_schemas.py` passe sur les 67 SVG. La fiche [`reports/rapport-s-arbre-referents.md`](reports/rapport-s-arbre-referents.md) raconte le problème, l'arbre, les référents, le SVG, les contrôles et les limites en paragraphes complets, et `donnees/paragraphes.json` porte trois paragraphes réels (cible + contexte + antécédent) comme unité de la banque suivante.
+
+Les chiffres avant/après sont nets. Avant l'arbre, 277 candidats sur 369 s'arrêtaient à une profondeur de 1 ; maintenant, sur 359 candidats, 37 seulement restent à 1, 221 sont à 2 et 99 atteignent 3 ou plus. Pour les référents, l'outil ne proposait aucun antécédent sur 371 formes ; il en propose maintenant pour 294 (79,2 %), et les 77 qui restent sans candidat sont précisément ceux qui demandent le contexte d'un paragraphe — « Elle avait pour habitude… » ne trouve Alice que dans la phrase précédente. Le paragraphe d'Alice sert de contrôle positif : sans contexte, « Elle » n'a aucun candidat ; avec le contexte, il propose Alice, et « elle » et « lui » la retrouvent.
+
+Les limites sont nommées dans la fiche : l'arbre est une heuristique d'attachement, les référents sont des candidats et non une résolution (« habitude » et « conseils » sont proposés à tort, le pronom objet « les » est classé DET et manqué), les trois paragraphes sont peu nombreux, et la banque partielle reste une trace. Cinquante tests couvrent l'arbre, les référents et le SVG ; la revue de documentation, le budget T0 et l'état passent. Le sous-module est poussé en `b18dbac` et le principal en `2b3595c1`, avec le pointeur à jour.
+
+La suite est l'UI du serveur : afficher le contexte, l'arbre et les référents dans la page de validation, et faire résoudre les référents avant le verdict de structure, puis étendre la banque de paragraphes complets et reprendre la validation. Les
+… [39 caractères tronqués]
+
+### Tour 11 — quel page web utiliser pour la suite?
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Inspect bank server routes and UI
+- bash — Read server data model and routes
+- bash — Read analyser output and UI rendering
+- bash — Read server tests to extend
+- bash — Add paragraph routes and data to server
+- bash — Read bank page header for style reuse
+
+**Synthèse produite :**
+
+⏵ Je vérifie les pages du serveur pour répondre précisément, et j'ouvre la page de validation des paragraphes avec l'arbre et les référents.
 
 ## 3. Travail accompli
 
@@ -471,7 +497,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 201 autres
+- … et 208 autres
 
 ## 4. Mesures et résultats marquants
 

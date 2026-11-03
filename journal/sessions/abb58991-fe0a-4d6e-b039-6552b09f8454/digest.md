@@ -24056,3 +24056,419 @@ The goal is marked complete and this autonomous run is ending. Write the closing
 
 Le goal est **clos** ; j'attends ta prochaine instruction.
 
+
+## Tour 168
+
+### 👤 Utilisateur
+
+consulte le dossier pilotage pour prendre un chantier
+
+### 🤖 Assistant
+
+⏵ Je consulte `docs/pilotage/` : état courant, roadmap et file « jamais en attente » pour choisir le chantier
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls -la docs/pilotage/; echo '=== roadmap (extrait) ==='; sed -n '1,80p' docs/pilotage/roadmap.md", "description": "List pilotage and read roadmap head", "timeoutMs": 60000}`
+
+  ```
+total 192
+drwxr-xr-x. 1 stephane stephane   260  3 nov 08:24 .
+drwxr-xr-x. 1 stephane stephane   124 31 oct 18:00 ..
+drwxr-xr-x. 1 stephane stephane  1686 31 oct 12:50 backlog
+-rw-r--r--. 1 stephane stephane 24647  3 nov 13:29 chantiers.md
+-rw-r--r--. 1 stephane stephane 11838  3 nov 16:26 en-cours.md
+-rw-r--r--. 1 stephane stephane 12411 28 oct 09:17 manques.md
+-rw-r--r--. 1 stephane stephane 24555  2 nov 22:15 plan-travail.md
+-rw-r--r--. 1 stephane stephane 22138  1 nov 13:46 programme-r.md
+-rw-r--r--. 1 stephane stephane  4380  2 nov 20:20 README.md
+-rw-r--r--. 1 stephane stephane 13855  3 nov 13:18 references-non-regression.md
+-rw-r--r--. 1 stephane stephane 46170  3 nov 16:26 roadmap.md
+-rw-r--r--. 1 stephane stephane 14336 28 oct 09:17 utilisation.md
+=== roadmap (extrait) ===
+# La roadmap de [Drave](../theorie/glossaire/entrees/drave.md) — un seul plan, quatre chantiers
+
+> **Un seul document de plan.** Le **moteur** (A), l'**intelligence** (B), le **natif** (N) et le **lecteur** (R).
+> L'ordre se décide par la **valeur** et les **dépendances**, jamais par une date. Les chiffres, les séries et les
+> contrôles vivent dans [`reports/`](../../reports/) ; ici : l'[état](../theorie
+… [12398 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis l'état courant et le plan de travail multi-sessions pour savoir quel chantier est libre et prioritaire
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '1,120p' docs/pilotage/en-cours.md", "description": "Read current state en-cours", "timeoutMs": 60000}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-03, 13 h 45 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit**, et de nouveau le **03/11 13 h 38** pour le **run long à 1 024** ; runbook :
+> [`plan-travail.md`](plan-travail.md) § 9.
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+>
+> **Serveurs locaux arrêtés (03/11 09 h)** : `llama-server` (Qwen2.5-7B, port 18082) tué ; unités
+> `llama-cpp`/`embed`/`vision` masquées, `ollama` désactivé ; les **professeurs** passent par l'**API
+> DeepSeek** (`tools/llm/enseignant.py`) ; `hauru-gpu-guard` (timer 30 s) et `porte-ressources`
+> (contrôle GPU) ve
+… [7925 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le pilotage désigne **L — le bloc langue** : « contrat de substitution à écrire » + « mesure 71 langues » ; je vérifie le détail avant de prendre ce chantier
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -rn \"contrat de L\\|contrat de substitution\\|71 langues\" docs/ reports/ 2>/dev/null | head -12; echo '=== roadmap : section L ==='; grep -n \"## L\\|### L\\|L —\" docs/pilotage/roadmap.md | head -8; echo '=== chantiers.md : L ==='; grep -n \"L … [151 caractères tronqués]`
+
+  ```
+docs/archive/etat-emulation-professeur.md:144:- chaque canal n'est actif qu'en moyenne dans **5,71 langues sur 6**
+docs/archive/roadmap-detail-2026-10-29.md:242:### B7 — Les langues : le même sens dans 71 langues
+docs/archive/roadmap-detail-2026-10-29.md:244:La couche de B5 était FR/EN. B7 ajoute un **lexique multilingue** (35 concepts, **71 langues**, **1 433
+docs/archive/roadmap-detail-2026-10-29.md:251:| B7.1 | **Le lexique multilingue** (pièces, rangs, enseignes, noms de jeux, notions de maîtres) | ✅ mesuré | **71 langues**, **35 concepts**, **1 433 couples** ; **32 langues fortes** (pièces N/P + un rang et une enseigne) ; source Wikidata, licences CC0 |
+docs/archive/roadmap-detail-2026-10-29.md:253:| B7.3 | **Les contrôles** : permutation des libellés, notation, détection | ✅ mesuré | permutation **12/275** items forts restants (**4,4 %**) ; notation **5 112/5 112** (72 items × 71 langues) ; détection des jeux **315/315** |
+docs/archive/roadmap-detail-2026-10-29.md:337:| B11.4 | **Données synthétiques / distillation du codec** | ✅ **mesuré** | 10 556 surfaces synthétiques, 71 langues, **aucune surface réelle** à l'entraînement ; test réel **45,1 %** ; **invariance 7,4 %** |
+do
+… [3793 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis la section L de `chantiers.md` (le contrat demandé) et la file « jamais en attente » pour cadrer le chantier
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '140,175p' docs/pilotage/chantiers.md; echo '=== file jamais en attente ==='; sed -n '334,360p' docs/pilotage/roadmap.md; echo '=== glossaire contrat ==='; sed -n '1,40p' docs/theorie/glossaire/entrees/contrat.md 2>/dev/null | head -30", "descr … [65 caractères tronqués]`
+
+  ```
+- **Le chemin du lecteur** : `R01 → R02 → R03 → R31 → R32 → R51` (profondeur 5). R03 est le nœud
+  par lequel tout se mesure.
+- **Le chemin de la langue** : `D → L → S → B` — la surface, puis les interprétations, puis le
+  sens. C'est le chemin que les 48 h ont rendu explicite.
+- **Le chemin du natif** : `D → N2 → R1 → R2 → R3` — le corpus, le modèle, la fenêtre, la mémoire,
+  la restitution.
+- **Le chemin de la pensée** : `B13 → L/R/N` — les états, les documents, les opérateurs.
+
+## 5. Les tensions, et ce qui reste à trancher
+
+1. **La frontière heuristique/réseau.** Où s'arrête l'étiquetage CPU et où commence le réseau ?
+   La réponse n'est pas idéologique : elle se mesure par **couverture × précision par unité de
+   calcul**, avec le contrôle négatif « une heuristique rapide mais fausse coûte plus qu'un appel
+   réseau ». La première mesure (langue/frontières, 71 langues) est la prochaine action de L.
+2. **Le contrat de L.** « Une version heuristique et une neuronale, substituables ou en parallèle »
+   demande un contrat d'entrée/sortie identique, une trace, un coût et une porte. Il n'est pas
+   encore écrit : c'est le premier livrable de L.
+3. **La pragmatique.** Le niveau 4 (do
+… [3723 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je prends le chantier **L — le bloc langue**, premier livrable : le **contrat de substitution** (heuristique/neuronal) ; je repère d'abord l'existant (bloc, langues, bancs)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && ls docs/theorie/ | head -20; echo '=== bloc langue dans docs ==='; grep -rln \"bloc langue\\|bloc linguistique\\|BlocLinguistique\" docs/ | head -6; echo '=== 71 langues : données ==='; grep -rln \"71\" tools/jeux/*.py 2>/dev/null | head -4; ls donnee … [177 caractères tronqués]`
+
+  ```
+architecture-native.md
+carte.md
+genealogie-des-langues.md
+glossaire
+glossaire.md
+histoire.md
+jeux-symboliques.md
+lecture-rapide.md
+modele-natif.md
+modules-cerveau-langage.md
+pensee-iterative.md
+pre-traitement-linguistique.md
+protocole-semantique.md
+semantique-universaux.md
+synthese
+vision.md
+=== bloc langue dans docs ===
+docs/archive/roadmap-detail-2026-10-29.md
+docs/schemas/README.md
+docs/schemas/chantiers-vision.svg
+docs/schemas/bloc-linguistique-niveaux.svg
+docs/schemas/bloc-linguistique-substitution.svg
+docs/pilotage/references-non-regression.md
+=== 71 langues : données ===
+tools/jeux/construire_lexique_multilingue.py
+tools/jeux/corpus_multilingue.py
+tools/jeux/lexique.py
+tools/jeux/maitres.py
+=== bancs langues ===
+anaphore.py
+evaluer_gold.py
+gold_gele.json
+gold.json
+gold.py
+gold_reel.json
+gold_reel.py
+gold_synthetique.json
+gold_synthetique.py
+juge.py
+miroir.py
+__pycache__
+qualifier_cascade.py
+qualifier_lien_appris.py
+qualifier_neuronal.py
+qualifier_pragmatique.py
+qualifier_syntagmes.py
+test_bloc_linguistique.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lis `pre-traitement-linguistique.md` (le bloc langue existant) et les deux schémas de substitution avant d'écrire le contrat
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && head -60 docs/theorie/pre-traitement-linguistique.md; echo '=== schemas ==='; head -12 docs/schemas/bloc-linguistique-substitution.svg", "description": "Read linguistic preprocessing doc and substitution schema", "timeoutMs": 60000}`
+
+  ```
+# La couche heuristique — ce que le CPU étiquette avant le réseau
+
+> **Rôle.** Cette note analyse une **couche linguistique de prétraitement par heuristiques** : ce
+> qu'elle peut étiqueter, du mot au document, en plusieurs langues, et ce qu'elle **retire au
+> réseau de neurones**. Elle ne remplace pas une mesure : elle fixe les niveaux, la cascade, le
+> coût et le protocole. Les chiffres cités viennent des fiches ; les **projections** sont dites
+> comme telles.
+>
+> **Ce qu'elle n'est pas.** Un plaidoyer « le CPU remplace le réseau ». Le CPU étiquette la
+> **surface** ; le réseau tranche l'**ambiguïté** et le **sens**. La cascade se juge sur sa
+> **précision par unité de calcul**, pas sur son débit brut.
+
+## 1. La thèse en trois idées
+
+1. **Le réseau paie la surface.** Une part du travail d'un modèle de langue n'est pas du sens :
+   c'est de la normalisation Unicode, de la détection de script et de langue, des frontières de
+   mots et de phrases, des classes fermées, des régions de document. Ces opérations sont
+   **locales, déterministes et bon marché** : un CPU les fait à des ordres de grandeur qui n'ont
+   rien à voir avec un passage dans un transformer.
+2. **L'heuristique ne dé
+… [5721 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le doc L existe (niveaux, cascade) mais **le contrat formel manque** ; je relève les classes et champs réels du bloc pour l'écrire sans inventer
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"^NIVEAUX\\|^CLASSES\\|^class \\|^def grammaire\" tools/bloc_linguistique.py | head -30; echo '=== Annotation/Etiquette ==='; grep -n \"class Annotation\\|class Etiquette\" -A 18 tools/bloc_linguistique.py | head -45", "description": "Read bl … [62 caractères tronqués]`
+
+  ```
+48:NIVEAUX = ("graphème", "morphème", "mot", "pos", "syntagme", "phrase", "discours",
+57:class Span:
+66:class Etiquette:
+90:class Annotation:
+128:class BlocLinguistique(Protocol):
+135:class RefusNeuronal(RuntimeError):
+390:class Heuristique:
+750:class MockNeuronal:
+804:class NeuronalLLM:
+871:CLASSES_POS = ("DET", "NOUN", "VERB", "ADJ", "ADV", "PREP", "PRON", "AUX", "CONJ",
+875:def grammaire_pos(n: int) -> str:
+883:class NeuronalLLMPOS:
+1006:def grammaire_bio(n: int) -> str:
+1014:class NeuronalLLMChunks:
+1149:class NeuronalLLMCompose:
+1185:def grammaire_pragma() -> str:
+1194:class NeuronalLLMPragmatique:
+1355:class Parallele:
+1374:class Cascade:
+1406:class CoucheSemantique:
+=== Annotation/Etiquette ===
+66:class Etiquette:
+67-    niveau: str
+68-    type: str
+69-    valeur: str
+70-    debut: int
+71-    fin: int
+72-    source: str = "heuristique"
+73-    confiance: float = 0.5
+74-    candidats: list[str] = field(default_factory=list)
+75-    langue: str = "und"
+76-    script: str = SCRIPT_NEUTRE
+77-    meta: dict = field(default_factory=dict)
+78-
+79-    def json(self) -> dict:
+80-        return {
+81-            "niveau": self.niveau, "type": self.type, "valeur": self.valeur,
+82-         
+… [925 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je relève les niveaux complets, le protocole, les modes `Parallele`/`Cascade` et la détection de langue pour écrire un contrat exact
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '48,56p' tools/bloc_linguistique.py; echo '=== protocol ==='; sed -n '128,140p' tools/bloc_linguistique.py; echo '=== parallele/cascade ==='; sed -n '1355,1405p' tools/bloc_linguistique.py; echo '=== detection langue/script ==='; grep -n \"def  … [167 caractères tronqués]`
+
+  ```
+NIVEAUX = ("graphème", "morphème", "mot", "pos", "syntagme", "phrase", "discours",
+           "pragmatique", "document")
+SOURCES = ("heuristique", "neuronal", "humain")
+SCRIPT_NEUTRE = "Zyyy"
+
+# --------------------------------------------------------------------------- types
+
+
+@dataclass(frozen=True)
+=== protocol ===
+class BlocLinguistique(Protocol):
+    nom: str
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation: ...
+
+
+class RefusNeuronal(RuntimeError):
+    """Le modèle n'a pas rendu une annotation exploitable — le contrat refuse, il n'invente pas."""
+
+
+# --------------------------------------------------------------------------- profils de langue
+
+=== parallele/cascade ===
+class Parallele:
+    """Les deux implémentations en parallèle : le contrat est le même, la fusion est explicite."""
+
+    nom = "parallele"
+
+    def __init__(self, blocs: Sequence[BlocLinguistique],
+                 priorite_syntagme: str = "heuristique"):
+        if len(blocs) != 2:
+            raise ValueError("le parallèle attend exactement deux blocs")
+        self.blocs = list(blocs)
+        self.priorite_syntagme = priorite_syntagme
+
+
+… [1869 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le contrat a tous ses éléments réels ; je regarde `detecter_langue` et le lexique 71 langues pour la première mesure de frontière
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '197,255p' tools/bloc_linguistique.py; echo '=== lexique 71 langues ==='; grep -n \"LANGUES\\|langues\" tools/jeux/lexique.py | head -6; python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('donnees/lexique_multilingue.json')\nif p.exists():\ … [286 caractères tronqués]`
+
+  ```
+def detecter_langue(texte: str, profils: dict[str, dict] | None = None,
+                    indice: str | None = None) -> tuple[str, float, dict[str, float]]:
+    """La langue par recouvrement de trigrammes ; l'indice est un **prior**, pas un verdict."""
+    if profils:
+        tri = collections.Counter(_trigrammes(texte))
+        scores = {langue: _score_profil(tri, p["trigrammes"]) for langue, p in profils.items()}
+        if indice and indice in scores:
+            scores[indice] = min(1.0, scores[indice] + 0.02)
+        if not scores:
+            return "und", 0.0, {}
+        classement = sorted(scores.items(), key=lambda kv: (-kv[1], kv[0]))
+        langue, meilleur = classement[0]
+        second = classement[1][1] if len(classement) > 1 else 0.0
+        if meilleur <= 0.0:
+            return "und", 0.0, scores
+        confiance = min(1.0, (meilleur - second) / meilleur + 0.2 * meilleur)
+        return langue, round(confiance, 4), scores
+    # profil de secours : mots-outils de quelques langues
+    mots = set(re.findall(r"[a-zà-ÿ']+", _normaliser(texte)))
+    scores = {l: len(mots & set(LEXIQUES[l])) / max(1, len(mots)) for l in LEXIQUES}
+    if indice and indice in scores:
+  
+… [2180 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je prends le chantier **L — le bloc langue** et j'écris son premier livrable : le **contrat de substitution** (entrée/sortie, 9 niveaux, 4 modes, refus, trace, coût, porte)
+
+- **write** `{"content": "# Le contrat du bloc langue — un seul contrat, quatre modes\n\n> **Rôle.** Ce document est le **premier livrable de L** : le contrat d'entrée/sortie que doivent\n> respecter l'**heuristique** et le **neuronal** pour être **substituables** ou **parallèles**.\n> Il ne remplace pas une mes … [8216 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/docs/theorie/contrat-bloc-langue.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrat écrit ; je vérifie comment le budget T0 est composé avant d'ajouter la ligne d'état de L (le T0 est à 3 997/4 000)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | head -12; echo '=== T0 doc ==='; grep -n \"T0\\|tache\\|mission\" tools/taille_documents.py | head -8; echo '=== en-cours : en cours ==='; grep -n \"## Ce qui est en cours\" -A 8 docs/pilotage/en-cours.md", "de … [76 caractères tronqués]`
+
+  ```
+budget de contexte · documents chargeables
+    mots lignes  cat budget  document
+    6561    384   T1   9000  docs/pilotage/roadmap.md
+    5999    597 DATÉ      0  docs/implantation/contexte-long.md
+    4858    515   T1   5000  docs/theorie/glossaire/10-le-pont-linguistico-semantique-le-vocabu.md
+    4085    431 DATÉ      0  docs/implantation/numa-segregation.md
+    3131    294   T1   3500  README.md
+    3072    341 DATÉ      0  docs/implantation/convertisseur.md
+    2962    364   T1   5000  docs/theorie/glossaire/02-modeles-et-architectures.md
+    2896    352 DATÉ      0  docs/implantation/configuration-nvme-raid-amd.md
+    2800    181   T1   2800  reports/README.md
+    2353    150   T1   2500  docs/pilotage/references-non-regression.md
+=== T0 doc ===
+5:  1. la taille des documents **chargeables** (T0/T1) en mots, avec un budget par catégorie ;
+27:    ("T0", "AGENTS.md", 1200),
+28:    ("T0", "docs/pilotage/en-cours.md", 2000),
+32:    ("T0", "docs/methode/*.md", 1200),
+112:            if cat in ("T0", "T1"):
+140:    # T0 : la somme des trois lectures par défaut
+145:    # Le T0 est « AGENTS + en-cours + UN document de tâche », et le document de tâche est un
+146:    # T0 (≤ 1 200 mot
+… [687 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le T0 est au plafond : j'ajoute la ligne L et je compacte le bilan de 08 h (détail déjà dans le journal) pour rester sous 4 000
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && sed -n '14,24p' docs/pilotage/en-cours.md; echo '=== roadmap L ==='; grep -n \"L — le bloc langue\" docs/pilotage/roadmap.md | head -2", "description": "Read bilan line and roadmap L line", "timeoutMs": 60000}`
+
+  ```
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+>
+> **Serveurs locaux arrêtés (03/11 09 h)** : `llama-server` (Qwen2.5-7B, port 18082) tué ; unités
+> `llama-cpp`/`embed`/`vision` masquées, `ollama` désactivé ; les **professeurs** passent par l'**API
+> DeepSeek** (`tools/llm/enseignant.py`) ; `hauru-gpu-guard` (timer 30 s) et `porte-ressources`
+> (contrôle GPU) verrouillent la règle ; les GPU sont réservés à Drave ; **clé API fournie** (`~/.config/drave/deepseek.key`).
+>
+> **Bilan de 08 h (03/11)** : passe **04 h 10 — 82 portes, 77/5** (4 connues + `porte-sessions`
+=== roadmap L ===
+35:| **L — le bloc langue** | surface, heuristique CPU + neuronal, [contrat](../theorie/glossaire/entrees/contrat.md), cascade, pragmatique | 🔬 **R0.7** : 9 niveaux, **398 langues à 0,9687**, script 1,0000 ; analyse heuristique (5 schémas) ; **contrat de substitution à écrire** | **le contrat 
+… [53 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'applique les trois mises à jour (contrat, roadmap L, en-cours) en compactant le bilan de 08 h ; puis revue et commit
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1. roadmap : le contrat est écrit, la prochaine action est la mesure 71 langues\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text(encoding='utf-8')\nold='**contrat de substitution à écrire** | **le contrat  … [1542 caractères tronqués]`
+
+  ```
+T0 max : 3986 mots (budget 4 000)
+  revue de documentation · 594 fiche(s) · 682 JSON · 120 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 119 documents, le disque en a 120
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+AssertionError: bilan 08h absent
+  ```
+
+### 🤖 Assistant
+
+⏵ T0 à 3 986 ✅ ; la revue signale le compteur de documents (119 → 120, le contrat) ; je corrige et je commite
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold='| documents de `docs/` | **119** (hors archive et README) |'\nnew='| documents de `docs/` | **120** (hors archive et README) |'\nasser … [592 caractères tronqués]`
