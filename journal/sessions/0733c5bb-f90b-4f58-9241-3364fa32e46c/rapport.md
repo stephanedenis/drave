@@ -7,12 +7,12 @@
 | Identifiant | `0733c5bb-f90b-4f58-9241-3364fa32e46c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:14 |
-| Durée | 7.8 h |
+| Durée | 8.2 h |
 | Tours | 2 |
-| Messages | 389 |
-| Appels d'outils | 388 |
+| Messages | 397 |
+| Appels d'outils | 396 |
 | Fichiers touchés | 25 |
-| Commandes | 285 |
+| Commandes | 292 |
 | Sous-agents | 0 |
 | Commits | 10 |
 | Compactages de contexte | 0 |
@@ -84,7 +84,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 
 ### Tour 2 — vérifie ce que les autres sessions font et continue avec des tâches jusqu'à demain matin 8h
 
-*148 appels d'outils.* Actions notables :
+*156 appels d'outils.* Actions notables :
 
 - bash — Check active sessions status
 - bash — Check recent commits and hardware state
@@ -100,11 +100,11 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - bash — Condense section and fix counters
 - bash — Trim header duplication and recheck gates
 - bash — Read required session fields
-- … et 101 autres
+- … et 107 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction de la fiche « porte 2,5 sur le corpus propre » (prose)
+⏵ Rafraîchissement du mandat (heartbeat, état d'avancement de la nuit)
 
 ## 3. Travail accompli
 
@@ -180,7 +180,7 @@ Découverte de méthode au passage : **la graine est inerte sous `--init`** (deu
 - **T1** Launch 200k training run in background
 - **T1** Check training start and GPU processes
 - **T1** Identify GPU holder and wait for training log
-- … et 245 autres
+- … et 252 autres
 
 ## 4. Mesures et résultats marquants
 

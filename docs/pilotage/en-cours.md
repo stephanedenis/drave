@@ -57,7 +57,8 @@
 - **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels.
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
-- **Fait** : B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432** ; **gold neuronal** ;
+- **Fait** : B13 **140/140** (6 S fixés ; T132/T133 2/5), gold **432** ; **gold neuronal** —
+  cascade **0,9415 / 0,6130 / 0,7574 / 1,0** (180) ;
   **DRVM/native** 3/27/2 ; **porte sto** — **5/5** (28–34 nœuds, 5–7 sonde) ; **fenêtre** — **non discriminante** (oracle BFS 228, aveugle 215 : tout passe) ; mobile/bouge **faibles** ; **pragmatique** 0,6375 ;
   [B13](../../reports/rapport-b13-porte-140.md), [sto](../../reports/rapport-pensee-porte-sto.md),
   [sto 5/5](../../reports/rapport-pensee-porte-sto-graines.md),
@@ -91,9 +92,8 @@
 ## Ce qui est en cours
 
 - **Données** : **10 corpus** (**21,6 M art.**, **31,4 G car.**, **38,8 Go**, **0 fuite**) ; **OCR CEGEP** **91 scans uniques** (60 documents, 1 982 p, 4,41 M car.) ; **glossaire** 355 entrées — [`inventaire`](../../reports/inventaire-donnees-entrainement.md), [`corpus-wikipedia`](../../reports/rapport-corpus-wikipedia.md), [`ocr-cegep`](../../reports/rapport-ocr-cegep.md).
-- **R1 — la fenêtre native** : loi mesurée jusqu'à **2 048** (1 000 octets : **2,9950** à 1 024) ;
-  **1 024 est le point d'équilibre** à octets constants ; à 20 000 pas elle donne **2,9955** à
-  128 et **2,6256** à 1 000 —
+- **R1 — la fenêtre native** : loi mesurée jusqu'à **2 048** (**2,9950** à 1 024) ;
+  **1 024 est le point d'équilibre** ; à 20 000 pas : **2,9955** à 128, **2,6256** à 1 000 —
   [`2048`](../../reports/rapport-n2-r12-2048.md), [`fenêtre`](../../reports/rapport-n2-fenetre.md).
 - **S — le banc de structures** : **analyseur 54/55 types, 131/131 rôles, 47/47 compléments**, **corpus réel 8,5 % CEGEP / 65,5 % propre** (mélange 9,1 %), gold **55**, **47 tests** ; corpus **55** structures (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats ; fiches [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md) ; banque à **0**.
 - **N2** : **200 k pas** — **3,16 / 5,61 / 7,28 / 8,00** (< 2,5 non atteinte) ;

@@ -6237,3 +6237,59 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-285", "timeout_ms": 3600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; tail -1 work/n2ac/rope2048-12.5k.log; tail -1 work/n2ac/mix1024-30k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Direct check on overnight runs"}`
+
+  ```
+00:12:28
+pas   6400 · perte 0.9711 · PPL val 2.558 · 6489 s
+pas   1750 · perte 0.9811 · PPL val 2.621 · 797 s
+0, 5646 MiB, 100 %
+1, 10068 MiB, 100 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure du coût d'inférence par fenêtre (ce que la PPL ne montre pas)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && cat > work/n2ac/cout_fenetre.py <<'EOF'\n#!/usr/bin/env python3\n\"\"\"cout_fenetre.py — ms par octet, à la longueur native de chaque fenêtre.\n\nLa PPL ne montre pas le prix : l'attention coûte O(L²) par couche, donc doubler la fenêtre\nquadruple le  … [2148 caractères tronqués]`
+
+  ```
+fenêtre 256    L=  256 ·    91.81 ms/passe ·     22306 octets/s
+  fenêtre 512    L=  512 ·   180.20 ms/passe ·     22730 octets/s
+  fenêtre 1 024  L= 1024 ·   387.21 ms/passe ·     21156 octets/s
+  fenêtre 2 048  L= 2048 ·   844.28 ms/passe ·     19405 octets/s
+{"fenêtre 256": {"L": 256, "ms_passe": 91.81, "ms_par_octet_lot8": 0.04483, "octets_par_s": 22306}, "fenêtre 512": {"L": 512, "ms_passe": 180.2, "ms_par_octet_lot8": 0.04399, "octets_par_s": 22730}, "fenêtre 1 024": {"L": 1024, "ms_passe": 387.21, "ms_par_octet_lot8": 0.04727, "octets_par_s": 21156}, "fenêtre 2 048": {"L": 2048, "ms_passe": 844.28, "ms_par_octet_lot8": 0.05153, "octets_par_s": 19405}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction mesurée du coût d'inférence dans les trois fiches
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsentence = \"\"\"**Le coût d'inférence ne quadruple pas.** Mesuré à batch 8 (`work/n2ac/cout_fenetre.py`),\nle débit passe de **22 306** octets/s (fenêtre 256) à **22 730** (512), **21 156** (1 024) et\n**19 405** (2  … [1160 caractères tronqués]`
+
+  ```
+corrigé : reports/rapport-n2-fenetre.md
+corrigé : reports/rapport-n2-r12-2048.md
+corrigé : reports/rapport-n2-production-fenetre.md
+  ```
+
+- **bash** `{"command": "sleep 3000; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_2048_wiki.out; tail -1 work/n2ac/rope2048-12.5k.log; tail -1 work/n2ac/mix1024-30k.log", "description": "Wait for 2048 long run completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-289]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-289", "timeout_ms": 3000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+

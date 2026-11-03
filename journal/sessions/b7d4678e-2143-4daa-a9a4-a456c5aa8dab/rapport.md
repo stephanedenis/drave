@@ -7,14 +7,14 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 7.8 h |
-| Tours | 36 |
-| Messages | 701 |
-| Appels d'outils | 672 |
+| Durée | 8.1 h |
+| Tours | 41 |
+| Messages | 736 |
+| Appels d'outils | 698 |
 | Fichiers touchés | 24 |
-| Commandes | 474 |
+| Commandes | 489 |
 | Sous-agents | 0 |
-| Commits | 34 |
+| Commits | 36 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -97,6 +97,16 @@
 **Tour 35** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 **Tour 36** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 37** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 38** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 39** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 40** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
+
+**Tour 41** — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), tenir en-cours/roadmap/plan-travail et les compteurs à jour et concis, publier et faire vivre la consigne de coordination et d'usage optimal des ressources (registre tools/ressources.py, claims/release, usages non déclarés), prendre des tâches légères sans gêner les runs (portes docu … [732 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -959,7 +969,99 @@ La veille continue ; elle note le passage de journée dans `work/veille/nuit.md`
 
 **Synthèse produite :**
 
-⏵ Round 31 : veille — note de journée et attente des prochains commits
+⏵ Round 31 : l’état passe au 03/11, fraîcheur réparée
+
+- **Minuit passé** : la revue signalait `en-cours` daté du 02/11 alors que le dernier commit est du 03/11 — **en-tête passé au 03/11 00 h 06**, revue ✅ (commit `589508b2`).
+- **Nouvelle fiche** (N2 `rapport-n2-porte-propre.md`) : compteurs **574 fiches / 660 JSON / 82 portes** (`8133ee1e`), tous les contrôles verts (T0, T1, stricte, en-cours, journal).
+- **Runs N2** : `713516` (1 h 42) et `758133` (11 min) continuent ; les GPU restent occupés et déclarés.
+
+La veille continue : intégration des commits au fil de l'eau, suivi des runs, puis le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 37 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check events and runs
+- bash — Wait for the next commit
+
+**Synthèse produite :**
+
+⏵ Round 32 : phase de calcul, aucun commit depuis 00 h 07
+
+- Les runs N2 continuent (1 h 55 et 24 min) ; aucun commit depuis `589508b2` (00 h 07) — les sessions sont en calcul long.
+- **État stable** : revue ✅ 574/660/82, en-cours ✅ (daté 03/11), T0 sous 4 000, T1 2 428, porte stricte ✅, registre ✅ (claims N2 + veille ; `nvme_raid` 33 Gio en limite connue).
+
+La veille reste en attente active des prochains commits et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 38 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check events and runs
+- bash — Watch for the next commit in background
+
+**Synthèse produite :**
+
+⏵ Round 33 : veille silencieuse, un guetteur de commit est posé
+
+- Les runs N2 continuent (1 h 56 et 25 min) ; aucun commit depuis `589508b2` (00 h 07).
+- J'ai posé un **guetteur en arrière-plan** (`bash-478`, 30 min max) : il me signalera le prochain commit pour l'intégrer sans scruter en boucle.
+- **État stable** : revue ✅ 574/660/82, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅, registre ✅.
+
+La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 39 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check HEAD and runs
+- job_output
+
+**Synthèse produite :**
+
+⏵ Round 34 : le guetteur veille, les runs continuent
+
+- **Aucun commit** depuis `589508b2` ; le guetteur `bash-478` est toujours en veille.
+- **Runs N2** : `713516` (1 h 56) et `758133` (25 min) continuent ; les GPU restent occupés et déclarés.
+- **État stable** : revue ✅ 574/660/82, en-cours ✅, T0 sous 4 000, T1 2 428, porte stricte ✅, registre ✅.
+
+La veille attend le signal du guetteur pour intégrer le prochain commit et tiendra le **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 40 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check claims expiry and actual usage
+
+**Synthèse produite :**
+
+⏵ Round 35 : claims et usage réel cohérents
+
+- **GPU0** : run N2 `758133` sous le claim `r12-1024` ; **GPU1** : run N2 `713516` sous le claim `r12-mix-512-gpu1` (posé par la veille) — les deux cartes sont **réservées et utilisées**, le hub a son claim `veille`, S et Pensée leurs `cpu1`.
+- `--check` ✅ (aucune sur-réservation ; seul `nvme_raid` 33 Gio) ; aucun claim à libérer.
+- **Aucun commit** depuis `589508b2` ; le guetteur `bash-478` reste en veille ; l'état est vert (574/660/82).
+
+La veille continue jusqu'au **checkpoint de 8 h**. Rien de bloquant.
+
+### Tour 41 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
+
+*19 appels d'outils.* Actions notables :
+
+- bash — Check the roadmap freshness for the night's facts
+- bash — Read the roadmap state paragraph
+- read
+- edit `docs/pilotage/roadmap.md`
+- edit `docs/pilotage/roadmap.md`
+- edit `docs/pilotage/roadmap.md`
+- edit `docs/pilotage/roadmap.md`
+- bash — Verify the roadmap update
+- bash — Commit the roadmap update
+- bash — Check the cascade facts in en-cours
+- edit `docs/pilotage/en-cours.md`
+- bash — Check budgets after the en-cours addition
+- bash — Locate the R1 bullet after the additions
+- edit `docs/pilotage/en-cours.md`
+- … et 2 autres
 
 ## 3. Travail accompli
 
@@ -976,8 +1078,8 @@ La veille continue ; elle note le passage de journée dans `work/veille/nuit.md`
 | `work/ocr/fait_fiche.py` | 1 | 1 |
 | `work/ocr/ajoute_micro.py` | 1 | 0 |
 | `reports/rapport-ocr-cegep.md` | 0 | 2 |
-| `docs/pilotage/en-cours.md` | 0 | 26 |
-| `docs/pilotage/roadmap.md` | 0 | 10 |
+| `docs/pilotage/en-cours.md` | 0 | 28 |
+| `docs/pilotage/roadmap.md` | 0 | 14 |
 | `docs/pilotage/chantiers.md` | 0 | 6 |
 | `docs/pilotage/plan-travail.md` | 0 | 8 |
 | `journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/cloture.md` | 1 | 0 |
@@ -1034,7 +1136,7 @@ La veille continue ; elle note le passage de journée dans `work/veille/nuit.md`
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 434 autres
+- … et 449 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1204,4 +1306,6 @@ La veille continue ; elle note le passage de journée dans `work/veille/nuit.md`
 - ps -eo pid,etime,args | grep -E "git commit|git add" | grep -v grep | head -2; ls .git/index.lock 2>/dev/null || echo "pas de lock"; git status --short docs/pil
 - NUIT — LA LIGNE DES COMPTEURS RETROUVE SA CELLULE DE CONTRÔLE ; PORTE-TABLEAUX REPASSE VERTE" -m "L'édition du compteur JSON (571/659) avait perdu la troisième 
 - NUIT — L'ÉTAT PASSE AU 03/11 : LA FRAÎCHEUR SUIT LE DISQUE (574 FICHES, 660 JSON)" -m "La revue signalait en-cours daté du 02/11 alors que le dernier commit est
+- NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE" -m "État au 03/11 00 h 20 : cascade vrai modèle (POS
+- NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE" -m "État au 03/11 00 h 20 : cascade vrai modèle (POS
 
