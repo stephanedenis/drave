@@ -7,12 +7,12 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 3.9 h |
+| Durée | 4.0 h |
 | Tours | 9 |
-| Messages | 398 |
-| Appels d'outils | 502 |
-| Fichiers touchés | 33 |
-| Commandes | 367 |
+| Messages | 404 |
+| Appels d'outils | 508 |
+| Fichiers touchés | 34 |
+| Commandes | 371 |
 | Sous-agents | 0 |
 | Commits | 9 |
 | Compactages de contexte | 1 |
@@ -364,16 +364,22 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 
 ### Tour 9 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Read politique tests and current S state
 - read
 - edit `/home/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py`
 - edit `/home/stephane/GitHub/Qtrinet/tools/tests/test_pensee_politique.py`
+- bash — Run politique tests and inspect mobile prompt
+- write `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_mobile_drvm.py`
+- bash — Run mobile door qualification
+- bash — Check concurrent commits and staged state
+- bash — Check S commit files, B13 state, T0 at HEAD
+- job_output
 
 **Synthèse produite :**
 
-⏵ Ajout du prompt `porte_mobile` et du test unitaire (7e test)
+⏵ J'attends la mesure mobile (2 portes × 5 politiques) ; l'état HEAD est à 3 997/4 000
 
 ## 3. Travail accompli
 
@@ -414,6 +420,7 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 | `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_minute_drvm.py` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-minute.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py` | 0 | 1 |
+| `/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_mobile_drvm.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -457,7 +464,7 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 327 autres
+- … et 331 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -535,6 +542,8 @@ La suite : la **porte mobile** (deux positions, dont une hors du chemin) ou **st
 - **T5** `identiques, RoPE est **invariant** au décalage (Δ 0,0017) quand la table absolue **×4,8** ;`
 - **T8** `"""Le bruit variable : la politique entraînée à 80 % tient de 50 % à 95 %."""`
 - **T8** `| [rapport-n2-anglais-distille.md](rapport-n2-anglais-distille.md) | N2.n — La distillation anglaise : 4,42 → 3,94, la chaîne complète sur 204 Mo |`
+- **T9** `3f74fe83 20:08:57 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS`
+- **T9** `3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS`
 
 ## 5. Erreurs rencontrées
 

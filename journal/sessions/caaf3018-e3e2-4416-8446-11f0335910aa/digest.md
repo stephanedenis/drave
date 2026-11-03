@@ -2688,3 +2688,155 @@ La passe tourne (`bash-108`, journaux `work/portes/passe-1102-19h32`) : **26 por
 
 Je ne la relis plus en boucle : je reprendrai à la notification de fin, avec le protocole déjà arrêté — lecture du verdict par `awk '$2 != 0'`, confrontation aux cinq rouges tolérées, rejeu seul de toute autre rouge, puis mise à jour de `references-non-regression.md`, de l'état et du journal, et commit du verdict.
 
+
+## Tour 4
+
+### 👤 Utilisateur
+
+Es-tu en attente active d'une tache et ressource? tu doi pouvoir prendre de petites tâches indépendantes si tu cherches bien. Tiens-toi occuppé toute la nuit. je reviens vers 8h demain. je m'attends à ce que les sessions soient bien coordonnées et que le temps de chaque session soit bien utilisé jusqu'à mon retour.
+
+### 🤖 Assistant
+
+⏵ Oui — j'étais en attente passive. Je passe en pilotage de nuit : goal, plan de rounds, et petites tâches du territoire hub.
+
+- **create_goal** `{"objective": "Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches in … [224 caractères tronqués]`
+
+> **Objectif** (create) : Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h.
+
+
+  ```
+{"goal":{"id":"goal-88b10965-3fd1-4a98-b327-a3923f75e06c","revision":1,"objective":"Tenir le hub de nuit jusqu'à 8 h le 03/11 : intégrer le verdict de la passe complète et chaque fait livré par les quatre sessions (N2 0733c5bb, S 29ad180d, Pensée e181ce02, D/R/A fe3c05f0), garder en-cours, roadmap, références, journal et compteurs verts, prendre les petites tâches indépendantes du territoire hub (backlog, INDEX, docs de méthode, runbook §9, liens, schémas), surveiller les heartbeats et les conflits de territoire, et laisser un rapport de nuit reprenable à 8 h.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date; echo \"=== passe ===\"; wc -l < work/portes/passe-1102-19h32/registre.txt; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; tail -2 work/portes/passe-1102-19h32/registre.txt; echo \"=== sessions ===\"; python3 tools/sessi … [134 caractères tronqués]`
+
+  ```
+lun 02 nov 2026 20:12:33 EST
+=== passe ===
+30
+porte-homeostasie 2 0
+porte-homeostasie 2 0
+porte-horloge 0 27
+=== sessions ===
+    0733c5bb-f90b-4f58 · actif    ·  17 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+    0b0a6a0d-05f5-4308 · terminé  · 2138 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+    0b69f616-5c75-4c34 · terminé  · 4212 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+    22e518ee-81b8-4081 · terminé  · 3383 min · archives de sessions, journal, en-cours, roadmap, backlog, outillage d'archivage
+    29ad180d-38a5-4481 · actif    ·  23 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+    536cd5d6-94ac-4057 · actif    ·  23 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+    71d57f53-8b41-4220 · terminé  · 4716 min · docs/pilotage/en-cours.md, docs/methode/continuite.md, tools/sessions.py, journal/sessions/README.md, journal/sessions/_modele/plan.md, tools/porte-sessions.sh
+    8156fd
+… [400 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ C'est la nuit du hub : D/R/A a terminé. J'intègre sa clôture et je garde l'œil sur la passe.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== plan D/R/A (fin) ===\"; tail -25 journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/plan.md; echo \"=== git log 6 ===\"; git log --oneline -6", "description": "Inspect D/R/A session completion and recent commits"}`
+
+  ```
+=== plan D/R/A (fin) ===
+2. l'**extraction PDF native et OCR** des documents locaux (les 104 livres, les 2 711 PDF du
+   CEGEP, les collections) avec leurs licences ;
+3. la **préparation de R1.1/R1.2** (le contexte natif) et les mesures A2.6/A8.3 ;
+4. pour chaque livraison : le chiffre, la fiche, le JSON, le commit et la ligne d'état.
+
+## Ambition
+
+Que **D** cesse d'être un inventaire et devienne le **carburant mesuré** de N2, L et S : des
+corpus dont on connaît la taille, la qualité, les fuites et les limites — et dont le passage à
+l'échelle (10 langues, texte intégral, documents) est reproduit par un outil, pas à la main.
+
+## Stratégie
+
+1. **Le pilote avant le run** : 100 000 articles pour mesurer le débaliseur (temps, résidus,
+   volume), puis le run complet en arrière-plan.
+2. **La même chaîne que les résumés** : dédup exacte, split par article, SHA-256, manifeste,
+   contamination — pour que les deux corpus se comparent.
+3. **Les limites écrites** : débaliseur regex (infobox, formules, tableaux perdus), licence
+   CC-BY-SA, dédup exacte seulement.
+4. **Ne pas toucher aux GPU** : la session est CPU/IO ; N2 garde les siens.
+
+## Reprise
+
+**R4.4** est close (fiche `rapport-r44-sca
+… [768 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"=== git status ===\"; git status --short | head -20; echo \"=== rapports récents ===\"; ls -lat reports/*.md | head -6; echo \"=== session D/R/A fichiers ===\"; ls -lat journal/sessions/fe3c05f0-834b-44f2-8739-501865d652c1/ | he … [61 caractères tronqués]`
+
+  ```
+=== git status ===
+ M tools/pensee/operateurs.py
+ M tools/tests/test_pensee_politique.py
+?? tools/tests/qualifier_porte_mobile_drvm.py
+=== rapports récents ===
+-rw-r--r--. 1 stephane stephane  9369  2 nov 20:05 reports/rapport-s-analyseur-roles.md
+-rw-r--r--. 1 stephane stephane  5863  2 nov 20:05 reports/rapport-s-corpus-reel.md
+-rw-r--r--. 1 stephane stephane 75231  2 nov 20:01 reports/INDEX.md
+-rw-r--r--. 1 stephane stephane 23125  2 nov 19:50 reports/README.md
+-rw-------. 1 stephane stephane  5967  2 nov 19:50 reports/rapport-pensee-porte-minute.md
+-rw-------. 1 stephane stephane  9210  2 nov 19:42 reports/rapport-n2-200k.md
+=== session D/R/A fichiers ===
+total 16428
+-rw-r--r--. 1 stephane stephane   763951  2 nov 20:10 rapport.md
+-rw-r--r--. 1 stephane stephane  2474971  2 nov 20:09 digest.md
+drwxr-xr-x. 1 stephane stephane      114  2 nov 18:36 .
+-rw-------. 1 stephane stephane     2050  2 nov 18:36 cloture.md
+-rw-r--r--. 1 stephane stephane     3461  2 nov 18:36 plan.md
+drwxr-xr-x. 1 stephane stephane     8440  2 nov 16:16 ..
+-rw-------. 1 stephane stephane 13568675  2 nov 13:25 session.v4.jsonl.zstd
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+### 🤖 Assistant
+
+⏵ Autres commits de pilotage pendant la passe — je vérifie qui écrit l'état et je réconcilie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git log --format=\"%h %ad %an %s\" --date=format:\"%d/%m %H:%M\" -10; echo \"=== a902abea ===\"; git show --stat --oneline a902abea | head -12; echo \"=== a67dbf00 ===\"; git show --stat --oneline a67dbf00 | head -12", "description": " … [38 caractères tronqués]`
+
+  ```
+3f74fe83 02/11 20:08 Stéphane S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+a67dbf00 02/11 20:07 Stéphane PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE
+67ec9cd4 02/11 20:04 Stéphane B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)
+c0196b55 02/11 19:59 Stéphane N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)
+a902abea 02/11 19:49 Stéphane PILOTAGE — L'ÉTAT EST À JOUR ET CONCIS : 3 SESSIONS ACTIVES, N2 CLOSE (200 K PAS), 560/648 ; R1.2 À 1 024 OCTETS
+e2227509 02/11 19:46 Stéphane N2 — CLÔTURE : 200 000 PAS (3,1591) ET R1.1/R1.2 (0,97× LA PORTE, FENÊTRE 512 −0,244) SONT COMMITTÉS
+e12c39c1 02/11 19:43 Stéphane N2 — 200 000 PAS SUR LE MÉLANGE 1 Go : 3,1591 EN DOMAINE (−0,33), 5,6056 EN LITTÉRATURE, LA PORTE 2,5 À 1,3–2,7 M PAS
+9f1f4869 02/11 19:34 Stéphane B13 — LA PORTE EST À 134/140 : LE 140/140 DE 702b368c NE SE REJOUE PAS (138/140) ; 4 ROUGES DU SOUS-MODULE S, 2 DU TEST PÉRIMÉ
+7d5bd08d 02/11 19:16 Stéphane ÉTAT — T0 REVENU SOUS 4 000 (3 930) : N2/S/R1 CONDENSÉS, LES CHIFFRES GARDÉS
+4a8
+… [1735 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; sed -n 1,40p docs/pilotage/en-cours.md", "description": "Read current state header and sessions"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-02, 20 h 05 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reprise après le reboot du 02/11 15 h 06** : quatre sessions rouvertes ; **D/R/A close**
+> (18 h 45), **N2** close à 19 h 46 puis **rouverte** pour la **nuit** ; runbook :
+> [`plan-travail.md`](plan-travail.md) § 9.
+
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+
+### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise
+
+- **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
+- **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
+- **Plan** : 1–7) ~~audit, commits, état, mandats, po
+… [1234 caractères tronqués]
+  ```
+

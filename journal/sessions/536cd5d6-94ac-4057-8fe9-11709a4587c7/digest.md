@@ -5887,3 +5887,101 @@ MM journal/2026-11-02/outils.md
   ✅ index : aucun fait stagé sans état
   ```
 
+### 🤖 Assistant
+
+⏵ Registre des ressources en place ; le réel montre le gate sur GPU0 et GPU1 au repos.
+
+# Oui : le pilotage sait maintenant réserver la machine
+
+## Ce qui est en place
+
+| pièce | rôle |
+|---|---|
+| `tools/ressources.py` | registre des ressources : `--claim`, `--release`, `--check`, `--suggest`, `--actual`, `--autotest` (9 cas) |
+| `docs/pilotage/plan-travail.md` § 10 | la politique : matrice, règle NUMA, protocole, allocation type, stockage, limites |
+| `work/ressources.json` | le registre vivant (ignoré par git) ; les quatre sessions y sont déjà déclarées |
+
+**Commit** : `a67dbf00` sur `master` (Qtrinet). Le hook a ajouté le journal dérivé ; **les fichiers déjà indexés par les autres sessions (`en-cours`, `roadmap`, rapports) n'ont pas été touchés**. L'état est en écriture par les autres sessions (1 623 mots, T0 **3 997/4 000**) : je n'y ai pas ajouté de ligne pour ne pas écraser leur version ; la politique est dans `plan-travail` § 10.
+
+## Le modèle
+
+| ressource | capacité | NUMA | règle |
+|---|---|---:|---|
+| `gpu0` / `gpu1` | 1 job exclusif, 16 Gio | 0 | une carte, un job ; GPU1 libre pour une éval |
+| `cpu0` | 16 fils utiles (20, réserve 4) | 0 | **fils des GPU** (0-9,20-29) |
+| `cpu1` | 16 fils utiles (20, réserve 4) | 1 | **CPU seul, hub** (10-19,30-39) |
+| `ram` | 109 Gio utiles (125, réserve 16) | — | un job > 80 Gio est machine-exclusif |
+| `nvme_system` | 1 IO lourde, 705 Gio | — | `/`, `/home`, `/FastNVMe` (qui est sur le système, pas le RAID) |
+| `nvme_raid` | 1 IO lourde, **33 Gio** | — | `/home/stephane/IA` — presque plein |
+| `hdd_data13tb` | 1 IO lourde, 1,9 Tio | — | corpus, OCR |
+| `machine` | 1 job exclusif | — | passe complète / mesure globale |
+
+**Règle NUMA** : les deux GPU sont sur le node 0. Un job GPU réserve `cpu0` et se lance avec
+`numactl --cpunodebind=0 --membind=0` (+ `CUDA_VISIBLE_DEVICES=0/1`) ; un job CPU seul va sur
+`cpu1` avec `numactl --cpunodebind=1 --membind=1`.
+
+## Le protocole
+
+```bash
+python3 tools/ressources.py --status
+python3 tools/ressources.py --claim --session 0733c5bb --job r12-1024 \
+  --res "gpu0=exclusive,cpu0=12,ram=60" --prio 1 --eta 240
+python3 tools/ressources.py --release --session 0733c5bb --job r12-1024
+python3 tools/ressources.py --check        # --strict pour une porte
+python3 tools/ressources.py --suggest      # ce qui est libre
+python3 tools/ressources.py --actual       # le réel vs le registre
+```
+
+Si le claim ne tient pas, il est **mis en file** (⏸) ; la session prend une autre tâche et la file
+est admise à la libération. C'est la règle « jamais en attente ».
+
+## L'allocation type (et l'état réel de ce soir)
+
+| session | claim | lancement |
+|---|---|---|
+| **N2** (`0733c5bb`) | `gpu0`, `cpu0` 12, `ram` 60 | node 0 |
+| **hub/portes** (`536cd5d6`) | `gpu1`, `cpu1` 8, `ram` 8 | node 1 (portes CPU-first) |
+| **S** (`29ad180d`) | `cpu1` 4, `ram` 8 | node 1 |
+| **Pensée** (`e181ce02`) | `cpu1` 4, `ram` 16 | node 1 |
+| **passe complète** | `machine` exclusive | attend que les autres libèrent |
+
+`cpu1` = 8 + 4 + 4 = **16 fils** ; `ram` = 92 Gio ; les quatre claims passent `--check`.
+
+**Mais le réel de 20 h 00 raconte autre chose** :
+
+```
+GPU0 (N2) : llama-server 366 Mio + python N2 5 276 Mio + drave (porte) 120 Mio
+GPU1      : llama-server 118 Mio — 28 °C, 16 W, 300 MHz, au repos
+CPU       : drave 883 %, llama-server 683 %, python N2 100 % — affinités 0-39
+```
+
+La porte `drave` tournait **sur GPU0**, avec N2, alors que **GPU1 était au repos** ; N2 et
+`llama-server` ne sont **pas pinnés** (0-39). C'est exactement la simultanéité que le registre doit
+empêcher. L'état dit « les portes gardent le GPU1 » : le processus, lui, était sur GPU0.
+
+## Ce qu'il faut faire maintenant
+
+1. **Pinner N2** : `CUDA_VISIBLE_DEVICES=0 numactl -N0 -m0 <commande>`.
+2. **Pinner les portes** : `CUDA_VISIBLE_DEVICES=1 numactl -N1 -m1 <porte>` (ou `cpu0` 4 si la
+   porte est GPU-lourde : 12 + 4 = 16). Le claim `hub/portes` est déjà `gpu1/cpu1`.
+3. **Passe complète** : si c'est bien les 81 portes, elle doit claim `machine` et **attendre** que
+   N2, S et Pensée libèrent ; sinon, c'est une passe partielle, `gpu1/cpu1` suffit.
+4. **llama-server** : service partagé (118/366 Mio, 683 % CPU) ; le déclarer comme service de fond
+   ou le borner (`numactl`/`CPUQuota`), pas comme un claim GPU exclusif.
+5. **Stockage** : `IA` à **33 Gio** ; pas de gros checkpoint dessus — `hdd_data13tb` (1,9 Tio) ou
+   `nvme_system` (705 Gio), et `--claim nvme_raid=heavy:20` vérifie l'espace.
+
+## Les limites
+
+- Le registre est **consultatif** : il rend le conflit visible, il ne l'empêche pas. L'application
+  dure serait `systemd-run` avec `AllowedCPUs`, `IOWeight`, `MemoryMax` et `CUDA_VISIBLE_DEVICES`,
+  ou des slices par ressource.
+- Le mapping **processus → claim** n'est pas automatique : `--actual` liste les processus et les
+  claims par GPU, mais ne sait pas qu'un `drave` est la porte du hub. C'est le hub qui relit.
+- Une **porte `porte-ressources.sh`** (`--check --strict`) pourra suivre : elle ferait passer le
+  compte de 81 à 82 portes, et les compteurs de l'état suivraient.
+
+Les quatre claims sont actifs dans `work/ressources.json` ; `--status` les montre et `--actual`
+montre le réel. Les sessions peuvent les libérer avec `--release` ; le hub peut ajouter la ligne
+d'état « Ressources » quand il reprend l'écriture de `en-cours`.
+

@@ -6224,3 +6224,134 @@ Another git process seems to be running in this repository, or the lock file may
   ```
 
 - **bash** `{"command": "for i in $(seq 1 60); do N=$(pgrep -fc \"git commit\" 2>/dev/null || true); [ \"${N:-0}\" -eq 0 ] && break; sleep 3; done; echo \"git commits restants: $(pgrep -fc 'git commit' 2>/dev/null || echo 0)\"; git log --oneline -4; echo \"--- status ---\"; git status --short | head -12; echo \ … [196 caractères tronqués]`
+
+  ```
+git commits restants: 2
+3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+a67dbf00 PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE
+67ec9cd4 B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)
+c0196b55 N2 — MANDAT DE NUIT : R1.2 À 1 024 OCTETS ET LA FENÊTRE SUR LE MÉLANGE DE PRODUCTION (JUSQU'À 08 h)
+--- status ---
+ M tools/pensee/operateurs.py
+ M tools/tests/test_pensee_politique.py
+?? tools/tests/qualifier_porte_mobile_drvm.py
+--- consigne? ---
+1
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -3; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -2; echo \"=== T0 ===\"; python3 tools/taille_documents.py 2>&1 | tail -2; echo \"=== strict ===\"; python3 tools/sessions.py --check --strict 2>&1 | tail -2; ec … [133 caractères tronqués]`
+
+  ```
+revue de documentation · 562 fiche(s) · 648 JSON · 119 doc(s) · 81 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== en-cours ===
+  en-cours · 1623 mots · 7 sections · 4 session(s) · 7 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== T0 ===
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+=== strict ===
+  ⚠ fichiers proches : data/ (0733c5bb-f90b-4f58-9241-3364fa32e46c) / data/structures/ (29ad180d-38a5-4481-a9a7-ec6ab31c895f)
+=== journal ===
+  journal · 39 jour(s) · 117 session(s) · 1858 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "python3 tools/ressources.py --status 2>&1 | tail -12; echo \"=== actual ===\"; python3 tools/ressources.py --actual 2>&1 | grep -E \"GPU|⚠|libres\" | head -8; echo \"=== check ===\"; python3 tools/ressources.py --check 2>&1 | tail -3; echo \"=== journal auto dry ===\"; python3 tools/jou … [115 caractères tronqués]`
+
+  ```
+cpu1           cpu             16       16        0  réserve 4 fils
+  ram            ram            109       92       17  réserve 16 Gio
+  nvme_system    io               1        0        1  705 Gio libres · 0 Gio réservés
+  nvme_raid      io               1        0        1  33 Gio libres · 0 Gio réservés
+  hdd_data13tb   io               1        0        1  1943 Gio libres · 0 Gio réservés
+  machine        global           1        0        1  passe complète
+
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 536cd5d6 / portes : gpu1=exclusive, cpu1=8, ram=8 (prio 1, 110 min)
+    · 29ad180d / analyseur : cpu1=4, ram=8 (prio 2, 90 min)
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+=== actual ===
+  Réel · GPU
+    GPU0 (réservé) : PID 110066 llama-server (366 MiB) ; PID 327714 /home/stephane/gpu-env/bin/python (5276 MiB) ; PID 345583 ./drave-core/target/release/drave (120 MiB)
+    GPU1 (réservé) : PID 110066 llama-server (118 MiB) ; PID 331743 /home/stephane/gpu-env/bin/python (2992 MiB)
+    nvme_system    705 Gio libres (/)
+    nvme_raid      33 Gio libres (/home/stephane/IA)
+    hdd_data13tb   1943 Gio lib
+… [365 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,pcpu,args | grep -E \"toutes-les-portes|porte-|session_report|journal_auto\" | grep -v grep | head -6; echo \"--- claims ---\"; python3 tools/ressources.py --status 2>&1 | grep -A6 \"Réservations\"; echo \"--- journal commits ---\"; git show --stat --oneline 3f74fe83 |  … [191 caractères tronqués]`
+
+  ```
+164359       40:30  0.0 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; CUDA_VISIBLE_DEVICES=1,0 JOURNAUX=work/portes/passe-1102-19h32 bash tools/toutes-les-portes.sh; echo "EXIT=$?"; echo "=== REGISTRE (code != 0) ==="; awk '$2 != 0' work/portes/passe-1102-19h32/registre.txt; echo "=== BILAN ==="; tail -1 work/portes/passe-1102-19h32/registre.txt
+ 164366       40:30  0.0 bash tools/toutes-les-portes.sh
+ 343576       03:20  0.0 timeout 1800 bash tools/porte-indice.sh
+ 343577       03:20  0.0 bash tools/porte-indice.sh
+ 348710       01:06  0.1 bash -c cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/tests/qualifier_porte_mobile_drvm.py && curl -s --max-time 3 http://127.0.0.1:18082/health && time python3 tools/tests/qualifier_porte_mobile_drvm.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-porte-mobile.json 2>&1 | tail -50
+ 348819       01:05  0.9 python3 tools/tests/qualifier_porte_mobile_drvm.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-porte-mobile.json
+--- claims ---
+  Réservations actives :
+    · 0733c5bb / r12-1024 : gpu0=exclusive, cpu0=12, ram=60 (prio 1, 240 min)
+    · 536cd5d6 / portes : gpu1=exclusive, cpu1=8, ram=8
+… [769 caractères tronqués]
+  ```
+
+- **bash** `{"command": "tail -30 journal/2026-11-02/README.md", "description": "Read the journal notes tail"}`
+
+  ```
+(44 nœuds) : la porte n'est pas un contrôle propre. Fiche
+[`pensee-politique-llm`](../../reports/rapport-pensee-politique-llm.md), JSON
+[`pensee-politique-llm.json`](../../reports/pensee-politique-llm.json).
+
+**18 h 44 — la porte DRVM s'ouvre avec la règle : 27 nœuds, 4 sonde.**
+
+Le 7B, avec le prompt `porte` (murs, porte (3,3), règle « depuis (3,2), réponds bas »), ouvre
+la porte et atteint le but en **27 nœuds, 4 sonde, 7 appels, 12 s** ; l'ancien prompt (sans la
+règle) échouait à **200 nœuds, 3 appels, 179,5 s**. L'oracle 28/5, l'aveugle 200/61 sans but,
+le hasard 44/7 par chance. Le modèle **suit** une règle ; il ne la découvre pas. Fiche
+[`pensee-porte-llm`](../../reports/rapport-pensee-porte-llm.md), JSON
+[`pensee-porte-llm.json`](../../reports/pensee-porte-llm.json).
+
+**19 h 31 — la porte B13 est à 134/140 ; le 140/140 de 702b368c ne se rejoue pas.**
+
+Le worktree exact du commit `702b368c` (sous-module `3b68143`) rend **2/5** sur
+`fidelite_lien_auto` : la porte y serait **138/140**, pas 140/140. Le sous-module S `647205a`
+ajoute **quatre** rouges (T111, T113–T115 ; l'ancien `3b68143` les passe, 138/140) ; les deux
+T132/T133 sont un **test périmé** (2/5 déterministe avec les 
+… [650 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "journal/2026-11-02/README.md", "offset": 300}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md</path>
+<type>file</type>
+<content>
+300: 
+301: **18 h 44 — la porte DRVM s'ouvre avec la règle : 27 nœuds, 4 sonde.**
+302: 
+303: Le 7B, avec le prompt `porte` (murs, porte (3,3), règle « depuis (3,2), réponds bas »), ouvre
+304: la porte et atteint le but en **27 nœuds, 4 sonde, 7 appels, 12 s** ; l'ancien prompt (sans la
+305: règle) échouait à **200 nœuds, 3 appels, 179,5 s**. L'oracle 28/5, l'aveugle 200/61 sans but,
+306: le hasard 44/7 par chance. Le modèle **suit** une règle ; il ne la découvre pas. Fiche
+307: [`pensee-porte-llm`](../../reports/rapport-pensee-porte-llm.md), JSON
+308: [`pensee-porte-llm.json`](../../reports/pensee-porte-llm.json).
+309: 
+310: **19 h 31 — la porte B13 est à 134/140 ; le 140/140 de 702b368c ne se rejoue pas.**
+311: 
+312: Le worktree exact du commit `702b368c` (sous-module `3b68143`) rend **2/5** sur
+313: `fidelite_lien_auto` : la porte y serait **138/140**, pas 140/140. Le sous-module S `647205a`
+314: ajoute **quatre** rouges (T111, T113–T115 ; l'ancien `3b68143` les passe, 138/140) ; les deux
+315: T132/T133 sont un **test périmé** (2/5 déterministe avec les deux sous-
+… [739 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "journal/2026-11-02/README.md", "new_string": "[`pensee-porte-minute`](../../reports/rapport-pensee-porte-minute.md), JSON\n[`pensee-porte-minute.json`](../../reports/pensee-porte-minute.json).\n\n**20 h 10 — la nuit s'organise : quatre claims, la passe des portes, quatre axes.**\n\nLe … [786 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-02/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "export GIT_INDEX_FILE=/tmp/index.veille; git read-tree HEAD; git add journal/2026-11-02/README.md; git diff --cached --stat; git commit -m \"NUIT — LE RÉCIT S'OUVRE : QUATRE CLAIMS, LA PASSE DES PORTES ET LE REGISTRE VIVANT\" 2>&1 | tail -6", "description": "Commit the night journal not … [47 caractères tronqués]`

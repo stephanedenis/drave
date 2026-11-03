@@ -4962,3 +4962,64 @@ MM journal/2026-11-02/memoire.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --cached --stat | tail -12; echo \"=== commit ===\"; git commit -m \"S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS\" -m \"mesure_corpus.py : 50 000 lignes et 2 … [610 caractères tronqués]`
+
+  ```
+.../rapport.md                                     |  17 ++--
+ .../536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md |  63 ------------
+ .../rapport.md                                     |  19 ++--
+ journal/sessions/MANIFEST.md                       |  10 +-
+ .../abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md |  75 ---------------
+ .../rapport.md                                     |  41 ++------
+ .../b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md |  65 -------------
+ .../rapport.md                                     |  19 ++--
+ reports/rapport-s-analyseur-roles.md               |   2 +-
+ reports/rapport-s-corpus-reel.md                   |  96 +++++++++++++++++++
+ tools/structures                                   |   2 +-
+ 26 files changed, 193 insertions(+), 437 deletions(-)
+=== commit ===
+[master 3f74fe83] S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+ 16 files changed, 312 insertions(+), 33 deletions(-)
+ create mode 100644 reports/rapport-s-corpus-reel.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git push origin master 2>&1 | tail -4; echo \"exit=${PIPESTATUS[0]}\"; git ls-remote --heads origin | head -1; git -C tools/structures ls-remote --heads origin | head -1; echo \"=== S dans HEAD ===\"; git show HEAD:docs/pilotage/en-c … [167 caractères tronqués]`
+
+  ```
+To github.com:stephanedenis/drave.git
+   c0196b55..3f74fe83  master -> master
+exit=0
+3f74fe83a4a1af31cff539a50c71a1e9d791aadc	refs/heads/master
+97641d538ce0a8816a55104fa5d3847e4e6cecfe	refs/heads/master
+=== S dans HEAD ===
+2
+160000 commit 97641d538ce0a8816a55104fa5d3847e4e6cecfe	tools/structures
+ M tools/pensee/operateurs.py
+ M tools/tests/test_pensee_politique.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Non : le CPU a servi au corpus réel et à la banque ; tout est committé et poussé.
+
+**Ce qui a été entrepris**
+
+- **Mesure sur corpus réel** (`mesure_corpus.py`, 60 s CPU) : **50 000 lignes** et **20 799 phrases** CEGEP OCR + **50 000** lignes/phrases de littérature propre, avec le **mélange des mots** en contrôle.
+  - littérature propre : **65,5 %** de GN+GV (phrases) / **51,0 %** (lignes) contre **9,1 %** / **3,8 %** pour le mélange ;
+  - CEGEP OCR : **8,5 %** / **3,6 %** contre **9,1 %** / **3,8 %** — **au plancher du mélange** : corpus multilingue/technique, analyseur français ; ce n'est pas une mesure du français OCR ;
+  - couverture **0,94** / **0,89** ; homographes **25**/20 799 et **1 064**/50 000.
+- **Banque de candidats réels** (`candidats_corpus.py`) : **200 phrases, 355 candidats**, manifeste SHA-256 `43957a3b…` — de la matière à valider, pas des vérités.
+- **46 tests** verts ; fiches [`corpus réel`](reports/rapport-s-corpus-reel.md) et [`analyseur`](reports/rapport-s-analyseur-roles.md).
+
+**Committé et poussé**
+
+- Sous-module : **`97641d5`** (mesure + banque) → `drave-structures` ; le pointeur est dans le principal.
+- Principal : **`3f74fe83`** → `origin/master` (la fiche, le manifeste, l'état S, le pointeur, l'INDEX) ; le registre des ressources **`a67dbf00`** du hub est poussé avec.
+- État : **562 fiches / 648 JSON**, T0 vert, `en-cours` 1 623 mots.
+
+**Ce qui tourne / ce qui reste**
+
+- Le **GPU** est à N2 (mandat de nuit R1.2 à 1 024 octets, jusqu'à 08 h) et à la passe de portes ; le **CPU** était à S, d'où le registre `tools/ressources.py` du hub (`a67dbf00`) — on peut maintenant réserver explicitement.
+- Prochaine action S : **validation humaine des 200 phrases** de la banque (le serveur les charge), puis **homographes/lexique** (`ferme`, `fait`, `lit`) et filtre langue/genre.
+

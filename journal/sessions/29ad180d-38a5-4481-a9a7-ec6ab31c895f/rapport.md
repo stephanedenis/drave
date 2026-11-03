@@ -9,10 +9,10 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 3.9 h |
 | Tours | 6 |
-| Messages | 237 |
-| Appels d'outils | 248 |
+| Messages | 239 |
+| Appels d'outils | 249 |
 | Fichiers touchés | 13 |
-| Commandes | 180 |
+| Commandes | 181 |
 | Sous-agents | 0 |
 | Commits | 12 |
 | Compactages de contexte | 0 |
@@ -223,7 +223,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 
 ### Tour 6 — attends-tu aprèes quelque-chose? on a des ressources qui peuvent en prendre un peu plus
 
-*32 appels d'outils.* Actions notables :
+*33 appels d'outils.* Actions notables :
 
 - bash — Inspect CEGEP OCR corpus for real-text measurement
 - bash — Assess OCR text quality and plausible sentence count
@@ -239,11 +239,31 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - bash — Commit and push corpus measurement submodule
 - bash — Check main state, gate pass, and fiche status
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s-corpus-reel.md`
-- … et 18 autres
+- … et 19 autres
 
 **Synthèse produite :**
 
-⏵ Non, rien de bloquant : je n'attends que la passe de portes du hub. J'entreprends la mesure de l'analyseur sur le corpus CEGEP réel, en CPU.
+⏵ Non : le CPU a servi au corpus réel et à la banque ; tout est committé et poussé.
+
+**Ce qui a été entrepris**
+
+- **Mesure sur corpus réel** (`mesure_corpus.py`, 60 s CPU) : **50 000 lignes** et **20 799 phrases** CEGEP OCR + **50 000** lignes/phrases de littérature propre, avec le **mélange des mots** en contrôle.
+  - littérature propre : **65,5 %** de GN+GV (phrases) / **51,0 %** (lignes) contre **9,1 %** / **3,8 %** pour le mélange ;
+  - CEGEP OCR : **8,5 %** / **3,6 %** contre **9,1 %** / **3,8 %** — **au plancher du mélange** : corpus multilingue/technique, analyseur français ; ce n'est pas une mesure du français OCR ;
+  - couverture **0,94** / **0,89** ; homographes **25**/20 799 et **1 064**/50 000.
+- **Banque de candidats réels** (`candidats_corpus.py`) : **200 phrases, 355 candidats**, manifeste SHA-256 `43957a3b…` — de la matière à valider, pas des vérités.
+- **46 tests** verts ; fiches [`corpus réel`](reports/rapport-s-corpus-reel.md) et [`analyseur`](reports/rapport-s-analyseur-roles.md).
+
+**Committé et poussé**
+
+- Sous-module : **`97641d5`** (mesure + banque) → `drave-structures` ; le pointeur est dans le principal.
+- Principal : **`3f74fe83`** → `origin/master` (la fiche, le manifeste, l'état S, le pointeur, l'INDEX) ; le registre des ressources **`a67dbf00`** du hub est poussé avec.
+- État : **562 fiches / 648 JSON**, T0 vert, `en-cours` 1 623 mots.
+
+**Ce qui tourne / ce qui reste**
+
+- Le **GPU** est à N2 (mandat de nuit R1.2 à 1 024 octets, jusqu'à 08 h) et à la passe de portes ; le **CPU** était à S, d'où le registre `tools/ressources.py` du hub (`a67dbf00`) — on peut maintenant réserver explicitement.
+- Prochaine action S : **validation humaine des 200 phrases** de la banque (le serveur les charge), puis **homographes/lexique** (`ferme`, `fait`, `lit`) et filtre langue/genre.
 
 ## 3. Travail accompli
 
@@ -307,7 +327,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 140 autres
+- … et 141 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -356,6 +376,7 @@ Dis-moi quand ils sont prêts : je les commite avec leurs lignes d'état et je p
 - **T6** `262:  propre contre 9,1 % pour les mots mélangés, 8,5 % contre 9,1 % sur le CEGEP OCR (multilingue et`
 - **T6** `[master 140feb6] S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)`
 - **T6** `140feb6 S — L'ANALYSEUR LIT LE FRANÇAIS PROPRE (65,5 %), PAS LE CEGEP OCR (8,5 %, PLANCHER DU MÉLANGE)`
+- **T6** `[master 3f74fe83] S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS`
 
 ## 5. Erreurs rencontrées
 

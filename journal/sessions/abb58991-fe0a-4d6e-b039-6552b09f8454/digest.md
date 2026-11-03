@@ -10099,3 +10099,172 @@ MM journal/2026-11-02/apprentissage.md
 MM journal/2026-11-02/attention.md
   ```
 
+### 🤖 Assistant
+
+⏵ Lecture des zones à éditer (prompt et tests), puis ajout du `porte_mobile`
+
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", "offset": 115, "limit": 35}`
+- **read** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/test_pensee_politique.py", "offset": 1, "limit": 50}`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py</path>
+<type>file</type>
+<content>
+115:         return ("avant", "arriere") if self.jeu == "cadenas" else ("droite", "gauche", "bas", "haut")
+116: 
+117:     def _invite(self, etat, but) -> str:
+118:         if self.jeu == "cadenas":
+119:             if self.variante == "minimal":
+120:                 return ("Tu es la politique d'un moteur de recherche. Position : "
+121:                         f"{_pos_c(etat)}. But : {but}. Réponds uniquement par avant ou arriere.")
+122:             return ("Tu es la politique d'un moteur de recherche. Position : "
+123:                     f"{_pos_c(etat)}. But : {but}. "
+124:                     "La position augmente quand on va avant et diminue quand on va arriere. "
+125:                     "Si la position est inférieure au but, réponds avant ; sinon réponds arriere. "
+126:                     "Réponds uniquement par avant ou arriere.")
+127:         if self.jeu == "porte":
+128:             x, y = _xy_p(etat)
+129:             ouvert = "oui" if _open_p(etat) else "non"
+130:             murs = ", ".join(f"({a},{b})" for a, b in sorted(MURS_P))
+131:             return ("Tu es la politiq
+… [1395 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/test_pensee_politique.py</path>
+<type>file</type>
+<content>
+1: """Tests de la politique DRVM/native — le contrat sans modèle, puis le refus."""
+2: import pathlib
+3: import sys
+4: import unittest
+5: 
+6: RACINE = pathlib.Path(__file__).resolve().parents[2]
+7: sys.path.insert(0, str(RACINE))
+8: from tools.pensee.operateurs import (BUT_C, CADENAS, LABYRINTHE, LABYRINTHE_PORTE,  # noqa: E402
+9:                                      L_BUT, P_BUT, PolitiqueLLM)
+10: 
+11: 
+12: class TestPolitiqueLLM(unittest.TestCase):
+13:     def test_cadenas(self):
+14:         p = PolitiqueLLM("faux", jeu="cadenas", transport=lambda *_: "avant")
+15:         self.assertEqual(p.propose(CADENAS.initial(), BUT_C), "avant")
+16:         self.assertGreater(p.latence, 0.0)
+17: 
+18:     def test_cadenas_variantes(self):
+19:         etat = CADENAS.initial()
+20:         minimal = PolitiqueLLM("faux", jeu="cadenas", variante="minimal")
+21:         regle = PolitiqueLLM("faux", jeu="cadenas", variante="regle")
+22:         self.assertNotIn("augmente", minimal._invite(etat, BUT_C))
+23:         self.assertIn("augmente", regle._invite(etat, BUT_C))
+24: 
+25:     def test_porte(
+… [1144 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout du prompt `porte_mobile` et du test unitaire (7e test)
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py", "old_string": "        x, y = _xy_l(etat)\n        murs = \", \".join(f\"({a},{b})\" for a, b in sorted(MURS))", "new_string": "        if self.jeu == \"porte_mobile\":\n            x, y = _xy_pmob(etat)\n            d = _d_pm … [851 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/pensee/operateurs.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/GitHub/Qtrinet/tools/tests/test_pensee_politique.py", "old_string": "        self.assertIn(\"(3,2)\", invite)\n\n    def test_labyrinthe(self):", "new_string": "        self.assertIn(\"(3,2)\", invite)\n\n    def test_porte_mobile(self):\n        from tools.pensee.opera … [437 caractères tronqués]`
+
+  ```
+The file /home/stephane/GitHub/Qtrinet/tools/tests/test_pensee_politique.py has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Tests du prompt mobile (7 tests) puis écriture du banc
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m unittest tools/tests/test_pensee_politique.py 2>&1 | tail -3; python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.pensee.operateurs import PolitiqueLLM, _etat_pmob\np=PolitiqueLLM('faux', jeu='porte_mobile')\ne=_etat_pmob(1,2,F … [125 caractères tronqués]`
+
+  ```
+Ran 7 tests in 0.001s
+
+OK
+Tu es la politique d'un moteur de recherche dans une grille 5x5. x va vers la droite, y vers le bas. Murs : (0,1), (1,1), (1,2), (2,1), (2,2), (3,4), (4,1), (4,2). La porte mobile est en (1,3) ; depuis une case voisine, la sonde l'ouvre si tu vises sa direction. Une fois ouverte, va en (4,4). Position : (1,2). Porte ouverte : non. But : (4,4). Réponds uniquement par droite, gauche, bas ou haut. Ne propose pas un mur.
+  ```
+
+### 🤖 Assistant
+
+⏵ Banc mobile : oracle Manhattan (T31), Q-table, aveugle, hasard, LLM porte_mobile vs labyrinthe, aux deux portes
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"qualifier_porte_mobile_drvm.py — la porte **mobile** : deux positions (3,3) et (1,3).\n\n`LABYRINTHE_PORTE_MOBILE_0/1` (registre `REGISTRE_PMOB`) : la porte est en `(3,3)` ou en\n`(1,3)` — cette dernière est dans un mur du labyrinthe. La politique doit **vi … [7812 caractères tronqués]`
+
+  ```
+<path>/home/stephane/GitHub/Qtrinet/tools/tests/qualifier_porte_mobile_drvm.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure de la porte mobile (2 positions × 5 politiques, ≈4 min)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 -m py_compile tools/tests/qualifier_porte_mobile_drvm.py && curl -s --max-time 3 http://127.0.0.1:18082/health && time python3 tools/tests/qualifier_porte_mobile_drvm.py --endpoint http://127.0.0.1:18082 --sortie reports/pensee-porte-mobile.js … [95 caractères tronqués]`
+
+  ```
+started background job bash-369
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la mesure mobile, je vérifie les commits concurrents (hub/S) et prépare la fiche
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; git log -2 --format='%h %ad %s' --date=format:'%H:%M:%S'; echo '--- STAGED ---'; git diff --cached --stat | tail -4; echo '--- WORK ---'; git status --short | head -12", "description": "Check concurrent commits and staged state"}`
+
+  ```
+20:11:49
+3f74fe83 20:08:57 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+a67dbf00 20:07:08 PILOTAGE — LE REGISTRE DES RESSOURCES : GPU, CPU, NVMe, RAM ET PASSE GLOBALE
+--- STAGED ---
+--- WORK ---
+ M tools/pensee/operateurs.py
+ M tools/tests/test_pensee_politique.py
+?? tools/tests/qualifier_porte_mobile_drvm.py
+  ```
+
+### 🤖 Assistant
+
+⏵ Les sessions S/hub/N2 ont committé ; l'arbre est propre sauf mes 3 fichiers ; je vérifie le T0 et la porte B13 au HEAD S
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git show --name-only --format='%h %s' 3f74fe83 | head -14; echo '=== B13 ==='; grep -n \"B13 :.*134/140\\|134/140\" docs/pilotage/en-cours.md | head -3; grep -n \"T111\\|T132\" reports/rapport-b13-porte-134.md | head -3; echo '=== T0 ==='; python3 too … [178 caractères tronqués]`
+
+  ```
+3f74fe83 S — LE CORPUS RÉEL (65,5 % PROPRE / 8,5 % CEGEP, PLANCHER DU MÉLANGE) ET LA BANQUE 200 PHRASES / 355 CANDIDATS
+
+docs/pilotage/en-cours.md
+docs/pilotage/roadmap.md
+journal/2026-11-02/README.md
+journal/2026-11-02/distribue.md
+journal/README.md
+journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md
+journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/rapport.md
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md
+journal/sessions/MANIFEST.md
+journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md
+journal/sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md
+=== B13 ===
+58:- **Fait** : B13 **134/140** (4 S `647205a` + 2 test périmé T132/T133 ; le 140/140 de 702b368c
+101:- **Pensée — B13** : **134/140** (4 S + 2 test périmé), gold **432**, **116 liens** ; porte minute
+125:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 134/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 134/140 ; minute 26 nœuds** ; **B10.3 bloquée** |
+5:> (T111, T113–T115 ; l'ancien `3b68143` les passe, **138/140**) et **2** (T132/T133) d'un
+17:ce chiffre. Depuis, la por
+… [339 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'attends la mesure mobile (2 portes × 5 politiques) ; l'état HEAD est à 3 997/4 000
+
+- **job_output** `{"job_id": "bash-369", "timeout_ms": 480000, "wait": true}`

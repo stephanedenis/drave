@@ -4732,3 +4732,23 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-202", "timeout_ms": 420000, "wait": true}`
+
+  ```
+20:10:15
+--- 1024 chaine ---
+pas   1650 · perte 1.1078 · PPL val 3.020 · 734 s
+--- production ---
+pas   1200 · perte 1.1429 · PPL val 2.961 · 248 s
+0, 5766 MiB, 99 %
+1, 3114 MiB, 99 %
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 780; cd /home/stephane/GitHub/Qtrinet && date '+%H:%M:%S'; cat work/n2ac/chaine_1024.out; tail -1 work/n2ac/rope1024-20k.log 2>/dev/null; echo \"--- prod ---\"; tail -1 work/n2ac/mix512-15k.log; echo \"--- portes ---\"; ps -eo pid,etime,cmd --no-headers | grep -E \"[t]outes-les-po … [99 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-203]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-203", "timeout_ms": 780000, "wait": true}`
