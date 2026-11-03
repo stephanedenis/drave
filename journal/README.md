@@ -105,7 +105,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `4e86f5e2` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 37 | 0 | 0 | [rapport](sessions/4e86f5e2-cc8e-43d7-8be0-ba9622de2dc7/rapport.md) |
 | `4f3e8570` | Configuration RAID0 NVMe pour modèles IA | 2026-10-12 15:30 | 25.5 h | 13 | 822 | 41 | 57 | [rapport](sessions/4f3e8570-3d81-41e0-a055-1002702a6959/rapport.md) |
 | `5185ccb1` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 17:03 | 0.4 h | 1 | 123 | 9 | 0 | [rapport](sessions/5185ccb1-be24-4716-89df-62621e790444/rapport.md) |
-| `536cd5d6` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 17.3 h | 73 | 426 | 15 | 37 | [rapport](sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) |
+| `536cd5d6` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 17.3 h | 73 | 427 | 15 | 37 | [rapport](sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) |
 | `54621513` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:41 | 0.7 h | 1 | 78 | 4 | 0 | [rapport](sessions/54621513-76ae-401e-87df-a5084cacb359/rapport.md) |
 | `564fbe3a` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:07 | 0.1 h | 1 | 35 | 0 | 0 | [rapport](sessions/564fbe3a-a859-4b3b-bd17-4da73a2f4e22/rapport.md) |
 | `56879594` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 29 | 0 | 0 | [rapport](sessions/56879594-1434-4e34-83cc-de42cdf192a1/rapport.md) |
@@ -154,7 +154,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `c25f97d1` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.2 h | 1 | 104 | 1 | 0 | [rapport](sessions/c25f97d1-9a4d-41da-b983-004f793afe43/rapport.md) |
 | `c3d0f0bd` | Chantier inactif à examiner | 2026-10-29 14:37 | 18.7 h | 5 | 551 | 26 | 32 | [rapport](sessions/c3d0f0bd-e344-4600-a023-0ed50d25b48b/rapport.md) |
 | `c776b71f` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:36 | 0.1 h | 1 | 54 | 0 | 0 | [rapport](sessions/c776b71f-525a-4bad-b83c-eff1c2d204ff/rapport.md) |
-| `caaf3018` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 16.6 h | 28 | 459 | 6 | 14 | [rapport](sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) |
+| `caaf3018` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 16.6 h | 28 | 467 | 6 | 15 | [rapport](sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) |
 | `cf0456ab` | Mécanisme de mise à jour pair douteux | 2026-10-29 15:51 | 21.6 h | 8 | 343 | 27 | 11 | [rapport](sessions/cf0456ab-e3f0-4f81-a4f5-bec4b3455f9f/rapport.md) |
 | `d04ed7a2` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 60 | 0 | 0 | [rapport](sessions/d04ed7a2-0988-4dfd-83c5-644695dc2f8f/rapport.md) |
 | `d093c795` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 40 | 0 | 0 | [rapport](sessions/d093c795-b4c9-4270-bea8-e2673f86057b/rapport.md) |

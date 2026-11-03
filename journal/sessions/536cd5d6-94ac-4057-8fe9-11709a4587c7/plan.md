@@ -14,10 +14,11 @@
   `reports/README.md`, `reports/INDEX.md`, `AGENTS.md`, `tools/sessions.py`,
   `tools/porte-sessions.sh`, `tools/index_reports.py`, `tools/surveille_sessions.py`,
   `journal/sessions/536cd5d6-…/`.
-- **Heartbeat** : 2026-11-02 22:31 EST
-- **Prochaine action** : la 82e porte est **validée** (`ba815f43`), le README/INDEX et la passe
-  sont à jour ; la **veille** des quatre sessions et le **bilan 08 h** (claim `veille`).
-- **Ressources** : `gpu1`, `cpu1` 8 fils, `ram` 8 Gio ; registre `work/ressources.json`.
+- **Heartbeat** : 2026-11-03 08:55 EST
+- **Prochaine action** : le **bilan de 08 h** est écrit et committé ; **N2 et S en pause**,
+  **Pensée active** ; la 5e rouge (`porte-sessions`) est close par la pause ; la **validation
+  de la banque S est reportée**. Journée : suivre Pensée, préparer la reprise de N2/S, tenir l'état.
+- **Ressources** : `cpu1` 1 fil, `ram` 1 Gio (claim `jour`) ; aucun GPU ; registre à jour, file vide.
 - **Nuit** : consigne `plan-travail` § 10.7 ; quatre sessions productives ; bilan 08 h.
 - **État** : actif
 - **Plan** : 1) ~~audit des 111 sessions et du pilotage~~ ; 2) ~~plan de session~~ ; 3) **commits par

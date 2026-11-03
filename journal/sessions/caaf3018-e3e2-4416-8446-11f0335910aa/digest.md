@@ -7937,3 +7937,123 @@ reports/n2-r12-2048.json clés: 11
 ⏵ Je commite les 7 fichiers de N2 (en pause) avec leur ligne d'état, sans toucher à Pensée (active).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"docs/pilotage/en-cours.md\"); t = p.read_text(encoding=\"utf-8\")\nsubs = [\n(\"\"\"- **Ce qu'elle fait** : la loi de la fenêtre, la **production à 1 024 / 30 k pas**, la\n  **porte  … [2366 caractères tronqués]`
+
+  ```
+état : N2 committée par le hub
+[still running after 60000ms; moved to background job bash-327]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-327", "timeout_ms": 120000, "wait": true}`
+
+  ```
+[master 19eacae6] N2 — LES SIX FICHIERS DE LA NUIT COMMITTÉS PAR LE HUB APRÈS LA PAUSE
+ 21 files changed, 929 insertions(+), 43 deletions(-)
+ create mode 100644 reports/n2-porte-propre.json
+ create mode 100644 reports/n2-production-fenetre.json
+ create mode 100644 reports/rapport-n2-porte-propre.md
+ create mode 100644 reports/rapport-n2-production-fenetre.md
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ N2 committée. Je vérifie les compteurs et j'ajoute le report de validation à l'état.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/revue_documentation.py 2>&1 | tail -2; echo \"disque: $(ls reports/*.md | wc -l) fiches, $(ls reports/*.json | wc -l) JSON\"; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; echo \"--- S ---\"; sed -n 46,58p docs/p … [68 caractères tronqués]`
+
+  ```
+revue de documentation · 587 fiche(s) · 674 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+disque: 587 fiches, 674 JSON
+121:| fichiers / JSON de résultats | **587** / **674** | `reports/*.md` / `reports/*.json` |
+--- S ---
+- **Ambition** : nommer le rôle et la frontière GN.
+- **Stratégie** : une règle = une phrase, trois contrôles.
+- **Objectif final** : gold **55**, corpus **55**, manifeste SHA-256.
+- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélange 9,1 %), **65,5 %** propre (9,1 %) ; banque **200** phrases / **355** candidats ; **47 tests** ; [`analyseur`](../../reports/rapport-s-analyseur-roles.md), [`réel`](../../reports/rapport-s-corpus-reel.md).
+- **Ce qu'elle fait** : **`00d2a01`** ; corpus **55** (SHA `76accf9d…`) ; banque **200** phrases / **355** candidats, **0** validée.
+- **Ce que font les autres** : **hub**, **N2**, **Pensée**, **D/R/A**.
+- **Prochaine action** : **en pause** (dernier heartbeat 20 h 40 ; claim li
+… [310 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute la reprise de 8 h 50 au bilan du journal (validation reportée, rouge close, sédimentation N2 nettoyée).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\"); t = p.read_text(encoding=\"utf-8\")\najout = \"\"\"\n## 08 h 50 — la reprise : validation reportée, 5e rouge close, sédimentation N2 nettoyée\n\n- ** … [1010 caractères tronqués]`
+
+  ```
+journal : reprise 08 h 50 consignée
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ Je passe le hub en mode journée : plan, heartbeat, claim.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/ressources.py --status 2>&1 | sed -n '/Réservations/,$p' | head -8; echo \"---\"; grep -E \"Heartbeat|Prochaine action|Ressources\" -A1 journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md | head -8", "descriptio … [32 caractères tronqués]`
+
+  ```
+Réservations actives :
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / veille : cpu1=1, ram=1 (prio 2, 600 min)
+  File d'attente :
+    ⏸ 536cd5d6 / passe-82 : machine=exclusive (prio 1, 150 min)
+    ⏸ 536cd5d6-94ac-4057-8fe9-11709a4587c7 / passe-82 : machine=exclusive (prio 1, 150 min)
+---
+- **Heartbeat** : 2026-11-02 22:31 EST
+- **Prochaine action** : la 82e porte est **validée** (`ba815f43`), le README/INDEX et la passe
+  sont à jour ; la **veille** des quatre sessions et le **bilan 08 h** (claim `veille`).
+- **Ressources** : `gpu1`, `cpu1` 8 fils, `ram` 8 Gio ; registre `work/ressources.json`.
+- **Nuit** : consigne `plan-travail` § 10.7 ; quatre sessions productives ; bilan 08 h.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/ressources.py --release --session 536cd5d6 --job passe-82 2>&1 | tail -2; python3 tools/ressources.py --release --session 536cd5d6-94ac-4057-8fe9-11709a4587c7 --job passe-82 2>&1 | tail -2; python3 tools/ressources.py --r … [341 caractères tronqués]`
+
+  ```
+ℹ aucune réservation active pour 536cd5d6 / passe-82
+  ℹ aucune réservation active pour 536cd5d6-94ac-4057-8fe9-11709a4587c7 / passe-82
+  ✅ libéré : 1 réservation(s) de 536cd5d6 / veille
+  ✅ accordé : 536cd5d6 / jour
+--- status ---
+  Réservations actives :
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / jour : cpu1=1, ram=1 (prio 2, 600 min)
+  File d'attente :
+    ⏸ 536cd5d6 / passe-82 : machine=exclusive (prio 1, 150 min)
+    ⏸ 536cd5d6-94ac-4057-8fe9-11709a4587c7 / passe-82 : machine=exclusive (prio 1, 150 min)
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux entrées `passe-82` restent en file alors que la passe est finie ; je regarde comment les annuler.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 tools/ressources.py --help 2>&1 | grep -iE \"annul|file|queue|cancel|release\" | head -5; echo \"--- queue ---\"; python3 -c \"\nimport json; d=json.load(open('work/ressources.json')); print(json.dumps(d.get('queue', d), ensure … [75 caractères tronqués]`
+
+  ```
+usage: ressources.py [-h] [--ledger LEDGER] [--status] [--claim] [--release]
+en file ce qui ne tient pas — pour éviter les attentes inutiles et les simultanéités
+  python3 tools/ressources.py --release --session <id> [--job <nom>]
+  --release
+  --prio PRIO        1 = prioritaire, 5 = fond de file
+--- queue ---
+[{"id": "536cd5d6:passe-82:1793697056", "session": "536cd5d6", "job": "passe-82", "res": {"machine": "exclusive"}, "prio": 1, "eta_min": 150, "created": "2026-11-03T04:10:56", "state": "pending"}, {"id": "536cd5d6-94ac-4057-8fe9-11709a4587c7:passe-82:1793697783", "session": "536cd5d6-94ac-4057-8fe9-11709a4587c7", "job": "passe-82", "res": {"machine": "exclusive"}, "prio": 1, "eta_min": 150, "created": "2026-11-03T04:23:03", "note": "veille : machine libre (GPU 0 %), file passe-82 admise ; passe complète 82 portes", "state": "pending"}]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport json, pathlib\np = pathlib.Path(\"work/ressources.json\"); d = json.loads(p.read_text())\navant = len(d.get(\"queue\", []))\nd[\"queue\"] = [q for q in d.get(\"queue\", []) if not (q.get(\"job\") == \"passe-82\ … [1427 caractères tronqués]`
+
+  ```
+file : 2 → 0
+  Réservations actives :
+    · e181ce02 / b13-gold : cpu1=4, ram=16 (prio 2, 90 min)
+    · 536cd5d6 / jour : cpu1=1, ram=1 (prio 2, 600 min)
+plan hub : journée 08 h 55
+  ```
+
+### 🤖 Assistant
+
+⏵ File vidée, plan en mode journée. Je commite journal + plan.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-jour.txt <<'EOF'\nJOUR — VALIDATION S REPORTÉE, ROUGE DE COORDINATION CLOSE, HUB EN MODE JOURNÉE\n\nLe journal du 03/11 porte la reprise de 08 h 50 : validation humaine de la banque S\nreportée (décision de l'humain), N2 … [504 caractères tronqués]`

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**35 commits** · **5 session(s)** · **6 thème(s)**
+**36 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 10 | [distribue.md](distribue.md) |
 | docs | 14 | [docs.md](docs.md) |
-| mesures | 5 | [mesures.md](mesures.md) |
+| mesures | 6 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 4 | [portes.md](portes.md) |
 
@@ -67,6 +67,7 @@
 | 08:16 | `0b53a31c` | RÉFÉRENCES — porte-sessions REJOUÉE VERTE APRÈS LA MISE EN PAUSE DE N2/S ; TROIS PASSES ANCIENNES SORTENT |
 | 08:18 | `f73a73f1` | ÉTAT — LA 5e ROUGE DE LA PASSE 04 H 10 EST CLOSE (porte-sessions rejouée verte après la pause N2/S) |
 | 08:24 | `5b3d37a8` | ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08 |
+| 08:50 | `19eacae6` | N2 — LES SIX FICHIERS DE LA NUIT COMMITTÉS PAR LE HUB APRÈS LA PAUSE |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -139,4 +140,15 @@ plus rafraîchi. GPU au repos.
 **Ce qui attend l'humain.** 1) **validation de la banque S** (mode `banque` à 0 verdict) ;
 2) **trancher `porte-reparti-moteur`** (pin 9,1748 non reproduit, 8,7434 des deux côtés, écart nul) ;
 3) **committer ou laisser finir** les fichiers en cours de N2 (3) et Pensée (2+).
+
+## 08 h 50 — la reprise : validation reportée, 5e rouge close, sédimentation N2 nettoyée
+
+- **Validation humaine de la banque S : reportée** (décision de l'humain, « un autre jour ») —
+  S reste **en pause** ; à la reprise : h050/h053 puis la banque, la validation en dernier.
+- **`porte-sessions` rejouée verte** après la mise en pause de N2/S (`f73a73f1`) : la 5e rouge
+  de la passe 82 était bien une **rouge de coordination**, close par la pause — aucun code touché.
+- **Sédimentation** : N2 s'est arrêtée en laissant **6 fichiers** (3 fiches + 2 JSON + la mise à
+  jour de la fenêtre) ; le hub les a committés (`19eacae6`) avec leur ligne d'état. Pensée,
+  **active**, garde ses fichiers en cours (le hub n'y touche pas).
+- **Compteurs** : 587 fiches / 674 JSON, revue verte ; `en-cours` 1 625 mots ; T0 3 996.
 <!-- /notes -->

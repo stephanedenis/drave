@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:16 |
 | Durée | 16.6 h |
 | Tours | 28 |
-| Messages | 457 |
-| Appels d'outils | 459 |
+| Messages | 465 |
+| Appels d'outils | 467 |
 | Fichiers touchés | 6 |
-| Commandes | 327 |
+| Commandes | 334 |
 | Sous-agents | 0 |
-| Commits | 14 |
+| Commits | 15 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -592,7 +592,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 28 — continue, la validation va attendre un autre jour.
 
-*10 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and check morning state
@@ -604,10 +604,15 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Read N2 section in current state
 - bash — Commit N2 pending files with state line
 - job_output
+- bash — Check counters and S section
+- bash — Append morning resumption to journal
+- bash — Check claims and hub plan
+- bash — Clean stale claims and claim day job
+- … et 3 autres
 
 **Synthèse produite :**
 
-⏵ Je commite les 7 fichiers de N2 (en pause) avec leur ligne d'état, sans toucher à Pensée (active).
+⏵ File vidée, plan en mode journée. Je commite journal + plan.
 
 ## 3. Travail accompli
 
@@ -664,7 +669,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 287 autres
+- … et 294 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -762,6 +767,9 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T27** `- **N2** : `r12-1024` sur GPU0 et `r12-mix-512-gpu1` sur GPU1 ; fiche fenêtre 8,7 Ko, JSON `n2-fenetre.json` attendu.`
 - **T27** `[still running after 60000ms; moved to background job bash-318]`
 - **T28** `[still running after 60000ms; moved to background job bash-327]`
+- **T28** `- **Fait** : types **54/55**, rôles **131/131** ; contrôles **94/131**, **96/131**, **0,109** ; h033/h046/h047 corrigés, **h050/h053** limites nommées ; **corpus réel** : GN+GV **8,5 %** CEGEP (mélang`
+- **T28** `[{"id": "536cd5d6:passe-82:1793697056", "session": "536cd5d6", "job": "passe-82", "res": {"machine": "exclusive"}, "prio": 1, "eta_min": 150, "created": "2026-11-03T04:10:56", "state": "pending"}, {"i`
+- **T28** `[still running after 60000ms; moved to background job bash-334]`
 
 ## 5. Erreurs rencontrées
 
@@ -787,4 +795,5 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short | grep -v journal | head -8; cat > work/msg-passe82.txt <<'EOF' PASSE — 82 PORTES SUR MAC
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-bilan.txt <<'EOF' JOURNAL — LE BILAN DE 8 H EST ÉCRIT : DEUX PASSES, 82 PORTES, 77/5 SUR MACH
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY' import pathlib p = pathlib.Path("docs/pilotage/en-cours.md"); t = p.read_text(encoding="utf
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-jour.txt <<'EOF' JOUR — VALIDATION S REPORTÉE, ROUGE DE COORDINATION CLOSE, HUB EN MODE JOURN
 

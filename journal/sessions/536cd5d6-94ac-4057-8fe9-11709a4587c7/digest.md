@@ -11912,3 +11912,35 @@ PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check s
 
 y a-t-il des conflits possibles entre les sessions parallèles?
 
+### 🤖 Assistant
+
+⏵ Audit des conflits entre sessions : territoires, ressources, index git, fichiers partagés.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== plans actifs : réservations ==\" && for f in $(grep -l '^- \\*\\*État\\*\\* : actif' journal/sessions/*/plan.md); do id=$(basename $(dirname $f)); echo \"--- $id\"; grep -A2 'Fichiers réservés' \"$f\" | head -4; done; echo; … [1133 caractères tronqués]`
+
+  ```
+== plans actifs : réservations ==
+--- 536cd5d6-94ac-4057-8fe9-11709a4587c7
+- **Fichiers réservés** : `docs/pilotage/`, `journal/` (hors `sessions/<id>/`),
+  `reports/README.md`, `reports/INDEX.md`, `AGENTS.md`, `tools/sessions.py`,
+  `tools/porte-sessions.sh`, `tools/index_reports.py`, `tools/surveille_sessions.py`,
+--- e181ce02-cd50-488a-a6be-e84b79d40dcc
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`,
+  `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`,
+  `reports/r44-*`, `docs/theorie/pre-traitement-linguistique.md`,
+--- _modele
+- **Fichiers réservés** : `tools/...`, `reports/...`
+- **Heartbeat** : <AAAA-MM-JJ HH:MM HAE>
+- **Prochaine action** : <une action nommée>
+
+== check sessions ==
+  ⚠ mandat long (620 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+  ⚠ mandat long (668 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — claim actif, heartbeat non exigé
+
+== who touched pilotage ==
+5b3d37a8 ROADMAP — N2 ET S EN PAUSE, B13 GOLD 432 RÉEL, DATE AU 03/11 08 H 08
+f73a73f1 ÉTAT — LA 5e ROUGE DE LA PASSE 04 H 10 EST CLOSE (porte-sessions rejouée verte après la pause N2/S)
+0b53a31c RÉFÉREN
+… [2879 caractères tronqués]
+  ```
+

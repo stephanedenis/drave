@@ -9,10 +9,10 @@
 | Début | 2026-11-02 15:33 |
 | Durée | 17.3 h |
 | Tours | 73 |
-| Messages | 485 |
-| Appels d'outils | 426 |
+| Messages | 487 |
+| Appels d'outils | 427 |
 | Fichiers touchés | 15 |
-| Commandes | 311 |
+| Commandes | 312 |
 | Sous-agents | 0 |
 | Commits | 37 |
 | Compactages de contexte | 1 |
@@ -1901,6 +1901,43 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 
 ### Tour 73 — y a-t-il des conflits possibles entre les sessions parallèles?
 
+*1 appels d'outils.* Actions notables :
+
+- bash — Audit cross-session conflicts: territories, git, resources
+
+**Synthèse produite :**
+
+⏵ Audit terminé : oui, plusieurs conflits — trois sont actifs en ce moment.
+
+\## Conflits actifs (constatés à 08 h 50)
+
+- **`docs/pilotage/`** — le hub le réserve ; or le B13 a écrit `en-cours`/`roadmap`/`plan-travail`/`chantiers` dans ses commits « ÉTAT » (`297b01cf`, `8eab6a7c`, `7f48be65`, `6132480c`…) : la règle **un seul écrivain** est violée, dernier écrivain gagne. `sessions.py` ne le voit pas (le plan B13 ne réserve pas `docs/pilotage/`).
+- **`reports/rapport-n2-*` et `reports/n2-r12-2048.json`** — **modifiés alors que N2 est en pause** (son plan réserve `reports/n2-*` et `reports/rapport-n2-*`) ; `sessions.py` ne contrôle que les périmètres des sessions **actives**.
+- **Index git** — `.git/index.lock` **vivant à 08 h 50** (commit d'une autre session) ; `M docs/pilotage/en-cours.md` en attente ; collisions déjà vues (`unable to write new index file`).
+- **`tools/porte-ressources.sh`** — **supprimé par un commit B13**, restauré par `1cbaff53`.
+- **Ressources** — `b13-gold` (90 min) et `veille` (600 min) sont des claims **longs** ; **`passe-82` machine=exclusive demandé deux fois** dans la file ; GPU libres mais le B13 peut lancer des jobs GPU **sans claim GPU** ; `llama-server` partagé (683 % CPU) non déclaré.
+- **Disque** — `IA` **34 G / 97 %** ; `data` **127 G** sur Data13TB (1,9 T libres).
+
+\## Conflits structurels (nominal ou latent)
+
+- `data/` (N2) ⊃ `data/structures/` (S) : imbriqué, **averti**, nominal.
+- `journal/2026-11-03/*` : hub + B13 (« ÉTAT ») ; `portes.md` supprimé/recréé (`D` + `??`).
+- `journal/sessions/<id>/digest.md` + `rapport.md` : régénérés par le hook `archive_sessions` **dans le territoire des sessions**.
+- `reports/INDEX`/`README` : hub, mais les sessions ajoutent des fiches → INDEX à régénérer.
+- `tools/tests/` partagé (B13, S) ; `reports/rapport-s-*` modifiés hors session S.
+
+\## Garde-fous existants
+
+`sessions.py` (périmètres, heartbeats, claims) · `ressources.py` · règle un-écrivain · hook `verifie_etat_a_jour` · `git commit --only` · `archive_sessions`.
+
+\## À corriger, par ordre
+
+1. **`sessions.py`** : inclure les sessions **en pause** et vérifier les **commits** (le B13 ne doit pas committer `docs/pilotage/`).
+2. **`ressources.py`** : verrou/atomicité, **dédoublonner `passe-82`**, purger `b13-gold`/`veille`, claim GPU pour le B13, déclarer `llama-server`.
+3. **git** : `GIT_INDEX_FILE` par session (ou commits sérialisés) ; retirer le lock mort ; le `en-cours` stagé en attente.
+4. **`porte-*`** : réserver/relire les modific
+… [320 caractères tronqués]
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1965,7 +2002,7 @@ Goal actif ; prochain round : JSON N2/`porte-tableaux`, INDEX, puis veille jusqu
 - **T1** Check nested reports and index link count
 - **T1** Group uncommitted files by exact date and time
 - **T1** List oldest uncommitted files and directory breakdown
-- … et 271 autres
+- … et 272 autres
 
 ## 4. Mesures et résultats marquants
 
