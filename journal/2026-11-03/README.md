@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**29 commits** · **5 session(s)** · **5 thème(s)**
+**30 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,6 +16,7 @@
 | docs | 12 | [docs.md](docs.md) |
 | mesures | 5 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
+| portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -25,7 +26,7 @@
 | `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 13.3 h | [rapport](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) · [digest](../sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md) |
 | `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 9.5 h | [rapport](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/rapport.md) · [digest](../sessions/abb58991-fe0a-4d6e-b039-6552b09f8454/digest.md) |
 | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 12.5 h | [rapport](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) · [digest](../sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/digest.md) |
-| `caaf3018-e3e2-4416-8446-11f0335910aa` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 13.6 h | [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md) |
+| `caaf3018-e3e2-4416-8446-11f0335910aa` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 15.0 h | [rapport](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) · [digest](../sessions/caaf3018-e3e2-4416-8446-11f0335910aa/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -60,6 +61,7 @@
 | 01:38 | `297b01cf` | ÉTAT — T0 4 000 : LIGNE DU PLAFOND RACCOURCIE |
 | 01:42 | `32d695ab` | L/B13 — LA PARITÉ DRVM/NATIVE : 114/114 POIDS, 5/5 PROMPTS, REJOUABLE MAIS CHECKPOINT VOLATIL |
 | 02:45 | `18493fb9` | ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673) |
+| 05:53 | `2280ca7d` | PASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTES, 5 ROUGES (4 CONNUES + SESSIONS) |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -97,4 +99,39 @@ Index des sessions : [journal](../README.md#sessions).
 4. **Documentation** : `revue_documentation.py` ; `taille_documents.py` ; `verifie_journal.py`.
 5. **Git** : `git log --oneline --since="2026-11-02 16:00"` ; `git status --short`.
 6. **Remplir** : les quatre sessions (fini/reste), les claims réels, le verdict de la passe, le JSON N2, le README/INDEX, ce qui attend l'humain (validation S, porte B13, gold).
+
+## 07 h 20 — le bilan du hub (nuit du 02/11 20 h → 03/11 08 h)
+
+**Deux passes complètes, deux verdicts.**
+- **02/11 19 h 32** : 81 portes, **76 vertes / 5 rouges**, 1 h 52, lancée sur le **GPU 1** pendant
+  que N2 tenait le GPU 0 (`CUDA_VISIBLE_DEVICES=1,0`). Les 4 rouges connues + `porte-tableaux`
+  (lien d'une fiche N2 en cours d'écriture) — **rejouée verte à 21 h 57** quand le JSON est apparu.
+- **03/11 04 h 10** : **machine au repos** (deux GPU libres, claims rendus), **82 portes, 77 vertes,
+  5 rouges, 1 h 40** — journaux `work/portes/passe-0303-04h10`. La **82e porte** (`porte-ressources`)
+  est comptée et verte ; `porte-tableaux` verte ; 4 rouges connues + **`porte-sessions`**
+  (plans N2/S périmés sans claim : **coordination**, pas de code).
+
+**Ce que les sessions ont livré.**
+- **N2** : 200 k pas → **3,1591** ; R1.1 **3,2545** (table absolue 8,2024) ; fenêtre 256→1 024 =
+  **3,2545 → 3,0107 → 2,9950** ; à 20 000 pas, **2,6256** à 1 000 (approche de 2,5).
+- **S** : gold **55**, types **54/55**, rôles **131/131**, compléments **47/47** ; corpus réel
+  **65,5 %** propre contre 9,1 % mélangé ; CEGEP OCR **8,5 %** (plancher) ; banque **200/355**.
+- **Pensée** : **140/140** ; gold réel 432 (POS **0,9065**, syntagmes 0,4598, tête 0,5633, acte
+  **0,9954**) ; cascade vrai modèle 0,9415 ; **parité DRVM/native 114/114 poids, 5/5 prompts** ;
+  fenêtre **non discriminante** (oracle 228, aveugle 215, 7B 238).
+- **D/R/A** : close le 02/11 18 h 45 (147 scans, 60 documents, 1 982 p, 4,41 M car.).
+
+**Corrections du hub.** `portes.md` : le registre est dans `work/`, pas `/tmp`, + procédure
+« un seul GPU libre » ; `references` : § 2 réécrit en 82 lignes, en-têtes des deux passes ;
+`porte-homeostasie` : son message n'exécute plus sa commande (backticks) ; `ressources.py` entré
+dans le routage ; compteurs alignés (587 fiches / 674 JSON).
+
+**État à 8 h.** `en-cours` 1 625 mots ✅, T0 3 996 ✅, revue ✅, journal ✅, schémas ✅, backlog ✅.
+`sessions --check --strict` sort en **1** : plans **N2** (00 h 25) et **S** (20 h 40) périmés sans
+claim — les sessions vivent (N2 et Pensée ont des fichiers non committés), mais leur plan n'est
+plus rafraîchi. GPU au repos.
+
+**Ce qui attend l'humain.** 1) **validation de la banque S** (mode `banque` à 0 verdict) ;
+2) **trancher `porte-reparti-moteur`** (pin 9,1748 non reproduit, 8,7434 des deux côtés, écart nul) ;
+3) **committer ou laisser finir** les fichiers en cours de N2 (3) et Pensée (2+).
 <!-- /notes -->

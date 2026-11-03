@@ -7354,3 +7354,299 @@ portes.md : passe 82
 ⏵ Tout est vert ; je commite le verdict propre (références + état + `portes.md`).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short | grep -v journal | head -8; cat > work/msg-passe82.txt <<'EOF'\nPASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTES, 5 ROUGES (4 CONNUES + SESSIONS)\n\nLes deux GPU étaient libres à 04 h 10 (N2 avait fini son run de  … [888 caractères tronqués]`
+
+  ```
+M docs/methode/portes.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/references-non-regression.md
+ M reports/n2-r12-2048.json
+ M reports/rapport-n2-fenetre.md
+ M reports/rapport-n2-r12-2048.md
+ M tools/pensee/store.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+[still running after 60000ms; moved to background job bash-306]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-306", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[master 2280ca7d] PASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTES, 5 ROUGES (4 CONNUES + SESSIONS)
+ 19 files changed, 2702 insertions(+), 165 deletions(-)
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe 82 committée (`2280ca7d`). N2 écrit encore (fiches modifiées à 05 h 55) : les sessions vivent.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat >> work/hub-nuit.md <<'EOF'\n\n## 05 h 50 — VERDICT PROPRE DE LA PASSE 82 (machine au repos)\n\n**82 portes, 77 vertes, 5 rouges, 1 h 40** (`work/portes/passe-0303-04h10`, commit `2280ca7d`).\n- 4 rouges **connues** : `porte-indice … [883 caractères tronqués]`
+
+  ```
+ok
+05:54
+05:47 · 18493fb9 ÉTAT — LE COMPTEUR JSON SUIT LE DISQUE (673) · actifs=6 ·   ✅ état court, structuré, multi-s
+  ```
+
+### 🤖 Assistant
+
+⏵ 05 h 54 : je vérifie la machine et les sessions avant le rapport de 8 h.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; echo \"--- sessions ---\"; python3 tools/sessions.py --status 2>&1 | grep -E \"actif\" | head -5; echo \"--- git ---\"; git log --oneline -1 | … [113 caractères tronqués]`
+
+  ```
+05:55
+0, 370 MiB, 0 %
+1, 122 MiB, 0 %
+--- sessions ---
+  ⏰ 0733c5bb-f90b-4f58 · actif    · 330 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+  ⏰ 29ad180d-38a5-4481 · actif    · 555 min · S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+  ⏰ 536cd5d6-94ac-4057 · actif    · 444 min · pilotage (en-cours, roadmap, chantiers, plan-travail, références), backlog, journal (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, outillage de pilotage.
+  ⏰ e181ce02-cd50-488a · actif    · 492 min · Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+  ⚠ mandat long (444 min) : 536cd5d6-94ac-4057-8fe9-11709a4587c7 — claim actif, heartbeat non exigé
+--- git ---
+2280ca7d PASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTES, 5 ROUGES 
+ M reports/n2-r12-2048.json
+ M reports/rapport-n2-fenetre.md
+ M reports/rapport-n2-r12-2048.md
+ M tools/pensee/store.py
+ M tools/tests/qualifier_porte_fenetre_drvm.py
+  ```
+
+### 🤖 Assistant
+
+⏵ 05 h 55 : GPU au repos, quatre plans actifs mais périmés, deux sessions ont des fichiers non committés (N2, Pensée). Je note et j'attends.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat >> work/hub-nuit.md <<'EOF'\n\n## 05 h 55 — l'état réel des sessions\n\n- **N2** : plan 00 h 25 (330 min), **fichiers non committés** (`reports/n2-r12-2048.json`,\n  `rapport-n2-fenetre.md`, `rapport-n2-r12-2048.md`) — travail en c … [479 caractères tronqués]`
+
+  ```
+ok
+05:55
+  ```
+
+### 🤖 Assistant
+
+⏵ Round de 30 min (trois attentes alternées) avant le point de 06 h 30.
+
+- **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; tail -2 work/veille-nuit.log; git log --oneline -1 | cut -c1-60; git status --short | grep -v journal | wc -l", "description": "Status at 06h25"}`
+
+  ```
+06:25
+06:07 · 2280ca7d PASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTE · actifs=6 ·   ✅ état court, structuré, multi-s
+06:17 · 2280ca7d PASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTE · actifs=6 ·   ✅ état court, structuré, multi-s
+2280ca7d PASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTES,
+10
+  ```
+
+### 🤖 Assistant
+
+⏵ 06 h 25 : calme depuis mon commit ; 10 fichiers en cours chez les sessions. Round de 30 min.
+
+- **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; tail -1 work/veille-nuit.log; git log --oneline -1 | cut -c1-60; git status --short | grep -v journal | wc -l; nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader | tr '\\n' ' '", "description": "Status at 06h45"}`
+
+  ```
+06:45
+06:37 · 2280ca7d PASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTE · actifs=6 ·   ✅ état court, structuré, multi-s
+2280ca7d PASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTES,
+10
+0 % 0 %
+  ```
+
+### 🤖 Assistant
+
+⏵ 06 h 45 : calme. Je lance les contrôles de clôture pour le rapport de 8 h.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -2; echo \"=== en-cours ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; echo \"=== T0 ===\"; python3 tools/taille_documents.py 2>&1 | grep \ … [402 caractères tronqués]`
+
+  ```
+06:45
+=== revue ===
+  revue de documentation · 587 fiche(s) · 674 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== en-cours ===
+  ✅ état court, structuré, multi-session et reprenable
+=== T0 ===
+  T0 max : 3996 mots (budget 4 000)
+=== sessions ===
+code=1
+=== journal ===
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+=== schémas ===
+     sources et images relatives.
+=== backlog ===
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie le journal du 03/11 (point de reprise de 08 h) pour y compléter le verdict.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; ls journal/2026-11-03/ | head; echo \"---\"; sed -n 1,40p journal/2026-11-03/README.md 2>/dev/null | cut -c1-140", "description": "Read 03/11 journal entry"}`
+
+  ```
+attention.md
+distribue.md
+docs.md
+mesures.md
+modele.md
+README.md
+---
+# 2026-11-03
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-11-03/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
+
+**29 commits** · **5 session(s)** · **5 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| attention | 1 | [attention.md](attention.md) |
+| distribue | 10 | [distribue.md](distribue.md) |
+| docs | 12 | [docs.md](docs.md) |
+| mesures | 5 | [mesures.md](mesures.md) |
+| modele | 1 | [modele.md](modele.md) |
+
+## Sessions DSH
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 11.8 h | [rapport](../sessions/0733c5bb-f9
+| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 13.3 h | [rapport](../sessions/536cd5d6-94
+| `abb58991-fe0a-4d6e-b039-6552b09f8454` | Reprise session L/B13 et mise à jour plan | 2026-11-02 16:15 | 9.5 h | 
+… [1131 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le journal du 03/11 liste 5 sessions (dont trois reprises du hub). Je regarde le bloc « notes » pour y laisser le rapport.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; tail -30 journal/2026-11-03/README.md | cut -c1-150", "description": "Read journal notes block format"}`
+
+  ```
+## 21 h 49 — l'état de la nuit
+
+- **Passe complète** : 76 vertes / 5 rouges (4 connues + `porte-tableaux` sur la fiche N2 en cours) ; `porte-sessions` verte par le claim ; 82e `porte
+- **N2** : `r12-1024` sur GPU0 et `r12-mix-512-gpu1` sur GPU1 ; fiche fenêtre 8,7 Ko, JSON `n2-fenetre.json` attendu.
+- **S** : corpus réel et banque 200/355 ; h033/gold en cours ; validation humaine à 08 h.
+- **Pensée/B13** : 140/140 ; porte minute ; gold 432.
+- **Hub** : état 82 portes, INDEX 567, README 2 762/2 800, revue 569/654, T0 3 981/4 000 ; claims tenus.
+- **Reste** : JSON N2 → `porte-tableaux` ; bilan de 08 h.
+
+## Sessions DSH
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `0733c5bb-f90b-4f58-9241-3364fa32e46c` | Session N2 : plan et réservations | 2026-11-02 16:14 | 5,4 h | [rapport](../sessions/0733c5bb-f90b-4f58-924
+| `29ad180d-38a5-4481-a9a7-ec6ab31c895f` | Session structures CPU analyseur rôles | 2026-11-02 16:14 | 4,4 h | [rapport](../sessions/29ad180d-38a5-448
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Pensée — B13 et RSN | 2026-11-02 16:15 | 5,5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc
+| `536cd5d6-94ac-4057-8fe9-11709a4587c7` | Étude des se
+… [921 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je prépare le bilan de 8 h et vérifie les derniers chiffres de Pensée.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; grep -rn \"0,9065\\|0.9065\\|0,9954\\|0.9954\" reports/rapport-pensee-gold*.md reports/rapport-pensee-*.md 2>/dev/null | head -3 | cut -c1-140; ls -t reports/*.md | head -3", "description": "Verify Pensée gold numbers"}`
+
+  ```
+reports/rapport-pensee-cascade-reel-432.md:1:# B13 — le gold réel 432 : la cascade tient (POS 0,9065 ; syntagmes 0,4598 ; tête 0,5633 ; acte
+reports/rapport-pensee-cascade-reel-432.md:5:> `seuils_contrat.gold_reel_432`). Avec eux, le verdict est **`true`** : POS 0,9065 ≥ 0,90,
+reports/rapport-pensee-cascade-reel-432.md:12:> absolus échouent** — 432 phrases, 2 375 tokens, POS **0,9065** (fermé 0,8973, ouvert 0,9162)
+reports/rapport-n2-porte-propre.md
+reports/rapport-n2-production-fenetre.md
+reports/INDEX.md
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+### 🤖 Assistant
+
+⏵ Chiffres vérifiés. J'attends 07 h 30 pour écrire le bilan dans le journal et clore.
+
+- **job_output** `{"job_id": "bash-271", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-272", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-271", "timeout_ms": 580000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; date +%H:%M; tail -1 work/veille-nuit.log; git log --oneline -1 | cut -c1-60; git status --short | grep -v journal | wc -l", "description": "Status at 07h20"}`
+
+  ```
+07:16
+07:07 · 2280ca7d PASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTE · actifs=6 ·   ✅ état court, structuré, multi-s
+2280ca7d PASSE — 82 PORTES SUR MACHINE AU REPOS : 77 VERTES,
+10
+  ```
+
+### 🤖 Assistant
+
+⏵ 07 h 16 : j'écris le bilan de 8 h dans le bloc « notes » du journal du 03/11.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"journal/2026-11-03/README.md\")\nt = p.read_text(encoding=\"utf-8\")\nrapport = \"\"\"\n## 07 h 20 — le bilan du hub (nuit du 02/11 20 h → 03/11 08 h)\n\n**Deux passes complètes, deu … [2711 caractères tronqués]`
+
+  ```
+bilan inséré dans le journal du 03/11
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan inséré et journal vert ; je le commite.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-bilan.txt <<'EOF'\nJOURNAL — LE BILAN DE 8 H EST ÉCRIT : DEUX PASSES, 82 PORTES, 77/5 SUR MACHINE AU REPOS\n\nLe bloc « notes » du 03/11 porte le bilan du hub : la passe du 02/11 19 h 32\n(81 portes, 76/5, GPU 1, porte-t … [524 caractères tronqués]`

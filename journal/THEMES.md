@@ -315,6 +315,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-10-31](2026-10-31/portes.md) | — |
 | [2026-11-01](2026-11-01/portes.md) | `20 %` |
 | [2026-11-02](2026-11-02/portes.md) | `1 Go` · `3,1591` · `5,6056` · `0,944` · `8 Ko` |
+| [2026-11-03](2026-11-03/portes.md) | — |
 
 ### `docs` — Documentation, état, conventions
 

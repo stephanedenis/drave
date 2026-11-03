@@ -7,14 +7,14 @@
 | Identifiant | `caaf3018-e3e2-4416-8446-11f0335910aa` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 13.6 h |
+| Durée | 15.0 h |
 | Tours | 27 |
-| Messages | 423 |
-| Appels d'outils | 425 |
+| Messages | 444 |
+| Appels d'outils | 446 |
 | Fichiers touchés | 6 |
-| Commandes | 306 |
+| Commandes | 318 |
 | Sous-agents | 0 |
-| Commits | 12 |
+| Commits | 13 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -542,7 +542,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 
 ### Tour 27 — background job bash-290 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; pgrep -fc "toutes-les-portes.sh" || t … [954 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*35 appels d'outils.* Actions notables :
 
 - job_output
 - bash — Gather evidence of session liveness
@@ -557,10 +557,12 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - bash — Patch en-cours counters precisely
 - bash — Patch portes.md and run checks
 - bash — Commit clean pass integration
+- bash — Record clean pass verdict in night notes
+- … et 11 autres
 
 **Synthèse produite :**
 
-⏵ Tout est vert ; je commite le verdict propre (références + état + `portes.md`).
+⏵ Bilan inséré et journal vert ; je le commite.
 
 ## 3. Travail accompli
 
@@ -617,7 +619,7 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T1** Run sessions and en-cours checks
 - **T1** Run document budget and journal checks
 - **T1** Inspect sessions check exit logic and rerun
-- … et 266 autres
+- … et 278 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -712,6 +714,8 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - **T26** `0, 5646 MiB, 99 %`
 - **T26** `0, 370 MiB, 0 %`
 - **T27** `[still running after 60000ms; moved to background job bash-306]`
+- **T27** `- **N2** : `r12-1024` sur GPU0 et `r12-mix-512-gpu1` sur GPU1 ; fiche fenêtre 8,7 Ko, JSON `n2-fenetre.json` attendu.`
+- **T27** `[still running after 60000ms; moved to background job bash-318]`
 
 ## 5. Erreurs rencontrées
 
@@ -735,4 +739,5 @@ Le veilleur émet un point toutes les 10 min (`bash-262`). Dernier commit : `16f
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-refs.txt <<'EOF' RÉFÉRENCES — LA ROUGE DE PASSAGE DE `porte-tableaux` EST REJOUÉE VERTE (21 H
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-etat.txt <<'EOF' ÉTAT — LA 82e PORTE EST VALIDÉE ET COMPTÉE ; LA PASSE DE 19 H 32 EST LA RÉFÉ
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; git status --short | grep -v journal | head -8; cat > work/msg-passe82.txt <<'EOF' PASSE — 82 PORTES SUR MAC
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; cat > work/msg-bilan.txt <<'EOF' JOURNAL — LE BILAN DE 8 H EST ÉCRIT : DEUX PASSES, 82 PORTES, 77/5 SUR MACH
 
