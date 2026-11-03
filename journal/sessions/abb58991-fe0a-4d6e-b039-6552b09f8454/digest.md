@@ -21784,3 +21784,92 @@ ok
 ⏵ Round 153 : fiche et état écrits (T0 4 000) ; j'aligne index/README et je commite le fait « forme inversée »
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text(encoding='utf-8')\nt=t.replace(\"| [`rapport-pensee-lien-repare.md`](rapport-pensee-lien-repare.md) | **L** **5/5** |\",\n            \"| [`rapport-pensee-lien-invers … [646 caractères tronqués]`
+
+  ```
+ok
+  577 fiches → reports/INDEX.md
+  revue de documentation · 580 fiche(s) · 665 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[master f7a53e2a] L/B13 — LA FORME INVERSÉE : _SUJET RÉPARÉ, _VERBE AVEUGLE, LES 10 PAIRES RESTENT 5/10
+ 19 files changed, 530 insertions(+), 46 deletions(-)
+ create mode 100644 reports/pensee-lien-inverse.json
+ create mode 100644 reports/rapport-pensee-lien-inverse.md
+EXIT=0
+f7a53e2a L/B13 — LA FORME INVERSÉE : _SUJET RÉPARÉ, _VERBE AVEUGLE, LES 10 PAIRES RESTENT 5/10
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 153 : « forme inversée » committé (`f7a53e2a`, 19 fichiers) — `_sujet` réparé, `_verbe` aveugle, 10 paires **5/10**
+
+**Fait de la nuit — round 153** : la forme inversée.
+
+| question | `_sujet` avant | `_sujet` après | `_verbe` |
+|---|---|---|---|
+| r408 « Ne viens-tu pas demain ? » | None | viens-tu | None |
+| r409 « Ne mange-t-il pas ? » | None | **il** | None |
+| r410 « Ne dort-elle pas ? » | None | dort-elle | None |
+| r411 « Ne partent-ils pas ? » | None | partent-ils | None |
+| r412 « Ne lis-tu pas ? » | None | lis-tu | None |
+
+- **`_sujet` réparé** : le pronom inversé est le 3ᵉ segment du token (`mange-t-il` → `il`) ; il ne marche que sur 3 segments, d'où `viens-tu`/`dort-elle`/`partent-ils` non coupés.
+- **`_verbe` reste aveugle** : `mange-t-il` est étiqueté **NOUN**, pas VERB → `None` sur les 5 formes.
+- **Résultat** : les 10 paires restent **5/10** (r418–r422 5/5, r408–r412 0/5) ; r409 part sur **r389** « Le bateau tangue ; il avance. ».
+- **Contrôle négatif** : r418–r422 font 5/5 avant comme après → la réparation ne casse rien ; r408–r412 font 0/5 avant comme après → la limite est bien le **verbe**, pas le sujet.
+- Fiche `rapport-pensee-lien-inverse.md` ; JSON `pensee-lien-inverse.json`.
+
+**État** : HEAD `f7a53e2a` ; T0 **4 000** ; revue **580/665** verte ; N2 intact ; serveur 7B sain.
+
+La suite : **réparer `_verbe`** pour la forme inversée (premier segment du token, ou étiquette `GV`), puis la **parité DRVM/native**. Le goal reste **actif**.
+
+
+## Tour 156
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 154/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 154 : je répare `_verbe` pour l'inversion (premier segment du token `mange-t-il`) et je re-mesure les 10 paires
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/miroir.py'); t=p.read_text(encoding='utf-8')\nold='''def _verbe(a: bl.Annotation) -> str | None:\n    \"\"\"Le premier verbe de surface de l'annotation (le prédicat de la paire … [1657 caractères tronqués]`
+
+  ```
+ok
+r408  'Ne viens-tu pas demain ?'     -> r304  'Viens-tu demain ?'        attendu r423 NON
+r409  'Ne mange-t-il pas ?'          -> r344  'Le chat mange ; il dort.' attendu r424 NON
+r410  'Ne dort-elle pas ?'           -> -     ''                         attendu r425 NON
+r411  'Ne partent-ils pas ?'         -> -     ''                         attendu r426 NON
+r412  'Ne lis-tu pas ?'              -> -     ''                         attendu r427 NON
+r418  'Tu ne viens pas demain ?'     -> r423  'Tu viens demain.'         attendu r423 OK
+r419  'Il ne mange pas ?'            -> r424  'Il mange.'                attendu r424 OK
+r420  'Elle ne dort pas ?'           -> r425  'Elle dort.'               attendu r425 OK
+r421  'Ils ne partent pas ?'         -> r426  'Ils partent.'             attendu r426 OK
+r422  "You don't come tomorrow?"     -> r427  'You come tomorrow.'       attendu r427 OK
+justes 5 / 10
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 154 : `_verbe` réparé (« mange-t-il » → « mange ») ; les paires restent **5/10** — le repli sujet-seul choisit r344 « Le chat mange ; il dort. » pour r409 ; r410–r412 restent sans antécédent
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json, pathlib\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique();  … [4309 caractères tronqués]`
+
+  ```
+json 2385 justes 5
+fiche 2487
+ok
+  T0 max : 4002 mots (budget 4 000)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 154 : T0 à 4 002 ; je raccourcis la ligne, j'aligne index/README et je commite la réparation `_verbe`
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 5/5, inversé 5/10 (verbe ok)'\nnew=' ; voisin 5/5, inversé 5/10 (verbe)'\nassert old in t\nt=t.replace(old,new,1)\np.write_t … [950 caractères tronqués]`

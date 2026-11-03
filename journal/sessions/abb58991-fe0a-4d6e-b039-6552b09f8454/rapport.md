@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
 | Durée | 9.0 h |
-| Tours | 155 |
-| Messages | 1063 |
-| Appels d'outils | 871 |
+| Tours | 156 |
+| Messages | 1068 |
+| Appels d'outils | 874 |
 | Fichiers touchés | 48 |
-| Commandes | 697 |
+| Commandes | 700 |
 | Sous-agents | 0 |
-| Commits | 78 |
+| Commits | 79 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -333,6 +333,8 @@
 **Tour 154** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 155** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 156** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3899,7 +3901,39 @@ La suite : **réparer `_sujet`** pour la forme inversée + critère **assertion 
 
 **Synthèse produite :**
 
-⏵ Round 153 : fiche et état écrits (T0 4 000) ; j'aligne index/README et je commite le fait « forme inversée »
+⏵ Round 153 : « forme inversée » committé (`f7a53e2a`, 19 fichiers) — `_sujet` réparé, `_verbe` aveugle, 10 paires **5/10**
+
+**Fait de la nuit — round 153** : la forme inversée.
+
+| question | `_sujet` avant | `_sujet` après | `_verbe` |
+|---|---|---|---|
+| r408 « Ne viens-tu pas demain ? » | None | viens-tu | None |
+| r409 « Ne mange-t-il pas ? » | None | **il** | None |
+| r410 « Ne dort-elle pas ? » | None | dort-elle | None |
+| r411 « Ne partent-ils pas ? » | None | partent-ils | None |
+| r412 « Ne lis-tu pas ? » | None | lis-tu | None |
+
+- **`_sujet` réparé** : le pronom inversé est le 3ᵉ segment du token (`mange-t-il` → `il`) ; il ne marche que sur 3 segments, d'où `viens-tu`/`dort-elle`/`partent-ils` non coupés.
+- **`_verbe` reste aveugle** : `mange-t-il` est étiqueté **NOUN**, pas VERB → `None` sur les 5 formes.
+- **Résultat** : les 10 paires restent **5/10** (r418–r422 5/5, r408–r412 0/5) ; r409 part sur **r389** « Le bateau tangue ; il avance. ».
+- **Contrôle négatif** : r418–r422 font 5/5 avant comme après → la réparation ne casse rien ; r408–r412 font 0/5 avant comme après → la limite est bien le **verbe**, pas le sujet.
+- Fiche `rapport-pensee-lien-inverse.md` ; JSON `pensee-lien-inverse.json`.
+
+**État** : HEAD `f7a53e2a` ; T0 **4 000** ; revue **580/665** verte ; N2 intact ; serveur 7B sain.
+
+La suite : **réparer `_verbe`** pour la forme inversée (premier segment du token, ou étiquette `GV`), puis la **parité DRVM/native**. Le goal reste **actif**.
+
+### Tour 156 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Repair _verbe for inversion and measure
+- bash — Freeze _verbe repair measurement
+- bash — Commit _verbe repair fact
+
+**Synthèse produite :**
+
+⏵ Round 154 : T0 à 4 002 ; je raccourcis la ligne, j'aligne index/README et je commite la réparation `_verbe`
 
 ## 3. Travail accompli
 
@@ -3998,7 +4032,7 @@ La suite : **réparer `_sujet`** pour la forme inversée + critère **assertion 
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 657 autres
+- … et 660 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4179,4 +4213,5 @@ La suite : **réparer `_sujet`** pour la forme inversée + critère **assertion 
 - L/B13 — LE LIEN RÉPARÉ : LA PAIRE (SUJET + VERBE) AVANT LA PROXIMITÉ, AUTO 2/5 → 5/5" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' 
 - L/B13 — LES 10 PAIRES : 5/10, LA FORME INVERSÉE EST LA LIMITE (r408–r412)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
 - L/B13 — LA FORME INVERSÉE : _SUJET RÉPARÉ, _VERBE AVEUGLE, LES 10 PAIRES RESTENT 5/10" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s'
+- L/B13 — _VERBE RÉPARÉ POUR L'INVERSION : LES PAIRES RESTENT 5/10, LE REPLI SUJET-SEUL TROMPE" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format=
 

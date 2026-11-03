@@ -205,10 +205,17 @@ def _sujet(a: bl.Annotation) -> str | None:
 
 
 def _verbe(a: bl.Annotation) -> str | None:
-    """Le premier verbe de surface de l'annotation (le prédicat de la paire)."""
+    """Le premier verbe de surface de l'annotation (le prédicat de la paire).
+
+    La forme inversée « mange-t-il » est UN token étiqueté NOUN : le verbe est son **premier
+    segment**. Sans cette branche, `_verbe` rendait None et la paire ne pouvait pas se former.
+    """
     for e in a.etiquettes:
         if e.niveau == "pos" and e.type == "VERB":
             return e.valeur
+    for e in a.etiquettes:
+        if e.niveau == "pos" and e.type in ("NOUN", "VERB") and "-" in e.valeur:
+            return e.valeur.split("-")[0]
     return None
 
 
