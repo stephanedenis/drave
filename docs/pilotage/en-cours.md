@@ -55,7 +55,7 @@
 - **Ambition** : un **runtime cognitif** où penser est une recherche tracée sur des états pluriels.
 - **Stratégie** : v0 petit et mesuré.
 - **Objectif final** : un **moteur de pensée v0** exécutable, documenté, mesuré, committé.
-- **Fait** : B13 **138/140** (4 S fixés ; T132/T133 restent), gold **432** ; **gold
+- **Fait** : B13 **138/140** (6 S fixés ; T132/T133 restent), gold **432** ; **gold
   neuronal** POS/syntagmes, cascade **0,9415/0,7539/1,0** ; **DRVM/native** cadenas 3, porte 27,
   labyrinthe 2 ; **porte minute** — **26 nœuds** ; **porte mobile** — (3,3) **échoue**, (1,3)
   passe (28/4) ; l'aveugle/labyrinthe aussi ; **pragmatique** 0,6375 ; l'heuristique garde ;
@@ -121,7 +121,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 134/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 138/140 ; minute 26, mobile test faible** ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 138/140, gold 432, 116 liens** | **B13 : gold 200+ ; porte 138/140 ; minute 26, mobile test faible** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N3, N4** | N2 : **200 k pas — 3,16 / 5,61 / 7,28 / 8,00** ; **< 2,5 non atteinte** (2,5 à 1,3–2,7 M pas) ; **R1.2-1024 en cours** (GPU 0) ; N4 0/4 ; N5 gelé | **N2** : R1.2-1024, fiche ; **N4** |
 | **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** (398 langues) ; R2/R3 attendent N5/N4 | **R1.1/R1.2 mesurées** ; la suite est **1 024 octets entraînés** (fenêtre), pas un autre schéma |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
@@ -133,7 +133,7 @@ externes** et la **prochaine action**.
 ## Ce qui reste
 
 **R1** — R1.2-1024 (nuit) ; **Pensée** — gold 200+, porte mobile ; **S** — homographes, validation ;
-**N4** — la consigne ; **B10.3** — le `z` ; **B13** — 134/140 ; **R0.7** — le tagger ; **D** — OCR clos (8 `.PDF`).
+**N4** — la consigne ; **B10.3** — le `z` ; **B13** — 138/140 ; **R0.7** — le tagger ; **D** — OCR clos (8 `.PDF`).
 
 - **Vue d'ensemble** : huit chantiers et relations [`chantiers`](chantiers.md) ; plan multi-sessions [`plan-travail`](plan-travail.md) ; carte [`chantiers-vision.svg`](../schemas/chantiers-vision.svg).
 

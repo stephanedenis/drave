@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 4.6 h |
+| Durée | 4.7 h |
 | Tours | 10 |
-| Messages | 430 |
-| Appels d'outils | 534 |
-| Fichiers touchés | 37 |
-| Commandes | 391 |
+| Messages | 437 |
+| Appels d'outils | 544 |
+| Fichiers touchés | 38 |
+| Commandes | 397 |
 | Sous-agents | 0 |
-| Commits | 11 |
+| Commits | 12 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -407,7 +407,7 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 
 ### Tour 10 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [827 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Locate B13 gate four expected values
 - read
@@ -423,11 +423,11 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 - bash — Update fiche/JSON/state to five S values
 - bash — Fix remaining 134 mentions and read gate result
 - bash — Fix final 134 mentions in state
-- … et 1 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ La porte est à 137 : T110 (segmenteur) a aussi bougé avec le S `00d2a01` ; je l'aligne et relance (138 attendu)
+⏵ Contrôles verts (T0 3 984, revue 564/650) ; je commite le fait « porte B13 138/140 » et je collecte la porte
 
 ## 3. Travail accompli
 
@@ -472,6 +472,7 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-pensee-porte-mobile.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/rapport-b13-porte-138.md` | 1 | 0 |
 | `/home/stephane/GitHub/Qtrinet/reports/b13-porte-138.json` | 1 | 0 |
+| `/home/stephane/GitHub/Qtrinet/tools/pensee/autotest.py` | 0 | 2 |
 
 ### Commandes exécutées (échantillon)
 
@@ -515,7 +516,7 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 351 autres
+- … et 357 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -619,4 +620,5 @@ La suite : **porte stochastique** ou **fenêtre** (le test qui discrimine), le *
 - B13 — LA PORTE MINUTE S'OUVRE AVEC LA RÈGLE (26 NŒUDS, 4 SONDE) ; LE PROMPT LABYRINTHE ÉCHOUE (200, 3)" 2>&1 | tail -8; echo "EXIT=${PIPESTATUS[0]}"; git log -3
 - B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'AVEUGLE (26/2) ET LE LABYRINTHE (29/5) ; TEST NON DISCRIMINANT" 2>&1 
 - B13 — LA PORTE MOBILE : LE 7B ÉCHOUE À (3,3) (200 NŒUDS, 3 SONDE) ET PASSE À (1,3) COMME L'AVEUGLE (26/2) ET LE LABYRINTHE (29/5) ; TEST NON DISCRIMINANT" 2>&1 
+- B13 — LA PORTE EST À 138/140 : LES SIX ATTENDUS DU SOUS-MODULE S 00d2a01 SONT FIXÉS ; T132/T133 RESTENT" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 

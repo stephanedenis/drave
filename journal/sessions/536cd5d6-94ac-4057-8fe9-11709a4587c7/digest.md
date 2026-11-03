@@ -6769,3 +6769,38 @@ PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check s
 ⏵ La porte sessions est verte avec le claim du N2 ; je commite et je vérifie la passe.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/sessions.py && timeout 300 git commit --only -m \"PILOTAGE — UN MANDAT LONG AVEC UN CLAIM ACTIF N'EST PAS PÉRIMÉ ; LA PORTE SESSIONS LIT LE REGISTRE\" -m \"Le N2 tourne depuis 53 min (R1.2-1024) et son heartbeat de plan … [822 caractères tronqués]`
+
+  ```
+[master b1c0bcda] PILOTAGE — UN MANDAT LONG AVEC UN CLAIM ACTIF N'EST PAS PÉRIMÉ ; LA PORTE SESSIONS LIT LE REGISTRE
+ 27 files changed, 957 insertions(+), 118 deletions(-)
+[commit 0]
+b1c0bcda PILOTAGE — UN MANDAT LONG AVEC UN CLAIM ACTIF N'EST PAS PÉRIMÉ ; LA PORTE SESSIONS LIT LE REGISTRE
+
+== revue ==
+  revue de documentation · 564 fiche(s) · 650 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+== taille ==
+  T0 max : 3984 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+
+== passe ==
+porte-pannes 0 47
+porte-peripherie 0 14
+porte-poids-creux 0 317
+porte-pont 0 89
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 1 : la porte sessions est verte avec le claim du N2 (commit `b1c0bcda`). J'attends la fin de la passe.
+
+- **todo_write** `{"todos": [{"content": "Poser la consigne de nuit (plan-travail §10.7, plan hub)", "status": "completed"}, {"content": "Vérifier la porte sessions et le routage docs (nested data/, ressources.md)", "status": "completed"}, {"content": "Intégrer claim/heartbeat dans sessions.py (mandat long vs mort)", … [420 caractères tronqués]`
+
+  ```
+Updated todo list: 2 pending, 2 in progress, 3 completed.
+  ```
+
+- **job_output** `{"job_id": "bash-172", "timeout_ms": 600000, "wait": true}`

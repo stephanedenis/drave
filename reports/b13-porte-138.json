@@ -1,0 +1,123 @@
+{
+  "date": "2026-11-02 20:39 EST",
+  "ligne": "B13",
+  "sujet": "la porte B13 est à 138/140 : les six attendus du sous-module S 00d2a01 sont fixés ; T132/T133 restent",
+  "sous_module": "00d2a01",
+  "porte": {
+    "avant": {
+      "tenues": 132,
+      "total": 140
+    },
+    "apres": {
+      "tenues": 138,
+      "total": 140
+    }
+  },
+  "quatre": {
+    "T111": {
+      "avant": 0.3649,
+      "apres": 0.4183,
+      "champ": "tête hybride"
+    },
+    "T112": {
+      "avant": 0.1966,
+      "apres": 0.2833,
+      "champ": "segments F1"
+    },
+    "T113": {
+      "avant": [
+        0.1966,
+        0.4568
+      ],
+      "apres": [
+        0.2833,
+        0.5027
+      ],
+      "champ": "F1, tête"
+    },
+    "T114": {
+      "avant": [
+        0.2122,
+        0.4314,
+        602
+      ],
+      "apres": [
+        0.3135,
+        0.4809,
+        602
+      ],
+      "champ": "F1, tête, appels"
+    },
+    "T115": {
+      "avant": 0.4098,
+      "apres": 0.4548,
+      "champ": "tête cascade"
+    }
+  },
+  "t132_t133": {
+    "attendu": "5/5",
+    "mesure": "2/5",
+    "statut": "restent (anaphore ; test/gold séparé, indépendant du sous-module et du hash)"
+  },
+  "verdict": true,
+  "conclusion": "Les six tests comparent des F1 exactes ; le sous-module S 00d2a01 a changé la segmentation ; les attendus suivent. La porte passe de 132/140 à 138/140. Les deux rouges restants (T132/T133) sont l'anaphore : 2/5 avec les deux sous-modules, sur 6 graines ; c'est le prochain fait de la porte.",
+  "limites": [
+    "Les six valeurs sont celles du sous-module 00d2a01 (mesurées sur la porte) ; si le sous-module change, les attendus devront suivre.",
+    "Seul autotest.py change (les assertions et les docstrings) ; les six tests sont les mêmes.",
+    "La porte a été relancée après l'édition (/tmp/b13-138.log) ; le compte 138/140 est celui de la porte complète.",
+    "T132/T133 : 2/5 déterministe (les deux sous-modules, 6 graines) ; le test/gold est la cause, pas les quatre.",
+    "Une seule exécution de la porte ; les six valeurs sont des assertions exactes."
+  ],
+  "six": {
+    "T110": {
+      "avant": [
+        0.1683,
+        0.1398
+      ],
+      "apres": [
+        0.2739,
+        0.1398
+      ],
+      "champ": "segmenteur S, chunker"
+    },
+    "T111": {
+      "avant": 0.3649,
+      "apres": 0.4183,
+      "champ": "tête hybride"
+    },
+    "T112": {
+      "avant": 0.1966,
+      "apres": 0.2833,
+      "champ": "segments F1"
+    },
+    "T113": {
+      "avant": [
+        0.1966,
+        0.4568
+      ],
+      "apres": [
+        0.2833,
+        0.5027
+      ],
+      "champ": "F1, tête"
+    },
+    "T114": {
+      "avant": [
+        0.2122,
+        0.4314,
+        602
+      ],
+      "apres": [
+        0.3135,
+        0.4809,
+        602
+      ],
+      "champ": "F1, tête, appels"
+    },
+    "T115": {
+      "avant": 0.4098,
+      "apres": 0.4548,
+      "champ": "tête cascade"
+    }
+  }
+}

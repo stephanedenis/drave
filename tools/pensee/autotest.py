@@ -1668,7 +1668,7 @@ def t109_anaphore_103() -> tuple[bool, str]:
 
 
 def t110_segmenteur() -> tuple[bool, str]:
-    """Le segmenteur : S générateur F1 0,1722, chunker 0,1425 ; tête 0,3552 / 0,4707."""
+    """Le segmenteur : S générateur F1 0,2739, chunker 0,1398 ; tête 0,4012 / 0,4617."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger, evaluer_bloc
     ph = charger()
@@ -1681,13 +1681,13 @@ def t110_segmenteur() -> tuple[bool, str]:
     f2 = round(r2["syntagme"]["f1"], 4)
     t1 = round(r1["syntagme"]["tete"]["f1"], 4)
     t2 = round(r2["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.1683) < 0.001 and abs(f2 - 0.1398) < 0.001
+    return (abs(f1 - 0.2739) < 0.001 and abs(f2 - 0.1398) < 0.001
             and t1 < t2), (
         f"segmenteur : S F1 {f1} tête {t1} ; chunker F1 {f2} tête {t2}")
 
 
 def t111_hybride_seg() -> tuple[bool, str]:
-    """L'hybride frontières/têtes : tête F1 0,3732 (S 0,3552, chunker 0,4707)."""
+    """L'hybride frontières/têtes : tête F1 0,4183 (S 0,3552, chunker 0,4707)."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger, _tete
     ph = charger()
@@ -1707,12 +1707,12 @@ def t111_hybride_seg() -> tuple[bool, str]:
             pred.add((t, cand[0] if cand else d))
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn); f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.3649) < 0.001, (
+    return abs(f1 - 0.4183) < 0.001, (
         f"hybride : tête F1 {f1} (S 0,3552, chunker 0,4707)")
 
 
 def t112_union() -> tuple[bool, str]:
-    """L'union des segmenteurs : segments F1 0,2005 (S 0,1722), tête 0,4662."""
+    """L'union des segmenteurs : segments F1 0,2833 (S 0,1722), tête 0,5027."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger, _seg, _tete
     ph = charger()
@@ -1728,11 +1728,11 @@ def t112_union() -> tuple[bool, str]:
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.1966) < 0.001, f"union : segments F1 {f1} (S 0,1683)"
+    return abs(f1 - 0.2833) < 0.001, f"union : segments F1 {f1} (S 0,1683)"
 
 
 def t113_union_defaut() -> tuple[bool, str]:
-    """L'union par défaut : F1 0,2005, tête 0,4662 dans l'analyseur."""
+    """L'union par défaut : F1 0,2833, tête 0,5027 dans l'analyseur."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger, evaluer_bloc
     ph = charger()
@@ -1740,12 +1740,12 @@ def t113_union_defaut() -> tuple[bool, str]:
     r = evaluer_bloc("h", h, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return abs(f1 - 0.1966) < 0.001 and abs(tete - 0.4568) < 0.001, (
+    return abs(f1 - 0.2833) < 0.001 and abs(tete - 0.5027) < 0.001, (
         f"union par défaut : F1 {f1}, tête {tete}")
 
 
 def t114_cascade_union() -> tuple[bool, str]:
-    """La cascade avec l'union : F1 0,2170, tête 0,4410, 1 601 appels neuronaux."""
+    """La cascade avec l'union : F1 0,3135, tête 0,4809, 602 appels neuronaux."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger, evaluer_bloc
     ph = charger()
@@ -1754,13 +1754,13 @@ def t114_cascade_union() -> tuple[bool, str]:
     r = evaluer_bloc("c", cascade, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.2122) < 0.001 and abs(tete - 0.4314) < 0.001
+    return (abs(f1 - 0.3135) < 0.001 and abs(tete - 0.4809) < 0.001
             and cascade.appels_neuronal == 602), (
         f"cascade : F1 {f1}, tête {tete}, {cascade.appels_neuronal} appels")
 
 
 def t115_tete_cascade() -> tuple[bool, str]:
-    """La tête de la cascade : la correction par l'union dégrade (0,419 contre 0,441)."""
+    """La tête de la cascade : la correction par l'union dégrade (0,455 contre 0,441)."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger
     ph = charger()
@@ -1780,7 +1780,7 @@ def t115_tete_cascade() -> tuple[bool, str]:
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.4098) < 0.001, (
+    return abs(f1 - 0.4548) < 0.001, (
         f"tête cascade corrigée : {f1} (cascade 0,441 ; union 0,466)")
 
 

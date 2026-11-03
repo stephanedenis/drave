@@ -1,11 +1,11 @@
 {
  "version": 2,
  "mode": "gold",
- "date": "2026-11-02T20:36:15",
+ "date": "2026-11-02T19:40:35",
  "source": "tools/structures/donnees/gold-analyseur.json",
  "sortie": "data/structures/banque.jsonl",
- "phrases": 55,
- "candidats_acceptes": 55,
- "sha256": "76accf9dbd60a9fcc9fe58a56eecbdbb6aec0ffd5e8dbf0c69443e4a49dd1ac6",
+ "phrases": 47,
+ "candidats_acceptes": 47,
+ "sha256": "f2a0d2fb3a9b0a9aebd562b170503f4d1a98251efdc4a3645a2523b5197227a2",
  "note": "structures de référence, sans jugement humain — `statut: reference` ; spans vérifiés."
 }
