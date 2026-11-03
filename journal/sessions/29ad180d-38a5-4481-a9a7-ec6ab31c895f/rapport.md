@@ -9,12 +9,12 @@
 | Début | 2026-11-02 16:14 |
 | Durée | 21.7 h |
 | Tours | 9 |
-| Messages | 289 |
-| Appels d'outils | 293 |
+| Messages | 292 |
+| Appels d'outils | 296 |
 | Fichiers touchés | 14 |
-| Commandes | 217 |
+| Commandes | 220 |
 | Sous-agents | 0 |
-| Commits | 17 |
+| Commits | 18 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -340,7 +340,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 
 ### Tour 9 — pour ce qui est de la validation de la banque, après moins de 20%, j'arrête car j'ai trop de doutes sur l'arvre syntaxiq … [105 caractères tronqués]
 
-*15 appels d'outils.* Actions notables :
+*18 appels d'outils.* Actions notables :
 
 - bash — Inspect partial human validations and notes
 - bash — Stop bank server and export partial validated bank
@@ -356,7 +356,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - bash — Trim S state to T0 budget
 - bash — Final trim and check S files for commit
 - bash — Stage partial bank fact in alternate index
-- … et 1 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
@@ -425,7 +425,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - **T1** Inspect holdout type failure
 - **T1** Add copula predicate rule and remeasure
 - **T1** Add second holdout and run once
-- … et 177 autres
+- … et 180 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -505,7 +505,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 
 ## 5. Erreurs rencontrées
 
-9 sorties en erreur ou divergentes. Les premières :
+10 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : __pycache__/ *.pyc reports/*.tmp models/ data/ qtrinet-core/target/  # Traces de session : la copie brute reste sur disque (volumineuse, binaire), # le digest markdown est versionné. journal/sessions/
 - **T1** : === data suivis === count: 0 === reports json exemples === reports/b102bis-corpus-jw.json reports/campagne-benefices/051-R-annexe-manifeste-des-journaux.md reports/corpus-genres.json reports/corpus-li
@@ -516,6 +516,7 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - **T5** : === WIP mtimes === -rw-------. 1 stephane stephane 14355 18:49:42 reports/rapport-n2-r11.md -rw-------. 1 stephane stephane 82670 18:52:50 tools/bloc_linguistique.py -rw-------. 1 stephane stephane 11
 - **T5** : {     "version": 2,     "mode": "gold",     "date": "2026-11-02T19:40:35",     "source": "tools/structures/donnees/gold-analyseur.json",     "sortie": "data/structures/banque.jsonl",     "phrases": 47
 - **T6** : [stderr]   ✅ index : aucun fait stagé sans état fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.  Another git process seems to be running in this
+- **T9** : [stderr]   ✅ index : aucun fait stagé sans état fatal: cannot lock ref 'HEAD': is at 229c5bf16e5e5bf09c0c93d7c274e614c73899b0 but expected d255588d2e4ee2d98482dd9aed6e6b4e64f5950d [exit code: 128]
 
 ## 6. Commits
 
@@ -535,5 +536,6 @@ La liste DSH est à jour : banque (humain) et filtre langue/genre en tête, `h05
 - S — BANQUE : LE MANIFESTE REPREND LA DATE DU RESCAN (SHA 43957a3b INCHANGÉ)" -m "La banque de 200 phrases / 355 candidats est identique (sha256 43957a3b…) ; seu
 - S — LE CONTEXTE TRANCHE LES HOMOGRAPHES : 54/55 TYPES, 131/131 RÔLES ; GOLD 55 (SHA 76accf9d)" -m "Le GN ne s'arrête plus devant « ferme »/« fait » quand le sui
 - S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES / 65 PHRASES ; L'ARRÊT HUMAIN EST MESURÉ (ARBRE 1, RÉFÉRENTS 0)" -m "La validation humaine s'arrête : arbre 
+- S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ" -m "La validation humaine s'arrête après 142 
 - S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ" -m "La validation humaine s'arrête après 142 
 

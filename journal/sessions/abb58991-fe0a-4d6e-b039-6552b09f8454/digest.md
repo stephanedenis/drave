@@ -23498,3 +23498,78 @@ d255588d L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN 
 ⏵ Le commit a emporté le journal du hub mais **pas mes fichiers** (le hub avait stagé le journal) ; je récupère mes trois fichiers + l'état et je commite
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && git add reports/pensee-parite-drvm-native-rejoue.json reports/rapport-pensee-parite-drvm-native-rejoue.md reports/native-parite.json reports/INDEX.md reports/README.md docs/pilotage/en-cours.md && git status --porcelain | grep -E \"pensee-parite|rappo … [318 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+A  reports/pensee-parite-drvm-native-rejoue.json
+A  reports/rapport-pensee-parite-drvm-native-rejoue.md
+  ✅ index : aucun fait stagé sans état
+[master 229c5bf1] L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005
+ 24 files changed, 520 insertions(+), 150 deletions(-)
+ create mode 100644 reports/pensee-parite-drvm-native-rejoue.json
+ create mode 100644 reports/rapport-pensee-parite-drvm-native-rejoue.md
+EXIT=0
+229c5bf1 L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005
+ docs/pilotage/en-cours.md                          |  15 +-
+ journal/2026-11-03/README.md                       |   7 +-
+ journal/2026-11-03/attention.md                    |   2 +-
+ journal/2026-11-03/distribue.md                    |   2 +-
+ journal/2026-11-03/docs.md                         |   7 +-
+ journal/2026-11-03/memoire.md                      |   2 +-
+ journal/2026-11-03/mesures.md                      |   2 +-
+  ```
+
+### 🤖 Assistant
+
+⏵ La parité rejouée est enfin committée (`229c5bf1`, 24 fichiers) ; je vérifie l'état final (T0, revue, hook)
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep T0 | head -1; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -2; git log -1 --format='%h %s'; echo '---'; git status --porcelain | grep -E \"pensee-pa … [151 caractères tronqués]`
+
+  ```
+T0 max : 3996 mots (budget 4 000)
+  revue de documentation · 590 fiche(s) · 679 JSON · 119 doc(s) · 82 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  état · dernier fait 229c5bf1 · dernier état 229c5bf1
+  ✅ aucun fait commité après le dernier état
+229c5bf1 L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005
+---
+ M docs/pilotage/en-cours.md
+(vide = propre)
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 1 du goal de continuation : la parité DRVM/native est **rejouée de bout en bout** — checkpoint régénéré en CPU, 5/5 prompts, commit `229c5bf1`
+
+**Fait** : la parité n'est plus seulement documentée, elle est **reproductible**.
+
+| étape | mesure |
+|---|---|
+| régénération CPU (`entrainer_native.py --device cpu --pas 200`) | **44,9 s**, `CUDA_VISIBLE_DEVICES=""` |
+| checkpoint | `/tmp/drave-n0-pont.pt` (47 306 271 o) |
+| DRVM | `/tmp/drave-n0-pont.drvm` (47 283 932 o), `sha256 db74e4b5…` |
+| parité Rust ↔ Python | **5/5 top-1, 5/5 top-5**, écart max **0,00005** |
+
+- **Le piège révélé** : `verifier_parite_native.py` compare à `/tmp/n0-native.drvm` **codé en dur**. Sans ce fichier : **0/5 et écart 999** (mesuré). Après copie du DRVM frais : 5/5 — le banc échoue proprement, il ne passe pas par hasard.
+- **Contrôle négatif** : 0/5 avant copie, 5/5 après ; aucune mesure GPU, N2 intact.
+- **Limites** : checkpoint/DRVM dans `/tmp` (à régénérer, 44,9 s) ; 5 prompts = parité de logits, pas de perplexité ; le chemin codé en dur reste à corriger.
+- Fiche `reports/rapport-pensee-parite-drvm-native-rejoue.md` ; JSON `reports/pensee-parite-drvm-native-rejoue.json` ; sortie brute `reports/native-parite.json`.
+
+**Vérifié** : T0 **3 996** mots ; revue documentation verte (**590 fiches / 679 JSON**) ; hook état ✅ (`dernier fait 229c5bf1 = dernier état 229c5bf1`) ; HEAD `229c5bf1`.
+
+**À noter** : un commit intermédiaire (`d255588d`) a emporté le journal staged par le hub (le hub avait stagé ses journaux) ; le mien est repassé proprement derrière (`229c5bf1`). `docs/pilotage/en-cours.md` est **modifié par une autre session** en ce moment (statut `M`) — je n'y touche pas, le hub le committera.
+
+**Prochaine action** : corriger `verifier_parite_native.py` pour prendre le DRVM **en argument** (fin du chemin codé en dur), puis l'ajouter aux portes. Le goal de continuation reste **actif**.
+
+
+## Tour 165
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+

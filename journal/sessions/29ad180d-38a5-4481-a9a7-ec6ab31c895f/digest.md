@@ -5958,3 +5958,45 @@ docs/pilotage/en-cours.md                          |  14 +--
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && GIT_INDEX_FILE=/tmp/index.s git commit -m \"S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ\" -m \"La validation humaine s'arrête après 142 verdicts/71 phrases : 81 le … [555 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 229c5bf16e5e5bf09c0c93d7c274e614c73899b0 but expected d255588d2e4ee2d98482dd9aed6e6b4e64f5950d
+[exit code: 128]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2; echo \"=== S in HEAD ? ===\"; git show HEAD:reports/rapport-s-banque-partielle.md >/dev/null 2>&1 && echo \"fiche dans HEAD\" || echo \"fiche absente\"; git show HEAD:reports/s-banque-validee.json >/dev/null 2>& … [364 caractères tronqués]`
+
+  ```
+229c5bf1 L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005
+d255588d L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005
+=== S in HEAD ? ===
+fiche absente
+manifeste absent
+160000 commit 00d2a015d2f7448db8324a4b25796312abffa83d	tools/structures
+=== status ===
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M tools/structures
+?? reports/rapport-s-banque-partielle.md
+?? reports/s-banque-validee.json
+=== lock ===
+pas de verrou
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"INDEX fiche dans HEAD: $(git show HEAD:reports/INDEX.md | grep -c 'banque-partielle')\"; echo \"plan actif dans HEAD: $(git show HEAD:journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md | grep -c '13 h 55')\"; echo \ … [554 caractères tronqués]`
+
+  ```
+INDEX fiche dans HEAD: 1
+plan actif dans HEAD: 1
+en-cours S banque HEAD: 3
+ docs/pilotage/en-cours.md             |  13 ++--
+ docs/pilotage/roadmap.md              |   2 +-
+ reports/rapport-s-banque-partielle.md | 110 ++++++++++++++++++++++++++++++++++
+ reports/s-banque-validee.json         |  11 ++++
+ tools/structures                      |   2 +-
+ 5 files changed, 129 insertions(+), 9 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && GIT_INDEX_FILE=/tmp/index.s git commit -m \"S — LA BANQUE PARTIELLE : 142 VERDICTS, 81 LECTURES/65 PHRASES ; L'ARRÊT HUMAIN (ARBRE 1, RÉFÉRENTS 0) EST MESURÉ\" -m \"La validation humaine s'arrête après 142 verdicts/71 phrases : 81 le … [590 caractères tronqués]`

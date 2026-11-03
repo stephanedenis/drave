@@ -8,11 +8,11 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
 | Durée | 21.7 h |
-| Tours | 164 |
-| Messages | 1146 |
-| Appels d'outils | 936 |
+| Tours | 165 |
+| Messages | 1152 |
+| Appels d'outils | 940 |
 | Fichiers touchés | 48 |
-| Commandes | 756 |
+| Commandes | 760 |
 | Sous-agents | 0 |
 | Commits | 95 |
 | Compactages de contexte | 3 |
@@ -355,6 +355,8 @@
 **Tour 163** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 164** — continue
+
+**Tour 165** — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour rejouer la parité native, puis reprendre le lien (apprentissage) et vérifier l'état (en-cours, fichiers non committés) ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite)." Round: 1/1000  Continue working toward the objective in this … [483 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -4184,7 +4186,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ### Tour 164 — continue
 
-*29 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - update_goal
 - bash — Resume goal and inspect state
@@ -4200,11 +4202,43 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - bash — Check Rust binary and copy fresh DRVM
 - bash — Replay native parity with fresh DRVM
 - bash — Write replayed native parity JSON
-- … et 14 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ Le commit a emporté le journal du hub mais **pas mes fichiers** (le hub avait stagé le journal) ; je récupère mes trois fichiers + l'état et je commite
+⏵ Round 1 du goal de continuation : la parité DRVM/native est **rejouée de bout en bout** — checkpoint régénéré en CPU, 5/5 prompts, commit `229c5bf1`
+
+**Fait** : la parité n'est plus seulement documentée, elle est **reproductible**.
+
+| étape | mesure |
+|---|---|
+| régénération CPU (`entrainer_native.py --device cpu --pas 200`) | **44,9 s**, `CUDA_VISIBLE_DEVICES=""` |
+| checkpoint | `/tmp/drave-n0-pont.pt` (47 306 271 o) |
+| DRVM | `/tmp/drave-n0-pont.drvm` (47 283 932 o), `sha256 db74e4b5…` |
+| parité Rust ↔ Python | **5/5 top-1, 5/5 top-5**, écart max **0,00005** |
+
+- **Le piège révélé** : `verifier_parite_native.py` compare à `/tmp/n0-native.drvm` **codé en dur**. Sans ce fichier : **0/5 et écart 999** (mesuré). Après copie du DRVM frais : 5/5 — le banc échoue proprement, il ne passe pas par hasard.
+- **Contrôle négatif** : 0/5 avant copie, 5/5 après ; aucune mesure GPU, N2 intact.
+- **Limites** : checkpoint/DRVM dans `/tmp` (à régénérer, 44,9 s) ; 5 prompts = parité de logits, pas de perplexité ; le chemin codé en dur reste à corriger.
+- Fiche `reports/rapport-pensee-parite-drvm-native-rejoue.md` ; JSON `reports/pensee-parite-drvm-native-rejoue.json` ; sortie brute `reports/native-parite.json`.
+
+**Vérifié** : T0 **3 996** mots ; revue documentation verte (**590 fiches / 679 JSON**) ; hook état ✅ (`dernier fait 229c5bf1 = dernier état 229c5bf1`) ; HEAD `229c5bf1`.
+
+**À noter** : un commit intermédiaire (`d255588d`) a emporté le journal staged par le hub (le hub avait stagé ses journaux) ; le mien est repassé proprement derrière (`229c5bf1`). `docs/pilotage/en-cours.md` est **modifié par une autre session** en ce moment (statut `M`) — je n'y touche pas, le hub le committera.
+
+**Prochaine action** : corriger `verifier_parite_native.py` pour prendre le DRVM **en argument** (fin du chemin codé en dur), puis l'ajouter aux portes. Le goal de continuation reste **actif**.
+
+### Tour 165 — <goal_round> Objective: "Poursuivre L/B13 après clôture : régénérer le checkpoint et le DRVM en CPU (sans GPU N2) pour r … [763 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Check gold pair order for link bench
+- bash — Verify original link bench definition
+- bash — Add forward link and measure both directions
+
+**Synthèse produite :**
+
+⏵ Le banc d'origine ne fait que **5 paires précédentes** (5/5) ; mon extension de 10 paires comparait le lien à 5 paires où l'assertion est **après** la question. Je construis le lien **avant** (miroir) et je mesure les deux sens
 
 ## 3. Travail accompli
 
@@ -4303,7 +4337,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 716 autres
+- … et 720 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4396,7 +4430,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 
 ## 5. Erreurs rencontrées
 
-8 sorties en erreur ou divergentes. Les premières :
+9 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : Error: could not connect to ollama server, run 'ollama serve' to start it --- total 1656188 drwxr-xr-x. 1 stephane stephane       138 15 oct 09:02 . drwxr-xr-x. 1 stephane stephane       100 15 oct 09
 - **T1** : > Tu es un étiqueteur linguistique. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour. Schéma : {"langue":"fr","script":"Latn","etiquettes":[{"niveau":"phrase|pragmatique|syntagme|pos","t
@@ -4406,6 +4440,7 @@ Les trois items de l'objectif sont désormais **mesurés, écrits et committés*
 - **T73** : cascade {'pos': {'exactitude': 0.9415, 'exactitude_ferme': 0.9392, 'exactitude_ouvert': 0.9432, 'tokens': 804, 'confusions': {'ADJ': {'ADJ': 52, 'NOUN': 5}, 'ADV': {'ADV': 48}, 'AUX': {'PREP': 3, 'AUX
 - **T148** : date 2026-11-03 00:25 EST verdict False gold {'phrases': 432, 'tokens': 2375} [stderr] Traceback (most recent call last):   File "<stdin>", line 9, in <module> KeyError: 'pos' [exit code: 1]
 - **T154** : r408 'Ne viens-tu pas demain ?'     -> r304   'Viens-tu demain ?'    attendu r424 NON [stderr] Traceback (most recent call last):   File "<stdin>", line 12, in <module> TypeError: unsupported format s
+- **T165** : r408 pos 407 | r423 pos 417 | assertion avant question ? False r409 pos 408 | r424 pos 418 | assertion avant question ? False r410 pos 409 | r425 pos 419 | assertion avant question ? False r411 pos 41
 
 ## 6. Commits
 

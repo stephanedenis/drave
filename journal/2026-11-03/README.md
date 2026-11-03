@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**67 commits** · **6 session(s)** · **8 thème(s)**
+**68 commits** · **6 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | distribue | 20 | [distribue.md](distribue.md) |
 | docs | 21 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
-| mesures | 6 | [mesures.md](mesures.md) |
+| mesures | 7 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 8 | [portes.md](portes.md) |
@@ -102,6 +102,7 @@
 | 13:48 | `00bb1fa9` | JOURNAUX DE SESSION — TRACES DE LA BOUCLE DE GÉNÉRATION RETIRÉES (4 FICHIERS) |
 | 13:52 | `c66a2eef` | JOURNAUX D629 — LES LIGNES DE LA BOUCLE DE GÉNÉRATION SONT RETIRÉES |
 | 13:54 | `d255588d` | L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005 |
+| 13:56 | `229c5bf1` | L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005 |
 
 ## Le récit de la journée (écrit à la main)
 

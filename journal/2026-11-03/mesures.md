@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,10 +14,11 @@
 | 00:48 | `612f8743` | L/B13 — LES 429 APPELS DU GOLD RÉEL SONT UN EFFET DE CACHE, PAS DES PHRASES VIDES (0 refus, 0 token vide, 432 ids) | `en-cours.md`, `README.md`, `attention.md` (+13) |
 | 00:50 | `9a337f45` | NUIT — LA FICHE DU GOLD RÉEL DIT LE CACHE : 429 APPELS POUR 432 IDS, 0 REFUS, 0 VIDE | `en-cours.md`, `README.md`, `attention.md` (+11) |
 | 08:50 | `19eacae6` | N2 — LES SIX FICHIERS DE LA NUIT COMMITTÉS PAR LE HUB APRÈS LA PAUSE | `en-cours.md`, `README.md`, `attention.md` (+18) |
+| 13:56 | `229c5bf1` | L/B13 — LA PARITÉ DRVM/NATIVE REJOUÉE : CHECKPOINT RÉGÉNÉRÉ EN CPU (44,9 s), 5/5 PROMPTS, ÉCART 0,00005 | `en-cours.md`, `README.md`, `attention.md` (+21) |
 
 ## Chiffres du jour
 
-`0,9065` · `0,4598` · `0,5633` · `0,9954`
+`44,9 s` · `0,9065` · `0,4598` · `0,5633` · `0,9954`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -39,6 +40,7 @@
 - [reports/rapport-n2-production-fenetre.md](../../reports/rapport-n2-production-fenetre.md)
 - [reports/rapport-n2-r12-2048.md](../../reports/rapport-n2-r12-2048.md)
 - [reports/rapport-pensee-cascade-reel-432.md](../../reports/rapport-pensee-cascade-reel-432.md)
+- [reports/rapport-pensee-parite-drvm-native-rejoue.md](../../reports/rapport-pensee-parite-drvm-native-rejoue.md)
 - [reports/rapport-pensee-seuils-gold-reel.md](../../reports/rapport-pensee-seuils-gold-reel.md)
 
 <!-- notes -->
