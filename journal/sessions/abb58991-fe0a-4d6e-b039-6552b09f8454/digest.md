@@ -21408,3 +21408,114 @@ c41528b7 L/B13 — LA BONNE RÉPONSE, PAS LE VOISIN : LIEN AUTO 2/5, CONTEXTUEL 
 ⏵ Round 150 : T0 encore à 4 002 ; je retire 3 mots de la ligne et je commite l'état (le lock a libéré)
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 2/5**'\nnew=' ; voisin 2/5'\nassert old in t\nt=t.replace(old,new,1)\np.write_text(t,encoding='utf-8')\nprint('ok')\nPY\npyt … [471 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3998 mots (budget 4 000)
+  ✅ index : aucun fait stagé sans état
+[master 10ba0488] ÉTAT — T0 4 000 : LIGNE DU VOISIN RACCOURCIE
+ 14 files changed, 184 insertions(+), 35 deletions(-)
+EXIT=0
+10ba0488 ÉTAT — T0 4 000 : LIGNE DU VOISIN RACCOURCIE
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 150 : « la bonne réponse, pas le voisin » committé (`c41528b7`, état `10ba0488`) — T0 3 998, revue 577/662 verte
+
+**Fait de la nuit — round 150** : la fonction « la bonne réponse, pas le voisin ».
+
+| lecture | justes | taux |
+|---|---:|---:|
+| **lien automatique** (`trouver_precedente`) | **2/5** | 0,40 |
+| **réponse contextuelle** (antécédent donné) | **5/5** | 1,00 |
+
+- Les 3 erreurs choisissent **le voisin le plus proche** : r419 → **r428** « Il pleut. » (au lieu de r424 « Il mange. »), r420 → **r430** « Elle est partie. » (au lieu de r425 « Elle dort. »), r421 → **r431** « Ils sont arrivés. » (au lieu de r426 « Ils partent. »).
+- **Contrôle négatif** : le contextuel fait 5/5 → la difficulté n'est pas la réponse mais le **choix du lien** ; sans distracteurs le lien auto faisait 5/5 → la chute est bien causée par r428–r432.
+- **Ce qui rendrait le résultat faux** : juge par égalité de chaînes, 5 paires seulement, sujet ambigu.
+- Fiche `rapport-pensee-bonne-reponse-voisin.md` ; JSON `pensee-bonne-reponse-voisin.json`.
+
+**État** : HEAD `10ba0488` ; T0 **3 998** ; revue **577/662** verte ; N2 intact.
+
+La suite : **réparer le lien** (critère de paire assertion ↔ question du même verbe avant la proximité), puis la **parité DRVM/native** (cadenas 3, porte 27, labyrinthe 2). Le goal reste **actif**.
+
+
+## Tour 153
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 151/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 151 : je répare le lien — ajouter le critère de **paire** (même verbe, assertion ↔ question) avant la proximité, et mesurer le gain
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && grep -n \"def _sujet\" -A 18 tools/tests/linguistique/miroir.py; echo '---'; grep -n \"^from\\|^import\" tools/tests/linguistique/miroir.py | head -8", "description": "Read _sujet and imports in miroir", "timeoutMs": 60000}`
+
+  ```
+186:def _sujet(a: bl.Annotation) -> str | None:
+187-    """Le sujet de surface : le premier pronom sujet, puis le premier GN, puis le premier NOUN."""
+188-    for e in a.etiquettes:
+189-        if e.niveau == "pos" and e.type == "PRON":
+190-            return e.valeur
+191-    for e in a.etiquettes:
+192-        if e.niveau == "syntagme" and e.type == "GN":
+193-            return e.valeur
+194-    for e in a.etiquettes:
+195-        if e.niveau == "pos" and e.type == "NOUN":
+196-            return e.valeur
+197-    return None
+198-
+199-
+200-def trouver_precedente(question: dict, phrases: list[dict], bloc=None) -> dict | None:
+201-    """Le lien **automatique** : la phrase précédente qui partage le sujet de la question."""
+202-    bloc = bloc or bl.Heuristique()
+203-    a = bloc.analyser(question["texte"], question["langue"])
+204-    sujet = _sujet(a)
+---
+8:from __future__ import annotations
+10:import re
+12:import pathlib
+13:import sys
+16:import tools.bloc_linguistique as bl
+17:from tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 151 : j'ajoute `_verbe` et je fais passer la paire (même sujet **et** même verbe) avant la proximité — repli sur le sujet seul
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/miroir.py'); t=p.read_text(encoding='utf-8')\nold='''def trouver_precedente(question: dict, phrases: list[dict], bloc=None) -> dict | None:\n    \"\"\"Le lien **automatique** : … [2705 caractères tronqués]`
+
+  ```
+ok
+r418 -> r423 'Tu viens demain.' (attendu r423)
+r419 -> r424 'Il mange.' (attendu r424)
+r420 -> r425 'Elle dort.' (attendu r425)
+r421 -> r426 'Ils partent.' (attendu r426)
+r422 -> r427 'You come tomorrow.' (attendu r427)
+auto   {'paires': 5, 'justes': 5, 'taux': 1.0}
+contex {'paires': 5, 'justes': 5.0, 'taux': 1.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 151 : lien réparé — le critère de **paire (sujet + verbe)** passe avant la proximité : auto **2/5 → 5/5**, contexte 5/5 ; je fige la mesure
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 180 python3 - <<'PY'\nimport json, pathlib\nfrom tools.tests.linguistique import miroir\nfrom tools.bloc_linguistique import Heuristique\nph=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nbl=Heuristique();  … [3838 caractères tronqués]`
+
+  ```
+json 1572 {'lien_auto': 1.0, 'justes': 5} {'paires': 5, 'justes': 5.0, 'taux': 1.0}
+fiche 2392
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 151 : JSON et fiche écrits (auto 5/5) ; j'aligne index/en-cours/README et je commite le lien réparé
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nold=' ; voisin 2/5'\nnew=' ; voisin 5/5 (réparé)'\nassert old in t\nt=t.replace(old,new,1)\nt=t.replace('| fichiers / JSON de résultats | * … [1046 caractères tronqués]`

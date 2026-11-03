@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 8.8 h |
-| Tours | 152 |
-| Messages | 1042 |
-| Appels d'outils | 856 |
+| Durée | 8.9 h |
+| Tours | 153 |
+| Messages | 1048 |
+| Appels d'outils | 860 |
 | Fichiers touchés | 48 |
-| Commandes | 682 |
+| Commandes | 686 |
 | Sous-agents | 0 |
-| Commits | 75 |
+| Commits | 76 |
 | Compactages de contexte | 3 |
 
 ## Objectifs déclarés
@@ -327,6 +327,8 @@
 **Tour 151** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 **Tour 152** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
+
+**Tour 153** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [549 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -3799,7 +3801,36 @@ La suite : la fonction « **la bonne réponse, pas le voisin** » (T132/T133, di
 
 **Synthèse produite :**
 
-⏵ Round 150 : T0 encore à 4 002 ; je retire 3 mots de la ligne et je commite l'état (le lock a libéré)
+⏵ Round 150 : « la bonne réponse, pas le voisin » committé (`c41528b7`, état `10ba0488`) — T0 3 998, revue 577/662 verte
+
+**Fait de la nuit — round 150** : la fonction « la bonne réponse, pas le voisin ».
+
+| lecture | justes | taux |
+|---|---:|---:|
+| **lien automatique** (`trouver_precedente`) | **2/5** | 0,40 |
+| **réponse contextuelle** (antécédent donné) | **5/5** | 1,00 |
+
+- Les 3 erreurs choisissent **le voisin le plus proche** : r419 → **r428** « Il pleut. » (au lieu de r424 « Il mange. »), r420 → **r430** « Elle est partie. » (au lieu de r425 « Elle dort. »), r421 → **r431** « Ils sont arrivés. » (au lieu de r426 « Ils partent. »).
+- **Contrôle négatif** : le contextuel fait 5/5 → la difficulté n'est pas la réponse mais le **choix du lien** ; sans distracteurs le lien auto faisait 5/5 → la chute est bien causée par r428–r432.
+- **Ce qui rendrait le résultat faux** : juge par égalité de chaînes, 5 paires seulement, sujet ambigu.
+- Fiche `rapport-pensee-bonne-reponse-voisin.md` ; JSON `pensee-bonne-reponse-voisin.json`.
+
+**État** : HEAD `10ba0488` ; T0 **3 998** ; revue **577/662** verte ; N2 intact.
+
+La suite : **réparer le lien** (critère de paire assertion ↔ question du même verbe avant la proximité), puis la **parité DRVM/native** (cadenas 3, porte 27, labyrinthe 2). Le goal reste **actif**.
+
+### Tour 153 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [829 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Read _sujet and imports in miroir
+- bash — Repair link with verb pairing and measure
+- bash — Write link-repair JSON and fiche
+- bash — Commit repaired link fact
+
+**Synthèse produite :**
+
+⏵ Round 151 : JSON et fiche écrits (auto 5/5) ; j'aligne index/en-cours/README et je commite le lien réparé
 
 ## 3. Travail accompli
 
@@ -3898,7 +3929,7 @@ La suite : la fonction « **la bonne réponse, pas le voisin** » (T132/T133, di
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 642 autres
+- … et 646 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -4075,4 +4106,5 @@ La suite : la fonction « **la bonne réponse, pas le voisin** » (T132/T133, di
 - L/B13 — LA BONNE RÉPONSE, PAS LE VOISIN : LIEN AUTO 2/5, CONTEXTUEL 5/5 (DISTRACTEURS r428–r432)" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --for
 - ÉTAT — T0 4 000 : LIGNE DU VOISIN RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1; python3 tools/revue_documenta
 - ÉTAT — T0 4 000 : LIGNE DU VOISIN RACCOURCIE" 2>&1 | tail -3; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' | head -1
+- L/B13 — LE LIEN RÉPARÉ : LA PAIRE (SUJET + VERBE) AVANT LA PROXIMITÉ, AUTO 2/5 → 5/5" 2>&1 | tail -4; echo "EXIT=${PIPESTATUS[0]}"; git log -1 --format='%h %s' 
 

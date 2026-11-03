@@ -197,20 +197,39 @@ def _sujet(a: bl.Annotation) -> str | None:
     return None
 
 
+def _verbe(a: bl.Annotation) -> str | None:
+    """Le premier verbe de surface de l'annotation (le prédicat de la paire)."""
+    for e in a.etiquettes:
+        if e.niveau == "pos" and e.type == "VERB":
+            return e.valeur
+    return None
+
+
 def trouver_precedente(question: dict, phrases: list[dict], bloc=None) -> dict | None:
-    """Le lien **automatique** : la phrase précédente qui partage le sujet de la question."""
+    """Le lien **automatique** : la phrase précédente de la **paire** (même sujet ET même verbe).
+
+    La proximité seule choisit le voisin : « Il ne mange pas ? » → « Il pleut. » (r428) plutôt
+    que « Il mange. » (r424). Le critère de paire (sujet + verbe) passe avant, et la proximité
+    ne sert que de repli quand aucun verbe ne concorde.
+    """
     bloc = bloc or bl.Heuristique()
     a = bloc.analyser(question["texte"], question["langue"])
     sujet = _sujet(a)
+    verbe = _verbe(a)
     if not sujet:
         return None
     idx = next((i for i, p in enumerate(phrases) if p.get("id") == question.get("id")), -1)
+    repli = None
     for p in reversed(phrases[:idx] if idx > 0 else []):
         b = bloc.analyser(p["texte"], p["langue"])
         s = _sujet(b)
         if s and _normaliser_egal(s, sujet):
-            return p
-    return None
+            v = _verbe(b)
+            if verbe and v and _normaliser_egal(v, verbe):
+                return p
+            if repli is None:
+                repli = p
+    return repli
 
 
 def _normaliser_egal(a: str, b: str) -> bool:

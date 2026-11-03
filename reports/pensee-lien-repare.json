@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-03 01:00 EST",
+  "gold": "gold_reel.json",
+  "paires": 5,
+  "avant": {
+    "lien_auto": 0.4,
+    "justes": 2
+  },
+  "apres": {
+    "lien_auto": 1.0,
+    "justes": 5
+  },
+  "contextuel": {
+    "paires": 5,
+    "justes": 5.0,
+    "taux": 1.0
+  },
+  "detail": [
+    {
+      "question": "r418",
+      "attendu": "r423",
+      "texte_attendu": "Tu viens demain.",
+      "trouve": "r423",
+      "texte_trouve": "Tu viens demain.",
+      "juste": true
+    },
+    {
+      "question": "r419",
+      "attendu": "r424",
+      "texte_attendu": "Il mange.",
+      "trouve": "r424",
+      "texte_trouve": "Il mange.",
+      "juste": true
+    },
+    {
+      "question": "r420",
+      "attendu": "r425",
+      "texte_attendu": "Elle dort.",
+      "trouve": "r425",
+      "texte_trouve": "Elle dort.",
+      "juste": true
+    },
+    {
+      "question": "r421",
+      "attendu": "r426",
+      "texte_attendu": "Ils partent.",
+      "trouve": "r426",
+      "texte_trouve": "Ils partent.",
+      "juste": true
+    },
+    {
+      "question": "r422",
+      "attendu": "r427",
+      "texte_attendu": "You come tomorrow.",
+      "trouve": "r427",
+      "texte_trouve": "You come tomorrow.",
+      "juste": true
+    }
+  ],
+  "critere": "paire (sujet + verbe) avant la proximité ; repli sur le sujet seul",
+  "controle_negatif": {
+    "distracteurs": "r428/r430/r431 partagent le sujet mais pas le verbe ; avant la réparation le lien les choisissait, après il choisit r424/r425/r426",
+    "sans_distracteurs": "5/5 avant comme après : le banc n'est pas le problème"
+  }
+}
