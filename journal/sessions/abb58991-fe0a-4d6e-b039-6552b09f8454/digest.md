@@ -15796,3 +15796,58 @@ seuils {
 ⏵ Round 46 : l'oracle BFS passe (228 nœuds) mais l'aveugle (215), le hasard (227), le 7B (238) et le labyrinthe (234) passent **aussi** — la fenêtre est **non discriminante**. Je l'écris et je commite
 
 - **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('reports/rapport-pensee-porte-fenetre.md'); t=p.read_text(encoding='utf-8')\nt += \"\"\"\n\n## 10. Test non discriminant (round 45-46)\n\nAvec `Store.push` FIFO et l'oracle **BFS** (budget 500), * … [2443 caractères tronqués]`
+
+  ```
+ok
+  568 fiches → reports/INDEX.md
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 658 JSON, le disque en a 659
+  T0 max : 3998 mots (budget 4 000)
+  ✅ index : aucun fait stagé sans état
+[master 19038f08] B13 — LA FENÊTRE EST NON DISCRIMINANTE : L'ORACLE BFS 228, L'AVEUGLE 215, LE 7B 238 — TOUT LE MONDE PASSE
+ 22 files changed, 655 insertions(+), 37 deletions(-)
+ create mode 100644 reports/pensee-porte-fenetre-bfs.json
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 46 : commit `19038f08` — la fenêtre est **non discriminante** (oracle 228, aveugle 215, hasard 227, 7B 238, labyrinthe 234 : tous passent)
+
+**Fait de la nuit** — commit **`19038f08`** : la fenêtre non discriminante.
+
+| politique | but | nœuds | sonde |
+|---|---|---:|---:|
+| oracle (BFS) | ✅ | 228 | — |
+| **aveugle** | ✅ | **215** | 11 |
+| **hasard** | ✅ | 227 | 23 |
+| **LLM `porte_fenetre`** | ✅ | 238 | 34 |
+| LLM `labyrinthe` | ✅ | 234 | 30 |
+
+- L'**aveugle fait mieux que le 7B** (215 vs 238) : le prompt `porte_fenetre` n'apporte rien. La fenêtre, une fois `Store.push` réparé et le budget à 500, est un problème d'exploration que tout le monde résout.
+- **Verdict** : la fenêtre est **non discriminante**, comme la porte mobile et la porte qui bouge. Les tests qui discriminent restent : **porte** (27 nœuds), **minute** (26), **stochastique** (7B 5/5, labyrinthe 0/1).
+- Le récit : `pensee-porte-fenetre.md` § 10 + JSON mis à jour.
+
+**État** : HEAD `19038f08` ; T0 **3 998/4 000** ; revue : **1 anomalie de compteurs** (en-cours 658 JSON, disque 659 — le nouveau `pensee-porte-fenetre-bfs.json`), à corriger au prochain passage ; en-cours 23 h 10.
+
+Nuit committée : B13 140 `6532541c` · bouge `35ca1461` · sto `7d2c0a2d` · sto 5/5 `c4903bc9` · fenêtre `55dcb1c4` · contre-fiche `84182603` · FIFO `8deac6ce` · **non discriminant `19038f08`** ; plus POS, syntagmes, cascade, DRVM, porte, pragmatique, minute, mobile ; S `3f74fe83`, hub `a67dbf00`→..., N2 `c0196b55`.
+
+La suite : corriger le compteur JSON (658→659) et committer ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+
+## Tour 49
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloque."
+Round: 47/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Round 47 : je corrige le compteur JSON de l'en-cours (658 → 659), je vérifie la revue et je commite l'état
+
+- **bash** `{"command": "cd /home/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nt=t.replace('| fichiers / JSON de résultats | **568** / **658** |','| fichiers / JSON de résultats | **568** / **659** |')\nt=t.replace('23 … [433 caractères tronqués]`

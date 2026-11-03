@@ -7,14 +7,14 @@
 | Identifiant | `abb58991-fe0a-4d6e-b039-6552b09f8454` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:15 |
-| Durée | 6.6 h |
-| Tours | 48 |
-| Messages | 661 |
-| Appels d'outils | 690 |
+| Durée | 6.7 h |
+| Tours | 49 |
+| Messages | 666 |
+| Appels d'outils | 693 |
 | Fichiers touchés | 47 |
-| Commandes | 525 |
+| Commandes | 528 |
 | Sous-agents | 0 |
-| Commits | 51 |
+| Commits | 53 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -119,6 +119,8 @@
 **Tour 47** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 **Tour 48** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
+
+**Tour 49** — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/GV/GP/REL/SUB), mesurer la cascade complète avec le vrai modèle, puis la parité DRVM/native ; chaque fait = mesure + contrôle négatif + fiche + en-cours + commit explicite (git add explicite). Ne pas toucher aux GPU de N2 ; prendre la file « jamais en attente » si une ligne bloqu … [548 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1538,7 +1540,39 @@ La suite : **constater et committer** le « test non discriminant » de la fenê
 
 **Synthèse produite :**
 
-⏵ Round 46 : l'oracle BFS passe (228 nœuds) mais l'aveugle (215), le hasard (227), le 7B (238) et le labyrinthe (234) passent **aussi** — la fenêtre est **non discriminante**. Je l'écris et je commite
+⏵ Round 46 : commit `19038f08` — la fenêtre est **non discriminante** (oracle 228, aveugle 215, hasard 227, 7B 238, labyrinthe 234 : tous passent)
+
+**Fait de la nuit** — commit **`19038f08`** : la fenêtre non discriminante.
+
+| politique | but | nœuds | sonde |
+|---|---|---:|---:|
+| oracle (BFS) | ✅ | 228 | — |
+| **aveugle** | ✅ | **215** | 11 |
+| **hasard** | ✅ | 227 | 23 |
+| **LLM `porte_fenetre`** | ✅ | 238 | 34 |
+| LLM `labyrinthe` | ✅ | 234 | 30 |
+
+- L'**aveugle fait mieux que le 7B** (215 vs 238) : le prompt `porte_fenetre` n'apporte rien. La fenêtre, une fois `Store.push` réparé et le budget à 500, est un problème d'exploration que tout le monde résout.
+- **Verdict** : la fenêtre est **non discriminante**, comme la porte mobile et la porte qui bouge. Les tests qui discriminent restent : **porte** (27 nœuds), **minute** (26), **stochastique** (7B 5/5, labyrinthe 0/1).
+- Le récit : `pensee-porte-fenetre.md` § 10 + JSON mis à jour.
+
+**État** : HEAD `19038f08` ; T0 **3 998/4 000** ; revue : **1 anomalie de compteurs** (en-cours 658 JSON, disque 659 — le nouveau `pensee-porte-fenetre-bfs.json`), à corriger au prochain passage ; en-cours 23 h 10.
+
+Nuit committée : B13 140 `6532541c` · bouge `35ca1461` · sto `7d2c0a2d` · sto 5/5 `c4903bc9` · fenêtre `55dcb1c4` · contre-fiche `84182603` · FIFO `8deac6ce` · **non discriminant `19038f08`** ; plus POS, syntagmes, cascade, DRVM, porte, pragmatique, minute, mobile ; S `3f74fe83`, hub `a67dbf00`→..., N2 `c0196b55`.
+
+La suite : corriger le compteur JSON (658→659) et committer ; puis le **gold 200+** et la fonction « la bonne réponse, pas le voisin ». Le goal reste **actif**.
+
+### Tour 49 — <goal_round> Objective: "Poursuivre la session L/B13 toute la nuit : qualifier le tagger 7B local sur les syntagmes (GN/ … [828 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Fix JSON counter and commit state
+- bash — Find and fix JSON counter line
+- bash — Fix counter to 571 and commit
+
+**Synthèse produite :**
+
+⏵ Round 47 : la ligne réelle était `571 / 659` (j'avais mis 568 par erreur) ; je remets 571, vérifie la revue et commite
 
 ## 3. Travail accompli
 
@@ -1636,7 +1670,7 @@ La suite : **constater et committer** le « test non discriminant » de la fenê
 - **T1** Look for installed spaCy/stanza models
 - **T1** Inspect eval entry points
 - **T1** Find B13/R0.7 backlog cards
-- … et 485 autres
+- … et 488 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1787,4 +1821,6 @@ La suite : **constater et committer** le « test non discriminant » de la fenê
 - B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 228 NŒUDS (37 ÉTATS)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE : STORE.PUSH EN FIFO — LE BFS DU MOTEUR ATTEINT LE BUT EN 228 NŒUDS (37 ÉTATS)" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
 - B13 — LA FENÊTRE EST NON DISCRIMINANTE : L'ORACLE BFS 228, L'AVEUGLE 215, LE 7B 238 — TOUT LE MONDE PASSE" 2>&1 | tail -6; echo "EXIT=${PIPESTATUS[0]}"
+- ÉTAT — COMPTEUR JSON 659 : LA FENÊTRE NON DISCRIMINANTE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
+- ÉTAT — COMPTEUR 571/659 : LA FENÊTRE NON DISCRIMINANTE EST COMPTÉE" 2>&1 | tail -5; echo "EXIT=${PIPESTATUS[0]}"
 

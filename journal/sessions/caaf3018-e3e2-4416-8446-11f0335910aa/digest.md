@@ -6219,3 +6219,10 @@ started background job bash-257
   ```
 
 - **job_output** `{"job_id": "bash-257", "timeout_ms": 615000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-257", "timeout_ms": 615000, "wait": true}`

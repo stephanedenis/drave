@@ -7,12 +7,12 @@
 | Identifiant | `b7d4678e-2143-4daa-a9a4-a456c5aa8dab` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-02 16:16 |
-| Durée | 6.5 h |
+| Durée | 6.6 h |
 | Tours | 26 |
-| Messages | 636 |
-| Appels d'outils | 632 |
+| Messages | 638 |
+| Appels d'outils | 634 |
 | Fichiers touchés | 24 |
-| Commandes | 439 |
+| Commandes | 441 |
 | Sous-agents | 0 |
 | Commits | 32 |
 | Compactages de contexte | 0 |
@@ -743,10 +743,12 @@ La veille continue : intégration des commits, suivi des sessions et des runs, p
 
 ### Tour 26 — <goal_round> Objective: "Nuit de coordination (02/11 20 h → 03/11 08 h) : suivre les sessions (hub, N2, S, Pensée), teni … [1012 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Check events, runs and journal
 - bash — Wait for the next commit
+- bash — Verify state and log the non-discriminant gate
+- bash — Wait for the Pensée commit and counters
 
 **Synthèse produite :**
 
@@ -825,7 +827,7 @@ La veille continue : intégration des commits, suivi des sessions et des runs, p
 - **T2** Detect true scanned PDFs via full text
 - **T2** Inspect OCR scan gate and threading settings
 - **T2** Check whether the 10 OCR notes are in the full-text scan list
-- … et 399 autres
+- … et 401 autres
 
 ## 4. Mesures et résultats marquants
 
